@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -48,11 +49,14 @@ type RiskQuery struct {
 	withViewers               *GroupQuery
 	withRiskKind              *CustomTypeEnumQuery
 	withRiskCategory          *CustomTypeEnumQuery
+	withEnvironment           *CustomTypeEnumQuery
+	withScope                 *CustomTypeEnumQuery
 	withControls              *ControlQuery
 	withSubcontrols           *SubcontrolQuery
 	withProcedures            *ProcedureQuery
 	withInternalPolicies      *InternalPolicyQuery
 	withPrograms              *ProgramQuery
+	withPlatforms             *PlatformQuery
 	withActionPlans           *ActionPlanQuery
 	withTasks                 *TaskQuery
 	withAssets                *AssetQuery
@@ -73,6 +77,7 @@ type RiskQuery struct {
 	withNamedProcedures       map[string]*ProcedureQuery
 	withNamedInternalPolicies map[string]*InternalPolicyQuery
 	withNamedPrograms         map[string]*ProgramQuery
+	withNamedPlatforms        map[string]*PlatformQuery
 	withNamedActionPlans      map[string]*ActionPlanQuery
 	withNamedTasks            map[string]*TaskQuery
 	withNamedAssets           map[string]*AssetQuery
@@ -266,6 +271,56 @@ func (_q *RiskQuery) QueryRiskCategory() *CustomTypeEnumQuery {
 	return query
 }
 
+// QueryEnvironment chains the current query on the "environment" edge.
+func (_q *RiskQuery) QueryEnvironment() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.EnvironmentTable, risk.EnvironmentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScope chains the current query on the "scope" edge.
+func (_q *RiskQuery) QueryScope() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.ScopeTable, risk.ScopeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryControls chains the current query on the "controls" edge.
 func (_q *RiskQuery) QueryControls() *ControlQuery {
 	query := (&ControlClient{config: _q.config}).Query()
@@ -385,6 +440,31 @@ func (_q *RiskQuery) QueryPrograms() *ProgramQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramRisks
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPlatforms chains the current query on the "platforms" edge.
+func (_q *RiskQuery) QueryPlatforms() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, risk.PlatformsTable, risk.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformRisks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -814,11 +894,14 @@ func (_q *RiskQuery) Clone() *RiskQuery {
 		withViewers:          _q.withViewers.Clone(),
 		withRiskKind:         _q.withRiskKind.Clone(),
 		withRiskCategory:     _q.withRiskCategory.Clone(),
+		withEnvironment:      _q.withEnvironment.Clone(),
+		withScope:            _q.withScope.Clone(),
 		withControls:         _q.withControls.Clone(),
 		withSubcontrols:      _q.withSubcontrols.Clone(),
 		withProcedures:       _q.withProcedures.Clone(),
 		withInternalPolicies: _q.withInternalPolicies.Clone(),
 		withPrograms:         _q.withPrograms.Clone(),
+		withPlatforms:        _q.withPlatforms.Clone(),
 		withActionPlans:      _q.withActionPlans.Clone(),
 		withTasks:            _q.withTasks.Clone(),
 		withAssets:           _q.withAssets.Clone(),
@@ -901,6 +984,28 @@ func (_q *RiskQuery) WithRiskCategory(opts ...func(*CustomTypeEnumQuery)) *RiskQ
 	return _q
 }
 
+// WithEnvironment tells the query-builder to eager-load the nodes that are connected to
+// the "environment" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithEnvironment(opts ...func(*CustomTypeEnumQuery)) *RiskQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEnvironment = query
+	return _q
+}
+
+// WithScope tells the query-builder to eager-load the nodes that are connected to
+// the "scope" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *RiskQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScope = query
+	return _q
+}
+
 // WithControls tells the query-builder to eager-load the nodes that are connected to
 // the "controls" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *RiskQuery) WithControls(opts ...func(*ControlQuery)) *RiskQuery {
@@ -953,6 +1058,17 @@ func (_q *RiskQuery) WithPrograms(opts ...func(*ProgramQuery)) *RiskQuery {
 		opt(query)
 	}
 	_q.withPrograms = query
+	return _q
+}
+
+// WithPlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithPlatforms(opts ...func(*PlatformQuery)) *RiskQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatforms = query
 	return _q
 }
 
@@ -1140,18 +1256,21 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		nodes       = []*Risk{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [20]bool{
+		loadedTypes = [23]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
 			_q.withRiskKind != nil,
 			_q.withRiskCategory != nil,
+			_q.withEnvironment != nil,
+			_q.withScope != nil,
 			_q.withControls != nil,
 			_q.withSubcontrols != nil,
 			_q.withProcedures != nil,
 			_q.withInternalPolicies != nil,
 			_q.withPrograms != nil,
+			_q.withPlatforms != nil,
 			_q.withActionPlans != nil,
 			_q.withTasks != nil,
 			_q.withAssets != nil,
@@ -1228,6 +1347,18 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			return nil, err
 		}
 	}
+	if query := _q.withEnvironment; query != nil {
+		if err := _q.loadEnvironment(ctx, query, nodes, nil,
+			func(n *Risk, e *CustomTypeEnum) { n.Edges.Environment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScope; query != nil {
+		if err := _q.loadScope(ctx, query, nodes, nil,
+			func(n *Risk, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withControls; query != nil {
 		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Controls = []*Control{} },
@@ -1260,6 +1391,13 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Programs = []*Program{} },
 			func(n *Risk, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatforms; query != nil {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Risk) { n.Edges.Platforms = []*Platform{} },
+			func(n *Risk, e *Platform) { n.Edges.Platforms = append(n.Edges.Platforms, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1377,6 +1515,13 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedPrograms(name) },
 			func(n *Risk, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPlatforms {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedPlatforms(name) },
+			func(n *Risk, e *Platform) { n.appendNamedPlatforms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1710,6 +1855,64 @@ func (_q *RiskQuery) loadRiskCategory(ctx context.Context, query *CustomTypeEnum
 	}
 	return nil
 }
+func (_q *RiskQuery) loadEnvironment(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		fk := nodes[i].EnvironmentID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "environment_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *RiskQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		fk := nodes[i].ScopeID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *RiskQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Control)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Risk)
@@ -2013,6 +2216,68 @@ func (_q *RiskQuery) loadPrograms(ctx context.Context, query *ProgramQuery, node
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "programs" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *RiskQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Risk)
+	nids := make(map[string]map[*Risk]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(risk.PlatformsTable)
+		joinT.Schema(_q.schemaConfig.PlatformRisks)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(risk.PlatformsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(risk.PlatformsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(risk.PlatformsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Risk]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "platforms" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -2397,6 +2662,12 @@ func (_q *RiskQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withRiskCategory != nil {
 			_spec.Node.AddColumnOnce(risk.FieldRiskCategoryID)
 		}
+		if _q.withEnvironment != nil {
+			_spec.Node.AddColumnOnce(risk.FieldEnvironmentID)
+		}
+		if _q.withScope != nil {
+			_spec.Node.AddColumnOnce(risk.FieldScopeID)
+		}
 		if _q.withStakeholder != nil {
 			_spec.Node.AddColumnOnce(risk.FieldStakeholderID)
 		}
@@ -2580,6 +2851,20 @@ func (_q *RiskQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery))
 		_q.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	_q.withNamedPrograms[name] = query
+	return _q
+}
+
+// WithNamedPlatforms tells the query-builder to eager-load the nodes that are connected to the "platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQuery)) *RiskQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatforms == nil {
+		_q.withNamedPlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatforms[name] = query
 	return _q
 }
 

@@ -40,6 +40,14 @@ type DirectoryMembershipHistory struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the environment of the directory_membership
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the directory_membership
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the directory_membership
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the directory_membership
+	ScopeID string `json:"scope_id,omitempty"`
 	// integration that owns this directory membership
 	IntegrationID string `json:"integration_id,omitempty"`
 	// sync run that produced this snapshot
@@ -74,7 +82,7 @@ func (*DirectoryMembershipHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case directorymembershiphistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case directorymembershiphistory.FieldID, directorymembershiphistory.FieldRef, directorymembershiphistory.FieldCreatedBy, directorymembershiphistory.FieldUpdatedBy, directorymembershiphistory.FieldDisplayID, directorymembershiphistory.FieldOwnerID, directorymembershiphistory.FieldIntegrationID, directorymembershiphistory.FieldDirectorySyncRunID, directorymembershiphistory.FieldDirectoryAccountID, directorymembershiphistory.FieldDirectoryGroupID, directorymembershiphistory.FieldRole, directorymembershiphistory.FieldSource, directorymembershiphistory.FieldLastConfirmedRunID:
+		case directorymembershiphistory.FieldID, directorymembershiphistory.FieldRef, directorymembershiphistory.FieldCreatedBy, directorymembershiphistory.FieldUpdatedBy, directorymembershiphistory.FieldDisplayID, directorymembershiphistory.FieldOwnerID, directorymembershiphistory.FieldEnvironmentName, directorymembershiphistory.FieldEnvironmentID, directorymembershiphistory.FieldScopeName, directorymembershiphistory.FieldScopeID, directorymembershiphistory.FieldIntegrationID, directorymembershiphistory.FieldDirectorySyncRunID, directorymembershiphistory.FieldDirectoryAccountID, directorymembershiphistory.FieldDirectoryGroupID, directorymembershiphistory.FieldRole, directorymembershiphistory.FieldSource, directorymembershiphistory.FieldLastConfirmedRunID:
 			values[i] = new(sql.NullString)
 		case directorymembershiphistory.FieldHistoryTime, directorymembershiphistory.FieldCreatedAt, directorymembershiphistory.FieldUpdatedAt, directorymembershiphistory.FieldFirstSeenAt, directorymembershiphistory.FieldLastSeenAt, directorymembershiphistory.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -152,6 +160,30 @@ func (_m *DirectoryMembershipHistory) assignValues(columns []string, values []an
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case directorymembershiphistory.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case directorymembershiphistory.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case directorymembershiphistory.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case directorymembershiphistory.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case directorymembershiphistory.FieldIntegrationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -287,6 +319,18 @@ func (_m *DirectoryMembershipHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)

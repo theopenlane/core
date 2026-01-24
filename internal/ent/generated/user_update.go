@@ -14,18 +14,22 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
@@ -649,6 +653,36 @@ func (_u *UserUpdate) AddActionPlans(v ...*ActionPlan) *UserUpdate {
 	return _u.AddActionPlanIDs(ids...)
 }
 
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_u *UserUpdate) AddCampaignIDs(ids ...string) *UserUpdate {
+	_u.mutation.AddCampaignIDs(ids...)
+	return _u
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_u *UserUpdate) AddCampaigns(v ...*Campaign) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCampaignIDs(ids...)
+}
+
+// AddCampaignTargetIDs adds the "campaign_targets" edge to the CampaignTarget entity by IDs.
+func (_u *UserUpdate) AddCampaignTargetIDs(ids ...string) *UserUpdate {
+	_u.mutation.AddCampaignTargetIDs(ids...)
+	return _u
+}
+
+// AddCampaignTargets adds the "campaign_targets" edges to the CampaignTarget entity.
+func (_u *UserUpdate) AddCampaignTargets(v ...*CampaignTarget) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCampaignTargetIDs(ids...)
+}
+
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
 func (_u *UserUpdate) AddSubcontrolIDs(ids ...string) *UserUpdate {
 	_u.mutation.AddSubcontrolIDs(ids...)
@@ -722,6 +756,36 @@ func (_u *UserUpdate) AddProgramsOwned(v ...*Program) *UserUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddProgramsOwnedIDs(ids...)
+}
+
+// AddPlatformsOwnedIDs adds the "platforms_owned" edge to the Platform entity by IDs.
+func (_u *UserUpdate) AddPlatformsOwnedIDs(ids ...string) *UserUpdate {
+	_u.mutation.AddPlatformsOwnedIDs(ids...)
+	return _u
+}
+
+// AddPlatformsOwned adds the "platforms_owned" edges to the Platform entity.
+func (_u *UserUpdate) AddPlatformsOwned(v ...*Platform) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformsOwnedIDs(ids...)
+}
+
+// AddIdentityHolderProfileIDs adds the "identity_holder_profiles" edge to the IdentityHolder entity by IDs.
+func (_u *UserUpdate) AddIdentityHolderProfileIDs(ids ...string) *UserUpdate {
+	_u.mutation.AddIdentityHolderProfileIDs(ids...)
+	return _u
+}
+
+// AddIdentityHolderProfiles adds the "identity_holder_profiles" edges to the IdentityHolder entity.
+func (_u *UserUpdate) AddIdentityHolderProfiles(v ...*IdentityHolder) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIdentityHolderProfileIDs(ids...)
 }
 
 // AddImpersonationEventIDs adds the "impersonation_events" edge to the ImpersonationEvent entity by IDs.
@@ -1041,6 +1105,48 @@ func (_u *UserUpdate) RemoveActionPlans(v ...*ActionPlan) *UserUpdate {
 	return _u.RemoveActionPlanIDs(ids...)
 }
 
+// ClearCampaigns clears all "campaigns" edges to the Campaign entity.
+func (_u *UserUpdate) ClearCampaigns() *UserUpdate {
+	_u.mutation.ClearCampaigns()
+	return _u
+}
+
+// RemoveCampaignIDs removes the "campaigns" edge to Campaign entities by IDs.
+func (_u *UserUpdate) RemoveCampaignIDs(ids ...string) *UserUpdate {
+	_u.mutation.RemoveCampaignIDs(ids...)
+	return _u
+}
+
+// RemoveCampaigns removes "campaigns" edges to Campaign entities.
+func (_u *UserUpdate) RemoveCampaigns(v ...*Campaign) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCampaignIDs(ids...)
+}
+
+// ClearCampaignTargets clears all "campaign_targets" edges to the CampaignTarget entity.
+func (_u *UserUpdate) ClearCampaignTargets() *UserUpdate {
+	_u.mutation.ClearCampaignTargets()
+	return _u
+}
+
+// RemoveCampaignTargetIDs removes the "campaign_targets" edge to CampaignTarget entities by IDs.
+func (_u *UserUpdate) RemoveCampaignTargetIDs(ids ...string) *UserUpdate {
+	_u.mutation.RemoveCampaignTargetIDs(ids...)
+	return _u
+}
+
+// RemoveCampaignTargets removes "campaign_targets" edges to CampaignTarget entities.
+func (_u *UserUpdate) RemoveCampaignTargets(v ...*CampaignTarget) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCampaignTargetIDs(ids...)
+}
+
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
 func (_u *UserUpdate) ClearSubcontrols() *UserUpdate {
 	_u.mutation.ClearSubcontrols()
@@ -1144,6 +1250,48 @@ func (_u *UserUpdate) RemoveProgramsOwned(v ...*Program) *UserUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProgramsOwnedIDs(ids...)
+}
+
+// ClearPlatformsOwned clears all "platforms_owned" edges to the Platform entity.
+func (_u *UserUpdate) ClearPlatformsOwned() *UserUpdate {
+	_u.mutation.ClearPlatformsOwned()
+	return _u
+}
+
+// RemovePlatformsOwnedIDs removes the "platforms_owned" edge to Platform entities by IDs.
+func (_u *UserUpdate) RemovePlatformsOwnedIDs(ids ...string) *UserUpdate {
+	_u.mutation.RemovePlatformsOwnedIDs(ids...)
+	return _u
+}
+
+// RemovePlatformsOwned removes "platforms_owned" edges to Platform entities.
+func (_u *UserUpdate) RemovePlatformsOwned(v ...*Platform) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformsOwnedIDs(ids...)
+}
+
+// ClearIdentityHolderProfiles clears all "identity_holder_profiles" edges to the IdentityHolder entity.
+func (_u *UserUpdate) ClearIdentityHolderProfiles() *UserUpdate {
+	_u.mutation.ClearIdentityHolderProfiles()
+	return _u
+}
+
+// RemoveIdentityHolderProfileIDs removes the "identity_holder_profiles" edge to IdentityHolder entities by IDs.
+func (_u *UserUpdate) RemoveIdentityHolderProfileIDs(ids ...string) *UserUpdate {
+	_u.mutation.RemoveIdentityHolderProfileIDs(ids...)
+	return _u
+}
+
+// RemoveIdentityHolderProfiles removes "identity_holder_profiles" edges to IdentityHolder entities.
+func (_u *UserUpdate) RemoveIdentityHolderProfiles(v ...*IdentityHolder) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIdentityHolderProfileIDs(ids...)
 }
 
 // ClearImpersonationEvents clears all "impersonation_events" edges to the ImpersonationEvent entity.
@@ -2112,6 +2260,102 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   user.CampaignsTable,
+			Columns: user.CampaignsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignUsers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   user.CampaignsTable,
+			Columns: user.CampaignsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignUsers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   user.CampaignsTable,
+			Columns: user.CampaignsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignUsers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignTargetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CampaignTargetsTable,
+			Columns: []string{user.CampaignTargetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignTarget
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCampaignTargetsIDs(); len(nodes) > 0 && !_u.mutation.CampaignTargetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CampaignTargetsTable,
+			Columns: []string{user.CampaignTargetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignTargetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CampaignTargetsTable,
+			Columns: []string{user.CampaignTargetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2368,6 +2612,102 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PlatformsOwnedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.PlatformsOwnedTable,
+			Columns: []string{user.PlatformsOwnedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Platform
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformsOwnedIDs(); len(nodes) > 0 && !_u.mutation.PlatformsOwnedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.PlatformsOwnedTable,
+			Columns: []string{user.PlatformsOwnedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Platform
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformsOwnedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.PlatformsOwnedTable,
+			Columns: []string{user.PlatformsOwnedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Platform
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHolderProfilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.IdentityHolderProfilesTable,
+			Columns: []string{user.IdentityHolderProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolder
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIdentityHolderProfilesIDs(); len(nodes) > 0 && !_u.mutation.IdentityHolderProfilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.IdentityHolderProfilesTable,
+			Columns: []string{user.IdentityHolderProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolder
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHolderProfilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.IdentityHolderProfilesTable,
+			Columns: []string{user.IdentityHolderProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3281,6 +3621,36 @@ func (_u *UserUpdateOne) AddActionPlans(v ...*ActionPlan) *UserUpdateOne {
 	return _u.AddActionPlanIDs(ids...)
 }
 
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_u *UserUpdateOne) AddCampaignIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.AddCampaignIDs(ids...)
+	return _u
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_u *UserUpdateOne) AddCampaigns(v ...*Campaign) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCampaignIDs(ids...)
+}
+
+// AddCampaignTargetIDs adds the "campaign_targets" edge to the CampaignTarget entity by IDs.
+func (_u *UserUpdateOne) AddCampaignTargetIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.AddCampaignTargetIDs(ids...)
+	return _u
+}
+
+// AddCampaignTargets adds the "campaign_targets" edges to the CampaignTarget entity.
+func (_u *UserUpdateOne) AddCampaignTargets(v ...*CampaignTarget) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCampaignTargetIDs(ids...)
+}
+
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
 func (_u *UserUpdateOne) AddSubcontrolIDs(ids ...string) *UserUpdateOne {
 	_u.mutation.AddSubcontrolIDs(ids...)
@@ -3354,6 +3724,36 @@ func (_u *UserUpdateOne) AddProgramsOwned(v ...*Program) *UserUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddProgramsOwnedIDs(ids...)
+}
+
+// AddPlatformsOwnedIDs adds the "platforms_owned" edge to the Platform entity by IDs.
+func (_u *UserUpdateOne) AddPlatformsOwnedIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.AddPlatformsOwnedIDs(ids...)
+	return _u
+}
+
+// AddPlatformsOwned adds the "platforms_owned" edges to the Platform entity.
+func (_u *UserUpdateOne) AddPlatformsOwned(v ...*Platform) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformsOwnedIDs(ids...)
+}
+
+// AddIdentityHolderProfileIDs adds the "identity_holder_profiles" edge to the IdentityHolder entity by IDs.
+func (_u *UserUpdateOne) AddIdentityHolderProfileIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.AddIdentityHolderProfileIDs(ids...)
+	return _u
+}
+
+// AddIdentityHolderProfiles adds the "identity_holder_profiles" edges to the IdentityHolder entity.
+func (_u *UserUpdateOne) AddIdentityHolderProfiles(v ...*IdentityHolder) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIdentityHolderProfileIDs(ids...)
 }
 
 // AddImpersonationEventIDs adds the "impersonation_events" edge to the ImpersonationEvent entity by IDs.
@@ -3673,6 +4073,48 @@ func (_u *UserUpdateOne) RemoveActionPlans(v ...*ActionPlan) *UserUpdateOne {
 	return _u.RemoveActionPlanIDs(ids...)
 }
 
+// ClearCampaigns clears all "campaigns" edges to the Campaign entity.
+func (_u *UserUpdateOne) ClearCampaigns() *UserUpdateOne {
+	_u.mutation.ClearCampaigns()
+	return _u
+}
+
+// RemoveCampaignIDs removes the "campaigns" edge to Campaign entities by IDs.
+func (_u *UserUpdateOne) RemoveCampaignIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.RemoveCampaignIDs(ids...)
+	return _u
+}
+
+// RemoveCampaigns removes "campaigns" edges to Campaign entities.
+func (_u *UserUpdateOne) RemoveCampaigns(v ...*Campaign) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCampaignIDs(ids...)
+}
+
+// ClearCampaignTargets clears all "campaign_targets" edges to the CampaignTarget entity.
+func (_u *UserUpdateOne) ClearCampaignTargets() *UserUpdateOne {
+	_u.mutation.ClearCampaignTargets()
+	return _u
+}
+
+// RemoveCampaignTargetIDs removes the "campaign_targets" edge to CampaignTarget entities by IDs.
+func (_u *UserUpdateOne) RemoveCampaignTargetIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.RemoveCampaignTargetIDs(ids...)
+	return _u
+}
+
+// RemoveCampaignTargets removes "campaign_targets" edges to CampaignTarget entities.
+func (_u *UserUpdateOne) RemoveCampaignTargets(v ...*CampaignTarget) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCampaignTargetIDs(ids...)
+}
+
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
 func (_u *UserUpdateOne) ClearSubcontrols() *UserUpdateOne {
 	_u.mutation.ClearSubcontrols()
@@ -3776,6 +4218,48 @@ func (_u *UserUpdateOne) RemoveProgramsOwned(v ...*Program) *UserUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProgramsOwnedIDs(ids...)
+}
+
+// ClearPlatformsOwned clears all "platforms_owned" edges to the Platform entity.
+func (_u *UserUpdateOne) ClearPlatformsOwned() *UserUpdateOne {
+	_u.mutation.ClearPlatformsOwned()
+	return _u
+}
+
+// RemovePlatformsOwnedIDs removes the "platforms_owned" edge to Platform entities by IDs.
+func (_u *UserUpdateOne) RemovePlatformsOwnedIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.RemovePlatformsOwnedIDs(ids...)
+	return _u
+}
+
+// RemovePlatformsOwned removes "platforms_owned" edges to Platform entities.
+func (_u *UserUpdateOne) RemovePlatformsOwned(v ...*Platform) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformsOwnedIDs(ids...)
+}
+
+// ClearIdentityHolderProfiles clears all "identity_holder_profiles" edges to the IdentityHolder entity.
+func (_u *UserUpdateOne) ClearIdentityHolderProfiles() *UserUpdateOne {
+	_u.mutation.ClearIdentityHolderProfiles()
+	return _u
+}
+
+// RemoveIdentityHolderProfileIDs removes the "identity_holder_profiles" edge to IdentityHolder entities by IDs.
+func (_u *UserUpdateOne) RemoveIdentityHolderProfileIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.RemoveIdentityHolderProfileIDs(ids...)
+	return _u
+}
+
+// RemoveIdentityHolderProfiles removes "identity_holder_profiles" edges to IdentityHolder entities.
+func (_u *UserUpdateOne) RemoveIdentityHolderProfiles(v ...*IdentityHolder) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIdentityHolderProfileIDs(ids...)
 }
 
 // ClearImpersonationEvents clears all "impersonation_events" edges to the ImpersonationEvent entity.
@@ -4774,6 +5258,102 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   user.CampaignsTable,
+			Columns: user.CampaignsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignUsers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   user.CampaignsTable,
+			Columns: user.CampaignsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignUsers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   user.CampaignsTable,
+			Columns: user.CampaignsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignUsers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignTargetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CampaignTargetsTable,
+			Columns: []string{user.CampaignTargetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignTarget
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCampaignTargetsIDs(); len(nodes) > 0 && !_u.mutation.CampaignTargetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CampaignTargetsTable,
+			Columns: []string{user.CampaignTargetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignTargetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CampaignTargetsTable,
+			Columns: []string{user.CampaignTargetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -5030,6 +5610,102 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PlatformsOwnedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.PlatformsOwnedTable,
+			Columns: []string{user.PlatformsOwnedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Platform
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformsOwnedIDs(); len(nodes) > 0 && !_u.mutation.PlatformsOwnedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.PlatformsOwnedTable,
+			Columns: []string{user.PlatformsOwnedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Platform
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformsOwnedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.PlatformsOwnedTable,
+			Columns: []string{user.PlatformsOwnedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Platform
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHolderProfilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.IdentityHolderProfilesTable,
+			Columns: []string{user.IdentityHolderProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolder
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIdentityHolderProfilesIDs(); len(nodes) > 0 && !_u.mutation.IdentityHolderProfilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.IdentityHolderProfilesTable,
+			Columns: []string{user.IdentityHolderProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolder
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHolderProfilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.IdentityHolderProfilesTable,
+			Columns: []string{user.IdentityHolderProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

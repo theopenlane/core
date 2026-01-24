@@ -34,12 +34,48 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldReviewedBy holds the string denoting the reviewed_by field in the database.
+	FieldReviewedBy = "reviewed_by"
+	// FieldReviewedByUserID holds the string denoting the reviewed_by_user_id field in the database.
+	FieldReviewedByUserID = "reviewed_by_user_id"
+	// FieldReviewedByGroupID holds the string denoting the reviewed_by_group_id field in the database.
+	FieldReviewedByGroupID = "reviewed_by_group_id"
+	// FieldAssignedTo holds the string denoting the assigned_to field in the database.
+	FieldAssignedTo = "assigned_to"
+	// FieldAssignedToUserID holds the string denoting the assigned_to_user_id field in the database.
+	FieldAssignedToUserID = "assigned_to_user_id"
+	// FieldAssignedToGroupID holds the string denoting the assigned_to_group_id field in the database.
+	FieldAssignedToGroupID = "assigned_to_group_id"
+	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
+	FieldEnvironmentName = "environment_name"
+	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
+	FieldEnvironmentID = "environment_id"
+	// FieldScopeName holds the string denoting the scope_name field in the database.
+	FieldScopeName = "scope_name"
+	// FieldScopeID holds the string denoting the scope_id field in the database.
+	FieldScopeID = "scope_id"
 	// FieldTarget holds the string denoting the target field in the database.
 	FieldTarget = "target"
 	// FieldScanType holds the string denoting the scan_type field in the database.
 	FieldScanType = "scan_type"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldScanDate holds the string denoting the scan_date field in the database.
+	FieldScanDate = "scan_date"
+	// FieldScanSchedule holds the string denoting the scan_schedule field in the database.
+	FieldScanSchedule = "scan_schedule"
+	// FieldNextScanRunAt holds the string denoting the next_scan_run_at field in the database.
+	FieldNextScanRunAt = "next_scan_run_at"
+	// FieldPerformedBy holds the string denoting the performed_by field in the database.
+	FieldPerformedBy = "performed_by"
+	// FieldPerformedByUserID holds the string denoting the performed_by_user_id field in the database.
+	FieldPerformedByUserID = "performed_by_user_id"
+	// FieldPerformedByGroupID holds the string denoting the performed_by_group_id field in the database.
+	FieldPerformedByGroupID = "performed_by_group_id"
+	// FieldGeneratedByPlatformID holds the string denoting the generated_by_platform_id field in the database.
+	FieldGeneratedByPlatformID = "generated_by_platform_id"
+	// FieldVulnerabilityIds holds the string denoting the vulnerability_ids field in the database.
+	FieldVulnerabilityIds = "vulnerability_ids"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
@@ -50,10 +86,44 @@ const (
 	EdgeEditors = "editors"
 	// EdgeViewers holds the string denoting the viewers edge name in mutations.
 	EdgeViewers = "viewers"
+	// EdgeReviewedByUser holds the string denoting the reviewed_by_user edge name in mutations.
+	EdgeReviewedByUser = "reviewed_by_user"
+	// EdgeReviewedByGroup holds the string denoting the reviewed_by_group edge name in mutations.
+	EdgeReviewedByGroup = "reviewed_by_group"
+	// EdgeAssignedToUser holds the string denoting the assigned_to_user edge name in mutations.
+	EdgeAssignedToUser = "assigned_to_user"
+	// EdgeAssignedToGroup holds the string denoting the assigned_to_group edge name in mutations.
+	EdgeAssignedToGroup = "assigned_to_group"
+	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
+	EdgeEnvironment = "environment"
+	// EdgeScope holds the string denoting the scope edge name in mutations.
+	EdgeScope = "scope"
 	// EdgeAssets holds the string denoting the assets edge name in mutations.
 	EdgeAssets = "assets"
 	// EdgeEntities holds the string denoting the entities edge name in mutations.
 	EdgeEntities = "entities"
+	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
+	EdgeEvidence = "evidence"
+	// EdgeFiles holds the string denoting the files edge name in mutations.
+	EdgeFiles = "files"
+	// EdgeRemediations holds the string denoting the remediations edge name in mutations.
+	EdgeRemediations = "remediations"
+	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
+	EdgeActionPlans = "action_plans"
+	// EdgeTasks holds the string denoting the tasks edge name in mutations.
+	EdgeTasks = "tasks"
+	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
+	EdgePlatforms = "platforms"
+	// EdgeVulnerabilities holds the string denoting the vulnerabilities edge name in mutations.
+	EdgeVulnerabilities = "vulnerabilities"
+	// EdgeControls holds the string denoting the controls edge name in mutations.
+	EdgeControls = "controls"
+	// EdgeGeneratedByPlatform holds the string denoting the generated_by_platform edge name in mutations.
+	EdgeGeneratedByPlatform = "generated_by_platform"
+	// EdgePerformedByUser holds the string denoting the performed_by_user edge name in mutations.
+	EdgePerformedByUser = "performed_by_user"
+	// EdgePerformedByGroup holds the string denoting the performed_by_group edge name in mutations.
+	EdgePerformedByGroup = "performed_by_group"
 	// Table holds the table name of the scan in the database.
 	Table = "scans"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -78,6 +148,48 @@ const (
 	// ViewersInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ViewersInverseTable = "groups"
+	// ReviewedByUserTable is the table that holds the reviewed_by_user relation/edge.
+	ReviewedByUserTable = "scans"
+	// ReviewedByUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	ReviewedByUserInverseTable = "users"
+	// ReviewedByUserColumn is the table column denoting the reviewed_by_user relation/edge.
+	ReviewedByUserColumn = "reviewed_by_user_id"
+	// ReviewedByGroupTable is the table that holds the reviewed_by_group relation/edge.
+	ReviewedByGroupTable = "scans"
+	// ReviewedByGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ReviewedByGroupInverseTable = "groups"
+	// ReviewedByGroupColumn is the table column denoting the reviewed_by_group relation/edge.
+	ReviewedByGroupColumn = "reviewed_by_group_id"
+	// AssignedToUserTable is the table that holds the assigned_to_user relation/edge.
+	AssignedToUserTable = "scans"
+	// AssignedToUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	AssignedToUserInverseTable = "users"
+	// AssignedToUserColumn is the table column denoting the assigned_to_user relation/edge.
+	AssignedToUserColumn = "assigned_to_user_id"
+	// AssignedToGroupTable is the table that holds the assigned_to_group relation/edge.
+	AssignedToGroupTable = "scans"
+	// AssignedToGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	AssignedToGroupInverseTable = "groups"
+	// AssignedToGroupColumn is the table column denoting the assigned_to_group relation/edge.
+	AssignedToGroupColumn = "assigned_to_group_id"
+	// EnvironmentTable is the table that holds the environment relation/edge.
+	EnvironmentTable = "scans"
+	// EnvironmentInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	EnvironmentInverseTable = "custom_type_enums"
+	// EnvironmentColumn is the table column denoting the environment relation/edge.
+	EnvironmentColumn = "environment_id"
+	// ScopeTable is the table that holds the scope relation/edge.
+	ScopeTable = "scans"
+	// ScopeInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ScopeInverseTable = "custom_type_enums"
+	// ScopeColumn is the table column denoting the scope relation/edge.
+	ScopeColumn = "scope_id"
 	// AssetsTable is the table that holds the assets relation/edge. The primary key declared below.
 	AssetsTable = "scan_assets"
 	// AssetsInverseTable is the table name for the Asset entity.
@@ -90,6 +202,67 @@ const (
 	EntitiesInverseTable = "entities"
 	// EntitiesColumn is the table column denoting the entities relation/edge.
 	EntitiesColumn = "scan_entities"
+	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
+	EvidenceTable = "scan_evidence"
+	// EvidenceInverseTable is the table name for the Evidence entity.
+	// It exists in this package in order to avoid circular dependency with the "evidence" package.
+	EvidenceInverseTable = "evidences"
+	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
+	FilesTable = "scan_files"
+	// FilesInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FilesInverseTable = "files"
+	// RemediationsTable is the table that holds the remediations relation/edge. The primary key declared below.
+	RemediationsTable = "scan_remediations"
+	// RemediationsInverseTable is the table name for the Remediation entity.
+	// It exists in this package in order to avoid circular dependency with the "remediation" package.
+	RemediationsInverseTable = "remediations"
+	// ActionPlansTable is the table that holds the action_plans relation/edge. The primary key declared below.
+	ActionPlansTable = "scan_action_plans"
+	// ActionPlansInverseTable is the table name for the ActionPlan entity.
+	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
+	ActionPlansInverseTable = "action_plans"
+	// TasksTable is the table that holds the tasks relation/edge. The primary key declared below.
+	TasksTable = "scan_tasks"
+	// TasksInverseTable is the table name for the Task entity.
+	// It exists in this package in order to avoid circular dependency with the "task" package.
+	TasksInverseTable = "tasks"
+	// PlatformsTable is the table that holds the platforms relation/edge. The primary key declared below.
+	PlatformsTable = "platform_scans"
+	// PlatformsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformsInverseTable = "platforms"
+	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge. The primary key declared below.
+	VulnerabilitiesTable = "vulnerability_scans"
+	// VulnerabilitiesInverseTable is the table name for the Vulnerability entity.
+	// It exists in this package in order to avoid circular dependency with the "vulnerability" package.
+	VulnerabilitiesInverseTable = "vulnerabilities"
+	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
+	ControlsTable = "control_scans"
+	// ControlsInverseTable is the table name for the Control entity.
+	// It exists in this package in order to avoid circular dependency with the "control" package.
+	ControlsInverseTable = "controls"
+	// GeneratedByPlatformTable is the table that holds the generated_by_platform relation/edge.
+	GeneratedByPlatformTable = "scans"
+	// GeneratedByPlatformInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	GeneratedByPlatformInverseTable = "platforms"
+	// GeneratedByPlatformColumn is the table column denoting the generated_by_platform relation/edge.
+	GeneratedByPlatformColumn = "generated_by_platform_id"
+	// PerformedByUserTable is the table that holds the performed_by_user relation/edge.
+	PerformedByUserTable = "scans"
+	// PerformedByUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	PerformedByUserInverseTable = "users"
+	// PerformedByUserColumn is the table column denoting the performed_by_user relation/edge.
+	PerformedByUserColumn = "performed_by_user_id"
+	// PerformedByGroupTable is the table that holds the performed_by_group relation/edge.
+	PerformedByGroupTable = "scans"
+	// PerformedByGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	PerformedByGroupInverseTable = "groups"
+	// PerformedByGroupColumn is the table column denoting the performed_by_group relation/edge.
+	PerformedByGroupColumn = "performed_by_group_id"
 )
 
 // Columns holds all SQL columns for scan fields.
@@ -103,20 +276,36 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldOwnerID,
+	FieldReviewedBy,
+	FieldReviewedByUserID,
+	FieldReviewedByGroupID,
+	FieldAssignedTo,
+	FieldAssignedToUserID,
+	FieldAssignedToGroupID,
+	FieldEnvironmentName,
+	FieldEnvironmentID,
+	FieldScopeName,
+	FieldScopeID,
 	FieldTarget,
 	FieldScanType,
 	FieldMetadata,
+	FieldScanDate,
+	FieldScanSchedule,
+	FieldNextScanRunAt,
+	FieldPerformedBy,
+	FieldPerformedByUserID,
+	FieldPerformedByGroupID,
+	FieldGeneratedByPlatformID,
+	FieldVulnerabilityIds,
 	FieldStatus,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "scans"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"control_scans",
 	"entity_scans",
 	"finding_scans",
 	"risk_scans",
-	"vulnerability_scans",
 }
 
 var (
@@ -132,6 +321,30 @@ var (
 	// AssetsPrimaryKey and AssetsColumn2 are the table columns denoting the
 	// primary key for the assets relation (M2M).
 	AssetsPrimaryKey = []string{"scan_id", "asset_id"}
+	// EvidencePrimaryKey and EvidenceColumn2 are the table columns denoting the
+	// primary key for the evidence relation (M2M).
+	EvidencePrimaryKey = []string{"scan_id", "evidence_id"}
+	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
+	// primary key for the files relation (M2M).
+	FilesPrimaryKey = []string{"scan_id", "file_id"}
+	// RemediationsPrimaryKey and RemediationsColumn2 are the table columns denoting the
+	// primary key for the remediations relation (M2M).
+	RemediationsPrimaryKey = []string{"scan_id", "remediation_id"}
+	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
+	// primary key for the action_plans relation (M2M).
+	ActionPlansPrimaryKey = []string{"scan_id", "action_plan_id"}
+	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
+	// primary key for the tasks relation (M2M).
+	TasksPrimaryKey = []string{"scan_id", "task_id"}
+	// PlatformsPrimaryKey and PlatformsColumn2 are the table columns denoting the
+	// primary key for the platforms relation (M2M).
+	PlatformsPrimaryKey = []string{"platform_id", "scan_id"}
+	// VulnerabilitiesPrimaryKey and VulnerabilitiesColumn2 are the table columns denoting the
+	// primary key for the vulnerabilities relation (M2M).
+	VulnerabilitiesPrimaryKey = []string{"vulnerability_id", "scan_id"}
+	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
+	// primary key for the controls relation (M2M).
+	ControlsPrimaryKey = []string{"control_id", "scan_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -155,7 +368,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [8]ent.Hook
+	Hooks        [10]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -170,6 +383,10 @@ var (
 	OwnerIDValidator func(string) error
 	// TargetValidator is a validator for the "target" field. It is called by the builders before save.
 	TargetValidator func(string) error
+	// ScanScheduleValidator is a validator for the "scan_schedule" field. It is called by the builders before save.
+	ScanScheduleValidator func(string) error
+	// DefaultVulnerabilityIds holds the default value on creation for the "vulnerability_ids" field.
+	DefaultVulnerabilityIds []string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -241,6 +458,56 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// ByReviewedBy orders the results by the reviewed_by field.
+func ByReviewedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedBy, opts...).ToFunc()
+}
+
+// ByReviewedByUserID orders the results by the reviewed_by_user_id field.
+func ByReviewedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByUserID, opts...).ToFunc()
+}
+
+// ByReviewedByGroupID orders the results by the reviewed_by_group_id field.
+func ByReviewedByGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByGroupID, opts...).ToFunc()
+}
+
+// ByAssignedTo orders the results by the assigned_to field.
+func ByAssignedTo(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedTo, opts...).ToFunc()
+}
+
+// ByAssignedToUserID orders the results by the assigned_to_user_id field.
+func ByAssignedToUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedToUserID, opts...).ToFunc()
+}
+
+// ByAssignedToGroupID orders the results by the assigned_to_group_id field.
+func ByAssignedToGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedToGroupID, opts...).ToFunc()
+}
+
+// ByEnvironmentName orders the results by the environment_name field.
+func ByEnvironmentName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentName, opts...).ToFunc()
+}
+
+// ByEnvironmentID orders the results by the environment_id field.
+func ByEnvironmentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentID, opts...).ToFunc()
+}
+
+// ByScopeName orders the results by the scope_name field.
+func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeName, opts...).ToFunc()
+}
+
+// ByScopeID orders the results by the scope_id field.
+func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
+}
+
 // ByTarget orders the results by the target field.
 func ByTarget(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTarget, opts...).ToFunc()
@@ -249,6 +516,41 @@ func ByTarget(opts ...sql.OrderTermOption) OrderOption {
 // ByScanType orders the results by the scan_type field.
 func ByScanType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScanType, opts...).ToFunc()
+}
+
+// ByScanDate orders the results by the scan_date field.
+func ByScanDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScanDate, opts...).ToFunc()
+}
+
+// ByScanSchedule orders the results by the scan_schedule field.
+func ByScanSchedule(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScanSchedule, opts...).ToFunc()
+}
+
+// ByNextScanRunAt orders the results by the next_scan_run_at field.
+func ByNextScanRunAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNextScanRunAt, opts...).ToFunc()
+}
+
+// ByPerformedBy orders the results by the performed_by field.
+func ByPerformedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPerformedBy, opts...).ToFunc()
+}
+
+// ByPerformedByUserID orders the results by the performed_by_user_id field.
+func ByPerformedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPerformedByUserID, opts...).ToFunc()
+}
+
+// ByPerformedByGroupID orders the results by the performed_by_group_id field.
+func ByPerformedByGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPerformedByGroupID, opts...).ToFunc()
+}
+
+// ByGeneratedByPlatformID orders the results by the generated_by_platform_id field.
+func ByGeneratedByPlatformID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGeneratedByPlatformID, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.
@@ -305,6 +607,48 @@ func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByReviewedByUserField orders the results by reviewed_by_user field.
+func ByReviewedByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewedByUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByReviewedByGroupField orders the results by reviewed_by_group field.
+func ByReviewedByGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewedByGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByAssignedToUserField orders the results by assigned_to_user field.
+func ByAssignedToUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssignedToUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByAssignedToGroupField orders the results by assigned_to_group field.
+func ByAssignedToGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssignedToGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEnvironmentField orders the results by environment field.
+func ByEnvironmentField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEnvironmentStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByScopeField orders the results by scope field.
+func ByScopeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScopeStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByAssetsCount orders the results by assets count.
 func ByAssetsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -330,6 +674,139 @@ func ByEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
 func ByEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEvidenceCount orders the results by evidence count.
+func ByEvidenceCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEvidenceStep(), opts...)
+	}
+}
+
+// ByEvidence orders the results by evidence terms.
+func ByEvidence(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEvidenceStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByFilesCount orders the results by files count.
+func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
+	}
+}
+
+// ByFiles orders the results by files terms.
+func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRemediationsCount orders the results by remediations count.
+func ByRemediationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRemediationsStep(), opts...)
+	}
+}
+
+// ByRemediations orders the results by remediations terms.
+func ByRemediations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRemediationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByActionPlansCount orders the results by action_plans count.
+func ByActionPlansCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newActionPlansStep(), opts...)
+	}
+}
+
+// ByActionPlans orders the results by action_plans terms.
+func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newActionPlansStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTasksCount orders the results by tasks count.
+func ByTasksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTasksStep(), opts...)
+	}
+}
+
+// ByTasks orders the results by tasks terms.
+func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTasksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPlatformsCount orders the results by platforms count.
+func ByPlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformsStep(), opts...)
+	}
+}
+
+// ByPlatforms orders the results by platforms terms.
+func ByPlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByVulnerabilitiesCount orders the results by vulnerabilities count.
+func ByVulnerabilitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVulnerabilitiesStep(), opts...)
+	}
+}
+
+// ByVulnerabilities orders the results by vulnerabilities terms.
+func ByVulnerabilities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVulnerabilitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByControlsCount orders the results by controls count.
+func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlsStep(), opts...)
+	}
+}
+
+// ByControls orders the results by controls terms.
+func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByGeneratedByPlatformField orders the results by generated_by_platform field.
+func ByGeneratedByPlatformField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newGeneratedByPlatformStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByPerformedByUserField orders the results by performed_by_user field.
+func ByPerformedByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPerformedByUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByPerformedByGroupField orders the results by performed_by_group field.
+func ByPerformedByGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPerformedByGroupStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -360,6 +837,48 @@ func newViewersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
 	)
 }
+func newReviewedByUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewedByUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByUserTable, ReviewedByUserColumn),
+	)
+}
+func newReviewedByGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewedByGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByGroupTable, ReviewedByGroupColumn),
+	)
+}
+func newAssignedToUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssignedToUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AssignedToUserTable, AssignedToUserColumn),
+	)
+}
+func newAssignedToGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssignedToGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AssignedToGroupTable, AssignedToGroupColumn),
+	)
+}
+func newEnvironmentStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EnvironmentInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EnvironmentTable, EnvironmentColumn),
+	)
+}
+func newScopeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScopeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
+	)
+}
 func newAssetsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -372,6 +891,83 @@ func newEntitiesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EntitiesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, EntitiesTable, EntitiesColumn),
+	)
+}
+func newEvidenceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EvidenceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, EvidenceTable, EvidencePrimaryKey...),
+	)
+}
+func newFilesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FilesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+	)
+}
+func newRemediationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RemediationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, RemediationsTable, RemediationsPrimaryKey...),
+	)
+}
+func newActionPlansStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ActionPlansInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
+	)
+}
+func newTasksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TasksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
+	)
+}
+func newPlatformsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
+	)
+}
+func newVulnerabilitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VulnerabilitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
+	)
+}
+func newControlsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
+	)
+}
+func newGeneratedByPlatformStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(GeneratedByPlatformInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, GeneratedByPlatformTable, GeneratedByPlatformColumn),
+	)
+}
+func newPerformedByUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PerformedByUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, PerformedByUserTable, PerformedByUserColumn),
+	)
+}
+func newPerformedByGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PerformedByGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, PerformedByGroupTable, PerformedByGroupColumn),
 	)
 }
 

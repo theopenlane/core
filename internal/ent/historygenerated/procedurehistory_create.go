@@ -440,6 +440,62 @@ func (_c *ProcedureHistoryCreate) SetNillableProcedureKindID(v *string) *Procedu
 	return _c
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *ProcedureHistoryCreate) SetEnvironmentName(v string) *ProcedureHistoryCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *ProcedureHistoryCreate) SetNillableEnvironmentName(v *string) *ProcedureHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *ProcedureHistoryCreate) SetEnvironmentID(v string) *ProcedureHistoryCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *ProcedureHistoryCreate) SetNillableEnvironmentID(v *string) *ProcedureHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *ProcedureHistoryCreate) SetScopeName(v string) *ProcedureHistoryCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *ProcedureHistoryCreate) SetNillableScopeName(v *string) *ProcedureHistoryCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *ProcedureHistoryCreate) SetScopeID(v string) *ProcedureHistoryCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *ProcedureHistoryCreate) SetNillableScopeID(v *string) *ProcedureHistoryCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_c *ProcedureHistoryCreate) SetWorkflowEligibleMarker(v bool) *ProcedureHistoryCreate {
 	_c.mutation.SetWorkflowEligibleMarker(v)
@@ -800,6 +856,22 @@ func (_c *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cre
 	if value, ok := _c.mutation.ProcedureKindID(); ok {
 		_spec.SetField(procedurehistory.FieldProcedureKindID, field.TypeString, value)
 		_node.ProcedureKindID = value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(procedurehistory.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.EnvironmentID(); ok {
+		_spec.SetField(procedurehistory.FieldEnvironmentID, field.TypeString, value)
+		_node.EnvironmentID = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(procedurehistory.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.ScopeID(); ok {
+		_spec.SetField(procedurehistory.FieldScopeID, field.TypeString, value)
+		_node.ScopeID = value
 	}
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(procedurehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)

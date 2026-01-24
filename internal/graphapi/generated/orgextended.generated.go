@@ -160,6 +160,14 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_subscribers(ctx, field)
 			case "entities":
 				return ec.fieldContext_Organization_entities(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Organization_platforms(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Organization_identityHolders(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Organization_campaigns(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_Organization_campaignTargets(ctx, field)
 			case "entityTypes":
 				return ec.fieldContext_Organization_entityTypes(ctx, field)
 			case "contacts":

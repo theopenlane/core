@@ -597,6 +597,86 @@ func (_u *ProcedureUpdate) ClearProcedureKindID() *ProcedureUpdate {
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *ProcedureUpdate) SetEnvironmentName(v string) *ProcedureUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableEnvironmentName(v *string) *ProcedureUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *ProcedureUpdate) ClearEnvironmentName() *ProcedureUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *ProcedureUpdate) SetEnvironmentID(v string) *ProcedureUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableEnvironmentID(v *string) *ProcedureUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *ProcedureUpdate) ClearEnvironmentID() *ProcedureUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *ProcedureUpdate) SetScopeName(v string) *ProcedureUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableScopeName(v *string) *ProcedureUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *ProcedureUpdate) ClearScopeName() *ProcedureUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *ProcedureUpdate) SetScopeID(v string) *ProcedureUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableScopeID(v *string) *ProcedureUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *ProcedureUpdate) ClearScopeID() *ProcedureUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_u *ProcedureUpdate) SetWorkflowEligibleMarker(v bool) *ProcedureUpdate {
 	_u.mutation.SetWorkflowEligibleMarker(v)
@@ -665,6 +745,16 @@ func (_u *ProcedureUpdate) SetDelegate(v *Group) *ProcedureUpdate {
 // SetProcedureKind sets the "procedure_kind" edge to the CustomTypeEnum entity.
 func (_u *ProcedureUpdate) SetProcedureKind(v *CustomTypeEnum) *ProcedureUpdate {
 	return _u.SetProcedureKindID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdate) SetEnvironment(v *CustomTypeEnum) *ProcedureUpdate {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdate) SetScope(v *CustomTypeEnum) *ProcedureUpdate {
+	return _u.SetScopeID(v.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -890,6 +980,18 @@ func (_u *ProcedureUpdate) ClearDelegate() *ProcedureUpdate {
 // ClearProcedureKind clears the "procedure_kind" edge to the CustomTypeEnum entity.
 func (_u *ProcedureUpdate) ClearProcedureKind() *ProcedureUpdate {
 	_u.mutation.ClearProcedureKind()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdate) ClearEnvironment() *ProcedureUpdate {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdate) ClearScope() *ProcedureUpdate {
+	_u.mutation.ClearScope()
 	return _u
 }
 
@@ -1384,6 +1486,18 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.ProcedureKindNameCleared() {
 		_spec.ClearField(procedure.FieldProcedureKindName, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(procedure.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(procedure.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(procedure.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(procedure.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(procedure.FieldWorkflowEligibleMarker, field.TypeBool, value)
 	}
@@ -1599,6 +1713,68 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Inverse: false,
 			Table:   procedure.ProcedureKindTable,
 			Columns: []string{procedure.ProcedureKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.EnvironmentTable,
+			Columns: []string{procedure.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.EnvironmentTable,
+			Columns: []string{procedure.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ScopeTable,
+			Columns: []string{procedure.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ScopeTable,
+			Columns: []string{procedure.ScopeColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
@@ -2695,6 +2871,86 @@ func (_u *ProcedureUpdateOne) ClearProcedureKindID() *ProcedureUpdateOne {
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *ProcedureUpdateOne) SetEnvironmentName(v string) *ProcedureUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableEnvironmentName(v *string) *ProcedureUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *ProcedureUpdateOne) ClearEnvironmentName() *ProcedureUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *ProcedureUpdateOne) SetEnvironmentID(v string) *ProcedureUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableEnvironmentID(v *string) *ProcedureUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *ProcedureUpdateOne) ClearEnvironmentID() *ProcedureUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *ProcedureUpdateOne) SetScopeName(v string) *ProcedureUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableScopeName(v *string) *ProcedureUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *ProcedureUpdateOne) ClearScopeName() *ProcedureUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *ProcedureUpdateOne) SetScopeID(v string) *ProcedureUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableScopeID(v *string) *ProcedureUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *ProcedureUpdateOne) ClearScopeID() *ProcedureUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_u *ProcedureUpdateOne) SetWorkflowEligibleMarker(v bool) *ProcedureUpdateOne {
 	_u.mutation.SetWorkflowEligibleMarker(v)
@@ -2763,6 +3019,16 @@ func (_u *ProcedureUpdateOne) SetDelegate(v *Group) *ProcedureUpdateOne {
 // SetProcedureKind sets the "procedure_kind" edge to the CustomTypeEnum entity.
 func (_u *ProcedureUpdateOne) SetProcedureKind(v *CustomTypeEnum) *ProcedureUpdateOne {
 	return _u.SetProcedureKindID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdateOne) SetEnvironment(v *CustomTypeEnum) *ProcedureUpdateOne {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdateOne) SetScope(v *CustomTypeEnum) *ProcedureUpdateOne {
+	return _u.SetScopeID(v.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -2988,6 +3254,18 @@ func (_u *ProcedureUpdateOne) ClearDelegate() *ProcedureUpdateOne {
 // ClearProcedureKind clears the "procedure_kind" edge to the CustomTypeEnum entity.
 func (_u *ProcedureUpdateOne) ClearProcedureKind() *ProcedureUpdateOne {
 	_u.mutation.ClearProcedureKind()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdateOne) ClearEnvironment() *ProcedureUpdateOne {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdateOne) ClearScope() *ProcedureUpdateOne {
+	_u.mutation.ClearScope()
 	return _u
 }
 
@@ -3512,6 +3790,18 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 	if _u.mutation.ProcedureKindNameCleared() {
 		_spec.ClearField(procedure.FieldProcedureKindName, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(procedure.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(procedure.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(procedure.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(procedure.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(procedure.FieldWorkflowEligibleMarker, field.TypeBool, value)
 	}
@@ -3727,6 +4017,68 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 			Inverse: false,
 			Table:   procedure.ProcedureKindTable,
 			Columns: []string{procedure.ProcedureKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.EnvironmentTable,
+			Columns: []string{procedure.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.EnvironmentTable,
+			Columns: []string{procedure.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ScopeTable,
+			Columns: []string{procedure.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ScopeTable,
+			Columns: []string{procedure.ScopeColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),

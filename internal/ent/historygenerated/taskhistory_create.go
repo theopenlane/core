@@ -197,6 +197,62 @@ func (_c *TaskHistoryCreate) SetNillableTaskKindID(v *string) *TaskHistoryCreate
 	return _c
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *TaskHistoryCreate) SetEnvironmentName(v string) *TaskHistoryCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableEnvironmentName(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *TaskHistoryCreate) SetEnvironmentID(v string) *TaskHistoryCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableEnvironmentID(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *TaskHistoryCreate) SetScopeName(v string) *TaskHistoryCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableScopeName(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *TaskHistoryCreate) SetScopeID(v string) *TaskHistoryCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableScopeID(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *TaskHistoryCreate) SetTitle(v string) *TaskHistoryCreate {
 	_c.mutation.SetTitle(v)
@@ -556,6 +612,22 @@ func (_c *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.TaskKindID(); ok {
 		_spec.SetField(taskhistory.FieldTaskKindID, field.TypeString, value)
 		_node.TaskKindID = value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(taskhistory.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.EnvironmentID(); ok {
+		_spec.SetField(taskhistory.FieldEnvironmentID, field.TypeString, value)
+		_node.EnvironmentID = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(taskhistory.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.ScopeID(); ok {
+		_spec.SetField(taskhistory.FieldScopeID, field.TypeString, value)
+		_node.ScopeID = value
 	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)

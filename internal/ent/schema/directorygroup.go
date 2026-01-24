@@ -135,6 +135,8 @@ func (g DirectoryGroup) Mixin() []ent.Mixin {
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(g),
+			newCustomEnumMixin(g, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(g, withEnumFieldName("scope"), withGlobalEnum()),
 		},
 	}.getMixins(g)
 }

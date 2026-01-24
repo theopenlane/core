@@ -13,17 +13,25 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -32,33 +40,62 @@ import (
 // EntityQuery is the builder for querying Entity entities.
 type EntityQuery struct {
 	config
-	ctx                    *QueryContext
-	order                  []entity.OrderOption
-	inters                 []Interceptor
-	predicates             []predicate.Entity
-	withOwner              *OrganizationQuery
-	withBlockedGroups      *GroupQuery
-	withEditors            *GroupQuery
-	withViewers            *GroupQuery
-	withContacts           *ContactQuery
-	withDocuments          *DocumentDataQuery
-	withNotes              *NoteQuery
-	withFiles              *FileQuery
-	withAssets             *AssetQuery
-	withScans              *ScanQuery
-	withEntityType         *EntityTypeQuery
-	withFKs                bool
-	loadTotal              []func(context.Context, []*Entity) error
-	modifiers              []func(*sql.Selector)
-	withNamedBlockedGroups map[string]*GroupQuery
-	withNamedEditors       map[string]*GroupQuery
-	withNamedViewers       map[string]*GroupQuery
-	withNamedContacts      map[string]*ContactQuery
-	withNamedDocuments     map[string]*DocumentDataQuery
-	withNamedNotes         map[string]*NoteQuery
-	withNamedFiles         map[string]*FileQuery
-	withNamedAssets        map[string]*AssetQuery
-	withNamedScans         map[string]*ScanQuery
+	ctx                                   *QueryContext
+	order                                 []entity.OrderOption
+	inters                                []Interceptor
+	predicates                            []predicate.Entity
+	withOwner                             *OrganizationQuery
+	withBlockedGroups                     *GroupQuery
+	withEditors                           *GroupQuery
+	withViewers                           *GroupQuery
+	withInternalOwnerUser                 *UserQuery
+	withInternalOwnerGroup                *GroupQuery
+	withReviewedByUser                    *UserQuery
+	withReviewedByGroup                   *GroupQuery
+	withEntityRelationshipState           *CustomTypeEnumQuery
+	withEntitySecurityQuestionnaireStatus *CustomTypeEnumQuery
+	withEntitySourceType                  *CustomTypeEnumQuery
+	withEnvironment                       *CustomTypeEnumQuery
+	withScope                             *CustomTypeEnumQuery
+	withContacts                          *ContactQuery
+	withDocuments                         *DocumentDataQuery
+	withNotes                             *NoteQuery
+	withFiles                             *FileQuery
+	withAssets                            *AssetQuery
+	withScans                             *ScanQuery
+	withCampaigns                         *CampaignQuery
+	withAssessmentResponses               *AssessmentResponseQuery
+	withIntegrations                      *IntegrationQuery
+	withSubprocessors                     *SubprocessorQuery
+	withAuthMethods                       *CustomTypeEnumQuery
+	withEmployerIdentityHolders           *IdentityHolderQuery
+	withIdentityHolders                   *IdentityHolderQuery
+	withPlatforms                         *PlatformQuery
+	withOutOfScopePlatforms               *PlatformQuery
+	withSourcePlatforms                   *PlatformQuery
+	withEntityType                        *EntityTypeQuery
+	withFKs                               bool
+	loadTotal                             []func(context.Context, []*Entity) error
+	modifiers                             []func(*sql.Selector)
+	withNamedBlockedGroups                map[string]*GroupQuery
+	withNamedEditors                      map[string]*GroupQuery
+	withNamedViewers                      map[string]*GroupQuery
+	withNamedContacts                     map[string]*ContactQuery
+	withNamedDocuments                    map[string]*DocumentDataQuery
+	withNamedNotes                        map[string]*NoteQuery
+	withNamedFiles                        map[string]*FileQuery
+	withNamedAssets                       map[string]*AssetQuery
+	withNamedScans                        map[string]*ScanQuery
+	withNamedCampaigns                    map[string]*CampaignQuery
+	withNamedAssessmentResponses          map[string]*AssessmentResponseQuery
+	withNamedIntegrations                 map[string]*IntegrationQuery
+	withNamedSubprocessors                map[string]*SubprocessorQuery
+	withNamedAuthMethods                  map[string]*CustomTypeEnumQuery
+	withNamedEmployerIdentityHolders      map[string]*IdentityHolderQuery
+	withNamedIdentityHolders              map[string]*IdentityHolderQuery
+	withNamedPlatforms                    map[string]*PlatformQuery
+	withNamedOutOfScopePlatforms          map[string]*PlatformQuery
+	withNamedSourcePlatforms              map[string]*PlatformQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -189,6 +226,231 @@ func (_q *EntityQuery) QueryViewers() *GroupQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.EntityViewers
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerUser chains the current query on the "internal_owner_user" edge.
+func (_q *EntityQuery) QueryInternalOwnerUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.InternalOwnerUserTable, entity.InternalOwnerUserColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerGroup chains the current query on the "internal_owner_group" edge.
+func (_q *EntityQuery) QueryInternalOwnerGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.InternalOwnerGroupTable, entity.InternalOwnerGroupColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviewedByUser chains the current query on the "reviewed_by_user" edge.
+func (_q *EntityQuery) QueryReviewedByUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.ReviewedByUserTable, entity.ReviewedByUserColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviewedByGroup chains the current query on the "reviewed_by_group" edge.
+func (_q *EntityQuery) QueryReviewedByGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.ReviewedByGroupTable, entity.ReviewedByGroupColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEntityRelationshipState chains the current query on the "entity_relationship_state" edge.
+func (_q *EntityQuery) QueryEntityRelationshipState() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.EntityRelationshipStateTable, entity.EntityRelationshipStateColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEntitySecurityQuestionnaireStatus chains the current query on the "entity_security_questionnaire_status" edge.
+func (_q *EntityQuery) QueryEntitySecurityQuestionnaireStatus() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.EntitySecurityQuestionnaireStatusTable, entity.EntitySecurityQuestionnaireStatusColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEntitySourceType chains the current query on the "entity_source_type" edge.
+func (_q *EntityQuery) QueryEntitySourceType() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.EntitySourceTypeTable, entity.EntitySourceTypeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEnvironment chains the current query on the "environment" edge.
+func (_q *EntityQuery) QueryEnvironment() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.EnvironmentTable, entity.EnvironmentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScope chains the current query on the "scope" edge.
+func (_q *EntityQuery) QueryScope() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.ScopeTable, entity.ScopeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Entity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -339,6 +601,256 @@ func (_q *EntityQuery) QueryScans() *ScanQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Scan
 		step.Edge.Schema = schemaConfig.Scan
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaigns chains the current query on the "campaigns" edge.
+func (_q *EntityQuery) QueryCampaigns() *CampaignQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.CampaignsTable, entity.CampaignsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssessmentResponses chains the current query on the "assessment_responses" edge.
+func (_q *EntityQuery) QueryAssessmentResponses() *AssessmentResponseQuery {
+	query := (&AssessmentResponseClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.AssessmentResponsesTable, entity.AssessmentResponsesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.AssessmentResponse
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIntegrations chains the current query on the "integrations" edge.
+func (_q *EntityQuery) QueryIntegrations() *IntegrationQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, entity.IntegrationsTable, entity.IntegrationsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.EntityIntegrations
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySubprocessors chains the current query on the "subprocessors" edge.
+func (_q *EntityQuery) QuerySubprocessors() *SubprocessorQuery {
+	query := (&SubprocessorClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(subprocessor.Table, subprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, entity.SubprocessorsTable, entity.SubprocessorsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.EntitySubprocessors
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAuthMethods chains the current query on the "auth_methods" edge.
+func (_q *EntityQuery) QueryAuthMethods() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.AuthMethodsTable, entity.AuthMethodsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.CustomTypeEnum
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEmployerIdentityHolders chains the current query on the "employer_identity_holders" edge.
+func (_q *EntityQuery) QueryEmployerIdentityHolders() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, entity.EmployerIdentityHoldersTable, entity.EmployerIdentityHoldersColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolder
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders chains the current query on the "identity_holders" edge.
+func (_q *EntityQuery) QueryIdentityHolders() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.IdentityHoldersTable, entity.IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolderEntities
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPlatforms chains the current query on the "platforms" edge.
+func (_q *EntityQuery) QueryPlatforms() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.PlatformsTable, entity.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformEntities
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOutOfScopePlatforms chains the current query on the "out_of_scope_platforms" edge.
+func (_q *EntityQuery) QueryOutOfScopePlatforms() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.OutOfScopePlatformsTable, entity.OutOfScopePlatformsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformOutOfScopeVendors
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySourcePlatforms chains the current query on the "source_platforms" edge.
+func (_q *EntityQuery) QuerySourcePlatforms() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.SourcePlatformsTable, entity.SourcePlatformsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformSourceEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -557,22 +1069,41 @@ func (_q *EntityQuery) Clone() *EntityQuery {
 		return nil
 	}
 	return &EntityQuery{
-		config:            _q.config,
-		ctx:               _q.ctx.Clone(),
-		order:             append([]entity.OrderOption{}, _q.order...),
-		inters:            append([]Interceptor{}, _q.inters...),
-		predicates:        append([]predicate.Entity{}, _q.predicates...),
-		withOwner:         _q.withOwner.Clone(),
-		withBlockedGroups: _q.withBlockedGroups.Clone(),
-		withEditors:       _q.withEditors.Clone(),
-		withViewers:       _q.withViewers.Clone(),
-		withContacts:      _q.withContacts.Clone(),
-		withDocuments:     _q.withDocuments.Clone(),
-		withNotes:         _q.withNotes.Clone(),
-		withFiles:         _q.withFiles.Clone(),
-		withAssets:        _q.withAssets.Clone(),
-		withScans:         _q.withScans.Clone(),
-		withEntityType:    _q.withEntityType.Clone(),
+		config:                                _q.config,
+		ctx:                                   _q.ctx.Clone(),
+		order:                                 append([]entity.OrderOption{}, _q.order...),
+		inters:                                append([]Interceptor{}, _q.inters...),
+		predicates:                            append([]predicate.Entity{}, _q.predicates...),
+		withOwner:                             _q.withOwner.Clone(),
+		withBlockedGroups:                     _q.withBlockedGroups.Clone(),
+		withEditors:                           _q.withEditors.Clone(),
+		withViewers:                           _q.withViewers.Clone(),
+		withInternalOwnerUser:                 _q.withInternalOwnerUser.Clone(),
+		withInternalOwnerGroup:                _q.withInternalOwnerGroup.Clone(),
+		withReviewedByUser:                    _q.withReviewedByUser.Clone(),
+		withReviewedByGroup:                   _q.withReviewedByGroup.Clone(),
+		withEntityRelationshipState:           _q.withEntityRelationshipState.Clone(),
+		withEntitySecurityQuestionnaireStatus: _q.withEntitySecurityQuestionnaireStatus.Clone(),
+		withEntitySourceType:                  _q.withEntitySourceType.Clone(),
+		withEnvironment:                       _q.withEnvironment.Clone(),
+		withScope:                             _q.withScope.Clone(),
+		withContacts:                          _q.withContacts.Clone(),
+		withDocuments:                         _q.withDocuments.Clone(),
+		withNotes:                             _q.withNotes.Clone(),
+		withFiles:                             _q.withFiles.Clone(),
+		withAssets:                            _q.withAssets.Clone(),
+		withScans:                             _q.withScans.Clone(),
+		withCampaigns:                         _q.withCampaigns.Clone(),
+		withAssessmentResponses:               _q.withAssessmentResponses.Clone(),
+		withIntegrations:                      _q.withIntegrations.Clone(),
+		withSubprocessors:                     _q.withSubprocessors.Clone(),
+		withAuthMethods:                       _q.withAuthMethods.Clone(),
+		withEmployerIdentityHolders:           _q.withEmployerIdentityHolders.Clone(),
+		withIdentityHolders:                   _q.withIdentityHolders.Clone(),
+		withPlatforms:                         _q.withPlatforms.Clone(),
+		withOutOfScopePlatforms:               _q.withOutOfScopePlatforms.Clone(),
+		withSourcePlatforms:                   _q.withSourcePlatforms.Clone(),
+		withEntityType:                        _q.withEntityType.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -621,6 +1152,105 @@ func (_q *EntityQuery) WithViewers(opts ...func(*GroupQuery)) *EntityQuery {
 		opt(query)
 	}
 	_q.withViewers = query
+	return _q
+}
+
+// WithInternalOwnerUser tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithInternalOwnerUser(opts ...func(*UserQuery)) *EntityQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerUser = query
+	return _q
+}
+
+// WithInternalOwnerGroup tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithInternalOwnerGroup(opts ...func(*GroupQuery)) *EntityQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerGroup = query
+	return _q
+}
+
+// WithReviewedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "reviewed_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithReviewedByUser(opts ...func(*UserQuery)) *EntityQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewedByUser = query
+	return _q
+}
+
+// WithReviewedByGroup tells the query-builder to eager-load the nodes that are connected to
+// the "reviewed_by_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithReviewedByGroup(opts ...func(*GroupQuery)) *EntityQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewedByGroup = query
+	return _q
+}
+
+// WithEntityRelationshipState tells the query-builder to eager-load the nodes that are connected to
+// the "entity_relationship_state" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithEntityRelationshipState(opts ...func(*CustomTypeEnumQuery)) *EntityQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEntityRelationshipState = query
+	return _q
+}
+
+// WithEntitySecurityQuestionnaireStatus tells the query-builder to eager-load the nodes that are connected to
+// the "entity_security_questionnaire_status" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithEntitySecurityQuestionnaireStatus(opts ...func(*CustomTypeEnumQuery)) *EntityQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEntitySecurityQuestionnaireStatus = query
+	return _q
+}
+
+// WithEntitySourceType tells the query-builder to eager-load the nodes that are connected to
+// the "entity_source_type" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithEntitySourceType(opts ...func(*CustomTypeEnumQuery)) *EntityQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEntitySourceType = query
+	return _q
+}
+
+// WithEnvironment tells the query-builder to eager-load the nodes that are connected to
+// the "environment" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithEnvironment(opts ...func(*CustomTypeEnumQuery)) *EntityQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEnvironment = query
+	return _q
+}
+
+// WithScope tells the query-builder to eager-load the nodes that are connected to
+// the "scope" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *EntityQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScope = query
 	return _q
 }
 
@@ -687,6 +1317,116 @@ func (_q *EntityQuery) WithScans(opts ...func(*ScanQuery)) *EntityQuery {
 		opt(query)
 	}
 	_q.withScans = query
+	return _q
+}
+
+// WithCampaigns tells the query-builder to eager-load the nodes that are connected to
+// the "campaigns" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithCampaigns(opts ...func(*CampaignQuery)) *EntityQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaigns = query
+	return _q
+}
+
+// WithAssessmentResponses tells the query-builder to eager-load the nodes that are connected to
+// the "assessment_responses" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithAssessmentResponses(opts ...func(*AssessmentResponseQuery)) *EntityQuery {
+	query := (&AssessmentResponseClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssessmentResponses = query
+	return _q
+}
+
+// WithIntegrations tells the query-builder to eager-load the nodes that are connected to
+// the "integrations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *EntityQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrations = query
+	return _q
+}
+
+// WithSubprocessors tells the query-builder to eager-load the nodes that are connected to
+// the "subprocessors" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithSubprocessors(opts ...func(*SubprocessorQuery)) *EntityQuery {
+	query := (&SubprocessorClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSubprocessors = query
+	return _q
+}
+
+// WithAuthMethods tells the query-builder to eager-load the nodes that are connected to
+// the "auth_methods" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithAuthMethods(opts ...func(*CustomTypeEnumQuery)) *EntityQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAuthMethods = query
+	return _q
+}
+
+// WithEmployerIdentityHolders tells the query-builder to eager-load the nodes that are connected to
+// the "employer_identity_holders" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithEmployerIdentityHolders(opts ...func(*IdentityHolderQuery)) *EntityQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEmployerIdentityHolders = query
+	return _q
+}
+
+// WithIdentityHolders tells the query-builder to eager-load the nodes that are connected to
+// the "identity_holders" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithIdentityHolders(opts ...func(*IdentityHolderQuery)) *EntityQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIdentityHolders = query
+	return _q
+}
+
+// WithPlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithPlatforms(opts ...func(*PlatformQuery)) *EntityQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatforms = query
+	return _q
+}
+
+// WithOutOfScopePlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "out_of_scope_platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithOutOfScopePlatforms(opts ...func(*PlatformQuery)) *EntityQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withOutOfScopePlatforms = query
+	return _q
+}
+
+// WithSourcePlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "source_platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithSourcePlatforms(opts ...func(*PlatformQuery)) *EntityQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSourcePlatforms = query
 	return _q
 }
 
@@ -786,17 +1526,36 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		nodes       = []*Entity{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [11]bool{
+		loadedTypes = [30]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
+			_q.withInternalOwnerUser != nil,
+			_q.withInternalOwnerGroup != nil,
+			_q.withReviewedByUser != nil,
+			_q.withReviewedByGroup != nil,
+			_q.withEntityRelationshipState != nil,
+			_q.withEntitySecurityQuestionnaireStatus != nil,
+			_q.withEntitySourceType != nil,
+			_q.withEnvironment != nil,
+			_q.withScope != nil,
 			_q.withContacts != nil,
 			_q.withDocuments != nil,
 			_q.withNotes != nil,
 			_q.withFiles != nil,
 			_q.withAssets != nil,
 			_q.withScans != nil,
+			_q.withCampaigns != nil,
+			_q.withAssessmentResponses != nil,
+			_q.withIntegrations != nil,
+			_q.withSubprocessors != nil,
+			_q.withAuthMethods != nil,
+			_q.withEmployerIdentityHolders != nil,
+			_q.withIdentityHolders != nil,
+			_q.withPlatforms != nil,
+			_q.withOutOfScopePlatforms != nil,
+			_q.withSourcePlatforms != nil,
 			_q.withEntityType != nil,
 		}
 	)
@@ -853,6 +1612,60 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			return nil, err
 		}
 	}
+	if query := _q.withInternalOwnerUser; query != nil {
+		if err := _q.loadInternalOwnerUser(ctx, query, nodes, nil,
+			func(n *Entity, e *User) { n.Edges.InternalOwnerUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalOwnerGroup; query != nil {
+		if err := _q.loadInternalOwnerGroup(ctx, query, nodes, nil,
+			func(n *Entity, e *Group) { n.Edges.InternalOwnerGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviewedByUser; query != nil {
+		if err := _q.loadReviewedByUser(ctx, query, nodes, nil,
+			func(n *Entity, e *User) { n.Edges.ReviewedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviewedByGroup; query != nil {
+		if err := _q.loadReviewedByGroup(ctx, query, nodes, nil,
+			func(n *Entity, e *Group) { n.Edges.ReviewedByGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEntityRelationshipState; query != nil {
+		if err := _q.loadEntityRelationshipState(ctx, query, nodes, nil,
+			func(n *Entity, e *CustomTypeEnum) { n.Edges.EntityRelationshipState = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEntitySecurityQuestionnaireStatus; query != nil {
+		if err := _q.loadEntitySecurityQuestionnaireStatus(ctx, query, nodes, nil,
+			func(n *Entity, e *CustomTypeEnum) { n.Edges.EntitySecurityQuestionnaireStatus = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEntitySourceType; query != nil {
+		if err := _q.loadEntitySourceType(ctx, query, nodes, nil,
+			func(n *Entity, e *CustomTypeEnum) { n.Edges.EntitySourceType = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEnvironment; query != nil {
+		if err := _q.loadEnvironment(ctx, query, nodes, nil,
+			func(n *Entity, e *CustomTypeEnum) { n.Edges.Environment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScope; query != nil {
+		if err := _q.loadScope(ctx, query, nodes, nil,
+			func(n *Entity, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withContacts; query != nil {
 		if err := _q.loadContacts(ctx, query, nodes,
 			func(n *Entity) { n.Edges.Contacts = []*Contact{} },
@@ -892,6 +1705,80 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		if err := _q.loadScans(ctx, query, nodes,
 			func(n *Entity) { n.Edges.Scans = []*Scan{} },
 			func(n *Entity, e *Scan) { n.Edges.Scans = append(n.Edges.Scans, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaigns; query != nil {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *Entity) { n.Edges.Campaigns = []*Campaign{} },
+			func(n *Entity, e *Campaign) { n.Edges.Campaigns = append(n.Edges.Campaigns, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssessmentResponses; query != nil {
+		if err := _q.loadAssessmentResponses(ctx, query, nodes,
+			func(n *Entity) { n.Edges.AssessmentResponses = []*AssessmentResponse{} },
+			func(n *Entity, e *AssessmentResponse) {
+				n.Edges.AssessmentResponses = append(n.Edges.AssessmentResponses, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIntegrations; query != nil {
+		if err := _q.loadIntegrations(ctx, query, nodes,
+			func(n *Entity) { n.Edges.Integrations = []*Integration{} },
+			func(n *Entity, e *Integration) { n.Edges.Integrations = append(n.Edges.Integrations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSubprocessors; query != nil {
+		if err := _q.loadSubprocessors(ctx, query, nodes,
+			func(n *Entity) { n.Edges.Subprocessors = []*Subprocessor{} },
+			func(n *Entity, e *Subprocessor) { n.Edges.Subprocessors = append(n.Edges.Subprocessors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAuthMethods; query != nil {
+		if err := _q.loadAuthMethods(ctx, query, nodes,
+			func(n *Entity) { n.Edges.AuthMethods = []*CustomTypeEnum{} },
+			func(n *Entity, e *CustomTypeEnum) { n.Edges.AuthMethods = append(n.Edges.AuthMethods, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEmployerIdentityHolders; query != nil {
+		if err := _q.loadEmployerIdentityHolders(ctx, query, nodes,
+			func(n *Entity) { n.Edges.EmployerIdentityHolders = []*IdentityHolder{} },
+			func(n *Entity, e *IdentityHolder) {
+				n.Edges.EmployerIdentityHolders = append(n.Edges.EmployerIdentityHolders, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIdentityHolders; query != nil {
+		if err := _q.loadIdentityHolders(ctx, query, nodes,
+			func(n *Entity) { n.Edges.IdentityHolders = []*IdentityHolder{} },
+			func(n *Entity, e *IdentityHolder) { n.Edges.IdentityHolders = append(n.Edges.IdentityHolders, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatforms; query != nil {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Entity) { n.Edges.Platforms = []*Platform{} },
+			func(n *Entity, e *Platform) { n.Edges.Platforms = append(n.Edges.Platforms, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withOutOfScopePlatforms; query != nil {
+		if err := _q.loadOutOfScopePlatforms(ctx, query, nodes,
+			func(n *Entity) { n.Edges.OutOfScopePlatforms = []*Platform{} },
+			func(n *Entity, e *Platform) { n.Edges.OutOfScopePlatforms = append(n.Edges.OutOfScopePlatforms, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSourcePlatforms; query != nil {
+		if err := _q.loadSourcePlatforms(ctx, query, nodes,
+			func(n *Entity) { n.Edges.SourcePlatforms = []*Platform{} },
+			func(n *Entity, e *Platform) { n.Edges.SourcePlatforms = append(n.Edges.SourcePlatforms, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -961,6 +1848,76 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		if err := _q.loadScans(ctx, query, nodes,
 			func(n *Entity) { n.appendNamedScans(name) },
 			func(n *Entity, e *Scan) { n.appendNamedScans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaigns {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedCampaigns(name) },
+			func(n *Entity, e *Campaign) { n.appendNamedCampaigns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAssessmentResponses {
+		if err := _q.loadAssessmentResponses(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedAssessmentResponses(name) },
+			func(n *Entity, e *AssessmentResponse) { n.appendNamedAssessmentResponses(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrations {
+		if err := _q.loadIntegrations(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedIntegrations(name) },
+			func(n *Entity, e *Integration) { n.appendNamedIntegrations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSubprocessors {
+		if err := _q.loadSubprocessors(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedSubprocessors(name) },
+			func(n *Entity, e *Subprocessor) { n.appendNamedSubprocessors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAuthMethods {
+		if err := _q.loadAuthMethods(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedAuthMethods(name) },
+			func(n *Entity, e *CustomTypeEnum) { n.appendNamedAuthMethods(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEmployerIdentityHolders {
+		if err := _q.loadEmployerIdentityHolders(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedEmployerIdentityHolders(name) },
+			func(n *Entity, e *IdentityHolder) { n.appendNamedEmployerIdentityHolders(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIdentityHolders {
+		if err := _q.loadIdentityHolders(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedIdentityHolders(name) },
+			func(n *Entity, e *IdentityHolder) { n.appendNamedIdentityHolders(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPlatforms {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedPlatforms(name) },
+			func(n *Entity, e *Platform) { n.appendNamedPlatforms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedOutOfScopePlatforms {
+		if err := _q.loadOutOfScopePlatforms(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedOutOfScopePlatforms(name) },
+			func(n *Entity, e *Platform) { n.appendNamedOutOfScopePlatforms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSourcePlatforms {
+		if err := _q.loadSourcePlatforms(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedSourcePlatforms(name) },
+			func(n *Entity, e *Platform) { n.appendNamedSourcePlatforms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1183,6 +2140,267 @@ func (_q *EntityQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadInternalOwnerUser(ctx context.Context, query *UserQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadInternalOwnerGroup(ctx context.Context, query *GroupQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadReviewedByUser(ctx context.Context, query *UserQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		fk := nodes[i].ReviewedByUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "reviewed_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadReviewedByGroup(ctx context.Context, query *GroupQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		fk := nodes[i].ReviewedByGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "reviewed_by_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadEntityRelationshipState(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		fk := nodes[i].EntityRelationshipStateID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "entity_relationship_state_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadEntitySecurityQuestionnaireStatus(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		fk := nodes[i].EntitySecurityQuestionnaireStatusID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "entity_security_questionnaire_status_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadEntitySourceType(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		fk := nodes[i].EntitySourceTypeID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "entity_source_type_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadEnvironment(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		fk := nodes[i].EnvironmentID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "environment_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		fk := nodes[i].ScopeID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil
@@ -1497,6 +2715,499 @@ func (_q *EntityQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []
 	}
 	return nil
 }
+func (_q *EntityQuery) loadCampaigns(ctx context.Context, query *CampaignQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Campaign)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Entity)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(campaign.FieldEntityID)
+	}
+	query.Where(predicate.Campaign(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(entity.CampaignsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.EntityID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "entity_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *EntityQuery) loadAssessmentResponses(ctx context.Context, query *AssessmentResponseQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *AssessmentResponse)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Entity)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(assessmentresponse.FieldEntityID)
+	}
+	query.Where(predicate.AssessmentResponse(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(entity.AssessmentResponsesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.EntityID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "entity_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *EntityQuery) loadIntegrations(ctx context.Context, query *IntegrationQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Integration)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Entity)
+	nids := make(map[string]map[*Entity]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(entity.IntegrationsTable)
+		joinT.Schema(_q.schemaConfig.EntityIntegrations)
+		s.Join(joinT).On(s.C(integration.FieldID), joinT.C(entity.IntegrationsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(entity.IntegrationsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(entity.IntegrationsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Entity]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Integration](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "integrations" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadSubprocessors(ctx context.Context, query *SubprocessorQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Subprocessor)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Entity)
+	nids := make(map[string]map[*Entity]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(entity.SubprocessorsTable)
+		joinT.Schema(_q.schemaConfig.EntitySubprocessors)
+		s.Join(joinT).On(s.C(subprocessor.FieldID), joinT.C(entity.SubprocessorsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(entity.SubprocessorsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(entity.SubprocessorsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Entity]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Subprocessor](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "subprocessors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadAuthMethods(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *CustomTypeEnum)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Entity)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.CustomTypeEnum(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(entity.AuthMethodsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.entity_auth_methods
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "entity_auth_methods" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "entity_auth_methods" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *EntityQuery) loadEmployerIdentityHolders(ctx context.Context, query *IdentityHolderQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *IdentityHolder)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Entity)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(identityholder.FieldEmployerEntityID)
+	}
+	query.Where(predicate.IdentityHolder(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(entity.EmployerIdentityHoldersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.EmployerEntityID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "employer_entity_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *EntityQuery) loadIdentityHolders(ctx context.Context, query *IdentityHolderQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *IdentityHolder)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Entity)
+	nids := make(map[string]map[*Entity]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(entity.IdentityHoldersTable)
+		joinT.Schema(_q.schemaConfig.IdentityHolderEntities)
+		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(entity.IdentityHoldersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(entity.IdentityHoldersPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(entity.IdentityHoldersPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Entity]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*IdentityHolder](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "identity_holders" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Entity)
+	nids := make(map[string]map[*Entity]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(entity.PlatformsTable)
+		joinT.Schema(_q.schemaConfig.PlatformEntities)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(entity.PlatformsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(entity.PlatformsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(entity.PlatformsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Entity]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "platforms" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadOutOfScopePlatforms(ctx context.Context, query *PlatformQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Entity)
+	nids := make(map[string]map[*Entity]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(entity.OutOfScopePlatformsTable)
+		joinT.Schema(_q.schemaConfig.PlatformOutOfScopeVendors)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(entity.OutOfScopePlatformsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(entity.OutOfScopePlatformsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(entity.OutOfScopePlatformsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Entity]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "out_of_scope_platforms" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadSourcePlatforms(ctx context.Context, query *PlatformQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Entity)
+	nids := make(map[string]map[*Entity]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(entity.SourcePlatformsTable)
+		joinT.Schema(_q.schemaConfig.PlatformSourceEntities)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(entity.SourcePlatformsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(entity.SourcePlatformsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(entity.SourcePlatformsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Entity]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "source_platforms" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *EntityQuery) loadEntityType(ctx context.Context, query *EntityTypeQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *EntityType)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Entity)
@@ -1559,6 +3270,33 @@ func (_q *EntityQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(entity.FieldOwnerID)
+		}
+		if _q.withInternalOwnerUser != nil {
+			_spec.Node.AddColumnOnce(entity.FieldInternalOwnerUserID)
+		}
+		if _q.withInternalOwnerGroup != nil {
+			_spec.Node.AddColumnOnce(entity.FieldInternalOwnerGroupID)
+		}
+		if _q.withReviewedByUser != nil {
+			_spec.Node.AddColumnOnce(entity.FieldReviewedByUserID)
+		}
+		if _q.withReviewedByGroup != nil {
+			_spec.Node.AddColumnOnce(entity.FieldReviewedByGroupID)
+		}
+		if _q.withEntityRelationshipState != nil {
+			_spec.Node.AddColumnOnce(entity.FieldEntityRelationshipStateID)
+		}
+		if _q.withEntitySecurityQuestionnaireStatus != nil {
+			_spec.Node.AddColumnOnce(entity.FieldEntitySecurityQuestionnaireStatusID)
+		}
+		if _q.withEntitySourceType != nil {
+			_spec.Node.AddColumnOnce(entity.FieldEntitySourceTypeID)
+		}
+		if _q.withEnvironment != nil {
+			_spec.Node.AddColumnOnce(entity.FieldEnvironmentID)
+		}
+		if _q.withScope != nil {
+			_spec.Node.AddColumnOnce(entity.FieldScopeID)
 		}
 		if _q.withEntityType != nil {
 			_spec.Node.AddColumnOnce(entity.FieldEntityTypeID)
@@ -1754,6 +3492,146 @@ func (_q *EntityQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *En
 		_q.withNamedScans = make(map[string]*ScanQuery)
 	}
 	_q.withNamedScans[name] = query
+	return _q
+}
+
+// WithNamedCampaigns tells the query-builder to eager-load the nodes that are connected to the "campaigns"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedCampaigns(name string, opts ...func(*CampaignQuery)) *EntityQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaigns == nil {
+		_q.withNamedCampaigns = make(map[string]*CampaignQuery)
+	}
+	_q.withNamedCampaigns[name] = query
+	return _q
+}
+
+// WithNamedAssessmentResponses tells the query-builder to eager-load the nodes that are connected to the "assessment_responses"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedAssessmentResponses(name string, opts ...func(*AssessmentResponseQuery)) *EntityQuery {
+	query := (&AssessmentResponseClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssessmentResponses == nil {
+		_q.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery)
+	}
+	_q.withNamedAssessmentResponses[name] = query
+	return _q
+}
+
+// WithNamedIntegrations tells the query-builder to eager-load the nodes that are connected to the "integrations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedIntegrations(name string, opts ...func(*IntegrationQuery)) *EntityQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrations == nil {
+		_q.withNamedIntegrations = make(map[string]*IntegrationQuery)
+	}
+	_q.withNamedIntegrations[name] = query
+	return _q
+}
+
+// WithNamedSubprocessors tells the query-builder to eager-load the nodes that are connected to the "subprocessors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedSubprocessors(name string, opts ...func(*SubprocessorQuery)) *EntityQuery {
+	query := (&SubprocessorClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSubprocessors == nil {
+		_q.withNamedSubprocessors = make(map[string]*SubprocessorQuery)
+	}
+	_q.withNamedSubprocessors[name] = query
+	return _q
+}
+
+// WithNamedAuthMethods tells the query-builder to eager-load the nodes that are connected to the "auth_methods"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedAuthMethods(name string, opts ...func(*CustomTypeEnumQuery)) *EntityQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAuthMethods == nil {
+		_q.withNamedAuthMethods = make(map[string]*CustomTypeEnumQuery)
+	}
+	_q.withNamedAuthMethods[name] = query
+	return _q
+}
+
+// WithNamedEmployerIdentityHolders tells the query-builder to eager-load the nodes that are connected to the "employer_identity_holders"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedEmployerIdentityHolders(name string, opts ...func(*IdentityHolderQuery)) *EntityQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEmployerIdentityHolders == nil {
+		_q.withNamedEmployerIdentityHolders = make(map[string]*IdentityHolderQuery)
+	}
+	_q.withNamedEmployerIdentityHolders[name] = query
+	return _q
+}
+
+// WithNamedIdentityHolders tells the query-builder to eager-load the nodes that are connected to the "identity_holders"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedIdentityHolders(name string, opts ...func(*IdentityHolderQuery)) *EntityQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIdentityHolders == nil {
+		_q.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery)
+	}
+	_q.withNamedIdentityHolders[name] = query
+	return _q
+}
+
+// WithNamedPlatforms tells the query-builder to eager-load the nodes that are connected to the "platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQuery)) *EntityQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatforms == nil {
+		_q.withNamedPlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatforms[name] = query
+	return _q
+}
+
+// WithNamedOutOfScopePlatforms tells the query-builder to eager-load the nodes that are connected to the "out_of_scope_platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedOutOfScopePlatforms(name string, opts ...func(*PlatformQuery)) *EntityQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedOutOfScopePlatforms == nil {
+		_q.withNamedOutOfScopePlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedOutOfScopePlatforms[name] = query
+	return _q
+}
+
+// WithNamedSourcePlatforms tells the query-builder to eager-load the nodes that are connected to the "source_platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedSourcePlatforms(name string, opts ...func(*PlatformQuery)) *EntityQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSourcePlatforms == nil {
+		_q.withNamedSourcePlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedSourcePlatforms[name] = query
 	return _q
 }
 

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -44,6 +45,44 @@ type AssetHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the internal owner for the asset when no user or group is linked
+	InternalOwner string `json:"internal_owner,omitempty"`
+	// the internal owner user id for the asset
+	InternalOwnerUserID string `json:"internal_owner_user_id,omitempty"`
+	// the internal owner group id for the asset
+	InternalOwnerGroupID string `json:"internal_owner_group_id,omitempty"`
+	// the subtype of the asset
+	AssetSubtypeName string `json:"asset_subtype_name,omitempty"`
+	// the subtype of the asset
+	AssetSubtypeID string `json:"asset_subtype_id,omitempty"`
+	// the data_classification of the asset
+	AssetDataClassificationName string `json:"asset_data_classification_name,omitempty"`
+	// the data_classification of the asset
+	AssetDataClassificationID string `json:"asset_data_classification_id,omitempty"`
+	// the environment of the asset
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the asset
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the asset
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the asset
+	ScopeID string `json:"scope_id,omitempty"`
+	// the access_model of the asset
+	AccessModelName string `json:"access_model_name,omitempty"`
+	// the access_model of the asset
+	AccessModelID string `json:"access_model_id,omitempty"`
+	// the encryption_status of the asset
+	EncryptionStatusName string `json:"encryption_status_name,omitempty"`
+	// the encryption_status of the asset
+	EncryptionStatusID string `json:"encryption_status_id,omitempty"`
+	// the security_tier of the asset
+	SecurityTierName string `json:"security_tier_name,omitempty"`
+	// the security_tier of the asset
+	SecurityTierID string `json:"security_tier_id,omitempty"`
+	// the criticality of the asset
+	CriticalityName string `json:"criticality_name,omitempty"`
+	// the criticality of the asset
+	CriticalityID string `json:"criticality_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
@@ -60,6 +99,24 @@ type AssetHistory struct {
 	Identifier string `json:"identifier,omitempty"`
 	// the website of the asset, if applicable
 	Website string `json:"website,omitempty"`
+	// physical location of the asset, if applicable
+	PhysicalLocation string `json:"physical_location,omitempty"`
+	// the region where the asset operates or is hosted
+	Region string `json:"region,omitempty"`
+	// whether the asset stores or processes PII
+	ContainsPii bool `json:"contains_pii,omitempty"`
+	// the source of the asset record, e.g., manual, discovered, imported, api
+	SourceType enums.SourceType `json:"source_type,omitempty"`
+	// the platform that sourced the asset record
+	SourcePlatformID string `json:"source_platform_id,omitempty"`
+	// the identifier used by the source platform for the asset
+	SourceIdentifier string `json:"source_identifier,omitempty"`
+	// cost center associated with the asset
+	CostCenter string `json:"cost_center,omitempty"`
+	// estimated monthly cost for the asset
+	EstimatedMonthlyCost float64 `json:"estimated_monthly_cost,omitempty"`
+	// purchase date for the asset
+	PurchaseDate *models.DateTime `json:"purchase_date,omitempty"`
 	// the CPE (Common Platform Enumeration) of the asset, if applicable
 	Cpe string `json:"cpe,omitempty"`
 	// the categories of the asset, e.g. web server, database, etc
@@ -72,13 +129,17 @@ func (*AssetHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case assethistory.FieldPurchaseDate:
+			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case assethistory.FieldTags, assethistory.FieldCategories:
 			values[i] = new([]byte)
 		case assethistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case assethistory.FieldSystemOwned:
+		case assethistory.FieldSystemOwned, assethistory.FieldContainsPii:
 			values[i] = new(sql.NullBool)
-		case assethistory.FieldID, assethistory.FieldRef, assethistory.FieldCreatedBy, assethistory.FieldUpdatedBy, assethistory.FieldDeletedBy, assethistory.FieldOwnerID, assethistory.FieldInternalNotes, assethistory.FieldSystemInternalID, assethistory.FieldAssetType, assethistory.FieldName, assethistory.FieldDescription, assethistory.FieldIdentifier, assethistory.FieldWebsite, assethistory.FieldCpe:
+		case assethistory.FieldEstimatedMonthlyCost:
+			values[i] = new(sql.NullFloat64)
+		case assethistory.FieldID, assethistory.FieldRef, assethistory.FieldCreatedBy, assethistory.FieldUpdatedBy, assethistory.FieldDeletedBy, assethistory.FieldOwnerID, assethistory.FieldInternalOwner, assethistory.FieldInternalOwnerUserID, assethistory.FieldInternalOwnerGroupID, assethistory.FieldAssetSubtypeName, assethistory.FieldAssetSubtypeID, assethistory.FieldAssetDataClassificationName, assethistory.FieldAssetDataClassificationID, assethistory.FieldEnvironmentName, assethistory.FieldEnvironmentID, assethistory.FieldScopeName, assethistory.FieldScopeID, assethistory.FieldAccessModelName, assethistory.FieldAccessModelID, assethistory.FieldEncryptionStatusName, assethistory.FieldEncryptionStatusID, assethistory.FieldSecurityTierName, assethistory.FieldSecurityTierID, assethistory.FieldCriticalityName, assethistory.FieldCriticalityID, assethistory.FieldInternalNotes, assethistory.FieldSystemInternalID, assethistory.FieldAssetType, assethistory.FieldName, assethistory.FieldDescription, assethistory.FieldIdentifier, assethistory.FieldWebsite, assethistory.FieldPhysicalLocation, assethistory.FieldRegion, assethistory.FieldSourceType, assethistory.FieldSourcePlatformID, assethistory.FieldSourceIdentifier, assethistory.FieldCostCenter, assethistory.FieldCpe:
 			values[i] = new(sql.NullString)
 		case assethistory.FieldHistoryTime, assethistory.FieldCreatedAt, assethistory.FieldUpdatedAt, assethistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -171,6 +232,120 @@ func (_m *AssetHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
+		case assethistory.FieldInternalOwner:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner", values[i])
+			} else if value.Valid {
+				_m.InternalOwner = value.String
+			}
+		case assethistory.FieldInternalOwnerUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_user_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerUserID = value.String
+			}
+		case assethistory.FieldInternalOwnerGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_group_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerGroupID = value.String
+			}
+		case assethistory.FieldAssetSubtypeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field asset_subtype_name", values[i])
+			} else if value.Valid {
+				_m.AssetSubtypeName = value.String
+			}
+		case assethistory.FieldAssetSubtypeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field asset_subtype_id", values[i])
+			} else if value.Valid {
+				_m.AssetSubtypeID = value.String
+			}
+		case assethistory.FieldAssetDataClassificationName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field asset_data_classification_name", values[i])
+			} else if value.Valid {
+				_m.AssetDataClassificationName = value.String
+			}
+		case assethistory.FieldAssetDataClassificationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field asset_data_classification_id", values[i])
+			} else if value.Valid {
+				_m.AssetDataClassificationID = value.String
+			}
+		case assethistory.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case assethistory.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case assethistory.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case assethistory.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
+			}
+		case assethistory.FieldAccessModelName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field access_model_name", values[i])
+			} else if value.Valid {
+				_m.AccessModelName = value.String
+			}
+		case assethistory.FieldAccessModelID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field access_model_id", values[i])
+			} else if value.Valid {
+				_m.AccessModelID = value.String
+			}
+		case assethistory.FieldEncryptionStatusName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field encryption_status_name", values[i])
+			} else if value.Valid {
+				_m.EncryptionStatusName = value.String
+			}
+		case assethistory.FieldEncryptionStatusID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field encryption_status_id", values[i])
+			} else if value.Valid {
+				_m.EncryptionStatusID = value.String
+			}
+		case assethistory.FieldSecurityTierName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field security_tier_name", values[i])
+			} else if value.Valid {
+				_m.SecurityTierName = value.String
+			}
+		case assethistory.FieldSecurityTierID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field security_tier_id", values[i])
+			} else if value.Valid {
+				_m.SecurityTierID = value.String
+			}
+		case assethistory.FieldCriticalityName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field criticality_name", values[i])
+			} else if value.Valid {
+				_m.CriticalityName = value.String
+			}
+		case assethistory.FieldCriticalityID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field criticality_id", values[i])
+			} else if value.Valid {
+				_m.CriticalityID = value.String
+			}
 		case assethistory.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
@@ -220,6 +395,61 @@ func (_m *AssetHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field website", values[i])
 			} else if value.Valid {
 				_m.Website = value.String
+			}
+		case assethistory.FieldPhysicalLocation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field physical_location", values[i])
+			} else if value.Valid {
+				_m.PhysicalLocation = value.String
+			}
+		case assethistory.FieldRegion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field region", values[i])
+			} else if value.Valid {
+				_m.Region = value.String
+			}
+		case assethistory.FieldContainsPii:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field contains_pii", values[i])
+			} else if value.Valid {
+				_m.ContainsPii = value.Bool
+			}
+		case assethistory.FieldSourceType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_type", values[i])
+			} else if value.Valid {
+				_m.SourceType = enums.SourceType(value.String)
+			}
+		case assethistory.FieldSourcePlatformID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_platform_id", values[i])
+			} else if value.Valid {
+				_m.SourcePlatformID = value.String
+			}
+		case assethistory.FieldSourceIdentifier:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_identifier", values[i])
+			} else if value.Valid {
+				_m.SourceIdentifier = value.String
+			}
+		case assethistory.FieldCostCenter:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field cost_center", values[i])
+			} else if value.Valid {
+				_m.CostCenter = value.String
+			}
+		case assethistory.FieldEstimatedMonthlyCost:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field estimated_monthly_cost", values[i])
+			} else if value.Valid {
+				_m.EstimatedMonthlyCost = value.Float64
+			}
+		case assethistory.FieldPurchaseDate:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field purchase_date", values[i])
+			} else if value.Valid {
+				_m.PurchaseDate = new(models.DateTime)
+				*_m.PurchaseDate = *value.S.(*models.DateTime)
 			}
 		case assethistory.FieldCpe:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -304,6 +534,63 @@ func (_m *AssetHistory) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
+	builder.WriteString("internal_owner=")
+	builder.WriteString(_m.InternalOwner)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_user_id=")
+	builder.WriteString(_m.InternalOwnerUserID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_group_id=")
+	builder.WriteString(_m.InternalOwnerGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("asset_subtype_name=")
+	builder.WriteString(_m.AssetSubtypeName)
+	builder.WriteString(", ")
+	builder.WriteString("asset_subtype_id=")
+	builder.WriteString(_m.AssetSubtypeID)
+	builder.WriteString(", ")
+	builder.WriteString("asset_data_classification_name=")
+	builder.WriteString(_m.AssetDataClassificationName)
+	builder.WriteString(", ")
+	builder.WriteString("asset_data_classification_id=")
+	builder.WriteString(_m.AssetDataClassificationID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
+	builder.WriteString(", ")
+	builder.WriteString("access_model_name=")
+	builder.WriteString(_m.AccessModelName)
+	builder.WriteString(", ")
+	builder.WriteString("access_model_id=")
+	builder.WriteString(_m.AccessModelID)
+	builder.WriteString(", ")
+	builder.WriteString("encryption_status_name=")
+	builder.WriteString(_m.EncryptionStatusName)
+	builder.WriteString(", ")
+	builder.WriteString("encryption_status_id=")
+	builder.WriteString(_m.EncryptionStatusID)
+	builder.WriteString(", ")
+	builder.WriteString("security_tier_name=")
+	builder.WriteString(_m.SecurityTierName)
+	builder.WriteString(", ")
+	builder.WriteString("security_tier_id=")
+	builder.WriteString(_m.SecurityTierID)
+	builder.WriteString(", ")
+	builder.WriteString("criticality_name=")
+	builder.WriteString(_m.CriticalityName)
+	builder.WriteString(", ")
+	builder.WriteString("criticality_id=")
+	builder.WriteString(_m.CriticalityID)
+	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
 	builder.WriteString(", ")
@@ -331,6 +618,35 @@ func (_m *AssetHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("website=")
 	builder.WriteString(_m.Website)
+	builder.WriteString(", ")
+	builder.WriteString("physical_location=")
+	builder.WriteString(_m.PhysicalLocation)
+	builder.WriteString(", ")
+	builder.WriteString("region=")
+	builder.WriteString(_m.Region)
+	builder.WriteString(", ")
+	builder.WriteString("contains_pii=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ContainsPii))
+	builder.WriteString(", ")
+	builder.WriteString("source_type=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SourceType))
+	builder.WriteString(", ")
+	builder.WriteString("source_platform_id=")
+	builder.WriteString(_m.SourcePlatformID)
+	builder.WriteString(", ")
+	builder.WriteString("source_identifier=")
+	builder.WriteString(_m.SourceIdentifier)
+	builder.WriteString(", ")
+	builder.WriteString("cost_center=")
+	builder.WriteString(_m.CostCenter)
+	builder.WriteString(", ")
+	builder.WriteString("estimated_monthly_cost=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EstimatedMonthlyCost))
+	builder.WriteString(", ")
+	if v := _m.PurchaseDate; v != nil {
+		builder.WriteString("purchase_date=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("cpe=")
 	builder.WriteString(_m.Cpe)

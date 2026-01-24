@@ -52,6 +52,14 @@ type RemediationHistory struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the environment of the remediation
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the remediation
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the remediation
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the remediation
+	ScopeID string `json:"scope_id,omitempty"`
 	// external identifier from the integration source for the remediation
 	ExternalID string `json:"external_id,omitempty"`
 	// external identifier from the integration source for the remediation
@@ -106,7 +114,7 @@ func (*RemediationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case remediationhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case remediationhistory.FieldID, remediationhistory.FieldRef, remediationhistory.FieldCreatedBy, remediationhistory.FieldUpdatedBy, remediationhistory.FieldDeletedBy, remediationhistory.FieldDisplayID, remediationhistory.FieldOwnerID, remediationhistory.FieldInternalNotes, remediationhistory.FieldSystemInternalID, remediationhistory.FieldExternalID, remediationhistory.FieldExternalOwnerID, remediationhistory.FieldTitle, remediationhistory.FieldState, remediationhistory.FieldIntent, remediationhistory.FieldSummary, remediationhistory.FieldExplanation, remediationhistory.FieldInstructions, remediationhistory.FieldOwnerReference, remediationhistory.FieldRepositoryURI, remediationhistory.FieldPullRequestURI, remediationhistory.FieldTicketReference, remediationhistory.FieldError, remediationhistory.FieldSource, remediationhistory.FieldExternalURI:
+		case remediationhistory.FieldID, remediationhistory.FieldRef, remediationhistory.FieldCreatedBy, remediationhistory.FieldUpdatedBy, remediationhistory.FieldDeletedBy, remediationhistory.FieldDisplayID, remediationhistory.FieldOwnerID, remediationhistory.FieldInternalNotes, remediationhistory.FieldSystemInternalID, remediationhistory.FieldEnvironmentName, remediationhistory.FieldEnvironmentID, remediationhistory.FieldScopeName, remediationhistory.FieldScopeID, remediationhistory.FieldExternalID, remediationhistory.FieldExternalOwnerID, remediationhistory.FieldTitle, remediationhistory.FieldState, remediationhistory.FieldIntent, remediationhistory.FieldSummary, remediationhistory.FieldExplanation, remediationhistory.FieldInstructions, remediationhistory.FieldOwnerReference, remediationhistory.FieldRepositoryURI, remediationhistory.FieldPullRequestURI, remediationhistory.FieldTicketReference, remediationhistory.FieldError, remediationhistory.FieldSource, remediationhistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case remediationhistory.FieldHistoryTime, remediationhistory.FieldCreatedAt, remediationhistory.FieldUpdatedAt, remediationhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -224,6 +232,30 @@ func (_m *RemediationHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
+			}
+		case remediationhistory.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case remediationhistory.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case remediationhistory.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case remediationhistory.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case remediationhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -428,6 +460,18 @@ func (_m *RemediationHistory) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

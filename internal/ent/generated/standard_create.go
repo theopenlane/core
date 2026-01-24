@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
@@ -430,6 +431,21 @@ func (_c *StandardCreate) AddTrustCenterDocs(v ...*TrustCenterDoc) *StandardCrea
 	return _c.AddTrustCenterDocIDs(ids...)
 }
 
+// AddApplicablePlatformIDs adds the "applicable_platforms" edge to the Platform entity by IDs.
+func (_c *StandardCreate) AddApplicablePlatformIDs(ids ...string) *StandardCreate {
+	_c.mutation.AddApplicablePlatformIDs(ids...)
+	return _c
+}
+
+// AddApplicablePlatforms adds the "applicable_platforms" edges to the Platform entity.
+func (_c *StandardCreate) AddApplicablePlatforms(v ...*Platform) *StandardCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddApplicablePlatformIDs(ids...)
+}
+
 // SetLogoFile sets the "logo_file" edge to the File entity.
 func (_c *StandardCreate) SetLogoFile(v *File) *StandardCreate {
 	return _c.SetLogoFileID(v.ID)
@@ -746,6 +762,23 @@ func (_c *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ApplicablePlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   standard.ApplicablePlatformsTable,
+			Columns: standard.ApplicablePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.PlatformApplicableFrameworks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

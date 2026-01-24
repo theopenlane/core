@@ -11,8 +11,13 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // Scan is the model entity for the Scan schema.
@@ -36,23 +41,57 @@ type Scan struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// who reviewed the scan when no user or group is linked
+	ReviewedBy string `json:"reviewed_by,omitempty"`
+	// the user id that reviewed the scan
+	ReviewedByUserID string `json:"reviewed_by_user_id,omitempty"`
+	// the group id that reviewed the scan
+	ReviewedByGroupID string `json:"reviewed_by_group_id,omitempty"`
+	// who the scan is assigned to when no user or group is linked
+	AssignedTo string `json:"assigned_to,omitempty"`
+	// the user id assigned to the scan
+	AssignedToUserID string `json:"assigned_to_user_id,omitempty"`
+	// the group id assigned to the scan
+	AssignedToGroupID string `json:"assigned_to_group_id,omitempty"`
+	// the environment of the scan
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the scan
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the scan
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the scan
+	ScopeID string `json:"scope_id,omitempty"`
 	// the target of the scan, e.g., a domain name or IP address, codebase
 	Target string `json:"target,omitempty"`
 	// the type of scan, e.g., domain scan, vulnerability scan, provider scan
 	ScanType enums.ScanType `json:"scan_type,omitempty"`
 	// additional metadata for the scan, e.g., scan configuration, options, etc
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// when the scan was executed
+	ScanDate *models.DateTime `json:"scan_date,omitempty"`
+	// cron schedule that governs the scan cadence, in cron 6-field syntax
+	ScanSchedule *models.Cron `json:"scan_schedule,omitempty"`
+	// when the scan is scheduled to run next
+	NextScanRunAt *models.DateTime `json:"next_scan_run_at,omitempty"`
+	// who performed the scan when no user or group is linked
+	PerformedBy string `json:"performed_by,omitempty"`
+	// the user id that performed the scan
+	PerformedByUserID string `json:"performed_by_user_id,omitempty"`
+	// the group id that performed the scan
+	PerformedByGroupID string `json:"performed_by_group_id,omitempty"`
+	// the platform that generated the scan
+	GeneratedByPlatformID string `json:"generated_by_platform_id,omitempty"`
+	// identifiers of vulnerabilities discovered during the scan
+	VulnerabilityIds []string `json:"vulnerability_ids,omitempty"`
 	// the status of the scan, e.g., processing, completed, failed
 	Status enums.ScanStatus `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScanQuery when eager-loading is set.
-	Edges               ScanEdges `json:"edges"`
-	control_scans       *string
-	entity_scans        *string
-	finding_scans       *string
-	risk_scans          *string
-	vulnerability_scans *string
-	selectValues        sql.SelectValues
+	Edges         ScanEdges `json:"edges"`
+	entity_scans  *string
+	finding_scans *string
+	risk_scans    *string
+	selectValues  sql.SelectValues
 }
 
 // ScanEdges holds the relations/edges for other nodes in the graph.
@@ -65,21 +104,63 @@ type ScanEdges struct {
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
 	Viewers []*Group `json:"viewers,omitempty"`
+	// ReviewedByUser holds the value of the reviewed_by_user edge.
+	ReviewedByUser *User `json:"reviewed_by_user,omitempty"`
+	// ReviewedByGroup holds the value of the reviewed_by_group edge.
+	ReviewedByGroup *Group `json:"reviewed_by_group,omitempty"`
+	// AssignedToUser holds the value of the assigned_to_user edge.
+	AssignedToUser *User `json:"assigned_to_user,omitempty"`
+	// AssignedToGroup holds the value of the assigned_to_group edge.
+	AssignedToGroup *Group `json:"assigned_to_group,omitempty"`
+	// Environment holds the value of the environment edge.
+	Environment *CustomTypeEnum `json:"environment,omitempty"`
+	// Scope holds the value of the scope edge.
+	Scope *CustomTypeEnum `json:"scope,omitempty"`
 	// Assets holds the value of the assets edge.
 	Assets []*Asset `json:"assets,omitempty"`
 	// Entities holds the value of the entities edge.
 	Entities []*Entity `json:"entities,omitempty"`
+	// Evidence holds the value of the evidence edge.
+	Evidence []*Evidence `json:"evidence,omitempty"`
+	// Files holds the value of the files edge.
+	Files []*File `json:"files,omitempty"`
+	// Remediations holds the value of the remediations edge.
+	Remediations []*Remediation `json:"remediations,omitempty"`
+	// ActionPlans holds the value of the action_plans edge.
+	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
+	// Tasks holds the value of the tasks edge.
+	Tasks []*Task `json:"tasks,omitempty"`
+	// Platforms holds the value of the platforms edge.
+	Platforms []*Platform `json:"platforms,omitempty"`
+	// Vulnerabilities holds the value of the vulnerabilities edge.
+	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
+	// Controls holds the value of the controls edge.
+	Controls []*Control `json:"controls,omitempty"`
+	// GeneratedByPlatform holds the value of the generated_by_platform edge.
+	GeneratedByPlatform *Platform `json:"generated_by_platform,omitempty"`
+	// PerformedByUser holds the value of the performed_by_user edge.
+	PerformedByUser *User `json:"performed_by_user,omitempty"`
+	// PerformedByGroup holds the value of the performed_by_group edge.
+	PerformedByGroup *Group `json:"performed_by_group,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [23]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [23]map[string]int
 
-	namedBlockedGroups map[string][]*Group
-	namedEditors       map[string][]*Group
-	namedViewers       map[string][]*Group
-	namedAssets        map[string][]*Asset
-	namedEntities      map[string][]*Entity
+	namedBlockedGroups   map[string][]*Group
+	namedEditors         map[string][]*Group
+	namedViewers         map[string][]*Group
+	namedAssets          map[string][]*Asset
+	namedEntities        map[string][]*Entity
+	namedEvidence        map[string][]*Evidence
+	namedFiles           map[string][]*File
+	namedRemediations    map[string][]*Remediation
+	namedActionPlans     map[string][]*ActionPlan
+	namedTasks           map[string][]*Task
+	namedPlatforms       map[string][]*Platform
+	namedVulnerabilities map[string][]*Vulnerability
+	namedControls        map[string][]*Control
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -120,10 +201,76 @@ func (e ScanEdges) ViewersOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "viewers"}
 }
 
+// ReviewedByUserOrErr returns the ReviewedByUser value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScanEdges) ReviewedByUserOrErr() (*User, error) {
+	if e.ReviewedByUser != nil {
+		return e.ReviewedByUser, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "reviewed_by_user"}
+}
+
+// ReviewedByGroupOrErr returns the ReviewedByGroup value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScanEdges) ReviewedByGroupOrErr() (*Group, error) {
+	if e.ReviewedByGroup != nil {
+		return e.ReviewedByGroup, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "reviewed_by_group"}
+}
+
+// AssignedToUserOrErr returns the AssignedToUser value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScanEdges) AssignedToUserOrErr() (*User, error) {
+	if e.AssignedToUser != nil {
+		return e.AssignedToUser, nil
+	} else if e.loadedTypes[6] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "assigned_to_user"}
+}
+
+// AssignedToGroupOrErr returns the AssignedToGroup value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScanEdges) AssignedToGroupOrErr() (*Group, error) {
+	if e.AssignedToGroup != nil {
+		return e.AssignedToGroup, nil
+	} else if e.loadedTypes[7] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "assigned_to_group"}
+}
+
+// EnvironmentOrErr returns the Environment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScanEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
+	if e.Environment != nil {
+		return e.Environment, nil
+	} else if e.loadedTypes[8] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "environment"}
+}
+
+// ScopeOrErr returns the Scope value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScanEdges) ScopeOrErr() (*CustomTypeEnum, error) {
+	if e.Scope != nil {
+		return e.Scope, nil
+	} else if e.loadedTypes[9] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "scope"}
+}
+
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[10] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -132,10 +279,115 @@ func (e ScanEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[11] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
+}
+
+// EvidenceOrErr returns the Evidence value or an error if the edge
+// was not loaded in eager-loading.
+func (e ScanEdges) EvidenceOrErr() ([]*Evidence, error) {
+	if e.loadedTypes[12] {
+		return e.Evidence, nil
+	}
+	return nil, &NotLoadedError{edge: "evidence"}
+}
+
+// FilesOrErr returns the Files value or an error if the edge
+// was not loaded in eager-loading.
+func (e ScanEdges) FilesOrErr() ([]*File, error) {
+	if e.loadedTypes[13] {
+		return e.Files, nil
+	}
+	return nil, &NotLoadedError{edge: "files"}
+}
+
+// RemediationsOrErr returns the Remediations value or an error if the edge
+// was not loaded in eager-loading.
+func (e ScanEdges) RemediationsOrErr() ([]*Remediation, error) {
+	if e.loadedTypes[14] {
+		return e.Remediations, nil
+	}
+	return nil, &NotLoadedError{edge: "remediations"}
+}
+
+// ActionPlansOrErr returns the ActionPlans value or an error if the edge
+// was not loaded in eager-loading.
+func (e ScanEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
+	if e.loadedTypes[15] {
+		return e.ActionPlans, nil
+	}
+	return nil, &NotLoadedError{edge: "action_plans"}
+}
+
+// TasksOrErr returns the Tasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e ScanEdges) TasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[16] {
+		return e.Tasks, nil
+	}
+	return nil, &NotLoadedError{edge: "tasks"}
+}
+
+// PlatformsOrErr returns the Platforms value or an error if the edge
+// was not loaded in eager-loading.
+func (e ScanEdges) PlatformsOrErr() ([]*Platform, error) {
+	if e.loadedTypes[17] {
+		return e.Platforms, nil
+	}
+	return nil, &NotLoadedError{edge: "platforms"}
+}
+
+// VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
+// was not loaded in eager-loading.
+func (e ScanEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
+	if e.loadedTypes[18] {
+		return e.Vulnerabilities, nil
+	}
+	return nil, &NotLoadedError{edge: "vulnerabilities"}
+}
+
+// ControlsOrErr returns the Controls value or an error if the edge
+// was not loaded in eager-loading.
+func (e ScanEdges) ControlsOrErr() ([]*Control, error) {
+	if e.loadedTypes[19] {
+		return e.Controls, nil
+	}
+	return nil, &NotLoadedError{edge: "controls"}
+}
+
+// GeneratedByPlatformOrErr returns the GeneratedByPlatform value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScanEdges) GeneratedByPlatformOrErr() (*Platform, error) {
+	if e.GeneratedByPlatform != nil {
+		return e.GeneratedByPlatform, nil
+	} else if e.loadedTypes[20] {
+		return nil, &NotFoundError{label: platform.Label}
+	}
+	return nil, &NotLoadedError{edge: "generated_by_platform"}
+}
+
+// PerformedByUserOrErr returns the PerformedByUser value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScanEdges) PerformedByUserOrErr() (*User, error) {
+	if e.PerformedByUser != nil {
+		return e.PerformedByUser, nil
+	} else if e.loadedTypes[21] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "performed_by_user"}
+}
+
+// PerformedByGroupOrErr returns the PerformedByGroup value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScanEdges) PerformedByGroupOrErr() (*Group, error) {
+	if e.PerformedByGroup != nil {
+		return e.PerformedByGroup, nil
+	} else if e.loadedTypes[22] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "performed_by_group"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -143,21 +395,21 @@ func (*Scan) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case scan.FieldTags, scan.FieldMetadata:
+		case scan.FieldScanSchedule:
+			values[i] = &sql.NullScanner{S: new(models.Cron)}
+		case scan.FieldScanDate, scan.FieldNextScanRunAt:
+			values[i] = &sql.NullScanner{S: new(models.DateTime)}
+		case scan.FieldTags, scan.FieldMetadata, scan.FieldVulnerabilityIds:
 			values[i] = new([]byte)
-		case scan.FieldID, scan.FieldCreatedBy, scan.FieldUpdatedBy, scan.FieldDeletedBy, scan.FieldOwnerID, scan.FieldTarget, scan.FieldScanType, scan.FieldStatus:
+		case scan.FieldID, scan.FieldCreatedBy, scan.FieldUpdatedBy, scan.FieldDeletedBy, scan.FieldOwnerID, scan.FieldReviewedBy, scan.FieldReviewedByUserID, scan.FieldReviewedByGroupID, scan.FieldAssignedTo, scan.FieldAssignedToUserID, scan.FieldAssignedToGroupID, scan.FieldEnvironmentName, scan.FieldEnvironmentID, scan.FieldScopeName, scan.FieldScopeID, scan.FieldTarget, scan.FieldScanType, scan.FieldPerformedBy, scan.FieldPerformedByUserID, scan.FieldPerformedByGroupID, scan.FieldGeneratedByPlatformID, scan.FieldStatus:
 			values[i] = new(sql.NullString)
 		case scan.FieldCreatedAt, scan.FieldUpdatedAt, scan.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case scan.ForeignKeys[0]: // control_scans
+		case scan.ForeignKeys[0]: // entity_scans
 			values[i] = new(sql.NullString)
-		case scan.ForeignKeys[1]: // entity_scans
+		case scan.ForeignKeys[1]: // finding_scans
 			values[i] = new(sql.NullString)
-		case scan.ForeignKeys[2]: // finding_scans
-			values[i] = new(sql.NullString)
-		case scan.ForeignKeys[3]: // risk_scans
-			values[i] = new(sql.NullString)
-		case scan.ForeignKeys[4]: // vulnerability_scans
+		case scan.ForeignKeys[2]: // risk_scans
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -230,6 +482,66 @@ func (_m *Scan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
+		case scan.FieldReviewedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by", values[i])
+			} else if value.Valid {
+				_m.ReviewedBy = value.String
+			}
+		case scan.FieldReviewedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by_user_id", values[i])
+			} else if value.Valid {
+				_m.ReviewedByUserID = value.String
+			}
+		case scan.FieldReviewedByGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by_group_id", values[i])
+			} else if value.Valid {
+				_m.ReviewedByGroupID = value.String
+			}
+		case scan.FieldAssignedTo:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assigned_to", values[i])
+			} else if value.Valid {
+				_m.AssignedTo = value.String
+			}
+		case scan.FieldAssignedToUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assigned_to_user_id", values[i])
+			} else if value.Valid {
+				_m.AssignedToUserID = value.String
+			}
+		case scan.FieldAssignedToGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assigned_to_group_id", values[i])
+			} else if value.Valid {
+				_m.AssignedToGroupID = value.String
+			}
+		case scan.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case scan.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case scan.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case scan.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
+			}
 		case scan.FieldTarget:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field target", values[i])
@@ -250,6 +562,59 @@ func (_m *Scan) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
+		case scan.FieldScanDate:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field scan_date", values[i])
+			} else if value.Valid {
+				_m.ScanDate = new(models.DateTime)
+				*_m.ScanDate = *value.S.(*models.DateTime)
+			}
+		case scan.FieldScanSchedule:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field scan_schedule", values[i])
+			} else if value.Valid {
+				_m.ScanSchedule = new(models.Cron)
+				*_m.ScanSchedule = *value.S.(*models.Cron)
+			}
+		case scan.FieldNextScanRunAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field next_scan_run_at", values[i])
+			} else if value.Valid {
+				_m.NextScanRunAt = new(models.DateTime)
+				*_m.NextScanRunAt = *value.S.(*models.DateTime)
+			}
+		case scan.FieldPerformedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field performed_by", values[i])
+			} else if value.Valid {
+				_m.PerformedBy = value.String
+			}
+		case scan.FieldPerformedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field performed_by_user_id", values[i])
+			} else if value.Valid {
+				_m.PerformedByUserID = value.String
+			}
+		case scan.FieldPerformedByGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field performed_by_group_id", values[i])
+			} else if value.Valid {
+				_m.PerformedByGroupID = value.String
+			}
+		case scan.FieldGeneratedByPlatformID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field generated_by_platform_id", values[i])
+			} else if value.Valid {
+				_m.GeneratedByPlatformID = value.String
+			}
+		case scan.FieldVulnerabilityIds:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field vulnerability_ids", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.VulnerabilityIds); err != nil {
+					return fmt.Errorf("unmarshal field vulnerability_ids: %w", err)
+				}
+			}
 		case scan.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
@@ -258,38 +623,24 @@ func (_m *Scan) assignValues(columns []string, values []any) error {
 			}
 		case scan.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_scans", values[i])
-			} else if value.Valid {
-				_m.control_scans = new(string)
-				*_m.control_scans = value.String
-			}
-		case scan.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field entity_scans", values[i])
 			} else if value.Valid {
 				_m.entity_scans = new(string)
 				*_m.entity_scans = value.String
 			}
-		case scan.ForeignKeys[2]:
+		case scan.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field finding_scans", values[i])
 			} else if value.Valid {
 				_m.finding_scans = new(string)
 				*_m.finding_scans = value.String
 			}
-		case scan.ForeignKeys[3]:
+		case scan.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field risk_scans", values[i])
 			} else if value.Valid {
 				_m.risk_scans = new(string)
 				*_m.risk_scans = value.String
-			}
-		case scan.ForeignKeys[4]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field vulnerability_scans", values[i])
-			} else if value.Valid {
-				_m.vulnerability_scans = new(string)
-				*_m.vulnerability_scans = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -324,6 +675,36 @@ func (_m *Scan) QueryViewers() *GroupQuery {
 	return NewScanClient(_m.config).QueryViewers(_m)
 }
 
+// QueryReviewedByUser queries the "reviewed_by_user" edge of the Scan entity.
+func (_m *Scan) QueryReviewedByUser() *UserQuery {
+	return NewScanClient(_m.config).QueryReviewedByUser(_m)
+}
+
+// QueryReviewedByGroup queries the "reviewed_by_group" edge of the Scan entity.
+func (_m *Scan) QueryReviewedByGroup() *GroupQuery {
+	return NewScanClient(_m.config).QueryReviewedByGroup(_m)
+}
+
+// QueryAssignedToUser queries the "assigned_to_user" edge of the Scan entity.
+func (_m *Scan) QueryAssignedToUser() *UserQuery {
+	return NewScanClient(_m.config).QueryAssignedToUser(_m)
+}
+
+// QueryAssignedToGroup queries the "assigned_to_group" edge of the Scan entity.
+func (_m *Scan) QueryAssignedToGroup() *GroupQuery {
+	return NewScanClient(_m.config).QueryAssignedToGroup(_m)
+}
+
+// QueryEnvironment queries the "environment" edge of the Scan entity.
+func (_m *Scan) QueryEnvironment() *CustomTypeEnumQuery {
+	return NewScanClient(_m.config).QueryEnvironment(_m)
+}
+
+// QueryScope queries the "scope" edge of the Scan entity.
+func (_m *Scan) QueryScope() *CustomTypeEnumQuery {
+	return NewScanClient(_m.config).QueryScope(_m)
+}
+
 // QueryAssets queries the "assets" edge of the Scan entity.
 func (_m *Scan) QueryAssets() *AssetQuery {
 	return NewScanClient(_m.config).QueryAssets(_m)
@@ -332,6 +713,61 @@ func (_m *Scan) QueryAssets() *AssetQuery {
 // QueryEntities queries the "entities" edge of the Scan entity.
 func (_m *Scan) QueryEntities() *EntityQuery {
 	return NewScanClient(_m.config).QueryEntities(_m)
+}
+
+// QueryEvidence queries the "evidence" edge of the Scan entity.
+func (_m *Scan) QueryEvidence() *EvidenceQuery {
+	return NewScanClient(_m.config).QueryEvidence(_m)
+}
+
+// QueryFiles queries the "files" edge of the Scan entity.
+func (_m *Scan) QueryFiles() *FileQuery {
+	return NewScanClient(_m.config).QueryFiles(_m)
+}
+
+// QueryRemediations queries the "remediations" edge of the Scan entity.
+func (_m *Scan) QueryRemediations() *RemediationQuery {
+	return NewScanClient(_m.config).QueryRemediations(_m)
+}
+
+// QueryActionPlans queries the "action_plans" edge of the Scan entity.
+func (_m *Scan) QueryActionPlans() *ActionPlanQuery {
+	return NewScanClient(_m.config).QueryActionPlans(_m)
+}
+
+// QueryTasks queries the "tasks" edge of the Scan entity.
+func (_m *Scan) QueryTasks() *TaskQuery {
+	return NewScanClient(_m.config).QueryTasks(_m)
+}
+
+// QueryPlatforms queries the "platforms" edge of the Scan entity.
+func (_m *Scan) QueryPlatforms() *PlatformQuery {
+	return NewScanClient(_m.config).QueryPlatforms(_m)
+}
+
+// QueryVulnerabilities queries the "vulnerabilities" edge of the Scan entity.
+func (_m *Scan) QueryVulnerabilities() *VulnerabilityQuery {
+	return NewScanClient(_m.config).QueryVulnerabilities(_m)
+}
+
+// QueryControls queries the "controls" edge of the Scan entity.
+func (_m *Scan) QueryControls() *ControlQuery {
+	return NewScanClient(_m.config).QueryControls(_m)
+}
+
+// QueryGeneratedByPlatform queries the "generated_by_platform" edge of the Scan entity.
+func (_m *Scan) QueryGeneratedByPlatform() *PlatformQuery {
+	return NewScanClient(_m.config).QueryGeneratedByPlatform(_m)
+}
+
+// QueryPerformedByUser queries the "performed_by_user" edge of the Scan entity.
+func (_m *Scan) QueryPerformedByUser() *UserQuery {
+	return NewScanClient(_m.config).QueryPerformedByUser(_m)
+}
+
+// QueryPerformedByGroup queries the "performed_by_group" edge of the Scan entity.
+func (_m *Scan) QueryPerformedByGroup() *GroupQuery {
+	return NewScanClient(_m.config).QueryPerformedByGroup(_m)
 }
 
 // Update returns a builder for updating this Scan.
@@ -381,6 +817,36 @@ func (_m *Scan) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
+	builder.WriteString("reviewed_by=")
+	builder.WriteString(_m.ReviewedBy)
+	builder.WriteString(", ")
+	builder.WriteString("reviewed_by_user_id=")
+	builder.WriteString(_m.ReviewedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("reviewed_by_group_id=")
+	builder.WriteString(_m.ReviewedByGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("assigned_to=")
+	builder.WriteString(_m.AssignedTo)
+	builder.WriteString(", ")
+	builder.WriteString("assigned_to_user_id=")
+	builder.WriteString(_m.AssignedToUserID)
+	builder.WriteString(", ")
+	builder.WriteString("assigned_to_group_id=")
+	builder.WriteString(_m.AssignedToGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
+	builder.WriteString(", ")
 	builder.WriteString("target=")
 	builder.WriteString(_m.Target)
 	builder.WriteString(", ")
@@ -389,6 +855,36 @@ func (_m *Scan) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	if v := _m.ScanDate; v != nil {
+		builder.WriteString("scan_date=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.ScanSchedule; v != nil {
+		builder.WriteString("scan_schedule=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.NextScanRunAt; v != nil {
+		builder.WriteString("next_scan_run_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("performed_by=")
+	builder.WriteString(_m.PerformedBy)
+	builder.WriteString(", ")
+	builder.WriteString("performed_by_user_id=")
+	builder.WriteString(_m.PerformedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("performed_by_group_id=")
+	builder.WriteString(_m.PerformedByGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("generated_by_platform_id=")
+	builder.WriteString(_m.GeneratedByPlatformID)
+	builder.WriteString(", ")
+	builder.WriteString("vulnerability_ids=")
+	builder.WriteString(fmt.Sprintf("%v", _m.VulnerabilityIds))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
@@ -513,6 +1009,198 @@ func (_m *Scan) appendNamedEntities(name string, edges ...*Entity) {
 		_m.Edges.namedEntities[name] = []*Entity{}
 	} else {
 		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
+	}
+}
+
+// NamedEvidence returns the Evidence named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Scan) NamedEvidence(name string) ([]*Evidence, error) {
+	if _m.Edges.namedEvidence == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEvidence[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Scan) appendNamedEvidence(name string, edges ...*Evidence) {
+	if _m.Edges.namedEvidence == nil {
+		_m.Edges.namedEvidence = make(map[string][]*Evidence)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEvidence[name] = []*Evidence{}
+	} else {
+		_m.Edges.namedEvidence[name] = append(_m.Edges.namedEvidence[name], edges...)
+	}
+}
+
+// NamedFiles returns the Files named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Scan) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Scan) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFiles[name] = []*File{}
+	} else {
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
+	}
+}
+
+// NamedRemediations returns the Remediations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Scan) NamedRemediations(name string) ([]*Remediation, error) {
+	if _m.Edges.namedRemediations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedRemediations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Scan) appendNamedRemediations(name string, edges ...*Remediation) {
+	if _m.Edges.namedRemediations == nil {
+		_m.Edges.namedRemediations = make(map[string][]*Remediation)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedRemediations[name] = []*Remediation{}
+	} else {
+		_m.Edges.namedRemediations[name] = append(_m.Edges.namedRemediations[name], edges...)
+	}
+}
+
+// NamedActionPlans returns the ActionPlans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Scan) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if _m.Edges.namedActionPlans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedActionPlans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Scan) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if _m.Edges.namedActionPlans == nil {
+		_m.Edges.namedActionPlans = make(map[string][]*ActionPlan)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedActionPlans[name] = []*ActionPlan{}
+	} else {
+		_m.Edges.namedActionPlans[name] = append(_m.Edges.namedActionPlans[name], edges...)
+	}
+}
+
+// NamedTasks returns the Tasks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Scan) NamedTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedTasks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTasks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Scan) appendNamedTasks(name string, edges ...*Task) {
+	if _m.Edges.namedTasks == nil {
+		_m.Edges.namedTasks = make(map[string][]*Task)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTasks[name] = []*Task{}
+	} else {
+		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedPlatforms returns the Platforms named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Scan) NamedPlatforms(name string) ([]*Platform, error) {
+	if _m.Edges.namedPlatforms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedPlatforms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Scan) appendNamedPlatforms(name string, edges ...*Platform) {
+	if _m.Edges.namedPlatforms == nil {
+		_m.Edges.namedPlatforms = make(map[string][]*Platform)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedPlatforms[name] = []*Platform{}
+	} else {
+		_m.Edges.namedPlatforms[name] = append(_m.Edges.namedPlatforms[name], edges...)
+	}
+}
+
+// NamedVulnerabilities returns the Vulnerabilities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Scan) NamedVulnerabilities(name string) ([]*Vulnerability, error) {
+	if _m.Edges.namedVulnerabilities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedVulnerabilities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Scan) appendNamedVulnerabilities(name string, edges ...*Vulnerability) {
+	if _m.Edges.namedVulnerabilities == nil {
+		_m.Edges.namedVulnerabilities = make(map[string][]*Vulnerability)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedVulnerabilities[name] = []*Vulnerability{}
+	} else {
+		_m.Edges.namedVulnerabilities[name] = append(_m.Edges.namedVulnerabilities[name], edges...)
+	}
+}
+
+// NamedControls returns the Controls named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Scan) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedControls[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Scan) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedControls[name] = []*Control{}
+	} else {
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
 	}
 }
 

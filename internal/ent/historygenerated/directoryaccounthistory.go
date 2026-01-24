@@ -42,6 +42,14 @@ type DirectoryAccountHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the environment of the directory_account
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the directory_account
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the directory_account
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the directory_account
+	ScopeID string `json:"scope_id,omitempty"`
 	// integration that owns this directory account
 	IntegrationID string `json:"integration_id,omitempty"`
 	// sync run that produced this snapshot
@@ -96,7 +104,7 @@ func (*DirectoryAccountHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case directoryaccounthistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case directoryaccounthistory.FieldID, directoryaccounthistory.FieldRef, directoryaccounthistory.FieldCreatedBy, directoryaccounthistory.FieldUpdatedBy, directoryaccounthistory.FieldDisplayID, directoryaccounthistory.FieldOwnerID, directoryaccounthistory.FieldIntegrationID, directoryaccounthistory.FieldDirectorySyncRunID, directoryaccounthistory.FieldExternalID, directoryaccounthistory.FieldSecondaryKey, directoryaccounthistory.FieldCanonicalEmail, directoryaccounthistory.FieldDisplayName, directoryaccounthistory.FieldGivenName, directoryaccounthistory.FieldFamilyName, directoryaccounthistory.FieldJobTitle, directoryaccounthistory.FieldDepartment, directoryaccounthistory.FieldOrganizationUnit, directoryaccounthistory.FieldAccountType, directoryaccounthistory.FieldStatus, directoryaccounthistory.FieldMfaState, directoryaccounthistory.FieldLastSeenIP, directoryaccounthistory.FieldProfileHash, directoryaccounthistory.FieldRawProfileFileID, directoryaccounthistory.FieldSourceVersion:
+		case directoryaccounthistory.FieldID, directoryaccounthistory.FieldRef, directoryaccounthistory.FieldCreatedBy, directoryaccounthistory.FieldUpdatedBy, directoryaccounthistory.FieldDisplayID, directoryaccounthistory.FieldOwnerID, directoryaccounthistory.FieldEnvironmentName, directoryaccounthistory.FieldEnvironmentID, directoryaccounthistory.FieldScopeName, directoryaccounthistory.FieldScopeID, directoryaccounthistory.FieldIntegrationID, directoryaccounthistory.FieldDirectorySyncRunID, directoryaccounthistory.FieldExternalID, directoryaccounthistory.FieldSecondaryKey, directoryaccounthistory.FieldCanonicalEmail, directoryaccounthistory.FieldDisplayName, directoryaccounthistory.FieldGivenName, directoryaccounthistory.FieldFamilyName, directoryaccounthistory.FieldJobTitle, directoryaccounthistory.FieldDepartment, directoryaccounthistory.FieldOrganizationUnit, directoryaccounthistory.FieldAccountType, directoryaccounthistory.FieldStatus, directoryaccounthistory.FieldMfaState, directoryaccounthistory.FieldLastSeenIP, directoryaccounthistory.FieldProfileHash, directoryaccounthistory.FieldRawProfileFileID, directoryaccounthistory.FieldSourceVersion:
 			values[i] = new(sql.NullString)
 		case directoryaccounthistory.FieldHistoryTime, directoryaccounthistory.FieldCreatedAt, directoryaccounthistory.FieldUpdatedAt, directoryaccounthistory.FieldLastLoginAt, directoryaccounthistory.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -182,6 +190,30 @@ func (_m *DirectoryAccountHistory) assignValues(columns []string, values []any) 
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case directoryaccounthistory.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case directoryaccounthistory.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case directoryaccounthistory.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case directoryaccounthistory.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case directoryaccounthistory.FieldIntegrationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -387,6 +419,18 @@ func (_m *DirectoryAccountHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)

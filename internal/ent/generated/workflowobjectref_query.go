@@ -14,14 +14,18 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -55,6 +59,10 @@ type WorkflowObjectRefQuery struct {
 	withSubcontrol             *SubcontrolQuery
 	withActionPlan             *ActionPlanQuery
 	withProcedure              *ProcedureQuery
+	withCampaign               *CampaignQuery
+	withCampaignTarget         *CampaignTargetQuery
+	withIdentityHolder         *IdentityHolderQuery
+	withPlatform               *PlatformQuery
 	withFKs                    bool
 	loadTotal                  []func(context.Context, []*WorkflowObjectRef) error
 	modifiers                  []func(*sql.Selector)
@@ -445,6 +453,106 @@ func (_q *WorkflowObjectRefQuery) QueryProcedure() *ProcedureQuery {
 	return query
 }
 
+// QueryCampaign chains the current query on the "campaign" edge.
+func (_q *WorkflowObjectRefQuery) QueryCampaign() *CampaignQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, selector),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.CampaignTable, workflowobjectref.CampaignColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaignTarget chains the current query on the "campaign_target" edge.
+func (_q *WorkflowObjectRefQuery) QueryCampaignTarget() *CampaignTargetQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, selector),
+			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.CampaignTargetTable, workflowobjectref.CampaignTargetColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIdentityHolder chains the current query on the "identity_holder" edge.
+func (_q *WorkflowObjectRefQuery) QueryIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.IdentityHolderTable, workflowobjectref.IdentityHolderColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPlatform chains the current query on the "platform" edge.
+func (_q *WorkflowObjectRefQuery) QueryPlatform() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.PlatformTable, workflowobjectref.PlatformColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first WorkflowObjectRef entity from the query.
 // Returns a *NotFoundError when no WorkflowObjectRef was found.
 func (_q *WorkflowObjectRefQuery) First(ctx context.Context) (*WorkflowObjectRef, error) {
@@ -651,6 +759,10 @@ func (_q *WorkflowObjectRefQuery) Clone() *WorkflowObjectRefQuery {
 		withSubcontrol:          _q.withSubcontrol.Clone(),
 		withActionPlan:          _q.withActionPlan.Clone(),
 		withProcedure:           _q.withProcedure.Clone(),
+		withCampaign:            _q.withCampaign.Clone(),
+		withCampaignTarget:      _q.withCampaignTarget.Clone(),
+		withIdentityHolder:      _q.withIdentityHolder.Clone(),
+		withPlatform:            _q.withPlatform.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -812,6 +924,50 @@ func (_q *WorkflowObjectRefQuery) WithProcedure(opts ...func(*ProcedureQuery)) *
 	return _q
 }
 
+// WithCampaign tells the query-builder to eager-load the nodes that are connected to
+// the "campaign" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowObjectRefQuery) WithCampaign(opts ...func(*CampaignQuery)) *WorkflowObjectRefQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaign = query
+	return _q
+}
+
+// WithCampaignTarget tells the query-builder to eager-load the nodes that are connected to
+// the "campaign_target" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowObjectRefQuery) WithCampaignTarget(opts ...func(*CampaignTargetQuery)) *WorkflowObjectRefQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaignTarget = query
+	return _q
+}
+
+// WithIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowObjectRefQuery) WithIdentityHolder(opts ...func(*IdentityHolderQuery)) *WorkflowObjectRefQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIdentityHolder = query
+	return _q
+}
+
+// WithPlatform tells the query-builder to eager-load the nodes that are connected to
+// the "platform" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowObjectRefQuery) WithPlatform(opts ...func(*PlatformQuery)) *WorkflowObjectRefQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatform = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -897,7 +1053,7 @@ func (_q *WorkflowObjectRefQuery) sqlAll(ctx context.Context, hooks ...queryHook
 		nodes       = []*WorkflowObjectRef{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [14]bool{
+		loadedTypes = [18]bool{
 			_q.withOwner != nil,
 			_q.withWorkflowInstance != nil,
 			_q.withWorkflowProposals != nil,
@@ -912,6 +1068,10 @@ func (_q *WorkflowObjectRefQuery) sqlAll(ctx context.Context, hooks ...queryHook
 			_q.withSubcontrol != nil,
 			_q.withActionPlan != nil,
 			_q.withProcedure != nil,
+			_q.withCampaign != nil,
+			_q.withCampaignTarget != nil,
+			_q.withIdentityHolder != nil,
+			_q.withPlatform != nil,
 		}
 	)
 	if withFKs {
@@ -1024,6 +1184,30 @@ func (_q *WorkflowObjectRefQuery) sqlAll(ctx context.Context, hooks ...queryHook
 	if query := _q.withProcedure; query != nil {
 		if err := _q.loadProcedure(ctx, query, nodes, nil,
 			func(n *WorkflowObjectRef, e *Procedure) { n.Edges.Procedure = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaign; query != nil {
+		if err := _q.loadCampaign(ctx, query, nodes, nil,
+			func(n *WorkflowObjectRef, e *Campaign) { n.Edges.Campaign = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaignTarget; query != nil {
+		if err := _q.loadCampaignTarget(ctx, query, nodes, nil,
+			func(n *WorkflowObjectRef, e *CampaignTarget) { n.Edges.CampaignTarget = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIdentityHolder; query != nil {
+		if err := _q.loadIdentityHolder(ctx, query, nodes, nil,
+			func(n *WorkflowObjectRef, e *IdentityHolder) { n.Edges.IdentityHolder = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatform; query != nil {
+		if err := _q.loadPlatform(ctx, query, nodes, nil,
+			func(n *WorkflowObjectRef, e *Platform) { n.Edges.Platform = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1449,6 +1633,122 @@ func (_q *WorkflowObjectRefQuery) loadProcedure(ctx context.Context, query *Proc
 	}
 	return nil
 }
+func (_q *WorkflowObjectRefQuery) loadCampaign(ctx context.Context, query *CampaignQuery, nodes []*WorkflowObjectRef, init func(*WorkflowObjectRef), assign func(*WorkflowObjectRef, *Campaign)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowObjectRef)
+	for i := range nodes {
+		fk := nodes[i].CampaignID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(campaign.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "campaign_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowObjectRefQuery) loadCampaignTarget(ctx context.Context, query *CampaignTargetQuery, nodes []*WorkflowObjectRef, init func(*WorkflowObjectRef), assign func(*WorkflowObjectRef, *CampaignTarget)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowObjectRef)
+	for i := range nodes {
+		fk := nodes[i].CampaignTargetID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(campaigntarget.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "campaign_target_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowObjectRefQuery) loadIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*WorkflowObjectRef, init func(*WorkflowObjectRef), assign func(*WorkflowObjectRef, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowObjectRef)
+	for i := range nodes {
+		fk := nodes[i].IdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "identity_holder_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowObjectRefQuery) loadPlatform(ctx context.Context, query *PlatformQuery, nodes []*WorkflowObjectRef, init func(*WorkflowObjectRef), assign func(*WorkflowObjectRef, *Platform)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowObjectRef)
+	for i := range nodes {
+		fk := nodes[i].PlatformID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(platform.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "platform_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (_q *WorkflowObjectRefQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1518,6 +1818,18 @@ func (_q *WorkflowObjectRefQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withProcedure != nil {
 			_spec.Node.AddColumnOnce(workflowobjectref.FieldProcedureID)
+		}
+		if _q.withCampaign != nil {
+			_spec.Node.AddColumnOnce(workflowobjectref.FieldCampaignID)
+		}
+		if _q.withCampaignTarget != nil {
+			_spec.Node.AddColumnOnce(workflowobjectref.FieldCampaignTargetID)
+		}
+		if _q.withIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(workflowobjectref.FieldIdentityHolderID)
+		}
+		if _q.withPlatform != nil {
+			_spec.Node.AddColumnOnce(workflowobjectref.FieldPlatformID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

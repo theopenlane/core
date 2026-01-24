@@ -125,6 +125,86 @@ func (_u *EvidenceHistoryUpdate) ClearTags() *EvidenceHistoryUpdate {
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *EvidenceHistoryUpdate) SetEnvironmentName(v string) *EvidenceHistoryUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdate) SetNillableEnvironmentName(v *string) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *EvidenceHistoryUpdate) ClearEnvironmentName() *EvidenceHistoryUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *EvidenceHistoryUpdate) SetEnvironmentID(v string) *EvidenceHistoryUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdate) SetNillableEnvironmentID(v *string) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *EvidenceHistoryUpdate) ClearEnvironmentID() *EvidenceHistoryUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *EvidenceHistoryUpdate) SetScopeName(v string) *EvidenceHistoryUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdate) SetNillableScopeName(v *string) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *EvidenceHistoryUpdate) ClearScopeName() *EvidenceHistoryUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *EvidenceHistoryUpdate) SetScopeID(v string) *EvidenceHistoryUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdate) SetNillableScopeID(v *string) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *EvidenceHistoryUpdate) ClearScopeID() *EvidenceHistoryUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_u *EvidenceHistoryUpdate) SetWorkflowEligibleMarker(v bool) *EvidenceHistoryUpdate {
 	_u.mutation.SetWorkflowEligibleMarker(v)
@@ -435,6 +515,30 @@ func (_u *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(evidencehistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(evidencehistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(evidencehistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(evidencehistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(evidencehistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(evidencehistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(evidencehistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(evidencehistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(evidencehistory.FieldScopeID, field.TypeString)
+	}
 	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(evidencehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
 	}
@@ -600,6 +704,86 @@ func (_u *EvidenceHistoryUpdateOne) AppendTags(v []string) *EvidenceHistoryUpdat
 // ClearTags clears the value of the "tags" field.
 func (_u *EvidenceHistoryUpdateOne) ClearTags() *EvidenceHistoryUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *EvidenceHistoryUpdateOne) SetEnvironmentName(v string) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdateOne) SetNillableEnvironmentName(v *string) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *EvidenceHistoryUpdateOne) ClearEnvironmentName() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *EvidenceHistoryUpdateOne) SetEnvironmentID(v string) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdateOne) SetNillableEnvironmentID(v *string) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *EvidenceHistoryUpdateOne) ClearEnvironmentID() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *EvidenceHistoryUpdateOne) SetScopeName(v string) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdateOne) SetNillableScopeName(v *string) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *EvidenceHistoryUpdateOne) ClearScopeName() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *EvidenceHistoryUpdateOne) SetScopeID(v string) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdateOne) SetNillableScopeID(v *string) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *EvidenceHistoryUpdateOne) ClearScopeID() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -942,6 +1126,30 @@ func (_u *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Evidenc
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(evidencehistory.FieldOwnerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(evidencehistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(evidencehistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(evidencehistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(evidencehistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(evidencehistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(evidencehistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(evidencehistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(evidencehistory.FieldScopeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(evidencehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)

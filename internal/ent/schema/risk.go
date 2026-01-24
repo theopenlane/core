@@ -135,6 +135,7 @@ func (r Risk) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(r, Procedure{}),
 		defaultEdgeFromWithPagination(r, InternalPolicy{}),
 		defaultEdgeFromWithPagination(r, Program{}), // risk can be associated to 1:m programs, this allow permission inheritance from the program(s)
+		defaultEdgeFromWithPagination(r, Platform{}),
 		defaultEdgeToWithPagination(r, ActionPlan{}),
 		defaultEdgeToWithPagination(r, Task{}),
 		defaultEdgeToWithPagination(r, Asset{}),
@@ -210,13 +211,15 @@ func (r Risk) Mixin() []ent.Mixin {
 			// it will also create program parent tuples for the risk when a program is associated to the risk
 			newObjectOwnedMixin[generated.Risk](r,
 				withParents(
-					Program{}, Control{}, Procedure{}, ControlObjective{}, InternalPolicy{}, Subcontrol{}),
+					Program{}, Control{}, Procedure{}, ControlObjective{}, InternalPolicy{}, Subcontrol{}, Platform{}),
 				withOrganizationOwner(true),
 			),
 			// add groups permissions with viewer, editor, and blocked groups
 			newGroupPermissionsMixin(),
 			newCustomEnumMixin(r),
 			newCustomEnumMixin(r, withEnumFieldName("category")),
+			newCustomEnumMixin(r, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(r, withEnumFieldName("scope"), withGlobalEnum()),
 		},
 	}.getMixins(r)
 }

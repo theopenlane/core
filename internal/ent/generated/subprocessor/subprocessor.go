@@ -51,6 +51,8 @@ const (
 	EdgeLogoFile = "logo_file"
 	// EdgeTrustCenterSubprocessors holds the string denoting the trust_center_subprocessors edge name in mutations.
 	EdgeTrustCenterSubprocessors = "trust_center_subprocessors"
+	// EdgeEntities holds the string denoting the entities edge name in mutations.
+	EdgeEntities = "entities"
 	// Table holds the table name of the subprocessor in the database.
 	Table = "subprocessors"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -74,6 +76,11 @@ const (
 	TrustCenterSubprocessorsInverseTable = "trust_center_subprocessors"
 	// TrustCenterSubprocessorsColumn is the table column denoting the trust_center_subprocessors relation/edge.
 	TrustCenterSubprocessorsColumn = "subprocessor_id"
+	// EntitiesTable is the table that holds the entities relation/edge. The primary key declared below.
+	EntitiesTable = "entity_subprocessors"
+	// EntitiesInverseTable is the table name for the Entity entity.
+	// It exists in this package in order to avoid circular dependency with the "entity" package.
+	EntitiesInverseTable = "entities"
 )
 
 // Columns holds all SQL columns for subprocessor fields.
@@ -95,6 +102,12 @@ var Columns = []string{
 	FieldLogoRemoteURL,
 	FieldLogoFileID,
 }
+
+var (
+	// EntitiesPrimaryKey and EntitiesColumn2 are the table columns denoting the
+	// primary key for the entities relation (M2M).
+	EntitiesPrimaryKey = []string{"entity_id", "subprocessor_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -240,6 +253,20 @@ func ByTrustCenterSubprocessors(term sql.OrderTerm, terms ...sql.OrderTerm) Orde
 		sqlgraph.OrderByNeighborTerms(s, newTrustCenterSubprocessorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByEntitiesCount orders the results by entities count.
+func ByEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEntitiesStep(), opts...)
+	}
+}
+
+// ByEntities orders the results by entities terms.
+func ByEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -259,5 +286,12 @@ func newTrustCenterSubprocessorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterSubprocessorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterSubprocessorsTable, TrustCenterSubprocessorsColumn),
+	)
+}
+func newEntitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EntitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, EntitiesTable, EntitiesPrimaryKey...),
 	)
 }

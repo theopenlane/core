@@ -15,8 +15,11 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 
@@ -36,13 +39,19 @@ type AssessmentQuery struct {
 	withEditors                  *GroupQuery
 	withViewers                  *GroupQuery
 	withTemplate                 *TemplateQuery
+	withPlatforms                *PlatformQuery
+	withIdentityHolders          *IdentityHolderQuery
 	withAssessmentResponses      *AssessmentResponseQuery
+	withCampaigns                *CampaignQuery
 	loadTotal                    []func(context.Context, []*Assessment) error
 	modifiers                    []func(*sql.Selector)
 	withNamedBlockedGroups       map[string]*GroupQuery
 	withNamedEditors             map[string]*GroupQuery
 	withNamedViewers             map[string]*GroupQuery
+	withNamedPlatforms           map[string]*PlatformQuery
+	withNamedIdentityHolders     map[string]*IdentityHolderQuery
 	withNamedAssessmentResponses map[string]*AssessmentResponseQuery
+	withNamedCampaigns           map[string]*CampaignQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -204,6 +213,56 @@ func (_q *AssessmentQuery) QueryTemplate() *TemplateQuery {
 	return query
 }
 
+// QueryPlatforms chains the current query on the "platforms" edge.
+func (_q *AssessmentQuery) QueryPlatforms() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, assessment.PlatformsTable, assessment.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformAssessments
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders chains the current query on the "identity_holders" edge.
+func (_q *AssessmentQuery) QueryIdentityHolders() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, assessment.IdentityHoldersTable, assessment.IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolderAssessments
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryAssessmentResponses chains the current query on the "assessment_responses" edge.
 func (_q *AssessmentQuery) QueryAssessmentResponses() *AssessmentResponseQuery {
 	query := (&AssessmentResponseClient{config: _q.config}).Query()
@@ -223,6 +282,31 @@ func (_q *AssessmentQuery) QueryAssessmentResponses() *AssessmentResponseQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.AssessmentResponse
 		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaigns chains the current query on the "campaigns" edge.
+func (_q *AssessmentQuery) QueryCampaigns() *CampaignQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, selector),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, assessment.CampaignsTable, assessment.CampaignsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -426,7 +510,10 @@ func (_q *AssessmentQuery) Clone() *AssessmentQuery {
 		withEditors:             _q.withEditors.Clone(),
 		withViewers:             _q.withViewers.Clone(),
 		withTemplate:            _q.withTemplate.Clone(),
+		withPlatforms:           _q.withPlatforms.Clone(),
+		withIdentityHolders:     _q.withIdentityHolders.Clone(),
 		withAssessmentResponses: _q.withAssessmentResponses.Clone(),
+		withCampaigns:           _q.withCampaigns.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -489,6 +576,28 @@ func (_q *AssessmentQuery) WithTemplate(opts ...func(*TemplateQuery)) *Assessmen
 	return _q
 }
 
+// WithPlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithPlatforms(opts ...func(*PlatformQuery)) *AssessmentQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatforms = query
+	return _q
+}
+
+// WithIdentityHolders tells the query-builder to eager-load the nodes that are connected to
+// the "identity_holders" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithIdentityHolders(opts ...func(*IdentityHolderQuery)) *AssessmentQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIdentityHolders = query
+	return _q
+}
+
 // WithAssessmentResponses tells the query-builder to eager-load the nodes that are connected to
 // the "assessment_responses" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *AssessmentQuery) WithAssessmentResponses(opts ...func(*AssessmentResponseQuery)) *AssessmentQuery {
@@ -497,6 +606,17 @@ func (_q *AssessmentQuery) WithAssessmentResponses(opts ...func(*AssessmentRespo
 		opt(query)
 	}
 	_q.withAssessmentResponses = query
+	return _q
+}
+
+// WithCampaigns tells the query-builder to eager-load the nodes that are connected to
+// the "campaigns" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithCampaigns(opts ...func(*CampaignQuery)) *AssessmentQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaigns = query
 	return _q
 }
 
@@ -584,13 +704,16 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 	var (
 		nodes       = []*Assessment{}
 		_spec       = _q.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [9]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
 			_q.withTemplate != nil,
+			_q.withPlatforms != nil,
+			_q.withIdentityHolders != nil,
 			_q.withAssessmentResponses != nil,
+			_q.withCampaigns != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -649,12 +772,33 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			return nil, err
 		}
 	}
+	if query := _q.withPlatforms; query != nil {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Assessment) { n.Edges.Platforms = []*Platform{} },
+			func(n *Assessment, e *Platform) { n.Edges.Platforms = append(n.Edges.Platforms, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIdentityHolders; query != nil {
+		if err := _q.loadIdentityHolders(ctx, query, nodes,
+			func(n *Assessment) { n.Edges.IdentityHolders = []*IdentityHolder{} },
+			func(n *Assessment, e *IdentityHolder) { n.Edges.IdentityHolders = append(n.Edges.IdentityHolders, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withAssessmentResponses; query != nil {
 		if err := _q.loadAssessmentResponses(ctx, query, nodes,
 			func(n *Assessment) { n.Edges.AssessmentResponses = []*AssessmentResponse{} },
 			func(n *Assessment, e *AssessmentResponse) {
 				n.Edges.AssessmentResponses = append(n.Edges.AssessmentResponses, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaigns; query != nil {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *Assessment) { n.Edges.Campaigns = []*Campaign{} },
+			func(n *Assessment, e *Campaign) { n.Edges.Campaigns = append(n.Edges.Campaigns, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -679,10 +823,31 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedPlatforms {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Assessment) { n.appendNamedPlatforms(name) },
+			func(n *Assessment, e *Platform) { n.appendNamedPlatforms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIdentityHolders {
+		if err := _q.loadIdentityHolders(ctx, query, nodes,
+			func(n *Assessment) { n.appendNamedIdentityHolders(name) },
+			func(n *Assessment, e *IdentityHolder) { n.appendNamedIdentityHolders(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedAssessmentResponses {
 		if err := _q.loadAssessmentResponses(ctx, query, nodes,
 			func(n *Assessment) { n.appendNamedAssessmentResponses(name) },
 			func(n *Assessment, e *AssessmentResponse) { n.appendNamedAssessmentResponses(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaigns {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *Assessment) { n.appendNamedCampaigns(name) },
+			func(n *Assessment, e *Campaign) { n.appendNamedCampaigns(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -845,6 +1010,130 @@ func (_q *AssessmentQuery) loadTemplate(ctx context.Context, query *TemplateQuer
 	}
 	return nil
 }
+func (_q *AssessmentQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*Assessment, init func(*Assessment), assign func(*Assessment, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Assessment)
+	nids := make(map[string]map[*Assessment]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(assessment.PlatformsTable)
+		joinT.Schema(_q.schemaConfig.PlatformAssessments)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(assessment.PlatformsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(assessment.PlatformsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(assessment.PlatformsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Assessment]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "platforms" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *AssessmentQuery) loadIdentityHolders(ctx context.Context, query *IdentityHolderQuery, nodes []*Assessment, init func(*Assessment), assign func(*Assessment, *IdentityHolder)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Assessment)
+	nids := make(map[string]map[*Assessment]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(assessment.IdentityHoldersTable)
+		joinT.Schema(_q.schemaConfig.IdentityHolderAssessments)
+		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(assessment.IdentityHoldersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(assessment.IdentityHoldersPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(assessment.IdentityHoldersPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Assessment]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*IdentityHolder](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "identity_holders" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *AssessmentQuery) loadAssessmentResponses(ctx context.Context, query *AssessmentResponseQuery, nodes []*Assessment, init func(*Assessment), assign func(*Assessment, *AssessmentResponse)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Assessment)
@@ -860,6 +1149,36 @@ func (_q *AssessmentQuery) loadAssessmentResponses(ctx context.Context, query *A
 	}
 	query.Where(predicate.AssessmentResponse(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(assessment.AssessmentResponsesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.AssessmentID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "assessment_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *AssessmentQuery) loadCampaigns(ctx context.Context, query *CampaignQuery, nodes []*Assessment, init func(*Assessment), assign func(*Assessment, *Campaign)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Assessment)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(campaign.FieldAssessmentID)
+	}
+	query.Where(predicate.Campaign(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(assessment.CampaignsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -1022,6 +1341,34 @@ func (_q *AssessmentQuery) WithNamedViewers(name string, opts ...func(*GroupQuer
 	return _q
 }
 
+// WithNamedPlatforms tells the query-builder to eager-load the nodes that are connected to the "platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQuery)) *AssessmentQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatforms == nil {
+		_q.withNamedPlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatforms[name] = query
+	return _q
+}
+
+// WithNamedIdentityHolders tells the query-builder to eager-load the nodes that are connected to the "identity_holders"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithNamedIdentityHolders(name string, opts ...func(*IdentityHolderQuery)) *AssessmentQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIdentityHolders == nil {
+		_q.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery)
+	}
+	_q.withNamedIdentityHolders[name] = query
+	return _q
+}
+
 // WithNamedAssessmentResponses tells the query-builder to eager-load the nodes that are connected to the "assessment_responses"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *AssessmentQuery) WithNamedAssessmentResponses(name string, opts ...func(*AssessmentResponseQuery)) *AssessmentQuery {
@@ -1033,6 +1380,20 @@ func (_q *AssessmentQuery) WithNamedAssessmentResponses(name string, opts ...fun
 		_q.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery)
 	}
 	_q.withNamedAssessmentResponses[name] = query
+	return _q
+}
+
+// WithNamedCampaigns tells the query-builder to eager-load the nodes that are connected to the "campaigns"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithNamedCampaigns(name string, opts ...func(*CampaignQuery)) *AssessmentQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaigns == nil {
+		_q.withNamedCampaigns = make(map[string]*CampaignQuery)
+	}
+	_q.withNamedCampaigns[name] = query
 	return _q
 }
 

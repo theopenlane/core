@@ -1,0 +1,2 @@
+WorkflowEligibleMarker,Email,FullName,Status,SentAt,CompletedAt,Metadata,OwnerId,CampaignId,ContactId,UserId,GroupId,WorkflowObjectRefIDs
+example_workfloweligiblemarker,example_email,example_fullname,example_status,example_sentat,example_completedat,example_metadata,example_ownerid,example_campaignid,example_contactid,example_userid,example_groupid,example_workflowobjectrefids

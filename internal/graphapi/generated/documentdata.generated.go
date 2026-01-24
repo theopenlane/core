@@ -66,12 +66,24 @@ func (ec *executionContext) fieldContext_DocumentDataBulkCreatePayload_documentD
 				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_DocumentData_ownerID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_DocumentData_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_DocumentData_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_DocumentData_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_DocumentData_scopeID(ctx, field)
 			case "templateID":
 				return ec.fieldContext_DocumentData_templateID(ctx, field)
 			case "data":
 				return ec.fieldContext_DocumentData_data(ctx, field)
 			case "owner":
 				return ec.fieldContext_DocumentData_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_DocumentData_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_DocumentData_scope(ctx, field)
 			case "template":
 				return ec.fieldContext_DocumentData_template(ctx, field)
 			case "entities":
@@ -152,12 +164,24 @@ func (ec *executionContext) fieldContext_DocumentDataCreatePayload_documentData(
 				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_DocumentData_ownerID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_DocumentData_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_DocumentData_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_DocumentData_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_DocumentData_scopeID(ctx, field)
 			case "templateID":
 				return ec.fieldContext_DocumentData_templateID(ctx, field)
 			case "data":
 				return ec.fieldContext_DocumentData_data(ctx, field)
 			case "owner":
 				return ec.fieldContext_DocumentData_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_DocumentData_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_DocumentData_scope(ctx, field)
 			case "template":
 				return ec.fieldContext_DocumentData_template(ctx, field)
 			case "entities":
@@ -238,12 +262,24 @@ func (ec *executionContext) fieldContext_DocumentDataUpdatePayload_documentData(
 				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_DocumentData_ownerID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_DocumentData_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_DocumentData_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_DocumentData_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_DocumentData_scopeID(ctx, field)
 			case "templateID":
 				return ec.fieldContext_DocumentData_templateID(ctx, field)
 			case "data":
 				return ec.fieldContext_DocumentData_data(ctx, field)
 			case "owner":
 				return ec.fieldContext_DocumentData_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_DocumentData_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_DocumentData_scope(ctx, field)
 			case "template":
 				return ec.fieldContext_DocumentData_template(ctx, field)
 			case "entities":

@@ -13,6 +13,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -40,6 +42,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -64,6 +67,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -292,6 +296,60 @@ func (f TraverseAsset) Traverse(ctx context.Context, q generated.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.AssetQuery", q)
+}
+
+// The CampaignFunc type is an adapter to allow the use of ordinary function as a Querier.
+type CampaignFunc func(context.Context, *generated.CampaignQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f CampaignFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.CampaignQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.CampaignQuery", q)
+}
+
+// The TraverseCampaign type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseCampaign func(context.Context, *generated.CampaignQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseCampaign) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseCampaign) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.CampaignQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.CampaignQuery", q)
+}
+
+// The CampaignTargetFunc type is an adapter to allow the use of ordinary function as a Querier.
+type CampaignTargetFunc func(context.Context, *generated.CampaignTargetQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f CampaignTargetFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.CampaignTargetQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.CampaignTargetQuery", q)
+}
+
+// The TraverseCampaignTarget type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseCampaignTarget func(context.Context, *generated.CampaignTargetQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseCampaignTarget) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseCampaignTarget) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.CampaignTargetQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.CampaignTargetQuery", q)
 }
 
 // The ContactFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1023,6 +1081,33 @@ func (f TraverseHush) Traverse(ctx context.Context, q generated.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *generated.HushQuery", q)
 }
 
+// The IdentityHolderFunc type is an adapter to allow the use of ordinary function as a Querier.
+type IdentityHolderFunc func(context.Context, *generated.IdentityHolderQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f IdentityHolderFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.IdentityHolderQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.IdentityHolderQuery", q)
+}
+
+// The TraverseIdentityHolder type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseIdentityHolder func(context.Context, *generated.IdentityHolderQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseIdentityHolder) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseIdentityHolder) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.IdentityHolderQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.IdentityHolderQuery", q)
+}
+
 // The ImpersonationEventFunc type is an adapter to allow the use of ordinary function as a Querier.
 type ImpersonationEventFunc func(context.Context, *generated.ImpersonationEventQuery) (generated.Value, error)
 
@@ -1669,6 +1754,33 @@ func (f TraversePersonalAccessToken) Traverse(ctx context.Context, q generated.Q
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.PersonalAccessTokenQuery", q)
+}
+
+// The PlatformFunc type is an adapter to allow the use of ordinary function as a Querier.
+type PlatformFunc func(context.Context, *generated.PlatformQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f PlatformFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.PlatformQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.PlatformQuery", q)
+}
+
+// The TraversePlatform type is an adapter to allow the use of ordinary function as Traverser.
+type TraversePlatform func(context.Context, *generated.PlatformQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraversePlatform) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraversePlatform) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.PlatformQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.PlatformQuery", q)
 }
 
 // The ProcedureFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2656,6 +2768,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.AssessmentResponseQuery, predicate.AssessmentResponse, assessmentresponse.OrderOption]{typ: generated.TypeAssessmentResponse, tq: q}, nil
 	case *generated.AssetQuery:
 		return &query[*generated.AssetQuery, predicate.Asset, asset.OrderOption]{typ: generated.TypeAsset, tq: q}, nil
+	case *generated.CampaignQuery:
+		return &query[*generated.CampaignQuery, predicate.Campaign, campaign.OrderOption]{typ: generated.TypeCampaign, tq: q}, nil
+	case *generated.CampaignTargetQuery:
+		return &query[*generated.CampaignTargetQuery, predicate.CampaignTarget, campaigntarget.OrderOption]{typ: generated.TypeCampaignTarget, tq: q}, nil
 	case *generated.ContactQuery:
 		return &query[*generated.ContactQuery, predicate.Contact, contact.OrderOption]{typ: generated.TypeContact, tq: q}, nil
 	case *generated.ControlQuery:
@@ -2710,6 +2826,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.GroupSettingQuery, predicate.GroupSetting, groupsetting.OrderOption]{typ: generated.TypeGroupSetting, tq: q}, nil
 	case *generated.HushQuery:
 		return &query[*generated.HushQuery, predicate.Hush, hush.OrderOption]{typ: generated.TypeHush, tq: q}, nil
+	case *generated.IdentityHolderQuery:
+		return &query[*generated.IdentityHolderQuery, predicate.IdentityHolder, identityholder.OrderOption]{typ: generated.TypeIdentityHolder, tq: q}, nil
 	case *generated.ImpersonationEventQuery:
 		return &query[*generated.ImpersonationEventQuery, predicate.ImpersonationEvent, impersonationevent.OrderOption]{typ: generated.TypeImpersonationEvent, tq: q}, nil
 	case *generated.IntegrationQuery:
@@ -2758,6 +2876,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.PasswordResetTokenQuery, predicate.PasswordResetToken, passwordresettoken.OrderOption]{typ: generated.TypePasswordResetToken, tq: q}, nil
 	case *generated.PersonalAccessTokenQuery:
 		return &query[*generated.PersonalAccessTokenQuery, predicate.PersonalAccessToken, personalaccesstoken.OrderOption]{typ: generated.TypePersonalAccessToken, tq: q}, nil
+	case *generated.PlatformQuery:
+		return &query[*generated.PlatformQuery, predicate.Platform, platform.OrderOption]{typ: generated.TypePlatform, tq: q}, nil
 	case *generated.ProcedureQuery:
 		return &query[*generated.ProcedureQuery, predicate.Procedure, procedure.OrderOption]{typ: generated.TypeProcedure, tq: q}, nil
 	case *generated.ProgramQuery:

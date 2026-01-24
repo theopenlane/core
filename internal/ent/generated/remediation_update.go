@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
@@ -27,6 +28,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
@@ -175,6 +177,86 @@ func (_u *RemediationUpdate) SetNillableSystemInternalID(v *string) *Remediation
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *RemediationUpdate) ClearSystemInternalID() *RemediationUpdate {
 	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *RemediationUpdate) SetEnvironmentName(v string) *RemediationUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *RemediationUpdate) SetNillableEnvironmentName(v *string) *RemediationUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *RemediationUpdate) ClearEnvironmentName() *RemediationUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *RemediationUpdate) SetEnvironmentID(v string) *RemediationUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *RemediationUpdate) SetNillableEnvironmentID(v *string) *RemediationUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *RemediationUpdate) ClearEnvironmentID() *RemediationUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *RemediationUpdate) SetScopeName(v string) *RemediationUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *RemediationUpdate) SetNillableScopeName(v *string) *RemediationUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *RemediationUpdate) ClearScopeName() *RemediationUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *RemediationUpdate) SetScopeID(v string) *RemediationUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *RemediationUpdate) SetNillableScopeID(v *string) *RemediationUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *RemediationUpdate) ClearScopeID() *RemediationUpdate {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -595,6 +677,16 @@ func (_u *RemediationUpdate) AddViewers(v ...*Group) *RemediationUpdate {
 	return _u.AddViewerIDs(ids...)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *RemediationUpdate) SetEnvironment(v *CustomTypeEnum) *RemediationUpdate {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *RemediationUpdate) SetScope(v *CustomTypeEnum) *RemediationUpdate {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (_u *RemediationUpdate) AddIntegrationIDs(ids ...string) *RemediationUpdate {
 	_u.mutation.AddIntegrationIDs(ids...)
@@ -608,6 +700,21 @@ func (_u *RemediationUpdate) AddIntegrations(v ...*Integration) *RemediationUpda
 		ids[i] = v[i].ID
 	}
 	return _u.AddIntegrationIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (_u *RemediationUpdate) AddScanIDs(ids ...string) *RemediationUpdate {
+	_u.mutation.AddScanIDs(ids...)
+	return _u
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (_u *RemediationUpdate) AddScans(v ...*Scan) *RemediationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddScanIDs(ids...)
 }
 
 // AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
@@ -873,6 +980,18 @@ func (_u *RemediationUpdate) RemoveViewers(v ...*Group) *RemediationUpdate {
 	return _u.RemoveViewerIDs(ids...)
 }
 
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *RemediationUpdate) ClearEnvironment() *RemediationUpdate {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *RemediationUpdate) ClearScope() *RemediationUpdate {
+	_u.mutation.ClearScope()
+	return _u
+}
+
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
 func (_u *RemediationUpdate) ClearIntegrations() *RemediationUpdate {
 	_u.mutation.ClearIntegrations()
@@ -892,6 +1011,27 @@ func (_u *RemediationUpdate) RemoveIntegrations(v ...*Integration) *RemediationU
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIntegrationIDs(ids...)
+}
+
+// ClearScans clears all "scans" edges to the Scan entity.
+func (_u *RemediationUpdate) ClearScans() *RemediationUpdate {
+	_u.mutation.ClearScans()
+	return _u
+}
+
+// RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
+func (_u *RemediationUpdate) RemoveScanIDs(ids ...string) *RemediationUpdate {
+	_u.mutation.RemoveScanIDs(ids...)
+	return _u
+}
+
+// RemoveScans removes "scans" edges to Scan entities.
+func (_u *RemediationUpdate) RemoveScans(v ...*Scan) *RemediationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveScanIDs(ids...)
 }
 
 // ClearFindings clears all "findings" edges to the Finding entity.
@@ -1280,6 +1420,18 @@ func (_u *RemediationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(remediation.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(remediation.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(remediation.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(remediation.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(remediation.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(remediation.FieldExternalID, field.TypeString, value)
 	}
@@ -1538,6 +1690,68 @@ func (_u *RemediationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   remediation.EnvironmentTable,
+			Columns: []string{remediation.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Remediation
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   remediation.EnvironmentTable,
+			Columns: []string{remediation.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Remediation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   remediation.ScopeTable,
+			Columns: []string{remediation.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Remediation
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   remediation.ScopeTable,
+			Columns: []string{remediation.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Remediation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1581,6 +1795,54 @@ func (_u *RemediationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 			},
 		}
 		edge.Schema = _u.schemaConfig.IntegrationRemediations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   remediation.ScansTable,
+			Columns: remediation.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanRemediations
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   remediation.ScansTable,
+			Columns: remediation.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanRemediations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   remediation.ScansTable,
+			Columns: remediation.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanRemediations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2364,6 +2626,86 @@ func (_u *RemediationUpdateOne) ClearSystemInternalID() *RemediationUpdateOne {
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *RemediationUpdateOne) SetEnvironmentName(v string) *RemediationUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *RemediationUpdateOne) SetNillableEnvironmentName(v *string) *RemediationUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *RemediationUpdateOne) ClearEnvironmentName() *RemediationUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *RemediationUpdateOne) SetEnvironmentID(v string) *RemediationUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *RemediationUpdateOne) SetNillableEnvironmentID(v *string) *RemediationUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *RemediationUpdateOne) ClearEnvironmentID() *RemediationUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *RemediationUpdateOne) SetScopeName(v string) *RemediationUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *RemediationUpdateOne) SetNillableScopeName(v *string) *RemediationUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *RemediationUpdateOne) ClearScopeName() *RemediationUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *RemediationUpdateOne) SetScopeID(v string) *RemediationUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *RemediationUpdateOne) SetNillableScopeID(v *string) *RemediationUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *RemediationUpdateOne) ClearScopeID() *RemediationUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *RemediationUpdateOne) SetExternalID(v string) *RemediationUpdateOne {
 	_u.mutation.SetExternalID(v)
@@ -2781,6 +3123,16 @@ func (_u *RemediationUpdateOne) AddViewers(v ...*Group) *RemediationUpdateOne {
 	return _u.AddViewerIDs(ids...)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *RemediationUpdateOne) SetEnvironment(v *CustomTypeEnum) *RemediationUpdateOne {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *RemediationUpdateOne) SetScope(v *CustomTypeEnum) *RemediationUpdateOne {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (_u *RemediationUpdateOne) AddIntegrationIDs(ids ...string) *RemediationUpdateOne {
 	_u.mutation.AddIntegrationIDs(ids...)
@@ -2794,6 +3146,21 @@ func (_u *RemediationUpdateOne) AddIntegrations(v ...*Integration) *RemediationU
 		ids[i] = v[i].ID
 	}
 	return _u.AddIntegrationIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (_u *RemediationUpdateOne) AddScanIDs(ids ...string) *RemediationUpdateOne {
+	_u.mutation.AddScanIDs(ids...)
+	return _u
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (_u *RemediationUpdateOne) AddScans(v ...*Scan) *RemediationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddScanIDs(ids...)
 }
 
 // AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
@@ -3059,6 +3426,18 @@ func (_u *RemediationUpdateOne) RemoveViewers(v ...*Group) *RemediationUpdateOne
 	return _u.RemoveViewerIDs(ids...)
 }
 
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *RemediationUpdateOne) ClearEnvironment() *RemediationUpdateOne {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *RemediationUpdateOne) ClearScope() *RemediationUpdateOne {
+	_u.mutation.ClearScope()
+	return _u
+}
+
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
 func (_u *RemediationUpdateOne) ClearIntegrations() *RemediationUpdateOne {
 	_u.mutation.ClearIntegrations()
@@ -3078,6 +3457,27 @@ func (_u *RemediationUpdateOne) RemoveIntegrations(v ...*Integration) *Remediati
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIntegrationIDs(ids...)
+}
+
+// ClearScans clears all "scans" edges to the Scan entity.
+func (_u *RemediationUpdateOne) ClearScans() *RemediationUpdateOne {
+	_u.mutation.ClearScans()
+	return _u
+}
+
+// RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
+func (_u *RemediationUpdateOne) RemoveScanIDs(ids ...string) *RemediationUpdateOne {
+	_u.mutation.RemoveScanIDs(ids...)
+	return _u
+}
+
+// RemoveScans removes "scans" edges to Scan entities.
+func (_u *RemediationUpdateOne) RemoveScans(v ...*Scan) *RemediationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveScanIDs(ids...)
 }
 
 // ClearFindings clears all "findings" edges to the Finding entity.
@@ -3496,6 +3896,18 @@ func (_u *RemediationUpdateOne) sqlSave(ctx context.Context) (_node *Remediation
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(remediation.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(remediation.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(remediation.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(remediation.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(remediation.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(remediation.FieldExternalID, field.TypeString, value)
 	}
@@ -3754,6 +4166,68 @@ func (_u *RemediationUpdateOne) sqlSave(ctx context.Context) (_node *Remediation
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   remediation.EnvironmentTable,
+			Columns: []string{remediation.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Remediation
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   remediation.EnvironmentTable,
+			Columns: []string{remediation.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Remediation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   remediation.ScopeTable,
+			Columns: []string{remediation.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Remediation
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   remediation.ScopeTable,
+			Columns: []string{remediation.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Remediation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3797,6 +4271,54 @@ func (_u *RemediationUpdateOne) sqlSave(ctx context.Context) (_node *Remediation
 			},
 		}
 		edge.Schema = _u.schemaConfig.IntegrationRemediations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   remediation.ScansTable,
+			Columns: remediation.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanRemediations
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   remediation.ScansTable,
+			Columns: remediation.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanRemediations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   remediation.ScansTable,
+			Columns: remediation.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanRemediations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

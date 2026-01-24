@@ -216,6 +216,74 @@ func (r *queryResolver) Assets(ctx context.Context, after *entgql.Cursor[string]
 	return res, err
 }
 
+// Campaigns is the resolver for the campaigns field.
+func (r *queryResolver) Campaigns(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) (*generated.CampaignConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.CampaignOrder{
+			{
+				Field:     generated.CampaignOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Campaign.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "campaign"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithCampaignOrder(orderBy),
+		generated.WithCampaignFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "campaign"})
+	}
+
+	return res, err
+}
+
+// CampaignTargets is the resolver for the campaignTargets field.
+func (r *queryResolver) CampaignTargets(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignTargetOrder, where *generated.CampaignTargetWhereInput) (*generated.CampaignTargetConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.CampaignTargetOrder{
+			{
+				Field:     generated.CampaignTargetOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).CampaignTarget.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "campaigntarget"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithCampaignTargetOrder(orderBy),
+		generated.WithCampaignTargetFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "campaigntarget"})
+	}
+
+	return res, err
+}
+
 // Contacts is the resolver for the contacts field.
 func (r *queryResolver) Contacts(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) (*generated.ContactConnection, error) {
 	// set page limit if nothing was set
@@ -1057,6 +1125,40 @@ func (r *queryResolver) Hushes(ctx context.Context, after *entgql.Cursor[string]
 	return res, err
 }
 
+// IdentityHolders is the resolver for the identityHolders field.
+func (r *queryResolver) IdentityHolders(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) (*generated.IdentityHolderConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.IdentityHolderOrder{
+			{
+				Field:     generated.IdentityHolderOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).IdentityHolder.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "identityholder"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithIdentityHolderOrder(orderBy),
+		generated.WithIdentityHolderFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "identityholder"})
+	}
+
+	return res, err
+}
+
 // Integrations is the resolver for the integrations field.
 func (r *queryResolver) Integrations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) (*generated.IntegrationConnection, error) {
 	// set page limit if nothing was set
@@ -1628,6 +1730,40 @@ func (r *queryResolver) PersonalAccessTokens(ctx context.Context, after *entgql.
 		generated.WithPersonalAccessTokenFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "personalaccesstoken"})
+	}
+
+	return res, err
+}
+
+// Platforms is the resolver for the platforms field.
+func (r *queryResolver) Platforms(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) (*generated.PlatformConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.PlatformOrder{
+			{
+				Field:     generated.PlatformOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Platform.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "platform"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithPlatformOrder(orderBy),
+		generated.WithPlatformFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "platform"})
 	}
 
 	return res, err
@@ -2843,8 +2979,30 @@ func (r *createNotificationInputResolver) Channels(ctx context.Context, obj *gen
 	return nil
 }
 
+// VulnerabilityIds is the resolver for the vulnerabilityIds field.
+func (r *createScanInputResolver) VulnerabilityIds(ctx context.Context, obj *generated.CreateScanInput, data []string) error {
+	obj.VulnerabilityIds = data
+
+	return nil
+}
+
+// VulnerabilityIDs is the resolver for the vulnerabilityIDs field.
+func (r *createScanInputResolver) VulnerabilityIDs(ctx context.Context, obj *generated.CreateScanInput, data []string) error {
+	obj.VulnerabilityIDs = data
+
+	return nil
+}
+
 // ActionPlan returns gqlgenerated.ActionPlanResolver implementation.
 func (r *Resolver) ActionPlan() gqlgenerated.ActionPlanResolver { return &actionPlanResolver{r} }
+
+// Campaign returns gqlgenerated.CampaignResolver implementation.
+func (r *Resolver) Campaign() gqlgenerated.CampaignResolver { return &campaignResolver{r} }
+
+// CampaignTarget returns gqlgenerated.CampaignTargetResolver implementation.
+func (r *Resolver) CampaignTarget() gqlgenerated.CampaignTargetResolver {
+	return &campaignTargetResolver{r}
+}
 
 // Control returns gqlgenerated.ControlResolver implementation.
 func (r *Resolver) Control() gqlgenerated.ControlResolver { return &controlResolver{r} }
@@ -2855,6 +3013,11 @@ func (r *Resolver) Evidence() gqlgenerated.EvidenceResolver { return &evidenceRe
 // Group returns gqlgenerated.GroupResolver implementation.
 func (r *Resolver) Group() gqlgenerated.GroupResolver { return &groupResolver{r} }
 
+// IdentityHolder returns gqlgenerated.IdentityHolderResolver implementation.
+func (r *Resolver) IdentityHolder() gqlgenerated.IdentityHolderResolver {
+	return &identityHolderResolver{r}
+}
+
 // InternalPolicy returns gqlgenerated.InternalPolicyResolver implementation.
 func (r *Resolver) InternalPolicy() gqlgenerated.InternalPolicyResolver {
 	return &internalPolicyResolver{r}
@@ -2862,6 +3025,9 @@ func (r *Resolver) InternalPolicy() gqlgenerated.InternalPolicyResolver {
 
 // Notification returns gqlgenerated.NotificationResolver implementation.
 func (r *Resolver) Notification() gqlgenerated.NotificationResolver { return &notificationResolver{r} }
+
+// Platform returns gqlgenerated.PlatformResolver implementation.
+func (r *Resolver) Platform() gqlgenerated.PlatformResolver { return &platformResolver{r} }
 
 // Procedure returns gqlgenerated.ProcedureResolver implementation.
 func (r *Resolver) Procedure() gqlgenerated.ProcedureResolver { return &procedureResolver{r} }
@@ -2900,6 +3066,11 @@ func (r *Resolver) CreateNotificationInput() gqlgenerated.CreateNotificationInpu
 // CreateOrganizationInput returns gqlgenerated.CreateOrganizationInputResolver implementation.
 func (r *Resolver) CreateOrganizationInput() gqlgenerated.CreateOrganizationInputResolver {
 	return &createOrganizationInputResolver{r}
+}
+
+// CreateScanInput returns gqlgenerated.CreateScanInputResolver implementation.
+func (r *Resolver) CreateScanInput() gqlgenerated.CreateScanInputResolver {
+	return &createScanInputResolver{r}
 }
 
 // CreateTrustCenterInput returns gqlgenerated.CreateTrustCenterInputResolver implementation.
@@ -2993,11 +3164,15 @@ func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputR
 }
 
 type actionPlanResolver struct{ *Resolver }
+type campaignResolver struct{ *Resolver }
+type campaignTargetResolver struct{ *Resolver }
 type controlResolver struct{ *Resolver }
 type evidenceResolver struct{ *Resolver }
 type groupResolver struct{ *Resolver }
+type identityHolderResolver struct{ *Resolver }
 type internalPolicyResolver struct{ *Resolver }
 type notificationResolver struct{ *Resolver }
+type platformResolver struct{ *Resolver }
 type procedureResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type subcontrolResolver struct{ *Resolver }
@@ -3007,6 +3182,7 @@ type createGroupInputResolver struct{ *Resolver }
 type createMappedControlInputResolver struct{ *Resolver }
 type createNotificationInputResolver struct{ *Resolver }
 type createOrganizationInputResolver struct{ *Resolver }
+type createScanInputResolver struct{ *Resolver }
 type createTrustCenterInputResolver struct{ *Resolver }
 type updateActionPlanInputResolver struct{ *Resolver }
 type updateControlInputResolver struct{ *Resolver }

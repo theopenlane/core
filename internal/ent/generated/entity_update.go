@@ -12,16 +12,26 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -130,6 +140,146 @@ func (_u *EntityUpdate) ClearTags() *EntityUpdate {
 	return _u
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_u *EntityUpdate) SetInternalOwner(v string) *EntityUpdate {
+	_u.mutation.SetInternalOwner(v)
+	return _u
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableInternalOwner(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetInternalOwner(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (_u *EntityUpdate) ClearInternalOwner() *EntityUpdate {
+	_u.mutation.ClearInternalOwner()
+	return _u
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_u *EntityUpdate) SetInternalOwnerUserID(v string) *EntityUpdate {
+	_u.mutation.SetInternalOwnerUserID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableInternalOwnerUserID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetInternalOwnerUserID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (_u *EntityUpdate) ClearInternalOwnerUserID() *EntityUpdate {
+	_u.mutation.ClearInternalOwnerUserID()
+	return _u
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_u *EntityUpdate) SetInternalOwnerGroupID(v string) *EntityUpdate {
+	_u.mutation.SetInternalOwnerGroupID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableInternalOwnerGroupID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetInternalOwnerGroupID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (_u *EntityUpdate) ClearInternalOwnerGroupID() *EntityUpdate {
+	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetReviewedBy sets the "reviewed_by" field.
+func (_u *EntityUpdate) SetReviewedBy(v string) *EntityUpdate {
+	_u.mutation.SetReviewedBy(v)
+	return _u
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableReviewedBy(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetReviewedBy(*v)
+	}
+	return _u
+}
+
+// ClearReviewedBy clears the value of the "reviewed_by" field.
+func (_u *EntityUpdate) ClearReviewedBy() *EntityUpdate {
+	_u.mutation.ClearReviewedBy()
+	return _u
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_u *EntityUpdate) SetReviewedByUserID(v string) *EntityUpdate {
+	_u.mutation.SetReviewedByUserID(v)
+	return _u
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableReviewedByUserID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetReviewedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByUserID clears the value of the "reviewed_by_user_id" field.
+func (_u *EntityUpdate) ClearReviewedByUserID() *EntityUpdate {
+	_u.mutation.ClearReviewedByUserID()
+	return _u
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_u *EntityUpdate) SetReviewedByGroupID(v string) *EntityUpdate {
+	_u.mutation.SetReviewedByGroupID(v)
+	return _u
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableReviewedByGroupID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetReviewedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
+func (_u *EntityUpdate) ClearReviewedByGroupID() *EntityUpdate {
+	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetLastReviewedAt sets the "last_reviewed_at" field.
+func (_u *EntityUpdate) SetLastReviewedAt(v models.DateTime) *EntityUpdate {
+	_u.mutation.SetLastReviewedAt(v)
+	return _u
+}
+
+// SetNillableLastReviewedAt sets the "last_reviewed_at" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableLastReviewedAt(v *models.DateTime) *EntityUpdate {
+	if v != nil {
+		_u.SetLastReviewedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastReviewedAt clears the value of the "last_reviewed_at" field.
+func (_u *EntityUpdate) ClearLastReviewedAt() *EntityUpdate {
+	_u.mutation.ClearLastReviewedAt()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *EntityUpdate) SetInternalNotes(v string) *EntityUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -167,6 +317,206 @@ func (_u *EntityUpdate) SetNillableSystemInternalID(v *string) *EntityUpdate {
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *EntityUpdate) ClearSystemInternalID() *EntityUpdate {
 	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
+// SetEntityRelationshipStateName sets the "entity_relationship_state_name" field.
+func (_u *EntityUpdate) SetEntityRelationshipStateName(v string) *EntityUpdate {
+	_u.mutation.SetEntityRelationshipStateName(v)
+	return _u
+}
+
+// SetNillableEntityRelationshipStateName sets the "entity_relationship_state_name" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableEntityRelationshipStateName(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetEntityRelationshipStateName(*v)
+	}
+	return _u
+}
+
+// ClearEntityRelationshipStateName clears the value of the "entity_relationship_state_name" field.
+func (_u *EntityUpdate) ClearEntityRelationshipStateName() *EntityUpdate {
+	_u.mutation.ClearEntityRelationshipStateName()
+	return _u
+}
+
+// SetEntityRelationshipStateID sets the "entity_relationship_state_id" field.
+func (_u *EntityUpdate) SetEntityRelationshipStateID(v string) *EntityUpdate {
+	_u.mutation.SetEntityRelationshipStateID(v)
+	return _u
+}
+
+// SetNillableEntityRelationshipStateID sets the "entity_relationship_state_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableEntityRelationshipStateID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetEntityRelationshipStateID(*v)
+	}
+	return _u
+}
+
+// ClearEntityRelationshipStateID clears the value of the "entity_relationship_state_id" field.
+func (_u *EntityUpdate) ClearEntityRelationshipStateID() *EntityUpdate {
+	_u.mutation.ClearEntityRelationshipStateID()
+	return _u
+}
+
+// SetEntitySecurityQuestionnaireStatusName sets the "entity_security_questionnaire_status_name" field.
+func (_u *EntityUpdate) SetEntitySecurityQuestionnaireStatusName(v string) *EntityUpdate {
+	_u.mutation.SetEntitySecurityQuestionnaireStatusName(v)
+	return _u
+}
+
+// SetNillableEntitySecurityQuestionnaireStatusName sets the "entity_security_questionnaire_status_name" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableEntitySecurityQuestionnaireStatusName(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetEntitySecurityQuestionnaireStatusName(*v)
+	}
+	return _u
+}
+
+// ClearEntitySecurityQuestionnaireStatusName clears the value of the "entity_security_questionnaire_status_name" field.
+func (_u *EntityUpdate) ClearEntitySecurityQuestionnaireStatusName() *EntityUpdate {
+	_u.mutation.ClearEntitySecurityQuestionnaireStatusName()
+	return _u
+}
+
+// SetEntitySecurityQuestionnaireStatusID sets the "entity_security_questionnaire_status_id" field.
+func (_u *EntityUpdate) SetEntitySecurityQuestionnaireStatusID(v string) *EntityUpdate {
+	_u.mutation.SetEntitySecurityQuestionnaireStatusID(v)
+	return _u
+}
+
+// SetNillableEntitySecurityQuestionnaireStatusID sets the "entity_security_questionnaire_status_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableEntitySecurityQuestionnaireStatusID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetEntitySecurityQuestionnaireStatusID(*v)
+	}
+	return _u
+}
+
+// ClearEntitySecurityQuestionnaireStatusID clears the value of the "entity_security_questionnaire_status_id" field.
+func (_u *EntityUpdate) ClearEntitySecurityQuestionnaireStatusID() *EntityUpdate {
+	_u.mutation.ClearEntitySecurityQuestionnaireStatusID()
+	return _u
+}
+
+// SetEntitySourceTypeName sets the "entity_source_type_name" field.
+func (_u *EntityUpdate) SetEntitySourceTypeName(v string) *EntityUpdate {
+	_u.mutation.SetEntitySourceTypeName(v)
+	return _u
+}
+
+// SetNillableEntitySourceTypeName sets the "entity_source_type_name" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableEntitySourceTypeName(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetEntitySourceTypeName(*v)
+	}
+	return _u
+}
+
+// ClearEntitySourceTypeName clears the value of the "entity_source_type_name" field.
+func (_u *EntityUpdate) ClearEntitySourceTypeName() *EntityUpdate {
+	_u.mutation.ClearEntitySourceTypeName()
+	return _u
+}
+
+// SetEntitySourceTypeID sets the "entity_source_type_id" field.
+func (_u *EntityUpdate) SetEntitySourceTypeID(v string) *EntityUpdate {
+	_u.mutation.SetEntitySourceTypeID(v)
+	return _u
+}
+
+// SetNillableEntitySourceTypeID sets the "entity_source_type_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableEntitySourceTypeID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetEntitySourceTypeID(*v)
+	}
+	return _u
+}
+
+// ClearEntitySourceTypeID clears the value of the "entity_source_type_id" field.
+func (_u *EntityUpdate) ClearEntitySourceTypeID() *EntityUpdate {
+	_u.mutation.ClearEntitySourceTypeID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *EntityUpdate) SetEnvironmentName(v string) *EntityUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableEnvironmentName(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *EntityUpdate) ClearEnvironmentName() *EntityUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *EntityUpdate) SetEnvironmentID(v string) *EntityUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableEnvironmentID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *EntityUpdate) ClearEnvironmentID() *EntityUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *EntityUpdate) SetScopeName(v string) *EntityUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableScopeName(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *EntityUpdate) ClearScopeName() *EntityUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *EntityUpdate) SetScopeID(v string) *EntityUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableScopeID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *EntityUpdate) ClearScopeID() *EntityUpdate {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -288,6 +638,513 @@ func (_u *EntityUpdate) ClearStatus() *EntityUpdate {
 	return _u
 }
 
+// SetApprovedForUse sets the "approved_for_use" field.
+func (_u *EntityUpdate) SetApprovedForUse(v bool) *EntityUpdate {
+	_u.mutation.SetApprovedForUse(v)
+	return _u
+}
+
+// SetNillableApprovedForUse sets the "approved_for_use" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableApprovedForUse(v *bool) *EntityUpdate {
+	if v != nil {
+		_u.SetApprovedForUse(*v)
+	}
+	return _u
+}
+
+// ClearApprovedForUse clears the value of the "approved_for_use" field.
+func (_u *EntityUpdate) ClearApprovedForUse() *EntityUpdate {
+	_u.mutation.ClearApprovedForUse()
+	return _u
+}
+
+// SetLinkedAssetIds sets the "linked_asset_ids" field.
+func (_u *EntityUpdate) SetLinkedAssetIds(v []string) *EntityUpdate {
+	_u.mutation.SetLinkedAssetIds(v)
+	return _u
+}
+
+// AppendLinkedAssetIds appends value to the "linked_asset_ids" field.
+func (_u *EntityUpdate) AppendLinkedAssetIds(v []string) *EntityUpdate {
+	_u.mutation.AppendLinkedAssetIds(v)
+	return _u
+}
+
+// ClearLinkedAssetIds clears the value of the "linked_asset_ids" field.
+func (_u *EntityUpdate) ClearLinkedAssetIds() *EntityUpdate {
+	_u.mutation.ClearLinkedAssetIds()
+	return _u
+}
+
+// SetHasSoc2 sets the "has_soc2" field.
+func (_u *EntityUpdate) SetHasSoc2(v bool) *EntityUpdate {
+	_u.mutation.SetHasSoc2(v)
+	return _u
+}
+
+// SetNillableHasSoc2 sets the "has_soc2" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableHasSoc2(v *bool) *EntityUpdate {
+	if v != nil {
+		_u.SetHasSoc2(*v)
+	}
+	return _u
+}
+
+// ClearHasSoc2 clears the value of the "has_soc2" field.
+func (_u *EntityUpdate) ClearHasSoc2() *EntityUpdate {
+	_u.mutation.ClearHasSoc2()
+	return _u
+}
+
+// SetSoc2PeriodEnd sets the "soc2_period_end" field.
+func (_u *EntityUpdate) SetSoc2PeriodEnd(v models.DateTime) *EntityUpdate {
+	_u.mutation.SetSoc2PeriodEnd(v)
+	return _u
+}
+
+// SetNillableSoc2PeriodEnd sets the "soc2_period_end" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableSoc2PeriodEnd(v *models.DateTime) *EntityUpdate {
+	if v != nil {
+		_u.SetSoc2PeriodEnd(*v)
+	}
+	return _u
+}
+
+// ClearSoc2PeriodEnd clears the value of the "soc2_period_end" field.
+func (_u *EntityUpdate) ClearSoc2PeriodEnd() *EntityUpdate {
+	_u.mutation.ClearSoc2PeriodEnd()
+	return _u
+}
+
+// SetContractStartDate sets the "contract_start_date" field.
+func (_u *EntityUpdate) SetContractStartDate(v models.DateTime) *EntityUpdate {
+	_u.mutation.SetContractStartDate(v)
+	return _u
+}
+
+// SetNillableContractStartDate sets the "contract_start_date" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableContractStartDate(v *models.DateTime) *EntityUpdate {
+	if v != nil {
+		_u.SetContractStartDate(*v)
+	}
+	return _u
+}
+
+// ClearContractStartDate clears the value of the "contract_start_date" field.
+func (_u *EntityUpdate) ClearContractStartDate() *EntityUpdate {
+	_u.mutation.ClearContractStartDate()
+	return _u
+}
+
+// SetContractEndDate sets the "contract_end_date" field.
+func (_u *EntityUpdate) SetContractEndDate(v models.DateTime) *EntityUpdate {
+	_u.mutation.SetContractEndDate(v)
+	return _u
+}
+
+// SetNillableContractEndDate sets the "contract_end_date" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableContractEndDate(v *models.DateTime) *EntityUpdate {
+	if v != nil {
+		_u.SetContractEndDate(*v)
+	}
+	return _u
+}
+
+// ClearContractEndDate clears the value of the "contract_end_date" field.
+func (_u *EntityUpdate) ClearContractEndDate() *EntityUpdate {
+	_u.mutation.ClearContractEndDate()
+	return _u
+}
+
+// SetAutoRenews sets the "auto_renews" field.
+func (_u *EntityUpdate) SetAutoRenews(v bool) *EntityUpdate {
+	_u.mutation.SetAutoRenews(v)
+	return _u
+}
+
+// SetNillableAutoRenews sets the "auto_renews" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableAutoRenews(v *bool) *EntityUpdate {
+	if v != nil {
+		_u.SetAutoRenews(*v)
+	}
+	return _u
+}
+
+// ClearAutoRenews clears the value of the "auto_renews" field.
+func (_u *EntityUpdate) ClearAutoRenews() *EntityUpdate {
+	_u.mutation.ClearAutoRenews()
+	return _u
+}
+
+// SetTerminationNoticeDays sets the "termination_notice_days" field.
+func (_u *EntityUpdate) SetTerminationNoticeDays(v int) *EntityUpdate {
+	_u.mutation.ResetTerminationNoticeDays()
+	_u.mutation.SetTerminationNoticeDays(v)
+	return _u
+}
+
+// SetNillableTerminationNoticeDays sets the "termination_notice_days" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableTerminationNoticeDays(v *int) *EntityUpdate {
+	if v != nil {
+		_u.SetTerminationNoticeDays(*v)
+	}
+	return _u
+}
+
+// AddTerminationNoticeDays adds value to the "termination_notice_days" field.
+func (_u *EntityUpdate) AddTerminationNoticeDays(v int) *EntityUpdate {
+	_u.mutation.AddTerminationNoticeDays(v)
+	return _u
+}
+
+// ClearTerminationNoticeDays clears the value of the "termination_notice_days" field.
+func (_u *EntityUpdate) ClearTerminationNoticeDays() *EntityUpdate {
+	_u.mutation.ClearTerminationNoticeDays()
+	return _u
+}
+
+// SetAnnualSpend sets the "annual_spend" field.
+func (_u *EntityUpdate) SetAnnualSpend(v float64) *EntityUpdate {
+	_u.mutation.ResetAnnualSpend()
+	_u.mutation.SetAnnualSpend(v)
+	return _u
+}
+
+// SetNillableAnnualSpend sets the "annual_spend" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableAnnualSpend(v *float64) *EntityUpdate {
+	if v != nil {
+		_u.SetAnnualSpend(*v)
+	}
+	return _u
+}
+
+// AddAnnualSpend adds value to the "annual_spend" field.
+func (_u *EntityUpdate) AddAnnualSpend(v float64) *EntityUpdate {
+	_u.mutation.AddAnnualSpend(v)
+	return _u
+}
+
+// ClearAnnualSpend clears the value of the "annual_spend" field.
+func (_u *EntityUpdate) ClearAnnualSpend() *EntityUpdate {
+	_u.mutation.ClearAnnualSpend()
+	return _u
+}
+
+// SetSpendCurrency sets the "spend_currency" field.
+func (_u *EntityUpdate) SetSpendCurrency(v string) *EntityUpdate {
+	_u.mutation.SetSpendCurrency(v)
+	return _u
+}
+
+// SetNillableSpendCurrency sets the "spend_currency" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableSpendCurrency(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetSpendCurrency(*v)
+	}
+	return _u
+}
+
+// ClearSpendCurrency clears the value of the "spend_currency" field.
+func (_u *EntityUpdate) ClearSpendCurrency() *EntityUpdate {
+	_u.mutation.ClearSpendCurrency()
+	return _u
+}
+
+// SetBillingModel sets the "billing_model" field.
+func (_u *EntityUpdate) SetBillingModel(v string) *EntityUpdate {
+	_u.mutation.SetBillingModel(v)
+	return _u
+}
+
+// SetNillableBillingModel sets the "billing_model" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableBillingModel(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetBillingModel(*v)
+	}
+	return _u
+}
+
+// ClearBillingModel clears the value of the "billing_model" field.
+func (_u *EntityUpdate) ClearBillingModel() *EntityUpdate {
+	_u.mutation.ClearBillingModel()
+	return _u
+}
+
+// SetRenewalRisk sets the "renewal_risk" field.
+func (_u *EntityUpdate) SetRenewalRisk(v string) *EntityUpdate {
+	_u.mutation.SetRenewalRisk(v)
+	return _u
+}
+
+// SetNillableRenewalRisk sets the "renewal_risk" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableRenewalRisk(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetRenewalRisk(*v)
+	}
+	return _u
+}
+
+// ClearRenewalRisk clears the value of the "renewal_risk" field.
+func (_u *EntityUpdate) ClearRenewalRisk() *EntityUpdate {
+	_u.mutation.ClearRenewalRisk()
+	return _u
+}
+
+// SetSSOEnforced sets the "sso_enforced" field.
+func (_u *EntityUpdate) SetSSOEnforced(v bool) *EntityUpdate {
+	_u.mutation.SetSSOEnforced(v)
+	return _u
+}
+
+// SetNillableSSOEnforced sets the "sso_enforced" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableSSOEnforced(v *bool) *EntityUpdate {
+	if v != nil {
+		_u.SetSSOEnforced(*v)
+	}
+	return _u
+}
+
+// ClearSSOEnforced clears the value of the "sso_enforced" field.
+func (_u *EntityUpdate) ClearSSOEnforced() *EntityUpdate {
+	_u.mutation.ClearSSOEnforced()
+	return _u
+}
+
+// SetMfaSupported sets the "mfa_supported" field.
+func (_u *EntityUpdate) SetMfaSupported(v bool) *EntityUpdate {
+	_u.mutation.SetMfaSupported(v)
+	return _u
+}
+
+// SetNillableMfaSupported sets the "mfa_supported" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableMfaSupported(v *bool) *EntityUpdate {
+	if v != nil {
+		_u.SetMfaSupported(*v)
+	}
+	return _u
+}
+
+// ClearMfaSupported clears the value of the "mfa_supported" field.
+func (_u *EntityUpdate) ClearMfaSupported() *EntityUpdate {
+	_u.mutation.ClearMfaSupported()
+	return _u
+}
+
+// SetMfaEnforced sets the "mfa_enforced" field.
+func (_u *EntityUpdate) SetMfaEnforced(v bool) *EntityUpdate {
+	_u.mutation.SetMfaEnforced(v)
+	return _u
+}
+
+// SetNillableMfaEnforced sets the "mfa_enforced" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableMfaEnforced(v *bool) *EntityUpdate {
+	if v != nil {
+		_u.SetMfaEnforced(*v)
+	}
+	return _u
+}
+
+// ClearMfaEnforced clears the value of the "mfa_enforced" field.
+func (_u *EntityUpdate) ClearMfaEnforced() *EntityUpdate {
+	_u.mutation.ClearMfaEnforced()
+	return _u
+}
+
+// SetStatusPageURL sets the "status_page_url" field.
+func (_u *EntityUpdate) SetStatusPageURL(v string) *EntityUpdate {
+	_u.mutation.SetStatusPageURL(v)
+	return _u
+}
+
+// SetNillableStatusPageURL sets the "status_page_url" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableStatusPageURL(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetStatusPageURL(*v)
+	}
+	return _u
+}
+
+// ClearStatusPageURL clears the value of the "status_page_url" field.
+func (_u *EntityUpdate) ClearStatusPageURL() *EntityUpdate {
+	_u.mutation.ClearStatusPageURL()
+	return _u
+}
+
+// SetProvidedServices sets the "provided_services" field.
+func (_u *EntityUpdate) SetProvidedServices(v []string) *EntityUpdate {
+	_u.mutation.SetProvidedServices(v)
+	return _u
+}
+
+// AppendProvidedServices appends value to the "provided_services" field.
+func (_u *EntityUpdate) AppendProvidedServices(v []string) *EntityUpdate {
+	_u.mutation.AppendProvidedServices(v)
+	return _u
+}
+
+// ClearProvidedServices clears the value of the "provided_services" field.
+func (_u *EntityUpdate) ClearProvidedServices() *EntityUpdate {
+	_u.mutation.ClearProvidedServices()
+	return _u
+}
+
+// SetLinks sets the "links" field.
+func (_u *EntityUpdate) SetLinks(v []string) *EntityUpdate {
+	_u.mutation.SetLinks(v)
+	return _u
+}
+
+// AppendLinks appends value to the "links" field.
+func (_u *EntityUpdate) AppendLinks(v []string) *EntityUpdate {
+	_u.mutation.AppendLinks(v)
+	return _u
+}
+
+// ClearLinks clears the value of the "links" field.
+func (_u *EntityUpdate) ClearLinks() *EntityUpdate {
+	_u.mutation.ClearLinks()
+	return _u
+}
+
+// SetRiskRating sets the "risk_rating" field.
+func (_u *EntityUpdate) SetRiskRating(v string) *EntityUpdate {
+	_u.mutation.SetRiskRating(v)
+	return _u
+}
+
+// SetNillableRiskRating sets the "risk_rating" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableRiskRating(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetRiskRating(*v)
+	}
+	return _u
+}
+
+// ClearRiskRating clears the value of the "risk_rating" field.
+func (_u *EntityUpdate) ClearRiskRating() *EntityUpdate {
+	_u.mutation.ClearRiskRating()
+	return _u
+}
+
+// SetRiskScore sets the "risk_score" field.
+func (_u *EntityUpdate) SetRiskScore(v int) *EntityUpdate {
+	_u.mutation.ResetRiskScore()
+	_u.mutation.SetRiskScore(v)
+	return _u
+}
+
+// SetNillableRiskScore sets the "risk_score" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableRiskScore(v *int) *EntityUpdate {
+	if v != nil {
+		_u.SetRiskScore(*v)
+	}
+	return _u
+}
+
+// AddRiskScore adds value to the "risk_score" field.
+func (_u *EntityUpdate) AddRiskScore(v int) *EntityUpdate {
+	_u.mutation.AddRiskScore(v)
+	return _u
+}
+
+// ClearRiskScore clears the value of the "risk_score" field.
+func (_u *EntityUpdate) ClearRiskScore() *EntityUpdate {
+	_u.mutation.ClearRiskScore()
+	return _u
+}
+
+// SetTier sets the "tier" field.
+func (_u *EntityUpdate) SetTier(v string) *EntityUpdate {
+	_u.mutation.SetTier(v)
+	return _u
+}
+
+// SetNillableTier sets the "tier" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableTier(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetTier(*v)
+	}
+	return _u
+}
+
+// ClearTier clears the value of the "tier" field.
+func (_u *EntityUpdate) ClearTier() *EntityUpdate {
+	_u.mutation.ClearTier()
+	return _u
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (_u *EntityUpdate) SetReviewFrequency(v enums.Frequency) *EntityUpdate {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableReviewFrequency(v *enums.Frequency) *EntityUpdate {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
+	}
+	return _u
+}
+
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (_u *EntityUpdate) ClearReviewFrequency() *EntityUpdate {
+	_u.mutation.ClearReviewFrequency()
+	return _u
+}
+
+// SetNextReviewAt sets the "next_review_at" field.
+func (_u *EntityUpdate) SetNextReviewAt(v models.DateTime) *EntityUpdate {
+	_u.mutation.SetNextReviewAt(v)
+	return _u
+}
+
+// SetNillableNextReviewAt sets the "next_review_at" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableNextReviewAt(v *models.DateTime) *EntityUpdate {
+	if v != nil {
+		_u.SetNextReviewAt(*v)
+	}
+	return _u
+}
+
+// ClearNextReviewAt clears the value of the "next_review_at" field.
+func (_u *EntityUpdate) ClearNextReviewAt() *EntityUpdate {
+	_u.mutation.ClearNextReviewAt()
+	return _u
+}
+
+// SetContractRenewalAt sets the "contract_renewal_at" field.
+func (_u *EntityUpdate) SetContractRenewalAt(v models.DateTime) *EntityUpdate {
+	_u.mutation.SetContractRenewalAt(v)
+	return _u
+}
+
+// SetNillableContractRenewalAt sets the "contract_renewal_at" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableContractRenewalAt(v *models.DateTime) *EntityUpdate {
+	if v != nil {
+		_u.SetContractRenewalAt(*v)
+	}
+	return _u
+}
+
+// ClearContractRenewalAt clears the value of the "contract_renewal_at" field.
+func (_u *EntityUpdate) ClearContractRenewalAt() *EntityUpdate {
+	_u.mutation.ClearContractRenewalAt()
+	return _u
+}
+
+// SetVendorMetadata sets the "vendor_metadata" field.
+func (_u *EntityUpdate) SetVendorMetadata(v map[string]interface{}) *EntityUpdate {
+	_u.mutation.SetVendorMetadata(v)
+	return _u
+}
+
+// ClearVendorMetadata clears the value of the "vendor_metadata" field.
+func (_u *EntityUpdate) ClearVendorMetadata() *EntityUpdate {
+	_u.mutation.ClearVendorMetadata()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *EntityUpdate) AddBlockedGroupIDs(ids ...string) *EntityUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -331,6 +1188,51 @@ func (_u *EntityUpdate) AddViewers(v ...*Group) *EntityUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddViewerIDs(ids...)
+}
+
+// SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
+func (_u *EntityUpdate) SetInternalOwnerUser(v *User) *EntityUpdate {
+	return _u.SetInternalOwnerUserID(v.ID)
+}
+
+// SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
+func (_u *EntityUpdate) SetInternalOwnerGroup(v *Group) *EntityUpdate {
+	return _u.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
+func (_u *EntityUpdate) SetReviewedByUser(v *User) *EntityUpdate {
+	return _u.SetReviewedByUserID(v.ID)
+}
+
+// SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
+func (_u *EntityUpdate) SetReviewedByGroup(v *Group) *EntityUpdate {
+	return _u.SetReviewedByGroupID(v.ID)
+}
+
+// SetEntityRelationshipState sets the "entity_relationship_state" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdate) SetEntityRelationshipState(v *CustomTypeEnum) *EntityUpdate {
+	return _u.SetEntityRelationshipStateID(v.ID)
+}
+
+// SetEntitySecurityQuestionnaireStatus sets the "entity_security_questionnaire_status" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdate) SetEntitySecurityQuestionnaireStatus(v *CustomTypeEnum) *EntityUpdate {
+	return _u.SetEntitySecurityQuestionnaireStatusID(v.ID)
+}
+
+// SetEntitySourceType sets the "entity_source_type" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdate) SetEntitySourceType(v *CustomTypeEnum) *EntityUpdate {
+	return _u.SetEntitySourceTypeID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdate) SetEnvironment(v *CustomTypeEnum) *EntityUpdate {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdate) SetScope(v *CustomTypeEnum) *EntityUpdate {
+	return _u.SetScopeID(v.ID)
 }
 
 // AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
@@ -423,6 +1325,156 @@ func (_u *EntityUpdate) AddScans(v ...*Scan) *EntityUpdate {
 	return _u.AddScanIDs(ids...)
 }
 
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_u *EntityUpdate) AddCampaignIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddCampaignIDs(ids...)
+	return _u
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_u *EntityUpdate) AddCampaigns(v ...*Campaign) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCampaignIDs(ids...)
+}
+
+// AddAssessmentResponseIDs adds the "assessment_responses" edge to the AssessmentResponse entity by IDs.
+func (_u *EntityUpdate) AddAssessmentResponseIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddAssessmentResponseIDs(ids...)
+	return _u
+}
+
+// AddAssessmentResponses adds the "assessment_responses" edges to the AssessmentResponse entity.
+func (_u *EntityUpdate) AddAssessmentResponses(v ...*AssessmentResponse) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssessmentResponseIDs(ids...)
+}
+
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (_u *EntityUpdate) AddIntegrationIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddIntegrationIDs(ids...)
+	return _u
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (_u *EntityUpdate) AddIntegrations(v ...*Integration) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationIDs(ids...)
+}
+
+// AddSubprocessorIDs adds the "subprocessors" edge to the Subprocessor entity by IDs.
+func (_u *EntityUpdate) AddSubprocessorIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddSubprocessorIDs(ids...)
+	return _u
+}
+
+// AddSubprocessors adds the "subprocessors" edges to the Subprocessor entity.
+func (_u *EntityUpdate) AddSubprocessors(v ...*Subprocessor) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubprocessorIDs(ids...)
+}
+
+// AddAuthMethodIDs adds the "auth_methods" edge to the CustomTypeEnum entity by IDs.
+func (_u *EntityUpdate) AddAuthMethodIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddAuthMethodIDs(ids...)
+	return _u
+}
+
+// AddAuthMethods adds the "auth_methods" edges to the CustomTypeEnum entity.
+func (_u *EntityUpdate) AddAuthMethods(v ...*CustomTypeEnum) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAuthMethodIDs(ids...)
+}
+
+// AddEmployerIdentityHolderIDs adds the "employer_identity_holders" edge to the IdentityHolder entity by IDs.
+func (_u *EntityUpdate) AddEmployerIdentityHolderIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddEmployerIdentityHolderIDs(ids...)
+	return _u
+}
+
+// AddEmployerIdentityHolders adds the "employer_identity_holders" edges to the IdentityHolder entity.
+func (_u *EntityUpdate) AddEmployerIdentityHolders(v ...*IdentityHolder) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEmployerIdentityHolderIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_u *EntityUpdate) AddIdentityHolderIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddIdentityHolderIDs(ids...)
+	return _u
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_u *EntityUpdate) AddIdentityHolders(v ...*IdentityHolder) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIdentityHolderIDs(ids...)
+}
+
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_u *EntityUpdate) AddPlatformIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddPlatformIDs(ids...)
+	return _u
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_u *EntityUpdate) AddPlatforms(v ...*Platform) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformIDs(ids...)
+}
+
+// AddOutOfScopePlatformIDs adds the "out_of_scope_platforms" edge to the Platform entity by IDs.
+func (_u *EntityUpdate) AddOutOfScopePlatformIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddOutOfScopePlatformIDs(ids...)
+	return _u
+}
+
+// AddOutOfScopePlatforms adds the "out_of_scope_platforms" edges to the Platform entity.
+func (_u *EntityUpdate) AddOutOfScopePlatforms(v ...*Platform) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddOutOfScopePlatformIDs(ids...)
+}
+
+// AddSourcePlatformIDs adds the "source_platforms" edge to the Platform entity by IDs.
+func (_u *EntityUpdate) AddSourcePlatformIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddSourcePlatformIDs(ids...)
+	return _u
+}
+
+// AddSourcePlatforms adds the "source_platforms" edges to the Platform entity.
+func (_u *EntityUpdate) AddSourcePlatforms(v ...*Platform) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSourcePlatformIDs(ids...)
+}
+
 // SetEntityType sets the "entity_type" edge to the EntityType entity.
 func (_u *EntityUpdate) SetEntityType(v *EntityType) *EntityUpdate {
 	return _u.SetEntityTypeID(v.ID)
@@ -494,6 +1546,60 @@ func (_u *EntityUpdate) RemoveViewers(v ...*Group) *EntityUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveViewerIDs(ids...)
+}
+
+// ClearInternalOwnerUser clears the "internal_owner_user" edge to the User entity.
+func (_u *EntityUpdate) ClearInternalOwnerUser() *EntityUpdate {
+	_u.mutation.ClearInternalOwnerUser()
+	return _u
+}
+
+// ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
+func (_u *EntityUpdate) ClearInternalOwnerGroup() *EntityUpdate {
+	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearReviewedByUser clears the "reviewed_by_user" edge to the User entity.
+func (_u *EntityUpdate) ClearReviewedByUser() *EntityUpdate {
+	_u.mutation.ClearReviewedByUser()
+	return _u
+}
+
+// ClearReviewedByGroup clears the "reviewed_by_group" edge to the Group entity.
+func (_u *EntityUpdate) ClearReviewedByGroup() *EntityUpdate {
+	_u.mutation.ClearReviewedByGroup()
+	return _u
+}
+
+// ClearEntityRelationshipState clears the "entity_relationship_state" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdate) ClearEntityRelationshipState() *EntityUpdate {
+	_u.mutation.ClearEntityRelationshipState()
+	return _u
+}
+
+// ClearEntitySecurityQuestionnaireStatus clears the "entity_security_questionnaire_status" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdate) ClearEntitySecurityQuestionnaireStatus() *EntityUpdate {
+	_u.mutation.ClearEntitySecurityQuestionnaireStatus()
+	return _u
+}
+
+// ClearEntitySourceType clears the "entity_source_type" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdate) ClearEntitySourceType() *EntityUpdate {
+	_u.mutation.ClearEntitySourceType()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdate) ClearEnvironment() *EntityUpdate {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdate) ClearScope() *EntityUpdate {
+	_u.mutation.ClearScope()
+	return _u
 }
 
 // ClearContacts clears all "contacts" edges to the Contact entity.
@@ -622,6 +1728,216 @@ func (_u *EntityUpdate) RemoveScans(v ...*Scan) *EntityUpdate {
 	return _u.RemoveScanIDs(ids...)
 }
 
+// ClearCampaigns clears all "campaigns" edges to the Campaign entity.
+func (_u *EntityUpdate) ClearCampaigns() *EntityUpdate {
+	_u.mutation.ClearCampaigns()
+	return _u
+}
+
+// RemoveCampaignIDs removes the "campaigns" edge to Campaign entities by IDs.
+func (_u *EntityUpdate) RemoveCampaignIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveCampaignIDs(ids...)
+	return _u
+}
+
+// RemoveCampaigns removes "campaigns" edges to Campaign entities.
+func (_u *EntityUpdate) RemoveCampaigns(v ...*Campaign) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCampaignIDs(ids...)
+}
+
+// ClearAssessmentResponses clears all "assessment_responses" edges to the AssessmentResponse entity.
+func (_u *EntityUpdate) ClearAssessmentResponses() *EntityUpdate {
+	_u.mutation.ClearAssessmentResponses()
+	return _u
+}
+
+// RemoveAssessmentResponseIDs removes the "assessment_responses" edge to AssessmentResponse entities by IDs.
+func (_u *EntityUpdate) RemoveAssessmentResponseIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveAssessmentResponseIDs(ids...)
+	return _u
+}
+
+// RemoveAssessmentResponses removes "assessment_responses" edges to AssessmentResponse entities.
+func (_u *EntityUpdate) RemoveAssessmentResponses(v ...*AssessmentResponse) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssessmentResponseIDs(ids...)
+}
+
+// ClearIntegrations clears all "integrations" edges to the Integration entity.
+func (_u *EntityUpdate) ClearIntegrations() *EntityUpdate {
+	_u.mutation.ClearIntegrations()
+	return _u
+}
+
+// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
+func (_u *EntityUpdate) RemoveIntegrationIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveIntegrationIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrations removes "integrations" edges to Integration entities.
+func (_u *EntityUpdate) RemoveIntegrations(v ...*Integration) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationIDs(ids...)
+}
+
+// ClearSubprocessors clears all "subprocessors" edges to the Subprocessor entity.
+func (_u *EntityUpdate) ClearSubprocessors() *EntityUpdate {
+	_u.mutation.ClearSubprocessors()
+	return _u
+}
+
+// RemoveSubprocessorIDs removes the "subprocessors" edge to Subprocessor entities by IDs.
+func (_u *EntityUpdate) RemoveSubprocessorIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveSubprocessorIDs(ids...)
+	return _u
+}
+
+// RemoveSubprocessors removes "subprocessors" edges to Subprocessor entities.
+func (_u *EntityUpdate) RemoveSubprocessors(v ...*Subprocessor) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubprocessorIDs(ids...)
+}
+
+// ClearAuthMethods clears all "auth_methods" edges to the CustomTypeEnum entity.
+func (_u *EntityUpdate) ClearAuthMethods() *EntityUpdate {
+	_u.mutation.ClearAuthMethods()
+	return _u
+}
+
+// RemoveAuthMethodIDs removes the "auth_methods" edge to CustomTypeEnum entities by IDs.
+func (_u *EntityUpdate) RemoveAuthMethodIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveAuthMethodIDs(ids...)
+	return _u
+}
+
+// RemoveAuthMethods removes "auth_methods" edges to CustomTypeEnum entities.
+func (_u *EntityUpdate) RemoveAuthMethods(v ...*CustomTypeEnum) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAuthMethodIDs(ids...)
+}
+
+// ClearEmployerIdentityHolders clears all "employer_identity_holders" edges to the IdentityHolder entity.
+func (_u *EntityUpdate) ClearEmployerIdentityHolders() *EntityUpdate {
+	_u.mutation.ClearEmployerIdentityHolders()
+	return _u
+}
+
+// RemoveEmployerIdentityHolderIDs removes the "employer_identity_holders" edge to IdentityHolder entities by IDs.
+func (_u *EntityUpdate) RemoveEmployerIdentityHolderIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveEmployerIdentityHolderIDs(ids...)
+	return _u
+}
+
+// RemoveEmployerIdentityHolders removes "employer_identity_holders" edges to IdentityHolder entities.
+func (_u *EntityUpdate) RemoveEmployerIdentityHolders(v ...*IdentityHolder) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEmployerIdentityHolderIDs(ids...)
+}
+
+// ClearIdentityHolders clears all "identity_holders" edges to the IdentityHolder entity.
+func (_u *EntityUpdate) ClearIdentityHolders() *EntityUpdate {
+	_u.mutation.ClearIdentityHolders()
+	return _u
+}
+
+// RemoveIdentityHolderIDs removes the "identity_holders" edge to IdentityHolder entities by IDs.
+func (_u *EntityUpdate) RemoveIdentityHolderIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveIdentityHolderIDs(ids...)
+	return _u
+}
+
+// RemoveIdentityHolders removes "identity_holders" edges to IdentityHolder entities.
+func (_u *EntityUpdate) RemoveIdentityHolders(v ...*IdentityHolder) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIdentityHolderIDs(ids...)
+}
+
+// ClearPlatforms clears all "platforms" edges to the Platform entity.
+func (_u *EntityUpdate) ClearPlatforms() *EntityUpdate {
+	_u.mutation.ClearPlatforms()
+	return _u
+}
+
+// RemovePlatformIDs removes the "platforms" edge to Platform entities by IDs.
+func (_u *EntityUpdate) RemovePlatformIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemovePlatformIDs(ids...)
+	return _u
+}
+
+// RemovePlatforms removes "platforms" edges to Platform entities.
+func (_u *EntityUpdate) RemovePlatforms(v ...*Platform) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformIDs(ids...)
+}
+
+// ClearOutOfScopePlatforms clears all "out_of_scope_platforms" edges to the Platform entity.
+func (_u *EntityUpdate) ClearOutOfScopePlatforms() *EntityUpdate {
+	_u.mutation.ClearOutOfScopePlatforms()
+	return _u
+}
+
+// RemoveOutOfScopePlatformIDs removes the "out_of_scope_platforms" edge to Platform entities by IDs.
+func (_u *EntityUpdate) RemoveOutOfScopePlatformIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveOutOfScopePlatformIDs(ids...)
+	return _u
+}
+
+// RemoveOutOfScopePlatforms removes "out_of_scope_platforms" edges to Platform entities.
+func (_u *EntityUpdate) RemoveOutOfScopePlatforms(v ...*Platform) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveOutOfScopePlatformIDs(ids...)
+}
+
+// ClearSourcePlatforms clears all "source_platforms" edges to the Platform entity.
+func (_u *EntityUpdate) ClearSourcePlatforms() *EntityUpdate {
+	_u.mutation.ClearSourcePlatforms()
+	return _u
+}
+
+// RemoveSourcePlatformIDs removes the "source_platforms" edge to Platform entities by IDs.
+func (_u *EntityUpdate) RemoveSourcePlatformIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveSourcePlatformIDs(ids...)
+	return _u
+}
+
+// RemoveSourcePlatforms removes "source_platforms" edges to Platform entities.
+func (_u *EntityUpdate) RemoveSourcePlatforms(v ...*Platform) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSourcePlatformIDs(ids...)
+}
+
 // ClearEntityType clears the "entity_type" edge to the EntityType entity.
 func (_u *EntityUpdate) ClearEntityType() *EntityUpdate {
 	_u.mutation.ClearEntityType()
@@ -687,6 +2003,21 @@ func (_u *EntityUpdate) check() error {
 			return &ValidationError{Name: "domains", err: fmt.Errorf(`generated: validator failed for field "Entity.domains": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.StatusPageURL(); ok {
+		if err := entity.StatusPageURLValidator(v); err != nil {
+			return &ValidationError{Name: "status_page_url", err: fmt.Errorf(`generated: validator failed for field "Entity.status_page_url": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Links(); ok {
+		if err := entity.LinksValidator(v); err != nil {
+			return &ValidationError{Name: "links", err: fmt.Errorf(`generated: validator failed for field "Entity.links": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
+		if err := entity.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Entity.review_frequency": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -749,6 +2080,24 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entity.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.InternalOwner(); ok {
+		_spec.SetField(entity.FieldInternalOwner, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(entity.FieldInternalOwner, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedBy(); ok {
+		_spec.SetField(entity.FieldReviewedBy, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(entity.FieldReviewedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.LastReviewedAt(); ok {
+		_spec.SetField(entity.FieldLastReviewedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastReviewedAtCleared() {
+		_spec.ClearField(entity.FieldLastReviewedAt, field.TypeTime)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(entity.FieldSystemOwned, field.TypeBool)
 	}
@@ -763,6 +2112,36 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(entity.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntityRelationshipStateName(); ok {
+		_spec.SetField(entity.FieldEntityRelationshipStateName, field.TypeString, value)
+	}
+	if _u.mutation.EntityRelationshipStateNameCleared() {
+		_spec.ClearField(entity.FieldEntityRelationshipStateName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntitySecurityQuestionnaireStatusName(); ok {
+		_spec.SetField(entity.FieldEntitySecurityQuestionnaireStatusName, field.TypeString, value)
+	}
+	if _u.mutation.EntitySecurityQuestionnaireStatusNameCleared() {
+		_spec.ClearField(entity.FieldEntitySecurityQuestionnaireStatusName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntitySourceTypeName(); ok {
+		_spec.SetField(entity.FieldEntitySourceTypeName, field.TypeString, value)
+	}
+	if _u.mutation.EntitySourceTypeNameCleared() {
+		_spec.ClearField(entity.FieldEntitySourceTypeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(entity.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(entity.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(entity.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(entity.FieldScopeName, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(entity.FieldName, field.TypeString, value)
@@ -798,6 +2177,180 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(entity.FieldStatus, field.TypeString)
+	}
+	if value, ok := _u.mutation.ApprovedForUse(); ok {
+		_spec.SetField(entity.FieldApprovedForUse, field.TypeBool, value)
+	}
+	if _u.mutation.ApprovedForUseCleared() {
+		_spec.ClearField(entity.FieldApprovedForUse, field.TypeBool)
+	}
+	if value, ok := _u.mutation.LinkedAssetIds(); ok {
+		_spec.SetField(entity.FieldLinkedAssetIds, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedLinkedAssetIds(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entity.FieldLinkedAssetIds, value)
+		})
+	}
+	if _u.mutation.LinkedAssetIdsCleared() {
+		_spec.ClearField(entity.FieldLinkedAssetIds, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.HasSoc2(); ok {
+		_spec.SetField(entity.FieldHasSoc2, field.TypeBool, value)
+	}
+	if _u.mutation.HasSoc2Cleared() {
+		_spec.ClearField(entity.FieldHasSoc2, field.TypeBool)
+	}
+	if value, ok := _u.mutation.Soc2PeriodEnd(); ok {
+		_spec.SetField(entity.FieldSoc2PeriodEnd, field.TypeTime, value)
+	}
+	if _u.mutation.Soc2PeriodEndCleared() {
+		_spec.ClearField(entity.FieldSoc2PeriodEnd, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ContractStartDate(); ok {
+		_spec.SetField(entity.FieldContractStartDate, field.TypeTime, value)
+	}
+	if _u.mutation.ContractStartDateCleared() {
+		_spec.ClearField(entity.FieldContractStartDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ContractEndDate(); ok {
+		_spec.SetField(entity.FieldContractEndDate, field.TypeTime, value)
+	}
+	if _u.mutation.ContractEndDateCleared() {
+		_spec.ClearField(entity.FieldContractEndDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.AutoRenews(); ok {
+		_spec.SetField(entity.FieldAutoRenews, field.TypeBool, value)
+	}
+	if _u.mutation.AutoRenewsCleared() {
+		_spec.ClearField(entity.FieldAutoRenews, field.TypeBool)
+	}
+	if value, ok := _u.mutation.TerminationNoticeDays(); ok {
+		_spec.SetField(entity.FieldTerminationNoticeDays, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedTerminationNoticeDays(); ok {
+		_spec.AddField(entity.FieldTerminationNoticeDays, field.TypeInt, value)
+	}
+	if _u.mutation.TerminationNoticeDaysCleared() {
+		_spec.ClearField(entity.FieldTerminationNoticeDays, field.TypeInt)
+	}
+	if value, ok := _u.mutation.AnnualSpend(); ok {
+		_spec.SetField(entity.FieldAnnualSpend, field.TypeFloat64, value)
+	}
+	if value, ok := _u.mutation.AddedAnnualSpend(); ok {
+		_spec.AddField(entity.FieldAnnualSpend, field.TypeFloat64, value)
+	}
+	if _u.mutation.AnnualSpendCleared() {
+		_spec.ClearField(entity.FieldAnnualSpend, field.TypeFloat64)
+	}
+	if value, ok := _u.mutation.SpendCurrency(); ok {
+		_spec.SetField(entity.FieldSpendCurrency, field.TypeString, value)
+	}
+	if _u.mutation.SpendCurrencyCleared() {
+		_spec.ClearField(entity.FieldSpendCurrency, field.TypeString)
+	}
+	if value, ok := _u.mutation.BillingModel(); ok {
+		_spec.SetField(entity.FieldBillingModel, field.TypeString, value)
+	}
+	if _u.mutation.BillingModelCleared() {
+		_spec.ClearField(entity.FieldBillingModel, field.TypeString)
+	}
+	if value, ok := _u.mutation.RenewalRisk(); ok {
+		_spec.SetField(entity.FieldRenewalRisk, field.TypeString, value)
+	}
+	if _u.mutation.RenewalRiskCleared() {
+		_spec.ClearField(entity.FieldRenewalRisk, field.TypeString)
+	}
+	if value, ok := _u.mutation.SSOEnforced(); ok {
+		_spec.SetField(entity.FieldSSOEnforced, field.TypeBool, value)
+	}
+	if _u.mutation.SSOEnforcedCleared() {
+		_spec.ClearField(entity.FieldSSOEnforced, field.TypeBool)
+	}
+	if value, ok := _u.mutation.MfaSupported(); ok {
+		_spec.SetField(entity.FieldMfaSupported, field.TypeBool, value)
+	}
+	if _u.mutation.MfaSupportedCleared() {
+		_spec.ClearField(entity.FieldMfaSupported, field.TypeBool)
+	}
+	if value, ok := _u.mutation.MfaEnforced(); ok {
+		_spec.SetField(entity.FieldMfaEnforced, field.TypeBool, value)
+	}
+	if _u.mutation.MfaEnforcedCleared() {
+		_spec.ClearField(entity.FieldMfaEnforced, field.TypeBool)
+	}
+	if value, ok := _u.mutation.StatusPageURL(); ok {
+		_spec.SetField(entity.FieldStatusPageURL, field.TypeString, value)
+	}
+	if _u.mutation.StatusPageURLCleared() {
+		_spec.ClearField(entity.FieldStatusPageURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProvidedServices(); ok {
+		_spec.SetField(entity.FieldProvidedServices, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedProvidedServices(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entity.FieldProvidedServices, value)
+		})
+	}
+	if _u.mutation.ProvidedServicesCleared() {
+		_spec.ClearField(entity.FieldProvidedServices, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Links(); ok {
+		_spec.SetField(entity.FieldLinks, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entity.FieldLinks, value)
+		})
+	}
+	if _u.mutation.LinksCleared() {
+		_spec.ClearField(entity.FieldLinks, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.RiskRating(); ok {
+		_spec.SetField(entity.FieldRiskRating, field.TypeString, value)
+	}
+	if _u.mutation.RiskRatingCleared() {
+		_spec.ClearField(entity.FieldRiskRating, field.TypeString)
+	}
+	if value, ok := _u.mutation.RiskScore(); ok {
+		_spec.SetField(entity.FieldRiskScore, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedRiskScore(); ok {
+		_spec.AddField(entity.FieldRiskScore, field.TypeInt, value)
+	}
+	if _u.mutation.RiskScoreCleared() {
+		_spec.ClearField(entity.FieldRiskScore, field.TypeInt)
+	}
+	if value, ok := _u.mutation.Tier(); ok {
+		_spec.SetField(entity.FieldTier, field.TypeString, value)
+	}
+	if _u.mutation.TierCleared() {
+		_spec.ClearField(entity.FieldTier, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
+		_spec.SetField(entity.FieldReviewFrequency, field.TypeEnum, value)
+	}
+	if _u.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(entity.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.NextReviewAt(); ok {
+		_spec.SetField(entity.FieldNextReviewAt, field.TypeTime, value)
+	}
+	if _u.mutation.NextReviewAtCleared() {
+		_spec.ClearField(entity.FieldNextReviewAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ContractRenewalAt(); ok {
+		_spec.SetField(entity.FieldContractRenewalAt, field.TypeTime, value)
+	}
+	if _u.mutation.ContractRenewalAtCleared() {
+		_spec.ClearField(entity.FieldContractRenewalAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.VendorMetadata(); ok {
+		_spec.SetField(entity.FieldVendorMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.VendorMetadataCleared() {
+		_spec.ClearField(entity.FieldVendorMetadata, field.TypeJSON)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -938,6 +2491,285 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.EntityViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerUserTable,
+			Columns: []string{entity.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerUserTable,
+			Columns: []string{entity.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerGroupTable,
+			Columns: []string{entity.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerGroupTable,
+			Columns: []string{entity.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByUserTable,
+			Columns: []string{entity.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByUserTable,
+			Columns: []string{entity.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByGroupTable,
+			Columns: []string{entity.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByGroupTable,
+			Columns: []string{entity.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntityRelationshipStateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EntityRelationshipStateTable,
+			Columns: []string{entity.EntityRelationshipStateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntityRelationshipStateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EntityRelationshipStateTable,
+			Columns: []string{entity.EntityRelationshipStateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntitySecurityQuestionnaireStatusCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EntitySecurityQuestionnaireStatusTable,
+			Columns: []string{entity.EntitySecurityQuestionnaireStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntitySecurityQuestionnaireStatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EntitySecurityQuestionnaireStatusTable,
+			Columns: []string{entity.EntitySecurityQuestionnaireStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntitySourceTypeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EntitySourceTypeTable,
+			Columns: []string{entity.EntitySourceTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntitySourceTypeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EntitySourceTypeTable,
+			Columns: []string{entity.EntitySourceTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EnvironmentTable,
+			Columns: []string{entity.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EnvironmentTable,
+			Columns: []string{entity.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ScopeTable,
+			Columns: []string{entity.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ScopeTable,
+			Columns: []string{entity.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1226,6 +3058,486 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.CampaignsTable,
+			Columns: []string{entity.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.CampaignsTable,
+			Columns: []string{entity.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.CampaignsTable,
+			Columns: []string{entity.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssessmentResponsesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AssessmentResponsesTable,
+			Columns: []string{entity.AssessmentResponsesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssessmentResponsesIDs(); len(nodes) > 0 && !_u.mutation.AssessmentResponsesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AssessmentResponsesTable,
+			Columns: []string{entity.AssessmentResponsesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentResponsesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AssessmentResponsesTable,
+			Columns: []string{entity.AssessmentResponsesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.IntegrationsTable,
+			Columns: entity.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityIntegrations
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.IntegrationsTable,
+			Columns: entity.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityIntegrations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.IntegrationsTable,
+			Columns: entity.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityIntegrations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubprocessorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.SubprocessorsTable,
+			Columns: entity.SubprocessorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntitySubprocessors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubprocessorsIDs(); len(nodes) > 0 && !_u.mutation.SubprocessorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.SubprocessorsTable,
+			Columns: entity.SubprocessorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntitySubprocessors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubprocessorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.SubprocessorsTable,
+			Columns: entity.SubprocessorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntitySubprocessors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AuthMethodsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AuthMethodsTable,
+			Columns: []string{entity.AuthMethodsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CustomTypeEnum
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAuthMethodsIDs(); len(nodes) > 0 && !_u.mutation.AuthMethodsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AuthMethodsTable,
+			Columns: []string{entity.AuthMethodsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CustomTypeEnum
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AuthMethodsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AuthMethodsTable,
+			Columns: []string{entity.AuthMethodsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CustomTypeEnum
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EmployerIdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   entity.EmployerIdentityHoldersTable,
+			Columns: []string{entity.EmployerIdentityHoldersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolder
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEmployerIdentityHoldersIDs(); len(nodes) > 0 && !_u.mutation.EmployerIdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   entity.EmployerIdentityHoldersTable,
+			Columns: []string{entity.EmployerIdentityHoldersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolder
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EmployerIdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   entity.EmployerIdentityHoldersTable,
+			Columns: []string{entity.EmployerIdentityHoldersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolder
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.IdentityHoldersTable,
+			Columns: entity.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderEntities
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIdentityHoldersIDs(); len(nodes) > 0 && !_u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.IdentityHoldersTable,
+			Columns: entity.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.IdentityHoldersTable,
+			Columns: entity.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.PlatformsTable,
+			Columns: entity.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformEntities
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.PlatformsTable,
+			Columns: entity.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.PlatformsTable,
+			Columns: entity.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.OutOfScopePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.OutOfScopePlatformsTable,
+			Columns: entity.OutOfScopePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformOutOfScopeVendors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedOutOfScopePlatformsIDs(); len(nodes) > 0 && !_u.mutation.OutOfScopePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.OutOfScopePlatformsTable,
+			Columns: entity.OutOfScopePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformOutOfScopeVendors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.OutOfScopePlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.OutOfScopePlatformsTable,
+			Columns: entity.OutOfScopePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformOutOfScopeVendors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SourcePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.SourcePlatformsTable,
+			Columns: entity.SourcePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformSourceEntities
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSourcePlatformsIDs(); len(nodes) > 0 && !_u.mutation.SourcePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.SourcePlatformsTable,
+			Columns: entity.SourcePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformSourceEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SourcePlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.SourcePlatformsTable,
+			Columns: entity.SourcePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformSourceEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1376,6 +3688,146 @@ func (_u *EntityUpdateOne) ClearTags() *EntityUpdateOne {
 	return _u
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_u *EntityUpdateOne) SetInternalOwner(v string) *EntityUpdateOne {
+	_u.mutation.SetInternalOwner(v)
+	return _u
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableInternalOwner(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetInternalOwner(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (_u *EntityUpdateOne) ClearInternalOwner() *EntityUpdateOne {
+	_u.mutation.ClearInternalOwner()
+	return _u
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_u *EntityUpdateOne) SetInternalOwnerUserID(v string) *EntityUpdateOne {
+	_u.mutation.SetInternalOwnerUserID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableInternalOwnerUserID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerUserID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (_u *EntityUpdateOne) ClearInternalOwnerUserID() *EntityUpdateOne {
+	_u.mutation.ClearInternalOwnerUserID()
+	return _u
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_u *EntityUpdateOne) SetInternalOwnerGroupID(v string) *EntityUpdateOne {
+	_u.mutation.SetInternalOwnerGroupID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableInternalOwnerGroupID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerGroupID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (_u *EntityUpdateOne) ClearInternalOwnerGroupID() *EntityUpdateOne {
+	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetReviewedBy sets the "reviewed_by" field.
+func (_u *EntityUpdateOne) SetReviewedBy(v string) *EntityUpdateOne {
+	_u.mutation.SetReviewedBy(v)
+	return _u
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableReviewedBy(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetReviewedBy(*v)
+	}
+	return _u
+}
+
+// ClearReviewedBy clears the value of the "reviewed_by" field.
+func (_u *EntityUpdateOne) ClearReviewedBy() *EntityUpdateOne {
+	_u.mutation.ClearReviewedBy()
+	return _u
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_u *EntityUpdateOne) SetReviewedByUserID(v string) *EntityUpdateOne {
+	_u.mutation.SetReviewedByUserID(v)
+	return _u
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableReviewedByUserID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetReviewedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByUserID clears the value of the "reviewed_by_user_id" field.
+func (_u *EntityUpdateOne) ClearReviewedByUserID() *EntityUpdateOne {
+	_u.mutation.ClearReviewedByUserID()
+	return _u
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_u *EntityUpdateOne) SetReviewedByGroupID(v string) *EntityUpdateOne {
+	_u.mutation.SetReviewedByGroupID(v)
+	return _u
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableReviewedByGroupID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetReviewedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
+func (_u *EntityUpdateOne) ClearReviewedByGroupID() *EntityUpdateOne {
+	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetLastReviewedAt sets the "last_reviewed_at" field.
+func (_u *EntityUpdateOne) SetLastReviewedAt(v models.DateTime) *EntityUpdateOne {
+	_u.mutation.SetLastReviewedAt(v)
+	return _u
+}
+
+// SetNillableLastReviewedAt sets the "last_reviewed_at" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableLastReviewedAt(v *models.DateTime) *EntityUpdateOne {
+	if v != nil {
+		_u.SetLastReviewedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastReviewedAt clears the value of the "last_reviewed_at" field.
+func (_u *EntityUpdateOne) ClearLastReviewedAt() *EntityUpdateOne {
+	_u.mutation.ClearLastReviewedAt()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *EntityUpdateOne) SetInternalNotes(v string) *EntityUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -1413,6 +3865,206 @@ func (_u *EntityUpdateOne) SetNillableSystemInternalID(v *string) *EntityUpdateO
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *EntityUpdateOne) ClearSystemInternalID() *EntityUpdateOne {
 	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
+// SetEntityRelationshipStateName sets the "entity_relationship_state_name" field.
+func (_u *EntityUpdateOne) SetEntityRelationshipStateName(v string) *EntityUpdateOne {
+	_u.mutation.SetEntityRelationshipStateName(v)
+	return _u
+}
+
+// SetNillableEntityRelationshipStateName sets the "entity_relationship_state_name" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableEntityRelationshipStateName(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetEntityRelationshipStateName(*v)
+	}
+	return _u
+}
+
+// ClearEntityRelationshipStateName clears the value of the "entity_relationship_state_name" field.
+func (_u *EntityUpdateOne) ClearEntityRelationshipStateName() *EntityUpdateOne {
+	_u.mutation.ClearEntityRelationshipStateName()
+	return _u
+}
+
+// SetEntityRelationshipStateID sets the "entity_relationship_state_id" field.
+func (_u *EntityUpdateOne) SetEntityRelationshipStateID(v string) *EntityUpdateOne {
+	_u.mutation.SetEntityRelationshipStateID(v)
+	return _u
+}
+
+// SetNillableEntityRelationshipStateID sets the "entity_relationship_state_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableEntityRelationshipStateID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetEntityRelationshipStateID(*v)
+	}
+	return _u
+}
+
+// ClearEntityRelationshipStateID clears the value of the "entity_relationship_state_id" field.
+func (_u *EntityUpdateOne) ClearEntityRelationshipStateID() *EntityUpdateOne {
+	_u.mutation.ClearEntityRelationshipStateID()
+	return _u
+}
+
+// SetEntitySecurityQuestionnaireStatusName sets the "entity_security_questionnaire_status_name" field.
+func (_u *EntityUpdateOne) SetEntitySecurityQuestionnaireStatusName(v string) *EntityUpdateOne {
+	_u.mutation.SetEntitySecurityQuestionnaireStatusName(v)
+	return _u
+}
+
+// SetNillableEntitySecurityQuestionnaireStatusName sets the "entity_security_questionnaire_status_name" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableEntitySecurityQuestionnaireStatusName(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetEntitySecurityQuestionnaireStatusName(*v)
+	}
+	return _u
+}
+
+// ClearEntitySecurityQuestionnaireStatusName clears the value of the "entity_security_questionnaire_status_name" field.
+func (_u *EntityUpdateOne) ClearEntitySecurityQuestionnaireStatusName() *EntityUpdateOne {
+	_u.mutation.ClearEntitySecurityQuestionnaireStatusName()
+	return _u
+}
+
+// SetEntitySecurityQuestionnaireStatusID sets the "entity_security_questionnaire_status_id" field.
+func (_u *EntityUpdateOne) SetEntitySecurityQuestionnaireStatusID(v string) *EntityUpdateOne {
+	_u.mutation.SetEntitySecurityQuestionnaireStatusID(v)
+	return _u
+}
+
+// SetNillableEntitySecurityQuestionnaireStatusID sets the "entity_security_questionnaire_status_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableEntitySecurityQuestionnaireStatusID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetEntitySecurityQuestionnaireStatusID(*v)
+	}
+	return _u
+}
+
+// ClearEntitySecurityQuestionnaireStatusID clears the value of the "entity_security_questionnaire_status_id" field.
+func (_u *EntityUpdateOne) ClearEntitySecurityQuestionnaireStatusID() *EntityUpdateOne {
+	_u.mutation.ClearEntitySecurityQuestionnaireStatusID()
+	return _u
+}
+
+// SetEntitySourceTypeName sets the "entity_source_type_name" field.
+func (_u *EntityUpdateOne) SetEntitySourceTypeName(v string) *EntityUpdateOne {
+	_u.mutation.SetEntitySourceTypeName(v)
+	return _u
+}
+
+// SetNillableEntitySourceTypeName sets the "entity_source_type_name" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableEntitySourceTypeName(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetEntitySourceTypeName(*v)
+	}
+	return _u
+}
+
+// ClearEntitySourceTypeName clears the value of the "entity_source_type_name" field.
+func (_u *EntityUpdateOne) ClearEntitySourceTypeName() *EntityUpdateOne {
+	_u.mutation.ClearEntitySourceTypeName()
+	return _u
+}
+
+// SetEntitySourceTypeID sets the "entity_source_type_id" field.
+func (_u *EntityUpdateOne) SetEntitySourceTypeID(v string) *EntityUpdateOne {
+	_u.mutation.SetEntitySourceTypeID(v)
+	return _u
+}
+
+// SetNillableEntitySourceTypeID sets the "entity_source_type_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableEntitySourceTypeID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetEntitySourceTypeID(*v)
+	}
+	return _u
+}
+
+// ClearEntitySourceTypeID clears the value of the "entity_source_type_id" field.
+func (_u *EntityUpdateOne) ClearEntitySourceTypeID() *EntityUpdateOne {
+	_u.mutation.ClearEntitySourceTypeID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *EntityUpdateOne) SetEnvironmentName(v string) *EntityUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableEnvironmentName(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *EntityUpdateOne) ClearEnvironmentName() *EntityUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *EntityUpdateOne) SetEnvironmentID(v string) *EntityUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableEnvironmentID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *EntityUpdateOne) ClearEnvironmentID() *EntityUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *EntityUpdateOne) SetScopeName(v string) *EntityUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableScopeName(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *EntityUpdateOne) ClearScopeName() *EntityUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *EntityUpdateOne) SetScopeID(v string) *EntityUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableScopeID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *EntityUpdateOne) ClearScopeID() *EntityUpdateOne {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -1534,6 +4186,513 @@ func (_u *EntityUpdateOne) ClearStatus() *EntityUpdateOne {
 	return _u
 }
 
+// SetApprovedForUse sets the "approved_for_use" field.
+func (_u *EntityUpdateOne) SetApprovedForUse(v bool) *EntityUpdateOne {
+	_u.mutation.SetApprovedForUse(v)
+	return _u
+}
+
+// SetNillableApprovedForUse sets the "approved_for_use" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableApprovedForUse(v *bool) *EntityUpdateOne {
+	if v != nil {
+		_u.SetApprovedForUse(*v)
+	}
+	return _u
+}
+
+// ClearApprovedForUse clears the value of the "approved_for_use" field.
+func (_u *EntityUpdateOne) ClearApprovedForUse() *EntityUpdateOne {
+	_u.mutation.ClearApprovedForUse()
+	return _u
+}
+
+// SetLinkedAssetIds sets the "linked_asset_ids" field.
+func (_u *EntityUpdateOne) SetLinkedAssetIds(v []string) *EntityUpdateOne {
+	_u.mutation.SetLinkedAssetIds(v)
+	return _u
+}
+
+// AppendLinkedAssetIds appends value to the "linked_asset_ids" field.
+func (_u *EntityUpdateOne) AppendLinkedAssetIds(v []string) *EntityUpdateOne {
+	_u.mutation.AppendLinkedAssetIds(v)
+	return _u
+}
+
+// ClearLinkedAssetIds clears the value of the "linked_asset_ids" field.
+func (_u *EntityUpdateOne) ClearLinkedAssetIds() *EntityUpdateOne {
+	_u.mutation.ClearLinkedAssetIds()
+	return _u
+}
+
+// SetHasSoc2 sets the "has_soc2" field.
+func (_u *EntityUpdateOne) SetHasSoc2(v bool) *EntityUpdateOne {
+	_u.mutation.SetHasSoc2(v)
+	return _u
+}
+
+// SetNillableHasSoc2 sets the "has_soc2" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableHasSoc2(v *bool) *EntityUpdateOne {
+	if v != nil {
+		_u.SetHasSoc2(*v)
+	}
+	return _u
+}
+
+// ClearHasSoc2 clears the value of the "has_soc2" field.
+func (_u *EntityUpdateOne) ClearHasSoc2() *EntityUpdateOne {
+	_u.mutation.ClearHasSoc2()
+	return _u
+}
+
+// SetSoc2PeriodEnd sets the "soc2_period_end" field.
+func (_u *EntityUpdateOne) SetSoc2PeriodEnd(v models.DateTime) *EntityUpdateOne {
+	_u.mutation.SetSoc2PeriodEnd(v)
+	return _u
+}
+
+// SetNillableSoc2PeriodEnd sets the "soc2_period_end" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableSoc2PeriodEnd(v *models.DateTime) *EntityUpdateOne {
+	if v != nil {
+		_u.SetSoc2PeriodEnd(*v)
+	}
+	return _u
+}
+
+// ClearSoc2PeriodEnd clears the value of the "soc2_period_end" field.
+func (_u *EntityUpdateOne) ClearSoc2PeriodEnd() *EntityUpdateOne {
+	_u.mutation.ClearSoc2PeriodEnd()
+	return _u
+}
+
+// SetContractStartDate sets the "contract_start_date" field.
+func (_u *EntityUpdateOne) SetContractStartDate(v models.DateTime) *EntityUpdateOne {
+	_u.mutation.SetContractStartDate(v)
+	return _u
+}
+
+// SetNillableContractStartDate sets the "contract_start_date" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableContractStartDate(v *models.DateTime) *EntityUpdateOne {
+	if v != nil {
+		_u.SetContractStartDate(*v)
+	}
+	return _u
+}
+
+// ClearContractStartDate clears the value of the "contract_start_date" field.
+func (_u *EntityUpdateOne) ClearContractStartDate() *EntityUpdateOne {
+	_u.mutation.ClearContractStartDate()
+	return _u
+}
+
+// SetContractEndDate sets the "contract_end_date" field.
+func (_u *EntityUpdateOne) SetContractEndDate(v models.DateTime) *EntityUpdateOne {
+	_u.mutation.SetContractEndDate(v)
+	return _u
+}
+
+// SetNillableContractEndDate sets the "contract_end_date" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableContractEndDate(v *models.DateTime) *EntityUpdateOne {
+	if v != nil {
+		_u.SetContractEndDate(*v)
+	}
+	return _u
+}
+
+// ClearContractEndDate clears the value of the "contract_end_date" field.
+func (_u *EntityUpdateOne) ClearContractEndDate() *EntityUpdateOne {
+	_u.mutation.ClearContractEndDate()
+	return _u
+}
+
+// SetAutoRenews sets the "auto_renews" field.
+func (_u *EntityUpdateOne) SetAutoRenews(v bool) *EntityUpdateOne {
+	_u.mutation.SetAutoRenews(v)
+	return _u
+}
+
+// SetNillableAutoRenews sets the "auto_renews" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableAutoRenews(v *bool) *EntityUpdateOne {
+	if v != nil {
+		_u.SetAutoRenews(*v)
+	}
+	return _u
+}
+
+// ClearAutoRenews clears the value of the "auto_renews" field.
+func (_u *EntityUpdateOne) ClearAutoRenews() *EntityUpdateOne {
+	_u.mutation.ClearAutoRenews()
+	return _u
+}
+
+// SetTerminationNoticeDays sets the "termination_notice_days" field.
+func (_u *EntityUpdateOne) SetTerminationNoticeDays(v int) *EntityUpdateOne {
+	_u.mutation.ResetTerminationNoticeDays()
+	_u.mutation.SetTerminationNoticeDays(v)
+	return _u
+}
+
+// SetNillableTerminationNoticeDays sets the "termination_notice_days" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableTerminationNoticeDays(v *int) *EntityUpdateOne {
+	if v != nil {
+		_u.SetTerminationNoticeDays(*v)
+	}
+	return _u
+}
+
+// AddTerminationNoticeDays adds value to the "termination_notice_days" field.
+func (_u *EntityUpdateOne) AddTerminationNoticeDays(v int) *EntityUpdateOne {
+	_u.mutation.AddTerminationNoticeDays(v)
+	return _u
+}
+
+// ClearTerminationNoticeDays clears the value of the "termination_notice_days" field.
+func (_u *EntityUpdateOne) ClearTerminationNoticeDays() *EntityUpdateOne {
+	_u.mutation.ClearTerminationNoticeDays()
+	return _u
+}
+
+// SetAnnualSpend sets the "annual_spend" field.
+func (_u *EntityUpdateOne) SetAnnualSpend(v float64) *EntityUpdateOne {
+	_u.mutation.ResetAnnualSpend()
+	_u.mutation.SetAnnualSpend(v)
+	return _u
+}
+
+// SetNillableAnnualSpend sets the "annual_spend" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableAnnualSpend(v *float64) *EntityUpdateOne {
+	if v != nil {
+		_u.SetAnnualSpend(*v)
+	}
+	return _u
+}
+
+// AddAnnualSpend adds value to the "annual_spend" field.
+func (_u *EntityUpdateOne) AddAnnualSpend(v float64) *EntityUpdateOne {
+	_u.mutation.AddAnnualSpend(v)
+	return _u
+}
+
+// ClearAnnualSpend clears the value of the "annual_spend" field.
+func (_u *EntityUpdateOne) ClearAnnualSpend() *EntityUpdateOne {
+	_u.mutation.ClearAnnualSpend()
+	return _u
+}
+
+// SetSpendCurrency sets the "spend_currency" field.
+func (_u *EntityUpdateOne) SetSpendCurrency(v string) *EntityUpdateOne {
+	_u.mutation.SetSpendCurrency(v)
+	return _u
+}
+
+// SetNillableSpendCurrency sets the "spend_currency" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableSpendCurrency(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetSpendCurrency(*v)
+	}
+	return _u
+}
+
+// ClearSpendCurrency clears the value of the "spend_currency" field.
+func (_u *EntityUpdateOne) ClearSpendCurrency() *EntityUpdateOne {
+	_u.mutation.ClearSpendCurrency()
+	return _u
+}
+
+// SetBillingModel sets the "billing_model" field.
+func (_u *EntityUpdateOne) SetBillingModel(v string) *EntityUpdateOne {
+	_u.mutation.SetBillingModel(v)
+	return _u
+}
+
+// SetNillableBillingModel sets the "billing_model" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableBillingModel(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetBillingModel(*v)
+	}
+	return _u
+}
+
+// ClearBillingModel clears the value of the "billing_model" field.
+func (_u *EntityUpdateOne) ClearBillingModel() *EntityUpdateOne {
+	_u.mutation.ClearBillingModel()
+	return _u
+}
+
+// SetRenewalRisk sets the "renewal_risk" field.
+func (_u *EntityUpdateOne) SetRenewalRisk(v string) *EntityUpdateOne {
+	_u.mutation.SetRenewalRisk(v)
+	return _u
+}
+
+// SetNillableRenewalRisk sets the "renewal_risk" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableRenewalRisk(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetRenewalRisk(*v)
+	}
+	return _u
+}
+
+// ClearRenewalRisk clears the value of the "renewal_risk" field.
+func (_u *EntityUpdateOne) ClearRenewalRisk() *EntityUpdateOne {
+	_u.mutation.ClearRenewalRisk()
+	return _u
+}
+
+// SetSSOEnforced sets the "sso_enforced" field.
+func (_u *EntityUpdateOne) SetSSOEnforced(v bool) *EntityUpdateOne {
+	_u.mutation.SetSSOEnforced(v)
+	return _u
+}
+
+// SetNillableSSOEnforced sets the "sso_enforced" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableSSOEnforced(v *bool) *EntityUpdateOne {
+	if v != nil {
+		_u.SetSSOEnforced(*v)
+	}
+	return _u
+}
+
+// ClearSSOEnforced clears the value of the "sso_enforced" field.
+func (_u *EntityUpdateOne) ClearSSOEnforced() *EntityUpdateOne {
+	_u.mutation.ClearSSOEnforced()
+	return _u
+}
+
+// SetMfaSupported sets the "mfa_supported" field.
+func (_u *EntityUpdateOne) SetMfaSupported(v bool) *EntityUpdateOne {
+	_u.mutation.SetMfaSupported(v)
+	return _u
+}
+
+// SetNillableMfaSupported sets the "mfa_supported" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableMfaSupported(v *bool) *EntityUpdateOne {
+	if v != nil {
+		_u.SetMfaSupported(*v)
+	}
+	return _u
+}
+
+// ClearMfaSupported clears the value of the "mfa_supported" field.
+func (_u *EntityUpdateOne) ClearMfaSupported() *EntityUpdateOne {
+	_u.mutation.ClearMfaSupported()
+	return _u
+}
+
+// SetMfaEnforced sets the "mfa_enforced" field.
+func (_u *EntityUpdateOne) SetMfaEnforced(v bool) *EntityUpdateOne {
+	_u.mutation.SetMfaEnforced(v)
+	return _u
+}
+
+// SetNillableMfaEnforced sets the "mfa_enforced" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableMfaEnforced(v *bool) *EntityUpdateOne {
+	if v != nil {
+		_u.SetMfaEnforced(*v)
+	}
+	return _u
+}
+
+// ClearMfaEnforced clears the value of the "mfa_enforced" field.
+func (_u *EntityUpdateOne) ClearMfaEnforced() *EntityUpdateOne {
+	_u.mutation.ClearMfaEnforced()
+	return _u
+}
+
+// SetStatusPageURL sets the "status_page_url" field.
+func (_u *EntityUpdateOne) SetStatusPageURL(v string) *EntityUpdateOne {
+	_u.mutation.SetStatusPageURL(v)
+	return _u
+}
+
+// SetNillableStatusPageURL sets the "status_page_url" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableStatusPageURL(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetStatusPageURL(*v)
+	}
+	return _u
+}
+
+// ClearStatusPageURL clears the value of the "status_page_url" field.
+func (_u *EntityUpdateOne) ClearStatusPageURL() *EntityUpdateOne {
+	_u.mutation.ClearStatusPageURL()
+	return _u
+}
+
+// SetProvidedServices sets the "provided_services" field.
+func (_u *EntityUpdateOne) SetProvidedServices(v []string) *EntityUpdateOne {
+	_u.mutation.SetProvidedServices(v)
+	return _u
+}
+
+// AppendProvidedServices appends value to the "provided_services" field.
+func (_u *EntityUpdateOne) AppendProvidedServices(v []string) *EntityUpdateOne {
+	_u.mutation.AppendProvidedServices(v)
+	return _u
+}
+
+// ClearProvidedServices clears the value of the "provided_services" field.
+func (_u *EntityUpdateOne) ClearProvidedServices() *EntityUpdateOne {
+	_u.mutation.ClearProvidedServices()
+	return _u
+}
+
+// SetLinks sets the "links" field.
+func (_u *EntityUpdateOne) SetLinks(v []string) *EntityUpdateOne {
+	_u.mutation.SetLinks(v)
+	return _u
+}
+
+// AppendLinks appends value to the "links" field.
+func (_u *EntityUpdateOne) AppendLinks(v []string) *EntityUpdateOne {
+	_u.mutation.AppendLinks(v)
+	return _u
+}
+
+// ClearLinks clears the value of the "links" field.
+func (_u *EntityUpdateOne) ClearLinks() *EntityUpdateOne {
+	_u.mutation.ClearLinks()
+	return _u
+}
+
+// SetRiskRating sets the "risk_rating" field.
+func (_u *EntityUpdateOne) SetRiskRating(v string) *EntityUpdateOne {
+	_u.mutation.SetRiskRating(v)
+	return _u
+}
+
+// SetNillableRiskRating sets the "risk_rating" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableRiskRating(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetRiskRating(*v)
+	}
+	return _u
+}
+
+// ClearRiskRating clears the value of the "risk_rating" field.
+func (_u *EntityUpdateOne) ClearRiskRating() *EntityUpdateOne {
+	_u.mutation.ClearRiskRating()
+	return _u
+}
+
+// SetRiskScore sets the "risk_score" field.
+func (_u *EntityUpdateOne) SetRiskScore(v int) *EntityUpdateOne {
+	_u.mutation.ResetRiskScore()
+	_u.mutation.SetRiskScore(v)
+	return _u
+}
+
+// SetNillableRiskScore sets the "risk_score" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableRiskScore(v *int) *EntityUpdateOne {
+	if v != nil {
+		_u.SetRiskScore(*v)
+	}
+	return _u
+}
+
+// AddRiskScore adds value to the "risk_score" field.
+func (_u *EntityUpdateOne) AddRiskScore(v int) *EntityUpdateOne {
+	_u.mutation.AddRiskScore(v)
+	return _u
+}
+
+// ClearRiskScore clears the value of the "risk_score" field.
+func (_u *EntityUpdateOne) ClearRiskScore() *EntityUpdateOne {
+	_u.mutation.ClearRiskScore()
+	return _u
+}
+
+// SetTier sets the "tier" field.
+func (_u *EntityUpdateOne) SetTier(v string) *EntityUpdateOne {
+	_u.mutation.SetTier(v)
+	return _u
+}
+
+// SetNillableTier sets the "tier" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableTier(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetTier(*v)
+	}
+	return _u
+}
+
+// ClearTier clears the value of the "tier" field.
+func (_u *EntityUpdateOne) ClearTier() *EntityUpdateOne {
+	_u.mutation.ClearTier()
+	return _u
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (_u *EntityUpdateOne) SetReviewFrequency(v enums.Frequency) *EntityUpdateOne {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableReviewFrequency(v *enums.Frequency) *EntityUpdateOne {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
+	}
+	return _u
+}
+
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (_u *EntityUpdateOne) ClearReviewFrequency() *EntityUpdateOne {
+	_u.mutation.ClearReviewFrequency()
+	return _u
+}
+
+// SetNextReviewAt sets the "next_review_at" field.
+func (_u *EntityUpdateOne) SetNextReviewAt(v models.DateTime) *EntityUpdateOne {
+	_u.mutation.SetNextReviewAt(v)
+	return _u
+}
+
+// SetNillableNextReviewAt sets the "next_review_at" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableNextReviewAt(v *models.DateTime) *EntityUpdateOne {
+	if v != nil {
+		_u.SetNextReviewAt(*v)
+	}
+	return _u
+}
+
+// ClearNextReviewAt clears the value of the "next_review_at" field.
+func (_u *EntityUpdateOne) ClearNextReviewAt() *EntityUpdateOne {
+	_u.mutation.ClearNextReviewAt()
+	return _u
+}
+
+// SetContractRenewalAt sets the "contract_renewal_at" field.
+func (_u *EntityUpdateOne) SetContractRenewalAt(v models.DateTime) *EntityUpdateOne {
+	_u.mutation.SetContractRenewalAt(v)
+	return _u
+}
+
+// SetNillableContractRenewalAt sets the "contract_renewal_at" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableContractRenewalAt(v *models.DateTime) *EntityUpdateOne {
+	if v != nil {
+		_u.SetContractRenewalAt(*v)
+	}
+	return _u
+}
+
+// ClearContractRenewalAt clears the value of the "contract_renewal_at" field.
+func (_u *EntityUpdateOne) ClearContractRenewalAt() *EntityUpdateOne {
+	_u.mutation.ClearContractRenewalAt()
+	return _u
+}
+
+// SetVendorMetadata sets the "vendor_metadata" field.
+func (_u *EntityUpdateOne) SetVendorMetadata(v map[string]interface{}) *EntityUpdateOne {
+	_u.mutation.SetVendorMetadata(v)
+	return _u
+}
+
+// ClearVendorMetadata clears the value of the "vendor_metadata" field.
+func (_u *EntityUpdateOne) ClearVendorMetadata() *EntityUpdateOne {
+	_u.mutation.ClearVendorMetadata()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *EntityUpdateOne) AddBlockedGroupIDs(ids ...string) *EntityUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1577,6 +4736,51 @@ func (_u *EntityUpdateOne) AddViewers(v ...*Group) *EntityUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddViewerIDs(ids...)
+}
+
+// SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
+func (_u *EntityUpdateOne) SetInternalOwnerUser(v *User) *EntityUpdateOne {
+	return _u.SetInternalOwnerUserID(v.ID)
+}
+
+// SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
+func (_u *EntityUpdateOne) SetInternalOwnerGroup(v *Group) *EntityUpdateOne {
+	return _u.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
+func (_u *EntityUpdateOne) SetReviewedByUser(v *User) *EntityUpdateOne {
+	return _u.SetReviewedByUserID(v.ID)
+}
+
+// SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
+func (_u *EntityUpdateOne) SetReviewedByGroup(v *Group) *EntityUpdateOne {
+	return _u.SetReviewedByGroupID(v.ID)
+}
+
+// SetEntityRelationshipState sets the "entity_relationship_state" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdateOne) SetEntityRelationshipState(v *CustomTypeEnum) *EntityUpdateOne {
+	return _u.SetEntityRelationshipStateID(v.ID)
+}
+
+// SetEntitySecurityQuestionnaireStatus sets the "entity_security_questionnaire_status" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdateOne) SetEntitySecurityQuestionnaireStatus(v *CustomTypeEnum) *EntityUpdateOne {
+	return _u.SetEntitySecurityQuestionnaireStatusID(v.ID)
+}
+
+// SetEntitySourceType sets the "entity_source_type" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdateOne) SetEntitySourceType(v *CustomTypeEnum) *EntityUpdateOne {
+	return _u.SetEntitySourceTypeID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdateOne) SetEnvironment(v *CustomTypeEnum) *EntityUpdateOne {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdateOne) SetScope(v *CustomTypeEnum) *EntityUpdateOne {
+	return _u.SetScopeID(v.ID)
 }
 
 // AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
@@ -1669,6 +4873,156 @@ func (_u *EntityUpdateOne) AddScans(v ...*Scan) *EntityUpdateOne {
 	return _u.AddScanIDs(ids...)
 }
 
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_u *EntityUpdateOne) AddCampaignIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddCampaignIDs(ids...)
+	return _u
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_u *EntityUpdateOne) AddCampaigns(v ...*Campaign) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCampaignIDs(ids...)
+}
+
+// AddAssessmentResponseIDs adds the "assessment_responses" edge to the AssessmentResponse entity by IDs.
+func (_u *EntityUpdateOne) AddAssessmentResponseIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddAssessmentResponseIDs(ids...)
+	return _u
+}
+
+// AddAssessmentResponses adds the "assessment_responses" edges to the AssessmentResponse entity.
+func (_u *EntityUpdateOne) AddAssessmentResponses(v ...*AssessmentResponse) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssessmentResponseIDs(ids...)
+}
+
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (_u *EntityUpdateOne) AddIntegrationIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddIntegrationIDs(ids...)
+	return _u
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (_u *EntityUpdateOne) AddIntegrations(v ...*Integration) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationIDs(ids...)
+}
+
+// AddSubprocessorIDs adds the "subprocessors" edge to the Subprocessor entity by IDs.
+func (_u *EntityUpdateOne) AddSubprocessorIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddSubprocessorIDs(ids...)
+	return _u
+}
+
+// AddSubprocessors adds the "subprocessors" edges to the Subprocessor entity.
+func (_u *EntityUpdateOne) AddSubprocessors(v ...*Subprocessor) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubprocessorIDs(ids...)
+}
+
+// AddAuthMethodIDs adds the "auth_methods" edge to the CustomTypeEnum entity by IDs.
+func (_u *EntityUpdateOne) AddAuthMethodIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddAuthMethodIDs(ids...)
+	return _u
+}
+
+// AddAuthMethods adds the "auth_methods" edges to the CustomTypeEnum entity.
+func (_u *EntityUpdateOne) AddAuthMethods(v ...*CustomTypeEnum) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAuthMethodIDs(ids...)
+}
+
+// AddEmployerIdentityHolderIDs adds the "employer_identity_holders" edge to the IdentityHolder entity by IDs.
+func (_u *EntityUpdateOne) AddEmployerIdentityHolderIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddEmployerIdentityHolderIDs(ids...)
+	return _u
+}
+
+// AddEmployerIdentityHolders adds the "employer_identity_holders" edges to the IdentityHolder entity.
+func (_u *EntityUpdateOne) AddEmployerIdentityHolders(v ...*IdentityHolder) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEmployerIdentityHolderIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_u *EntityUpdateOne) AddIdentityHolderIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddIdentityHolderIDs(ids...)
+	return _u
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_u *EntityUpdateOne) AddIdentityHolders(v ...*IdentityHolder) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIdentityHolderIDs(ids...)
+}
+
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_u *EntityUpdateOne) AddPlatformIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddPlatformIDs(ids...)
+	return _u
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_u *EntityUpdateOne) AddPlatforms(v ...*Platform) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformIDs(ids...)
+}
+
+// AddOutOfScopePlatformIDs adds the "out_of_scope_platforms" edge to the Platform entity by IDs.
+func (_u *EntityUpdateOne) AddOutOfScopePlatformIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddOutOfScopePlatformIDs(ids...)
+	return _u
+}
+
+// AddOutOfScopePlatforms adds the "out_of_scope_platforms" edges to the Platform entity.
+func (_u *EntityUpdateOne) AddOutOfScopePlatforms(v ...*Platform) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddOutOfScopePlatformIDs(ids...)
+}
+
+// AddSourcePlatformIDs adds the "source_platforms" edge to the Platform entity by IDs.
+func (_u *EntityUpdateOne) AddSourcePlatformIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddSourcePlatformIDs(ids...)
+	return _u
+}
+
+// AddSourcePlatforms adds the "source_platforms" edges to the Platform entity.
+func (_u *EntityUpdateOne) AddSourcePlatforms(v ...*Platform) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSourcePlatformIDs(ids...)
+}
+
 // SetEntityType sets the "entity_type" edge to the EntityType entity.
 func (_u *EntityUpdateOne) SetEntityType(v *EntityType) *EntityUpdateOne {
 	return _u.SetEntityTypeID(v.ID)
@@ -1740,6 +5094,60 @@ func (_u *EntityUpdateOne) RemoveViewers(v ...*Group) *EntityUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveViewerIDs(ids...)
+}
+
+// ClearInternalOwnerUser clears the "internal_owner_user" edge to the User entity.
+func (_u *EntityUpdateOne) ClearInternalOwnerUser() *EntityUpdateOne {
+	_u.mutation.ClearInternalOwnerUser()
+	return _u
+}
+
+// ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
+func (_u *EntityUpdateOne) ClearInternalOwnerGroup() *EntityUpdateOne {
+	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearReviewedByUser clears the "reviewed_by_user" edge to the User entity.
+func (_u *EntityUpdateOne) ClearReviewedByUser() *EntityUpdateOne {
+	_u.mutation.ClearReviewedByUser()
+	return _u
+}
+
+// ClearReviewedByGroup clears the "reviewed_by_group" edge to the Group entity.
+func (_u *EntityUpdateOne) ClearReviewedByGroup() *EntityUpdateOne {
+	_u.mutation.ClearReviewedByGroup()
+	return _u
+}
+
+// ClearEntityRelationshipState clears the "entity_relationship_state" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdateOne) ClearEntityRelationshipState() *EntityUpdateOne {
+	_u.mutation.ClearEntityRelationshipState()
+	return _u
+}
+
+// ClearEntitySecurityQuestionnaireStatus clears the "entity_security_questionnaire_status" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdateOne) ClearEntitySecurityQuestionnaireStatus() *EntityUpdateOne {
+	_u.mutation.ClearEntitySecurityQuestionnaireStatus()
+	return _u
+}
+
+// ClearEntitySourceType clears the "entity_source_type" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdateOne) ClearEntitySourceType() *EntityUpdateOne {
+	_u.mutation.ClearEntitySourceType()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdateOne) ClearEnvironment() *EntityUpdateOne {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *EntityUpdateOne) ClearScope() *EntityUpdateOne {
+	_u.mutation.ClearScope()
+	return _u
 }
 
 // ClearContacts clears all "contacts" edges to the Contact entity.
@@ -1868,6 +5276,216 @@ func (_u *EntityUpdateOne) RemoveScans(v ...*Scan) *EntityUpdateOne {
 	return _u.RemoveScanIDs(ids...)
 }
 
+// ClearCampaigns clears all "campaigns" edges to the Campaign entity.
+func (_u *EntityUpdateOne) ClearCampaigns() *EntityUpdateOne {
+	_u.mutation.ClearCampaigns()
+	return _u
+}
+
+// RemoveCampaignIDs removes the "campaigns" edge to Campaign entities by IDs.
+func (_u *EntityUpdateOne) RemoveCampaignIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveCampaignIDs(ids...)
+	return _u
+}
+
+// RemoveCampaigns removes "campaigns" edges to Campaign entities.
+func (_u *EntityUpdateOne) RemoveCampaigns(v ...*Campaign) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCampaignIDs(ids...)
+}
+
+// ClearAssessmentResponses clears all "assessment_responses" edges to the AssessmentResponse entity.
+func (_u *EntityUpdateOne) ClearAssessmentResponses() *EntityUpdateOne {
+	_u.mutation.ClearAssessmentResponses()
+	return _u
+}
+
+// RemoveAssessmentResponseIDs removes the "assessment_responses" edge to AssessmentResponse entities by IDs.
+func (_u *EntityUpdateOne) RemoveAssessmentResponseIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveAssessmentResponseIDs(ids...)
+	return _u
+}
+
+// RemoveAssessmentResponses removes "assessment_responses" edges to AssessmentResponse entities.
+func (_u *EntityUpdateOne) RemoveAssessmentResponses(v ...*AssessmentResponse) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssessmentResponseIDs(ids...)
+}
+
+// ClearIntegrations clears all "integrations" edges to the Integration entity.
+func (_u *EntityUpdateOne) ClearIntegrations() *EntityUpdateOne {
+	_u.mutation.ClearIntegrations()
+	return _u
+}
+
+// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
+func (_u *EntityUpdateOne) RemoveIntegrationIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveIntegrationIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrations removes "integrations" edges to Integration entities.
+func (_u *EntityUpdateOne) RemoveIntegrations(v ...*Integration) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationIDs(ids...)
+}
+
+// ClearSubprocessors clears all "subprocessors" edges to the Subprocessor entity.
+func (_u *EntityUpdateOne) ClearSubprocessors() *EntityUpdateOne {
+	_u.mutation.ClearSubprocessors()
+	return _u
+}
+
+// RemoveSubprocessorIDs removes the "subprocessors" edge to Subprocessor entities by IDs.
+func (_u *EntityUpdateOne) RemoveSubprocessorIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveSubprocessorIDs(ids...)
+	return _u
+}
+
+// RemoveSubprocessors removes "subprocessors" edges to Subprocessor entities.
+func (_u *EntityUpdateOne) RemoveSubprocessors(v ...*Subprocessor) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubprocessorIDs(ids...)
+}
+
+// ClearAuthMethods clears all "auth_methods" edges to the CustomTypeEnum entity.
+func (_u *EntityUpdateOne) ClearAuthMethods() *EntityUpdateOne {
+	_u.mutation.ClearAuthMethods()
+	return _u
+}
+
+// RemoveAuthMethodIDs removes the "auth_methods" edge to CustomTypeEnum entities by IDs.
+func (_u *EntityUpdateOne) RemoveAuthMethodIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveAuthMethodIDs(ids...)
+	return _u
+}
+
+// RemoveAuthMethods removes "auth_methods" edges to CustomTypeEnum entities.
+func (_u *EntityUpdateOne) RemoveAuthMethods(v ...*CustomTypeEnum) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAuthMethodIDs(ids...)
+}
+
+// ClearEmployerIdentityHolders clears all "employer_identity_holders" edges to the IdentityHolder entity.
+func (_u *EntityUpdateOne) ClearEmployerIdentityHolders() *EntityUpdateOne {
+	_u.mutation.ClearEmployerIdentityHolders()
+	return _u
+}
+
+// RemoveEmployerIdentityHolderIDs removes the "employer_identity_holders" edge to IdentityHolder entities by IDs.
+func (_u *EntityUpdateOne) RemoveEmployerIdentityHolderIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveEmployerIdentityHolderIDs(ids...)
+	return _u
+}
+
+// RemoveEmployerIdentityHolders removes "employer_identity_holders" edges to IdentityHolder entities.
+func (_u *EntityUpdateOne) RemoveEmployerIdentityHolders(v ...*IdentityHolder) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEmployerIdentityHolderIDs(ids...)
+}
+
+// ClearIdentityHolders clears all "identity_holders" edges to the IdentityHolder entity.
+func (_u *EntityUpdateOne) ClearIdentityHolders() *EntityUpdateOne {
+	_u.mutation.ClearIdentityHolders()
+	return _u
+}
+
+// RemoveIdentityHolderIDs removes the "identity_holders" edge to IdentityHolder entities by IDs.
+func (_u *EntityUpdateOne) RemoveIdentityHolderIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveIdentityHolderIDs(ids...)
+	return _u
+}
+
+// RemoveIdentityHolders removes "identity_holders" edges to IdentityHolder entities.
+func (_u *EntityUpdateOne) RemoveIdentityHolders(v ...*IdentityHolder) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIdentityHolderIDs(ids...)
+}
+
+// ClearPlatforms clears all "platforms" edges to the Platform entity.
+func (_u *EntityUpdateOne) ClearPlatforms() *EntityUpdateOne {
+	_u.mutation.ClearPlatforms()
+	return _u
+}
+
+// RemovePlatformIDs removes the "platforms" edge to Platform entities by IDs.
+func (_u *EntityUpdateOne) RemovePlatformIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemovePlatformIDs(ids...)
+	return _u
+}
+
+// RemovePlatforms removes "platforms" edges to Platform entities.
+func (_u *EntityUpdateOne) RemovePlatforms(v ...*Platform) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformIDs(ids...)
+}
+
+// ClearOutOfScopePlatforms clears all "out_of_scope_platforms" edges to the Platform entity.
+func (_u *EntityUpdateOne) ClearOutOfScopePlatforms() *EntityUpdateOne {
+	_u.mutation.ClearOutOfScopePlatforms()
+	return _u
+}
+
+// RemoveOutOfScopePlatformIDs removes the "out_of_scope_platforms" edge to Platform entities by IDs.
+func (_u *EntityUpdateOne) RemoveOutOfScopePlatformIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveOutOfScopePlatformIDs(ids...)
+	return _u
+}
+
+// RemoveOutOfScopePlatforms removes "out_of_scope_platforms" edges to Platform entities.
+func (_u *EntityUpdateOne) RemoveOutOfScopePlatforms(v ...*Platform) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveOutOfScopePlatformIDs(ids...)
+}
+
+// ClearSourcePlatforms clears all "source_platforms" edges to the Platform entity.
+func (_u *EntityUpdateOne) ClearSourcePlatforms() *EntityUpdateOne {
+	_u.mutation.ClearSourcePlatforms()
+	return _u
+}
+
+// RemoveSourcePlatformIDs removes the "source_platforms" edge to Platform entities by IDs.
+func (_u *EntityUpdateOne) RemoveSourcePlatformIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveSourcePlatformIDs(ids...)
+	return _u
+}
+
+// RemoveSourcePlatforms removes "source_platforms" edges to Platform entities.
+func (_u *EntityUpdateOne) RemoveSourcePlatforms(v ...*Platform) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSourcePlatformIDs(ids...)
+}
+
 // ClearEntityType clears the "entity_type" edge to the EntityType entity.
 func (_u *EntityUpdateOne) ClearEntityType() *EntityUpdateOne {
 	_u.mutation.ClearEntityType()
@@ -1944,6 +5562,21 @@ func (_u *EntityUpdateOne) check() error {
 	if v, ok := _u.mutation.Domains(); ok {
 		if err := entity.DomainsValidator(v); err != nil {
 			return &ValidationError{Name: "domains", err: fmt.Errorf(`generated: validator failed for field "Entity.domains": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.StatusPageURL(); ok {
+		if err := entity.StatusPageURLValidator(v); err != nil {
+			return &ValidationError{Name: "status_page_url", err: fmt.Errorf(`generated: validator failed for field "Entity.status_page_url": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Links(); ok {
+		if err := entity.LinksValidator(v); err != nil {
+			return &ValidationError{Name: "links", err: fmt.Errorf(`generated: validator failed for field "Entity.links": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
+		if err := entity.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Entity.review_frequency": %w`, err)}
 		}
 	}
 	return nil
@@ -2025,6 +5658,24 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entity.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.InternalOwner(); ok {
+		_spec.SetField(entity.FieldInternalOwner, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(entity.FieldInternalOwner, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedBy(); ok {
+		_spec.SetField(entity.FieldReviewedBy, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(entity.FieldReviewedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.LastReviewedAt(); ok {
+		_spec.SetField(entity.FieldLastReviewedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastReviewedAtCleared() {
+		_spec.ClearField(entity.FieldLastReviewedAt, field.TypeTime)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(entity.FieldSystemOwned, field.TypeBool)
 	}
@@ -2039,6 +5690,36 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(entity.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntityRelationshipStateName(); ok {
+		_spec.SetField(entity.FieldEntityRelationshipStateName, field.TypeString, value)
+	}
+	if _u.mutation.EntityRelationshipStateNameCleared() {
+		_spec.ClearField(entity.FieldEntityRelationshipStateName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntitySecurityQuestionnaireStatusName(); ok {
+		_spec.SetField(entity.FieldEntitySecurityQuestionnaireStatusName, field.TypeString, value)
+	}
+	if _u.mutation.EntitySecurityQuestionnaireStatusNameCleared() {
+		_spec.ClearField(entity.FieldEntitySecurityQuestionnaireStatusName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntitySourceTypeName(); ok {
+		_spec.SetField(entity.FieldEntitySourceTypeName, field.TypeString, value)
+	}
+	if _u.mutation.EntitySourceTypeNameCleared() {
+		_spec.ClearField(entity.FieldEntitySourceTypeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(entity.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(entity.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(entity.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(entity.FieldScopeName, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(entity.FieldName, field.TypeString, value)
@@ -2074,6 +5755,180 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(entity.FieldStatus, field.TypeString)
+	}
+	if value, ok := _u.mutation.ApprovedForUse(); ok {
+		_spec.SetField(entity.FieldApprovedForUse, field.TypeBool, value)
+	}
+	if _u.mutation.ApprovedForUseCleared() {
+		_spec.ClearField(entity.FieldApprovedForUse, field.TypeBool)
+	}
+	if value, ok := _u.mutation.LinkedAssetIds(); ok {
+		_spec.SetField(entity.FieldLinkedAssetIds, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedLinkedAssetIds(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entity.FieldLinkedAssetIds, value)
+		})
+	}
+	if _u.mutation.LinkedAssetIdsCleared() {
+		_spec.ClearField(entity.FieldLinkedAssetIds, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.HasSoc2(); ok {
+		_spec.SetField(entity.FieldHasSoc2, field.TypeBool, value)
+	}
+	if _u.mutation.HasSoc2Cleared() {
+		_spec.ClearField(entity.FieldHasSoc2, field.TypeBool)
+	}
+	if value, ok := _u.mutation.Soc2PeriodEnd(); ok {
+		_spec.SetField(entity.FieldSoc2PeriodEnd, field.TypeTime, value)
+	}
+	if _u.mutation.Soc2PeriodEndCleared() {
+		_spec.ClearField(entity.FieldSoc2PeriodEnd, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ContractStartDate(); ok {
+		_spec.SetField(entity.FieldContractStartDate, field.TypeTime, value)
+	}
+	if _u.mutation.ContractStartDateCleared() {
+		_spec.ClearField(entity.FieldContractStartDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ContractEndDate(); ok {
+		_spec.SetField(entity.FieldContractEndDate, field.TypeTime, value)
+	}
+	if _u.mutation.ContractEndDateCleared() {
+		_spec.ClearField(entity.FieldContractEndDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.AutoRenews(); ok {
+		_spec.SetField(entity.FieldAutoRenews, field.TypeBool, value)
+	}
+	if _u.mutation.AutoRenewsCleared() {
+		_spec.ClearField(entity.FieldAutoRenews, field.TypeBool)
+	}
+	if value, ok := _u.mutation.TerminationNoticeDays(); ok {
+		_spec.SetField(entity.FieldTerminationNoticeDays, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedTerminationNoticeDays(); ok {
+		_spec.AddField(entity.FieldTerminationNoticeDays, field.TypeInt, value)
+	}
+	if _u.mutation.TerminationNoticeDaysCleared() {
+		_spec.ClearField(entity.FieldTerminationNoticeDays, field.TypeInt)
+	}
+	if value, ok := _u.mutation.AnnualSpend(); ok {
+		_spec.SetField(entity.FieldAnnualSpend, field.TypeFloat64, value)
+	}
+	if value, ok := _u.mutation.AddedAnnualSpend(); ok {
+		_spec.AddField(entity.FieldAnnualSpend, field.TypeFloat64, value)
+	}
+	if _u.mutation.AnnualSpendCleared() {
+		_spec.ClearField(entity.FieldAnnualSpend, field.TypeFloat64)
+	}
+	if value, ok := _u.mutation.SpendCurrency(); ok {
+		_spec.SetField(entity.FieldSpendCurrency, field.TypeString, value)
+	}
+	if _u.mutation.SpendCurrencyCleared() {
+		_spec.ClearField(entity.FieldSpendCurrency, field.TypeString)
+	}
+	if value, ok := _u.mutation.BillingModel(); ok {
+		_spec.SetField(entity.FieldBillingModel, field.TypeString, value)
+	}
+	if _u.mutation.BillingModelCleared() {
+		_spec.ClearField(entity.FieldBillingModel, field.TypeString)
+	}
+	if value, ok := _u.mutation.RenewalRisk(); ok {
+		_spec.SetField(entity.FieldRenewalRisk, field.TypeString, value)
+	}
+	if _u.mutation.RenewalRiskCleared() {
+		_spec.ClearField(entity.FieldRenewalRisk, field.TypeString)
+	}
+	if value, ok := _u.mutation.SSOEnforced(); ok {
+		_spec.SetField(entity.FieldSSOEnforced, field.TypeBool, value)
+	}
+	if _u.mutation.SSOEnforcedCleared() {
+		_spec.ClearField(entity.FieldSSOEnforced, field.TypeBool)
+	}
+	if value, ok := _u.mutation.MfaSupported(); ok {
+		_spec.SetField(entity.FieldMfaSupported, field.TypeBool, value)
+	}
+	if _u.mutation.MfaSupportedCleared() {
+		_spec.ClearField(entity.FieldMfaSupported, field.TypeBool)
+	}
+	if value, ok := _u.mutation.MfaEnforced(); ok {
+		_spec.SetField(entity.FieldMfaEnforced, field.TypeBool, value)
+	}
+	if _u.mutation.MfaEnforcedCleared() {
+		_spec.ClearField(entity.FieldMfaEnforced, field.TypeBool)
+	}
+	if value, ok := _u.mutation.StatusPageURL(); ok {
+		_spec.SetField(entity.FieldStatusPageURL, field.TypeString, value)
+	}
+	if _u.mutation.StatusPageURLCleared() {
+		_spec.ClearField(entity.FieldStatusPageURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProvidedServices(); ok {
+		_spec.SetField(entity.FieldProvidedServices, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedProvidedServices(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entity.FieldProvidedServices, value)
+		})
+	}
+	if _u.mutation.ProvidedServicesCleared() {
+		_spec.ClearField(entity.FieldProvidedServices, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Links(); ok {
+		_spec.SetField(entity.FieldLinks, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entity.FieldLinks, value)
+		})
+	}
+	if _u.mutation.LinksCleared() {
+		_spec.ClearField(entity.FieldLinks, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.RiskRating(); ok {
+		_spec.SetField(entity.FieldRiskRating, field.TypeString, value)
+	}
+	if _u.mutation.RiskRatingCleared() {
+		_spec.ClearField(entity.FieldRiskRating, field.TypeString)
+	}
+	if value, ok := _u.mutation.RiskScore(); ok {
+		_spec.SetField(entity.FieldRiskScore, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedRiskScore(); ok {
+		_spec.AddField(entity.FieldRiskScore, field.TypeInt, value)
+	}
+	if _u.mutation.RiskScoreCleared() {
+		_spec.ClearField(entity.FieldRiskScore, field.TypeInt)
+	}
+	if value, ok := _u.mutation.Tier(); ok {
+		_spec.SetField(entity.FieldTier, field.TypeString, value)
+	}
+	if _u.mutation.TierCleared() {
+		_spec.ClearField(entity.FieldTier, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
+		_spec.SetField(entity.FieldReviewFrequency, field.TypeEnum, value)
+	}
+	if _u.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(entity.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.NextReviewAt(); ok {
+		_spec.SetField(entity.FieldNextReviewAt, field.TypeTime, value)
+	}
+	if _u.mutation.NextReviewAtCleared() {
+		_spec.ClearField(entity.FieldNextReviewAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ContractRenewalAt(); ok {
+		_spec.SetField(entity.FieldContractRenewalAt, field.TypeTime, value)
+	}
+	if _u.mutation.ContractRenewalAtCleared() {
+		_spec.ClearField(entity.FieldContractRenewalAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.VendorMetadata(); ok {
+		_spec.SetField(entity.FieldVendorMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.VendorMetadataCleared() {
+		_spec.ClearField(entity.FieldVendorMetadata, field.TypeJSON)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2214,6 +6069,285 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 			},
 		}
 		edge.Schema = _u.schemaConfig.EntityViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerUserTable,
+			Columns: []string{entity.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerUserTable,
+			Columns: []string{entity.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerGroupTable,
+			Columns: []string{entity.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerGroupTable,
+			Columns: []string{entity.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByUserTable,
+			Columns: []string{entity.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByUserTable,
+			Columns: []string{entity.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByGroupTable,
+			Columns: []string{entity.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByGroupTable,
+			Columns: []string{entity.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntityRelationshipStateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EntityRelationshipStateTable,
+			Columns: []string{entity.EntityRelationshipStateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntityRelationshipStateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EntityRelationshipStateTable,
+			Columns: []string{entity.EntityRelationshipStateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntitySecurityQuestionnaireStatusCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EntitySecurityQuestionnaireStatusTable,
+			Columns: []string{entity.EntitySecurityQuestionnaireStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntitySecurityQuestionnaireStatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EntitySecurityQuestionnaireStatusTable,
+			Columns: []string{entity.EntitySecurityQuestionnaireStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntitySourceTypeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EntitySourceTypeTable,
+			Columns: []string{entity.EntitySourceTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntitySourceTypeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EntitySourceTypeTable,
+			Columns: []string{entity.EntitySourceTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EnvironmentTable,
+			Columns: []string{entity.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EnvironmentTable,
+			Columns: []string{entity.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ScopeTable,
+			Columns: []string{entity.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ScopeTable,
+			Columns: []string{entity.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2502,6 +6636,486 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 			},
 		}
 		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.CampaignsTable,
+			Columns: []string{entity.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.CampaignsTable,
+			Columns: []string{entity.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.CampaignsTable,
+			Columns: []string{entity.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssessmentResponsesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AssessmentResponsesTable,
+			Columns: []string{entity.AssessmentResponsesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssessmentResponsesIDs(); len(nodes) > 0 && !_u.mutation.AssessmentResponsesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AssessmentResponsesTable,
+			Columns: []string{entity.AssessmentResponsesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentResponsesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AssessmentResponsesTable,
+			Columns: []string{entity.AssessmentResponsesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.IntegrationsTable,
+			Columns: entity.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityIntegrations
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.IntegrationsTable,
+			Columns: entity.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityIntegrations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.IntegrationsTable,
+			Columns: entity.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityIntegrations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubprocessorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.SubprocessorsTable,
+			Columns: entity.SubprocessorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntitySubprocessors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubprocessorsIDs(); len(nodes) > 0 && !_u.mutation.SubprocessorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.SubprocessorsTable,
+			Columns: entity.SubprocessorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntitySubprocessors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubprocessorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.SubprocessorsTable,
+			Columns: entity.SubprocessorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntitySubprocessors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AuthMethodsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AuthMethodsTable,
+			Columns: []string{entity.AuthMethodsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CustomTypeEnum
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAuthMethodsIDs(); len(nodes) > 0 && !_u.mutation.AuthMethodsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AuthMethodsTable,
+			Columns: []string{entity.AuthMethodsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CustomTypeEnum
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AuthMethodsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AuthMethodsTable,
+			Columns: []string{entity.AuthMethodsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CustomTypeEnum
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EmployerIdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   entity.EmployerIdentityHoldersTable,
+			Columns: []string{entity.EmployerIdentityHoldersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolder
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEmployerIdentityHoldersIDs(); len(nodes) > 0 && !_u.mutation.EmployerIdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   entity.EmployerIdentityHoldersTable,
+			Columns: []string{entity.EmployerIdentityHoldersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolder
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EmployerIdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   entity.EmployerIdentityHoldersTable,
+			Columns: []string{entity.EmployerIdentityHoldersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolder
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.IdentityHoldersTable,
+			Columns: entity.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderEntities
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIdentityHoldersIDs(); len(nodes) > 0 && !_u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.IdentityHoldersTable,
+			Columns: entity.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.IdentityHoldersTable,
+			Columns: entity.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.PlatformsTable,
+			Columns: entity.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformEntities
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.PlatformsTable,
+			Columns: entity.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.PlatformsTable,
+			Columns: entity.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.OutOfScopePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.OutOfScopePlatformsTable,
+			Columns: entity.OutOfScopePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformOutOfScopeVendors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedOutOfScopePlatformsIDs(); len(nodes) > 0 && !_u.mutation.OutOfScopePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.OutOfScopePlatformsTable,
+			Columns: entity.OutOfScopePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformOutOfScopeVendors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.OutOfScopePlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.OutOfScopePlatformsTable,
+			Columns: entity.OutOfScopePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformOutOfScopeVendors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SourcePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.SourcePlatformsTable,
+			Columns: entity.SourcePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformSourceEntities
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSourcePlatformsIDs(); len(nodes) > 0 && !_u.mutation.SourcePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.SourcePlatformsTable,
+			Columns: entity.SourcePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformSourceEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SourcePlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.SourcePlatformsTable,
+			Columns: entity.SourcePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformSourceEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

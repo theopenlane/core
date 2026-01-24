@@ -47,6 +47,8 @@ type ProcedureQuery struct {
 	withApprover                *GroupQuery
 	withDelegate                *GroupQuery
 	withProcedureKind           *CustomTypeEnumQuery
+	withEnvironment             *CustomTypeEnumQuery
+	withScope                   *CustomTypeEnumQuery
 	withControls                *ControlQuery
 	withSubcontrols             *SubcontrolQuery
 	withInternalPolicies        *InternalPolicyQuery
@@ -249,6 +251,56 @@ func (_q *ProcedureQuery) QueryProcedureKind() *CustomTypeEnumQuery {
 			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, procedure.ProcedureKindTable, procedure.ProcedureKindColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Procedure
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEnvironment chains the current query on the "environment" edge.
+func (_q *ProcedureQuery) QueryEnvironment() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.EnvironmentTable, procedure.EnvironmentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Procedure
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScope chains the current query on the "scope" edge.
+func (_q *ProcedureQuery) QueryScope() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.ScopeTable, procedure.ScopeColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.CustomTypeEnum
@@ -732,6 +784,8 @@ func (_q *ProcedureQuery) Clone() *ProcedureQuery {
 		withApprover:           _q.withApprover.Clone(),
 		withDelegate:           _q.withDelegate.Clone(),
 		withProcedureKind:      _q.withProcedureKind.Clone(),
+		withEnvironment:        _q.withEnvironment.Clone(),
+		withScope:              _q.withScope.Clone(),
 		withControls:           _q.withControls.Clone(),
 		withSubcontrols:        _q.withSubcontrols.Clone(),
 		withInternalPolicies:   _q.withInternalPolicies.Clone(),
@@ -813,6 +867,28 @@ func (_q *ProcedureQuery) WithProcedureKind(opts ...func(*CustomTypeEnumQuery)) 
 		opt(query)
 	}
 	_q.withProcedureKind = query
+	return _q
+}
+
+// WithEnvironment tells the query-builder to eager-load the nodes that are connected to
+// the "environment" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProcedureQuery) WithEnvironment(opts ...func(*CustomTypeEnumQuery)) *ProcedureQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEnvironment = query
+	return _q
+}
+
+// WithScope tells the query-builder to eager-load the nodes that are connected to
+// the "scope" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProcedureQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *ProcedureQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScope = query
 	return _q
 }
 
@@ -1022,13 +1098,15 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		nodes       = []*Procedure{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [17]bool{
+		loadedTypes = [19]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withApprover != nil,
 			_q.withDelegate != nil,
 			_q.withProcedureKind != nil,
+			_q.withEnvironment != nil,
+			_q.withScope != nil,
 			_q.withControls != nil,
 			_q.withSubcontrols != nil,
 			_q.withInternalPolicies != nil,
@@ -1103,6 +1181,18 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 	if query := _q.withProcedureKind; query != nil {
 		if err := _q.loadProcedureKind(ctx, query, nodes, nil,
 			func(n *Procedure, e *CustomTypeEnum) { n.Edges.ProcedureKind = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEnvironment; query != nil {
+		if err := _q.loadEnvironment(ctx, query, nodes, nil,
+			func(n *Procedure, e *CustomTypeEnum) { n.Edges.Environment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScope; query != nil {
+		if err := _q.loadScope(ctx, query, nodes, nil,
+			func(n *Procedure, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1509,6 +1599,64 @@ func (_q *ProcedureQuery) loadProcedureKind(ctx context.Context, query *CustomTy
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "procedure_kind_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ProcedureQuery) loadEnvironment(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Procedure)
+	for i := range nodes {
+		fk := nodes[i].EnvironmentID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "environment_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ProcedureQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Procedure)
+	for i := range nodes {
+		fk := nodes[i].ScopeID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -2117,6 +2265,12 @@ func (_q *ProcedureQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withProcedureKind != nil {
 			_spec.Node.AddColumnOnce(procedure.FieldProcedureKindID)
+		}
+		if _q.withEnvironment != nil {
+			_spec.Node.AddColumnOnce(procedure.FieldEnvironmentID)
+		}
+		if _q.withScope != nil {
+			_spec.Node.AddColumnOnce(procedure.FieldScopeID)
 		}
 		if _q.withFile != nil {
 			_spec.Node.AddColumnOnce(procedure.FieldFileID)

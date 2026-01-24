@@ -184,6 +184,86 @@ func (_u *IntegrationHistoryUpdate) ClearSystemInternalID() *IntegrationHistoryU
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *IntegrationHistoryUpdate) SetEnvironmentName(v string) *IntegrationHistoryUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdate) SetNillableEnvironmentName(v *string) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *IntegrationHistoryUpdate) ClearEnvironmentName() *IntegrationHistoryUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *IntegrationHistoryUpdate) SetEnvironmentID(v string) *IntegrationHistoryUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdate) SetNillableEnvironmentID(v *string) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *IntegrationHistoryUpdate) ClearEnvironmentID() *IntegrationHistoryUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *IntegrationHistoryUpdate) SetScopeName(v string) *IntegrationHistoryUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdate) SetNillableScopeName(v *string) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *IntegrationHistoryUpdate) ClearScopeName() *IntegrationHistoryUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *IntegrationHistoryUpdate) SetScopeID(v string) *IntegrationHistoryUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdate) SetNillableScopeID(v *string) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *IntegrationHistoryUpdate) ClearScopeID() *IntegrationHistoryUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *IntegrationHistoryUpdate) SetName(v string) *IntegrationHistoryUpdate {
 	_u.mutation.SetName(v)
@@ -397,6 +477,30 @@ func (_u *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(integrationhistory.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(integrationhistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(integrationhistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(integrationhistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(integrationhistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(integrationhistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(integrationhistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(integrationhistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(integrationhistory.FieldScopeID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(integrationhistory.FieldName, field.TypeString, value)
 	}
@@ -595,6 +699,86 @@ func (_u *IntegrationHistoryUpdateOne) SetNillableSystemInternalID(v *string) *I
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *IntegrationHistoryUpdateOne) ClearSystemInternalID() *IntegrationHistoryUpdateOne {
 	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *IntegrationHistoryUpdateOne) SetEnvironmentName(v string) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdateOne) SetNillableEnvironmentName(v *string) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *IntegrationHistoryUpdateOne) ClearEnvironmentName() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *IntegrationHistoryUpdateOne) SetEnvironmentID(v string) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdateOne) SetNillableEnvironmentID(v *string) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *IntegrationHistoryUpdateOne) ClearEnvironmentID() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *IntegrationHistoryUpdateOne) SetScopeName(v string) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdateOne) SetNillableScopeName(v *string) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *IntegrationHistoryUpdateOne) ClearScopeName() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *IntegrationHistoryUpdateOne) SetScopeID(v string) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdateOne) SetNillableScopeID(v *string) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *IntegrationHistoryUpdateOne) ClearScopeID() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -840,6 +1024,30 @@ func (_u *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Inte
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(integrationhistory.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(integrationhistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(integrationhistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(integrationhistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(integrationhistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(integrationhistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(integrationhistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(integrationhistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(integrationhistory.FieldScopeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(integrationhistory.FieldName, field.TypeString, value)

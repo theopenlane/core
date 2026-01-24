@@ -151,6 +151,12 @@ func (s Standard) Edges() []ent.Edge {
 			fromSchema: s,
 			edgeSchema: TrustCenterDoc{},
 		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: s,
+			name:       "applicable_platforms",
+			t:          Platform.Type,
+			ref:        "applicable_frameworks",
+		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: s,
 			name:       "logo_file",

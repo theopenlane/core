@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/schema"
 
 	"entgo.io/ent"
 	"github.com/gertd/go-pluralize"
@@ -17,6 +18,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/migrate"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
@@ -27,7 +30,104 @@ var (
 	ErrCustomEnumCreationFailed = errors.New("value does not exist")
 	// ErrCustomEnumInUse is returned when a custom enum is in use and cannot be deleted
 	ErrCustomEnumInUse = errors.New("enum is in use")
+	// ErrInvalidGlobalEnumField is returned when creating a global enum with an invalid field
+	ErrInvalidGlobalEnumField = errors.New("invalid global enum field")
 )
+
+// tableInfo holds table metadata for enum checks
+type tableInfo struct {
+	name          string
+	hasSoftDelete bool
+}
+
+// tableHasColumn checks if a table has a column with the given name
+func tableHasColumn(table *schema.Table, columnName string) bool {
+	for _, col := range table.Columns {
+		if col.Name == columnName {
+			return true
+		}
+	}
+
+	return false
+}
+
+// tableHasSoftDelete checks if a table has soft delete by looking for deleted_at column
+func tableHasSoftDelete(table *schema.Table) bool {
+	return tableHasColumn(table, "deleted_at")
+}
+
+// findTablesWithColumn returns all tables that have a column with the given name
+func findTablesWithColumn(columnName string) []tableInfo {
+	var tables []tableInfo
+
+	for _, table := range migrate.Tables {
+		if tableHasColumn(table, columnName) {
+			tables = append(tables, tableInfo{
+				name:          table.Name,
+				hasSoftDelete: tableHasSoftDelete(table),
+			})
+		}
+	}
+
+	return tables
+}
+
+// findTableWithColumn returns the first table that has a column with the given name
+func findTableWithColumn(columnName string) *tableInfo {
+	for _, table := range migrate.Tables {
+		if tableHasColumn(table, columnName) {
+			return &tableInfo{
+				name:          table.Name,
+				hasSoftDelete: tableHasSoftDelete(table),
+			}
+		}
+	}
+
+	return nil
+}
+
+// IsValidEnumField returns true if any table has a column matching the object type and field pattern
+// For global enums (empty objectType), checks for {field}_id columns
+// For object-scoped enums, checks for {objectType}_{field}_id columns
+func IsValidEnumField(objectType, field string) bool {
+	if field == "" {
+		field = "kind"
+	}
+
+	var columnName string
+	if objectType == "" {
+		columnName = fmt.Sprintf("%s_id", strcase.SnakeCase(field))
+		return len(findTablesWithColumn(columnName)) > 0
+	}
+
+	columnName = fmt.Sprintf("%s_%s_id", strcase.SnakeCase(objectType), strcase.SnakeCase(field))
+
+	return findTableWithColumn(columnName) != nil
+}
+
+// HookCustomTypeEnumCreate validates that the object_type and field combination is valid
+func HookCustomTypeEnumCreate() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.CustomTypeEnumFunc(func(ctx context.Context, m *generated.CustomTypeEnumMutation) (generated.Value, error) {
+			objectType, _ := m.ObjectType()
+
+			fieldName, ok := m.GetField()
+			if !ok || fieldName == "" {
+				fieldName = "kind"
+			}
+
+			if !IsValidEnumField(objectType, fieldName) {
+				if objectType == "" {
+					return nil, fmt.Errorf("%w: %s is not a valid global enum field", ErrInvalidGlobalEnumField, fieldName)
+				}
+
+				return nil, fmt.Errorf("%w: %s is not a valid field for object type %s", ErrInvalidGlobalEnumField, fieldName, objectType)
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate)
+}
 
 // CustomEnumFilter is used to filter custom enums based on object type and field
 type CustomEnumFilter struct {
@@ -39,6 +139,8 @@ type CustomEnumFilter struct {
 	EdgeFieldName string
 	// SchemaFieldName is the schema field name the enum applies to, e.g. "control_kind_name
 	SchemaFieldName string
+	// AllowGlobal indicates the enum lookup should use global enums with an empty object type
+	AllowGlobal bool
 }
 
 // HookCustomEnums ensures that a custom enum value exists for the given object type and field
@@ -64,14 +166,30 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 
 			// look up the enum by name, object type, and field
 			// and ensure it exists
-			enum, err := client.CustomTypeEnum.Query().
-				Where(
-					customtypeenum.ObjectTypeEqualFold(in.ObjectType),
-					customtypeenum.NameEqualFold(enumValue),
-					customtypeenum.FieldEqualFold(in.Field),
-					customtypeenum.DeletedAtIsNil(),
-				).
-				Only(ctx)
+			enumPredicates := []predicate.CustomTypeEnum{
+				customtypeenum.NameEqualFold(enumValue),
+				customtypeenum.FieldEqualFold(in.Field),
+				customtypeenum.DeletedAtIsNil(),
+			}
+
+			// lookupEnum fetches a custom enum by object type
+			lookupEnum := func(objectType string) (*generated.CustomTypeEnum, error) {
+				return client.CustomTypeEnum.Query().
+					Where(append(enumPredicates, customtypeenum.ObjectTypeEqualFold(objectType))...).
+					Only(ctx)
+			}
+
+			var enum *generated.CustomTypeEnum
+			var err error
+
+			if in.AllowGlobal {
+				enum, err = lookupEnum("")
+				if err != nil && generated.IsNotFound(err) {
+					enum, err = lookupEnum(in.ObjectType)
+				}
+			} else {
+				enum, err = lookupEnum(in.ObjectType)
+			}
 			if err != nil {
 				// if the enum does not exist, return a custom error
 				if generated.IsNotFound(err) {
@@ -111,6 +229,7 @@ func HookCustomTypeEnumDelete() ent.Hook {
 				Select(
 					customtypeenum.FieldID,
 					customtypeenum.FieldObjectType,
+					customtypeenum.FieldField,
 					customtypeenum.FieldName,
 				).
 				All(ctx)
@@ -123,7 +242,7 @@ func HookCustomTypeEnumDelete() ent.Hook {
 
 			funcs := make([]func(), 0)
 			for _, enum := range enums {
-				funcs = append(funcs, isEnumInUse(ctx, client, enum.ID, strings.ToLower(enum.ObjectType), enum.ObjectType, enum.Name, &errs, &mu))
+				funcs = append(funcs, isEnumInUse(ctx, client, enum.ID, enum.ObjectType, enum.Field, enum.Name, &errs, &mu))
 			}
 
 			if len(funcs) == 0 {
@@ -147,42 +266,54 @@ func HookCustomTypeEnumDelete() ent.Hook {
 	}, ent.OpDeleteOne|ent.OpDelete|ent.OpUpdateOne|ent.OpUpdate)
 }
 
-func isEnumInUse(ctx context.Context, client *generated.Client, enumID, edgeName, objectType, name string, allErrors *[]string, mu *sync.Mutex) func() {
-
+// isEnumInUse returns a closure that checks whether a custom enum is referenced by any records
+func isEnumInUse(ctx context.Context, client *generated.Client, enumID, objectType, enumField, name string, allErrors *[]string, mu *sync.Mutex) func() {
 	ctrlCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	type tableConfig struct {
-		table string
-		field string
-		label string
+	if enumField == "" {
+		enumField = "kind"
 	}
 
-	table := pluralize.NewClient().Plural(edgeName)
+	// handle global enums (empty object type)
+	if objectType == "" {
+		return isGlobalEnumInUse(ctrlCtx, ctx, client, enumID, enumField, name, allErrors, mu)
+	}
 
-	field := fmt.Sprintf("%s_kind_id", strcase.SnakeCase(edgeName))
+	return isNonGlobalEnumInUse(ctrlCtx, ctx, client, enumID, objectType, enumField, name, allErrors, mu)
+}
 
-	config := tableConfig{
-		table: table,
-		field: field,
-		label: strings.ReplaceAll(edgeName, "_", " "),
+// isGlobalEnumInUse checks if a global enum is in use across all tables with the enum column
+func isGlobalEnumInUse(ctrlCtx, logCtx context.Context, client *generated.Client, enumID, enumField, name string, allErrors *[]string, mu *sync.Mutex) func() {
+	columnName := fmt.Sprintf("%s_id", strcase.SnakeCase(enumField))
+	tables := findTablesWithColumn(columnName)
+
+	if len(tables) == 0 {
+		return func() {}
 	}
 
 	return func() {
-		query := fmt.Sprintf("SELECT count(id) FROM %s WHERE %s = $1 AND deleted_at IS NULL", config.table, config.field)
+		var unionParts []string
+		var tableNames []string
+
+		for _, table := range tables {
+			tableNames = append(tableNames, table.name)
+
+			if table.hasSoftDelete {
+				unionParts = append(unionParts, fmt.Sprintf("SELECT count(id) as cnt FROM %s WHERE %s = $1 AND deleted_at IS NULL", table.name, columnName))
+			} else {
+				unionParts = append(unionParts, fmt.Sprintf("SELECT count(id) as cnt FROM %s WHERE %s = $1", table.name, columnName))
+			}
+		}
+
+		query := fmt.Sprintf("SELECT SUM(cnt) FROM (%s) combined", strings.Join(unionParts, " UNION ALL "))
 
 		var rows sql.Rows
-		err := client.Driver().
-			Query(ctrlCtx,
-				query, lo.ToAnySlice([]string{enumID}), &rows)
-		if err != nil {
+		if err := client.Driver().Query(ctrlCtx, query, lo.ToAnySlice([]string{enumID}), &rows); err != nil {
 			mu.Lock()
-			logx.FromContext(ctx).Error().Err(err).
-				Str("table", config.table).
-				Str("field", config.field).
-				Str("enum_id", enumID).
-				Msg("failed to query enum edges")
-			*allErrors = append(*allErrors, fmt.Sprintf("failed to check if %s enum %s is in use: %v", objectType, name, err))
+			logx.FromContext(logCtx).Error().Err(err).Str("enum_field", enumField).Str("enum_id", enumID).Strs("tables", tableNames).Msg("failed to query global enum usage")
+			*allErrors = append(*allErrors, fmt.Sprintf("failed to check if global %s enum %s is in use: %v", enumField, name, err))
 			mu.Unlock()
+
 			return
 		}
 		defer rows.Close()
@@ -191,13 +322,10 @@ func isEnumInUse(ctx context.Context, client *generated.Client, enumID, edgeName
 		if rows.Next() {
 			if err := rows.Scan(&count); err != nil {
 				mu.Lock()
-				logx.FromContext(ctx).Error().Err(err).
-					Str("table", config.table).
-					Str("field", config.field).
-					Str("enum_id", enumID).
-					Msg("failed to scan enum edge count")
-				*allErrors = append(*allErrors, fmt.Sprintf("failed to check if %s enum %s is in use: %v", objectType, name, err))
+				logx.FromContext(logCtx).Error().Err(err).Str("enum_field", enumField).Str("enum_id", enumID).Msg("failed to scan global enum count")
+				*allErrors = append(*allErrors, fmt.Sprintf("failed to check if global %s enum %s is in use: %v", enumField, name, err))
 				mu.Unlock()
+
 				return
 			}
 		}
@@ -205,13 +333,70 @@ func isEnumInUse(ctx context.Context, client *generated.Client, enumID, edgeName
 		if count > 0 {
 			mu.Lock()
 
-			label := config.label
+			label := "record"
 			if count != 1 {
-				label = pluralize.NewClient().Plural(config.label)
+				label = "records"
 			}
 
-			*allErrors = append(*allErrors, fmt.Sprintf("the %s value of %s is in use by %d %s and cannot be deleted until those are updated",
-				objectType, name, count, label))
+			*allErrors = append(*allErrors, fmt.Sprintf("the global %s value of %s is in use by %d %s and cannot be deleted until those are updated", enumField, name, count, label))
+			mu.Unlock()
+		}
+	}
+}
+
+// isNonGlobalEnumInUse checks if a non-global enum is in use in its specific table
+func isNonGlobalEnumInUse(ctrlCtx, logCtx context.Context, client *generated.Client, enumID, objectType, enumField, name string, allErrors *[]string, mu *sync.Mutex) func() {
+	edgeName := strings.ToLower(objectType)
+	columnName := fmt.Sprintf("%s_%s_id", strcase.SnakeCase(edgeName), strcase.SnakeCase(enumField))
+	label := strings.ReplaceAll(edgeName, "_", " ")
+
+	tblInfo := findTableWithColumn(columnName)
+	if tblInfo == nil {
+		// fallback to convention if no table found
+		tableName := pluralize.NewClient().Plural(strcase.SnakeCase(edgeName))
+		tblInfo = &tableInfo{name: tableName, hasSoftDelete: true}
+	}
+
+	return func() {
+		var query string
+		if tblInfo.hasSoftDelete {
+			query = fmt.Sprintf("SELECT count(id) FROM %s WHERE %s = $1 AND deleted_at IS NULL", tblInfo.name, columnName)
+		} else {
+			query = fmt.Sprintf("SELECT count(id) FROM %s WHERE %s = $1", tblInfo.name, columnName)
+		}
+
+		var rows sql.Rows
+		if err := client.Driver().Query(ctrlCtx, query, lo.ToAnySlice([]string{enumID}), &rows); err != nil {
+			mu.Lock()
+			logx.FromContext(logCtx).Error().Err(err).Str("table", tblInfo.name).Str("field", columnName).Str("enum_id", enumID).Msg("failed to query enum edges")
+			*allErrors = append(*allErrors, fmt.Sprintf("failed to check if %s enum %s is in use: %v", objectType, name, err))
+			mu.Unlock()
+
+			return
+		}
+		defer rows.Close()
+
+		var count int
+		if rows.Next() {
+			if err := rows.Scan(&count); err != nil {
+				mu.Lock()
+				logx.FromContext(logCtx).Error().Err(err).Str("table", tblInfo.name).Str("field", columnName).Str("enum_id", enumID).Msg("failed to scan enum edge count")
+				*allErrors = append(*allErrors, fmt.Sprintf("failed to check if %s enum %s is in use: %v", objectType, name, err))
+				mu.Unlock()
+
+				return
+			}
+		}
+
+		if count > 0 {
+			mu.Lock()
+
+			displayLabel := label
+			if count != 1 {
+				displayLabel = pluralize.NewClient().Plural(label)
+			}
+
+			*allErrors = append(*allErrors, fmt.Sprintf("the %s value of %s is in use by %d %s and cannot be deleted until those are updated", objectType, name, count, displayLabel))
 			mu.Unlock()
 		}
 	}

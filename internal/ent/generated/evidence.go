@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 )
@@ -38,6 +39,14 @@ type Evidence struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the environment of the evidence
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the evidence
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the evidence
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the evidence
+	ScopeID string `json:"scope_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
 	// the name of the evidence
@@ -68,6 +77,10 @@ type Evidence struct {
 type EvidenceEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// Environment holds the value of the environment edge.
+	Environment *CustomTypeEnum `json:"environment,omitempty"`
+	// Scope holds the value of the scope edge.
+	Scope *CustomTypeEnum `json:"scope,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
@@ -82,15 +95,19 @@ type EvidenceEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
+	// Platforms holds the value of the platforms edge.
+	Platforms []*Platform `json:"platforms,omitempty"`
+	// Scans holds the value of the scans edge.
+	Scans []*Scan `json:"scans,omitempty"`
 	// conversations related to the evidence
 	Comments []*Note `json:"comments,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [10]bool
+	loadedTypes [14]bool
 	// totalCount holds the count of the edges above.
-	totalCount [10]map[string]int
+	totalCount [14]map[string]int
 
 	namedControls               map[string][]*Control
 	namedSubcontrols            map[string][]*Subcontrol
@@ -99,6 +116,8 @@ type EvidenceEdges struct {
 	namedFiles                  map[string][]*File
 	namedPrograms               map[string][]*Program
 	namedTasks                  map[string][]*Task
+	namedPlatforms              map[string][]*Platform
+	namedScans                  map[string][]*Scan
 	namedComments               map[string][]*Note
 	namedWorkflowObjectRefs     map[string][]*WorkflowObjectRef
 }
@@ -114,10 +133,32 @@ func (e EvidenceEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// EnvironmentOrErr returns the Environment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EvidenceEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
+	if e.Environment != nil {
+		return e.Environment, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "environment"}
+}
+
+// ScopeOrErr returns the Scope value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EvidenceEdges) ScopeOrErr() (*CustomTypeEnum, error) {
+	if e.Scope != nil {
+		return e.Scope, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "scope"}
+}
+
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -126,7 +167,7 @@ func (e EvidenceEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -135,7 +176,7 @@ func (e EvidenceEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.ControlObjectives, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objectives"}
@@ -144,7 +185,7 @@ func (e EvidenceEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
 // ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.ControlImplementations, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementations"}
@@ -153,7 +194,7 @@ func (e EvidenceEdges) ControlImplementationsOrErr() ([]*ControlImplementation, 
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -162,7 +203,7 @@ func (e EvidenceEdges) FilesOrErr() ([]*File, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -171,16 +212,34 @@ func (e EvidenceEdges) ProgramsOrErr() ([]*Program, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
 }
 
+// PlatformsOrErr returns the Platforms value or an error if the edge
+// was not loaded in eager-loading.
+func (e EvidenceEdges) PlatformsOrErr() ([]*Platform, error) {
+	if e.loadedTypes[10] {
+		return e.Platforms, nil
+	}
+	return nil, &NotLoadedError{edge: "platforms"}
+}
+
+// ScansOrErr returns the Scans value or an error if the edge
+// was not loaded in eager-loading.
+func (e EvidenceEdges) ScansOrErr() ([]*Scan, error) {
+	if e.loadedTypes[11] {
+		return e.Scans, nil
+	}
+	return nil, &NotLoadedError{edge: "scans"}
+}
+
 // CommentsOrErr returns the Comments value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) CommentsOrErr() ([]*Note, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[12] {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
@@ -189,7 +248,7 @@ func (e EvidenceEdges) CommentsOrErr() ([]*Note, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[13] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -204,7 +263,7 @@ func (*Evidence) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case evidence.FieldWorkflowEligibleMarker, evidence.FieldIsAutomated:
 			values[i] = new(sql.NullBool)
-		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldOwnerID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus:
+		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldOwnerID, evidence.FieldEnvironmentName, evidence.FieldEnvironmentID, evidence.FieldScopeName, evidence.FieldScopeID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus:
 			values[i] = new(sql.NullString)
 		case evidence.FieldCreatedAt, evidence.FieldUpdatedAt, evidence.FieldDeletedAt, evidence.FieldCreationDate, evidence.FieldRenewalDate:
 			values[i] = new(sql.NullTime)
@@ -285,6 +344,30 @@ func (_m *Evidence) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
+		case evidence.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case evidence.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case evidence.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case evidence.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
+			}
 		case evidence.FieldWorkflowEligibleMarker:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
@@ -363,6 +446,16 @@ func (_m *Evidence) QueryOwner() *OrganizationQuery {
 	return NewEvidenceClient(_m.config).QueryOwner(_m)
 }
 
+// QueryEnvironment queries the "environment" edge of the Evidence entity.
+func (_m *Evidence) QueryEnvironment() *CustomTypeEnumQuery {
+	return NewEvidenceClient(_m.config).QueryEnvironment(_m)
+}
+
+// QueryScope queries the "scope" edge of the Evidence entity.
+func (_m *Evidence) QueryScope() *CustomTypeEnumQuery {
+	return NewEvidenceClient(_m.config).QueryScope(_m)
+}
+
 // QueryControls queries the "controls" edge of the Evidence entity.
 func (_m *Evidence) QueryControls() *ControlQuery {
 	return NewEvidenceClient(_m.config).QueryControls(_m)
@@ -396,6 +489,16 @@ func (_m *Evidence) QueryPrograms() *ProgramQuery {
 // QueryTasks queries the "tasks" edge of the Evidence entity.
 func (_m *Evidence) QueryTasks() *TaskQuery {
 	return NewEvidenceClient(_m.config).QueryTasks(_m)
+}
+
+// QueryPlatforms queries the "platforms" edge of the Evidence entity.
+func (_m *Evidence) QueryPlatforms() *PlatformQuery {
+	return NewEvidenceClient(_m.config).QueryPlatforms(_m)
+}
+
+// QueryScans queries the "scans" edge of the Evidence entity.
+func (_m *Evidence) QueryScans() *ScanQuery {
+	return NewEvidenceClient(_m.config).QueryScans(_m)
 }
 
 // QueryComments queries the "comments" edge of the Evidence entity.
@@ -457,6 +560,18 @@ func (_m *Evidence) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
@@ -656,6 +771,54 @@ func (_m *Evidence) appendNamedTasks(name string, edges ...*Task) {
 		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
 		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedPlatforms returns the Platforms named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Evidence) NamedPlatforms(name string) ([]*Platform, error) {
+	if _m.Edges.namedPlatforms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedPlatforms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Evidence) appendNamedPlatforms(name string, edges ...*Platform) {
+	if _m.Edges.namedPlatforms == nil {
+		_m.Edges.namedPlatforms = make(map[string][]*Platform)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedPlatforms[name] = []*Platform{}
+	} else {
+		_m.Edges.namedPlatforms[name] = append(_m.Edges.namedPlatforms[name], edges...)
+	}
+}
+
+// NamedScans returns the Scans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Evidence) NamedScans(name string) ([]*Scan, error) {
+	if _m.Edges.namedScans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedScans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Evidence) appendNamedScans(name string, edges ...*Scan) {
+	if _m.Edges.namedScans == nil {
+		_m.Edges.namedScans = make(map[string][]*Scan)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedScans[name] = []*Scan{}
+	} else {
+		_m.Edges.namedScans[name] = append(_m.Edges.namedScans[name], edges...)
 	}
 }
 

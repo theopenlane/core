@@ -14,8 +14,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -28,20 +31,26 @@ import (
 // TemplateQuery is the builder for querying Template entities.
 type TemplateQuery struct {
 	config
-	ctx                  *QueryContext
-	order                []template.OrderOption
-	inters               []Interceptor
-	predicates           []predicate.Template
-	withOwner            *OrganizationQuery
-	withDocuments        *DocumentDataQuery
-	withFiles            *FileQuery
-	withTrustCenter      *TrustCenterQuery
-	withAssessments      *AssessmentQuery
-	loadTotal            []func(context.Context, []*Template) error
-	modifiers            []func(*sql.Selector)
-	withNamedDocuments   map[string]*DocumentDataQuery
-	withNamedFiles       map[string]*FileQuery
-	withNamedAssessments map[string]*AssessmentQuery
+	ctx                      *QueryContext
+	order                    []template.OrderOption
+	inters                   []Interceptor
+	predicates               []predicate.Template
+	withOwner                *OrganizationQuery
+	withEnvironment          *CustomTypeEnumQuery
+	withScope                *CustomTypeEnumQuery
+	withDocuments            *DocumentDataQuery
+	withFiles                *FileQuery
+	withTrustCenter          *TrustCenterQuery
+	withAssessments          *AssessmentQuery
+	withCampaigns            *CampaignQuery
+	withIdentityHolders      *IdentityHolderQuery
+	loadTotal                []func(context.Context, []*Template) error
+	modifiers                []func(*sql.Selector)
+	withNamedDocuments       map[string]*DocumentDataQuery
+	withNamedFiles           map[string]*FileQuery
+	withNamedAssessments     map[string]*AssessmentQuery
+	withNamedCampaigns       map[string]*CampaignQuery
+	withNamedIdentityHolders map[string]*IdentityHolderQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -96,6 +105,56 @@ func (_q *TemplateQuery) QueryOwner() *OrganizationQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Template
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEnvironment chains the current query on the "environment" edge.
+func (_q *TemplateQuery) QueryEnvironment() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, template.EnvironmentTable, template.EnvironmentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Template
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScope chains the current query on the "scope" edge.
+func (_q *TemplateQuery) QueryScope() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, template.ScopeTable, template.ScopeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.Template
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -197,6 +256,56 @@ func (_q *TemplateQuery) QueryAssessments() *AssessmentQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Assessment
 		step.Edge.Schema = schemaConfig.Assessment
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaigns chains the current query on the "campaigns" edge.
+func (_q *TemplateQuery) QueryCampaigns() *CampaignQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, selector),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, template.CampaignsTable, template.CampaignsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders chains the current query on the "identity_holders" edge.
+func (_q *TemplateQuery) QueryIdentityHolders() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, template.IdentityHoldersTable, template.IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolderTemplates
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -390,16 +499,20 @@ func (_q *TemplateQuery) Clone() *TemplateQuery {
 		return nil
 	}
 	return &TemplateQuery{
-		config:          _q.config,
-		ctx:             _q.ctx.Clone(),
-		order:           append([]template.OrderOption{}, _q.order...),
-		inters:          append([]Interceptor{}, _q.inters...),
-		predicates:      append([]predicate.Template{}, _q.predicates...),
-		withOwner:       _q.withOwner.Clone(),
-		withDocuments:   _q.withDocuments.Clone(),
-		withFiles:       _q.withFiles.Clone(),
-		withTrustCenter: _q.withTrustCenter.Clone(),
-		withAssessments: _q.withAssessments.Clone(),
+		config:              _q.config,
+		ctx:                 _q.ctx.Clone(),
+		order:               append([]template.OrderOption{}, _q.order...),
+		inters:              append([]Interceptor{}, _q.inters...),
+		predicates:          append([]predicate.Template{}, _q.predicates...),
+		withOwner:           _q.withOwner.Clone(),
+		withEnvironment:     _q.withEnvironment.Clone(),
+		withScope:           _q.withScope.Clone(),
+		withDocuments:       _q.withDocuments.Clone(),
+		withFiles:           _q.withFiles.Clone(),
+		withTrustCenter:     _q.withTrustCenter.Clone(),
+		withAssessments:     _q.withAssessments.Clone(),
+		withCampaigns:       _q.withCampaigns.Clone(),
+		withIdentityHolders: _q.withIdentityHolders.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -415,6 +528,28 @@ func (_q *TemplateQuery) WithOwner(opts ...func(*OrganizationQuery)) *TemplateQu
 		opt(query)
 	}
 	_q.withOwner = query
+	return _q
+}
+
+// WithEnvironment tells the query-builder to eager-load the nodes that are connected to
+// the "environment" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TemplateQuery) WithEnvironment(opts ...func(*CustomTypeEnumQuery)) *TemplateQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEnvironment = query
+	return _q
+}
+
+// WithScope tells the query-builder to eager-load the nodes that are connected to
+// the "scope" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TemplateQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *TemplateQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScope = query
 	return _q
 }
 
@@ -459,6 +594,28 @@ func (_q *TemplateQuery) WithAssessments(opts ...func(*AssessmentQuery)) *Templa
 		opt(query)
 	}
 	_q.withAssessments = query
+	return _q
+}
+
+// WithCampaigns tells the query-builder to eager-load the nodes that are connected to
+// the "campaigns" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TemplateQuery) WithCampaigns(opts ...func(*CampaignQuery)) *TemplateQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaigns = query
+	return _q
+}
+
+// WithIdentityHolders tells the query-builder to eager-load the nodes that are connected to
+// the "identity_holders" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TemplateQuery) WithIdentityHolders(opts ...func(*IdentityHolderQuery)) *TemplateQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIdentityHolders = query
 	return _q
 }
 
@@ -546,12 +703,16 @@ func (_q *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 	var (
 		nodes       = []*Template{}
 		_spec       = _q.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [9]bool{
 			_q.withOwner != nil,
+			_q.withEnvironment != nil,
+			_q.withScope != nil,
 			_q.withDocuments != nil,
 			_q.withFiles != nil,
 			_q.withTrustCenter != nil,
 			_q.withAssessments != nil,
+			_q.withCampaigns != nil,
+			_q.withIdentityHolders != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -583,6 +744,18 @@ func (_q *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 			return nil, err
 		}
 	}
+	if query := _q.withEnvironment; query != nil {
+		if err := _q.loadEnvironment(ctx, query, nodes, nil,
+			func(n *Template, e *CustomTypeEnum) { n.Edges.Environment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScope; query != nil {
+		if err := _q.loadScope(ctx, query, nodes, nil,
+			func(n *Template, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withDocuments; query != nil {
 		if err := _q.loadDocuments(ctx, query, nodes,
 			func(n *Template) { n.Edges.Documents = []*DocumentData{} },
@@ -610,6 +783,20 @@ func (_q *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 			return nil, err
 		}
 	}
+	if query := _q.withCampaigns; query != nil {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *Template) { n.Edges.Campaigns = []*Campaign{} },
+			func(n *Template, e *Campaign) { n.Edges.Campaigns = append(n.Edges.Campaigns, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIdentityHolders; query != nil {
+		if err := _q.loadIdentityHolders(ctx, query, nodes,
+			func(n *Template) { n.Edges.IdentityHolders = []*IdentityHolder{} },
+			func(n *Template, e *IdentityHolder) { n.Edges.IdentityHolders = append(n.Edges.IdentityHolders, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedDocuments {
 		if err := _q.loadDocuments(ctx, query, nodes,
 			func(n *Template) { n.appendNamedDocuments(name) },
@@ -628,6 +815,20 @@ func (_q *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 		if err := _q.loadAssessments(ctx, query, nodes,
 			func(n *Template) { n.appendNamedAssessments(name) },
 			func(n *Template, e *Assessment) { n.appendNamedAssessments(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaigns {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *Template) { n.appendNamedCampaigns(name) },
+			func(n *Template, e *Campaign) { n.appendNamedCampaigns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIdentityHolders {
+		if err := _q.loadIdentityHolders(ctx, query, nodes,
+			func(n *Template) { n.appendNamedIdentityHolders(name) },
+			func(n *Template, e *IdentityHolder) { n.appendNamedIdentityHolders(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -661,6 +862,64 @@ func (_q *TemplateQuery) loadOwner(ctx context.Context, query *OrganizationQuery
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *TemplateQuery) loadEnvironment(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Template, init func(*Template), assign func(*Template, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Template)
+	for i := range nodes {
+		fk := nodes[i].EnvironmentID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "environment_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *TemplateQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Template, init func(*Template), assign func(*Template, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Template)
+	for i := range nodes {
+		fk := nodes[i].ScopeID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -819,6 +1078,98 @@ func (_q *TemplateQuery) loadAssessments(ctx context.Context, query *AssessmentQ
 	}
 	return nil
 }
+func (_q *TemplateQuery) loadCampaigns(ctx context.Context, query *CampaignQuery, nodes []*Template, init func(*Template), assign func(*Template, *Campaign)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Template)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(campaign.FieldTemplateID)
+	}
+	query.Where(predicate.Campaign(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(template.CampaignsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.TemplateID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "template_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *TemplateQuery) loadIdentityHolders(ctx context.Context, query *IdentityHolderQuery, nodes []*Template, init func(*Template), assign func(*Template, *IdentityHolder)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Template)
+	nids := make(map[string]map[*Template]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(template.IdentityHoldersTable)
+		joinT.Schema(_q.schemaConfig.IdentityHolderTemplates)
+		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(template.IdentityHoldersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(template.IdentityHoldersPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(template.IdentityHoldersPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Template]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*IdentityHolder](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "identity_holders" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (_q *TemplateQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -852,6 +1203,12 @@ func (_q *TemplateQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(template.FieldOwnerID)
+		}
+		if _q.withEnvironment != nil {
+			_spec.Node.AddColumnOnce(template.FieldEnvironmentID)
+		}
+		if _q.withScope != nil {
+			_spec.Node.AddColumnOnce(template.FieldScopeID)
 		}
 		if _q.withTrustCenter != nil {
 			_spec.Node.AddColumnOnce(template.FieldTrustCenterID)
@@ -963,6 +1320,34 @@ func (_q *TemplateQuery) WithNamedAssessments(name string, opts ...func(*Assessm
 		_q.withNamedAssessments = make(map[string]*AssessmentQuery)
 	}
 	_q.withNamedAssessments[name] = query
+	return _q
+}
+
+// WithNamedCampaigns tells the query-builder to eager-load the nodes that are connected to the "campaigns"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TemplateQuery) WithNamedCampaigns(name string, opts ...func(*CampaignQuery)) *TemplateQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaigns == nil {
+		_q.withNamedCampaigns = make(map[string]*CampaignQuery)
+	}
+	_q.withNamedCampaigns[name] = query
+	return _q
+}
+
+// WithNamedIdentityHolders tells the query-builder to eager-load the nodes that are connected to the "identity_holders"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TemplateQuery) WithNamedIdentityHolders(name string, opts ...func(*IdentityHolderQuery)) *TemplateQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIdentityHolders == nil {
+		_q.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery)
+	}
+	_q.withNamedIdentityHolders[name] = query
 	return _q
 }
 

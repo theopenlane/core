@@ -58,6 +58,8 @@ func (d DocumentData) Mixin() []ent.Mixin {
 				withOrganizationOwner(false),
 				withAllowAnonymousTrustCenterAccess(true),
 				withParents(Template{})),
+			newCustomEnumMixin(d, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(d, withEnumFieldName("scope"), withGlobalEnum()),
 		},
 	}.getMixins(d)
 }

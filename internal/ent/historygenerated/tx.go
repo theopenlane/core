@@ -22,6 +22,10 @@ type Tx struct {
 	AssessmentResponseHistory *AssessmentResponseHistoryClient
 	// AssetHistory is the client for interacting with the AssetHistory builders.
 	AssetHistory *AssetHistoryClient
+	// CampaignHistory is the client for interacting with the CampaignHistory builders.
+	CampaignHistory *CampaignHistoryClient
+	// CampaignTargetHistory is the client for interacting with the CampaignTargetHistory builders.
+	CampaignTargetHistory *CampaignTargetHistoryClient
 	// ContactHistory is the client for interacting with the ContactHistory builders.
 	ContactHistory *ContactHistoryClient
 	// ControlHistory is the client for interacting with the ControlHistory builders.
@@ -64,6 +68,8 @@ type Tx struct {
 	GroupSettingHistory *GroupSettingHistoryClient
 	// HushHistory is the client for interacting with the HushHistory builders.
 	HushHistory *HushHistoryClient
+	// IdentityHolderHistory is the client for interacting with the IdentityHolderHistory builders.
+	IdentityHolderHistory *IdentityHolderHistoryClient
 	// IntegrationHistory is the client for interacting with the IntegrationHistory builders.
 	IntegrationHistory *IntegrationHistoryClient
 	// InternalPolicyHistory is the client for interacting with the InternalPolicyHistory builders.
@@ -86,6 +92,8 @@ type Tx struct {
 	OrganizationHistory *OrganizationHistoryClient
 	// OrganizationSettingHistory is the client for interacting with the OrganizationSettingHistory builders.
 	OrganizationSettingHistory *OrganizationSettingHistoryClient
+	// PlatformHistory is the client for interacting with the PlatformHistory builders.
+	PlatformHistory *PlatformHistoryClient
 	// ProcedureHistory is the client for interacting with the ProcedureHistory builders.
 	ProcedureHistory *ProcedureHistoryClient
 	// ProgramHistory is the client for interacting with the ProgramHistory builders.
@@ -281,6 +289,8 @@ func (tx *Tx) init() {
 	tx.AssessmentHistory = NewAssessmentHistoryClient(tx.config)
 	tx.AssessmentResponseHistory = NewAssessmentResponseHistoryClient(tx.config)
 	tx.AssetHistory = NewAssetHistoryClient(tx.config)
+	tx.CampaignHistory = NewCampaignHistoryClient(tx.config)
+	tx.CampaignTargetHistory = NewCampaignTargetHistoryClient(tx.config)
 	tx.ContactHistory = NewContactHistoryClient(tx.config)
 	tx.ControlHistory = NewControlHistoryClient(tx.config)
 	tx.ControlImplementationHistory = NewControlImplementationHistoryClient(tx.config)
@@ -302,6 +312,7 @@ func (tx *Tx) init() {
 	tx.GroupMembershipHistory = NewGroupMembershipHistoryClient(tx.config)
 	tx.GroupSettingHistory = NewGroupSettingHistoryClient(tx.config)
 	tx.HushHistory = NewHushHistoryClient(tx.config)
+	tx.IdentityHolderHistory = NewIdentityHolderHistoryClient(tx.config)
 	tx.IntegrationHistory = NewIntegrationHistoryClient(tx.config)
 	tx.InternalPolicyHistory = NewInternalPolicyHistoryClient(tx.config)
 	tx.JobTemplateHistory = NewJobTemplateHistoryClient(tx.config)
@@ -313,6 +324,7 @@ func (tx *Tx) init() {
 	tx.OrgSubscriptionHistory = NewOrgSubscriptionHistoryClient(tx.config)
 	tx.OrganizationHistory = NewOrganizationHistoryClient(tx.config)
 	tx.OrganizationSettingHistory = NewOrganizationSettingHistoryClient(tx.config)
+	tx.PlatformHistory = NewPlatformHistoryClient(tx.config)
 	tx.ProcedureHistory = NewProcedureHistoryClient(tx.config)
 	tx.ProgramHistory = NewProgramHistoryClient(tx.config)
 	tx.ProgramMembershipHistory = NewProgramMembershipHistoryClient(tx.config)

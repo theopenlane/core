@@ -209,6 +209,54 @@ func (f AssetHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m histor
 	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.AssetHistoryMutation", m)
 }
 
+// The CampaignHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type CampaignHistoryQueryRuleFunc func(context.Context, *historygenerated.CampaignHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f CampaignHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.CampaignHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.CampaignHistoryQuery", q)
+}
+
+// The CampaignHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type CampaignHistoryMutationRuleFunc func(context.Context, *historygenerated.CampaignHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f CampaignHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.CampaignHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.CampaignHistoryMutation", m)
+}
+
+// The CampaignTargetHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type CampaignTargetHistoryQueryRuleFunc func(context.Context, *historygenerated.CampaignTargetHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f CampaignTargetHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.CampaignTargetHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.CampaignTargetHistoryQuery", q)
+}
+
+// The CampaignTargetHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type CampaignTargetHistoryMutationRuleFunc func(context.Context, *historygenerated.CampaignTargetHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f CampaignTargetHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.CampaignTargetHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.CampaignTargetHistoryMutation", m)
+}
+
 // The ContactHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type ContactHistoryQueryRuleFunc func(context.Context, *historygenerated.ContactHistoryQuery) error
@@ -713,6 +761,30 @@ func (f HushHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m history
 	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.HushHistoryMutation", m)
 }
 
+// The IdentityHolderHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type IdentityHolderHistoryQueryRuleFunc func(context.Context, *historygenerated.IdentityHolderHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f IdentityHolderHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.IdentityHolderHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.IdentityHolderHistoryQuery", q)
+}
+
+// The IdentityHolderHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type IdentityHolderHistoryMutationRuleFunc func(context.Context, *historygenerated.IdentityHolderHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f IdentityHolderHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.IdentityHolderHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.IdentityHolderHistoryMutation", m)
+}
+
 // The IntegrationHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type IntegrationHistoryQueryRuleFunc func(context.Context, *historygenerated.IntegrationHistoryQuery) error
@@ -975,6 +1047,30 @@ func (f OrganizationSettingHistoryMutationRuleFunc) EvalMutation(ctx context.Con
 		return f(ctx, m)
 	}
 	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.OrganizationSettingHistoryMutation", m)
+}
+
+// The PlatformHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type PlatformHistoryQueryRuleFunc func(context.Context, *historygenerated.PlatformHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f PlatformHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.PlatformHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.PlatformHistoryQuery", q)
+}
+
+// The PlatformHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type PlatformHistoryMutationRuleFunc func(context.Context, *historygenerated.PlatformHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f PlatformHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.PlatformHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.PlatformHistoryMutation", m)
 }
 
 // The ProcedureHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
@@ -1740,6 +1836,10 @@ func queryFilter(q historygenerated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *historygenerated.AssetHistoryQuery:
 		return q.Filter(), nil
+	case *historygenerated.CampaignHistoryQuery:
+		return q.Filter(), nil
+	case *historygenerated.CampaignTargetHistoryQuery:
+		return q.Filter(), nil
 	case *historygenerated.ContactHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.ControlHistoryQuery:
@@ -1782,6 +1882,8 @@ func queryFilter(q historygenerated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *historygenerated.HushHistoryQuery:
 		return q.Filter(), nil
+	case *historygenerated.IdentityHolderHistoryQuery:
+		return q.Filter(), nil
 	case *historygenerated.IntegrationHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.InternalPolicyHistoryQuery:
@@ -1803,6 +1905,8 @@ func queryFilter(q historygenerated.Query) (Filter, error) {
 	case *historygenerated.OrganizationHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.OrganizationSettingHistoryQuery:
+		return q.Filter(), nil
+	case *historygenerated.PlatformHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.ProcedureHistoryQuery:
 		return q.Filter(), nil
@@ -1879,6 +1983,10 @@ func mutationFilter(m historygenerated.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *historygenerated.AssetHistoryMutation:
 		return m.Filter(), nil
+	case *historygenerated.CampaignHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.CampaignTargetHistoryMutation:
+		return m.Filter(), nil
 	case *historygenerated.ContactHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.ControlHistoryMutation:
@@ -1921,6 +2029,8 @@ func mutationFilter(m historygenerated.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *historygenerated.HushHistoryMutation:
 		return m.Filter(), nil
+	case *historygenerated.IdentityHolderHistoryMutation:
+		return m.Filter(), nil
 	case *historygenerated.IntegrationHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.InternalPolicyHistoryMutation:
@@ -1942,6 +2052,8 @@ func mutationFilter(m historygenerated.Mutation) (Filter, error) {
 	case *historygenerated.OrganizationHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.OrganizationSettingHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.PlatformHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.ProcedureHistoryMutation:
 		return m.Filter(), nil

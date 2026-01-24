@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
@@ -43,6 +44,14 @@ type Template struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the environment of the template
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the template
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the template
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the template
+	ScopeID string `json:"scope_id,omitempty"`
 	// the name of the template
 	Name string `json:"name,omitempty"`
 	// the type of the template, either a provided template or an implementation (document)
@@ -67,6 +76,10 @@ type Template struct {
 type TemplateEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// Environment holds the value of the environment edge.
+	Environment *CustomTypeEnum `json:"environment,omitempty"`
+	// Scope holds the value of the scope edge.
+	Scope *CustomTypeEnum `json:"scope,omitempty"`
 	// Documents holds the value of the documents edge.
 	Documents []*DocumentData `json:"documents,omitempty"`
 	// Files holds the value of the files edge.
@@ -75,15 +88,21 @@ type TemplateEdges struct {
 	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
 	// Assessments holds the value of the assessments edge.
 	Assessments []*Assessment `json:"assessments,omitempty"`
+	// Campaigns holds the value of the campaigns edge.
+	Campaigns []*Campaign `json:"campaigns,omitempty"`
+	// IdentityHolders holds the value of the identity_holders edge.
+	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [9]map[string]int
 
-	namedDocuments   map[string][]*DocumentData
-	namedFiles       map[string][]*File
-	namedAssessments map[string][]*Assessment
+	namedDocuments       map[string][]*DocumentData
+	namedFiles           map[string][]*File
+	namedAssessments     map[string][]*Assessment
+	namedCampaigns       map[string][]*Campaign
+	namedIdentityHolders map[string][]*IdentityHolder
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -97,10 +116,32 @@ func (e TemplateEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// EnvironmentOrErr returns the Environment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TemplateEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
+	if e.Environment != nil {
+		return e.Environment, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "environment"}
+}
+
+// ScopeOrErr returns the Scope value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TemplateEdges) ScopeOrErr() (*CustomTypeEnum, error) {
+	if e.Scope != nil {
+		return e.Scope, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "scope"}
+}
+
 // DocumentsOrErr returns the Documents value or an error if the edge
 // was not loaded in eager-loading.
 func (e TemplateEdges) DocumentsOrErr() ([]*DocumentData, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Documents, nil
 	}
 	return nil, &NotLoadedError{edge: "documents"}
@@ -109,7 +150,7 @@ func (e TemplateEdges) DocumentsOrErr() ([]*DocumentData, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e TemplateEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -120,7 +161,7 @@ func (e TemplateEdges) FilesOrErr() ([]*File, error) {
 func (e TemplateEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -129,10 +170,28 @@ func (e TemplateEdges) TrustCenterOrErr() (*TrustCenter, error) {
 // AssessmentsOrErr returns the Assessments value or an error if the edge
 // was not loaded in eager-loading.
 func (e TemplateEdges) AssessmentsOrErr() ([]*Assessment, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Assessments, nil
 	}
 	return nil, &NotLoadedError{edge: "assessments"}
+}
+
+// CampaignsOrErr returns the Campaigns value or an error if the edge
+// was not loaded in eager-loading.
+func (e TemplateEdges) CampaignsOrErr() ([]*Campaign, error) {
+	if e.loadedTypes[7] {
+		return e.Campaigns, nil
+	}
+	return nil, &NotLoadedError{edge: "campaigns"}
+}
+
+// IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
+// was not loaded in eager-loading.
+func (e TemplateEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
+	if e.loadedTypes[8] {
+		return e.IdentityHolders, nil
+	}
+	return nil, &NotLoadedError{edge: "identity_holders"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -144,7 +203,7 @@ func (*Template) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case template.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case template.FieldID, template.FieldCreatedBy, template.FieldUpdatedBy, template.FieldDeletedBy, template.FieldOwnerID, template.FieldInternalNotes, template.FieldSystemInternalID, template.FieldName, template.FieldTemplateType, template.FieldDescription, template.FieldKind, template.FieldTrustCenterID:
+		case template.FieldID, template.FieldCreatedBy, template.FieldUpdatedBy, template.FieldDeletedBy, template.FieldOwnerID, template.FieldInternalNotes, template.FieldSystemInternalID, template.FieldEnvironmentName, template.FieldEnvironmentID, template.FieldScopeName, template.FieldScopeID, template.FieldName, template.FieldTemplateType, template.FieldDescription, template.FieldKind, template.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case template.FieldCreatedAt, template.FieldUpdatedAt, template.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -239,6 +298,30 @@ func (_m *Template) assignValues(columns []string, values []any) error {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
 			}
+		case template.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case template.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case template.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case template.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
+			}
 		case template.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -303,6 +386,16 @@ func (_m *Template) QueryOwner() *OrganizationQuery {
 	return NewTemplateClient(_m.config).QueryOwner(_m)
 }
 
+// QueryEnvironment queries the "environment" edge of the Template entity.
+func (_m *Template) QueryEnvironment() *CustomTypeEnumQuery {
+	return NewTemplateClient(_m.config).QueryEnvironment(_m)
+}
+
+// QueryScope queries the "scope" edge of the Template entity.
+func (_m *Template) QueryScope() *CustomTypeEnumQuery {
+	return NewTemplateClient(_m.config).QueryScope(_m)
+}
+
 // QueryDocuments queries the "documents" edge of the Template entity.
 func (_m *Template) QueryDocuments() *DocumentDataQuery {
 	return NewTemplateClient(_m.config).QueryDocuments(_m)
@@ -321,6 +414,16 @@ func (_m *Template) QueryTrustCenter() *TrustCenterQuery {
 // QueryAssessments queries the "assessments" edge of the Template entity.
 func (_m *Template) QueryAssessments() *AssessmentQuery {
 	return NewTemplateClient(_m.config).QueryAssessments(_m)
+}
+
+// QueryCampaigns queries the "campaigns" edge of the Template entity.
+func (_m *Template) QueryCampaigns() *CampaignQuery {
+	return NewTemplateClient(_m.config).QueryCampaigns(_m)
+}
+
+// QueryIdentityHolders queries the "identity_holders" edge of the Template entity.
+func (_m *Template) QueryIdentityHolders() *IdentityHolderQuery {
+	return NewTemplateClient(_m.config).QueryIdentityHolders(_m)
 }
 
 // Update returns a builder for updating this Template.
@@ -382,6 +485,18 @@ func (_m *Template) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
@@ -476,6 +591,54 @@ func (_m *Template) appendNamedAssessments(name string, edges ...*Assessment) {
 		_m.Edges.namedAssessments[name] = []*Assessment{}
 	} else {
 		_m.Edges.namedAssessments[name] = append(_m.Edges.namedAssessments[name], edges...)
+	}
+}
+
+// NamedCampaigns returns the Campaigns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Template) NamedCampaigns(name string) ([]*Campaign, error) {
+	if _m.Edges.namedCampaigns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedCampaigns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Template) appendNamedCampaigns(name string, edges ...*Campaign) {
+	if _m.Edges.namedCampaigns == nil {
+		_m.Edges.namedCampaigns = make(map[string][]*Campaign)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedCampaigns[name] = []*Campaign{}
+	} else {
+		_m.Edges.namedCampaigns[name] = append(_m.Edges.namedCampaigns[name], edges...)
+	}
+}
+
+// NamedIdentityHolders returns the IdentityHolders named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Template) NamedIdentityHolders(name string) ([]*IdentityHolder, error) {
+	if _m.Edges.namedIdentityHolders == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIdentityHolders[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Template) appendNamedIdentityHolders(name string, edges ...*IdentityHolder) {
+	if _m.Edges.namedIdentityHolders == nil {
+		_m.Edges.namedIdentityHolders = make(map[string][]*IdentityHolder)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIdentityHolders[name] = []*IdentityHolder{}
+	} else {
+		_m.Edges.namedIdentityHolders[name] = append(_m.Edges.namedIdentityHolders[name], edges...)
 	}
 }
 

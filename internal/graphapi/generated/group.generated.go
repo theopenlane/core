@@ -138,6 +138,18 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_actionPlanBlockedGroups(ctx, field)
 			case "actionPlanViewers":
 				return ec.fieldContext_Group_actionPlanViewers(ctx, field)
+			case "platformEditors":
+				return ec.fieldContext_Group_platformEditors(ctx, field)
+			case "platformBlockedGroups":
+				return ec.fieldContext_Group_platformBlockedGroups(ctx, field)
+			case "platformViewers":
+				return ec.fieldContext_Group_platformViewers(ctx, field)
+			case "campaignEditors":
+				return ec.fieldContext_Group_campaignEditors(ctx, field)
+			case "campaignBlockedGroups":
+				return ec.fieldContext_Group_campaignBlockedGroups(ctx, field)
+			case "campaignViewers":
+				return ec.fieldContext_Group_campaignViewers(ctx, field)
 			case "procedureEditors":
 				return ec.fieldContext_Group_procedureEditors(ctx, field)
 			case "procedureBlockedGroups":
@@ -166,6 +178,10 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_files(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Group_tasks(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Group_campaigns(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_Group_campaignTargets(ctx, field)
 			case "members":
 				return ec.fieldContext_Group_members(ctx, field)
 			case "permissions":
@@ -316,6 +332,18 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_actionPlanBlockedGroups(ctx, field)
 			case "actionPlanViewers":
 				return ec.fieldContext_Group_actionPlanViewers(ctx, field)
+			case "platformEditors":
+				return ec.fieldContext_Group_platformEditors(ctx, field)
+			case "platformBlockedGroups":
+				return ec.fieldContext_Group_platformBlockedGroups(ctx, field)
+			case "platformViewers":
+				return ec.fieldContext_Group_platformViewers(ctx, field)
+			case "campaignEditors":
+				return ec.fieldContext_Group_campaignEditors(ctx, field)
+			case "campaignBlockedGroups":
+				return ec.fieldContext_Group_campaignBlockedGroups(ctx, field)
+			case "campaignViewers":
+				return ec.fieldContext_Group_campaignViewers(ctx, field)
 			case "procedureEditors":
 				return ec.fieldContext_Group_procedureEditors(ctx, field)
 			case "procedureBlockedGroups":
@@ -344,6 +372,10 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_files(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Group_tasks(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Group_campaigns(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_Group_campaignTargets(ctx, field)
 			case "members":
 				return ec.fieldContext_Group_members(ctx, field)
 			case "permissions":
@@ -494,6 +526,18 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_actionPlanBlockedGroups(ctx, field)
 			case "actionPlanViewers":
 				return ec.fieldContext_Group_actionPlanViewers(ctx, field)
+			case "platformEditors":
+				return ec.fieldContext_Group_platformEditors(ctx, field)
+			case "platformBlockedGroups":
+				return ec.fieldContext_Group_platformBlockedGroups(ctx, field)
+			case "platformViewers":
+				return ec.fieldContext_Group_platformViewers(ctx, field)
+			case "campaignEditors":
+				return ec.fieldContext_Group_campaignEditors(ctx, field)
+			case "campaignBlockedGroups":
+				return ec.fieldContext_Group_campaignBlockedGroups(ctx, field)
+			case "campaignViewers":
+				return ec.fieldContext_Group_campaignViewers(ctx, field)
 			case "procedureEditors":
 				return ec.fieldContext_Group_procedureEditors(ctx, field)
 			case "procedureBlockedGroups":
@@ -522,6 +566,10 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_files(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Group_tasks(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Group_campaigns(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_Group_campaignTargets(ctx, field)
 			case "members":
 				return ec.fieldContext_Group_members(ctx, field)
 			case "permissions":

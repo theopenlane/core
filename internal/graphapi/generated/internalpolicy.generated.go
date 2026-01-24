@@ -116,6 +116,14 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
 			case "internalPolicyKindID":
 				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_InternalPolicy_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_InternalPolicy_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_InternalPolicy_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_InternalPolicy_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
 			case "owner":
@@ -130,6 +138,10 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
 			case "internalPolicyKind":
 				return ec.fieldContext_InternalPolicy_internalPolicyKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_InternalPolicy_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_InternalPolicy_scope(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
 			case "controlImplementations":
@@ -284,6 +296,14 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
 			case "internalPolicyKindID":
 				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_InternalPolicy_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_InternalPolicy_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_InternalPolicy_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_InternalPolicy_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
 			case "owner":
@@ -298,6 +318,10 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
 			case "internalPolicyKind":
 				return ec.fieldContext_InternalPolicy_internalPolicyKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_InternalPolicy_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_InternalPolicy_scope(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
 			case "controlImplementations":
@@ -452,6 +476,14 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
 			case "internalPolicyKindID":
 				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_InternalPolicy_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_InternalPolicy_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_InternalPolicy_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_InternalPolicy_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
 			case "owner":
@@ -466,6 +498,10 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
 			case "internalPolicyKind":
 				return ec.fieldContext_InternalPolicy_internalPolicyKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_InternalPolicy_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_InternalPolicy_scope(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
 			case "controlImplementations":
@@ -620,6 +656,14 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
 			case "internalPolicyKindID":
 				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_InternalPolicy_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_InternalPolicy_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_InternalPolicy_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_InternalPolicy_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
 			case "owner":
@@ -634,6 +678,10 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
 			case "internalPolicyKind":
 				return ec.fieldContext_InternalPolicy_internalPolicyKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_InternalPolicy_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_InternalPolicy_scope(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
 			case "controlImplementations":

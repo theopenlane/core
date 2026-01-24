@@ -14,6 +14,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -22,12 +24,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
@@ -209,10 +213,17 @@ func adminSearchAssessmentResponses(ctx context.Context, query string, after *en
 	request := withTransactionalMutation(ctx).AssessmentResponse.Query().
 		Where(
 			assessmentresponse.Or(
-				assessmentresponse.ID(query),                       // search equal to ID
-				assessmentresponse.OwnerIDContainsFold(query),      // search by OwnerID
-				assessmentresponse.AssessmentIDContainsFold(query), // search by AssessmentID
-				assessmentresponse.EmailContainsFold(query),        // search by Email
+				assessmentresponse.ID(query),                           // search equal to ID
+				assessmentresponse.OwnerIDContainsFold(query),          // search by OwnerID
+				assessmentresponse.AssessmentIDContainsFold(query),     // search by AssessmentID
+				assessmentresponse.CampaignIDContainsFold(query),       // search by CampaignID
+				assessmentresponse.IdentityHolderIDContainsFold(query), // search by IdentityHolderID
+				assessmentresponse.EntityIDContainsFold(query),         // search by EntityID
+				assessmentresponse.EmailContainsFold(query),            // search by Email
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(email_metadata)::text LIKE $8", likeQuery)) // search by EmailMetadata
+				},
 			),
 		)
 
@@ -224,11 +235,12 @@ func searchAssets(ctx context.Context, query string, after *entgql.Cursor[string
 	request := withTransactionalMutation(ctx).Asset.Query().
 		Where(
 			asset.Or(
-				asset.ID(query),               // search equal to ID
-				asset.NameContainsFold(query), // search by Name
+				asset.ID(query),                        // search equal to ID
+				asset.InternalOwnerContainsFold(query), // search by InternalOwner
+				asset.NameContainsFold(query),          // search by Name
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 				},
 			),
 		)
@@ -246,16 +258,126 @@ func adminSearchAssets(ctx context.Context, query string, after *entgql.Cursor[s
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				asset.OwnerIDContainsFold(query),          // search by OwnerID
-				asset.InternalNotesContainsFold(query),    // search by InternalNotes
-				asset.SystemInternalIDContainsFold(query), // search by SystemInternalID
-				asset.NameContainsFold(query),             // search by Name
-				asset.DescriptionContainsFold(query),      // search by Description
-				asset.IdentifierContainsFold(query),       // search by Identifier
-				asset.WebsiteContainsFold(query),          // search by Website
+				asset.OwnerIDContainsFold(query),                     // search by OwnerID
+				asset.InternalOwnerContainsFold(query),               // search by InternalOwner
+				asset.InternalOwnerUserIDContainsFold(query),         // search by InternalOwnerUserID
+				asset.InternalOwnerGroupIDContainsFold(query),        // search by InternalOwnerGroupID
+				asset.AssetSubtypeNameContainsFold(query),            // search by AssetSubtypeName
+				asset.AssetSubtypeIDContainsFold(query),              // search by AssetSubtypeID
+				asset.AssetDataClassificationNameContainsFold(query), // search by AssetDataClassificationName
+				asset.AssetDataClassificationIDContainsFold(query),   // search by AssetDataClassificationID
+				asset.EnvironmentNameContainsFold(query),             // search by EnvironmentName
+				asset.EnvironmentIDContainsFold(query),               // search by EnvironmentID
+				asset.ScopeNameContainsFold(query),                   // search by ScopeName
+				asset.ScopeIDContainsFold(query),                     // search by ScopeID
+				asset.AccessModelNameContainsFold(query),             // search by AccessModelName
+				asset.AccessModelIDContainsFold(query),               // search by AccessModelID
+				asset.EncryptionStatusNameContainsFold(query),        // search by EncryptionStatusName
+				asset.EncryptionStatusIDContainsFold(query),          // search by EncryptionStatusID
+				asset.SecurityTierNameContainsFold(query),            // search by SecurityTierName
+				asset.SecurityTierIDContainsFold(query),              // search by SecurityTierID
+				asset.CriticalityNameContainsFold(query),             // search by CriticalityName
+				asset.CriticalityIDContainsFold(query),               // search by CriticalityID
+				asset.InternalNotesContainsFold(query),               // search by InternalNotes
+				asset.SystemInternalIDContainsFold(query),            // search by SystemInternalID
+				asset.NameContainsFold(query),                        // search by Name
+				asset.DescriptionContainsFold(query),                 // search by Description
+				asset.IdentifierContainsFold(query),                  // search by Identifier
+				asset.WebsiteContainsFold(query),                     // search by Website
+				asset.PhysicalLocationContainsFold(query),            // search by PhysicalLocation
+				asset.RegionContainsFold(query),                      // search by Region
+				asset.SourcePlatformIDContainsFold(query),            // search by SourcePlatformID
+				asset.SourceIdentifierContainsFold(query),            // search by SourceIdentifier
+				asset.CostCenterContainsFold(query),                  // search by CostCenter
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(categories)::text LIKE $10", likeQuery)) // search by Categories
+					s.Where(sql.ExprP("(categories)::text LIKE $34", likeQuery)) // search by Categories
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchCampaign searches for Campaign based on the query string looking for matches
+func searchCampaigns(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CampaignConnection, error) {
+	request := withTransactionalMutation(ctx).Campaign.Query().
+		Where(
+			campaign.Or(
+				campaign.DisplayID(query),                 // search equal to DisplayID
+				campaign.ID(query),                        // search equal to ID
+				campaign.InternalOwnerContainsFold(query), // search by InternalOwner
+				campaign.NameContainsFold(query),          // search by Name
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchCampaign searches for Campaign based on the query string looking for matches
+func adminSearchCampaigns(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CampaignConnection, error) {
+	request := withTransactionalMutation(ctx).Campaign.Query().
+		Where(
+			campaign.Or(
+				campaign.ID(query),        // search equal to ID
+				campaign.DisplayID(query), // search equal to DisplayID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+				campaign.OwnerIDContainsFold(query),              // search by OwnerID
+				campaign.InternalOwnerContainsFold(query),        // search by InternalOwner
+				campaign.InternalOwnerUserIDContainsFold(query),  // search by InternalOwnerUserID
+				campaign.InternalOwnerGroupIDContainsFold(query), // search by InternalOwnerGroupID
+				campaign.NameContainsFold(query),                 // search by Name
+				campaign.DescriptionContainsFold(query),          // search by Description
+				campaign.RecurrenceTimezoneContainsFold(query),   // search by RecurrenceTimezone
+				campaign.TemplateIDContainsFold(query),           // search by TemplateID
+				campaign.EntityIDContainsFold(query),             // search by EntityID
+				campaign.AssessmentIDContainsFold(query),         // search by AssessmentID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(metadata)::text LIKE $14", likeQuery)) // search by Metadata
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchCampaignTarget searches for CampaignTarget based on the query string looking for matches
+func searchCampaignTargets(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CampaignTargetConnection, error) {
+	request := withTransactionalMutation(ctx).CampaignTarget.Query().
+		Where(
+			campaigntarget.Or(
+				campaigntarget.EmailContainsFold(query), // search by Email
+				campaigntarget.ID(query),                // search equal to ID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchCampaignTarget searches for CampaignTarget based on the query string looking for matches
+func adminSearchCampaignTargets(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CampaignTargetConnection, error) {
+	request := withTransactionalMutation(ctx).CampaignTarget.Query().
+		Where(
+			campaigntarget.Or(
+				campaigntarget.ID(query),                     // search equal to ID
+				campaigntarget.OwnerIDContainsFold(query),    // search by OwnerID
+				campaigntarget.CampaignIDContainsFold(query), // search by CampaignID
+				campaigntarget.ContactIDContainsFold(query),  // search by ContactID
+				campaigntarget.UserIDContainsFold(query),     // search by UserID
+				campaigntarget.GroupIDContainsFold(query),    // search by GroupID
+				campaigntarget.EmailContainsFold(query),      // search by Email
+				campaigntarget.FullNameContainsFold(query),   // search by FullName
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(metadata)::text LIKE $9", likeQuery)) // search by Metadata
 				},
 			),
 		)
@@ -406,6 +528,10 @@ func adminSearchControls(ctx context.Context, query string, after *entgql.Cursor
 				control.SystemInternalIDContainsFold(query), // search by SystemInternalID
 				control.ControlKindNameContainsFold(query),  // search by ControlKindName
 				control.ControlKindIDContainsFold(query),    // search by ControlKindID
+				control.EnvironmentNameContainsFold(query),  // search by EnvironmentName
+				control.EnvironmentIDContainsFold(query),    // search by EnvironmentID
+				control.ScopeNameContainsFold(query),        // search by ScopeName
+				control.ScopeIDContainsFold(query),          // search by ScopeID
 				control.RefCodeContainsFold(query),          // search by RefCode
 				control.StandardIDContainsFold(query),       // search by StandardID
 			),
@@ -504,13 +630,14 @@ func searchEntities(ctx context.Context, query string, after *entgql.Cursor[stri
 	request := withTransactionalMutation(ctx).Entity.Query().
 		Where(
 			entity.Or(
-				entity.DescriptionContainsFold(query), // search by Description
-				entity.DisplayNameContainsFold(query), // search by DisplayName
-				entity.ID(query),                      // search equal to ID
-				entity.NameContainsFold(query),        // search by Name
+				entity.DescriptionContainsFold(query),   // search by Description
+				entity.DisplayNameContainsFold(query),   // search by DisplayName
+				entity.ID(query),                        // search equal to ID
+				entity.InternalOwnerContainsFold(query), // search by InternalOwner
+				entity.NameContainsFold(query),          // search by Name
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $6", likeQuery)) // search by Tags
 				},
 			),
 		)
@@ -528,18 +655,56 @@ func adminSearchEntities(ctx context.Context, query string, after *entgql.Cursor
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				entity.OwnerIDContainsFold(query),          // search by OwnerID
-				entity.InternalNotesContainsFold(query),    // search by InternalNotes
-				entity.SystemInternalIDContainsFold(query), // search by SystemInternalID
-				entity.NameContainsFold(query),             // search by Name
-				entity.DisplayNameContainsFold(query),      // search by DisplayName
-				entity.DescriptionContainsFold(query),      // search by Description
+				entity.OwnerIDContainsFold(query),                               // search by OwnerID
+				entity.InternalOwnerContainsFold(query),                         // search by InternalOwner
+				entity.InternalOwnerUserIDContainsFold(query),                   // search by InternalOwnerUserID
+				entity.InternalOwnerGroupIDContainsFold(query),                  // search by InternalOwnerGroupID
+				entity.ReviewedByContainsFold(query),                            // search by ReviewedBy
+				entity.ReviewedByUserIDContainsFold(query),                      // search by ReviewedByUserID
+				entity.ReviewedByGroupIDContainsFold(query),                     // search by ReviewedByGroupID
+				entity.InternalNotesContainsFold(query),                         // search by InternalNotes
+				entity.SystemInternalIDContainsFold(query),                      // search by SystemInternalID
+				entity.EntityRelationshipStateNameContainsFold(query),           // search by EntityRelationshipStateName
+				entity.EntityRelationshipStateIDContainsFold(query),             // search by EntityRelationshipStateID
+				entity.EntitySecurityQuestionnaireStatusNameContainsFold(query), // search by EntitySecurityQuestionnaireStatusName
+				entity.EntitySecurityQuestionnaireStatusIDContainsFold(query),   // search by EntitySecurityQuestionnaireStatusID
+				entity.EntitySourceTypeNameContainsFold(query),                  // search by EntitySourceTypeName
+				entity.EntitySourceTypeIDContainsFold(query),                    // search by EntitySourceTypeID
+				entity.EnvironmentNameContainsFold(query),                       // search by EnvironmentName
+				entity.EnvironmentIDContainsFold(query),                         // search by EnvironmentID
+				entity.ScopeNameContainsFold(query),                             // search by ScopeName
+				entity.ScopeIDContainsFold(query),                               // search by ScopeID
+				entity.NameContainsFold(query),                                  // search by Name
+				entity.DisplayNameContainsFold(query),                           // search by DisplayName
+				entity.DescriptionContainsFold(query),                           // search by Description
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(domains)::text LIKE $9", likeQuery)) // search by Domains
+					s.Where(sql.ExprP("(domains)::text LIKE $25", likeQuery)) // search by Domains
 				},
 				entity.EntityTypeIDContainsFold(query), // search by EntityTypeID
 				entity.StatusContainsFold(query),       // search by Status
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(linked_asset_ids)::text LIKE $28", likeQuery)) // search by LinkedAssetIds
+				},
+				entity.SpendCurrencyContainsFold(query), // search by SpendCurrency
+				entity.BillingModelContainsFold(query),  // search by BillingModel
+				entity.RenewalRiskContainsFold(query),   // search by RenewalRisk
+				entity.StatusPageURLContainsFold(query), // search by StatusPageURL
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(provided_services)::text LIKE $33", likeQuery)) // search by ProvidedServices
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(links)::text LIKE $34", likeQuery)) // search by Links
+				},
+				entity.RiskRatingContainsFold(query), // search by RiskRating
+				entity.TierContainsFold(query),       // search by Tier
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(vendor_metadata)::text LIKE $37", likeQuery)) // search by VendorMetadata
+				},
 			),
 		)
 
@@ -576,6 +741,10 @@ func adminSearchEvidences(ctx context.Context, query string, after *entgql.Curso
 					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				evidence.OwnerIDContainsFold(query),             // search by OwnerID
+				evidence.EnvironmentNameContainsFold(query),     // search by EnvironmentName
+				evidence.EnvironmentIDContainsFold(query),       // search by EnvironmentID
+				evidence.ScopeNameContainsFold(query),           // search by ScopeName
+				evidence.ScopeIDContainsFold(query),             // search by ScopeID
 				evidence.NameContainsFold(query),                // search by Name
 				evidence.DescriptionContainsFold(query),         // search by Description
 				evidence.CollectionProcedureContainsFold(query), // search by CollectionProcedure
@@ -621,6 +790,10 @@ func adminSearchFindings(ctx context.Context, query string, after *entgql.Cursor
 				finding.OwnerIDContainsFold(query),          // search by OwnerID
 				finding.InternalNotesContainsFold(query),    // search by InternalNotes
 				finding.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				finding.EnvironmentNameContainsFold(query),  // search by EnvironmentName
+				finding.EnvironmentIDContainsFold(query),    // search by EnvironmentID
+				finding.ScopeNameContainsFold(query),        // search by ScopeName
+				finding.ScopeIDContainsFold(query),          // search by ScopeID
 				finding.ExternalIDContainsFold(query),       // search by ExternalID
 				finding.ExternalOwnerIDContainsFold(query),  // search by ExternalOwnerID
 				finding.SourceContainsFold(query),           // search by Source
@@ -630,7 +803,7 @@ func adminSearchFindings(ctx context.Context, query string, after *entgql.Cursor
 				finding.CategoryContainsFold(query),         // search by Category
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(categories)::text LIKE $14", likeQuery)) // search by Categories
+					s.Where(sql.ExprP("(categories)::text LIKE $18", likeQuery)) // search by Categories
 				},
 				finding.FindingClassContainsFold(query),       // search by FindingClass
 				finding.SeverityContainsFold(query),           // search by Severity
@@ -641,30 +814,30 @@ func adminSearchFindings(ctx context.Context, query string, after *entgql.Cursor
 				finding.RecommendedActionsContainsFold(query), // search by RecommendedActions
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(references)::text LIKE $22", likeQuery)) // search by References
+					s.Where(sql.ExprP("(references)::text LIKE $26", likeQuery)) // search by References
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(steps_to_reproduce)::text LIKE $23", likeQuery)) // search by StepsToReproduce
+					s.Where(sql.ExprP("(steps_to_reproduce)::text LIKE $27", likeQuery)) // search by StepsToReproduce
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(targets)::text LIKE $24", likeQuery)) // search by Targets
+					s.Where(sql.ExprP("(targets)::text LIKE $28", likeQuery)) // search by Targets
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(target_details)::text LIKE $25", likeQuery)) // search by TargetDetails
+					s.Where(sql.ExprP("(target_details)::text LIKE $29", likeQuery)) // search by TargetDetails
 				},
 				finding.VectorContainsFold(query),      // search by Vector
 				finding.StatusContainsFold(query),      // search by Status
 				finding.ExternalURIContainsFold(query), // search by ExternalURI
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(metadata)::text LIKE $29", likeQuery)) // search by Metadata
+					s.Where(sql.ExprP("(metadata)::text LIKE $33", likeQuery)) // search by Metadata
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(raw_payload)::text LIKE $30", likeQuery)) // search by RawPayload
+					s.Where(sql.ExprP("(raw_payload)::text LIKE $34", likeQuery)) // search by RawPayload
 				},
 			),
 		)
@@ -708,6 +881,67 @@ func adminSearchGroups(ctx context.Context, query string, after *entgql.Cursor[s
 				group.ScimExternalIDContainsFold(query),   // search by ScimExternalID
 				group.ScimDisplayNameContainsFold(query),  // search by ScimDisplayName
 				group.ScimGroupMailingContainsFold(query), // search by ScimGroupMailing
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchIdentityHolder searches for IdentityHolder based on the query string looking for matches
+func searchIdentityHolders(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.IdentityHolderConnection, error) {
+	request := withTransactionalMutation(ctx).IdentityHolder.Query().
+		Where(
+			identityholder.Or(
+				identityholder.DisplayID(query),                 // search equal to DisplayID
+				identityholder.EmailContainsFold(query),         // search by Email
+				identityholder.FullNameContainsFold(query),      // search by FullName
+				identityholder.ID(query),                        // search equal to ID
+				identityholder.InternalOwnerContainsFold(query), // search by InternalOwner
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $6", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchIdentityHolder searches for IdentityHolder based on the query string looking for matches
+func adminSearchIdentityHolders(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.IdentityHolderConnection, error) {
+	request := withTransactionalMutation(ctx).IdentityHolder.Query().
+		Where(
+			identityholder.Or(
+				identityholder.ID(query),        // search equal to ID
+				identityholder.DisplayID(query), // search equal to DisplayID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+				identityholder.OwnerIDContainsFold(query),              // search by OwnerID
+				identityholder.InternalOwnerContainsFold(query),        // search by InternalOwner
+				identityholder.InternalOwnerUserIDContainsFold(query),  // search by InternalOwnerUserID
+				identityholder.InternalOwnerGroupIDContainsFold(query), // search by InternalOwnerGroupID
+				identityholder.EnvironmentNameContainsFold(query),      // search by EnvironmentName
+				identityholder.EnvironmentIDContainsFold(query),        // search by EnvironmentID
+				identityholder.ScopeNameContainsFold(query),            // search by ScopeName
+				identityholder.ScopeIDContainsFold(query),              // search by ScopeID
+				identityholder.FullNameContainsFold(query),             // search by FullName
+				identityholder.EmailContainsFold(query),                // search by Email
+				identityholder.AlternateEmailContainsFold(query),       // search by AlternateEmail
+				identityholder.PhoneNumberContainsFold(query),          // search by PhoneNumber
+				identityholder.UserIDContainsFold(query),               // search by UserID
+				identityholder.TitleContainsFold(query),                // search by Title
+				identityholder.DepartmentContainsFold(query),           // search by Department
+				identityholder.TeamContainsFold(query),                 // search by Team
+				identityholder.LocationContainsFold(query),             // search by Location
+				identityholder.EmployerEntityIDContainsFold(query),     // search by EmployerEntityID
+				identityholder.ExternalUserIDContainsFold(query),       // search by ExternalUserID
+				identityholder.ExternalReferenceIDContainsFold(query),  // search by ExternalReferenceID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(metadata)::text LIKE $24", likeQuery)) // search by Metadata
+				},
 			),
 		)
 
@@ -784,6 +1018,10 @@ func adminSearchInternalPolicies(ctx context.Context, query string, after *entgq
 				internalpolicy.FileIDContainsFold(query),                 // search by FileID
 				internalpolicy.InternalPolicyKindNameContainsFold(query), // search by InternalPolicyKindName
 				internalpolicy.InternalPolicyKindIDContainsFold(query),   // search by InternalPolicyKindID
+				internalpolicy.EnvironmentNameContainsFold(query),        // search by EnvironmentName
+				internalpolicy.EnvironmentIDContainsFold(query),          // search by EnvironmentID
+				internalpolicy.ScopeNameContainsFold(query),              // search by ScopeName
+				internalpolicy.ScopeIDContainsFold(query),                // search by ScopeID
 			),
 		)
 
@@ -981,6 +1219,84 @@ func adminSearchOrganizations(ctx context.Context, query string, after *entgql.C
 	return request.Paginate(ctx, after, first, before, last)
 }
 
+// searchPlatform searches for Platform based on the query string looking for matches
+func searchPlatforms(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.PlatformConnection, error) {
+	request := withTransactionalMutation(ctx).Platform.Query().
+		Where(
+			platform.Or(
+				platform.DisplayID(query),                 // search equal to DisplayID
+				platform.ID(query),                        // search equal to ID
+				platform.InternalOwnerContainsFold(query), // search by InternalOwner
+				platform.NameContainsFold(query),          // search by Name
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchPlatform searches for Platform based on the query string looking for matches
+func adminSearchPlatforms(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.PlatformConnection, error) {
+	request := withTransactionalMutation(ctx).Platform.Query().
+		Where(
+			platform.Or(
+				platform.ID(query),        // search equal to ID
+				platform.DisplayID(query), // search equal to DisplayID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+				platform.OwnerIDContainsFold(query),                        // search by OwnerID
+				platform.InternalOwnerContainsFold(query),                  // search by InternalOwner
+				platform.InternalOwnerUserIDContainsFold(query),            // search by InternalOwnerUserID
+				platform.InternalOwnerGroupIDContainsFold(query),           // search by InternalOwnerGroupID
+				platform.BusinessOwnerContainsFold(query),                  // search by BusinessOwner
+				platform.BusinessOwnerUserIDContainsFold(query),            // search by BusinessOwnerUserID
+				platform.BusinessOwnerGroupIDContainsFold(query),           // search by BusinessOwnerGroupID
+				platform.TechnicalOwnerContainsFold(query),                 // search by TechnicalOwner
+				platform.TechnicalOwnerUserIDContainsFold(query),           // search by TechnicalOwnerUserID
+				platform.TechnicalOwnerGroupIDContainsFold(query),          // search by TechnicalOwnerGroupID
+				platform.SecurityOwnerContainsFold(query),                  // search by SecurityOwner
+				platform.SecurityOwnerUserIDContainsFold(query),            // search by SecurityOwnerUserID
+				platform.SecurityOwnerGroupIDContainsFold(query),           // search by SecurityOwnerGroupID
+				platform.PlatformKindNameContainsFold(query),               // search by PlatformKindName
+				platform.PlatformKindIDContainsFold(query),                 // search by PlatformKindID
+				platform.PlatformDataClassificationNameContainsFold(query), // search by PlatformDataClassificationName
+				platform.PlatformDataClassificationIDContainsFold(query),   // search by PlatformDataClassificationID
+				platform.EnvironmentNameContainsFold(query),                // search by EnvironmentName
+				platform.EnvironmentIDContainsFold(query),                  // search by EnvironmentID
+				platform.ScopeNameContainsFold(query),                      // search by ScopeName
+				platform.ScopeIDContainsFold(query),                        // search by ScopeID
+				platform.AccessModelNameContainsFold(query),                // search by AccessModelName
+				platform.AccessModelIDContainsFold(query),                  // search by AccessModelID
+				platform.EncryptionStatusNameContainsFold(query),           // search by EncryptionStatusName
+				platform.EncryptionStatusIDContainsFold(query),             // search by EncryptionStatusID
+				platform.SecurityTierNameContainsFold(query),               // search by SecurityTierName
+				platform.SecurityTierIDContainsFold(query),                 // search by SecurityTierID
+				platform.CriticalityNameContainsFold(query),                // search by CriticalityName
+				platform.CriticalityIDContainsFold(query),                  // search by CriticalityID
+				platform.NameContainsFold(query),                           // search by Name
+				platform.DescriptionContainsFold(query),                    // search by Description
+				platform.BusinessPurposeContainsFold(query),                // search by BusinessPurpose
+				platform.PhysicalLocationContainsFold(query),               // search by PhysicalLocation
+				platform.RegionContainsFold(query),                         // search by Region
+				platform.SourceIdentifierContainsFold(query),               // search by SourceIdentifier
+				platform.CostCenterContainsFold(query),                     // search by CostCenter
+				platform.PlatformOwnerIDContainsFold(query),                // search by PlatformOwnerID
+				platform.ExternalReferenceIDContainsFold(query),            // search by ExternalReferenceID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(metadata)::text LIKE $42", likeQuery)) // search by Metadata
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
 // searchProcedure searches for Procedure based on the query string looking for matches
 func searchProcedures(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ProcedureConnection, error) {
 	request := withTransactionalMutation(ctx).Procedure.Query().
@@ -1051,6 +1367,10 @@ func adminSearchProcedures(ctx context.Context, query string, after *entgql.Curs
 				procedure.SystemInternalIDContainsFold(query),  // search by SystemInternalID
 				procedure.ProcedureKindNameContainsFold(query), // search by ProcedureKindName
 				procedure.ProcedureKindIDContainsFold(query),   // search by ProcedureKindID
+				procedure.EnvironmentNameContainsFold(query),   // search by EnvironmentName
+				procedure.EnvironmentIDContainsFold(query),     // search by EnvironmentID
+				procedure.ScopeNameContainsFold(query),         // search by ScopeName
+				procedure.ScopeIDContainsFold(query),           // search by ScopeID
 			),
 		)
 
@@ -1137,6 +1457,10 @@ func adminSearchRemediations(ctx context.Context, query string, after *entgql.Cu
 				remediation.OwnerIDContainsFold(query),          // search by OwnerID
 				remediation.InternalNotesContainsFold(query),    // search by InternalNotes
 				remediation.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				remediation.EnvironmentNameContainsFold(query),  // search by EnvironmentName
+				remediation.EnvironmentIDContainsFold(query),    // search by EnvironmentID
+				remediation.ScopeNameContainsFold(query),        // search by ScopeName
+				remediation.ScopeIDContainsFold(query),          // search by ScopeID
 				remediation.ExternalIDContainsFold(query),       // search by ExternalID
 				remediation.ExternalOwnerIDContainsFold(query),  // search by ExternalOwnerID
 				remediation.TitleContainsFold(query),            // search by Title
@@ -1154,7 +1478,7 @@ func adminSearchRemediations(ctx context.Context, query string, after *entgql.Cu
 				remediation.ExternalURIContainsFold(query),      // search by ExternalURI
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(metadata)::text LIKE $22", likeQuery)) // search by Metadata
+					s.Where(sql.ExprP("(metadata)::text LIKE $26", likeQuery)) // search by Metadata
 				},
 			),
 		)
@@ -1194,6 +1518,10 @@ func adminSearchReviews(ctx context.Context, query string, after *entgql.Cursor[
 				review.OwnerIDContainsFold(query),          // search by OwnerID
 				review.InternalNotesContainsFold(query),    // search by InternalNotes
 				review.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				review.EnvironmentNameContainsFold(query),  // search by EnvironmentName
+				review.EnvironmentIDContainsFold(query),    // search by EnvironmentID
+				review.ScopeNameContainsFold(query),        // search by ScopeName
+				review.ScopeIDContainsFold(query),          // search by ScopeID
 				review.ExternalIDContainsFold(query),       // search by ExternalID
 				review.ExternalOwnerIDContainsFold(query),  // search by ExternalOwnerID
 				review.TitleContainsFold(query),            // search by Title
@@ -1208,11 +1536,11 @@ func adminSearchReviews(ctx context.Context, query string, after *entgql.Cursor[
 				review.ExternalURIContainsFold(query),      // search by ExternalURI
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(metadata)::text LIKE $18", likeQuery)) // search by Metadata
+					s.Where(sql.ExprP("(metadata)::text LIKE $22", likeQuery)) // search by Metadata
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(raw_payload)::text LIKE $19", likeQuery)) // search by RawPayload
+					s.Where(sql.ExprP("(raw_payload)::text LIKE $23", likeQuery)) // search by RawPayload
 				},
 			),
 		)
@@ -1254,21 +1582,25 @@ func adminSearchRisks(ctx context.Context, query string, after *entgql.Cursor[st
 				risk.RiskKindIDContainsFold(query),       // search by RiskKindID
 				risk.RiskCategoryNameContainsFold(query), // search by RiskCategoryName
 				risk.RiskCategoryIDContainsFold(query),   // search by RiskCategoryID
+				risk.EnvironmentNameContainsFold(query),  // search by EnvironmentName
+				risk.EnvironmentIDContainsFold(query),    // search by EnvironmentID
+				risk.ScopeNameContainsFold(query),        // search by ScopeName
+				risk.ScopeIDContainsFold(query),          // search by ScopeID
 				risk.NameContainsFold(query),             // search by Name
 				risk.MitigationContainsFold(query),       // search by Mitigation
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(mitigation_json)::text LIKE $11", likeQuery)) // search by MitigationJSON
+					s.Where(sql.ExprP("(mitigation_json)::text LIKE $15", likeQuery)) // search by MitigationJSON
 				},
 				risk.DetailsContainsFold(query), // search by Details
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(details_json)::text LIKE $13", likeQuery)) // search by DetailsJSON
+					s.Where(sql.ExprP("(details_json)::text LIKE $17", likeQuery)) // search by DetailsJSON
 				},
 				risk.BusinessCostsContainsFold(query), // search by BusinessCosts
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(business_costs_json)::text LIKE $15", likeQuery)) // search by BusinessCostsJSON
+					s.Where(sql.ExprP("(business_costs_json)::text LIKE $19", likeQuery)) // search by BusinessCostsJSON
 				},
 				risk.StakeholderIDContainsFold(query), // search by StakeholderID
 				risk.DelegateIDContainsFold(query),    // search by DelegateID
@@ -1305,11 +1637,29 @@ func adminSearchScans(ctx context.Context, query string, after *entgql.Cursor[st
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				scan.OwnerIDContainsFold(query), // search by OwnerID
-				scan.TargetContainsFold(query),  // search by Target
+				scan.OwnerIDContainsFold(query),           // search by OwnerID
+				scan.ReviewedByContainsFold(query),        // search by ReviewedBy
+				scan.ReviewedByUserIDContainsFold(query),  // search by ReviewedByUserID
+				scan.ReviewedByGroupIDContainsFold(query), // search by ReviewedByGroupID
+				scan.AssignedToContainsFold(query),        // search by AssignedTo
+				scan.AssignedToUserIDContainsFold(query),  // search by AssignedToUserID
+				scan.AssignedToGroupIDContainsFold(query), // search by AssignedToGroupID
+				scan.EnvironmentNameContainsFold(query),   // search by EnvironmentName
+				scan.EnvironmentIDContainsFold(query),     // search by EnvironmentID
+				scan.ScopeNameContainsFold(query),         // search by ScopeName
+				scan.ScopeIDContainsFold(query),           // search by ScopeID
+				scan.TargetContainsFold(query),            // search by Target
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(metadata)::text LIKE $5", likeQuery)) // search by Metadata
+					s.Where(sql.ExprP("(metadata)::text LIKE $15", likeQuery)) // search by Metadata
+				},
+				scan.PerformedByContainsFold(query),           // search by PerformedBy
+				scan.PerformedByUserIDContainsFold(query),     // search by PerformedByUserID
+				scan.PerformedByGroupIDContainsFold(query),    // search by PerformedByGroupID
+				scan.GeneratedByPlatformIDContainsFold(query), // search by GeneratedByPlatformID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(vulnerability_ids)::text LIKE $20", likeQuery)) // search by VulnerabilityIds
 				},
 			),
 		)
@@ -1631,21 +1981,25 @@ func adminSearchTasks(ctx context.Context, query string, after *entgql.Cursor[st
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
-				task.OwnerIDContainsFold(query),      // search by OwnerID
-				task.TaskKindNameContainsFold(query), // search by TaskKindName
-				task.TaskKindIDContainsFold(query),   // search by TaskKindID
-				task.TitleContainsFold(query),        // search by Title
-				task.DetailsContainsFold(query),      // search by Details
+				task.OwnerIDContainsFold(query),         // search by OwnerID
+				task.TaskKindNameContainsFold(query),    // search by TaskKindName
+				task.TaskKindIDContainsFold(query),      // search by TaskKindID
+				task.EnvironmentNameContainsFold(query), // search by EnvironmentName
+				task.EnvironmentIDContainsFold(query),   // search by EnvironmentID
+				task.ScopeNameContainsFold(query),       // search by ScopeName
+				task.ScopeIDContainsFold(query),         // search by ScopeID
+				task.TitleContainsFold(query),           // search by Title
+				task.DetailsContainsFold(query),         // search by Details
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(details_json)::text LIKE $9", likeQuery)) // search by DetailsJSON
+					s.Where(sql.ExprP("(details_json)::text LIKE $13", likeQuery)) // search by DetailsJSON
 				},
 				task.AssigneeIDContainsFold(query),     // search by AssigneeID
 				task.AssignerIDContainsFold(query),     // search by AssignerID
 				task.IdempotencyKeyContainsFold(query), // search by IdempotencyKey
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(external_reference_url)::text LIKE $13", likeQuery)) // search by ExternalReferenceURL
+					s.Where(sql.ExprP("(external_reference_url)::text LIKE $17", likeQuery)) // search by ExternalReferenceURL
 				},
 				task.ParentTaskIDContainsFold(query), // search by ParentTaskID
 			),
@@ -1689,6 +2043,10 @@ func adminSearchTemplates(ctx context.Context, query string, after *entgql.Curso
 				template.OwnerIDContainsFold(query),          // search by OwnerID
 				template.InternalNotesContainsFold(query),    // search by InternalNotes
 				template.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				template.EnvironmentNameContainsFold(query),  // search by EnvironmentName
+				template.EnvironmentIDContainsFold(query),    // search by EnvironmentID
+				template.ScopeNameContainsFold(query),        // search by ScopeName
+				template.ScopeIDContainsFold(query),          // search by ScopeID
 				template.NameContainsFold(query),             // search by Name
 				template.DescriptionContainsFold(query),      // search by Description
 				func(s *sql.Selector) {
@@ -1698,7 +2056,7 @@ func adminSearchTemplates(ctx context.Context, query string, after *entgql.Curso
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(uischema)::text LIKE $9", likeQuery)) // search by Uischema
+					s.Where(sql.ExprP("(uischema)::text LIKE $13", likeQuery)) // search by Uischema
 				},
 				template.TrustCenterIDContainsFold(query), // search by TrustCenterID
 			),
@@ -1772,6 +2130,10 @@ func adminSearchVulnerabilities(ctx context.Context, query string, after *entgql
 				vulnerability.OwnerIDContainsFold(query),          // search by OwnerID
 				vulnerability.InternalNotesContainsFold(query),    // search by InternalNotes
 				vulnerability.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				vulnerability.EnvironmentNameContainsFold(query),  // search by EnvironmentName
+				vulnerability.EnvironmentIDContainsFold(query),    // search by EnvironmentID
+				vulnerability.ScopeNameContainsFold(query),        // search by ScopeName
+				vulnerability.ScopeIDContainsFold(query),          // search by ScopeID
 				vulnerability.ExternalOwnerIDContainsFold(query),  // search by ExternalOwnerID
 				vulnerability.ExternalIDContainsFold(query),       // search by ExternalID
 				vulnerability.CveIDContainsFold(query),            // search by CveID
@@ -1786,20 +2148,20 @@ func adminSearchVulnerabilities(ctx context.Context, query string, after *entgql
 				vulnerability.VectorContainsFold(query),           // search by Vector
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(references)::text LIKE $19", likeQuery)) // search by References
+					s.Where(sql.ExprP("(references)::text LIKE $23", likeQuery)) // search by References
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(impacts)::text LIKE $20", likeQuery)) // search by Impacts
+					s.Where(sql.ExprP("(impacts)::text LIKE $24", likeQuery)) // search by Impacts
 				},
 				vulnerability.ExternalURIContainsFold(query), // search by ExternalURI
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(metadata)::text LIKE $22", likeQuery)) // search by Metadata
+					s.Where(sql.ExprP("(metadata)::text LIKE $26", likeQuery)) // search by Metadata
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(raw_payload)::text LIKE $23", likeQuery)) // search by RawPayload
+					s.Where(sql.ExprP("(raw_payload)::text LIKE $27", likeQuery)) // search by RawPayload
 				},
 			),
 		)

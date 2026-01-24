@@ -15,11 +15,15 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -28,26 +32,47 @@ import (
 // AssetQuery is the builder for querying Asset entities.
 type AssetQuery struct {
 	config
-	ctx                    *QueryContext
-	order                  []asset.OrderOption
-	inters                 []Interceptor
-	predicates             []predicate.Asset
-	withOwner              *OrganizationQuery
-	withBlockedGroups      *GroupQuery
-	withEditors            *GroupQuery
-	withViewers            *GroupQuery
-	withScans              *ScanQuery
-	withEntities           *EntityQuery
-	withControls           *ControlQuery
-	withFKs                bool
-	loadTotal              []func(context.Context, []*Asset) error
-	modifiers              []func(*sql.Selector)
-	withNamedBlockedGroups map[string]*GroupQuery
-	withNamedEditors       map[string]*GroupQuery
-	withNamedViewers       map[string]*GroupQuery
-	withNamedScans         map[string]*ScanQuery
-	withNamedEntities      map[string]*EntityQuery
-	withNamedControls      map[string]*ControlQuery
+	ctx                          *QueryContext
+	order                        []asset.OrderOption
+	inters                       []Interceptor
+	predicates                   []predicate.Asset
+	withOwner                    *OrganizationQuery
+	withBlockedGroups            *GroupQuery
+	withEditors                  *GroupQuery
+	withViewers                  *GroupQuery
+	withInternalOwnerUser        *UserQuery
+	withInternalOwnerGroup       *GroupQuery
+	withAssetSubtype             *CustomTypeEnumQuery
+	withAssetDataClassification  *CustomTypeEnumQuery
+	withEnvironment              *CustomTypeEnumQuery
+	withScope                    *CustomTypeEnumQuery
+	withAccessModel              *CustomTypeEnumQuery
+	withEncryptionStatus         *CustomTypeEnumQuery
+	withSecurityTier             *CustomTypeEnumQuery
+	withCriticality              *CustomTypeEnumQuery
+	withScans                    *ScanQuery
+	withEntities                 *EntityQuery
+	withPlatforms                *PlatformQuery
+	withOutOfScopePlatforms      *PlatformQuery
+	withIdentityHolders          *IdentityHolderQuery
+	withControls                 *ControlQuery
+	withSourcePlatform           *PlatformQuery
+	withConnectedAssets          *AssetQuery
+	withConnectedFrom            *AssetQuery
+	withFKs                      bool
+	loadTotal                    []func(context.Context, []*Asset) error
+	modifiers                    []func(*sql.Selector)
+	withNamedBlockedGroups       map[string]*GroupQuery
+	withNamedEditors             map[string]*GroupQuery
+	withNamedViewers             map[string]*GroupQuery
+	withNamedScans               map[string]*ScanQuery
+	withNamedEntities            map[string]*EntityQuery
+	withNamedPlatforms           map[string]*PlatformQuery
+	withNamedOutOfScopePlatforms map[string]*PlatformQuery
+	withNamedIdentityHolders     map[string]*IdentityHolderQuery
+	withNamedControls            map[string]*ControlQuery
+	withNamedConnectedAssets     map[string]*AssetQuery
+	withNamedConnectedFrom       map[string]*AssetQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -184,6 +209,256 @@ func (_q *AssetQuery) QueryViewers() *GroupQuery {
 	return query
 }
 
+// QueryInternalOwnerUser chains the current query on the "internal_owner_user" edge.
+func (_q *AssetQuery) QueryInternalOwnerUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.InternalOwnerUserTable, asset.InternalOwnerUserColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerGroup chains the current query on the "internal_owner_group" edge.
+func (_q *AssetQuery) QueryInternalOwnerGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.InternalOwnerGroupTable, asset.InternalOwnerGroupColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssetSubtype chains the current query on the "asset_subtype" edge.
+func (_q *AssetQuery) QueryAssetSubtype() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.AssetSubtypeTable, asset.AssetSubtypeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssetDataClassification chains the current query on the "asset_data_classification" edge.
+func (_q *AssetQuery) QueryAssetDataClassification() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.AssetDataClassificationTable, asset.AssetDataClassificationColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEnvironment chains the current query on the "environment" edge.
+func (_q *AssetQuery) QueryEnvironment() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.EnvironmentTable, asset.EnvironmentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScope chains the current query on the "scope" edge.
+func (_q *AssetQuery) QueryScope() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.ScopeTable, asset.ScopeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAccessModel chains the current query on the "access_model" edge.
+func (_q *AssetQuery) QueryAccessModel() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.AccessModelTable, asset.AccessModelColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEncryptionStatus chains the current query on the "encryption_status" edge.
+func (_q *AssetQuery) QueryEncryptionStatus() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.EncryptionStatusTable, asset.EncryptionStatusColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySecurityTier chains the current query on the "security_tier" edge.
+func (_q *AssetQuery) QuerySecurityTier() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.SecurityTierTable, asset.SecurityTierColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCriticality chains the current query on the "criticality" edge.
+func (_q *AssetQuery) QueryCriticality() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.CriticalityTable, asset.CriticalityColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryScans chains the current query on the "scans" edge.
 func (_q *AssetQuery) QueryScans() *ScanQuery {
 	query := (&ScanClient{config: _q.config}).Query()
@@ -234,6 +509,81 @@ func (_q *AssetQuery) QueryEntities() *EntityQuery {
 	return query
 }
 
+// QueryPlatforms chains the current query on the "platforms" edge.
+func (_q *AssetQuery) QueryPlatforms() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.PlatformsTable, asset.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformAssets
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOutOfScopePlatforms chains the current query on the "out_of_scope_platforms" edge.
+func (_q *AssetQuery) QueryOutOfScopePlatforms() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.OutOfScopePlatformsTable, asset.OutOfScopePlatformsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformOutOfScopeAssets
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders chains the current query on the "identity_holders" edge.
+func (_q *AssetQuery) QueryIdentityHolders() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.IdentityHoldersTable, asset.IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolderAssets
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryControls chains the current query on the "controls" edge.
 func (_q *AssetQuery) QueryControls() *ControlQuery {
 	query := (&ControlClient{config: _q.config}).Query()
@@ -253,6 +603,81 @@ func (_q *AssetQuery) QueryControls() *ControlQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ControlAssets
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySourcePlatform chains the current query on the "source_platform" edge.
+func (_q *AssetQuery) QuerySourcePlatform() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, asset.SourcePlatformTable, asset.SourcePlatformColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryConnectedAssets chains the current query on the "connected_assets" edge.
+func (_q *AssetQuery) QueryConnectedAssets() *AssetQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, asset.ConnectedAssetsTable, asset.ConnectedAssetsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.AssetConnectedAssets
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryConnectedFrom chains the current query on the "connected_from" edge.
+func (_q *AssetQuery) QueryConnectedFrom() *AssetQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.ConnectedFromTable, asset.ConnectedFromPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.AssetConnectedAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -446,18 +871,34 @@ func (_q *AssetQuery) Clone() *AssetQuery {
 		return nil
 	}
 	return &AssetQuery{
-		config:            _q.config,
-		ctx:               _q.ctx.Clone(),
-		order:             append([]asset.OrderOption{}, _q.order...),
-		inters:            append([]Interceptor{}, _q.inters...),
-		predicates:        append([]predicate.Asset{}, _q.predicates...),
-		withOwner:         _q.withOwner.Clone(),
-		withBlockedGroups: _q.withBlockedGroups.Clone(),
-		withEditors:       _q.withEditors.Clone(),
-		withViewers:       _q.withViewers.Clone(),
-		withScans:         _q.withScans.Clone(),
-		withEntities:      _q.withEntities.Clone(),
-		withControls:      _q.withControls.Clone(),
+		config:                      _q.config,
+		ctx:                         _q.ctx.Clone(),
+		order:                       append([]asset.OrderOption{}, _q.order...),
+		inters:                      append([]Interceptor{}, _q.inters...),
+		predicates:                  append([]predicate.Asset{}, _q.predicates...),
+		withOwner:                   _q.withOwner.Clone(),
+		withBlockedGroups:           _q.withBlockedGroups.Clone(),
+		withEditors:                 _q.withEditors.Clone(),
+		withViewers:                 _q.withViewers.Clone(),
+		withInternalOwnerUser:       _q.withInternalOwnerUser.Clone(),
+		withInternalOwnerGroup:      _q.withInternalOwnerGroup.Clone(),
+		withAssetSubtype:            _q.withAssetSubtype.Clone(),
+		withAssetDataClassification: _q.withAssetDataClassification.Clone(),
+		withEnvironment:             _q.withEnvironment.Clone(),
+		withScope:                   _q.withScope.Clone(),
+		withAccessModel:             _q.withAccessModel.Clone(),
+		withEncryptionStatus:        _q.withEncryptionStatus.Clone(),
+		withSecurityTier:            _q.withSecurityTier.Clone(),
+		withCriticality:             _q.withCriticality.Clone(),
+		withScans:                   _q.withScans.Clone(),
+		withEntities:                _q.withEntities.Clone(),
+		withPlatforms:               _q.withPlatforms.Clone(),
+		withOutOfScopePlatforms:     _q.withOutOfScopePlatforms.Clone(),
+		withIdentityHolders:         _q.withIdentityHolders.Clone(),
+		withControls:                _q.withControls.Clone(),
+		withSourcePlatform:          _q.withSourcePlatform.Clone(),
+		withConnectedAssets:         _q.withConnectedAssets.Clone(),
+		withConnectedFrom:           _q.withConnectedFrom.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -509,6 +950,116 @@ func (_q *AssetQuery) WithViewers(opts ...func(*GroupQuery)) *AssetQuery {
 	return _q
 }
 
+// WithInternalOwnerUser tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithInternalOwnerUser(opts ...func(*UserQuery)) *AssetQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerUser = query
+	return _q
+}
+
+// WithInternalOwnerGroup tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithInternalOwnerGroup(opts ...func(*GroupQuery)) *AssetQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerGroup = query
+	return _q
+}
+
+// WithAssetSubtype tells the query-builder to eager-load the nodes that are connected to
+// the "asset_subtype" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithAssetSubtype(opts ...func(*CustomTypeEnumQuery)) *AssetQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssetSubtype = query
+	return _q
+}
+
+// WithAssetDataClassification tells the query-builder to eager-load the nodes that are connected to
+// the "asset_data_classification" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithAssetDataClassification(opts ...func(*CustomTypeEnumQuery)) *AssetQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssetDataClassification = query
+	return _q
+}
+
+// WithEnvironment tells the query-builder to eager-load the nodes that are connected to
+// the "environment" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithEnvironment(opts ...func(*CustomTypeEnumQuery)) *AssetQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEnvironment = query
+	return _q
+}
+
+// WithScope tells the query-builder to eager-load the nodes that are connected to
+// the "scope" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *AssetQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScope = query
+	return _q
+}
+
+// WithAccessModel tells the query-builder to eager-load the nodes that are connected to
+// the "access_model" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithAccessModel(opts ...func(*CustomTypeEnumQuery)) *AssetQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAccessModel = query
+	return _q
+}
+
+// WithEncryptionStatus tells the query-builder to eager-load the nodes that are connected to
+// the "encryption_status" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithEncryptionStatus(opts ...func(*CustomTypeEnumQuery)) *AssetQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEncryptionStatus = query
+	return _q
+}
+
+// WithSecurityTier tells the query-builder to eager-load the nodes that are connected to
+// the "security_tier" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithSecurityTier(opts ...func(*CustomTypeEnumQuery)) *AssetQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSecurityTier = query
+	return _q
+}
+
+// WithCriticality tells the query-builder to eager-load the nodes that are connected to
+// the "criticality" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithCriticality(opts ...func(*CustomTypeEnumQuery)) *AssetQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCriticality = query
+	return _q
+}
+
 // WithScans tells the query-builder to eager-load the nodes that are connected to
 // the "scans" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *AssetQuery) WithScans(opts ...func(*ScanQuery)) *AssetQuery {
@@ -531,6 +1082,39 @@ func (_q *AssetQuery) WithEntities(opts ...func(*EntityQuery)) *AssetQuery {
 	return _q
 }
 
+// WithPlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithPlatforms(opts ...func(*PlatformQuery)) *AssetQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatforms = query
+	return _q
+}
+
+// WithOutOfScopePlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "out_of_scope_platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithOutOfScopePlatforms(opts ...func(*PlatformQuery)) *AssetQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withOutOfScopePlatforms = query
+	return _q
+}
+
+// WithIdentityHolders tells the query-builder to eager-load the nodes that are connected to
+// the "identity_holders" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithIdentityHolders(opts ...func(*IdentityHolderQuery)) *AssetQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIdentityHolders = query
+	return _q
+}
+
 // WithControls tells the query-builder to eager-load the nodes that are connected to
 // the "controls" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *AssetQuery) WithControls(opts ...func(*ControlQuery)) *AssetQuery {
@@ -539,6 +1123,39 @@ func (_q *AssetQuery) WithControls(opts ...func(*ControlQuery)) *AssetQuery {
 		opt(query)
 	}
 	_q.withControls = query
+	return _q
+}
+
+// WithSourcePlatform tells the query-builder to eager-load the nodes that are connected to
+// the "source_platform" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithSourcePlatform(opts ...func(*PlatformQuery)) *AssetQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSourcePlatform = query
+	return _q
+}
+
+// WithConnectedAssets tells the query-builder to eager-load the nodes that are connected to
+// the "connected_assets" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithConnectedAssets(opts ...func(*AssetQuery)) *AssetQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withConnectedAssets = query
+	return _q
+}
+
+// WithConnectedFrom tells the query-builder to eager-load the nodes that are connected to
+// the "connected_from" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithConnectedFrom(opts ...func(*AssetQuery)) *AssetQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withConnectedFrom = query
 	return _q
 }
 
@@ -627,14 +1244,30 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 		nodes       = []*Asset{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [23]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
+			_q.withInternalOwnerUser != nil,
+			_q.withInternalOwnerGroup != nil,
+			_q.withAssetSubtype != nil,
+			_q.withAssetDataClassification != nil,
+			_q.withEnvironment != nil,
+			_q.withScope != nil,
+			_q.withAccessModel != nil,
+			_q.withEncryptionStatus != nil,
+			_q.withSecurityTier != nil,
+			_q.withCriticality != nil,
 			_q.withScans != nil,
 			_q.withEntities != nil,
+			_q.withPlatforms != nil,
+			_q.withOutOfScopePlatforms != nil,
+			_q.withIdentityHolders != nil,
 			_q.withControls != nil,
+			_q.withSourcePlatform != nil,
+			_q.withConnectedAssets != nil,
+			_q.withConnectedFrom != nil,
 		}
 	)
 	if withFKs {
@@ -690,6 +1323,66 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 			return nil, err
 		}
 	}
+	if query := _q.withInternalOwnerUser; query != nil {
+		if err := _q.loadInternalOwnerUser(ctx, query, nodes, nil,
+			func(n *Asset, e *User) { n.Edges.InternalOwnerUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalOwnerGroup; query != nil {
+		if err := _q.loadInternalOwnerGroup(ctx, query, nodes, nil,
+			func(n *Asset, e *Group) { n.Edges.InternalOwnerGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssetSubtype; query != nil {
+		if err := _q.loadAssetSubtype(ctx, query, nodes, nil,
+			func(n *Asset, e *CustomTypeEnum) { n.Edges.AssetSubtype = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssetDataClassification; query != nil {
+		if err := _q.loadAssetDataClassification(ctx, query, nodes, nil,
+			func(n *Asset, e *CustomTypeEnum) { n.Edges.AssetDataClassification = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEnvironment; query != nil {
+		if err := _q.loadEnvironment(ctx, query, nodes, nil,
+			func(n *Asset, e *CustomTypeEnum) { n.Edges.Environment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScope; query != nil {
+		if err := _q.loadScope(ctx, query, nodes, nil,
+			func(n *Asset, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAccessModel; query != nil {
+		if err := _q.loadAccessModel(ctx, query, nodes, nil,
+			func(n *Asset, e *CustomTypeEnum) { n.Edges.AccessModel = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEncryptionStatus; query != nil {
+		if err := _q.loadEncryptionStatus(ctx, query, nodes, nil,
+			func(n *Asset, e *CustomTypeEnum) { n.Edges.EncryptionStatus = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSecurityTier; query != nil {
+		if err := _q.loadSecurityTier(ctx, query, nodes, nil,
+			func(n *Asset, e *CustomTypeEnum) { n.Edges.SecurityTier = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCriticality; query != nil {
+		if err := _q.loadCriticality(ctx, query, nodes, nil,
+			func(n *Asset, e *CustomTypeEnum) { n.Edges.Criticality = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withScans; query != nil {
 		if err := _q.loadScans(ctx, query, nodes,
 			func(n *Asset) { n.Edges.Scans = []*Scan{} },
@@ -704,10 +1397,51 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 			return nil, err
 		}
 	}
+	if query := _q.withPlatforms; query != nil {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Asset) { n.Edges.Platforms = []*Platform{} },
+			func(n *Asset, e *Platform) { n.Edges.Platforms = append(n.Edges.Platforms, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withOutOfScopePlatforms; query != nil {
+		if err := _q.loadOutOfScopePlatforms(ctx, query, nodes,
+			func(n *Asset) { n.Edges.OutOfScopePlatforms = []*Platform{} },
+			func(n *Asset, e *Platform) { n.Edges.OutOfScopePlatforms = append(n.Edges.OutOfScopePlatforms, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIdentityHolders; query != nil {
+		if err := _q.loadIdentityHolders(ctx, query, nodes,
+			func(n *Asset) { n.Edges.IdentityHolders = []*IdentityHolder{} },
+			func(n *Asset, e *IdentityHolder) { n.Edges.IdentityHolders = append(n.Edges.IdentityHolders, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withControls; query != nil {
 		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Asset) { n.Edges.Controls = []*Control{} },
 			func(n *Asset, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSourcePlatform; query != nil {
+		if err := _q.loadSourcePlatform(ctx, query, nodes, nil,
+			func(n *Asset, e *Platform) { n.Edges.SourcePlatform = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withConnectedAssets; query != nil {
+		if err := _q.loadConnectedAssets(ctx, query, nodes,
+			func(n *Asset) { n.Edges.ConnectedAssets = []*Asset{} },
+			func(n *Asset, e *Asset) { n.Edges.ConnectedAssets = append(n.Edges.ConnectedAssets, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withConnectedFrom; query != nil {
+		if err := _q.loadConnectedFrom(ctx, query, nodes,
+			func(n *Asset) { n.Edges.ConnectedFrom = []*Asset{} },
+			func(n *Asset, e *Asset) { n.Edges.ConnectedFrom = append(n.Edges.ConnectedFrom, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -746,10 +1480,45 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedPlatforms {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Asset) { n.appendNamedPlatforms(name) },
+			func(n *Asset, e *Platform) { n.appendNamedPlatforms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedOutOfScopePlatforms {
+		if err := _q.loadOutOfScopePlatforms(ctx, query, nodes,
+			func(n *Asset) { n.appendNamedOutOfScopePlatforms(name) },
+			func(n *Asset, e *Platform) { n.appendNamedOutOfScopePlatforms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIdentityHolders {
+		if err := _q.loadIdentityHolders(ctx, query, nodes,
+			func(n *Asset) { n.appendNamedIdentityHolders(name) },
+			func(n *Asset, e *IdentityHolder) { n.appendNamedIdentityHolders(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedControls {
 		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Asset) { n.appendNamedControls(name) },
 			func(n *Asset, e *Control) { n.appendNamedControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedConnectedAssets {
+		if err := _q.loadConnectedAssets(ctx, query, nodes,
+			func(n *Asset) { n.appendNamedConnectedAssets(name) },
+			func(n *Asset, e *Asset) { n.appendNamedConnectedAssets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedConnectedFrom {
+		if err := _q.loadConnectedFrom(ctx, query, nodes,
+			func(n *Asset) { n.appendNamedConnectedFrom(name) },
+			func(n *Asset, e *Asset) { n.appendNamedConnectedFrom(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -883,6 +1652,296 @@ func (_q *AssetQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes 
 	}
 	return nil
 }
+func (_q *AssetQuery) loadInternalOwnerUser(ctx context.Context, query *UserQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Asset)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadInternalOwnerGroup(ctx context.Context, query *GroupQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Asset)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadAssetSubtype(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Asset)
+	for i := range nodes {
+		fk := nodes[i].AssetSubtypeID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "asset_subtype_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadAssetDataClassification(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Asset)
+	for i := range nodes {
+		fk := nodes[i].AssetDataClassificationID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "asset_data_classification_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadEnvironment(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Asset)
+	for i := range nodes {
+		fk := nodes[i].EnvironmentID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "environment_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Asset)
+	for i := range nodes {
+		fk := nodes[i].ScopeID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadAccessModel(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Asset)
+	for i := range nodes {
+		fk := nodes[i].AccessModelID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "access_model_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadEncryptionStatus(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Asset)
+	for i := range nodes {
+		fk := nodes[i].EncryptionStatusID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "encryption_status_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadSecurityTier(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Asset)
+	for i := range nodes {
+		fk := nodes[i].SecurityTierID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "security_tier_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadCriticality(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Asset)
+	for i := range nodes {
+		fk := nodes[i].CriticalityID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "criticality_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *AssetQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Scan)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Asset)
@@ -1007,6 +2066,192 @@ func (_q *AssetQuery) loadEntities(ctx context.Context, query *EntityQuery, node
 	}
 	return nil
 }
+func (_q *AssetQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Asset)
+	nids := make(map[string]map[*Asset]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(asset.PlatformsTable)
+		joinT.Schema(_q.schemaConfig.PlatformAssets)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(asset.PlatformsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(asset.PlatformsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(asset.PlatformsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Asset]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "platforms" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadOutOfScopePlatforms(ctx context.Context, query *PlatformQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Asset)
+	nids := make(map[string]map[*Asset]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(asset.OutOfScopePlatformsTable)
+		joinT.Schema(_q.schemaConfig.PlatformOutOfScopeAssets)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(asset.OutOfScopePlatformsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(asset.OutOfScopePlatformsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(asset.OutOfScopePlatformsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Asset]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "out_of_scope_platforms" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadIdentityHolders(ctx context.Context, query *IdentityHolderQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *IdentityHolder)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Asset)
+	nids := make(map[string]map[*Asset]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(asset.IdentityHoldersTable)
+		joinT.Schema(_q.schemaConfig.IdentityHolderAssets)
+		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(asset.IdentityHoldersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(asset.IdentityHoldersPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(asset.IdentityHoldersPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Asset]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*IdentityHolder](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "identity_holders" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *AssetQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Control)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Asset)
@@ -1069,6 +2314,159 @@ func (_q *AssetQuery) loadControls(ctx context.Context, query *ControlQuery, nod
 	}
 	return nil
 }
+func (_q *AssetQuery) loadSourcePlatform(ctx context.Context, query *PlatformQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Platform)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Asset)
+	for i := range nodes {
+		fk := nodes[i].SourcePlatformID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(platform.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "source_platform_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadConnectedAssets(ctx context.Context, query *AssetQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Asset)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Asset)
+	nids := make(map[string]map[*Asset]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(asset.ConnectedAssetsTable)
+		joinT.Schema(_q.schemaConfig.AssetConnectedAssets)
+		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(asset.ConnectedAssetsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(asset.ConnectedAssetsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(asset.ConnectedAssetsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Asset]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Asset](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "connected_assets" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadConnectedFrom(ctx context.Context, query *AssetQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Asset)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Asset)
+	nids := make(map[string]map[*Asset]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(asset.ConnectedFromTable)
+		joinT.Schema(_q.schemaConfig.AssetConnectedAssets)
+		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(asset.ConnectedFromPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(asset.ConnectedFromPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(asset.ConnectedFromPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Asset]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Asset](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "connected_from" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (_q *AssetQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1102,6 +2500,39 @@ func (_q *AssetQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(asset.FieldOwnerID)
+		}
+		if _q.withInternalOwnerUser != nil {
+			_spec.Node.AddColumnOnce(asset.FieldInternalOwnerUserID)
+		}
+		if _q.withInternalOwnerGroup != nil {
+			_spec.Node.AddColumnOnce(asset.FieldInternalOwnerGroupID)
+		}
+		if _q.withAssetSubtype != nil {
+			_spec.Node.AddColumnOnce(asset.FieldAssetSubtypeID)
+		}
+		if _q.withAssetDataClassification != nil {
+			_spec.Node.AddColumnOnce(asset.FieldAssetDataClassificationID)
+		}
+		if _q.withEnvironment != nil {
+			_spec.Node.AddColumnOnce(asset.FieldEnvironmentID)
+		}
+		if _q.withScope != nil {
+			_spec.Node.AddColumnOnce(asset.FieldScopeID)
+		}
+		if _q.withAccessModel != nil {
+			_spec.Node.AddColumnOnce(asset.FieldAccessModelID)
+		}
+		if _q.withEncryptionStatus != nil {
+			_spec.Node.AddColumnOnce(asset.FieldEncryptionStatusID)
+		}
+		if _q.withSecurityTier != nil {
+			_spec.Node.AddColumnOnce(asset.FieldSecurityTierID)
+		}
+		if _q.withCriticality != nil {
+			_spec.Node.AddColumnOnce(asset.FieldCriticalityID)
+		}
+		if _q.withSourcePlatform != nil {
+			_spec.Node.AddColumnOnce(asset.FieldSourcePlatformID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
@@ -1241,6 +2672,48 @@ func (_q *AssetQuery) WithNamedEntities(name string, opts ...func(*EntityQuery))
 	return _q
 }
 
+// WithNamedPlatforms tells the query-builder to eager-load the nodes that are connected to the "platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQuery)) *AssetQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatforms == nil {
+		_q.withNamedPlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatforms[name] = query
+	return _q
+}
+
+// WithNamedOutOfScopePlatforms tells the query-builder to eager-load the nodes that are connected to the "out_of_scope_platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithNamedOutOfScopePlatforms(name string, opts ...func(*PlatformQuery)) *AssetQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedOutOfScopePlatforms == nil {
+		_q.withNamedOutOfScopePlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedOutOfScopePlatforms[name] = query
+	return _q
+}
+
+// WithNamedIdentityHolders tells the query-builder to eager-load the nodes that are connected to the "identity_holders"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithNamedIdentityHolders(name string, opts ...func(*IdentityHolderQuery)) *AssetQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIdentityHolders == nil {
+		_q.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery)
+	}
+	_q.withNamedIdentityHolders[name] = query
+	return _q
+}
+
 // WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *AssetQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *AssetQuery {
@@ -1252,6 +2725,34 @@ func (_q *AssetQuery) WithNamedControls(name string, opts ...func(*ControlQuery)
 		_q.withNamedControls = make(map[string]*ControlQuery)
 	}
 	_q.withNamedControls[name] = query
+	return _q
+}
+
+// WithNamedConnectedAssets tells the query-builder to eager-load the nodes that are connected to the "connected_assets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithNamedConnectedAssets(name string, opts ...func(*AssetQuery)) *AssetQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedConnectedAssets == nil {
+		_q.withNamedConnectedAssets = make(map[string]*AssetQuery)
+	}
+	_q.withNamedConnectedAssets[name] = query
+	return _q
+}
+
+// WithNamedConnectedFrom tells the query-builder to eager-load the nodes that are connected to the "connected_from"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithNamedConnectedFrom(name string, opts ...func(*AssetQuery)) *AssetQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedConnectedFrom == nil {
+		_q.withNamedConnectedFrom = make(map[string]*AssetQuery)
+	}
+	_q.withNamedConnectedFrom[name] = query
 	return _q
 }
 

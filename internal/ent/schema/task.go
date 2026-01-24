@@ -126,10 +126,12 @@ func (t Task) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Task](t,
 				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{},
-					Program{}, Risk{}, Asset{}, Scan{}, ActionPlan{}, Task{}),
+					Program{}, Risk{}, Asset{}, Platform{}, IdentityHolder{}, Scan{}, ActionPlan{}, Task{}),
 				withOrganizationOwner(true),
 			),
 			newCustomEnumMixin(t),
+			newCustomEnumMixin(t, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(t, withEnumFieldName("scope"), withGlobalEnum()),
 		},
 	}.getMixins(t)
 }
@@ -220,6 +222,27 @@ func (t Task) Edges() []ent.Edge {
 			edgeSchema: Risk{},
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Risk{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: Platform{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Platform{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: Scan{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Scan{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: IdentityHolder{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(IdentityHolder{}.Name()),
 			},
 		}),
 		edgeFromWithPagination(&edgeDefinition{

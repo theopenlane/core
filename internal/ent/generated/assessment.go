@@ -67,18 +67,27 @@ type AssessmentEdges struct {
 	Viewers []*Group `json:"viewers,omitempty"`
 	// Template holds the value of the template edge.
 	Template *Template `json:"template,omitempty"`
+	// Platforms holds the value of the platforms edge.
+	Platforms []*Platform `json:"platforms,omitempty"`
+	// IdentityHolders holds the value of the identity_holders edge.
+	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
 	// AssessmentResponses holds the value of the assessment_responses edge.
 	AssessmentResponses []*AssessmentResponse `json:"assessment_responses,omitempty"`
+	// Campaigns holds the value of the campaigns edge.
+	Campaigns []*Campaign `json:"campaigns,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [9]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
 	namedViewers             map[string][]*Group
+	namedPlatforms           map[string][]*Platform
+	namedIdentityHolders     map[string][]*IdentityHolder
 	namedAssessmentResponses map[string][]*AssessmentResponse
+	namedCampaigns           map[string][]*Campaign
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -130,13 +139,40 @@ func (e AssessmentEdges) TemplateOrErr() (*Template, error) {
 	return nil, &NotLoadedError{edge: "template"}
 }
 
+// PlatformsOrErr returns the Platforms value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssessmentEdges) PlatformsOrErr() ([]*Platform, error) {
+	if e.loadedTypes[5] {
+		return e.Platforms, nil
+	}
+	return nil, &NotLoadedError{edge: "platforms"}
+}
+
+// IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssessmentEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
+	if e.loadedTypes[6] {
+		return e.IdentityHolders, nil
+	}
+	return nil, &NotLoadedError{edge: "identity_holders"}
+}
+
 // AssessmentResponsesOrErr returns the AssessmentResponses value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssessmentEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.AssessmentResponses, nil
 	}
 	return nil, &NotLoadedError{edge: "assessment_responses"}
+}
+
+// CampaignsOrErr returns the Campaigns value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssessmentEdges) CampaignsOrErr() ([]*Campaign, error) {
+	if e.loadedTypes[8] {
+		return e.Campaigns, nil
+	}
+	return nil, &NotLoadedError{edge: "campaigns"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -301,9 +337,24 @@ func (_m *Assessment) QueryTemplate() *TemplateQuery {
 	return NewAssessmentClient(_m.config).QueryTemplate(_m)
 }
 
+// QueryPlatforms queries the "platforms" edge of the Assessment entity.
+func (_m *Assessment) QueryPlatforms() *PlatformQuery {
+	return NewAssessmentClient(_m.config).QueryPlatforms(_m)
+}
+
+// QueryIdentityHolders queries the "identity_holders" edge of the Assessment entity.
+func (_m *Assessment) QueryIdentityHolders() *IdentityHolderQuery {
+	return NewAssessmentClient(_m.config).QueryIdentityHolders(_m)
+}
+
 // QueryAssessmentResponses queries the "assessment_responses" edge of the Assessment entity.
 func (_m *Assessment) QueryAssessmentResponses() *AssessmentResponseQuery {
 	return NewAssessmentClient(_m.config).QueryAssessmentResponses(_m)
+}
+
+// QueryCampaigns queries the "campaigns" edge of the Assessment entity.
+func (_m *Assessment) QueryCampaigns() *CampaignQuery {
+	return NewAssessmentClient(_m.config).QueryCampaigns(_m)
 }
 
 // Update returns a builder for updating this Assessment.
@@ -446,6 +497,54 @@ func (_m *Assessment) appendNamedViewers(name string, edges ...*Group) {
 	}
 }
 
+// NamedPlatforms returns the Platforms named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Assessment) NamedPlatforms(name string) ([]*Platform, error) {
+	if _m.Edges.namedPlatforms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedPlatforms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Assessment) appendNamedPlatforms(name string, edges ...*Platform) {
+	if _m.Edges.namedPlatforms == nil {
+		_m.Edges.namedPlatforms = make(map[string][]*Platform)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedPlatforms[name] = []*Platform{}
+	} else {
+		_m.Edges.namedPlatforms[name] = append(_m.Edges.namedPlatforms[name], edges...)
+	}
+}
+
+// NamedIdentityHolders returns the IdentityHolders named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Assessment) NamedIdentityHolders(name string) ([]*IdentityHolder, error) {
+	if _m.Edges.namedIdentityHolders == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIdentityHolders[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Assessment) appendNamedIdentityHolders(name string, edges ...*IdentityHolder) {
+	if _m.Edges.namedIdentityHolders == nil {
+		_m.Edges.namedIdentityHolders = make(map[string][]*IdentityHolder)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIdentityHolders[name] = []*IdentityHolder{}
+	} else {
+		_m.Edges.namedIdentityHolders[name] = append(_m.Edges.namedIdentityHolders[name], edges...)
+	}
+}
+
 // NamedAssessmentResponses returns the AssessmentResponses named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (_m *Assessment) NamedAssessmentResponses(name string) ([]*AssessmentResponse, error) {
@@ -467,6 +566,30 @@ func (_m *Assessment) appendNamedAssessmentResponses(name string, edges ...*Asse
 		_m.Edges.namedAssessmentResponses[name] = []*AssessmentResponse{}
 	} else {
 		_m.Edges.namedAssessmentResponses[name] = append(_m.Edges.namedAssessmentResponses[name], edges...)
+	}
+}
+
+// NamedCampaigns returns the Campaigns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Assessment) NamedCampaigns(name string) ([]*Campaign, error) {
+	if _m.Edges.namedCampaigns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedCampaigns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Assessment) appendNamedCampaigns(name string, edges ...*Campaign) {
+	if _m.Edges.namedCampaigns == nil {
+		_m.Edges.namedCampaigns = make(map[string][]*Campaign)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedCampaigns[name] = []*Campaign{}
+	} else {
+		_m.Edges.namedCampaigns[name] = append(_m.Edges.namedCampaigns[name], edges...)
 	}
 }
 
