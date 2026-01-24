@@ -21,7 +21,7 @@ require (
 	github.com/99designs/gqlgen v0.17.86
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/Yamashou/gqlgenc v0.33.0
-	github.com/alicebob/miniredis/v2 v2.36.0
+	github.com/alicebob/miniredis/v2 v2.36.1
 	github.com/alitto/pond/v2 v2.6.0
 	github.com/aws/aws-sdk-go-v2 v1.41.1
 	github.com/aws/aws-sdk-go-v2/config v1.32.7
@@ -56,7 +56,7 @@ require (
 	github.com/knadh/koanf/providers/env/v2 v2.0.0
 	github.com/knadh/koanf/providers/file v1.2.1
 	github.com/knadh/koanf/providers/posflag v1.0.1
-	github.com/knadh/koanf/v2 v2.3.0
+	github.com/knadh/koanf/v2 v2.3.1
 	github.com/labstack/echo-contrib v0.17.4
 	github.com/labstack/echo/v4 v4.15.0
 	github.com/labstack/gommon v0.4.2
@@ -68,7 +68,7 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.27
 	github.com/nyaruka/phonenumbers v1.6.8
 	github.com/oklog/ulid/v2 v2.1.1
-	github.com/openfga/go-sdk v0.7.3
+	github.com/openfga/go-sdk v0.7.4
 	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
 	github.com/pquerna/otp v1.5.0
@@ -85,17 +85,17 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v84 v84.1.0
 	github.com/theopenlane/beacon v0.3.0
-	github.com/theopenlane/core/common v1.0.3
+	github.com/theopenlane/core/common v1.0.4
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/emailtemplates v0.3.1
 	github.com/theopenlane/entx v0.20.5
-	github.com/theopenlane/go-client v0.6.0
+	github.com/theopenlane/go-client v0.6.2
 	github.com/theopenlane/gqlgen-plugins v0.13.3
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.23.4
 	github.com/theopenlane/newman v0.2.1
-	github.com/theopenlane/riverboat v0.8.4
+	github.com/theopenlane/riverboat v0.8.5
 	github.com/theopenlane/utils v0.6.2
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.6.2

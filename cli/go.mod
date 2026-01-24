@@ -11,15 +11,15 @@ require (
 	github.com/knadh/koanf/providers/env/v2 v2.0.0
 	github.com/knadh/koanf/providers/file v1.2.1
 	github.com/knadh/koanf/providers/posflag v1.0.1
-	github.com/knadh/koanf/v2 v2.3.0
+	github.com/knadh/koanf/v2 v2.3.1
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.2
 	github.com/theopenlane/core v1.3.9
-	github.com/theopenlane/core/common v1.0.3
-	github.com/theopenlane/go-client v0.6.0
+	github.com/theopenlane/core/common v1.0.4
+	github.com/theopenlane/go-client v0.6.2
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.23.4
 	github.com/theopenlane/utils v0.6.2
