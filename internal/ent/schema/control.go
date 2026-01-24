@@ -224,6 +224,9 @@ func (Control) Modules() []models.OrgModule {
 func (c Control) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.Exportable{},
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+			entx.WithSystemOwned(),
+		),
 	}
 }

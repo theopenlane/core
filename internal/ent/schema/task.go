@@ -288,7 +288,9 @@ func (t Task) Edges() []ent.Edge {
 func (Task) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.Exportable{},
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+		),
 	}
 }
 

@@ -159,6 +159,9 @@ func (t Subprocessor) Interceptors() []ent.Interceptor {
 func (Subprocessor) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.Exportable{},
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+			entx.WithSystemOwned(),
+		),
 	}
 }
