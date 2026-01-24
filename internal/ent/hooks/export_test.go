@@ -43,6 +43,13 @@ func TestGetFinalFilters(t *testing.T) {
 			ownerID:         "owner-123",
 			expectedFilters: map[string]any{"foo": "bar", "ownerID": "owner-123"},
 		},
+		{
+			name:            "No filters provided, should add ownerID and systemOwned",
+			exportType:      enums.ExportTypeRemediation,
+			filters:         "",
+			ownerID:         "owner-123",
+			expectedFilters: map[string]any{"ownerID": "owner-123", "systemOwned": false},
+		},
 	}
 
 	for _, tc := range cases {
