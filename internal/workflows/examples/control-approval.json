@@ -1,0 +1,41 @@
+{
+  "$schema": "https://raw.githubusercontent.com/theopenlane/core/main/jsonschema/workflow-definition.schema.json",
+  "name": "Control Change Approval",
+  "description": "Require approval before control changes take effect",
+  "schemaType": "Control",
+  "workflowKind": "APPROVAL",
+  "version": "1.0",
+  "triggers": [
+    {
+      "operation": "UPDATE",
+      "objectType": "Control",
+      "fields": ["status", "category"],
+      "description": "Triggered when control status or category changes"
+    }
+  ],
+  "conditions": [
+    {
+      "expression": "'status' in changed_fields || 'category' in changed_fields",
+      "description": "Only when status or category field changes"
+    }
+  ],
+  "actions": [
+    {
+      "key": "approval",
+      "type": "REQUEST_APPROVAL",
+      "description": "Request approval from compliance team",
+      "params": {
+        "targets": [
+          {"type": "GROUP", "id": "<REPLACE_WITH_GROUP_ID>"}
+        ],
+        "required": true,
+        "label": "Control change approval",
+        "fields": ["status", "category"]
+      }
+    }
+  ],
+  "metadata": {
+    "author": "Openlane",
+    "category": "compliance"
+  }
+}

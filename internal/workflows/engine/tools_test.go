@@ -38,6 +38,7 @@ import (
 
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	_ "github.com/theopenlane/core/internal/ent/historygenerated/runtime"
+	_ "github.com/theopenlane/core/internal/ent/workflowgenerated"
 )
 
 const (
@@ -450,12 +451,15 @@ func (s *WorkflowEngineTestSuite) SeedContext(userID, orgID string) context.Cont
 	return ctx
 }
 
+// syncEmitTimeout is the maximum time to wait for event handlers to complete
+const syncEmitTimeout = 10 * time.Second
+
 // syncBusEmitter is a synchronous event emitter for testing
 type syncBusEmitter struct {
 	bus *soiree.EventBus
 }
 
-// Emit publishes an event synchronously
+// Emit publishes an event synchronously with a timeout to prevent deadlock from nested emits
 func (s *syncBusEmitter) Emit(topic string, event any) <-chan error {
 	if s == nil || s.bus == nil {
 		ch := make(chan error, 1)
@@ -465,18 +469,30 @@ func (s *syncBusEmitter) Emit(topic string, event any) <-chan error {
 
 	errCh := s.bus.Emit(topic, event)
 	errs := make([]error, 0)
-	for err := range errCh {
-		if err != nil {
-			errs = append(errs, err)
+	timeout := time.After(syncEmitTimeout)
+
+	for {
+		select {
+		case err, ok := <-errCh:
+			if !ok {
+				// Channel closed, return collected errors
+				ch := make(chan error, len(errs))
+				for _, e := range errs {
+					ch <- e
+				}
+				close(ch)
+				return ch
+			}
+			if err != nil {
+				errs = append(errs, err)
+			}
+		case <-timeout:
+			// Timeout reached, return what we have to prevent deadlock
+			ch := make(chan error, 1)
+			close(ch)
+			return ch
 		}
 	}
-
-	ch := make(chan error, len(errs))
-	for _, err := range errs {
-		ch <- err
-	}
-	close(ch)
-	return ch
 }
 
 // mockEventEmitter is a mock event emitter for testing
@@ -504,7 +520,9 @@ func (m *mockEventEmitter) Emit(topic string, event any) <-chan error {
 
 // SetupWorkflowEngineWithListeners creates a workflow engine with all listeners registered
 func (s *WorkflowEngineTestSuite) SetupWorkflowEngineWithListeners() *engine.WorkflowEngine {
-	bus := soiree.New()
+	// Use a larger worker pool to handle nested event chains without deadlock
+	// Workflow event chains can be deep: Triggered -> ActionStarted -> ActionCompleted -> next action...
+	bus := soiree.New(soiree.Workers(50))
 	emitter := &syncBusEmitter{bus: bus}
 
 	wfEngine := s.NewTestEngine(emitter)

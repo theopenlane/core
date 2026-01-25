@@ -164,7 +164,7 @@ func (e *WorkflowEngine) TriggerExistingInstance(ctx context.Context, instance *
 	return nil
 }
 
-// guardTrigger enforces cooldown and active-instance checks for a trigger attempt
+// guardTrigger enforces active-instance checks for a trigger attempt
 func (e *WorkflowEngine) guardTrigger(ctx context.Context, def *generated.WorkflowDefinition, obj *workflows.Object, domain *workflows.DomainChanges) error {
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
@@ -298,13 +298,16 @@ func (e *WorkflowEngine) ProcessAction(ctx context.Context, instance *generated.
 		return err
 	}
 
+	// Use allow context for internal workflow operations
+	allowCtx := workflows.AllowContext(ctx)
+
 	objRef, err := e.client.WorkflowObjectRef.
 		Query().
 		Where(
 			workflowobjectref.WorkflowInstanceIDEQ(instance.ID),
 			workflowobjectref.OwnerIDEQ(orgID),
 		).
-		First(ctx)
+		First(allowCtx)
 
 	if err != nil {
 		return fmt.Errorf("failed to load object reference: %w", err)

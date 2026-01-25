@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // WorkflowInstance tracks execution of a workflow definition for a specific object
@@ -219,7 +220,7 @@ func (WorkflowInstance) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowInstance](WorkflowInstance{},
 				withParents(Control{}, InternalPolicy{}, Evidence{}, Subcontrol{}, ActionPlan{}, Procedure{}, Campaign{}, CampaignTarget{}, IdentityHolder{}, Platform{}),
-				withOrganizationOwner(true),
+				withOrganizationOwnerServiceOnly(true),
 			),
 		},
 	}.getMixins(WorkflowInstance{})
@@ -242,6 +243,7 @@ func (WorkflowInstance) Annotations() []schema.Annotation {
 func (WorkflowInstance) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.AllowIfInternalRequest(),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.WorkflowInstanceMutation](),
 		),

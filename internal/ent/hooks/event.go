@@ -234,6 +234,8 @@ func RegisterListeners(e *Eventer) error {
 		total += len(entries)
 	}
 
+	total += len(e.bindings)
+
 	if total == 0 {
 		return nil
 	}
@@ -242,6 +244,8 @@ func RegisterListeners(e *Eventer) error {
 	for _, entries := range e.listeners {
 		bindings = append(bindings, entries...)
 	}
+
+	bindings = append(bindings, e.bindings...)
 
 	if _, err := e.Emitter.RegisterListeners(bindings...); err != nil {
 		log.Error().Err(err).Msg("failed to register listeners")

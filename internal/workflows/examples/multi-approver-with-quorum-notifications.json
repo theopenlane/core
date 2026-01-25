@@ -1,0 +1,102 @@
+{
+  "$schema": "https://raw.githubusercontent.com/theopenlane/core/main/jsonschema/workflow-definition.schema.json",
+  "name": "Multi-Approver Review with Quorum Notifications",
+  "description": "Requires multiple approvers with notifications at each milestone",
+  "schemaType": "Control",
+  "workflowKind": "APPROVAL",
+  "version": "1.0.0",
+  "triggers": [
+    {
+      "operation": "UPDATE",
+      "objectType": "Control",
+      "fields": ["status", "category"],
+      "expression": "'status' in changed_fields || 'category' in changed_fields"
+    }
+  ],
+  "actions": [
+    {
+      "key": "team_review",
+      "type": "REQUEST_APPROVAL",
+      "description": "Request approval from control owner and responsible party (quorum 2)",
+      "params": {
+        "targets": [
+          {
+            "type": "RESOLVER",
+            "resolver_key": "CONTROL_OWNER"
+          },
+          {
+            "type": "RESOLVER",
+            "resolver_key": "RESPONSIBLE_PARTY"
+          }
+        ],
+        "required": true,
+        "required_count": 2,
+        "label": "Team Review",
+        "fields": ["status", "category"]
+      }
+    },
+    {
+      "key": "notify_first_approval",
+      "type": "NOTIFY",
+      "description": "Notify when the first approval is received",
+      "when": "assignments.by_action[\"team_review\"].approved == 1 && assignments.by_action[\"team_review\"].pending > 0",
+      "params": {
+        "targets": [
+          {
+            "type": "RESOLVER",
+            "resolver_key": "OBJECT_CREATOR"
+          }
+        ],
+        "title": "First Approval Received",
+        "body": "A control change request has received 1 approval. Waiting for 1 more approval to reach quorum.",
+        "channels": ["IN_APP"]
+      }
+    },
+    {
+      "key": "notify_quorum_reached",
+      "type": "NOTIFY",
+      "description": "Notify when quorum is reached and approval is complete",
+      "when": "assignments.by_action[\"team_review\"].approved >= 2",
+      "params": {
+        "targets": [
+          {
+            "type": "RESOLVER",
+            "resolver_key": "OBJECT_CREATOR"
+          },
+          {
+            "type": "RESOLVER",
+            "resolver_key": "CONTROL_OWNER"
+          }
+        ],
+        "title": "Quorum Reached - Changes Approved",
+        "body": "The control change request for {{object_id}} has been approved with {{assignments.by_action[\"team_review\"].approved}} approvals.",
+        "channels": ["IN_APP"],
+        "data": {
+          "approval_count": "{{assignments.by_action[\"team_review\"].approved}}",
+          "instance_id": "{{instance_id}}"
+        }
+      }
+    },
+    {
+      "key": "notify_rejection",
+      "type": "NOTIFY",
+      "description": "Notify all stakeholders on rejection",
+      "when": "assignments.by_action[\"team_review\"].rejected > 0",
+      "params": {
+        "targets": [
+          {
+            "type": "RESOLVER",
+            "resolver_key": "OBJECT_CREATOR"
+          },
+          {
+            "type": "RESOLVER",
+            "resolver_key": "CONTROL_OWNER"
+          }
+        ],
+        "title": "Control Change Request Rejected",
+        "body": "The control change request for {{object_id}} has been rejected. Please review and resubmit if needed.",
+        "channels": ["IN_APP"]
+      }
+    }
+  ]
+}

@@ -19,6 +19,9 @@ const eventerPoolWorkers = 100
 type Eventer struct {
 	Emitter   *soiree.EventBus
 	listeners map[string][]soiree.ListenerBinding
+	bindings  []soiree.ListenerBinding
+	// workflowListenersEnabled controls registration of workflow listeners/mutation handlers
+	workflowListenersEnabled bool
 }
 
 // EventerOpts configures an Eventer instance via the functional-options pattern
@@ -27,7 +30,10 @@ type EventerOpts func(*Eventer)
 // NewEventer constructs an Eventer and applies the provided option set; callers typically use this
 // when they have an existing event bus that needs to be reused
 func NewEventer(opts ...EventerOpts) *Eventer {
-	e := &Eventer{listeners: make(map[string][]soiree.ListenerBinding)}
+	e := &Eventer{
+		listeners:                make(map[string][]soiree.ListenerBinding),
+		workflowListenersEnabled: true,
+	}
 
 	for _, opt := range opts {
 		opt(e)
@@ -40,6 +46,13 @@ func NewEventer(opts ...EventerOpts) *Eventer {
 func WithEventerEmitter(emitter *soiree.EventBus) EventerOpts {
 	return func(e *Eventer) {
 		e.Emitter = emitter
+	}
+}
+
+// WithWorkflowListenersEnabled toggles workflow listener registration
+func WithWorkflowListenersEnabled(enabled bool) EventerOpts {
+	return func(e *Eventer) {
+		e.workflowListenersEnabled = enabled
 	}
 }
 
@@ -80,6 +93,15 @@ func (e *Eventer) AddMutationListener(entity string, handler MutationHandler) {
 	)
 
 	e.listeners[entity] = append(e.listeners[entity], bound)
+}
+
+// AddListenerBinding registers a non-mutation listener binding for later registration.
+func (e *Eventer) AddListenerBinding(binding soiree.ListenerBinding) {
+	if e == nil {
+		return
+	}
+
+	e.bindings = append(e.bindings, binding)
 }
 
 // Initialize configures the Eventer with an event bus bound to the provided client and registers
@@ -129,4 +151,8 @@ func registerDefaultMutationListeners(e *Eventer) {
 	notifications.RegisterListeners(func(entityType string, handler func(*soiree.EventContext, *events.MutationPayload) error) {
 		e.AddMutationListener(entityType, handler)
 	})
+
+	if e.workflowListenersEnabled {
+		RegisterWorkflowListeners(e)
+	}
 }

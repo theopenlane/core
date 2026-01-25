@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // WorkflowObjectRef is a through table linking workflow instances to workflow-addressable objects.
@@ -282,7 +283,7 @@ func (w WorkflowObjectRef) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowObjectRef](w,
 				withParents(WorkflowInstance{}, Control{}, InternalPolicy{}, Evidence{}, Subcontrol{}, ActionPlan{}, Procedure{}, Campaign{}, CampaignTarget{}, IdentityHolder{}, Platform{}),
-				withOrganizationOwner(true),
+				withOrganizationOwnerServiceOnly(true),
 			),
 		},
 	}.getMixins(w)
@@ -306,6 +307,7 @@ func (WorkflowObjectRef) Annotations() []schema.Annotation {
 func (WorkflowObjectRef) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.AllowIfInternalRequest(),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.WorkflowObjectRefMutation](),
 			entfga.CheckDeleteAccess[*generated.WorkflowObjectRefMutation](),

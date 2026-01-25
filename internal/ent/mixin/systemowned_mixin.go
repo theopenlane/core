@@ -2,6 +2,8 @@ package mixin
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
@@ -265,7 +267,14 @@ func queryForSystemOwned(ctx context.Context, m SystemOwnedMutation, ids []strin
 	}
 
 	table := strcase.SnakeCase(pluralize.NewClient().Plural(m.Type()))
-	query := "SELECT system_owned FROM " + table + " WHERE id in ($1)"
+
+	// Build placeholders for IN clause: $1, $2, $3, ...
+	placeholders := make([]string, len(ids))
+	for i := range ids {
+		placeholders[i] = fmt.Sprintf("$%d", i+1)
+	}
+
+	query := "SELECT system_owned FROM " + table + " WHERE id IN (" + strings.Join(placeholders, ", ") + ")"
 
 	var rows sql.Rows
 	if err := m.Client().Driver().Query(ctx, query, lo.ToAnySlice(ids), &rows); err != nil {

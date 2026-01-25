@@ -1,0 +1,44 @@
+{
+  "$schema": "https://raw.githubusercontent.com/theopenlane/core/main/jsonschema/workflow-definition.schema.json",
+  "name": "Control Slack Webhook Alert",
+  "description": "Send a Slack webhook when a control status is approved",
+  "schemaType": "Control",
+  "workflowKind": "NOTIFICATION",
+  "version": "1.0",
+  "triggers": [
+    {
+      "operation": "UPDATE",
+      "objectType": "Control",
+      "fields": ["status"],
+      "description": "Triggered when control status changes"
+    }
+  ],
+  "conditions": [
+    {
+      "expression": "'status' in changed_fields && object.status == \"APPROVED\"",
+      "description": "Only fire when status transitions to APPROVED"
+    }
+  ],
+  "actions": [
+    {
+      "key": "slack_webhook",
+      "type": "WEBHOOK",
+      "description": "Post a Slack message with control details",
+      "params": {
+        "url": "<REPLACE_WITH_SLACK_WEBHOOK_URL>",
+        "method": "POST",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "payload": {
+          "text": "Control status approved. Control details are included in the payload."
+        },
+        "timeout_ms": 5000
+      }
+    }
+  ],
+  "metadata": {
+    "author": "Openlane",
+    "category": "notifications"
+  }
+}

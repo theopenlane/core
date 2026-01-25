@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -72,7 +73,7 @@ func (WorkflowEvent) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowEvent](WorkflowEvent{},
 				withParents(WorkflowInstance{}),
-				withOrganizationOwner(true),
+				withOrganizationOwnerServiceOnly(true),
 			),
 		},
 	}.getMixins(WorkflowEvent{})
@@ -90,6 +91,7 @@ func (WorkflowEvent) Policy() ent.Policy {
 			policy.CheckOrgReadAccess(),
 		),
 		policy.WithMutationRules(
+			rule.AllowIfInternalRequest(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

@@ -5,7 +5,6 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
-	"fmt"
 	"strings"
 
 	"github.com/samber/lo"
@@ -17,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/internal/workflows/observability"
 )
 
 // computeHMACSignature computes an HMAC-SHA256 signature for webhook authentication
@@ -159,6 +157,7 @@ func actionIndexForKey(actions []models.WorkflowAction, key string) int {
 			return i
 		}
 	}
+
 	return -1
 }
 
@@ -183,38 +182,6 @@ func resolveApproval(requiredCount int, statusCounts AssignmentStatusCounts) app
 	}
 
 	return approvalSatisfied
-}
-
-// withTx executes fn inside a transaction and handles commit/rollback
-func withTx[T any](ctx context.Context, client *generated.Client, scope *observability.Scope, fn func(tx *generated.Tx) (T, error)) (T, error) {
-	var zero T
-
-	tx, err := client.Tx(ctx)
-	if err != nil {
-		return zero, fmt.Errorf("failed to begin transaction: %w", err)
-	}
-
-	committed := false
-	defer func() {
-		if committed {
-			return
-		}
-		if rollbackErr := tx.Rollback(); rollbackErr != nil && scope != nil {
-			scope.Warn(rollbackErr, nil)
-		}
-	}()
-
-	result, err := fn(tx)
-	if err != nil {
-		return zero, err
-	}
-
-	if err := tx.Commit(); err != nil {
-		return zero, fmt.Errorf("failed to commit transaction: %w", err)
-	}
-	committed = true
-
-	return result, nil
 }
 
 // buildTriggerContext constructs the workflow instance context for a new trigger

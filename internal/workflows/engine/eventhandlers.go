@@ -179,11 +179,15 @@ func workflowEventTypeFromEntOperation(operation string) string {
 }
 
 // HandleWorkflowTriggered processes a newly triggered workflow instance.
+// For approval actions with When conditions, all matching actions are started concurrently.
+// This enables workflows where multiple fields change in a single mutation to trigger
+// their respective approval requirements simultaneously.
 func (l *WorkflowListeners) HandleWorkflowTriggered(ctx *soiree.EventContext, payload soiree.WorkflowTriggeredPayload) (err error) {
 	scope := observability.BeginListenerTopic(ctx, l.observer, soiree.WorkflowTriggeredTopic, payload, nil)
+	scopeCtx := scope.Context()
 	defer scope.End(err, nil)
 
-	instance, _, err := l.loadInstanceForScope(scope, payload.InstanceID)
+	instance, orgID, err := l.loadInstanceForScope(scope, payload.InstanceID)
 	if err != nil {
 		return scope.Fail(err, nil)
 	}
@@ -193,15 +197,35 @@ func (l *WorkflowListeners) HandleWorkflowTriggered(ctx *soiree.EventContext, pa
 	def := instance.DefinitionSnapshot
 	obj := workflowObjectFromPayload(payload.ObjectID, payload.ObjectType)
 
-	// Process first action
-	if len(def.Actions) > 0 {
+	if len(def.Actions) == 0 {
+		l.emitInstanceCompleted(scope, instance, enums.WorkflowInstanceStateCompleted, obj)
+		return nil
+	}
+
+	// Find all approval actions with When conditions and start those that match concurrently
+	startedConditionalApproval := false
+	for i, action := range def.Actions {
+		actionType := enums.ToWorkflowActionType(action.Type)
+		if actionType == nil || *actionType != enums.WorkflowActionTypeApproval || action.When == "" {
+			continue
+		}
+
+		// Evaluate the When condition using existing evaluation logic
+		loadedObj, shouldExecute, evalErr := l.evaluateActionWhen(scopeCtx, instance, action, obj, orgID)
+		if evalErr != nil || !shouldExecute {
+			continue
+		}
+
+		l.emitActionStarted(scope, instance, action.Key, i, enums.WorkflowActionTypeApproval, loadedObj)
+		startedConditionalApproval = true
+	}
+
+	// If no conditional approvals matched, start the first action normally
+	if !startedConditionalApproval {
 		actionType := enums.ToWorkflowActionType(def.Actions[0].Type)
 		if actionType != nil {
 			l.emitActionStarted(scope, instance, def.Actions[0].Key, 0, *actionType, obj)
 		}
-	} else {
-		// No actions, mark as completed
-		l.emitInstanceCompleted(scope, instance, enums.WorkflowInstanceStateCompleted, obj)
 	}
 
 	return nil
@@ -590,13 +614,18 @@ func requiredApprovalCount(action models.WorkflowAction, meta models.WorkflowAss
 }
 
 // loadInstanceForScope loads a workflow instance and annotates scope fields
+// Uses AllowContext since all callers are internal workflow operations
 func (l *WorkflowListeners) loadInstanceForScope(scope *observability.Scope, instanceID string) (*generated.WorkflowInstance, string, error) {
-	orgID, err := auth.GetOrganizationIDFromContext(scope.Context())
+	ctx := scope.Context()
+
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
 		return nil, "", err
 	}
 
-	instance, err := loadWorkflowInstance(scope.Context(), l.client, instanceID, orgID)
+	allowCtx := workflows.AllowContext(ctx)
+
+	instance, err := loadWorkflowInstance(allowCtx, l.client, instanceID, orgID)
 	if err != nil {
 		return nil, "", err
 	}

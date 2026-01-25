@@ -88,7 +88,9 @@ func (e *WorkflowEngine) EvaluateActionWhen(ctx context.Context, expression stri
 	)
 
 	// Merge assignment context (assignments, instance, initiator)
-	assignmentCtx, err := workflows.BuildAssignmentContext(ctx, e.client, instance.ID)
+	// Use privacy bypass for internal workflow operations that query assignment state
+	allowCtx := workflows.AllowContext(ctx)
+	assignmentCtx, err := workflows.BuildAssignmentContext(allowCtx, e.client, instance.ID)
 	if err != nil {
 		return false, err
 	}

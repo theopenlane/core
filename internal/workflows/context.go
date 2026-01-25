@@ -6,6 +6,8 @@ import (
 	"entgo.io/ent/privacy"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
+
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // WorkflowBypassContextKey is the context key for workflow bypass operations
@@ -31,8 +33,9 @@ func IsWorkflowBypass(ctx context.Context) bool {
 }
 
 // AllowContext sets the ent privacy decision to allow for internal workflow operations.
+// It also sets the internal request marker so FGA checks are bypassed.
 func AllowContext(ctx context.Context) context.Context {
-	return privacy.DecisionContext(ctx, privacy.Allow)
+	return privacy.DecisionContext(rule.WithInternalContext(ctx), privacy.Allow)
 }
 
 // AllowBypassContext sets workflow bypass and allow decision for internal workflow operations.

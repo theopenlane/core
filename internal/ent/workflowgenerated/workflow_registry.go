@@ -336,6 +336,13 @@ func buildAssignmentContext(ctx context.Context, client *generated.Client, insta
 		return nil, err
 	}
 
+	// Convert summary to map for CEL dynamic access
+	// CEL cannot traverse Go structs directly - it needs map[string]any
+	summaryMap, err := entObjectToMap(summary)
+	if err != nil {
+		return nil, err
+	}
+
 	// Get instance for context
 	instance, err := client.WorkflowInstance.Get(ctx, instanceID)
 	if err != nil {
@@ -356,7 +363,7 @@ func buildAssignmentContext(ctx context.Context, client *generated.Client, insta
 	}
 
 	return map[string]any{
-		"assignments": summary,
+		"assignments": summaryMap,
 		"instance":    instanceContext,
 		"initiator":   initiator,
 	}, nil

@@ -27,6 +27,7 @@ func (s *WorkflowEngineTestSuite) TestWorkflowEngineExecute() {
 // TestExecuteApproval verifies approval action execution
 func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 	userID, orgID, userCtx := s.SetupTestUser()
+	seedCtx := s.SeedContext(userID, orgID)
 
 	wfEngine := s.NewTestEngine(nil)
 
@@ -41,7 +42,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 			ObjectType:           enums.WorkflowObjectTypeControl,
 			ObjectID:             "test123",
 		}).
-		Save(userCtx)
+		SetOwnerID(orgID).
+		Save(seedCtx)
 	s.Require().NoError(err)
 
 	control, err := s.client.Control.Create().
@@ -127,7 +129,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 
 // TestExecuteInvalidActionType verifies invalid action handling
 func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
-	_, orgID, userCtx := s.SetupTestUser()
+	userID, orgID, userCtx := s.SetupTestUser()
+	seedCtx := s.SeedContext(userID, orgID)
 
 	wfEngine := s.NewTestEngine(nil)
 
@@ -142,7 +145,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
 			ObjectType:           enums.WorkflowObjectTypeControl,
 			ObjectID:             "test123",
 		}).
-		Save(userCtx)
+		SetOwnerID(orgID).
+		Save(seedCtx)
 	s.Require().NoError(err)
 
 	control, err := s.client.Control.Create().
@@ -168,7 +172,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
 
 // TestExecuteNotification verifies notification action execution
 func (s *WorkflowEngineTestSuite) TestExecuteNotification() {
-	_, orgID, userCtx := s.SetupTestUser()
+	userID, orgID, userCtx := s.SetupTestUser()
+	seedCtx := s.SeedContext(userID, orgID)
 
 	wfEngine := s.NewTestEngine(nil)
 
@@ -183,7 +188,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotification() {
 			ObjectType:           enums.WorkflowObjectTypeControl,
 			ObjectID:             "test123",
 		}).
-		Save(userCtx)
+		SetOwnerID(orgID).
+		Save(seedCtx)
 	s.Require().NoError(err)
 
 	err = wfEngine.Execute(userCtx, models.WorkflowAction{Type: enums.WorkflowActionTypeNotification.String(), Key: "test_notification"}, instance, &workflows.Object{ID: "test123", Type: enums.WorkflowObjectTypeControl})
@@ -192,7 +198,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotification() {
 
 // TestExecuteWebhook verifies webhook action execution
 func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
-	_, orgID, userCtx := s.SetupTestUser()
+	userID, orgID, userCtx := s.SetupTestUser()
+	seedCtx := s.SeedContext(userID, orgID)
 
 	wfEngine := s.NewTestEngine(nil)
 
@@ -213,7 +220,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 			ObjectType:           enums.WorkflowObjectTypeControl,
 			ObjectID:             control.ID,
 		}).
-		Save(userCtx)
+		SetOwnerID(orgID).
+		Save(seedCtx)
 	s.Require().NoError(err)
 
 	obj := &workflows.Object{
@@ -331,7 +339,8 @@ func (s *WorkflowEngineTestSuite) TestApplyObjectFieldUpdates_CoercesEnums() {
 
 // TestExecuteFieldUpdate verifies field update action execution
 func (s *WorkflowEngineTestSuite) TestExecuteFieldUpdate() {
-	_, orgID, userCtx := s.SetupTestUser()
+	userID, orgID, userCtx := s.SetupTestUser()
+	seedCtx := s.SeedContext(userID, orgID)
 
 	wfEngine := s.NewTestEngine(nil)
 
@@ -352,7 +361,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteFieldUpdate() {
 			ObjectType:           enums.WorkflowObjectTypeControl,
 			ObjectID:             control.ID,
 		}).
-		Save(userCtx)
+		SetOwnerID(orgID).
+		Save(seedCtx)
 	s.Require().NoError(err)
 
 	obj := &workflows.Object{

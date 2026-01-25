@@ -16,7 +16,7 @@ import (
 
 // createInstanceTx builds a workflow instance transaction and optional proposal
 func (e *WorkflowEngine) createInstanceTx(ctx context.Context, def *generated.WorkflowDefinition, obj *workflows.Object, domain *workflows.DomainChanges, defSnapshot models.WorkflowDefinitionDocument, contextData models.WorkflowInstanceContext, ownerID string, scope *observability.Scope) (*generated.WorkflowInstance, error) {
-	return withTx(ctx, e.client, scope, func(tx *generated.Tx) (*generated.WorkflowInstance, error) {
+	return workflows.WithTx(ctx, e.client, scope, func(tx *generated.Tx) (*generated.WorkflowInstance, error) {
 		instance, objRef, err := workflows.CreateWorkflowInstanceWithObjectRef(ctx, tx, workflows.WorkflowInstanceBuilderParams{
 			WorkflowDefinitionID: def.ID,
 			DefinitionSnapshot:   defSnapshot,
