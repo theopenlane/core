@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/workflows"
+	wf "github.com/theopenlane/core/internal/workflows"
 )
 
 // WorkflowDomain represents a canonical approval domain for workflow proposals.
@@ -318,6 +318,11 @@ var (
 	}
 )
 
+func init() {
+	// Ensure workflow-eligible fields are available to approval routing helpers.
+	wf.RegisterEligibleFields(WorkflowEligibleFields)
+}
+
 // WorkflowEligibleFields maps object types to their workflow-eligible field names.
 // Use this to validate that fields in a domain are valid for the object type.
 var WorkflowEligibleFields = map[enums.WorkflowObjectType]map[string]struct{}{
@@ -499,9 +504,4 @@ func IsFieldEligible(objectType enums.WorkflowObjectType, field string) bool {
 	}
 	_, ok = eligible[field]
 	return ok
-}
-
-func init() {
-	// Ensure workflow-eligible fields are available to approval routing helpers.
-	workflows.RegisterEligibleFields(WorkflowEligibleFields)
 }

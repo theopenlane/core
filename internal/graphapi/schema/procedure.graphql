@@ -25,10 +25,6 @@ extend type Procedure {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up procedure by ID

@@ -51,6 +51,7 @@ type ResolverRoot interface {
 	Query() QueryResolver
 	Subcontrol() SubcontrolResolver
 	Subscription() SubscriptionResolver
+	WorkflowInstance() WorkflowInstanceResolver
 	CreateDiscussionInput() CreateDiscussionInputResolver
 	CreateEntityInput() CreateEntityInputResolver
 	CreateGroupInput() CreateGroupInputResolver
@@ -6227,6 +6228,15 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	WorkflowFieldDiff struct {
+		CurrentValue  func(childComplexity int) int
+		Diff          func(childComplexity int) int
+		Field         func(childComplexity int) int
+		Label         func(childComplexity int) int
+		ProposedValue func(childComplexity int) int
+		Type          func(childComplexity int) int
+	}
+
 	WorkflowFieldMetadata struct {
 		Label func(childComplexity int) int
 		Name  func(childComplexity int) int
@@ -6262,6 +6272,7 @@ type ComplexityRoot struct {
 		PlatformID           func(childComplexity int) int
 		Procedure            func(childComplexity int) int
 		ProcedureID          func(childComplexity int) int
+		ProposalPreview      func(childComplexity int) int
 		State                func(childComplexity int) int
 		Subcontrol           func(childComplexity int) int
 		SubcontrolID         func(childComplexity int) int
@@ -6351,6 +6362,17 @@ type ComplexityRoot struct {
 		Label          func(childComplexity int) int
 		ResolverKeys   func(childComplexity int) int
 		Type           func(childComplexity int) int
+	}
+
+	WorkflowProposalPreview struct {
+		CurrentValues     func(childComplexity int) int
+		Diffs             func(childComplexity int) int
+		DomainKey         func(childComplexity int) int
+		ProposalID        func(childComplexity int) int
+		ProposedChanges   func(childComplexity int) int
+		State             func(childComplexity int) int
+		SubmittedAt       func(childComplexity int) int
+		SubmittedByUserID func(childComplexity int) int
 	}
 }
 
@@ -42433,6 +42455,48 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowEventEdge.Node(childComplexity), true
 
+	case "WorkflowFieldDiff.currentValue":
+		if e.complexity.WorkflowFieldDiff.CurrentValue == nil {
+			break
+		}
+
+		return e.complexity.WorkflowFieldDiff.CurrentValue(childComplexity), true
+
+	case "WorkflowFieldDiff.diff":
+		if e.complexity.WorkflowFieldDiff.Diff == nil {
+			break
+		}
+
+		return e.complexity.WorkflowFieldDiff.Diff(childComplexity), true
+
+	case "WorkflowFieldDiff.field":
+		if e.complexity.WorkflowFieldDiff.Field == nil {
+			break
+		}
+
+		return e.complexity.WorkflowFieldDiff.Field(childComplexity), true
+
+	case "WorkflowFieldDiff.label":
+		if e.complexity.WorkflowFieldDiff.Label == nil {
+			break
+		}
+
+		return e.complexity.WorkflowFieldDiff.Label(childComplexity), true
+
+	case "WorkflowFieldDiff.proposedValue":
+		if e.complexity.WorkflowFieldDiff.ProposedValue == nil {
+			break
+		}
+
+		return e.complexity.WorkflowFieldDiff.ProposedValue(childComplexity), true
+
+	case "WorkflowFieldDiff.type":
+		if e.complexity.WorkflowFieldDiff.Type == nil {
+			break
+		}
+
+		return e.complexity.WorkflowFieldDiff.Type(childComplexity), true
+
 	case "WorkflowFieldMetadata.label":
 		if e.complexity.WorkflowFieldMetadata.Label == nil {
 			break
@@ -42649,6 +42713,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowInstance.ProcedureID(childComplexity), true
+
+	case "WorkflowInstance.proposalPreview":
+		if e.complexity.WorkflowInstance.ProposalPreview == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.ProposalPreview(childComplexity), true
 
 	case "WorkflowInstance.state":
 		if e.complexity.WorkflowInstance.State == nil {
@@ -43140,6 +43211,62 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowObjectTypeMetadata.Type(childComplexity), true
+
+	case "WorkflowProposalPreview.currentValues":
+		if e.complexity.WorkflowProposalPreview.CurrentValues == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposalPreview.CurrentValues(childComplexity), true
+
+	case "WorkflowProposalPreview.diffs":
+		if e.complexity.WorkflowProposalPreview.Diffs == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposalPreview.Diffs(childComplexity), true
+
+	case "WorkflowProposalPreview.domainKey":
+		if e.complexity.WorkflowProposalPreview.DomainKey == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposalPreview.DomainKey(childComplexity), true
+
+	case "WorkflowProposalPreview.proposalID":
+		if e.complexity.WorkflowProposalPreview.ProposalID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposalPreview.ProposalID(childComplexity), true
+
+	case "WorkflowProposalPreview.proposedChanges":
+		if e.complexity.WorkflowProposalPreview.ProposedChanges == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposalPreview.ProposedChanges(childComplexity), true
+
+	case "WorkflowProposalPreview.state":
+		if e.complexity.WorkflowProposalPreview.State == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposalPreview.State(childComplexity), true
+
+	case "WorkflowProposalPreview.submittedAt":
+		if e.complexity.WorkflowProposalPreview.SubmittedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposalPreview.SubmittedAt(childComplexity), true
+
+	case "WorkflowProposalPreview.submittedByUserID":
+		if e.complexity.WorkflowProposalPreview.SubmittedByUserID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposalPreview.SubmittedByUserID(childComplexity), true
 
 	}
 	return 0, false
@@ -43773,10 +43900,6 @@ scalar Any`, BuiltIn: false},
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up actionPlan by ID
@@ -43925,7 +44048,8 @@ type ActionPlanBulkDeletePayload {
     Deleted actionPlan IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/apitoken.graphql", Input: `extend type Query {
     """
     Look up apiToken by ID
@@ -44350,10 +44474,6 @@ type AssetBulkDeletePayload {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up campaign by ID
@@ -44484,10 +44604,6 @@ type CampaignBulkCreatePayload {
         includeEmitFailures: Boolean
     ): WorkflowEventConnection!
 }
-
-
-
-
 
 extend type Query {
     """
@@ -44769,10 +44885,6 @@ type ContactBulkDeletePayload {
         includeEmitFailures: Boolean
     ): WorkflowEventConnection!
 }
-
-
-
-
 
 extend type Query {
     """
@@ -121560,10 +121672,6 @@ type EventBulkDeletePayload {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up evidence by ID
@@ -122866,17 +122974,6 @@ type HushBulkDeletePayload {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
-extend type Query {
-    """
-    Look up identityHolder by ID
-    """
-     identityHolder(
-        """
-        ID of the identityHolder
         """
         id: ID!
     ):  IdentityHolder!
@@ -123032,10 +123129,6 @@ type IntegrationDeletePayload {
         includeEmitFailures: Boolean
     ): WorkflowEventConnection!
 }
-
-
-
-
 
 extend type Query {
     """
@@ -124938,10 +125031,6 @@ type PersonalAccessTokenBulkCreatePayload {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up platform by ID
@@ -125071,10 +125160,6 @@ type PlatformBulkCreatePayload {
         includeEmitFailures: Boolean
     ): WorkflowEventConnection!
 }
-
-
-
-
 
 extend type Query {
     """
@@ -127472,10 +127557,6 @@ type StandardBulkCreatePayload {
         includeEmitFailures: Boolean
     ): WorkflowEventConnection!
 }
-
-
-
-
 
 extend type Query {
     """
@@ -130074,6 +130155,90 @@ type WorkflowFieldMetadata {
         """
         id: ID!
     ):  WorkflowInstance!
+}
+`, BuiltIn: false},
+	{Name: "../schema/workflowinstanceextended.graphql", Input: `extend type WorkflowInstance {
+    """
+    Precomputed proposal preview (diff + values) for approval workflows.
+    Only available to editors/owners of the target object.
+    """
+    proposalPreview: WorkflowProposalPreview
+}
+
+"""
+WorkflowProposalPreview describes the proposed changes alongside current values and diffs.
+"""
+type WorkflowProposalPreview {
+    """
+    ID of the workflow proposal
+    """
+    proposalID: ID!
+    """
+    Stable key representing the approval domain for this proposal
+    """
+    domainKey: String!
+    """
+    Current state of the proposal
+    """
+    state: WorkflowProposalState!
+    """
+    Timestamp when the proposal was submitted
+    """
+    submittedAt: DateTime
+    """
+    User who submitted the proposal
+    """
+    submittedByUserID: ID
+    """
+    Proposed changes for the approval domain
+    """
+    proposedChanges: Map
+    """
+    Current values for the proposed fields
+    """
+    currentValues: Map
+    """
+    Field-level diffs for the proposed changes
+    """
+    diffs: [WorkflowFieldDiff!]!
+}
+
+"""
+WorkflowFieldDiff describes a proposed change for a single field.
+"""
+type WorkflowFieldDiff {
+    """
+    Field name (snake_case)
+    """
+    field: String!
+    """
+    Human-friendly field label when available
+    """
+    label: String
+    """
+    Field type metadata when available
+    """
+    type: String
+    """
+    Current field value
+    """
+    currentValue: Any
+    """
+    Proposed field value
+    """
+    proposedValue: Any
+    """
+    Unified diff for the field (when applicable)
+    """
+    diff: String
+}
+
+enum WorkflowProposalState @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowProposalState") {
+    DRAFT
+    SUBMITTED
+    APPLIED
+    REJECTED
+    SUPERSEDED
 }
 `, BuiltIn: false},
 	{Name: "../schema/workflowobjectref.graphql", Input: `extend type Query {

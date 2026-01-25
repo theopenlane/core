@@ -84117,6 +84117,35 @@ enum WorkflowEventWorkflowEventType @goModel(model: "github.com/theopenlane/core
 	EMIT_FAILED_TERMINAL
 }
 """
+WorkflowFieldDiff describes a proposed change for a single field.
+"""
+type WorkflowFieldDiff {
+	"""
+	Field name (snake_case)
+	"""
+	field: String!
+	"""
+	Human-friendly field label when available
+	"""
+	label: String
+	"""
+	Field type metadata when available
+	"""
+	type: String
+	"""
+	Current field value
+	"""
+	currentValue: Any
+	"""
+	Proposed field value
+	"""
+	proposedValue: Any
+	"""
+	Unified diff for the field (when applicable)
+	"""
+	diff: String
+}
+"""
 Metadata for a workflow-eligible field
 """
 type WorkflowFieldMetadata {
@@ -84357,6 +84386,11 @@ type WorkflowInstance implements Node {
 		"""
 		where: WorkflowObjectRefWhereInput
 	): WorkflowObjectRefConnection!
+	"""
+	Precomputed proposal preview (diff + values) for approval workflows.
+	Only available to editors/owners of the target object.
+	"""
+	proposalPreview: WorkflowProposalPreview
 }
 """
 A connection to a list of items.
@@ -85575,4 +85609,48 @@ type WorkflowObjectTypeMetadata {
 	Available resolver keys for this object type
 	"""
 	resolverKeys: [String!]!
+}
+"""
+WorkflowProposalPreview describes the proposed changes alongside current values and diffs.
+"""
+type WorkflowProposalPreview {
+	"""
+	ID of the workflow proposal
+	"""
+	proposalID: ID!
+	"""
+	Stable key representing the approval domain for this proposal
+	"""
+	domainKey: String!
+	"""
+	Current state of the proposal
+	"""
+	state: WorkflowProposalState!
+	"""
+	Timestamp when the proposal was submitted
+	"""
+	submittedAt: DateTime
+	"""
+	User who submitted the proposal
+	"""
+	submittedByUserID: ID
+	"""
+	Proposed changes for the approval domain
+	"""
+	proposedChanges: Map
+	"""
+	Current values for the proposed fields
+	"""
+	currentValues: Map
+	"""
+	Field-level diffs for the proposed changes
+	"""
+	diffs: [WorkflowFieldDiff!]!
+}
+enum WorkflowProposalState @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowProposalState") {
+	DRAFT
+	SUBMITTED
+	APPLIED
+	REJECTED
+	SUPERSEDED
 }

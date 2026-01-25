@@ -307,6 +307,45 @@ func init() {
 
 	// Register assignment context builder for workflow runtime state in CEL expressions.
 	wf.RegisterAssignmentContextBuilder(buildAssignmentContext)
+
+	// Register observability fields builder for structured logging.
+	wf.RegisterObservabilityFieldsBuilder(buildObservabilityFields)
+
+	// Register eligible fields from the generated workflow domain.
+	wf.RegisterEligibleFields(WorkflowEligibleFields)
+}
+
+// buildObservabilityFields returns standard log fields for a workflow object.
+func buildObservabilityFields(obj *wf.Object) map[string]any {
+	if obj == nil {
+		return nil
+	}
+	fields := map[string]any{
+		"object_type": obj.Type.String(),
+	}
+	switch obj.Type {
+	case enums.WorkflowObjectTypeActionPlan:
+		fields[workflowobjectref.FieldActionPlanID] = obj.ID
+	case enums.WorkflowObjectTypeCampaign:
+		fields[workflowobjectref.FieldCampaignID] = obj.ID
+	case enums.WorkflowObjectTypeCampaignTarget:
+		fields[workflowobjectref.FieldCampaignTargetID] = obj.ID
+	case enums.WorkflowObjectTypeControl:
+		fields[workflowobjectref.FieldControlID] = obj.ID
+	case enums.WorkflowObjectTypeEvidence:
+		fields[workflowobjectref.FieldEvidenceID] = obj.ID
+	case enums.WorkflowObjectTypeIdentityHolder:
+		fields[workflowobjectref.FieldIdentityHolderID] = obj.ID
+	case enums.WorkflowObjectTypeInternalPolicy:
+		fields[workflowobjectref.FieldInternalPolicyID] = obj.ID
+	case enums.WorkflowObjectTypePlatform:
+		fields[workflowobjectref.FieldPlatformID] = obj.ID
+	case enums.WorkflowObjectTypeProcedure:
+		fields[workflowobjectref.FieldProcedureID] = obj.ID
+	case enums.WorkflowObjectTypeSubcontrol:
+		fields[workflowobjectref.FieldSubcontrolID] = obj.ID
+	}
+	return fields
 }
 
 // entObjectToMap converts an ent entity to a map[string]any via JSON marshaling.

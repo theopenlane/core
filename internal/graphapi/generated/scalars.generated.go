@@ -238,6 +238,24 @@ func (ec *executionContext) marshalOAddress2ᚖgithubᚗcomᚋtheopenlaneᚋcore
 	return v
 }
 
+func (ec *executionContext) unmarshalOAny2interface(ctx context.Context, v any) (any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalAny(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOAny2interface(ctx context.Context, sel ast.SelectionSet, v any) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalAny(v)
+	return res
+}
+
 func (ec *executionContext) unmarshalOAny2ᚕinterfaceᚄ(ctx context.Context, v any) ([]any, error) {
 	if v == nil {
 		return nil, nil

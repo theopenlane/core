@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/internal/workflows"
@@ -23,8 +24,11 @@ func (r *Resolver) workflowInstanceProposalPreview(ctx context.Context, instance
 		return nil, nil
 	}
 
-	objectType, objectID, ok := workflowInstanceObjectContext(instance)
-	if !ok || objectID == "" {
+	objectType, objectID, err := workflowInstanceObjectContext(ctx, r.db, instance)
+	if err != nil {
+		return nil, err
+	}
+	if objectID == "" {
 		return nil, nil
 	}
 
@@ -75,14 +79,15 @@ func (r *Resolver) workflowInstanceProposalPreview(ctx context.Context, instance
 		meta := fieldMeta[field]
 		currentValue := currentValues[field]
 		proposedValue := proposal.Changes[field]
+		diffText := workflowProposalDiff(currentValue, proposedValue)
 
 		diffs = append(diffs, &model.WorkflowFieldDiff{
 			Field:         field,
-			Label:         meta.Label,
-			Type:          meta.Type,
+			Label:         workflowProposalOptionalString(meta.Label),
+			Type:          workflowProposalOptionalString(meta.Type),
 			CurrentValue:  currentValue,
 			ProposedValue: proposedValue,
-			Diff:          workflowProposalDiff(currentValue, proposedValue),
+			Diff:          workflowProposalOptionalString(diffText),
 		})
 	}
 
@@ -107,39 +112,65 @@ func (r *Resolver) workflowInstanceProposalPreview(ctx context.Context, instance
 	return preview, nil
 }
 
-func workflowInstanceObjectContext(instance *generated.WorkflowInstance) (enums.WorkflowObjectType, string, bool) {
+func workflowProposalOptionalString(value string) *string {
+	if value == "" {
+		return nil
+	}
+
+	return &value
+}
+
+func workflowInstanceObjectContext(ctx context.Context, client *generated.Client, instance *generated.WorkflowInstance) (enums.WorkflowObjectType, string, error) {
 	if instance == nil {
-		return "", "", false
+		return "", "", nil
 	}
 
 	if instance.Context.ObjectID != "" && instance.Context.ObjectType != "" {
-		return instance.Context.ObjectType, instance.Context.ObjectID, true
+		return instance.Context.ObjectType, instance.Context.ObjectID, nil
 	}
 
-	switch {
-	case instance.ActionPlanID != "":
-		return enums.WorkflowObjectTypeActionPlan, instance.ActionPlanID, true
-	case instance.CampaignID != "":
-		return enums.WorkflowObjectTypeCampaign, instance.CampaignID, true
-	case instance.CampaignTargetID != "":
-		return enums.WorkflowObjectTypeCampaignTarget, instance.CampaignTargetID, true
-	case instance.ControlID != "":
-		return enums.WorkflowObjectTypeControl, instance.ControlID, true
-	case instance.EvidenceID != "":
-		return enums.WorkflowObjectTypeEvidence, instance.EvidenceID, true
-	case instance.IdentityHolderID != "":
-		return enums.WorkflowObjectTypeIdentityHolder, instance.IdentityHolderID, true
-	case instance.InternalPolicyID != "":
-		return enums.WorkflowObjectTypeInternalPolicy, instance.InternalPolicyID, true
-	case instance.PlatformID != "":
-		return enums.WorkflowObjectTypePlatform, instance.PlatformID, true
-	case instance.ProcedureID != "":
-		return enums.WorkflowObjectTypeProcedure, instance.ProcedureID, true
-	case instance.SubcontrolID != "":
-		return enums.WorkflowObjectTypeSubcontrol, instance.SubcontrolID, true
-	default:
-		return "", "", false
+	if obj, ok := workflowObjectFromRefs(instance.Edges.WorkflowObjectRefs); ok {
+		return obj.Type, obj.ID, nil
 	}
+
+	if client == nil {
+		return "", "", nil
+	}
+
+	allowCtx := workflows.AllowContext(ctx)
+	query := client.WorkflowObjectRef.Query().
+		Where(workflowobjectref.WorkflowInstanceIDEQ(instance.ID))
+	if instance.OwnerID != "" {
+		query = query.Where(workflowobjectref.OwnerIDEQ(instance.OwnerID))
+	}
+
+	ref, err := query.First(allowCtx)
+	if err != nil {
+		if generated.IsNotFound(err) {
+			return "", "", nil
+		}
+		return "", "", parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobjectref"})
+	}
+
+	if obj, ok := workflowObjectFromRefs([]*generated.WorkflowObjectRef{ref}); ok {
+		return obj.Type, obj.ID, nil
+	}
+
+	return "", "", nil
+}
+
+func workflowObjectFromRefs(refs []*generated.WorkflowObjectRef) (*workflows.Object, bool) {
+	for _, ref := range refs {
+		if ref == nil {
+			continue
+		}
+		obj, err := workflows.ObjectFromRef(ref)
+		if err == nil && obj != nil {
+			return obj, true
+		}
+	}
+
+	return nil, false
 }
 
 func workflowProposalFieldMetadata(objectType enums.WorkflowObjectType) map[string]generated.WorkflowFieldInfo {

@@ -25,10 +25,6 @@ extend type Subcontrol {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up subcontrol by ID
