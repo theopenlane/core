@@ -131,6 +131,20 @@ func (_c *AssessmentResponseCreate) SetAssessmentID(v string) *AssessmentRespons
 	return _c
 }
 
+// SetIsTest sets the "is_test" field.
+func (_c *AssessmentResponseCreate) SetIsTest(v bool) *AssessmentResponseCreate {
+	_c.mutation.SetIsTest(v)
+	return _c
+}
+
+// SetNillableIsTest sets the "is_test" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableIsTest(v *bool) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetIsTest(*v)
+	}
+	return _c
+}
+
 // SetCampaignID sets the "campaign_id" field.
 func (_c *AssessmentResponseCreate) SetCampaignID(v string) *AssessmentResponseCreate {
 	_c.mutation.SetCampaignID(v)
@@ -476,6 +490,10 @@ func (_c *AssessmentResponseCreate) defaults() error {
 		v := assessmentresponse.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.IsTest(); !ok {
+		v := assessmentresponse.DefaultIsTest
+		_c.mutation.SetIsTest(v)
+	}
 	if _, ok := _c.mutation.SendAttempts(); !ok {
 		v := assessmentresponse.DefaultSendAttempts
 		_c.mutation.SetSendAttempts(v)
@@ -527,6 +545,9 @@ func (_c *AssessmentResponseCreate) check() error {
 		if err := assessmentresponse.AssessmentIDValidator(v); err != nil {
 			return &ValidationError{Name: "assessment_id", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.assessment_id": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.IsTest(); !ok {
+		return &ValidationError{Name: "is_test", err: errors.New(`generated: missing required field "AssessmentResponse.is_test"`)}
 	}
 	if _, ok := _c.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`generated: missing required field "AssessmentResponse.email"`)}
@@ -615,6 +636,10 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(assessmentresponse.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := _c.mutation.IsTest(); ok {
+		_spec.SetField(assessmentresponse.FieldIsTest, field.TypeBool, value)
+		_node.IsTest = value
 	}
 	if value, ok := _c.mutation.Email(); ok {
 		_spec.SetField(assessmentresponse.FieldEmail, field.TypeString, value)

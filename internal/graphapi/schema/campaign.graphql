@@ -4,10 +4,28 @@ extend type Campaign {
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this campaign if one is running
+    Indicates if this campaign has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this campaign (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this campaign across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
 
 extend type Query {
     """
@@ -31,46 +49,6 @@ extend type Mutation{
         """
         input: CreateCampaignInput!
     ): CampaignCreatePayload!
-    """
-    Create a new campaign with associated targets
-    """
-    createCampaignWithTargets(
-        """
-        values of the campaign and targets
-        """
-        input: CreateCampaignWithTargetsInput!
-    ): CampaignCreateWithTargetsPayload!
-    """
-    Create a new campaign with associated targets via file upload
-    """
-    createCampaignWithTargetsCSV(
-        """
-        values of the campaign
-        """
-        campaign: CreateCampaignInput!
-        """
-        csv file containing target values
-        """
-        targets: Upload!
-    ): CampaignCreateWithTargetsPayload!
-    """
-    Launch a campaign and send emails to its targets
-    """
-    launchCampaign(
-        """
-        values for launching a campaign
-        """
-        input: LaunchCampaignInput!
-    ): CampaignLaunchPayload!
-    """
-    Send a test email for a campaign without creating campaign targets
-    """
-    sendCampaignTestEmail(
-        """
-        values for sending a campaign test email
-        """
-        input: SendCampaignTestEmailInput!
-    ): CampaignTestEmailPayload!
     """
     Create multiple new campaigns
     """
@@ -121,98 +99,6 @@ type CampaignCreatePayload {
     Created campaign
     """
     campaign: Campaign!
-}
-
-"""
-Input for createCampaignWithTargets mutation
-"""
-input CreateCampaignWithTargetsInput {
-    """
-    values of the campaign
-    """
-    campaign: CreateCampaignInput!
-    """
-    list of targets to create for the campaign
-    """
-    targets: [CreateCampaignTargetInput!]
-}
-
-"""
-Return response for createCampaignWithTargets mutation
-"""
-type CampaignCreateWithTargetsPayload {
-    """
-    Created campaign
-    """
-    campaign: Campaign!
-    """
-    Created campaign targets
-    """
-    campaignTargets: [CampaignTarget!]
-}
-
-"""
-Input for launchCampaign mutation
-"""
-input LaunchCampaignInput {
-    """
-    ID of the campaign
-    """
-    campaignID: ID!
-    """
-    Whether to resend emails to previously-sent targets
-    """
-    resend: Boolean
-}
-
-"""
-Return response for launchCampaign mutation
-"""
-type CampaignLaunchPayload {
-    """
-    Updated campaign
-    """
-    campaign: Campaign!
-    """
-    Number of targets queued for send
-    """
-    queuedCount: Int!
-    """
-    Number of targets skipped
-    """
-    skippedCount: Int!
-}
-
-"""
-Input for sendCampaignTestEmail mutation
-"""
-input SendCampaignTestEmailInput {
-    """
-    ID of the campaign
-    """
-    campaignID: ID!
-    """
-    List of recipient emails to send the test to
-    """
-    emails: [String!]!
-}
-
-"""
-Return response for sendCampaignTestEmail mutation
-"""
-type CampaignTestEmailPayload {
-    """
-    Campaign used for the test send
-    """
-    campaign: Campaign!
-    """
-    Number of emails queued for send
-    """
-    queuedCount: Int!
-    """
-    Number of emails skipped
-    """
-    skippedCount: Int!
 }
 
 """

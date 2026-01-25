@@ -898,6 +898,10 @@ func (m *AssessmentResponseMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetAssessmentID(assessmentID)
 	}
 
+	if isTest, exists := m.IsTest(); exists {
+		create = create.SetIsTest(isTest)
+	}
+
 	if campaignID, exists := m.CampaignID(); exists {
 		create = create.SetCampaignID(campaignID)
 	}
@@ -1047,6 +1051,12 @@ func (m *AssessmentResponseMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetAssessmentID(assessmentID)
 		} else {
 			create = create.SetAssessmentID(assessmentresponse.AssessmentID)
+		}
+
+		if isTest, exists := m.IsTest(); exists {
+			create = create.SetIsTest(isTest)
+		} else {
+			create = create.SetIsTest(assessmentresponse.IsTest)
 		}
 
 		if campaignID, exists := m.CampaignID(); exists {
@@ -1200,6 +1210,7 @@ func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context
 			SetDeletedBy(assessmentresponse.DeletedBy).
 			SetOwnerID(assessmentresponse.OwnerID).
 			SetAssessmentID(assessmentresponse.AssessmentID).
+			SetIsTest(assessmentresponse.IsTest).
 			SetCampaignID(assessmentresponse.CampaignID).
 			SetIdentityHolderID(assessmentresponse.IdentityHolderID).
 			SetEntityID(assessmentresponse.EntityID).

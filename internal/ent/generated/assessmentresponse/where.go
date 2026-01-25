@@ -108,6 +108,11 @@ func AssessmentID(v string) predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(sql.FieldEQ(FieldAssessmentID, v))
 }
 
+// IsTest applies equality check predicate on the "is_test" field. It's identical to IsTestEQ.
+func IsTest(v bool) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldEQ(FieldIsTest, v))
+}
+
 // CampaignID applies equality check predicate on the "campaign_id" field. It's identical to CampaignIDEQ.
 func CampaignID(v string) predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(sql.FieldEQ(FieldCampaignID, v))
@@ -701,6 +706,16 @@ func AssessmentIDEqualFold(v string) predicate.AssessmentResponse {
 // AssessmentIDContainsFold applies the ContainsFold predicate on the "assessment_id" field.
 func AssessmentIDContainsFold(v string) predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(sql.FieldContainsFold(FieldAssessmentID, v))
+}
+
+// IsTestEQ applies the EQ predicate on the "is_test" field.
+func IsTestEQ(v bool) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldEQ(FieldIsTest, v))
+}
+
+// IsTestNEQ applies the NEQ predicate on the "is_test" field.
+func IsTestNEQ(v bool) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldNEQ(FieldIsTest, v))
 }
 
 // CampaignIDEQ applies the EQ predicate on the "campaign_id" field.

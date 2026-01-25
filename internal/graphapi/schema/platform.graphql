@@ -4,10 +4,28 @@ extend type Platform {
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this platform if one is running
+    Indicates if this platform has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this platform (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this platform across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
 
 extend type Query {
     """

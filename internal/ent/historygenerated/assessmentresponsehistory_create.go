@@ -162,6 +162,20 @@ func (_c *AssessmentResponseHistoryCreate) SetAssessmentID(v string) *Assessment
 	return _c
 }
 
+// SetIsTest sets the "is_test" field.
+func (_c *AssessmentResponseHistoryCreate) SetIsTest(v bool) *AssessmentResponseHistoryCreate {
+	_c.mutation.SetIsTest(v)
+	return _c
+}
+
+// SetNillableIsTest sets the "is_test" field if the given value is not nil.
+func (_c *AssessmentResponseHistoryCreate) SetNillableIsTest(v *bool) *AssessmentResponseHistoryCreate {
+	if v != nil {
+		_c.SetIsTest(*v)
+	}
+	return _c
+}
+
 // SetCampaignID sets the "campaign_id" field.
 func (_c *AssessmentResponseHistoryCreate) SetCampaignID(v string) *AssessmentResponseHistoryCreate {
 	_c.mutation.SetCampaignID(v)
@@ -470,6 +484,10 @@ func (_c *AssessmentResponseHistoryCreate) defaults() error {
 		v := assessmentresponsehistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.IsTest(); !ok {
+		v := assessmentresponsehistory.DefaultIsTest
+		_c.mutation.SetIsTest(v)
+	}
 	if _, ok := _c.mutation.SendAttempts(); !ok {
 		v := assessmentresponsehistory.DefaultSendAttempts
 		_c.mutation.SetSendAttempts(v)
@@ -522,6 +540,9 @@ func (_c *AssessmentResponseHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.AssessmentID(); !ok {
 		return &ValidationError{Name: "assessment_id", err: errors.New(`historygenerated: missing required field "AssessmentResponseHistory.assessment_id"`)}
+	}
+	if _, ok := _c.mutation.IsTest(); !ok {
+		return &ValidationError{Name: "is_test", err: errors.New(`historygenerated: missing required field "AssessmentResponseHistory.is_test"`)}
 	}
 	if _, ok := _c.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`historygenerated: missing required field "AssessmentResponseHistory.email"`)}
@@ -622,6 +643,10 @@ func (_c *AssessmentResponseHistoryCreate) createSpec() (*AssessmentResponseHist
 	if value, ok := _c.mutation.AssessmentID(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldAssessmentID, field.TypeString, value)
 		_node.AssessmentID = value
+	}
+	if value, ok := _c.mutation.IsTest(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldIsTest, field.TypeBool, value)
+		_node.IsTest = value
 	}
 	if value, ok := _c.mutation.CampaignID(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldCampaignID, field.TypeString, value)

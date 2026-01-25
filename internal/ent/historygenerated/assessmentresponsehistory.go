@@ -44,6 +44,8 @@ type AssessmentResponseHistory struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the assessment this response is for
 	AssessmentID string `json:"assessment_id,omitempty"`
+	// whether this assessment response is for a test send
+	IsTest bool `json:"is_test,omitempty"`
 	// the campaign this response is associated with
 	CampaignID string `json:"campaign_id,omitempty"`
 	// the identity holder record for the recipient
@@ -92,6 +94,8 @@ func (*AssessmentResponseHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case assessmentresponsehistory.FieldOperation:
 			values[i] = new(history.OpType)
+		case assessmentresponsehistory.FieldIsTest:
+			values[i] = new(sql.NullBool)
 		case assessmentresponsehistory.FieldSendAttempts, assessmentresponsehistory.FieldEmailOpenCount, assessmentresponsehistory.FieldEmailClickCount:
 			values[i] = new(sql.NullInt64)
 		case assessmentresponsehistory.FieldID, assessmentresponsehistory.FieldRef, assessmentresponsehistory.FieldCreatedBy, assessmentresponsehistory.FieldUpdatedBy, assessmentresponsehistory.FieldDeletedBy, assessmentresponsehistory.FieldOwnerID, assessmentresponsehistory.FieldAssessmentID, assessmentresponsehistory.FieldCampaignID, assessmentresponsehistory.FieldIdentityHolderID, assessmentresponsehistory.FieldEntityID, assessmentresponsehistory.FieldEmail, assessmentresponsehistory.FieldStatus, assessmentresponsehistory.FieldDocumentDataID:
@@ -184,6 +188,12 @@ func (_m *AssessmentResponseHistory) assignValues(columns []string, values []any
 				return fmt.Errorf("unexpected type %T for field assessment_id", values[i])
 			} else if value.Valid {
 				_m.AssessmentID = value.String
+			}
+		case assessmentresponsehistory.FieldIsTest:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_test", values[i])
+			} else if value.Valid {
+				_m.IsTest = value.Bool
 			}
 		case assessmentresponsehistory.FieldCampaignID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -363,6 +373,9 @@ func (_m *AssessmentResponseHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("assessment_id=")
 	builder.WriteString(_m.AssessmentID)
+	builder.WriteString(", ")
+	builder.WriteString("is_test=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsTest))
 	builder.WriteString(", ")
 	builder.WriteString("campaign_id=")
 	builder.WriteString(_m.CampaignID)

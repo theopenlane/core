@@ -4,6 +4,7 @@ package workflowgenerated
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -80,6 +81,9 @@ func init() {
 	})
 
 	// Register CEL context builders so CEL expressions can work with typed objects.
+	// Objects are converted to map[string]any via JSON to ensure:
+	// - Field names match JSON tags (lowercase)
+	// - Enum types are converted to strings
 	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
 		if obj == nil || obj.Node == nil {
 			return nil
@@ -88,8 +92,12 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -106,8 +114,12 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -124,8 +136,12 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -142,8 +158,12 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -160,8 +180,12 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -178,8 +202,12 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -196,8 +224,12 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -214,8 +246,12 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -232,8 +268,12 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -250,8 +290,12 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -263,6 +307,20 @@ func init() {
 
 	// Register assignment context builder for workflow runtime state in CEL expressions.
 	wf.RegisterAssignmentContextBuilder(buildAssignmentContext)
+}
+
+// entObjectToMap converts an ent entity to a map[string]any via JSON marshaling.
+// This ensures field names match JSON tags (lowercase) and enums are converted to strings.
+func entObjectToMap(obj any) (map[string]any, error) {
+	data, err := json.Marshal(obj)
+	if err != nil {
+		return nil, err
+	}
+	var result map[string]any
+	if err := json.Unmarshal(data, &result); err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 // buildAssignmentContext builds the workflow runtime context (assignments, instance, initiator) for CEL evaluation.

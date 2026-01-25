@@ -240,8 +240,12 @@ func (ec *executionContext) fieldContext_PlatformBulkCreatePayload_platforms(_ c
 				return ec.fieldContext_Platform_platformOwner(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Platform_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Platform_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Platform_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Platform_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Platform_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Platform", field.Name)
 		},
@@ -461,8 +465,12 @@ func (ec *executionContext) fieldContext_PlatformCreatePayload_platform(_ contex
 				return ec.fieldContext_Platform_platformOwner(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Platform_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Platform_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Platform_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Platform_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Platform_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Platform", field.Name)
 		},
@@ -711,8 +719,12 @@ func (ec *executionContext) fieldContext_PlatformUpdatePayload_platform(_ contex
 				return ec.fieldContext_Platform_platformOwner(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Platform_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Platform_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Platform_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Platform_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Platform_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Platform", field.Name)
 		},

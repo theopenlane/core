@@ -170,8 +170,12 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_InternalPolicy_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_InternalPolicy_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_InternalPolicy_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_InternalPolicy_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_InternalPolicy_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},
@@ -350,8 +354,12 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_InternalPolicy_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_InternalPolicy_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_InternalPolicy_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_InternalPolicy_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_InternalPolicy_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},
@@ -530,8 +538,12 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_InternalPolicy_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_InternalPolicy_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_InternalPolicy_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_InternalPolicy_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_InternalPolicy_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},
@@ -710,8 +722,12 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_InternalPolicy_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_InternalPolicy_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_InternalPolicy_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_InternalPolicy_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_InternalPolicy_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},

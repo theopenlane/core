@@ -7,8 +7,8 @@ package graphapi
 
 import (
 	"context"
-	"fmt"
 
+	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
@@ -20,12 +20,22 @@ import (
 
 // HasPendingWorkflow is the resolver for the hasPendingWorkflow field.
 func (r *campaignResolver) HasPendingWorkflow(ctx context.Context, obj *generated.Campaign) (bool, error) {
-	panic(fmt.Errorf("not implemented: HasPendingWorkflow - hasPendingWorkflow"))
+	return workflowResolverHasPending(ctx, generated.TypeCampaign, obj.ID)
 }
 
-// ActiveWorkflowInstance is the resolver for the activeWorkflowInstance field.
-func (r *campaignResolver) ActiveWorkflowInstance(ctx context.Context, obj *generated.Campaign) (*generated.WorkflowInstance, error) {
-	panic(fmt.Errorf("not implemented: ActiveWorkflowInstance - activeWorkflowInstance"))
+// HasWorkflowHistory is the resolver for the hasWorkflowHistory field.
+func (r *campaignResolver) HasWorkflowHistory(ctx context.Context, obj *generated.Campaign) (bool, error) {
+	return workflowResolverHasHistory(ctx, generated.TypeCampaign, obj.ID)
+}
+
+// ActiveWorkflowInstances is the resolver for the activeWorkflowInstances field.
+func (r *campaignResolver) ActiveWorkflowInstances(ctx context.Context, obj *generated.Campaign) ([]*generated.WorkflowInstance, error) {
+	return workflowResolverActiveInstances(ctx, generated.TypeCampaign, obj.ID)
+}
+
+// WorkflowTimeline is the resolver for the workflowTimeline field.
+func (r *campaignResolver) WorkflowTimeline(ctx context.Context, obj *generated.Campaign, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) (*generated.WorkflowEventConnection, error) {
+	return workflowResolverTimeline(ctx, generated.TypeCampaign, obj.ID, after, first, before, last, orderBy, where, includeEmitFailures)
 }
 
 // CreateCampaign is the resolver for the createCampaign field.
@@ -144,3 +154,15 @@ func (r *queryResolver) Campaign(ctx context.Context, id string) (*generated.Cam
 
 	return res, nil
 }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+/*
+	func (r *campaignResolver) ActiveWorkflowInstance(ctx context.Context, obj *generated.Campaign) (*generated.WorkflowInstance, error) {
+	panic(fmt.Errorf("not implemented: ActiveWorkflowInstance - activeWorkflowInstance"))
+}
+*/

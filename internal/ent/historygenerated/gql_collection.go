@@ -615,6 +615,11 @@ func (_q *AssessmentResponseHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, assessmentresponsehistory.FieldAssessmentID)
 				fieldSeen[assessmentresponsehistory.FieldAssessmentID] = struct{}{}
 			}
+		case "isTest":
+			if _, ok := fieldSeen[assessmentresponsehistory.FieldIsTest]; !ok {
+				selectedFields = append(selectedFields, assessmentresponsehistory.FieldIsTest)
+				fieldSeen[assessmentresponsehistory.FieldIsTest] = struct{}{}
+			}
 		case "campaignID":
 			if _, ok := fieldSeen[assessmentresponsehistory.FieldCampaignID]; !ok {
 				selectedFields = append(selectedFields, assessmentresponsehistory.FieldCampaignID)

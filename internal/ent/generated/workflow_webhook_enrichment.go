@@ -41,8 +41,9 @@ func (c *Client) EnrichWebhookPayload(ctx context.Context, objectType enums.Work
 		if err != nil {
 			return err
 		}
-		// No fields marked with WebhookPayloadField annotation
-		payload["id"] = entity.ID
+		payload["title"] = entity.Title
+		payload["status"] = entity.Status
+		payload["ref_code"] = entity.RefCode
 		return nil
 	case enums.WorkflowObjectTypeEvidence:
 		entity, err := c.Evidence.Get(ctx, objectID)
@@ -89,8 +90,8 @@ func (c *Client) EnrichWebhookPayload(ctx context.Context, objectType enums.Work
 		if err != nil {
 			return err
 		}
-		// No fields marked with WebhookPayloadField annotation
-		payload["id"] = entity.ID
+		payload["title"] = entity.Title
+		payload["status"] = entity.Status
 		return nil
 	default:
 		return fmt.Errorf("unsupported object type: %s", objectType)
@@ -133,7 +134,9 @@ func (c *Client) EnrichControlWebhookPayload(ctx context.Context, id string, pay
 	if err != nil {
 		return err
 	}
-	payload["id"] = entity.ID
+	payload["title"] = entity.Title
+	payload["status"] = entity.Status
+	payload["ref_code"] = entity.RefCode
 	return nil
 }
 
@@ -193,6 +196,7 @@ func (c *Client) EnrichSubcontrolWebhookPayload(ctx context.Context, id string, 
 	if err != nil {
 		return err
 	}
-	payload["id"] = entity.ID
+	payload["title"] = entity.Title
+	payload["status"] = entity.Status
 	return nil
 }

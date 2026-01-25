@@ -8,9 +8,11 @@ package graphapi
 import (
 	"context"
 
+	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/graphapi/common"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
 // WorkflowEvent is the resolver for the workflowEvent field.
@@ -26,4 +28,38 @@ func (r *queryResolver) WorkflowEvent(ctx context.Context, id string) (*generate
 	}
 
 	return res, nil
+}
+
+// WorkflowEventTimeline is the resolver for the workflowEventTimeline field.
+func (r *queryResolver) WorkflowEventTimeline(ctx context.Context, workflowInstanceID string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) (*generated.WorkflowEventConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.WorkflowEventOrder{
+			{
+				Field:     generated.WorkflowEventOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).WorkflowEvent.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowevent"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWorkflowEventOrder(orderBy),
+		generated.WithWorkflowEventFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowevent"})
+	}
+
+	return res, err
 }

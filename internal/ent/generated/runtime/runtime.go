@@ -208,6 +208,7 @@ func init() {
 	actionplanMixinHooks8 := actionplanMixin[8].Hooks()
 	actionplanMixinHooks9 := actionplanMixin[9].Hooks()
 	actionplanMixinHooks10 := actionplanMixin[10].Hooks()
+	actionplanMixinHooks11 := actionplanMixin[11].Hooks()
 
 	actionplan.Hooks[1] = actionplanMixinHooks0[0]
 
@@ -242,6 +243,8 @@ func init() {
 	actionplan.Hooks[16] = actionplanMixinHooks9[0]
 
 	actionplan.Hooks[17] = actionplanMixinHooks10[0]
+
+	actionplan.Hooks[18] = actionplanMixinHooks11[0]
 	actionplanMixinInters1 := actionplanMixin[1].Interceptors()
 	actionplanMixinInters7 := actionplanMixin[7].Interceptors()
 	actionplan.Interceptors[0] = actionplanMixinInters1[0]
@@ -480,28 +483,32 @@ func init() {
 	assessmentresponseDescAssessmentID := assessmentresponseFields[0].Descriptor()
 	// assessmentresponse.AssessmentIDValidator is a validator for the "assessment_id" field. It is called by the builders before save.
 	assessmentresponse.AssessmentIDValidator = assessmentresponseDescAssessmentID.Validators[0].(func(string) error)
+	// assessmentresponseDescIsTest is the schema descriptor for is_test field.
+	assessmentresponseDescIsTest := assessmentresponseFields[1].Descriptor()
+	// assessmentresponse.DefaultIsTest holds the default value on creation for the is_test field.
+	assessmentresponse.DefaultIsTest = assessmentresponseDescIsTest.Default.(bool)
 	// assessmentresponseDescEmail is the schema descriptor for email field.
-	assessmentresponseDescEmail := assessmentresponseFields[4].Descriptor()
+	assessmentresponseDescEmail := assessmentresponseFields[5].Descriptor()
 	// assessmentresponse.EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	assessmentresponse.EmailValidator = assessmentresponseDescEmail.Validators[0].(func(string) error)
 	// assessmentresponseDescSendAttempts is the schema descriptor for send_attempts field.
-	assessmentresponseDescSendAttempts := assessmentresponseFields[5].Descriptor()
+	assessmentresponseDescSendAttempts := assessmentresponseFields[6].Descriptor()
 	// assessmentresponse.DefaultSendAttempts holds the default value on creation for the send_attempts field.
 	assessmentresponse.DefaultSendAttempts = assessmentresponseDescSendAttempts.Default.(int)
 	// assessmentresponseDescEmailOpenCount is the schema descriptor for email_open_count field.
-	assessmentresponseDescEmailOpenCount := assessmentresponseFields[9].Descriptor()
+	assessmentresponseDescEmailOpenCount := assessmentresponseFields[10].Descriptor()
 	// assessmentresponse.DefaultEmailOpenCount holds the default value on creation for the email_open_count field.
 	assessmentresponse.DefaultEmailOpenCount = assessmentresponseDescEmailOpenCount.Default.(int)
 	// assessmentresponseDescEmailClickCount is the schema descriptor for email_click_count field.
-	assessmentresponseDescEmailClickCount := assessmentresponseFields[10].Descriptor()
+	assessmentresponseDescEmailClickCount := assessmentresponseFields[11].Descriptor()
 	// assessmentresponse.DefaultEmailClickCount holds the default value on creation for the email_click_count field.
 	assessmentresponse.DefaultEmailClickCount = assessmentresponseDescEmailClickCount.Default.(int)
 	// assessmentresponseDescAssignedAt is the schema descriptor for assigned_at field.
-	assessmentresponseDescAssignedAt := assessmentresponseFields[14].Descriptor()
+	assessmentresponseDescAssignedAt := assessmentresponseFields[15].Descriptor()
 	// assessmentresponse.DefaultAssignedAt holds the default value on creation for the assigned_at field.
 	assessmentresponse.DefaultAssignedAt = assessmentresponseDescAssignedAt.Default.(func() time.Time)
 	// assessmentresponseDescStartedAt is the schema descriptor for started_at field.
-	assessmentresponseDescStartedAt := assessmentresponseFields[15].Descriptor()
+	assessmentresponseDescStartedAt := assessmentresponseFields[16].Descriptor()
 	// assessmentresponse.DefaultStartedAt holds the default value on creation for the started_at field.
 	assessmentresponse.DefaultStartedAt = assessmentresponseDescStartedAt.Default.(time.Time)
 	// assessmentresponseDescID is the schema descriptor for id field.
@@ -633,6 +640,7 @@ func init() {
 	campaignMixinHooks3 := campaignMixin[3].Hooks()
 	campaignMixinHooks5 := campaignMixin[5].Hooks()
 	campaignMixinHooks6 := campaignMixin[6].Hooks()
+	campaignMixinHooks8 := campaignMixin[8].Hooks()
 
 	campaign.Hooks[1] = campaignMixinHooks0[0]
 
@@ -651,6 +659,8 @@ func init() {
 	campaign.Hooks[8] = campaignMixinHooks6[1]
 
 	campaign.Hooks[9] = campaignMixinHooks6[2]
+
+	campaign.Hooks[10] = campaignMixinHooks8[0]
 	campaignMixinInters1 := campaignMixin[1].Interceptors()
 	campaignMixinInters5 := campaignMixin[5].Interceptors()
 	campaign.Interceptors[0] = campaignMixinInters1[0]
@@ -743,6 +753,8 @@ func init() {
 	campaigntargetMixinHooks0 := campaigntargetMixin[0].Hooks()
 	campaigntargetMixinHooks1 := campaigntargetMixin[1].Hooks()
 	campaigntargetMixinHooks4 := campaigntargetMixin[4].Hooks()
+	campaigntargetMixinHooks5 := campaigntargetMixin[5].Hooks()
+	campaigntargetHooks := schema.CampaignTarget{}.Hooks()
 
 	campaigntarget.Hooks[1] = campaigntargetMixinHooks0[0]
 
@@ -751,6 +763,10 @@ func init() {
 	campaigntarget.Hooks[3] = campaigntargetMixinHooks4[0]
 
 	campaigntarget.Hooks[4] = campaigntargetMixinHooks4[1]
+
+	campaigntarget.Hooks[5] = campaigntargetMixinHooks5[0]
+
+	campaigntarget.Hooks[6] = campaigntargetHooks[0]
 	campaigntargetMixinInters1 := campaigntargetMixin[1].Interceptors()
 	campaigntargetMixinInters4 := campaigntargetMixin[4].Interceptors()
 	campaigntarget.Interceptors[0] = campaigntargetMixinInters1[0]
@@ -904,6 +920,7 @@ func init() {
 	controlMixinHooks9 := controlMixin[9].Hooks()
 	controlMixinHooks10 := controlMixin[10].Hooks()
 	controlMixinHooks11 := controlMixin[11].Hooks()
+	controlMixinHooks12 := controlMixin[12].Hooks()
 	controlHooks := schema.Control{}.Hooks()
 
 	control.Hooks[1] = controlMixinHooks0[0]
@@ -936,7 +953,9 @@ func init() {
 
 	control.Hooks[15] = controlMixinHooks11[0]
 
-	control.Hooks[16] = controlHooks[0]
+	control.Hooks[16] = controlMixinHooks12[0]
+
+	control.Hooks[17] = controlHooks[0]
 	controlMixinInters1 := controlMixin[1].Interceptors()
 	controlMixinInters5 := controlMixin[5].Interceptors()
 	controlMixinInters6 := controlMixin[6].Interceptors()
@@ -2316,6 +2335,7 @@ func init() {
 	evidenceMixinHooks5 := evidenceMixin[5].Hooks()
 	evidenceMixinHooks6 := evidenceMixin[6].Hooks()
 	evidenceMixinHooks7 := evidenceMixin[7].Hooks()
+	evidenceMixinHooks8 := evidenceMixin[8].Hooks()
 	evidenceHooks := schema.Evidence{}.Hooks()
 
 	evidence.Hooks[1] = evidenceMixinHooks0[0]
@@ -2334,9 +2354,11 @@ func init() {
 
 	evidence.Hooks[8] = evidenceMixinHooks7[0]
 
-	evidence.Hooks[9] = evidenceHooks[0]
+	evidence.Hooks[9] = evidenceMixinHooks8[0]
 
-	evidence.Hooks[10] = evidenceHooks[1]
+	evidence.Hooks[10] = evidenceHooks[0]
+
+	evidence.Hooks[11] = evidenceHooks[1]
 	evidenceMixinInters1 := evidenceMixin[1].Interceptors()
 	evidenceMixinInters5 := evidenceMixin[5].Interceptors()
 	evidence.Interceptors[0] = evidenceMixinInters1[0]
@@ -3002,6 +3024,7 @@ func init() {
 	identityholderMixinHooks6 := identityholderMixin[6].Hooks()
 	identityholderMixinHooks8 := identityholderMixin[8].Hooks()
 	identityholderMixinHooks9 := identityholderMixin[9].Hooks()
+	identityholderMixinHooks10 := identityholderMixin[10].Hooks()
 
 	identityholder.Hooks[1] = identityholderMixinHooks0[0]
 
@@ -3024,6 +3047,8 @@ func init() {
 	identityholder.Hooks[10] = identityholderMixinHooks8[0]
 
 	identityholder.Hooks[11] = identityholderMixinHooks9[0]
+
+	identityholder.Hooks[12] = identityholderMixinHooks10[0]
 	identityholderMixinInters1 := identityholderMixin[1].Interceptors()
 	identityholderMixinInters5 := identityholderMixin[5].Interceptors()
 	identityholder.Interceptors[0] = identityholderMixinInters1[0]
@@ -3241,6 +3266,7 @@ func init() {
 	internalpolicyMixinHooks10 := internalpolicyMixin[10].Hooks()
 	internalpolicyMixinHooks11 := internalpolicyMixin[11].Hooks()
 	internalpolicyMixinHooks12 := internalpolicyMixin[12].Hooks()
+	internalpolicyMixinHooks13 := internalpolicyMixin[13].Hooks()
 	internalpolicyHooks := schema.InternalPolicy{}.Hooks()
 
 	internalpolicy.Hooks[1] = internalpolicyMixinHooks0[0]
@@ -3279,7 +3305,9 @@ func init() {
 
 	internalpolicy.Hooks[18] = internalpolicyMixinHooks12[0]
 
-	internalpolicy.Hooks[19] = internalpolicyHooks[0]
+	internalpolicy.Hooks[19] = internalpolicyMixinHooks13[0]
+
+	internalpolicy.Hooks[20] = internalpolicyHooks[0]
 	internalpolicyMixinInters1 := internalpolicyMixin[1].Interceptors()
 	internalpolicyMixinInters6 := internalpolicyMixin[6].Interceptors()
 	internalpolicyMixinInters8 := internalpolicyMixin[8].Interceptors()
@@ -4944,6 +4972,7 @@ func init() {
 	platformMixinHooks13 := platformMixin[13].Hooks()
 	platformMixinHooks14 := platformMixin[14].Hooks()
 	platformMixinHooks15 := platformMixin[15].Hooks()
+	platformMixinHooks16 := platformMixin[16].Hooks()
 
 	platform.Hooks[1] = platformMixinHooks0[0]
 
@@ -4978,6 +5007,8 @@ func init() {
 	platform.Hooks[16] = platformMixinHooks14[0]
 
 	platform.Hooks[17] = platformMixinHooks15[0]
+
+	platform.Hooks[18] = platformMixinHooks16[0]
 	platformMixinInters1 := platformMixin[1].Interceptors()
 	platformMixinInters5 := platformMixin[5].Interceptors()
 	platform.Interceptors[0] = platformMixinInters1[0]
@@ -5055,6 +5086,7 @@ func init() {
 	procedureMixinHooks10 := procedureMixin[10].Hooks()
 	procedureMixinHooks11 := procedureMixin[11].Hooks()
 	procedureMixinHooks12 := procedureMixin[12].Hooks()
+	procedureMixinHooks13 := procedureMixin[13].Hooks()
 	procedureHooks := schema.Procedure{}.Hooks()
 
 	procedure.Hooks[1] = procedureMixinHooks0[0]
@@ -5093,7 +5125,9 @@ func init() {
 
 	procedure.Hooks[18] = procedureMixinHooks12[0]
 
-	procedure.Hooks[19] = procedureHooks[0]
+	procedure.Hooks[19] = procedureMixinHooks13[0]
+
+	procedure.Hooks[20] = procedureHooks[0]
 	procedureMixinInters1 := procedureMixin[1].Interceptors()
 	procedureMixinInters6 := procedureMixin[6].Interceptors()
 	procedureMixinInters7 := procedureMixin[7].Interceptors()
@@ -5966,6 +6000,7 @@ func init() {
 	subcontrolMixinHooks6 := subcontrolMixin[6].Hooks()
 	subcontrolMixinHooks7 := subcontrolMixin[7].Hooks()
 	subcontrolMixinHooks8 := subcontrolMixin[8].Hooks()
+	subcontrolMixinHooks9 := subcontrolMixin[9].Hooks()
 	subcontrolHooks := schema.Subcontrol{}.Hooks()
 
 	subcontrol.Hooks[1] = subcontrolMixinHooks0[0]
@@ -5990,9 +6025,11 @@ func init() {
 
 	subcontrol.Hooks[11] = subcontrolMixinHooks8[0]
 
-	subcontrol.Hooks[12] = subcontrolHooks[0]
+	subcontrol.Hooks[12] = subcontrolMixinHooks9[0]
 
-	subcontrol.Hooks[13] = subcontrolHooks[1]
+	subcontrol.Hooks[13] = subcontrolHooks[0]
+
+	subcontrol.Hooks[14] = subcontrolHooks[1]
 	subcontrolMixinInters1 := subcontrolMixin[1].Interceptors()
 	subcontrolMixinInters5 := subcontrolMixin[5].Interceptors()
 	subcontrolMixinInters6 := subcontrolMixin[6].Interceptors()
@@ -7719,6 +7756,7 @@ func init() {
 	workflowassignmentMixinHooks2 := workflowassignmentMixin[2].Hooks()
 	workflowassignmentMixinHooks3 := workflowassignmentMixin[3].Hooks()
 	workflowassignmentMixinHooks5 := workflowassignmentMixin[5].Hooks()
+	workflowassignmentHooks := schema.WorkflowAssignment{}.Hooks()
 
 	workflowassignment.Hooks[1] = workflowassignmentMixinHooks0[0]
 
@@ -7731,6 +7769,8 @@ func init() {
 	workflowassignment.Hooks[5] = workflowassignmentMixinHooks5[0]
 
 	workflowassignment.Hooks[6] = workflowassignmentMixinHooks5[1]
+
+	workflowassignment.Hooks[7] = workflowassignmentHooks[0]
 	workflowassignmentMixinInters1 := workflowassignmentMixin[1].Interceptors()
 	workflowassignmentMixinInters5 := workflowassignmentMixin[5].Interceptors()
 	workflowassignment.Interceptors[0] = workflowassignmentMixinInters1[0]
@@ -7876,6 +7916,7 @@ func init() {
 	workflowdefinitionMixinHooks3 := workflowdefinitionMixin[3].Hooks()
 	workflowdefinitionMixinHooks5 := workflowdefinitionMixin[5].Hooks()
 	workflowdefinitionMixinHooks6 := workflowdefinitionMixin[6].Hooks()
+	workflowdefinitionHooks := schema.WorkflowDefinition{}.Hooks()
 
 	workflowdefinition.Hooks[1] = workflowdefinitionMixinHooks0[0]
 
@@ -7890,6 +7931,8 @@ func init() {
 	workflowdefinition.Hooks[6] = workflowdefinitionMixinHooks5[1]
 
 	workflowdefinition.Hooks[7] = workflowdefinitionMixinHooks6[0]
+
+	workflowdefinition.Hooks[8] = workflowdefinitionHooks[0]
 	workflowdefinitionMixinInters1 := workflowdefinitionMixin[1].Interceptors()
 	workflowdefinitionMixinInters5 := workflowdefinitionMixin[5].Interceptors()
 	workflowdefinition.Interceptors[0] = workflowdefinitionMixinInters1[0]
@@ -8193,10 +8236,13 @@ func init() {
 	workflowproposalMixinHooks0 := workflowproposalMixin[0].Hooks()
 	workflowproposalMixinHooks2 := workflowproposalMixin[2].Hooks()
 	workflowproposalMixinHooks3 := workflowproposalMixin[3].Hooks()
+	workflowproposalHooks := schema.WorkflowProposal{}.Hooks()
 	workflowproposal.Hooks[0] = workflowproposalMixinHooks0[0]
 	workflowproposal.Hooks[1] = workflowproposalMixinHooks2[0]
 	workflowproposal.Hooks[2] = workflowproposalMixinHooks3[0]
 	workflowproposal.Hooks[3] = workflowproposalMixinHooks3[1]
+	workflowproposal.Hooks[4] = workflowproposalHooks[0]
+	workflowproposal.Hooks[5] = workflowproposalHooks[1]
 	workflowproposalMixinInters3 := workflowproposalMixin[3].Interceptors()
 	workflowproposal.Interceptors[0] = workflowproposalMixinInters3[0]
 	workflowproposal.Interceptors[1] = workflowproposalMixinInters3[1]

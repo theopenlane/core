@@ -41,6 +41,8 @@ type AssessmentResponse struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the assessment this response is for
 	AssessmentID string `json:"assessment_id,omitempty"`
+	// whether this assessment response is for a test send
+	IsTest bool `json:"is_test,omitempty"`
 	// the campaign this response is associated with
 	CampaignID string `json:"campaign_id,omitempty"`
 	// the identity holder record for the recipient
@@ -177,6 +179,8 @@ func (*AssessmentResponse) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case assessmentresponse.FieldEmailMetadata:
 			values[i] = new([]byte)
+		case assessmentresponse.FieldIsTest:
+			values[i] = new(sql.NullBool)
 		case assessmentresponse.FieldSendAttempts, assessmentresponse.FieldEmailOpenCount, assessmentresponse.FieldEmailClickCount:
 			values[i] = new(sql.NullInt64)
 		case assessmentresponse.FieldID, assessmentresponse.FieldCreatedBy, assessmentresponse.FieldUpdatedBy, assessmentresponse.FieldDeletedBy, assessmentresponse.FieldOwnerID, assessmentresponse.FieldAssessmentID, assessmentresponse.FieldCampaignID, assessmentresponse.FieldIdentityHolderID, assessmentresponse.FieldEntityID, assessmentresponse.FieldEmail, assessmentresponse.FieldStatus, assessmentresponse.FieldDocumentDataID:
@@ -251,6 +255,12 @@ func (_m *AssessmentResponse) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field assessment_id", values[i])
 			} else if value.Valid {
 				_m.AssessmentID = value.String
+			}
+		case assessmentresponse.FieldIsTest:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_test", values[i])
+			} else if value.Valid {
+				_m.IsTest = value.Bool
 			}
 		case assessmentresponse.FieldCampaignID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -451,6 +461,9 @@ func (_m *AssessmentResponse) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("assessment_id=")
 	builder.WriteString(_m.AssessmentID)
+	builder.WriteString(", ")
+	builder.WriteString("is_test=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsTest))
 	builder.WriteString(", ")
 	builder.WriteString("campaign_id=")
 	builder.WriteString(_m.CampaignID)

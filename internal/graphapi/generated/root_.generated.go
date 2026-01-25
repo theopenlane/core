@@ -143,7 +143,7 @@ type ComplexityRoot struct {
 		ActionPlanKind                  func(childComplexity int) int
 		ActionPlanKindID                func(childComplexity int) int
 		ActionPlanKindName              func(childComplexity int) int
-		ActiveWorkflowInstance          func(childComplexity int) int
+		ActiveWorkflowInstances         func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
@@ -169,6 +169,7 @@ type ComplexityRoot struct {
 		FileID                          func(childComplexity int) int
 		Findings                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		HasPendingWorkflow              func(childComplexity int) int
+		HasWorkflowHistory              func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
@@ -204,6 +205,7 @@ type ComplexityRoot struct {
 		Vulnerabilities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 		WorkflowEligibleMarker          func(childComplexity int) int
 		WorkflowObjectRefs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	ActionPlanBulkCreatePayload struct {
@@ -314,6 +316,7 @@ type ComplexityRoot struct {
 		ID               func(childComplexity int) int
 		IdentityHolder   func(childComplexity int) int
 		IdentityHolderID func(childComplexity int) int
+		IsTest           func(childComplexity int) int
 		LastEmailEventAt func(childComplexity int) int
 		Owner            func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
@@ -450,60 +453,62 @@ type ComplexityRoot struct {
 	}
 
 	Campaign struct {
-		ActiveWorkflowInstance func(childComplexity int) int
-		Assessment             func(childComplexity int) int
-		AssessmentID           func(childComplexity int) int
-		AssessmentResponses    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
-		BlockedGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		CampaignTargets        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignTargetOrder, where *generated.CampaignTargetWhereInput) int
-		CampaignType           func(childComplexity int) int
-		CompletedAt            func(childComplexity int) int
-		Contacts               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		Description            func(childComplexity int) int
-		DisplayID              func(childComplexity int) int
-		DueDate                func(childComplexity int) int
-		Editors                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Entity                 func(childComplexity int) int
-		EntityID               func(childComplexity int) int
-		Groups                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		HasPendingWorkflow     func(childComplexity int) int
-		ID                     func(childComplexity int) int
-		IdentityHolders        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
-		InternalOwner          func(childComplexity int) int
-		InternalOwnerGroup     func(childComplexity int) int
-		InternalOwnerGroupID   func(childComplexity int) int
-		InternalOwnerUser      func(childComplexity int) int
-		InternalOwnerUserID    func(childComplexity int) int
-		IsActive               func(childComplexity int) int
-		IsRecurring            func(childComplexity int) int
-		LastResentAt           func(childComplexity int) int
-		LastRunAt              func(childComplexity int) int
-		LaunchedAt             func(childComplexity int) int
-		Metadata               func(childComplexity int) int
-		Name                   func(childComplexity int) int
-		NextRunAt              func(childComplexity int) int
-		Owner                  func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		RecipientCount         func(childComplexity int) int
-		RecurrenceCron         func(childComplexity int) int
-		RecurrenceEndAt        func(childComplexity int) int
-		RecurrenceFrequency    func(childComplexity int) int
-		RecurrenceInterval     func(childComplexity int) int
-		RecurrenceTimezone     func(childComplexity int) int
-		ResendCount            func(childComplexity int) int
-		ScheduledAt            func(childComplexity int) int
-		Status                 func(childComplexity int) int
-		Tags                   func(childComplexity int) int
-		Template               func(childComplexity int) int
-		TemplateID             func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
-		Users                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
-		Viewers                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		WorkflowEligibleMarker func(childComplexity int) int
-		WorkflowObjectRefs     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		ActiveWorkflowInstances func(childComplexity int) int
+		Assessment              func(childComplexity int) int
+		AssessmentID            func(childComplexity int) int
+		AssessmentResponses     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
+		BlockedGroups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		CampaignTargets         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignTargetOrder, where *generated.CampaignTargetWhereInput) int
+		CampaignType            func(childComplexity int) int
+		CompletedAt             func(childComplexity int) int
+		Contacts                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Description             func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		DueDate                 func(childComplexity int) int
+		Editors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entity                  func(childComplexity int) int
+		EntityID                func(childComplexity int) int
+		Groups                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		HasPendingWorkflow      func(childComplexity int) int
+		HasWorkflowHistory      func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IdentityHolders         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
+		InternalOwner           func(childComplexity int) int
+		InternalOwnerGroup      func(childComplexity int) int
+		InternalOwnerGroupID    func(childComplexity int) int
+		InternalOwnerUser       func(childComplexity int) int
+		InternalOwnerUserID     func(childComplexity int) int
+		IsActive                func(childComplexity int) int
+		IsRecurring             func(childComplexity int) int
+		LastResentAt            func(childComplexity int) int
+		LastRunAt               func(childComplexity int) int
+		LaunchedAt              func(childComplexity int) int
+		Metadata                func(childComplexity int) int
+		Name                    func(childComplexity int) int
+		NextRunAt               func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		RecipientCount          func(childComplexity int) int
+		RecurrenceCron          func(childComplexity int) int
+		RecurrenceEndAt         func(childComplexity int) int
+		RecurrenceFrequency     func(childComplexity int) int
+		RecurrenceInterval      func(childComplexity int) int
+		RecurrenceTimezone      func(childComplexity int) int
+		ResendCount             func(childComplexity int) int
+		ScheduledAt             func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		Template                func(childComplexity int) int
+		TemplateID              func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		Users                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
+		Viewers                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		WorkflowEligibleMarker  func(childComplexity int) int
+		WorkflowObjectRefs      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	CampaignBulkCreatePayload struct {
@@ -530,31 +535,33 @@ type ComplexityRoot struct {
 	}
 
 	CampaignTarget struct {
-		ActiveWorkflowInstance func(childComplexity int) int
-		Campaign               func(childComplexity int) int
-		CampaignID             func(childComplexity int) int
-		CompletedAt            func(childComplexity int) int
-		Contact                func(childComplexity int) int
-		ContactID              func(childComplexity int) int
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		Email                  func(childComplexity int) int
-		FullName               func(childComplexity int) int
-		Group                  func(childComplexity int) int
-		GroupID                func(childComplexity int) int
-		HasPendingWorkflow     func(childComplexity int) int
-		ID                     func(childComplexity int) int
-		Metadata               func(childComplexity int) int
-		Owner                  func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		SentAt                 func(childComplexity int) int
-		Status                 func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
-		User                   func(childComplexity int) int
-		UserID                 func(childComplexity int) int
-		WorkflowEligibleMarker func(childComplexity int) int
-		WorkflowObjectRefs     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		ActiveWorkflowInstances func(childComplexity int) int
+		Campaign                func(childComplexity int) int
+		CampaignID              func(childComplexity int) int
+		CompletedAt             func(childComplexity int) int
+		Contact                 func(childComplexity int) int
+		ContactID               func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Email                   func(childComplexity int) int
+		FullName                func(childComplexity int) int
+		Group                   func(childComplexity int) int
+		GroupID                 func(childComplexity int) int
+		HasPendingWorkflow      func(childComplexity int) int
+		HasWorkflowHistory      func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		Metadata                func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		SentAt                  func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		User                    func(childComplexity int) int
+		UserID                  func(childComplexity int) int
+		WorkflowEligibleMarker  func(childComplexity int) int
+		WorkflowObjectRefs      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	CampaignTargetBulkCreatePayload struct {
@@ -648,7 +655,7 @@ type ComplexityRoot struct {
 
 	Control struct {
 		ActionPlans                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		ActiveWorkflowInstance     func(childComplexity int) int
+		ActiveWorkflowInstances    func(childComplexity int) int
 		Aliases                    func(childComplexity int) int
 		AssessmentMethods          func(childComplexity int) int
 		AssessmentObjectives       func(childComplexity int) int
@@ -684,6 +691,7 @@ type ComplexityRoot struct {
 		ExampleEvidence            func(childComplexity int) int
 		Findings                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		HasPendingWorkflow         func(childComplexity int) int
+		HasWorkflowHistory         func(childComplexity int) int
 		ID                         func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
@@ -724,6 +732,7 @@ type ComplexityRoot struct {
 		UpdatedBy                  func(childComplexity int) int
 		WorkflowEligibleMarker     func(childComplexity int) int
 		WorkflowObjectRefs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	ControlBulkCreatePayload struct {
@@ -1656,44 +1665,46 @@ type ComplexityRoot struct {
 	}
 
 	Evidence struct {
-		ActiveWorkflowInstance func(childComplexity int) int
-		CollectionProcedure    func(childComplexity int) int
-		Comments               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		ControlImplementations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
-		ControlObjectives      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
-		Controls               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		CreationDate           func(childComplexity int) int
-		Description            func(childComplexity int) int
-		DisplayID              func(childComplexity int) int
-		Environment            func(childComplexity int) int
-		EnvironmentID          func(childComplexity int) int
-		EnvironmentName        func(childComplexity int) int
-		Files                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		HasPendingWorkflow     func(childComplexity int) int
-		ID                     func(childComplexity int) int
-		IsAutomated            func(childComplexity int) int
-		Name                   func(childComplexity int) int
-		Owner                  func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		Platforms              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
-		Programs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		RenewalDate            func(childComplexity int) int
-		Scans                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		Scope                  func(childComplexity int) int
-		ScopeID                func(childComplexity int) int
-		ScopeName              func(childComplexity int) int
-		Source                 func(childComplexity int) int
-		Status                 func(childComplexity int) int
-		Subcontrols            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Tags                   func(childComplexity int) int
-		Tasks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		URL                    func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
-		WorkflowEligibleMarker func(childComplexity int) int
-		WorkflowObjectRefs     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		ActiveWorkflowInstances func(childComplexity int) int
+		CollectionProcedure     func(childComplexity int) int
+		Comments                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		ControlImplementations  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
+		ControlObjectives       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		Controls                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		CreationDate            func(childComplexity int) int
+		Description             func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		Environment             func(childComplexity int) int
+		EnvironmentID           func(childComplexity int) int
+		EnvironmentName         func(childComplexity int) int
+		Files                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		HasPendingWorkflow      func(childComplexity int) int
+		HasWorkflowHistory      func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IsAutomated             func(childComplexity int) int
+		Name                    func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		Programs                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RenewalDate             func(childComplexity int) int
+		Scans                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Scope                   func(childComplexity int) int
+		ScopeID                 func(childComplexity int) int
+		ScopeName               func(childComplexity int) int
+		Source                  func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Tags                    func(childComplexity int) int
+		Tasks                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		URL                     func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		WorkflowEligibleMarker  func(childComplexity int) int
+		WorkflowObjectRefs      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	EvidenceBulkCreatePayload struct {
@@ -2274,63 +2285,65 @@ type ComplexityRoot struct {
 	}
 
 	IdentityHolder struct {
-		AccessPlatforms        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
-		ActiveWorkflowInstance func(childComplexity int) int
-		AlternateEmail         func(childComplexity int) int
-		AssessmentResponses    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
-		Assessments            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
-		Assets                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		BlockedGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Campaigns              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		Department             func(childComplexity int) int
-		DisplayID              func(childComplexity int) int
-		Editors                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Email                  func(childComplexity int) int
-		Employer               func(childComplexity int) int
-		EmployerEntityID       func(childComplexity int) int
-		EndDate                func(childComplexity int) int
-		Entities               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		Environment            func(childComplexity int) int
-		EnvironmentID          func(childComplexity int) int
-		EnvironmentName        func(childComplexity int) int
-		ExternalReferenceID    func(childComplexity int) int
-		ExternalUserID         func(childComplexity int) int
-		FullName               func(childComplexity int) int
-		HasPendingWorkflow     func(childComplexity int) int
-		ID                     func(childComplexity int) int
-		IdentityHolderType     func(childComplexity int) int
-		InternalOwner          func(childComplexity int) int
-		InternalOwnerGroup     func(childComplexity int) int
-		InternalOwnerGroupID   func(childComplexity int) int
-		InternalOwnerUser      func(childComplexity int) int
-		InternalOwnerUserID    func(childComplexity int) int
-		IsActive               func(childComplexity int) int
-		IsOpenlaneUser         func(childComplexity int) int
-		Location               func(childComplexity int) int
-		Metadata               func(childComplexity int) int
-		Owner                  func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		PhoneNumber            func(childComplexity int) int
-		Platforms              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
-		Scope                  func(childComplexity int) int
-		ScopeID                func(childComplexity int) int
-		ScopeName              func(childComplexity int) int
-		StartDate              func(childComplexity int) int
-		Status                 func(childComplexity int) int
-		Tags                   func(childComplexity int) int
-		Tasks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		Team                   func(childComplexity int) int
-		Templates              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
-		Title                  func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
-		User                   func(childComplexity int) int
-		UserID                 func(childComplexity int) int
-		Viewers                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		WorkflowEligibleMarker func(childComplexity int) int
-		WorkflowObjectRefs     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		AccessPlatforms         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		ActiveWorkflowInstances func(childComplexity int) int
+		AlternateEmail          func(childComplexity int) int
+		AssessmentResponses     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
+		Assessments             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
+		Assets                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Campaigns               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Department              func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		Editors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Email                   func(childComplexity int) int
+		Employer                func(childComplexity int) int
+		EmployerEntityID        func(childComplexity int) int
+		EndDate                 func(childComplexity int) int
+		Entities                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment             func(childComplexity int) int
+		EnvironmentID           func(childComplexity int) int
+		EnvironmentName         func(childComplexity int) int
+		ExternalReferenceID     func(childComplexity int) int
+		ExternalUserID          func(childComplexity int) int
+		FullName                func(childComplexity int) int
+		HasPendingWorkflow      func(childComplexity int) int
+		HasWorkflowHistory      func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IdentityHolderType      func(childComplexity int) int
+		InternalOwner           func(childComplexity int) int
+		InternalOwnerGroup      func(childComplexity int) int
+		InternalOwnerGroupID    func(childComplexity int) int
+		InternalOwnerUser       func(childComplexity int) int
+		InternalOwnerUserID     func(childComplexity int) int
+		IsActive                func(childComplexity int) int
+		IsOpenlaneUser          func(childComplexity int) int
+		Location                func(childComplexity int) int
+		Metadata                func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		PhoneNumber             func(childComplexity int) int
+		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		Scope                   func(childComplexity int) int
+		ScopeID                 func(childComplexity int) int
+		ScopeName               func(childComplexity int) int
+		StartDate               func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		Tasks                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		Team                    func(childComplexity int) int
+		Templates               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
+		Title                   func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		User                    func(childComplexity int) int
+		UserID                  func(childComplexity int) int
+		Viewers                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		WorkflowEligibleMarker  func(childComplexity int) int
+		WorkflowObjectRefs      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	IdentityHolderBulkCreatePayload struct {
@@ -2415,7 +2428,7 @@ type ComplexityRoot struct {
 	}
 
 	InternalPolicy struct {
-		ActiveWorkflowInstance          func(childComplexity int) int
+		ActiveWorkflowInstances         func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
@@ -2443,6 +2456,7 @@ type ComplexityRoot struct {
 		File                            func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		HasPendingWorkflow              func(childComplexity int) int
+		HasWorkflowHistory              func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
@@ -2475,6 +2489,7 @@ type ComplexityRoot struct {
 		UpdatedBy                       func(childComplexity int) int
 		WorkflowEligibleMarker          func(childComplexity int) int
 		WorkflowObjectRefs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	InternalPolicyBulkCreatePayload struct {
@@ -3805,7 +3820,7 @@ type ComplexityRoot struct {
 		AccessModel                    func(childComplexity int) int
 		AccessModelID                  func(childComplexity int) int
 		AccessModelName                func(childComplexity int) int
-		ActiveWorkflowInstance         func(childComplexity int) int
+		ActiveWorkflowInstances        func(childComplexity int) int
 		ApplicableFrameworks           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
 		Assessments                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
 		Assets                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
@@ -3841,6 +3856,7 @@ type ComplexityRoot struct {
 		Files                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		GeneratedScans                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		HasPendingWorkflow             func(childComplexity int) int
+		HasWorkflowHistory             func(childComplexity int) int
 		ID                             func(childComplexity int) int
 		IdentityHolders                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		InternalOwner                  func(childComplexity int) int
@@ -3897,6 +3913,7 @@ type ComplexityRoot struct {
 		Viewers                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		WorkflowEligibleMarker         func(childComplexity int) int
 		WorkflowObjectRefs             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	PlatformBulkCreatePayload struct {
@@ -3927,7 +3944,7 @@ type ComplexityRoot struct {
 	}
 
 	Procedure struct {
-		ActiveWorkflowInstance          func(childComplexity int) int
+		ActiveWorkflowInstances         func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
@@ -3953,6 +3970,7 @@ type ComplexityRoot struct {
 		File                            func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		HasPendingWorkflow              func(childComplexity int) int
+		HasWorkflowHistory              func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
@@ -3985,6 +4003,7 @@ type ComplexityRoot struct {
 		UpdatedBy                       func(childComplexity int) int
 		WorkflowEligibleMarker          func(childComplexity int) int
 		WorkflowObjectRefs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	ProcedureBulkCreatePayload struct {
@@ -4358,6 +4377,7 @@ type ComplexityRoot struct {
 		WorkflowDefinition              func(childComplexity int, id string) int
 		WorkflowDefinitions             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowDefinitionOrder, where *generated.WorkflowDefinitionWhereInput) int
 		WorkflowEvent                   func(childComplexity int, id string) int
+		WorkflowEventTimeline           func(childComplexity int, workflowInstanceID string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 		WorkflowEvents                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput) int
 		WorkflowInstance                func(childComplexity int, id string) int
 		WorkflowInstances               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowInstanceOrder, where *generated.WorkflowInstanceWhereInput) int
@@ -4925,7 +4945,7 @@ type ComplexityRoot struct {
 
 	Subcontrol struct {
 		ActionPlans                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		ActiveWorkflowInstance     func(childComplexity int) int
+		ActiveWorkflowInstances    func(childComplexity int) int
 		Aliases                    func(childComplexity int) int
 		AssessmentMethods          func(childComplexity int) int
 		AssessmentObjectives       func(childComplexity int) int
@@ -4952,6 +4972,7 @@ type ComplexityRoot struct {
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
 		HasPendingWorkflow         func(childComplexity int) int
+		HasWorkflowHistory         func(childComplexity int) int
 		ID                         func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
@@ -4986,6 +5007,7 @@ type ComplexityRoot struct {
 		UpdatedBy                  func(childComplexity int) int
 		WorkflowEligibleMarker     func(childComplexity int) int
 		WorkflowObjectRefs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	SubcontrolBulkCreatePayload struct {
@@ -6574,12 +6596,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.ActionPlanKindName(childComplexity), true
 
-	case "ActionPlan.activeWorkflowInstance":
-		if e.complexity.ActionPlan.ActiveWorkflowInstance == nil {
+	case "ActionPlan.activeWorkflowInstances":
+		if e.complexity.ActionPlan.ActiveWorkflowInstances == nil {
 			break
 		}
 
-		return e.complexity.ActionPlan.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.ActionPlan.ActiveWorkflowInstances(childComplexity), true
 
 	case "ActionPlan.approvalRequired":
 		if e.complexity.ActionPlan.ApprovalRequired == nil {
@@ -6775,6 +6797,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.HasPendingWorkflow(childComplexity), true
+
+	case "ActionPlan.hasWorkflowHistory":
+		if e.complexity.ActionPlan.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.HasWorkflowHistory(childComplexity), true
 
 	case "ActionPlan.id":
 		if e.complexity.ActionPlan.ID == nil {
@@ -7070,6 +7099,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "ActionPlan.workflowTimeline":
+		if e.complexity.ActionPlan.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_ActionPlan_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ActionPlan.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
 
 	case "ActionPlanBulkCreatePayload.actionPlans":
 		if e.complexity.ActionPlanBulkCreatePayload.ActionPlans == nil {
@@ -7560,6 +7601,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssessmentResponse.IdentityHolderID(childComplexity), true
+
+	case "AssessmentResponse.isTest":
+		if e.complexity.AssessmentResponse.IsTest == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.IsTest(childComplexity), true
 
 	case "AssessmentResponse.lastEmailEventAt":
 		if e.complexity.AssessmentResponse.LastEmailEventAt == nil {
@@ -8274,12 +8322,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssetUpdatePayload.Asset(childComplexity), true
 
-	case "Campaign.activeWorkflowInstance":
-		if e.complexity.Campaign.ActiveWorkflowInstance == nil {
+	case "Campaign.activeWorkflowInstances":
+		if e.complexity.Campaign.ActiveWorkflowInstances == nil {
 			break
 		}
 
-		return e.complexity.Campaign.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.Campaign.ActiveWorkflowInstances(childComplexity), true
 
 	case "Campaign.assessment":
 		if e.complexity.Campaign.Assessment == nil {
@@ -8436,6 +8484,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Campaign.HasPendingWorkflow(childComplexity), true
+
+	case "Campaign.hasWorkflowHistory":
+		if e.complexity.Campaign.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.Campaign.HasWorkflowHistory(childComplexity), true
 
 	case "Campaign.id":
 		if e.complexity.Campaign.ID == nil {
@@ -8702,6 +8757,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Campaign.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
 
+	case "Campaign.workflowTimeline":
+		if e.complexity.Campaign.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_Campaign_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Campaign.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
+
 	case "CampaignBulkCreatePayload.campaigns":
 		if e.complexity.CampaignBulkCreatePayload.Campaigns == nil {
 			break
@@ -8758,12 +8825,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.CampaignEdge.Node(childComplexity), true
 
-	case "CampaignTarget.activeWorkflowInstance":
-		if e.complexity.CampaignTarget.ActiveWorkflowInstance == nil {
+	case "CampaignTarget.activeWorkflowInstances":
+		if e.complexity.CampaignTarget.ActiveWorkflowInstances == nil {
 			break
 		}
 
-		return e.complexity.CampaignTarget.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.CampaignTarget.ActiveWorkflowInstances(childComplexity), true
 
 	case "CampaignTarget.campaign":
 		if e.complexity.CampaignTarget.Campaign == nil {
@@ -8848,6 +8915,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CampaignTarget.HasPendingWorkflow(childComplexity), true
+
+	case "CampaignTarget.hasWorkflowHistory":
+		if e.complexity.CampaignTarget.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.HasWorkflowHistory(childComplexity), true
 
 	case "CampaignTarget.id":
 		if e.complexity.CampaignTarget.ID == nil {
@@ -8937,6 +9011,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CampaignTarget.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "CampaignTarget.workflowTimeline":
+		if e.complexity.CampaignTarget.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_CampaignTarget_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.CampaignTarget.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
 
 	case "CampaignTargetBulkCreatePayload.campaignTargets":
 		if e.complexity.CampaignTargetBulkCreatePayload.CampaignTargets == nil {
@@ -9257,12 +9343,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
-	case "Control.activeWorkflowInstance":
-		if e.complexity.Control.ActiveWorkflowInstance == nil {
+	case "Control.activeWorkflowInstances":
+		if e.complexity.Control.ActiveWorkflowInstances == nil {
 			break
 		}
 
-		return e.complexity.Control.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.Control.ActiveWorkflowInstances(childComplexity), true
 
 	case "Control.aliases":
 		if e.complexity.Control.Aliases == nil {
@@ -9558,6 +9644,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.HasPendingWorkflow(childComplexity), true
+
+	case "Control.hasWorkflowHistory":
+		if e.complexity.Control.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.Control.HasWorkflowHistory(childComplexity), true
 
 	case "Control.id":
 		if e.complexity.Control.ID == nil {
@@ -9893,6 +9986,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "Control.workflowTimeline":
+		if e.complexity.Control.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_Control_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
 
 	case "ControlBulkCreatePayload.controls":
 		if e.complexity.ControlBulkCreatePayload.Controls == nil {
@@ -14231,12 +14336,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EventUpdatePayload.Event(childComplexity), true
 
-	case "Evidence.activeWorkflowInstance":
-		if e.complexity.Evidence.ActiveWorkflowInstance == nil {
+	case "Evidence.activeWorkflowInstances":
+		if e.complexity.Evidence.ActiveWorkflowInstances == nil {
 			break
 		}
 
-		return e.complexity.Evidence.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.Evidence.ActiveWorkflowInstances(childComplexity), true
 
 	case "Evidence.collectionProcedure":
 		if e.complexity.Evidence.CollectionProcedure == nil {
@@ -14367,6 +14472,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Evidence.HasPendingWorkflow(childComplexity), true
+
+	case "Evidence.hasWorkflowHistory":
+		if e.complexity.Evidence.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.Evidence.HasWorkflowHistory(childComplexity), true
 
 	case "Evidence.id":
 		if e.complexity.Evidence.ID == nil {
@@ -14551,6 +14663,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Evidence.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "Evidence.workflowTimeline":
+		if e.complexity.Evidence.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_Evidence_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Evidence.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
 
 	case "EvidenceBulkCreatePayload.evidences":
 		if e.complexity.EvidenceBulkCreatePayload.Evidences == nil {
@@ -17523,12 +17647,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.IdentityHolder.AccessPlatforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
 
-	case "IdentityHolder.activeWorkflowInstance":
-		if e.complexity.IdentityHolder.ActiveWorkflowInstance == nil {
+	case "IdentityHolder.activeWorkflowInstances":
+		if e.complexity.IdentityHolder.ActiveWorkflowInstances == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolder.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.IdentityHolder.ActiveWorkflowInstances(childComplexity), true
 
 	case "IdentityHolder.alternateEmail":
 		if e.complexity.IdentityHolder.AlternateEmail == nil {
@@ -17725,6 +17849,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.IdentityHolder.HasPendingWorkflow(childComplexity), true
+
+	case "IdentityHolder.hasWorkflowHistory":
+		if e.complexity.IdentityHolder.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.HasWorkflowHistory(childComplexity), true
 
 	case "IdentityHolder.id":
 		if e.complexity.IdentityHolder.ID == nil {
@@ -17974,6 +18105,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.IdentityHolder.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "IdentityHolder.workflowTimeline":
+		if e.complexity.IdentityHolder.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
 
 	case "IdentityHolderBulkCreatePayload.identityHolders":
 		if e.complexity.IdentityHolderBulkCreatePayload.IdentityHolders == nil {
@@ -18402,12 +18545,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.IntegrationEdge.Node(childComplexity), true
 
-	case "InternalPolicy.activeWorkflowInstance":
-		if e.complexity.InternalPolicy.ActiveWorkflowInstance == nil {
+	case "InternalPolicy.activeWorkflowInstances":
+		if e.complexity.InternalPolicy.ActiveWorkflowInstances == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicy.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.InternalPolicy.ActiveWorkflowInstances(childComplexity), true
 
 	case "InternalPolicy.approvalRequired":
 		if e.complexity.InternalPolicy.ApprovalRequired == nil {
@@ -18632,6 +18775,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicy.HasPendingWorkflow(childComplexity), true
+
+	case "InternalPolicy.hasWorkflowHistory":
+		if e.complexity.InternalPolicy.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.HasWorkflowHistory(childComplexity), true
 
 	case "InternalPolicy.id":
 		if e.complexity.InternalPolicy.ID == nil {
@@ -18891,6 +19041,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicy.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "InternalPolicy.workflowTimeline":
+		if e.complexity.InternalPolicy.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
 
 	case "InternalPolicyBulkCreatePayload.internalPolicies":
 		if e.complexity.InternalPolicyBulkCreatePayload.InternalPolicies == nil {
@@ -28490,12 +28652,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Platform.AccessModelName(childComplexity), true
 
-	case "Platform.activeWorkflowInstance":
-		if e.complexity.Platform.ActiveWorkflowInstance == nil {
+	case "Platform.activeWorkflowInstances":
+		if e.complexity.Platform.ActiveWorkflowInstances == nil {
 			break
 		}
 
-		return e.complexity.Platform.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.Platform.ActiveWorkflowInstances(childComplexity), true
 
 	case "Platform.applicableFrameworks":
 		if e.complexity.Platform.ApplicableFrameworks == nil {
@@ -28791,6 +28953,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Platform.HasPendingWorkflow(childComplexity), true
+
+	case "Platform.hasWorkflowHistory":
+		if e.complexity.Platform.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.Platform.HasWorkflowHistory(childComplexity), true
 
 	case "Platform.id":
 		if e.complexity.Platform.ID == nil {
@@ -29234,6 +29403,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Platform.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
 
+	case "Platform.workflowTimeline":
+		if e.complexity.Platform.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
+
 	case "PlatformBulkCreatePayload.platforms":
 		if e.complexity.PlatformBulkCreatePayload.Platforms == nil {
 			break
@@ -29297,12 +29478,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.PlatformUpdatePayload.Platform(childComplexity), true
 
-	case "Procedure.activeWorkflowInstance":
-		if e.complexity.Procedure.ActiveWorkflowInstance == nil {
+	case "Procedure.activeWorkflowInstances":
+		if e.complexity.Procedure.ActiveWorkflowInstances == nil {
 			break
 		}
 
-		return e.complexity.Procedure.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.Procedure.ActiveWorkflowInstances(childComplexity), true
 
 	case "Procedure.approvalRequired":
 		if e.complexity.Procedure.ApprovalRequired == nil {
@@ -29503,6 +29684,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Procedure.HasPendingWorkflow(childComplexity), true
+
+	case "Procedure.hasWorkflowHistory":
+		if e.complexity.Procedure.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.Procedure.HasWorkflowHistory(childComplexity), true
 
 	case "Procedure.id":
 		if e.complexity.Procedure.ID == nil {
@@ -29762,6 +29950,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Procedure.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "Procedure.workflowTimeline":
+		if e.complexity.Procedure.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_Procedure_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
 
 	case "ProcedureBulkCreatePayload.procedures":
 		if e.complexity.ProcedureBulkCreatePayload.Procedures == nil {
@@ -32984,6 +33184,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.WorkflowEvent(childComplexity, args["id"].(string)), true
 
+	case "Query.workflowEventTimeline":
+		if e.complexity.Query.WorkflowEventTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowEventTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowEventTimeline(childComplexity, args["workflowInstanceID"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
+
 	case "Query.workflowEvents":
 		if e.complexity.Query.WorkflowEvents == nil {
 			break
@@ -36136,12 +36348,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
-	case "Subcontrol.activeWorkflowInstance":
-		if e.complexity.Subcontrol.ActiveWorkflowInstance == nil {
+	case "Subcontrol.activeWorkflowInstances":
+		if e.complexity.Subcontrol.ActiveWorkflowInstances == nil {
 			break
 		}
 
-		return e.complexity.Subcontrol.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.Subcontrol.ActiveWorkflowInstances(childComplexity), true
 
 	case "Subcontrol.aliases":
 		if e.complexity.Subcontrol.Aliases == nil {
@@ -36349,6 +36561,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Subcontrol.HasPendingWorkflow(childComplexity), true
+
+	case "Subcontrol.hasWorkflowHistory":
+		if e.complexity.Subcontrol.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.HasWorkflowHistory(childComplexity), true
 
 	case "Subcontrol.id":
 		if e.complexity.Subcontrol.ID == nil {
@@ -36622,6 +36841,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Subcontrol.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "Subcontrol.workflowTimeline":
+		if e.complexity.Subcontrol.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_Subcontrol_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subcontrol.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
 
 	case "SubcontrolBulkCreatePayload.subcontrols":
 		if e.complexity.SubcontrolBulkCreatePayload.Subcontrols == nil {
@@ -43513,10 +43744,28 @@ scalar Any`, BuiltIn: false},
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this actionPlan if one is running
+    Indicates if this actionPlan has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this actionPlan (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this actionPlan across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
 
 extend type Query {
     """
@@ -44070,10 +44319,28 @@ type AssetBulkDeletePayload {
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this campaign if one is running
+    Indicates if this campaign has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this campaign (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this campaign across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
 
 extend type Query {
     """
@@ -44177,17 +44444,36 @@ type CampaignBulkCreatePayload {
     Created campaigns
     """
     campaigns: [Campaign!]
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/campaigntarget.graphql", Input: `extend type CampaignTarget {
     """
     Indicates if this campaignTarget has pending changes awaiting workflow approval
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this campaignTarget if one is running
+    Indicates if this campaignTarget has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this campaignTarget (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this campaignTarget across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
 
 extend type Query {
     """
@@ -44449,10 +44735,28 @@ type ContactBulkDeletePayload {
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this control if one is running
+    Indicates if this control has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this control (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this control across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
 
 extend type Query {
     """
@@ -48013,6 +48317,10 @@ type AssessmentResponse implements Node {
   """
   assessmentID: ID!
   """
+  whether this assessment response is for a test send
+  """
+  isTest: Boolean!
+  """
   the campaign this response is associated with
   """
   campaignID: ID
@@ -48280,6 +48588,11 @@ input AssessmentResponseWhereInput {
   assessmentIDHasSuffix: ID
   assessmentIDEqualFold: ID
   assessmentIDContainsFold: ID
+  """
+  is_test field predicates
+  """
+  isTest: Boolean
+  isTestNEQ: Boolean
   """
   campaign_id field predicates
   """
@@ -121179,10 +121492,28 @@ type EventBulkDeletePayload {
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this evidence if one is running
+    Indicates if this evidence has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this evidence (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this evidence across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
 
 extend type Query {
     """
@@ -122465,10 +122796,28 @@ type HushBulkDeletePayload {
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this identityHolder if one is running
+    Indicates if this identityHolder has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this identityHolder (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this identityHolder across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
 
 extend type Query {
     """
@@ -122612,10 +122961,28 @@ type IntegrationDeletePayload {
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this internalPolicy if one is running
+    Indicates if this internalPolicy has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this internalPolicy (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this internalPolicy across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
 
 extend type Query {
     """
@@ -124497,10 +124864,28 @@ type PersonalAccessTokenBulkCreatePayload {
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this platform if one is running
+    Indicates if this platform has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this platform (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this platform across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
 
 extend type Query {
     """
@@ -124611,10 +124996,28 @@ type PlatformBulkCreatePayload {
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this procedure if one is running
+    Indicates if this procedure has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this procedure (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this procedure across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
 
 extend type Query {
     """
@@ -126992,10 +127395,28 @@ type StandardBulkCreatePayload {
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this subcontrol if one is running
+    Indicates if this subcontrol has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this subcontrol (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this subcontrol across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
 
 extend type Query {
     """
@@ -129537,6 +129958,51 @@ type WorkflowFieldMetadata {
         """
         id: ID!
     ):  WorkflowEvent!
+
+    """
+    Get workflow events for a workflow instance timeline
+    """
+    workflowEventTimeline(
+        """
+        ID of the workflow instance
+        """
+        workflowInstanceID: ID!
+
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+
+        """
+        Ordering options.
+        """
+        orderBy: [WorkflowEventOrder!]
+
+        """
+        Filtering options.
+        """
+        where: WorkflowEventWhereInput
+
+        """
+        Include emit failure events in the timeline
+        """
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
 `, BuiltIn: false},
 	{Name: "../schema/workflowinstance.graphql", Input: `extend type Query {

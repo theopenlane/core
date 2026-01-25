@@ -100,8 +100,12 @@ func (ec *executionContext) fieldContext_CampaignTargetBulkCreatePayload_campaig
 				return ec.fieldContext_CampaignTarget_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_CampaignTarget_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_CampaignTarget_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_CampaignTarget_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_CampaignTarget_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_CampaignTarget_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CampaignTarget", field.Name)
 		},
@@ -181,8 +185,12 @@ func (ec *executionContext) fieldContext_CampaignTargetCreatePayload_campaignTar
 				return ec.fieldContext_CampaignTarget_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_CampaignTarget_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_CampaignTarget_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_CampaignTarget_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_CampaignTarget_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_CampaignTarget_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CampaignTarget", field.Name)
 		},
@@ -291,8 +299,12 @@ func (ec *executionContext) fieldContext_CampaignTargetUpdatePayload_campaignTar
 				return ec.fieldContext_CampaignTarget_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_CampaignTarget_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_CampaignTarget_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_CampaignTarget_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_CampaignTarget_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_CampaignTarget_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CampaignTarget", field.Name)
 		},

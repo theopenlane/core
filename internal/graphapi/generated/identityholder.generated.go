@@ -164,8 +164,12 @@ func (ec *executionContext) fieldContext_IdentityHolderBulkCreatePayload_identit
 				return ec.fieldContext_IdentityHolder_user(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_IdentityHolder_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_IdentityHolder_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_IdentityHolder_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_IdentityHolder_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_IdentityHolder_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type IdentityHolder", field.Name)
 		},
@@ -309,8 +313,12 @@ func (ec *executionContext) fieldContext_IdentityHolderCreatePayload_identityHol
 				return ec.fieldContext_IdentityHolder_user(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_IdentityHolder_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_IdentityHolder_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_IdentityHolder_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_IdentityHolder_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_IdentityHolder_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type IdentityHolder", field.Name)
 		},
@@ -483,8 +491,12 @@ func (ec *executionContext) fieldContext_IdentityHolderUpdatePayload_identityHol
 				return ec.fieldContext_IdentityHolder_user(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_IdentityHolder_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_IdentityHolder_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_IdentityHolder_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_IdentityHolder_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_IdentityHolder_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type IdentityHolder", field.Name)
 		},

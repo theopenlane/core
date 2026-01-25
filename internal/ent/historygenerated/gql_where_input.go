@@ -2627,6 +2627,10 @@ type AssessmentResponseHistoryWhereInput struct {
 	AssessmentIDEqualFold    *string  `json:"assessmentIDEqualFold,omitempty"`
 	AssessmentIDContainsFold *string  `json:"assessmentIDContainsFold,omitempty"`
 
+	// "is_test" field predicates.
+	IsTest    *bool `json:"isTest,omitempty"`
+	IsTestNEQ *bool `json:"isTestNEQ,omitempty"`
+
 	// "campaign_id" field predicates.
 	CampaignID             *string  `json:"campaignID,omitempty"`
 	CampaignIDNEQ          *string  `json:"campaignIDNEQ,omitempty"`
@@ -3241,6 +3245,12 @@ func (i *AssessmentResponseHistoryWhereInput) P() (predicate.AssessmentResponseH
 	}
 	if i.AssessmentIDContainsFold != nil {
 		predicates = append(predicates, assessmentresponsehistory.AssessmentIDContainsFold(*i.AssessmentIDContainsFold))
+	}
+	if i.IsTest != nil {
+		predicates = append(predicates, assessmentresponsehistory.IsTestEQ(*i.IsTest))
+	}
+	if i.IsTestNEQ != nil {
+		predicates = append(predicates, assessmentresponsehistory.IsTestNEQ(*i.IsTestNEQ))
 	}
 	if i.CampaignID != nil {
 		predicates = append(predicates, assessmentresponsehistory.CampaignIDEQ(*i.CampaignID))

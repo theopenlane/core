@@ -166,8 +166,12 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Procedure_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Procedure_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Procedure_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Procedure_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Procedure_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -342,8 +346,12 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Procedure_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Procedure_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Procedure_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Procedure_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Procedure_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -518,8 +526,12 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Procedure_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Procedure_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Procedure_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Procedure_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Procedure_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -694,8 +706,12 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Procedure_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Procedure_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Procedure_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Procedure_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Procedure_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
