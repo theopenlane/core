@@ -675,6 +675,543 @@ func TestWorkflowGraphQLMyAssignments(t *testing.T) {
 	// Approver2 may have 0 or more assignments from other tests, but should not have the ones we just created
 }
 
+// TestWorkflowGraphQLApprovalAuthorization tests that only authorized users can approve/reject assignments
+func TestWorkflowGraphQLApprovalAuthorization(t *testing.T) {
+	// Create dedicated test users for workflow testing
+	initiator := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	approver := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	unauthorizedUser := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+
+	// Add approver and unauthorized user to initiator's organization
+	suite.addUserToOrganization(initiator.UserCtx, t, &approver, enums.RoleAdmin, initiator.OrganizationID)
+	suite.addUserToOrganization(initiator.UserCtx, t, &unauthorizedUser, enums.RoleAdmin, initiator.OrganizationID)
+
+	ctx := setContext(initiator.UserCtx, suite.client.db)
+
+	// Create workflow engine
+	workflowEngine, err := engine.NewWorkflowEngine(suite.client.db, nil)
+	assert.NilError(t, err)
+	suite.client.db.WorkflowEngine = workflowEngine
+
+	// Create workflow definition targeting the approver user only
+	targets := []workflows.TargetConfig{
+		{
+			Type: enums.WorkflowTargetTypeUser,
+			ID:   approver.ID,
+		},
+	}
+
+	params := struct {
+		Targets  []workflows.TargetConfig `json:"targets"`
+		Required bool                     `json:"required"`
+		Label    string                   `json:"label"`
+	}{
+		Targets:  targets,
+		Required: true,
+		Label:    "Authorization Test Approval",
+	}
+
+	paramsBytes, err := json.Marshal(params)
+	assert.NilError(t, err)
+
+	workflowDef, err := suite.client.db.WorkflowDefinition.Create().
+		SetName("Authorization Test Workflow").
+		SetSchemaType("Control").
+		SetWorkflowKind(enums.WorkflowKindApproval).
+		SetActive(true).
+		SetOwnerID(initiator.OrganizationID).
+		SetDefinitionJSON(models.WorkflowDefinitionDocument{
+			Triggers: []models.WorkflowTrigger{
+				{Operation: "UPDATE", Fields: []string{"status"}},
+			},
+			Conditions: []models.WorkflowCondition{
+				{Expression: "true"},
+			},
+			Actions: []models.WorkflowAction{
+				{
+					Type:   enums.WorkflowActionTypeApproval.String(),
+					Key:    "auth_test_approval",
+					Params: paramsBytes,
+				},
+			},
+		}).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	t.Run("non-target user cannot approve user-targeted assignment", func(t *testing.T) {
+		// Create a control and trigger workflow
+		control, err := suite.client.db.Control.Create().
+			SetRefCode("CTL-" + ulids.New().String()).
+			SetTitle("Auth Test Control 1").
+			SetStatus(enums.ControlStatusNotImplemented).
+			SetOwnerID(initiator.OrganizationID).
+			Save(ctx)
+		assert.NilError(t, err)
+
+		obj := &workflows.Object{
+			ID:   control.ID,
+			Type: enums.WorkflowObjectTypeControl,
+		}
+
+		instance, err := workflowEngine.TriggerWorkflow(ctx, workflowDef, obj, engine.TriggerInput{
+			EventType:     "UPDATE",
+			ChangedFields: []string{"status"},
+		})
+		assert.NilError(t, err)
+
+		// Process the workflow actions to create assignment
+		for _, action := range workflowDef.DefinitionJSON.Actions {
+			err = workflowEngine.ProcessAction(ctx, instance, action)
+			assert.NilError(t, err)
+		}
+
+		// Get the assignment
+		assignments, err := suite.client.db.WorkflowAssignment.Query().
+			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+			All(ctx)
+		assert.NilError(t, err)
+		assert.Check(t, len(assignments) >= 1)
+
+		assignment := assignments[0]
+
+		// Unauthorized user (not the target) tries to approve - should fail
+		_, err = suite.client.api.ApproveWorkflowAssignment(unauthorizedUser.UserCtx, assignment.ID)
+		assert.Check(t, err != nil, "expected error when non-target user tries to approve")
+		assert.Check(t, is.Contains(err.Error(), "not authorized"), "error should indicate unauthorized access")
+
+		// Verify assignment is still pending
+		reloaded, err := suite.client.db.WorkflowAssignment.Get(ctx, assignment.ID)
+		assert.NilError(t, err)
+		assert.Equal(t, enums.WorkflowAssignmentStatusPending, reloaded.Status)
+	})
+
+	t.Run("non-target user cannot reject user-targeted assignment", func(t *testing.T) {
+		// Create a control and trigger workflow
+		control, err := suite.client.db.Control.Create().
+			SetRefCode("CTL-" + ulids.New().String()).
+			SetTitle("Auth Test Control 2").
+			SetStatus(enums.ControlStatusNotImplemented).
+			SetOwnerID(initiator.OrganizationID).
+			Save(ctx)
+		assert.NilError(t, err)
+
+		obj := &workflows.Object{
+			ID:   control.ID,
+			Type: enums.WorkflowObjectTypeControl,
+		}
+
+		instance, err := workflowEngine.TriggerWorkflow(ctx, workflowDef, obj, engine.TriggerInput{
+			EventType:     "UPDATE",
+			ChangedFields: []string{"status"},
+		})
+		assert.NilError(t, err)
+
+		// Process the workflow actions to create assignment
+		for _, action := range workflowDef.DefinitionJSON.Actions {
+			err = workflowEngine.ProcessAction(ctx, instance, action)
+			assert.NilError(t, err)
+		}
+
+		// Get the assignment
+		assignments, err := suite.client.db.WorkflowAssignment.Query().
+			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+			All(ctx)
+		assert.NilError(t, err)
+		assert.Check(t, len(assignments) >= 1)
+
+		assignment := assignments[0]
+
+		// Unauthorized user tries to reject - should fail
+		reason := "Trying to reject without permission"
+		_, err = suite.client.api.RejectWorkflowAssignment(unauthorizedUser.UserCtx, assignment.ID, &reason)
+		assert.Check(t, err != nil, "expected error when non-target user tries to reject")
+		assert.Check(t, is.Contains(err.Error(), "not authorized"), "error should indicate unauthorized access")
+
+		// Verify assignment is still pending
+		reloaded, err := suite.client.db.WorkflowAssignment.Get(ctx, assignment.ID)
+		assert.NilError(t, err)
+		assert.Equal(t, enums.WorkflowAssignmentStatusPending, reloaded.Status)
+	})
+
+	t.Run("initiator cannot approve their own workflow if not a target", func(t *testing.T) {
+		// Create a control and trigger workflow
+		control, err := suite.client.db.Control.Create().
+			SetRefCode("CTL-" + ulids.New().String()).
+			SetTitle("Auth Test Control 3").
+			SetStatus(enums.ControlStatusNotImplemented).
+			SetOwnerID(initiator.OrganizationID).
+			Save(ctx)
+		assert.NilError(t, err)
+
+		obj := &workflows.Object{
+			ID:   control.ID,
+			Type: enums.WorkflowObjectTypeControl,
+		}
+
+		instance, err := workflowEngine.TriggerWorkflow(ctx, workflowDef, obj, engine.TriggerInput{
+			EventType:     "UPDATE",
+			ChangedFields: []string{"status"},
+		})
+		assert.NilError(t, err)
+
+		// Process the workflow actions to create assignment
+		for _, action := range workflowDef.DefinitionJSON.Actions {
+			err = workflowEngine.ProcessAction(ctx, instance, action)
+			assert.NilError(t, err)
+		}
+
+		// Get the assignment
+		assignments, err := suite.client.db.WorkflowAssignment.Query().
+			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+			All(ctx)
+		assert.NilError(t, err)
+		assert.Check(t, len(assignments) >= 1)
+
+		assignment := assignments[0]
+
+		// Initiator (who triggered the workflow but is not a target) tries to approve - should fail
+		_, err = suite.client.api.ApproveWorkflowAssignment(initiator.UserCtx, assignment.ID)
+		assert.Check(t, err != nil, "expected error when initiator (non-target) tries to approve")
+		assert.Check(t, is.Contains(err.Error(), "not authorized"), "error should indicate unauthorized access")
+
+		// Verify assignment is still pending
+		reloaded, err := suite.client.db.WorkflowAssignment.Get(ctx, assignment.ID)
+		assert.NilError(t, err)
+		assert.Equal(t, enums.WorkflowAssignmentStatusPending, reloaded.Status)
+	})
+
+	t.Run("target user can still approve after unauthorized attempts", func(t *testing.T) {
+		// Create a control and trigger workflow
+		control, err := suite.client.db.Control.Create().
+			SetRefCode("CTL-" + ulids.New().String()).
+			SetTitle("Auth Test Control 4").
+			SetStatus(enums.ControlStatusNotImplemented).
+			SetOwnerID(initiator.OrganizationID).
+			Save(ctx)
+		assert.NilError(t, err)
+
+		obj := &workflows.Object{
+			ID:   control.ID,
+			Type: enums.WorkflowObjectTypeControl,
+		}
+
+		instance, err := workflowEngine.TriggerWorkflow(ctx, workflowDef, obj, engine.TriggerInput{
+			EventType:     "UPDATE",
+			ChangedFields: []string{"status"},
+		})
+		assert.NilError(t, err)
+
+		// Process the workflow actions to create assignment
+		for _, action := range workflowDef.DefinitionJSON.Actions {
+			err = workflowEngine.ProcessAction(ctx, instance, action)
+			assert.NilError(t, err)
+		}
+
+		// Get the assignment
+		assignments, err := suite.client.db.WorkflowAssignment.Query().
+			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+			All(ctx)
+		assert.NilError(t, err)
+		assert.Check(t, len(assignments) >= 1)
+
+		assignment := assignments[0]
+
+		// Unauthorized user tries first - should fail
+		_, err = suite.client.api.ApproveWorkflowAssignment(unauthorizedUser.UserCtx, assignment.ID)
+		assert.Check(t, err != nil, "expected error when non-target user tries to approve")
+
+		// Now the actual target user approves - should succeed
+		resp, err := suite.client.api.ApproveWorkflowAssignment(approver.UserCtx, assignment.ID)
+		assert.NilError(t, err)
+		assert.Check(t, resp != nil)
+		assert.Equal(t, enums.WorkflowAssignmentStatusApproved, resp.ApproveWorkflowAssignment.WorkflowAssignment.Status)
+	})
+}
+
+// TestWorkflowGraphQLGroupApprovalAuthorization tests authorization for group-targeted assignments
+func TestWorkflowGraphQLGroupApprovalAuthorization(t *testing.T) {
+	// Create dedicated test users
+	initiator := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	groupMember := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	nonGroupMember := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+
+	// Add users to initiator's organization
+	suite.addUserToOrganization(initiator.UserCtx, t, &groupMember, enums.RoleAdmin, initiator.OrganizationID)
+	suite.addUserToOrganization(initiator.UserCtx, t, &nonGroupMember, enums.RoleAdmin, initiator.OrganizationID)
+
+	ctx := setContext(initiator.UserCtx, suite.client.db)
+
+	// Create a group with only groupMember
+	approvalGroup, err := suite.client.db.Group.Create().
+		SetName("Approval Group " + ulids.New().String()).
+		SetOwnerID(initiator.OrganizationID).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	// Add only groupMember to the group
+	_, err = suite.client.db.GroupMembership.Create().
+		SetGroupID(approvalGroup.ID).
+		SetUserID(groupMember.ID).
+		SetRole(enums.RoleMember).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	// Create workflow engine
+	workflowEngine, err := engine.NewWorkflowEngine(suite.client.db, nil)
+	assert.NilError(t, err)
+	suite.client.db.WorkflowEngine = workflowEngine
+
+	// Create workflow definition targeting the group
+	targets := []workflows.TargetConfig{
+		{
+			Type: enums.WorkflowTargetTypeGroup,
+			ID:   approvalGroup.ID,
+		},
+	}
+
+	params := struct {
+		Targets  []workflows.TargetConfig `json:"targets"`
+		Required bool                     `json:"required"`
+		Label    string                   `json:"label"`
+	}{
+		Targets:  targets,
+		Required: true,
+		Label:    "Group Authorization Test",
+	}
+
+	paramsBytes, err := json.Marshal(params)
+	assert.NilError(t, err)
+
+	workflowDef, err := suite.client.db.WorkflowDefinition.Create().
+		SetName("Group Auth Test Workflow").
+		SetSchemaType("Control").
+		SetWorkflowKind(enums.WorkflowKindApproval).
+		SetActive(true).
+		SetOwnerID(initiator.OrganizationID).
+		SetDefinitionJSON(models.WorkflowDefinitionDocument{
+			Triggers: []models.WorkflowTrigger{
+				{Operation: "UPDATE", Fields: []string{"status"}},
+			},
+			Conditions: []models.WorkflowCondition{
+				{Expression: "true"},
+			},
+			Actions: []models.WorkflowAction{
+				{
+					Type:   enums.WorkflowActionTypeApproval.String(),
+					Key:    "group_auth_approval",
+					Params: paramsBytes,
+				},
+			},
+		}).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	t.Run("non-group-member cannot approve group-targeted assignment", func(t *testing.T) {
+		// Create a control and trigger workflow
+		control, err := suite.client.db.Control.Create().
+			SetRefCode("CTL-" + ulids.New().String()).
+			SetTitle("Group Auth Test Control 1").
+			SetStatus(enums.ControlStatusNotImplemented).
+			SetOwnerID(initiator.OrganizationID).
+			Save(ctx)
+		assert.NilError(t, err)
+
+		obj := &workflows.Object{
+			ID:   control.ID,
+			Type: enums.WorkflowObjectTypeControl,
+		}
+
+		instance, err := workflowEngine.TriggerWorkflow(ctx, workflowDef, obj, engine.TriggerInput{
+			EventType:     "UPDATE",
+			ChangedFields: []string{"status"},
+		})
+		assert.NilError(t, err)
+
+		// Process the workflow actions to create assignment
+		for _, action := range workflowDef.DefinitionJSON.Actions {
+			err = workflowEngine.ProcessAction(ctx, instance, action)
+			assert.NilError(t, err)
+		}
+
+		// Get the assignment
+		assignments, err := suite.client.db.WorkflowAssignment.Query().
+			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+			All(ctx)
+		assert.NilError(t, err)
+		assert.Check(t, len(assignments) >= 1)
+
+		assignment := assignments[0]
+
+		// Non-group member tries to approve - should fail
+		_, err = suite.client.api.ApproveWorkflowAssignment(nonGroupMember.UserCtx, assignment.ID)
+		assert.Check(t, err != nil, "expected error when non-group-member tries to approve")
+		assert.Check(t, is.Contains(err.Error(), "not authorized"), "error should indicate unauthorized access")
+
+		// Verify assignment is still pending
+		reloaded, err := suite.client.db.WorkflowAssignment.Get(ctx, assignment.ID)
+		assert.NilError(t, err)
+		assert.Equal(t, enums.WorkflowAssignmentStatusPending, reloaded.Status)
+	})
+
+	t.Run("non-group-member cannot reject group-targeted assignment", func(t *testing.T) {
+		// Create a control and trigger workflow
+		control, err := suite.client.db.Control.Create().
+			SetRefCode("CTL-" + ulids.New().String()).
+			SetTitle("Group Auth Test Control 2").
+			SetStatus(enums.ControlStatusNotImplemented).
+			SetOwnerID(initiator.OrganizationID).
+			Save(ctx)
+		assert.NilError(t, err)
+
+		obj := &workflows.Object{
+			ID:   control.ID,
+			Type: enums.WorkflowObjectTypeControl,
+		}
+
+		instance, err := workflowEngine.TriggerWorkflow(ctx, workflowDef, obj, engine.TriggerInput{
+			EventType:     "UPDATE",
+			ChangedFields: []string{"status"},
+		})
+		assert.NilError(t, err)
+
+		// Process the workflow actions to create assignment
+		for _, action := range workflowDef.DefinitionJSON.Actions {
+			err = workflowEngine.ProcessAction(ctx, instance, action)
+			assert.NilError(t, err)
+		}
+
+		// Get the assignment
+		assignments, err := suite.client.db.WorkflowAssignment.Query().
+			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+			All(ctx)
+		assert.NilError(t, err)
+		assert.Check(t, len(assignments) >= 1)
+
+		assignment := assignments[0]
+
+		// Non-group member tries to reject - should fail
+		reason := "Unauthorized rejection attempt"
+		_, err = suite.client.api.RejectWorkflowAssignment(nonGroupMember.UserCtx, assignment.ID, &reason)
+		assert.Check(t, err != nil, "expected error when non-group-member tries to reject")
+		assert.Check(t, is.Contains(err.Error(), "not authorized"), "error should indicate unauthorized access")
+
+		// Verify assignment is still pending
+		reloaded, err := suite.client.db.WorkflowAssignment.Get(ctx, assignment.ID)
+		assert.NilError(t, err)
+		assert.Equal(t, enums.WorkflowAssignmentStatusPending, reloaded.Status)
+	})
+
+	t.Run("group member can approve after non-member fails", func(t *testing.T) {
+		// Create a control and trigger workflow
+		control, err := suite.client.db.Control.Create().
+			SetRefCode("CTL-" + ulids.New().String()).
+			SetTitle("Group Auth Test Control 3").
+			SetStatus(enums.ControlStatusNotImplemented).
+			SetOwnerID(initiator.OrganizationID).
+			Save(ctx)
+		assert.NilError(t, err)
+
+		obj := &workflows.Object{
+			ID:   control.ID,
+			Type: enums.WorkflowObjectTypeControl,
+		}
+
+		instance, err := workflowEngine.TriggerWorkflow(ctx, workflowDef, obj, engine.TriggerInput{
+			EventType:     "UPDATE",
+			ChangedFields: []string{"status"},
+		})
+		assert.NilError(t, err)
+
+		// Process the workflow actions to create assignment
+		for _, action := range workflowDef.DefinitionJSON.Actions {
+			err = workflowEngine.ProcessAction(ctx, instance, action)
+			assert.NilError(t, err)
+		}
+
+		// Get the assignment
+		assignments, err := suite.client.db.WorkflowAssignment.Query().
+			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+			All(ctx)
+		assert.NilError(t, err)
+		assert.Check(t, len(assignments) >= 1)
+
+		assignment := assignments[0]
+
+		// Non-group member tries first - should fail
+		_, err = suite.client.api.ApproveWorkflowAssignment(nonGroupMember.UserCtx, assignment.ID)
+		assert.Check(t, err != nil, "expected error when non-group-member tries to approve")
+
+		// Group member approves - should succeed
+		resp, err := suite.client.api.ApproveWorkflowAssignment(groupMember.UserCtx, assignment.ID)
+		assert.NilError(t, err)
+		assert.Check(t, resp != nil)
+		assert.Equal(t, enums.WorkflowAssignmentStatusApproved, resp.ApproveWorkflowAssignment.WorkflowAssignment.Status)
+	})
+
+	t.Run("user removed from group cannot approve", func(t *testing.T) {
+		// Create another user who will be added then removed from group
+		tempMember := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+		suite.addUserToOrganization(initiator.UserCtx, t, &tempMember, enums.RoleAdmin, initiator.OrganizationID)
+
+		// Add temp member to group
+		membership, err := suite.client.db.GroupMembership.Create().
+			SetGroupID(approvalGroup.ID).
+			SetUserID(tempMember.ID).
+			SetRole(enums.RoleMember).
+			Save(ctx)
+		assert.NilError(t, err)
+
+		// Create a control and trigger workflow
+		control, err := suite.client.db.Control.Create().
+			SetRefCode("CTL-" + ulids.New().String()).
+			SetTitle("Group Auth Test Control 4").
+			SetStatus(enums.ControlStatusNotImplemented).
+			SetOwnerID(initiator.OrganizationID).
+			Save(ctx)
+		assert.NilError(t, err)
+
+		obj := &workflows.Object{
+			ID:   control.ID,
+			Type: enums.WorkflowObjectTypeControl,
+		}
+
+		instance, err := workflowEngine.TriggerWorkflow(ctx, workflowDef, obj, engine.TriggerInput{
+			EventType:     "UPDATE",
+			ChangedFields: []string{"status"},
+		})
+		assert.NilError(t, err)
+
+		// Process the workflow actions to create assignment
+		for _, action := range workflowDef.DefinitionJSON.Actions {
+			err = workflowEngine.ProcessAction(ctx, instance, action)
+			assert.NilError(t, err)
+		}
+
+		// Get the assignment
+		assignments, err := suite.client.db.WorkflowAssignment.Query().
+			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+			All(ctx)
+		assert.NilError(t, err)
+		assert.Check(t, len(assignments) >= 1)
+
+		assignment := assignments[0]
+
+		// Remove temp member from group before they try to approve
+		err = suite.client.db.GroupMembership.DeleteOneID(membership.ID).Exec(ctx)
+		assert.NilError(t, err)
+
+		// Former group member tries to approve - should fail
+		_, err = suite.client.api.ApproveWorkflowAssignment(tempMember.UserCtx, assignment.ID)
+		assert.Check(t, err != nil, "expected error when former group member tries to approve")
+		assert.Check(t, is.Contains(err.Error(), "not authorized"), "error should indicate unauthorized access")
+
+		// Verify assignment is still pending
+		reloaded, err := suite.client.db.WorkflowAssignment.Get(ctx, assignment.ID)
+		assert.NilError(t, err)
+		assert.Equal(t, enums.WorkflowAssignmentStatusPending, reloaded.Status)
+	})
+}
+
 // TestWorkflowGraphQLObjectRef tests that WorkflowObjectRef is created correctly
 func TestWorkflowGraphQLObjectRef(t *testing.T) {
 	// Create dedicated test user

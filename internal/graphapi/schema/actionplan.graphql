@@ -25,10 +25,6 @@ extend type ActionPlan {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up actionPlan by ID
