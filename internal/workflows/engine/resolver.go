@@ -3,7 +3,6 @@ package engine
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/samber/lo"
 
@@ -11,10 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/core/internal/workflows/resolvers"
@@ -183,85 +179,4 @@ func (e *WorkflowEngine) loadObjectNode(ctx context.Context, obj *workflows.Obje
 
 	obj.Node = entity
 	return entity, nil
-}
-
-// ResolveAssignmentState checks assignments for an instance and updates instance state.
-// This is intended for tests that do not use event emitters. It synchronously performs
-// the same state resolution that HandleAssignmentCompleted does via events.
-func (e *WorkflowEngine) ResolveAssignmentState(ctx context.Context, instanceID string) error {
-	allowCtx, orgID, err := workflows.AllowContextWithOrg(ctx)
-	if err != nil {
-		return err
-	}
-
-	instance, err := e.client.WorkflowInstance.Query().Where(workflowinstance.IDEQ(instanceID), workflowinstance.OwnerIDEQ(orgID)).Only(allowCtx)
-	if err != nil {
-		return fmt.Errorf("failed to load workflow instance: %w", err)
-	}
-
-	def := instance.DefinitionSnapshot
-
-	assignments, err := e.client.WorkflowAssignment.Query().Where(workflowassignment.WorkflowInstanceIDEQ(instanceID), workflowassignment.OwnerIDEQ(orgID)).All(allowCtx)
-	if err != nil {
-		return fmt.Errorf("failed to load assignments: %w", err)
-	}
-
-	if len(assignments) == 0 {
-		return nil
-	}
-
-	// Check each approval action in sequence
-	lastCompletedAction := -1
-	for i, action := range def.Actions {
-		actionType := enums.ToWorkflowActionType(action.Type)
-		if actionType == nil || *actionType != enums.WorkflowActionTypeApproval {
-			lastCompletedAction = i
-			continue
-		}
-
-		prefix := fmt.Sprintf("approval_%s_", action.Key)
-		actionAssignments := lo.Filter(assignments, func(a *generated.WorkflowAssignment, _ int) bool {
-			return strings.HasPrefix(a.AssignmentKey, prefix)
-		})
-
-		if len(actionAssignments) == 0 {
-			lastCompletedAction = i
-			continue
-		}
-
-		meta := actionAssignments[0].ApprovalMetadata
-		required := actionAssignments[0].Required
-		requiredCount := requiredApprovalCount(action, meta, required)
-		statusCounts := CountAssignmentStatus(actionAssignments)
-		switch resolveApproval(requiredCount, statusCounts) {
-		case approvalFailed:
-			return e.client.WorkflowInstance.Update().Where(workflowinstance.IDEQ(instanceID), workflowinstance.OwnerIDEQ(orgID)).SetState(enums.WorkflowInstanceStateFailed).Exec(allowCtx)
-		case approvalPending:
-			return nil
-		}
-
-		lastCompletedAction = i
-	}
-
-	if instance.WorkflowProposalID != "" {
-		objRef, err := e.client.WorkflowObjectRef.Query().Where(workflowobjectref.WorkflowInstanceIDEQ(instanceID), workflowobjectref.OwnerIDEQ(orgID)).First(allowCtx)
-		if err != nil {
-			return fmt.Errorf("failed to load object ref: %w", err)
-		}
-		obj, err := workflows.ObjectFromRef(objRef)
-		if err != nil {
-			return err
-		}
-		scope := observability.BeginEngine(ctx, e.observer, observability.OpCompleteAssignment, "resolve", nil)
-		if err := e.proposalManager.Apply(scope, instance.WorkflowProposalID, obj); err != nil {
-			return fmt.Errorf("failed to apply proposal: %w", err)
-		}
-	}
-
-	nextIndex := lastCompletedAction + 1
-	if nextIndex >= len(def.Actions) {
-		return e.client.WorkflowInstance.Update().Where(workflowinstance.IDEQ(instanceID), workflowinstance.OwnerIDEQ(orgID)).SetState(enums.WorkflowInstanceStateCompleted).SetCurrentActionIndex(nextIndex).Exec(allowCtx)
-	}
-
-	return e.client.WorkflowInstance.Update().Where(workflowinstance.IDEQ(instanceID), workflowinstance.OwnerIDEQ(orgID)).SetState(enums.WorkflowInstanceStateRunning).SetCurrentActionIndex(nextIndex).Exec(allowCtx)
 }

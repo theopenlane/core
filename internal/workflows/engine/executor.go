@@ -297,11 +297,11 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		return err
 	}
 
-	return e.dispatchWorkflowNotifications(ctx, wfworkflows.AllowContext(ctx), instance, obj, params, title, body, data, channels, ownerID, action.Type, action.Key)
+	return e.dispatchWorkflowNotifications(ctx, wfworkflows.AllowContext(ctx), obj, params, title, body, data, channels, ownerID, action.Type, action.Key)
 }
 
 // dispatchWorkflowNotifications sends notification payloads to configured channels
-func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, allowCtx context.Context, instance *generated.WorkflowInstance, obj *wfworkflows.Object, params wfworkflows.NotificationActionParams, title, body string, data map[string]any, channels []enums.Channel, ownerID string, actionType string, actionKey string) error {
+func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, allowCtx context.Context, obj *wfworkflows.Object, params wfworkflows.NotificationActionParams, title, body string, data map[string]any, channels []enums.Channel, ownerID string, actionType string, actionKey string) error {
 	seenUsers := make(map[string]struct{})
 
 	for _, targetConfig := range params.Targets {

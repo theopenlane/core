@@ -4,18 +4,17 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
 )
 
 func TestEligibleWorkflowFields(t *testing.T) {
 	metadata := WorkflowMetadata()
-	require.NotEmpty(t, metadata)
+	assert.NotEmpty(t, metadata)
 
 	entry := metadata[0]
 	fields := EligibleWorkflowFields(entry.Type)
-	require.NotEmpty(t, fields)
+	assert.NotEmpty(t, fields)
 
 	for _, field := range entry.EligibleFields {
 		assert.Contains(t, fields, field.Name)
@@ -27,8 +26,8 @@ func TestEligibleWorkflowFields(t *testing.T) {
 
 func TestCollectChangedFields(t *testing.T) {
 	metadata := WorkflowMetadata()
-	require.NotEmpty(t, metadata)
-	require.NotEmpty(t, metadata[0].EligibleFields)
+	assert.NotEmpty(t, metadata)
+	assert.NotEmpty(t, metadata[0].EligibleFields)
 
 	eligibleName := metadata[0].EligibleFields[0].Name
 	m := fakeMutation{

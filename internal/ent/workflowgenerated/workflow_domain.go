@@ -61,6 +61,21 @@ func (d WorkflowDomain) Contains(other WorkflowDomain) bool {
 
 // Single-field domain constants for each workflow-eligible field
 var (
+	// DomainActionPlanStatus is the approval domain for ActionPlan.status
+	DomainActionPlanStatus = WorkflowDomain{
+		ObjectType: enums.WorkflowObjectTypeActionPlan,
+		Fields:     []string{"status"},
+	}
+	// DomainActionPlanDetails is the approval domain for ActionPlan.details
+	DomainActionPlanDetails = WorkflowDomain{
+		ObjectType: enums.WorkflowObjectTypeActionPlan,
+		Fields:     []string{"details"},
+	}
+	// DomainActionPlanDetailsJSON is the approval domain for ActionPlan.details_json
+	DomainActionPlanDetailsJSON = WorkflowDomain{
+		ObjectType: enums.WorkflowObjectTypeActionPlan,
+		Fields:     []string{"details_json"},
+	}
 	// DomainActionPlanWorkflowEligibleMarker is the approval domain for ActionPlan.workflow_eligible_marker
 	DomainActionPlanWorkflowEligibleMarker = WorkflowDomain{
 		ObjectType: enums.WorkflowObjectTypeActionPlan,
@@ -221,6 +236,21 @@ var (
 		ObjectType: enums.WorkflowObjectTypeIdentityHolder,
 		Fields:     []string{"end_date"},
 	}
+	// DomainInternalPolicyStatus is the approval domain for InternalPolicy.status
+	DomainInternalPolicyStatus = WorkflowDomain{
+		ObjectType: enums.WorkflowObjectTypeInternalPolicy,
+		Fields:     []string{"status"},
+	}
+	// DomainInternalPolicyDetails is the approval domain for InternalPolicy.details
+	DomainInternalPolicyDetails = WorkflowDomain{
+		ObjectType: enums.WorkflowObjectTypeInternalPolicy,
+		Fields:     []string{"details"},
+	}
+	// DomainInternalPolicyDetailsJSON is the approval domain for InternalPolicy.details_json
+	DomainInternalPolicyDetailsJSON = WorkflowDomain{
+		ObjectType: enums.WorkflowObjectTypeInternalPolicy,
+		Fields:     []string{"details_json"},
+	}
 	// DomainInternalPolicyWorkflowEligibleMarker is the approval domain for InternalPolicy.workflow_eligible_marker
 	DomainInternalPolicyWorkflowEligibleMarker = WorkflowDomain{
 		ObjectType: enums.WorkflowObjectTypeInternalPolicy,
@@ -250,6 +280,21 @@ var (
 	DomainPlatformContainsPii = WorkflowDomain{
 		ObjectType: enums.WorkflowObjectTypePlatform,
 		Fields:     []string{"contains_pii"},
+	}
+	// DomainProcedureStatus is the approval domain for Procedure.status
+	DomainProcedureStatus = WorkflowDomain{
+		ObjectType: enums.WorkflowObjectTypeProcedure,
+		Fields:     []string{"status"},
+	}
+	// DomainProcedureDetails is the approval domain for Procedure.details
+	DomainProcedureDetails = WorkflowDomain{
+		ObjectType: enums.WorkflowObjectTypeProcedure,
+		Fields:     []string{"details"},
+	}
+	// DomainProcedureDetailsJSON is the approval domain for Procedure.details_json
+	DomainProcedureDetailsJSON = WorkflowDomain{
+		ObjectType: enums.WorkflowObjectTypeProcedure,
+		Fields:     []string{"details_json"},
 	}
 	// DomainProcedureWorkflowEligibleMarker is the approval domain for Procedure.workflow_eligible_marker
 	DomainProcedureWorkflowEligibleMarker = WorkflowDomain{
@@ -327,6 +372,9 @@ func init() {
 // Use this to validate that fields in a domain are valid for the object type.
 var WorkflowEligibleFields = map[enums.WorkflowObjectType]map[string]struct{}{
 	enums.WorkflowObjectTypeActionPlan: {
+		"status":                   {},
+		"details":                  {},
+		"details_json":             {},
 		"workflow_eligible_marker": {},
 	},
 	enums.WorkflowObjectTypeCampaign: {
@@ -371,6 +419,9 @@ var WorkflowEligibleFields = map[enums.WorkflowObjectType]map[string]struct{}{
 		"end_date":                 {},
 	},
 	enums.WorkflowObjectTypeInternalPolicy: {
+		"status":                   {},
+		"details":                  {},
+		"details_json":             {},
 		"workflow_eligible_marker": {},
 	},
 	enums.WorkflowObjectTypePlatform: {
@@ -381,6 +432,9 @@ var WorkflowEligibleFields = map[enums.WorkflowObjectType]map[string]struct{}{
 		"contains_pii":             {},
 	},
 	enums.WorkflowObjectTypeProcedure: {
+		"status":                   {},
+		"details":                  {},
+		"details_json":             {},
 		"workflow_eligible_marker": {},
 	},
 	enums.WorkflowObjectTypeSubcontrol: {

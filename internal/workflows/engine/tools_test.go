@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/rs/zerolog"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v84"
 	"github.com/theopenlane/emailtemplates"
@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/entdb"
@@ -142,6 +143,12 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	s.Require().NoError(err)
 
 	s.client = db
+
+	// Enable mutation eventer + listeners so workflows are triggered via real entity updates.
+	eventer := hooks.NewEventer()
+	eventer.Initialize(s.client)
+	hooks.RegisterGlobalHooks(s.client, eventer)
+	s.Require().NoError(hooks.RegisterListeners(eventer))
 }
 
 // TearDownSuite cleans up test dependencies
@@ -451,6 +458,15 @@ func (s *WorkflowEngineTestSuite) SeedContext(userID, orgID string) context.Cont
 	return ctx
 }
 
+// TriggerInstance creates a workflow instance via the engine to avoid manual instance construction in tests.
+// This wraps TriggerWorkflow with required assertions and returns the created instance.
+func (s *WorkflowEngineTestSuite) TriggerInstance(ctx context.Context, wfEngine *engine.WorkflowEngine, def *generated.WorkflowDefinition, obj *workflows.Object, input engine.TriggerInput) *generated.WorkflowInstance {
+	instance, err := wfEngine.TriggerWorkflow(ctx, def, obj, input)
+	s.Require().NoError(err)
+	s.Require().NotNil(instance)
+	return instance
+}
+
 // syncEmitTimeout is the maximum time to wait for event handlers to complete
 const syncEmitTimeout = 10 * time.Second
 
@@ -526,6 +542,7 @@ func (s *WorkflowEngineTestSuite) SetupWorkflowEngineWithListeners() *engine.Wor
 	emitter := &syncBusEmitter{bus: bus}
 
 	wfEngine := s.NewTestEngine(emitter)
+	s.client.WorkflowEngine = wfEngine
 
 	listeners := engine.NewWorkflowListeners(s.client, wfEngine, emitter)
 
@@ -549,7 +566,7 @@ func (s *WorkflowEngineTestSuite) SetupWorkflowEngineWithListeners() *engine.Wor
 
 	for _, binding := range bindings {
 		_, err := binding.Register(bus)
-		require.NoError(s.T(), err)
+		assert.NoError(s.T(), err)
 	}
 
 	return wfEngine

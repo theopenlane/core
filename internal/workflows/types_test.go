@@ -6,7 +6,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -21,7 +20,7 @@ func TestCELValue(t *testing.T) {
 
 	obj := &Object{ID: "obj1", Type: enums.WorkflowObjectTypeControl}
 	value := obj.CELValue()
-	require.IsType(t, map[string]any{}, value)
+	assert.IsType(t, map[string]any{}, value)
 
 	mapped := value.(map[string]any)
 	assert.Equal(t, "obj1", mapped["id"])
@@ -82,7 +81,7 @@ func TestObjectFromRef(t *testing.T) {
 	}
 
 	obj, err := ObjectFromRef(&generated.WorkflowObjectRef{})
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, expected, obj)
 }
 
@@ -94,7 +93,7 @@ func TestBuildAssignmentContext(t *testing.T) {
 
 	ctx := context.Background()
 	vars, err := BuildAssignmentContext(ctx, nil, "")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Nil(t, vars)
 
 	assignmentContextBuilder = func(_ context.Context, _ *generated.Client, instanceID string) (map[string]any, error) {
@@ -102,7 +101,7 @@ func TestBuildAssignmentContext(t *testing.T) {
 	}
 
 	vars, err = BuildAssignmentContext(ctx, nil, "instance-1")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, map[string]any{"instance_id": "instance-1"}, vars)
 }
 
@@ -116,7 +115,7 @@ func TestRegisterObjectRefResolver(t *testing.T) {
 	})
 
 	obj, err := ObjectFromRef(&generated.WorkflowObjectRef{})
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, "obj", obj.ID)
 }
 
@@ -143,7 +142,7 @@ func TestRegisterAssignmentContextBuilder(t *testing.T) {
 	})
 
 	out, err := BuildAssignmentContext(context.Background(), nil, "instance-2")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, map[string]any{"instance_id": "instance-2"}, out)
 }
 

@@ -6,7 +6,6 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -176,7 +175,7 @@ func TestComputeProposalHash(t *testing.T) {
 				return
 			}
 
-			require.NoError(t, err)
+			assert.NoError(t, err)
 
 			if tt.expectEmpty {
 				assert.Empty(t, hash)
@@ -201,10 +200,10 @@ func TestComputeProposalHash_Stability(t *testing.T) {
 	}
 
 	hash1, err1 := ComputeProposalHash(changes1)
-	require.NoError(t, err1)
+	assert.NoError(t, err1)
 
 	hash2, err2 := ComputeProposalHash(changes2)
-	require.NoError(t, err2)
+	assert.NoError(t, err2)
 
 	assert.Equal(t, hash1, hash2, "hashes should be stable regardless of map iteration order")
 }
@@ -218,10 +217,10 @@ func TestComputeProposalHash_Deterministic(t *testing.T) {
 	}
 
 	hash1, err := ComputeProposalHash(changes)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	hash2, err := ComputeProposalHash(changes)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	assert.Equal(t, hash1, hash2, "hash should be deterministic")
 }
@@ -231,17 +230,17 @@ func TestApprovalDomains(t *testing.T) {
 	primaryParams, err := json.Marshal(ApprovalActionParams{
 		Fields: []string{" status ", "name", ""},
 	})
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	duplicateParams, err := json.Marshal(ApprovalActionParams{
 		Fields: []string{"name", "status"},
 	})
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	secondaryParams, err := json.Marshal(ApprovalActionParams{
 		Fields: []string{"priority"},
 	})
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	doc := models.WorkflowDefinitionDocument{
 		Actions: []models.WorkflowAction{
@@ -269,7 +268,7 @@ func TestApprovalDomains(t *testing.T) {
 	}
 
 	domains, err := ApprovalDomains(doc)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	assert.Equal(t, [][]string{
 		{" status ", "name"},
@@ -309,7 +308,7 @@ func TestSplitChangesByDomains(t *testing.T) {
 	}
 
 	matches := SplitChangesByDomains(changes, domains)
-	require.Len(t, matches, 2)
+	assert.Len(t, matches, 2)
 
 	assert.Equal(t, DeriveDomainKey([]string{"status"}), matches[0].DomainKey)
 	assert.Equal(t, []string{"status"}, matches[0].Fields)
@@ -325,7 +324,7 @@ func TestDomainChangesForDefinition(t *testing.T) {
 	params, err := json.Marshal(ApprovalActionParams{
 		Fields: []string{"status", "priority"},
 	})
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	doc := models.WorkflowDefinitionDocument{
 		Actions: []models.WorkflowAction{
@@ -343,8 +342,8 @@ func TestDomainChangesForDefinition(t *testing.T) {
 	}
 
 	domainChanges, err := DomainChangesForDefinition(doc, changes)
-	require.NoError(t, err)
-	require.Len(t, domainChanges, 1)
+	assert.NoError(t, err)
+	assert.Len(t, domainChanges, 1)
 
 	expectedFields := []string{"priority", "status"}
 	assert.Equal(t, DeriveDomainKey(expectedFields), domainChanges[0].DomainKey)
@@ -366,8 +365,8 @@ func TestDomainChangesForDefinitionFallback(t *testing.T) {
 	}
 
 	domainChanges, err := DomainChangesForDefinition(doc, changes)
-	require.NoError(t, err)
-	require.Len(t, domainChanges, 1)
+	assert.NoError(t, err)
+	assert.Len(t, domainChanges, 1)
 
 	fields := lo.Keys(changes)
 	assert.Equal(t, DeriveDomainKey(fields), domainChanges[0].DomainKey)
@@ -404,13 +403,13 @@ func TestApprovalDomainsFromDefinition(t *testing.T) {
 	}
 
 	domains, err := ApprovalDomains(def.DefinitionJSON)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Empty(t, domains)
 
 	params, err := json.Marshal(ApprovalActionParams{
 		Fields: []string{"name"},
 	})
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	def.DefinitionJSON.Actions = append(def.DefinitionJSON.Actions, models.WorkflowAction{
 		Key:    "approval",
@@ -419,7 +418,7 @@ func TestApprovalDomainsFromDefinition(t *testing.T) {
 	})
 
 	domains, err = ApprovalDomains(def.DefinitionJSON)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, [][]string{{"name"}}, domains)
 }
 

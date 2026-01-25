@@ -27,24 +27,10 @@ func (s *WorkflowEngineTestSuite) TestWorkflowEngineExecute() {
 // TestExecuteApproval verifies approval action execution
 func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 	userID, orgID, userCtx := s.SetupTestUser()
-	seedCtx := s.SeedContext(userID, orgID)
 
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.NewTestEngine(&mockEventEmitter{})
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
-
-	instance, err := s.client.WorkflowInstance.Create().
-		SetWorkflowDefinitionID(def.ID).
-		SetState(enums.WorkflowInstanceStateRunning).
-		SetDefinitionSnapshot(def.DefinitionJSON).
-		SetContext(models.WorkflowInstanceContext{
-			WorkflowDefinitionID: def.ID,
-			ObjectType:           enums.WorkflowObjectTypeControl,
-			ObjectID:             "test123",
-		}).
-		SetOwnerID(orgID).
-		Save(seedCtx)
-	s.Require().NoError(err)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-TEST-" + ulid.Make().String()).
@@ -56,6 +42,10 @@ func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 		ID:   control.ID,
 		Type: enums.WorkflowObjectTypeControl,
 	}
+	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
+		EventType:     "UPDATE",
+		ChangedFields: []string{"status"},
+	})
 
 	s.Run("creates approval assignment with user target", func() {
 		targets := []workflows.TargetConfig{
@@ -129,25 +119,11 @@ func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 
 // TestExecuteInvalidActionType verifies invalid action handling
 func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
-	userID, orgID, userCtx := s.SetupTestUser()
-	seedCtx := s.SeedContext(userID, orgID)
+	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.NewTestEngine(&mockEventEmitter{})
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
-
-	instance, err := s.client.WorkflowInstance.Create().
-		SetWorkflowDefinitionID(def.ID).
-		SetState(enums.WorkflowInstanceStateRunning).
-		SetDefinitionSnapshot(def.DefinitionJSON).
-		SetContext(models.WorkflowInstanceContext{
-			WorkflowDefinitionID: def.ID,
-			ObjectType:           enums.WorkflowObjectTypeControl,
-			ObjectID:             "test123",
-		}).
-		SetOwnerID(orgID).
-		Save(seedCtx)
-	s.Require().NoError(err)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-FIELD-TEST-" + ulid.Make().String()).
@@ -159,6 +135,10 @@ func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
 		ID:   control.ID,
 		Type: enums.WorkflowObjectTypeControl,
 	}
+	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
+		EventType:     "UPDATE",
+		ChangedFields: []string{"status"},
+	})
 
 	action := models.WorkflowAction{
 		Type: "INVALID_TYPE",
@@ -172,36 +152,33 @@ func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
 
 // TestExecuteNotification verifies notification action execution
 func (s *WorkflowEngineTestSuite) TestExecuteNotification() {
-	userID, orgID, userCtx := s.SetupTestUser()
-	seedCtx := s.SeedContext(userID, orgID)
+	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.NewTestEngine(&mockEventEmitter{})
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
-	instance, err := s.client.WorkflowInstance.Create().
-		SetWorkflowDefinitionID(def.ID).
-		SetState(enums.WorkflowInstanceStateRunning).
-		SetDefinitionSnapshot(def.DefinitionJSON).
-		SetContext(models.WorkflowInstanceContext{
-			WorkflowDefinitionID: def.ID,
-			ObjectType:           enums.WorkflowObjectTypeControl,
-			ObjectID:             "test123",
-		}).
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-NOTIFY-" + ulid.Make().String()).
 		SetOwnerID(orgID).
-		Save(seedCtx)
+		Save(userCtx)
 	s.Require().NoError(err)
 
-	err = wfEngine.Execute(userCtx, models.WorkflowAction{Type: enums.WorkflowActionTypeNotification.String(), Key: "test_notification"}, instance, &workflows.Object{ID: "test123", Type: enums.WorkflowObjectTypeControl})
+	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
+		EventType:     "UPDATE",
+		ChangedFields: []string{"status"},
+	})
+
+	err = wfEngine.Execute(userCtx, models.WorkflowAction{Type: enums.WorkflowActionTypeNotification.String(), Key: "test_notification"}, instance, obj)
 	s.NoError(err)
 }
 
 // TestExecuteWebhook verifies webhook action execution
 func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
-	userID, orgID, userCtx := s.SetupTestUser()
-	seedCtx := s.SeedContext(userID, orgID)
+	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.NewTestEngine(&mockEventEmitter{})
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
@@ -211,23 +188,14 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		Save(userCtx)
 	s.Require().NoError(err)
 
-	instance, err := s.client.WorkflowInstance.Create().
-		SetWorkflowDefinitionID(def.ID).
-		SetState(enums.WorkflowInstanceStateRunning).
-		SetDefinitionSnapshot(def.DefinitionJSON).
-		SetContext(models.WorkflowInstanceContext{
-			WorkflowDefinitionID: def.ID,
-			ObjectType:           enums.WorkflowObjectTypeControl,
-			ObjectID:             control.ID,
-		}).
-		SetOwnerID(orgID).
-		Save(seedCtx)
-	s.Require().NoError(err)
-
 	obj := &workflows.Object{
 		ID:   control.ID,
 		Type: enums.WorkflowObjectTypeControl,
 	}
+	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
+		EventType:     "UPDATE",
+		ChangedFields: []string{"status"},
+	})
 
 	s.Run("executes webhook with valid URL", func() {
 		var receivedPayload map[string]any
@@ -339,10 +307,9 @@ func (s *WorkflowEngineTestSuite) TestApplyObjectFieldUpdates_CoercesEnums() {
 
 // TestExecuteFieldUpdate verifies field update action execution
 func (s *WorkflowEngineTestSuite) TestExecuteFieldUpdate() {
-	userID, orgID, userCtx := s.SetupTestUser()
-	seedCtx := s.SeedContext(userID, orgID)
+	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.NewTestEngine(&mockEventEmitter{})
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
@@ -352,23 +319,14 @@ func (s *WorkflowEngineTestSuite) TestExecuteFieldUpdate() {
 		Save(userCtx)
 	s.Require().NoError(err)
 
-	instance, err := s.client.WorkflowInstance.Create().
-		SetWorkflowDefinitionID(def.ID).
-		SetState(enums.WorkflowInstanceStateRunning).
-		SetDefinitionSnapshot(def.DefinitionJSON).
-		SetContext(models.WorkflowInstanceContext{
-			WorkflowDefinitionID: def.ID,
-			ObjectType:           enums.WorkflowObjectTypeControl,
-			ObjectID:             control.ID,
-		}).
-		SetOwnerID(orgID).
-		Save(seedCtx)
-	s.Require().NoError(err)
-
 	obj := &workflows.Object{
 		ID:   control.ID,
 		Type: enums.WorkflowObjectTypeControl,
 	}
+	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
+		EventType:     "UPDATE",
+		ChangedFields: []string{"status"},
+	})
 
 	s.Run("executes field update with valid params", func() {
 		params := workflows.FieldUpdateActionParams{

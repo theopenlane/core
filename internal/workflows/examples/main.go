@@ -34,16 +34,16 @@ type WorkflowDemoSeed struct {
 	// OrganizationID is the demo organization id
 	OrganizationID string
 	// Control is the created control payload
-	Control        *graphclient.CreateControl_CreateControl_Control
+	Control *graphclient.CreateControl_CreateControl_Control
 	// WorkflowDef is the created workflow definition
-	WorkflowDef    *graphclient.CreateWorkflowDefinition_CreateWorkflowDefinition_WorkflowDefinition
+	WorkflowDef *graphclient.CreateWorkflowDefinition_CreateWorkflowDefinition_WorkflowDefinition
 	// InstanceID is the created workflow instance id
-	InstanceID     string
+	InstanceID string
 }
 
 type DemoConfig struct {
 	// OrgID is the target organization id
-	OrgID         string
+	OrgID string
 	// UseDefaultOrg selects the user's default organization
 	UseDefaultOrg bool
 }
@@ -657,7 +657,7 @@ type approveWorkflowAssignmentResponse struct {
 		// WorkflowAssignment holds the approved assignment data
 		WorkflowAssignment struct {
 			// ID is the assignment identifier
-			ID     string                         `json:"id"`
+			ID string `json:"id"`
 			// Status is the assignment status after approval
 			Status enums.WorkflowAssignmentStatus `json:"status"`
 		} `json:"workflowAssignment"`

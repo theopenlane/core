@@ -949,3 +949,698 @@ func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
 		s.False(result)
 	})
 }
+
+// TestTriggerExistingInstanceResumes verifies TriggerExistingInstance behavior for running vs completed instances
+func (s *WorkflowEngineTestSuite) TestTriggerExistingInstanceResumes() {
+	userID, orgID, userCtx := s.SetupTestUser()
+
+	wfEngine := s.SetupWorkflowEngineWithListeners()
+
+	s.Run("resumes paused instance successfully", func() {
+		s.ClearWorkflowDefinitions()
+
+		approvalParams := workflows.ApprovalActionParams{
+			TargetedActionParams: workflows.TargetedActionParams{
+				Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
+			},
+			Required: boolPtr(true),
+			Label:    "Resume Test Approval",
+			Fields:   []string{"status"},
+		}
+		paramsBytes, err := json.Marshal(approvalParams)
+		s.Require().NoError(err)
+
+		def, err := s.client.WorkflowDefinition.Create().
+			SetName("Resume Paused Workflow " + ulid.Make().String()).
+			SetWorkflowKind(enums.WorkflowKindApproval).
+			SetSchemaType("Control").
+			SetActive(true).
+			SetOwnerID(orgID).
+			SetTriggerOperations([]string{"UPDATE"}).
+			SetTriggerFields([]string{"status"}).
+			SetDefinitionJSON(models.WorkflowDefinitionDocument{
+				Triggers: []models.WorkflowTrigger{
+					{Operation: "UPDATE", Fields: []string{"status"}},
+				},
+				Actions: []models.WorkflowAction{
+					{Type: enums.WorkflowActionTypeApproval.String(), Key: "test_approval", Params: paramsBytes},
+				},
+			}).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		control, err := s.client.Control.Create().
+			SetRefCode("CTL-PAUSED-" + ulid.Make().String()).
+			SetOwnerID(orgID).
+			SetStatus(enums.ControlStatusNotImplemented).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+
+		// Trigger workflow which will pause for approval
+		instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
+			EventType:       "UPDATE",
+			ChangedFields:   []string{"status"},
+			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
+		})
+		s.Require().NoError(err)
+
+		// Instance should be paused waiting for approval
+		pausedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
+		s.Require().NoError(err)
+		s.Equal(enums.WorkflowInstanceStatePaused, pausedInstance.State)
+
+		// TriggerExistingInstance should succeed on paused instance (no error)
+		err = wfEngine.TriggerExistingInstance(userCtx, pausedInstance, def, obj, engine.TriggerInput{
+			EventType:     "UPDATE",
+			ChangedFields: []string{"status"},
+		})
+		s.Require().NoError(err)
+	})
+
+	s.Run("rejects completed instance", func() {
+		s.ClearWorkflowDefinitions()
+
+		def, err := s.client.WorkflowDefinition.Create().
+			SetName("Reject Completed Workflow " + ulid.Make().String()).
+			SetWorkflowKind(enums.WorkflowKindNotification).
+			SetSchemaType("Control").
+			SetActive(true).
+			SetOwnerID(orgID).
+			SetTriggerOperations([]string{"UPDATE"}).
+			SetTriggerFields([]string{"status"}).
+			SetDefinitionJSON(models.WorkflowDefinitionDocument{
+				Triggers: []models.WorkflowTrigger{
+					{Operation: "UPDATE", Fields: []string{"status"}},
+				},
+				Actions: []models.WorkflowAction{},
+			}).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		control, err := s.client.Control.Create().
+			SetRefCode("CTL-COMPLETE-" + ulid.Make().String()).
+			SetOwnerID(orgID).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+
+		instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
+			EventType:     "UPDATE",
+			ChangedFields: []string{"status"},
+		})
+		s.Require().NoError(err)
+
+		// Instance completes immediately since no actions
+		completedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
+		s.Require().NoError(err)
+		s.Equal(enums.WorkflowInstanceStateCompleted, completedInstance.State)
+
+		// Completed instance should reject TriggerExistingInstance
+		err = wfEngine.TriggerExistingInstance(userCtx, completedInstance, def, obj, engine.TriggerInput{
+			EventType: "UPDATE",
+		})
+		s.Require().ErrorIs(err, engine.ErrInvalidState)
+	})
+}
+
+// TestTriggerWorkflowGuardsActiveDomainInstance ensures per-domain guard prevents duplicate approvals
+func (s *WorkflowEngineTestSuite) TestTriggerWorkflowGuardsActiveDomainInstance() {
+	userID, orgID, userCtx := s.SetupTestUser()
+
+	wfEngine := s.SetupWorkflowEngineWithListeners()
+
+	s.Run("blocks duplicate approval workflow for same domain", func() {
+		s.ClearWorkflowDefinitions()
+
+		approvalParams := workflows.ApprovalActionParams{
+			TargetedActionParams: workflows.TargetedActionParams{
+				Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
+			},
+			Required:      boolPtr(true),
+			RequiredCount: 1,
+			Label:         "Status Approval",
+			Fields:        []string{"status"},
+		}
+		paramsBytes, err := json.Marshal(approvalParams)
+		s.Require().NoError(err)
+
+		def, err := s.client.WorkflowDefinition.Create().
+			SetName("Guard Workflow " + ulid.Make().String()).
+			SetWorkflowKind(enums.WorkflowKindApproval).
+			SetSchemaType("Control").
+			SetActive(true).
+			SetOwnerID(orgID).
+			SetTriggerOperations([]string{"UPDATE"}).
+			SetTriggerFields([]string{"status"}).
+			SetDefinitionJSON(models.WorkflowDefinitionDocument{
+				Triggers: []models.WorkflowTrigger{
+					{Operation: "UPDATE", Fields: []string{"status"}},
+				},
+				Actions: []models.WorkflowAction{
+					{
+						Type:   enums.WorkflowActionTypeApproval.String(),
+						Key:    "status_approval",
+						Params: paramsBytes,
+					},
+				},
+			}).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		control, err := s.client.Control.Create().
+			SetRefCode("CTL-GUARD-" + ulid.Make().String()).
+			SetOwnerID(orgID).
+			SetStatus(enums.ControlStatusNotImplemented).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+
+		instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
+			EventType:       "UPDATE",
+			ChangedFields:   []string{"status"},
+			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
+		})
+		s.Require().NoError(err)
+		s.Require().NotEmpty(instance.WorkflowProposalID)
+
+		// Second trigger for same domain should be blocked
+		_, err = wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
+			EventType:       "UPDATE",
+			ChangedFields:   []string{"status"},
+			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
+		})
+		s.Require().ErrorIs(err, workflows.ErrWorkflowAlreadyActive)
+	})
+}
+
+// TestTriggerWorkflowCooldownGuard ensures cooldown blocks recent instances for non-approval workflows
+func (s *WorkflowEngineTestSuite) TestTriggerWorkflowCooldownGuard() {
+	_, orgID, userCtx := s.SetupTestUser()
+
+	wfEngine := s.SetupWorkflowEngineWithListeners()
+
+	s.Run("cooldown blocks workflow trigger after recent completion", func() {
+		s.ClearWorkflowDefinitions()
+
+		def, err := s.client.WorkflowDefinition.Create().
+			SetName("Cooldown Workflow " + ulid.Make().String()).
+			SetWorkflowKind(enums.WorkflowKindNotification).
+			SetSchemaType("Control").
+			SetActive(true).
+			SetOwnerID(orgID).
+			SetTriggerOperations([]string{"UPDATE"}).
+			SetTriggerFields([]string{"status"}).
+			SetCooldownSeconds(3600).
+			SetDefinitionJSON(models.WorkflowDefinitionDocument{
+				Triggers: []models.WorkflowTrigger{
+					{Operation: "UPDATE", Fields: []string{"status"}},
+				},
+				Actions: []models.WorkflowAction{},
+			}).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		control, err := s.client.Control.Create().
+			SetRefCode("CTL-COOLDOWN-" + ulid.Make().String()).
+			SetOwnerID(orgID).
+			SetStatus(enums.ControlStatusNotImplemented).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+
+		// First trigger completes immediately (no actions)
+		instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
+			EventType:     "UPDATE",
+			ChangedFields: []string{"status"},
+		})
+		s.Require().NoError(err)
+
+		updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
+		s.Require().NoError(err)
+		s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+
+		// Second trigger within cooldown should be blocked
+		_, err = wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
+			EventType:     "UPDATE",
+			ChangedFields: []string{"status"},
+		})
+		s.Require().ErrorIs(err, workflows.ErrWorkflowAlreadyActive)
+	})
+}
+
+// TestTriggerWorkflowRecordsEmitFailure ensures emit failures are recorded when no emitter is configured
+func (s *WorkflowEngineTestSuite) TestTriggerWorkflowRecordsEmitFailure() {
+	_, orgID, userCtx := s.SetupTestUser()
+
+	// Create engine without emitter to test failure recording
+	wfEngine := s.NewTestEngine(nil)
+
+	s.Run("records emit failure when emitter is nil", func() {
+		s.ClearWorkflowDefinitions()
+
+		def, err := s.client.WorkflowDefinition.Create().
+			SetName("Emit Failure Workflow " + ulid.Make().String()).
+			SetWorkflowKind(enums.WorkflowKindNotification).
+			SetSchemaType("Control").
+			SetActive(true).
+			SetOwnerID(orgID).
+			SetTriggerOperations([]string{"UPDATE"}).
+			SetTriggerFields([]string{"status"}).
+			SetDefinitionJSON(models.WorkflowDefinitionDocument{
+				Triggers: []models.WorkflowTrigger{
+					{Operation: "UPDATE", Fields: []string{"status"}},
+				},
+				Actions: []models.WorkflowAction{},
+			}).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		control, err := s.client.Control.Create().
+			SetRefCode("CTL-EMIT-" + ulid.Make().String()).
+			SetOwnerID(orgID).
+			SetStatus(enums.ControlStatusNotImplemented).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+
+		instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
+			EventType:     "UPDATE",
+			ChangedFields: []string{"status"},
+		})
+		s.Require().NoError(err)
+		s.Require().NotNil(instance)
+
+		// Check that emit failure was recorded
+		count, err := s.client.WorkflowEvent.Query().
+			Where(
+				workflowevent.WorkflowInstanceIDEQ(instance.ID),
+				workflowevent.EventTypeEQ(enums.WorkflowEventTypeEmitFailed),
+			).
+			Count(userCtx)
+		s.Require().NoError(err)
+		s.GreaterOrEqual(count, 1)
+	})
+}
+
+// TestSelectorWithTagMismatch verifies workflows are skipped when tag selector doesn't match
+func (s *WorkflowEngineTestSuite) TestSelectorWithTagMismatch() {
+	userID, orgID, userCtx := s.SetupTestUser()
+	seedCtx := s.SeedContext(userID, orgID)
+
+	wfEngine := s.SetupWorkflowEngineWithListeners()
+
+	s.Run("workflow skipped when object lacks required tag", func() {
+		s.ClearWorkflowDefinitions()
+
+		tag, err := s.client.TagDefinition.Create().
+			SetName("RequiredTag-" + ulid.Make().String()).
+			SetOwnerID(orgID).
+			Save(seedCtx)
+		s.Require().NoError(err)
+
+		// Create definition requiring the tag
+		def, err := s.client.WorkflowDefinition.Create().
+			SetName("Tag Selector Workflow " + ulid.Make().String()).
+			SetWorkflowKind(enums.WorkflowKindNotification).
+			SetSchemaType("Control").
+			SetActive(true).
+			SetOwnerID(orgID).
+			SetTriggerOperations([]string{"UPDATE"}).
+			SetTriggerFields([]string{"status"}).
+			SetDefinitionJSON(models.WorkflowDefinitionDocument{
+				Triggers: []models.WorkflowTrigger{
+					{
+						Operation: "UPDATE",
+						Fields:    []string{"status"},
+						Selector: models.WorkflowSelector{
+							TagIDs: []string{tag.ID},
+						},
+					},
+				},
+				Actions: []models.WorkflowAction{},
+			}).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		// Create control WITHOUT the required tag
+		control, err := s.client.Control.Create().
+			SetRefCode("CTL-NO-TAG-" + ulid.Make().String()).
+			SetOwnerID(orgID).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+
+		// Should find no matching definitions because tag doesn't match
+		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, obj)
+		s.NoError(err)
+		s.Empty(defs)
+	})
+}
+
+// TestSelectorWithGroupMismatch verifies workflows are skipped when group selector doesn't match
+func (s *WorkflowEngineTestSuite) TestSelectorWithGroupMismatch() {
+	userID, orgID, userCtx := s.SetupTestUser()
+	seedCtx := s.SeedContext(userID, orgID)
+
+	wfEngine := s.SetupWorkflowEngineWithListeners()
+
+	s.Run("workflow skipped when object lacks required group", func() {
+		s.ClearWorkflowDefinitions()
+
+		group, err := s.client.Group.Create().
+			SetName("RequiredGroup-" + ulid.Make().String()).
+			SetOwnerID(orgID).
+			Save(seedCtx)
+		s.Require().NoError(err)
+
+		// Create definition requiring the group
+		def, err := s.client.WorkflowDefinition.Create().
+			SetName("Group Selector Workflow " + ulid.Make().String()).
+			SetWorkflowKind(enums.WorkflowKindNotification).
+			SetSchemaType("Control").
+			SetActive(true).
+			SetOwnerID(orgID).
+			SetTriggerOperations([]string{"UPDATE"}).
+			SetTriggerFields([]string{"status"}).
+			SetDefinitionJSON(models.WorkflowDefinitionDocument{
+				Triggers: []models.WorkflowTrigger{
+					{
+						Operation: "UPDATE",
+						Fields:    []string{"status"},
+						Selector: models.WorkflowSelector{
+							GroupIDs: []string{group.ID},
+						},
+					},
+				},
+				Actions: []models.WorkflowAction{},
+			}).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		// Create control WITHOUT the required group
+		control, err := s.client.Control.Create().
+			SetRefCode("CTL-NO-GROUP-" + ulid.Make().String()).
+			SetOwnerID(orgID).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+
+		// Should find no matching definitions because group doesn't match
+		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, obj)
+		s.NoError(err)
+		s.Empty(defs)
+	})
+}
+
+// TestOptionalApprovalSkipped verifies optional approvals with false when clause are skipped
+func (s *WorkflowEngineTestSuite) TestOptionalApprovalSkipped() {
+	userID, orgID, userCtx := s.SetupTestUser()
+
+	wfEngine := s.SetupWorkflowEngineWithListeners()
+
+	s.Run("optional approval skipped when when clause is false", func() {
+		s.ClearWorkflowDefinitions()
+
+		approvalParams := workflows.ApprovalActionParams{
+			TargetedActionParams: workflows.TargetedActionParams{
+				Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
+			},
+			Required: boolPtr(false),
+			Label:    "Optional Approval",
+			Fields:   []string{"status"},
+		}
+		paramsBytes, err := json.Marshal(approvalParams)
+		s.Require().NoError(err)
+
+		def, err := s.client.WorkflowDefinition.Create().
+			SetName("Optional Approval Workflow " + ulid.Make().String()).
+			SetWorkflowKind(enums.WorkflowKindApproval).
+			SetSchemaType("Control").
+			SetActive(true).
+			SetOwnerID(orgID).
+			SetTriggerOperations([]string{"UPDATE"}).
+			SetTriggerFields([]string{"status"}).
+			SetDefinitionJSON(models.WorkflowDefinitionDocument{
+				Triggers: []models.WorkflowTrigger{
+					{Operation: "UPDATE", Fields: []string{"status"}},
+				},
+				Actions: []models.WorkflowAction{
+					{
+						Type:   enums.WorkflowActionTypeApproval.String(),
+						Key:    "optional_approval",
+						When:   "false", // Always false - should be skipped
+						Params: paramsBytes,
+					},
+				},
+			}).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		control, err := s.client.Control.Create().
+			SetRefCode("CTL-OPTIONAL-" + ulid.Make().String()).
+			SetOwnerID(orgID).
+			SetStatus(enums.ControlStatusNotImplemented).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+
+		instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
+			EventType:       "UPDATE",
+			ChangedFields:   []string{"status"},
+			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
+		})
+		s.Require().NoError(err)
+
+		// No assignments should be created since when clause is false
+		assignments, err := s.client.WorkflowAssignment.Query().
+			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+			All(userCtx)
+		s.Require().NoError(err)
+		s.Empty(assignments)
+
+		// Instance should complete since no approvals were needed
+		updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
+		s.Require().NoError(err)
+		s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+	})
+}
+
+// TestMultipleWebhooksInSequence verifies multiple webhook actions execute in order
+func (s *WorkflowEngineTestSuite) TestMultipleWebhooksInSequence() {
+	_, orgID, userCtx := s.SetupTestUser()
+
+	wfEngine := s.SetupWorkflowEngineWithListeners()
+
+	s.Run("multiple webhooks execute in sequence", func() {
+		s.ClearWorkflowDefinitions()
+
+		callOrder := make(chan string, 2)
+		server1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			callOrder <- "webhook1"
+			w.WriteHeader(http.StatusOK)
+		}))
+		defer server1.Close()
+
+		server2 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			callOrder <- "webhook2"
+			w.WriteHeader(http.StatusOK)
+		}))
+		defer server2.Close()
+
+		webhook1Params, _ := json.Marshal(workflows.WebhookActionParams{URL: server1.URL})
+		webhook2Params, _ := json.Marshal(workflows.WebhookActionParams{URL: server2.URL})
+
+		def, err := s.client.WorkflowDefinition.Create().
+			SetName("Multi Webhook Workflow " + ulid.Make().String()).
+			SetWorkflowKind(enums.WorkflowKindNotification).
+			SetSchemaType("Control").
+			SetActive(true).
+			SetOwnerID(orgID).
+			SetTriggerOperations([]string{"UPDATE"}).
+			SetTriggerFields([]string{"status"}).
+			SetDefinitionJSON(models.WorkflowDefinitionDocument{
+				Triggers: []models.WorkflowTrigger{
+					{Operation: "UPDATE", Fields: []string{"status"}},
+				},
+				Actions: []models.WorkflowAction{
+					{Type: enums.WorkflowActionTypeWebhook.String(), Key: "webhook1", Params: webhook1Params},
+					{Type: enums.WorkflowActionTypeWebhook.String(), Key: "webhook2", Params: webhook2Params},
+				},
+			}).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		control, err := s.client.Control.Create().
+			SetRefCode("CTL-MULTI-HOOK-" + ulid.Make().String()).
+			SetOwnerID(orgID).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+
+		instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
+			EventType:     "UPDATE",
+			ChangedFields: []string{"status"},
+		})
+		s.Require().NoError(err)
+
+		// Wait for both webhooks
+		first := <-callOrder
+		second := <-callOrder
+		s.Equal("webhook1", first)
+		s.Equal("webhook2", second)
+
+		updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
+		s.Require().NoError(err)
+		s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+	})
+}
+
+// TestResolveAssignmentStateTransitions exercises ResolveAssignmentState for various approval states
+func (s *WorkflowEngineTestSuite) TestResolveAssignmentStateTransitions() {
+	userID, orgID, userCtx := s.SetupTestUser()
+
+	wfEngine := s.SetupWorkflowEngineWithListeners()
+
+	approvalParams := workflows.ApprovalActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
+		},
+		Required:      boolPtr(true),
+		RequiredCount: 1,
+		Label:         "Status Approval",
+		Fields:        []string{"status"},
+	}
+	paramsBytes, err := json.Marshal(approvalParams)
+	s.Require().NoError(err)
+
+	s.Run("rejected required approval fails instance", func() {
+		s.ClearWorkflowDefinitions()
+
+		def, err := s.client.WorkflowDefinition.Create().
+			SetName("Rejection Workflow " + ulid.Make().String()).
+			SetWorkflowKind(enums.WorkflowKindApproval).
+			SetSchemaType("Control").
+			SetActive(true).
+			SetOwnerID(orgID).
+			SetTriggerOperations([]string{"UPDATE"}).
+			SetTriggerFields([]string{"status"}).
+			SetDefinitionJSON(models.WorkflowDefinitionDocument{
+				Triggers: []models.WorkflowTrigger{
+					{Operation: "UPDATE", Fields: []string{"status"}},
+				},
+				Actions: []models.WorkflowAction{
+					{
+						Type:   enums.WorkflowActionTypeApproval.String(),
+						Key:    "status_approval",
+						Params: paramsBytes,
+					},
+				},
+			}).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		control, err := s.client.Control.Create().
+			SetRefCode("CTL-REJECT-" + ulid.Make().String()).
+			SetOwnerID(orgID).
+			SetStatus(enums.ControlStatusNotImplemented).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+
+		instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
+			EventType:       "UPDATE",
+			ChangedFields:   []string{"status"},
+			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
+		})
+		s.Require().NoError(err)
+
+		assignments, err := s.client.WorkflowAssignment.Query().
+			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+			All(userCtx)
+		s.Require().NoError(err)
+		s.Require().Len(assignments, 1)
+
+		// Reject the approval
+		err = wfEngine.CompleteAssignment(userCtx, assignments[0].ID, enums.WorkflowAssignmentStatusRejected, nil, nil)
+		s.Require().NoError(err)
+
+		// Instance should be failed
+		updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
+		s.Require().NoError(err)
+		s.Equal(enums.WorkflowInstanceStateFailed, updatedInstance.State)
+	})
+
+	s.Run("approved required approval completes instance", func() {
+		s.ClearWorkflowDefinitions()
+
+		def, err := s.client.WorkflowDefinition.Create().
+			SetName("Approval Workflow " + ulid.Make().String()).
+			SetWorkflowKind(enums.WorkflowKindApproval).
+			SetSchemaType("Control").
+			SetActive(true).
+			SetOwnerID(orgID).
+			SetTriggerOperations([]string{"UPDATE"}).
+			SetTriggerFields([]string{"status"}).
+			SetDefinitionJSON(models.WorkflowDefinitionDocument{
+				Triggers: []models.WorkflowTrigger{
+					{Operation: "UPDATE", Fields: []string{"status"}},
+				},
+				Actions: []models.WorkflowAction{
+					{
+						Type:   enums.WorkflowActionTypeApproval.String(),
+						Key:    "status_approval",
+						Params: paramsBytes,
+					},
+				},
+			}).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		control, err := s.client.Control.Create().
+			SetRefCode("CTL-APPROVE-" + ulid.Make().String()).
+			SetOwnerID(orgID).
+			SetStatus(enums.ControlStatusNotImplemented).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+
+		instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
+			EventType:       "UPDATE",
+			ChangedFields:   []string{"status"},
+			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
+		})
+		s.Require().NoError(err)
+
+		assignments, err := s.client.WorkflowAssignment.Query().
+			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+			All(userCtx)
+		s.Require().NoError(err)
+		s.Require().Len(assignments, 1)
+
+		// Approve the assignment
+		err = wfEngine.CompleteAssignment(userCtx, assignments[0].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
+		s.Require().NoError(err)
+
+		// Instance should be completed
+		updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
+		s.Require().NoError(err)
+		s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+
+		// Control status should be updated
+		updatedControl, err := s.client.Control.Get(userCtx, control.ID)
+		s.Require().NoError(err)
+		s.Equal(enums.ControlStatusApproved, updatedControl.Status)
+	})
+}
