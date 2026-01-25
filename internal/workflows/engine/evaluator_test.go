@@ -114,7 +114,7 @@ func (s *WorkflowEngineTestSuite) TestEvaluateConditions() {
 	for _, tc := range testCases {
 		s.Run(tc.name, func() {
 			def.DefinitionJSON.Conditions = tc.conditions
-			result, err := wfEngine.EvaluateConditions(s.ctx, def, tc.obj, "UPDATE", tc.changedFields, nil, nil, nil)
+			result, err := wfEngine.EvaluateConditions(s.ctx, def, tc.obj, "UPDATE", tc.changedFields, nil, nil, nil, nil)
 
 			if tc.wantErr {
 				s.Error(err)
@@ -136,7 +136,7 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
 	unknownObj := &workflows.Object{ID: "test123", Type: enums.WorkflowObjectType("NonexistentType")}
 
 	s.Run("no matching definitions", func() {
-		defs, err := wfEngine.FindMatchingDefinitions(userCtx, "NonexistentType", "UPDATE", []string{"status"}, nil, nil, nil, unknownObj)
+		defs, err := wfEngine.FindMatchingDefinitions(userCtx, "NonexistentType", "UPDATE", []string{"status"}, nil, nil, nil, nil, unknownObj)
 		s.NoError(err)
 		s.Empty(defs)
 	})
@@ -149,7 +149,7 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
 		}
 		def = s.UpdateWorkflowDefinitionWithPrefilter(def, def.DefinitionJSON)
 
-		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, obj)
+		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Len(defs, 1)
 		s.Equal(def.ID, defs[0].ID)
@@ -163,7 +163,7 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
 		}
 		s.UpdateWorkflowDefinitionInactive(def, def.DefinitionJSON)
 
-		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, obj)
+		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Empty(defs)
 	})
@@ -216,12 +216,12 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsSelectors() {
 
 	def := s.CreateTestWorkflowDefinitionWithPrefilter(userCtx, orgID, triggers, []string{"UPDATE"}, []string{"status"})
 
-	defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, obj)
+	defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 	s.NoError(err)
 	s.Len(defs, 1)
 
 	otherObj := &workflows.Object{ID: "missing", Type: enums.WorkflowObjectTypeProcedure}
-	defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, otherObj)
+	defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, otherObj)
 	s.NoError(err)
 	s.Empty(defs)
 }
@@ -251,11 +251,11 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsEdgeTriggers() {
 
 	addedIDs := map[string][]string{"evidence": {"evidence-1"}}
 
-	defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", nil, []string{"evidence"}, addedIDs, nil, obj)
+	defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", nil, []string{"evidence"}, addedIDs, nil, nil, obj)
 	s.NoError(err)
 	s.Len(defs, 1)
 
-	defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", nil, []string{"other_edge"}, addedIDs, nil, obj)
+	defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", nil, []string{"other_edge"}, addedIDs, nil, nil, obj)
 	s.NoError(err)
 	s.Empty(defs)
 }
@@ -278,12 +278,12 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 			[]string{"status"},
 		)
 
-		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, obj)
+		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Len(defs, 1)
 		s.Equal(def.ID, defs[0].ID)
 
-		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "CREATE", []string{"status"}, nil, nil, nil, obj)
+		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "CREATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Empty(defs)
 	})
@@ -300,15 +300,15 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 			[]string{"name", "status"},
 		)
 
-		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, obj)
+		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Len(defs, 1)
 
-		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "CREATE", []string{"name"}, nil, nil, nil, obj)
+		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "CREATE", []string{"name"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Len(defs, 1)
 
-		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "DELETE", []string{"id"}, nil, nil, nil, obj)
+		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "DELETE", []string{"id"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Empty(defs)
 	})
@@ -324,11 +324,11 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 			[]string{"status"},
 		)
 
-		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, obj)
+		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Len(defs, 1)
 
-		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"name"}, nil, nil, nil, obj)
+		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"name"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Empty(defs)
 	})
@@ -344,19 +344,19 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 			[]string{"priority", "status"},
 		)
 
-		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, obj)
+		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Len(defs, 1)
 
-		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"priority"}, nil, nil, nil, obj)
+		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"priority"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Len(defs, 1)
 
-		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status", "priority"}, nil, nil, nil, obj)
+		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status", "priority"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Len(defs, 1)
 
-		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"description"}, nil, nil, nil, obj)
+		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"description"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Empty(defs)
 	})
@@ -372,11 +372,11 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 			nil,
 		)
 
-		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, obj)
+		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Len(defs, 1)
 
-		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"any_field"}, nil, nil, nil, obj)
+		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"any_field"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Len(defs, 1)
 	})
@@ -395,15 +395,15 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 		s.ElementsMatch([]string{"CREATE", "UPDATE"}, updated.TriggerOperations)
 		s.ElementsMatch([]string{"description", "name", "status"}, updated.TriggerFields)
 
-		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "CREATE", []string{"name"}, nil, nil, nil, obj)
+		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "CREATE", []string{"name"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Len(defs, 1)
 
-		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, obj)
+		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Len(defs, 1)
 
-		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "DELETE", []string{"id"}, nil, nil, nil, obj)
+		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "DELETE", []string{"id"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Empty(defs)
 	})

@@ -89,13 +89,13 @@ func (l *WorkflowListeners) HandleWorkflowMutation(ctx *soiree.EventContext, pay
 
 	eventType := workflowEventTypeFromEntOperation(payload.Operation)
 
+	proposedChanges := workflows.BuildProposedChanges(mut, changedFields)
+
 	allowCtx := workflows.AllowContext(ctx.Context())
-	definitions, err := l.engine.FindMatchingDefinitions(allowCtx, payload.Mutation.Type(), eventType, changedFields, changedEdges, addedIDs, removedIDs, obj)
+	definitions, err := l.engine.FindMatchingDefinitions(allowCtx, payload.Mutation.Type(), eventType, changedFields, changedEdges, addedIDs, removedIDs, proposedChanges, obj)
 	if err != nil || len(definitions) == 0 {
 		return nil
 	}
-
-	proposedChanges := workflows.BuildProposedChanges(mut, changedFields)
 
 	for _, def := range definitions {
 		_, err := l.engine.TriggerWorkflow(ctx.Context(), def, obj, TriggerInput{
@@ -407,15 +407,36 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 
 	scope.WithFields(observability.ActionFields(def.Actions[actionIndex].Key, nil))
 
-	prefix := fmt.Sprintf("approval_%s_", def.Actions[actionIndex].Key)
-	assignments, err := l.client.WorkflowAssignment.Query().
+	allAssignments, err := l.client.WorkflowAssignment.Query().
 		Where(
 			workflowassignment.WorkflowInstanceIDEQ(instance.ID),
-			workflowassignment.AssignmentKeyHasPrefix(prefix),
 			workflowassignment.OwnerIDEQ(orgID),
-		).All(scopeCtx)
+		).
+		All(scopeCtx)
 	if err != nil {
 		return scope.Fail(err, nil)
+	}
+
+	assignmentsByAction := make(map[int][]*generated.WorkflowAssignment)
+	maxActionIndex := -1
+	for _, a := range allAssignments {
+		idx := approvalActionIndex(def.Actions, a.AssignmentKey, a.ApprovalMetadata.ActionKey)
+		if idx == -1 {
+			continue
+		}
+		assignmentsByAction[idx] = append(assignmentsByAction[idx], a)
+		if idx > maxActionIndex {
+			maxActionIndex = idx
+		}
+	}
+
+	assignments := assignmentsByAction[actionIndex]
+	if len(assignments) == 0 {
+		scope.RecordError(ErrAssignmentActionNotFound, observability.ActionFields(def.Actions[actionIndex].Key, nil))
+		return nil
+	}
+	if maxActionIndex == -1 {
+		maxActionIndex = actionIndex
 	}
 
 	requiredCount := requiredApprovalCount(def.Actions[actionIndex], approvalMeta, assignment.Required)
@@ -447,6 +468,26 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 		return nil
 	}
 
+	allResolved := true
+	for idx, grouped := range assignmentsByAction {
+		if len(grouped) == 0 {
+			continue
+		}
+		groupMeta := grouped[0].ApprovalMetadata
+		groupRequired := requiredApprovalCount(def.Actions[idx], groupMeta, grouped[0].Required)
+		groupCounts := CountAssignmentStatus(grouped)
+		groupResolution := resolveApproval(groupRequired, groupCounts)
+		if groupResolution == approvalFailed {
+			return l.failInstance(scope, instance, obj, nil, nil)
+		}
+		if groupResolution == approvalPending {
+			allResolved = false
+		}
+	}
+	if !allResolved {
+		return nil
+	}
+
 	// Apply proposed changes once approvals satisfy quorum/all required targets.
 	if instance.WorkflowProposalID != "" {
 		if err := l.engine.proposalManager.Apply(scope, instance.WorkflowProposalID, obj); err != nil {
@@ -457,7 +498,7 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 	}
 
 	// Resume workflow by re-entering the normal action pipeline using compare-and-swap to prevent races.
-	if err := l.resumeWorkflowAfterApproval(scope, instance, orgID, actionIndex, obj, def); err != nil {
+	if err := l.resumeWorkflowAfterApproval(scope, instance, orgID, maxActionIndex, obj, def); err != nil {
 		return l.failInstance(scope, instance, obj, err, nil)
 	}
 

@@ -84,7 +84,7 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 	ctx = scope.Context()
 	defer scope.End(err, nil)
 
-	shouldRun, err := e.EvaluateConditions(ctx, def, obj, input.EventType, input.ChangedFields, input.ChangedEdges, input.AddedIDs, input.RemovedIDs)
+	shouldRun, err := e.EvaluateConditions(ctx, def, obj, input.EventType, input.ChangedFields, input.ChangedEdges, input.AddedIDs, input.RemovedIDs, input.ProposedChanges)
 	if err != nil {
 		return nil, scope.Fail(fmt.Errorf("failed to evaluate conditions: %w", err), nil)
 	}

@@ -307,7 +307,7 @@ func triggerWorkflowForProposal(ctx context.Context, client *generated.Client, p
 	obj.Node = entity
 
 	allowCtx := workflows.AllowContext(ctx)
-	definitions, err := wfEngine.FindMatchingDefinitions(allowCtx, obj.Type.String(), "UPDATE", changedFields, nil, nil, nil, obj)
+	definitions, err := wfEngine.FindMatchingDefinitions(allowCtx, obj.Type.String(), "UPDATE", changedFields, nil, nil, nil, proposal.Changes, obj)
 	if err != nil {
 		return ErrFailedToFindMatchingDefinitions
 	}

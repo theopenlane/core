@@ -50,7 +50,7 @@ func stringArrayEmpty(field string) predicate.WorkflowDefinition {
 }
 
 // EvaluateConditions checks if all conditions pass for a workflow.
-func (e *WorkflowEngine) EvaluateConditions(ctx context.Context, def *generated.WorkflowDefinition, obj *workflows.Object, eventType string, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string) (bool, error) {
+func (e *WorkflowEngine) EvaluateConditions(ctx context.Context, def *generated.WorkflowDefinition, obj *workflows.Object, eventType string, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, proposedChanges map[string]any) (bool, error) {
 	conditions := def.DefinitionJSON.Conditions
 	if len(conditions) == 0 {
 		return true, nil
@@ -58,7 +58,7 @@ func (e *WorkflowEngine) EvaluateConditions(ctx context.Context, def *generated.
 
 	userID, _ := auth.GetSubjectIDFromContext(ctx)
 
-	vars := workflows.BuildCELVars(obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID)
+	vars := workflows.BuildCELVars(obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID, proposedChanges)
 
 	for i, cond := range conditions {
 		result, err := e.celEvaluator.Evaluate(ctx, cond.Expression, vars)
@@ -85,6 +85,7 @@ func (e *WorkflowEngine) EvaluateActionWhen(ctx context.Context, expression stri
 		instance.Context.TriggerRemovedIDs,
 		instance.Context.TriggerEventType,
 		instance.Context.TriggerUserID,
+		nil,
 	)
 
 	// Merge assignment context (assignments, instance, initiator)
@@ -108,7 +109,7 @@ func (e *WorkflowEngine) EvaluateActionWhen(ctx context.Context, expression stri
 }
 
 // FindMatchingDefinitions returns all active workflow definitions that match the criteria
-func (e *WorkflowEngine) FindMatchingDefinitions(ctx context.Context, schemaType string, eventType string, changedFields []string, changedEdges []string, addedIDs map[string][]string, removedIDs map[string][]string, obj *workflows.Object) (defs []*generated.WorkflowDefinition, err error) {
+func (e *WorkflowEngine) FindMatchingDefinitions(ctx context.Context, schemaType string, eventType string, changedFields []string, changedEdges []string, addedIDs map[string][]string, removedIDs map[string][]string, proposedChanges map[string]any, obj *workflows.Object) (defs []*generated.WorkflowDefinition, err error) {
 	scope := observability.BeginEngine(ctx, e.observer, observability.OpFindMatchingDefinitions, eventType, lo.Assign(observability.Fields(obj.ObservabilityFields()), observability.Fields{
 		workflowevent.FieldEventType: eventType,
 	}))
@@ -155,7 +156,7 @@ func (e *WorkflowEngine) FindMatchingDefinitions(ctx context.Context, schemaType
 	var matching []*generated.WorkflowDefinition
 
 	for _, def := range defs {
-		if e.matchesTriggers(ctx, scope, def, eventType, changedFields, changedEdges, addedIDs, removedIDs, obj) {
+		if e.matchesTriggers(ctx, scope, def, eventType, changedFields, changedEdges, addedIDs, removedIDs, proposedChanges, obj) {
 			matching = append(matching, def)
 		}
 	}
@@ -164,7 +165,7 @@ func (e *WorkflowEngine) FindMatchingDefinitions(ctx context.Context, schemaType
 }
 
 // matchesTriggers checks if the triggers match the event
-func (e *WorkflowEngine) matchesTriggers(ctx context.Context, scope *observability.Scope, def *generated.WorkflowDefinition, eventType string, changedFields []string, changedEdges []string, addedIDs map[string][]string, removedIDs map[string][]string, obj *workflows.Object) bool {
+func (e *WorkflowEngine) matchesTriggers(ctx context.Context, scope *observability.Scope, def *generated.WorkflowDefinition, eventType string, changedFields []string, changedEdges []string, addedIDs map[string][]string, removedIDs map[string][]string, proposedChanges map[string]any, obj *workflows.Object) bool {
 	triggers := def.DefinitionJSON.Triggers
 	if len(triggers) == 0 {
 		return false
@@ -182,7 +183,7 @@ func (e *WorkflowEngine) matchesTriggers(ctx context.Context, scope *observabili
 		// Evaluate trigger expression if present
 		if trigger.Expression != "" {
 			userID, _ := auth.GetSubjectIDFromContext(ctx)
-			vars := workflows.BuildCELVars(obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID)
+			vars := workflows.BuildCELVars(obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID, proposedChanges)
 
 			result, err := e.celEvaluator.Evaluate(ctx, trigger.Expression, vars)
 			if err != nil {

@@ -68,7 +68,7 @@ func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 			Node: control,
 		}
 
-		result, err := wfEngine.EvaluateConditions(userCtx, def, obj, "UPDATE", []string{"status"}, nil, nil, nil)
+		result, err := wfEngine.EvaluateConditions(userCtx, def, obj, "UPDATE", []string{"status"}, nil, nil, nil, nil)
 		s.NoError(err)
 		s.True(result)
 	})
@@ -114,7 +114,7 @@ func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 			Node: control,
 		}
 
-		result, err := wfEngine.EvaluateConditions(userCtx, def, obj, "UPDATE", []string{"status"}, nil, nil, nil)
+		result, err := wfEngine.EvaluateConditions(userCtx, def, obj, "UPDATE", []string{"status"}, nil, nil, nil, nil)
 		s.NoError(err)
 		s.False(result)
 	})
@@ -160,7 +160,7 @@ func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 			Node: control,
 		}
 
-		result, err := wfEngine.EvaluateConditions(userCtx, def, obj, "UPDATE", []string{"status"}, nil, nil, nil)
+		result, err := wfEngine.EvaluateConditions(userCtx, def, obj, "UPDATE", []string{"status"}, nil, nil, nil, nil)
 		s.NoError(err)
 		s.True(result)
 
@@ -177,7 +177,7 @@ func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 			Node: controlNonTechnical,
 		}
 
-		result, err = wfEngine.EvaluateConditions(userCtx, def, objNonTechnical, "UPDATE", []string{"status"}, nil, nil, nil)
+		result, err = wfEngine.EvaluateConditions(userCtx, def, objNonTechnical, "UPDATE", []string{"status"}, nil, nil, nil, nil)
 		s.NoError(err)
 		s.False(result)
 	})
@@ -918,6 +918,7 @@ func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
 			[]string{"controls"},
 			map[string][]string{"controls": {"control-1", "control-2"}},
 			nil,
+			nil,
 		)
 		s.NoError(err)
 		s.True(result)
@@ -931,6 +932,7 @@ func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
 			[]string{"controls"},
 			map[string][]string{"controls": {}},
 			nil,
+			nil,
 		)
 		s.NoError(err)
 		s.False(result)
@@ -943,6 +945,7 @@ func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
 			nil,
 			[]string{"other_edge"},
 			map[string][]string{"other_edge": {"id-1"}},
+			nil,
 			nil,
 		)
 		s.NoError(err)
@@ -1298,7 +1301,7 @@ func (s *WorkflowEngineTestSuite) TestSelectorWithTagMismatch() {
 		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
 		// Should find no matching definitions because tag doesn't match
-		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, obj)
+		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Empty(defs)
 	})
@@ -1354,7 +1357,7 @@ func (s *WorkflowEngineTestSuite) TestSelectorWithGroupMismatch() {
 		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
 		// Should find no matching definitions because group doesn't match
-		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, obj)
+		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
 		s.Empty(defs)
 	})

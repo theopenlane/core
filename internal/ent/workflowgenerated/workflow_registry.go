@@ -84,7 +84,7 @@ func init() {
 	// Objects are converted to map[string]any via JSON to ensure:
 	// - Field names match JSON tags (lowercase)
 	// - Enum types are converted to strings
-	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
 		if obj == nil || obj.Node == nil {
 			return nil
 		}
@@ -97,16 +97,17 @@ func init() {
 			return nil
 		}
 		return map[string]any{
-			"object":         objectMap,
-			"changed_fields": changedFields,
-			"changed_edges":  changedEdges,
-			"added_ids":      addedIDs,
-			"removed_ids":    removedIDs,
-			"event_type":     eventType,
-			"user_id":        userID,
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
 		}
 	})
-	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
 		if obj == nil || obj.Node == nil {
 			return nil
 		}
@@ -119,16 +120,17 @@ func init() {
 			return nil
 		}
 		return map[string]any{
-			"object":         objectMap,
-			"changed_fields": changedFields,
-			"changed_edges":  changedEdges,
-			"added_ids":      addedIDs,
-			"removed_ids":    removedIDs,
-			"event_type":     eventType,
-			"user_id":        userID,
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
 		}
 	})
-	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
 		if obj == nil || obj.Node == nil {
 			return nil
 		}
@@ -141,16 +143,17 @@ func init() {
 			return nil
 		}
 		return map[string]any{
-			"object":         objectMap,
-			"changed_fields": changedFields,
-			"changed_edges":  changedEdges,
-			"added_ids":      addedIDs,
-			"removed_ids":    removedIDs,
-			"event_type":     eventType,
-			"user_id":        userID,
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
 		}
 	})
-	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
 		if obj == nil || obj.Node == nil {
 			return nil
 		}
@@ -163,16 +166,17 @@ func init() {
 			return nil
 		}
 		return map[string]any{
-			"object":         objectMap,
-			"changed_fields": changedFields,
-			"changed_edges":  changedEdges,
-			"added_ids":      addedIDs,
-			"removed_ids":    removedIDs,
-			"event_type":     eventType,
-			"user_id":        userID,
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
 		}
 	})
-	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
 		if obj == nil || obj.Node == nil {
 			return nil
 		}
@@ -185,16 +189,17 @@ func init() {
 			return nil
 		}
 		return map[string]any{
-			"object":         objectMap,
-			"changed_fields": changedFields,
-			"changed_edges":  changedEdges,
-			"added_ids":      addedIDs,
-			"removed_ids":    removedIDs,
-			"event_type":     eventType,
-			"user_id":        userID,
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
 		}
 	})
-	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
 		if obj == nil || obj.Node == nil {
 			return nil
 		}
@@ -207,16 +212,17 @@ func init() {
 			return nil
 		}
 		return map[string]any{
-			"object":         objectMap,
-			"changed_fields": changedFields,
-			"changed_edges":  changedEdges,
-			"added_ids":      addedIDs,
-			"removed_ids":    removedIDs,
-			"event_type":     eventType,
-			"user_id":        userID,
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
 		}
 	})
-	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
 		if obj == nil || obj.Node == nil {
 			return nil
 		}
@@ -229,16 +235,17 @@ func init() {
 			return nil
 		}
 		return map[string]any{
-			"object":         objectMap,
-			"changed_fields": changedFields,
-			"changed_edges":  changedEdges,
-			"added_ids":      addedIDs,
-			"removed_ids":    removedIDs,
-			"event_type":     eventType,
-			"user_id":        userID,
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
 		}
 	})
-	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
 		if obj == nil || obj.Node == nil {
 			return nil
 		}
@@ -251,16 +258,17 @@ func init() {
 			return nil
 		}
 		return map[string]any{
-			"object":         objectMap,
-			"changed_fields": changedFields,
-			"changed_edges":  changedEdges,
-			"added_ids":      addedIDs,
-			"removed_ids":    removedIDs,
-			"event_type":     eventType,
-			"user_id":        userID,
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
 		}
 	})
-	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
 		if obj == nil || obj.Node == nil {
 			return nil
 		}
@@ -273,16 +281,17 @@ func init() {
 			return nil
 		}
 		return map[string]any{
-			"object":         objectMap,
-			"changed_fields": changedFields,
-			"changed_edges":  changedEdges,
-			"added_ids":      addedIDs,
-			"removed_ids":    removedIDs,
-			"event_type":     eventType,
-			"user_id":        userID,
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
 		}
 	})
-	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
 		if obj == nil || obj.Node == nil {
 			return nil
 		}
@@ -295,13 +304,14 @@ func init() {
 			return nil
 		}
 		return map[string]any{
-			"object":         objectMap,
-			"changed_fields": changedFields,
-			"changed_edges":  changedEdges,
-			"added_ids":      addedIDs,
-			"removed_ids":    removedIDs,
-			"event_type":     eventType,
-			"user_id":        userID,
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
 		}
 	})
 

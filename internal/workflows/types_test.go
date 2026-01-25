@@ -38,7 +38,8 @@ func TestBuildCELVarsDefault(t *testing.T) {
 	celContextBuilders = nil
 
 	obj := &Object{ID: "obj1", Type: enums.WorkflowObjectTypeControl}
-	vars := BuildCELVars(obj, []string{"status"}, []string{"edge"}, map[string][]string{"a": []string{"1"}}, map[string][]string{"b": []string{"2"}}, "UPDATE", "user1")
+	proposed := map[string]any{"status": "APPROVED"}
+	vars := BuildCELVars(obj, []string{"status"}, []string{"edge"}, map[string][]string{"a": []string{"1"}}, map[string][]string{"b": []string{"2"}}, "UPDATE", "user1", proposed)
 
 	assert.Equal(t, obj.CELValue(), vars["object"])
 	assert.Equal(t, []string{"status"}, vars["changed_fields"])
@@ -47,6 +48,7 @@ func TestBuildCELVarsDefault(t *testing.T) {
 	assert.Equal(t, map[string][]string{"b": []string{"2"}}, vars["removed_ids"])
 	assert.Equal(t, "UPDATE", vars["event_type"])
 	assert.Equal(t, "user1", vars["user_id"])
+	assert.Equal(t, proposed, vars["proposed_changes"])
 }
 
 // TestBuildCELVarsCustomBuilder verifies custom CEL context builders
@@ -56,11 +58,11 @@ func TestBuildCELVarsCustomBuilder(t *testing.T) {
 	celContextBuilders = nil
 
 	expected := map[string]any{"custom": true}
-	RegisterCELContextBuilder(func(_ *Object, _ []string, _ []string, _ map[string][]string, _ map[string][]string, _ string, _ string) map[string]any {
+	RegisterCELContextBuilder(func(_ *Object, _ []string, _ []string, _ map[string][]string, _ map[string][]string, _ string, _ string, _ map[string]any) map[string]any {
 		return expected
 	})
 
-	vars := BuildCELVars(nil, nil, nil, nil, nil, "", "")
+	vars := BuildCELVars(nil, nil, nil, nil, nil, "", "", nil)
 	assert.Equal(t, expected, vars)
 }
 

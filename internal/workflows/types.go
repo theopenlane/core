@@ -59,7 +59,7 @@ type TargetConfig struct {
 // CELContextBuilder can override how CEL activation variables are built per object type.
 // Codegen can register specialized builders (e.g., to expose typed fields) by calling
 // RegisterCELContextBuilder in an init() function.
-type CELContextBuilder func(obj *Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any
+type CELContextBuilder func(obj *Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any
 
 var celContextBuilders []CELContextBuilder
 
@@ -70,9 +70,9 @@ func RegisterCELContextBuilder(builder CELContextBuilder) {
 
 // BuildCELVars constructs the activation map for CEL evaluation, allowing generated builders
 // to provide typed contexts instead of ad-hoc maps
-func BuildCELVars(obj *Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+func BuildCELVars(obj *Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
 	for i := len(celContextBuilders) - 1; i >= 0; i-- {
-		if vars := celContextBuilders[i](obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID); vars != nil {
+		if vars := celContextBuilders[i](obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID, proposedChanges); vars != nil {
 			return vars
 		}
 	}
@@ -83,13 +83,14 @@ func BuildCELVars(obj *Object, changedFields []string, changedEdges []string, ad
 	}
 
 	return map[string]any{
-		"object":         objectValue,
-		"changed_fields": changedFields,
-		"changed_edges":  changedEdges,
-		"added_ids":      addedIDs,
-		"removed_ids":    removedIDs,
-		"event_type":     eventType,
-		"user_id":        userID,
+		"object":           objectValue,
+		"changed_fields":   changedFields,
+		"changed_edges":    changedEdges,
+		"added_ids":        addedIDs,
+		"removed_ids":      removedIDs,
+		"event_type":       eventType,
+		"user_id":          userID,
+		"proposed_changes": proposedChanges,
 	}
 }
 

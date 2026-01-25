@@ -12,7 +12,9 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -320,6 +322,93 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 	s.Nil(value)
 }
 
+// TestApprovalTriggerExpressionUsesCurrentObjectState verifies trigger expressions see the current object state,
+// not the proposed value, when approvals are routed via proposals.
+func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObjectState() {
+	userID, orgID, _ := s.SetupTestUser()
+	seedCtx := s.SeedContext(userID, orgID)
+
+	// Enable engine + listeners so hooks and proposal submission are wired.
+	wfEngine := s.SetupWorkflowEngineWithListeners()
+	s.client.WorkflowEngine = wfEngine
+
+	params := workflows.ApprovalActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{
+				{Type: enums.WorkflowTargetTypeUser, ID: userID},
+			},
+		},
+		Required: boolPtr(true),
+		Label:    "Status Approval",
+		Fields:   []string{"status"},
+	}
+	paramsBytes, err := json.Marshal(params)
+	s.Require().NoError(err)
+
+	_, err = s.client.WorkflowDefinition.Create().
+		SetName("Status Approval With Expression " + ulid.Make().String()).
+		SetWorkflowKind(enums.WorkflowKindApproval).
+		SetSchemaType("Control").
+		SetActive(true).
+		SetDraft(false).
+		SetOwnerID(orgID).
+		SetTriggerOperations([]string{"UPDATE"}).
+		SetTriggerFields([]string{"status"}).
+		SetApprovalSubmissionMode(enums.WorkflowApprovalSubmissionModeAutoSubmit).
+		SetDefinitionJSON(models.WorkflowDefinitionDocument{
+			ApprovalSubmissionMode: enums.WorkflowApprovalSubmissionModeAutoSubmit,
+			Triggers: []models.WorkflowTrigger{
+				{
+					Operation:  "UPDATE",
+					Fields:     []string{"status"},
+					Expression: `object.status == "APPROVED"`,
+				},
+			},
+			Actions: []models.WorkflowAction{
+				{
+					Type:   enums.WorkflowActionTypeApproval.String(),
+					Key:    "status_approval",
+					Params: paramsBytes,
+				},
+			},
+		}).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-STATUS-" + ulid.Make().String()).
+		SetOwnerID(orgID).
+		SetStatus(enums.ControlStatusNotImplemented).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	// Update status; approval hook intercepts and creates a proposal, so the control remains unchanged.
+	updated, err := s.client.Control.UpdateOneID(control.ID).
+		SetStatus(enums.ControlStatusApproved).
+		Save(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(enums.ControlStatusNotImplemented, updated.Status)
+
+	domainKey := workflows.DeriveDomainKey([]string{"status"})
+	proposal, err := s.client.WorkflowProposal.Query().
+		Where(workflowproposal.DomainKeyEQ(domainKey)).
+		Only(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
+
+	instance, err := s.client.WorkflowInstance.Query().
+		Where(workflowinstance.WorkflowProposalIDEQ(proposal.ID)).
+		Only(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowInstanceStatePaused, instance.State)
+
+	assignments, err := s.client.WorkflowAssignment.Query().
+		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+		All(seedCtx)
+	s.Require().NoError(err)
+	s.Len(assignments, 0)
+}
+
 // TestSkippedApprovalActionAdvancesWorkflow verifies skipped approvals advance workflow
 func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 	userID, orgID, userCtx := s.SetupTestUser()
@@ -528,6 +617,125 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 	// Verify invalidation metadata was recorded
 	s.Require().NotEmpty(invalidatedAssignment.InvalidationMetadata.Reason)
 	s.Equal("proposal changes edited after approval", invalidatedAssignment.InvalidationMetadata.Reason)
+}
+
+// TestInternalPolicyDetailsApprovalFlow verifies the complete workflow proposal lifecycle
+// for policy content changes via actual entity mutation.
+func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
+	userID, orgID, _ := s.SetupTestUser()
+	seedCtx := s.SeedContext(userID, orgID)
+
+	wfEngine := s.SetupWorkflowEngineWithListeners()
+	s.client.WorkflowEngine = wfEngine
+
+	// Create approval workflow definition for InternalPolicy details field
+	params := workflows.ApprovalActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{
+				{Type: enums.WorkflowTargetTypeUser, ID: userID},
+			},
+		},
+		Required: boolPtr(true),
+		Label:    "Policy Content Approval",
+		Fields:   []string{"details"},
+	}
+	paramsBytes, err := json.Marshal(params)
+	s.Require().NoError(err)
+
+	_, err = s.client.WorkflowDefinition.Create().
+		SetName("Policy Details Approval " + ulid.Make().String()).
+		SetWorkflowKind(enums.WorkflowKindApproval).
+		SetSchemaType("InternalPolicy").
+		SetActive(true).
+		SetDraft(false).
+		SetOwnerID(orgID).
+		SetTriggerOperations([]string{"UPDATE"}).
+		SetTriggerFields([]string{"details"}).
+		SetApprovalSubmissionMode(enums.WorkflowApprovalSubmissionModeAutoSubmit).
+		SetDefinitionJSON(models.WorkflowDefinitionDocument{
+			Triggers: []models.WorkflowTrigger{
+				{Operation: "UPDATE", Fields: []string{"details"}},
+			},
+			Actions: []models.WorkflowAction{
+				{
+					Type:   enums.WorkflowActionTypeApproval.String(),
+					Key:    "details_approval",
+					Params: paramsBytes,
+				},
+			},
+		}).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	// Create InternalPolicy with initial content
+	initialContent := "This is the initial policy content."
+	policy, err := s.client.InternalPolicy.Create().
+		SetName("Data Security Policy " + ulid.Make().String()).
+		SetOwnerID(orgID).
+		SetDetails(initialContent).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	// Update the policy details - hook should intercept and create proposal
+	proposedContent := "This is the UPDATED policy content."
+	updated, err := s.client.InternalPolicy.UpdateOneID(policy.ID).
+		SetDetails(proposedContent).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	// Original content should be unchanged (mutation was intercepted)
+	s.Equal(initialContent, updated.Details)
+
+	// Verify proposal was created
+	domainKey := workflows.DeriveDomainKey([]string{"details"})
+	proposal, err := s.client.WorkflowProposal.Query().
+		Where(workflowproposal.DomainKeyEQ(domainKey)).
+		Only(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
+	s.Equal(proposedContent, proposal.Changes["details"])
+
+	// Verify workflow instance exists (created in PAUSED state by the hook)
+	instance, err := s.client.WorkflowInstance.Query().
+		Where(workflowinstance.WorkflowProposalIDEQ(proposal.ID)).
+		Only(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowInstanceStatePaused, instance.State)
+
+	// Get the workflow definition
+	def, err := s.client.WorkflowDefinition.Query().
+		Where(workflowdefinition.IDEQ(instance.WorkflowDefinitionID)).
+		Only(seedCtx)
+	s.Require().NoError(err)
+
+	// Resume the paused instance (simulates what happens when proposal is submitted)
+	obj := &workflows.Object{ID: policy.ID, Type: enums.WorkflowObjectTypeInternalPolicy}
+	err = wfEngine.TriggerExistingInstance(seedCtx, instance, def, obj, engine.TriggerInput{
+		EventType:     "UPDATE",
+		ChangedFields: []string{"details"},
+	})
+	s.Require().NoError(err)
+
+	// Verify assignment was created
+	assignments, err := s.client.WorkflowAssignment.Query().
+		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+		All(seedCtx)
+	s.Require().NoError(err)
+	s.Require().Len(assignments, 1)
+	s.Equal(enums.WorkflowAssignmentStatusPending, assignments[0].Status)
+
+	// Complete the approval
+	err = wfEngine.CompleteAssignment(seedCtx, assignments[0].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
+	s.Require().NoError(err)
+
+	// Verify proposal is applied and content is updated
+	appliedProposal, err := s.client.WorkflowProposal.Get(seedCtx, proposal.ID)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowProposalStateApplied, appliedProposal.State)
+
+	finalPolicy, err := s.client.InternalPolicy.Get(seedCtx, policy.ID)
+	s.Require().NoError(err)
+	s.Equal(proposedContent, finalPolicy.Details)
 }
 
 // TestActionWhenExpressionUsesTriggerContext verifies when expressions use trigger context
