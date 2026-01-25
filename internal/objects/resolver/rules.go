@@ -7,6 +7,7 @@ import (
 	"github.com/theopenlane/eddy/helpers"
 	"github.com/theopenlane/utils/contextx"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
@@ -62,6 +63,7 @@ func (rc *ruleCoordinator) configure() {
 	}
 
 	rc.addKnownProviderRule()
+	rc.addTemplateKindRule(enums.TemplateKindTrustCenterNda, storage.R2Provider)
 	rc.addModuleRule(models.CatalogTrustCenterModule, storage.R2Provider)
 	rc.addModuleRule(models.CatalogComplianceModule, storage.S3Provider)
 	rc.addDefaultProviderRule()
@@ -173,6 +175,26 @@ func (rc *ruleCoordinator) addModuleRule(module models.OrgModule, provider stora
 		},
 		Resolver: func(_ context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {
 			return rc.resolveProviderWithBuilder(moduleProvider)
+		},
+	}
+
+	rc.resolver.AddRule(rule)
+}
+
+// addTemplateKindRule routes requests for a specific template kind to the desired provider
+func (rc *ruleCoordinator) addTemplateKindRule(kind enums.TemplateKind, provider storage.ProviderType) {
+	if !rc.providerEnabled(provider) || kind == "" {
+		return
+	}
+
+	templateKind := kind
+	rule := &helpers.ConditionalRule[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
+		Predicate: func(ctx context.Context) bool {
+			hint, ok := contextx.From[objects.TemplateKindHint](ctx)
+			return ok && enums.TemplateKind(hint) == templateKind
+		},
+		Resolver: func(_ context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {
+			return rc.resolveProviderWithBuilder(provider)
 		},
 	}
 
