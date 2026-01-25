@@ -56,6 +56,7 @@ func (Control) Fields() []ent.Field {
 			NotEmpty().
 			Annotations(
 				entx.FieldSearchable(),
+				entx.FieldWebhookPayloadField(),
 				entgql.OrderField("ref_code"),
 				directives.ExternalSourceDirectiveAnnotation,
 			).

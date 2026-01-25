@@ -88,6 +88,16 @@ type Config struct {
 	IntegrationOauthProvider handlers.IntegrationOauthProviderConfig `json:"integrationoauthprovider" koanf:"integrationoauthprovider"`
 	// Workflows contains the configuration for the workflows engine
 	Workflows workflows.Config `json:"workflows" koanf:"workflows"`
+	// EmailWebhook contains webhook configuration for email providers
+	EmailWebhook EmailWebhook `json:"emailwebhook" koanf:"emailwebhook"`
+}
+
+// EmailWebhook contains webhook configuration for email providers (e.g., Resend).
+type EmailWebhook struct {
+	// Enabled is a flag to enable or disable email webhooks
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// ResendSecret is the signing secret used to verify Resend webhook payloads
+	ResendSecret string `json:"resendsecret" koanf:"resendsecret" default:"" sensitive:"true"`
 }
 
 // Server settings for the echo server

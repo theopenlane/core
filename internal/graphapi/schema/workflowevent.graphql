@@ -8,4 +8,141 @@ extend type Query {
         """
         id: ID!
     ):  WorkflowEvent!
+
+    """
+    Get workflow events for a workflow instance timeline
+    """
+    workflowEventTimeline(
+        """
+        ID of the workflow instance
+        """
+        workflowInstanceID: ID!
+
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+
+        """
+        Ordering options.
+        """
+        orderBy: [WorkflowEventOrder!]
+
+        """
+        Filtering options.
+        """
+        where: WorkflowEventWhereInput
+
+        """
+        Include emit failure events in the timeline
+        """
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
+}
+
+extend type Mutation{
+    """
+    Create a new workflowEvent
+    """
+    createWorkflowEvent(
+        """
+        values of the workflowEvent
+        """
+        input: CreateWorkflowEventInput!
+    ): WorkflowEventCreatePayload!
+    """
+    Create multiple new workflowEvents
+    """
+    createBulkWorkflowEvent(
+        """
+        values of the workflowEvent
+        """
+        input: [CreateWorkflowEventInput!]
+    ): WorkflowEventBulkCreatePayload!
+    """
+    Create multiple new workflowEvents via file upload
+    """
+    createBulkCSVWorkflowEvent(
+        """
+        csv file containing values of the workflowEvent
+        """
+        input: Upload!
+    ): WorkflowEventBulkCreatePayload!
+    """
+    Update an existing workflowEvent
+    """
+    updateWorkflowEvent(
+        """
+        ID of the workflowEvent
+        """
+        id: ID!
+        """
+        New values for the workflowEvent
+        """
+        input: UpdateWorkflowEventInput!
+    ): WorkflowEventUpdatePayload!
+    """
+    Delete an existing workflowEvent
+    """
+    deleteWorkflowEvent(
+        """
+        ID of the workflowEvent
+        """
+        id: ID!
+    ): WorkflowEventDeletePayload!
+}
+
+"""
+Return response for createWorkflowEvent mutation
+"""
+type WorkflowEventCreatePayload {
+    """
+    Created workflowEvent
+    """
+    workflowEvent: WorkflowEvent!
+}
+
+"""
+Return response for updateWorkflowEvent mutation
+"""
+type WorkflowEventUpdatePayload {
+    """
+    Updated workflowEvent
+    """
+    workflowEvent: WorkflowEvent!
+}
+
+"""
+Return response for deleteWorkflowEvent mutation
+"""
+type WorkflowEventDeletePayload {
+    """
+    Deleted workflowEvent ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkWorkflowEvent mutation
+"""
+type WorkflowEventBulkCreatePayload {
+    """
+    Created workflowEvents
+    """
+    workflowEvents: [WorkflowEvent!]
 }
