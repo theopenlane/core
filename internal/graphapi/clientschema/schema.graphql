@@ -40821,12 +40821,6 @@ type Mutation {
 		"""
 		templateFiles: [Upload!]
 	): TrustCenterNDAUpdatePayload!
-	sendTrustCenterNDAEmail(
-		"""
-		values of the trustCenterNDA
-		"""
-		input: SendTrustCenterNDAInput!
-	): SendTrustCenterNDAEmailPayload!
 	"""
 	Submit a response to a Trust Center NDA
 	"""
@@ -62927,19 +62921,6 @@ type SearchSnippet {
 	The matched text with surrounding context (with highlighting markers if applicable)
 	"""
 	text: String!
-}
-type SendTrustCenterNDAEmailPayload {
-	success: Boolean!
-}
-input SendTrustCenterNDAInput {
-	"""
-	trust center id
-	"""
-	trustCenterID: ID!
-	"""
-	email address
-	"""
-	email: String!
 }
 type Standard implements Node {
 	id: ID!

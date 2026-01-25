@@ -6,33 +6,19 @@ import (
 	_ "embed"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"html/template"
-	"net/url"
 
-	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqljson"
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 	"github.com/samber/lo"
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	gentemplate "github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/pkg/domain"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -40,10 +26,7 @@ import (
 //go:embed trustcenternda.json.tpl
 var trustCenterNDATemplate string
 
-var (
-	errTrustCenterOwnerNotFound = errors.New("trust center owner not found")
-	errOneNDAOnly               = errors.New("one NDA file is required")
-)
+var errOneNDAOnly = errors.New("one NDA file is required")
 
 func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAInput) (*model.TrustCenterNDACreatePayload, error) {
 	txnCtx := withTransactionalMutation(ctx)
@@ -184,172 +167,6 @@ func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDA
 
 	return &model.TrustCenterNDAUpdatePayload{
 		Template: updatedTmpl,
-	}, nil
-}
-
-func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDAInput, r *mutationResolver) (*model.SendTrustCenterNDAEmailPayload, error) {
-	var anonymousUser *auth.AnonymousTrustCenterUser
-	if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
-		if anon.TrustCenterID != input.TrustCenterID {
-			return nil, rout.ErrPermissionDenied
-		}
-
-		anonymousUser = anon
-	} else {
-		// allow for system admins to also send the email
-		admin, err := rule.CheckIsSystemAdminWithContext(ctx)
-		if err != nil {
-			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
-		}
-
-		if !admin {
-			return nil, rout.ErrPermissionDenied
-		}
-
-		anonymousUser = &auth.AnonymousTrustCenterUser{
-			SubjectID:          fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, uuid.New().String()),
-			SubjectName:        "Anonymous User",
-			AuthenticationType: auth.JWTAuthentication,
-			TrustCenterID:      input.TrustCenterID,
-		}
-	}
-
-	txnCtx := withTransactionalMutation(ctx)
-
-	trustCenter, err := txnCtx.TrustCenter.Query().
-		Where(trustcenter.IDEQ(input.TrustCenterID)).
-		WithCustomDomain().
-		Only(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
-	}
-
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	trustCenterOwner, err := txnCtx.Organization.Get(allowCtx, trustCenter.OwnerID)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
-	}
-
-	if trustCenterOwner == nil {
-		return nil, parseRequestError(ctx, errTrustCenterOwnerNotFound, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
-	}
-
-	orgName := trustCenterOwner.Name
-
-	// create new claims for the user
-	newClaims := &tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: anonymousUser.SubjectID,
-		},
-		UserID:        anonymousUser.SubjectID,
-		OrgID:         trustCenter.OwnerID,
-		TrustCenterID: anonymousUser.TrustCenterID,
-		Email:         input.Email,
-	}
-
-	// create a new token pair for the user
-	access, _, err := r.db.TokenManager.CreateTokenPair(newClaims)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
-	}
-
-	trustCenterURL := url.URL{
-		Scheme: "https",
-	}
-	if trustCenter.Edges.CustomDomain != nil {
-		customHost := trustCenter.Edges.CustomDomain.CnameRecord
-		if normalized, err := domain.NormalizeHostname(customHost); err == nil {
-			customHost = normalized
-		}
-		trustCenterURL.Host = customHost
-	} else {
-		defaultHost := r.defaultTrustCenterDomain
-		if normalized, err := domain.NormalizeHostname(defaultHost); err == nil {
-			defaultHost = normalized
-		}
-		trustCenterURL.Host = defaultHost
-		trustCenterURL.Path = "/" + trustCenter.Slug
-	}
-
-	// Check if the user has already signed the NDA.
-	// If they have, we'll send them an email with a new auth token
-	ndaTemplate, err := txnCtx.Template.Query().Where(
-		gentemplate.And(
-			gentemplate.TrustCenterIDEQ(trustCenter.ID),
-			gentemplate.KindEQ(enums.TemplateKindTrustCenterNda),
-		),
-	).Only(allowCtx)
-	if err != nil && !generated.IsNotFound(err) {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
-	}
-
-	if ndaTemplate != nil {
-		// Check if there's a document_data record for this user and template
-		count, err := txnCtx.DocumentData.Query().Where(
-			documentdata.And(
-				documentdata.TemplateIDEQ(ndaTemplate.ID),
-				func(s *sql.Selector) {
-					s.Where(
-						sqljson.ValueEQ(documentdata.FieldData, anonymousUser.SubjectEmail, sqljson.DotPath("signatory_info.email")),
-					)
-				},
-				func(s *sql.Selector) {
-					s.Where(
-						sqljson.ValueEQ(documentdata.FieldData, anonymousUser.SubjectID, sqljson.DotPath("signature_metadata.user_id")),
-					)
-				},
-			),
-		).Count(allowCtx)
-		if err != nil {
-			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
-		}
-
-		if count > 0 {
-			// send the new link email
-			email, err := txnCtx.Emailer.NewTrustCenterAuthEmail(emailtemplates.Recipient{
-				Email: input.Email,
-			}, access, emailtemplates.TrustCenterAuthData{
-				OrganizationName: orgName,
-				TrustCenterURL:   trustCenterURL.String(),
-			})
-			if err != nil {
-				return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
-			}
-			// Send the email via job queue
-			if _, err := r.db.Job.Insert(ctx, jobs.EmailArgs{
-				Message: *email,
-			}, nil); err != nil {
-				return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
-			}
-
-			return &model.SendTrustCenterNDAEmailPayload{
-				Success: true,
-			}, nil
-		}
-	}
-
-	trustCenterURL.Path += "/access/sign-nda"
-
-	email, err := txnCtx.Emailer.NewTrustCenterNDARequestEmail(emailtemplates.Recipient{
-		Email: input.Email,
-	}, access, emailtemplates.TrustCenterNDARequestData{
-		OrganizationName: orgName,
-		TrustCenterURL:   trustCenterURL.String(),
-	})
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
-	}
-
-	// Send the email via job queue
-	if _, err := r.db.Job.Insert(ctx, jobs.EmailArgs{
-		Message: *email,
-	}, nil); err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
-	}
-
-	return &model.SendTrustCenterNDAEmailPayload{
-		Success: true,
 	}, nil
 }
 

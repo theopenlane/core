@@ -27683,17 +27683,6 @@ type SearchSnippet struct {
 	Text string `json:"text"`
 }
 
-type SendTrustCenterNDAEmailPayload struct {
-	Success bool `json:"success"`
-}
-
-type SendTrustCenterNDAInput struct {
-	// trust center id
-	TrustCenterID string `json:"trustCenterID"`
-	// email address
-	Email string `json:"email"`
-}
-
 type Standard struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
