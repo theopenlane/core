@@ -1,4 +1,4 @@
-h1:B83LQWpibBfl4veOrrmzdRjrQw9qscrUo7atVjSPaGY=
+h1:TLHUM8AqgglXhq8h9OZk7cTTVaoBvjkjDqwzvh5PMMk=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -23,3 +23,5 @@ h1:B83LQWpibBfl4veOrrmzdRjrQw9qscrUo7atVjSPaGY=
 20260120175415_trustcenter_settings_company_name_history.sql h1:CjTpemrTbOmCuMGoy3sAOe5jlOK0ZhuncjsCBtVLdso=
 20260123223505_customenumsandcampaigns.sql h1:6fjYtcPRCcur/XPfj96PMwfzOrCPuR43w9M1TKIOhdY=
 20260123223508_customenumsandcampaigns_history.sql h1:0kAamDbJXMVoaqAEQadz6YDdoqAB22MAanJHRg9LJgE=
+20260125055552_additionalcampaign.sql h1:DvOi5tYKCqk+beuZSS7tsh85rHffOtB9BxWAHxEqgwU=
+20260125055558_additionalcampaign_history.sql h1:JXExlyDasFyEKSVGz3Kjam4v7zlIjJ0KJPUszPqsMpY=

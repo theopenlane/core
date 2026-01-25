@@ -111,6 +111,9 @@ email:
         verifybilling: ""
         verifysubscriber: ""
     year: 0
+emailwebhook:
+    enabled: false
+    resendsecret: ""
 entconfig:
     billing:
         bypassemaildomains: null
