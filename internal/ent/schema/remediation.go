@@ -207,7 +207,10 @@ func (Remediation) Indexes() []ent.Index {
 func (Remediation) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.Exportable{},
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+			entx.WithSystemOwned(),
+		),
 	}
 }
 

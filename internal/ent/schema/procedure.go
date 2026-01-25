@@ -173,7 +173,9 @@ func (Procedure) Modules() []models.OrgModule {
 func (p Procedure) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.Exportable{},
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+		),
 	}
 }
 

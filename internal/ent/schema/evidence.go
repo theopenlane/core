@@ -173,7 +173,9 @@ func (Evidence) Modules() []models.OrgModule {
 func (e Evidence) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.Exportable{},
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+		),
 	}
 }
 

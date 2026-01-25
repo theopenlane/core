@@ -6,27 +6,81 @@ import (
 	"fmt"
 )
 
+type info struct {
+	hasOwnerField       bool
+	hasSystemOwnedField bool
+}
+
 // ExportableSchemas contains all schemas that have Exportable annotation
-var ExportableSchemas = map[string]bool{
-	"CONTROL":                   true,
-	"DIRECTORY_MEMBERSHIP":      true,
-	"EVIDENCE":                  true,
-	"FINDING":                   true,
-	"INTERNAL_POLICY":           true,
-	"PROCEDURE":                 true,
-	"REMEDIATION":               true,
-	"REVIEW":                    true,
-	"RISK":                      true,
-	"SUBPROCESSOR":              true,
-	"SUBSCRIBER":                true,
-	"TASK":                      true,
-	"TRUST_CENTER_SUBPROCESSOR": true,
-	"VULNERABILITY":             true,
+var ExportableSchemas = map[string]info{"CONTROL": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: true,
+}, "DIRECTORY_MEMBERSHIP": info{
+	hasOwnerField:       false,
+	hasSystemOwnedField: false,
+}, "EVIDENCE": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
+}, "FINDING": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: true,
+}, "INTERNAL_POLICY": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
+}, "PROCEDURE": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
+}, "REMEDIATION": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: true,
+}, "REVIEW": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: true,
+}, "RISK": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
+}, "SUBPROCESSOR": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: true,
+}, "SUBSCRIBER": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
+}, "TASK": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
+}, "TRUST_CENTER_SUBPROCESSOR": info{
+	hasOwnerField:       false,
+	hasSystemOwnedField: false,
+}, "VULNERABILITY": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: true,
+},
 }
 
 // IsSchemaExportable checks if a schema name is exportable
 func IsSchemaExportable(schemaName string) bool {
-	return ExportableSchemas[schemaName]
+	_, ok := ExportableSchemas[schemaName]
+	return ok
+}
+
+// HasOwnerField checks if a schema has an owner field
+func HasOwnerField(schemaName string) bool {
+	info, ok := ExportableSchemas[schemaName]
+	if !ok {
+		return false
+	}
+
+	return info.hasOwnerField
+}
+
+// HasSystemOwnedField checks if a schema has a system owned field
+func HasSystemOwnedField(schemaName string) bool {
+	info, ok := ExportableSchemas[schemaName]
+	if !ok {
+		return false
+	}
+
+	return info.hasSystemOwnedField
 }
 
 // ValidateExportType validates that an export type corresponds to an exportable schema
