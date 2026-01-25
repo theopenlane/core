@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 )
@@ -140,12 +141,12 @@ func (WorkflowProposal) Modules() []models.OrgModule {
 }
 
 // Hooks returns the hooks for the WorkflowProposal schema
-// func (WorkflowProposal) Hooks() []ent.Hook {
-// 	return []ent.Hook{
-// 		hooks.HookWorkflowProposalInvalidateAssignments(),
-// 		hooks.HookWorkflowProposalTriggerOnSubmit(),
-// 	}
-// }
+func (WorkflowProposal) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookWorkflowProposalInvalidateAssignments(),
+		hooks.HookWorkflowProposalTriggerOnSubmit(),
+	}
+}
 
 // Annotations returns the annotations for the WorkflowProposal schema
 func (WorkflowProposal) Annotations() []schema.Annotation {

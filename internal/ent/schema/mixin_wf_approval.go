@@ -4,6 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/entx"
 )
 
@@ -28,9 +29,9 @@ func (WorkflowApprovalMixin) Fields() []ent.Field {
 	}
 }
 
-// Interceptors of the WorkflowApprovalMixin
-// func (WorkflowApprovalMixin) Interceptors() []ent.Interceptor {
-// 	return []ent.Interceptor{
-// 		interceptors.WorkflowApprovalInterceptor(),
-// 	}
-// }
+// Hooks of the WorkflowApprovalMixin
+func (WorkflowApprovalMixin) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookWorkflowApprovalRouting(),
+	}
+}
