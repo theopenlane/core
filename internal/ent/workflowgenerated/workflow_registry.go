@@ -32,6 +32,18 @@ func init() {
 		if ref.ProcedureID != "" {
 			return &wf.Object{ID: ref.ProcedureID, Type: enums.WorkflowObjectTypeProcedure}, true
 		}
+		if ref.CampaignID != "" {
+			return &wf.Object{ID: ref.CampaignID, Type: enums.WorkflowObjectTypeCampaign}, true
+		}
+		if ref.CampaignTargetID != "" {
+			return &wf.Object{ID: ref.CampaignTargetID, Type: enums.WorkflowObjectTypeCampaignTarget}, true
+		}
+		if ref.IdentityHolderID != "" {
+			return &wf.Object{ID: ref.IdentityHolderID, Type: enums.WorkflowObjectTypeIdentityHolder}, true
+		}
+		if ref.PlatformID != "" {
+			return &wf.Object{ID: ref.PlatformID, Type: enums.WorkflowObjectTypePlatform}, true
+		}
 		return nil, false
 	})
 
@@ -44,12 +56,20 @@ func init() {
 		switch obj.Type {
 		case enums.WorkflowObjectTypeActionPlan:
 			return query.Where(workflowobjectref.ActionPlanIDEQ(obj.ID)), true
+		case enums.WorkflowObjectTypeCampaign:
+			return query.Where(workflowobjectref.CampaignIDEQ(obj.ID)), true
+		case enums.WorkflowObjectTypeCampaignTarget:
+			return query.Where(workflowobjectref.CampaignTargetIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeControl:
 			return query.Where(workflowobjectref.ControlIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeEvidence:
 			return query.Where(workflowobjectref.EvidenceIDEQ(obj.ID)), true
+		case enums.WorkflowObjectTypeIdentityHolder:
+			return query.Where(workflowobjectref.IdentityHolderIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeInternalPolicy:
 			return query.Where(workflowobjectref.InternalPolicyIDEQ(obj.ID)), true
+		case enums.WorkflowObjectTypePlatform:
+			return query.Where(workflowobjectref.PlatformIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeProcedure:
 			return query.Where(workflowobjectref.ProcedureIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeSubcontrol:
@@ -65,6 +85,42 @@ func init() {
 			return nil
 		}
 		entObj, ok := obj.Node.(*generated.ActionPlan)
+		if !ok {
+			return nil
+		}
+		return map[string]any{
+			"object":         entObj,
+			"changed_fields": changedFields,
+			"changed_edges":  changedEdges,
+			"added_ids":      addedIDs,
+			"removed_ids":    removedIDs,
+			"event_type":     eventType,
+			"user_id":        userID,
+		}
+	})
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+		if obj == nil || obj.Node == nil {
+			return nil
+		}
+		entObj, ok := obj.Node.(*generated.Campaign)
+		if !ok {
+			return nil
+		}
+		return map[string]any{
+			"object":         entObj,
+			"changed_fields": changedFields,
+			"changed_edges":  changedEdges,
+			"added_ids":      addedIDs,
+			"removed_ids":    removedIDs,
+			"event_type":     eventType,
+			"user_id":        userID,
+		}
+	})
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+		if obj == nil || obj.Node == nil {
+			return nil
+		}
+		entObj, ok := obj.Node.(*generated.CampaignTarget)
 		if !ok {
 			return nil
 		}
@@ -118,7 +174,43 @@ func init() {
 		if obj == nil || obj.Node == nil {
 			return nil
 		}
+		entObj, ok := obj.Node.(*generated.IdentityHolder)
+		if !ok {
+			return nil
+		}
+		return map[string]any{
+			"object":         entObj,
+			"changed_fields": changedFields,
+			"changed_edges":  changedEdges,
+			"added_ids":      addedIDs,
+			"removed_ids":    removedIDs,
+			"event_type":     eventType,
+			"user_id":        userID,
+		}
+	})
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+		if obj == nil || obj.Node == nil {
+			return nil
+		}
 		entObj, ok := obj.Node.(*generated.InternalPolicy)
+		if !ok {
+			return nil
+		}
+		return map[string]any{
+			"object":         entObj,
+			"changed_fields": changedFields,
+			"changed_edges":  changedEdges,
+			"added_ids":      addedIDs,
+			"removed_ids":    removedIDs,
+			"event_type":     eventType,
+			"user_id":        userID,
+		}
+	})
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+		if obj == nil || obj.Node == nil {
+			return nil
+		}
+		entObj, ok := obj.Node.(*generated.Platform)
 		if !ok {
 			return nil
 		}

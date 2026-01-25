@@ -13,12 +13,23 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -147,6 +158,206 @@ func (_u *ScanUpdate) ClearOwnerID() *ScanUpdate {
 	return _u
 }
 
+// SetReviewedBy sets the "reviewed_by" field.
+func (_u *ScanUpdate) SetReviewedBy(v string) *ScanUpdate {
+	_u.mutation.SetReviewedBy(v)
+	return _u
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableReviewedBy(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetReviewedBy(*v)
+	}
+	return _u
+}
+
+// ClearReviewedBy clears the value of the "reviewed_by" field.
+func (_u *ScanUpdate) ClearReviewedBy() *ScanUpdate {
+	_u.mutation.ClearReviewedBy()
+	return _u
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_u *ScanUpdate) SetReviewedByUserID(v string) *ScanUpdate {
+	_u.mutation.SetReviewedByUserID(v)
+	return _u
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableReviewedByUserID(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetReviewedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByUserID clears the value of the "reviewed_by_user_id" field.
+func (_u *ScanUpdate) ClearReviewedByUserID() *ScanUpdate {
+	_u.mutation.ClearReviewedByUserID()
+	return _u
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_u *ScanUpdate) SetReviewedByGroupID(v string) *ScanUpdate {
+	_u.mutation.SetReviewedByGroupID(v)
+	return _u
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableReviewedByGroupID(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetReviewedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
+func (_u *ScanUpdate) ClearReviewedByGroupID() *ScanUpdate {
+	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetAssignedTo sets the "assigned_to" field.
+func (_u *ScanUpdate) SetAssignedTo(v string) *ScanUpdate {
+	_u.mutation.SetAssignedTo(v)
+	return _u
+}
+
+// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableAssignedTo(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetAssignedTo(*v)
+	}
+	return _u
+}
+
+// ClearAssignedTo clears the value of the "assigned_to" field.
+func (_u *ScanUpdate) ClearAssignedTo() *ScanUpdate {
+	_u.mutation.ClearAssignedTo()
+	return _u
+}
+
+// SetAssignedToUserID sets the "assigned_to_user_id" field.
+func (_u *ScanUpdate) SetAssignedToUserID(v string) *ScanUpdate {
+	_u.mutation.SetAssignedToUserID(v)
+	return _u
+}
+
+// SetNillableAssignedToUserID sets the "assigned_to_user_id" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableAssignedToUserID(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetAssignedToUserID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToUserID clears the value of the "assigned_to_user_id" field.
+func (_u *ScanUpdate) ClearAssignedToUserID() *ScanUpdate {
+	_u.mutation.ClearAssignedToUserID()
+	return _u
+}
+
+// SetAssignedToGroupID sets the "assigned_to_group_id" field.
+func (_u *ScanUpdate) SetAssignedToGroupID(v string) *ScanUpdate {
+	_u.mutation.SetAssignedToGroupID(v)
+	return _u
+}
+
+// SetNillableAssignedToGroupID sets the "assigned_to_group_id" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableAssignedToGroupID(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetAssignedToGroupID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToGroupID clears the value of the "assigned_to_group_id" field.
+func (_u *ScanUpdate) ClearAssignedToGroupID() *ScanUpdate {
+	_u.mutation.ClearAssignedToGroupID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *ScanUpdate) SetEnvironmentName(v string) *ScanUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableEnvironmentName(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *ScanUpdate) ClearEnvironmentName() *ScanUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *ScanUpdate) SetEnvironmentID(v string) *ScanUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableEnvironmentID(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *ScanUpdate) ClearEnvironmentID() *ScanUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *ScanUpdate) SetScopeName(v string) *ScanUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableScopeName(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *ScanUpdate) ClearScopeName() *ScanUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *ScanUpdate) SetScopeID(v string) *ScanUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableScopeID(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *ScanUpdate) ClearScopeID() *ScanUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetTarget sets the "target" field.
 func (_u *ScanUpdate) SetTarget(v string) *ScanUpdate {
 	_u.mutation.SetTarget(v)
@@ -184,6 +395,164 @@ func (_u *ScanUpdate) SetMetadata(v map[string]interface{}) *ScanUpdate {
 // ClearMetadata clears the value of the "metadata" field.
 func (_u *ScanUpdate) ClearMetadata() *ScanUpdate {
 	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetScanDate sets the "scan_date" field.
+func (_u *ScanUpdate) SetScanDate(v models.DateTime) *ScanUpdate {
+	_u.mutation.SetScanDate(v)
+	return _u
+}
+
+// SetNillableScanDate sets the "scan_date" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableScanDate(v *models.DateTime) *ScanUpdate {
+	if v != nil {
+		_u.SetScanDate(*v)
+	}
+	return _u
+}
+
+// ClearScanDate clears the value of the "scan_date" field.
+func (_u *ScanUpdate) ClearScanDate() *ScanUpdate {
+	_u.mutation.ClearScanDate()
+	return _u
+}
+
+// SetScanSchedule sets the "scan_schedule" field.
+func (_u *ScanUpdate) SetScanSchedule(v models.Cron) *ScanUpdate {
+	_u.mutation.SetScanSchedule(v)
+	return _u
+}
+
+// SetNillableScanSchedule sets the "scan_schedule" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableScanSchedule(v *models.Cron) *ScanUpdate {
+	if v != nil {
+		_u.SetScanSchedule(*v)
+	}
+	return _u
+}
+
+// ClearScanSchedule clears the value of the "scan_schedule" field.
+func (_u *ScanUpdate) ClearScanSchedule() *ScanUpdate {
+	_u.mutation.ClearScanSchedule()
+	return _u
+}
+
+// SetNextScanRunAt sets the "next_scan_run_at" field.
+func (_u *ScanUpdate) SetNextScanRunAt(v models.DateTime) *ScanUpdate {
+	_u.mutation.SetNextScanRunAt(v)
+	return _u
+}
+
+// SetNillableNextScanRunAt sets the "next_scan_run_at" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableNextScanRunAt(v *models.DateTime) *ScanUpdate {
+	if v != nil {
+		_u.SetNextScanRunAt(*v)
+	}
+	return _u
+}
+
+// ClearNextScanRunAt clears the value of the "next_scan_run_at" field.
+func (_u *ScanUpdate) ClearNextScanRunAt() *ScanUpdate {
+	_u.mutation.ClearNextScanRunAt()
+	return _u
+}
+
+// SetPerformedBy sets the "performed_by" field.
+func (_u *ScanUpdate) SetPerformedBy(v string) *ScanUpdate {
+	_u.mutation.SetPerformedBy(v)
+	return _u
+}
+
+// SetNillablePerformedBy sets the "performed_by" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillablePerformedBy(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetPerformedBy(*v)
+	}
+	return _u
+}
+
+// ClearPerformedBy clears the value of the "performed_by" field.
+func (_u *ScanUpdate) ClearPerformedBy() *ScanUpdate {
+	_u.mutation.ClearPerformedBy()
+	return _u
+}
+
+// SetPerformedByUserID sets the "performed_by_user_id" field.
+func (_u *ScanUpdate) SetPerformedByUserID(v string) *ScanUpdate {
+	_u.mutation.SetPerformedByUserID(v)
+	return _u
+}
+
+// SetNillablePerformedByUserID sets the "performed_by_user_id" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillablePerformedByUserID(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetPerformedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearPerformedByUserID clears the value of the "performed_by_user_id" field.
+func (_u *ScanUpdate) ClearPerformedByUserID() *ScanUpdate {
+	_u.mutation.ClearPerformedByUserID()
+	return _u
+}
+
+// SetPerformedByGroupID sets the "performed_by_group_id" field.
+func (_u *ScanUpdate) SetPerformedByGroupID(v string) *ScanUpdate {
+	_u.mutation.SetPerformedByGroupID(v)
+	return _u
+}
+
+// SetNillablePerformedByGroupID sets the "performed_by_group_id" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillablePerformedByGroupID(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetPerformedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearPerformedByGroupID clears the value of the "performed_by_group_id" field.
+func (_u *ScanUpdate) ClearPerformedByGroupID() *ScanUpdate {
+	_u.mutation.ClearPerformedByGroupID()
+	return _u
+}
+
+// SetGeneratedByPlatformID sets the "generated_by_platform_id" field.
+func (_u *ScanUpdate) SetGeneratedByPlatformID(v string) *ScanUpdate {
+	_u.mutation.SetGeneratedByPlatformID(v)
+	return _u
+}
+
+// SetNillableGeneratedByPlatformID sets the "generated_by_platform_id" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableGeneratedByPlatformID(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetGeneratedByPlatformID(*v)
+	}
+	return _u
+}
+
+// ClearGeneratedByPlatformID clears the value of the "generated_by_platform_id" field.
+func (_u *ScanUpdate) ClearGeneratedByPlatformID() *ScanUpdate {
+	_u.mutation.ClearGeneratedByPlatformID()
+	return _u
+}
+
+// SetVulnerabilityIds sets the "vulnerability_ids" field.
+func (_u *ScanUpdate) SetVulnerabilityIds(v []string) *ScanUpdate {
+	_u.mutation.SetVulnerabilityIds(v)
+	return _u
+}
+
+// AppendVulnerabilityIds appends value to the "vulnerability_ids" field.
+func (_u *ScanUpdate) AppendVulnerabilityIds(v []string) *ScanUpdate {
+	_u.mutation.AppendVulnerabilityIds(v)
+	return _u
+}
+
+// ClearVulnerabilityIds clears the value of the "vulnerability_ids" field.
+func (_u *ScanUpdate) ClearVulnerabilityIds() *ScanUpdate {
+	_u.mutation.ClearVulnerabilityIds()
 	return _u
 }
 
@@ -251,6 +620,36 @@ func (_u *ScanUpdate) AddViewers(v ...*Group) *ScanUpdate {
 	return _u.AddViewerIDs(ids...)
 }
 
+// SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
+func (_u *ScanUpdate) SetReviewedByUser(v *User) *ScanUpdate {
+	return _u.SetReviewedByUserID(v.ID)
+}
+
+// SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
+func (_u *ScanUpdate) SetReviewedByGroup(v *Group) *ScanUpdate {
+	return _u.SetReviewedByGroupID(v.ID)
+}
+
+// SetAssignedToUser sets the "assigned_to_user" edge to the User entity.
+func (_u *ScanUpdate) SetAssignedToUser(v *User) *ScanUpdate {
+	return _u.SetAssignedToUserID(v.ID)
+}
+
+// SetAssignedToGroup sets the "assigned_to_group" edge to the Group entity.
+func (_u *ScanUpdate) SetAssignedToGroup(v *Group) *ScanUpdate {
+	return _u.SetAssignedToGroupID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *ScanUpdate) SetEnvironment(v *CustomTypeEnum) *ScanUpdate {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *ScanUpdate) SetScope(v *CustomTypeEnum) *ScanUpdate {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
 func (_u *ScanUpdate) AddAssetIDs(ids ...string) *ScanUpdate {
 	_u.mutation.AddAssetIDs(ids...)
@@ -279,6 +678,141 @@ func (_u *ScanUpdate) AddEntities(v ...*Entity) *ScanUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddEntityIDs(ids...)
+}
+
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (_u *ScanUpdate) AddEvidenceIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddEvidenceIDs(ids...)
+	return _u
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (_u *ScanUpdate) AddEvidence(v ...*Evidence) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEvidenceIDs(ids...)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_u *ScanUpdate) AddFileIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_u *ScanUpdate) AddFiles(v ...*File) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_u *ScanUpdate) AddRemediationIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddRemediationIDs(ids...)
+	return _u
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_u *ScanUpdate) AddRemediations(v ...*Remediation) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationIDs(ids...)
+}
+
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (_u *ScanUpdate) AddActionPlanIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddActionPlanIDs(ids...)
+	return _u
+}
+
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (_u *ScanUpdate) AddActionPlans(v ...*ActionPlan) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionPlanIDs(ids...)
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_u *ScanUpdate) AddTaskIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_u *ScanUpdate) AddTasks(v ...*Task) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTaskIDs(ids...)
+}
+
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_u *ScanUpdate) AddPlatformIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddPlatformIDs(ids...)
+	return _u
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_u *ScanUpdate) AddPlatforms(v ...*Platform) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_u *ScanUpdate) AddVulnerabilityIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddVulnerabilityIDs(ids...)
+	return _u
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_u *ScanUpdate) AddVulnerabilities(v ...*Vulnerability) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVulnerabilityIDs(ids...)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (_u *ScanUpdate) AddControlIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (_u *ScanUpdate) AddControls(v ...*Control) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlIDs(ids...)
+}
+
+// SetGeneratedByPlatform sets the "generated_by_platform" edge to the Platform entity.
+func (_u *ScanUpdate) SetGeneratedByPlatform(v *Platform) *ScanUpdate {
+	return _u.SetGeneratedByPlatformID(v.ID)
+}
+
+// SetPerformedByUser sets the "performed_by_user" edge to the User entity.
+func (_u *ScanUpdate) SetPerformedByUser(v *User) *ScanUpdate {
+	return _u.SetPerformedByUserID(v.ID)
+}
+
+// SetPerformedByGroup sets the "performed_by_group" edge to the Group entity.
+func (_u *ScanUpdate) SetPerformedByGroup(v *Group) *ScanUpdate {
+	return _u.SetPerformedByGroupID(v.ID)
 }
 
 // Mutation returns the ScanMutation object of the builder.
@@ -355,6 +889,42 @@ func (_u *ScanUpdate) RemoveViewers(v ...*Group) *ScanUpdate {
 	return _u.RemoveViewerIDs(ids...)
 }
 
+// ClearReviewedByUser clears the "reviewed_by_user" edge to the User entity.
+func (_u *ScanUpdate) ClearReviewedByUser() *ScanUpdate {
+	_u.mutation.ClearReviewedByUser()
+	return _u
+}
+
+// ClearReviewedByGroup clears the "reviewed_by_group" edge to the Group entity.
+func (_u *ScanUpdate) ClearReviewedByGroup() *ScanUpdate {
+	_u.mutation.ClearReviewedByGroup()
+	return _u
+}
+
+// ClearAssignedToUser clears the "assigned_to_user" edge to the User entity.
+func (_u *ScanUpdate) ClearAssignedToUser() *ScanUpdate {
+	_u.mutation.ClearAssignedToUser()
+	return _u
+}
+
+// ClearAssignedToGroup clears the "assigned_to_group" edge to the Group entity.
+func (_u *ScanUpdate) ClearAssignedToGroup() *ScanUpdate {
+	_u.mutation.ClearAssignedToGroup()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *ScanUpdate) ClearEnvironment() *ScanUpdate {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *ScanUpdate) ClearScope() *ScanUpdate {
+	_u.mutation.ClearScope()
+	return _u
+}
+
 // ClearAssets clears all "assets" edges to the Asset entity.
 func (_u *ScanUpdate) ClearAssets() *ScanUpdate {
 	_u.mutation.ClearAssets()
@@ -395,6 +965,192 @@ func (_u *ScanUpdate) RemoveEntities(v ...*Entity) *ScanUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEntityIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (_u *ScanUpdate) ClearEvidence() *ScanUpdate {
+	_u.mutation.ClearEvidence()
+	return _u
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (_u *ScanUpdate) RemoveEvidenceIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveEvidenceIDs(ids...)
+	return _u
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (_u *ScanUpdate) RemoveEvidence(v ...*Evidence) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEvidenceIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (_u *ScanUpdate) ClearFiles() *ScanUpdate {
+	_u.mutation.ClearFiles()
+	return _u
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (_u *ScanUpdate) RemoveFileIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (_u *ScanUpdate) RemoveFiles(v ...*File) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileIDs(ids...)
+}
+
+// ClearRemediations clears all "remediations" edges to the Remediation entity.
+func (_u *ScanUpdate) ClearRemediations() *ScanUpdate {
+	_u.mutation.ClearRemediations()
+	return _u
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to Remediation entities by IDs.
+func (_u *ScanUpdate) RemoveRemediationIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveRemediationIDs(ids...)
+	return _u
+}
+
+// RemoveRemediations removes "remediations" edges to Remediation entities.
+func (_u *ScanUpdate) RemoveRemediations(v ...*Remediation) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationIDs(ids...)
+}
+
+// ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
+func (_u *ScanUpdate) ClearActionPlans() *ScanUpdate {
+	_u.mutation.ClearActionPlans()
+	return _u
+}
+
+// RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
+func (_u *ScanUpdate) RemoveActionPlanIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveActionPlanIDs(ids...)
+	return _u
+}
+
+// RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
+func (_u *ScanUpdate) RemoveActionPlans(v ...*ActionPlan) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionPlanIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (_u *ScanUpdate) ClearTasks() *ScanUpdate {
+	_u.mutation.ClearTasks()
+	return _u
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (_u *ScanUpdate) RemoveTaskIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (_u *ScanUpdate) RemoveTasks(v ...*Task) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTaskIDs(ids...)
+}
+
+// ClearPlatforms clears all "platforms" edges to the Platform entity.
+func (_u *ScanUpdate) ClearPlatforms() *ScanUpdate {
+	_u.mutation.ClearPlatforms()
+	return _u
+}
+
+// RemovePlatformIDs removes the "platforms" edge to Platform entities by IDs.
+func (_u *ScanUpdate) RemovePlatformIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemovePlatformIDs(ids...)
+	return _u
+}
+
+// RemovePlatforms removes "platforms" edges to Platform entities.
+func (_u *ScanUpdate) RemovePlatforms(v ...*Platform) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformIDs(ids...)
+}
+
+// ClearVulnerabilities clears all "vulnerabilities" edges to the Vulnerability entity.
+func (_u *ScanUpdate) ClearVulnerabilities() *ScanUpdate {
+	_u.mutation.ClearVulnerabilities()
+	return _u
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to Vulnerability entities by IDs.
+func (_u *ScanUpdate) RemoveVulnerabilityIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveVulnerabilityIDs(ids...)
+	return _u
+}
+
+// RemoveVulnerabilities removes "vulnerabilities" edges to Vulnerability entities.
+func (_u *ScanUpdate) RemoveVulnerabilities(v ...*Vulnerability) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVulnerabilityIDs(ids...)
+}
+
+// ClearControls clears all "controls" edges to the Control entity.
+func (_u *ScanUpdate) ClearControls() *ScanUpdate {
+	_u.mutation.ClearControls()
+	return _u
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
+func (_u *ScanUpdate) RemoveControlIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
+}
+
+// RemoveControls removes "controls" edges to Control entities.
+func (_u *ScanUpdate) RemoveControls(v ...*Control) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlIDs(ids...)
+}
+
+// ClearGeneratedByPlatform clears the "generated_by_platform" edge to the Platform entity.
+func (_u *ScanUpdate) ClearGeneratedByPlatform() *ScanUpdate {
+	_u.mutation.ClearGeneratedByPlatform()
+	return _u
+}
+
+// ClearPerformedByUser clears the "performed_by_user" edge to the User entity.
+func (_u *ScanUpdate) ClearPerformedByUser() *ScanUpdate {
+	_u.mutation.ClearPerformedByUser()
+	return _u
+}
+
+// ClearPerformedByGroup clears the "performed_by_group" edge to the Group entity.
+func (_u *ScanUpdate) ClearPerformedByGroup() *ScanUpdate {
+	_u.mutation.ClearPerformedByGroup()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -454,6 +1210,11 @@ func (_u *ScanUpdate) check() error {
 	if v, ok := _u.mutation.ScanType(); ok {
 		if err := scan.ScanTypeValidator(v); err != nil {
 			return &ValidationError{Name: "scan_type", err: fmt.Errorf(`generated: validator failed for field "Scan.scan_type": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ScanSchedule(); ok {
+		if err := scan.ScanScheduleValidator(string(v)); err != nil {
+			return &ValidationError{Name: "scan_schedule", err: fmt.Errorf(`generated: validator failed for field "Scan.scan_schedule": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Status(); ok {
@@ -523,6 +1284,30 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(scan.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.ReviewedBy(); ok {
+		_spec.SetField(scan.FieldReviewedBy, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(scan.FieldReviewedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedTo(); ok {
+		_spec.SetField(scan.FieldAssignedTo, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToCleared() {
+		_spec.ClearField(scan.FieldAssignedTo, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(scan.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(scan.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(scan.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(scan.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Target(); ok {
 		_spec.SetField(scan.FieldTarget, field.TypeString, value)
 	}
@@ -534,6 +1319,41 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(scan.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ScanDate(); ok {
+		_spec.SetField(scan.FieldScanDate, field.TypeTime, value)
+	}
+	if _u.mutation.ScanDateCleared() {
+		_spec.ClearField(scan.FieldScanDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ScanSchedule(); ok {
+		_spec.SetField(scan.FieldScanSchedule, field.TypeString, value)
+	}
+	if _u.mutation.ScanScheduleCleared() {
+		_spec.ClearField(scan.FieldScanSchedule, field.TypeString)
+	}
+	if value, ok := _u.mutation.NextScanRunAt(); ok {
+		_spec.SetField(scan.FieldNextScanRunAt, field.TypeTime, value)
+	}
+	if _u.mutation.NextScanRunAtCleared() {
+		_spec.ClearField(scan.FieldNextScanRunAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.PerformedBy(); ok {
+		_spec.SetField(scan.FieldPerformedBy, field.TypeString, value)
+	}
+	if _u.mutation.PerformedByCleared() {
+		_spec.ClearField(scan.FieldPerformedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.VulnerabilityIds(); ok {
+		_spec.SetField(scan.FieldVulnerabilityIds, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedVulnerabilityIds(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, scan.FieldVulnerabilityIds, value)
+		})
+	}
+	if _u.mutation.VulnerabilityIdsCleared() {
+		_spec.ClearField(scan.FieldVulnerabilityIds, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scan.FieldStatus, field.TypeEnum, value)
@@ -713,6 +1533,192 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ReviewedByUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ReviewedByUserTable,
+			Columns: []string{scan.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ReviewedByUserTable,
+			Columns: []string{scan.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ReviewedByGroupTable,
+			Columns: []string{scan.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ReviewedByGroupTable,
+			Columns: []string{scan.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssignedToUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.AssignedToUserTable,
+			Columns: []string{scan.AssignedToUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssignedToUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.AssignedToUserTable,
+			Columns: []string{scan.AssignedToUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssignedToGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.AssignedToGroupTable,
+			Columns: []string{scan.AssignedToGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssignedToGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.AssignedToGroupTable,
+			Columns: []string{scan.AssignedToGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.EnvironmentTable,
+			Columns: []string{scan.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.EnvironmentTable,
+			Columns: []string{scan.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ScopeTable,
+			Columns: []string{scan.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ScopeTable,
+			Columns: []string{scan.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -804,6 +1810,483 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.EvidenceTable,
+			Columns: scan.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanEvidence
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !_u.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.EvidenceTable,
+			Columns: scan.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanEvidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.EvidenceTable,
+			Columns: scan.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanEvidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.FilesTable,
+			Columns: scan.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.FilesTable,
+			Columns: scan.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.FilesTable,
+			Columns: scan.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.RemediationsTable,
+			Columns: scan.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanRemediations
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.RemediationsTable,
+			Columns: scan.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanRemediations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.RemediationsTable,
+			Columns: scan.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanRemediations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ActionPlansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.ActionPlansTable,
+			Columns: scan.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanActionPlans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.ActionPlansTable,
+			Columns: scan.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.ActionPlansTable,
+			Columns: scan.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.TasksTable,
+			Columns: scan.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.TasksTable,
+			Columns: scan.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.TasksTable,
+			Columns: scan.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.PlatformsTable,
+			Columns: scan.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.PlatformsTable,
+			Columns: scan.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.PlatformsTable,
+			Columns: scan.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.VulnerabilitiesTable,
+			Columns: scan.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilityScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.VulnerabilitiesTable,
+			Columns: scan.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilityScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.VulnerabilitiesTable,
+			Columns: scan.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilityScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.ControlsTable,
+			Columns: scan.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.ControlsTable,
+			Columns: scan.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.ControlsTable,
+			Columns: scan.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.GeneratedByPlatformCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scan.GeneratedByPlatformTable,
+			Columns: []string{scan.GeneratedByPlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.GeneratedByPlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scan.GeneratedByPlatformTable,
+			Columns: []string{scan.GeneratedByPlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PerformedByUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.PerformedByUserTable,
+			Columns: []string{scan.PerformedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PerformedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.PerformedByUserTable,
+			Columns: []string{scan.PerformedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PerformedByGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.PerformedByGroupTable,
+			Columns: []string{scan.PerformedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PerformedByGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.PerformedByGroupTable,
+			Columns: []string{scan.PerformedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -943,6 +2426,206 @@ func (_u *ScanUpdateOne) ClearOwnerID() *ScanUpdateOne {
 	return _u
 }
 
+// SetReviewedBy sets the "reviewed_by" field.
+func (_u *ScanUpdateOne) SetReviewedBy(v string) *ScanUpdateOne {
+	_u.mutation.SetReviewedBy(v)
+	return _u
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableReviewedBy(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetReviewedBy(*v)
+	}
+	return _u
+}
+
+// ClearReviewedBy clears the value of the "reviewed_by" field.
+func (_u *ScanUpdateOne) ClearReviewedBy() *ScanUpdateOne {
+	_u.mutation.ClearReviewedBy()
+	return _u
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_u *ScanUpdateOne) SetReviewedByUserID(v string) *ScanUpdateOne {
+	_u.mutation.SetReviewedByUserID(v)
+	return _u
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableReviewedByUserID(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetReviewedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByUserID clears the value of the "reviewed_by_user_id" field.
+func (_u *ScanUpdateOne) ClearReviewedByUserID() *ScanUpdateOne {
+	_u.mutation.ClearReviewedByUserID()
+	return _u
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_u *ScanUpdateOne) SetReviewedByGroupID(v string) *ScanUpdateOne {
+	_u.mutation.SetReviewedByGroupID(v)
+	return _u
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableReviewedByGroupID(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetReviewedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
+func (_u *ScanUpdateOne) ClearReviewedByGroupID() *ScanUpdateOne {
+	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetAssignedTo sets the "assigned_to" field.
+func (_u *ScanUpdateOne) SetAssignedTo(v string) *ScanUpdateOne {
+	_u.mutation.SetAssignedTo(v)
+	return _u
+}
+
+// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableAssignedTo(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetAssignedTo(*v)
+	}
+	return _u
+}
+
+// ClearAssignedTo clears the value of the "assigned_to" field.
+func (_u *ScanUpdateOne) ClearAssignedTo() *ScanUpdateOne {
+	_u.mutation.ClearAssignedTo()
+	return _u
+}
+
+// SetAssignedToUserID sets the "assigned_to_user_id" field.
+func (_u *ScanUpdateOne) SetAssignedToUserID(v string) *ScanUpdateOne {
+	_u.mutation.SetAssignedToUserID(v)
+	return _u
+}
+
+// SetNillableAssignedToUserID sets the "assigned_to_user_id" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableAssignedToUserID(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetAssignedToUserID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToUserID clears the value of the "assigned_to_user_id" field.
+func (_u *ScanUpdateOne) ClearAssignedToUserID() *ScanUpdateOne {
+	_u.mutation.ClearAssignedToUserID()
+	return _u
+}
+
+// SetAssignedToGroupID sets the "assigned_to_group_id" field.
+func (_u *ScanUpdateOne) SetAssignedToGroupID(v string) *ScanUpdateOne {
+	_u.mutation.SetAssignedToGroupID(v)
+	return _u
+}
+
+// SetNillableAssignedToGroupID sets the "assigned_to_group_id" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableAssignedToGroupID(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetAssignedToGroupID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToGroupID clears the value of the "assigned_to_group_id" field.
+func (_u *ScanUpdateOne) ClearAssignedToGroupID() *ScanUpdateOne {
+	_u.mutation.ClearAssignedToGroupID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *ScanUpdateOne) SetEnvironmentName(v string) *ScanUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableEnvironmentName(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *ScanUpdateOne) ClearEnvironmentName() *ScanUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *ScanUpdateOne) SetEnvironmentID(v string) *ScanUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableEnvironmentID(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *ScanUpdateOne) ClearEnvironmentID() *ScanUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *ScanUpdateOne) SetScopeName(v string) *ScanUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableScopeName(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *ScanUpdateOne) ClearScopeName() *ScanUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *ScanUpdateOne) SetScopeID(v string) *ScanUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableScopeID(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *ScanUpdateOne) ClearScopeID() *ScanUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetTarget sets the "target" field.
 func (_u *ScanUpdateOne) SetTarget(v string) *ScanUpdateOne {
 	_u.mutation.SetTarget(v)
@@ -980,6 +2663,164 @@ func (_u *ScanUpdateOne) SetMetadata(v map[string]interface{}) *ScanUpdateOne {
 // ClearMetadata clears the value of the "metadata" field.
 func (_u *ScanUpdateOne) ClearMetadata() *ScanUpdateOne {
 	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetScanDate sets the "scan_date" field.
+func (_u *ScanUpdateOne) SetScanDate(v models.DateTime) *ScanUpdateOne {
+	_u.mutation.SetScanDate(v)
+	return _u
+}
+
+// SetNillableScanDate sets the "scan_date" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableScanDate(v *models.DateTime) *ScanUpdateOne {
+	if v != nil {
+		_u.SetScanDate(*v)
+	}
+	return _u
+}
+
+// ClearScanDate clears the value of the "scan_date" field.
+func (_u *ScanUpdateOne) ClearScanDate() *ScanUpdateOne {
+	_u.mutation.ClearScanDate()
+	return _u
+}
+
+// SetScanSchedule sets the "scan_schedule" field.
+func (_u *ScanUpdateOne) SetScanSchedule(v models.Cron) *ScanUpdateOne {
+	_u.mutation.SetScanSchedule(v)
+	return _u
+}
+
+// SetNillableScanSchedule sets the "scan_schedule" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableScanSchedule(v *models.Cron) *ScanUpdateOne {
+	if v != nil {
+		_u.SetScanSchedule(*v)
+	}
+	return _u
+}
+
+// ClearScanSchedule clears the value of the "scan_schedule" field.
+func (_u *ScanUpdateOne) ClearScanSchedule() *ScanUpdateOne {
+	_u.mutation.ClearScanSchedule()
+	return _u
+}
+
+// SetNextScanRunAt sets the "next_scan_run_at" field.
+func (_u *ScanUpdateOne) SetNextScanRunAt(v models.DateTime) *ScanUpdateOne {
+	_u.mutation.SetNextScanRunAt(v)
+	return _u
+}
+
+// SetNillableNextScanRunAt sets the "next_scan_run_at" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableNextScanRunAt(v *models.DateTime) *ScanUpdateOne {
+	if v != nil {
+		_u.SetNextScanRunAt(*v)
+	}
+	return _u
+}
+
+// ClearNextScanRunAt clears the value of the "next_scan_run_at" field.
+func (_u *ScanUpdateOne) ClearNextScanRunAt() *ScanUpdateOne {
+	_u.mutation.ClearNextScanRunAt()
+	return _u
+}
+
+// SetPerformedBy sets the "performed_by" field.
+func (_u *ScanUpdateOne) SetPerformedBy(v string) *ScanUpdateOne {
+	_u.mutation.SetPerformedBy(v)
+	return _u
+}
+
+// SetNillablePerformedBy sets the "performed_by" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillablePerformedBy(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetPerformedBy(*v)
+	}
+	return _u
+}
+
+// ClearPerformedBy clears the value of the "performed_by" field.
+func (_u *ScanUpdateOne) ClearPerformedBy() *ScanUpdateOne {
+	_u.mutation.ClearPerformedBy()
+	return _u
+}
+
+// SetPerformedByUserID sets the "performed_by_user_id" field.
+func (_u *ScanUpdateOne) SetPerformedByUserID(v string) *ScanUpdateOne {
+	_u.mutation.SetPerformedByUserID(v)
+	return _u
+}
+
+// SetNillablePerformedByUserID sets the "performed_by_user_id" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillablePerformedByUserID(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetPerformedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearPerformedByUserID clears the value of the "performed_by_user_id" field.
+func (_u *ScanUpdateOne) ClearPerformedByUserID() *ScanUpdateOne {
+	_u.mutation.ClearPerformedByUserID()
+	return _u
+}
+
+// SetPerformedByGroupID sets the "performed_by_group_id" field.
+func (_u *ScanUpdateOne) SetPerformedByGroupID(v string) *ScanUpdateOne {
+	_u.mutation.SetPerformedByGroupID(v)
+	return _u
+}
+
+// SetNillablePerformedByGroupID sets the "performed_by_group_id" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillablePerformedByGroupID(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetPerformedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearPerformedByGroupID clears the value of the "performed_by_group_id" field.
+func (_u *ScanUpdateOne) ClearPerformedByGroupID() *ScanUpdateOne {
+	_u.mutation.ClearPerformedByGroupID()
+	return _u
+}
+
+// SetGeneratedByPlatformID sets the "generated_by_platform_id" field.
+func (_u *ScanUpdateOne) SetGeneratedByPlatformID(v string) *ScanUpdateOne {
+	_u.mutation.SetGeneratedByPlatformID(v)
+	return _u
+}
+
+// SetNillableGeneratedByPlatformID sets the "generated_by_platform_id" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableGeneratedByPlatformID(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetGeneratedByPlatformID(*v)
+	}
+	return _u
+}
+
+// ClearGeneratedByPlatformID clears the value of the "generated_by_platform_id" field.
+func (_u *ScanUpdateOne) ClearGeneratedByPlatformID() *ScanUpdateOne {
+	_u.mutation.ClearGeneratedByPlatformID()
+	return _u
+}
+
+// SetVulnerabilityIds sets the "vulnerability_ids" field.
+func (_u *ScanUpdateOne) SetVulnerabilityIds(v []string) *ScanUpdateOne {
+	_u.mutation.SetVulnerabilityIds(v)
+	return _u
+}
+
+// AppendVulnerabilityIds appends value to the "vulnerability_ids" field.
+func (_u *ScanUpdateOne) AppendVulnerabilityIds(v []string) *ScanUpdateOne {
+	_u.mutation.AppendVulnerabilityIds(v)
+	return _u
+}
+
+// ClearVulnerabilityIds clears the value of the "vulnerability_ids" field.
+func (_u *ScanUpdateOne) ClearVulnerabilityIds() *ScanUpdateOne {
+	_u.mutation.ClearVulnerabilityIds()
 	return _u
 }
 
@@ -1047,6 +2888,36 @@ func (_u *ScanUpdateOne) AddViewers(v ...*Group) *ScanUpdateOne {
 	return _u.AddViewerIDs(ids...)
 }
 
+// SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
+func (_u *ScanUpdateOne) SetReviewedByUser(v *User) *ScanUpdateOne {
+	return _u.SetReviewedByUserID(v.ID)
+}
+
+// SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
+func (_u *ScanUpdateOne) SetReviewedByGroup(v *Group) *ScanUpdateOne {
+	return _u.SetReviewedByGroupID(v.ID)
+}
+
+// SetAssignedToUser sets the "assigned_to_user" edge to the User entity.
+func (_u *ScanUpdateOne) SetAssignedToUser(v *User) *ScanUpdateOne {
+	return _u.SetAssignedToUserID(v.ID)
+}
+
+// SetAssignedToGroup sets the "assigned_to_group" edge to the Group entity.
+func (_u *ScanUpdateOne) SetAssignedToGroup(v *Group) *ScanUpdateOne {
+	return _u.SetAssignedToGroupID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *ScanUpdateOne) SetEnvironment(v *CustomTypeEnum) *ScanUpdateOne {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *ScanUpdateOne) SetScope(v *CustomTypeEnum) *ScanUpdateOne {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
 func (_u *ScanUpdateOne) AddAssetIDs(ids ...string) *ScanUpdateOne {
 	_u.mutation.AddAssetIDs(ids...)
@@ -1075,6 +2946,141 @@ func (_u *ScanUpdateOne) AddEntities(v ...*Entity) *ScanUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddEntityIDs(ids...)
+}
+
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (_u *ScanUpdateOne) AddEvidenceIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddEvidenceIDs(ids...)
+	return _u
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (_u *ScanUpdateOne) AddEvidence(v ...*Evidence) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEvidenceIDs(ids...)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_u *ScanUpdateOne) AddFileIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_u *ScanUpdateOne) AddFiles(v ...*File) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_u *ScanUpdateOne) AddRemediationIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddRemediationIDs(ids...)
+	return _u
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_u *ScanUpdateOne) AddRemediations(v ...*Remediation) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationIDs(ids...)
+}
+
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (_u *ScanUpdateOne) AddActionPlanIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddActionPlanIDs(ids...)
+	return _u
+}
+
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (_u *ScanUpdateOne) AddActionPlans(v ...*ActionPlan) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionPlanIDs(ids...)
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_u *ScanUpdateOne) AddTaskIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_u *ScanUpdateOne) AddTasks(v ...*Task) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTaskIDs(ids...)
+}
+
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_u *ScanUpdateOne) AddPlatformIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddPlatformIDs(ids...)
+	return _u
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_u *ScanUpdateOne) AddPlatforms(v ...*Platform) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_u *ScanUpdateOne) AddVulnerabilityIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddVulnerabilityIDs(ids...)
+	return _u
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_u *ScanUpdateOne) AddVulnerabilities(v ...*Vulnerability) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVulnerabilityIDs(ids...)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (_u *ScanUpdateOne) AddControlIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (_u *ScanUpdateOne) AddControls(v ...*Control) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlIDs(ids...)
+}
+
+// SetGeneratedByPlatform sets the "generated_by_platform" edge to the Platform entity.
+func (_u *ScanUpdateOne) SetGeneratedByPlatform(v *Platform) *ScanUpdateOne {
+	return _u.SetGeneratedByPlatformID(v.ID)
+}
+
+// SetPerformedByUser sets the "performed_by_user" edge to the User entity.
+func (_u *ScanUpdateOne) SetPerformedByUser(v *User) *ScanUpdateOne {
+	return _u.SetPerformedByUserID(v.ID)
+}
+
+// SetPerformedByGroup sets the "performed_by_group" edge to the Group entity.
+func (_u *ScanUpdateOne) SetPerformedByGroup(v *Group) *ScanUpdateOne {
+	return _u.SetPerformedByGroupID(v.ID)
 }
 
 // Mutation returns the ScanMutation object of the builder.
@@ -1151,6 +3157,42 @@ func (_u *ScanUpdateOne) RemoveViewers(v ...*Group) *ScanUpdateOne {
 	return _u.RemoveViewerIDs(ids...)
 }
 
+// ClearReviewedByUser clears the "reviewed_by_user" edge to the User entity.
+func (_u *ScanUpdateOne) ClearReviewedByUser() *ScanUpdateOne {
+	_u.mutation.ClearReviewedByUser()
+	return _u
+}
+
+// ClearReviewedByGroup clears the "reviewed_by_group" edge to the Group entity.
+func (_u *ScanUpdateOne) ClearReviewedByGroup() *ScanUpdateOne {
+	_u.mutation.ClearReviewedByGroup()
+	return _u
+}
+
+// ClearAssignedToUser clears the "assigned_to_user" edge to the User entity.
+func (_u *ScanUpdateOne) ClearAssignedToUser() *ScanUpdateOne {
+	_u.mutation.ClearAssignedToUser()
+	return _u
+}
+
+// ClearAssignedToGroup clears the "assigned_to_group" edge to the Group entity.
+func (_u *ScanUpdateOne) ClearAssignedToGroup() *ScanUpdateOne {
+	_u.mutation.ClearAssignedToGroup()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *ScanUpdateOne) ClearEnvironment() *ScanUpdateOne {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *ScanUpdateOne) ClearScope() *ScanUpdateOne {
+	_u.mutation.ClearScope()
+	return _u
+}
+
 // ClearAssets clears all "assets" edges to the Asset entity.
 func (_u *ScanUpdateOne) ClearAssets() *ScanUpdateOne {
 	_u.mutation.ClearAssets()
@@ -1191,6 +3233,192 @@ func (_u *ScanUpdateOne) RemoveEntities(v ...*Entity) *ScanUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEntityIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (_u *ScanUpdateOne) ClearEvidence() *ScanUpdateOne {
+	_u.mutation.ClearEvidence()
+	return _u
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (_u *ScanUpdateOne) RemoveEvidenceIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveEvidenceIDs(ids...)
+	return _u
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (_u *ScanUpdateOne) RemoveEvidence(v ...*Evidence) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEvidenceIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (_u *ScanUpdateOne) ClearFiles() *ScanUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (_u *ScanUpdateOne) RemoveFileIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (_u *ScanUpdateOne) RemoveFiles(v ...*File) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileIDs(ids...)
+}
+
+// ClearRemediations clears all "remediations" edges to the Remediation entity.
+func (_u *ScanUpdateOne) ClearRemediations() *ScanUpdateOne {
+	_u.mutation.ClearRemediations()
+	return _u
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to Remediation entities by IDs.
+func (_u *ScanUpdateOne) RemoveRemediationIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveRemediationIDs(ids...)
+	return _u
+}
+
+// RemoveRemediations removes "remediations" edges to Remediation entities.
+func (_u *ScanUpdateOne) RemoveRemediations(v ...*Remediation) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationIDs(ids...)
+}
+
+// ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
+func (_u *ScanUpdateOne) ClearActionPlans() *ScanUpdateOne {
+	_u.mutation.ClearActionPlans()
+	return _u
+}
+
+// RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
+func (_u *ScanUpdateOne) RemoveActionPlanIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveActionPlanIDs(ids...)
+	return _u
+}
+
+// RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
+func (_u *ScanUpdateOne) RemoveActionPlans(v ...*ActionPlan) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionPlanIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (_u *ScanUpdateOne) ClearTasks() *ScanUpdateOne {
+	_u.mutation.ClearTasks()
+	return _u
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (_u *ScanUpdateOne) RemoveTaskIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (_u *ScanUpdateOne) RemoveTasks(v ...*Task) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTaskIDs(ids...)
+}
+
+// ClearPlatforms clears all "platforms" edges to the Platform entity.
+func (_u *ScanUpdateOne) ClearPlatforms() *ScanUpdateOne {
+	_u.mutation.ClearPlatforms()
+	return _u
+}
+
+// RemovePlatformIDs removes the "platforms" edge to Platform entities by IDs.
+func (_u *ScanUpdateOne) RemovePlatformIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemovePlatformIDs(ids...)
+	return _u
+}
+
+// RemovePlatforms removes "platforms" edges to Platform entities.
+func (_u *ScanUpdateOne) RemovePlatforms(v ...*Platform) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformIDs(ids...)
+}
+
+// ClearVulnerabilities clears all "vulnerabilities" edges to the Vulnerability entity.
+func (_u *ScanUpdateOne) ClearVulnerabilities() *ScanUpdateOne {
+	_u.mutation.ClearVulnerabilities()
+	return _u
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to Vulnerability entities by IDs.
+func (_u *ScanUpdateOne) RemoveVulnerabilityIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveVulnerabilityIDs(ids...)
+	return _u
+}
+
+// RemoveVulnerabilities removes "vulnerabilities" edges to Vulnerability entities.
+func (_u *ScanUpdateOne) RemoveVulnerabilities(v ...*Vulnerability) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVulnerabilityIDs(ids...)
+}
+
+// ClearControls clears all "controls" edges to the Control entity.
+func (_u *ScanUpdateOne) ClearControls() *ScanUpdateOne {
+	_u.mutation.ClearControls()
+	return _u
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
+func (_u *ScanUpdateOne) RemoveControlIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
+}
+
+// RemoveControls removes "controls" edges to Control entities.
+func (_u *ScanUpdateOne) RemoveControls(v ...*Control) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlIDs(ids...)
+}
+
+// ClearGeneratedByPlatform clears the "generated_by_platform" edge to the Platform entity.
+func (_u *ScanUpdateOne) ClearGeneratedByPlatform() *ScanUpdateOne {
+	_u.mutation.ClearGeneratedByPlatform()
+	return _u
+}
+
+// ClearPerformedByUser clears the "performed_by_user" edge to the User entity.
+func (_u *ScanUpdateOne) ClearPerformedByUser() *ScanUpdateOne {
+	_u.mutation.ClearPerformedByUser()
+	return _u
+}
+
+// ClearPerformedByGroup clears the "performed_by_group" edge to the Group entity.
+func (_u *ScanUpdateOne) ClearPerformedByGroup() *ScanUpdateOne {
+	_u.mutation.ClearPerformedByGroup()
+	return _u
 }
 
 // Where appends a list predicates to the ScanUpdate builder.
@@ -1263,6 +3491,11 @@ func (_u *ScanUpdateOne) check() error {
 	if v, ok := _u.mutation.ScanType(); ok {
 		if err := scan.ScanTypeValidator(v); err != nil {
 			return &ValidationError{Name: "scan_type", err: fmt.Errorf(`generated: validator failed for field "Scan.scan_type": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ScanSchedule(); ok {
+		if err := scan.ScanScheduleValidator(string(v)); err != nil {
+			return &ValidationError{Name: "scan_schedule", err: fmt.Errorf(`generated: validator failed for field "Scan.scan_schedule": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Status(); ok {
@@ -1349,6 +3582,30 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(scan.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.ReviewedBy(); ok {
+		_spec.SetField(scan.FieldReviewedBy, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(scan.FieldReviewedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedTo(); ok {
+		_spec.SetField(scan.FieldAssignedTo, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToCleared() {
+		_spec.ClearField(scan.FieldAssignedTo, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(scan.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(scan.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(scan.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(scan.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Target(); ok {
 		_spec.SetField(scan.FieldTarget, field.TypeString, value)
 	}
@@ -1360,6 +3617,41 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(scan.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ScanDate(); ok {
+		_spec.SetField(scan.FieldScanDate, field.TypeTime, value)
+	}
+	if _u.mutation.ScanDateCleared() {
+		_spec.ClearField(scan.FieldScanDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ScanSchedule(); ok {
+		_spec.SetField(scan.FieldScanSchedule, field.TypeString, value)
+	}
+	if _u.mutation.ScanScheduleCleared() {
+		_spec.ClearField(scan.FieldScanSchedule, field.TypeString)
+	}
+	if value, ok := _u.mutation.NextScanRunAt(); ok {
+		_spec.SetField(scan.FieldNextScanRunAt, field.TypeTime, value)
+	}
+	if _u.mutation.NextScanRunAtCleared() {
+		_spec.ClearField(scan.FieldNextScanRunAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.PerformedBy(); ok {
+		_spec.SetField(scan.FieldPerformedBy, field.TypeString, value)
+	}
+	if _u.mutation.PerformedByCleared() {
+		_spec.ClearField(scan.FieldPerformedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.VulnerabilityIds(); ok {
+		_spec.SetField(scan.FieldVulnerabilityIds, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedVulnerabilityIds(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, scan.FieldVulnerabilityIds, value)
+		})
+	}
+	if _u.mutation.VulnerabilityIdsCleared() {
+		_spec.ClearField(scan.FieldVulnerabilityIds, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scan.FieldStatus, field.TypeEnum, value)
@@ -1539,6 +3831,192 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ReviewedByUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ReviewedByUserTable,
+			Columns: []string{scan.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ReviewedByUserTable,
+			Columns: []string{scan.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ReviewedByGroupTable,
+			Columns: []string{scan.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ReviewedByGroupTable,
+			Columns: []string{scan.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssignedToUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.AssignedToUserTable,
+			Columns: []string{scan.AssignedToUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssignedToUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.AssignedToUserTable,
+			Columns: []string{scan.AssignedToUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssignedToGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.AssignedToGroupTable,
+			Columns: []string{scan.AssignedToGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssignedToGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.AssignedToGroupTable,
+			Columns: []string{scan.AssignedToGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.EnvironmentTable,
+			Columns: []string{scan.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.EnvironmentTable,
+			Columns: []string{scan.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ScopeTable,
+			Columns: []string{scan.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ScopeTable,
+			Columns: []string{scan.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1630,6 +4108,483 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.EvidenceTable,
+			Columns: scan.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanEvidence
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !_u.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.EvidenceTable,
+			Columns: scan.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanEvidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.EvidenceTable,
+			Columns: scan.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanEvidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.FilesTable,
+			Columns: scan.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.FilesTable,
+			Columns: scan.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.FilesTable,
+			Columns: scan.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.RemediationsTable,
+			Columns: scan.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanRemediations
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.RemediationsTable,
+			Columns: scan.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanRemediations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.RemediationsTable,
+			Columns: scan.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanRemediations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ActionPlansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.ActionPlansTable,
+			Columns: scan.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanActionPlans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.ActionPlansTable,
+			Columns: scan.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.ActionPlansTable,
+			Columns: scan.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.TasksTable,
+			Columns: scan.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.TasksTable,
+			Columns: scan.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.TasksTable,
+			Columns: scan.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.PlatformsTable,
+			Columns: scan.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.PlatformsTable,
+			Columns: scan.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.PlatformsTable,
+			Columns: scan.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.VulnerabilitiesTable,
+			Columns: scan.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilityScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.VulnerabilitiesTable,
+			Columns: scan.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilityScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.VulnerabilitiesTable,
+			Columns: scan.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilityScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.ControlsTable,
+			Columns: scan.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.ControlsTable,
+			Columns: scan.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.ControlsTable,
+			Columns: scan.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.GeneratedByPlatformCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scan.GeneratedByPlatformTable,
+			Columns: []string{scan.GeneratedByPlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.GeneratedByPlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scan.GeneratedByPlatformTable,
+			Columns: []string{scan.GeneratedByPlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PerformedByUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.PerformedByUserTable,
+			Columns: []string{scan.PerformedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PerformedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.PerformedByUserTable,
+			Columns: []string{scan.PerformedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PerformedByGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.PerformedByGroupTable,
+			Columns: []string{scan.PerformedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PerformedByGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.PerformedByGroupTable,
+			Columns: []string{scan.PerformedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

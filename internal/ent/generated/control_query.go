@@ -30,6 +30,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -69,8 +70,11 @@ type ControlQuery struct {
 	withBlockedGroups               *GroupQuery
 	withEditors                     *GroupQuery
 	withControlKind                 *CustomTypeEnumQuery
+	withEnvironment                 *CustomTypeEnumQuery
+	withScope                       *CustomTypeEnumQuery
 	withStandard                    *StandardQuery
 	withPrograms                    *ProgramQuery
+	withPlatforms                   *PlatformQuery
 	withAssets                      *AssetQuery
 	withScans                       *ScanQuery
 	withFindings                    *FindingQuery
@@ -97,6 +101,7 @@ type ControlQuery struct {
 	withNamedBlockedGroups          map[string]*GroupQuery
 	withNamedEditors                map[string]*GroupQuery
 	withNamedPrograms               map[string]*ProgramQuery
+	withNamedPlatforms              map[string]*PlatformQuery
 	withNamedAssets                 map[string]*AssetQuery
 	withNamedScans                  map[string]*ScanQuery
 	withNamedFindings               map[string]*FindingQuery
@@ -568,6 +573,56 @@ func (_q *ControlQuery) QueryControlKind() *CustomTypeEnumQuery {
 	return query
 }
 
+// QueryEnvironment chains the current query on the "environment" edge.
+func (_q *ControlQuery) QueryEnvironment() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.EnvironmentTable, control.EnvironmentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Control
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScope chains the current query on the "scope" edge.
+func (_q *ControlQuery) QueryScope() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.ScopeTable, control.ScopeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Control
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryStandard chains the current query on the "standard" edge.
 func (_q *ControlQuery) QueryStandard() *StandardQuery {
 	query := (&StandardClient{config: _q.config}).Query()
@@ -618,6 +673,31 @@ func (_q *ControlQuery) QueryPrograms() *ProgramQuery {
 	return query
 }
 
+// QueryPlatforms chains the current query on the "platforms" edge.
+func (_q *ControlQuery) QueryPlatforms() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.PlatformsTable, control.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformControls
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryAssets chains the current query on the "assets" edge.
 func (_q *ControlQuery) QueryAssets() *AssetQuery {
 	query := (&AssetClient{config: _q.config}).Query()
@@ -657,11 +737,11 @@ func (_q *ControlQuery) QueryScans() *ScanQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(control.Table, control.FieldID, selector),
 			sqlgraph.To(scan.Table, scan.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, control.ScansTable, control.ScansColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, control.ScansTable, control.ScansPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ControlScans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1077,8 +1157,11 @@ func (_q *ControlQuery) Clone() *ControlQuery {
 		withBlockedGroups:          _q.withBlockedGroups.Clone(),
 		withEditors:                _q.withEditors.Clone(),
 		withControlKind:            _q.withControlKind.Clone(),
+		withEnvironment:            _q.withEnvironment.Clone(),
+		withScope:                  _q.withScope.Clone(),
 		withStandard:               _q.withStandard.Clone(),
 		withPrograms:               _q.withPrograms.Clone(),
+		withPlatforms:              _q.withPlatforms.Clone(),
 		withAssets:                 _q.withAssets.Clone(),
 		withScans:                  _q.withScans.Clone(),
 		withFindings:               _q.withFindings.Clone(),
@@ -1283,6 +1366,28 @@ func (_q *ControlQuery) WithControlKind(opts ...func(*CustomTypeEnumQuery)) *Con
 	return _q
 }
 
+// WithEnvironment tells the query-builder to eager-load the nodes that are connected to
+// the "environment" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithEnvironment(opts ...func(*CustomTypeEnumQuery)) *ControlQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEnvironment = query
+	return _q
+}
+
+// WithScope tells the query-builder to eager-load the nodes that are connected to
+// the "scope" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *ControlQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScope = query
+	return _q
+}
+
 // WithStandard tells the query-builder to eager-load the nodes that are connected to
 // the "standard" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ControlQuery) WithStandard(opts ...func(*StandardQuery)) *ControlQuery {
@@ -1302,6 +1407,17 @@ func (_q *ControlQuery) WithPrograms(opts ...func(*ProgramQuery)) *ControlQuery 
 		opt(query)
 	}
 	_q.withPrograms = query
+	return _q
+}
+
+// WithPlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithPlatforms(opts ...func(*PlatformQuery)) *ControlQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatforms = query
 	return _q
 }
 
@@ -1500,7 +1616,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		nodes       = []*Control{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [29]bool{
+		loadedTypes = [32]bool{
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
 			_q.withTasks != nil,
@@ -1518,8 +1634,11 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withControlKind != nil,
+			_q.withEnvironment != nil,
+			_q.withScope != nil,
 			_q.withStandard != nil,
 			_q.withPrograms != nil,
+			_q.withPlatforms != nil,
 			_q.withAssets != nil,
 			_q.withScans != nil,
 			_q.withFindings != nil,
@@ -1674,6 +1793,18 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	if query := _q.withEnvironment; query != nil {
+		if err := _q.loadEnvironment(ctx, query, nodes, nil,
+			func(n *Control, e *CustomTypeEnum) { n.Edges.Environment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScope; query != nil {
+		if err := _q.loadScope(ctx, query, nodes, nil,
+			func(n *Control, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withStandard; query != nil {
 		if err := _q.loadStandard(ctx, query, nodes, nil,
 			func(n *Control, e *Standard) { n.Edges.Standard = e }); err != nil {
@@ -1684,6 +1815,13 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Control) { n.Edges.Programs = []*Program{} },
 			func(n *Control, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatforms; query != nil {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Control) { n.Edges.Platforms = []*Platform{} },
+			func(n *Control, e *Platform) { n.Edges.Platforms = append(n.Edges.Platforms, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1849,6 +1987,13 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Control) { n.appendNamedPrograms(name) },
 			func(n *Control, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPlatforms {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Control) { n.appendNamedPlatforms(name) },
+			func(n *Control, e *Platform) { n.appendNamedPlatforms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2760,6 +2905,64 @@ func (_q *ControlQuery) loadControlKind(ctx context.Context, query *CustomTypeEn
 	}
 	return nil
 }
+func (_q *ControlQuery) loadEnvironment(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Control, init func(*Control), assign func(*Control, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Control)
+	for i := range nodes {
+		fk := nodes[i].EnvironmentID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "environment_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ControlQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Control, init func(*Control), assign func(*Control, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Control)
+	for i := range nodes {
+		fk := nodes[i].ScopeID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *ControlQuery) loadStandard(ctx context.Context, query *StandardQuery, nodes []*Control, init func(*Control), assign func(*Control, *Standard)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Control)
@@ -2851,6 +3054,68 @@ func (_q *ControlQuery) loadPrograms(ctx context.Context, query *ProgramQuery, n
 	}
 	return nil
 }
+func (_q *ControlQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*Control, init func(*Control), assign func(*Control, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.PlatformsTable)
+		joinT.Schema(_q.schemaConfig.PlatformControls)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(control.PlatformsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(control.PlatformsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.PlatformsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "platforms" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *ControlQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*Control, init func(*Control), assign func(*Control, *Asset)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Control)
@@ -2914,33 +3179,64 @@ func (_q *ControlQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes
 	return nil
 }
 func (_q *ControlQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*Control, init func(*Control), assign func(*Control, *Scan)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Control)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Scan(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(control.ScansColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.ScansTable)
+		joinT.Schema(_q.schemaConfig.ControlScans)
+		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(control.ScansPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(control.ScansPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.ScansPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Scan](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.control_scans
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "control_scans" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "control_scans" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "scans" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -3392,6 +3688,12 @@ func (_q *ControlQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withControlKind != nil {
 			_spec.Node.AddColumnOnce(control.FieldControlKindID)
 		}
+		if _q.withEnvironment != nil {
+			_spec.Node.AddColumnOnce(control.FieldEnvironmentID)
+		}
+		if _q.withScope != nil {
+			_spec.Node.AddColumnOnce(control.FieldScopeID)
+		}
 		if _q.withStandard != nil {
 			_spec.Node.AddColumnOnce(control.FieldStandardID)
 		}
@@ -3642,6 +3944,20 @@ func (_q *ControlQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuer
 		_q.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	_q.withNamedPrograms[name] = query
+	return _q
+}
+
+// WithNamedPlatforms tells the query-builder to eager-load the nodes that are connected to the "platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQuery)) *ControlQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatforms == nil {
+		_q.withNamedPlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatforms[name] = query
 	return _q
 }
 

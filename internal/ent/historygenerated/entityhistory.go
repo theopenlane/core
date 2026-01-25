@@ -12,6 +12,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -43,12 +45,46 @@ type EntityHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the internal owner for the entity when no user or group is linked
+	InternalOwner string `json:"internal_owner,omitempty"`
+	// the internal owner user id for the entity
+	InternalOwnerUserID string `json:"internal_owner_user_id,omitempty"`
+	// the internal owner group id for the entity
+	InternalOwnerGroupID string `json:"internal_owner_group_id,omitempty"`
+	// who reviewed the entity when no user or group is linked
+	ReviewedBy string `json:"reviewed_by,omitempty"`
+	// the user id that reviewed the entity
+	ReviewedByUserID string `json:"reviewed_by_user_id,omitempty"`
+	// the group id that reviewed the entity
+	ReviewedByGroupID string `json:"reviewed_by_group_id,omitempty"`
+	// when the entity was last reviewed
+	LastReviewedAt *models.DateTime `json:"last_reviewed_at,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the relationship_state of the entity
+	EntityRelationshipStateName string `json:"entity_relationship_state_name,omitempty"`
+	// the relationship_state of the entity
+	EntityRelationshipStateID string `json:"entity_relationship_state_id,omitempty"`
+	// the security_questionnaire_status of the entity
+	EntitySecurityQuestionnaireStatusName string `json:"entity_security_questionnaire_status_name,omitempty"`
+	// the security_questionnaire_status of the entity
+	EntitySecurityQuestionnaireStatusID string `json:"entity_security_questionnaire_status_id,omitempty"`
+	// the source_type of the entity
+	EntitySourceTypeName string `json:"entity_source_type_name,omitempty"`
+	// the source_type of the entity
+	EntitySourceTypeID string `json:"entity_source_type_id,omitempty"`
+	// the environment of the entity
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the entity
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the entity
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the entity
+	ScopeID string `json:"scope_id,omitempty"`
 	// the name of the entity
 	Name string `json:"name,omitempty"`
 	// The entity's displayed 'friendly' name
@@ -60,8 +96,58 @@ type EntityHistory struct {
 	// The type of the entity
 	EntityTypeID string `json:"entity_type_id,omitempty"`
 	// status of the entity
-	Status       string `json:"status,omitempty"`
-	selectValues sql.SelectValues
+	Status string `json:"status,omitempty"`
+	// whether the entity is approved for use
+	ApprovedForUse bool `json:"approved_for_use,omitempty"`
+	// asset identifiers linked to the entity
+	LinkedAssetIds []string `json:"linked_asset_ids,omitempty"`
+	// whether the entity has an active SOC 2 report
+	HasSoc2 bool `json:"has_soc2,omitempty"`
+	// SOC 2 reporting period end date
+	Soc2PeriodEnd *models.DateTime `json:"soc2_period_end,omitempty"`
+	// start date for the entity contract
+	ContractStartDate *models.DateTime `json:"contract_start_date,omitempty"`
+	// end date for the entity contract
+	ContractEndDate *models.DateTime `json:"contract_end_date,omitempty"`
+	// whether the contract auto-renews
+	AutoRenews bool `json:"auto_renews,omitempty"`
+	// number of days required for termination notice
+	TerminationNoticeDays int `json:"termination_notice_days,omitempty"`
+	// annual spend associated with the entity
+	AnnualSpend float64 `json:"annual_spend,omitempty"`
+	// the currency of the annual spend
+	SpendCurrency string `json:"spend_currency,omitempty"`
+	// billing model for the entity relationship
+	BillingModel string `json:"billing_model,omitempty"`
+	// renewal risk rating for the entity
+	RenewalRisk string `json:"renewal_risk,omitempty"`
+	// whether SSO is enforced for the entity
+	SSOEnforced bool `json:"sso_enforced,omitempty"`
+	// whether MFA is supported by the entity
+	MfaSupported bool `json:"mfa_supported,omitempty"`
+	// whether MFA is enforced by the entity
+	MfaEnforced bool `json:"mfa_enforced,omitempty"`
+	// status page URL for the entity
+	StatusPageURL string `json:"status_page_url,omitempty"`
+	// services provided by the entity
+	ProvidedServices []string `json:"provided_services,omitempty"`
+	// external links associated with the entity
+	Links []string `json:"links,omitempty"`
+	// the risk rating label for the entity
+	RiskRating string `json:"risk_rating,omitempty"`
+	// the risk score for the entity
+	RiskScore int `json:"risk_score,omitempty"`
+	// the tier classification for the entity
+	Tier string `json:"tier,omitempty"`
+	// the cadence for reviewing the entity
+	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	// when the entity is due for review
+	NextReviewAt *models.DateTime `json:"next_review_at,omitempty"`
+	// when the entity contract is up for renewal
+	ContractRenewalAt *models.DateTime `json:"contract_renewal_at,omitempty"`
+	// vendor metadata such as additional enrichment info, company size, public, etc.
+	VendorMetadata map[string]interface{} `json:"vendor_metadata,omitempty"`
+	selectValues   sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -69,13 +155,19 @@ func (*EntityHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case entityhistory.FieldTags, entityhistory.FieldDomains:
+		case entityhistory.FieldLastReviewedAt, entityhistory.FieldSoc2PeriodEnd, entityhistory.FieldContractStartDate, entityhistory.FieldContractEndDate, entityhistory.FieldNextReviewAt, entityhistory.FieldContractRenewalAt:
+			values[i] = &sql.NullScanner{S: new(models.DateTime)}
+		case entityhistory.FieldTags, entityhistory.FieldDomains, entityhistory.FieldLinkedAssetIds, entityhistory.FieldProvidedServices, entityhistory.FieldLinks, entityhistory.FieldVendorMetadata:
 			values[i] = new([]byte)
 		case entityhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case entityhistory.FieldSystemOwned:
+		case entityhistory.FieldSystemOwned, entityhistory.FieldApprovedForUse, entityhistory.FieldHasSoc2, entityhistory.FieldAutoRenews, entityhistory.FieldSSOEnforced, entityhistory.FieldMfaSupported, entityhistory.FieldMfaEnforced:
 			values[i] = new(sql.NullBool)
-		case entityhistory.FieldID, entityhistory.FieldRef, entityhistory.FieldCreatedBy, entityhistory.FieldUpdatedBy, entityhistory.FieldDeletedBy, entityhistory.FieldOwnerID, entityhistory.FieldInternalNotes, entityhistory.FieldSystemInternalID, entityhistory.FieldName, entityhistory.FieldDisplayName, entityhistory.FieldDescription, entityhistory.FieldEntityTypeID, entityhistory.FieldStatus:
+		case entityhistory.FieldAnnualSpend:
+			values[i] = new(sql.NullFloat64)
+		case entityhistory.FieldTerminationNoticeDays, entityhistory.FieldRiskScore:
+			values[i] = new(sql.NullInt64)
+		case entityhistory.FieldID, entityhistory.FieldRef, entityhistory.FieldCreatedBy, entityhistory.FieldUpdatedBy, entityhistory.FieldDeletedBy, entityhistory.FieldOwnerID, entityhistory.FieldInternalOwner, entityhistory.FieldInternalOwnerUserID, entityhistory.FieldInternalOwnerGroupID, entityhistory.FieldReviewedBy, entityhistory.FieldReviewedByUserID, entityhistory.FieldReviewedByGroupID, entityhistory.FieldInternalNotes, entityhistory.FieldSystemInternalID, entityhistory.FieldEntityRelationshipStateName, entityhistory.FieldEntityRelationshipStateID, entityhistory.FieldEntitySecurityQuestionnaireStatusName, entityhistory.FieldEntitySecurityQuestionnaireStatusID, entityhistory.FieldEntitySourceTypeName, entityhistory.FieldEntitySourceTypeID, entityhistory.FieldEnvironmentName, entityhistory.FieldEnvironmentID, entityhistory.FieldScopeName, entityhistory.FieldScopeID, entityhistory.FieldName, entityhistory.FieldDisplayName, entityhistory.FieldDescription, entityhistory.FieldEntityTypeID, entityhistory.FieldStatus, entityhistory.FieldSpendCurrency, entityhistory.FieldBillingModel, entityhistory.FieldRenewalRisk, entityhistory.FieldStatusPageURL, entityhistory.FieldRiskRating, entityhistory.FieldTier, entityhistory.FieldReviewFrequency:
 			values[i] = new(sql.NullString)
 		case entityhistory.FieldHistoryTime, entityhistory.FieldCreatedAt, entityhistory.FieldUpdatedAt, entityhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -168,6 +260,49 @@ func (_m *EntityHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
+		case entityhistory.FieldInternalOwner:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner", values[i])
+			} else if value.Valid {
+				_m.InternalOwner = value.String
+			}
+		case entityhistory.FieldInternalOwnerUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_user_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerUserID = value.String
+			}
+		case entityhistory.FieldInternalOwnerGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_group_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerGroupID = value.String
+			}
+		case entityhistory.FieldReviewedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by", values[i])
+			} else if value.Valid {
+				_m.ReviewedBy = value.String
+			}
+		case entityhistory.FieldReviewedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by_user_id", values[i])
+			} else if value.Valid {
+				_m.ReviewedByUserID = value.String
+			}
+		case entityhistory.FieldReviewedByGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by_group_id", values[i])
+			} else if value.Valid {
+				_m.ReviewedByGroupID = value.String
+			}
+		case entityhistory.FieldLastReviewedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field last_reviewed_at", values[i])
+			} else if value.Valid {
+				_m.LastReviewedAt = new(models.DateTime)
+				*_m.LastReviewedAt = *value.S.(*models.DateTime)
+			}
 		case entityhistory.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
@@ -187,6 +322,66 @@ func (_m *EntityHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
+			}
+		case entityhistory.FieldEntityRelationshipStateName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field entity_relationship_state_name", values[i])
+			} else if value.Valid {
+				_m.EntityRelationshipStateName = value.String
+			}
+		case entityhistory.FieldEntityRelationshipStateID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field entity_relationship_state_id", values[i])
+			} else if value.Valid {
+				_m.EntityRelationshipStateID = value.String
+			}
+		case entityhistory.FieldEntitySecurityQuestionnaireStatusName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field entity_security_questionnaire_status_name", values[i])
+			} else if value.Valid {
+				_m.EntitySecurityQuestionnaireStatusName = value.String
+			}
+		case entityhistory.FieldEntitySecurityQuestionnaireStatusID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field entity_security_questionnaire_status_id", values[i])
+			} else if value.Valid {
+				_m.EntitySecurityQuestionnaireStatusID = value.String
+			}
+		case entityhistory.FieldEntitySourceTypeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field entity_source_type_name", values[i])
+			} else if value.Valid {
+				_m.EntitySourceTypeName = value.String
+			}
+		case entityhistory.FieldEntitySourceTypeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field entity_source_type_id", values[i])
+			} else if value.Valid {
+				_m.EntitySourceTypeID = value.String
+			}
+		case entityhistory.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case entityhistory.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case entityhistory.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case entityhistory.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case entityhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -225,6 +420,169 @@ func (_m *EntityHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = value.String
+			}
+		case entityhistory.FieldApprovedForUse:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field approved_for_use", values[i])
+			} else if value.Valid {
+				_m.ApprovedForUse = value.Bool
+			}
+		case entityhistory.FieldLinkedAssetIds:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field linked_asset_ids", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.LinkedAssetIds); err != nil {
+					return fmt.Errorf("unmarshal field linked_asset_ids: %w", err)
+				}
+			}
+		case entityhistory.FieldHasSoc2:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field has_soc2", values[i])
+			} else if value.Valid {
+				_m.HasSoc2 = value.Bool
+			}
+		case entityhistory.FieldSoc2PeriodEnd:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field soc2_period_end", values[i])
+			} else if value.Valid {
+				_m.Soc2PeriodEnd = new(models.DateTime)
+				*_m.Soc2PeriodEnd = *value.S.(*models.DateTime)
+			}
+		case entityhistory.FieldContractStartDate:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field contract_start_date", values[i])
+			} else if value.Valid {
+				_m.ContractStartDate = new(models.DateTime)
+				*_m.ContractStartDate = *value.S.(*models.DateTime)
+			}
+		case entityhistory.FieldContractEndDate:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field contract_end_date", values[i])
+			} else if value.Valid {
+				_m.ContractEndDate = new(models.DateTime)
+				*_m.ContractEndDate = *value.S.(*models.DateTime)
+			}
+		case entityhistory.FieldAutoRenews:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field auto_renews", values[i])
+			} else if value.Valid {
+				_m.AutoRenews = value.Bool
+			}
+		case entityhistory.FieldTerminationNoticeDays:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field termination_notice_days", values[i])
+			} else if value.Valid {
+				_m.TerminationNoticeDays = int(value.Int64)
+			}
+		case entityhistory.FieldAnnualSpend:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field annual_spend", values[i])
+			} else if value.Valid {
+				_m.AnnualSpend = value.Float64
+			}
+		case entityhistory.FieldSpendCurrency:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field spend_currency", values[i])
+			} else if value.Valid {
+				_m.SpendCurrency = value.String
+			}
+		case entityhistory.FieldBillingModel:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field billing_model", values[i])
+			} else if value.Valid {
+				_m.BillingModel = value.String
+			}
+		case entityhistory.FieldRenewalRisk:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field renewal_risk", values[i])
+			} else if value.Valid {
+				_m.RenewalRisk = value.String
+			}
+		case entityhistory.FieldSSOEnforced:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field sso_enforced", values[i])
+			} else if value.Valid {
+				_m.SSOEnforced = value.Bool
+			}
+		case entityhistory.FieldMfaSupported:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field mfa_supported", values[i])
+			} else if value.Valid {
+				_m.MfaSupported = value.Bool
+			}
+		case entityhistory.FieldMfaEnforced:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field mfa_enforced", values[i])
+			} else if value.Valid {
+				_m.MfaEnforced = value.Bool
+			}
+		case entityhistory.FieldStatusPageURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field status_page_url", values[i])
+			} else if value.Valid {
+				_m.StatusPageURL = value.String
+			}
+		case entityhistory.FieldProvidedServices:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field provided_services", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ProvidedServices); err != nil {
+					return fmt.Errorf("unmarshal field provided_services: %w", err)
+				}
+			}
+		case entityhistory.FieldLinks:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field links", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Links); err != nil {
+					return fmt.Errorf("unmarshal field links: %w", err)
+				}
+			}
+		case entityhistory.FieldRiskRating:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_rating", values[i])
+			} else if value.Valid {
+				_m.RiskRating = value.String
+			}
+		case entityhistory.FieldRiskScore:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_score", values[i])
+			} else if value.Valid {
+				_m.RiskScore = int(value.Int64)
+			}
+		case entityhistory.FieldTier:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field tier", values[i])
+			} else if value.Valid {
+				_m.Tier = value.String
+			}
+		case entityhistory.FieldReviewFrequency:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
+			} else if value.Valid {
+				_m.ReviewFrequency = enums.Frequency(value.String)
+			}
+		case entityhistory.FieldNextReviewAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field next_review_at", values[i])
+			} else if value.Valid {
+				_m.NextReviewAt = new(models.DateTime)
+				*_m.NextReviewAt = *value.S.(*models.DateTime)
+			}
+		case entityhistory.FieldContractRenewalAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field contract_renewal_at", values[i])
+			} else if value.Valid {
+				_m.ContractRenewalAt = new(models.DateTime)
+				*_m.ContractRenewalAt = *value.S.(*models.DateTime)
+			}
+		case entityhistory.FieldVendorMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field vendor_metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.VendorMetadata); err != nil {
+					return fmt.Errorf("unmarshal field vendor_metadata: %w", err)
+				}
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -295,6 +653,29 @@ func (_m *EntityHistory) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
+	builder.WriteString("internal_owner=")
+	builder.WriteString(_m.InternalOwner)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_user_id=")
+	builder.WriteString(_m.InternalOwnerUserID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_group_id=")
+	builder.WriteString(_m.InternalOwnerGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("reviewed_by=")
+	builder.WriteString(_m.ReviewedBy)
+	builder.WriteString(", ")
+	builder.WriteString("reviewed_by_user_id=")
+	builder.WriteString(_m.ReviewedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("reviewed_by_group_id=")
+	builder.WriteString(_m.ReviewedByGroupID)
+	builder.WriteString(", ")
+	if v := _m.LastReviewedAt; v != nil {
+		builder.WriteString("last_reviewed_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
 	builder.WriteString(", ")
@@ -307,6 +688,36 @@ func (_m *EntityHistory) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("entity_relationship_state_name=")
+	builder.WriteString(_m.EntityRelationshipStateName)
+	builder.WriteString(", ")
+	builder.WriteString("entity_relationship_state_id=")
+	builder.WriteString(_m.EntityRelationshipStateID)
+	builder.WriteString(", ")
+	builder.WriteString("entity_security_questionnaire_status_name=")
+	builder.WriteString(_m.EntitySecurityQuestionnaireStatusName)
+	builder.WriteString(", ")
+	builder.WriteString("entity_security_questionnaire_status_id=")
+	builder.WriteString(_m.EntitySecurityQuestionnaireStatusID)
+	builder.WriteString(", ")
+	builder.WriteString("entity_source_type_name=")
+	builder.WriteString(_m.EntitySourceTypeName)
+	builder.WriteString(", ")
+	builder.WriteString("entity_source_type_id=")
+	builder.WriteString(_m.EntitySourceTypeID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
@@ -325,6 +736,91 @@ func (_m *EntityHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(_m.Status)
+	builder.WriteString(", ")
+	builder.WriteString("approved_for_use=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ApprovedForUse))
+	builder.WriteString(", ")
+	builder.WriteString("linked_asset_ids=")
+	builder.WriteString(fmt.Sprintf("%v", _m.LinkedAssetIds))
+	builder.WriteString(", ")
+	builder.WriteString("has_soc2=")
+	builder.WriteString(fmt.Sprintf("%v", _m.HasSoc2))
+	builder.WriteString(", ")
+	if v := _m.Soc2PeriodEnd; v != nil {
+		builder.WriteString("soc2_period_end=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.ContractStartDate; v != nil {
+		builder.WriteString("contract_start_date=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.ContractEndDate; v != nil {
+		builder.WriteString("contract_end_date=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("auto_renews=")
+	builder.WriteString(fmt.Sprintf("%v", _m.AutoRenews))
+	builder.WriteString(", ")
+	builder.WriteString("termination_notice_days=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TerminationNoticeDays))
+	builder.WriteString(", ")
+	builder.WriteString("annual_spend=")
+	builder.WriteString(fmt.Sprintf("%v", _m.AnnualSpend))
+	builder.WriteString(", ")
+	builder.WriteString("spend_currency=")
+	builder.WriteString(_m.SpendCurrency)
+	builder.WriteString(", ")
+	builder.WriteString("billing_model=")
+	builder.WriteString(_m.BillingModel)
+	builder.WriteString(", ")
+	builder.WriteString("renewal_risk=")
+	builder.WriteString(_m.RenewalRisk)
+	builder.WriteString(", ")
+	builder.WriteString("sso_enforced=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SSOEnforced))
+	builder.WriteString(", ")
+	builder.WriteString("mfa_supported=")
+	builder.WriteString(fmt.Sprintf("%v", _m.MfaSupported))
+	builder.WriteString(", ")
+	builder.WriteString("mfa_enforced=")
+	builder.WriteString(fmt.Sprintf("%v", _m.MfaEnforced))
+	builder.WriteString(", ")
+	builder.WriteString("status_page_url=")
+	builder.WriteString(_m.StatusPageURL)
+	builder.WriteString(", ")
+	builder.WriteString("provided_services=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ProvidedServices))
+	builder.WriteString(", ")
+	builder.WriteString("links=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Links))
+	builder.WriteString(", ")
+	builder.WriteString("risk_rating=")
+	builder.WriteString(_m.RiskRating)
+	builder.WriteString(", ")
+	builder.WriteString("risk_score=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RiskScore))
+	builder.WriteString(", ")
+	builder.WriteString("tier=")
+	builder.WriteString(_m.Tier)
+	builder.WriteString(", ")
+	builder.WriteString("review_frequency=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ReviewFrequency))
+	builder.WriteString(", ")
+	if v := _m.NextReviewAt; v != nil {
+		builder.WriteString("next_review_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.ContractRenewalAt; v != nil {
+		builder.WriteString("contract_renewal_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("vendor_metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.VendorMetadata))
 	builder.WriteByte(')')
 	return builder.String()
 }

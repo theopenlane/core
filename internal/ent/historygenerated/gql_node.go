@@ -15,6 +15,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlimplementationhistory"
@@ -36,6 +38,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/groupmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/identityholderhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
@@ -47,6 +50,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgsubscriptionhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/platformhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/programhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/programmembershiphistory"
@@ -103,6 +107,16 @@ var assethistoryImplementors = []string{"AssetHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*AssetHistory) IsNode() {}
+
+var campaignhistoryImplementors = []string{"CampaignHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*CampaignHistory) IsNode() {}
+
+var campaigntargethistoryImplementors = []string{"CampaignTargetHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*CampaignTargetHistory) IsNode() {}
 
 var contacthistoryImplementors = []string{"ContactHistory", "Node"}
 
@@ -209,6 +223,11 @@ var hushhistoryImplementors = []string{"HushHistory", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*HushHistory) IsNode() {}
 
+var identityholderhistoryImplementors = []string{"IdentityHolderHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*IdentityHolderHistory) IsNode() {}
+
 var integrationhistoryImplementors = []string{"IntegrationHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -263,6 +282,11 @@ var organizationsettinghistoryImplementors = []string{"OrganizationSettingHistor
 
 // IsNode implements the Node interface check for GQLGen.
 func (*OrganizationSettingHistory) IsNode() {}
+
+var platformhistoryImplementors = []string{"PlatformHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*PlatformHistory) IsNode() {}
 
 var procedurehistoryImplementors = []string{"ProcedureHistory", "Node"}
 
@@ -508,6 +532,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case campaignhistory.Table:
+		query := c.CampaignHistory.Query().
+			Where(campaignhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, campaignhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case campaigntargethistory.Table:
+		query := c.CampaignTargetHistory.Query().
+			Where(campaigntargethistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, campaigntargethistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	case contacthistory.Table:
 		query := c.ContactHistory.Query().
 			Where(contacthistory.ID(id))
@@ -697,6 +739,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case identityholderhistory.Table:
+		query := c.IdentityHolderHistory.Query().
+			Where(identityholderhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, identityholderhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	case integrationhistory.Table:
 		query := c.IntegrationHistory.Query().
 			Where(integrationhistory.ID(id))
@@ -792,6 +843,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(organizationsettinghistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, organizationsettinghistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case platformhistory.Table:
+		query := c.PlatformHistory.Query().
+			Where(platformhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, platformhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1203,6 +1263,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
+	case campaignhistory.Table:
+		query := c.CampaignHistory.Query().
+			Where(campaignhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, campaignhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case campaigntargethistory.Table:
+		query := c.CampaignTargetHistory.Query().
+			Where(campaigntargethistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, campaigntargethistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case contacthistory.Table:
 		query := c.ContactHistory.Query().
 			Where(contacthistory.IDIn(ids...))
@@ -1539,6 +1631,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
+	case identityholderhistory.Table:
+		query := c.IdentityHolderHistory.Query().
+			Where(identityholderhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, identityholderhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case integrationhistory.Table:
 		query := c.IntegrationHistory.Query().
 			Where(integrationhistory.IDIn(ids...))
@@ -1703,6 +1811,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.OrganizationSettingHistory.Query().
 			Where(organizationsettinghistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, organizationsettinghistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case platformhistory.Table:
+		query := c.PlatformHistory.Query().
+			Where(platformhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, platformhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

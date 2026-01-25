@@ -50,6 +50,14 @@ type TemplateHistory struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the environment of the template
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the template
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the template
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the template
+	ScopeID string `json:"scope_id,omitempty"`
 	// the name of the template
 	Name string `json:"name,omitempty"`
 	// the type of the template, either a provided template or an implementation (document)
@@ -78,7 +86,7 @@ func (*TemplateHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case templatehistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case templatehistory.FieldID, templatehistory.FieldRef, templatehistory.FieldCreatedBy, templatehistory.FieldUpdatedBy, templatehistory.FieldDeletedBy, templatehistory.FieldOwnerID, templatehistory.FieldInternalNotes, templatehistory.FieldSystemInternalID, templatehistory.FieldName, templatehistory.FieldTemplateType, templatehistory.FieldDescription, templatehistory.FieldKind, templatehistory.FieldTrustCenterID:
+		case templatehistory.FieldID, templatehistory.FieldRef, templatehistory.FieldCreatedBy, templatehistory.FieldUpdatedBy, templatehistory.FieldDeletedBy, templatehistory.FieldOwnerID, templatehistory.FieldInternalNotes, templatehistory.FieldSystemInternalID, templatehistory.FieldEnvironmentName, templatehistory.FieldEnvironmentID, templatehistory.FieldScopeName, templatehistory.FieldScopeID, templatehistory.FieldName, templatehistory.FieldTemplateType, templatehistory.FieldDescription, templatehistory.FieldKind, templatehistory.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case templatehistory.FieldHistoryTime, templatehistory.FieldCreatedAt, templatehistory.FieldUpdatedAt, templatehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -190,6 +198,30 @@ func (_m *TemplateHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
+			}
+		case templatehistory.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case templatehistory.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case templatehistory.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case templatehistory.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case templatehistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -318,6 +350,18 @@ func (_m *TemplateHistory) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

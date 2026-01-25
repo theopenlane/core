@@ -13,18 +13,26 @@ type WorkflowObjectType string
 
 var (
 	WorkflowObjectTypeActionPlan     WorkflowObjectType = "ActionPlan"
+	WorkflowObjectTypeCampaign       WorkflowObjectType = "Campaign"
+	WorkflowObjectTypeCampaignTarget WorkflowObjectType = "CampaignTarget"
 	WorkflowObjectTypeControl        WorkflowObjectType = "Control"
 	WorkflowObjectTypeEvidence       WorkflowObjectType = "Evidence"
+	WorkflowObjectTypeIdentityHolder WorkflowObjectType = "IdentityHolder"
 	WorkflowObjectTypeInternalPolicy WorkflowObjectType = "InternalPolicy"
+	WorkflowObjectTypePlatform       WorkflowObjectType = "Platform"
 	WorkflowObjectTypeProcedure      WorkflowObjectType = "Procedure"
 	WorkflowObjectTypeSubcontrol     WorkflowObjectType = "Subcontrol"
 )
 
 var WorkflowObjectTypes = []string{
 	string(WorkflowObjectTypeActionPlan),
+	string(WorkflowObjectTypeCampaign),
+	string(WorkflowObjectTypeCampaignTarget),
 	string(WorkflowObjectTypeControl),
 	string(WorkflowObjectTypeEvidence),
+	string(WorkflowObjectTypeIdentityHolder),
 	string(WorkflowObjectTypeInternalPolicy),
+	string(WorkflowObjectTypePlatform),
 	string(WorkflowObjectTypeProcedure),
 	string(WorkflowObjectTypeSubcontrol),
 }
@@ -42,12 +50,20 @@ func ToWorkflowObjectType(v string) *WorkflowObjectType {
 	switch v {
 	case WorkflowObjectTypeActionPlan.String():
 		return &WorkflowObjectTypeActionPlan
+	case WorkflowObjectTypeCampaign.String():
+		return &WorkflowObjectTypeCampaign
+	case WorkflowObjectTypeCampaignTarget.String():
+		return &WorkflowObjectTypeCampaignTarget
 	case WorkflowObjectTypeControl.String():
 		return &WorkflowObjectTypeControl
 	case WorkflowObjectTypeEvidence.String():
 		return &WorkflowObjectTypeEvidence
+	case WorkflowObjectTypeIdentityHolder.String():
+		return &WorkflowObjectTypeIdentityHolder
 	case WorkflowObjectTypeInternalPolicy.String():
 		return &WorkflowObjectTypeInternalPolicy
+	case WorkflowObjectTypePlatform.String():
+		return &WorkflowObjectTypePlatform
 	case WorkflowObjectTypeProcedure.String():
 		return &WorkflowObjectTypeProcedure
 	case WorkflowObjectTypeSubcontrol.String():

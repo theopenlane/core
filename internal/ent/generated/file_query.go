@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
@@ -24,8 +25,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
@@ -41,6 +44,8 @@ type FileQuery struct {
 	order                           []file.OrderOption
 	inters                          []Interceptor
 	predicates                      []predicate.File
+	withEnvironment                 *CustomTypeEnumQuery
+	withScope                       *CustomTypeEnumQuery
 	withOrganization                *OrganizationQuery
 	withGroups                      *GroupQuery
 	withContact                     *ContactQuery
@@ -49,7 +54,9 @@ type FileQuery struct {
 	withTemplate                    *TemplateQuery
 	withDocument                    *DocumentDataQuery
 	withProgram                     *ProgramQuery
+	withPlatform                    *PlatformQuery
 	withEvidence                    *EvidenceQuery
+	withScan                        *ScanQuery
 	withEvents                      *EventQuery
 	withIntegrations                *IntegrationQuery
 	withSecrets                     *HushQuery
@@ -67,7 +74,9 @@ type FileQuery struct {
 	withNamedTemplate               map[string]*TemplateQuery
 	withNamedDocument               map[string]*DocumentDataQuery
 	withNamedProgram                map[string]*ProgramQuery
+	withNamedPlatform               map[string]*PlatformQuery
 	withNamedEvidence               map[string]*EvidenceQuery
+	withNamedScan                   map[string]*ScanQuery
 	withNamedEvents                 map[string]*EventQuery
 	withNamedIntegrations           map[string]*IntegrationQuery
 	withNamedSecrets                map[string]*HushQuery
@@ -108,6 +117,56 @@ func (_q *FileQuery) Unique(unique bool) *FileQuery {
 func (_q *FileQuery) Order(o ...file.OrderOption) *FileQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryEnvironment chains the current query on the "environment" edge.
+func (_q *FileQuery) QueryEnvironment() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, file.EnvironmentTable, file.EnvironmentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.File
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScope chains the current query on the "scope" edge.
+func (_q *FileQuery) QueryScope() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, file.ScopeTable, file.ScopeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.File
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOrganization chains the current query on the "organization" edge.
@@ -310,6 +369,31 @@ func (_q *FileQuery) QueryProgram() *ProgramQuery {
 	return query
 }
 
+// QueryPlatform chains the current query on the "platform" edge.
+func (_q *FileQuery) QueryPlatform() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.PlatformTable, file.PlatformPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformFiles
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryEvidence chains the current query on the "evidence" edge.
 func (_q *FileQuery) QueryEvidence() *EvidenceQuery {
 	query := (&EvidenceClient{config: _q.config}).Query()
@@ -329,6 +413,31 @@ func (_q *FileQuery) QueryEvidence() *EvidenceQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Evidence
 		step.Edge.Schema = schemaConfig.EvidenceFiles
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScan chains the current query on the "scan" edge.
+func (_q *FileQuery) QueryScan() *ScanQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.ScanTable, file.ScanPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -677,6 +786,8 @@ func (_q *FileQuery) Clone() *FileQuery {
 		order:                      append([]file.OrderOption{}, _q.order...),
 		inters:                     append([]Interceptor{}, _q.inters...),
 		predicates:                 append([]predicate.File{}, _q.predicates...),
+		withEnvironment:            _q.withEnvironment.Clone(),
+		withScope:                  _q.withScope.Clone(),
 		withOrganization:           _q.withOrganization.Clone(),
 		withGroups:                 _q.withGroups.Clone(),
 		withContact:                _q.withContact.Clone(),
@@ -685,7 +796,9 @@ func (_q *FileQuery) Clone() *FileQuery {
 		withTemplate:               _q.withTemplate.Clone(),
 		withDocument:               _q.withDocument.Clone(),
 		withProgram:                _q.withProgram.Clone(),
+		withPlatform:               _q.withPlatform.Clone(),
 		withEvidence:               _q.withEvidence.Clone(),
+		withScan:                   _q.withScan.Clone(),
 		withEvents:                 _q.withEvents.Clone(),
 		withIntegrations:           _q.withIntegrations.Clone(),
 		withSecrets:                _q.withSecrets.Clone(),
@@ -697,6 +810,28 @@ func (_q *FileQuery) Clone() *FileQuery {
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithEnvironment tells the query-builder to eager-load the nodes that are connected to
+// the "environment" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithEnvironment(opts ...func(*CustomTypeEnumQuery)) *FileQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEnvironment = query
+	return _q
+}
+
+// WithScope tells the query-builder to eager-load the nodes that are connected to
+// the "scope" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *FileQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScope = query
+	return _q
 }
 
 // WithOrganization tells the query-builder to eager-load the nodes that are connected to
@@ -787,6 +922,17 @@ func (_q *FileQuery) WithProgram(opts ...func(*ProgramQuery)) *FileQuery {
 	return _q
 }
 
+// WithPlatform tells the query-builder to eager-load the nodes that are connected to
+// the "platform" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithPlatform(opts ...func(*PlatformQuery)) *FileQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatform = query
+	return _q
+}
+
 // WithEvidence tells the query-builder to eager-load the nodes that are connected to
 // the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *FileQuery) WithEvidence(opts ...func(*EvidenceQuery)) *FileQuery {
@@ -795,6 +941,17 @@ func (_q *FileQuery) WithEvidence(opts ...func(*EvidenceQuery)) *FileQuery {
 		opt(query)
 	}
 	_q.withEvidence = query
+	return _q
+}
+
+// WithScan tells the query-builder to eager-load the nodes that are connected to
+// the "scan" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithScan(opts ...func(*ScanQuery)) *FileQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScan = query
 	return _q
 }
 
@@ -949,7 +1106,9 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		nodes       = []*File{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [15]bool{
+		loadedTypes = [19]bool{
+			_q.withEnvironment != nil,
+			_q.withScope != nil,
 			_q.withOrganization != nil,
 			_q.withGroups != nil,
 			_q.withContact != nil,
@@ -958,7 +1117,9 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			_q.withTemplate != nil,
 			_q.withDocument != nil,
 			_q.withProgram != nil,
+			_q.withPlatform != nil,
 			_q.withEvidence != nil,
+			_q.withScan != nil,
 			_q.withEvents != nil,
 			_q.withIntegrations != nil,
 			_q.withSecrets != nil,
@@ -992,6 +1153,18 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := _q.withEnvironment; query != nil {
+		if err := _q.loadEnvironment(ctx, query, nodes, nil,
+			func(n *File, e *CustomTypeEnum) { n.Edges.Environment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScope; query != nil {
+		if err := _q.loadScope(ctx, query, nodes, nil,
+			func(n *File, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := _q.withOrganization; query != nil {
 		if err := _q.loadOrganization(ctx, query, nodes,
@@ -1051,10 +1224,24 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			return nil, err
 		}
 	}
+	if query := _q.withPlatform; query != nil {
+		if err := _q.loadPlatform(ctx, query, nodes,
+			func(n *File) { n.Edges.Platform = []*Platform{} },
+			func(n *File, e *Platform) { n.Edges.Platform = append(n.Edges.Platform, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withEvidence; query != nil {
 		if err := _q.loadEvidence(ctx, query, nodes,
 			func(n *File) { n.Edges.Evidence = []*Evidence{} },
 			func(n *File, e *Evidence) { n.Edges.Evidence = append(n.Edges.Evidence, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScan; query != nil {
+		if err := _q.loadScan(ctx, query, nodes,
+			func(n *File) { n.Edges.Scan = []*Scan{} },
+			func(n *File, e *Scan) { n.Edges.Scan = append(n.Edges.Scan, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1160,10 +1347,24 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedPlatform {
+		if err := _q.loadPlatform(ctx, query, nodes,
+			func(n *File) { n.appendNamedPlatform(name) },
+			func(n *File, e *Platform) { n.appendNamedPlatform(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedEvidence {
 		if err := _q.loadEvidence(ctx, query, nodes,
 			func(n *File) { n.appendNamedEvidence(name) },
 			func(n *File, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedScan {
+		if err := _q.loadScan(ctx, query, nodes,
+			func(n *File) { n.appendNamedScan(name) },
+			func(n *File, e *Scan) { n.appendNamedScan(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1217,6 +1418,64 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 	return nodes, nil
 }
 
+func (_q *FileQuery) loadEnvironment(ctx context.Context, query *CustomTypeEnumQuery, nodes []*File, init func(*File), assign func(*File, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*File)
+	for i := range nodes {
+		fk := nodes[i].EnvironmentID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "environment_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *FileQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuery, nodes []*File, init func(*File), assign func(*File, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*File)
+	for i := range nodes {
+		fk := nodes[i].ScopeID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *FileQuery) loadOrganization(ctx context.Context, query *OrganizationQuery, nodes []*File, init func(*File), assign func(*File, *Organization)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*File)
@@ -1713,6 +1972,68 @@ func (_q *FileQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes
 	}
 	return nil
 }
+func (_q *FileQuery) loadPlatform(ctx context.Context, query *PlatformQuery, nodes []*File, init func(*File), assign func(*File, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.PlatformTable)
+		joinT.Schema(_q.schemaConfig.PlatformFiles)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(file.PlatformPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.PlatformPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.PlatformPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "platform" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *FileQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*File, init func(*File), assign func(*File, *Evidence)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*File)
@@ -1768,6 +2089,68 @@ func (_q *FileQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nod
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "evidence" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *FileQuery) loadScan(ctx context.Context, query *ScanQuery, nodes []*File, init func(*File), assign func(*File, *Scan)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.ScanTable)
+		joinT.Schema(_q.schemaConfig.ScanFiles)
+		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(file.ScanPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.ScanPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.ScanPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Scan](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "scan" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -2060,6 +2443,12 @@ func (_q *FileQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
+		if _q.withEnvironment != nil {
+			_spec.Node.AddColumnOnce(file.FieldEnvironmentID)
+		}
+		if _q.withScope != nil {
+			_spec.Node.AddColumnOnce(file.FieldScopeID)
+		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -2240,6 +2629,20 @@ func (_q *FileQuery) WithNamedProgram(name string, opts ...func(*ProgramQuery)) 
 	return _q
 }
 
+// WithNamedPlatform tells the query-builder to eager-load the nodes that are connected to the "platform"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithNamedPlatform(name string, opts ...func(*PlatformQuery)) *FileQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatform == nil {
+		_q.withNamedPlatform = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatform[name] = query
+	return _q
+}
+
 // WithNamedEvidence tells the query-builder to eager-load the nodes that are connected to the "evidence"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *FileQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *FileQuery {
@@ -2251,6 +2654,20 @@ func (_q *FileQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)
 		_q.withNamedEvidence = make(map[string]*EvidenceQuery)
 	}
 	_q.withNamedEvidence[name] = query
+	return _q
+}
+
+// WithNamedScan tells the query-builder to eager-load the nodes that are connected to the "scan"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithNamedScan(name string, opts ...func(*ScanQuery)) *FileQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedScan == nil {
+		_q.withNamedScan = make(map[string]*ScanQuery)
+	}
+	_q.withNamedScan[name] = query
 	return _q
 }
 

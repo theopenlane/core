@@ -119,6 +119,26 @@ func TaskKindID(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldTaskKindID, v))
 }
 
+// EnvironmentName applies equality check predicate on the "environment_name" field. It's identical to EnvironmentNameEQ.
+func EnvironmentName(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldEnvironmentName, v))
+}
+
+// EnvironmentID applies equality check predicate on the "environment_id" field. It's identical to EnvironmentIDEQ.
+func EnvironmentID(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldEnvironmentID, v))
+}
+
+// ScopeName applies equality check predicate on the "scope_name" field. It's identical to ScopeNameEQ.
+func ScopeName(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldScopeName, v))
+}
+
+// ScopeID applies equality check predicate on the "scope_id" field. It's identical to ScopeIDEQ.
+func ScopeID(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldScopeID, v))
+}
+
 // Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
 func Title(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldTitle, v))
@@ -839,6 +859,306 @@ func TaskKindIDContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldTaskKindID, v))
 }
 
+// EnvironmentNameEQ applies the EQ predicate on the "environment_name" field.
+func EnvironmentNameEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameNEQ applies the NEQ predicate on the "environment_name" field.
+func EnvironmentNameNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameIn applies the In predicate on the "environment_name" field.
+func EnvironmentNameIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldEnvironmentName, vs...))
+}
+
+// EnvironmentNameNotIn applies the NotIn predicate on the "environment_name" field.
+func EnvironmentNameNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldEnvironmentName, vs...))
+}
+
+// EnvironmentNameGT applies the GT predicate on the "environment_name" field.
+func EnvironmentNameGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameGTE applies the GTE predicate on the "environment_name" field.
+func EnvironmentNameGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameLT applies the LT predicate on the "environment_name" field.
+func EnvironmentNameLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameLTE applies the LTE predicate on the "environment_name" field.
+func EnvironmentNameLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameContains applies the Contains predicate on the "environment_name" field.
+func EnvironmentNameContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameHasPrefix applies the HasPrefix predicate on the "environment_name" field.
+func EnvironmentNameHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameHasSuffix applies the HasSuffix predicate on the "environment_name" field.
+func EnvironmentNameHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameIsNil applies the IsNil predicate on the "environment_name" field.
+func EnvironmentNameIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldEnvironmentName))
+}
+
+// EnvironmentNameNotNil applies the NotNil predicate on the "environment_name" field.
+func EnvironmentNameNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldEnvironmentName))
+}
+
+// EnvironmentNameEqualFold applies the EqualFold predicate on the "environment_name" field.
+func EnvironmentNameEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameContainsFold applies the ContainsFold predicate on the "environment_name" field.
+func EnvironmentNameContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldEnvironmentName, v))
+}
+
+// EnvironmentIDEQ applies the EQ predicate on the "environment_id" field.
+func EnvironmentIDEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDNEQ applies the NEQ predicate on the "environment_id" field.
+func EnvironmentIDNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDIn applies the In predicate on the "environment_id" field.
+func EnvironmentIDIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldEnvironmentID, vs...))
+}
+
+// EnvironmentIDNotIn applies the NotIn predicate on the "environment_id" field.
+func EnvironmentIDNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldEnvironmentID, vs...))
+}
+
+// EnvironmentIDGT applies the GT predicate on the "environment_id" field.
+func EnvironmentIDGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDGTE applies the GTE predicate on the "environment_id" field.
+func EnvironmentIDGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDLT applies the LT predicate on the "environment_id" field.
+func EnvironmentIDLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDLTE applies the LTE predicate on the "environment_id" field.
+func EnvironmentIDLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDContains applies the Contains predicate on the "environment_id" field.
+func EnvironmentIDContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDHasPrefix applies the HasPrefix predicate on the "environment_id" field.
+func EnvironmentIDHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDHasSuffix applies the HasSuffix predicate on the "environment_id" field.
+func EnvironmentIDHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDIsNil applies the IsNil predicate on the "environment_id" field.
+func EnvironmentIDIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldEnvironmentID))
+}
+
+// EnvironmentIDNotNil applies the NotNil predicate on the "environment_id" field.
+func EnvironmentIDNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldEnvironmentID))
+}
+
+// EnvironmentIDEqualFold applies the EqualFold predicate on the "environment_id" field.
+func EnvironmentIDEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDContainsFold applies the ContainsFold predicate on the "environment_id" field.
+func EnvironmentIDContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldEnvironmentID, v))
+}
+
+// ScopeNameEQ applies the EQ predicate on the "scope_name" field.
+func ScopeNameEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldScopeName, v))
+}
+
+// ScopeNameNEQ applies the NEQ predicate on the "scope_name" field.
+func ScopeNameNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldScopeName, v))
+}
+
+// ScopeNameIn applies the In predicate on the "scope_name" field.
+func ScopeNameIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldScopeName, vs...))
+}
+
+// ScopeNameNotIn applies the NotIn predicate on the "scope_name" field.
+func ScopeNameNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldScopeName, vs...))
+}
+
+// ScopeNameGT applies the GT predicate on the "scope_name" field.
+func ScopeNameGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldScopeName, v))
+}
+
+// ScopeNameGTE applies the GTE predicate on the "scope_name" field.
+func ScopeNameGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldScopeName, v))
+}
+
+// ScopeNameLT applies the LT predicate on the "scope_name" field.
+func ScopeNameLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldScopeName, v))
+}
+
+// ScopeNameLTE applies the LTE predicate on the "scope_name" field.
+func ScopeNameLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldScopeName, v))
+}
+
+// ScopeNameContains applies the Contains predicate on the "scope_name" field.
+func ScopeNameContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldScopeName, v))
+}
+
+// ScopeNameHasPrefix applies the HasPrefix predicate on the "scope_name" field.
+func ScopeNameHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldScopeName, v))
+}
+
+// ScopeNameHasSuffix applies the HasSuffix predicate on the "scope_name" field.
+func ScopeNameHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldScopeName, v))
+}
+
+// ScopeNameIsNil applies the IsNil predicate on the "scope_name" field.
+func ScopeNameIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldScopeName))
+}
+
+// ScopeNameNotNil applies the NotNil predicate on the "scope_name" field.
+func ScopeNameNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldScopeName))
+}
+
+// ScopeNameEqualFold applies the EqualFold predicate on the "scope_name" field.
+func ScopeNameEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldScopeName, v))
+}
+
+// ScopeNameContainsFold applies the ContainsFold predicate on the "scope_name" field.
+func ScopeNameContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldScopeName, v))
+}
+
+// ScopeIDEQ applies the EQ predicate on the "scope_id" field.
+func ScopeIDEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldScopeID, v))
+}
+
+// ScopeIDNEQ applies the NEQ predicate on the "scope_id" field.
+func ScopeIDNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldScopeID, v))
+}
+
+// ScopeIDIn applies the In predicate on the "scope_id" field.
+func ScopeIDIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldScopeID, vs...))
+}
+
+// ScopeIDNotIn applies the NotIn predicate on the "scope_id" field.
+func ScopeIDNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldScopeID, vs...))
+}
+
+// ScopeIDGT applies the GT predicate on the "scope_id" field.
+func ScopeIDGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldScopeID, v))
+}
+
+// ScopeIDGTE applies the GTE predicate on the "scope_id" field.
+func ScopeIDGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldScopeID, v))
+}
+
+// ScopeIDLT applies the LT predicate on the "scope_id" field.
+func ScopeIDLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldScopeID, v))
+}
+
+// ScopeIDLTE applies the LTE predicate on the "scope_id" field.
+func ScopeIDLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldScopeID, v))
+}
+
+// ScopeIDContains applies the Contains predicate on the "scope_id" field.
+func ScopeIDContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldScopeID, v))
+}
+
+// ScopeIDHasPrefix applies the HasPrefix predicate on the "scope_id" field.
+func ScopeIDHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldScopeID, v))
+}
+
+// ScopeIDHasSuffix applies the HasSuffix predicate on the "scope_id" field.
+func ScopeIDHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldScopeID, v))
+}
+
+// ScopeIDIsNil applies the IsNil predicate on the "scope_id" field.
+func ScopeIDIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldScopeID))
+}
+
+// ScopeIDNotNil applies the NotNil predicate on the "scope_id" field.
+func ScopeIDNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldScopeID))
+}
+
+// ScopeIDEqualFold applies the EqualFold predicate on the "scope_id" field.
+func ScopeIDEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldScopeID, v))
+}
+
+// ScopeIDContainsFold applies the ContainsFold predicate on the "scope_id" field.
+func ScopeIDContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldScopeID, v))
+}
+
 // TitleEQ applies the EQ predicate on the "title" field.
 func TitleEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldTitle, v))
@@ -1497,6 +1817,64 @@ func HasTaskKindWith(preds ...predicate.CustomTypeEnum) predicate.Task {
 	})
 }
 
+// HasEnvironment applies the HasEdge predicate on the "environment" edge.
+func HasEnvironment() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, EnvironmentTable, EnvironmentColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Task
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEnvironmentWith applies the HasEdge predicate on the "environment" edge with a given conditions (other predicates).
+func HasEnvironmentWith(preds ...predicate.CustomTypeEnum) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := newEnvironmentStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Task
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasScope applies the HasEdge predicate on the "scope" edge.
+func HasScope() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Task
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasScopeWith applies the HasEdge predicate on the "scope" edge with a given conditions (other predicates).
+func HasScopeWith(preds ...predicate.CustomTypeEnum) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := newScopeStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Task
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasAssigner applies the HasEdge predicate on the "assigner" edge.
 func HasAssigner() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
@@ -1808,6 +2186,93 @@ func HasRisksWith(preds ...predicate.Risk) predicate.Task {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Risk
 		step.Edge.Schema = schemaConfig.RiskTasks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPlatforms applies the HasEdge predicate on the "platforms" edge.
+func HasPlatforms() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformTasks
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPlatformsWith applies the HasEdge predicate on the "platforms" edge with a given conditions (other predicates).
+func HasPlatformsWith(preds ...predicate.Platform) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := newPlatformsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformTasks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasScans applies the HasEdge predicate on the "scans" edge.
+func HasScans() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ScansTable, ScansPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanTasks
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasScansWith applies the HasEdge predicate on the "scans" edge with a given conditions (other predicates).
+func HasScansWith(preds ...predicate.Scan) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := newScansStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanTasks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasIdentityHolders applies the HasEdge predicate on the "identity_holders" edge.
+func HasIdentityHolders() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolderTasks
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIdentityHoldersWith applies the HasEdge predicate on the "identity_holders" edge with a given conditions (other predicates).
+func HasIdentityHoldersWith(preds ...predicate.IdentityHolder) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := newIdentityHoldersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolderTasks
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -189,6 +189,62 @@ func (_c *FileHistoryCreate) SetNillableSystemInternalID(v *string) *FileHistory
 	return _c
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *FileHistoryCreate) SetEnvironmentName(v string) *FileHistoryCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableEnvironmentName(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *FileHistoryCreate) SetEnvironmentID(v string) *FileHistoryCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableEnvironmentID(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *FileHistoryCreate) SetScopeName(v string) *FileHistoryCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableScopeName(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *FileHistoryCreate) SetScopeID(v string) *FileHistoryCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableScopeID(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetProvidedFileName sets the "provided_file_name" field.
 func (_c *FileHistoryCreate) SetProvidedFileName(v string) *FileHistoryCreate {
 	_c.mutation.SetProvidedFileName(v)
@@ -600,6 +656,22 @@ func (_c *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(filehistory.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(filehistory.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.EnvironmentID(); ok {
+		_spec.SetField(filehistory.FieldEnvironmentID, field.TypeString, value)
+		_node.EnvironmentID = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(filehistory.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.ScopeID(); ok {
+		_spec.SetField(filehistory.FieldScopeID, field.TypeString, value)
+		_node.ScopeID = value
 	}
 	if value, ok := _c.mutation.ProvidedFileName(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)

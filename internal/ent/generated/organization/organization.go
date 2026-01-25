@@ -133,6 +133,14 @@ const (
 	EdgeSubscribers = "subscribers"
 	// EdgeEntities holds the string denoting the entities edge name in mutations.
 	EdgeEntities = "entities"
+	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
+	EdgePlatforms = "platforms"
+	// EdgeIdentityHolders holds the string denoting the identity_holders edge name in mutations.
+	EdgeIdentityHolders = "identity_holders"
+	// EdgeCampaigns holds the string denoting the campaigns edge name in mutations.
+	EdgeCampaigns = "campaigns"
+	// EdgeCampaignTargets holds the string denoting the campaign_targets edge name in mutations.
+	EdgeCampaignTargets = "campaign_targets"
 	// EdgeEntityTypes holds the string denoting the entity_types edge name in mutations.
 	EdgeEntityTypes = "entity_types"
 	// EdgeContacts holds the string denoting the contacts edge name in mutations.
@@ -525,6 +533,34 @@ const (
 	EntitiesInverseTable = "entities"
 	// EntitiesColumn is the table column denoting the entities relation/edge.
 	EntitiesColumn = "owner_id"
+	// PlatformsTable is the table that holds the platforms relation/edge.
+	PlatformsTable = "platforms"
+	// PlatformsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformsInverseTable = "platforms"
+	// PlatformsColumn is the table column denoting the platforms relation/edge.
+	PlatformsColumn = "owner_id"
+	// IdentityHoldersTable is the table that holds the identity_holders relation/edge.
+	IdentityHoldersTable = "identity_holders"
+	// IdentityHoldersInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	IdentityHoldersInverseTable = "identity_holders"
+	// IdentityHoldersColumn is the table column denoting the identity_holders relation/edge.
+	IdentityHoldersColumn = "owner_id"
+	// CampaignsTable is the table that holds the campaigns relation/edge.
+	CampaignsTable = "campaigns"
+	// CampaignsInverseTable is the table name for the Campaign entity.
+	// It exists in this package in order to avoid circular dependency with the "campaign" package.
+	CampaignsInverseTable = "campaigns"
+	// CampaignsColumn is the table column denoting the campaigns relation/edge.
+	CampaignsColumn = "owner_id"
+	// CampaignTargetsTable is the table that holds the campaign_targets relation/edge.
+	CampaignTargetsTable = "campaign_targets"
+	// CampaignTargetsInverseTable is the table name for the CampaignTarget entity.
+	// It exists in this package in order to avoid circular dependency with the "campaigntarget" package.
+	CampaignTargetsInverseTable = "campaign_targets"
+	// CampaignTargetsColumn is the table column denoting the campaign_targets relation/edge.
+	CampaignTargetsColumn = "owner_id"
 	// EntityTypesTable is the table that holds the entity_types relation/edge.
 	EntityTypesTable = "entity_types"
 	// EntityTypesInverseTable is the table name for the EntityType entity.
@@ -1651,6 +1687,62 @@ func ByEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByPlatformsCount orders the results by platforms count.
+func ByPlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformsStep(), opts...)
+	}
+}
+
+// ByPlatforms orders the results by platforms terms.
+func ByPlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIdentityHoldersCount orders the results by identity_holders count.
+func ByIdentityHoldersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIdentityHoldersStep(), opts...)
+	}
+}
+
+// ByIdentityHolders orders the results by identity_holders terms.
+func ByIdentityHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIdentityHoldersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCampaignsCount orders the results by campaigns count.
+func ByCampaignsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignsStep(), opts...)
+	}
+}
+
+// ByCampaigns orders the results by campaigns terms.
+func ByCampaigns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCampaignTargetsCount orders the results by campaign_targets count.
+func ByCampaignTargetsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignTargetsStep(), opts...)
+	}
+}
+
+// ByCampaignTargets orders the results by campaign_targets terms.
+func ByCampaignTargets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignTargetsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByEntityTypesCount orders the results by entity_types count.
 func ByEntityTypesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2712,6 +2804,34 @@ func newEntitiesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EntitiesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, EntitiesTable, EntitiesColumn),
+	)
+}
+func newPlatformsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PlatformsTable, PlatformsColumn),
+	)
+}
+func newIdentityHoldersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IdentityHoldersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IdentityHoldersTable, IdentityHoldersColumn),
+	)
+}
+func newCampaignsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CampaignsTable, CampaignsColumn),
+	)
+}
+func newCampaignTargetsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignTargetsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CampaignTargetsTable, CampaignTargetsColumn),
 	)
 }
 func newEntityTypesStep() *sqlgraph.Step {

@@ -7,9 +7,13 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
@@ -38,6 +42,64 @@ func (c *Client) ActionPlanEntitiesWithPendingWorkflows(ctx context.Context) ([]
 func (c *Client) ActionPlanEntitiesWithActiveWorkflows(ctx context.Context) ([]*ActionPlan, error) {
 	return c.ActionPlan.Query().
 		Where(actionplan.HasWorkflowObjectRefsWith(
+			workflowobjectref.HasWorkflowInstanceWith(
+				workflowinstance.StateEQ(enums.WorkflowInstanceStateRunning),
+			),
+		)).
+		All(ctx)
+}
+
+// PendingCampaignWorkflowInstances returns all running workflow instances for a specific Campaign
+func (c *Client) PendingCampaignWorkflowInstances(ctx context.Context, objectID string) ([]*WorkflowInstance, error) {
+	return c.WorkflowObjectRef.Query().
+		Where(workflowobjectref.CampaignIDEQ(objectID)).
+		QueryWorkflowInstance().
+		Where(workflowinstance.StateEQ(enums.WorkflowInstanceStateRunning)).
+		All(ctx)
+}
+
+// CampaignEntitiesWithPendingWorkflows returns all Campaign entities that have pending workflow proposals
+func (c *Client) CampaignEntitiesWithPendingWorkflows(ctx context.Context) ([]*Campaign, error) {
+	return c.Campaign.Query().
+		Where(campaign.HasWorkflowObjectRefsWith(
+			workflowobjectref.HasWorkflowProposalsWith(),
+		)).
+		All(ctx)
+}
+
+// CampaignEntitiesWithActiveWorkflows returns all Campaign entities that have running workflow instances
+func (c *Client) CampaignEntitiesWithActiveWorkflows(ctx context.Context) ([]*Campaign, error) {
+	return c.Campaign.Query().
+		Where(campaign.HasWorkflowObjectRefsWith(
+			workflowobjectref.HasWorkflowInstanceWith(
+				workflowinstance.StateEQ(enums.WorkflowInstanceStateRunning),
+			),
+		)).
+		All(ctx)
+}
+
+// PendingCampaignTargetWorkflowInstances returns all running workflow instances for a specific CampaignTarget
+func (c *Client) PendingCampaignTargetWorkflowInstances(ctx context.Context, objectID string) ([]*WorkflowInstance, error) {
+	return c.WorkflowObjectRef.Query().
+		Where(workflowobjectref.CampaignTargetIDEQ(objectID)).
+		QueryWorkflowInstance().
+		Where(workflowinstance.StateEQ(enums.WorkflowInstanceStateRunning)).
+		All(ctx)
+}
+
+// CampaignTargetEntitiesWithPendingWorkflows returns all CampaignTarget entities that have pending workflow proposals
+func (c *Client) CampaignTargetEntitiesWithPendingWorkflows(ctx context.Context) ([]*CampaignTarget, error) {
+	return c.CampaignTarget.Query().
+		Where(campaigntarget.HasWorkflowObjectRefsWith(
+			workflowobjectref.HasWorkflowProposalsWith(),
+		)).
+		All(ctx)
+}
+
+// CampaignTargetEntitiesWithActiveWorkflows returns all CampaignTarget entities that have running workflow instances
+func (c *Client) CampaignTargetEntitiesWithActiveWorkflows(ctx context.Context) ([]*CampaignTarget, error) {
+	return c.CampaignTarget.Query().
+		Where(campaigntarget.HasWorkflowObjectRefsWith(
 			workflowobjectref.HasWorkflowInstanceWith(
 				workflowinstance.StateEQ(enums.WorkflowInstanceStateRunning),
 			),
@@ -103,6 +165,35 @@ func (c *Client) EvidenceEntitiesWithActiveWorkflows(ctx context.Context) ([]*Ev
 		All(ctx)
 }
 
+// PendingIdentityHolderWorkflowInstances returns all running workflow instances for a specific IdentityHolder
+func (c *Client) PendingIdentityHolderWorkflowInstances(ctx context.Context, objectID string) ([]*WorkflowInstance, error) {
+	return c.WorkflowObjectRef.Query().
+		Where(workflowobjectref.IdentityHolderIDEQ(objectID)).
+		QueryWorkflowInstance().
+		Where(workflowinstance.StateEQ(enums.WorkflowInstanceStateRunning)).
+		All(ctx)
+}
+
+// IdentityHolderEntitiesWithPendingWorkflows returns all IdentityHolder entities that have pending workflow proposals
+func (c *Client) IdentityHolderEntitiesWithPendingWorkflows(ctx context.Context) ([]*IdentityHolder, error) {
+	return c.IdentityHolder.Query().
+		Where(identityholder.HasWorkflowObjectRefsWith(
+			workflowobjectref.HasWorkflowProposalsWith(),
+		)).
+		All(ctx)
+}
+
+// IdentityHolderEntitiesWithActiveWorkflows returns all IdentityHolder entities that have running workflow instances
+func (c *Client) IdentityHolderEntitiesWithActiveWorkflows(ctx context.Context) ([]*IdentityHolder, error) {
+	return c.IdentityHolder.Query().
+		Where(identityholder.HasWorkflowObjectRefsWith(
+			workflowobjectref.HasWorkflowInstanceWith(
+				workflowinstance.StateEQ(enums.WorkflowInstanceStateRunning),
+			),
+		)).
+		All(ctx)
+}
+
 // PendingInternalPolicyWorkflowInstances returns all running workflow instances for a specific InternalPolicy
 func (c *Client) PendingInternalPolicyWorkflowInstances(ctx context.Context, objectID string) ([]*WorkflowInstance, error) {
 	return c.WorkflowObjectRef.Query().
@@ -125,6 +216,35 @@ func (c *Client) InternalPolicyEntitiesWithPendingWorkflows(ctx context.Context)
 func (c *Client) InternalPolicyEntitiesWithActiveWorkflows(ctx context.Context) ([]*InternalPolicy, error) {
 	return c.InternalPolicy.Query().
 		Where(internalpolicy.HasWorkflowObjectRefsWith(
+			workflowobjectref.HasWorkflowInstanceWith(
+				workflowinstance.StateEQ(enums.WorkflowInstanceStateRunning),
+			),
+		)).
+		All(ctx)
+}
+
+// PendingPlatformWorkflowInstances returns all running workflow instances for a specific Platform
+func (c *Client) PendingPlatformWorkflowInstances(ctx context.Context, objectID string) ([]*WorkflowInstance, error) {
+	return c.WorkflowObjectRef.Query().
+		Where(workflowobjectref.PlatformIDEQ(objectID)).
+		QueryWorkflowInstance().
+		Where(workflowinstance.StateEQ(enums.WorkflowInstanceStateRunning)).
+		All(ctx)
+}
+
+// PlatformEntitiesWithPendingWorkflows returns all Platform entities that have pending workflow proposals
+func (c *Client) PlatformEntitiesWithPendingWorkflows(ctx context.Context) ([]*Platform, error) {
+	return c.Platform.Query().
+		Where(platform.HasWorkflowObjectRefsWith(
+			workflowobjectref.HasWorkflowProposalsWith(),
+		)).
+		All(ctx)
+}
+
+// PlatformEntitiesWithActiveWorkflows returns all Platform entities that have running workflow instances
+func (c *Client) PlatformEntitiesWithActiveWorkflows(ctx context.Context) ([]*Platform, error) {
+	return c.Platform.Query().
+		Where(platform.HasWorkflowObjectRefsWith(
 			workflowobjectref.HasWorkflowInstanceWith(
 				workflowinstance.StateEQ(enums.WorkflowInstanceStateRunning),
 			),

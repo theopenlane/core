@@ -52,6 +52,14 @@ type FindingHistory struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the environment of the finding
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the finding
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the finding
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the finding
+	ScopeID string `json:"scope_id,omitempty"`
 	// external identifier from the integration source for the finding
 	ExternalID string `json:"external_id,omitempty"`
 	// the owner of the finding
@@ -146,7 +154,7 @@ func (*FindingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case findinghistory.FieldRemediationSLA:
 			values[i] = new(sql.NullInt64)
-		case findinghistory.FieldID, findinghistory.FieldRef, findinghistory.FieldCreatedBy, findinghistory.FieldUpdatedBy, findinghistory.FieldDeletedBy, findinghistory.FieldDisplayID, findinghistory.FieldOwnerID, findinghistory.FieldInternalNotes, findinghistory.FieldSystemInternalID, findinghistory.FieldExternalID, findinghistory.FieldExternalOwnerID, findinghistory.FieldSource, findinghistory.FieldResourceName, findinghistory.FieldDisplayName, findinghistory.FieldState, findinghistory.FieldCategory, findinghistory.FieldFindingClass, findinghistory.FieldSeverity, findinghistory.FieldPriority, findinghistory.FieldAssessmentID, findinghistory.FieldDescription, findinghistory.FieldRecommendation, findinghistory.FieldRecommendedActions, findinghistory.FieldVector, findinghistory.FieldStatus, findinghistory.FieldExternalURI:
+		case findinghistory.FieldID, findinghistory.FieldRef, findinghistory.FieldCreatedBy, findinghistory.FieldUpdatedBy, findinghistory.FieldDeletedBy, findinghistory.FieldDisplayID, findinghistory.FieldOwnerID, findinghistory.FieldInternalNotes, findinghistory.FieldSystemInternalID, findinghistory.FieldEnvironmentName, findinghistory.FieldEnvironmentID, findinghistory.FieldScopeName, findinghistory.FieldScopeID, findinghistory.FieldExternalID, findinghistory.FieldExternalOwnerID, findinghistory.FieldSource, findinghistory.FieldResourceName, findinghistory.FieldDisplayName, findinghistory.FieldState, findinghistory.FieldCategory, findinghistory.FieldFindingClass, findinghistory.FieldSeverity, findinghistory.FieldPriority, findinghistory.FieldAssessmentID, findinghistory.FieldDescription, findinghistory.FieldRecommendation, findinghistory.FieldRecommendedActions, findinghistory.FieldVector, findinghistory.FieldStatus, findinghistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case findinghistory.FieldHistoryTime, findinghistory.FieldCreatedAt, findinghistory.FieldUpdatedAt, findinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -264,6 +272,30 @@ func (_m *FindingHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
+			}
+		case findinghistory.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case findinghistory.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case findinghistory.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case findinghistory.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case findinghistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -588,6 +620,18 @@ func (_m *FindingHistory) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

@@ -132,7 +132,7 @@ var (
 // EventTypeValidator is a validator for the "event_type" field enum values. It is called by the builders before save.
 func EventTypeValidator(et enums.WorkflowEventType) error {
 	switch et.String() {
-	case "ACTION", "TRIGGER", "DECISION", "INSTANCE_TRIGGERED", "ACTION_STARTED", "ACTION_COMPLETED", "ACTION_FAILED", "ACTION_SKIPPED", "CONDITION_EVALUATED", "ASSIGNMENT_CREATED", "ASSIGNMENT_RESOLVED", "ASSIGNMENT_INVALIDATED", "INSTANCE_PAUSED", "INSTANCE_RESUMED", "INSTANCE_COMPLETED":
+	case "ACTION", "TRIGGER", "DECISION", "WORKFLOW_TRIGGERED", "ACTION_STARTED", "ACTION_COMPLETED", "ACTION_FAILED", "ACTION_SKIPPED", "CONDITION_EVALUATED", "ASSIGNMENT_CREATED", "ASSIGNMENT_COMPLETED", "ASSIGNMENT_INVALIDATED", "INSTANCE_PAUSED", "INSTANCE_RESUMED", "WORKFLOW_COMPLETED", "EMIT_FAILED", "EMIT_RECOVERED", "EMIT_FAILED_TERMINAL":
 		return nil
 	default:
 		return fmt.Errorf("workflowevent: invalid enum value for event_type field: %q", et)

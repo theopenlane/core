@@ -42,16 +42,21 @@ func AllowBypassContext(ctx context.Context) context.Context {
 
 // AllowContextWithOrg returns an allow context plus the organization ID.
 func AllowContextWithOrg(ctx context.Context) (context.Context, string, error) {
-	allowCtx := AllowContext(ctx)
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-
-	return allowCtx, orgID, err
+	return allowContextWithOrg(ctx, false)
 }
 
 // AllowBypassContextWithOrg returns an allow/bypass context plus the organization ID.
 func AllowBypassContextWithOrg(ctx context.Context) (context.Context, string, error) {
-	bypassCtx := AllowBypassContext(ctx)
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	return allowContextWithOrg(ctx, true)
+}
 
-	return bypassCtx, orgID, err
+// allowContextWithOrg returns an allow context plus the organization ID with optional workflow bypass
+func allowContextWithOrg(ctx context.Context, bypass bool) (context.Context, string, error) {
+	allowCtx := AllowContext(ctx)
+	if bypass {
+		allowCtx = WithContext(allowCtx)
+	}
+
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	return allowCtx, orgID, err
 }

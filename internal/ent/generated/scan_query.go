@@ -13,12 +13,22 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -27,24 +37,49 @@ import (
 // ScanQuery is the builder for querying Scan entities.
 type ScanQuery struct {
 	config
-	ctx                    *QueryContext
-	order                  []scan.OrderOption
-	inters                 []Interceptor
-	predicates             []predicate.Scan
-	withOwner              *OrganizationQuery
-	withBlockedGroups      *GroupQuery
-	withEditors            *GroupQuery
-	withViewers            *GroupQuery
-	withAssets             *AssetQuery
-	withEntities           *EntityQuery
-	withFKs                bool
-	loadTotal              []func(context.Context, []*Scan) error
-	modifiers              []func(*sql.Selector)
-	withNamedBlockedGroups map[string]*GroupQuery
-	withNamedEditors       map[string]*GroupQuery
-	withNamedViewers       map[string]*GroupQuery
-	withNamedAssets        map[string]*AssetQuery
-	withNamedEntities      map[string]*EntityQuery
+	ctx                      *QueryContext
+	order                    []scan.OrderOption
+	inters                   []Interceptor
+	predicates               []predicate.Scan
+	withOwner                *OrganizationQuery
+	withBlockedGroups        *GroupQuery
+	withEditors              *GroupQuery
+	withViewers              *GroupQuery
+	withReviewedByUser       *UserQuery
+	withReviewedByGroup      *GroupQuery
+	withAssignedToUser       *UserQuery
+	withAssignedToGroup      *GroupQuery
+	withEnvironment          *CustomTypeEnumQuery
+	withScope                *CustomTypeEnumQuery
+	withAssets               *AssetQuery
+	withEntities             *EntityQuery
+	withEvidence             *EvidenceQuery
+	withFiles                *FileQuery
+	withRemediations         *RemediationQuery
+	withActionPlans          *ActionPlanQuery
+	withTasks                *TaskQuery
+	withPlatforms            *PlatformQuery
+	withVulnerabilities      *VulnerabilityQuery
+	withControls             *ControlQuery
+	withGeneratedByPlatform  *PlatformQuery
+	withPerformedByUser      *UserQuery
+	withPerformedByGroup     *GroupQuery
+	withFKs                  bool
+	loadTotal                []func(context.Context, []*Scan) error
+	modifiers                []func(*sql.Selector)
+	withNamedBlockedGroups   map[string]*GroupQuery
+	withNamedEditors         map[string]*GroupQuery
+	withNamedViewers         map[string]*GroupQuery
+	withNamedAssets          map[string]*AssetQuery
+	withNamedEntities        map[string]*EntityQuery
+	withNamedEvidence        map[string]*EvidenceQuery
+	withNamedFiles           map[string]*FileQuery
+	withNamedRemediations    map[string]*RemediationQuery
+	withNamedActionPlans     map[string]*ActionPlanQuery
+	withNamedTasks           map[string]*TaskQuery
+	withNamedPlatforms       map[string]*PlatformQuery
+	withNamedVulnerabilities map[string]*VulnerabilityQuery
+	withNamedControls        map[string]*ControlQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -181,6 +216,156 @@ func (_q *ScanQuery) QueryViewers() *GroupQuery {
 	return query
 }
 
+// QueryReviewedByUser chains the current query on the "reviewed_by_user" edge.
+func (_q *ScanQuery) QueryReviewedByUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.ReviewedByUserTable, scan.ReviewedByUserColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Scan
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviewedByGroup chains the current query on the "reviewed_by_group" edge.
+func (_q *ScanQuery) QueryReviewedByGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.ReviewedByGroupTable, scan.ReviewedByGroupColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Scan
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssignedToUser chains the current query on the "assigned_to_user" edge.
+func (_q *ScanQuery) QueryAssignedToUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.AssignedToUserTable, scan.AssignedToUserColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Scan
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssignedToGroup chains the current query on the "assigned_to_group" edge.
+func (_q *ScanQuery) QueryAssignedToGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.AssignedToGroupTable, scan.AssignedToGroupColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Scan
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEnvironment chains the current query on the "environment" edge.
+func (_q *ScanQuery) QueryEnvironment() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.EnvironmentTable, scan.EnvironmentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Scan
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScope chains the current query on the "scope" edge.
+func (_q *ScanQuery) QueryScope() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.ScopeTable, scan.ScopeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Scan
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryAssets chains the current query on the "assets" edge.
 func (_q *ScanQuery) QueryAssets() *AssetQuery {
 	query := (&AssetClient{config: _q.config}).Query()
@@ -225,6 +410,281 @@ func (_q *ScanQuery) QueryEntities() *EntityQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEvidence chains the current query on the "evidence" edge.
+func (_q *ScanQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.EvidenceTable, scan.EvidencePrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.ScanEvidence
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFiles chains the current query on the "files" edge.
+func (_q *ScanQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.FilesTable, scan.FilesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.ScanFiles
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRemediations chains the current query on the "remediations" edge.
+func (_q *ScanQuery) QueryRemediations() *RemediationQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.RemediationsTable, scan.RemediationsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.ScanRemediations
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryActionPlans chains the current query on the "action_plans" edge.
+func (_q *ScanQuery) QueryActionPlans() *ActionPlanQuery {
+	query := (&ActionPlanClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.ActionPlansTable, scan.ActionPlansPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ScanActionPlans
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTasks chains the current query on the "tasks" edge.
+func (_q *ScanQuery) QueryTasks() *TaskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.TasksTable, scan.TasksPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.ScanTasks
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPlatforms chains the current query on the "platforms" edge.
+func (_q *ScanQuery) QueryPlatforms() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, scan.PlatformsTable, scan.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformScans
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVulnerabilities chains the current query on the "vulnerabilities" edge.
+func (_q *ScanQuery) QueryVulnerabilities() *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, scan.VulnerabilitiesTable, scan.VulnerabilitiesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityScans
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControls chains the current query on the "controls" edge.
+func (_q *ScanQuery) QueryControls() *ControlQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, scan.ControlsTable, scan.ControlsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlScans
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryGeneratedByPlatform chains the current query on the "generated_by_platform" edge.
+func (_q *ScanQuery) QueryGeneratedByPlatform() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, scan.GeneratedByPlatformTable, scan.GeneratedByPlatformColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Scan
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPerformedByUser chains the current query on the "performed_by_user" edge.
+func (_q *ScanQuery) QueryPerformedByUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.PerformedByUserTable, scan.PerformedByUserColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Scan
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPerformedByGroup chains the current query on the "performed_by_group" edge.
+func (_q *ScanQuery) QueryPerformedByGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.PerformedByGroupTable, scan.PerformedByGroupColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Scan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -418,17 +878,34 @@ func (_q *ScanQuery) Clone() *ScanQuery {
 		return nil
 	}
 	return &ScanQuery{
-		config:            _q.config,
-		ctx:               _q.ctx.Clone(),
-		order:             append([]scan.OrderOption{}, _q.order...),
-		inters:            append([]Interceptor{}, _q.inters...),
-		predicates:        append([]predicate.Scan{}, _q.predicates...),
-		withOwner:         _q.withOwner.Clone(),
-		withBlockedGroups: _q.withBlockedGroups.Clone(),
-		withEditors:       _q.withEditors.Clone(),
-		withViewers:       _q.withViewers.Clone(),
-		withAssets:        _q.withAssets.Clone(),
-		withEntities:      _q.withEntities.Clone(),
+		config:                  _q.config,
+		ctx:                     _q.ctx.Clone(),
+		order:                   append([]scan.OrderOption{}, _q.order...),
+		inters:                  append([]Interceptor{}, _q.inters...),
+		predicates:              append([]predicate.Scan{}, _q.predicates...),
+		withOwner:               _q.withOwner.Clone(),
+		withBlockedGroups:       _q.withBlockedGroups.Clone(),
+		withEditors:             _q.withEditors.Clone(),
+		withViewers:             _q.withViewers.Clone(),
+		withReviewedByUser:      _q.withReviewedByUser.Clone(),
+		withReviewedByGroup:     _q.withReviewedByGroup.Clone(),
+		withAssignedToUser:      _q.withAssignedToUser.Clone(),
+		withAssignedToGroup:     _q.withAssignedToGroup.Clone(),
+		withEnvironment:         _q.withEnvironment.Clone(),
+		withScope:               _q.withScope.Clone(),
+		withAssets:              _q.withAssets.Clone(),
+		withEntities:            _q.withEntities.Clone(),
+		withEvidence:            _q.withEvidence.Clone(),
+		withFiles:               _q.withFiles.Clone(),
+		withRemediations:        _q.withRemediations.Clone(),
+		withActionPlans:         _q.withActionPlans.Clone(),
+		withTasks:               _q.withTasks.Clone(),
+		withPlatforms:           _q.withPlatforms.Clone(),
+		withVulnerabilities:     _q.withVulnerabilities.Clone(),
+		withControls:            _q.withControls.Clone(),
+		withGeneratedByPlatform: _q.withGeneratedByPlatform.Clone(),
+		withPerformedByUser:     _q.withPerformedByUser.Clone(),
+		withPerformedByGroup:    _q.withPerformedByGroup.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -480,6 +957,72 @@ func (_q *ScanQuery) WithViewers(opts ...func(*GroupQuery)) *ScanQuery {
 	return _q
 }
 
+// WithReviewedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "reviewed_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithReviewedByUser(opts ...func(*UserQuery)) *ScanQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewedByUser = query
+	return _q
+}
+
+// WithReviewedByGroup tells the query-builder to eager-load the nodes that are connected to
+// the "reviewed_by_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithReviewedByGroup(opts ...func(*GroupQuery)) *ScanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewedByGroup = query
+	return _q
+}
+
+// WithAssignedToUser tells the query-builder to eager-load the nodes that are connected to
+// the "assigned_to_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithAssignedToUser(opts ...func(*UserQuery)) *ScanQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssignedToUser = query
+	return _q
+}
+
+// WithAssignedToGroup tells the query-builder to eager-load the nodes that are connected to
+// the "assigned_to_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithAssignedToGroup(opts ...func(*GroupQuery)) *ScanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssignedToGroup = query
+	return _q
+}
+
+// WithEnvironment tells the query-builder to eager-load the nodes that are connected to
+// the "environment" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithEnvironment(opts ...func(*CustomTypeEnumQuery)) *ScanQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEnvironment = query
+	return _q
+}
+
+// WithScope tells the query-builder to eager-load the nodes that are connected to
+// the "scope" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *ScanQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScope = query
+	return _q
+}
+
 // WithAssets tells the query-builder to eager-load the nodes that are connected to
 // the "assets" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ScanQuery) WithAssets(opts ...func(*AssetQuery)) *ScanQuery {
@@ -499,6 +1042,127 @@ func (_q *ScanQuery) WithEntities(opts ...func(*EntityQuery)) *ScanQuery {
 		opt(query)
 	}
 	_q.withEntities = query
+	return _q
+}
+
+// WithEvidence tells the query-builder to eager-load the nodes that are connected to
+// the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithEvidence(opts ...func(*EvidenceQuery)) *ScanQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEvidence = query
+	return _q
+}
+
+// WithFiles tells the query-builder to eager-load the nodes that are connected to
+// the "files" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithFiles(opts ...func(*FileQuery)) *ScanQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFiles = query
+	return _q
+}
+
+// WithRemediations tells the query-builder to eager-load the nodes that are connected to
+// the "remediations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithRemediations(opts ...func(*RemediationQuery)) *ScanQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRemediations = query
+	return _q
+}
+
+// WithActionPlans tells the query-builder to eager-load the nodes that are connected to
+// the "action_plans" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithActionPlans(opts ...func(*ActionPlanQuery)) *ScanQuery {
+	query := (&ActionPlanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withActionPlans = query
+	return _q
+}
+
+// WithTasks tells the query-builder to eager-load the nodes that are connected to
+// the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithTasks(opts ...func(*TaskQuery)) *ScanQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTasks = query
+	return _q
+}
+
+// WithPlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithPlatforms(opts ...func(*PlatformQuery)) *ScanQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatforms = query
+	return _q
+}
+
+// WithVulnerabilities tells the query-builder to eager-load the nodes that are connected to
+// the "vulnerabilities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithVulnerabilities(opts ...func(*VulnerabilityQuery)) *ScanQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVulnerabilities = query
+	return _q
+}
+
+// WithControls tells the query-builder to eager-load the nodes that are connected to
+// the "controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithControls(opts ...func(*ControlQuery)) *ScanQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControls = query
+	return _q
+}
+
+// WithGeneratedByPlatform tells the query-builder to eager-load the nodes that are connected to
+// the "generated_by_platform" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithGeneratedByPlatform(opts ...func(*PlatformQuery)) *ScanQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withGeneratedByPlatform = query
+	return _q
+}
+
+// WithPerformedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "performed_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithPerformedByUser(opts ...func(*UserQuery)) *ScanQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPerformedByUser = query
+	return _q
+}
+
+// WithPerformedByGroup tells the query-builder to eager-load the nodes that are connected to
+// the "performed_by_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithPerformedByGroup(opts ...func(*GroupQuery)) *ScanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPerformedByGroup = query
 	return _q
 }
 
@@ -587,13 +1251,30 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 		nodes       = []*Scan{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [23]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
+			_q.withReviewedByUser != nil,
+			_q.withReviewedByGroup != nil,
+			_q.withAssignedToUser != nil,
+			_q.withAssignedToGroup != nil,
+			_q.withEnvironment != nil,
+			_q.withScope != nil,
 			_q.withAssets != nil,
 			_q.withEntities != nil,
+			_q.withEvidence != nil,
+			_q.withFiles != nil,
+			_q.withRemediations != nil,
+			_q.withActionPlans != nil,
+			_q.withTasks != nil,
+			_q.withPlatforms != nil,
+			_q.withVulnerabilities != nil,
+			_q.withControls != nil,
+			_q.withGeneratedByPlatform != nil,
+			_q.withPerformedByUser != nil,
+			_q.withPerformedByGroup != nil,
 		}
 	)
 	if withFKs {
@@ -649,6 +1330,42 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 			return nil, err
 		}
 	}
+	if query := _q.withReviewedByUser; query != nil {
+		if err := _q.loadReviewedByUser(ctx, query, nodes, nil,
+			func(n *Scan, e *User) { n.Edges.ReviewedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviewedByGroup; query != nil {
+		if err := _q.loadReviewedByGroup(ctx, query, nodes, nil,
+			func(n *Scan, e *Group) { n.Edges.ReviewedByGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssignedToUser; query != nil {
+		if err := _q.loadAssignedToUser(ctx, query, nodes, nil,
+			func(n *Scan, e *User) { n.Edges.AssignedToUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssignedToGroup; query != nil {
+		if err := _q.loadAssignedToGroup(ctx, query, nodes, nil,
+			func(n *Scan, e *Group) { n.Edges.AssignedToGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEnvironment; query != nil {
+		if err := _q.loadEnvironment(ctx, query, nodes, nil,
+			func(n *Scan, e *CustomTypeEnum) { n.Edges.Environment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScope; query != nil {
+		if err := _q.loadScope(ctx, query, nodes, nil,
+			func(n *Scan, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withAssets; query != nil {
 		if err := _q.loadAssets(ctx, query, nodes,
 			func(n *Scan) { n.Edges.Assets = []*Asset{} },
@@ -660,6 +1377,80 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Scan) { n.Edges.Entities = []*Entity{} },
 			func(n *Scan, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEvidence; query != nil {
+		if err := _q.loadEvidence(ctx, query, nodes,
+			func(n *Scan) { n.Edges.Evidence = []*Evidence{} },
+			func(n *Scan, e *Evidence) { n.Edges.Evidence = append(n.Edges.Evidence, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFiles; query != nil {
+		if err := _q.loadFiles(ctx, query, nodes,
+			func(n *Scan) { n.Edges.Files = []*File{} },
+			func(n *Scan, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withRemediations; query != nil {
+		if err := _q.loadRemediations(ctx, query, nodes,
+			func(n *Scan) { n.Edges.Remediations = []*Remediation{} },
+			func(n *Scan, e *Remediation) { n.Edges.Remediations = append(n.Edges.Remediations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withActionPlans; query != nil {
+		if err := _q.loadActionPlans(ctx, query, nodes,
+			func(n *Scan) { n.Edges.ActionPlans = []*ActionPlan{} },
+			func(n *Scan, e *ActionPlan) { n.Edges.ActionPlans = append(n.Edges.ActionPlans, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTasks; query != nil {
+		if err := _q.loadTasks(ctx, query, nodes,
+			func(n *Scan) { n.Edges.Tasks = []*Task{} },
+			func(n *Scan, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatforms; query != nil {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Scan) { n.Edges.Platforms = []*Platform{} },
+			func(n *Scan, e *Platform) { n.Edges.Platforms = append(n.Edges.Platforms, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withVulnerabilities; query != nil {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *Scan) { n.Edges.Vulnerabilities = []*Vulnerability{} },
+			func(n *Scan, e *Vulnerability) { n.Edges.Vulnerabilities = append(n.Edges.Vulnerabilities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withControls; query != nil {
+		if err := _q.loadControls(ctx, query, nodes,
+			func(n *Scan) { n.Edges.Controls = []*Control{} },
+			func(n *Scan, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withGeneratedByPlatform; query != nil {
+		if err := _q.loadGeneratedByPlatform(ctx, query, nodes, nil,
+			func(n *Scan, e *Platform) { n.Edges.GeneratedByPlatform = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPerformedByUser; query != nil {
+		if err := _q.loadPerformedByUser(ctx, query, nodes, nil,
+			func(n *Scan, e *User) { n.Edges.PerformedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPerformedByGroup; query != nil {
+		if err := _q.loadPerformedByGroup(ctx, query, nodes, nil,
+			func(n *Scan, e *Group) { n.Edges.PerformedByGroup = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -695,6 +1486,62 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Scan) { n.appendNamedEntities(name) },
 			func(n *Scan, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEvidence {
+		if err := _q.loadEvidence(ctx, query, nodes,
+			func(n *Scan) { n.appendNamedEvidence(name) },
+			func(n *Scan, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFiles {
+		if err := _q.loadFiles(ctx, query, nodes,
+			func(n *Scan) { n.appendNamedFiles(name) },
+			func(n *Scan, e *File) { n.appendNamedFiles(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedRemediations {
+		if err := _q.loadRemediations(ctx, query, nodes,
+			func(n *Scan) { n.appendNamedRemediations(name) },
+			func(n *Scan, e *Remediation) { n.appendNamedRemediations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedActionPlans {
+		if err := _q.loadActionPlans(ctx, query, nodes,
+			func(n *Scan) { n.appendNamedActionPlans(name) },
+			func(n *Scan, e *ActionPlan) { n.appendNamedActionPlans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTasks {
+		if err := _q.loadTasks(ctx, query, nodes,
+			func(n *Scan) { n.appendNamedTasks(name) },
+			func(n *Scan, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPlatforms {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Scan) { n.appendNamedPlatforms(name) },
+			func(n *Scan, e *Platform) { n.appendNamedPlatforms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVulnerabilities {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *Scan) { n.appendNamedVulnerabilities(name) },
+			func(n *Scan, e *Vulnerability) { n.appendNamedVulnerabilities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedControls {
+		if err := _q.loadControls(ctx, query, nodes,
+			func(n *Scan) { n.appendNamedControls(name) },
+			func(n *Scan, e *Control) { n.appendNamedControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -921,6 +1768,180 @@ func (_q *ScanQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes [
 	}
 	return nil
 }
+func (_q *ScanQuery) loadReviewedByUser(ctx context.Context, query *UserQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Scan)
+	for i := range nodes {
+		fk := nodes[i].ReviewedByUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "reviewed_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadReviewedByGroup(ctx context.Context, query *GroupQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Scan)
+	for i := range nodes {
+		fk := nodes[i].ReviewedByGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "reviewed_by_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadAssignedToUser(ctx context.Context, query *UserQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Scan)
+	for i := range nodes {
+		fk := nodes[i].AssignedToUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "assigned_to_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadAssignedToGroup(ctx context.Context, query *GroupQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Scan)
+	for i := range nodes {
+		fk := nodes[i].AssignedToGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "assigned_to_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadEnvironment(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Scan)
+	for i := range nodes {
+		fk := nodes[i].EnvironmentID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "environment_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Scan)
+	for i := range nodes {
+		fk := nodes[i].ScopeID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *ScanQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Asset)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Scan)
@@ -1014,6 +2035,589 @@ func (_q *ScanQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes
 	}
 	return nil
 }
+func (_q *ScanQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Evidence)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Scan)
+	nids := make(map[string]map[*Scan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(scan.EvidenceTable)
+		joinT.Schema(_q.schemaConfig.ScanEvidence)
+		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(scan.EvidencePrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(scan.EvidencePrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(scan.EvidencePrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Scan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Evidence](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "evidence" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *File)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Scan)
+	nids := make(map[string]map[*Scan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(scan.FilesTable)
+		joinT.Schema(_q.schemaConfig.ScanFiles)
+		s.Join(joinT).On(s.C(file.FieldID), joinT.C(scan.FilesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(scan.FilesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(scan.FilesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Scan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*File](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "files" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadRemediations(ctx context.Context, query *RemediationQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Remediation)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Scan)
+	nids := make(map[string]map[*Scan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(scan.RemediationsTable)
+		joinT.Schema(_q.schemaConfig.ScanRemediations)
+		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(scan.RemediationsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(scan.RemediationsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(scan.RemediationsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Scan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Remediation](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "remediations" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadActionPlans(ctx context.Context, query *ActionPlanQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *ActionPlan)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Scan)
+	nids := make(map[string]map[*Scan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(scan.ActionPlansTable)
+		joinT.Schema(_q.schemaConfig.ScanActionPlans)
+		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(scan.ActionPlansPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(scan.ActionPlansPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(scan.ActionPlansPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Scan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*ActionPlan](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "action_plans" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Task)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Scan)
+	nids := make(map[string]map[*Scan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(scan.TasksTable)
+		joinT.Schema(_q.schemaConfig.ScanTasks)
+		s.Join(joinT).On(s.C(task.FieldID), joinT.C(scan.TasksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(scan.TasksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(scan.TasksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Scan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Task](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "tasks" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Scan)
+	nids := make(map[string]map[*Scan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(scan.PlatformsTable)
+		joinT.Schema(_q.schemaConfig.PlatformScans)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(scan.PlatformsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(scan.PlatformsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(scan.PlatformsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Scan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "platforms" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadVulnerabilities(ctx context.Context, query *VulnerabilityQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Vulnerability)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Scan)
+	nids := make(map[string]map[*Scan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(scan.VulnerabilitiesTable)
+		joinT.Schema(_q.schemaConfig.VulnerabilityScans)
+		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(scan.VulnerabilitiesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(scan.VulnerabilitiesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(scan.VulnerabilitiesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Scan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Vulnerability](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "vulnerabilities" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Control)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Scan)
+	nids := make(map[string]map[*Scan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(scan.ControlsTable)
+		joinT.Schema(_q.schemaConfig.ControlScans)
+		s.Join(joinT).On(s.C(control.FieldID), joinT.C(scan.ControlsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(scan.ControlsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(scan.ControlsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Scan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Control](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "controls" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadGeneratedByPlatform(ctx context.Context, query *PlatformQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Platform)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Scan)
+	for i := range nodes {
+		fk := nodes[i].GeneratedByPlatformID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(platform.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "generated_by_platform_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadPerformedByUser(ctx context.Context, query *UserQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Scan)
+	for i := range nodes {
+		fk := nodes[i].PerformedByUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "performed_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadPerformedByGroup(ctx context.Context, query *GroupQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Scan)
+	for i := range nodes {
+		fk := nodes[i].PerformedByGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "performed_by_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (_q *ScanQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1047,6 +2651,33 @@ func (_q *ScanQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(scan.FieldOwnerID)
+		}
+		if _q.withReviewedByUser != nil {
+			_spec.Node.AddColumnOnce(scan.FieldReviewedByUserID)
+		}
+		if _q.withReviewedByGroup != nil {
+			_spec.Node.AddColumnOnce(scan.FieldReviewedByGroupID)
+		}
+		if _q.withAssignedToUser != nil {
+			_spec.Node.AddColumnOnce(scan.FieldAssignedToUserID)
+		}
+		if _q.withAssignedToGroup != nil {
+			_spec.Node.AddColumnOnce(scan.FieldAssignedToGroupID)
+		}
+		if _q.withEnvironment != nil {
+			_spec.Node.AddColumnOnce(scan.FieldEnvironmentID)
+		}
+		if _q.withScope != nil {
+			_spec.Node.AddColumnOnce(scan.FieldScopeID)
+		}
+		if _q.withGeneratedByPlatform != nil {
+			_spec.Node.AddColumnOnce(scan.FieldGeneratedByPlatformID)
+		}
+		if _q.withPerformedByUser != nil {
+			_spec.Node.AddColumnOnce(scan.FieldPerformedByUserID)
+		}
+		if _q.withPerformedByGroup != nil {
+			_spec.Node.AddColumnOnce(scan.FieldPerformedByGroupID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
@@ -1183,6 +2814,118 @@ func (_q *ScanQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) 
 		_q.withNamedEntities = make(map[string]*EntityQuery)
 	}
 	_q.withNamedEntities[name] = query
+	return _q
+}
+
+// WithNamedEvidence tells the query-builder to eager-load the nodes that are connected to the "evidence"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *ScanQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEvidence == nil {
+		_q.withNamedEvidence = make(map[string]*EvidenceQuery)
+	}
+	_q.withNamedEvidence[name] = query
+	return _q
+}
+
+// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *ScanQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFiles == nil {
+		_q.withNamedFiles = make(map[string]*FileQuery)
+	}
+	_q.withNamedFiles[name] = query
+	return _q
+}
+
+// WithNamedRemediations tells the query-builder to eager-load the nodes that are connected to the "remediations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithNamedRemediations(name string, opts ...func(*RemediationQuery)) *ScanQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedRemediations == nil {
+		_q.withNamedRemediations = make(map[string]*RemediationQuery)
+	}
+	_q.withNamedRemediations[name] = query
+	return _q
+}
+
+// WithNamedActionPlans tells the query-builder to eager-load the nodes that are connected to the "action_plans"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithNamedActionPlans(name string, opts ...func(*ActionPlanQuery)) *ScanQuery {
+	query := (&ActionPlanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedActionPlans == nil {
+		_q.withNamedActionPlans = make(map[string]*ActionPlanQuery)
+	}
+	_q.withNamedActionPlans[name] = query
+	return _q
+}
+
+// WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *ScanQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTasks == nil {
+		_q.withNamedTasks = make(map[string]*TaskQuery)
+	}
+	_q.withNamedTasks[name] = query
+	return _q
+}
+
+// WithNamedPlatforms tells the query-builder to eager-load the nodes that are connected to the "platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQuery)) *ScanQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatforms == nil {
+		_q.withNamedPlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatforms[name] = query
+	return _q
+}
+
+// WithNamedVulnerabilities tells the query-builder to eager-load the nodes that are connected to the "vulnerabilities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithNamedVulnerabilities(name string, opts ...func(*VulnerabilityQuery)) *ScanQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVulnerabilities == nil {
+		_q.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery)
+	}
+	_q.withNamedVulnerabilities[name] = query
+	return _q
+}
+
+// WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *ScanQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedControls == nil {
+		_q.withNamedControls = make(map[string]*ControlQuery)
+	}
+	_q.withNamedControls[name] = query
 	return _q
 }
 

@@ -343,6 +343,62 @@ func (_c *WorkflowInstanceHistoryCreate) SetNillableProcedureID(v *string) *Work
 	return _c
 }
 
+// SetCampaignID sets the "campaign_id" field.
+func (_c *WorkflowInstanceHistoryCreate) SetCampaignID(v string) *WorkflowInstanceHistoryCreate {
+	_c.mutation.SetCampaignID(v)
+	return _c
+}
+
+// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
+func (_c *WorkflowInstanceHistoryCreate) SetNillableCampaignID(v *string) *WorkflowInstanceHistoryCreate {
+	if v != nil {
+		_c.SetCampaignID(*v)
+	}
+	return _c
+}
+
+// SetCampaignTargetID sets the "campaign_target_id" field.
+func (_c *WorkflowInstanceHistoryCreate) SetCampaignTargetID(v string) *WorkflowInstanceHistoryCreate {
+	_c.mutation.SetCampaignTargetID(v)
+	return _c
+}
+
+// SetNillableCampaignTargetID sets the "campaign_target_id" field if the given value is not nil.
+func (_c *WorkflowInstanceHistoryCreate) SetNillableCampaignTargetID(v *string) *WorkflowInstanceHistoryCreate {
+	if v != nil {
+		_c.SetCampaignTargetID(*v)
+	}
+	return _c
+}
+
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_c *WorkflowInstanceHistoryCreate) SetIdentityHolderID(v string) *WorkflowInstanceHistoryCreate {
+	_c.mutation.SetIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_c *WorkflowInstanceHistoryCreate) SetNillableIdentityHolderID(v *string) *WorkflowInstanceHistoryCreate {
+	if v != nil {
+		_c.SetIdentityHolderID(*v)
+	}
+	return _c
+}
+
+// SetPlatformID sets the "platform_id" field.
+func (_c *WorkflowInstanceHistoryCreate) SetPlatformID(v string) *WorkflowInstanceHistoryCreate {
+	_c.mutation.SetPlatformID(v)
+	return _c
+}
+
+// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
+func (_c *WorkflowInstanceHistoryCreate) SetNillablePlatformID(v *string) *WorkflowInstanceHistoryCreate {
+	if v != nil {
+		_c.SetPlatformID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *WorkflowInstanceHistoryCreate) SetID(v string) *WorkflowInstanceHistoryCreate {
 	_c.mutation.SetID(v)
@@ -602,6 +658,22 @@ func (_c *WorkflowInstanceHistoryCreate) createSpec() (*WorkflowInstanceHistory,
 	if value, ok := _c.mutation.ProcedureID(); ok {
 		_spec.SetField(workflowinstancehistory.FieldProcedureID, field.TypeString, value)
 		_node.ProcedureID = value
+	}
+	if value, ok := _c.mutation.CampaignID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldCampaignID, field.TypeString, value)
+		_node.CampaignID = value
+	}
+	if value, ok := _c.mutation.CampaignTargetID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldCampaignTargetID, field.TypeString, value)
+		_node.CampaignTargetID = value
+	}
+	if value, ok := _c.mutation.IdentityHolderID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldIdentityHolderID, field.TypeString, value)
+		_node.IdentityHolderID = value
+	}
+	if value, ok := _c.mutation.PlatformID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldPlatformID, field.TypeString, value)
+		_node.PlatformID = value
 	}
 	return _node, _spec
 }

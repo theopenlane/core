@@ -585,6 +585,86 @@ func (_u *InternalPolicyHistoryUpdate) ClearInternalPolicyKindID() *InternalPoli
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *InternalPolicyHistoryUpdate) SetEnvironmentName(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdate) SetNillableEnvironmentName(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *InternalPolicyHistoryUpdate) ClearEnvironmentName() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *InternalPolicyHistoryUpdate) SetEnvironmentID(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdate) SetNillableEnvironmentID(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *InternalPolicyHistoryUpdate) ClearEnvironmentID() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *InternalPolicyHistoryUpdate) SetScopeName(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdate) SetNillableScopeName(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *InternalPolicyHistoryUpdate) ClearScopeName() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *InternalPolicyHistoryUpdate) SetScopeID(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdate) SetNillableScopeID(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *InternalPolicyHistoryUpdate) ClearScopeID() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_u *InternalPolicyHistoryUpdate) SetWorkflowEligibleMarker(v bool) *InternalPolicyHistoryUpdate {
 	_u.mutation.SetWorkflowEligibleMarker(v)
@@ -907,6 +987,30 @@ func (_u *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.InternalPolicyKindIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldInternalPolicyKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(internalpolicyhistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(internalpolicyhistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldScopeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(internalpolicyhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
@@ -1488,6 +1592,86 @@ func (_u *InternalPolicyHistoryUpdateOne) ClearInternalPolicyKindID() *InternalP
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *InternalPolicyHistoryUpdateOne) SetEnvironmentName(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableEnvironmentName(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *InternalPolicyHistoryUpdateOne) ClearEnvironmentName() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *InternalPolicyHistoryUpdateOne) SetEnvironmentID(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableEnvironmentID(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *InternalPolicyHistoryUpdateOne) ClearEnvironmentID() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *InternalPolicyHistoryUpdateOne) SetScopeName(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableScopeName(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *InternalPolicyHistoryUpdateOne) ClearScopeName() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *InternalPolicyHistoryUpdateOne) SetScopeID(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableScopeID(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *InternalPolicyHistoryUpdateOne) ClearScopeID() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_u *InternalPolicyHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *InternalPolicyHistoryUpdateOne {
 	_u.mutation.SetWorkflowEligibleMarker(v)
@@ -1840,6 +2024,30 @@ func (_u *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node *I
 	}
 	if _u.mutation.InternalPolicyKindIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldInternalPolicyKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(internalpolicyhistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(internalpolicyhistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldScopeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(internalpolicyhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)

@@ -32,42 +32,20 @@ func init() {
 
 // resolveControlAuditor returns the auditor reference ID for a control, if set.
 func resolveControlAuditor(ctx context.Context, client *generated.Client, obj *workflows.Object) ([]string, error) {
-	node, err := loadWorkflowNode(ctx, client, obj)
-	if err != nil {
-		return nil, err
-	}
-
-	auditorID := workflows.StringField(node, "auditor_reference_id")
-	if auditorID == "" {
-		return []string{}, nil
-	}
-
-	return []string{auditorID}, nil
+	return resolveOptionalIDList(ctx, client, obj, "auditor_reference_id")
 }
 
 // resolveResponsibleParty returns the responsible party for a control, if set
 func resolveResponsibleParty(ctx context.Context, client *generated.Client, obj *workflows.Object) ([]string, error) {
-	node, err := loadWorkflowNode(ctx, client, obj)
-	if err != nil {
-		return nil, err
-	}
-
-	responsiblePartyID := workflows.StringField(node, "responsible_party_id")
-	if responsiblePartyID == "" {
-		return []string{}, nil
-	}
-
-	return []string{responsiblePartyID}, nil
+	return resolveOptionalIDList(ctx, client, obj, "responsible_party_id")
 }
 
 // resolvePolicyApprover returns the approvers for a policy from the approver group
 func resolvePolicyApprover(ctx context.Context, client *generated.Client, obj *workflows.Object) ([]string, error) {
-	node, err := loadWorkflowNode(ctx, client, obj)
+	approverID, err := resolveOptionalID(ctx, client, obj, "approver_id")
 	if err != nil {
 		return nil, err
 	}
-
-	approverID := workflows.StringField(node, "approver_id")
 	if approverID == "" {
 		return []string{}, nil
 	}
@@ -77,12 +55,10 @@ func resolvePolicyApprover(ctx context.Context, client *generated.Client, obj *w
 
 // resolvePolicyDelegate returns the delegates for a policy from the delegate group
 func resolvePolicyDelegate(ctx context.Context, client *generated.Client, obj *workflows.Object) ([]string, error) {
-	node, err := loadWorkflowNode(ctx, client, obj)
+	delegateID, err := resolveOptionalID(ctx, client, obj, "delegate_id")
 	if err != nil {
 		return nil, err
 	}
-
-	delegateID := workflows.StringField(node, "delegate_id")
 	if delegateID == "" {
 		return []string{}, nil
 	}
@@ -92,16 +68,7 @@ func resolvePolicyDelegate(ctx context.Context, client *generated.Client, obj *w
 
 // resolveObjectCreator returns the creator of any object, if available
 func resolveObjectCreator(ctx context.Context, client *generated.Client, obj *workflows.Object) ([]string, error) {
-	node, err := loadWorkflowNode(ctx, client, obj)
-	if err != nil {
-		return nil, err
-	}
-
-	createdBy := workflows.StringField(node, "created_by")
-	if createdBy != "" {
-		return []string{createdBy}, nil
-	}
-	return []string{}, nil
+	return resolveOptionalIDList(ctx, client, obj, "created_by")
 }
 
 // ownerQueryer is an interface for objects that can query their owning organization
@@ -125,7 +92,10 @@ func resolveObjectOwner(ctx context.Context, client *generated.Client, obj *work
 		return nil, err
 	}
 
-	ownerID := workflows.StringField(node, "owner_id")
+	ownerID, err := workflows.StringField(node, "owner_id")
+	if err != nil {
+		return nil, err
+	}
 	if ownerID != "" {
 		return workflows.OrganizationOwnerIDs(ctx, client, ownerID)
 	}
@@ -142,6 +112,30 @@ func resolveObjectOwner(ctx context.Context, client *generated.Client, obj *work
 	}
 
 	return workflows.OrganizationOwnerIDs(ctx, client, org.ID)
+}
+
+// resolveOptionalID loads a workflow node and extracts a string field
+func resolveOptionalID(ctx context.Context, client *generated.Client, obj *workflows.Object, field string) (string, error) {
+	node, err := loadWorkflowNode(ctx, client, obj)
+	if err != nil {
+		return "", err
+	}
+
+	return workflows.StringField(node, field)
+}
+
+// resolveOptionalIDList returns a single-element slice when the field is present
+func resolveOptionalIDList(ctx context.Context, client *generated.Client, obj *workflows.Object, field string) ([]string, error) {
+	value, err := resolveOptionalID(ctx, client, obj, field)
+	if err != nil {
+		return nil, err
+	}
+
+	if value == "" {
+		return []string{}, nil
+	}
+
+	return []string{value}, nil
 }
 
 // ResolveGroupMembers returns the user IDs of all users in the specified group.

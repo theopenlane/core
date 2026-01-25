@@ -56,8 +56,14 @@ const (
 	EdgeViewers = "viewers"
 	// EdgeTemplate holds the string denoting the template edge name in mutations.
 	EdgeTemplate = "template"
+	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
+	EdgePlatforms = "platforms"
+	// EdgeIdentityHolders holds the string denoting the identity_holders edge name in mutations.
+	EdgeIdentityHolders = "identity_holders"
 	// EdgeAssessmentResponses holds the string denoting the assessment_responses edge name in mutations.
 	EdgeAssessmentResponses = "assessment_responses"
+	// EdgeCampaigns holds the string denoting the campaigns edge name in mutations.
+	EdgeCampaigns = "campaigns"
 	// Table holds the table name of the assessment in the database.
 	Table = "assessments"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -95,6 +101,16 @@ const (
 	TemplateInverseTable = "templates"
 	// TemplateColumn is the table column denoting the template relation/edge.
 	TemplateColumn = "template_id"
+	// PlatformsTable is the table that holds the platforms relation/edge. The primary key declared below.
+	PlatformsTable = "platform_assessments"
+	// PlatformsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformsInverseTable = "platforms"
+	// IdentityHoldersTable is the table that holds the identity_holders relation/edge. The primary key declared below.
+	IdentityHoldersTable = "identity_holder_assessments"
+	// IdentityHoldersInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	IdentityHoldersInverseTable = "identity_holders"
 	// AssessmentResponsesTable is the table that holds the assessment_responses relation/edge.
 	AssessmentResponsesTable = "assessment_responses"
 	// AssessmentResponsesInverseTable is the table name for the AssessmentResponse entity.
@@ -102,6 +118,13 @@ const (
 	AssessmentResponsesInverseTable = "assessment_responses"
 	// AssessmentResponsesColumn is the table column denoting the assessment_responses relation/edge.
 	AssessmentResponsesColumn = "assessment_id"
+	// CampaignsTable is the table that holds the campaigns relation/edge.
+	CampaignsTable = "campaigns"
+	// CampaignsInverseTable is the table name for the Campaign entity.
+	// It exists in this package in order to avoid circular dependency with the "campaign" package.
+	CampaignsInverseTable = "campaigns"
+	// CampaignsColumn is the table column denoting the campaigns relation/edge.
+	CampaignsColumn = "assessment_id"
 )
 
 // Columns holds all SQL columns for assessment fields.
@@ -122,6 +145,15 @@ var Columns = []string{
 	FieldUischema,
 	FieldResponseDueDuration,
 }
+
+var (
+	// PlatformsPrimaryKey and PlatformsColumn2 are the table columns denoting the
+	// primary key for the platforms relation (M2M).
+	PlatformsPrimaryKey = []string{"platform_id", "assessment_id"}
+	// IdentityHoldersPrimaryKey and IdentityHoldersColumn2 are the table columns denoting the
+	// primary key for the identity_holders relation (M2M).
+	IdentityHoldersPrimaryKey = []string{"identity_holder_id", "assessment_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -289,6 +321,34 @@ func ByTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByPlatformsCount orders the results by platforms count.
+func ByPlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformsStep(), opts...)
+	}
+}
+
+// ByPlatforms orders the results by platforms terms.
+func ByPlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIdentityHoldersCount orders the results by identity_holders count.
+func ByIdentityHoldersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIdentityHoldersStep(), opts...)
+	}
+}
+
+// ByIdentityHolders orders the results by identity_holders terms.
+func ByIdentityHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIdentityHoldersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByAssessmentResponsesCount orders the results by assessment_responses count.
 func ByAssessmentResponsesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -300,6 +360,20 @@ func ByAssessmentResponsesCount(opts ...sql.OrderTermOption) OrderOption {
 func ByAssessmentResponses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newAssessmentResponsesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCampaignsCount orders the results by campaigns count.
+func ByCampaignsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignsStep(), opts...)
+	}
+}
+
+// ByCampaigns orders the results by campaigns terms.
+func ByCampaigns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -337,11 +411,32 @@ func newTemplateStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, TemplateTable, TemplateColumn),
 	)
 }
+func newPlatformsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
+	)
+}
+func newIdentityHoldersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IdentityHoldersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
+	)
+}
 func newAssessmentResponsesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AssessmentResponsesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentResponsesTable, AssessmentResponsesColumn),
+	)
+}
+func newCampaignsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CampaignsTable, CampaignsColumn),
 	)
 }
 

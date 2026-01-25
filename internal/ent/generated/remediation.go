@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 )
@@ -44,6 +45,14 @@ type Remediation struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the environment of the remediation
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the remediation
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the remediation
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the remediation
+	ScopeID string `json:"scope_id,omitempty"`
 	// external identifier from the integration source for the remediation
 	ExternalID string `json:"external_id,omitempty"`
 	// external identifier from the integration source for the remediation
@@ -101,8 +110,14 @@ type RemediationEdges struct {
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
 	Viewers []*Group `json:"viewers,omitempty"`
+	// Environment holds the value of the environment edge.
+	Environment *CustomTypeEnum `json:"environment,omitempty"`
+	// Scope holds the value of the scope edge.
+	Scope *CustomTypeEnum `json:"scope,omitempty"`
 	// integration that produced the remediation
 	Integrations []*Integration `json:"integrations,omitempty"`
+	// Scans holds the value of the scans edge.
+	Scans []*Scan `json:"scans,omitempty"`
 	// Findings holds the value of the findings edge.
 	Findings []*Finding `json:"findings,omitempty"`
 	// Vulnerabilities holds the value of the vulnerabilities edge.
@@ -131,14 +146,15 @@ type RemediationEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [18]bool
+	loadedTypes [21]bool
 	// totalCount holds the count of the edges above.
-	totalCount [18]map[string]int
+	totalCount [21]map[string]int
 
 	namedBlockedGroups   map[string][]*Group
 	namedEditors         map[string][]*Group
 	namedViewers         map[string][]*Group
 	namedIntegrations    map[string][]*Integration
+	namedScans           map[string][]*Scan
 	namedFindings        map[string][]*Finding
 	namedVulnerabilities map[string][]*Vulnerability
 	namedActionPlans     map[string][]*ActionPlan
@@ -192,19 +208,50 @@ func (e RemediationEdges) ViewersOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "viewers"}
 }
 
+// EnvironmentOrErr returns the Environment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RemediationEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
+	if e.Environment != nil {
+		return e.Environment, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "environment"}
+}
+
+// ScopeOrErr returns the Scope value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RemediationEdges) ScopeOrErr() (*CustomTypeEnum, error) {
+	if e.Scope != nil {
+		return e.Scope, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "scope"}
+}
+
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e RemediationEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
 }
 
+// ScansOrErr returns the Scans value or an error if the edge
+// was not loaded in eager-loading.
+func (e RemediationEdges) ScansOrErr() ([]*Scan, error) {
+	if e.loadedTypes[7] {
+		return e.Scans, nil
+	}
+	return nil, &NotLoadedError{edge: "scans"}
+}
+
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e RemediationEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[8] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -213,7 +260,7 @@ func (e RemediationEdges) FindingsOrErr() ([]*Finding, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e RemediationEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[9] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -222,7 +269,7 @@ func (e RemediationEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e RemediationEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[10] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -231,7 +278,7 @@ func (e RemediationEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e RemediationEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[11] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -240,7 +287,7 @@ func (e RemediationEdges) TasksOrErr() ([]*Task, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e RemediationEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[12] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -249,7 +296,7 @@ func (e RemediationEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e RemediationEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[13] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -258,7 +305,7 @@ func (e RemediationEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e RemediationEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[14] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -267,7 +314,7 @@ func (e RemediationEdges) RisksOrErr() ([]*Risk, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e RemediationEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[15] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -276,7 +323,7 @@ func (e RemediationEdges) ProgramsOrErr() ([]*Program, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e RemediationEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[16] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -285,7 +332,7 @@ func (e RemediationEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e RemediationEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[17] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -294,7 +341,7 @@ func (e RemediationEdges) EntitiesOrErr() ([]*Entity, error) {
 // ReviewsOrErr returns the Reviews value or an error if the edge
 // was not loaded in eager-loading.
 func (e RemediationEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[18] {
 		return e.Reviews, nil
 	}
 	return nil, &NotLoadedError{edge: "reviews"}
@@ -303,7 +350,7 @@ func (e RemediationEdges) ReviewsOrErr() ([]*Review, error) {
 // CommentsOrErr returns the Comments value or an error if the edge
 // was not loaded in eager-loading.
 func (e RemediationEdges) CommentsOrErr() ([]*Note, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[19] {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
@@ -312,7 +359,7 @@ func (e RemediationEdges) CommentsOrErr() ([]*Note, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e RemediationEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[20] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -329,7 +376,7 @@ func (*Remediation) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case remediation.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case remediation.FieldID, remediation.FieldCreatedBy, remediation.FieldUpdatedBy, remediation.FieldDeletedBy, remediation.FieldDisplayID, remediation.FieldOwnerID, remediation.FieldInternalNotes, remediation.FieldSystemInternalID, remediation.FieldExternalID, remediation.FieldExternalOwnerID, remediation.FieldTitle, remediation.FieldState, remediation.FieldIntent, remediation.FieldSummary, remediation.FieldExplanation, remediation.FieldInstructions, remediation.FieldOwnerReference, remediation.FieldRepositoryURI, remediation.FieldPullRequestURI, remediation.FieldTicketReference, remediation.FieldError, remediation.FieldSource, remediation.FieldExternalURI:
+		case remediation.FieldID, remediation.FieldCreatedBy, remediation.FieldUpdatedBy, remediation.FieldDeletedBy, remediation.FieldDisplayID, remediation.FieldOwnerID, remediation.FieldInternalNotes, remediation.FieldSystemInternalID, remediation.FieldEnvironmentName, remediation.FieldEnvironmentID, remediation.FieldScopeName, remediation.FieldScopeID, remediation.FieldExternalID, remediation.FieldExternalOwnerID, remediation.FieldTitle, remediation.FieldState, remediation.FieldIntent, remediation.FieldSummary, remediation.FieldExplanation, remediation.FieldInstructions, remediation.FieldOwnerReference, remediation.FieldRepositoryURI, remediation.FieldPullRequestURI, remediation.FieldTicketReference, remediation.FieldError, remediation.FieldSource, remediation.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case remediation.FieldCreatedAt, remediation.FieldUpdatedAt, remediation.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -435,6 +482,30 @@ func (_m *Remediation) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
+			}
+		case remediation.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case remediation.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case remediation.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case remediation.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case remediation.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -609,9 +680,24 @@ func (_m *Remediation) QueryViewers() *GroupQuery {
 	return NewRemediationClient(_m.config).QueryViewers(_m)
 }
 
+// QueryEnvironment queries the "environment" edge of the Remediation entity.
+func (_m *Remediation) QueryEnvironment() *CustomTypeEnumQuery {
+	return NewRemediationClient(_m.config).QueryEnvironment(_m)
+}
+
+// QueryScope queries the "scope" edge of the Remediation entity.
+func (_m *Remediation) QueryScope() *CustomTypeEnumQuery {
+	return NewRemediationClient(_m.config).QueryScope(_m)
+}
+
 // QueryIntegrations queries the "integrations" edge of the Remediation entity.
 func (_m *Remediation) QueryIntegrations() *IntegrationQuery {
 	return NewRemediationClient(_m.config).QueryIntegrations(_m)
+}
+
+// QueryScans queries the "scans" edge of the Remediation entity.
+func (_m *Remediation) QueryScans() *ScanQuery {
+	return NewRemediationClient(_m.config).QueryScans(_m)
 }
 
 // QueryFindings queries the "findings" edge of the Remediation entity.
@@ -741,6 +827,18 @@ func (_m *Remediation) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)
@@ -901,6 +999,30 @@ func (_m *Remediation) appendNamedIntegrations(name string, edges ...*Integratio
 		_m.Edges.namedIntegrations[name] = []*Integration{}
 	} else {
 		_m.Edges.namedIntegrations[name] = append(_m.Edges.namedIntegrations[name], edges...)
+	}
+}
+
+// NamedScans returns the Scans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Remediation) NamedScans(name string) ([]*Scan, error) {
+	if _m.Edges.namedScans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedScans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Remediation) appendNamedScans(name string, edges ...*Scan) {
+	if _m.Edges.namedScans == nil {
+		_m.Edges.namedScans = make(map[string][]*Scan)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedScans[name] = []*Scan{}
+	} else {
+		_m.Edges.namedScans[name] = append(_m.Edges.namedScans[name], edges...)
 	}
 }
 

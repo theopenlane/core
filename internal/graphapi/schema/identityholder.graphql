@@ -1,0 +1,114 @@
+extend type IdentityHolder {
+    """
+    Indicates if this identityHolder has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this identityHolder if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
+extend type Query {
+    """
+    Look up identityHolder by ID
+    """
+     identityHolder(
+        """
+        ID of the identityHolder
+        """
+        id: ID!
+    ):  IdentityHolder!
+}
+
+extend type Mutation{
+    """
+    Create a new identityHolder
+    """
+    createIdentityHolder(
+        """
+        values of the identityHolder
+        """
+        input: CreateIdentityHolderInput!
+    ): IdentityHolderCreatePayload!
+    """
+    Create multiple new identityHolders
+    """
+    createBulkIdentityHolder(
+        """
+        values of the identityHolder
+        """
+        input: [CreateIdentityHolderInput!]
+    ): IdentityHolderBulkCreatePayload!
+    """
+    Create multiple new identityHolders via file upload
+    """
+    createBulkCSVIdentityHolder(
+        """
+        csv file containing values of the identityHolder
+        """
+        input: Upload!
+    ): IdentityHolderBulkCreatePayload!
+    """
+    Update an existing identityHolder
+    """
+    updateIdentityHolder(
+        """
+        ID of the identityHolder
+        """
+        id: ID!
+        """
+        New values for the identityHolder
+        """
+        input: UpdateIdentityHolderInput!
+    ): IdentityHolderUpdatePayload!
+    """
+    Delete an existing identityHolder
+    """
+    deleteIdentityHolder(
+        """
+        ID of the identityHolder
+        """
+        id: ID!
+    ): IdentityHolderDeletePayload!
+}
+
+"""
+Return response for createIdentityHolder mutation
+"""
+type IdentityHolderCreatePayload {
+    """
+    Created identityHolder
+    """
+    identityHolder: IdentityHolder!
+}
+
+"""
+Return response for updateIdentityHolder mutation
+"""
+type IdentityHolderUpdatePayload {
+    """
+    Updated identityHolder
+    """
+    identityHolder: IdentityHolder!
+}
+
+"""
+Return response for deleteIdentityHolder mutation
+"""
+type IdentityHolderDeletePayload {
+    """
+    Deleted identityHolder ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkIdentityHolder mutation
+"""
+type IdentityHolderBulkCreatePayload {
+    """
+    Created identityHolders
+    """
+    identityHolders: [IdentityHolder!]
+}

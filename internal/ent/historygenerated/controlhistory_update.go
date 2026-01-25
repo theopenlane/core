@@ -684,6 +684,86 @@ func (_u *ControlHistoryUpdate) ClearControlKindID() *ControlHistoryUpdate {
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *ControlHistoryUpdate) SetEnvironmentName(v string) *ControlHistoryUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableEnvironmentName(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *ControlHistoryUpdate) ClearEnvironmentName() *ControlHistoryUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *ControlHistoryUpdate) SetEnvironmentID(v string) *ControlHistoryUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableEnvironmentID(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *ControlHistoryUpdate) ClearEnvironmentID() *ControlHistoryUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *ControlHistoryUpdate) SetScopeName(v string) *ControlHistoryUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableScopeName(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *ControlHistoryUpdate) ClearScopeName() *ControlHistoryUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *ControlHistoryUpdate) SetScopeID(v string) *ControlHistoryUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableScopeID(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *ControlHistoryUpdate) ClearScopeID() *ControlHistoryUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_u *ControlHistoryUpdate) SetWorkflowEligibleMarker(v bool) *ControlHistoryUpdate {
 	_u.mutation.SetWorkflowEligibleMarker(v)
@@ -1096,6 +1176,30 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.ControlKindIDCleared() {
 		_spec.ClearField(controlhistory.FieldControlKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(controlhistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(controlhistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(controlhistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(controlhistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(controlhistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(controlhistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(controlhistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(controlhistory.FieldScopeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(controlhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
@@ -1784,6 +1888,86 @@ func (_u *ControlHistoryUpdateOne) ClearControlKindID() *ControlHistoryUpdateOne
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *ControlHistoryUpdateOne) SetEnvironmentName(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableEnvironmentName(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *ControlHistoryUpdateOne) ClearEnvironmentName() *ControlHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *ControlHistoryUpdateOne) SetEnvironmentID(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableEnvironmentID(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *ControlHistoryUpdateOne) ClearEnvironmentID() *ControlHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *ControlHistoryUpdateOne) SetScopeName(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableScopeName(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *ControlHistoryUpdateOne) ClearScopeName() *ControlHistoryUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *ControlHistoryUpdateOne) SetScopeID(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableScopeID(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *ControlHistoryUpdateOne) ClearScopeID() *ControlHistoryUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_u *ControlHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *ControlHistoryUpdateOne {
 	_u.mutation.SetWorkflowEligibleMarker(v)
@@ -2226,6 +2410,30 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	}
 	if _u.mutation.ControlKindIDCleared() {
 		_spec.ClearField(controlhistory.FieldControlKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(controlhistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(controlhistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(controlhistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(controlhistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(controlhistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(controlhistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(controlhistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(controlhistory.FieldScopeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(controlhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)

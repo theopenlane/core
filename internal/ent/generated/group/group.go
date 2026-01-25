@@ -103,6 +103,18 @@ const (
 	EdgeActionPlanBlockedGroups = "action_plan_blocked_groups"
 	// EdgeActionPlanViewers holds the string denoting the action_plan_viewers edge name in mutations.
 	EdgeActionPlanViewers = "action_plan_viewers"
+	// EdgePlatformEditors holds the string denoting the platform_editors edge name in mutations.
+	EdgePlatformEditors = "platform_editors"
+	// EdgePlatformBlockedGroups holds the string denoting the platform_blocked_groups edge name in mutations.
+	EdgePlatformBlockedGroups = "platform_blocked_groups"
+	// EdgePlatformViewers holds the string denoting the platform_viewers edge name in mutations.
+	EdgePlatformViewers = "platform_viewers"
+	// EdgeCampaignEditors holds the string denoting the campaign_editors edge name in mutations.
+	EdgeCampaignEditors = "campaign_editors"
+	// EdgeCampaignBlockedGroups holds the string denoting the campaign_blocked_groups edge name in mutations.
+	EdgeCampaignBlockedGroups = "campaign_blocked_groups"
+	// EdgeCampaignViewers holds the string denoting the campaign_viewers edge name in mutations.
+	EdgeCampaignViewers = "campaign_viewers"
 	// EdgeProcedureEditors holds the string denoting the procedure_editors edge name in mutations.
 	EdgeProcedureEditors = "procedure_editors"
 	// EdgeProcedureBlockedGroups holds the string denoting the procedure_blocked_groups edge name in mutations.
@@ -131,6 +143,10 @@ const (
 	EdgeFiles = "files"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
 	EdgeTasks = "tasks"
+	// EdgeCampaigns holds the string denoting the campaigns edge name in mutations.
+	EdgeCampaigns = "campaigns"
+	// EdgeCampaignTargets holds the string denoting the campaign_targets edge name in mutations.
+	EdgeCampaignTargets = "campaign_targets"
 	// EdgeInvites holds the string denoting the invites edge name in mutations.
 	EdgeInvites = "invites"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
@@ -264,6 +280,36 @@ const (
 	// ActionPlanViewersInverseTable is the table name for the ActionPlan entity.
 	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
 	ActionPlanViewersInverseTable = "action_plans"
+	// PlatformEditorsTable is the table that holds the platform_editors relation/edge. The primary key declared below.
+	PlatformEditorsTable = "platform_editors"
+	// PlatformEditorsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformEditorsInverseTable = "platforms"
+	// PlatformBlockedGroupsTable is the table that holds the platform_blocked_groups relation/edge. The primary key declared below.
+	PlatformBlockedGroupsTable = "platform_blocked_groups"
+	// PlatformBlockedGroupsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformBlockedGroupsInverseTable = "platforms"
+	// PlatformViewersTable is the table that holds the platform_viewers relation/edge. The primary key declared below.
+	PlatformViewersTable = "platform_viewers"
+	// PlatformViewersInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformViewersInverseTable = "platforms"
+	// CampaignEditorsTable is the table that holds the campaign_editors relation/edge. The primary key declared below.
+	CampaignEditorsTable = "campaign_editors"
+	// CampaignEditorsInverseTable is the table name for the Campaign entity.
+	// It exists in this package in order to avoid circular dependency with the "campaign" package.
+	CampaignEditorsInverseTable = "campaigns"
+	// CampaignBlockedGroupsTable is the table that holds the campaign_blocked_groups relation/edge. The primary key declared below.
+	CampaignBlockedGroupsTable = "campaign_blocked_groups"
+	// CampaignBlockedGroupsInverseTable is the table name for the Campaign entity.
+	// It exists in this package in order to avoid circular dependency with the "campaign" package.
+	CampaignBlockedGroupsInverseTable = "campaigns"
+	// CampaignViewersTable is the table that holds the campaign_viewers relation/edge. The primary key declared below.
+	CampaignViewersTable = "campaign_viewers"
+	// CampaignViewersInverseTable is the table name for the Campaign entity.
+	// It exists in this package in order to avoid circular dependency with the "campaign" package.
+	CampaignViewersInverseTable = "campaigns"
 	// ProcedureEditorsTable is the table that holds the procedure_editors relation/edge. The primary key declared below.
 	ProcedureEditorsTable = "procedure_editors"
 	// ProcedureEditorsInverseTable is the table name for the Procedure entity.
@@ -338,6 +384,18 @@ const (
 	// TasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
+	// CampaignsTable is the table that holds the campaigns relation/edge. The primary key declared below.
+	CampaignsTable = "campaign_groups"
+	// CampaignsInverseTable is the table name for the Campaign entity.
+	// It exists in this package in order to avoid circular dependency with the "campaign" package.
+	CampaignsInverseTable = "campaigns"
+	// CampaignTargetsTable is the table that holds the campaign_targets relation/edge.
+	CampaignTargetsTable = "campaign_targets"
+	// CampaignTargetsInverseTable is the table name for the CampaignTarget entity.
+	// It exists in this package in order to avoid circular dependency with the "campaigntarget" package.
+	CampaignTargetsInverseTable = "campaign_targets"
+	// CampaignTargetsColumn is the table column denoting the campaign_targets relation/edge.
+	CampaignTargetsColumn = "group_id"
 	// InvitesTable is the table that holds the invites relation/edge. The primary key declared below.
 	InvitesTable = "invite_groups"
 	// InvitesInverseTable is the table name for the Invite entity.
@@ -388,6 +446,9 @@ var ForeignKeys = []string{
 	"finding_blocked_groups",
 	"finding_editors",
 	"finding_viewers",
+	"identity_holder_blocked_groups",
+	"identity_holder_editors",
+	"identity_holder_viewers",
 	"organization_control_creators",
 	"organization_control_implementation_creators",
 	"organization_control_objective_creators",
@@ -510,6 +571,24 @@ var (
 	// ActionPlanViewersPrimaryKey and ActionPlanViewersColumn2 are the table columns denoting the
 	// primary key for the action_plan_viewers relation (M2M).
 	ActionPlanViewersPrimaryKey = []string{"action_plan_id", "group_id"}
+	// PlatformEditorsPrimaryKey and PlatformEditorsColumn2 are the table columns denoting the
+	// primary key for the platform_editors relation (M2M).
+	PlatformEditorsPrimaryKey = []string{"platform_id", "group_id"}
+	// PlatformBlockedGroupsPrimaryKey and PlatformBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the platform_blocked_groups relation (M2M).
+	PlatformBlockedGroupsPrimaryKey = []string{"platform_id", "group_id"}
+	// PlatformViewersPrimaryKey and PlatformViewersColumn2 are the table columns denoting the
+	// primary key for the platform_viewers relation (M2M).
+	PlatformViewersPrimaryKey = []string{"platform_id", "group_id"}
+	// CampaignEditorsPrimaryKey and CampaignEditorsColumn2 are the table columns denoting the
+	// primary key for the campaign_editors relation (M2M).
+	CampaignEditorsPrimaryKey = []string{"campaign_id", "group_id"}
+	// CampaignBlockedGroupsPrimaryKey and CampaignBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the campaign_blocked_groups relation (M2M).
+	CampaignBlockedGroupsPrimaryKey = []string{"campaign_id", "group_id"}
+	// CampaignViewersPrimaryKey and CampaignViewersColumn2 are the table columns denoting the
+	// primary key for the campaign_viewers relation (M2M).
+	CampaignViewersPrimaryKey = []string{"campaign_id", "group_id"}
 	// ProcedureEditorsPrimaryKey and ProcedureEditorsColumn2 are the table columns denoting the
 	// primary key for the procedure_editors relation (M2M).
 	ProcedureEditorsPrimaryKey = []string{"procedure_id", "group_id"}
@@ -546,6 +625,9 @@ var (
 	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
 	// primary key for the tasks relation (M2M).
 	TasksPrimaryKey = []string{"group_id", "task_id"}
+	// CampaignsPrimaryKey and CampaignsColumn2 are the table columns denoting the
+	// primary key for the campaigns relation (M2M).
+	CampaignsPrimaryKey = []string{"campaign_id", "group_id"}
 	// InvitesPrimaryKey and InvitesColumn2 are the table columns denoting the
 	// primary key for the invites relation (M2M).
 	InvitesPrimaryKey = []string{"invite_id", "group_id"}
@@ -1046,6 +1128,90 @@ func ByActionPlanViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption
 	}
 }
 
+// ByPlatformEditorsCount orders the results by platform_editors count.
+func ByPlatformEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformEditorsStep(), opts...)
+	}
+}
+
+// ByPlatformEditors orders the results by platform_editors terms.
+func ByPlatformEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPlatformBlockedGroupsCount orders the results by platform_blocked_groups count.
+func ByPlatformBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByPlatformBlockedGroups orders the results by platform_blocked_groups terms.
+func ByPlatformBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPlatformViewersCount orders the results by platform_viewers count.
+func ByPlatformViewersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformViewersStep(), opts...)
+	}
+}
+
+// ByPlatformViewers orders the results by platform_viewers terms.
+func ByPlatformViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCampaignEditorsCount orders the results by campaign_editors count.
+func ByCampaignEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignEditorsStep(), opts...)
+	}
+}
+
+// ByCampaignEditors orders the results by campaign_editors terms.
+func ByCampaignEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCampaignBlockedGroupsCount orders the results by campaign_blocked_groups count.
+func ByCampaignBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByCampaignBlockedGroups orders the results by campaign_blocked_groups terms.
+func ByCampaignBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCampaignViewersCount orders the results by campaign_viewers count.
+func ByCampaignViewersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignViewersStep(), opts...)
+	}
+}
+
+// ByCampaignViewers orders the results by campaign_viewers terms.
+func ByCampaignViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByProcedureEditorsCount orders the results by procedure_editors count.
 func ByProcedureEditorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1232,6 +1398,34 @@ func ByTasksCount(opts ...sql.OrderTermOption) OrderOption {
 func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTasksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCampaignsCount orders the results by campaigns count.
+func ByCampaignsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignsStep(), opts...)
+	}
+}
+
+// ByCampaigns orders the results by campaigns terms.
+func ByCampaigns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCampaignTargetsCount orders the results by campaign_targets count.
+func ByCampaignTargetsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignTargetsStep(), opts...)
+	}
+}
+
+// ByCampaignTargets orders the results by campaign_targets terms.
+func ByCampaignTargets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignTargetsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1437,6 +1631,48 @@ func newActionPlanViewersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, ActionPlanViewersTable, ActionPlanViewersPrimaryKey...),
 	)
 }
+func newPlatformEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PlatformEditorsTable, PlatformEditorsPrimaryKey...),
+	)
+}
+func newPlatformBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PlatformBlockedGroupsTable, PlatformBlockedGroupsPrimaryKey...),
+	)
+}
+func newPlatformViewersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PlatformViewersTable, PlatformViewersPrimaryKey...),
+	)
+}
+func newCampaignEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, CampaignEditorsTable, CampaignEditorsPrimaryKey...),
+	)
+}
+func newCampaignBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, CampaignBlockedGroupsTable, CampaignBlockedGroupsPrimaryKey...),
+	)
+}
+func newCampaignViewersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, CampaignViewersTable, CampaignViewersPrimaryKey...),
+	)
+}
 func newProcedureEditorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1533,6 +1769,20 @@ func newTasksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TasksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
+	)
+}
+func newCampaignsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, CampaignsTable, CampaignsPrimaryKey...),
+	)
+}
+func newCampaignTargetsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignTargetsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CampaignTargetsTable, CampaignTargetsColumn),
 	)
 }
 func newInvitesStep() *sqlgraph.Step {

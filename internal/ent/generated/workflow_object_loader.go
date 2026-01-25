@@ -7,9 +7,13 @@ import (
 	"fmt"
 
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 )
@@ -20,6 +24,20 @@ func (c *Client) LoadWorkflowObject(ctx context.Context, schemaType string, enti
 	switch schemaType {
 	case TypeActionPlan:
 		query := c.ActionPlan.Query().Where(actionplan.ID(entityID))
+		entity, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return entity, nil
+	case TypeCampaign:
+		query := c.Campaign.Query().Where(campaign.ID(entityID))
+		entity, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return entity, nil
+	case TypeCampaignTarget:
+		query := c.CampaignTarget.Query().Where(campaigntarget.ID(entityID))
 		entity, err := query.Only(ctx)
 		if err != nil {
 			return nil, err
@@ -39,8 +57,22 @@ func (c *Client) LoadWorkflowObject(ctx context.Context, schemaType string, enti
 			return nil, err
 		}
 		return entity, nil
+	case TypeIdentityHolder:
+		query := c.IdentityHolder.Query().Where(identityholder.ID(entityID))
+		entity, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return entity, nil
 	case TypeInternalPolicy:
 		query := c.InternalPolicy.Query().Where(internalpolicy.ID(entityID))
+		entity, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return entity, nil
+	case TypePlatform:
+		query := c.Platform.Query().Where(platform.ID(entityID))
 		entity, err := query.Only(ctx)
 		if err != nil {
 			return nil, err
@@ -71,6 +103,18 @@ func (c *Client) LoadActionPlanWorkflowObject(ctx context.Context, id string) (*
 	return query.Only(ctx)
 }
 
+// LoadCampaignWorkflowObject loads a Campaign entity with eager loading for workflow processing
+func (c *Client) LoadCampaignWorkflowObject(ctx context.Context, id string) (*Campaign, error) {
+	query := c.Campaign.Query().Where(campaign.ID(id))
+	return query.Only(ctx)
+}
+
+// LoadCampaignTargetWorkflowObject loads a CampaignTarget entity with eager loading for workflow processing
+func (c *Client) LoadCampaignTargetWorkflowObject(ctx context.Context, id string) (*CampaignTarget, error) {
+	query := c.CampaignTarget.Query().Where(campaigntarget.ID(id))
+	return query.Only(ctx)
+}
+
 // LoadControlWorkflowObject loads a Control entity with eager loading for workflow processing
 func (c *Client) LoadControlWorkflowObject(ctx context.Context, id string) (*Control, error) {
 	query := c.Control.Query().Where(control.ID(id))
@@ -83,9 +127,21 @@ func (c *Client) LoadEvidenceWorkflowObject(ctx context.Context, id string) (*Ev
 	return query.Only(ctx)
 }
 
+// LoadIdentityHolderWorkflowObject loads a IdentityHolder entity with eager loading for workflow processing
+func (c *Client) LoadIdentityHolderWorkflowObject(ctx context.Context, id string) (*IdentityHolder, error) {
+	query := c.IdentityHolder.Query().Where(identityholder.ID(id))
+	return query.Only(ctx)
+}
+
 // LoadInternalPolicyWorkflowObject loads a InternalPolicy entity with eager loading for workflow processing
 func (c *Client) LoadInternalPolicyWorkflowObject(ctx context.Context, id string) (*InternalPolicy, error) {
 	query := c.InternalPolicy.Query().Where(internalpolicy.ID(id))
+	return query.Only(ctx)
+}
+
+// LoadPlatformWorkflowObject loads a Platform entity with eager loading for workflow processing
+func (c *Client) LoadPlatformWorkflowObject(ctx context.Context, id string) (*Platform, error) {
+	query := c.Platform.Query().Where(platform.ID(id))
 	return query.Only(ctx)
 }
 

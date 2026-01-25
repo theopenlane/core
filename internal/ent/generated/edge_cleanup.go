@@ -11,6 +11,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -36,6 +38,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
@@ -57,6 +60,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
@@ -124,6 +128,18 @@ func AssessmentResponseEdgeCleanup(ctx context.Context, id string) error {
 
 func AssetEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup asset edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func CampaignEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup campaign edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func CampaignTargetEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup campaigntarget edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -328,6 +344,12 @@ func GroupSettingEdgeCleanup(ctx context.Context, id string) error {
 
 func HushEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup hush edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func IdentityHolderEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup identityholder edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -584,6 +606,34 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).Entity.Query().Where((entity.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if entityCount, err := FromContext(ctx).Entity.Delete().Where(entity.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", entityCount).Msg("error deleting entity")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Platform.Query().Where((platform.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if platformCount, err := FromContext(ctx).Platform.Delete().Where(platform.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", platformCount).Msg("error deleting platform")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).IdentityHolder.Query().Where((identityholder.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if identityholderCount, err := FromContext(ctx).IdentityHolder.Delete().Where(identityholder.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", identityholderCount).Msg("error deleting identityholder")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Campaign.Query().Where((campaign.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if campaignCount, err := FromContext(ctx).Campaign.Delete().Where(campaign.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", campaignCount).Msg("error deleting campaign")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).CampaignTarget.Query().Where((campaigntarget.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if campaigntargetCount, err := FromContext(ctx).CampaignTarget.Delete().Where(campaigntarget.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", campaigntargetCount).Msg("error deleting campaigntarget")
 			return err
 		}
 	}
@@ -983,6 +1033,12 @@ func PasswordResetTokenEdgeCleanup(ctx context.Context, id string) error {
 
 func PersonalAccessTokenEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup personalaccesstoken edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func PlatformEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup platform edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

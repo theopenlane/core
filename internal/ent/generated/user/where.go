@@ -2086,6 +2086,64 @@ func HasActionPlansWith(preds ...predicate.ActionPlan) predicate.User {
 	})
 }
 
+// HasCampaigns applies the HasEdge predicate on the "campaigns" edge.
+func HasCampaigns() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, CampaignsTable, CampaignsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignUsers
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCampaignsWith applies the HasEdge predicate on the "campaigns" edge with a given conditions (other predicates).
+func HasCampaignsWith(preds ...predicate.Campaign) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newCampaignsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignUsers
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasCampaignTargets applies the HasEdge predicate on the "campaign_targets" edge.
+func HasCampaignTargets() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CampaignTargetsTable, CampaignTargetsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCampaignTargetsWith applies the HasEdge predicate on the "campaign_targets" edge with a given conditions (other predicates).
+func HasCampaignTargetsWith(preds ...predicate.CampaignTarget) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newCampaignTargetsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasSubcontrols applies the HasEdge predicate on the "subcontrols" edge.
 func HasSubcontrols() predicate.User {
 	return predicate.User(func(s *sql.Selector) {
@@ -2223,6 +2281,64 @@ func HasProgramsOwnedWith(preds ...predicate.Program) predicate.User {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.Program
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPlatformsOwned applies the HasEdge predicate on the "platforms_owned" edge.
+func HasPlatformsOwned() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PlatformsOwnedTable, PlatformsOwnedColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Platform
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPlatformsOwnedWith applies the HasEdge predicate on the "platforms_owned" edge with a given conditions (other predicates).
+func HasPlatformsOwnedWith(preds ...predicate.Platform) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newPlatformsOwnedStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Platform
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasIdentityHolderProfiles applies the HasEdge predicate on the "identity_holder_profiles" edge.
+func HasIdentityHolderProfiles() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, IdentityHolderProfilesTable, IdentityHolderProfilesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolder
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIdentityHolderProfilesWith applies the HasEdge predicate on the "identity_holder_profiles" edge with a given conditions (other predicates).
+func HasIdentityHolderProfilesWith(preds ...predicate.IdentityHolder) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newIdentityHolderProfilesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolder
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

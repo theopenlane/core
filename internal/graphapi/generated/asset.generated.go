@@ -66,6 +66,44 @@ func (ec *executionContext) fieldContext_AssetBulkCreatePayload_assets(_ context
 				return ec.fieldContext_Asset_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Asset_ownerID(ctx, field)
+			case "internalOwner":
+				return ec.fieldContext_Asset_internalOwner(ctx, field)
+			case "internalOwnerUserID":
+				return ec.fieldContext_Asset_internalOwnerUserID(ctx, field)
+			case "internalOwnerGroupID":
+				return ec.fieldContext_Asset_internalOwnerGroupID(ctx, field)
+			case "assetSubtypeName":
+				return ec.fieldContext_Asset_assetSubtypeName(ctx, field)
+			case "assetSubtypeID":
+				return ec.fieldContext_Asset_assetSubtypeID(ctx, field)
+			case "assetDataClassificationName":
+				return ec.fieldContext_Asset_assetDataClassificationName(ctx, field)
+			case "assetDataClassificationID":
+				return ec.fieldContext_Asset_assetDataClassificationID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Asset_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Asset_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Asset_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Asset_scopeID(ctx, field)
+			case "accessModelName":
+				return ec.fieldContext_Asset_accessModelName(ctx, field)
+			case "accessModelID":
+				return ec.fieldContext_Asset_accessModelID(ctx, field)
+			case "encryptionStatusName":
+				return ec.fieldContext_Asset_encryptionStatusName(ctx, field)
+			case "encryptionStatusID":
+				return ec.fieldContext_Asset_encryptionStatusID(ctx, field)
+			case "securityTierName":
+				return ec.fieldContext_Asset_securityTierName(ctx, field)
+			case "securityTierID":
+				return ec.fieldContext_Asset_securityTierID(ctx, field)
+			case "criticalityName":
+				return ec.fieldContext_Asset_criticalityName(ctx, field)
+			case "criticalityID":
+				return ec.fieldContext_Asset_criticalityID(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_Asset_systemOwned(ctx, field)
 			case "internalNotes":
@@ -82,6 +120,24 @@ func (ec *executionContext) fieldContext_AssetBulkCreatePayload_assets(_ context
 				return ec.fieldContext_Asset_identifier(ctx, field)
 			case "website":
 				return ec.fieldContext_Asset_website(ctx, field)
+			case "physicalLocation":
+				return ec.fieldContext_Asset_physicalLocation(ctx, field)
+			case "region":
+				return ec.fieldContext_Asset_region(ctx, field)
+			case "containsPii":
+				return ec.fieldContext_Asset_containsPii(ctx, field)
+			case "sourceType":
+				return ec.fieldContext_Asset_sourceType(ctx, field)
+			case "sourcePlatformID":
+				return ec.fieldContext_Asset_sourcePlatformID(ctx, field)
+			case "sourceIdentifier":
+				return ec.fieldContext_Asset_sourceIdentifier(ctx, field)
+			case "costCenter":
+				return ec.fieldContext_Asset_costCenter(ctx, field)
+			case "estimatedMonthlyCost":
+				return ec.fieldContext_Asset_estimatedMonthlyCost(ctx, field)
+			case "purchaseDate":
+				return ec.fieldContext_Asset_purchaseDate(ctx, field)
 			case "cpe":
 				return ec.fieldContext_Asset_cpe(ctx, field)
 			case "categories":
@@ -94,12 +150,44 @@ func (ec *executionContext) fieldContext_AssetBulkCreatePayload_assets(_ context
 				return ec.fieldContext_Asset_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Asset_viewers(ctx, field)
+			case "internalOwnerUser":
+				return ec.fieldContext_Asset_internalOwnerUser(ctx, field)
+			case "internalOwnerGroup":
+				return ec.fieldContext_Asset_internalOwnerGroup(ctx, field)
+			case "assetSubtype":
+				return ec.fieldContext_Asset_assetSubtype(ctx, field)
+			case "assetDataClassification":
+				return ec.fieldContext_Asset_assetDataClassification(ctx, field)
+			case "environment":
+				return ec.fieldContext_Asset_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Asset_scope(ctx, field)
+			case "accessModel":
+				return ec.fieldContext_Asset_accessModel(ctx, field)
+			case "encryptionStatus":
+				return ec.fieldContext_Asset_encryptionStatus(ctx, field)
+			case "securityTier":
+				return ec.fieldContext_Asset_securityTier(ctx, field)
+			case "criticality":
+				return ec.fieldContext_Asset_criticality(ctx, field)
 			case "scans":
 				return ec.fieldContext_Asset_scans(ctx, field)
 			case "entities":
 				return ec.fieldContext_Asset_entities(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Asset_platforms(ctx, field)
+			case "outOfScopePlatforms":
+				return ec.fieldContext_Asset_outOfScopePlatforms(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Asset_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Asset_controls(ctx, field)
+			case "sourcePlatform":
+				return ec.fieldContext_Asset_sourcePlatform(ctx, field)
+			case "connectedAssets":
+				return ec.fieldContext_Asset_connectedAssets(ctx, field)
+			case "connectedFrom":
+				return ec.fieldContext_Asset_connectedFrom(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Asset", field.Name)
 		},
@@ -174,6 +262,44 @@ func (ec *executionContext) fieldContext_AssetCreatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Asset_ownerID(ctx, field)
+			case "internalOwner":
+				return ec.fieldContext_Asset_internalOwner(ctx, field)
+			case "internalOwnerUserID":
+				return ec.fieldContext_Asset_internalOwnerUserID(ctx, field)
+			case "internalOwnerGroupID":
+				return ec.fieldContext_Asset_internalOwnerGroupID(ctx, field)
+			case "assetSubtypeName":
+				return ec.fieldContext_Asset_assetSubtypeName(ctx, field)
+			case "assetSubtypeID":
+				return ec.fieldContext_Asset_assetSubtypeID(ctx, field)
+			case "assetDataClassificationName":
+				return ec.fieldContext_Asset_assetDataClassificationName(ctx, field)
+			case "assetDataClassificationID":
+				return ec.fieldContext_Asset_assetDataClassificationID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Asset_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Asset_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Asset_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Asset_scopeID(ctx, field)
+			case "accessModelName":
+				return ec.fieldContext_Asset_accessModelName(ctx, field)
+			case "accessModelID":
+				return ec.fieldContext_Asset_accessModelID(ctx, field)
+			case "encryptionStatusName":
+				return ec.fieldContext_Asset_encryptionStatusName(ctx, field)
+			case "encryptionStatusID":
+				return ec.fieldContext_Asset_encryptionStatusID(ctx, field)
+			case "securityTierName":
+				return ec.fieldContext_Asset_securityTierName(ctx, field)
+			case "securityTierID":
+				return ec.fieldContext_Asset_securityTierID(ctx, field)
+			case "criticalityName":
+				return ec.fieldContext_Asset_criticalityName(ctx, field)
+			case "criticalityID":
+				return ec.fieldContext_Asset_criticalityID(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_Asset_systemOwned(ctx, field)
 			case "internalNotes":
@@ -190,6 +316,24 @@ func (ec *executionContext) fieldContext_AssetCreatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_identifier(ctx, field)
 			case "website":
 				return ec.fieldContext_Asset_website(ctx, field)
+			case "physicalLocation":
+				return ec.fieldContext_Asset_physicalLocation(ctx, field)
+			case "region":
+				return ec.fieldContext_Asset_region(ctx, field)
+			case "containsPii":
+				return ec.fieldContext_Asset_containsPii(ctx, field)
+			case "sourceType":
+				return ec.fieldContext_Asset_sourceType(ctx, field)
+			case "sourcePlatformID":
+				return ec.fieldContext_Asset_sourcePlatformID(ctx, field)
+			case "sourceIdentifier":
+				return ec.fieldContext_Asset_sourceIdentifier(ctx, field)
+			case "costCenter":
+				return ec.fieldContext_Asset_costCenter(ctx, field)
+			case "estimatedMonthlyCost":
+				return ec.fieldContext_Asset_estimatedMonthlyCost(ctx, field)
+			case "purchaseDate":
+				return ec.fieldContext_Asset_purchaseDate(ctx, field)
 			case "cpe":
 				return ec.fieldContext_Asset_cpe(ctx, field)
 			case "categories":
@@ -202,12 +346,44 @@ func (ec *executionContext) fieldContext_AssetCreatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Asset_viewers(ctx, field)
+			case "internalOwnerUser":
+				return ec.fieldContext_Asset_internalOwnerUser(ctx, field)
+			case "internalOwnerGroup":
+				return ec.fieldContext_Asset_internalOwnerGroup(ctx, field)
+			case "assetSubtype":
+				return ec.fieldContext_Asset_assetSubtype(ctx, field)
+			case "assetDataClassification":
+				return ec.fieldContext_Asset_assetDataClassification(ctx, field)
+			case "environment":
+				return ec.fieldContext_Asset_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Asset_scope(ctx, field)
+			case "accessModel":
+				return ec.fieldContext_Asset_accessModel(ctx, field)
+			case "encryptionStatus":
+				return ec.fieldContext_Asset_encryptionStatus(ctx, field)
+			case "securityTier":
+				return ec.fieldContext_Asset_securityTier(ctx, field)
+			case "criticality":
+				return ec.fieldContext_Asset_criticality(ctx, field)
 			case "scans":
 				return ec.fieldContext_Asset_scans(ctx, field)
 			case "entities":
 				return ec.fieldContext_Asset_entities(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Asset_platforms(ctx, field)
+			case "outOfScopePlatforms":
+				return ec.fieldContext_Asset_outOfScopePlatforms(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Asset_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Asset_controls(ctx, field)
+			case "sourcePlatform":
+				return ec.fieldContext_Asset_sourcePlatform(ctx, field)
+			case "connectedAssets":
+				return ec.fieldContext_Asset_connectedAssets(ctx, field)
+			case "connectedFrom":
+				return ec.fieldContext_Asset_connectedFrom(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Asset", field.Name)
 		},
@@ -282,6 +458,44 @@ func (ec *executionContext) fieldContext_AssetUpdatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Asset_ownerID(ctx, field)
+			case "internalOwner":
+				return ec.fieldContext_Asset_internalOwner(ctx, field)
+			case "internalOwnerUserID":
+				return ec.fieldContext_Asset_internalOwnerUserID(ctx, field)
+			case "internalOwnerGroupID":
+				return ec.fieldContext_Asset_internalOwnerGroupID(ctx, field)
+			case "assetSubtypeName":
+				return ec.fieldContext_Asset_assetSubtypeName(ctx, field)
+			case "assetSubtypeID":
+				return ec.fieldContext_Asset_assetSubtypeID(ctx, field)
+			case "assetDataClassificationName":
+				return ec.fieldContext_Asset_assetDataClassificationName(ctx, field)
+			case "assetDataClassificationID":
+				return ec.fieldContext_Asset_assetDataClassificationID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Asset_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Asset_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Asset_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Asset_scopeID(ctx, field)
+			case "accessModelName":
+				return ec.fieldContext_Asset_accessModelName(ctx, field)
+			case "accessModelID":
+				return ec.fieldContext_Asset_accessModelID(ctx, field)
+			case "encryptionStatusName":
+				return ec.fieldContext_Asset_encryptionStatusName(ctx, field)
+			case "encryptionStatusID":
+				return ec.fieldContext_Asset_encryptionStatusID(ctx, field)
+			case "securityTierName":
+				return ec.fieldContext_Asset_securityTierName(ctx, field)
+			case "securityTierID":
+				return ec.fieldContext_Asset_securityTierID(ctx, field)
+			case "criticalityName":
+				return ec.fieldContext_Asset_criticalityName(ctx, field)
+			case "criticalityID":
+				return ec.fieldContext_Asset_criticalityID(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_Asset_systemOwned(ctx, field)
 			case "internalNotes":
@@ -298,6 +512,24 @@ func (ec *executionContext) fieldContext_AssetUpdatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_identifier(ctx, field)
 			case "website":
 				return ec.fieldContext_Asset_website(ctx, field)
+			case "physicalLocation":
+				return ec.fieldContext_Asset_physicalLocation(ctx, field)
+			case "region":
+				return ec.fieldContext_Asset_region(ctx, field)
+			case "containsPii":
+				return ec.fieldContext_Asset_containsPii(ctx, field)
+			case "sourceType":
+				return ec.fieldContext_Asset_sourceType(ctx, field)
+			case "sourcePlatformID":
+				return ec.fieldContext_Asset_sourcePlatformID(ctx, field)
+			case "sourceIdentifier":
+				return ec.fieldContext_Asset_sourceIdentifier(ctx, field)
+			case "costCenter":
+				return ec.fieldContext_Asset_costCenter(ctx, field)
+			case "estimatedMonthlyCost":
+				return ec.fieldContext_Asset_estimatedMonthlyCost(ctx, field)
+			case "purchaseDate":
+				return ec.fieldContext_Asset_purchaseDate(ctx, field)
 			case "cpe":
 				return ec.fieldContext_Asset_cpe(ctx, field)
 			case "categories":
@@ -310,12 +542,44 @@ func (ec *executionContext) fieldContext_AssetUpdatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Asset_viewers(ctx, field)
+			case "internalOwnerUser":
+				return ec.fieldContext_Asset_internalOwnerUser(ctx, field)
+			case "internalOwnerGroup":
+				return ec.fieldContext_Asset_internalOwnerGroup(ctx, field)
+			case "assetSubtype":
+				return ec.fieldContext_Asset_assetSubtype(ctx, field)
+			case "assetDataClassification":
+				return ec.fieldContext_Asset_assetDataClassification(ctx, field)
+			case "environment":
+				return ec.fieldContext_Asset_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Asset_scope(ctx, field)
+			case "accessModel":
+				return ec.fieldContext_Asset_accessModel(ctx, field)
+			case "encryptionStatus":
+				return ec.fieldContext_Asset_encryptionStatus(ctx, field)
+			case "securityTier":
+				return ec.fieldContext_Asset_securityTier(ctx, field)
+			case "criticality":
+				return ec.fieldContext_Asset_criticality(ctx, field)
 			case "scans":
 				return ec.fieldContext_Asset_scans(ctx, field)
 			case "entities":
 				return ec.fieldContext_Asset_entities(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Asset_platforms(ctx, field)
+			case "outOfScopePlatforms":
+				return ec.fieldContext_Asset_outOfScopePlatforms(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Asset_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Asset_controls(ctx, field)
+			case "sourcePlatform":
+				return ec.fieldContext_Asset_sourcePlatform(ctx, field)
+			case "connectedAssets":
+				return ec.fieldContext_Asset_connectedAssets(ctx, field)
+			case "connectedFrom":
+				return ec.fieldContext_Asset_connectedFrom(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Asset", field.Name)
 		},

@@ -14,11 +14,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
@@ -137,6 +140,62 @@ func (_c *EvidenceCreate) SetOwnerID(v string) *EvidenceCreate {
 func (_c *EvidenceCreate) SetNillableOwnerID(v *string) *EvidenceCreate {
 	if v != nil {
 		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *EvidenceCreate) SetEnvironmentName(v string) *EvidenceCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *EvidenceCreate) SetNillableEnvironmentName(v *string) *EvidenceCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *EvidenceCreate) SetEnvironmentID(v string) *EvidenceCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *EvidenceCreate) SetNillableEnvironmentID(v *string) *EvidenceCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *EvidenceCreate) SetScopeName(v string) *EvidenceCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *EvidenceCreate) SetNillableScopeName(v *string) *EvidenceCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *EvidenceCreate) SetScopeID(v string) *EvidenceCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *EvidenceCreate) SetNillableScopeID(v *string) *EvidenceCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
 	}
 	return _c
 }
@@ -292,6 +351,16 @@ func (_c *EvidenceCreate) SetOwner(v *Organization) *EvidenceCreate {
 	return _c.SetOwnerID(v.ID)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_c *EvidenceCreate) SetEnvironment(v *CustomTypeEnum) *EvidenceCreate {
+	return _c.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_c *EvidenceCreate) SetScope(v *CustomTypeEnum) *EvidenceCreate {
+	return _c.SetScopeID(v.ID)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_c *EvidenceCreate) AddControlIDs(ids ...string) *EvidenceCreate {
 	_c.mutation.AddControlIDs(ids...)
@@ -395,6 +464,36 @@ func (_c *EvidenceCreate) AddTasks(v ...*Task) *EvidenceCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddTaskIDs(ids...)
+}
+
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_c *EvidenceCreate) AddPlatformIDs(ids ...string) *EvidenceCreate {
+	_c.mutation.AddPlatformIDs(ids...)
+	return _c
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_c *EvidenceCreate) AddPlatforms(v ...*Platform) *EvidenceCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (_c *EvidenceCreate) AddScanIDs(ids ...string) *EvidenceCreate {
+	_c.mutation.AddScanIDs(ids...)
+	return _c
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (_c *EvidenceCreate) AddScans(v ...*Scan) *EvidenceCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddScanIDs(ids...)
 }
 
 // AddCommentIDs adds the "comments" edge to the Note entity by IDs.
@@ -615,6 +714,14 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 		_spec.SetField(evidence.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(evidence.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(evidence.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(evidence.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
@@ -671,6 +778,42 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   evidence.EnvironmentTable,
+			Columns: []string{evidence.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Evidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EnvironmentID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   evidence.ScopeTable,
+			Columns: []string{evidence.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Evidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ScopeID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
@@ -787,6 +930,40 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.TaskEvidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   evidence.PlatformsTable,
+			Columns: evidence.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.PlatformEvidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   evidence.ScansTable,
+			Columns: evidence.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ScanEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

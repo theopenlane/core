@@ -118,6 +118,10 @@ func (ec *executionContext) fieldContext_UserBulkCreatePayload_users(_ context.C
 				return ec.fieldContext_User_events(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_User_actionPlans(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_User_campaigns(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_User_campaignTargets(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_User_subcontrols(ctx, field)
 			case "assignerTasks":
@@ -128,6 +132,10 @@ func (ec *executionContext) fieldContext_UserBulkCreatePayload_users(_ context.C
 				return ec.fieldContext_User_programs(ctx, field)
 			case "programsOwned":
 				return ec.fieldContext_User_programsOwned(ctx, field)
+			case "platformsOwned":
+				return ec.fieldContext_User_platformsOwned(ctx, field)
+			case "identityHolderProfiles":
+				return ec.fieldContext_User_identityHolderProfiles(ctx, field)
 			case "groupMemberships":
 				return ec.fieldContext_User_groupMemberships(ctx, field)
 			case "orgMemberships":
@@ -231,6 +239,10 @@ func (ec *executionContext) fieldContext_UserCreatePayload_user(_ context.Contex
 				return ec.fieldContext_User_events(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_User_actionPlans(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_User_campaigns(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_User_campaignTargets(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_User_subcontrols(ctx, field)
 			case "assignerTasks":
@@ -241,6 +253,10 @@ func (ec *executionContext) fieldContext_UserCreatePayload_user(_ context.Contex
 				return ec.fieldContext_User_programs(ctx, field)
 			case "programsOwned":
 				return ec.fieldContext_User_programsOwned(ctx, field)
+			case "platformsOwned":
+				return ec.fieldContext_User_platformsOwned(ctx, field)
+			case "identityHolderProfiles":
+				return ec.fieldContext_User_identityHolderProfiles(ctx, field)
 			case "groupMemberships":
 				return ec.fieldContext_User_groupMemberships(ctx, field)
 			case "orgMemberships":
@@ -373,6 +389,10 @@ func (ec *executionContext) fieldContext_UserUpdatePayload_user(_ context.Contex
 				return ec.fieldContext_User_events(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_User_actionPlans(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_User_campaigns(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_User_campaignTargets(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_User_subcontrols(ctx, field)
 			case "assignerTasks":
@@ -383,6 +403,10 @@ func (ec *executionContext) fieldContext_UserUpdatePayload_user(_ context.Contex
 				return ec.fieldContext_User_programs(ctx, field)
 			case "programsOwned":
 				return ec.fieldContext_User_programsOwned(ctx, field)
+			case "platformsOwned":
+				return ec.fieldContext_User_platformsOwned(ctx, field)
+			case "identityHolderProfiles":
+				return ec.fieldContext_User_identityHolderProfiles(ctx, field)
 			case "groupMemberships":
 				return ec.fieldContext_User_groupMemberships(ctx, field)
 			case "orgMemberships":

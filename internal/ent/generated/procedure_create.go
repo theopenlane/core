@@ -417,6 +417,62 @@ func (_c *ProcedureCreate) SetNillableProcedureKindID(v *string) *ProcedureCreat
 	return _c
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *ProcedureCreate) SetEnvironmentName(v string) *ProcedureCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableEnvironmentName(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *ProcedureCreate) SetEnvironmentID(v string) *ProcedureCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableEnvironmentID(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *ProcedureCreate) SetScopeName(v string) *ProcedureCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableScopeName(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *ProcedureCreate) SetScopeID(v string) *ProcedureCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableScopeID(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_c *ProcedureCreate) SetWorkflowEligibleMarker(v bool) *ProcedureCreate {
 	_c.mutation.SetWorkflowEligibleMarker(v)
@@ -493,6 +549,16 @@ func (_c *ProcedureCreate) SetDelegate(v *Group) *ProcedureCreate {
 // SetProcedureKind sets the "procedure_kind" edge to the CustomTypeEnum entity.
 func (_c *ProcedureCreate) SetProcedureKind(v *CustomTypeEnum) *ProcedureCreate {
 	return _c.SetProcedureKindID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_c *ProcedureCreate) SetEnvironment(v *CustomTypeEnum) *ProcedureCreate {
+	return _c.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_c *ProcedureCreate) SetScope(v *CustomTypeEnum) *ProcedureCreate {
+	return _c.SetScopeID(v.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -948,6 +1014,14 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		_spec.SetField(procedure.FieldProcedureKindName, field.TypeString, value)
 		_node.ProcedureKindName = value
 	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(procedure.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(procedure.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(procedure.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
@@ -1056,6 +1130,42 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ProcedureKindID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.EnvironmentTable,
+			Columns: []string{procedure.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EnvironmentID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ScopeTable,
+			Columns: []string{procedure.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ScopeID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {

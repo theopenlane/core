@@ -4,72 +4,41 @@ import (
 	"context"
 	"testing"
 
+	"entgo.io/ent/privacy"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
 )
 
-func TestWithContext(t *testing.T) {
-	ctx := context.Background()
+func TestWorkflowContexts(t *testing.T) {
+	base := context.Background()
 
-	assert.False(t, IsWorkflowBypass(ctx))
+	bypass := WithContext(base)
+	assert.True(t, IsWorkflowBypass(bypass))
 
-	ctx = WithContext(ctx)
+	decision, ok := privacy.DecisionFromContext(AllowContext(base))
+	assert.True(t, ok)
+	assert.NoError(t, decision)
 
-	assert.True(t, IsWorkflowBypass(ctx))
-}
+	orgID := ulids.New().String()
+	orgCtx := auth.NewTestContextWithOrgID(ulids.New().String(), orgID)
 
-func TestFromContext(t *testing.T) {
-	testCases := []struct {
-		name     string
-		ctx      context.Context
-		expected bool
-	}{
-		{
-			name:     "context without workflow bypass",
-			ctx:      context.Background(),
-			expected: false,
-		},
-		{
-			name:     "context with workflow bypass",
-			ctx:      WithContext(context.Background()),
-			expected: true,
-		},
-	}
+	allowCtx, resolvedOrg, err := AllowContextWithOrg(orgCtx)
+	assert.NoError(t, err)
+	assert.Equal(t, orgID, resolvedOrg)
+	decision, ok = privacy.DecisionFromContext(allowCtx)
+	assert.True(t, ok)
+	assert.NoError(t, decision)
 
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			_, ok := FromContext(tc.ctx)
-			assert.Equal(t, tc.expected, ok)
-		})
-	}
-}
+	bypassCtx, resolvedOrg, err := AllowBypassContextWithOrg(orgCtx)
+	assert.NoError(t, err)
+	assert.Equal(t, orgID, resolvedOrg)
+	assert.True(t, IsWorkflowBypass(bypassCtx))
+	decision, ok = privacy.DecisionFromContext(bypassCtx)
+	assert.True(t, ok)
+	assert.NoError(t, decision)
 
-func TestIsWorkflowBypass(t *testing.T) {
-	testCases := []struct {
-		name     string
-		ctx      context.Context
-		expected bool
-	}{
-		{
-			name:     "no bypass in context",
-			ctx:      context.Background(),
-			expected: false,
-		},
-		{
-			name:     "bypass in context",
-			ctx:      WithContext(context.Background()),
-			expected: true,
-		},
-		{
-			name:     "bypass persists through context chain",
-			ctx:      context.WithValue(WithContext(context.Background()), "key", "value"),
-			expected: true,
-		},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			result := IsWorkflowBypass(tc.ctx)
-			assert.Equal(t, tc.expected, result)
-		})
-	}
+	_, _, err = AllowContextWithOrg(base)
+	assert.Error(t, err)
 }

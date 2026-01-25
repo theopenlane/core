@@ -14,7 +14,10 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -120,6 +123,66 @@ func (_u *AssessmentResponseUpdate) SetNillableAssessmentID(v *string) *Assessme
 	return _u
 }
 
+// SetCampaignID sets the "campaign_id" field.
+func (_u *AssessmentResponseUpdate) SetCampaignID(v string) *AssessmentResponseUpdate {
+	_u.mutation.SetCampaignID(v)
+	return _u
+}
+
+// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
+func (_u *AssessmentResponseUpdate) SetNillableCampaignID(v *string) *AssessmentResponseUpdate {
+	if v != nil {
+		_u.SetCampaignID(*v)
+	}
+	return _u
+}
+
+// ClearCampaignID clears the value of the "campaign_id" field.
+func (_u *AssessmentResponseUpdate) ClearCampaignID() *AssessmentResponseUpdate {
+	_u.mutation.ClearCampaignID()
+	return _u
+}
+
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_u *AssessmentResponseUpdate) SetIdentityHolderID(v string) *AssessmentResponseUpdate {
+	_u.mutation.SetIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_u *AssessmentResponseUpdate) SetNillableIdentityHolderID(v *string) *AssessmentResponseUpdate {
+	if v != nil {
+		_u.SetIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
+func (_u *AssessmentResponseUpdate) ClearIdentityHolderID() *AssessmentResponseUpdate {
+	_u.mutation.ClearIdentityHolderID()
+	return _u
+}
+
+// SetEntityID sets the "entity_id" field.
+func (_u *AssessmentResponseUpdate) SetEntityID(v string) *AssessmentResponseUpdate {
+	_u.mutation.SetEntityID(v)
+	return _u
+}
+
+// SetNillableEntityID sets the "entity_id" field if the given value is not nil.
+func (_u *AssessmentResponseUpdate) SetNillableEntityID(v *string) *AssessmentResponseUpdate {
+	if v != nil {
+		_u.SetEntityID(*v)
+	}
+	return _u
+}
+
+// ClearEntityID clears the value of the "entity_id" field.
+func (_u *AssessmentResponseUpdate) ClearEntityID() *AssessmentResponseUpdate {
+	_u.mutation.ClearEntityID()
+	return _u
+}
+
 // SetSendAttempts sets the "send_attempts" field.
 func (_u *AssessmentResponseUpdate) SetSendAttempts(v int) *AssessmentResponseUpdate {
 	_u.mutation.ResetSendAttempts()
@@ -138,6 +201,152 @@ func (_u *AssessmentResponseUpdate) SetNillableSendAttempts(v *int) *AssessmentR
 // AddSendAttempts adds value to the "send_attempts" field.
 func (_u *AssessmentResponseUpdate) AddSendAttempts(v int) *AssessmentResponseUpdate {
 	_u.mutation.AddSendAttempts(v)
+	return _u
+}
+
+// SetEmailDeliveredAt sets the "email_delivered_at" field.
+func (_u *AssessmentResponseUpdate) SetEmailDeliveredAt(v time.Time) *AssessmentResponseUpdate {
+	_u.mutation.SetEmailDeliveredAt(v)
+	return _u
+}
+
+// SetNillableEmailDeliveredAt sets the "email_delivered_at" field if the given value is not nil.
+func (_u *AssessmentResponseUpdate) SetNillableEmailDeliveredAt(v *time.Time) *AssessmentResponseUpdate {
+	if v != nil {
+		_u.SetEmailDeliveredAt(*v)
+	}
+	return _u
+}
+
+// ClearEmailDeliveredAt clears the value of the "email_delivered_at" field.
+func (_u *AssessmentResponseUpdate) ClearEmailDeliveredAt() *AssessmentResponseUpdate {
+	_u.mutation.ClearEmailDeliveredAt()
+	return _u
+}
+
+// SetEmailOpenedAt sets the "email_opened_at" field.
+func (_u *AssessmentResponseUpdate) SetEmailOpenedAt(v time.Time) *AssessmentResponseUpdate {
+	_u.mutation.SetEmailOpenedAt(v)
+	return _u
+}
+
+// SetNillableEmailOpenedAt sets the "email_opened_at" field if the given value is not nil.
+func (_u *AssessmentResponseUpdate) SetNillableEmailOpenedAt(v *time.Time) *AssessmentResponseUpdate {
+	if v != nil {
+		_u.SetEmailOpenedAt(*v)
+	}
+	return _u
+}
+
+// ClearEmailOpenedAt clears the value of the "email_opened_at" field.
+func (_u *AssessmentResponseUpdate) ClearEmailOpenedAt() *AssessmentResponseUpdate {
+	_u.mutation.ClearEmailOpenedAt()
+	return _u
+}
+
+// SetEmailClickedAt sets the "email_clicked_at" field.
+func (_u *AssessmentResponseUpdate) SetEmailClickedAt(v time.Time) *AssessmentResponseUpdate {
+	_u.mutation.SetEmailClickedAt(v)
+	return _u
+}
+
+// SetNillableEmailClickedAt sets the "email_clicked_at" field if the given value is not nil.
+func (_u *AssessmentResponseUpdate) SetNillableEmailClickedAt(v *time.Time) *AssessmentResponseUpdate {
+	if v != nil {
+		_u.SetEmailClickedAt(*v)
+	}
+	return _u
+}
+
+// ClearEmailClickedAt clears the value of the "email_clicked_at" field.
+func (_u *AssessmentResponseUpdate) ClearEmailClickedAt() *AssessmentResponseUpdate {
+	_u.mutation.ClearEmailClickedAt()
+	return _u
+}
+
+// SetEmailOpenCount sets the "email_open_count" field.
+func (_u *AssessmentResponseUpdate) SetEmailOpenCount(v int) *AssessmentResponseUpdate {
+	_u.mutation.ResetEmailOpenCount()
+	_u.mutation.SetEmailOpenCount(v)
+	return _u
+}
+
+// SetNillableEmailOpenCount sets the "email_open_count" field if the given value is not nil.
+func (_u *AssessmentResponseUpdate) SetNillableEmailOpenCount(v *int) *AssessmentResponseUpdate {
+	if v != nil {
+		_u.SetEmailOpenCount(*v)
+	}
+	return _u
+}
+
+// AddEmailOpenCount adds value to the "email_open_count" field.
+func (_u *AssessmentResponseUpdate) AddEmailOpenCount(v int) *AssessmentResponseUpdate {
+	_u.mutation.AddEmailOpenCount(v)
+	return _u
+}
+
+// ClearEmailOpenCount clears the value of the "email_open_count" field.
+func (_u *AssessmentResponseUpdate) ClearEmailOpenCount() *AssessmentResponseUpdate {
+	_u.mutation.ClearEmailOpenCount()
+	return _u
+}
+
+// SetEmailClickCount sets the "email_click_count" field.
+func (_u *AssessmentResponseUpdate) SetEmailClickCount(v int) *AssessmentResponseUpdate {
+	_u.mutation.ResetEmailClickCount()
+	_u.mutation.SetEmailClickCount(v)
+	return _u
+}
+
+// SetNillableEmailClickCount sets the "email_click_count" field if the given value is not nil.
+func (_u *AssessmentResponseUpdate) SetNillableEmailClickCount(v *int) *AssessmentResponseUpdate {
+	if v != nil {
+		_u.SetEmailClickCount(*v)
+	}
+	return _u
+}
+
+// AddEmailClickCount adds value to the "email_click_count" field.
+func (_u *AssessmentResponseUpdate) AddEmailClickCount(v int) *AssessmentResponseUpdate {
+	_u.mutation.AddEmailClickCount(v)
+	return _u
+}
+
+// ClearEmailClickCount clears the value of the "email_click_count" field.
+func (_u *AssessmentResponseUpdate) ClearEmailClickCount() *AssessmentResponseUpdate {
+	_u.mutation.ClearEmailClickCount()
+	return _u
+}
+
+// SetLastEmailEventAt sets the "last_email_event_at" field.
+func (_u *AssessmentResponseUpdate) SetLastEmailEventAt(v time.Time) *AssessmentResponseUpdate {
+	_u.mutation.SetLastEmailEventAt(v)
+	return _u
+}
+
+// SetNillableLastEmailEventAt sets the "last_email_event_at" field if the given value is not nil.
+func (_u *AssessmentResponseUpdate) SetNillableLastEmailEventAt(v *time.Time) *AssessmentResponseUpdate {
+	if v != nil {
+		_u.SetLastEmailEventAt(*v)
+	}
+	return _u
+}
+
+// ClearLastEmailEventAt clears the value of the "last_email_event_at" field.
+func (_u *AssessmentResponseUpdate) ClearLastEmailEventAt() *AssessmentResponseUpdate {
+	_u.mutation.ClearLastEmailEventAt()
+	return _u
+}
+
+// SetEmailMetadata sets the "email_metadata" field.
+func (_u *AssessmentResponseUpdate) SetEmailMetadata(v map[string]interface{}) *AssessmentResponseUpdate {
+	_u.mutation.SetEmailMetadata(v)
+	return _u
+}
+
+// ClearEmailMetadata clears the value of the "email_metadata" field.
+func (_u *AssessmentResponseUpdate) ClearEmailMetadata() *AssessmentResponseUpdate {
+	_u.mutation.ClearEmailMetadata()
 	return _u
 }
 
@@ -234,6 +443,21 @@ func (_u *AssessmentResponseUpdate) SetAssessment(v *Assessment) *AssessmentResp
 	return _u.SetAssessmentID(v.ID)
 }
 
+// SetCampaign sets the "campaign" edge to the Campaign entity.
+func (_u *AssessmentResponseUpdate) SetCampaign(v *Campaign) *AssessmentResponseUpdate {
+	return _u.SetCampaignID(v.ID)
+}
+
+// SetIdentityHolder sets the "identity_holder" edge to the IdentityHolder entity.
+func (_u *AssessmentResponseUpdate) SetIdentityHolder(v *IdentityHolder) *AssessmentResponseUpdate {
+	return _u.SetIdentityHolderID(v.ID)
+}
+
+// SetEntity sets the "entity" edge to the Entity entity.
+func (_u *AssessmentResponseUpdate) SetEntity(v *Entity) *AssessmentResponseUpdate {
+	return _u.SetEntityID(v.ID)
+}
+
 // SetDocumentID sets the "document" edge to the DocumentData entity by ID.
 func (_u *AssessmentResponseUpdate) SetDocumentID(id string) *AssessmentResponseUpdate {
 	_u.mutation.SetDocumentID(id)
@@ -261,6 +485,24 @@ func (_u *AssessmentResponseUpdate) Mutation() *AssessmentResponseMutation {
 // ClearAssessment clears the "assessment" edge to the Assessment entity.
 func (_u *AssessmentResponseUpdate) ClearAssessment() *AssessmentResponseUpdate {
 	_u.mutation.ClearAssessment()
+	return _u
+}
+
+// ClearCampaign clears the "campaign" edge to the Campaign entity.
+func (_u *AssessmentResponseUpdate) ClearCampaign() *AssessmentResponseUpdate {
+	_u.mutation.ClearCampaign()
+	return _u
+}
+
+// ClearIdentityHolder clears the "identity_holder" edge to the IdentityHolder entity.
+func (_u *AssessmentResponseUpdate) ClearIdentityHolder() *AssessmentResponseUpdate {
+	_u.mutation.ClearIdentityHolder()
+	return _u
+}
+
+// ClearEntity clears the "entity" edge to the Entity entity.
+func (_u *AssessmentResponseUpdate) ClearEntity() *AssessmentResponseUpdate {
+	_u.mutation.ClearEntity()
 	return _u
 }
 
@@ -384,6 +626,54 @@ func (_u *AssessmentResponseUpdate) sqlSave(ctx context.Context) (_node int, err
 	if value, ok := _u.mutation.AddedSendAttempts(); ok {
 		_spec.AddField(assessmentresponse.FieldSendAttempts, field.TypeInt, value)
 	}
+	if value, ok := _u.mutation.EmailDeliveredAt(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailDeliveredAt, field.TypeTime, value)
+	}
+	if _u.mutation.EmailDeliveredAtCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmailDeliveredAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.EmailOpenedAt(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailOpenedAt, field.TypeTime, value)
+	}
+	if _u.mutation.EmailOpenedAtCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmailOpenedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.EmailClickedAt(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailClickedAt, field.TypeTime, value)
+	}
+	if _u.mutation.EmailClickedAtCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmailClickedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.EmailOpenCount(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailOpenCount, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedEmailOpenCount(); ok {
+		_spec.AddField(assessmentresponse.FieldEmailOpenCount, field.TypeInt, value)
+	}
+	if _u.mutation.EmailOpenCountCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmailOpenCount, field.TypeInt)
+	}
+	if value, ok := _u.mutation.EmailClickCount(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailClickCount, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedEmailClickCount(); ok {
+		_spec.AddField(assessmentresponse.FieldEmailClickCount, field.TypeInt, value)
+	}
+	if _u.mutation.EmailClickCountCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmailClickCount, field.TypeInt)
+	}
+	if value, ok := _u.mutation.LastEmailEventAt(); ok {
+		_spec.SetField(assessmentresponse.FieldLastEmailEventAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastEmailEventAtCleared() {
+		_spec.ClearField(assessmentresponse.FieldLastEmailEventAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.EmailMetadata(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.EmailMetadataCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmailMetadata, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(assessmentresponse.FieldStatus, field.TypeEnum, value)
 	}
@@ -425,6 +715,99 @@ func (_u *AssessmentResponseUpdate) sqlSave(ctx context.Context) (_node int, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   assessmentresponse.CampaignTable,
+			Columns: []string{assessmentresponse.CampaignColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   assessmentresponse.CampaignTable,
+			Columns: []string{assessmentresponse.CampaignColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   assessmentresponse.IdentityHolderTable,
+			Columns: []string{assessmentresponse.IdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   assessmentresponse.IdentityHolderTable,
+			Columns: []string{assessmentresponse.IdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   assessmentresponse.EntityTable,
+			Columns: []string{assessmentresponse.EntityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   assessmentresponse.EntityTable,
+			Columns: []string{assessmentresponse.EntityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.AssessmentResponse
@@ -574,6 +957,66 @@ func (_u *AssessmentResponseUpdateOne) SetNillableAssessmentID(v *string) *Asses
 	return _u
 }
 
+// SetCampaignID sets the "campaign_id" field.
+func (_u *AssessmentResponseUpdateOne) SetCampaignID(v string) *AssessmentResponseUpdateOne {
+	_u.mutation.SetCampaignID(v)
+	return _u
+}
+
+// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
+func (_u *AssessmentResponseUpdateOne) SetNillableCampaignID(v *string) *AssessmentResponseUpdateOne {
+	if v != nil {
+		_u.SetCampaignID(*v)
+	}
+	return _u
+}
+
+// ClearCampaignID clears the value of the "campaign_id" field.
+func (_u *AssessmentResponseUpdateOne) ClearCampaignID() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearCampaignID()
+	return _u
+}
+
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_u *AssessmentResponseUpdateOne) SetIdentityHolderID(v string) *AssessmentResponseUpdateOne {
+	_u.mutation.SetIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_u *AssessmentResponseUpdateOne) SetNillableIdentityHolderID(v *string) *AssessmentResponseUpdateOne {
+	if v != nil {
+		_u.SetIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
+func (_u *AssessmentResponseUpdateOne) ClearIdentityHolderID() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearIdentityHolderID()
+	return _u
+}
+
+// SetEntityID sets the "entity_id" field.
+func (_u *AssessmentResponseUpdateOne) SetEntityID(v string) *AssessmentResponseUpdateOne {
+	_u.mutation.SetEntityID(v)
+	return _u
+}
+
+// SetNillableEntityID sets the "entity_id" field if the given value is not nil.
+func (_u *AssessmentResponseUpdateOne) SetNillableEntityID(v *string) *AssessmentResponseUpdateOne {
+	if v != nil {
+		_u.SetEntityID(*v)
+	}
+	return _u
+}
+
+// ClearEntityID clears the value of the "entity_id" field.
+func (_u *AssessmentResponseUpdateOne) ClearEntityID() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearEntityID()
+	return _u
+}
+
 // SetSendAttempts sets the "send_attempts" field.
 func (_u *AssessmentResponseUpdateOne) SetSendAttempts(v int) *AssessmentResponseUpdateOne {
 	_u.mutation.ResetSendAttempts()
@@ -592,6 +1035,152 @@ func (_u *AssessmentResponseUpdateOne) SetNillableSendAttempts(v *int) *Assessme
 // AddSendAttempts adds value to the "send_attempts" field.
 func (_u *AssessmentResponseUpdateOne) AddSendAttempts(v int) *AssessmentResponseUpdateOne {
 	_u.mutation.AddSendAttempts(v)
+	return _u
+}
+
+// SetEmailDeliveredAt sets the "email_delivered_at" field.
+func (_u *AssessmentResponseUpdateOne) SetEmailDeliveredAt(v time.Time) *AssessmentResponseUpdateOne {
+	_u.mutation.SetEmailDeliveredAt(v)
+	return _u
+}
+
+// SetNillableEmailDeliveredAt sets the "email_delivered_at" field if the given value is not nil.
+func (_u *AssessmentResponseUpdateOne) SetNillableEmailDeliveredAt(v *time.Time) *AssessmentResponseUpdateOne {
+	if v != nil {
+		_u.SetEmailDeliveredAt(*v)
+	}
+	return _u
+}
+
+// ClearEmailDeliveredAt clears the value of the "email_delivered_at" field.
+func (_u *AssessmentResponseUpdateOne) ClearEmailDeliveredAt() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearEmailDeliveredAt()
+	return _u
+}
+
+// SetEmailOpenedAt sets the "email_opened_at" field.
+func (_u *AssessmentResponseUpdateOne) SetEmailOpenedAt(v time.Time) *AssessmentResponseUpdateOne {
+	_u.mutation.SetEmailOpenedAt(v)
+	return _u
+}
+
+// SetNillableEmailOpenedAt sets the "email_opened_at" field if the given value is not nil.
+func (_u *AssessmentResponseUpdateOne) SetNillableEmailOpenedAt(v *time.Time) *AssessmentResponseUpdateOne {
+	if v != nil {
+		_u.SetEmailOpenedAt(*v)
+	}
+	return _u
+}
+
+// ClearEmailOpenedAt clears the value of the "email_opened_at" field.
+func (_u *AssessmentResponseUpdateOne) ClearEmailOpenedAt() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearEmailOpenedAt()
+	return _u
+}
+
+// SetEmailClickedAt sets the "email_clicked_at" field.
+func (_u *AssessmentResponseUpdateOne) SetEmailClickedAt(v time.Time) *AssessmentResponseUpdateOne {
+	_u.mutation.SetEmailClickedAt(v)
+	return _u
+}
+
+// SetNillableEmailClickedAt sets the "email_clicked_at" field if the given value is not nil.
+func (_u *AssessmentResponseUpdateOne) SetNillableEmailClickedAt(v *time.Time) *AssessmentResponseUpdateOne {
+	if v != nil {
+		_u.SetEmailClickedAt(*v)
+	}
+	return _u
+}
+
+// ClearEmailClickedAt clears the value of the "email_clicked_at" field.
+func (_u *AssessmentResponseUpdateOne) ClearEmailClickedAt() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearEmailClickedAt()
+	return _u
+}
+
+// SetEmailOpenCount sets the "email_open_count" field.
+func (_u *AssessmentResponseUpdateOne) SetEmailOpenCount(v int) *AssessmentResponseUpdateOne {
+	_u.mutation.ResetEmailOpenCount()
+	_u.mutation.SetEmailOpenCount(v)
+	return _u
+}
+
+// SetNillableEmailOpenCount sets the "email_open_count" field if the given value is not nil.
+func (_u *AssessmentResponseUpdateOne) SetNillableEmailOpenCount(v *int) *AssessmentResponseUpdateOne {
+	if v != nil {
+		_u.SetEmailOpenCount(*v)
+	}
+	return _u
+}
+
+// AddEmailOpenCount adds value to the "email_open_count" field.
+func (_u *AssessmentResponseUpdateOne) AddEmailOpenCount(v int) *AssessmentResponseUpdateOne {
+	_u.mutation.AddEmailOpenCount(v)
+	return _u
+}
+
+// ClearEmailOpenCount clears the value of the "email_open_count" field.
+func (_u *AssessmentResponseUpdateOne) ClearEmailOpenCount() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearEmailOpenCount()
+	return _u
+}
+
+// SetEmailClickCount sets the "email_click_count" field.
+func (_u *AssessmentResponseUpdateOne) SetEmailClickCount(v int) *AssessmentResponseUpdateOne {
+	_u.mutation.ResetEmailClickCount()
+	_u.mutation.SetEmailClickCount(v)
+	return _u
+}
+
+// SetNillableEmailClickCount sets the "email_click_count" field if the given value is not nil.
+func (_u *AssessmentResponseUpdateOne) SetNillableEmailClickCount(v *int) *AssessmentResponseUpdateOne {
+	if v != nil {
+		_u.SetEmailClickCount(*v)
+	}
+	return _u
+}
+
+// AddEmailClickCount adds value to the "email_click_count" field.
+func (_u *AssessmentResponseUpdateOne) AddEmailClickCount(v int) *AssessmentResponseUpdateOne {
+	_u.mutation.AddEmailClickCount(v)
+	return _u
+}
+
+// ClearEmailClickCount clears the value of the "email_click_count" field.
+func (_u *AssessmentResponseUpdateOne) ClearEmailClickCount() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearEmailClickCount()
+	return _u
+}
+
+// SetLastEmailEventAt sets the "last_email_event_at" field.
+func (_u *AssessmentResponseUpdateOne) SetLastEmailEventAt(v time.Time) *AssessmentResponseUpdateOne {
+	_u.mutation.SetLastEmailEventAt(v)
+	return _u
+}
+
+// SetNillableLastEmailEventAt sets the "last_email_event_at" field if the given value is not nil.
+func (_u *AssessmentResponseUpdateOne) SetNillableLastEmailEventAt(v *time.Time) *AssessmentResponseUpdateOne {
+	if v != nil {
+		_u.SetLastEmailEventAt(*v)
+	}
+	return _u
+}
+
+// ClearLastEmailEventAt clears the value of the "last_email_event_at" field.
+func (_u *AssessmentResponseUpdateOne) ClearLastEmailEventAt() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearLastEmailEventAt()
+	return _u
+}
+
+// SetEmailMetadata sets the "email_metadata" field.
+func (_u *AssessmentResponseUpdateOne) SetEmailMetadata(v map[string]interface{}) *AssessmentResponseUpdateOne {
+	_u.mutation.SetEmailMetadata(v)
+	return _u
+}
+
+// ClearEmailMetadata clears the value of the "email_metadata" field.
+func (_u *AssessmentResponseUpdateOne) ClearEmailMetadata() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearEmailMetadata()
 	return _u
 }
 
@@ -688,6 +1277,21 @@ func (_u *AssessmentResponseUpdateOne) SetAssessment(v *Assessment) *AssessmentR
 	return _u.SetAssessmentID(v.ID)
 }
 
+// SetCampaign sets the "campaign" edge to the Campaign entity.
+func (_u *AssessmentResponseUpdateOne) SetCampaign(v *Campaign) *AssessmentResponseUpdateOne {
+	return _u.SetCampaignID(v.ID)
+}
+
+// SetIdentityHolder sets the "identity_holder" edge to the IdentityHolder entity.
+func (_u *AssessmentResponseUpdateOne) SetIdentityHolder(v *IdentityHolder) *AssessmentResponseUpdateOne {
+	return _u.SetIdentityHolderID(v.ID)
+}
+
+// SetEntity sets the "entity" edge to the Entity entity.
+func (_u *AssessmentResponseUpdateOne) SetEntity(v *Entity) *AssessmentResponseUpdateOne {
+	return _u.SetEntityID(v.ID)
+}
+
 // SetDocumentID sets the "document" edge to the DocumentData entity by ID.
 func (_u *AssessmentResponseUpdateOne) SetDocumentID(id string) *AssessmentResponseUpdateOne {
 	_u.mutation.SetDocumentID(id)
@@ -715,6 +1319,24 @@ func (_u *AssessmentResponseUpdateOne) Mutation() *AssessmentResponseMutation {
 // ClearAssessment clears the "assessment" edge to the Assessment entity.
 func (_u *AssessmentResponseUpdateOne) ClearAssessment() *AssessmentResponseUpdateOne {
 	_u.mutation.ClearAssessment()
+	return _u
+}
+
+// ClearCampaign clears the "campaign" edge to the Campaign entity.
+func (_u *AssessmentResponseUpdateOne) ClearCampaign() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearCampaign()
+	return _u
+}
+
+// ClearIdentityHolder clears the "identity_holder" edge to the IdentityHolder entity.
+func (_u *AssessmentResponseUpdateOne) ClearIdentityHolder() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearIdentityHolder()
+	return _u
+}
+
+// ClearEntity clears the "entity" edge to the Entity entity.
+func (_u *AssessmentResponseUpdateOne) ClearEntity() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearEntity()
 	return _u
 }
 
@@ -868,6 +1490,54 @@ func (_u *AssessmentResponseUpdateOne) sqlSave(ctx context.Context) (_node *Asse
 	if value, ok := _u.mutation.AddedSendAttempts(); ok {
 		_spec.AddField(assessmentresponse.FieldSendAttempts, field.TypeInt, value)
 	}
+	if value, ok := _u.mutation.EmailDeliveredAt(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailDeliveredAt, field.TypeTime, value)
+	}
+	if _u.mutation.EmailDeliveredAtCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmailDeliveredAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.EmailOpenedAt(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailOpenedAt, field.TypeTime, value)
+	}
+	if _u.mutation.EmailOpenedAtCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmailOpenedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.EmailClickedAt(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailClickedAt, field.TypeTime, value)
+	}
+	if _u.mutation.EmailClickedAtCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmailClickedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.EmailOpenCount(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailOpenCount, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedEmailOpenCount(); ok {
+		_spec.AddField(assessmentresponse.FieldEmailOpenCount, field.TypeInt, value)
+	}
+	if _u.mutation.EmailOpenCountCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmailOpenCount, field.TypeInt)
+	}
+	if value, ok := _u.mutation.EmailClickCount(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailClickCount, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedEmailClickCount(); ok {
+		_spec.AddField(assessmentresponse.FieldEmailClickCount, field.TypeInt, value)
+	}
+	if _u.mutation.EmailClickCountCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmailClickCount, field.TypeInt)
+	}
+	if value, ok := _u.mutation.LastEmailEventAt(); ok {
+		_spec.SetField(assessmentresponse.FieldLastEmailEventAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastEmailEventAtCleared() {
+		_spec.ClearField(assessmentresponse.FieldLastEmailEventAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.EmailMetadata(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.EmailMetadataCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmailMetadata, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(assessmentresponse.FieldStatus, field.TypeEnum, value)
 	}
@@ -909,6 +1579,99 @@ func (_u *AssessmentResponseUpdateOne) sqlSave(ctx context.Context) (_node *Asse
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   assessmentresponse.CampaignTable,
+			Columns: []string{assessmentresponse.CampaignColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   assessmentresponse.CampaignTable,
+			Columns: []string{assessmentresponse.CampaignColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   assessmentresponse.IdentityHolderTable,
+			Columns: []string{assessmentresponse.IdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   assessmentresponse.IdentityHolderTable,
+			Columns: []string{assessmentresponse.IdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   assessmentresponse.EntityTable,
+			Columns: []string{assessmentresponse.EntityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   assessmentresponse.EntityTable,
+			Columns: []string{assessmentresponse.EntityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.AssessmentResponse

@@ -24,6 +24,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -51,6 +53,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -75,6 +78,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
@@ -146,6 +150,10 @@ type Client struct {
 	AssessmentResponse *AssessmentResponseClient
 	// Asset is the client for interacting with the Asset builders.
 	Asset *AssetClient
+	// Campaign is the client for interacting with the Campaign builders.
+	Campaign *CampaignClient
+	// CampaignTarget is the client for interacting with the CampaignTarget builders.
+	CampaignTarget *CampaignTargetClient
 	// Contact is the client for interacting with the Contact builders.
 	Contact *ContactClient
 	// Control is the client for interacting with the Control builders.
@@ -200,6 +208,8 @@ type Client struct {
 	GroupSetting *GroupSettingClient
 	// Hush is the client for interacting with the Hush builders.
 	Hush *HushClient
+	// IdentityHolder is the client for interacting with the IdentityHolder builders.
+	IdentityHolder *IdentityHolderClient
 	// ImpersonationEvent is the client for interacting with the ImpersonationEvent builders.
 	ImpersonationEvent *ImpersonationEventClient
 	// Integration is the client for interacting with the Integration builders.
@@ -248,6 +258,8 @@ type Client struct {
 	PasswordResetToken *PasswordResetTokenClient
 	// PersonalAccessToken is the client for interacting with the PersonalAccessToken builders.
 	PersonalAccessToken *PersonalAccessTokenClient
+	// Platform is the client for interacting with the Platform builders.
+	Platform *PlatformClient
 	// Procedure is the client for interacting with the Procedure builders.
 	Procedure *ProcedureClient
 	// Program is the client for interacting with the Program builders.
@@ -345,6 +357,8 @@ func (c *Client) init() {
 	c.Assessment = NewAssessmentClient(c.config)
 	c.AssessmentResponse = NewAssessmentResponseClient(c.config)
 	c.Asset = NewAssetClient(c.config)
+	c.Campaign = NewCampaignClient(c.config)
+	c.CampaignTarget = NewCampaignTargetClient(c.config)
 	c.Contact = NewContactClient(c.config)
 	c.Control = NewControlClient(c.config)
 	c.ControlImplementation = NewControlImplementationClient(c.config)
@@ -372,6 +386,7 @@ func (c *Client) init() {
 	c.GroupMembership = NewGroupMembershipClient(c.config)
 	c.GroupSetting = NewGroupSettingClient(c.config)
 	c.Hush = NewHushClient(c.config)
+	c.IdentityHolder = NewIdentityHolderClient(c.config)
 	c.ImpersonationEvent = NewImpersonationEventClient(c.config)
 	c.Integration = NewIntegrationClient(c.config)
 	c.InternalPolicy = NewInternalPolicyClient(c.config)
@@ -396,6 +411,7 @@ func (c *Client) init() {
 	c.OrganizationSetting = NewOrganizationSettingClient(c.config)
 	c.PasswordResetToken = NewPasswordResetTokenClient(c.config)
 	c.PersonalAccessToken = NewPersonalAccessTokenClient(c.config)
+	c.Platform = NewPlatformClient(c.config)
 	c.Procedure = NewProcedureClient(c.config)
 	c.Program = NewProgramClient(c.config)
 	c.ProgramMembership = NewProgramMembershipClient(c.config)
@@ -462,6 +478,9 @@ type (
 		EmailVerifier      *validator.EmailVerifier
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
+
+		// WorkflowEngine configures the workflow orchestration engine.
+		WorkflowEngine any
 
 		// schemaConfig contains alternative names for all tables.
 		schemaConfig SchemaConfig
@@ -638,6 +657,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Assessment:                 NewAssessmentClient(cfg),
 		AssessmentResponse:         NewAssessmentResponseClient(cfg),
 		Asset:                      NewAssetClient(cfg),
+		Campaign:                   NewCampaignClient(cfg),
+		CampaignTarget:             NewCampaignTargetClient(cfg),
 		Contact:                    NewContactClient(cfg),
 		Control:                    NewControlClient(cfg),
 		ControlImplementation:      NewControlImplementationClient(cfg),
@@ -665,6 +686,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		GroupMembership:            NewGroupMembershipClient(cfg),
 		GroupSetting:               NewGroupSettingClient(cfg),
 		Hush:                       NewHushClient(cfg),
+		IdentityHolder:             NewIdentityHolderClient(cfg),
 		ImpersonationEvent:         NewImpersonationEventClient(cfg),
 		Integration:                NewIntegrationClient(cfg),
 		InternalPolicy:             NewInternalPolicyClient(cfg),
@@ -689,6 +711,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		OrganizationSetting:        NewOrganizationSettingClient(cfg),
 		PasswordResetToken:         NewPasswordResetTokenClient(cfg),
 		PersonalAccessToken:        NewPersonalAccessTokenClient(cfg),
+		Platform:                   NewPlatformClient(cfg),
 		Procedure:                  NewProcedureClient(cfg),
 		Program:                    NewProgramClient(cfg),
 		ProgramMembership:          NewProgramMembershipClient(cfg),
@@ -749,6 +772,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Assessment:                 NewAssessmentClient(cfg),
 		AssessmentResponse:         NewAssessmentResponseClient(cfg),
 		Asset:                      NewAssetClient(cfg),
+		Campaign:                   NewCampaignClient(cfg),
+		CampaignTarget:             NewCampaignTargetClient(cfg),
 		Contact:                    NewContactClient(cfg),
 		Control:                    NewControlClient(cfg),
 		ControlImplementation:      NewControlImplementationClient(cfg),
@@ -776,6 +801,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		GroupMembership:            NewGroupMembershipClient(cfg),
 		GroupSetting:               NewGroupSettingClient(cfg),
 		Hush:                       NewHushClient(cfg),
+		IdentityHolder:             NewIdentityHolderClient(cfg),
 		ImpersonationEvent:         NewImpersonationEventClient(cfg),
 		Integration:                NewIntegrationClient(cfg),
 		InternalPolicy:             NewInternalPolicyClient(cfg),
@@ -800,6 +826,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		OrganizationSetting:        NewOrganizationSettingClient(cfg),
 		PasswordResetToken:         NewPasswordResetTokenClient(cfg),
 		PersonalAccessToken:        NewPersonalAccessTokenClient(cfg),
+		Platform:                   NewPlatformClient(cfg),
 		Procedure:                  NewProcedureClient(cfg),
 		Program:                    NewProgramClient(cfg),
 		ProgramMembership:          NewProgramMembershipClient(cfg),
@@ -866,18 +893,19 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.APIToken, c.ActionPlan, c.Assessment, c.AssessmentResponse, c.Asset,
-		c.Contact, c.Control, c.ControlImplementation, c.ControlObjective,
-		c.CustomDomain, c.CustomTypeEnum, c.DNSVerification, c.DirectoryAccount,
-		c.DirectoryGroup, c.DirectoryMembership, c.DirectorySyncRun, c.Discussion,
-		c.DocumentData, c.EmailVerificationToken, c.Entity, c.EntityType, c.Event,
-		c.Evidence, c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl,
-		c.Group, c.GroupMembership, c.GroupSetting, c.Hush, c.ImpersonationEvent,
-		c.Integration, c.InternalPolicy, c.Invite, c.JobResult, c.JobRunner,
+		c.Campaign, c.CampaignTarget, c.Contact, c.Control, c.ControlImplementation,
+		c.ControlObjective, c.CustomDomain, c.CustomTypeEnum, c.DNSVerification,
+		c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
+		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailVerificationToken,
+		c.Entity, c.EntityType, c.Event, c.Evidence, c.Export, c.File,
+		c.FileDownloadToken, c.Finding, c.FindingControl, c.Group, c.GroupMembership,
+		c.GroupSetting, c.Hush, c.IdentityHolder, c.ImpersonationEvent, c.Integration,
+		c.InternalPolicy, c.Invite, c.JobResult, c.JobRunner,
 		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
 		c.MappableDomain, c.MappedControl, c.Narrative, c.Note, c.Notification,
 		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
 		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.Program, c.ProgramMembership,
+		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
 		c.Remediation, c.Review, c.Risk, c.Scan, c.ScheduledJob, c.ScheduledJobRun,
 		c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber, c.TFASetting,
 		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
@@ -896,18 +924,19 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.APIToken, c.ActionPlan, c.Assessment, c.AssessmentResponse, c.Asset,
-		c.Contact, c.Control, c.ControlImplementation, c.ControlObjective,
-		c.CustomDomain, c.CustomTypeEnum, c.DNSVerification, c.DirectoryAccount,
-		c.DirectoryGroup, c.DirectoryMembership, c.DirectorySyncRun, c.Discussion,
-		c.DocumentData, c.EmailVerificationToken, c.Entity, c.EntityType, c.Event,
-		c.Evidence, c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl,
-		c.Group, c.GroupMembership, c.GroupSetting, c.Hush, c.ImpersonationEvent,
-		c.Integration, c.InternalPolicy, c.Invite, c.JobResult, c.JobRunner,
+		c.Campaign, c.CampaignTarget, c.Contact, c.Control, c.ControlImplementation,
+		c.ControlObjective, c.CustomDomain, c.CustomTypeEnum, c.DNSVerification,
+		c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
+		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailVerificationToken,
+		c.Entity, c.EntityType, c.Event, c.Evidence, c.Export, c.File,
+		c.FileDownloadToken, c.Finding, c.FindingControl, c.Group, c.GroupMembership,
+		c.GroupSetting, c.Hush, c.IdentityHolder, c.ImpersonationEvent, c.Integration,
+		c.InternalPolicy, c.Invite, c.JobResult, c.JobRunner,
 		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
 		c.MappableDomain, c.MappedControl, c.Narrative, c.Note, c.Notification,
 		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
 		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.Program, c.ProgramMembership,
+		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
 		c.Remediation, c.Review, c.Risk, c.Scan, c.ScheduledJob, c.ScheduledJobRun,
 		c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber, c.TFASetting,
 		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
@@ -1006,6 +1035,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.AssessmentResponse.mutate(ctx, m)
 	case *AssetMutation:
 		return c.Asset.mutate(ctx, m)
+	case *CampaignMutation:
+		return c.Campaign.mutate(ctx, m)
+	case *CampaignTargetMutation:
+		return c.CampaignTarget.mutate(ctx, m)
 	case *ContactMutation:
 		return c.Contact.mutate(ctx, m)
 	case *ControlMutation:
@@ -1060,6 +1093,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.GroupSetting.mutate(ctx, m)
 	case *HushMutation:
 		return c.Hush.mutate(ctx, m)
+	case *IdentityHolderMutation:
+		return c.IdentityHolder.mutate(ctx, m)
 	case *ImpersonationEventMutation:
 		return c.ImpersonationEvent.mutate(ctx, m)
 	case *IntegrationMutation:
@@ -1108,6 +1143,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.PasswordResetToken.mutate(ctx, m)
 	case *PersonalAccessTokenMutation:
 		return c.PersonalAccessToken.mutate(ctx, m)
+	case *PlatformMutation:
+		return c.Platform.mutate(ctx, m)
 	case *ProcedureMutation:
 		return c.Procedure.mutate(ctx, m)
 	case *ProgramMutation:
@@ -1675,6 +1712,25 @@ func (c *ActionPlanClient) QueryVulnerabilities(_m *ActionPlan) *VulnerabilityQu
 	return query
 }
 
+// QueryScans queries the scans edge of a ActionPlan.
+func (c *ActionPlanClient) QueryScans(_m *ActionPlan) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ScansTable, actionplan.ScansPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanActionPlans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryReviews queries the reviews edge of a ActionPlan.
 func (c *ActionPlanClient) QueryReviews(_m *ActionPlan) *ReviewQuery {
 	query := (&ReviewClient{config: c.config}).Query()
@@ -2019,6 +2075,44 @@ func (c *AssessmentClient) QueryTemplate(_m *Assessment) *TemplateQuery {
 	return query
 }
 
+// QueryPlatforms queries the platforms edge of a Assessment.
+func (c *AssessmentClient) QueryPlatforms(_m *Assessment) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, assessment.PlatformsTable, assessment.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformAssessments
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders queries the identity_holders edge of a Assessment.
+func (c *AssessmentClient) QueryIdentityHolders(_m *Assessment) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, assessment.IdentityHoldersTable, assessment.IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolderAssessments
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryAssessmentResponses queries the assessment_responses edge of a Assessment.
 func (c *AssessmentClient) QueryAssessmentResponses(_m *Assessment) *AssessmentResponseQuery {
 	query := (&AssessmentResponseClient{config: c.config}).Query()
@@ -2032,6 +2126,25 @@ func (c *AssessmentClient) QueryAssessmentResponses(_m *Assessment) *AssessmentR
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.AssessmentResponse
 		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaigns queries the campaigns edge of a Assessment.
+func (c *AssessmentClient) QueryCampaigns(_m *Assessment) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, assessment.CampaignsTable, assessment.CampaignsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2204,6 +2317,63 @@ func (c *AssessmentResponseClient) QueryAssessment(_m *AssessmentResponse) *Asse
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaign queries the campaign edge of a AssessmentResponse.
+func (c *AssessmentResponseClient) QueryCampaign(_m *AssessmentResponse) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, assessmentresponse.CampaignTable, assessmentresponse.CampaignColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIdentityHolder queries the identity_holder edge of a AssessmentResponse.
+func (c *AssessmentResponseClient) QueryIdentityHolder(_m *AssessmentResponse) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, assessmentresponse.IdentityHolderTable, assessmentresponse.IdentityHolderColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntity queries the entity edge of a AssessmentResponse.
+func (c *AssessmentResponseClient) QueryEntity(_m *AssessmentResponse) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, assessmentresponse.EntityTable, assessmentresponse.EntityColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -2441,6 +2611,196 @@ func (c *AssetClient) QueryViewers(_m *Asset) *GroupQuery {
 	return query
 }
 
+// QueryInternalOwnerUser queries the internal_owner_user edge of a Asset.
+func (c *AssetClient) QueryInternalOwnerUser(_m *Asset) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.InternalOwnerUserTable, asset.InternalOwnerUserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerGroup queries the internal_owner_group edge of a Asset.
+func (c *AssetClient) QueryInternalOwnerGroup(_m *Asset) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.InternalOwnerGroupTable, asset.InternalOwnerGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssetSubtype queries the asset_subtype edge of a Asset.
+func (c *AssetClient) QueryAssetSubtype(_m *Asset) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.AssetSubtypeTable, asset.AssetSubtypeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssetDataClassification queries the asset_data_classification edge of a Asset.
+func (c *AssetClient) QueryAssetDataClassification(_m *Asset) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.AssetDataClassificationTable, asset.AssetDataClassificationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEnvironment queries the environment edge of a Asset.
+func (c *AssetClient) QueryEnvironment(_m *Asset) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.EnvironmentTable, asset.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a Asset.
+func (c *AssetClient) QueryScope(_m *Asset) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.ScopeTable, asset.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAccessModel queries the access_model edge of a Asset.
+func (c *AssetClient) QueryAccessModel(_m *Asset) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.AccessModelTable, asset.AccessModelColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEncryptionStatus queries the encryption_status edge of a Asset.
+func (c *AssetClient) QueryEncryptionStatus(_m *Asset) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.EncryptionStatusTable, asset.EncryptionStatusColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySecurityTier queries the security_tier edge of a Asset.
+func (c *AssetClient) QuerySecurityTier(_m *Asset) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.SecurityTierTable, asset.SecurityTierColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCriticality queries the criticality edge of a Asset.
+func (c *AssetClient) QueryCriticality(_m *Asset) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.CriticalityTable, asset.CriticalityColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryScans queries the scans edge of a Asset.
 func (c *AssetClient) QueryScans(_m *Asset) *ScanQuery {
 	query := (&ScanClient{config: c.config}).Query()
@@ -2479,6 +2839,63 @@ func (c *AssetClient) QueryEntities(_m *Asset) *EntityQuery {
 	return query
 }
 
+// QueryPlatforms queries the platforms edge of a Asset.
+func (c *AssetClient) QueryPlatforms(_m *Asset) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.PlatformsTable, asset.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformAssets
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOutOfScopePlatforms queries the out_of_scope_platforms edge of a Asset.
+func (c *AssetClient) QueryOutOfScopePlatforms(_m *Asset) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.OutOfScopePlatformsTable, asset.OutOfScopePlatformsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformOutOfScopeAssets
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders queries the identity_holders edge of a Asset.
+func (c *AssetClient) QueryIdentityHolders(_m *Asset) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.IdentityHoldersTable, asset.IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolderAssets
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryControls queries the controls edge of a Asset.
 func (c *AssetClient) QueryControls(_m *Asset) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
@@ -2492,6 +2909,63 @@ func (c *AssetClient) QueryControls(_m *Asset) *ControlQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ControlAssets
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySourcePlatform queries the source_platform edge of a Asset.
+func (c *AssetClient) QuerySourcePlatform(_m *Asset) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, asset.SourcePlatformTable, asset.SourcePlatformColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryConnectedAssets queries the connected_assets edge of a Asset.
+func (c *AssetClient) QueryConnectedAssets(_m *Asset) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, asset.ConnectedAssetsTable, asset.ConnectedAssetsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.AssetConnectedAssets
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryConnectedFrom queries the connected_from edge of a Asset.
+func (c *AssetClient) QueryConnectedFrom(_m *Asset) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.ConnectedFromTable, asset.ConnectedFromPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.AssetConnectedAssets
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2522,6 +2996,694 @@ func (c *AssetClient) mutate(ctx context.Context, m *AssetMutation) (Value, erro
 		return (&AssetDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown Asset mutation op: %q", m.Op())
+	}
+}
+
+// CampaignClient is a client for the Campaign schema.
+type CampaignClient struct {
+	config
+}
+
+// NewCampaignClient returns a client for the Campaign from the given config.
+func NewCampaignClient(c config) *CampaignClient {
+	return &CampaignClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `campaign.Hooks(f(g(h())))`.
+func (c *CampaignClient) Use(hooks ...Hook) {
+	c.hooks.Campaign = append(c.hooks.Campaign, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `campaign.Intercept(f(g(h())))`.
+func (c *CampaignClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Campaign = append(c.inters.Campaign, interceptors...)
+}
+
+// Create returns a builder for creating a Campaign entity.
+func (c *CampaignClient) Create() *CampaignCreate {
+	mutation := newCampaignMutation(c.config, OpCreate)
+	return &CampaignCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Campaign entities.
+func (c *CampaignClient) CreateBulk(builders ...*CampaignCreate) *CampaignCreateBulk {
+	return &CampaignCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CampaignClient) MapCreateBulk(slice any, setFunc func(*CampaignCreate, int)) *CampaignCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CampaignCreateBulk{err: fmt.Errorf("calling to CampaignClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CampaignCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CampaignCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Campaign.
+func (c *CampaignClient) Update() *CampaignUpdate {
+	mutation := newCampaignMutation(c.config, OpUpdate)
+	return &CampaignUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CampaignClient) UpdateOne(_m *Campaign) *CampaignUpdateOne {
+	mutation := newCampaignMutation(c.config, OpUpdateOne, withCampaign(_m))
+	return &CampaignUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CampaignClient) UpdateOneID(id string) *CampaignUpdateOne {
+	mutation := newCampaignMutation(c.config, OpUpdateOne, withCampaignID(id))
+	return &CampaignUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Campaign.
+func (c *CampaignClient) Delete() *CampaignDelete {
+	mutation := newCampaignMutation(c.config, OpDelete)
+	return &CampaignDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CampaignClient) DeleteOne(_m *Campaign) *CampaignDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CampaignClient) DeleteOneID(id string) *CampaignDeleteOne {
+	builder := c.Delete().Where(campaign.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CampaignDeleteOne{builder}
+}
+
+// Query returns a query builder for Campaign.
+func (c *CampaignClient) Query() *CampaignQuery {
+	return &CampaignQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCampaign},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Campaign entity by its id.
+func (c *CampaignClient) Get(ctx context.Context, id string) (*Campaign, error) {
+	return c.Query().Where(campaign.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CampaignClient) GetX(ctx context.Context, id string) *Campaign {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Campaign.
+func (c *CampaignClient) QueryOwner(_m *Campaign) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaign.OwnerTable, campaign.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups queries the blocked_groups edge of a Campaign.
+func (c *CampaignClient) QueryBlockedGroups(_m *Campaign) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, campaign.BlockedGroupsTable, campaign.BlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.CampaignBlockedGroups
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a Campaign.
+func (c *CampaignClient) QueryEditors(_m *Campaign) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, campaign.EditorsTable, campaign.EditorsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.CampaignEditors
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryViewers queries the viewers edge of a Campaign.
+func (c *CampaignClient) QueryViewers(_m *Campaign) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, campaign.ViewersTable, campaign.ViewersPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.CampaignViewers
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerUser queries the internal_owner_user edge of a Campaign.
+func (c *CampaignClient) QueryInternalOwnerUser(_m *Campaign) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, campaign.InternalOwnerUserTable, campaign.InternalOwnerUserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerGroup queries the internal_owner_group edge of a Campaign.
+func (c *CampaignClient) QueryInternalOwnerGroup(_m *Campaign) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, campaign.InternalOwnerGroupTable, campaign.InternalOwnerGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessment queries the assessment edge of a Campaign.
+func (c *CampaignClient) QueryAssessment(_m *Campaign) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaign.AssessmentTable, campaign.AssessmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTemplate queries the template edge of a Campaign.
+func (c *CampaignClient) QueryTemplate(_m *Campaign) *TemplateQuery {
+	query := (&TemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(template.Table, template.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaign.TemplateTable, campaign.TemplateColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntity queries the entity edge of a Campaign.
+func (c *CampaignClient) QueryEntity(_m *Campaign) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaign.EntityTable, campaign.EntityColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaignTargets queries the campaign_targets edge of a Campaign.
+func (c *CampaignClient) QueryCampaignTargets(_m *Campaign) *CampaignTargetQuery {
+	query := (&CampaignTargetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, campaign.CampaignTargetsTable, campaign.CampaignTargetsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessmentResponses queries the assessment_responses edge of a Campaign.
+func (c *CampaignClient) QueryAssessmentResponses(_m *Campaign) *AssessmentResponseQuery {
+	query := (&AssessmentResponseClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, campaign.AssessmentResponsesTable, campaign.AssessmentResponsesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.AssessmentResponse
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryContacts queries the contacts edge of a Campaign.
+func (c *CampaignClient) QueryContacts(_m *Campaign) *ContactQuery {
+	query := (&ContactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(contact.Table, contact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, campaign.ContactsTable, campaign.ContactsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.CampaignContacts
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUsers queries the users edge of a Campaign.
+func (c *CampaignClient) QueryUsers(_m *Campaign) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, campaign.UsersTable, campaign.UsersPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.CampaignUsers
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryGroups queries the groups edge of a Campaign.
+func (c *CampaignClient) QueryGroups(_m *Campaign) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, campaign.GroupsTable, campaign.GroupsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.CampaignGroups
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders queries the identity_holders edge of a Campaign.
+func (c *CampaignClient) QueryIdentityHolders(_m *Campaign) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, campaign.IdentityHoldersTable, campaign.IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.CampaignIdentityHolders
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a Campaign.
+func (c *CampaignClient) QueryWorkflowObjectRefs(_m *Campaign) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, campaign.WorkflowObjectRefsTable, campaign.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *CampaignClient) Hooks() []Hook {
+	hooks := c.hooks.Campaign
+	return append(hooks[:len(hooks):len(hooks)], campaign.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *CampaignClient) Interceptors() []Interceptor {
+	inters := c.inters.Campaign
+	return append(inters[:len(inters):len(inters)], campaign.Interceptors[:]...)
+}
+
+func (c *CampaignClient) mutate(ctx context.Context, m *CampaignMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CampaignCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CampaignUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CampaignUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CampaignDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Campaign mutation op: %q", m.Op())
+	}
+}
+
+// CampaignTargetClient is a client for the CampaignTarget schema.
+type CampaignTargetClient struct {
+	config
+}
+
+// NewCampaignTargetClient returns a client for the CampaignTarget from the given config.
+func NewCampaignTargetClient(c config) *CampaignTargetClient {
+	return &CampaignTargetClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `campaigntarget.Hooks(f(g(h())))`.
+func (c *CampaignTargetClient) Use(hooks ...Hook) {
+	c.hooks.CampaignTarget = append(c.hooks.CampaignTarget, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `campaigntarget.Intercept(f(g(h())))`.
+func (c *CampaignTargetClient) Intercept(interceptors ...Interceptor) {
+	c.inters.CampaignTarget = append(c.inters.CampaignTarget, interceptors...)
+}
+
+// Create returns a builder for creating a CampaignTarget entity.
+func (c *CampaignTargetClient) Create() *CampaignTargetCreate {
+	mutation := newCampaignTargetMutation(c.config, OpCreate)
+	return &CampaignTargetCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of CampaignTarget entities.
+func (c *CampaignTargetClient) CreateBulk(builders ...*CampaignTargetCreate) *CampaignTargetCreateBulk {
+	return &CampaignTargetCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CampaignTargetClient) MapCreateBulk(slice any, setFunc func(*CampaignTargetCreate, int)) *CampaignTargetCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CampaignTargetCreateBulk{err: fmt.Errorf("calling to CampaignTargetClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CampaignTargetCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CampaignTargetCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for CampaignTarget.
+func (c *CampaignTargetClient) Update() *CampaignTargetUpdate {
+	mutation := newCampaignTargetMutation(c.config, OpUpdate)
+	return &CampaignTargetUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CampaignTargetClient) UpdateOne(_m *CampaignTarget) *CampaignTargetUpdateOne {
+	mutation := newCampaignTargetMutation(c.config, OpUpdateOne, withCampaignTarget(_m))
+	return &CampaignTargetUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CampaignTargetClient) UpdateOneID(id string) *CampaignTargetUpdateOne {
+	mutation := newCampaignTargetMutation(c.config, OpUpdateOne, withCampaignTargetID(id))
+	return &CampaignTargetUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for CampaignTarget.
+func (c *CampaignTargetClient) Delete() *CampaignTargetDelete {
+	mutation := newCampaignTargetMutation(c.config, OpDelete)
+	return &CampaignTargetDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CampaignTargetClient) DeleteOne(_m *CampaignTarget) *CampaignTargetDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CampaignTargetClient) DeleteOneID(id string) *CampaignTargetDeleteOne {
+	builder := c.Delete().Where(campaigntarget.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CampaignTargetDeleteOne{builder}
+}
+
+// Query returns a query builder for CampaignTarget.
+func (c *CampaignTargetClient) Query() *CampaignTargetQuery {
+	return &CampaignTargetQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCampaignTarget},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a CampaignTarget entity by its id.
+func (c *CampaignTargetClient) Get(ctx context.Context, id string) (*CampaignTarget, error) {
+	return c.Query().Where(campaigntarget.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CampaignTargetClient) GetX(ctx context.Context, id string) *CampaignTarget {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a CampaignTarget.
+func (c *CampaignTargetClient) QueryOwner(_m *CampaignTarget) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaigntarget.Table, campaigntarget.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaigntarget.OwnerTable, campaigntarget.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaign queries the campaign edge of a CampaignTarget.
+func (c *CampaignTargetClient) QueryCampaign(_m *CampaignTarget) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaigntarget.Table, campaigntarget.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaigntarget.CampaignTable, campaigntarget.CampaignColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryContact queries the contact edge of a CampaignTarget.
+func (c *CampaignTargetClient) QueryContact(_m *CampaignTarget) *ContactQuery {
+	query := (&ContactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaigntarget.Table, campaigntarget.FieldID, id),
+			sqlgraph.To(contact.Table, contact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaigntarget.ContactTable, campaigntarget.ContactColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUser queries the user edge of a CampaignTarget.
+func (c *CampaignTargetClient) QueryUser(_m *CampaignTarget) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaigntarget.Table, campaigntarget.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaigntarget.UserTable, campaigntarget.UserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryGroup queries the group edge of a CampaignTarget.
+func (c *CampaignTargetClient) QueryGroup(_m *CampaignTarget) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaigntarget.Table, campaigntarget.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaigntarget.GroupTable, campaigntarget.GroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a CampaignTarget.
+func (c *CampaignTargetClient) QueryWorkflowObjectRefs(_m *CampaignTarget) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaigntarget.Table, campaigntarget.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, campaigntarget.WorkflowObjectRefsTable, campaigntarget.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *CampaignTargetClient) Hooks() []Hook {
+	hooks := c.hooks.CampaignTarget
+	return append(hooks[:len(hooks):len(hooks)], campaigntarget.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *CampaignTargetClient) Interceptors() []Interceptor {
+	inters := c.inters.CampaignTarget
+	return append(inters[:len(inters):len(inters)], campaigntarget.Interceptors[:]...)
+}
+
+func (c *CampaignTargetClient) mutate(ctx context.Context, m *CampaignTargetMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CampaignTargetCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CampaignTargetUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CampaignTargetUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CampaignTargetDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown CampaignTarget mutation op: %q", m.Op())
 	}
 }
 
@@ -2665,6 +3827,44 @@ func (c *ContactClient) QueryEntities(_m *Contact) *EntityQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.EntityContacts
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaigns queries the campaigns edge of a Contact.
+func (c *ContactClient) QueryCampaigns(_m *Contact) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, contact.CampaignsTable, contact.CampaignsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignContacts
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaignTargets queries the campaign_targets edge of a Contact.
+func (c *ContactClient) QueryCampaignTargets(_m *Contact) *CampaignTargetQuery {
+	query := (&CampaignTargetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, id),
+			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, contact.CampaignTargetsTable, contact.CampaignTargetsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3148,6 +4348,44 @@ func (c *ControlClient) QueryControlKind(_m *Control) *CustomTypeEnumQuery {
 	return query
 }
 
+// QueryEnvironment queries the environment edge of a Control.
+func (c *ControlClient) QueryEnvironment(_m *Control) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.EnvironmentTable, control.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a Control.
+func (c *ControlClient) QueryScope(_m *Control) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.ScopeTable, control.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryStandard queries the standard edge of a Control.
 func (c *ControlClient) QueryStandard(_m *Control) *StandardQuery {
 	query := (&StandardClient{config: c.config}).Query()
@@ -3186,6 +4424,25 @@ func (c *ControlClient) QueryPrograms(_m *Control) *ProgramQuery {
 	return query
 }
 
+// QueryPlatforms queries the platforms edge of a Control.
+func (c *ControlClient) QueryPlatforms(_m *Control) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.PlatformsTable, control.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformControls
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryAssets queries the assets edge of a Control.
 func (c *ControlClient) QueryAssets(_m *Control) *AssetQuery {
 	query := (&AssetClient{config: c.config}).Query()
@@ -3213,11 +4470,11 @@ func (c *ControlClient) QueryScans(_m *Control) *ScanQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(control.Table, control.FieldID, id),
 			sqlgraph.To(scan.Table, scan.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, control.ScansTable, control.ScansColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, control.ScansTable, control.ScansPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ControlScans
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4543,6 +5800,25 @@ func (c *CustomTypeEnumClient) QueryPrograms(_m *CustomTypeEnum) *ProgramQuery {
 	return query
 }
 
+// QueryPlatforms queries the platforms edge of a CustomTypeEnum.
+func (c *CustomTypeEnumClient) QueryPlatforms(_m *CustomTypeEnum) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customtypeenum.Table, customtypeenum.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.PlatformsTable, customtypeenum.PlatformsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *CustomTypeEnumClient) Hooks() []Hook {
 	hooks := c.hooks.CustomTypeEnum
@@ -4870,6 +6146,44 @@ func (c *DirectoryAccountClient) QueryOwner(_m *DirectoryAccount) *OrganizationQ
 	return query
 }
 
+// QueryEnvironment queries the environment edge of a DirectoryAccount.
+func (c *DirectoryAccountClient) QueryEnvironment(_m *DirectoryAccount) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directoryaccount.EnvironmentTable, directoryaccount.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a DirectoryAccount.
+func (c *DirectoryAccountClient) QueryScope(_m *DirectoryAccount) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directoryaccount.ScopeTable, directoryaccount.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryIntegration queries the integration edge of a DirectoryAccount.
 func (c *DirectoryAccountClient) QueryIntegration(_m *DirectoryAccount) *IntegrationQuery {
 	query := (&IntegrationClient{config: c.config}).Query()
@@ -5119,6 +6433,44 @@ func (c *DirectoryGroupClient) QueryOwner(_m *DirectoryGroup) *OrganizationQuery
 	return query
 }
 
+// QueryEnvironment queries the environment edge of a DirectoryGroup.
+func (c *DirectoryGroupClient) QueryEnvironment(_m *DirectoryGroup) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorygroup.Table, directorygroup.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directorygroup.EnvironmentTable, directorygroup.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a DirectoryGroup.
+func (c *DirectoryGroupClient) QueryScope(_m *DirectoryGroup) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorygroup.Table, directorygroup.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directorygroup.ScopeTable, directorygroup.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryIntegration queries the integration edge of a DirectoryGroup.
 func (c *DirectoryGroupClient) QueryIntegration(_m *DirectoryGroup) *IntegrationQuery {
 	query := (&IntegrationClient{config: c.config}).Query()
@@ -5361,6 +6713,44 @@ func (c *DirectoryMembershipClient) QueryOwner(_m *DirectoryMembership) *Organiz
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEnvironment queries the environment edge of a DirectoryMembership.
+func (c *DirectoryMembershipClient) QueryEnvironment(_m *DirectoryMembership) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directorymembership.EnvironmentTable, directorymembership.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a DirectoryMembership.
+func (c *DirectoryMembershipClient) QueryScope(_m *DirectoryMembership) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directorymembership.ScopeTable, directorymembership.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.DirectoryMembership
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -5629,6 +7019,44 @@ func (c *DirectorySyncRunClient) QueryOwner(_m *DirectorySyncRun) *OrganizationQ
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.DirectorySyncRun
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEnvironment queries the environment edge of a DirectorySyncRun.
+func (c *DirectorySyncRunClient) QueryEnvironment(_m *DirectorySyncRun) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directorysyncrun.EnvironmentTable, directorysyncrun.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.DirectorySyncRun
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a DirectorySyncRun.
+func (c *DirectorySyncRunClient) QueryScope(_m *DirectorySyncRun) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directorysyncrun.ScopeTable, directorysyncrun.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.DirectorySyncRun
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -6134,6 +7562,44 @@ func (c *DocumentDataClient) QueryOwner(_m *DocumentData) *OrganizationQuery {
 	return query
 }
 
+// QueryEnvironment queries the environment edge of a DocumentData.
+func (c *DocumentDataClient) QueryEnvironment(_m *DocumentData) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentdata.Table, documentdata.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.EnvironmentTable, documentdata.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.DocumentData
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a DocumentData.
+func (c *DocumentDataClient) QueryScope(_m *DocumentData) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentdata.Table, documentdata.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.ScopeTable, documentdata.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.DocumentData
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryTemplate queries the template edge of a DocumentData.
 func (c *DocumentDataClient) QueryTemplate(_m *DocumentData) *TemplateQuery {
 	query := (&TemplateClient{config: c.config}).Query()
@@ -6556,6 +8022,177 @@ func (c *EntityClient) QueryViewers(_m *Entity) *GroupQuery {
 	return query
 }
 
+// QueryInternalOwnerUser queries the internal_owner_user edge of a Entity.
+func (c *EntityClient) QueryInternalOwnerUser(_m *Entity) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.InternalOwnerUserTable, entity.InternalOwnerUserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerGroup queries the internal_owner_group edge of a Entity.
+func (c *EntityClient) QueryInternalOwnerGroup(_m *Entity) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.InternalOwnerGroupTable, entity.InternalOwnerGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryReviewedByUser queries the reviewed_by_user edge of a Entity.
+func (c *EntityClient) QueryReviewedByUser(_m *Entity) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.ReviewedByUserTable, entity.ReviewedByUserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryReviewedByGroup queries the reviewed_by_group edge of a Entity.
+func (c *EntityClient) QueryReviewedByGroup(_m *Entity) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.ReviewedByGroupTable, entity.ReviewedByGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntityRelationshipState queries the entity_relationship_state edge of a Entity.
+func (c *EntityClient) QueryEntityRelationshipState(_m *Entity) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.EntityRelationshipStateTable, entity.EntityRelationshipStateColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntitySecurityQuestionnaireStatus queries the entity_security_questionnaire_status edge of a Entity.
+func (c *EntityClient) QueryEntitySecurityQuestionnaireStatus(_m *Entity) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.EntitySecurityQuestionnaireStatusTable, entity.EntitySecurityQuestionnaireStatusColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntitySourceType queries the entity_source_type edge of a Entity.
+func (c *EntityClient) QueryEntitySourceType(_m *Entity) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.EntitySourceTypeTable, entity.EntitySourceTypeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEnvironment queries the environment edge of a Entity.
+func (c *EntityClient) QueryEnvironment(_m *Entity) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.EnvironmentTable, entity.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a Entity.
+func (c *EntityClient) QueryScope(_m *Entity) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.ScopeTable, entity.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryContacts queries the contacts edge of a Entity.
 func (c *EntityClient) QueryContacts(_m *Entity) *ContactQuery {
 	query := (&ContactClient{config: c.config}).Query()
@@ -6664,6 +8301,196 @@ func (c *EntityClient) QueryScans(_m *Entity) *ScanQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Scan
 		step.Edge.Schema = schemaConfig.Scan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaigns queries the campaigns edge of a Entity.
+func (c *EntityClient) QueryCampaigns(_m *Entity) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.CampaignsTable, entity.CampaignsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessmentResponses queries the assessment_responses edge of a Entity.
+func (c *EntityClient) QueryAssessmentResponses(_m *Entity) *AssessmentResponseQuery {
+	query := (&AssessmentResponseClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.AssessmentResponsesTable, entity.AssessmentResponsesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.AssessmentResponse
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegrations queries the integrations edge of a Entity.
+func (c *EntityClient) QueryIntegrations(_m *Entity) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, entity.IntegrationsTable, entity.IntegrationsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.EntityIntegrations
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubprocessors queries the subprocessors edge of a Entity.
+func (c *EntityClient) QuerySubprocessors(_m *Entity) *SubprocessorQuery {
+	query := (&SubprocessorClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(subprocessor.Table, subprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, entity.SubprocessorsTable, entity.SubprocessorsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.EntitySubprocessors
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAuthMethods queries the auth_methods edge of a Entity.
+func (c *EntityClient) QueryAuthMethods(_m *Entity) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.AuthMethodsTable, entity.AuthMethodsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.CustomTypeEnum
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEmployerIdentityHolders queries the employer_identity_holders edge of a Entity.
+func (c *EntityClient) QueryEmployerIdentityHolders(_m *Entity) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, entity.EmployerIdentityHoldersTable, entity.EmployerIdentityHoldersColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolder
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders queries the identity_holders edge of a Entity.
+func (c *EntityClient) QueryIdentityHolders(_m *Entity) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.IdentityHoldersTable, entity.IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolderEntities
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlatforms queries the platforms edge of a Entity.
+func (c *EntityClient) QueryPlatforms(_m *Entity) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.PlatformsTable, entity.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformEntities
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOutOfScopePlatforms queries the out_of_scope_platforms edge of a Entity.
+func (c *EntityClient) QueryOutOfScopePlatforms(_m *Entity) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.OutOfScopePlatformsTable, entity.OutOfScopePlatformsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformOutOfScopeVendors
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySourcePlatforms queries the source_platforms edge of a Entity.
+func (c *EntityClient) QuerySourcePlatforms(_m *Entity) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.SourcePlatformsTable, entity.SourcePlatformsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformSourceEntities
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7378,6 +9205,44 @@ func (c *EvidenceClient) QueryOwner(_m *Evidence) *OrganizationQuery {
 	return query
 }
 
+// QueryEnvironment queries the environment edge of a Evidence.
+func (c *EvidenceClient) QueryEnvironment(_m *Evidence) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, evidence.EnvironmentTable, evidence.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Evidence
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a Evidence.
+func (c *EvidenceClient) QueryScope(_m *Evidence) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, evidence.ScopeTable, evidence.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Evidence
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryControls queries the controls edge of a Evidence.
 func (c *EvidenceClient) QueryControls(_m *Evidence) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
@@ -7505,6 +9370,44 @@ func (c *EvidenceClient) QueryTasks(_m *Evidence) *TaskQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.TaskEvidence
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlatforms queries the platforms edge of a Evidence.
+func (c *EvidenceClient) QueryPlatforms(_m *Evidence) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, evidence.PlatformsTable, evidence.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformEvidence
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScans queries the scans edge of a Evidence.
+func (c *EvidenceClient) QueryScans(_m *Evidence) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, evidence.ScansTable, evidence.ScansPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanEvidence
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7876,6 +9779,44 @@ func (c *FileClient) GetX(ctx context.Context, id string) *File {
 	return obj
 }
 
+// QueryEnvironment queries the environment edge of a File.
+func (c *FileClient) QueryEnvironment(_m *File) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, file.EnvironmentTable, file.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.File
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a File.
+func (c *FileClient) QueryScope(_m *File) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, file.ScopeTable, file.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.File
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryOrganization queries the organization edge of a File.
 func (c *FileClient) QueryOrganization(_m *File) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
@@ -8028,6 +9969,25 @@ func (c *FileClient) QueryProgram(_m *File) *ProgramQuery {
 	return query
 }
 
+// QueryPlatform queries the platform edge of a File.
+func (c *FileClient) QueryPlatform(_m *File) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.PlatformTable, file.PlatformPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformFiles
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEvidence queries the evidence edge of a File.
 func (c *FileClient) QueryEvidence(_m *File) *EvidenceQuery {
 	query := (&EvidenceClient{config: c.config}).Query()
@@ -8041,6 +10001,25 @@ func (c *FileClient) QueryEvidence(_m *File) *EvidenceQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Evidence
 		step.Edge.Schema = schemaConfig.EvidenceFiles
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScan queries the scan edge of a File.
+func (c *FileClient) QueryScan(_m *File) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.ScanTable, file.ScanPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanFiles
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -8520,6 +10499,44 @@ func (c *FindingClient) QueryViewers(_m *Finding) *GroupQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEnvironment queries the environment edge of a Finding.
+func (c *FindingClient) QueryEnvironment(_m *Finding) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.EnvironmentTable, finding.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Finding
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a Finding.
+func (c *FindingClient) QueryScope(_m *Finding) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.ScopeTable, finding.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Finding
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9650,6 +11667,120 @@ func (c *GroupClient) QueryActionPlanViewers(_m *Group) *ActionPlanQuery {
 	return query
 }
 
+// QueryPlatformEditors queries the platform_editors edge of a Group.
+func (c *GroupClient) QueryPlatformEditors(_m *Group) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.PlatformEditorsTable, group.PlatformEditorsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformEditors
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlatformBlockedGroups queries the platform_blocked_groups edge of a Group.
+func (c *GroupClient) QueryPlatformBlockedGroups(_m *Group) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.PlatformBlockedGroupsTable, group.PlatformBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformBlockedGroups
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlatformViewers queries the platform_viewers edge of a Group.
+func (c *GroupClient) QueryPlatformViewers(_m *Group) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.PlatformViewersTable, group.PlatformViewersPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformViewers
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaignEditors queries the campaign_editors edge of a Group.
+func (c *GroupClient) QueryCampaignEditors(_m *Group) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.CampaignEditorsTable, group.CampaignEditorsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignEditors
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaignBlockedGroups queries the campaign_blocked_groups edge of a Group.
+func (c *GroupClient) QueryCampaignBlockedGroups(_m *Group) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.CampaignBlockedGroupsTable, group.CampaignBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignBlockedGroups
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaignViewers queries the campaign_viewers edge of a Group.
+func (c *GroupClient) QueryCampaignViewers(_m *Group) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.CampaignViewersTable, group.CampaignViewersPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignViewers
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryProcedureEditors queries the procedure_editors edge of a Group.
 func (c *GroupClient) QueryProcedureEditors(_m *Group) *ProcedureQuery {
 	query := (&ProcedureClient{config: c.config}).Query()
@@ -9910,6 +12041,44 @@ func (c *GroupClient) QueryTasks(_m *Group) *TaskQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.GroupTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaigns queries the campaigns edge of a Group.
+func (c *GroupClient) QueryCampaigns(_m *Group) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.CampaignsTable, group.CampaignsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignGroups
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaignTargets queries the campaign_targets edge of a Group.
+func (c *GroupClient) QueryCampaignTargets(_m *Group) *CampaignTargetQuery {
+	query := (&CampaignTargetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, group.CampaignTargetsTable, group.CampaignTargetsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -10557,6 +12726,521 @@ func (c *HushClient) mutate(ctx context.Context, m *HushMutation) (Value, error)
 	}
 }
 
+// IdentityHolderClient is a client for the IdentityHolder schema.
+type IdentityHolderClient struct {
+	config
+}
+
+// NewIdentityHolderClient returns a client for the IdentityHolder from the given config.
+func NewIdentityHolderClient(c config) *IdentityHolderClient {
+	return &IdentityHolderClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `identityholder.Hooks(f(g(h())))`.
+func (c *IdentityHolderClient) Use(hooks ...Hook) {
+	c.hooks.IdentityHolder = append(c.hooks.IdentityHolder, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `identityholder.Intercept(f(g(h())))`.
+func (c *IdentityHolderClient) Intercept(interceptors ...Interceptor) {
+	c.inters.IdentityHolder = append(c.inters.IdentityHolder, interceptors...)
+}
+
+// Create returns a builder for creating a IdentityHolder entity.
+func (c *IdentityHolderClient) Create() *IdentityHolderCreate {
+	mutation := newIdentityHolderMutation(c.config, OpCreate)
+	return &IdentityHolderCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of IdentityHolder entities.
+func (c *IdentityHolderClient) CreateBulk(builders ...*IdentityHolderCreate) *IdentityHolderCreateBulk {
+	return &IdentityHolderCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *IdentityHolderClient) MapCreateBulk(slice any, setFunc func(*IdentityHolderCreate, int)) *IdentityHolderCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &IdentityHolderCreateBulk{err: fmt.Errorf("calling to IdentityHolderClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*IdentityHolderCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &IdentityHolderCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for IdentityHolder.
+func (c *IdentityHolderClient) Update() *IdentityHolderUpdate {
+	mutation := newIdentityHolderMutation(c.config, OpUpdate)
+	return &IdentityHolderUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *IdentityHolderClient) UpdateOne(_m *IdentityHolder) *IdentityHolderUpdateOne {
+	mutation := newIdentityHolderMutation(c.config, OpUpdateOne, withIdentityHolder(_m))
+	return &IdentityHolderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *IdentityHolderClient) UpdateOneID(id string) *IdentityHolderUpdateOne {
+	mutation := newIdentityHolderMutation(c.config, OpUpdateOne, withIdentityHolderID(id))
+	return &IdentityHolderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for IdentityHolder.
+func (c *IdentityHolderClient) Delete() *IdentityHolderDelete {
+	mutation := newIdentityHolderMutation(c.config, OpDelete)
+	return &IdentityHolderDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *IdentityHolderClient) DeleteOne(_m *IdentityHolder) *IdentityHolderDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *IdentityHolderClient) DeleteOneID(id string) *IdentityHolderDeleteOne {
+	builder := c.Delete().Where(identityholder.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &IdentityHolderDeleteOne{builder}
+}
+
+// Query returns a query builder for IdentityHolder.
+func (c *IdentityHolderClient) Query() *IdentityHolderQuery {
+	return &IdentityHolderQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeIdentityHolder},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a IdentityHolder entity by its id.
+func (c *IdentityHolderClient) Get(ctx context.Context, id string) (*IdentityHolder, error) {
+	return c.Query().Where(identityholder.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *IdentityHolderClient) GetX(ctx context.Context, id string) *IdentityHolder {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryOwner(_m *IdentityHolder) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, identityholder.OwnerTable, identityholder.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.IdentityHolder
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups queries the blocked_groups edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryBlockedGroups(_m *IdentityHolder) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.BlockedGroupsTable, identityholder.BlockedGroupsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryEditors(_m *IdentityHolder) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.EditorsTable, identityholder.EditorsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryViewers queries the viewers edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryViewers(_m *IdentityHolder) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.ViewersTable, identityholder.ViewersColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerUser queries the internal_owner_user edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryInternalOwnerUser(_m *IdentityHolder) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, identityholder.InternalOwnerUserTable, identityholder.InternalOwnerUserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.IdentityHolder
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerGroup queries the internal_owner_group edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryInternalOwnerGroup(_m *IdentityHolder) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, identityholder.InternalOwnerGroupTable, identityholder.InternalOwnerGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.IdentityHolder
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEnvironment queries the environment edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryEnvironment(_m *IdentityHolder) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, identityholder.EnvironmentTable, identityholder.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.IdentityHolder
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryScope(_m *IdentityHolder) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, identityholder.ScopeTable, identityholder.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.IdentityHolder
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEmployer queries the employer edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryEmployer(_m *IdentityHolder) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, identityholder.EmployerTable, identityholder.EmployerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.IdentityHolder
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessmentResponses queries the assessment_responses edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryAssessmentResponses(_m *IdentityHolder) *AssessmentResponseQuery {
+	query := (&AssessmentResponseClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.AssessmentResponsesTable, identityholder.AssessmentResponsesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.AssessmentResponse
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessments queries the assessments edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryAssessments(_m *IdentityHolder) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, identityholder.AssessmentsTable, identityholder.AssessmentsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.IdentityHolderAssessments
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTemplates queries the templates edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryTemplates(_m *IdentityHolder) *TemplateQuery {
+	query := (&TemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(template.Table, template.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, identityholder.TemplatesTable, identityholder.TemplatesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.IdentityHolderTemplates
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssets queries the assets edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryAssets(_m *IdentityHolder) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, identityholder.AssetsTable, identityholder.AssetsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.IdentityHolderAssets
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntities queries the entities edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryEntities(_m *IdentityHolder) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, identityholder.EntitiesTable, identityholder.EntitiesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.IdentityHolderEntities
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlatforms queries the platforms edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryPlatforms(_m *IdentityHolder) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, identityholder.PlatformsTable, identityholder.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformIdentityHolders
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaigns queries the campaigns edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryCampaigns(_m *IdentityHolder) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, identityholder.CampaignsTable, identityholder.CampaignsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignIdentityHolders
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTasks queries the tasks edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryTasks(_m *IdentityHolder) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, identityholder.TasksTable, identityholder.TasksPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.IdentityHolderTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryWorkflowObjectRefs(_m *IdentityHolder) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, identityholder.WorkflowObjectRefsTable, identityholder.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAccessPlatforms queries the access_platforms edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryAccessPlatforms(_m *IdentityHolder) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.AccessPlatformsTable, identityholder.AccessPlatformsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUser queries the user edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryUser(_m *IdentityHolder) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, identityholder.UserTable, identityholder.UserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.IdentityHolder
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *IdentityHolderClient) Hooks() []Hook {
+	hooks := c.hooks.IdentityHolder
+	return append(hooks[:len(hooks):len(hooks)], identityholder.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *IdentityHolderClient) Interceptors() []Interceptor {
+	inters := c.inters.IdentityHolder
+	return append(inters[:len(inters):len(inters)], identityholder.Interceptors[:]...)
+}
+
+func (c *IdentityHolderClient) mutate(ctx context.Context, m *IdentityHolderMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&IdentityHolderCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&IdentityHolderUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&IdentityHolderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&IdentityHolderDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown IdentityHolder mutation op: %q", m.Op())
+	}
+}
+
 // ImpersonationEventClient is a client for the ImpersonationEvent schema.
 type ImpersonationEventClient struct {
 	config
@@ -10876,6 +13560,44 @@ func (c *IntegrationClient) QueryOwner(_m *Integration) *OrganizationQuery {
 	return query
 }
 
+// QueryEnvironment queries the environment edge of a Integration.
+func (c *IntegrationClient) QueryEnvironment(_m *Integration) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, integration.EnvironmentTable, integration.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Integration
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a Integration.
+func (c *IntegrationClient) QueryScope(_m *Integration) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, integration.ScopeTable, integration.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Integration
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QuerySecrets queries the secrets edge of a Integration.
 func (c *IntegrationClient) QuerySecrets(_m *Integration) *HushQuery {
 	query := (&HushClient{config: c.config}).Query()
@@ -11123,6 +13845,25 @@ func (c *IntegrationClient) QueryDirectorySyncRuns(_m *Integration) *DirectorySy
 	return query
 }
 
+// QueryEntities queries the entities edge of a Integration.
+func (c *IntegrationClient) QueryEntities(_m *Integration) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integration.EntitiesTable, integration.EntitiesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.EntityIntegrations
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *IntegrationClient) Hooks() []Hook {
 	hooks := c.hooks.Integration
@@ -11362,6 +14103,44 @@ func (c *InternalPolicyClient) QueryInternalPolicyKind(_m *InternalPolicy) *Cust
 			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.InternalPolicyKindTable, internalpolicy.InternalPolicyKindColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEnvironment queries the environment edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryEnvironment(_m *InternalPolicy) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.EnvironmentTable, internalpolicy.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryScope(_m *InternalPolicy) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.ScopeTable, internalpolicy.ScopeColumn),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.CustomTypeEnum
@@ -16063,6 +18842,82 @@ func (c *OrganizationClient) QueryEntities(_m *Organization) *EntityQuery {
 	return query
 }
 
+// QueryPlatforms queries the platforms edge of a Organization.
+func (c *OrganizationClient) QueryPlatforms(_m *Organization) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.PlatformsTable, organization.PlatformsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders queries the identity_holders edge of a Organization.
+func (c *OrganizationClient) QueryIdentityHolders(_m *Organization) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.IdentityHoldersTable, organization.IdentityHoldersColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolder
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaigns queries the campaigns edge of a Organization.
+func (c *OrganizationClient) QueryCampaigns(_m *Organization) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.CampaignsTable, organization.CampaignsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaignTargets queries the campaign_targets edge of a Organization.
+func (c *OrganizationClient) QueryCampaignTargets(_m *Organization) *CampaignTargetQuery {
+	query := (&CampaignTargetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.CampaignTargetsTable, organization.CampaignTargetsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEntityTypes queries the entity_types edge of a Organization.
 func (c *OrganizationClient) QueryEntityTypes(_m *Organization) *EntityTypeQuery {
 	query := (&EntityTypeClient{config: c.config}).Query()
@@ -17654,6 +20509,863 @@ func (c *PersonalAccessTokenClient) mutate(ctx context.Context, m *PersonalAcces
 	}
 }
 
+// PlatformClient is a client for the Platform schema.
+type PlatformClient struct {
+	config
+}
+
+// NewPlatformClient returns a client for the Platform from the given config.
+func NewPlatformClient(c config) *PlatformClient {
+	return &PlatformClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `platform.Hooks(f(g(h())))`.
+func (c *PlatformClient) Use(hooks ...Hook) {
+	c.hooks.Platform = append(c.hooks.Platform, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `platform.Intercept(f(g(h())))`.
+func (c *PlatformClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Platform = append(c.inters.Platform, interceptors...)
+}
+
+// Create returns a builder for creating a Platform entity.
+func (c *PlatformClient) Create() *PlatformCreate {
+	mutation := newPlatformMutation(c.config, OpCreate)
+	return &PlatformCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Platform entities.
+func (c *PlatformClient) CreateBulk(builders ...*PlatformCreate) *PlatformCreateBulk {
+	return &PlatformCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PlatformClient) MapCreateBulk(slice any, setFunc func(*PlatformCreate, int)) *PlatformCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PlatformCreateBulk{err: fmt.Errorf("calling to PlatformClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PlatformCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PlatformCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Platform.
+func (c *PlatformClient) Update() *PlatformUpdate {
+	mutation := newPlatformMutation(c.config, OpUpdate)
+	return &PlatformUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PlatformClient) UpdateOne(_m *Platform) *PlatformUpdateOne {
+	mutation := newPlatformMutation(c.config, OpUpdateOne, withPlatform(_m))
+	return &PlatformUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PlatformClient) UpdateOneID(id string) *PlatformUpdateOne {
+	mutation := newPlatformMutation(c.config, OpUpdateOne, withPlatformID(id))
+	return &PlatformUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Platform.
+func (c *PlatformClient) Delete() *PlatformDelete {
+	mutation := newPlatformMutation(c.config, OpDelete)
+	return &PlatformDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PlatformClient) DeleteOne(_m *Platform) *PlatformDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PlatformClient) DeleteOneID(id string) *PlatformDeleteOne {
+	builder := c.Delete().Where(platform.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PlatformDeleteOne{builder}
+}
+
+// Query returns a query builder for Platform.
+func (c *PlatformClient) Query() *PlatformQuery {
+	return &PlatformQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePlatform},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Platform entity by its id.
+func (c *PlatformClient) Get(ctx context.Context, id string) (*Platform, error) {
+	return c.Query().Where(platform.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PlatformClient) GetX(ctx context.Context, id string) *Platform {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Platform.
+func (c *PlatformClient) QueryOwner(_m *Platform) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, platform.OwnerTable, platform.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups queries the blocked_groups edge of a Platform.
+func (c *PlatformClient) QueryBlockedGroups(_m *Platform) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.BlockedGroupsTable, platform.BlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.PlatformBlockedGroups
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a Platform.
+func (c *PlatformClient) QueryEditors(_m *Platform) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.EditorsTable, platform.EditorsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.PlatformEditors
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryViewers queries the viewers edge of a Platform.
+func (c *PlatformClient) QueryViewers(_m *Platform) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.ViewersTable, platform.ViewersPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.PlatformViewers
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerUser queries the internal_owner_user edge of a Platform.
+func (c *PlatformClient) QueryInternalOwnerUser(_m *Platform) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.InternalOwnerUserTable, platform.InternalOwnerUserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerGroup queries the internal_owner_group edge of a Platform.
+func (c *PlatformClient) QueryInternalOwnerGroup(_m *Platform) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.InternalOwnerGroupTable, platform.InternalOwnerGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBusinessOwnerUser queries the business_owner_user edge of a Platform.
+func (c *PlatformClient) QueryBusinessOwnerUser(_m *Platform) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.BusinessOwnerUserTable, platform.BusinessOwnerUserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBusinessOwnerGroup queries the business_owner_group edge of a Platform.
+func (c *PlatformClient) QueryBusinessOwnerGroup(_m *Platform) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.BusinessOwnerGroupTable, platform.BusinessOwnerGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTechnicalOwnerUser queries the technical_owner_user edge of a Platform.
+func (c *PlatformClient) QueryTechnicalOwnerUser(_m *Platform) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.TechnicalOwnerUserTable, platform.TechnicalOwnerUserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTechnicalOwnerGroup queries the technical_owner_group edge of a Platform.
+func (c *PlatformClient) QueryTechnicalOwnerGroup(_m *Platform) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.TechnicalOwnerGroupTable, platform.TechnicalOwnerGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySecurityOwnerUser queries the security_owner_user edge of a Platform.
+func (c *PlatformClient) QuerySecurityOwnerUser(_m *Platform) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.SecurityOwnerUserTable, platform.SecurityOwnerUserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySecurityOwnerGroup queries the security_owner_group edge of a Platform.
+func (c *PlatformClient) QuerySecurityOwnerGroup(_m *Platform) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.SecurityOwnerGroupTable, platform.SecurityOwnerGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlatformKind queries the platform_kind edge of a Platform.
+func (c *PlatformClient) QueryPlatformKind(_m *Platform) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.PlatformKindTable, platform.PlatformKindColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlatformDataClassification queries the platform_data_classification edge of a Platform.
+func (c *PlatformClient) QueryPlatformDataClassification(_m *Platform) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.PlatformDataClassificationTable, platform.PlatformDataClassificationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEnvironment queries the environment edge of a Platform.
+func (c *PlatformClient) QueryEnvironment(_m *Platform) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.EnvironmentTable, platform.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a Platform.
+func (c *PlatformClient) QueryScope(_m *Platform) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.ScopeTable, platform.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAccessModel queries the access_model edge of a Platform.
+func (c *PlatformClient) QueryAccessModel(_m *Platform) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.AccessModelTable, platform.AccessModelColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEncryptionStatus queries the encryption_status edge of a Platform.
+func (c *PlatformClient) QueryEncryptionStatus(_m *Platform) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.EncryptionStatusTable, platform.EncryptionStatusColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySecurityTier queries the security_tier edge of a Platform.
+func (c *PlatformClient) QuerySecurityTier(_m *Platform) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.SecurityTierTable, platform.SecurityTierColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCriticality queries the criticality edge of a Platform.
+func (c *PlatformClient) QueryCriticality(_m *Platform) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.CriticalityTable, platform.CriticalityColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssets queries the assets edge of a Platform.
+func (c *PlatformClient) QueryAssets(_m *Platform) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.AssetsTable, platform.AssetsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.PlatformAssets
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntities queries the entities edge of a Platform.
+func (c *PlatformClient) QueryEntities(_m *Platform) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.EntitiesTable, platform.EntitiesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.PlatformEntities
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvidence queries the evidence edge of a Platform.
+func (c *PlatformClient) QueryEvidence(_m *Platform) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.EvidenceTable, platform.EvidencePrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.PlatformEvidence
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a Platform.
+func (c *PlatformClient) QueryFiles(_m *Platform) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.FilesTable, platform.FilesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.PlatformFiles
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRisks queries the risks edge of a Platform.
+func (c *PlatformClient) QueryRisks(_m *Platform) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.RisksTable, platform.RisksPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.PlatformRisks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControls queries the controls edge of a Platform.
+func (c *PlatformClient) QueryControls(_m *Platform) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.ControlsTable, platform.ControlsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.PlatformControls
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessments queries the assessments edge of a Platform.
+func (c *PlatformClient) QueryAssessments(_m *Platform) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.AssessmentsTable, platform.AssessmentsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.PlatformAssessments
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScans queries the scans edge of a Platform.
+func (c *PlatformClient) QueryScans(_m *Platform) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.ScansTable, platform.ScansPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.PlatformScans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTasks queries the tasks edge of a Platform.
+func (c *PlatformClient) QueryTasks(_m *Platform) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.TasksTable, platform.TasksPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.PlatformTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders queries the identity_holders edge of a Platform.
+func (c *PlatformClient) QueryIdentityHolders(_m *Platform) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.IdentityHoldersTable, platform.IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.PlatformIdentityHolders
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a Platform.
+func (c *PlatformClient) QueryWorkflowObjectRefs(_m *Platform) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, platform.WorkflowObjectRefsTable, platform.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySourceAssets queries the source_assets edge of a Platform.
+func (c *PlatformClient) QuerySourceAssets(_m *Platform) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, platform.SourceAssetsTable, platform.SourceAssetsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySourceEntities queries the source_entities edge of a Platform.
+func (c *PlatformClient) QuerySourceEntities(_m *Platform) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.SourceEntitiesTable, platform.SourceEntitiesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.PlatformSourceEntities
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOutOfScopeAssets queries the out_of_scope_assets edge of a Platform.
+func (c *PlatformClient) QueryOutOfScopeAssets(_m *Platform) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.OutOfScopeAssetsTable, platform.OutOfScopeAssetsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.PlatformOutOfScopeAssets
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOutOfScopeVendors queries the out_of_scope_vendors edge of a Platform.
+func (c *PlatformClient) QueryOutOfScopeVendors(_m *Platform) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.OutOfScopeVendorsTable, platform.OutOfScopeVendorsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.PlatformOutOfScopeVendors
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryApplicableFrameworks queries the applicable_frameworks edge of a Platform.
+func (c *PlatformClient) QueryApplicableFrameworks(_m *Platform) *StandardQuery {
+	query := (&StandardClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(standard.Table, standard.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.ApplicableFrameworksTable, platform.ApplicableFrameworksPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.PlatformApplicableFrameworks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryGeneratedScans queries the generated_scans edge of a Platform.
+func (c *PlatformClient) QueryGeneratedScans(_m *Platform) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, platform.GeneratedScansTable, platform.GeneratedScansColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.Scan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlatformOwner queries the platform_owner edge of a Platform.
+func (c *PlatformClient) QueryPlatformOwner(_m *Platform) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, platform.PlatformOwnerTable, platform.PlatformOwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PlatformClient) Hooks() []Hook {
+	hooks := c.hooks.Platform
+	return append(hooks[:len(hooks):len(hooks)], platform.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *PlatformClient) Interceptors() []Interceptor {
+	inters := c.inters.Platform
+	return append(inters[:len(inters):len(inters)], platform.Interceptors[:]...)
+}
+
+func (c *PlatformClient) mutate(ctx context.Context, m *PlatformMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PlatformCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PlatformUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PlatformUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PlatformDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Platform mutation op: %q", m.Op())
+	}
+}
+
 // ProcedureClient is a client for the Procedure schema.
 type ProcedureClient struct {
 	config
@@ -17866,6 +21578,44 @@ func (c *ProcedureClient) QueryProcedureKind(_m *Procedure) *CustomTypeEnumQuery
 			sqlgraph.From(procedure.Table, procedure.FieldID, id),
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, procedure.ProcedureKindTable, procedure.ProcedureKindColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Procedure
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEnvironment queries the environment edge of a Procedure.
+func (c *ProcedureClient) QueryEnvironment(_m *Procedure) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.EnvironmentTable, procedure.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Procedure
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a Procedure.
+func (c *ProcedureClient) QueryScope(_m *Procedure) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.ScopeTable, procedure.ScopeColumn),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.CustomTypeEnum
@@ -19003,6 +22753,44 @@ func (c *RemediationClient) QueryViewers(_m *Remediation) *GroupQuery {
 	return query
 }
 
+// QueryEnvironment queries the environment edge of a Remediation.
+func (c *RemediationClient) QueryEnvironment(_m *Remediation) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, remediation.EnvironmentTable, remediation.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Remediation
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a Remediation.
+func (c *RemediationClient) QueryScope(_m *Remediation) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, remediation.ScopeTable, remediation.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Remediation
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryIntegrations queries the integrations edge of a Remediation.
 func (c *RemediationClient) QueryIntegrations(_m *Remediation) *IntegrationQuery {
 	query := (&IntegrationClient{config: c.config}).Query()
@@ -19016,6 +22804,25 @@ func (c *RemediationClient) QueryIntegrations(_m *Remediation) *IntegrationQuery
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Integration
 		step.Edge.Schema = schemaConfig.IntegrationRemediations
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScans queries the scans edge of a Remediation.
+func (c *RemediationClient) QueryScans(_m *Remediation) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, remediation.ScansTable, remediation.ScansPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanRemediations
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -19474,6 +23281,44 @@ func (c *ReviewClient) QueryViewers(_m *Review) *GroupQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEnvironment queries the environment edge of a Review.
+func (c *ReviewClient) QueryEnvironment(_m *Review) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, review.EnvironmentTable, review.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Review
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a Review.
+func (c *ReviewClient) QueryScope(_m *Review) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, review.ScopeTable, review.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Review
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -20014,6 +23859,44 @@ func (c *RiskClient) QueryRiskCategory(_m *Risk) *CustomTypeEnumQuery {
 	return query
 }
 
+// QueryEnvironment queries the environment edge of a Risk.
+func (c *RiskClient) QueryEnvironment(_m *Risk) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.EnvironmentTable, risk.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a Risk.
+func (c *RiskClient) QueryScope(_m *Risk) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.ScopeTable, risk.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryControls queries the controls edge of a Risk.
 func (c *RiskClient) QueryControls(_m *Risk) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
@@ -20103,6 +23986,25 @@ func (c *RiskClient) QueryPrograms(_m *Risk) *ProgramQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramRisks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlatforms queries the platforms edge of a Risk.
+func (c *RiskClient) QueryPlatforms(_m *Risk) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, risk.PlatformsTable, risk.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformRisks
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -20491,6 +24393,120 @@ func (c *ScanClient) QueryViewers(_m *Scan) *GroupQuery {
 	return query
 }
 
+// QueryReviewedByUser queries the reviewed_by_user edge of a Scan.
+func (c *ScanClient) QueryReviewedByUser(_m *Scan) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.ReviewedByUserTable, scan.ReviewedByUserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Scan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryReviewedByGroup queries the reviewed_by_group edge of a Scan.
+func (c *ScanClient) QueryReviewedByGroup(_m *Scan) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.ReviewedByGroupTable, scan.ReviewedByGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Scan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssignedToUser queries the assigned_to_user edge of a Scan.
+func (c *ScanClient) QueryAssignedToUser(_m *Scan) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.AssignedToUserTable, scan.AssignedToUserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Scan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssignedToGroup queries the assigned_to_group edge of a Scan.
+func (c *ScanClient) QueryAssignedToGroup(_m *Scan) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.AssignedToGroupTable, scan.AssignedToGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Scan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEnvironment queries the environment edge of a Scan.
+func (c *ScanClient) QueryEnvironment(_m *Scan) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.EnvironmentTable, scan.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Scan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a Scan.
+func (c *ScanClient) QueryScope(_m *Scan) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.ScopeTable, scan.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Scan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryAssets queries the assets edge of a Scan.
 func (c *ScanClient) QueryAssets(_m *Scan) *AssetQuery {
 	query := (&AssetClient{config: c.config}).Query()
@@ -20523,6 +24539,215 @@ func (c *ScanClient) QueryEntities(_m *Scan) *EntityQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvidence queries the evidence edge of a Scan.
+func (c *ScanClient) QueryEvidence(_m *Scan) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.EvidenceTable, scan.EvidencePrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.ScanEvidence
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a Scan.
+func (c *ScanClient) QueryFiles(_m *Scan) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.FilesTable, scan.FilesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.ScanFiles
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRemediations queries the remediations edge of a Scan.
+func (c *ScanClient) QueryRemediations(_m *Scan) *RemediationQuery {
+	query := (&RemediationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.RemediationsTable, scan.RemediationsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.ScanRemediations
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryActionPlans queries the action_plans edge of a Scan.
+func (c *ScanClient) QueryActionPlans(_m *Scan) *ActionPlanQuery {
+	query := (&ActionPlanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.ActionPlansTable, scan.ActionPlansPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ScanActionPlans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTasks queries the tasks edge of a Scan.
+func (c *ScanClient) QueryTasks(_m *Scan) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.TasksTable, scan.TasksPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.ScanTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlatforms queries the platforms edge of a Scan.
+func (c *ScanClient) QueryPlatforms(_m *Scan) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, scan.PlatformsTable, scan.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformScans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVulnerabilities queries the vulnerabilities edge of a Scan.
+func (c *ScanClient) QueryVulnerabilities(_m *Scan) *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, scan.VulnerabilitiesTable, scan.VulnerabilitiesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityScans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControls queries the controls edge of a Scan.
+func (c *ScanClient) QueryControls(_m *Scan) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, scan.ControlsTable, scan.ControlsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlScans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryGeneratedByPlatform queries the generated_by_platform edge of a Scan.
+func (c *ScanClient) QueryGeneratedByPlatform(_m *Scan) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, scan.GeneratedByPlatformTable, scan.GeneratedByPlatformColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Scan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPerformedByUser queries the performed_by_user edge of a Scan.
+func (c *ScanClient) QueryPerformedByUser(_m *Scan) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.PerformedByUserTable, scan.PerformedByUserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Scan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPerformedByGroup queries the performed_by_group edge of a Scan.
+func (c *ScanClient) QueryPerformedByGroup(_m *Scan) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.PerformedByGroupTable, scan.PerformedByGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Scan
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -21156,6 +25381,25 @@ func (c *StandardClient) QueryTrustCenterDocs(_m *Standard) *TrustCenterDocQuery
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenterDoc
 		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryApplicablePlatforms queries the applicable_platforms edge of a Standard.
+func (c *StandardClient) QueryApplicablePlatforms(_m *Standard) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(standard.Table, standard.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, standard.ApplicablePlatformsTable, standard.ApplicablePlatformsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformApplicableFrameworks
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -21907,6 +26151,25 @@ func (c *SubprocessorClient) QueryTrustCenterSubprocessors(_m *Subprocessor) *Tr
 	return query
 }
 
+// QueryEntities queries the entities edge of a Subprocessor.
+func (c *SubprocessorClient) QueryEntities(_m *Subprocessor) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subprocessor.Table, subprocessor.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, subprocessor.EntitiesTable, subprocessor.EntitiesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.EntitySubprocessors
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *SubprocessorClient) Hooks() []Hook {
 	hooks := c.hooks.Subprocessor
@@ -22561,6 +26824,44 @@ func (c *TaskClient) QueryTaskKind(_m *Task) *CustomTypeEnumQuery {
 	return query
 }
 
+// QueryEnvironment queries the environment edge of a Task.
+func (c *TaskClient) QueryEnvironment(_m *Task) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, task.EnvironmentTable, task.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a Task.
+func (c *TaskClient) QueryScope(_m *Task) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, task.ScopeTable, task.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryAssigner queries the assigner edge of a Task.
 func (c *TaskClient) QueryAssigner(_m *Task) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
@@ -22764,6 +27065,63 @@ func (c *TaskClient) QueryRisks(_m *Task) *RiskQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Risk
 		step.Edge.Schema = schemaConfig.RiskTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlatforms queries the platforms edge of a Task.
+func (c *TaskClient) QueryPlatforms(_m *Task) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.PlatformsTable, task.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScans queries the scans edge of a Task.
+func (c *TaskClient) QueryScans(_m *Task) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.ScansTable, task.ScansPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders queries the identity_holders edge of a Task.
+func (c *TaskClient) QueryIdentityHolders(_m *Task) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.IdentityHoldersTable, task.IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolderTasks
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -23038,6 +27396,44 @@ func (c *TemplateClient) QueryOwner(_m *Template) *OrganizationQuery {
 	return query
 }
 
+// QueryEnvironment queries the environment edge of a Template.
+func (c *TemplateClient) QueryEnvironment(_m *Template) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, template.EnvironmentTable, template.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Template
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a Template.
+func (c *TemplateClient) QueryScope(_m *Template) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, template.ScopeTable, template.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Template
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryDocuments queries the documents edge of a Template.
 func (c *TemplateClient) QueryDocuments(_m *Template) *DocumentDataQuery {
 	query := (&DocumentDataClient{config: c.config}).Query()
@@ -23108,6 +27504,44 @@ func (c *TemplateClient) QueryAssessments(_m *Template) *AssessmentQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Assessment
 		step.Edge.Schema = schemaConfig.Assessment
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaigns queries the campaigns edge of a Template.
+func (c *TemplateClient) QueryCampaigns(_m *Template) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, template.CampaignsTable, template.CampaignsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders queries the identity_holders edge of a Template.
+func (c *TemplateClient) QueryIdentityHolders(_m *Template) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, template.IdentityHoldersTable, template.IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolderTemplates
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -25469,6 +29903,44 @@ func (c *UserClient) QueryActionPlans(_m *User) *ActionPlanQuery {
 	return query
 }
 
+// QueryCampaigns queries the campaigns edge of a User.
+func (c *UserClient) QueryCampaigns(_m *User) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, user.CampaignsTable, user.CampaignsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignUsers
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaignTargets queries the campaign_targets edge of a User.
+func (c *UserClient) QueryCampaignTargets(_m *User) *CampaignTargetQuery {
+	query := (&CampaignTargetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.CampaignTargetsTable, user.CampaignTargetsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QuerySubcontrols queries the subcontrols edge of a User.
 func (c *UserClient) QuerySubcontrols(_m *User) *SubcontrolQuery {
 	query := (&SubcontrolClient{config: c.config}).Query()
@@ -25558,6 +30030,44 @@ func (c *UserClient) QueryProgramsOwned(_m *User) *ProgramQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.Program
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlatformsOwned queries the platforms_owned edge of a User.
+func (c *UserClient) QueryPlatformsOwned(_m *User) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.PlatformsOwnedTable, user.PlatformsOwnedColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Platform
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIdentityHolderProfiles queries the identity_holder_profiles edge of a User.
+func (c *UserClient) QueryIdentityHolderProfiles(_m *User) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.IdentityHolderProfilesTable, user.IdentityHolderProfilesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolder
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -26062,6 +30572,44 @@ func (c *VulnerabilityClient) QueryViewers(_m *Vulnerability) *GroupQuery {
 	return query
 }
 
+// QueryEnvironment queries the environment edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryEnvironment(_m *Vulnerability) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vulnerability.EnvironmentTable, vulnerability.EnvironmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Vulnerability
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScope queries the scope edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryScope(_m *Vulnerability) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vulnerability.ScopeTable, vulnerability.ScopeColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Vulnerability
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryIntegrations queries the integrations edge of a Vulnerability.
 func (c *VulnerabilityClient) QueryIntegrations(_m *Vulnerability) *IntegrationQuery {
 	query := (&IntegrationClient{config: c.config}).Query()
@@ -26241,11 +30789,11 @@ func (c *VulnerabilityClient) QueryScans(_m *Vulnerability) *ScanQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
 			sqlgraph.To(scan.Table, scan.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.ScansTable, vulnerability.ScansColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, vulnerability.ScansTable, vulnerability.ScansPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.VulnerabilityScans
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -27594,6 +32142,82 @@ func (c *WorkflowInstanceClient) QueryProcedure(_m *WorkflowInstance) *Procedure
 	return query
 }
 
+// QueryCampaign queries the campaign edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryCampaign(_m *WorkflowInstance) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.CampaignTable, workflowinstance.CampaignColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaignTarget queries the campaign_target edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryCampaignTarget(_m *WorkflowInstance) *CampaignTargetQuery {
+	query := (&CampaignTargetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.CampaignTargetTable, workflowinstance.CampaignTargetColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIdentityHolder queries the identity_holder edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryIdentityHolder(_m *WorkflowInstance) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.IdentityHolderTable, workflowinstance.IdentityHolderColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlatform queries the platform edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryPlatform(_m *WorkflowInstance) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.PlatformTable, workflowinstance.PlatformColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryWorkflowProposal queries the workflow_proposal edge of a WorkflowInstance.
 func (c *WorkflowInstanceClient) QueryWorkflowProposal(_m *WorkflowInstance) *WorkflowProposalQuery {
 	query := (&WorkflowProposalClient{config: c.config}).Query()
@@ -28071,6 +32695,82 @@ func (c *WorkflowObjectRefClient) QueryProcedure(_m *WorkflowObjectRef) *Procedu
 	return query
 }
 
+// QueryCampaign queries the campaign edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryCampaign(_m *WorkflowObjectRef) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.CampaignTable, workflowobjectref.CampaignColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaignTarget queries the campaign_target edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryCampaignTarget(_m *WorkflowObjectRef) *CampaignTargetQuery {
+	query := (&CampaignTargetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.CampaignTargetTable, workflowobjectref.CampaignTargetColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIdentityHolder queries the identity_holder edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryIdentityHolder(_m *WorkflowObjectRef) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.IdentityHolderTable, workflowobjectref.IdentityHolderColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlatform queries the platform edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryPlatform(_m *WorkflowObjectRef) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.PlatformTable, workflowobjectref.PlatformColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *WorkflowObjectRefClient) Hooks() []Hook {
 	hooks := c.hooks.WorkflowObjectRef
@@ -28312,20 +33012,21 @@ func (c *WorkflowProposalClient) mutate(ctx context.Context, m *WorkflowProposal
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Contact, Control,
-		ControlImplementation, ControlObjective, CustomDomain, CustomTypeEnum,
-		DNSVerification, DirectoryAccount, DirectoryGroup, DirectoryMembership,
-		DirectorySyncRun, Discussion, DocumentData, EmailVerificationToken, Entity,
-		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
-		FindingControl, Group, GroupMembership, GroupSetting, Hush, ImpersonationEvent,
+		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
+		CampaignTarget, Contact, Control, ControlImplementation, ControlObjective,
+		CustomDomain, CustomTypeEnum, DNSVerification, DirectoryAccount,
+		DirectoryGroup, DirectoryMembership, DirectorySyncRun, Discussion,
+		DocumentData, EmailVerificationToken, Entity, EntityType, Event, Evidence,
+		Export, File, FileDownloadToken, Finding, FindingControl, Group,
+		GroupMembership, GroupSetting, Hush, IdentityHolder, ImpersonationEvent,
 		Integration, InternalPolicy, Invite, JobResult, JobRunner,
 		JobRunnerRegistrationToken, JobRunnerToken, JobTemplate, MappableDomain,
 		MappedControl, Narrative, Note, Notification, Onboarding, OrgMembership,
 		OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
-		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Procedure,
-		Program, ProgramMembership, Remediation, Review, Risk, Scan, ScheduledJob,
-		ScheduledJobRun, Standard, Subcontrol, Subprocessor, Subscriber, TFASetting,
-		TagDefinition, Task, Template, TrustCenter, TrustCenterCompliance,
+		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
+		Procedure, Program, ProgramMembership, Remediation, Review, Risk, Scan,
+		ScheduledJob, ScheduledJobRun, Standard, Subcontrol, Subprocessor, Subscriber,
+		TFASetting, TagDefinition, Task, Template, TrustCenter, TrustCenterCompliance,
 		TrustCenterDoc, TrustCenterEntity, TrustCenterNDARequest, TrustCenterSetting,
 		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
 		Vulnerability, Webauthn, WorkflowAssignment, WorkflowAssignmentTarget,
@@ -28333,20 +33034,21 @@ type (
 		WorkflowProposal []ent.Hook
 	}
 	inters struct {
-		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Contact, Control,
-		ControlImplementation, ControlObjective, CustomDomain, CustomTypeEnum,
-		DNSVerification, DirectoryAccount, DirectoryGroup, DirectoryMembership,
-		DirectorySyncRun, Discussion, DocumentData, EmailVerificationToken, Entity,
-		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
-		FindingControl, Group, GroupMembership, GroupSetting, Hush, ImpersonationEvent,
+		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
+		CampaignTarget, Contact, Control, ControlImplementation, ControlObjective,
+		CustomDomain, CustomTypeEnum, DNSVerification, DirectoryAccount,
+		DirectoryGroup, DirectoryMembership, DirectorySyncRun, Discussion,
+		DocumentData, EmailVerificationToken, Entity, EntityType, Event, Evidence,
+		Export, File, FileDownloadToken, Finding, FindingControl, Group,
+		GroupMembership, GroupSetting, Hush, IdentityHolder, ImpersonationEvent,
 		Integration, InternalPolicy, Invite, JobResult, JobRunner,
 		JobRunnerRegistrationToken, JobRunnerToken, JobTemplate, MappableDomain,
 		MappedControl, Narrative, Note, Notification, Onboarding, OrgMembership,
 		OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
-		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Procedure,
-		Program, ProgramMembership, Remediation, Review, Risk, Scan, ScheduledJob,
-		ScheduledJobRun, Standard, Subcontrol, Subprocessor, Subscriber, TFASetting,
-		TagDefinition, Task, Template, TrustCenter, TrustCenterCompliance,
+		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
+		Procedure, Program, ProgramMembership, Remediation, Review, Risk, Scan,
+		ScheduledJob, ScheduledJobRun, Standard, Subcontrol, Subprocessor, Subscriber,
+		TFASetting, TagDefinition, Task, Template, TrustCenter, TrustCenterCompliance,
 		TrustCenterDoc, TrustCenterEntity, TrustCenterNDARequest, TrustCenterSetting,
 		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
 		Vulnerability, Webauthn, WorkflowAssignment, WorkflowAssignmentTarget,
@@ -28364,6 +33066,13 @@ func Job(ctx context.Context, opts ...riverqueue.Option) Option {
 		if err != nil {
 			panic(err)
 		}
+	}
+}
+
+// WorkflowEngine configures the workflow orchestration engine.
+func WorkflowEngine(v any) Option {
+	return func(c *config) {
+		c.WorkflowEngine = v
 	}
 }
 

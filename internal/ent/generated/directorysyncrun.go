@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -33,6 +34,14 @@ type DirectorySyncRun struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the environment of the directory_sync_run
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the directory_sync_run
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the directory_sync_run
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the directory_sync_run
+	ScopeID string `json:"scope_id,omitempty"`
 	// integration this sync run executed for
 	IntegrationID string `json:"integration_id,omitempty"`
 	// current state of the sync run
@@ -64,6 +73,10 @@ type DirectorySyncRun struct {
 type DirectorySyncRunEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// Environment holds the value of the environment edge.
+	Environment *CustomTypeEnum `json:"environment,omitempty"`
+	// Scope holds the value of the scope edge.
+	Scope *CustomTypeEnum `json:"scope,omitempty"`
 	// integration that executed this sync run
 	Integration *Integration `json:"integration,omitempty"`
 	// DirectoryAccounts holds the value of the directory_accounts edge.
@@ -74,9 +87,9 @@ type DirectorySyncRunEdges struct {
 	DirectoryMemberships []*DirectoryMembership `json:"directory_memberships,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [7]map[string]int
 
 	namedDirectoryAccounts    map[string][]*DirectoryAccount
 	namedDirectoryGroups      map[string][]*DirectoryGroup
@@ -94,12 +107,34 @@ func (e DirectorySyncRunEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// EnvironmentOrErr returns the Environment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e DirectorySyncRunEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
+	if e.Environment != nil {
+		return e.Environment, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "environment"}
+}
+
+// ScopeOrErr returns the Scope value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e DirectorySyncRunEdges) ScopeOrErr() (*CustomTypeEnum, error) {
+	if e.Scope != nil {
+		return e.Scope, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "scope"}
+}
+
 // IntegrationOrErr returns the Integration value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e DirectorySyncRunEdges) IntegrationOrErr() (*Integration, error) {
 	if e.Integration != nil {
 		return e.Integration, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: integration.Label}
 	}
 	return nil, &NotLoadedError{edge: "integration"}
@@ -108,7 +143,7 @@ func (e DirectorySyncRunEdges) IntegrationOrErr() (*Integration, error) {
 // DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectorySyncRunEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.DirectoryAccounts, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_accounts"}
@@ -117,7 +152,7 @@ func (e DirectorySyncRunEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, er
 // DirectoryGroupsOrErr returns the DirectoryGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectorySyncRunEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.DirectoryGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_groups"}
@@ -126,7 +161,7 @@ func (e DirectorySyncRunEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error)
 // DirectoryMembershipsOrErr returns the DirectoryMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectorySyncRunEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.DirectoryMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_memberships"}
@@ -141,7 +176,7 @@ func (*DirectorySyncRun) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case directorysyncrun.FieldFullCount, directorysyncrun.FieldDeltaCount:
 			values[i] = new(sql.NullInt64)
-		case directorysyncrun.FieldID, directorysyncrun.FieldCreatedBy, directorysyncrun.FieldUpdatedBy, directorysyncrun.FieldDisplayID, directorysyncrun.FieldOwnerID, directorysyncrun.FieldIntegrationID, directorysyncrun.FieldStatus, directorysyncrun.FieldSourceCursor, directorysyncrun.FieldError, directorysyncrun.FieldRawManifestFileID:
+		case directorysyncrun.FieldID, directorysyncrun.FieldCreatedBy, directorysyncrun.FieldUpdatedBy, directorysyncrun.FieldDisplayID, directorysyncrun.FieldOwnerID, directorysyncrun.FieldEnvironmentName, directorysyncrun.FieldEnvironmentID, directorysyncrun.FieldScopeName, directorysyncrun.FieldScopeID, directorysyncrun.FieldIntegrationID, directorysyncrun.FieldStatus, directorysyncrun.FieldSourceCursor, directorysyncrun.FieldError, directorysyncrun.FieldRawManifestFileID:
 			values[i] = new(sql.NullString)
 		case directorysyncrun.FieldCreatedAt, directorysyncrun.FieldUpdatedAt, directorysyncrun.FieldStartedAt, directorysyncrun.FieldCompletedAt:
 			values[i] = new(sql.NullTime)
@@ -203,6 +238,30 @@ func (_m *DirectorySyncRun) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case directorysyncrun.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case directorysyncrun.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case directorysyncrun.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case directorysyncrun.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case directorysyncrun.FieldIntegrationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -295,6 +354,16 @@ func (_m *DirectorySyncRun) QueryOwner() *OrganizationQuery {
 	return NewDirectorySyncRunClient(_m.config).QueryOwner(_m)
 }
 
+// QueryEnvironment queries the "environment" edge of the DirectorySyncRun entity.
+func (_m *DirectorySyncRun) QueryEnvironment() *CustomTypeEnumQuery {
+	return NewDirectorySyncRunClient(_m.config).QueryEnvironment(_m)
+}
+
+// QueryScope queries the "scope" edge of the DirectorySyncRun entity.
+func (_m *DirectorySyncRun) QueryScope() *CustomTypeEnumQuery {
+	return NewDirectorySyncRunClient(_m.config).QueryScope(_m)
+}
+
 // QueryIntegration queries the "integration" edge of the DirectorySyncRun entity.
 func (_m *DirectorySyncRun) QueryIntegration() *IntegrationQuery {
 	return NewDirectorySyncRunClient(_m.config).QueryIntegration(_m)
@@ -355,6 +424,18 @@ func (_m *DirectorySyncRun) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)

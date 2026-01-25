@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -84,6 +85,86 @@ func (_u *DirectoryMembershipUpdate) SetNillableOwnerID(v *string) *DirectoryMem
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *DirectoryMembershipUpdate) ClearOwnerID() *DirectoryMembershipUpdate {
 	_u.mutation.ClearOwnerID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *DirectoryMembershipUpdate) SetEnvironmentName(v string) *DirectoryMembershipUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdate) SetNillableEnvironmentName(v *string) *DirectoryMembershipUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *DirectoryMembershipUpdate) ClearEnvironmentName() *DirectoryMembershipUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *DirectoryMembershipUpdate) SetEnvironmentID(v string) *DirectoryMembershipUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdate) SetNillableEnvironmentID(v *string) *DirectoryMembershipUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *DirectoryMembershipUpdate) ClearEnvironmentID() *DirectoryMembershipUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *DirectoryMembershipUpdate) SetScopeName(v string) *DirectoryMembershipUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdate) SetNillableScopeName(v *string) *DirectoryMembershipUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *DirectoryMembershipUpdate) ClearScopeName() *DirectoryMembershipUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *DirectoryMembershipUpdate) SetScopeID(v string) *DirectoryMembershipUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdate) SetNillableScopeID(v *string) *DirectoryMembershipUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *DirectoryMembershipUpdate) ClearScopeID() *DirectoryMembershipUpdate {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -204,6 +285,16 @@ func (_u *DirectoryMembershipUpdate) SetOwner(v *Organization) *DirectoryMembers
 	return _u.SetOwnerID(v.ID)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *DirectoryMembershipUpdate) SetEnvironment(v *CustomTypeEnum) *DirectoryMembershipUpdate {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *DirectoryMembershipUpdate) SetScope(v *CustomTypeEnum) *DirectoryMembershipUpdate {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
 func (_u *DirectoryMembershipUpdate) AddEventIDs(ids ...string) *DirectoryMembershipUpdate {
 	_u.mutation.AddEventIDs(ids...)
@@ -242,6 +333,18 @@ func (_u *DirectoryMembershipUpdate) Mutation() *DirectoryMembershipMutation {
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (_u *DirectoryMembershipUpdate) ClearOwner() *DirectoryMembershipUpdate {
 	_u.mutation.ClearOwner()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *DirectoryMembershipUpdate) ClearEnvironment() *DirectoryMembershipUpdate {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *DirectoryMembershipUpdate) ClearScope() *DirectoryMembershipUpdate {
+	_u.mutation.ClearScope()
 	return _u
 }
 
@@ -392,6 +495,18 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(directorymembership.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(directorymembership.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(directorymembership.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(directorymembership.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(directorymembership.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(directorymembership.FieldRole, field.TypeEnum, value)
 	}
@@ -451,6 +566,68 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorymembership.EnvironmentTable,
+			Columns: []string{directorymembership.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorymembership.EnvironmentTable,
+			Columns: []string{directorymembership.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorymembership.ScopeTable,
+			Columns: []string{directorymembership.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorymembership.ScopeTable,
+			Columns: []string{directorymembership.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.DirectoryMembership
@@ -631,6 +808,86 @@ func (_u *DirectoryMembershipUpdateOne) ClearOwnerID() *DirectoryMembershipUpdat
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *DirectoryMembershipUpdateOne) SetEnvironmentName(v string) *DirectoryMembershipUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdateOne) SetNillableEnvironmentName(v *string) *DirectoryMembershipUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *DirectoryMembershipUpdateOne) ClearEnvironmentName() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *DirectoryMembershipUpdateOne) SetEnvironmentID(v string) *DirectoryMembershipUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdateOne) SetNillableEnvironmentID(v *string) *DirectoryMembershipUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *DirectoryMembershipUpdateOne) ClearEnvironmentID() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *DirectoryMembershipUpdateOne) SetScopeName(v string) *DirectoryMembershipUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdateOne) SetNillableScopeName(v *string) *DirectoryMembershipUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *DirectoryMembershipUpdateOne) ClearScopeName() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *DirectoryMembershipUpdateOne) SetScopeID(v string) *DirectoryMembershipUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdateOne) SetNillableScopeID(v *string) *DirectoryMembershipUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *DirectoryMembershipUpdateOne) ClearScopeID() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetRole sets the "role" field.
 func (_u *DirectoryMembershipUpdateOne) SetRole(v enums.DirectoryMembershipRole) *DirectoryMembershipUpdateOne {
 	_u.mutation.SetRole(v)
@@ -748,6 +1005,16 @@ func (_u *DirectoryMembershipUpdateOne) SetOwner(v *Organization) *DirectoryMemb
 	return _u.SetOwnerID(v.ID)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *DirectoryMembershipUpdateOne) SetEnvironment(v *CustomTypeEnum) *DirectoryMembershipUpdateOne {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *DirectoryMembershipUpdateOne) SetScope(v *CustomTypeEnum) *DirectoryMembershipUpdateOne {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
 func (_u *DirectoryMembershipUpdateOne) AddEventIDs(ids ...string) *DirectoryMembershipUpdateOne {
 	_u.mutation.AddEventIDs(ids...)
@@ -786,6 +1053,18 @@ func (_u *DirectoryMembershipUpdateOne) Mutation() *DirectoryMembershipMutation 
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (_u *DirectoryMembershipUpdateOne) ClearOwner() *DirectoryMembershipUpdateOne {
 	_u.mutation.ClearOwner()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *DirectoryMembershipUpdateOne) ClearEnvironment() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *DirectoryMembershipUpdateOne) ClearScope() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearScope()
 	return _u
 }
 
@@ -966,6 +1245,18 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(directorymembership.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(directorymembership.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(directorymembership.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(directorymembership.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(directorymembership.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(directorymembership.FieldRole, field.TypeEnum, value)
 	}
@@ -1025,6 +1316,68 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorymembership.EnvironmentTable,
+			Columns: []string{directorymembership.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorymembership.EnvironmentTable,
+			Columns: []string{directorymembership.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorymembership.ScopeTable,
+			Columns: []string{directorymembership.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorymembership.ScopeTable,
+			Columns: []string{directorymembership.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.DirectoryMembership

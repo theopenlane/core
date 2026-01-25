@@ -49,6 +49,14 @@ type IntegrationHistory struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the environment of the integration
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the integration
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the integration
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the integration
+	ScopeID string `json:"scope_id,omitempty"`
 	// the name of the integration
 	Name string `json:"name,omitempty"`
 	// a description of the integration
@@ -73,7 +81,7 @@ func (*IntegrationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case integrationhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case integrationhistory.FieldID, integrationhistory.FieldRef, integrationhistory.FieldCreatedBy, integrationhistory.FieldUpdatedBy, integrationhistory.FieldDeletedBy, integrationhistory.FieldOwnerID, integrationhistory.FieldInternalNotes, integrationhistory.FieldSystemInternalID, integrationhistory.FieldName, integrationhistory.FieldDescription, integrationhistory.FieldKind, integrationhistory.FieldIntegrationType:
+		case integrationhistory.FieldID, integrationhistory.FieldRef, integrationhistory.FieldCreatedBy, integrationhistory.FieldUpdatedBy, integrationhistory.FieldDeletedBy, integrationhistory.FieldOwnerID, integrationhistory.FieldInternalNotes, integrationhistory.FieldSystemInternalID, integrationhistory.FieldEnvironmentName, integrationhistory.FieldEnvironmentID, integrationhistory.FieldScopeName, integrationhistory.FieldScopeID, integrationhistory.FieldName, integrationhistory.FieldDescription, integrationhistory.FieldKind, integrationhistory.FieldIntegrationType:
 			values[i] = new(sql.NullString)
 		case integrationhistory.FieldHistoryTime, integrationhistory.FieldCreatedAt, integrationhistory.FieldUpdatedAt, integrationhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -185,6 +193,30 @@ func (_m *IntegrationHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
+			}
+		case integrationhistory.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case integrationhistory.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case integrationhistory.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case integrationhistory.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case integrationhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -299,6 +331,18 @@ func (_m *IntegrationHistory) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

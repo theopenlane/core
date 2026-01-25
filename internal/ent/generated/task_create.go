@@ -19,12 +19,15 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -172,6 +175,62 @@ func (_c *TaskCreate) SetTaskKindID(v string) *TaskCreate {
 func (_c *TaskCreate) SetNillableTaskKindID(v *string) *TaskCreate {
 	if v != nil {
 		_c.SetTaskKindID(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *TaskCreate) SetEnvironmentName(v string) *TaskCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableEnvironmentName(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *TaskCreate) SetEnvironmentID(v string) *TaskCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableEnvironmentID(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *TaskCreate) SetScopeName(v string) *TaskCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableScopeName(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *TaskCreate) SetScopeID(v string) *TaskCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableScopeID(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
 	}
 	return _c
 }
@@ -344,6 +403,16 @@ func (_c *TaskCreate) SetTaskKind(v *CustomTypeEnum) *TaskCreate {
 	return _c.SetTaskKindID(v.ID)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_c *TaskCreate) SetEnvironment(v *CustomTypeEnum) *TaskCreate {
+	return _c.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_c *TaskCreate) SetScope(v *CustomTypeEnum) *TaskCreate {
+	return _c.SetScopeID(v.ID)
+}
+
 // SetAssigner sets the "assigner" edge to the User entity.
 func (_c *TaskCreate) SetAssigner(v *User) *TaskCreate {
 	return _c.SetAssignerID(v.ID)
@@ -487,6 +556,51 @@ func (_c *TaskCreate) AddRisks(v ...*Risk) *TaskCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddRiskIDs(ids...)
+}
+
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_c *TaskCreate) AddPlatformIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddPlatformIDs(ids...)
+	return _c
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_c *TaskCreate) AddPlatforms(v ...*Platform) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (_c *TaskCreate) AddScanIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddScanIDs(ids...)
+	return _c
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (_c *TaskCreate) AddScans(v ...*Scan) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddScanIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_c *TaskCreate) AddIdentityHolderIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddIdentityHolderIDs(ids...)
+	return _c
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_c *TaskCreate) AddIdentityHolders(v ...*IdentityHolder) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIdentityHolderIDs(ids...)
 }
 
 // AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
@@ -767,6 +881,14 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		_spec.SetField(task.FieldTaskKindName, field.TypeString, value)
 		_node.TaskKindName = value
 	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(task.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(task.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(task.FieldTitle, field.TypeString, value)
 		_node.Title = value
@@ -837,6 +959,42 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.TaskKindID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.EnvironmentTable,
+			Columns: []string{task.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EnvironmentID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.ScopeTable,
+			Columns: []string{task.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ScopeID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.AssignerIDs(); len(nodes) > 0 {
@@ -1023,6 +1181,57 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.RiskTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.PlatformsTable,
+			Columns: task.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.PlatformTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ScansTable,
+			Columns: task.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ScanTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.IdentityHoldersTable,
+			Columns: task.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IdentityHolderTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

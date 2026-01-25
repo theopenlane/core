@@ -127,6 +127,26 @@ func SystemInternalID(v string) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldEQ(FieldSystemInternalID, v))
 }
 
+// EnvironmentName applies equality check predicate on the "environment_name" field. It's identical to EnvironmentNameEQ.
+func EnvironmentName(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldEnvironmentName, v))
+}
+
+// EnvironmentID applies equality check predicate on the "environment_id" field. It's identical to EnvironmentIDEQ.
+func EnvironmentID(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldEnvironmentID, v))
+}
+
+// ScopeName applies equality check predicate on the "scope_name" field. It's identical to ScopeNameEQ.
+func ScopeName(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldScopeName, v))
+}
+
+// ScopeID applies equality check predicate on the "scope_id" field. It's identical to ScopeIDEQ.
+func ScopeID(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldScopeID, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldEQ(FieldName, v))
@@ -910,6 +930,306 @@ func SystemInternalIDEqualFold(v string) predicate.IntegrationHistory {
 // SystemInternalIDContainsFold applies the ContainsFold predicate on the "system_internal_id" field.
 func SystemInternalIDContainsFold(v string) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldSystemInternalID, v))
+}
+
+// EnvironmentNameEQ applies the EQ predicate on the "environment_name" field.
+func EnvironmentNameEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameNEQ applies the NEQ predicate on the "environment_name" field.
+func EnvironmentNameNEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNEQ(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameIn applies the In predicate on the "environment_name" field.
+func EnvironmentNameIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIn(FieldEnvironmentName, vs...))
+}
+
+// EnvironmentNameNotIn applies the NotIn predicate on the "environment_name" field.
+func EnvironmentNameNotIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotIn(FieldEnvironmentName, vs...))
+}
+
+// EnvironmentNameGT applies the GT predicate on the "environment_name" field.
+func EnvironmentNameGT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGT(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameGTE applies the GTE predicate on the "environment_name" field.
+func EnvironmentNameGTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGTE(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameLT applies the LT predicate on the "environment_name" field.
+func EnvironmentNameLT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLT(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameLTE applies the LTE predicate on the "environment_name" field.
+func EnvironmentNameLTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLTE(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameContains applies the Contains predicate on the "environment_name" field.
+func EnvironmentNameContains(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContains(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameHasPrefix applies the HasPrefix predicate on the "environment_name" field.
+func EnvironmentNameHasPrefix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasPrefix(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameHasSuffix applies the HasSuffix predicate on the "environment_name" field.
+func EnvironmentNameHasSuffix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasSuffix(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameIsNil applies the IsNil predicate on the "environment_name" field.
+func EnvironmentNameIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldEnvironmentName))
+}
+
+// EnvironmentNameNotNil applies the NotNil predicate on the "environment_name" field.
+func EnvironmentNameNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldEnvironmentName))
+}
+
+// EnvironmentNameEqualFold applies the EqualFold predicate on the "environment_name" field.
+func EnvironmentNameEqualFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEqualFold(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameContainsFold applies the ContainsFold predicate on the "environment_name" field.
+func EnvironmentNameContainsFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldEnvironmentName, v))
+}
+
+// EnvironmentIDEQ applies the EQ predicate on the "environment_id" field.
+func EnvironmentIDEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDNEQ applies the NEQ predicate on the "environment_id" field.
+func EnvironmentIDNEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNEQ(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDIn applies the In predicate on the "environment_id" field.
+func EnvironmentIDIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIn(FieldEnvironmentID, vs...))
+}
+
+// EnvironmentIDNotIn applies the NotIn predicate on the "environment_id" field.
+func EnvironmentIDNotIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotIn(FieldEnvironmentID, vs...))
+}
+
+// EnvironmentIDGT applies the GT predicate on the "environment_id" field.
+func EnvironmentIDGT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGT(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDGTE applies the GTE predicate on the "environment_id" field.
+func EnvironmentIDGTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGTE(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDLT applies the LT predicate on the "environment_id" field.
+func EnvironmentIDLT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLT(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDLTE applies the LTE predicate on the "environment_id" field.
+func EnvironmentIDLTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLTE(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDContains applies the Contains predicate on the "environment_id" field.
+func EnvironmentIDContains(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContains(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDHasPrefix applies the HasPrefix predicate on the "environment_id" field.
+func EnvironmentIDHasPrefix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasPrefix(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDHasSuffix applies the HasSuffix predicate on the "environment_id" field.
+func EnvironmentIDHasSuffix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasSuffix(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDIsNil applies the IsNil predicate on the "environment_id" field.
+func EnvironmentIDIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldEnvironmentID))
+}
+
+// EnvironmentIDNotNil applies the NotNil predicate on the "environment_id" field.
+func EnvironmentIDNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldEnvironmentID))
+}
+
+// EnvironmentIDEqualFold applies the EqualFold predicate on the "environment_id" field.
+func EnvironmentIDEqualFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEqualFold(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDContainsFold applies the ContainsFold predicate on the "environment_id" field.
+func EnvironmentIDContainsFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldEnvironmentID, v))
+}
+
+// ScopeNameEQ applies the EQ predicate on the "scope_name" field.
+func ScopeNameEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldScopeName, v))
+}
+
+// ScopeNameNEQ applies the NEQ predicate on the "scope_name" field.
+func ScopeNameNEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNEQ(FieldScopeName, v))
+}
+
+// ScopeNameIn applies the In predicate on the "scope_name" field.
+func ScopeNameIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIn(FieldScopeName, vs...))
+}
+
+// ScopeNameNotIn applies the NotIn predicate on the "scope_name" field.
+func ScopeNameNotIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotIn(FieldScopeName, vs...))
+}
+
+// ScopeNameGT applies the GT predicate on the "scope_name" field.
+func ScopeNameGT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGT(FieldScopeName, v))
+}
+
+// ScopeNameGTE applies the GTE predicate on the "scope_name" field.
+func ScopeNameGTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGTE(FieldScopeName, v))
+}
+
+// ScopeNameLT applies the LT predicate on the "scope_name" field.
+func ScopeNameLT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLT(FieldScopeName, v))
+}
+
+// ScopeNameLTE applies the LTE predicate on the "scope_name" field.
+func ScopeNameLTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLTE(FieldScopeName, v))
+}
+
+// ScopeNameContains applies the Contains predicate on the "scope_name" field.
+func ScopeNameContains(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContains(FieldScopeName, v))
+}
+
+// ScopeNameHasPrefix applies the HasPrefix predicate on the "scope_name" field.
+func ScopeNameHasPrefix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasPrefix(FieldScopeName, v))
+}
+
+// ScopeNameHasSuffix applies the HasSuffix predicate on the "scope_name" field.
+func ScopeNameHasSuffix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasSuffix(FieldScopeName, v))
+}
+
+// ScopeNameIsNil applies the IsNil predicate on the "scope_name" field.
+func ScopeNameIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldScopeName))
+}
+
+// ScopeNameNotNil applies the NotNil predicate on the "scope_name" field.
+func ScopeNameNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldScopeName))
+}
+
+// ScopeNameEqualFold applies the EqualFold predicate on the "scope_name" field.
+func ScopeNameEqualFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEqualFold(FieldScopeName, v))
+}
+
+// ScopeNameContainsFold applies the ContainsFold predicate on the "scope_name" field.
+func ScopeNameContainsFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldScopeName, v))
+}
+
+// ScopeIDEQ applies the EQ predicate on the "scope_id" field.
+func ScopeIDEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldScopeID, v))
+}
+
+// ScopeIDNEQ applies the NEQ predicate on the "scope_id" field.
+func ScopeIDNEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNEQ(FieldScopeID, v))
+}
+
+// ScopeIDIn applies the In predicate on the "scope_id" field.
+func ScopeIDIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIn(FieldScopeID, vs...))
+}
+
+// ScopeIDNotIn applies the NotIn predicate on the "scope_id" field.
+func ScopeIDNotIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotIn(FieldScopeID, vs...))
+}
+
+// ScopeIDGT applies the GT predicate on the "scope_id" field.
+func ScopeIDGT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGT(FieldScopeID, v))
+}
+
+// ScopeIDGTE applies the GTE predicate on the "scope_id" field.
+func ScopeIDGTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGTE(FieldScopeID, v))
+}
+
+// ScopeIDLT applies the LT predicate on the "scope_id" field.
+func ScopeIDLT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLT(FieldScopeID, v))
+}
+
+// ScopeIDLTE applies the LTE predicate on the "scope_id" field.
+func ScopeIDLTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLTE(FieldScopeID, v))
+}
+
+// ScopeIDContains applies the Contains predicate on the "scope_id" field.
+func ScopeIDContains(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContains(FieldScopeID, v))
+}
+
+// ScopeIDHasPrefix applies the HasPrefix predicate on the "scope_id" field.
+func ScopeIDHasPrefix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasPrefix(FieldScopeID, v))
+}
+
+// ScopeIDHasSuffix applies the HasSuffix predicate on the "scope_id" field.
+func ScopeIDHasSuffix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasSuffix(FieldScopeID, v))
+}
+
+// ScopeIDIsNil applies the IsNil predicate on the "scope_id" field.
+func ScopeIDIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldScopeID))
+}
+
+// ScopeIDNotNil applies the NotNil predicate on the "scope_id" field.
+func ScopeIDNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldScopeID))
+}
+
+// ScopeIDEqualFold applies the EqualFold predicate on the "scope_id" field.
+func ScopeIDEqualFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEqualFold(FieldScopeID, v))
+}
+
+// ScopeIDContainsFold applies the ContainsFold predicate on the "scope_id" field.
+func ScopeIDContainsFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldScopeID, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

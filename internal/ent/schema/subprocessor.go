@@ -108,6 +108,7 @@ func (t Subprocessor) Edges() []ent.Edge {
 			edgeSchema:    TrustCenterSubprocessor{},
 			cascadeDelete: "Subprocessor",
 		}),
+		defaultEdgeFromWithPagination(t, Entity{}),
 	}
 }
 

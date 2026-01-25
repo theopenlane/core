@@ -42,10 +42,30 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldAssessmentID holds the string denoting the assessment_id field in the database.
 	FieldAssessmentID = "assessment_id"
+	// FieldCampaignID holds the string denoting the campaign_id field in the database.
+	FieldCampaignID = "campaign_id"
+	// FieldIdentityHolderID holds the string denoting the identity_holder_id field in the database.
+	FieldIdentityHolderID = "identity_holder_id"
+	// FieldEntityID holds the string denoting the entity_id field in the database.
+	FieldEntityID = "entity_id"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
 	// FieldSendAttempts holds the string denoting the send_attempts field in the database.
 	FieldSendAttempts = "send_attempts"
+	// FieldEmailDeliveredAt holds the string denoting the email_delivered_at field in the database.
+	FieldEmailDeliveredAt = "email_delivered_at"
+	// FieldEmailOpenedAt holds the string denoting the email_opened_at field in the database.
+	FieldEmailOpenedAt = "email_opened_at"
+	// FieldEmailClickedAt holds the string denoting the email_clicked_at field in the database.
+	FieldEmailClickedAt = "email_clicked_at"
+	// FieldEmailOpenCount holds the string denoting the email_open_count field in the database.
+	FieldEmailOpenCount = "email_open_count"
+	// FieldEmailClickCount holds the string denoting the email_click_count field in the database.
+	FieldEmailClickCount = "email_click_count"
+	// FieldLastEmailEventAt holds the string denoting the last_email_event_at field in the database.
+	FieldLastEmailEventAt = "last_email_event_at"
+	// FieldEmailMetadata holds the string denoting the email_metadata field in the database.
+	FieldEmailMetadata = "email_metadata"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldAssignedAt holds the string denoting the assigned_at field in the database.
@@ -76,8 +96,18 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldOwnerID,
 	FieldAssessmentID,
+	FieldCampaignID,
+	FieldIdentityHolderID,
+	FieldEntityID,
 	FieldEmail,
 	FieldSendAttempts,
+	FieldEmailDeliveredAt,
+	FieldEmailOpenedAt,
+	FieldEmailClickedAt,
+	FieldEmailOpenCount,
+	FieldEmailClickCount,
+	FieldLastEmailEventAt,
+	FieldEmailMetadata,
 	FieldStatus,
 	FieldAssignedAt,
 	FieldStartedAt,
@@ -115,6 +145,10 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultSendAttempts holds the default value on creation for the "send_attempts" field.
 	DefaultSendAttempts int
+	// DefaultEmailOpenCount holds the default value on creation for the "email_open_count" field.
+	DefaultEmailOpenCount int
+	// DefaultEmailClickCount holds the default value on creation for the "email_click_count" field.
+	DefaultEmailClickCount int
 	// DefaultAssignedAt holds the default value on creation for the "assigned_at" field.
 	DefaultAssignedAt func() time.Time
 	// DefaultStartedAt holds the default value on creation for the "started_at" field.
@@ -208,6 +242,21 @@ func ByAssessmentID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssessmentID, opts...).ToFunc()
 }
 
+// ByCampaignID orders the results by the campaign_id field.
+func ByCampaignID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCampaignID, opts...).ToFunc()
+}
+
+// ByIdentityHolderID orders the results by the identity_holder_id field.
+func ByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdentityHolderID, opts...).ToFunc()
+}
+
+// ByEntityID orders the results by the entity_id field.
+func ByEntityID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEntityID, opts...).ToFunc()
+}
+
 // ByEmail orders the results by the email field.
 func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
@@ -216,6 +265,36 @@ func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 // BySendAttempts orders the results by the send_attempts field.
 func BySendAttempts(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSendAttempts, opts...).ToFunc()
+}
+
+// ByEmailDeliveredAt orders the results by the email_delivered_at field.
+func ByEmailDeliveredAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailDeliveredAt, opts...).ToFunc()
+}
+
+// ByEmailOpenedAt orders the results by the email_opened_at field.
+func ByEmailOpenedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailOpenedAt, opts...).ToFunc()
+}
+
+// ByEmailClickedAt orders the results by the email_clicked_at field.
+func ByEmailClickedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailClickedAt, opts...).ToFunc()
+}
+
+// ByEmailOpenCount orders the results by the email_open_count field.
+func ByEmailOpenCount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailOpenCount, opts...).ToFunc()
+}
+
+// ByEmailClickCount orders the results by the email_click_count field.
+func ByEmailClickCount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailClickCount, opts...).ToFunc()
+}
+
+// ByLastEmailEventAt orders the results by the last_email_event_at field.
+func ByLastEmailEventAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastEmailEventAt, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.

@@ -366,18 +366,21 @@ var (
 	WorkflowEventTypeAction                WorkflowEventType = "ACTION"
 	WorkflowEventTypeTrigger               WorkflowEventType = "TRIGGER"
 	WorkflowEventTypeDecision              WorkflowEventType = "DECISION"
-	WorkflowEventTypeInstanceTriggered     WorkflowEventType = "INSTANCE_TRIGGERED"
+	WorkflowEventTypeInstanceTriggered     WorkflowEventType = "WORKFLOW_TRIGGERED"
 	WorkflowEventTypeActionStarted         WorkflowEventType = "ACTION_STARTED"
 	WorkflowEventTypeActionCompleted       WorkflowEventType = "ACTION_COMPLETED"
 	WorkflowEventTypeActionFailed          WorkflowEventType = "ACTION_FAILED"
 	WorkflowEventTypeActionSkipped         WorkflowEventType = "ACTION_SKIPPED"
 	WorkflowEventTypeConditionEvaluated    WorkflowEventType = "CONDITION_EVALUATED"
 	WorkflowEventTypeAssignmentCreated     WorkflowEventType = "ASSIGNMENT_CREATED"
-	WorkflowEventTypeAssignmentResolved    WorkflowEventType = "ASSIGNMENT_RESOLVED"
+	WorkflowEventTypeAssignmentResolved    WorkflowEventType = "ASSIGNMENT_COMPLETED"
 	WorkflowEventTypeAssignmentInvalidated WorkflowEventType = "ASSIGNMENT_INVALIDATED"
 	WorkflowEventTypeInstancePaused        WorkflowEventType = "INSTANCE_PAUSED"
 	WorkflowEventTypeInstanceResumed       WorkflowEventType = "INSTANCE_RESUMED"
-	WorkflowEventTypeInstanceCompleted     WorkflowEventType = "INSTANCE_COMPLETED"
+	WorkflowEventTypeInstanceCompleted     WorkflowEventType = "WORKFLOW_COMPLETED"
+	WorkflowEventTypeEmitFailed            WorkflowEventType = "EMIT_FAILED"
+	WorkflowEventTypeEmitRecovered         WorkflowEventType = "EMIT_RECOVERED"
+	WorkflowEventTypeEmitFailedTerminal    WorkflowEventType = "EMIT_FAILED_TERMINAL"
 )
 
 var WorkflowEventTypes = []string{
@@ -396,6 +399,9 @@ var WorkflowEventTypes = []string{
 	string(WorkflowEventTypeInstancePaused),
 	string(WorkflowEventTypeInstanceResumed),
 	string(WorkflowEventTypeInstanceCompleted),
+	string(WorkflowEventTypeEmitFailed),
+	string(WorkflowEventTypeEmitRecovered),
+	string(WorkflowEventTypeEmitFailedTerminal),
 }
 
 func (WorkflowEventType) Values() (vals []string) {
@@ -436,6 +442,12 @@ func ToWorkflowEventType(v string) *WorkflowEventType {
 		return &WorkflowEventTypeInstanceResumed
 	case WorkflowEventTypeInstanceCompleted.String():
 		return &WorkflowEventTypeInstanceCompleted
+	case WorkflowEventTypeEmitFailed.String():
+		return &WorkflowEventTypeEmitFailed
+	case WorkflowEventTypeEmitRecovered.String():
+		return &WorkflowEventTypeEmitRecovered
+	case WorkflowEventTypeEmitFailedTerminal.String():
+		return &WorkflowEventTypeEmitFailedTerminal
 	default:
 		return nil
 	}

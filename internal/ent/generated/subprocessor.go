@@ -64,13 +64,16 @@ type SubprocessorEdges struct {
 	LogoFile *File `json:"logo_file,omitempty"`
 	// TrustCenterSubprocessors holds the value of the trust_center_subprocessors edge.
 	TrustCenterSubprocessors []*TrustCenterSubprocessor `json:"trust_center_subprocessors,omitempty"`
+	// Entities holds the value of the entities edge.
+	Entities []*Entity `json:"entities,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 
 	namedTrustCenterSubprocessors map[string][]*TrustCenterSubprocessor
+	namedEntities                 map[string][]*Entity
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -102,6 +105,15 @@ func (e SubprocessorEdges) TrustCenterSubprocessorsOrErr() ([]*TrustCenterSubpro
 		return e.TrustCenterSubprocessors, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_subprocessors"}
+}
+
+// EntitiesOrErr returns the Entities value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubprocessorEdges) EntitiesOrErr() ([]*Entity, error) {
+	if e.loadedTypes[3] {
+		return e.Entities, nil
+	}
+	return nil, &NotLoadedError{edge: "entities"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -262,6 +274,11 @@ func (_m *Subprocessor) QueryTrustCenterSubprocessors() *TrustCenterSubprocessor
 	return NewSubprocessorClient(_m.config).QueryTrustCenterSubprocessors(_m)
 }
 
+// QueryEntities queries the "entities" edge of the Subprocessor entity.
+func (_m *Subprocessor) QueryEntities() *EntityQuery {
+	return NewSubprocessorClient(_m.config).QueryEntities(_m)
+}
+
 // Update returns a builder for updating this Subprocessor.
 // Note that you need to call Subprocessor.Unwrap() before calling this method if this Subprocessor
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -362,6 +379,30 @@ func (_m *Subprocessor) appendNamedTrustCenterSubprocessors(name string, edges .
 		_m.Edges.namedTrustCenterSubprocessors[name] = []*TrustCenterSubprocessor{}
 	} else {
 		_m.Edges.namedTrustCenterSubprocessors[name] = append(_m.Edges.namedTrustCenterSubprocessors[name], edges...)
+	}
+}
+
+// NamedEntities returns the Entities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Subprocessor) NamedEntities(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEntities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Subprocessor) appendNamedEntities(name string, edges ...*Entity) {
+	if _m.Edges.namedEntities == nil {
+		_m.Edges.namedEntities = make(map[string][]*Entity)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEntities[name] = []*Entity{}
+	} else {
+		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
 	}
 }
 

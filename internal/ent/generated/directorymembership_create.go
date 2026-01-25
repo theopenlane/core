@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
@@ -100,6 +101,62 @@ func (_c *DirectoryMembershipCreate) SetOwnerID(v string) *DirectoryMembershipCr
 func (_c *DirectoryMembershipCreate) SetNillableOwnerID(v *string) *DirectoryMembershipCreate {
 	if v != nil {
 		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *DirectoryMembershipCreate) SetEnvironmentName(v string) *DirectoryMembershipCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *DirectoryMembershipCreate) SetNillableEnvironmentName(v *string) *DirectoryMembershipCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *DirectoryMembershipCreate) SetEnvironmentID(v string) *DirectoryMembershipCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *DirectoryMembershipCreate) SetNillableEnvironmentID(v *string) *DirectoryMembershipCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *DirectoryMembershipCreate) SetScopeName(v string) *DirectoryMembershipCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *DirectoryMembershipCreate) SetNillableScopeName(v *string) *DirectoryMembershipCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *DirectoryMembershipCreate) SetScopeID(v string) *DirectoryMembershipCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *DirectoryMembershipCreate) SetNillableScopeID(v *string) *DirectoryMembershipCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
 	}
 	return _c
 }
@@ -235,6 +292,16 @@ func (_c *DirectoryMembershipCreate) SetNillableID(v *string) *DirectoryMembersh
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_c *DirectoryMembershipCreate) SetOwner(v *Organization) *DirectoryMembershipCreate {
 	return _c.SetOwnerID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_c *DirectoryMembershipCreate) SetEnvironment(v *CustomTypeEnum) *DirectoryMembershipCreate {
+	return _c.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_c *DirectoryMembershipCreate) SetScope(v *CustomTypeEnum) *DirectoryMembershipCreate {
+	return _c.SetScopeID(v.ID)
 }
 
 // SetIntegration sets the "integration" edge to the Integration entity.
@@ -472,6 +539,14 @@ func (_c *DirectoryMembershipCreate) createSpec() (*DirectoryMembership, *sqlgra
 		_spec.SetField(directorymembership.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(directorymembership.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(directorymembership.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
 	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(directorymembership.FieldRole, field.TypeEnum, value)
 		_node.Role = value
@@ -516,6 +591,42 @@ func (_c *DirectoryMembershipCreate) createSpec() (*DirectoryMembership, *sqlgra
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorymembership.EnvironmentTable,
+			Columns: []string{directorymembership.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EnvironmentID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorymembership.ScopeTable,
+			Columns: []string{directorymembership.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ScopeID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.IntegrationIDs(); len(nodes) > 0 {

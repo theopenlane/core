@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
@@ -35,6 +36,8 @@ type DirectoryMembershipQuery struct {
 	inters                      []Interceptor
 	predicates                  []predicate.DirectoryMembership
 	withOwner                   *OrganizationQuery
+	withEnvironment             *CustomTypeEnumQuery
+	withScope                   *CustomTypeEnumQuery
 	withIntegration             *IntegrationQuery
 	withDirectorySyncRun        *DirectorySyncRunQuery
 	withDirectoryAccount        *DirectoryAccountQuery
@@ -100,6 +103,56 @@ func (_q *DirectoryMembershipQuery) QueryOwner() *OrganizationQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEnvironment chains the current query on the "environment" edge.
+func (_q *DirectoryMembershipQuery) QueryEnvironment() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directorymembership.EnvironmentTable, directorymembership.EnvironmentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScope chains the current query on the "scope" edge.
+func (_q *DirectoryMembershipQuery) QueryScope() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directorymembership.ScopeTable, directorymembership.ScopeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.DirectoryMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -450,6 +503,8 @@ func (_q *DirectoryMembershipQuery) Clone() *DirectoryMembershipQuery {
 		inters:                 append([]Interceptor{}, _q.inters...),
 		predicates:             append([]predicate.DirectoryMembership{}, _q.predicates...),
 		withOwner:              _q.withOwner.Clone(),
+		withEnvironment:        _q.withEnvironment.Clone(),
+		withScope:              _q.withScope.Clone(),
 		withIntegration:        _q.withIntegration.Clone(),
 		withDirectorySyncRun:   _q.withDirectorySyncRun.Clone(),
 		withDirectoryAccount:   _q.withDirectoryAccount.Clone(),
@@ -471,6 +526,28 @@ func (_q *DirectoryMembershipQuery) WithOwner(opts ...func(*OrganizationQuery)) 
 		opt(query)
 	}
 	_q.withOwner = query
+	return _q
+}
+
+// WithEnvironment tells the query-builder to eager-load the nodes that are connected to
+// the "environment" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *DirectoryMembershipQuery) WithEnvironment(opts ...func(*CustomTypeEnumQuery)) *DirectoryMembershipQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEnvironment = query
+	return _q
+}
+
+// WithScope tells the query-builder to eager-load the nodes that are connected to
+// the "scope" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *DirectoryMembershipQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *DirectoryMembershipQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScope = query
 	return _q
 }
 
@@ -625,8 +702,10 @@ func (_q *DirectoryMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHo
 		nodes       = []*DirectoryMembership{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [9]bool{
 			_q.withOwner != nil,
+			_q.withEnvironment != nil,
+			_q.withScope != nil,
 			_q.withIntegration != nil,
 			_q.withDirectorySyncRun != nil,
 			_q.withDirectoryAccount != nil,
@@ -664,6 +743,18 @@ func (_q *DirectoryMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHo
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *DirectoryMembership, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEnvironment; query != nil {
+		if err := _q.loadEnvironment(ctx, query, nodes, nil,
+			func(n *DirectoryMembership, e *CustomTypeEnum) { n.Edges.Environment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScope; query != nil {
+		if err := _q.loadScope(ctx, query, nodes, nil,
+			func(n *DirectoryMembership, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -751,6 +842,64 @@ func (_q *DirectoryMembershipQuery) loadOwner(ctx context.Context, query *Organi
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *DirectoryMembershipQuery) loadEnvironment(ctx context.Context, query *CustomTypeEnumQuery, nodes []*DirectoryMembership, init func(*DirectoryMembership), assign func(*DirectoryMembership, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*DirectoryMembership)
+	for i := range nodes {
+		fk := nodes[i].EnvironmentID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "environment_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *DirectoryMembershipQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuery, nodes []*DirectoryMembership, init func(*DirectoryMembership), assign func(*DirectoryMembership, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*DirectoryMembership)
+	for i := range nodes {
+		fk := nodes[i].ScopeID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -969,6 +1118,12 @@ func (_q *DirectoryMembershipQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(directorymembership.FieldOwnerID)
+		}
+		if _q.withEnvironment != nil {
+			_spec.Node.AddColumnOnce(directorymembership.FieldEnvironmentID)
+		}
+		if _q.withScope != nil {
+			_spec.Node.AddColumnOnce(directorymembership.FieldScopeID)
 		}
 		if _q.withIntegration != nil {
 			_spec.Node.AddColumnOnce(directorymembership.FieldIntegrationID)

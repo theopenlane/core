@@ -38,6 +38,85 @@ func GetWorkflowMetadata() []WorkflowObjectTypeInfo {
 			},
 		},
 		{
+			Type:        enums.WorkflowObjectTypeCampaign,
+			Label:       "Campaign",
+			Description: "Campaign objects",
+			EligibleFields: []WorkflowFieldInfo{
+				{
+					Name:  "workflow_eligible_marker",
+					Label: "WorkflowEligibleMarker",
+					Type:  "bool",
+				},
+				{
+					Name:  "status",
+					Label: "Status",
+					Type:  "enums.CampaignStatus",
+				},
+				{
+					Name:  "is_active",
+					Label: "IsActive",
+					Type:  "bool",
+				},
+				{
+					Name:  "scheduled_at",
+					Label: "ScheduledAt",
+					Type:  "models.DateTime",
+				},
+				{
+					Name:  "due_date",
+					Label: "DueDate",
+					Type:  "models.DateTime",
+				},
+				{
+					Name:  "is_recurring",
+					Label: "IsRecurring",
+					Type:  "bool",
+				},
+				{
+					Name:  "recurrence_frequency",
+					Label: "RecurrenceFrequency",
+					Type:  "enums.Frequency",
+				},
+				{
+					Name:  "recipient_count",
+					Label: "RecipientCount",
+					Type:  "int",
+				},
+				{
+					Name:  "resend_count",
+					Label: "ResendCount",
+					Type:  "int",
+				},
+			},
+		},
+		{
+			Type:        enums.WorkflowObjectTypeCampaignTarget,
+			Label:       "CampaignTarget",
+			Description: "CampaignTarget objects",
+			EligibleFields: []WorkflowFieldInfo{
+				{
+					Name:  "workflow_eligible_marker",
+					Label: "WorkflowEligibleMarker",
+					Type:  "bool",
+				},
+				{
+					Name:  "status",
+					Label: "Status",
+					Type:  "enums.AssessmentResponseStatus",
+				},
+				{
+					Name:  "sent_at",
+					Label: "SentAt",
+					Type:  "models.DateTime",
+				},
+				{
+					Name:  "completed_at",
+					Label: "CompletedAt",
+					Type:  "models.DateTime",
+				},
+			},
+		},
+		{
 			Type:        enums.WorkflowObjectTypeControl,
 			Label:       "Control",
 			Description: "Control objects",
@@ -117,6 +196,38 @@ func GetWorkflowMetadata() []WorkflowObjectTypeInfo {
 			},
 		},
 		{
+			Type:        enums.WorkflowObjectTypeIdentityHolder,
+			Label:       "IdentityHolder",
+			Description: "IdentityHolder objects",
+			EligibleFields: []WorkflowFieldInfo{
+				{
+					Name:  "workflow_eligible_marker",
+					Label: "WorkflowEligibleMarker",
+					Type:  "bool",
+				},
+				{
+					Name:  "status",
+					Label: "Status",
+					Type:  "enums.UserStatus",
+				},
+				{
+					Name:  "is_active",
+					Label: "IsActive",
+					Type:  "bool",
+				},
+				{
+					Name:  "start_date",
+					Label: "StartDate",
+					Type:  "models.DateTime",
+				},
+				{
+					Name:  "end_date",
+					Label: "EndDate",
+					Type:  "models.DateTime",
+				},
+			},
+		},
+		{
 			Type:        enums.WorkflowObjectTypeInternalPolicy,
 			Label:       "InternalPolicy",
 			Description: "InternalPolicy objects",
@@ -124,6 +235,38 @@ func GetWorkflowMetadata() []WorkflowObjectTypeInfo {
 				{
 					Name:  "workflow_eligible_marker",
 					Label: "WorkflowEligibleMarker",
+					Type:  "bool",
+				},
+			},
+		},
+		{
+			Type:        enums.WorkflowObjectTypePlatform,
+			Label:       "Platform",
+			Description: "Platform objects",
+			EligibleFields: []WorkflowFieldInfo{
+				{
+					Name:  "workflow_eligible_marker",
+					Label: "WorkflowEligibleMarker",
+					Type:  "bool",
+				},
+				{
+					Name:  "business_purpose",
+					Label: "BusinessPurpose",
+					Type:  "string",
+				},
+				{
+					Name:  "scope_statement",
+					Label: "ScopeStatement",
+					Type:  "string",
+				},
+				{
+					Name:  "status",
+					Label: "Status",
+					Type:  "enums.PlatformStatus",
+				},
+				{
+					Name:  "contains_pii",
+					Label: "ContainsPii",
 					Type:  "bool",
 				},
 			},

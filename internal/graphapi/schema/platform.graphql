@@ -1,0 +1,114 @@
+extend type Platform {
+    """
+    Indicates if this platform has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this platform if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
+extend type Query {
+    """
+    Look up platform by ID
+    """
+     platform(
+        """
+        ID of the platform
+        """
+        id: ID!
+    ):  Platform!
+}
+
+extend type Mutation{
+    """
+    Create a new platform
+    """
+    createPlatform(
+        """
+        values of the platform
+        """
+        input: CreatePlatformInput!
+    ): PlatformCreatePayload!
+    """
+    Create multiple new platforms
+    """
+    createBulkPlatform(
+        """
+        values of the platform
+        """
+        input: [CreatePlatformInput!]
+    ): PlatformBulkCreatePayload!
+    """
+    Create multiple new platforms via file upload
+    """
+    createBulkCSVPlatform(
+        """
+        csv file containing values of the platform
+        """
+        input: Upload!
+    ): PlatformBulkCreatePayload!
+    """
+    Update an existing platform
+    """
+    updatePlatform(
+        """
+        ID of the platform
+        """
+        id: ID!
+        """
+        New values for the platform
+        """
+        input: UpdatePlatformInput!
+    ): PlatformUpdatePayload!
+    """
+    Delete an existing platform
+    """
+    deletePlatform(
+        """
+        ID of the platform
+        """
+        id: ID!
+    ): PlatformDeletePayload!
+}
+
+"""
+Return response for createPlatform mutation
+"""
+type PlatformCreatePayload {
+    """
+    Created platform
+    """
+    platform: Platform!
+}
+
+"""
+Return response for updatePlatform mutation
+"""
+type PlatformUpdatePayload {
+    """
+    Updated platform
+    """
+    platform: Platform!
+}
+
+"""
+Return response for deletePlatform mutation
+"""
+type PlatformDeletePayload {
+    """
+    Deleted platform ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkPlatform mutation
+"""
+type PlatformBulkCreatePayload {
+    """
+    Created platforms
+    """
+    platforms: [Platform!]
+}

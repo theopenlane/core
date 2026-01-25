@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -41,12 +42,46 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldInternalOwner holds the string denoting the internal_owner field in the database.
+	FieldInternalOwner = "internal_owner"
+	// FieldInternalOwnerUserID holds the string denoting the internal_owner_user_id field in the database.
+	FieldInternalOwnerUserID = "internal_owner_user_id"
+	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
+	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldReviewedBy holds the string denoting the reviewed_by field in the database.
+	FieldReviewedBy = "reviewed_by"
+	// FieldReviewedByUserID holds the string denoting the reviewed_by_user_id field in the database.
+	FieldReviewedByUserID = "reviewed_by_user_id"
+	// FieldReviewedByGroupID holds the string denoting the reviewed_by_group_id field in the database.
+	FieldReviewedByGroupID = "reviewed_by_group_id"
+	// FieldLastReviewedAt holds the string denoting the last_reviewed_at field in the database.
+	FieldLastReviewedAt = "last_reviewed_at"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
 	FieldSystemOwned = "system_owned"
 	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
 	FieldInternalNotes = "internal_notes"
 	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
 	FieldSystemInternalID = "system_internal_id"
+	// FieldEntityRelationshipStateName holds the string denoting the entity_relationship_state_name field in the database.
+	FieldEntityRelationshipStateName = "entity_relationship_state_name"
+	// FieldEntityRelationshipStateID holds the string denoting the entity_relationship_state_id field in the database.
+	FieldEntityRelationshipStateID = "entity_relationship_state_id"
+	// FieldEntitySecurityQuestionnaireStatusName holds the string denoting the entity_security_questionnaire_status_name field in the database.
+	FieldEntitySecurityQuestionnaireStatusName = "entity_security_questionnaire_status_name"
+	// FieldEntitySecurityQuestionnaireStatusID holds the string denoting the entity_security_questionnaire_status_id field in the database.
+	FieldEntitySecurityQuestionnaireStatusID = "entity_security_questionnaire_status_id"
+	// FieldEntitySourceTypeName holds the string denoting the entity_source_type_name field in the database.
+	FieldEntitySourceTypeName = "entity_source_type_name"
+	// FieldEntitySourceTypeID holds the string denoting the entity_source_type_id field in the database.
+	FieldEntitySourceTypeID = "entity_source_type_id"
+	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
+	FieldEnvironmentName = "environment_name"
+	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
+	FieldEnvironmentID = "environment_id"
+	// FieldScopeName holds the string denoting the scope_name field in the database.
+	FieldScopeName = "scope_name"
+	// FieldScopeID holds the string denoting the scope_id field in the database.
+	FieldScopeID = "scope_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
@@ -59,6 +94,56 @@ const (
 	FieldEntityTypeID = "entity_type_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldApprovedForUse holds the string denoting the approved_for_use field in the database.
+	FieldApprovedForUse = "approved_for_use"
+	// FieldLinkedAssetIds holds the string denoting the linked_asset_ids field in the database.
+	FieldLinkedAssetIds = "linked_asset_ids"
+	// FieldHasSoc2 holds the string denoting the has_soc2 field in the database.
+	FieldHasSoc2 = "has_soc2"
+	// FieldSoc2PeriodEnd holds the string denoting the soc2_period_end field in the database.
+	FieldSoc2PeriodEnd = "soc2_period_end"
+	// FieldContractStartDate holds the string denoting the contract_start_date field in the database.
+	FieldContractStartDate = "contract_start_date"
+	// FieldContractEndDate holds the string denoting the contract_end_date field in the database.
+	FieldContractEndDate = "contract_end_date"
+	// FieldAutoRenews holds the string denoting the auto_renews field in the database.
+	FieldAutoRenews = "auto_renews"
+	// FieldTerminationNoticeDays holds the string denoting the termination_notice_days field in the database.
+	FieldTerminationNoticeDays = "termination_notice_days"
+	// FieldAnnualSpend holds the string denoting the annual_spend field in the database.
+	FieldAnnualSpend = "annual_spend"
+	// FieldSpendCurrency holds the string denoting the spend_currency field in the database.
+	FieldSpendCurrency = "spend_currency"
+	// FieldBillingModel holds the string denoting the billing_model field in the database.
+	FieldBillingModel = "billing_model"
+	// FieldRenewalRisk holds the string denoting the renewal_risk field in the database.
+	FieldRenewalRisk = "renewal_risk"
+	// FieldSSOEnforced holds the string denoting the sso_enforced field in the database.
+	FieldSSOEnforced = "sso_enforced"
+	// FieldMfaSupported holds the string denoting the mfa_supported field in the database.
+	FieldMfaSupported = "mfa_supported"
+	// FieldMfaEnforced holds the string denoting the mfa_enforced field in the database.
+	FieldMfaEnforced = "mfa_enforced"
+	// FieldStatusPageURL holds the string denoting the status_page_url field in the database.
+	FieldStatusPageURL = "status_page_url"
+	// FieldProvidedServices holds the string denoting the provided_services field in the database.
+	FieldProvidedServices = "provided_services"
+	// FieldLinks holds the string denoting the links field in the database.
+	FieldLinks = "links"
+	// FieldRiskRating holds the string denoting the risk_rating field in the database.
+	FieldRiskRating = "risk_rating"
+	// FieldRiskScore holds the string denoting the risk_score field in the database.
+	FieldRiskScore = "risk_score"
+	// FieldTier holds the string denoting the tier field in the database.
+	FieldTier = "tier"
+	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
+	FieldReviewFrequency = "review_frequency"
+	// FieldNextReviewAt holds the string denoting the next_review_at field in the database.
+	FieldNextReviewAt = "next_review_at"
+	// FieldContractRenewalAt holds the string denoting the contract_renewal_at field in the database.
+	FieldContractRenewalAt = "contract_renewal_at"
+	// FieldVendorMetadata holds the string denoting the vendor_metadata field in the database.
+	FieldVendorMetadata = "vendor_metadata"
 	// Table holds the table name of the entityhistory in the database.
 	Table = "entity_history"
 )
@@ -77,15 +162,57 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldOwnerID,
+	FieldInternalOwner,
+	FieldInternalOwnerUserID,
+	FieldInternalOwnerGroupID,
+	FieldReviewedBy,
+	FieldReviewedByUserID,
+	FieldReviewedByGroupID,
+	FieldLastReviewedAt,
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
+	FieldEntityRelationshipStateName,
+	FieldEntityRelationshipStateID,
+	FieldEntitySecurityQuestionnaireStatusName,
+	FieldEntitySecurityQuestionnaireStatusID,
+	FieldEntitySourceTypeName,
+	FieldEntitySourceTypeID,
+	FieldEnvironmentName,
+	FieldEnvironmentID,
+	FieldScopeName,
+	FieldScopeID,
 	FieldName,
 	FieldDisplayName,
 	FieldDescription,
 	FieldDomains,
 	FieldEntityTypeID,
 	FieldStatus,
+	FieldApprovedForUse,
+	FieldLinkedAssetIds,
+	FieldHasSoc2,
+	FieldSoc2PeriodEnd,
+	FieldContractStartDate,
+	FieldContractEndDate,
+	FieldAutoRenews,
+	FieldTerminationNoticeDays,
+	FieldAnnualSpend,
+	FieldSpendCurrency,
+	FieldBillingModel,
+	FieldRenewalRisk,
+	FieldSSOEnforced,
+	FieldMfaSupported,
+	FieldMfaEnforced,
+	FieldStatusPageURL,
+	FieldProvidedServices,
+	FieldLinks,
+	FieldRiskRating,
+	FieldRiskScore,
+	FieldTier,
+	FieldReviewFrequency,
+	FieldNextReviewAt,
+	FieldContractRenewalAt,
+	FieldVendorMetadata,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -121,6 +248,26 @@ var (
 	DefaultSystemOwned bool
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus string
+	// DefaultApprovedForUse holds the default value on creation for the "approved_for_use" field.
+	DefaultApprovedForUse bool
+	// DefaultLinkedAssetIds holds the default value on creation for the "linked_asset_ids" field.
+	DefaultLinkedAssetIds []string
+	// DefaultHasSoc2 holds the default value on creation for the "has_soc2" field.
+	DefaultHasSoc2 bool
+	// DefaultAutoRenews holds the default value on creation for the "auto_renews" field.
+	DefaultAutoRenews bool
+	// DefaultSpendCurrency holds the default value on creation for the "spend_currency" field.
+	DefaultSpendCurrency string
+	// DefaultSSOEnforced holds the default value on creation for the "sso_enforced" field.
+	DefaultSSOEnforced bool
+	// DefaultMfaSupported holds the default value on creation for the "mfa_supported" field.
+	DefaultMfaSupported bool
+	// DefaultMfaEnforced holds the default value on creation for the "mfa_enforced" field.
+	DefaultMfaEnforced bool
+	// DefaultProvidedServices holds the default value on creation for the "provided_services" field.
+	DefaultProvidedServices []string
+	// DefaultLinks holds the default value on creation for the "links" field.
+	DefaultLinks []string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -132,6 +279,18 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("entityhistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultReviewFrequency enums.Frequency = "YEARLY"
+
+// ReviewFrequencyValidator is a validator for the "review_frequency" field enum values. It is called by the builders before save.
+func ReviewFrequencyValidator(rf enums.Frequency) error {
+	switch rf.String() {
+	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY":
+		return nil
+	default:
+		return fmt.Errorf("entityhistory: invalid enum value for review_frequency field: %q", rf)
 	}
 }
 
@@ -193,6 +352,41 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// ByInternalOwner orders the results by the internal_owner field.
+func ByInternalOwner(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwner, opts...).ToFunc()
+}
+
+// ByInternalOwnerUserID orders the results by the internal_owner_user_id field.
+func ByInternalOwnerUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerUserID, opts...).ToFunc()
+}
+
+// ByInternalOwnerGroupID orders the results by the internal_owner_group_id field.
+func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
+}
+
+// ByReviewedBy orders the results by the reviewed_by field.
+func ByReviewedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedBy, opts...).ToFunc()
+}
+
+// ByReviewedByUserID orders the results by the reviewed_by_user_id field.
+func ByReviewedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByUserID, opts...).ToFunc()
+}
+
+// ByReviewedByGroupID orders the results by the reviewed_by_group_id field.
+func ByReviewedByGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByGroupID, opts...).ToFunc()
+}
+
+// ByLastReviewedAt orders the results by the last_reviewed_at field.
+func ByLastReviewedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastReviewedAt, opts...).ToFunc()
+}
+
 // BySystemOwned orders the results by the system_owned field.
 func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
@@ -206,6 +400,56 @@ func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
 // BySystemInternalID orders the results by the system_internal_id field.
 func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
+}
+
+// ByEntityRelationshipStateName orders the results by the entity_relationship_state_name field.
+func ByEntityRelationshipStateName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEntityRelationshipStateName, opts...).ToFunc()
+}
+
+// ByEntityRelationshipStateID orders the results by the entity_relationship_state_id field.
+func ByEntityRelationshipStateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEntityRelationshipStateID, opts...).ToFunc()
+}
+
+// ByEntitySecurityQuestionnaireStatusName orders the results by the entity_security_questionnaire_status_name field.
+func ByEntitySecurityQuestionnaireStatusName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEntitySecurityQuestionnaireStatusName, opts...).ToFunc()
+}
+
+// ByEntitySecurityQuestionnaireStatusID orders the results by the entity_security_questionnaire_status_id field.
+func ByEntitySecurityQuestionnaireStatusID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEntitySecurityQuestionnaireStatusID, opts...).ToFunc()
+}
+
+// ByEntitySourceTypeName orders the results by the entity_source_type_name field.
+func ByEntitySourceTypeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEntitySourceTypeName, opts...).ToFunc()
+}
+
+// ByEntitySourceTypeID orders the results by the entity_source_type_id field.
+func ByEntitySourceTypeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEntitySourceTypeID, opts...).ToFunc()
+}
+
+// ByEnvironmentName orders the results by the environment_name field.
+func ByEnvironmentName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentName, opts...).ToFunc()
+}
+
+// ByEnvironmentID orders the results by the environment_id field.
+func ByEnvironmentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentID, opts...).ToFunc()
+}
+
+// ByScopeName orders the results by the scope_name field.
+func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeName, opts...).ToFunc()
+}
+
+// ByScopeID orders the results by the scope_id field.
+func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.
@@ -233,9 +477,121 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
+// ByApprovedForUse orders the results by the approved_for_use field.
+func ByApprovedForUse(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldApprovedForUse, opts...).ToFunc()
+}
+
+// ByHasSoc2 orders the results by the has_soc2 field.
+func ByHasSoc2(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasSoc2, opts...).ToFunc()
+}
+
+// BySoc2PeriodEnd orders the results by the soc2_period_end field.
+func BySoc2PeriodEnd(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSoc2PeriodEnd, opts...).ToFunc()
+}
+
+// ByContractStartDate orders the results by the contract_start_date field.
+func ByContractStartDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldContractStartDate, opts...).ToFunc()
+}
+
+// ByContractEndDate orders the results by the contract_end_date field.
+func ByContractEndDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldContractEndDate, opts...).ToFunc()
+}
+
+// ByAutoRenews orders the results by the auto_renews field.
+func ByAutoRenews(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAutoRenews, opts...).ToFunc()
+}
+
+// ByTerminationNoticeDays orders the results by the termination_notice_days field.
+func ByTerminationNoticeDays(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTerminationNoticeDays, opts...).ToFunc()
+}
+
+// ByAnnualSpend orders the results by the annual_spend field.
+func ByAnnualSpend(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAnnualSpend, opts...).ToFunc()
+}
+
+// BySpendCurrency orders the results by the spend_currency field.
+func BySpendCurrency(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSpendCurrency, opts...).ToFunc()
+}
+
+// ByBillingModel orders the results by the billing_model field.
+func ByBillingModel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBillingModel, opts...).ToFunc()
+}
+
+// ByRenewalRisk orders the results by the renewal_risk field.
+func ByRenewalRisk(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRenewalRisk, opts...).ToFunc()
+}
+
+// BySSOEnforced orders the results by the sso_enforced field.
+func BySSOEnforced(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSSOEnforced, opts...).ToFunc()
+}
+
+// ByMfaSupported orders the results by the mfa_supported field.
+func ByMfaSupported(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMfaSupported, opts...).ToFunc()
+}
+
+// ByMfaEnforced orders the results by the mfa_enforced field.
+func ByMfaEnforced(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMfaEnforced, opts...).ToFunc()
+}
+
+// ByStatusPageURL orders the results by the status_page_url field.
+func ByStatusPageURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatusPageURL, opts...).ToFunc()
+}
+
+// ByRiskRating orders the results by the risk_rating field.
+func ByRiskRating(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskRating, opts...).ToFunc()
+}
+
+// ByRiskScore orders the results by the risk_score field.
+func ByRiskScore(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskScore, opts...).ToFunc()
+}
+
+// ByTier orders the results by the tier field.
+func ByTier(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTier, opts...).ToFunc()
+}
+
+// ByReviewFrequency orders the results by the review_frequency field.
+func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
+}
+
+// ByNextReviewAt orders the results by the next_review_at field.
+func ByNextReviewAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNextReviewAt, opts...).ToFunc()
+}
+
+// ByContractRenewalAt orders the results by the contract_renewal_at field.
+func ByContractRenewalAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldContractRenewalAt, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.Frequency must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Frequency)(nil)
+	// enums.Frequency must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Frequency)(nil)
 )

@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
@@ -198,6 +199,62 @@ func (_c *RiskCreate) SetRiskCategoryID(v string) *RiskCreate {
 func (_c *RiskCreate) SetNillableRiskCategoryID(v *string) *RiskCreate {
 	if v != nil {
 		_c.SetRiskCategoryID(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *RiskCreate) SetEnvironmentName(v string) *RiskCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableEnvironmentName(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *RiskCreate) SetEnvironmentID(v string) *RiskCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableEnvironmentID(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *RiskCreate) SetScopeName(v string) *RiskCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableScopeName(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *RiskCreate) SetScopeID(v string) *RiskCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableScopeID(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
 	}
 	return _c
 }
@@ -426,6 +483,16 @@ func (_c *RiskCreate) SetRiskCategory(v *CustomTypeEnum) *RiskCreate {
 	return _c.SetRiskCategoryID(v.ID)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_c *RiskCreate) SetEnvironment(v *CustomTypeEnum) *RiskCreate {
+	return _c.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_c *RiskCreate) SetScope(v *CustomTypeEnum) *RiskCreate {
+	return _c.SetScopeID(v.ID)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_c *RiskCreate) AddControlIDs(ids ...string) *RiskCreate {
 	_c.mutation.AddControlIDs(ids...)
@@ -499,6 +566,21 @@ func (_c *RiskCreate) AddPrograms(v ...*Program) *RiskCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddProgramIDs(ids...)
+}
+
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_c *RiskCreate) AddPlatformIDs(ids ...string) *RiskCreate {
+	_c.mutation.AddPlatformIDs(ids...)
+	return _c
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_c *RiskCreate) AddPlatforms(v ...*Platform) *RiskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformIDs(ids...)
 }
 
 // AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
@@ -807,6 +889,14 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		_spec.SetField(risk.FieldRiskCategoryName, field.TypeString, value)
 		_node.RiskCategoryName = value
 	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(risk.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(risk.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(risk.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -956,6 +1046,42 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		_node.RiskCategoryID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.EnvironmentTable,
+			Columns: []string{risk.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EnvironmentID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.ScopeTable,
+			Columns: []string{risk.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ScopeID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1036,6 +1162,23 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.ProgramRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.PlatformsTable,
+			Columns: risk.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.PlatformRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

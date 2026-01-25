@@ -5,6 +5,7 @@
 package historygenerated
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -43,10 +44,30 @@ type AssessmentResponseHistory struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the assessment this response is for
 	AssessmentID string `json:"assessment_id,omitempty"`
+	// the campaign this response is associated with
+	CampaignID string `json:"campaign_id,omitempty"`
+	// the identity holder record for the recipient
+	IdentityHolderID string `json:"identity_holder_id,omitempty"`
+	// the entity associated with this assessment response
+	EntityID string `json:"entity_id,omitempty"`
 	// the email address of the recipient
 	Email string `json:"email,omitempty"`
 	// the number of attempts made to perform email send to the recipient about this assessment, maximum of 5
 	SendAttempts int `json:"send_attempts,omitempty"`
+	// when the assessment email was delivered to the recipient
+	EmailDeliveredAt time.Time `json:"email_delivered_at,omitempty"`
+	// when the assessment email was opened by the recipient
+	EmailOpenedAt time.Time `json:"email_opened_at,omitempty"`
+	// when a link in the assessment email was clicked by the recipient
+	EmailClickedAt time.Time `json:"email_clicked_at,omitempty"`
+	// the number of times the assessment email was opened
+	EmailOpenCount int `json:"email_open_count,omitempty"`
+	// the number of link clicks for the assessment email
+	EmailClickCount int `json:"email_click_count,omitempty"`
+	// the most recent email event timestamp for this assessment response
+	LastEmailEventAt time.Time `json:"last_email_event_at,omitempty"`
+	// additional metadata about email delivery events
+	EmailMetadata map[string]interface{} `json:"email_metadata,omitempty"`
 	// the current status of the assessment for this user
 	Status enums.AssessmentResponseStatus `json:"status,omitempty"`
 	// when the assessment was assigned to the user
@@ -67,13 +88,15 @@ func (*AssessmentResponseHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case assessmentresponsehistory.FieldEmailMetadata:
+			values[i] = new([]byte)
 		case assessmentresponsehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case assessmentresponsehistory.FieldSendAttempts:
+		case assessmentresponsehistory.FieldSendAttempts, assessmentresponsehistory.FieldEmailOpenCount, assessmentresponsehistory.FieldEmailClickCount:
 			values[i] = new(sql.NullInt64)
-		case assessmentresponsehistory.FieldID, assessmentresponsehistory.FieldRef, assessmentresponsehistory.FieldCreatedBy, assessmentresponsehistory.FieldUpdatedBy, assessmentresponsehistory.FieldDeletedBy, assessmentresponsehistory.FieldOwnerID, assessmentresponsehistory.FieldAssessmentID, assessmentresponsehistory.FieldEmail, assessmentresponsehistory.FieldStatus, assessmentresponsehistory.FieldDocumentDataID:
+		case assessmentresponsehistory.FieldID, assessmentresponsehistory.FieldRef, assessmentresponsehistory.FieldCreatedBy, assessmentresponsehistory.FieldUpdatedBy, assessmentresponsehistory.FieldDeletedBy, assessmentresponsehistory.FieldOwnerID, assessmentresponsehistory.FieldAssessmentID, assessmentresponsehistory.FieldCampaignID, assessmentresponsehistory.FieldIdentityHolderID, assessmentresponsehistory.FieldEntityID, assessmentresponsehistory.FieldEmail, assessmentresponsehistory.FieldStatus, assessmentresponsehistory.FieldDocumentDataID:
 			values[i] = new(sql.NullString)
-		case assessmentresponsehistory.FieldHistoryTime, assessmentresponsehistory.FieldCreatedAt, assessmentresponsehistory.FieldUpdatedAt, assessmentresponsehistory.FieldDeletedAt, assessmentresponsehistory.FieldAssignedAt, assessmentresponsehistory.FieldStartedAt, assessmentresponsehistory.FieldCompletedAt, assessmentresponsehistory.FieldDueDate:
+		case assessmentresponsehistory.FieldHistoryTime, assessmentresponsehistory.FieldCreatedAt, assessmentresponsehistory.FieldUpdatedAt, assessmentresponsehistory.FieldDeletedAt, assessmentresponsehistory.FieldEmailDeliveredAt, assessmentresponsehistory.FieldEmailOpenedAt, assessmentresponsehistory.FieldEmailClickedAt, assessmentresponsehistory.FieldLastEmailEventAt, assessmentresponsehistory.FieldAssignedAt, assessmentresponsehistory.FieldStartedAt, assessmentresponsehistory.FieldCompletedAt, assessmentresponsehistory.FieldDueDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -162,6 +185,24 @@ func (_m *AssessmentResponseHistory) assignValues(columns []string, values []any
 			} else if value.Valid {
 				_m.AssessmentID = value.String
 			}
+		case assessmentresponsehistory.FieldCampaignID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field campaign_id", values[i])
+			} else if value.Valid {
+				_m.CampaignID = value.String
+			}
+		case assessmentresponsehistory.FieldIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.IdentityHolderID = value.String
+			}
+		case assessmentresponsehistory.FieldEntityID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field entity_id", values[i])
+			} else if value.Valid {
+				_m.EntityID = value.String
+			}
 		case assessmentresponsehistory.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
@@ -173,6 +214,50 @@ func (_m *AssessmentResponseHistory) assignValues(columns []string, values []any
 				return fmt.Errorf("unexpected type %T for field send_attempts", values[i])
 			} else if value.Valid {
 				_m.SendAttempts = int(value.Int64)
+			}
+		case assessmentresponsehistory.FieldEmailDeliveredAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field email_delivered_at", values[i])
+			} else if value.Valid {
+				_m.EmailDeliveredAt = value.Time
+			}
+		case assessmentresponsehistory.FieldEmailOpenedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field email_opened_at", values[i])
+			} else if value.Valid {
+				_m.EmailOpenedAt = value.Time
+			}
+		case assessmentresponsehistory.FieldEmailClickedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field email_clicked_at", values[i])
+			} else if value.Valid {
+				_m.EmailClickedAt = value.Time
+			}
+		case assessmentresponsehistory.FieldEmailOpenCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field email_open_count", values[i])
+			} else if value.Valid {
+				_m.EmailOpenCount = int(value.Int64)
+			}
+		case assessmentresponsehistory.FieldEmailClickCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field email_click_count", values[i])
+			} else if value.Valid {
+				_m.EmailClickCount = int(value.Int64)
+			}
+		case assessmentresponsehistory.FieldLastEmailEventAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field last_email_event_at", values[i])
+			} else if value.Valid {
+				_m.LastEmailEventAt = value.Time
+			}
+		case assessmentresponsehistory.FieldEmailMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field email_metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.EmailMetadata); err != nil {
+					return fmt.Errorf("unmarshal field email_metadata: %w", err)
+				}
 			}
 		case assessmentresponsehistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -279,11 +364,41 @@ func (_m *AssessmentResponseHistory) String() string {
 	builder.WriteString("assessment_id=")
 	builder.WriteString(_m.AssessmentID)
 	builder.WriteString(", ")
+	builder.WriteString("campaign_id=")
+	builder.WriteString(_m.CampaignID)
+	builder.WriteString(", ")
+	builder.WriteString("identity_holder_id=")
+	builder.WriteString(_m.IdentityHolderID)
+	builder.WriteString(", ")
+	builder.WriteString("entity_id=")
+	builder.WriteString(_m.EntityID)
+	builder.WriteString(", ")
 	builder.WriteString("email=")
 	builder.WriteString(_m.Email)
 	builder.WriteString(", ")
 	builder.WriteString("send_attempts=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SendAttempts))
+	builder.WriteString(", ")
+	builder.WriteString("email_delivered_at=")
+	builder.WriteString(_m.EmailDeliveredAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("email_opened_at=")
+	builder.WriteString(_m.EmailOpenedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("email_clicked_at=")
+	builder.WriteString(_m.EmailClickedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("email_open_count=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailOpenCount))
+	builder.WriteString(", ")
+	builder.WriteString("email_click_count=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailClickCount))
+	builder.WriteString(", ")
+	builder.WriteString("last_email_event_at=")
+	builder.WriteString(_m.LastEmailEventAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("email_metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailMetadata))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
@@ -21,7 +22,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
@@ -162,6 +165,62 @@ func (_c *FileCreate) SetSystemInternalID(v string) *FileCreate {
 func (_c *FileCreate) SetNillableSystemInternalID(v *string) *FileCreate {
 	if v != nil {
 		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *FileCreate) SetEnvironmentName(v string) *FileCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *FileCreate) SetNillableEnvironmentName(v *string) *FileCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *FileCreate) SetEnvironmentID(v string) *FileCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *FileCreate) SetNillableEnvironmentID(v *string) *FileCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *FileCreate) SetScopeName(v string) *FileCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *FileCreate) SetNillableScopeName(v *string) *FileCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *FileCreate) SetScopeID(v string) *FileCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *FileCreate) SetNillableScopeID(v *string) *FileCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
 	}
 	return _c
 }
@@ -392,6 +451,16 @@ func (_c *FileCreate) SetNillableID(v *string) *FileCreate {
 	return _c
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_c *FileCreate) SetEnvironment(v *CustomTypeEnum) *FileCreate {
+	return _c.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_c *FileCreate) SetScope(v *CustomTypeEnum) *FileCreate {
+	return _c.SetScopeID(v.ID)
+}
+
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
 func (_c *FileCreate) AddOrganizationIDs(ids ...string) *FileCreate {
 	_c.mutation.AddOrganizationIDs(ids...)
@@ -512,6 +581,21 @@ func (_c *FileCreate) AddProgram(v ...*Program) *FileCreate {
 	return _c.AddProgramIDs(ids...)
 }
 
+// AddPlatformIDs adds the "platform" edge to the Platform entity by IDs.
+func (_c *FileCreate) AddPlatformIDs(ids ...string) *FileCreate {
+	_c.mutation.AddPlatformIDs(ids...)
+	return _c
+}
+
+// AddPlatform adds the "platform" edges to the Platform entity.
+func (_c *FileCreate) AddPlatform(v ...*Platform) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformIDs(ids...)
+}
+
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (_c *FileCreate) AddEvidenceIDs(ids ...string) *FileCreate {
 	_c.mutation.AddEvidenceIDs(ids...)
@@ -525,6 +609,21 @@ func (_c *FileCreate) AddEvidence(v ...*Evidence) *FileCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddEvidenceIDs(ids...)
+}
+
+// AddScanIDs adds the "scan" edge to the Scan entity by IDs.
+func (_c *FileCreate) AddScanIDs(ids ...string) *FileCreate {
+	_c.mutation.AddScanIDs(ids...)
+	return _c
+}
+
+// AddScan adds the "scan" edges to the Scan entity.
+func (_c *FileCreate) AddScan(v ...*Scan) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddScanIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -783,6 +882,14 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		_spec.SetField(file.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
 	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(file.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(file.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
 	if value, ok := _c.mutation.ProvidedFileName(); ok {
 		_spec.SetField(file.FieldProvidedFileName, field.TypeString, value)
 		_node.ProvidedFileName = value
@@ -854,6 +961,42 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.LastAccessedAt(); ok {
 		_spec.SetField(file.FieldLastAccessedAt, field.TypeTime, value)
 		_node.LastAccessedAt = &value
+	}
+	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.EnvironmentTable,
+			Columns: []string{file.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EnvironmentID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.ScopeTable,
+			Columns: []string{file.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ScopeID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -991,6 +1134,23 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.PlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.PlatformTable,
+			Columns: file.PlatformPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.PlatformFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1003,6 +1163,23 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.EvidenceFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScanIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ScanTable,
+			Columns: file.ScanPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ScanFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -20,6 +20,12 @@ type AssessmentResponseHistory func(*sql.Selector)
 // AssetHistory is the predicate function for assethistory builders.
 type AssetHistory func(*sql.Selector)
 
+// CampaignHistory is the predicate function for campaignhistory builders.
+type CampaignHistory func(*sql.Selector)
+
+// CampaignTargetHistory is the predicate function for campaigntargethistory builders.
+type CampaignTargetHistory func(*sql.Selector)
+
 // ContactHistory is the predicate function for contacthistory builders.
 type ContactHistory func(*sql.Selector)
 
@@ -83,6 +89,9 @@ type GroupSettingHistory func(*sql.Selector)
 // HushHistory is the predicate function for hushhistory builders.
 type HushHistory func(*sql.Selector)
 
+// IdentityHolderHistory is the predicate function for identityholderhistory builders.
+type IdentityHolderHistory func(*sql.Selector)
+
 // IntegrationHistory is the predicate function for integrationhistory builders.
 type IntegrationHistory func(*sql.Selector)
 
@@ -115,6 +124,9 @@ type OrganizationHistory func(*sql.Selector)
 
 // OrganizationSettingHistory is the predicate function for organizationsettinghistory builders.
 type OrganizationSettingHistory func(*sql.Selector)
+
+// PlatformHistory is the predicate function for platformhistory builders.
+type PlatformHistory func(*sql.Selector)
 
 // ProcedureHistory is the predicate function for procedurehistory builders.
 type ProcedureHistory func(*sql.Selector)

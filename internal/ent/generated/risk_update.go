@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -214,6 +215,86 @@ func (_u *RiskUpdate) SetNillableRiskCategoryID(v *string) *RiskUpdate {
 // ClearRiskCategoryID clears the value of the "risk_category_id" field.
 func (_u *RiskUpdate) ClearRiskCategoryID() *RiskUpdate {
 	_u.mutation.ClearRiskCategoryID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *RiskUpdate) SetEnvironmentName(v string) *RiskUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableEnvironmentName(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *RiskUpdate) ClearEnvironmentName() *RiskUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *RiskUpdate) SetEnvironmentID(v string) *RiskUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableEnvironmentID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *RiskUpdate) ClearEnvironmentID() *RiskUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *RiskUpdate) SetScopeName(v string) *RiskUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableScopeName(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *RiskUpdate) ClearScopeName() *RiskUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *RiskUpdate) SetScopeID(v string) *RiskUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableScopeID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *RiskUpdate) ClearScopeID() *RiskUpdate {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -527,6 +608,16 @@ func (_u *RiskUpdate) SetRiskCategory(v *CustomTypeEnum) *RiskUpdate {
 	return _u.SetRiskCategoryID(v.ID)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdate) SetEnvironment(v *CustomTypeEnum) *RiskUpdate {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdate) SetScope(v *CustomTypeEnum) *RiskUpdate {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *RiskUpdate) AddControlIDs(ids ...string) *RiskUpdate {
 	_u.mutation.AddControlIDs(ids...)
@@ -600,6 +691,21 @@ func (_u *RiskUpdate) AddPrograms(v ...*Program) *RiskUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddProgramIDs(ids...)
+}
+
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_u *RiskUpdate) AddPlatformIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddPlatformIDs(ids...)
+	return _u
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_u *RiskUpdate) AddPlatforms(v ...*Platform) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformIDs(ids...)
 }
 
 // AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
@@ -797,6 +903,18 @@ func (_u *RiskUpdate) ClearRiskCategory() *RiskUpdate {
 	return _u
 }
 
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdate) ClearEnvironment() *RiskUpdate {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdate) ClearScope() *RiskUpdate {
+	_u.mutation.ClearScope()
+	return _u
+}
+
 // ClearControls clears all "controls" edges to the Control entity.
 func (_u *RiskUpdate) ClearControls() *RiskUpdate {
 	_u.mutation.ClearControls()
@@ -900,6 +1018,27 @@ func (_u *RiskUpdate) RemovePrograms(v ...*Program) *RiskUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProgramIDs(ids...)
+}
+
+// ClearPlatforms clears all "platforms" edges to the Platform entity.
+func (_u *RiskUpdate) ClearPlatforms() *RiskUpdate {
+	_u.mutation.ClearPlatforms()
+	return _u
+}
+
+// RemovePlatformIDs removes the "platforms" edge to Platform entities by IDs.
+func (_u *RiskUpdate) RemovePlatformIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemovePlatformIDs(ids...)
+	return _u
+}
+
+// RemovePlatforms removes "platforms" edges to Platform entities.
+func (_u *RiskUpdate) RemovePlatforms(v ...*Platform) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformIDs(ids...)
 }
 
 // ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
@@ -1199,6 +1338,18 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.RiskCategoryNameCleared() {
 		_spec.ClearField(risk.FieldRiskCategoryName, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(risk.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(risk.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(risk.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(risk.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(risk.FieldName, field.TypeString, value)
 	}
@@ -1486,6 +1637,68 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.EnvironmentTable,
+			Columns: []string{risk.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.EnvironmentTable,
+			Columns: []string{risk.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.ScopeTable,
+			Columns: []string{risk.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.ScopeTable,
+			Columns: []string{risk.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1721,6 +1934,54 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProgramRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.PlatformsTable,
+			Columns: risk.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformRisks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.PlatformsTable,
+			Columns: risk.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.PlatformsTable,
+			Columns: risk.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2318,6 +2579,86 @@ func (_u *RiskUpdateOne) ClearRiskCategoryID() *RiskUpdateOne {
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *RiskUpdateOne) SetEnvironmentName(v string) *RiskUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableEnvironmentName(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *RiskUpdateOne) ClearEnvironmentName() *RiskUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *RiskUpdateOne) SetEnvironmentID(v string) *RiskUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableEnvironmentID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *RiskUpdateOne) ClearEnvironmentID() *RiskUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *RiskUpdateOne) SetScopeName(v string) *RiskUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableScopeName(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *RiskUpdateOne) ClearScopeName() *RiskUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *RiskUpdateOne) SetScopeID(v string) *RiskUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableScopeID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *RiskUpdateOne) ClearScopeID() *RiskUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *RiskUpdateOne) SetName(v string) *RiskUpdateOne {
 	_u.mutation.SetName(v)
@@ -2628,6 +2969,16 @@ func (_u *RiskUpdateOne) SetRiskCategory(v *CustomTypeEnum) *RiskUpdateOne {
 	return _u.SetRiskCategoryID(v.ID)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdateOne) SetEnvironment(v *CustomTypeEnum) *RiskUpdateOne {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdateOne) SetScope(v *CustomTypeEnum) *RiskUpdateOne {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *RiskUpdateOne) AddControlIDs(ids ...string) *RiskUpdateOne {
 	_u.mutation.AddControlIDs(ids...)
@@ -2701,6 +3052,21 @@ func (_u *RiskUpdateOne) AddPrograms(v ...*Program) *RiskUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddProgramIDs(ids...)
+}
+
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_u *RiskUpdateOne) AddPlatformIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddPlatformIDs(ids...)
+	return _u
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_u *RiskUpdateOne) AddPlatforms(v ...*Platform) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformIDs(ids...)
 }
 
 // AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
@@ -2898,6 +3264,18 @@ func (_u *RiskUpdateOne) ClearRiskCategory() *RiskUpdateOne {
 	return _u
 }
 
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdateOne) ClearEnvironment() *RiskUpdateOne {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdateOne) ClearScope() *RiskUpdateOne {
+	_u.mutation.ClearScope()
+	return _u
+}
+
 // ClearControls clears all "controls" edges to the Control entity.
 func (_u *RiskUpdateOne) ClearControls() *RiskUpdateOne {
 	_u.mutation.ClearControls()
@@ -3001,6 +3379,27 @@ func (_u *RiskUpdateOne) RemovePrograms(v ...*Program) *RiskUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProgramIDs(ids...)
+}
+
+// ClearPlatforms clears all "platforms" edges to the Platform entity.
+func (_u *RiskUpdateOne) ClearPlatforms() *RiskUpdateOne {
+	_u.mutation.ClearPlatforms()
+	return _u
+}
+
+// RemovePlatformIDs removes the "platforms" edge to Platform entities by IDs.
+func (_u *RiskUpdateOne) RemovePlatformIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemovePlatformIDs(ids...)
+	return _u
+}
+
+// RemovePlatforms removes "platforms" edges to Platform entities.
+func (_u *RiskUpdateOne) RemovePlatforms(v ...*Platform) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformIDs(ids...)
 }
 
 // ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
@@ -3330,6 +3729,18 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 	if _u.mutation.RiskCategoryNameCleared() {
 		_spec.ClearField(risk.FieldRiskCategoryName, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(risk.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(risk.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(risk.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(risk.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(risk.FieldName, field.TypeString, value)
 	}
@@ -3617,6 +4028,68 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.EnvironmentTable,
+			Columns: []string{risk.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.EnvironmentTable,
+			Columns: []string{risk.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.ScopeTable,
+			Columns: []string{risk.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.ScopeTable,
+			Columns: []string{risk.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3852,6 +4325,54 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProgramRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.PlatformsTable,
+			Columns: risk.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformRisks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.PlatformsTable,
+			Columns: risk.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.PlatformsTable,
+			Columns: risk.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

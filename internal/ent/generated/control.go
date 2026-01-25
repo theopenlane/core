@@ -103,6 +103,14 @@ type Control struct {
 	ControlKindName string `json:"control_kind_name,omitempty"`
 	// the kind of the control
 	ControlKindID string `json:"control_kind_id,omitempty"`
+	// the environment of the control
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the control
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the control
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the control
+	ScopeID string `json:"scope_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
 	// the unique reference code for the control
@@ -155,10 +163,16 @@ type ControlEdges struct {
 	Editors []*Group `json:"editors,omitempty"`
 	// ControlKind holds the value of the control_kind edge.
 	ControlKind *CustomTypeEnum `json:"control_kind,omitempty"`
+	// Environment holds the value of the environment edge.
+	Environment *CustomTypeEnum `json:"environment,omitempty"`
+	// Scope holds the value of the scope edge.
+	Scope *CustomTypeEnum `json:"scope,omitempty"`
 	// Standard holds the value of the standard edge.
 	Standard *Standard `json:"standard,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
+	// Platforms holds the value of the platforms edge.
+	Platforms []*Platform `json:"platforms,omitempty"`
 	// Assets holds the value of the assets edge.
 	Assets []*Asset `json:"assets,omitempty"`
 	// Scans holds the value of the scans edge.
@@ -181,9 +195,9 @@ type ControlEdges struct {
 	ControlMappings []*FindingControl `json:"control_mappings,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [29]bool
+	loadedTypes [32]bool
 	// totalCount holds the count of the edges above.
-	totalCount [27]map[string]int
+	totalCount [30]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -198,6 +212,7 @@ type ControlEdges struct {
 	namedBlockedGroups          map[string][]*Group
 	namedEditors                map[string][]*Group
 	namedPrograms               map[string][]*Program
+	namedPlatforms              map[string][]*Platform
 	namedAssets                 map[string][]*Asset
 	namedScans                  map[string][]*Scan
 	namedFindings               map[string][]*Finding
@@ -373,12 +388,34 @@ func (e ControlEdges) ControlKindOrErr() (*CustomTypeEnum, error) {
 	return nil, &NotLoadedError{edge: "control_kind"}
 }
 
+// EnvironmentOrErr returns the Environment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
+	if e.Environment != nil {
+		return e.Environment, nil
+	} else if e.loadedTypes[17] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "environment"}
+}
+
+// ScopeOrErr returns the Scope value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlEdges) ScopeOrErr() (*CustomTypeEnum, error) {
+	if e.Scope != nil {
+		return e.Scope, nil
+	} else if e.loadedTypes[18] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "scope"}
+}
+
 // StandardOrErr returns the Standard value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ControlEdges) StandardOrErr() (*Standard, error) {
 	if e.Standard != nil {
 		return e.Standard, nil
-	} else if e.loadedTypes[17] {
+	} else if e.loadedTypes[19] {
 		return nil, &NotFoundError{label: standard.Label}
 	}
 	return nil, &NotLoadedError{edge: "standard"}
@@ -387,16 +424,25 @@ func (e ControlEdges) StandardOrErr() (*Standard, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[20] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
 }
 
+// PlatformsOrErr returns the Platforms value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) PlatformsOrErr() ([]*Platform, error) {
+	if e.loadedTypes[21] {
+		return e.Platforms, nil
+	}
+	return nil, &NotLoadedError{edge: "platforms"}
+}
+
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[22] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -405,7 +451,7 @@ func (e ControlEdges) AssetsOrErr() ([]*Asset, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[23] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -414,7 +460,7 @@ func (e ControlEdges) ScansOrErr() ([]*Scan, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[24] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -423,7 +469,7 @@ func (e ControlEdges) FindingsOrErr() ([]*Finding, error) {
 // ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[25] {
 		return e.ControlImplementations, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementations"}
@@ -432,7 +478,7 @@ func (e ControlEdges) ControlImplementationsOrErr() ([]*ControlImplementation, e
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[26] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -441,7 +487,7 @@ func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ScheduledJobsOrErr returns the ScheduledJobs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[27] {
 		return e.ScheduledJobs, nil
 	}
 	return nil, &NotLoadedError{edge: "scheduled_jobs"}
@@ -450,7 +496,7 @@ func (e ControlEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
 // MappedToControlsOrErr returns the MappedToControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) MappedToControlsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[28] {
 		return e.MappedToControls, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_to_controls"}
@@ -459,7 +505,7 @@ func (e ControlEdges) MappedToControlsOrErr() ([]*MappedControl, error) {
 // MappedFromControlsOrErr returns the MappedFromControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) MappedFromControlsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[29] {
 		return e.MappedFromControls, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_from_controls"}
@@ -468,7 +514,7 @@ func (e ControlEdges) MappedFromControlsOrErr() ([]*MappedControl, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[30] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -477,7 +523,7 @@ func (e ControlEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 // ControlMappingsOrErr returns the ControlMappings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ControlMappingsOrErr() ([]*FindingControl, error) {
-	if e.loadedTypes[28] {
+	if e.loadedTypes[31] {
 		return e.ControlMappings, nil
 	}
 	return nil, &NotLoadedError{edge: "control_mappings"}
@@ -492,7 +538,7 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case control.FieldSystemOwned, control.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldSource, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldRefCode, control.FieldStandardID:
+		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldSource, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldEnvironmentName, control.FieldEnvironmentID, control.FieldScopeName, control.FieldScopeID, control.FieldRefCode, control.FieldStandardID:
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -788,6 +834,30 @@ func (_m *Control) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ControlKindID = value.String
 			}
+		case control.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case control.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case control.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case control.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
+			}
 		case control.FieldWorkflowEligibleMarker:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
@@ -932,6 +1002,16 @@ func (_m *Control) QueryControlKind() *CustomTypeEnumQuery {
 	return NewControlClient(_m.config).QueryControlKind(_m)
 }
 
+// QueryEnvironment queries the "environment" edge of the Control entity.
+func (_m *Control) QueryEnvironment() *CustomTypeEnumQuery {
+	return NewControlClient(_m.config).QueryEnvironment(_m)
+}
+
+// QueryScope queries the "scope" edge of the Control entity.
+func (_m *Control) QueryScope() *CustomTypeEnumQuery {
+	return NewControlClient(_m.config).QueryScope(_m)
+}
+
 // QueryStandard queries the "standard" edge of the Control entity.
 func (_m *Control) QueryStandard() *StandardQuery {
 	return NewControlClient(_m.config).QueryStandard(_m)
@@ -940,6 +1020,11 @@ func (_m *Control) QueryStandard() *StandardQuery {
 // QueryPrograms queries the "programs" edge of the Control entity.
 func (_m *Control) QueryPrograms() *ProgramQuery {
 	return NewControlClient(_m.config).QueryPrograms(_m)
+}
+
+// QueryPlatforms queries the "platforms" edge of the Control entity.
+func (_m *Control) QueryPlatforms() *PlatformQuery {
+	return NewControlClient(_m.config).QueryPlatforms(_m)
 }
 
 // QueryAssets queries the "assets" edge of the Control entity.
@@ -1141,6 +1226,18 @@ func (_m *Control) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("control_kind_id=")
 	builder.WriteString(_m.ControlKindID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
@@ -1463,6 +1560,30 @@ func (_m *Control) appendNamedPrograms(name string, edges ...*Program) {
 		_m.Edges.namedPrograms[name] = []*Program{}
 	} else {
 		_m.Edges.namedPrograms[name] = append(_m.Edges.namedPrograms[name], edges...)
+	}
+}
+
+// NamedPlatforms returns the Platforms named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Control) NamedPlatforms(name string) ([]*Platform, error) {
+	if _m.Edges.namedPlatforms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedPlatforms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Control) appendNamedPlatforms(name string, edges ...*Platform) {
+	if _m.Edges.namedPlatforms == nil {
+		_m.Edges.namedPlatforms = make(map[string][]*Platform)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedPlatforms[name] = []*Platform{}
+	} else {
+		_m.Edges.namedPlatforms[name] = append(_m.Edges.namedPlatforms[name], edges...)
 	}
 }
 

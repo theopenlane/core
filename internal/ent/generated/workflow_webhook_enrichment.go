@@ -20,6 +20,22 @@ func (c *Client) EnrichWebhookPayload(ctx context.Context, objectType enums.Work
 		// No fields marked with WebhookPayloadField annotation
 		payload["id"] = entity.ID
 		return nil
+	case enums.WorkflowObjectTypeCampaign:
+		entity, err := c.Campaign.Get(ctx, objectID)
+		if err != nil {
+			return err
+		}
+		// No fields marked with WebhookPayloadField annotation
+		payload["id"] = entity.ID
+		return nil
+	case enums.WorkflowObjectTypeCampaignTarget:
+		entity, err := c.CampaignTarget.Get(ctx, objectID)
+		if err != nil {
+			return err
+		}
+		// No fields marked with WebhookPayloadField annotation
+		payload["id"] = entity.ID
+		return nil
 	case enums.WorkflowObjectTypeControl:
 		entity, err := c.Control.Get(ctx, objectID)
 		if err != nil {
@@ -36,8 +52,24 @@ func (c *Client) EnrichWebhookPayload(ctx context.Context, objectType enums.Work
 		// No fields marked with WebhookPayloadField annotation
 		payload["id"] = entity.ID
 		return nil
+	case enums.WorkflowObjectTypeIdentityHolder:
+		entity, err := c.IdentityHolder.Get(ctx, objectID)
+		if err != nil {
+			return err
+		}
+		// No fields marked with WebhookPayloadField annotation
+		payload["id"] = entity.ID
+		return nil
 	case enums.WorkflowObjectTypeInternalPolicy:
 		entity, err := c.InternalPolicy.Get(ctx, objectID)
+		if err != nil {
+			return err
+		}
+		// No fields marked with WebhookPayloadField annotation
+		payload["id"] = entity.ID
+		return nil
+	case enums.WorkflowObjectTypePlatform:
+		entity, err := c.Platform.Get(ctx, objectID)
 		if err != nil {
 			return err
 		}
@@ -75,6 +107,26 @@ func (c *Client) EnrichActionPlanWebhookPayload(ctx context.Context, id string, 
 	return nil
 }
 
+// EnrichCampaignWebhookPayload enriches a webhook payload with Campaign fields
+func (c *Client) EnrichCampaignWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
+	entity, err := c.Campaign.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	payload["id"] = entity.ID
+	return nil
+}
+
+// EnrichCampaignTargetWebhookPayload enriches a webhook payload with CampaignTarget fields
+func (c *Client) EnrichCampaignTargetWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
+	entity, err := c.CampaignTarget.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	payload["id"] = entity.ID
+	return nil
+}
+
 // EnrichControlWebhookPayload enriches a webhook payload with Control fields
 func (c *Client) EnrichControlWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
 	entity, err := c.Control.Get(ctx, id)
@@ -95,9 +147,29 @@ func (c *Client) EnrichEvidenceWebhookPayload(ctx context.Context, id string, pa
 	return nil
 }
 
+// EnrichIdentityHolderWebhookPayload enriches a webhook payload with IdentityHolder fields
+func (c *Client) EnrichIdentityHolderWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
+	entity, err := c.IdentityHolder.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	payload["id"] = entity.ID
+	return nil
+}
+
 // EnrichInternalPolicyWebhookPayload enriches a webhook payload with InternalPolicy fields
 func (c *Client) EnrichInternalPolicyWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
 	entity, err := c.InternalPolicy.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	payload["id"] = entity.ID
+	return nil
+}
+
+// EnrichPlatformWebhookPayload enriches a webhook payload with Platform fields
+func (c *Client) EnrichPlatformWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
+	entity, err := c.Platform.Get(ctx, id)
 	if err != nil {
 		return err
 	}

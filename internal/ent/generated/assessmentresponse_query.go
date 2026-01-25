@@ -14,7 +14,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
@@ -25,15 +28,18 @@ import (
 // AssessmentResponseQuery is the builder for querying AssessmentResponse entities.
 type AssessmentResponseQuery struct {
 	config
-	ctx            *QueryContext
-	order          []assessmentresponse.OrderOption
-	inters         []Interceptor
-	predicates     []predicate.AssessmentResponse
-	withOwner      *OrganizationQuery
-	withAssessment *AssessmentQuery
-	withDocument   *DocumentDataQuery
-	loadTotal      []func(context.Context, []*AssessmentResponse) error
-	modifiers      []func(*sql.Selector)
+	ctx                *QueryContext
+	order              []assessmentresponse.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.AssessmentResponse
+	withOwner          *OrganizationQuery
+	withAssessment     *AssessmentQuery
+	withCampaign       *CampaignQuery
+	withIdentityHolder *IdentityHolderQuery
+	withEntity         *EntityQuery
+	withDocument       *DocumentDataQuery
+	loadTotal          []func(context.Context, []*AssessmentResponse) error
+	modifiers          []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -113,6 +119,81 @@ func (_q *AssessmentResponseQuery) QueryAssessment() *AssessmentQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaign chains the current query on the "campaign" edge.
+func (_q *AssessmentResponseQuery) QueryCampaign() *CampaignQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, selector),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, assessmentresponse.CampaignTable, assessmentresponse.CampaignColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIdentityHolder chains the current query on the "identity_holder" edge.
+func (_q *AssessmentResponseQuery) QueryIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, assessmentresponse.IdentityHolderTable, assessmentresponse.IdentityHolderColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEntity chains the current query on the "entity" edge.
+func (_q *AssessmentResponseQuery) QueryEntity() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, selector),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, assessmentresponse.EntityTable, assessmentresponse.EntityColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -332,14 +413,17 @@ func (_q *AssessmentResponseQuery) Clone() *AssessmentResponseQuery {
 		return nil
 	}
 	return &AssessmentResponseQuery{
-		config:         _q.config,
-		ctx:            _q.ctx.Clone(),
-		order:          append([]assessmentresponse.OrderOption{}, _q.order...),
-		inters:         append([]Interceptor{}, _q.inters...),
-		predicates:     append([]predicate.AssessmentResponse{}, _q.predicates...),
-		withOwner:      _q.withOwner.Clone(),
-		withAssessment: _q.withAssessment.Clone(),
-		withDocument:   _q.withDocument.Clone(),
+		config:             _q.config,
+		ctx:                _q.ctx.Clone(),
+		order:              append([]assessmentresponse.OrderOption{}, _q.order...),
+		inters:             append([]Interceptor{}, _q.inters...),
+		predicates:         append([]predicate.AssessmentResponse{}, _q.predicates...),
+		withOwner:          _q.withOwner.Clone(),
+		withAssessment:     _q.withAssessment.Clone(),
+		withCampaign:       _q.withCampaign.Clone(),
+		withIdentityHolder: _q.withIdentityHolder.Clone(),
+		withEntity:         _q.withEntity.Clone(),
+		withDocument:       _q.withDocument.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -366,6 +450,39 @@ func (_q *AssessmentResponseQuery) WithAssessment(opts ...func(*AssessmentQuery)
 		opt(query)
 	}
 	_q.withAssessment = query
+	return _q
+}
+
+// WithCampaign tells the query-builder to eager-load the nodes that are connected to
+// the "campaign" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentResponseQuery) WithCampaign(opts ...func(*CampaignQuery)) *AssessmentResponseQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaign = query
+	return _q
+}
+
+// WithIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentResponseQuery) WithIdentityHolder(opts ...func(*IdentityHolderQuery)) *AssessmentResponseQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIdentityHolder = query
+	return _q
+}
+
+// WithEntity tells the query-builder to eager-load the nodes that are connected to
+// the "entity" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentResponseQuery) WithEntity(opts ...func(*EntityQuery)) *AssessmentResponseQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEntity = query
 	return _q
 }
 
@@ -464,9 +581,12 @@ func (_q *AssessmentResponseQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	var (
 		nodes       = []*AssessmentResponse{}
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [6]bool{
 			_q.withOwner != nil,
 			_q.withAssessment != nil,
+			_q.withCampaign != nil,
+			_q.withIdentityHolder != nil,
+			_q.withEntity != nil,
 			_q.withDocument != nil,
 		}
 	)
@@ -502,6 +622,24 @@ func (_q *AssessmentResponseQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	if query := _q.withAssessment; query != nil {
 		if err := _q.loadAssessment(ctx, query, nodes, nil,
 			func(n *AssessmentResponse, e *Assessment) { n.Edges.Assessment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaign; query != nil {
+		if err := _q.loadCampaign(ctx, query, nodes, nil,
+			func(n *AssessmentResponse, e *Campaign) { n.Edges.Campaign = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIdentityHolder; query != nil {
+		if err := _q.loadIdentityHolder(ctx, query, nodes, nil,
+			func(n *AssessmentResponse, e *IdentityHolder) { n.Edges.IdentityHolder = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEntity; query != nil {
+		if err := _q.loadEntity(ctx, query, nodes, nil,
+			func(n *AssessmentResponse, e *Entity) { n.Edges.Entity = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -577,6 +715,93 @@ func (_q *AssessmentResponseQuery) loadAssessment(ctx context.Context, query *As
 	}
 	return nil
 }
+func (_q *AssessmentResponseQuery) loadCampaign(ctx context.Context, query *CampaignQuery, nodes []*AssessmentResponse, init func(*AssessmentResponse), assign func(*AssessmentResponse, *Campaign)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*AssessmentResponse)
+	for i := range nodes {
+		fk := nodes[i].CampaignID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(campaign.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "campaign_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *AssessmentResponseQuery) loadIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*AssessmentResponse, init func(*AssessmentResponse), assign func(*AssessmentResponse, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*AssessmentResponse)
+	for i := range nodes {
+		fk := nodes[i].IdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "identity_holder_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *AssessmentResponseQuery) loadEntity(ctx context.Context, query *EntityQuery, nodes []*AssessmentResponse, init func(*AssessmentResponse), assign func(*AssessmentResponse, *Entity)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*AssessmentResponse)
+	for i := range nodes {
+		fk := nodes[i].EntityID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(entity.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "entity_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *AssessmentResponseQuery) loadDocument(ctx context.Context, query *DocumentDataQuery, nodes []*AssessmentResponse, init func(*AssessmentResponse), assign func(*AssessmentResponse, *DocumentData)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*AssessmentResponse)
@@ -642,6 +867,15 @@ func (_q *AssessmentResponseQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withAssessment != nil {
 			_spec.Node.AddColumnOnce(assessmentresponse.FieldAssessmentID)
+		}
+		if _q.withCampaign != nil {
+			_spec.Node.AddColumnOnce(assessmentresponse.FieldCampaignID)
+		}
+		if _q.withIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(assessmentresponse.FieldIdentityHolderID)
+		}
+		if _q.withEntity != nil {
+			_spec.Node.AddColumnOnce(assessmentresponse.FieldEntityID)
 		}
 		if _q.withDocument != nil {
 			_spec.Node.AddColumnOnce(assessmentresponse.FieldDocumentDataID)

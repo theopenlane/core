@@ -23,7 +23,7 @@ server:
       - http://localhost:8000
   defaulttrustcenterdomain: "localhost:3004"
   trustcentercnametarget: "cname.demo-dns.com"
-  
+
   # tls settings
   tls:
     enabled: false

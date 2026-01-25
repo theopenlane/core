@@ -9,16 +9,26 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // EntityCreate is the builder for creating a Entity entity.
@@ -132,6 +142,104 @@ func (_c *EntityCreate) SetNillableOwnerID(v *string) *EntityCreate {
 	return _c
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_c *EntityCreate) SetInternalOwner(v string) *EntityCreate {
+	_c.mutation.SetInternalOwner(v)
+	return _c
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableInternalOwner(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetInternalOwner(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_c *EntityCreate) SetInternalOwnerUserID(v string) *EntityCreate {
+	_c.mutation.SetInternalOwnerUserID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableInternalOwnerUserID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetInternalOwnerUserID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_c *EntityCreate) SetInternalOwnerGroupID(v string) *EntityCreate {
+	_c.mutation.SetInternalOwnerGroupID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableInternalOwnerGroupID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetInternalOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetReviewedBy sets the "reviewed_by" field.
+func (_c *EntityCreate) SetReviewedBy(v string) *EntityCreate {
+	_c.mutation.SetReviewedBy(v)
+	return _c
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableReviewedBy(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetReviewedBy(*v)
+	}
+	return _c
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_c *EntityCreate) SetReviewedByUserID(v string) *EntityCreate {
+	_c.mutation.SetReviewedByUserID(v)
+	return _c
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableReviewedByUserID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetReviewedByUserID(*v)
+	}
+	return _c
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_c *EntityCreate) SetReviewedByGroupID(v string) *EntityCreate {
+	_c.mutation.SetReviewedByGroupID(v)
+	return _c
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableReviewedByGroupID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetReviewedByGroupID(*v)
+	}
+	return _c
+}
+
+// SetLastReviewedAt sets the "last_reviewed_at" field.
+func (_c *EntityCreate) SetLastReviewedAt(v models.DateTime) *EntityCreate {
+	_c.mutation.SetLastReviewedAt(v)
+	return _c
+}
+
+// SetNillableLastReviewedAt sets the "last_reviewed_at" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableLastReviewedAt(v *models.DateTime) *EntityCreate {
+	if v != nil {
+		_c.SetLastReviewedAt(*v)
+	}
+	return _c
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (_c *EntityCreate) SetSystemOwned(v bool) *EntityCreate {
 	_c.mutation.SetSystemOwned(v)
@@ -170,6 +278,146 @@ func (_c *EntityCreate) SetSystemInternalID(v string) *EntityCreate {
 func (_c *EntityCreate) SetNillableSystemInternalID(v *string) *EntityCreate {
 	if v != nil {
 		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
+// SetEntityRelationshipStateName sets the "entity_relationship_state_name" field.
+func (_c *EntityCreate) SetEntityRelationshipStateName(v string) *EntityCreate {
+	_c.mutation.SetEntityRelationshipStateName(v)
+	return _c
+}
+
+// SetNillableEntityRelationshipStateName sets the "entity_relationship_state_name" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableEntityRelationshipStateName(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetEntityRelationshipStateName(*v)
+	}
+	return _c
+}
+
+// SetEntityRelationshipStateID sets the "entity_relationship_state_id" field.
+func (_c *EntityCreate) SetEntityRelationshipStateID(v string) *EntityCreate {
+	_c.mutation.SetEntityRelationshipStateID(v)
+	return _c
+}
+
+// SetNillableEntityRelationshipStateID sets the "entity_relationship_state_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableEntityRelationshipStateID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetEntityRelationshipStateID(*v)
+	}
+	return _c
+}
+
+// SetEntitySecurityQuestionnaireStatusName sets the "entity_security_questionnaire_status_name" field.
+func (_c *EntityCreate) SetEntitySecurityQuestionnaireStatusName(v string) *EntityCreate {
+	_c.mutation.SetEntitySecurityQuestionnaireStatusName(v)
+	return _c
+}
+
+// SetNillableEntitySecurityQuestionnaireStatusName sets the "entity_security_questionnaire_status_name" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableEntitySecurityQuestionnaireStatusName(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetEntitySecurityQuestionnaireStatusName(*v)
+	}
+	return _c
+}
+
+// SetEntitySecurityQuestionnaireStatusID sets the "entity_security_questionnaire_status_id" field.
+func (_c *EntityCreate) SetEntitySecurityQuestionnaireStatusID(v string) *EntityCreate {
+	_c.mutation.SetEntitySecurityQuestionnaireStatusID(v)
+	return _c
+}
+
+// SetNillableEntitySecurityQuestionnaireStatusID sets the "entity_security_questionnaire_status_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableEntitySecurityQuestionnaireStatusID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetEntitySecurityQuestionnaireStatusID(*v)
+	}
+	return _c
+}
+
+// SetEntitySourceTypeName sets the "entity_source_type_name" field.
+func (_c *EntityCreate) SetEntitySourceTypeName(v string) *EntityCreate {
+	_c.mutation.SetEntitySourceTypeName(v)
+	return _c
+}
+
+// SetNillableEntitySourceTypeName sets the "entity_source_type_name" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableEntitySourceTypeName(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetEntitySourceTypeName(*v)
+	}
+	return _c
+}
+
+// SetEntitySourceTypeID sets the "entity_source_type_id" field.
+func (_c *EntityCreate) SetEntitySourceTypeID(v string) *EntityCreate {
+	_c.mutation.SetEntitySourceTypeID(v)
+	return _c
+}
+
+// SetNillableEntitySourceTypeID sets the "entity_source_type_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableEntitySourceTypeID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetEntitySourceTypeID(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *EntityCreate) SetEnvironmentName(v string) *EntityCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableEnvironmentName(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *EntityCreate) SetEnvironmentID(v string) *EntityCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableEnvironmentID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *EntityCreate) SetScopeName(v string) *EntityCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableScopeName(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *EntityCreate) SetScopeID(v string) *EntityCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableScopeID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
 	}
 	return _c
 }
@@ -250,6 +498,324 @@ func (_c *EntityCreate) SetNillableStatus(v *string) *EntityCreate {
 	return _c
 }
 
+// SetApprovedForUse sets the "approved_for_use" field.
+func (_c *EntityCreate) SetApprovedForUse(v bool) *EntityCreate {
+	_c.mutation.SetApprovedForUse(v)
+	return _c
+}
+
+// SetNillableApprovedForUse sets the "approved_for_use" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableApprovedForUse(v *bool) *EntityCreate {
+	if v != nil {
+		_c.SetApprovedForUse(*v)
+	}
+	return _c
+}
+
+// SetLinkedAssetIds sets the "linked_asset_ids" field.
+func (_c *EntityCreate) SetLinkedAssetIds(v []string) *EntityCreate {
+	_c.mutation.SetLinkedAssetIds(v)
+	return _c
+}
+
+// SetHasSoc2 sets the "has_soc2" field.
+func (_c *EntityCreate) SetHasSoc2(v bool) *EntityCreate {
+	_c.mutation.SetHasSoc2(v)
+	return _c
+}
+
+// SetNillableHasSoc2 sets the "has_soc2" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableHasSoc2(v *bool) *EntityCreate {
+	if v != nil {
+		_c.SetHasSoc2(*v)
+	}
+	return _c
+}
+
+// SetSoc2PeriodEnd sets the "soc2_period_end" field.
+func (_c *EntityCreate) SetSoc2PeriodEnd(v models.DateTime) *EntityCreate {
+	_c.mutation.SetSoc2PeriodEnd(v)
+	return _c
+}
+
+// SetNillableSoc2PeriodEnd sets the "soc2_period_end" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableSoc2PeriodEnd(v *models.DateTime) *EntityCreate {
+	if v != nil {
+		_c.SetSoc2PeriodEnd(*v)
+	}
+	return _c
+}
+
+// SetContractStartDate sets the "contract_start_date" field.
+func (_c *EntityCreate) SetContractStartDate(v models.DateTime) *EntityCreate {
+	_c.mutation.SetContractStartDate(v)
+	return _c
+}
+
+// SetNillableContractStartDate sets the "contract_start_date" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableContractStartDate(v *models.DateTime) *EntityCreate {
+	if v != nil {
+		_c.SetContractStartDate(*v)
+	}
+	return _c
+}
+
+// SetContractEndDate sets the "contract_end_date" field.
+func (_c *EntityCreate) SetContractEndDate(v models.DateTime) *EntityCreate {
+	_c.mutation.SetContractEndDate(v)
+	return _c
+}
+
+// SetNillableContractEndDate sets the "contract_end_date" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableContractEndDate(v *models.DateTime) *EntityCreate {
+	if v != nil {
+		_c.SetContractEndDate(*v)
+	}
+	return _c
+}
+
+// SetAutoRenews sets the "auto_renews" field.
+func (_c *EntityCreate) SetAutoRenews(v bool) *EntityCreate {
+	_c.mutation.SetAutoRenews(v)
+	return _c
+}
+
+// SetNillableAutoRenews sets the "auto_renews" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableAutoRenews(v *bool) *EntityCreate {
+	if v != nil {
+		_c.SetAutoRenews(*v)
+	}
+	return _c
+}
+
+// SetTerminationNoticeDays sets the "termination_notice_days" field.
+func (_c *EntityCreate) SetTerminationNoticeDays(v int) *EntityCreate {
+	_c.mutation.SetTerminationNoticeDays(v)
+	return _c
+}
+
+// SetNillableTerminationNoticeDays sets the "termination_notice_days" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableTerminationNoticeDays(v *int) *EntityCreate {
+	if v != nil {
+		_c.SetTerminationNoticeDays(*v)
+	}
+	return _c
+}
+
+// SetAnnualSpend sets the "annual_spend" field.
+func (_c *EntityCreate) SetAnnualSpend(v float64) *EntityCreate {
+	_c.mutation.SetAnnualSpend(v)
+	return _c
+}
+
+// SetNillableAnnualSpend sets the "annual_spend" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableAnnualSpend(v *float64) *EntityCreate {
+	if v != nil {
+		_c.SetAnnualSpend(*v)
+	}
+	return _c
+}
+
+// SetSpendCurrency sets the "spend_currency" field.
+func (_c *EntityCreate) SetSpendCurrency(v string) *EntityCreate {
+	_c.mutation.SetSpendCurrency(v)
+	return _c
+}
+
+// SetNillableSpendCurrency sets the "spend_currency" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableSpendCurrency(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetSpendCurrency(*v)
+	}
+	return _c
+}
+
+// SetBillingModel sets the "billing_model" field.
+func (_c *EntityCreate) SetBillingModel(v string) *EntityCreate {
+	_c.mutation.SetBillingModel(v)
+	return _c
+}
+
+// SetNillableBillingModel sets the "billing_model" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableBillingModel(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetBillingModel(*v)
+	}
+	return _c
+}
+
+// SetRenewalRisk sets the "renewal_risk" field.
+func (_c *EntityCreate) SetRenewalRisk(v string) *EntityCreate {
+	_c.mutation.SetRenewalRisk(v)
+	return _c
+}
+
+// SetNillableRenewalRisk sets the "renewal_risk" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableRenewalRisk(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetRenewalRisk(*v)
+	}
+	return _c
+}
+
+// SetSSOEnforced sets the "sso_enforced" field.
+func (_c *EntityCreate) SetSSOEnforced(v bool) *EntityCreate {
+	_c.mutation.SetSSOEnforced(v)
+	return _c
+}
+
+// SetNillableSSOEnforced sets the "sso_enforced" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableSSOEnforced(v *bool) *EntityCreate {
+	if v != nil {
+		_c.SetSSOEnforced(*v)
+	}
+	return _c
+}
+
+// SetMfaSupported sets the "mfa_supported" field.
+func (_c *EntityCreate) SetMfaSupported(v bool) *EntityCreate {
+	_c.mutation.SetMfaSupported(v)
+	return _c
+}
+
+// SetNillableMfaSupported sets the "mfa_supported" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableMfaSupported(v *bool) *EntityCreate {
+	if v != nil {
+		_c.SetMfaSupported(*v)
+	}
+	return _c
+}
+
+// SetMfaEnforced sets the "mfa_enforced" field.
+func (_c *EntityCreate) SetMfaEnforced(v bool) *EntityCreate {
+	_c.mutation.SetMfaEnforced(v)
+	return _c
+}
+
+// SetNillableMfaEnforced sets the "mfa_enforced" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableMfaEnforced(v *bool) *EntityCreate {
+	if v != nil {
+		_c.SetMfaEnforced(*v)
+	}
+	return _c
+}
+
+// SetStatusPageURL sets the "status_page_url" field.
+func (_c *EntityCreate) SetStatusPageURL(v string) *EntityCreate {
+	_c.mutation.SetStatusPageURL(v)
+	return _c
+}
+
+// SetNillableStatusPageURL sets the "status_page_url" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableStatusPageURL(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetStatusPageURL(*v)
+	}
+	return _c
+}
+
+// SetProvidedServices sets the "provided_services" field.
+func (_c *EntityCreate) SetProvidedServices(v []string) *EntityCreate {
+	_c.mutation.SetProvidedServices(v)
+	return _c
+}
+
+// SetLinks sets the "links" field.
+func (_c *EntityCreate) SetLinks(v []string) *EntityCreate {
+	_c.mutation.SetLinks(v)
+	return _c
+}
+
+// SetRiskRating sets the "risk_rating" field.
+func (_c *EntityCreate) SetRiskRating(v string) *EntityCreate {
+	_c.mutation.SetRiskRating(v)
+	return _c
+}
+
+// SetNillableRiskRating sets the "risk_rating" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableRiskRating(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetRiskRating(*v)
+	}
+	return _c
+}
+
+// SetRiskScore sets the "risk_score" field.
+func (_c *EntityCreate) SetRiskScore(v int) *EntityCreate {
+	_c.mutation.SetRiskScore(v)
+	return _c
+}
+
+// SetNillableRiskScore sets the "risk_score" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableRiskScore(v *int) *EntityCreate {
+	if v != nil {
+		_c.SetRiskScore(*v)
+	}
+	return _c
+}
+
+// SetTier sets the "tier" field.
+func (_c *EntityCreate) SetTier(v string) *EntityCreate {
+	_c.mutation.SetTier(v)
+	return _c
+}
+
+// SetNillableTier sets the "tier" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableTier(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetTier(*v)
+	}
+	return _c
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (_c *EntityCreate) SetReviewFrequency(v enums.Frequency) *EntityCreate {
+	_c.mutation.SetReviewFrequency(v)
+	return _c
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableReviewFrequency(v *enums.Frequency) *EntityCreate {
+	if v != nil {
+		_c.SetReviewFrequency(*v)
+	}
+	return _c
+}
+
+// SetNextReviewAt sets the "next_review_at" field.
+func (_c *EntityCreate) SetNextReviewAt(v models.DateTime) *EntityCreate {
+	_c.mutation.SetNextReviewAt(v)
+	return _c
+}
+
+// SetNillableNextReviewAt sets the "next_review_at" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableNextReviewAt(v *models.DateTime) *EntityCreate {
+	if v != nil {
+		_c.SetNextReviewAt(*v)
+	}
+	return _c
+}
+
+// SetContractRenewalAt sets the "contract_renewal_at" field.
+func (_c *EntityCreate) SetContractRenewalAt(v models.DateTime) *EntityCreate {
+	_c.mutation.SetContractRenewalAt(v)
+	return _c
+}
+
+// SetNillableContractRenewalAt sets the "contract_renewal_at" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableContractRenewalAt(v *models.DateTime) *EntityCreate {
+	if v != nil {
+		_c.SetContractRenewalAt(*v)
+	}
+	return _c
+}
+
+// SetVendorMetadata sets the "vendor_metadata" field.
+func (_c *EntityCreate) SetVendorMetadata(v map[string]interface{}) *EntityCreate {
+	_c.mutation.SetVendorMetadata(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *EntityCreate) SetID(v string) *EntityCreate {
 	_c.mutation.SetID(v)
@@ -312,6 +878,51 @@ func (_c *EntityCreate) AddViewers(v ...*Group) *EntityCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddViewerIDs(ids...)
+}
+
+// SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
+func (_c *EntityCreate) SetInternalOwnerUser(v *User) *EntityCreate {
+	return _c.SetInternalOwnerUserID(v.ID)
+}
+
+// SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
+func (_c *EntityCreate) SetInternalOwnerGroup(v *Group) *EntityCreate {
+	return _c.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
+func (_c *EntityCreate) SetReviewedByUser(v *User) *EntityCreate {
+	return _c.SetReviewedByUserID(v.ID)
+}
+
+// SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
+func (_c *EntityCreate) SetReviewedByGroup(v *Group) *EntityCreate {
+	return _c.SetReviewedByGroupID(v.ID)
+}
+
+// SetEntityRelationshipState sets the "entity_relationship_state" edge to the CustomTypeEnum entity.
+func (_c *EntityCreate) SetEntityRelationshipState(v *CustomTypeEnum) *EntityCreate {
+	return _c.SetEntityRelationshipStateID(v.ID)
+}
+
+// SetEntitySecurityQuestionnaireStatus sets the "entity_security_questionnaire_status" edge to the CustomTypeEnum entity.
+func (_c *EntityCreate) SetEntitySecurityQuestionnaireStatus(v *CustomTypeEnum) *EntityCreate {
+	return _c.SetEntitySecurityQuestionnaireStatusID(v.ID)
+}
+
+// SetEntitySourceType sets the "entity_source_type" edge to the CustomTypeEnum entity.
+func (_c *EntityCreate) SetEntitySourceType(v *CustomTypeEnum) *EntityCreate {
+	return _c.SetEntitySourceTypeID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_c *EntityCreate) SetEnvironment(v *CustomTypeEnum) *EntityCreate {
+	return _c.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_c *EntityCreate) SetScope(v *CustomTypeEnum) *EntityCreate {
+	return _c.SetScopeID(v.ID)
 }
 
 // AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
@@ -404,6 +1015,156 @@ func (_c *EntityCreate) AddScans(v ...*Scan) *EntityCreate {
 	return _c.AddScanIDs(ids...)
 }
 
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_c *EntityCreate) AddCampaignIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddCampaignIDs(ids...)
+	return _c
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_c *EntityCreate) AddCampaigns(v ...*Campaign) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignIDs(ids...)
+}
+
+// AddAssessmentResponseIDs adds the "assessment_responses" edge to the AssessmentResponse entity by IDs.
+func (_c *EntityCreate) AddAssessmentResponseIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddAssessmentResponseIDs(ids...)
+	return _c
+}
+
+// AddAssessmentResponses adds the "assessment_responses" edges to the AssessmentResponse entity.
+func (_c *EntityCreate) AddAssessmentResponses(v ...*AssessmentResponse) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAssessmentResponseIDs(ids...)
+}
+
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (_c *EntityCreate) AddIntegrationIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddIntegrationIDs(ids...)
+	return _c
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (_c *EntityCreate) AddIntegrations(v ...*Integration) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationIDs(ids...)
+}
+
+// AddSubprocessorIDs adds the "subprocessors" edge to the Subprocessor entity by IDs.
+func (_c *EntityCreate) AddSubprocessorIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddSubprocessorIDs(ids...)
+	return _c
+}
+
+// AddSubprocessors adds the "subprocessors" edges to the Subprocessor entity.
+func (_c *EntityCreate) AddSubprocessors(v ...*Subprocessor) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSubprocessorIDs(ids...)
+}
+
+// AddAuthMethodIDs adds the "auth_methods" edge to the CustomTypeEnum entity by IDs.
+func (_c *EntityCreate) AddAuthMethodIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddAuthMethodIDs(ids...)
+	return _c
+}
+
+// AddAuthMethods adds the "auth_methods" edges to the CustomTypeEnum entity.
+func (_c *EntityCreate) AddAuthMethods(v ...*CustomTypeEnum) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAuthMethodIDs(ids...)
+}
+
+// AddEmployerIdentityHolderIDs adds the "employer_identity_holders" edge to the IdentityHolder entity by IDs.
+func (_c *EntityCreate) AddEmployerIdentityHolderIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddEmployerIdentityHolderIDs(ids...)
+	return _c
+}
+
+// AddEmployerIdentityHolders adds the "employer_identity_holders" edges to the IdentityHolder entity.
+func (_c *EntityCreate) AddEmployerIdentityHolders(v ...*IdentityHolder) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEmployerIdentityHolderIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_c *EntityCreate) AddIdentityHolderIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddIdentityHolderIDs(ids...)
+	return _c
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_c *EntityCreate) AddIdentityHolders(v ...*IdentityHolder) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIdentityHolderIDs(ids...)
+}
+
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_c *EntityCreate) AddPlatformIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddPlatformIDs(ids...)
+	return _c
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_c *EntityCreate) AddPlatforms(v ...*Platform) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformIDs(ids...)
+}
+
+// AddOutOfScopePlatformIDs adds the "out_of_scope_platforms" edge to the Platform entity by IDs.
+func (_c *EntityCreate) AddOutOfScopePlatformIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddOutOfScopePlatformIDs(ids...)
+	return _c
+}
+
+// AddOutOfScopePlatforms adds the "out_of_scope_platforms" edges to the Platform entity.
+func (_c *EntityCreate) AddOutOfScopePlatforms(v ...*Platform) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddOutOfScopePlatformIDs(ids...)
+}
+
+// AddSourcePlatformIDs adds the "source_platforms" edge to the Platform entity by IDs.
+func (_c *EntityCreate) AddSourcePlatformIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddSourcePlatformIDs(ids...)
+	return _c
+}
+
+// AddSourcePlatforms adds the "source_platforms" edges to the Platform entity.
+func (_c *EntityCreate) AddSourcePlatforms(v ...*Platform) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSourcePlatformIDs(ids...)
+}
+
 // SetEntityType sets the "entity_type" edge to the EntityType entity.
 func (_c *EntityCreate) SetEntityType(v *EntityType) *EntityCreate {
 	return _c.SetEntityTypeID(v.ID)
@@ -472,6 +1233,50 @@ func (_c *EntityCreate) defaults() error {
 		v := entity.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.ApprovedForUse(); !ok {
+		v := entity.DefaultApprovedForUse
+		_c.mutation.SetApprovedForUse(v)
+	}
+	if _, ok := _c.mutation.LinkedAssetIds(); !ok {
+		v := entity.DefaultLinkedAssetIds
+		_c.mutation.SetLinkedAssetIds(v)
+	}
+	if _, ok := _c.mutation.HasSoc2(); !ok {
+		v := entity.DefaultHasSoc2
+		_c.mutation.SetHasSoc2(v)
+	}
+	if _, ok := _c.mutation.AutoRenews(); !ok {
+		v := entity.DefaultAutoRenews
+		_c.mutation.SetAutoRenews(v)
+	}
+	if _, ok := _c.mutation.SpendCurrency(); !ok {
+		v := entity.DefaultSpendCurrency
+		_c.mutation.SetSpendCurrency(v)
+	}
+	if _, ok := _c.mutation.SSOEnforced(); !ok {
+		v := entity.DefaultSSOEnforced
+		_c.mutation.SetSSOEnforced(v)
+	}
+	if _, ok := _c.mutation.MfaSupported(); !ok {
+		v := entity.DefaultMfaSupported
+		_c.mutation.SetMfaSupported(v)
+	}
+	if _, ok := _c.mutation.MfaEnforced(); !ok {
+		v := entity.DefaultMfaEnforced
+		_c.mutation.SetMfaEnforced(v)
+	}
+	if _, ok := _c.mutation.ProvidedServices(); !ok {
+		v := entity.DefaultProvidedServices
+		_c.mutation.SetProvidedServices(v)
+	}
+	if _, ok := _c.mutation.Links(); !ok {
+		v := entity.DefaultLinks
+		_c.mutation.SetLinks(v)
+	}
+	if _, ok := _c.mutation.ReviewFrequency(); !ok {
+		v := entity.DefaultReviewFrequency
+		_c.mutation.SetReviewFrequency(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if entity.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized entity.DefaultID (forgotten import generated/runtime?)")
@@ -502,6 +1307,21 @@ func (_c *EntityCreate) check() error {
 	if v, ok := _c.mutation.Domains(); ok {
 		if err := entity.DomainsValidator(v); err != nil {
 			return &ValidationError{Name: "domains", err: fmt.Errorf(`generated: validator failed for field "Entity.domains": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.StatusPageURL(); ok {
+		if err := entity.StatusPageURLValidator(v); err != nil {
+			return &ValidationError{Name: "status_page_url", err: fmt.Errorf(`generated: validator failed for field "Entity.status_page_url": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.Links(); ok {
+		if err := entity.LinksValidator(v); err != nil {
+			return &ValidationError{Name: "links", err: fmt.Errorf(`generated: validator failed for field "Entity.links": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.ReviewFrequency(); ok {
+		if err := entity.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Entity.review_frequency": %w`, err)}
 		}
 	}
 	return nil
@@ -568,6 +1388,18 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 		_spec.SetField(entity.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.InternalOwner(); ok {
+		_spec.SetField(entity.FieldInternalOwner, field.TypeString, value)
+		_node.InternalOwner = value
+	}
+	if value, ok := _c.mutation.ReviewedBy(); ok {
+		_spec.SetField(entity.FieldReviewedBy, field.TypeString, value)
+		_node.ReviewedBy = value
+	}
+	if value, ok := _c.mutation.LastReviewedAt(); ok {
+		_spec.SetField(entity.FieldLastReviewedAt, field.TypeTime, value)
+		_node.LastReviewedAt = &value
+	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(entity.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
@@ -579,6 +1411,26 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(entity.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
+	}
+	if value, ok := _c.mutation.EntityRelationshipStateName(); ok {
+		_spec.SetField(entity.FieldEntityRelationshipStateName, field.TypeString, value)
+		_node.EntityRelationshipStateName = value
+	}
+	if value, ok := _c.mutation.EntitySecurityQuestionnaireStatusName(); ok {
+		_spec.SetField(entity.FieldEntitySecurityQuestionnaireStatusName, field.TypeString, value)
+		_node.EntitySecurityQuestionnaireStatusName = value
+	}
+	if value, ok := _c.mutation.EntitySourceTypeName(); ok {
+		_spec.SetField(entity.FieldEntitySourceTypeName, field.TypeString, value)
+		_node.EntitySourceTypeName = value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(entity.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(entity.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(entity.FieldName, field.TypeString, value)
@@ -599,6 +1451,106 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(entity.FieldStatus, field.TypeString, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ApprovedForUse(); ok {
+		_spec.SetField(entity.FieldApprovedForUse, field.TypeBool, value)
+		_node.ApprovedForUse = value
+	}
+	if value, ok := _c.mutation.LinkedAssetIds(); ok {
+		_spec.SetField(entity.FieldLinkedAssetIds, field.TypeJSON, value)
+		_node.LinkedAssetIds = value
+	}
+	if value, ok := _c.mutation.HasSoc2(); ok {
+		_spec.SetField(entity.FieldHasSoc2, field.TypeBool, value)
+		_node.HasSoc2 = value
+	}
+	if value, ok := _c.mutation.Soc2PeriodEnd(); ok {
+		_spec.SetField(entity.FieldSoc2PeriodEnd, field.TypeTime, value)
+		_node.Soc2PeriodEnd = &value
+	}
+	if value, ok := _c.mutation.ContractStartDate(); ok {
+		_spec.SetField(entity.FieldContractStartDate, field.TypeTime, value)
+		_node.ContractStartDate = &value
+	}
+	if value, ok := _c.mutation.ContractEndDate(); ok {
+		_spec.SetField(entity.FieldContractEndDate, field.TypeTime, value)
+		_node.ContractEndDate = &value
+	}
+	if value, ok := _c.mutation.AutoRenews(); ok {
+		_spec.SetField(entity.FieldAutoRenews, field.TypeBool, value)
+		_node.AutoRenews = value
+	}
+	if value, ok := _c.mutation.TerminationNoticeDays(); ok {
+		_spec.SetField(entity.FieldTerminationNoticeDays, field.TypeInt, value)
+		_node.TerminationNoticeDays = value
+	}
+	if value, ok := _c.mutation.AnnualSpend(); ok {
+		_spec.SetField(entity.FieldAnnualSpend, field.TypeFloat64, value)
+		_node.AnnualSpend = value
+	}
+	if value, ok := _c.mutation.SpendCurrency(); ok {
+		_spec.SetField(entity.FieldSpendCurrency, field.TypeString, value)
+		_node.SpendCurrency = value
+	}
+	if value, ok := _c.mutation.BillingModel(); ok {
+		_spec.SetField(entity.FieldBillingModel, field.TypeString, value)
+		_node.BillingModel = value
+	}
+	if value, ok := _c.mutation.RenewalRisk(); ok {
+		_spec.SetField(entity.FieldRenewalRisk, field.TypeString, value)
+		_node.RenewalRisk = value
+	}
+	if value, ok := _c.mutation.SSOEnforced(); ok {
+		_spec.SetField(entity.FieldSSOEnforced, field.TypeBool, value)
+		_node.SSOEnforced = value
+	}
+	if value, ok := _c.mutation.MfaSupported(); ok {
+		_spec.SetField(entity.FieldMfaSupported, field.TypeBool, value)
+		_node.MfaSupported = value
+	}
+	if value, ok := _c.mutation.MfaEnforced(); ok {
+		_spec.SetField(entity.FieldMfaEnforced, field.TypeBool, value)
+		_node.MfaEnforced = value
+	}
+	if value, ok := _c.mutation.StatusPageURL(); ok {
+		_spec.SetField(entity.FieldStatusPageURL, field.TypeString, value)
+		_node.StatusPageURL = value
+	}
+	if value, ok := _c.mutation.ProvidedServices(); ok {
+		_spec.SetField(entity.FieldProvidedServices, field.TypeJSON, value)
+		_node.ProvidedServices = value
+	}
+	if value, ok := _c.mutation.Links(); ok {
+		_spec.SetField(entity.FieldLinks, field.TypeJSON, value)
+		_node.Links = value
+	}
+	if value, ok := _c.mutation.RiskRating(); ok {
+		_spec.SetField(entity.FieldRiskRating, field.TypeString, value)
+		_node.RiskRating = value
+	}
+	if value, ok := _c.mutation.RiskScore(); ok {
+		_spec.SetField(entity.FieldRiskScore, field.TypeInt, value)
+		_node.RiskScore = value
+	}
+	if value, ok := _c.mutation.Tier(); ok {
+		_spec.SetField(entity.FieldTier, field.TypeString, value)
+		_node.Tier = value
+	}
+	if value, ok := _c.mutation.ReviewFrequency(); ok {
+		_spec.SetField(entity.FieldReviewFrequency, field.TypeEnum, value)
+		_node.ReviewFrequency = value
+	}
+	if value, ok := _c.mutation.NextReviewAt(); ok {
+		_spec.SetField(entity.FieldNextReviewAt, field.TypeTime, value)
+		_node.NextReviewAt = &value
+	}
+	if value, ok := _c.mutation.ContractRenewalAt(); ok {
+		_spec.SetField(entity.FieldContractRenewalAt, field.TypeTime, value)
+		_node.ContractRenewalAt = &value
+	}
+	if value, ok := _c.mutation.VendorMetadata(); ok {
+		_spec.SetField(entity.FieldVendorMetadata, field.TypeJSON, value)
+		_node.VendorMetadata = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -667,6 +1619,168 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerUserTable,
+			Columns: []string{entity.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerGroupTable,
+			Columns: []string{entity.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByUserTable,
+			Columns: []string{entity.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReviewedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewedByGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByGroupTable,
+			Columns: []string{entity.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReviewedByGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EntityRelationshipStateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EntityRelationshipStateTable,
+			Columns: []string{entity.EntityRelationshipStateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EntityRelationshipStateID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EntitySecurityQuestionnaireStatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EntitySecurityQuestionnaireStatusTable,
+			Columns: []string{entity.EntitySecurityQuestionnaireStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EntitySecurityQuestionnaireStatusID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EntitySourceTypeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EntitySourceTypeTable,
+			Columns: []string{entity.EntitySourceTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EntitySourceTypeID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.EnvironmentTable,
+			Columns: []string{entity.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EnvironmentID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ScopeTable,
+			Columns: []string{entity.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ScopeID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ContactsIDs(); len(nodes) > 0 {
@@ -766,6 +1880,176 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.CampaignsTable,
+			Columns: []string{entity.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssessmentResponsesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AssessmentResponsesTable,
+			Columns: []string{entity.AssessmentResponsesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.IntegrationsTable,
+			Columns: entity.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.EntityIntegrations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SubprocessorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.SubprocessorsTable,
+			Columns: entity.SubprocessorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.EntitySubprocessors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AuthMethodsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AuthMethodsTable,
+			Columns: []string{entity.AuthMethodsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.CustomTypeEnum
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EmployerIdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   entity.EmployerIdentityHoldersTable,
+			Columns: []string{entity.EmployerIdentityHoldersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IdentityHolder
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.IdentityHoldersTable,
+			Columns: entity.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IdentityHolderEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.PlatformsTable,
+			Columns: entity.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.PlatformEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.OutOfScopePlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.OutOfScopePlatformsTable,
+			Columns: entity.OutOfScopePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.PlatformOutOfScopeVendors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SourcePlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.SourcePlatformsTable,
+			Columns: entity.SourcePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.PlatformSourceEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// TestNewCelEnv verifies CEL env creation with defaults
 func TestNewCelEnv(t *testing.T) {
 	env, err := NewCelEnv()
 	require.NoError(t, err)

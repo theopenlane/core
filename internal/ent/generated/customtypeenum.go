@@ -38,7 +38,7 @@ type CustomTypeEnum struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
-	// the kind of object the type applies to, for example task
+	// the kind of object the type applies to, for example task, leave empty for global enums
 	ObjectType string `json:"object_type,omitempty"`
 	// the field on the object the type applies to, for example kind or category
 	Field string `json:"field,omitempty"`
@@ -52,8 +52,9 @@ type CustomTypeEnum struct {
 	Icon string `json:"icon,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CustomTypeEnumQuery when eager-loading is set.
-	Edges        CustomTypeEnumEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges               CustomTypeEnumEdges `json:"edges"`
+	entity_auth_methods *string
+	selectValues        sql.SelectValues
 }
 
 // CustomTypeEnumEdges holds the relations/edges for other nodes in the graph.
@@ -78,11 +79,13 @@ type CustomTypeEnumEdges struct {
 	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
+	// Platforms holds the value of the platforms edge.
+	Platforms []*Platform `json:"platforms,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [10]bool
+	loadedTypes [11]bool
 	// totalCount holds the count of the edges above.
-	totalCount [10]map[string]int
+	totalCount [11]map[string]int
 
 	namedTasks            map[string][]*Task
 	namedControls         map[string][]*Control
@@ -93,6 +96,7 @@ type CustomTypeEnumEdges struct {
 	namedProcedures       map[string][]*Procedure
 	namedActionPlans      map[string][]*ActionPlan
 	namedPrograms         map[string][]*Program
+	namedPlatforms        map[string][]*Platform
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -187,6 +191,15 @@ func (e CustomTypeEnumEdges) ProgramsOrErr() ([]*Program, error) {
 	return nil, &NotLoadedError{edge: "programs"}
 }
 
+// PlatformsOrErr returns the Platforms value or an error if the edge
+// was not loaded in eager-loading.
+func (e CustomTypeEnumEdges) PlatformsOrErr() ([]*Platform, error) {
+	if e.loadedTypes[10] {
+		return e.Platforms, nil
+	}
+	return nil, &NotLoadedError{edge: "platforms"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*CustomTypeEnum) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -198,6 +211,8 @@ func (*CustomTypeEnum) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case customtypeenum.FieldCreatedAt, customtypeenum.FieldUpdatedAt, customtypeenum.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
+		case customtypeenum.ForeignKeys[0]: // entity_auth_methods
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -317,6 +332,13 @@ func (_m *CustomTypeEnum) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Icon = value.String
 			}
+		case customtypeenum.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field entity_auth_methods", values[i])
+			} else if value.Valid {
+				_m.entity_auth_methods = new(string)
+				*_m.entity_auth_methods = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -378,6 +400,11 @@ func (_m *CustomTypeEnum) QueryActionPlans() *ActionPlanQuery {
 // QueryPrograms queries the "programs" edge of the CustomTypeEnum entity.
 func (_m *CustomTypeEnum) QueryPrograms() *ProgramQuery {
 	return NewCustomTypeEnumClient(_m.config).QueryPrograms(_m)
+}
+
+// QueryPlatforms queries the "platforms" edge of the CustomTypeEnum entity.
+func (_m *CustomTypeEnum) QueryPlatforms() *PlatformQuery {
+	return NewCustomTypeEnumClient(_m.config).QueryPlatforms(_m)
 }
 
 // Update returns a builder for updating this CustomTypeEnum.
@@ -671,6 +698,30 @@ func (_m *CustomTypeEnum) appendNamedPrograms(name string, edges ...*Program) {
 		_m.Edges.namedPrograms[name] = []*Program{}
 	} else {
 		_m.Edges.namedPrograms[name] = append(_m.Edges.namedPrograms[name], edges...)
+	}
+}
+
+// NamedPlatforms returns the Platforms named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *CustomTypeEnum) NamedPlatforms(name string) ([]*Platform, error) {
+	if _m.Edges.namedPlatforms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedPlatforms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *CustomTypeEnum) appendNamedPlatforms(name string, edges ...*Platform) {
+	if _m.Edges.namedPlatforms == nil {
+		_m.Edges.namedPlatforms = make(map[string][]*Platform)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedPlatforms[name] = []*Platform{}
+	} else {
+		_m.Edges.namedPlatforms[name] = append(_m.Edges.namedPlatforms[name], edges...)
 	}
 }
 

@@ -66,12 +66,46 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Entity_ownerID(ctx, field)
+			case "internalOwner":
+				return ec.fieldContext_Entity_internalOwner(ctx, field)
+			case "internalOwnerUserID":
+				return ec.fieldContext_Entity_internalOwnerUserID(ctx, field)
+			case "internalOwnerGroupID":
+				return ec.fieldContext_Entity_internalOwnerGroupID(ctx, field)
+			case "reviewedBy":
+				return ec.fieldContext_Entity_reviewedBy(ctx, field)
+			case "reviewedByUserID":
+				return ec.fieldContext_Entity_reviewedByUserID(ctx, field)
+			case "reviewedByGroupID":
+				return ec.fieldContext_Entity_reviewedByGroupID(ctx, field)
+			case "lastReviewedAt":
+				return ec.fieldContext_Entity_lastReviewedAt(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_Entity_systemOwned(ctx, field)
 			case "internalNotes":
 				return ec.fieldContext_Entity_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Entity_systemInternalID(ctx, field)
+			case "entityRelationshipStateName":
+				return ec.fieldContext_Entity_entityRelationshipStateName(ctx, field)
+			case "entityRelationshipStateID":
+				return ec.fieldContext_Entity_entityRelationshipStateID(ctx, field)
+			case "entitySecurityQuestionnaireStatusName":
+				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatusName(ctx, field)
+			case "entitySecurityQuestionnaireStatusID":
+				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatusID(ctx, field)
+			case "entitySourceTypeName":
+				return ec.fieldContext_Entity_entitySourceTypeName(ctx, field)
+			case "entitySourceTypeID":
+				return ec.fieldContext_Entity_entitySourceTypeID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Entity_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Entity_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Entity_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Entity_scopeID(ctx, field)
 			case "name":
 				return ec.fieldContext_Entity_name(ctx, field)
 			case "displayName":
@@ -84,6 +118,56 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_entityTypeID(ctx, field)
 			case "status":
 				return ec.fieldContext_Entity_status(ctx, field)
+			case "approvedForUse":
+				return ec.fieldContext_Entity_approvedForUse(ctx, field)
+			case "linkedAssetIds":
+				return ec.fieldContext_Entity_linkedAssetIds(ctx, field)
+			case "hasSoc2":
+				return ec.fieldContext_Entity_hasSoc2(ctx, field)
+			case "soc2PeriodEnd":
+				return ec.fieldContext_Entity_soc2PeriodEnd(ctx, field)
+			case "contractStartDate":
+				return ec.fieldContext_Entity_contractStartDate(ctx, field)
+			case "contractEndDate":
+				return ec.fieldContext_Entity_contractEndDate(ctx, field)
+			case "autoRenews":
+				return ec.fieldContext_Entity_autoRenews(ctx, field)
+			case "terminationNoticeDays":
+				return ec.fieldContext_Entity_terminationNoticeDays(ctx, field)
+			case "annualSpend":
+				return ec.fieldContext_Entity_annualSpend(ctx, field)
+			case "spendCurrency":
+				return ec.fieldContext_Entity_spendCurrency(ctx, field)
+			case "billingModel":
+				return ec.fieldContext_Entity_billingModel(ctx, field)
+			case "renewalRisk":
+				return ec.fieldContext_Entity_renewalRisk(ctx, field)
+			case "ssoEnforced":
+				return ec.fieldContext_Entity_ssoEnforced(ctx, field)
+			case "mfaSupported":
+				return ec.fieldContext_Entity_mfaSupported(ctx, field)
+			case "mfaEnforced":
+				return ec.fieldContext_Entity_mfaEnforced(ctx, field)
+			case "statusPageURL":
+				return ec.fieldContext_Entity_statusPageURL(ctx, field)
+			case "providedServices":
+				return ec.fieldContext_Entity_providedServices(ctx, field)
+			case "links":
+				return ec.fieldContext_Entity_links(ctx, field)
+			case "riskRating":
+				return ec.fieldContext_Entity_riskRating(ctx, field)
+			case "riskScore":
+				return ec.fieldContext_Entity_riskScore(ctx, field)
+			case "tier":
+				return ec.fieldContext_Entity_tier(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_Entity_reviewFrequency(ctx, field)
+			case "nextReviewAt":
+				return ec.fieldContext_Entity_nextReviewAt(ctx, field)
+			case "contractRenewalAt":
+				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
+			case "vendorMetadata":
+				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "blockedGroups":
@@ -92,6 +176,24 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Entity_viewers(ctx, field)
+			case "internalOwnerUser":
+				return ec.fieldContext_Entity_internalOwnerUser(ctx, field)
+			case "internalOwnerGroup":
+				return ec.fieldContext_Entity_internalOwnerGroup(ctx, field)
+			case "reviewedByUser":
+				return ec.fieldContext_Entity_reviewedByUser(ctx, field)
+			case "reviewedByGroup":
+				return ec.fieldContext_Entity_reviewedByGroup(ctx, field)
+			case "entityRelationshipState":
+				return ec.fieldContext_Entity_entityRelationshipState(ctx, field)
+			case "entitySecurityQuestionnaireStatus":
+				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatus(ctx, field)
+			case "entitySourceType":
+				return ec.fieldContext_Entity_entitySourceType(ctx, field)
+			case "environment":
+				return ec.fieldContext_Entity_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Entity_scope(ctx, field)
 			case "contacts":
 				return ec.fieldContext_Entity_contacts(ctx, field)
 			case "documents":
@@ -104,6 +206,26 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_assets(ctx, field)
 			case "scans":
 				return ec.fieldContext_Entity_scans(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Entity_campaigns(ctx, field)
+			case "assessmentResponses":
+				return ec.fieldContext_Entity_assessmentResponses(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Entity_integrations(ctx, field)
+			case "subprocessors":
+				return ec.fieldContext_Entity_subprocessors(ctx, field)
+			case "authMethods":
+				return ec.fieldContext_Entity_authMethods(ctx, field)
+			case "employerIdentityHolders":
+				return ec.fieldContext_Entity_employerIdentityHolders(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Entity_identityHolders(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Entity_platforms(ctx, field)
+			case "outOfScopePlatforms":
+				return ec.fieldContext_Entity_outOfScopePlatforms(ctx, field)
+			case "sourcePlatforms":
+				return ec.fieldContext_Entity_sourcePlatforms(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
 			}
@@ -180,12 +302,46 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Entity_ownerID(ctx, field)
+			case "internalOwner":
+				return ec.fieldContext_Entity_internalOwner(ctx, field)
+			case "internalOwnerUserID":
+				return ec.fieldContext_Entity_internalOwnerUserID(ctx, field)
+			case "internalOwnerGroupID":
+				return ec.fieldContext_Entity_internalOwnerGroupID(ctx, field)
+			case "reviewedBy":
+				return ec.fieldContext_Entity_reviewedBy(ctx, field)
+			case "reviewedByUserID":
+				return ec.fieldContext_Entity_reviewedByUserID(ctx, field)
+			case "reviewedByGroupID":
+				return ec.fieldContext_Entity_reviewedByGroupID(ctx, field)
+			case "lastReviewedAt":
+				return ec.fieldContext_Entity_lastReviewedAt(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_Entity_systemOwned(ctx, field)
 			case "internalNotes":
 				return ec.fieldContext_Entity_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Entity_systemInternalID(ctx, field)
+			case "entityRelationshipStateName":
+				return ec.fieldContext_Entity_entityRelationshipStateName(ctx, field)
+			case "entityRelationshipStateID":
+				return ec.fieldContext_Entity_entityRelationshipStateID(ctx, field)
+			case "entitySecurityQuestionnaireStatusName":
+				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatusName(ctx, field)
+			case "entitySecurityQuestionnaireStatusID":
+				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatusID(ctx, field)
+			case "entitySourceTypeName":
+				return ec.fieldContext_Entity_entitySourceTypeName(ctx, field)
+			case "entitySourceTypeID":
+				return ec.fieldContext_Entity_entitySourceTypeID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Entity_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Entity_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Entity_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Entity_scopeID(ctx, field)
 			case "name":
 				return ec.fieldContext_Entity_name(ctx, field)
 			case "displayName":
@@ -198,6 +354,56 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_entityTypeID(ctx, field)
 			case "status":
 				return ec.fieldContext_Entity_status(ctx, field)
+			case "approvedForUse":
+				return ec.fieldContext_Entity_approvedForUse(ctx, field)
+			case "linkedAssetIds":
+				return ec.fieldContext_Entity_linkedAssetIds(ctx, field)
+			case "hasSoc2":
+				return ec.fieldContext_Entity_hasSoc2(ctx, field)
+			case "soc2PeriodEnd":
+				return ec.fieldContext_Entity_soc2PeriodEnd(ctx, field)
+			case "contractStartDate":
+				return ec.fieldContext_Entity_contractStartDate(ctx, field)
+			case "contractEndDate":
+				return ec.fieldContext_Entity_contractEndDate(ctx, field)
+			case "autoRenews":
+				return ec.fieldContext_Entity_autoRenews(ctx, field)
+			case "terminationNoticeDays":
+				return ec.fieldContext_Entity_terminationNoticeDays(ctx, field)
+			case "annualSpend":
+				return ec.fieldContext_Entity_annualSpend(ctx, field)
+			case "spendCurrency":
+				return ec.fieldContext_Entity_spendCurrency(ctx, field)
+			case "billingModel":
+				return ec.fieldContext_Entity_billingModel(ctx, field)
+			case "renewalRisk":
+				return ec.fieldContext_Entity_renewalRisk(ctx, field)
+			case "ssoEnforced":
+				return ec.fieldContext_Entity_ssoEnforced(ctx, field)
+			case "mfaSupported":
+				return ec.fieldContext_Entity_mfaSupported(ctx, field)
+			case "mfaEnforced":
+				return ec.fieldContext_Entity_mfaEnforced(ctx, field)
+			case "statusPageURL":
+				return ec.fieldContext_Entity_statusPageURL(ctx, field)
+			case "providedServices":
+				return ec.fieldContext_Entity_providedServices(ctx, field)
+			case "links":
+				return ec.fieldContext_Entity_links(ctx, field)
+			case "riskRating":
+				return ec.fieldContext_Entity_riskRating(ctx, field)
+			case "riskScore":
+				return ec.fieldContext_Entity_riskScore(ctx, field)
+			case "tier":
+				return ec.fieldContext_Entity_tier(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_Entity_reviewFrequency(ctx, field)
+			case "nextReviewAt":
+				return ec.fieldContext_Entity_nextReviewAt(ctx, field)
+			case "contractRenewalAt":
+				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
+			case "vendorMetadata":
+				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "blockedGroups":
@@ -206,6 +412,24 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Entity_viewers(ctx, field)
+			case "internalOwnerUser":
+				return ec.fieldContext_Entity_internalOwnerUser(ctx, field)
+			case "internalOwnerGroup":
+				return ec.fieldContext_Entity_internalOwnerGroup(ctx, field)
+			case "reviewedByUser":
+				return ec.fieldContext_Entity_reviewedByUser(ctx, field)
+			case "reviewedByGroup":
+				return ec.fieldContext_Entity_reviewedByGroup(ctx, field)
+			case "entityRelationshipState":
+				return ec.fieldContext_Entity_entityRelationshipState(ctx, field)
+			case "entitySecurityQuestionnaireStatus":
+				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatus(ctx, field)
+			case "entitySourceType":
+				return ec.fieldContext_Entity_entitySourceType(ctx, field)
+			case "environment":
+				return ec.fieldContext_Entity_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Entity_scope(ctx, field)
 			case "contacts":
 				return ec.fieldContext_Entity_contacts(ctx, field)
 			case "documents":
@@ -218,6 +442,26 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_assets(ctx, field)
 			case "scans":
 				return ec.fieldContext_Entity_scans(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Entity_campaigns(ctx, field)
+			case "assessmentResponses":
+				return ec.fieldContext_Entity_assessmentResponses(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Entity_integrations(ctx, field)
+			case "subprocessors":
+				return ec.fieldContext_Entity_subprocessors(ctx, field)
+			case "authMethods":
+				return ec.fieldContext_Entity_authMethods(ctx, field)
+			case "employerIdentityHolders":
+				return ec.fieldContext_Entity_employerIdentityHolders(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Entity_identityHolders(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Entity_platforms(ctx, field)
+			case "outOfScopePlatforms":
+				return ec.fieldContext_Entity_outOfScopePlatforms(ctx, field)
+			case "sourcePlatforms":
+				return ec.fieldContext_Entity_sourcePlatforms(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
 			}
@@ -294,12 +538,46 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Entity_ownerID(ctx, field)
+			case "internalOwner":
+				return ec.fieldContext_Entity_internalOwner(ctx, field)
+			case "internalOwnerUserID":
+				return ec.fieldContext_Entity_internalOwnerUserID(ctx, field)
+			case "internalOwnerGroupID":
+				return ec.fieldContext_Entity_internalOwnerGroupID(ctx, field)
+			case "reviewedBy":
+				return ec.fieldContext_Entity_reviewedBy(ctx, field)
+			case "reviewedByUserID":
+				return ec.fieldContext_Entity_reviewedByUserID(ctx, field)
+			case "reviewedByGroupID":
+				return ec.fieldContext_Entity_reviewedByGroupID(ctx, field)
+			case "lastReviewedAt":
+				return ec.fieldContext_Entity_lastReviewedAt(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_Entity_systemOwned(ctx, field)
 			case "internalNotes":
 				return ec.fieldContext_Entity_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Entity_systemInternalID(ctx, field)
+			case "entityRelationshipStateName":
+				return ec.fieldContext_Entity_entityRelationshipStateName(ctx, field)
+			case "entityRelationshipStateID":
+				return ec.fieldContext_Entity_entityRelationshipStateID(ctx, field)
+			case "entitySecurityQuestionnaireStatusName":
+				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatusName(ctx, field)
+			case "entitySecurityQuestionnaireStatusID":
+				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatusID(ctx, field)
+			case "entitySourceTypeName":
+				return ec.fieldContext_Entity_entitySourceTypeName(ctx, field)
+			case "entitySourceTypeID":
+				return ec.fieldContext_Entity_entitySourceTypeID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Entity_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Entity_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Entity_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Entity_scopeID(ctx, field)
 			case "name":
 				return ec.fieldContext_Entity_name(ctx, field)
 			case "displayName":
@@ -312,6 +590,56 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_entityTypeID(ctx, field)
 			case "status":
 				return ec.fieldContext_Entity_status(ctx, field)
+			case "approvedForUse":
+				return ec.fieldContext_Entity_approvedForUse(ctx, field)
+			case "linkedAssetIds":
+				return ec.fieldContext_Entity_linkedAssetIds(ctx, field)
+			case "hasSoc2":
+				return ec.fieldContext_Entity_hasSoc2(ctx, field)
+			case "soc2PeriodEnd":
+				return ec.fieldContext_Entity_soc2PeriodEnd(ctx, field)
+			case "contractStartDate":
+				return ec.fieldContext_Entity_contractStartDate(ctx, field)
+			case "contractEndDate":
+				return ec.fieldContext_Entity_contractEndDate(ctx, field)
+			case "autoRenews":
+				return ec.fieldContext_Entity_autoRenews(ctx, field)
+			case "terminationNoticeDays":
+				return ec.fieldContext_Entity_terminationNoticeDays(ctx, field)
+			case "annualSpend":
+				return ec.fieldContext_Entity_annualSpend(ctx, field)
+			case "spendCurrency":
+				return ec.fieldContext_Entity_spendCurrency(ctx, field)
+			case "billingModel":
+				return ec.fieldContext_Entity_billingModel(ctx, field)
+			case "renewalRisk":
+				return ec.fieldContext_Entity_renewalRisk(ctx, field)
+			case "ssoEnforced":
+				return ec.fieldContext_Entity_ssoEnforced(ctx, field)
+			case "mfaSupported":
+				return ec.fieldContext_Entity_mfaSupported(ctx, field)
+			case "mfaEnforced":
+				return ec.fieldContext_Entity_mfaEnforced(ctx, field)
+			case "statusPageURL":
+				return ec.fieldContext_Entity_statusPageURL(ctx, field)
+			case "providedServices":
+				return ec.fieldContext_Entity_providedServices(ctx, field)
+			case "links":
+				return ec.fieldContext_Entity_links(ctx, field)
+			case "riskRating":
+				return ec.fieldContext_Entity_riskRating(ctx, field)
+			case "riskScore":
+				return ec.fieldContext_Entity_riskScore(ctx, field)
+			case "tier":
+				return ec.fieldContext_Entity_tier(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_Entity_reviewFrequency(ctx, field)
+			case "nextReviewAt":
+				return ec.fieldContext_Entity_nextReviewAt(ctx, field)
+			case "contractRenewalAt":
+				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
+			case "vendorMetadata":
+				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "blockedGroups":
@@ -320,6 +648,24 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Entity_viewers(ctx, field)
+			case "internalOwnerUser":
+				return ec.fieldContext_Entity_internalOwnerUser(ctx, field)
+			case "internalOwnerGroup":
+				return ec.fieldContext_Entity_internalOwnerGroup(ctx, field)
+			case "reviewedByUser":
+				return ec.fieldContext_Entity_reviewedByUser(ctx, field)
+			case "reviewedByGroup":
+				return ec.fieldContext_Entity_reviewedByGroup(ctx, field)
+			case "entityRelationshipState":
+				return ec.fieldContext_Entity_entityRelationshipState(ctx, field)
+			case "entitySecurityQuestionnaireStatus":
+				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatus(ctx, field)
+			case "entitySourceType":
+				return ec.fieldContext_Entity_entitySourceType(ctx, field)
+			case "environment":
+				return ec.fieldContext_Entity_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Entity_scope(ctx, field)
 			case "contacts":
 				return ec.fieldContext_Entity_contacts(ctx, field)
 			case "documents":
@@ -332,6 +678,26 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_assets(ctx, field)
 			case "scans":
 				return ec.fieldContext_Entity_scans(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Entity_campaigns(ctx, field)
+			case "assessmentResponses":
+				return ec.fieldContext_Entity_assessmentResponses(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Entity_integrations(ctx, field)
+			case "subprocessors":
+				return ec.fieldContext_Entity_subprocessors(ctx, field)
+			case "authMethods":
+				return ec.fieldContext_Entity_authMethods(ctx, field)
+			case "employerIdentityHolders":
+				return ec.fieldContext_Entity_employerIdentityHolders(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Entity_identityHolders(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Entity_platforms(ctx, field)
+			case "outOfScopePlatforms":
+				return ec.fieldContext_Entity_outOfScopePlatforms(ctx, field)
+			case "sourcePlatforms":
+				return ec.fieldContext_Entity_sourcePlatforms(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
 			}

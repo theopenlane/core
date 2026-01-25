@@ -48,10 +48,8 @@ func (CustomTypeEnum) PluralName() string {
 func (CustomTypeEnum) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("object_type").
-			Comment("the kind of object the type applies to, for example task").
-			NotEmpty().
+			Comment("the kind of object the type applies to, for example task, leave empty for global enums").
 			Immutable().
-			Validate(validateObjectType).
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("object_type"),
@@ -145,6 +143,11 @@ func (t CustomTypeEnum) Edges() []ent.Edge {
 			ref:        "program_kind",
 			edgeSchema: Program{},
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: t,
+			ref:        "platform_kind",
+			edgeSchema: Platform{},
+		}),
 	}
 }
 
@@ -169,6 +172,7 @@ func (CustomTypeEnum) Annotations() []schema.Annotation {
 // Hooks of the CustomTypeEnum
 func (CustomTypeEnum) Hooks() []ent.Hook {
 	return []ent.Hook{
+		hooks.HookCustomTypeEnumCreate(),
 		hooks.HookCustomTypeEnumDelete(),
 	}
 }

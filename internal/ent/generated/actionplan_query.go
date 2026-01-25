@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
@@ -53,6 +54,7 @@ type ActionPlanQuery struct {
 	withPrograms                *ProgramQuery
 	withFindings                *FindingQuery
 	withVulnerabilities         *VulnerabilityQuery
+	withScans                   *ScanQuery
 	withReviews                 *ReviewQuery
 	withRemediations            *RemediationQuery
 	withTasks                   *TaskQuery
@@ -70,6 +72,7 @@ type ActionPlanQuery struct {
 	withNamedPrograms           map[string]*ProgramQuery
 	withNamedFindings           map[string]*FindingQuery
 	withNamedVulnerabilities    map[string]*VulnerabilityQuery
+	withNamedScans              map[string]*ScanQuery
 	withNamedReviews            map[string]*ReviewQuery
 	withNamedRemediations       map[string]*RemediationQuery
 	withNamedTasks              map[string]*TaskQuery
@@ -405,6 +408,31 @@ func (_q *ActionPlanQuery) QueryVulnerabilities() *VulnerabilityQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Vulnerability
 		step.Edge.Schema = schemaConfig.VulnerabilityActionPlans
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScans chains the current query on the "scans" edge.
+func (_q *ActionPlanQuery) QueryScans() *ScanQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ScansTable, actionplan.ScansPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -765,6 +793,7 @@ func (_q *ActionPlanQuery) Clone() *ActionPlanQuery {
 		withPrograms:           _q.withPrograms.Clone(),
 		withFindings:           _q.withFindings.Clone(),
 		withVulnerabilities:    _q.withVulnerabilities.Clone(),
+		withScans:              _q.withScans.Clone(),
 		withReviews:            _q.withReviews.Clone(),
 		withRemediations:       _q.withRemediations.Clone(),
 		withTasks:              _q.withTasks.Clone(),
@@ -907,6 +936,17 @@ func (_q *ActionPlanQuery) WithVulnerabilities(opts ...func(*VulnerabilityQuery)
 		opt(query)
 	}
 	_q.withVulnerabilities = query
+	return _q
+}
+
+// WithScans tells the query-builder to eager-load the nodes that are connected to
+// the "scans" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithScans(opts ...func(*ScanQuery)) *ActionPlanQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScans = query
 	return _q
 }
 
@@ -1061,7 +1101,7 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 		nodes       = []*ActionPlan{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [18]bool{
+		loadedTypes = [19]bool{
 			_q.withApprover != nil,
 			_q.withDelegate != nil,
 			_q.withOwner != nil,
@@ -1074,6 +1114,7 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			_q.withPrograms != nil,
 			_q.withFindings != nil,
 			_q.withVulnerabilities != nil,
+			_q.withScans != nil,
 			_q.withReviews != nil,
 			_q.withRemediations != nil,
 			_q.withTasks != nil,
@@ -1188,6 +1229,13 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			return nil, err
 		}
 	}
+	if query := _q.withScans; query != nil {
+		if err := _q.loadScans(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.Scans = []*Scan{} },
+			func(n *ActionPlan, e *Scan) { n.Edges.Scans = append(n.Edges.Scans, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withReviews; query != nil {
 		if err := _q.loadReviews(ctx, query, nodes,
 			func(n *ActionPlan) { n.Edges.Reviews = []*Review{} },
@@ -1284,6 +1332,13 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 		if err := _q.loadVulnerabilities(ctx, query, nodes,
 			func(n *ActionPlan) { n.appendNamedVulnerabilities(name) },
 			func(n *ActionPlan, e *Vulnerability) { n.appendNamedVulnerabilities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedScans {
+		if err := _q.loadScans(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedScans(name) },
+			func(n *ActionPlan, e *Scan) { n.appendNamedScans(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1942,6 +1997,68 @@ func (_q *ActionPlanQuery) loadVulnerabilities(ctx context.Context, query *Vulne
 	}
 	return nil
 }
+func (_q *ActionPlanQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Scan)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ActionPlan)
+	nids := make(map[string]map[*ActionPlan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(actionplan.ScansTable)
+		joinT.Schema(_q.schemaConfig.ScanActionPlans)
+		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(actionplan.ScansPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(actionplan.ScansPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(actionplan.ScansPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ActionPlan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Scan](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "scans" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *ActionPlanQuery) loadReviews(ctx context.Context, query *ReviewQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Review)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ActionPlan)
@@ -2476,6 +2593,20 @@ func (_q *ActionPlanQuery) WithNamedVulnerabilities(name string, opts ...func(*V
 		_q.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery)
 	}
 	_q.withNamedVulnerabilities[name] = query
+	return _q
+}
+
+// WithNamedScans tells the query-builder to eager-load the nodes that are connected to the "scans"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *ActionPlanQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedScans == nil {
+		_q.withNamedScans = make(map[string]*ScanQuery)
+	}
+	_q.withNamedScans[name] = query
 	return _q
 }
 
