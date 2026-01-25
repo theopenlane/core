@@ -657,8 +657,6 @@ github.com/theopenlane/eddy v0.1.0 h1:mtsBL9COYCJWMkjxPOb7LefPaysyPVmYb4idy7kL4l
 github.com/theopenlane/eddy v0.1.0/go.mod h1:UvovGX5x0N9RdKk2Kb5CMbGziRUasARDy8xSEAT8aDs=
 github.com/theopenlane/emailtemplates v0.3.1 h1:P2kWqdNUP6LOmvL17Ujc/3zvIaw621/4w9yFk0J+pO4=
 github.com/theopenlane/emailtemplates v0.3.1/go.mod h1:nLNXcp1fj53qUA5akgJpl/3ovERORr4sSZoa6lA5Vso=
-github.com/theopenlane/entx v0.21.0 h1:Y0NmtEaIksO5qYYZcSULqMShY27ZUtbMZnBvYquQfL8=
-github.com/theopenlane/entx v0.21.0/go.mod h1:rFKW+/zABTx5Se1X0oL/bNXej5kWjckP6wfMd1AopjE=
 github.com/theopenlane/go-client v0.6.2 h1:UH/fa05HZEDJQeVSEpK3kJ8jdQSzC6Od/1ZLrJHhwtg=
 github.com/theopenlane/go-client v0.6.2/go.mod h1:HmX+Jw4WjCypmMP6XcACJiougbNqV8cVxw3sMqwVBsY=
 github.com/theopenlane/gqlgen-plugins v0.13.3 h1:qOCwjRF/mCwfCCm5mWv0Z3AI5tb4HVBISZoHEjIFiII=
