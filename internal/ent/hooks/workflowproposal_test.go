@@ -17,17 +17,41 @@ import (
 
 func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments() {
 	user := suite.seedSystemAdmin()
-	orgID := user.Edges.OrgMemberships[0].ID
+	orgID := user.Edges.OrgMemberships[0].OrganizationID
 	userCtx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	userCtx = generated.NewContext(userCtx, suite.client)
+	internalCtx := workflows.AllowContext(userCtx)
+
+	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
+	suite.NoError(err)
+	suite.client.WorkflowEngine = wfEngine
+
+	def := suite.client.WorkflowDefinition.Create().
+		SetName("Invalidate Test " + ulids.New().String()).
+		SetWorkflowKind(enums.WorkflowKindApproval).
+		SetSchemaType("Control").
+		SetActive(true).
+		SetOwnerID(orgID).
+		SetDefinitionJSON(models.WorkflowDefinitionDocument{}).
+		SaveX(internalCtx)
 
 	control := suite.client.Control.Create().
 		SetRefCode("CTL-TEST").
+		SetOwnerID(orgID).
 		SaveX(userCtx)
 
-	objRef := suite.client.WorkflowObjectRef.Create().
+	instance := suite.client.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(def.ID).
+		SetState(enums.WorkflowInstanceStateRunning).
 		SetControlID(control.ID).
-		SaveX(userCtx)
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
+
+	objRef := suite.client.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetControlID(control.ID).
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
 
 	proposal := suite.client.WorkflowProposal.Create().
 		SetWorkflowObjectRefID(objRef.ID).
@@ -36,49 +60,50 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments() {
 		SetChanges(map[string]any{"text": "original"}).
 		SetProposedHash("hash1").
 		SetSubmittedByUserID(user.ID).
-		SaveX(userCtx)
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
 
-	instance := suite.client.WorkflowInstance.Create().
-		SetWorkflowDefinitionID("def-123").
-		SetState(enums.WorkflowInstanceStateRunning).
+	instance = suite.client.WorkflowInstance.UpdateOne(instance).
 		SetWorkflowProposalID(proposal.ID).
-		SetControlID(control.ID).
-		SaveX(userCtx)
+		SaveX(internalCtx)
 
 	assignment1 := suite.client.WorkflowAssignment.Create().
 		SetWorkflowInstanceID(instance.ID).
 		SetAssignmentKey("approver-1").
 		SetStatus(enums.WorkflowAssignmentStatusApproved).
-		SaveX(userCtx)
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
 
 	assignment2 := suite.client.WorkflowAssignment.Create().
 		SetWorkflowInstanceID(instance.ID).
 		SetAssignmentKey("approver-2").
 		SetStatus(enums.WorkflowAssignmentStatusPending).
-		SaveX(userCtx)
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
 
 	assignment3 := suite.client.WorkflowAssignment.Create().
 		SetWorkflowInstanceID(instance.ID).
 		SetAssignmentKey("approver-3").
 		SetStatus(enums.WorkflowAssignmentStatusApproved).
-		SaveX(userCtx)
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
 
-	_, err := suite.client.WorkflowProposal.UpdateOne(proposal).
+	_, err = suite.client.WorkflowProposal.UpdateOne(proposal).
 		SetChanges(map[string]any{"text": "modified"}).
-		Save(userCtx)
+		Save(internalCtx)
 	suite.NoError(err)
 
-	reloaded1, err := suite.client.WorkflowAssignment.Get(userCtx, assignment1.ID)
+	reloaded1, err := suite.client.WorkflowAssignment.Get(internalCtx, assignment1.ID)
 	suite.NoError(err)
 	suite.Equal(enums.WorkflowAssignmentStatusPending, reloaded1.Status)
 	suite.NotEmpty(reloaded1.InvalidationMetadata.Reason)
 	suite.Equal("proposal changes edited after approval", reloaded1.InvalidationMetadata.Reason)
 
-	reloaded2, err := suite.client.WorkflowAssignment.Get(userCtx, assignment2.ID)
+	reloaded2, err := suite.client.WorkflowAssignment.Get(internalCtx, assignment2.ID)
 	suite.NoError(err)
 	suite.Equal(enums.WorkflowAssignmentStatusPending, reloaded2.Status)
 
-	reloaded3, err := suite.client.WorkflowAssignment.Get(userCtx, assignment3.ID)
+	reloaded3, err := suite.client.WorkflowAssignment.Get(internalCtx, assignment3.ID)
 	suite.NoError(err)
 	suite.Equal(enums.WorkflowAssignmentStatusPending, reloaded3.Status)
 	suite.NotEmpty(reloaded3.InvalidationMetadata.Reason)
@@ -87,17 +112,41 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments() {
 
 func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments_DraftState() {
 	user := suite.seedSystemAdmin()
-	orgID := user.Edges.OrgMemberships[0].ID
+	orgID := user.Edges.OrgMemberships[0].OrganizationID
 	userCtx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	userCtx = generated.NewContext(userCtx, suite.client)
+	internalCtx := workflows.AllowContext(userCtx)
+
+	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
+	suite.NoError(err)
+	suite.client.WorkflowEngine = wfEngine
+
+	def := suite.client.WorkflowDefinition.Create().
+		SetName("Draft Test " + ulids.New().String()).
+		SetWorkflowKind(enums.WorkflowKindApproval).
+		SetSchemaType("Control").
+		SetActive(true).
+		SetOwnerID(orgID).
+		SetDefinitionJSON(models.WorkflowDefinitionDocument{}).
+		SaveX(internalCtx)
 
 	control := suite.client.Control.Create().
 		SetRefCode("CTL-TEST-2").
+		SetOwnerID(orgID).
 		SaveX(userCtx)
 
-	objRef := suite.client.WorkflowObjectRef.Create().
+	instance := suite.client.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(def.ID).
+		SetState(enums.WorkflowInstanceStateRunning).
 		SetControlID(control.ID).
-		SaveX(userCtx)
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
+
+	objRef := suite.client.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetControlID(control.ID).
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
 
 	proposal := suite.client.WorkflowProposal.Create().
 		SetWorkflowObjectRefID(objRef.ID).
@@ -106,44 +155,67 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments_DraftS
 		SetChanges(map[string]any{"text": "original"}).
 		SetProposedHash("hash1").
 		SetSubmittedByUserID(user.ID).
-		SaveX(userCtx)
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
 
-	instance := suite.client.WorkflowInstance.Create().
-		SetWorkflowDefinitionID("def-123").
-		SetState(enums.WorkflowInstanceStateRunning).
+	instance = suite.client.WorkflowInstance.UpdateOne(instance).
 		SetWorkflowProposalID(proposal.ID).
-		SetControlID(control.ID).
-		SaveX(userCtx)
+		SaveX(internalCtx)
 
 	assignment := suite.client.WorkflowAssignment.Create().
 		SetWorkflowInstanceID(instance.ID).
 		SetAssignmentKey("approver-1").
 		SetStatus(enums.WorkflowAssignmentStatusApproved).
-		SaveX(userCtx)
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
 
-	_, err := suite.client.WorkflowProposal.UpdateOne(proposal).
+	_, err = suite.client.WorkflowProposal.UpdateOne(proposal).
 		SetChanges(map[string]any{"text": "modified"}).
-		Save(userCtx)
+		Save(internalCtx)
 	suite.NoError(err)
 
-	reloaded, err := suite.client.WorkflowAssignment.Get(userCtx, assignment.ID)
+	reloaded, err := suite.client.WorkflowAssignment.Get(internalCtx, assignment.ID)
 	suite.NoError(err)
 	suite.Equal(enums.WorkflowAssignmentStatusApproved, reloaded.Status)
 }
 
 func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments_NonChangesField() {
 	user := suite.seedSystemAdmin()
-	orgID := user.Edges.OrgMemberships[0].ID
+	orgID := user.Edges.OrgMemberships[0].OrganizationID
 	userCtx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	userCtx = generated.NewContext(userCtx, suite.client)
+	internalCtx := workflows.AllowContext(userCtx)
+
+	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
+	suite.NoError(err)
+	suite.client.WorkflowEngine = wfEngine
+
+	def := suite.client.WorkflowDefinition.Create().
+		SetName("NonChanges Test " + ulids.New().String()).
+		SetWorkflowKind(enums.WorkflowKindApproval).
+		SetSchemaType("Control").
+		SetActive(true).
+		SetOwnerID(orgID).
+		SetDefinitionJSON(models.WorkflowDefinitionDocument{}).
+		SaveX(internalCtx)
 
 	control := suite.client.Control.Create().
 		SetRefCode("CTL-TEST-3").
+		SetOwnerID(orgID).
 		SaveX(userCtx)
 
-	objRef := suite.client.WorkflowObjectRef.Create().
+	instance := suite.client.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(def.ID).
+		SetState(enums.WorkflowInstanceStateRunning).
 		SetControlID(control.ID).
-		SaveX(userCtx)
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
+
+	objRef := suite.client.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetControlID(control.ID).
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
 
 	proposal := suite.client.WorkflowProposal.Create().
 		SetWorkflowObjectRefID(objRef.ID).
@@ -152,36 +224,36 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments_NonCha
 		SetChanges(map[string]any{"text": "original"}).
 		SetProposedHash("hash1").
 		SetSubmittedByUserID(user.ID).
-		SaveX(userCtx)
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
 
-	instance := suite.client.WorkflowInstance.Create().
-		SetWorkflowDefinitionID("def-123").
-		SetState(enums.WorkflowInstanceStateRunning).
+	instance = suite.client.WorkflowInstance.UpdateOne(instance).
 		SetWorkflowProposalID(proposal.ID).
-		SetControlID(control.ID).
-		SaveX(userCtx)
+		SaveX(internalCtx)
 
 	assignment := suite.client.WorkflowAssignment.Create().
 		SetWorkflowInstanceID(instance.ID).
 		SetAssignmentKey("approver-1").
 		SetStatus(enums.WorkflowAssignmentStatusApproved).
-		SaveX(userCtx)
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
 
-	_, err := suite.client.WorkflowProposal.UpdateOne(proposal).
+	_, err = suite.client.WorkflowProposal.UpdateOne(proposal).
 		SetRevision(2).
-		Save(userCtx)
+		Save(internalCtx)
 	suite.NoError(err)
 
-	reloaded, err := suite.client.WorkflowAssignment.Get(userCtx, assignment.ID)
+	reloaded, err := suite.client.WorkflowAssignment.Get(internalCtx, assignment.ID)
 	suite.NoError(err)
 	suite.Equal(enums.WorkflowAssignmentStatusApproved, reloaded.Status)
 }
 
 func (suite *HookTestSuite) TestHookWorkflowProposalTriggerOnSubmitResumesInstance() {
 	user := suite.seedSystemAdmin()
-	orgID := user.Edges.OrgMemberships[0].ID
+	orgID := user.Edges.OrgMemberships[0].OrganizationID
 	userCtx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	userCtx = generated.NewContext(userCtx, suite.client)
+	internalCtx := workflows.AllowContext(userCtx)
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)
@@ -204,7 +276,10 @@ func (suite *HookTestSuite) TestHookWorkflowProposalTriggerOnSubmitResumesInstan
 		SetWorkflowKind(enums.WorkflowKindApproval).
 		SetSchemaType("Control").
 		SetActive(true).
+		SetDraft(false).
 		SetOwnerID(orgID).
+		SetTriggerOperations([]string{"UPDATE"}).
+		SetTriggerFields([]string{"status"}).
 		SetDefinitionJSON(models.WorkflowDefinitionDocument{
 			Triggers: []models.WorkflowTrigger{
 				{Operation: "UPDATE", Fields: []string{"status"}},
@@ -217,7 +292,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalTriggerOnSubmitResumesInstan
 				},
 			},
 		}).
-		SaveX(userCtx)
+		SaveX(internalCtx)
 
 	control := suite.client.Control.Create().
 		SetRefCode("CTL-RESUME-" + ulids.New().String()).
@@ -228,12 +303,14 @@ func (suite *HookTestSuite) TestHookWorkflowProposalTriggerOnSubmitResumesInstan
 		SetWorkflowDefinitionID(def.ID).
 		SetState(enums.WorkflowInstanceStatePaused).
 		SetControlID(control.ID).
-		SaveX(userCtx)
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
 
 	objRef := suite.client.WorkflowObjectRef.Create().
 		SetWorkflowInstanceID(instance.ID).
 		SetControlID(control.ID).
-		SaveX(userCtx)
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
 
 	proposedHash, err := workflows.ComputeProposalHash(map[string]any{"status": enums.ControlStatusApproved})
 	suite.NoError(err)
@@ -245,26 +322,27 @@ func (suite *HookTestSuite) TestHookWorkflowProposalTriggerOnSubmitResumesInstan
 		SetChanges(map[string]any{"status": enums.ControlStatusApproved}).
 		SetProposedHash(proposedHash).
 		SetSubmittedByUserID(user.ID).
-		SaveX(userCtx)
+		SetOwnerID(orgID).
+		SaveX(internalCtx)
 
 	instance = suite.client.WorkflowInstance.UpdateOne(instance).
 		SetWorkflowProposalID(proposal.ID).
-		SaveX(userCtx)
+		SaveX(internalCtx)
 
 	_, err = suite.client.WorkflowProposal.UpdateOne(proposal).
 		SetState(enums.WorkflowProposalStateSubmitted).
 		SetSubmittedByUserID(user.ID).
-		Save(userCtx)
+		Save(internalCtx)
 	suite.NoError(err)
 
-	updated, err := suite.client.WorkflowInstance.Get(userCtx, instance.ID)
+	updated, err := suite.client.WorkflowInstance.Get(internalCtx, instance.ID)
 	suite.NoError(err)
 	suite.Equal(enums.WorkflowInstanceStateRunning, updated.State)
 	suite.Equal(0, updated.CurrentActionIndex)
 
 	count, err := suite.client.WorkflowInstance.Query().
 		Where(workflowinstance.WorkflowProposalID(proposal.ID)).
-		Count(userCtx)
+		Count(internalCtx)
 	suite.NoError(err)
 	suite.Equal(1, count)
 }

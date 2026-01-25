@@ -224,7 +224,12 @@ func HookWorkflowProposalTriggerOnSubmit() ent.Hook {
 				return value, err
 			}
 
-			client := m.Client()
+			// Use client from context which has WorkflowEngine set
+			client := generated.FromContext(ctx)
+			if client == nil {
+				client = m.Client()
+			}
+
 			if !workflowEngineEnabled(ctx, client) {
 				return value, nil
 			}
@@ -319,8 +324,9 @@ func triggerWorkflowForProposal(ctx context.Context, client *generated.Client, p
 
 		if existing := findInstanceForDefinition(proposal.Edges.WorkflowInstances, def.ID); existing != nil {
 			if err := wfEngine.TriggerExistingInstance(ctx, existing, def, obj, engine.TriggerInput{
-				EventType:     "UPDATE",
-				ChangedFields: changedFields,
+				EventType:       "UPDATE",
+				ChangedFields:   changedFields,
+				ProposedChanges: proposal.Changes,
 			}); err != nil {
 				log.Ctx(ctx).Error().Err(err).Str("definition_id", def.ID).Str("instance_id", existing.ID).Msg("failed to resume workflow")
 				return ErrFailedToResumeWorkflowInstance

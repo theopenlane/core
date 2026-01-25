@@ -409,6 +409,169 @@ func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObject
 	s.Len(assignments, 0)
 }
 
+// TestApprovalActionWhenUsesProposedChanges verifies action When expressions can access proposed_changes.
+func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
+	userID, orgID, _ := s.SetupTestUser()
+	seedCtx := s.SeedContext(userID, orgID)
+
+	wfEngine := s.SetupWorkflowEngineWithListeners()
+	s.client.WorkflowEngine = wfEngine
+
+	params := workflows.ApprovalActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{
+				{Type: enums.WorkflowTargetTypeUser, ID: userID},
+			},
+		},
+		Required: boolPtr(true),
+		Label:    "Status Approval",
+		Fields:   []string{"status"},
+	}
+	paramsBytes, err := json.Marshal(params)
+	s.Require().NoError(err)
+
+	_, err = s.client.WorkflowDefinition.Create().
+		SetName("Status Approval With Proposed Changes " + ulid.Make().String()).
+		SetWorkflowKind(enums.WorkflowKindApproval).
+		SetSchemaType("Control").
+		SetActive(true).
+		SetDraft(false).
+		SetOwnerID(orgID).
+		SetTriggerOperations([]string{"UPDATE"}).
+		SetTriggerFields([]string{"status"}).
+		SetApprovalSubmissionMode(enums.WorkflowApprovalSubmissionModeAutoSubmit).
+		SetDefinitionJSON(models.WorkflowDefinitionDocument{
+			ApprovalSubmissionMode: enums.WorkflowApprovalSubmissionModeAutoSubmit,
+			Triggers: []models.WorkflowTrigger{
+				{Operation: "UPDATE", Fields: []string{"status"}},
+			},
+			Actions: []models.WorkflowAction{
+				{
+					Type:   enums.WorkflowActionTypeApproval.String(),
+					Key:    "status_approval",
+					When:   `object.status == "NOT_IMPLEMENTED" && proposed_changes['status'] == "APPROVED"`,
+					Params: paramsBytes,
+				},
+			},
+		}).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-PROPOSED-WHEN-" + ulid.Make().String()).
+		SetOwnerID(orgID).
+		SetStatus(enums.ControlStatusNotImplemented).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	updated, err := s.client.Control.UpdateOneID(control.ID).
+		SetStatus(enums.ControlStatusApproved).
+		Save(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(enums.ControlStatusNotImplemented, updated.Status)
+
+	domainKey := workflows.DeriveDomainKey([]string{"status"})
+	proposal, err := s.client.WorkflowProposal.Query().
+		Where(workflowproposal.DomainKeyEQ(domainKey)).
+		Only(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
+
+	instance, err := s.client.WorkflowInstance.Query().
+		Where(workflowinstance.WorkflowProposalIDEQ(proposal.ID)).
+		Only(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowInstanceStatePaused, instance.State)
+
+	assignments, err := s.client.WorkflowAssignment.Query().
+		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+		All(seedCtx)
+	s.Require().NoError(err)
+	s.Len(assignments, 1)
+	s.Equal(enums.WorkflowAssignmentStatusPending, assignments[0].Status)
+}
+
+// TestApprovalActionWhenSkipsWhenProposedChangesDoNotMatch verifies action When skips when proposed_changes are different.
+func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChangesDoNotMatch() {
+	userID, orgID, _ := s.SetupTestUser()
+	seedCtx := s.SeedContext(userID, orgID)
+
+	wfEngine := s.SetupWorkflowEngineWithListeners()
+	s.client.WorkflowEngine = wfEngine
+
+	params := workflows.ApprovalActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{
+				{Type: enums.WorkflowTargetTypeUser, ID: userID},
+			},
+		},
+		Required: boolPtr(true),
+		Label:    "Status Approval",
+		Fields:   []string{"status"},
+	}
+	paramsBytes, err := json.Marshal(params)
+	s.Require().NoError(err)
+
+	_, err = s.client.WorkflowDefinition.Create().
+		SetName("Status Approval With Proposed Changes Skip " + ulid.Make().String()).
+		SetWorkflowKind(enums.WorkflowKindApproval).
+		SetSchemaType("Control").
+		SetActive(true).
+		SetDraft(false).
+		SetOwnerID(orgID).
+		SetTriggerOperations([]string{"UPDATE"}).
+		SetTriggerFields([]string{"status"}).
+		SetApprovalSubmissionMode(enums.WorkflowApprovalSubmissionModeAutoSubmit).
+		SetDefinitionJSON(models.WorkflowDefinitionDocument{
+			ApprovalSubmissionMode: enums.WorkflowApprovalSubmissionModeAutoSubmit,
+			Triggers: []models.WorkflowTrigger{
+				{Operation: "UPDATE", Fields: []string{"status"}},
+			},
+			Actions: []models.WorkflowAction{
+				{
+					Type:   enums.WorkflowActionTypeApproval.String(),
+					Key:    "status_approval",
+					When:   `proposed_changes['status'] == "ARCHIVED"`,
+					Params: paramsBytes,
+				},
+			},
+		}).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-PROPOSED-WHEN-SKIP-" + ulid.Make().String()).
+		SetOwnerID(orgID).
+		SetStatus(enums.ControlStatusNotImplemented).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	updated, err := s.client.Control.UpdateOneID(control.ID).
+		SetStatus(enums.ControlStatusApproved).
+		Save(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(enums.ControlStatusNotImplemented, updated.Status)
+
+	domainKey := workflows.DeriveDomainKey([]string{"status"})
+	proposal, err := s.client.WorkflowProposal.Query().
+		Where(workflowproposal.DomainKeyEQ(domainKey)).
+		Only(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
+
+	instance, err := s.client.WorkflowInstance.Query().
+		Where(workflowinstance.WorkflowProposalIDEQ(proposal.ID)).
+		Only(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowInstanceStatePaused, instance.State)
+
+	assignments, err := s.client.WorkflowAssignment.Query().
+		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+		All(seedCtx)
+	s.Require().NoError(err)
+	s.Len(assignments, 0)
+}
+
 // TestSkippedApprovalActionAdvancesWorkflow verifies skipped approvals advance workflow
 func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 	userID, orgID, userCtx := s.SetupTestUser()

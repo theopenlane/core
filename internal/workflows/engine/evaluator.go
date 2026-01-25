@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/iam/auth"
@@ -77,6 +78,26 @@ func (e *WorkflowEngine) EvaluateConditions(ctx context.Context, def *generated.
 // EvaluateActionWhen evaluates an action's When expression with assignment context.
 // This is used for re-evaluating NOTIFY actions when assignment status changes.
 func (e *WorkflowEngine) EvaluateActionWhen(ctx context.Context, expression string, instance *generated.WorkflowInstance, obj *workflows.Object) (bool, error) {
+	var proposedChanges map[string]any
+	if instance != nil && instance.WorkflowProposalID != "" {
+		allowCtx, orgID, err := workflows.AllowContextWithOrg(ctx)
+		if err != nil {
+			return false, err
+		}
+
+		proposal, err := e.client.WorkflowProposal.Query().
+			Where(
+				workflowproposal.IDEQ(instance.WorkflowProposalID),
+				workflowproposal.OwnerIDEQ(orgID),
+			).
+			Only(allowCtx)
+		if err != nil {
+			return false, err
+		}
+
+		proposedChanges = proposal.Changes
+	}
+
 	vars := workflows.BuildCELVars(
 		obj,
 		instance.Context.TriggerChangedFields,
@@ -85,7 +106,7 @@ func (e *WorkflowEngine) EvaluateActionWhen(ctx context.Context, expression stri
 		instance.Context.TriggerRemovedIDs,
 		instance.Context.TriggerEventType,
 		instance.Context.TriggerUserID,
-		nil,
+		proposedChanges,
 	)
 
 	// Merge assignment context (assignments, instance, initiator)
