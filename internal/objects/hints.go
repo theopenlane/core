@@ -6,6 +6,7 @@ import (
 
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/internal/entitlements/features"
@@ -19,6 +20,9 @@ type ModuleHint models.OrgModule
 type PreferredProviderHint storagetypes.ProviderType
 type KnownProviderHint storagetypes.ProviderType
 type SizeBytesHint int64
+type TemplateKindHint enums.TemplateKind
+
+const TemplateKindMetadataKey = "template_kind"
 
 // PopulateProviderHints ensures standard metadata is present on the file's provider hints
 func PopulateProviderHints(file *pkgobjects.File, orgID string) {
@@ -56,6 +60,19 @@ func PopulateProviderHints(file *pkgobjects.File, orgID string) {
 		hints.Module = module
 		hints.Metadata["module"] = string(module)
 	}
+}
+
+// SetTemplateKindHint sets the template kind hint on the file's provider hints
+func SetTemplateKindHint(file *pkgobjects.File, kind enums.TemplateKind) {
+	if file.ProviderHints == nil {
+		file.ProviderHints = &storage.ProviderHints{}
+	}
+
+	if file.ProviderHints.Metadata == nil {
+		file.ProviderHints.Metadata = map[string]string{}
+	}
+
+	file.ProviderHints.Metadata[TemplateKindMetadataKey] = kind.String()
 }
 
 // ResolveModuleFromFile attempts to determine the module associated with the upload
@@ -98,6 +115,10 @@ func ApplyProviderHints(ctx context.Context, hints *storagetypes.ProviderHints) 
 		}
 	}
 
+	if kind, ok := templateKindFromHints(hints); ok {
+		ctx = contextx.With(ctx, TemplateKindHint(kind))
+	}
+
 	return ctx
 }
 
@@ -126,4 +147,19 @@ func moduleFromHints(hints *storagetypes.ProviderHints) (models.OrgModule, bool)
 	}
 
 	return "", false
+}
+
+// templateKindFromHints extracts the TemplateKind from provider hints metadata
+func templateKindFromHints(hints *storagetypes.ProviderHints) (enums.TemplateKind, bool) {
+	raw, ok := hints.Metadata[TemplateKindMetadataKey]
+	if !ok || raw == "" {
+		return "", false
+	}
+
+	parsed := enums.ToTemplateKind(raw)
+	if parsed == nil || *parsed == enums.TemplateKindInvalid {
+		return "", false
+	}
+
+	return *parsed, true
 }

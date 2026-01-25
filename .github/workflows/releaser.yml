@@ -47,9 +47,7 @@ jobs:
           go-version-file: 'cli/go.mod'
           cache: true
           cache-dependency-path: |
-            **/go.sum
-      - name: Download Go modules
-        run: go mod download
+            cli/go.sum
       - name: Install Syft
         uses: anchore/sbom-action/download-syft@62ad5284b8ced813296287a0b63906cb364b73ee # v0.22.0
       - name: Install Cosign

@@ -17,7 +17,7 @@ require (
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.2
-	github.com/theopenlane/core v1.3.9
+	github.com/theopenlane/core v1.5.2
 	github.com/theopenlane/core/common v1.0.4
 	github.com/theopenlane/go-client v0.6.2
 	github.com/theopenlane/httpsling v0.3.0
@@ -30,7 +30,6 @@ require (
 require (
 	al.essio.dev/pkg/shellescape v1.6.0 // indirect
 	github.com/Yamashou/gqlgenc v0.33.0 // indirect
-	github.com/alicebob/miniredis/v2 v2.36.1 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect

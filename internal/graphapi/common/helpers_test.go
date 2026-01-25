@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/objects"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
@@ -171,7 +172,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 				OriginalName: "meow.txt",
 			}
 
-			result, err := retrieveObjectDetails(rctx, tt.key, upload)
+			result, err := retrieveObjectDetails(rctx, nil, "", tt.key, upload)
 			if tt.expectedErr != nil {
 
 				return
@@ -182,6 +183,88 @@ func TestRetrieveObjectDetails(t *testing.T) {
 			assert.Check(t, is.Equal(tt.expected.Key, result.Key))
 		})
 	}
+}
+
+func TestTemplateKindFromVariables(t *testing.T) {
+	t.Parallel()
+
+	variables := map[string]any{
+		"input": map[string]any{
+			"kind": enums.TemplateKindTrustCenterNda.String(),
+		},
+	}
+
+	kind := templateKindFromVariables(variables, "input")
+	assert.Check(t, kind != nil)
+	assert.Check(t, is.Equal(enums.TemplateKindTrustCenterNda, *kind))
+}
+
+func TestRetrieveObjectDetailsTemplateKindFromInput(t *testing.T) {
+	t.Parallel()
+
+	rctx := &graphql.FieldContext{
+		Field: graphql.CollectedField{
+			Field: &ast.Field{
+				Name: "createTemplate",
+				Arguments: ast.ArgumentList{
+					&ast.Argument{
+						Name: "templateFiles",
+						Value: &ast.Value{
+							ExpectedType: &ast.Type{
+								NamedType: "Upload",
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	variables := map[string]any{
+		"input": map[string]any{
+			"kind": enums.TemplateKindTrustCenterNda.String(),
+		},
+	}
+
+	upload := &pkgobjects.File{
+		OriginalName: "nda.pdf",
+	}
+
+	result, err := retrieveObjectDetails(rctx, variables, "input", "templateFiles", upload)
+	assert.NilError(t, err)
+	assert.Check(t, result.ProviderHints != nil)
+	assert.Check(t, is.Equal(enums.TemplateKindTrustCenterNda.String(), result.ProviderHints.Metadata[objects.TemplateKindMetadataKey]))
+}
+
+func TestRetrieveObjectDetailsTemplateKindFromFieldName(t *testing.T) {
+	t.Parallel()
+
+	rctx := &graphql.FieldContext{
+		Field: graphql.CollectedField{
+			Field: &ast.Field{
+				Name: "createTrustCenterNDA",
+				Arguments: ast.ArgumentList{
+					&ast.Argument{
+						Name: "templateFiles",
+						Value: &ast.Value{
+							ExpectedType: &ast.Type{
+								NamedType: "Upload",
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	upload := &pkgobjects.File{
+		OriginalName: "nda.pdf",
+	}
+
+	result, err := retrieveObjectDetails(rctx, map[string]any{}, "input", "templateFiles", upload)
+	assert.NilError(t, err)
+	assert.Check(t, result.ProviderHints != nil)
+	assert.Check(t, is.Equal(enums.TemplateKindTrustCenterNda.String(), result.ProviderHints.Metadata[objects.TemplateKindMetadataKey]))
 }
 func TestGetOrgOwnerFromInput(t *testing.T) {
 	t.Parallel()

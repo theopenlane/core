@@ -235,7 +235,9 @@ func (Risk) Modules() []models.OrgModule {
 func (r Risk) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.Exportable{},
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+		),
 	}
 }
 
