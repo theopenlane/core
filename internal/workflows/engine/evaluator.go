@@ -2,27 +2,66 @@ package engine
 
 import (
 	"context"
-	"errors"
 	"fmt"
+	"maps"
 
-	"github.com/google/cel-go/cel"
-	"github.com/google/cel-go/common/types"
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
+	"github.com/samber/lo"
+
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/iam/auth"
 )
 
-// EvaluateConditions checks if all conditions pass for a workflow
-func (e *WorkflowEngine) EvaluateConditions(ctx context.Context, def *generated.WorkflowDefinition, obj *workflows.Object, eventType string, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string) (bool, error) {
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil {
-		return false, err
+// stringArrayContains creates a predicate that checks if a JSON string array field contains a value
+// Returns false for NULL fields or non-array types
+func stringArrayContains(field string, value string) predicate.WorkflowDefinition {
+	return func(s *sql.Selector) {
+		// Only check containment if field is not null and is an array
+		s.Where(sql.And(
+			sql.NotNull(field),
+			sql.P(func(b *sql.Builder) {
+				b.WriteString("jsonb_typeof(").Ident(field).WriteString(") = 'array'")
+			}),
+			sqljson.ValueContains(field, []string{value}),
+		))
 	}
+}
+
+// stringArrayEmpty creates a predicate that checks if a JSON string array field is null or empty
+func stringArrayEmpty(field string) predicate.WorkflowDefinition {
+	return func(s *sql.Selector) {
+		// Use CASE to safely check array length only when field is actually an array
+		// This handles NULL, non-array types, and empty arrays
+		s.Where(sql.P(func(b *sql.Builder) {
+			b.WriteString("CASE WHEN ").Ident(field).WriteString(" IS NULL THEN true ")
+			b.WriteString("WHEN jsonb_typeof(").Ident(field).WriteString(") != 'array' THEN true ")
+			b.WriteString("ELSE jsonb_array_length(").Ident(field).WriteString(") = 0 END")
+		}))
+	}
+}
+
+// EvaluateConditions checks if all conditions pass for a workflow.
+func (e *WorkflowEngine) EvaluateConditions(ctx context.Context, def *generated.WorkflowDefinition, obj *workflows.Object, eventType string, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string) (bool, error) {
+	conditions := def.DefinitionJSON.Conditions
+	if len(conditions) == 0 {
+		return true, nil
+	}
+
+	userID, _ := auth.GetSubjectIDFromContext(ctx)
 
 	vars := workflows.BuildCELVars(obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID)
 
-	for i, cond := range def.DefinitionJSON.Conditions {
-		result, err := e.evaluateExpression(ctx, cond.Expression, vars)
+	for i, cond := range conditions {
+		result, err := e.celEvaluator.Evaluate(ctx, cond.Expression, vars)
 		if err != nil {
 			return false, fmt.Errorf("%w: condition %d: %v", ErrConditionFailed, i, err)
 		}
@@ -35,91 +74,247 @@ func (e *WorkflowEngine) EvaluateConditions(ctx context.Context, def *generated.
 	return true, nil
 }
 
-// evaluateExpression evaluates a CEL expression with the given variables, using caching and timeout
-func (e *WorkflowEngine) evaluateExpression(ctx context.Context, expression string, vars map[string]any) (bool, error) {
-	prg, err := e.getOrCompileProgram(expression)
+// EvaluateActionWhen evaluates an action's When expression with assignment context.
+// This is used for re-evaluating NOTIFY actions when assignment status changes.
+func (e *WorkflowEngine) EvaluateActionWhen(ctx context.Context, expression string, instance *generated.WorkflowInstance, obj *workflows.Object) (bool, error) {
+	vars := workflows.BuildCELVars(
+		obj,
+		instance.Context.TriggerChangedFields,
+		instance.Context.TriggerChangedEdges,
+		instance.Context.TriggerAddedIDs,
+		instance.Context.TriggerRemovedIDs,
+		instance.Context.TriggerEventType,
+		instance.Context.TriggerUserID,
+	)
+
+	// Merge assignment context (assignments, instance, initiator)
+	assignmentCtx, err := workflows.BuildAssignmentContext(ctx, e.client, instance.ID)
 	if err != nil {
 		return false, err
 	}
 
-	if ctx == nil {
-		ctx = context.Background()
+	if assignmentCtx != nil {
+		maps.Copy(vars, assignmentCtx)
+	} else {
+		// Provide empty defaults so CEL expressions don't fail on missing variables
+		vars["assignments"] = map[string]any{}
+		vars["instance"] = map[string]any{}
+		vars["initiator"] = ""
 	}
 
-	evalCtx, cancel := context.WithTimeout(ctx, e.config.CEL.Timeout)
-	defer cancel()
+	return e.celEvaluator.Evaluate(ctx, expression, vars)
+}
 
-	out, _, evalErr := prg.ContextEval(evalCtx, vars)
-	if evalErr != nil {
-		if errors.Is(evalErr, context.DeadlineExceeded) || errors.Is(evalErr, context.Canceled) || evalCtx.Err() != nil {
-			return false, ErrEvaluationTimeout
+// FindMatchingDefinitions returns all active workflow definitions that match the criteria
+func (e *WorkflowEngine) FindMatchingDefinitions(ctx context.Context, schemaType string, eventType string, changedFields []string, changedEdges []string, addedIDs map[string][]string, removedIDs map[string][]string, obj *workflows.Object) (defs []*generated.WorkflowDefinition, err error) {
+	scope := observability.BeginEngine(ctx, e.observer, observability.OpFindMatchingDefinitions, eventType, lo.Assign(observability.Fields(obj.ObservabilityFields()), observability.Fields{
+		workflowevent.FieldEventType: eventType,
+	}))
+	ctx = scope.Context()
+	defer scope.End(err, nil)
+
+	// Use privacy bypass for internal workflow operations
+	allowCtx, orgID, err := workflows.AllowContextWithOrg(ctx)
+	if err != nil {
+		return nil, scope.Fail(err, nil)
+	}
+
+	query := e.client.WorkflowDefinition.
+		Query().
+		Where(
+			workflowdefinition.SchemaTypeEQ(schemaType),
+			workflowdefinition.ActiveEQ(true),
+			workflowdefinition.DraftEQ(false),
+			workflowdefinition.OwnerIDEQ(orgID),
+		)
+
+	if eventType != "" {
+		query = query.Where(stringArrayContains(workflowdefinition.FieldTriggerOperations, eventType))
+	}
+
+	allChanges := make([]string, 0, len(changedFields)+len(changedEdges))
+	allChanges = append(allChanges, changedFields...)
+	allChanges = append(allChanges, changedEdges...)
+	if len(allChanges) > 0 {
+		fieldPredicates := lo.Map(allChanges, func(field string, _ int) predicate.WorkflowDefinition {
+			return stringArrayContains(workflowdefinition.FieldTriggerFields, field)
+		})
+		query = query.Where(workflowdefinition.Or(
+			stringArrayEmpty(workflowdefinition.FieldTriggerFields),
+			workflowdefinition.Or(fieldPredicates...),
+		))
+	}
+
+	defs, err = query.All(allowCtx)
+	if err != nil {
+		return nil, scope.Fail(fmt.Errorf("%w: %w", ErrFailedToQueryDefinitions, err), nil)
+	}
+
+	var matching []*generated.WorkflowDefinition
+
+	for _, def := range defs {
+		if e.matchesTriggers(ctx, scope, def, eventType, changedFields, changedEdges, addedIDs, removedIDs, obj) {
+			matching = append(matching, def)
+		}
+	}
+
+	return matching, nil
+}
+
+// matchesTriggers checks if the triggers match the event
+func (e *WorkflowEngine) matchesTriggers(ctx context.Context, scope *observability.Scope, def *generated.WorkflowDefinition, eventType string, changedFields []string, changedEdges []string, addedIDs map[string][]string, removedIDs map[string][]string, obj *workflows.Object) bool {
+	triggers := def.DefinitionJSON.Triggers
+	if len(triggers) == 0 {
+		return false
+	}
+
+	return lo.SomeBy(triggers, func(trigger models.WorkflowTrigger) bool {
+		if trigger.Operation != eventType {
+			return false
 		}
 
-		return false, ErrConditionFailed
-	}
+		if !e.matchesSelector(ctx, scope, trigger.Selector, obj) {
+			return false
+		}
 
-	if out == nil {
-		return false, ErrCELNilOutput
-	}
+		// Evaluate trigger expression if present
+		if trigger.Expression != "" {
+			userID, _ := auth.GetSubjectIDFromContext(ctx)
+			vars := workflows.BuildCELVars(obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID)
 
-	if out.Type() != types.BoolType {
-		return false, ErrCELTypeMismatch
-	}
+			result, err := e.celEvaluator.Evaluate(ctx, trigger.Expression, vars)
+			if err != nil {
+				scope.Warn(err, observability.Fields{
+					workflowinstance.FieldWorkflowDefinitionID: def.ID,
+					observability.FieldExpression:              trigger.Expression,
+				})
+				return false
+			}
 
-	result, ok := out.Value().(bool)
-	if !ok {
-		result = out.Equal(types.True) == types.True
-	}
+			if !result {
+				return false
+			}
+		}
 
-	return result, nil
+		// If no specific fields or edges are specified, any change to this operation type triggers
+		if len(trigger.Fields) == 0 && len(trigger.Edges) == 0 {
+			return true
+		}
+
+		// Check if any trigger field or edge is in the changed fields or edges
+		allTriggerFields := make([]string, 0, len(trigger.Fields)+len(trigger.Edges))
+		allTriggerFields = append(allTriggerFields, trigger.Fields...)
+		allTriggerFields = append(allTriggerFields, trigger.Edges...)
+		allChangedFields := make([]string, 0, len(changedFields)+len(changedEdges))
+		allChangedFields = append(allChangedFields, changedFields...)
+		allChangedFields = append(allChangedFields, changedEdges...)
+		return len(lo.Intersect(allTriggerFields, allChangedFields)) > 0
+	})
 }
 
-// getOrCompileProgram retrieves a compiled CEL program from cache or compiles it
-func (e *WorkflowEngine) getOrCompileProgram(expression string) (cel.Program, error) {
-	if cached, ok := e.programCache.Load(expression); ok {
-		return cached.(cel.Program), nil
+// matchesSelector checks if the object matches the trigger selector criteria
+func (e *WorkflowEngine) matchesSelector(ctx context.Context, scope *observability.Scope, selector models.WorkflowSelector, obj *workflows.Object) bool {
+	// If selector has objectTypes constraint, check if object type matches
+	if len(selector.ObjectTypes) > 0 {
+		if !lo.Contains(selector.ObjectTypes, obj.Type) {
+			return false
+		}
 	}
 
-	ast, issues := e.env.Compile(expression)
-	if issues != nil && issues.Err() != nil {
-		return nil, ErrCELCompilationFailed
+	// If selector has tagIds constraint, check if object has any of those tags
+	if len(selector.TagIDs) > 0 {
+		objectTags, err := e.getObjectTags(ctx, obj)
+		if err != nil {
+			scope.Warn(err, observability.Fields(obj.ObservabilityFields()))
+			return false
+		}
+
+		if len(lo.Intersect(selector.TagIDs, objectTags)) == 0 {
+			return false
+		}
 	}
 
-	opts := []cel.ProgramOption{
-		cel.InterruptCheckFrequency(e.config.CEL.InterruptCheckFrequency),
+	// If selector has groupIds constraint, check if object belongs to any of those groups
+	if len(selector.GroupIDs) > 0 {
+		objectGroups, err := e.getObjectGroups(ctx, obj)
+		if err != nil {
+			scope.Warn(err, observability.Fields(obj.ObservabilityFields()))
+			return false
+		}
+
+		if len(lo.Intersect(selector.GroupIDs, objectGroups)) == 0 {
+			return false
+		}
 	}
 
-	if e.config.CEL.CostLimit > 0 {
-		opts = append(opts, cel.CostLimit(e.config.CEL.CostLimit))
+	return true
+}
+
+// reEvaluateNotifyActions re-evaluates NOTIFY actions with When expressions after assignment changes.
+// This enables dynamic notifications based on assignment state (e.g., notify when quorum is reached).
+func (l *WorkflowListeners) reEvaluateNotifyActions(scope *observability.Scope, instance *generated.WorkflowInstance, obj *workflows.Object) {
+	executedNotifications := l.getExecutedNotifications(instance)
+
+	var newlyExecuted []string
+
+	for i, action := range instance.DefinitionSnapshot.Actions {
+		notifyKey, executed := l.processNotifyAction(scope, instance, obj, action, i, executedNotifications)
+		if executed {
+			newlyExecuted = append(newlyExecuted, notifyKey)
+		}
 	}
 
-	opts = append(opts, e.buildEvalOptions()...)
+	// Persist newly executed notification keys to instance context
+	if len(newlyExecuted) > 0 {
+		l.trackExecutedNotifications(scope, instance.ID, newlyExecuted)
+	}
+}
 
-	prg, err := e.env.Program(ast, opts...)
+// processNotifyAction evaluates and executes a NOTIFY action during assignment reconciliation
+func (l *WorkflowListeners) processNotifyAction(scope *observability.Scope, instance *generated.WorkflowInstance, obj *workflows.Object, action models.WorkflowAction, index int, executed map[string]bool) (string, bool) {
+	actionType := enums.ToWorkflowActionType(action.Type)
+	if actionType == nil || *actionType != enums.WorkflowActionTypeNotification {
+		return "", false
+	}
+
+	// Skip NOTIFY actions without When expressions (they execute in normal sequence)
+	if action.When == "" {
+		return "", false
+	}
+
+	notifyKey := notifyActionKey(action, index)
+	if executed[notifyKey] {
+		return "", false
+	}
+
+	ctx := scope.Context()
+	shouldExecute, err := l.engine.EvaluateActionWhen(ctx, action.When, instance, obj)
 	if err != nil {
-		return nil, ErrCELProgramCreationFailed
+		observability.WarnListener(ctx, observability.OpExecuteAction, action.Type, observability.ActionFields(action.Key, observability.Fields{
+			workflowevent.FieldWorkflowInstanceID: instance.ID,
+		}), err)
+		return "", false
 	}
 
-	e.programCache.Store(expression, prg)
+	if !shouldExecute {
+		return "", false
+	}
 
-	return prg, nil
+	if err := l.engine.Execute(ctx, action, instance, obj); err != nil {
+		observability.WarnListener(ctx, observability.OpExecuteAction, action.Type, observability.ActionFields(action.Key, observability.Fields{
+			workflowevent.FieldWorkflowInstanceID: instance.ID,
+		}), err)
+		return "", false
+	}
+
+	l.recordEvent(scope, instance, enums.WorkflowEventTypeActionCompleted, action.Key, map[string]any{
+		"triggered_by": "assignment_state_change",
+	})
+
+	return notifyKey, true
 }
 
-// buildEvalOptions constructs CEL evaluation options from configuration
-func (e *WorkflowEngine) buildEvalOptions() []cel.ProgramOption {
-	var evalOpts []cel.EvalOption
-
-	if e.config.CEL.EvalOptimize {
-		evalOpts = append(evalOpts, cel.OptOptimize)
-	}
-
-	if e.config.CEL.TrackState {
-		evalOpts = append(evalOpts, cel.OptTrackState)
-	}
-
-	if len(evalOpts) == 0 {
-		return nil
-	}
-
-	return []cel.ProgramOption{cel.EvalOptions(evalOpts...)}
+// notifyActionKey builds a stable key for a notification action execution
+func notifyActionKey(action models.WorkflowAction, index int) string {
+	return fmt.Sprintf("notify_%s_%d", action.Key, index)
 }
