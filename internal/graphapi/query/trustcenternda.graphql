@@ -18,22 +18,6 @@ mutation CreateTrustCenterNda($input: CreateTrustCenterNDAInput!, $templateFiles
   }
 }
 
-<<<<<<< HEAD
-||||||| e60bafe09
-mutation SendTrustCenterNDAEmail($input: SendTrustCenterNDAInput!) {
-    sendTrustCenterNDAEmail(input: $input) {
-        success
-    }
-}
-
-=======
-mutation SendTrustCenterNDAEmail($input: SendTrustCenterNDAInput!) {
-  sendTrustCenterNDAEmail(input: $input) {
-    success
-  }
-}
-
->>>>>>> origin/main
 mutation SubmitTrustCenterNDAResponse($input: SubmitTrustCenterNDAResponseInput!) {
   submitTrustCenterNDAResponse(input: $input) {
     documentData {

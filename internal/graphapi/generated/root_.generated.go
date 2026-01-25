@@ -35824,7 +35824,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchSnippet.Text(childComplexity), true
 
-
 	case "Standard.applicablePlatforms":
 		if e.complexity.Standard.ApplicablePlatforms == nil {
 			break
@@ -35836,6 +35835,16 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Standard.ApplicablePlatforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
+
+	case "Standard.controls":
+		if e.complexity.Standard.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_Standard_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
 
 		return e.complexity.Standard.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
