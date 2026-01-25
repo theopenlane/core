@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -169,4 +170,11 @@ func (WorkflowAssignment) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.WorkflowAssignmentMutation](),
 		),
 	)
+}
+
+// Hooks of the WorkflowAssignment
+func (WorkflowAssignment) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookWorkflowAssignmentDecisionAuth(),
+	}
 }

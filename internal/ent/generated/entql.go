@@ -245,6 +245,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessmentresponse.FieldDeletedBy:        {Type: field.TypeString, Column: assessmentresponse.FieldDeletedBy},
 			assessmentresponse.FieldOwnerID:          {Type: field.TypeString, Column: assessmentresponse.FieldOwnerID},
 			assessmentresponse.FieldAssessmentID:     {Type: field.TypeString, Column: assessmentresponse.FieldAssessmentID},
+			assessmentresponse.FieldIsTest:           {Type: field.TypeBool, Column: assessmentresponse.FieldIsTest},
 			assessmentresponse.FieldCampaignID:       {Type: field.TypeString, Column: assessmentresponse.FieldCampaignID},
 			assessmentresponse.FieldIdentityHolderID: {Type: field.TypeString, Column: assessmentresponse.FieldIdentityHolderID},
 			assessmentresponse.FieldEntityID:         {Type: field.TypeString, Column: assessmentresponse.FieldEntityID},
@@ -16261,6 +16262,11 @@ func (f *AssessmentResponseFilter) WhereOwnerID(p entql.StringP) {
 // WhereAssessmentID applies the entql string predicate on the assessment_id field.
 func (f *AssessmentResponseFilter) WhereAssessmentID(p entql.StringP) {
 	f.Where(p.Field(assessmentresponse.FieldAssessmentID))
+}
+
+// WhereIsTest applies the entql bool predicate on the is_test field.
+func (f *AssessmentResponseFilter) WhereIsTest(p entql.BoolP) {
+	f.Where(p.Field(assessmentresponse.FieldIsTest))
 }
 
 // WhereCampaignID applies the entql string predicate on the campaign_id field.

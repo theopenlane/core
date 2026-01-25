@@ -204,6 +204,7 @@ var controlFields = []ent.Field{
 		Annotations(
 			entx.FieldSearchable(),
 			entgql.OrderField("title"),
+			entx.FieldWebhookPayloadField(),
 			directives.ExternalSourceDirectiveAnnotation,
 			entx.FieldWorkflowEligible(),
 		).
@@ -244,6 +245,7 @@ var controlFields = []ent.Field{
 		Default(enums.ControlStatusNotImplemented.String()).
 		Annotations(
 			entgql.OrderField("STATUS"),
+			entx.FieldWebhookPayloadField(),
 			entx.FieldWorkflowEligible(),
 		).
 		Comment("status of the control"),

@@ -237,24 +237,28 @@ func init() {
 	assessmentresponsehistory.DefaultUpdatedAt = assessmentresponsehistoryDescUpdatedAt.Default.(func() time.Time)
 	// assessmentresponsehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	assessmentresponsehistory.UpdateDefaultUpdatedAt = assessmentresponsehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// assessmentresponsehistoryDescIsTest is the schema descriptor for is_test field.
+	assessmentresponsehistoryDescIsTest := assessmentresponsehistoryFields[12].Descriptor()
+	// assessmentresponsehistory.DefaultIsTest holds the default value on creation for the is_test field.
+	assessmentresponsehistory.DefaultIsTest = assessmentresponsehistoryDescIsTest.Default.(bool)
 	// assessmentresponsehistoryDescSendAttempts is the schema descriptor for send_attempts field.
-	assessmentresponsehistoryDescSendAttempts := assessmentresponsehistoryFields[16].Descriptor()
+	assessmentresponsehistoryDescSendAttempts := assessmentresponsehistoryFields[17].Descriptor()
 	// assessmentresponsehistory.DefaultSendAttempts holds the default value on creation for the send_attempts field.
 	assessmentresponsehistory.DefaultSendAttempts = assessmentresponsehistoryDescSendAttempts.Default.(int)
 	// assessmentresponsehistoryDescEmailOpenCount is the schema descriptor for email_open_count field.
-	assessmentresponsehistoryDescEmailOpenCount := assessmentresponsehistoryFields[20].Descriptor()
+	assessmentresponsehistoryDescEmailOpenCount := assessmentresponsehistoryFields[21].Descriptor()
 	// assessmentresponsehistory.DefaultEmailOpenCount holds the default value on creation for the email_open_count field.
 	assessmentresponsehistory.DefaultEmailOpenCount = assessmentresponsehistoryDescEmailOpenCount.Default.(int)
 	// assessmentresponsehistoryDescEmailClickCount is the schema descriptor for email_click_count field.
-	assessmentresponsehistoryDescEmailClickCount := assessmentresponsehistoryFields[21].Descriptor()
+	assessmentresponsehistoryDescEmailClickCount := assessmentresponsehistoryFields[22].Descriptor()
 	// assessmentresponsehistory.DefaultEmailClickCount holds the default value on creation for the email_click_count field.
 	assessmentresponsehistory.DefaultEmailClickCount = assessmentresponsehistoryDescEmailClickCount.Default.(int)
 	// assessmentresponsehistoryDescAssignedAt is the schema descriptor for assigned_at field.
-	assessmentresponsehistoryDescAssignedAt := assessmentresponsehistoryFields[25].Descriptor()
+	assessmentresponsehistoryDescAssignedAt := assessmentresponsehistoryFields[26].Descriptor()
 	// assessmentresponsehistory.DefaultAssignedAt holds the default value on creation for the assigned_at field.
 	assessmentresponsehistory.DefaultAssignedAt = assessmentresponsehistoryDescAssignedAt.Default.(func() time.Time)
 	// assessmentresponsehistoryDescStartedAt is the schema descriptor for started_at field.
-	assessmentresponsehistoryDescStartedAt := assessmentresponsehistoryFields[26].Descriptor()
+	assessmentresponsehistoryDescStartedAt := assessmentresponsehistoryFields[27].Descriptor()
 	// assessmentresponsehistory.DefaultStartedAt holds the default value on creation for the started_at field.
 	assessmentresponsehistory.DefaultStartedAt = assessmentresponsehistoryDescStartedAt.Default.(time.Time)
 	// assessmentresponsehistoryDescID is the schema descriptor for id field.

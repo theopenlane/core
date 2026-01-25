@@ -120,6 +120,20 @@ func (_u *AssessmentResponseHistoryUpdate) SetNillableAssessmentID(v *string) *A
 	return _u
 }
 
+// SetIsTest sets the "is_test" field.
+func (_u *AssessmentResponseHistoryUpdate) SetIsTest(v bool) *AssessmentResponseHistoryUpdate {
+	_u.mutation.SetIsTest(v)
+	return _u
+}
+
+// SetNillableIsTest sets the "is_test" field if the given value is not nil.
+func (_u *AssessmentResponseHistoryUpdate) SetNillableIsTest(v *bool) *AssessmentResponseHistoryUpdate {
+	if v != nil {
+		_u.SetIsTest(*v)
+	}
+	return _u
+}
+
 // SetCampaignID sets the "campaign_id" field.
 func (_u *AssessmentResponseHistoryUpdate) SetCampaignID(v string) *AssessmentResponseHistoryUpdate {
 	_u.mutation.SetCampaignID(v)
@@ -549,6 +563,9 @@ func (_u *AssessmentResponseHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if value, ok := _u.mutation.AssessmentID(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldAssessmentID, field.TypeString, value)
 	}
+	if value, ok := _u.mutation.IsTest(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldIsTest, field.TypeBool, value)
+	}
 	if value, ok := _u.mutation.CampaignID(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldCampaignID, field.TypeString, value)
 	}
@@ -751,6 +768,20 @@ func (_u *AssessmentResponseHistoryUpdateOne) SetAssessmentID(v string) *Assessm
 func (_u *AssessmentResponseHistoryUpdateOne) SetNillableAssessmentID(v *string) *AssessmentResponseHistoryUpdateOne {
 	if v != nil {
 		_u.SetAssessmentID(*v)
+	}
+	return _u
+}
+
+// SetIsTest sets the "is_test" field.
+func (_u *AssessmentResponseHistoryUpdateOne) SetIsTest(v bool) *AssessmentResponseHistoryUpdateOne {
+	_u.mutation.SetIsTest(v)
+	return _u
+}
+
+// SetNillableIsTest sets the "is_test" field if the given value is not nil.
+func (_u *AssessmentResponseHistoryUpdateOne) SetNillableIsTest(v *bool) *AssessmentResponseHistoryUpdateOne {
+	if v != nil {
+		_u.SetIsTest(*v)
 	}
 	return _u
 }
@@ -1213,6 +1244,9 @@ func (_u *AssessmentResponseHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if value, ok := _u.mutation.AssessmentID(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldAssessmentID, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.IsTest(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldIsTest, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.CampaignID(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldCampaignID, field.TypeString, value)

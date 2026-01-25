@@ -66,6 +66,8 @@ func (ec *executionContext) fieldContext_AssessmentResponseCreatePayload_assessm
 				return ec.fieldContext_AssessmentResponse_ownerID(ctx, field)
 			case "assessmentID":
 				return ec.fieldContext_AssessmentResponse_assessmentID(ctx, field)
+			case "isTest":
+				return ec.fieldContext_AssessmentResponse_isTest(ctx, field)
 			case "campaignID":
 				return ec.fieldContext_AssessmentResponse_campaignID(ctx, field)
 			case "identityHolderID":

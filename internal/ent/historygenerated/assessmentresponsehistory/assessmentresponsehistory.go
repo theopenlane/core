@@ -42,6 +42,8 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldAssessmentID holds the string denoting the assessment_id field in the database.
 	FieldAssessmentID = "assessment_id"
+	// FieldIsTest holds the string denoting the is_test field in the database.
+	FieldIsTest = "is_test"
 	// FieldCampaignID holds the string denoting the campaign_id field in the database.
 	FieldCampaignID = "campaign_id"
 	// FieldIdentityHolderID holds the string denoting the identity_holder_id field in the database.
@@ -96,6 +98,7 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldOwnerID,
 	FieldAssessmentID,
+	FieldIsTest,
 	FieldCampaignID,
 	FieldIdentityHolderID,
 	FieldEntityID,
@@ -143,6 +146,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultIsTest holds the default value on creation for the "is_test" field.
+	DefaultIsTest bool
 	// DefaultSendAttempts holds the default value on creation for the "send_attempts" field.
 	DefaultSendAttempts int
 	// DefaultEmailOpenCount holds the default value on creation for the "email_open_count" field.
@@ -240,6 +245,11 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // ByAssessmentID orders the results by the assessment_id field.
 func ByAssessmentID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssessmentID, opts...).ToFunc()
+}
+
+// ByIsTest orders the results by the is_test field.
+func ByIsTest(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsTest, opts...).ToFunc()
 }
 
 // ByCampaignID orders the results by the campaign_id field.

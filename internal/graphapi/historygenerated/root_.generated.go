@@ -156,6 +156,7 @@ type ComplexityRoot struct {
 		HistoryTime      func(childComplexity int) int
 		ID               func(childComplexity int) int
 		IdentityHolderID func(childComplexity int) int
+		IsTest           func(childComplexity int) int
 		LastEmailEventAt func(childComplexity int) int
 		Operation        func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
@@ -3542,6 +3543,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssessmentResponseHistory.IdentityHolderID(childComplexity), true
+
+	case "AssessmentResponseHistory.isTest":
+		if e.complexity.AssessmentResponseHistory.IsTest == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponseHistory.IsTest(childComplexity), true
 
 	case "AssessmentResponseHistory.lastEmailEventAt":
 		if e.complexity.AssessmentResponseHistory.LastEmailEventAt == nil {
@@ -20135,6 +20143,10 @@ type AssessmentResponseHistory implements Node {
   """
   assessmentID: String!
   """
+  whether this assessment response is for a test send
+  """
+  isTest: Boolean!
+  """
   the campaign this response is associated with
   """
   campaignID: String
@@ -20441,6 +20453,11 @@ input AssessmentResponseHistoryWhereInput {
   assessmentIDHasSuffix: String
   assessmentIDEqualFold: String
   assessmentIDContainsFold: String
+  """
+  is_test field predicates
+  """
+  isTest: Boolean
+  isTestNEQ: Boolean
   """
   campaign_id field predicates
   """

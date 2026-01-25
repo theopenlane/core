@@ -8,4 +8,49 @@ extend type Query {
         """
         id: ID!
     ):  WorkflowEvent!
+
+    """
+    Get workflow events for a workflow instance timeline
+    """
+    workflowEventTimeline(
+        """
+        ID of the workflow instance
+        """
+        workflowInstanceID: ID!
+
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+
+        """
+        Ordering options.
+        """
+        orderBy: [WorkflowEventOrder!]
+
+        """
+        Filtering options.
+        """
+        where: WorkflowEventWhereInput
+
+        """
+        Include emit failure events in the timeline
+        """
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }

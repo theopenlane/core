@@ -123,6 +123,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "assessment_id", Type: field.TypeString},
+		{Name: "is_test", Type: field.TypeBool, Default: false},
 		{Name: "campaign_id", Type: field.TypeString, Nullable: true},
 		{Name: "identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_id", Type: field.TypeString, Nullable: true},

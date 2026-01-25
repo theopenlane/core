@@ -27,6 +27,7 @@ Config contains the configuration for the core server
 |[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
 |[**integrationoauthprovider**](#integrationoauthprovider)|`object`|IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.<br/>||
 |[**workflows**](#workflows)|`object`|||
+|[**emailwebhook**](#emailwebhook)|`object`|EmailWebhook contains webhook configuration for email providers (e.g., Resend).<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -135,7 +136,8 @@ Config contains the configuration for the core server
     "integrationoauthprovider": {},
     "workflows": {
         "cel": {}
-    }
+    },
+    "emailwebhook": {}
 }
 ```
 
@@ -1717,6 +1719,20 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |**macrocalltracking**|`boolean`|||
 |**evaloptimize**|`boolean`|||
 |**trackstate**|`boolean`|||
+
+**Additional Properties:** not allowed  
+<a name="emailwebhook"></a>
+## emailwebhook: object
+
+EmailWebhook contains webhook configuration for email providers (e.g., Resend).
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled is a flag to enable or disable email webhooks<br/>||
+|**resendsecret**|`string`|ResendSecret is the signing secret used to verify Resend webhook payloads<br/>||
 
 **Additional Properties:** not allowed  
 

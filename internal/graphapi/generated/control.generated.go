@@ -204,8 +204,12 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_controlMappings(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Control_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Control_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Control_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Control_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -418,8 +422,12 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_controlMappings(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Control_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Control_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Control_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Control_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -632,8 +640,12 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_controlMappings(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Control_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Control_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Control_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Control_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -846,8 +858,12 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_controlMappings(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Control_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Control_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Control_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Control_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},

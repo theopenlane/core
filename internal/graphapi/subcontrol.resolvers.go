@@ -7,8 +7,8 @@ package graphapi
 
 import (
 	"context"
-	"fmt"
 
+	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -146,10 +146,20 @@ func (r *queryResolver) Subcontrol(ctx context.Context, id string) (*generated.S
 
 // HasPendingWorkflow is the resolver for the hasPendingWorkflow field.
 func (r *subcontrolResolver) HasPendingWorkflow(ctx context.Context, obj *generated.Subcontrol) (bool, error) {
-	panic(fmt.Errorf("not implemented: HasPendingWorkflow - hasPendingWorkflow"))
+	return workflowResolverHasPending(ctx, generated.TypeSubcontrol, obj.ID)
 }
 
-// ActiveWorkflowInstance is the resolver for the activeWorkflowInstance field.
-func (r *subcontrolResolver) ActiveWorkflowInstance(ctx context.Context, obj *generated.Subcontrol) (*generated.WorkflowInstance, error) {
-	panic(fmt.Errorf("not implemented: ActiveWorkflowInstance - activeWorkflowInstance"))
+// HasWorkflowHistory is the resolver for the hasWorkflowHistory field.
+func (r *subcontrolResolver) HasWorkflowHistory(ctx context.Context, obj *generated.Subcontrol) (bool, error) {
+	return workflowResolverHasHistory(ctx, generated.TypeSubcontrol, obj.ID)
+}
+
+// ActiveWorkflowInstances is the resolver for the activeWorkflowInstances field.
+func (r *subcontrolResolver) ActiveWorkflowInstances(ctx context.Context, obj *generated.Subcontrol) ([]*generated.WorkflowInstance, error) {
+	return workflowResolverActiveInstances(ctx, generated.TypeSubcontrol, obj.ID)
+}
+
+// WorkflowTimeline is the resolver for the workflowTimeline field.
+func (r *subcontrolResolver) WorkflowTimeline(ctx context.Context, obj *generated.Subcontrol, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) (*generated.WorkflowEventConnection, error) {
+	return workflowResolverTimeline(ctx, generated.TypeSubcontrol, obj.ID, after, first, before, last, orderBy, where, includeEmitFailures)
 }

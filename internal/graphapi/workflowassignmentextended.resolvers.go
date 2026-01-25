@@ -7,23 +7,112 @@ package graphapi
 
 import (
 	"context"
-	"fmt"
+	"time"
 
 	"entgo.io/contrib/entgql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/rout"
 )
 
 // ApproveWorkflowAssignment is the resolver for the approveWorkflowAssignment field.
 func (r *mutationResolver) ApproveWorkflowAssignment(ctx context.Context, id string) (*model.WorkflowAssignmentApprovePayload, error) {
-	panic(fmt.Errorf("not implemented: ApproveWorkflowAssignment - approveWorkflowAssignment"))
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
+	decisionCtx, err := r.validateAssignmentDecision(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	assignment := decisionCtx.Assignment
+	decidedAt := time.Now()
+	approvalMeta := assignment.ApprovalMetadata
+	approvalMeta.ApprovedAt = decidedAt.Format(time.RFC3339)
+	approvalMeta.ApprovedByUserID = decisionCtx.UserID
+
+	updatedCount, err := withTransactionalMutation(ctx).WorkflowAssignment.Update().
+		Where(
+			workflowassignment.ID(assignment.ID),
+			workflowassignment.StatusEQ(enums.WorkflowAssignmentStatusPending),
+		).
+		SetStatus(enums.WorkflowAssignmentStatusApproved).
+		SetApprovalMetadata(approvalMeta).
+		SetDecidedAt(decidedAt).
+		SetActorUserID(decisionCtx.UserID).
+		Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowassignment"})
+	}
+	if updatedCount == 0 {
+		return nil, rout.ErrPermissionDenied
+	}
+
+	updated, err := withTransactionalMutation(ctx).WorkflowAssignment.Get(ctx, assignment.ID)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignment"})
+	}
+
+	return &model.WorkflowAssignmentApprovePayload{
+		WorkflowAssignment: updated,
+	}, nil
 }
 
 // RejectWorkflowAssignment is the resolver for the rejectWorkflowAssignment field.
 func (r *mutationResolver) RejectWorkflowAssignment(ctx context.Context, id string, reason *string) (*model.WorkflowAssignmentRejectPayload, error) {
-	panic(fmt.Errorf("not implemented: RejectWorkflowAssignment - rejectWorkflowAssignment"))
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
+	decisionCtx, err := r.validateAssignmentDecision(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	assignment := decisionCtx.Assignment
+	decidedAt := time.Now()
+	rejectionMeta := assignment.RejectionMetadata
+	rejectionMeta.RejectedAt = decidedAt.Format(time.RFC3339)
+	rejectionMeta.RejectedByUserID = decisionCtx.UserID
+	if reason != nil {
+		rejectionMeta.RejectionReason = *reason
+	}
+
+	updatedCount, err := withTransactionalMutation(ctx).WorkflowAssignment.Update().
+		Where(
+			workflowassignment.ID(assignment.ID),
+			workflowassignment.StatusEQ(enums.WorkflowAssignmentStatusPending),
+		).
+		SetStatus(enums.WorkflowAssignmentStatusRejected).
+		SetRejectionMetadata(rejectionMeta).
+		SetDecidedAt(decidedAt).
+		SetActorUserID(decisionCtx.UserID).
+		Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowassignment"})
+	}
+	if updatedCount == 0 {
+		return nil, rout.ErrPermissionDenied
+	}
+
+	updated, err := withTransactionalMutation(ctx).WorkflowAssignment.Get(ctx, assignment.ID)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignment"})
+	}
+
+	return &model.WorkflowAssignmentRejectPayload{
+		WorkflowAssignment: updated,
+	}, nil
 }
 
 // MyWorkflowAssignments is the resolver for the myWorkflowAssignments field.
@@ -44,6 +133,35 @@ func (r *queryResolver) MyWorkflowAssignments(ctx context.Context, after *entgql
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignment"})
 	}
+
+	if where == nil {
+		where = &generated.WorkflowAssignmentWhereInput{}
+	}
+
+	userID, err := auth.GetSubjectIDFromContext(ctx)
+	if err != nil || userID == "" {
+		return nil, rout.ErrPermissionDenied
+	}
+
+	groupIDs, err := withTransactionalMutation(ctx).GroupMembership.Query().
+		Where(groupmembership.UserIDEQ(userID)).
+		Select(groupmembership.FieldGroupID).
+		Strings(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Str("user_id", userID).Msg("failed to query group memberships for workflow assignments")
+	}
+
+	// Use OR to match targets where the user is directly assigned OR belongs to an assigned group
+	targetPredicates := []predicate.WorkflowAssignmentTarget{
+		workflowassignmenttarget.TargetUserIDEQ(userID),
+	}
+	if len(groupIDs) > 0 {
+		targetPredicates = append(targetPredicates, workflowassignmenttarget.TargetGroupIDIn(groupIDs...))
+	}
+
+	query = query.Where(workflowassignment.HasWorkflowAssignmentTargetsWith(
+		workflowassignmenttarget.Or(targetPredicates...),
+	))
 
 	res, err := query.Paginate(
 		ctx,

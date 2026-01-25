@@ -123,6 +123,20 @@ func (_u *AssessmentResponseUpdate) SetNillableAssessmentID(v *string) *Assessme
 	return _u
 }
 
+// SetIsTest sets the "is_test" field.
+func (_u *AssessmentResponseUpdate) SetIsTest(v bool) *AssessmentResponseUpdate {
+	_u.mutation.SetIsTest(v)
+	return _u
+}
+
+// SetNillableIsTest sets the "is_test" field if the given value is not nil.
+func (_u *AssessmentResponseUpdate) SetNillableIsTest(v *bool) *AssessmentResponseUpdate {
+	if v != nil {
+		_u.SetIsTest(*v)
+	}
+	return _u
+}
+
 // SetCampaignID sets the "campaign_id" field.
 func (_u *AssessmentResponseUpdate) SetCampaignID(v string) *AssessmentResponseUpdate {
 	_u.mutation.SetCampaignID(v)
@@ -620,6 +634,9 @@ func (_u *AssessmentResponseUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(assessmentresponse.FieldDeletedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.IsTest(); ok {
+		_spec.SetField(assessmentresponse.FieldIsTest, field.TypeBool, value)
+	}
 	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponse.FieldSendAttempts, field.TypeInt, value)
 	}
@@ -953,6 +970,20 @@ func (_u *AssessmentResponseUpdateOne) SetAssessmentID(v string) *AssessmentResp
 func (_u *AssessmentResponseUpdateOne) SetNillableAssessmentID(v *string) *AssessmentResponseUpdateOne {
 	if v != nil {
 		_u.SetAssessmentID(*v)
+	}
+	return _u
+}
+
+// SetIsTest sets the "is_test" field.
+func (_u *AssessmentResponseUpdateOne) SetIsTest(v bool) *AssessmentResponseUpdateOne {
+	_u.mutation.SetIsTest(v)
+	return _u
+}
+
+// SetNillableIsTest sets the "is_test" field if the given value is not nil.
+func (_u *AssessmentResponseUpdateOne) SetNillableIsTest(v *bool) *AssessmentResponseUpdateOne {
+	if v != nil {
+		_u.SetIsTest(*v)
 	}
 	return _u
 }
@@ -1483,6 +1514,9 @@ func (_u *AssessmentResponseUpdateOne) sqlSave(ctx context.Context) (_node *Asse
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(assessmentresponse.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IsTest(); ok {
+		_spec.SetField(assessmentresponse.FieldIsTest, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponse.FieldSendAttempts, field.TypeInt, value)

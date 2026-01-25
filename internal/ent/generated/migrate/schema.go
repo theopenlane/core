@@ -243,6 +243,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "is_test", Type: field.TypeBool, Default: false},
 		{Name: "email", Type: field.TypeString},
 		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
 		{Name: "email_delivered_at", Type: field.TypeTime, Nullable: true},
@@ -272,37 +273,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "assessment_responses_assessments_assessment_responses",
-				Columns:    []*schema.Column{AssessmentResponsesColumns[21]},
+				Columns:    []*schema.Column{AssessmentResponsesColumns[22]},
 				RefColumns: []*schema.Column{AssessmentsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "assessment_responses_document_data_document",
-				Columns:    []*schema.Column{AssessmentResponsesColumns[22]},
+				Columns:    []*schema.Column{AssessmentResponsesColumns[23]},
 				RefColumns: []*schema.Column{DocumentDataColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assessment_responses_campaigns_assessment_responses",
-				Columns:    []*schema.Column{AssessmentResponsesColumns[23]},
+				Columns:    []*schema.Column{AssessmentResponsesColumns[24]},
 				RefColumns: []*schema.Column{CampaignsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assessment_responses_entities_assessment_responses",
-				Columns:    []*schema.Column{AssessmentResponsesColumns[24]},
+				Columns:    []*schema.Column{AssessmentResponsesColumns[25]},
 				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assessment_responses_identity_holders_assessment_responses",
-				Columns:    []*schema.Column{AssessmentResponsesColumns[25]},
+				Columns:    []*schema.Column{AssessmentResponsesColumns[26]},
 				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assessment_responses_organizations_assessment_responses",
-				Columns:    []*schema.Column{AssessmentResponsesColumns[26]},
+				Columns:    []*schema.Column{AssessmentResponsesColumns[27]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -311,7 +312,7 @@ var (
 			{
 				Name:    "assessmentresponse_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[26]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[27]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -319,7 +320,7 @@ var (
 			{
 				Name:    "assessmentresponse_assessment_id_email",
 				Unique:  true,
-				Columns: []*schema.Column{AssessmentResponsesColumns[21], AssessmentResponsesColumns[7]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[22], AssessmentResponsesColumns[8]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -327,37 +328,37 @@ var (
 			{
 				Name:    "assessmentresponse_campaign_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[23]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[24]},
 			},
 			{
 				Name:    "assessmentresponse_identity_holder_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[25]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[26]},
 			},
 			{
 				Name:    "assessmentresponse_entity_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[24]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[25]},
 			},
 			{
 				Name:    "assessmentresponse_status",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[16]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[17]},
 			},
 			{
 				Name:    "assessmentresponse_due_date",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[20]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[21]},
 			},
 			{
 				Name:    "assessmentresponse_assigned_at",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[17]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[18]},
 			},
 			{
 				Name:    "assessmentresponse_completed_at",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[19]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[20]},
 			},
 		},
 	}

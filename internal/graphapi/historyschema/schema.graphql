@@ -1118,6 +1118,10 @@ type AssessmentResponseHistory implements Node {
 	"""
 	assessmentID: String!
 	"""
+	whether this assessment response is for a test send
+	"""
+	isTest: Boolean!
+	"""
 	the campaign this response is associated with
 	"""
 	campaignID: String
@@ -1424,6 +1428,11 @@ input AssessmentResponseHistoryWhereInput {
 	assessmentIDHasSuffix: String
 	assessmentIDEqualFold: String
 	assessmentIDContainsFold: String
+	"""
+	is_test field predicates
+	"""
+	isTest: Boolean
+	isTestNEQ: Boolean
 	"""
 	campaign_id field predicates
 	"""

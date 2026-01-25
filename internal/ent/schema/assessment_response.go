@@ -45,6 +45,12 @@ func (AssessmentResponse) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationUpdateInput),
 			).
 			NotEmpty(),
+		field.Bool("is_test").
+			Comment("whether this assessment response is for a test send").
+			Default(false).
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			),
 		field.String("campaign_id").
 			Comment("the campaign this response is associated with").
 			Optional(),

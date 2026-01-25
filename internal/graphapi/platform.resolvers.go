@@ -7,8 +7,8 @@ package graphapi
 
 import (
 	"context"
-	"fmt"
 
+	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
@@ -122,12 +122,22 @@ func (r *mutationResolver) DeletePlatform(ctx context.Context, id string) (*mode
 
 // HasPendingWorkflow is the resolver for the hasPendingWorkflow field.
 func (r *platformResolver) HasPendingWorkflow(ctx context.Context, obj *generated.Platform) (bool, error) {
-	panic(fmt.Errorf("not implemented: HasPendingWorkflow - hasPendingWorkflow"))
+	return workflowResolverHasPending(ctx, generated.TypePlatform, obj.ID)
 }
 
-// ActiveWorkflowInstance is the resolver for the activeWorkflowInstance field.
-func (r *platformResolver) ActiveWorkflowInstance(ctx context.Context, obj *generated.Platform) (*generated.WorkflowInstance, error) {
-	panic(fmt.Errorf("not implemented: ActiveWorkflowInstance - activeWorkflowInstance"))
+// HasWorkflowHistory is the resolver for the hasWorkflowHistory field.
+func (r *platformResolver) HasWorkflowHistory(ctx context.Context, obj *generated.Platform) (bool, error) {
+	return workflowResolverHasHistory(ctx, generated.TypePlatform, obj.ID)
+}
+
+// ActiveWorkflowInstances is the resolver for the activeWorkflowInstances field.
+func (r *platformResolver) ActiveWorkflowInstances(ctx context.Context, obj *generated.Platform) ([]*generated.WorkflowInstance, error) {
+	return workflowResolverActiveInstances(ctx, generated.TypePlatform, obj.ID)
+}
+
+// WorkflowTimeline is the resolver for the workflowTimeline field.
+func (r *platformResolver) WorkflowTimeline(ctx context.Context, obj *generated.Platform, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) (*generated.WorkflowEventConnection, error) {
+	return workflowResolverTimeline(ctx, generated.TypePlatform, obj.ID, after, first, before, last, orderBy, where, includeEmitFailures)
 }
 
 // Platform is the resolver for the platform field.

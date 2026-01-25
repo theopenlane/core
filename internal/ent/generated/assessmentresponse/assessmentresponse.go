@@ -34,6 +34,8 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldAssessmentID holds the string denoting the assessment_id field in the database.
 	FieldAssessmentID = "assessment_id"
+	// FieldIsTest holds the string denoting the is_test field in the database.
+	FieldIsTest = "is_test"
 	// FieldCampaignID holds the string denoting the campaign_id field in the database.
 	FieldCampaignID = "campaign_id"
 	// FieldIdentityHolderID holds the string denoting the identity_holder_id field in the database.
@@ -139,6 +141,7 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldOwnerID,
 	FieldAssessmentID,
+	FieldIsTest,
 	FieldCampaignID,
 	FieldIdentityHolderID,
 	FieldEntityID,
@@ -188,6 +191,8 @@ var (
 	OwnerIDValidator func(string) error
 	// AssessmentIDValidator is a validator for the "assessment_id" field. It is called by the builders before save.
 	AssessmentIDValidator func(string) error
+	// DefaultIsTest holds the default value on creation for the "is_test" field.
+	DefaultIsTest bool
 	// EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	EmailValidator func(string) error
 	// DefaultSendAttempts holds the default value on creation for the "send_attempts" field.
@@ -262,6 +267,11 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // ByAssessmentID orders the results by the assessment_id field.
 func ByAssessmentID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssessmentID, opts...).ToFunc()
+}
+
+// ByIsTest orders the results by the is_test field.
+func ByIsTest(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsTest, opts...).ToFunc()
 }
 
 // ByCampaignID orders the results by the campaign_id field.
