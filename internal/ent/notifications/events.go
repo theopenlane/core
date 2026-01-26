@@ -43,7 +43,7 @@ type taskFields struct {
 	entityID string
 	ownerID  string
 }
-type policyFields struct {
+type documentFields struct {
 	approverID string
 	name       string
 	entityID   string
@@ -57,10 +57,10 @@ type taskNotificationInput struct {
 	ownerID    string
 }
 
-type policyNotificationInput struct {
+type documentNotificationInput struct {
 	approverID string
-	policyName string
-	policyID   string
+	name       string
+	docID      string
 	ownerID    string
 }
 
@@ -202,43 +202,9 @@ func queryTaskFromDB(ctx *soiree.EventContext, fields *taskFields) error {
 
 // handleInternalPolicyMutation processes internal policy mutations and creates notifications when status = NEEDS_APPROVAL or mentions are added
 func handleInternalPolicyMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
-	props := ctx.Properties()
-	if props == nil {
-		return nil
-	}
-
-	// Check if status field changed - only trigger notification if this field was updated
-	statusVal := props.GetKey(internalpolicy.FieldStatus)
-	if statusVal != nil {
-		status, ok := statusVal.(enums.DocumentStatus)
-		if ok {
-
-			// Check if status is NEEDS_APPROVAL
-			if status == enums.DocumentNeedsApproval {
-				// Get approver_id from payload and props, fallback to database query if missing
-				fields, err := fetchPolicyFields(ctx, props, payload)
-				if err != nil {
-					logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to get internal policy fields")
-					return err
-				}
-
-				if fields.approverID == "" {
-					logx.FromContext(ctx.Context()).Warn().Msg("approver_id not set for internal policy with NEEDS_APPROVAL status")
-				} else {
-					input := policyNotificationInput{
-						approverID: fields.approverID,
-						policyName: fields.name,
-						policyID:   fields.entityID,
-						ownerID:    fields.ownerID,
-					}
-
-					if err := addInternalPolicyNotification(ctx, input); err != nil {
-						logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to add internal policy notification")
-						return err
-					}
-				}
-			}
-		}
+	if err := handleDocumentNeedsApproval(ctx, payload); err != nil {
+		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to handle document needs approval")
+		return err
 	}
 
 	// Check for mentions in policy details
@@ -250,6 +216,48 @@ func handleInternalPolicyMutation(ctx *soiree.EventContext, payload *events.Muta
 	return nil
 }
 
+func handleDocumentNeedsApproval(ctx *soiree.EventContext, payload *events.MutationPayload) error {
+	props := ctx.Properties()
+	if props == nil {
+		return nil
+	}
+
+	// Check if status field changed - only trigger notification if this field was updated
+	statusVal := props.GetKey("status")
+	if statusVal != nil {
+		status, ok := statusVal.(enums.DocumentStatus)
+		if ok {
+
+			// Check if status is NEEDS_APPROVAL
+			if status == enums.DocumentNeedsApproval {
+				// Get approver_id from payload and props, fallback to database query if missing
+				fields, err := fetchDocumentFields(ctx, props, payload)
+				if err != nil {
+					logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to get document fields")
+					return err
+				}
+
+				if fields.approverID == "" {
+					logx.FromContext(ctx.Context()).Warn().Msg("approver_id not set for document with NEEDS_APPROVAL status")
+				} else {
+					input := documentNotificationInput{
+						approverID: fields.approverID,
+						name:       fields.name,
+						docID:      fields.entityID,
+						ownerID:    fields.ownerID,
+					}
+
+					if err := addDocumentNotification(ctx, input, payload); err != nil {
+						logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to add document notification")
+						return err
+					}
+				}
+			}
+		}
+	}
+	return nil
+}
+
 // handleRiskMutation processes risk mutations and creates notifications for mentions
 func handleRiskMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	return handleObjectMentions(ctx, payload)
@@ -257,12 +265,17 @@ func handleRiskMutation(ctx *soiree.EventContext, payload *events.MutationPayloa
 
 // handleProcedureMutation processes procedure mutations and creates notifications for mentions
 func handleProcedureMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
+	if err := handleDocumentNeedsApproval(ctx, payload); err != nil {
+		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to handle document needs approval")
+		return err
+	}
+
 	return handleObjectMentions(ctx, payload)
 }
 
-// fetchPolicyFields retrieves internal policy fields from payload, props, or queries database if missing
-func fetchPolicyFields(ctx *soiree.EventContext, props soiree.Properties, payload *events.MutationPayload) (*policyFields, error) {
-	fields := &policyFields{}
+// fetchDocumentFields retrieves internal policy fields from payload, props, or queries database if missing
+func fetchDocumentFields(ctx *soiree.EventContext, props soiree.Properties, payload *events.MutationPayload) (*documentFields, error) {
+	fields := &documentFields{}
 
 	extractPolicyFromPayload(payload, fields)
 	extractPolicyFromProps(props, fields)
@@ -277,7 +290,7 @@ func fetchPolicyFields(ctx *soiree.EventContext, props soiree.Properties, payloa
 }
 
 // extractPolicyFromPayload extracts policy fields from mutation payload
-func extractPolicyFromPayload(payload *events.MutationPayload, fields *policyFields) {
+func extractPolicyFromPayload(payload *events.MutationPayload, fields *documentFields) {
 	if payload == nil {
 		return
 	}
@@ -305,7 +318,7 @@ func extractPolicyFromPayload(payload *events.MutationPayload, fields *policyFie
 }
 
 // extractPolicyFromProps extracts policy fields from properties
-func extractPolicyFromProps(props soiree.Properties, fields *policyFields) {
+func extractPolicyFromProps(props soiree.Properties, fields *documentFields) {
 	if fields.approverID == "" {
 		if approverID, ok := props.GetKey(internalpolicy.FieldApproverID).(string); ok {
 			fields.approverID = approverID
@@ -332,12 +345,12 @@ func extractPolicyFromProps(props soiree.Properties, fields *policyFields) {
 }
 
 // needsPolicyDBQuery checks if database query is needed
-func needsPolicyDBQuery(fields *policyFields) bool {
+func needsPolicyDBQuery(fields *documentFields) bool {
 	return fields.name == "" || fields.entityID == "" || fields.ownerID == "" || fields.approverID == ""
 }
 
 // queryPolicyFromDB queries policy from database to fill missing fields
-func queryPolicyFromDB(ctx *soiree.EventContext, fields *policyFields) error {
+func queryPolicyFromDB(ctx *soiree.EventContext, fields *documentFields) error {
 	if fields.entityID == "" {
 		return ErrEntityIDNotFound
 	}
@@ -378,7 +391,7 @@ func addTaskAssigneeNotification(ctx *soiree.EventContext, input taskNotificatio
 
 	// create the data map with the URL
 	dataMap := map[string]any{
-		"url": fmt.Sprintf("%s/tasks?id=%s", consoleURL, input.taskID),
+		"url": getURLPathForObject(consoleURL, input.taskID, "Task"),
 	}
 
 	topic := enums.NotificationTopicTaskAssignment
@@ -395,7 +408,7 @@ func addTaskAssigneeNotification(ctx *soiree.EventContext, input taskNotificatio
 	return newNotificationCreation(ctx, []string{input.assigneeID}, notifInput)
 }
 
-func addInternalPolicyNotification(ctx *soiree.EventContext, input policyNotificationInput) error {
+func addDocumentNotification(ctx *soiree.EventContext, input documentNotificationInput, payload *events.MutationPayload) error {
 	client, ok := soiree.ClientAs[*generated.Client](ctx)
 	if !ok {
 		return nil
@@ -424,20 +437,31 @@ func addInternalPolicyNotification(ctx *soiree.EventContext, input policyNotific
 
 	consoleURL := client.EntConfig.Notifications.ConsoleURL
 
+	objectName := ""
+	switch payload.Mutation.(type) {
+	case *generated.InternalPolicyMutation:
+		objectName = "Internal Policy"
+	case *generated.ProcedureMutation:
+		objectName = "Procedure"
+	default:
+		logx.FromContext(ctx.Context()).Warn().Msg("unsupported mutation type for document notification")
+		return nil
+	}
+
 	// create the data map with the URL
 	dataMap := map[string]any{
-		"url": fmt.Sprintf("%s/policies/%s", consoleURL, input.policyID),
+		"url": getURLPathForObject(consoleURL, input.docID, payload.Mutation.Type()),
 	}
 
 	topic := enums.NotificationTopicApproval
 	notifInput := &generated.CreateNotificationInput{
 		NotificationType: enums.NotificationTypeOrganization,
-		Title:            "Policy approval required",
-		Body:             fmt.Sprintf("%s needs approval, internalPolicy", input.policyName),
+		Title:            fmt.Sprintf("%s approval required", objectName),
+		Body:             fmt.Sprintf("%s needs approval", input.name),
 		Data:             dataMap,
 		OwnerID:          &input.ownerID,
 		Topic:            &topic,
-		ObjectType:       "InternalPolicy",
+		ObjectType:       payload.Mutation.Type(),
 	}
 
 	return newNotificationCreation(ctx, userIDs, notifInput)
@@ -457,7 +481,7 @@ func newNotificationCreation(ctx *soiree.EventContext, userIDs []string, input *
 		mut := client.Notification.Create().SetInput(*input).SetUserID(userID)
 
 		if _, err := mut.Save(allowCtx); err != nil {
-			logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to create notification")
+			logx.FromContext(ctx.Context()).Error().Err(err).Str("user_id", userID).Msg("failed to create notification")
 			return err
 		}
 	}
