@@ -59,6 +59,7 @@ var (
 	flagPassword       = flag.String("password", "", "Demo user password (env: WORKFLOW_DEMO_PASSWORD)")
 	flagOrgID          = flag.String("org-id", "", "Existing organization ID (env: WORKFLOW_ORG_ID)")
 	flagUseDefaultOrg  = flag.Bool("use-default-org", false, "Use the user's default org instead of creating a new one (env: WORKFLOW_USE_DEFAULT_ORG)")
+	flagAPIToken       = flag.String("api-token", "", "API token for authentication, bypasses login (env: OPENLANE_API_TOKEN)")
 )
 
 // main runs the workflow demo scenarios
@@ -74,14 +75,14 @@ func main() {
 	flag.Parse()
 
 	config := openlane.NewDefaultConfig()
-	if baseURL := firstNonEmpty(*flagOpenlaneAPIURL, os.Getenv("OPENLANE_API_URL")); baseURL != "" {
-		parsed, err := url.Parse(baseURL)
-		if err != nil {
-			log.Fatalf("Invalid OPENLANE_API_URL %q: %v", baseURL, err)
-		}
-		config.BaseURL = parsed
-		fmt.Printf("\nUsing API URL from OPENLANE_API_URL: %s\n", parsed.String())
+	// Default to localhost to prevent accidental production usage
+	baseURL := firstNonEmpty(*flagOpenlaneAPIURL, os.Getenv("OPENLANE_API_URL"), "http://localhost:17608")
+	parsed, err := url.Parse(baseURL)
+	if err != nil {
+		log.Fatalf("Invalid API URL %q: %v", baseURL, err)
 	}
+	config.BaseURL = parsed
+	fmt.Printf("\nUsing API URL: %s\n", parsed.String())
 
 	client, err := newClient(config.BaseURL)
 	if err != nil {
@@ -104,13 +105,21 @@ func main() {
 		fmt.Printf("   User may already exist (register failed: %v), attempting login...\n", err)
 	} else {
 		fmt.Printf("   Registered new user: %s\n", email)
-		fmt.Printf("   Verifying user with token: %s\n", registerResp.Token[:20]+"...")
+		if registerResp.Token != "" {
+			tokenPreview := registerResp.Token
+			if len(tokenPreview) > 20 {
+				tokenPreview = tokenPreview[:20] + "..."
+			}
+			fmt.Printf("   Verifying user with token: %s\n", tokenPreview)
 
-		verifyResp, err := client.VerifyEmail(ctx, &api.VerifyRequest{Token: registerResp.Token})
-		if err != nil {
-			log.Fatalf("Failed to verify user: %v", err)
+			verifyResp, err := client.VerifyEmail(ctx, &api.VerifyRequest{Token: registerResp.Token})
+			if err != nil {
+				log.Fatalf("Failed to verify user: %v", err)
+			}
+			fmt.Printf("   User verified: %s\n", verifyResp.Email)
+		} else {
+			fmt.Println("   No verification token returned (email verification may be disabled)")
 		}
-		fmt.Printf("   User verified: %s\n", verifyResp.Email)
 	}
 
 	fmt.Println("\nAuthenticating...")
