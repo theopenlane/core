@@ -43,7 +43,7 @@ func HookTemplate() ent.Hook {
 func HookTemplateFiles() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TemplateFunc(func(ctx context.Context, m *generated.TemplateMutation) (generated.Value, error) {
-			if ctx.Value(clearingNDAFilesKeyOp{}) != nil {
+			if ok, _ := ctx.Value(clearingNDAFilesKeyOp{}).(bool); ok {
 				return next.Mutate(ctx, m)
 			}
 
