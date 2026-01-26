@@ -5,7 +5,7 @@ import (
 )
 
 func TestGetURLPathForObject(t *testing.T) {
-	base := "/base"
+	base := "https://console.theopenlane.io"
 	objectID := "123"
 
 	tests := []struct {
@@ -16,37 +16,37 @@ func TestGetURLPathForObject(t *testing.T) {
 		{
 			name:       "InternalPolicy",
 			objectType: "InternalPolicy",
-			want:       base + "/policies/123/view",
+			want:       "https://console.theopenlane.io/policies/123/view",
 		},
 		{
 			name:       "Procedure",
 			objectType: "Procedure",
-			want:       base + "/procedures/123/view",
+			want:       "https://console.theopenlane.io/procedures/123/view",
 		},
 		{
 			name:       "Risk",
 			objectType: "Risk",
-			want:       base + "/risks/123",
+			want:       "https://console.theopenlane.io/risks/123",
 		},
 		{
 			name:       "Task",
 			objectType: "Task",
-			want:       base + "/tasks?id=123",
+			want:       "https://console.theopenlane.io/tasks?id=123",
 		},
 		{
 			name:       "Control",
 			objectType: "Control",
-			want:       base + "/controls/123",
+			want:       "https://console.theopenlane.io/controls/123",
 		},
 		{
 			name:       "Evidence",
 			objectType: "Evidence",
-			want:       base + "/evidence?id=123",
+			want:       "https://console.theopenlane.io/evidence?id=123",
 		},
 		{
 			name:       "TrustCenterNDARequest",
 			objectType: "TrustCenterNDARequest",
-			want:       base + "/trust-center/NDAs",
+			want:       "https://console.theopenlane.io/trust-center/NDAs",
 		},
 		{
 			name:       "UnknownType",
