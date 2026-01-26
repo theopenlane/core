@@ -94,6 +94,14 @@ type InternalPolicyHistory struct {
 	InternalPolicyKindName string `json:"internal_policy_kind_name,omitempty"`
 	// the kind of the internal_policy
 	InternalPolicyKindID string `json:"internal_policy_kind_id,omitempty"`
+	// the environment of the internal_policy
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the internal_policy
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the internal_policy
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the internal_policy
+	ScopeID string `json:"scope_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
 	selectValues           sql.SelectValues
@@ -110,7 +118,7 @@ func (*InternalPolicyHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case internalpolicyhistory.FieldSystemOwned, internalpolicyhistory.FieldApprovalRequired, internalpolicyhistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldInternalNotes, internalpolicyhistory.FieldSystemInternalID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID, internalpolicyhistory.FieldSummary, internalpolicyhistory.FieldURL, internalpolicyhistory.FieldFileID, internalpolicyhistory.FieldInternalPolicyKindName, internalpolicyhistory.FieldInternalPolicyKindID:
+		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldInternalNotes, internalpolicyhistory.FieldSystemInternalID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID, internalpolicyhistory.FieldSummary, internalpolicyhistory.FieldURL, internalpolicyhistory.FieldFileID, internalpolicyhistory.FieldInternalPolicyKindName, internalpolicyhistory.FieldInternalPolicyKindID, internalpolicyhistory.FieldEnvironmentName, internalpolicyhistory.FieldEnvironmentID, internalpolicyhistory.FieldScopeName, internalpolicyhistory.FieldScopeID:
 			values[i] = new(sql.NullString)
 		case internalpolicyhistory.FieldHistoryTime, internalpolicyhistory.FieldCreatedAt, internalpolicyhistory.FieldUpdatedAt, internalpolicyhistory.FieldDeletedAt, internalpolicyhistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -371,6 +379,30 @@ func (_m *InternalPolicyHistory) assignValues(columns []string, values []any) er
 			} else if value.Valid {
 				_m.InternalPolicyKindID = value.String
 			}
+		case internalpolicyhistory.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case internalpolicyhistory.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case internalpolicyhistory.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case internalpolicyhistory.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
+			}
 		case internalpolicyhistory.FieldWorkflowEligibleMarker:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
@@ -528,6 +560,18 @@ func (_m *InternalPolicyHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("internal_policy_kind_id=")
 	builder.WriteString(_m.InternalPolicyKindID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))

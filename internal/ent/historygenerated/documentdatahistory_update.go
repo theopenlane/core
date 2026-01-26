@@ -124,6 +124,86 @@ func (_u *DocumentDataHistoryUpdate) ClearTags() *DocumentDataHistoryUpdate {
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *DocumentDataHistoryUpdate) SetEnvironmentName(v string) *DocumentDataHistoryUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *DocumentDataHistoryUpdate) SetNillableEnvironmentName(v *string) *DocumentDataHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *DocumentDataHistoryUpdate) ClearEnvironmentName() *DocumentDataHistoryUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *DocumentDataHistoryUpdate) SetEnvironmentID(v string) *DocumentDataHistoryUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *DocumentDataHistoryUpdate) SetNillableEnvironmentID(v *string) *DocumentDataHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *DocumentDataHistoryUpdate) ClearEnvironmentID() *DocumentDataHistoryUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *DocumentDataHistoryUpdate) SetScopeName(v string) *DocumentDataHistoryUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *DocumentDataHistoryUpdate) SetNillableScopeName(v *string) *DocumentDataHistoryUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *DocumentDataHistoryUpdate) ClearScopeName() *DocumentDataHistoryUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *DocumentDataHistoryUpdate) SetScopeID(v string) *DocumentDataHistoryUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *DocumentDataHistoryUpdate) SetNillableScopeID(v *string) *DocumentDataHistoryUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *DocumentDataHistoryUpdate) ClearScopeID() *DocumentDataHistoryUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetTemplateID sets the "template_id" field.
 func (_u *DocumentDataHistoryUpdate) SetTemplateID(v string) *DocumentDataHistoryUpdate {
 	_u.mutation.SetTemplateID(v)
@@ -259,6 +339,30 @@ func (_u *DocumentDataHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(documentdatahistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(documentdatahistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(documentdatahistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(documentdatahistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(documentdatahistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(documentdatahistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(documentdatahistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldScopeID, field.TypeString)
+	}
 	if value, ok := _u.mutation.TemplateID(); ok {
 		_spec.SetField(documentdatahistory.FieldTemplateID, field.TypeString, value)
 	}
@@ -379,6 +483,86 @@ func (_u *DocumentDataHistoryUpdateOne) AppendTags(v []string) *DocumentDataHist
 // ClearTags clears the value of the "tags" field.
 func (_u *DocumentDataHistoryUpdateOne) ClearTags() *DocumentDataHistoryUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *DocumentDataHistoryUpdateOne) SetEnvironmentName(v string) *DocumentDataHistoryUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *DocumentDataHistoryUpdateOne) SetNillableEnvironmentName(v *string) *DocumentDataHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *DocumentDataHistoryUpdateOne) ClearEnvironmentName() *DocumentDataHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *DocumentDataHistoryUpdateOne) SetEnvironmentID(v string) *DocumentDataHistoryUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *DocumentDataHistoryUpdateOne) SetNillableEnvironmentID(v *string) *DocumentDataHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *DocumentDataHistoryUpdateOne) ClearEnvironmentID() *DocumentDataHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *DocumentDataHistoryUpdateOne) SetScopeName(v string) *DocumentDataHistoryUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *DocumentDataHistoryUpdateOne) SetNillableScopeName(v *string) *DocumentDataHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *DocumentDataHistoryUpdateOne) ClearScopeName() *DocumentDataHistoryUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *DocumentDataHistoryUpdateOne) SetScopeID(v string) *DocumentDataHistoryUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *DocumentDataHistoryUpdateOne) SetNillableScopeID(v *string) *DocumentDataHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *DocumentDataHistoryUpdateOne) ClearScopeID() *DocumentDataHistoryUpdateOne {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -546,6 +730,30 @@ func (_u *DocumentDataHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Doc
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(documentdatahistory.FieldOwnerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(documentdatahistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(documentdatahistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(documentdatahistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(documentdatahistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(documentdatahistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(documentdatahistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldScopeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.TemplateID(); ok {
 		_spec.SetField(documentdatahistory.FieldTemplateID, field.TypeString, value)

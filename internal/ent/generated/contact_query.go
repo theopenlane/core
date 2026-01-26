@@ -13,6 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -26,17 +28,21 @@ import (
 // ContactQuery is the builder for querying Contact entities.
 type ContactQuery struct {
 	config
-	ctx               *QueryContext
-	order             []contact.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.Contact
-	withOwner         *OrganizationQuery
-	withEntities      *EntityQuery
-	withFiles         *FileQuery
-	loadTotal         []func(context.Context, []*Contact) error
-	modifiers         []func(*sql.Selector)
-	withNamedEntities map[string]*EntityQuery
-	withNamedFiles    map[string]*FileQuery
+	ctx                      *QueryContext
+	order                    []contact.OrderOption
+	inters                   []Interceptor
+	predicates               []predicate.Contact
+	withOwner                *OrganizationQuery
+	withEntities             *EntityQuery
+	withCampaigns            *CampaignQuery
+	withCampaignTargets      *CampaignTargetQuery
+	withFiles                *FileQuery
+	loadTotal                []func(context.Context, []*Contact) error
+	modifiers                []func(*sql.Selector)
+	withNamedEntities        map[string]*EntityQuery
+	withNamedCampaigns       map[string]*CampaignQuery
+	withNamedCampaignTargets map[string]*CampaignTargetQuery
+	withNamedFiles           map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -117,6 +123,56 @@ func (_q *ContactQuery) QueryEntities() *EntityQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.EntityContacts
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaigns chains the current query on the "campaigns" edge.
+func (_q *ContactQuery) QueryCampaigns() *CampaignQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, selector),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, contact.CampaignsTable, contact.CampaignsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignContacts
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaignTargets chains the current query on the "campaign_targets" edge.
+func (_q *ContactQuery) QueryCampaignTargets() *CampaignTargetQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, selector),
+			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, contact.CampaignTargetsTable, contact.CampaignTargetsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -335,14 +391,16 @@ func (_q *ContactQuery) Clone() *ContactQuery {
 		return nil
 	}
 	return &ContactQuery{
-		config:       _q.config,
-		ctx:          _q.ctx.Clone(),
-		order:        append([]contact.OrderOption{}, _q.order...),
-		inters:       append([]Interceptor{}, _q.inters...),
-		predicates:   append([]predicate.Contact{}, _q.predicates...),
-		withOwner:    _q.withOwner.Clone(),
-		withEntities: _q.withEntities.Clone(),
-		withFiles:    _q.withFiles.Clone(),
+		config:              _q.config,
+		ctx:                 _q.ctx.Clone(),
+		order:               append([]contact.OrderOption{}, _q.order...),
+		inters:              append([]Interceptor{}, _q.inters...),
+		predicates:          append([]predicate.Contact{}, _q.predicates...),
+		withOwner:           _q.withOwner.Clone(),
+		withEntities:        _q.withEntities.Clone(),
+		withCampaigns:       _q.withCampaigns.Clone(),
+		withCampaignTargets: _q.withCampaignTargets.Clone(),
+		withFiles:           _q.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -369,6 +427,28 @@ func (_q *ContactQuery) WithEntities(opts ...func(*EntityQuery)) *ContactQuery {
 		opt(query)
 	}
 	_q.withEntities = query
+	return _q
+}
+
+// WithCampaigns tells the query-builder to eager-load the nodes that are connected to
+// the "campaigns" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ContactQuery) WithCampaigns(opts ...func(*CampaignQuery)) *ContactQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaigns = query
+	return _q
+}
+
+// WithCampaignTargets tells the query-builder to eager-load the nodes that are connected to
+// the "campaign_targets" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ContactQuery) WithCampaignTargets(opts ...func(*CampaignTargetQuery)) *ContactQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaignTargets = query
 	return _q
 }
 
@@ -467,9 +547,11 @@ func (_q *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	var (
 		nodes       = []*Contact{}
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [5]bool{
 			_q.withOwner != nil,
 			_q.withEntities != nil,
+			_q.withCampaigns != nil,
+			_q.withCampaignTargets != nil,
 			_q.withFiles != nil,
 		}
 	)
@@ -509,6 +591,20 @@ func (_q *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	if query := _q.withCampaigns; query != nil {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *Contact) { n.Edges.Campaigns = []*Campaign{} },
+			func(n *Contact, e *Campaign) { n.Edges.Campaigns = append(n.Edges.Campaigns, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaignTargets; query != nil {
+		if err := _q.loadCampaignTargets(ctx, query, nodes,
+			func(n *Contact) { n.Edges.CampaignTargets = []*CampaignTarget{} },
+			func(n *Contact, e *CampaignTarget) { n.Edges.CampaignTargets = append(n.Edges.CampaignTargets, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withFiles; query != nil {
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Contact) { n.Edges.Files = []*File{} },
@@ -520,6 +616,20 @@ func (_q *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Contact) { n.appendNamedEntities(name) },
 			func(n *Contact, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaigns {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *Contact) { n.appendNamedCampaigns(name) },
+			func(n *Contact, e *Campaign) { n.appendNamedCampaigns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaignTargets {
+		if err := _q.loadCampaignTargets(ctx, query, nodes,
+			func(n *Contact) { n.appendNamedCampaignTargets(name) },
+			func(n *Contact, e *CampaignTarget) { n.appendNamedCampaignTargets(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -626,6 +736,98 @@ func (_q *ContactQuery) loadEntities(ctx context.Context, query *EntityQuery, no
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (_q *ContactQuery) loadCampaigns(ctx context.Context, query *CampaignQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *Campaign)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Contact)
+	nids := make(map[string]map[*Contact]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(contact.CampaignsTable)
+		joinT.Schema(_q.schemaConfig.CampaignContacts)
+		s.Join(joinT).On(s.C(campaign.FieldID), joinT.C(contact.CampaignsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(contact.CampaignsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(contact.CampaignsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Contact]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Campaign](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "campaigns" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ContactQuery) loadCampaignTargets(ctx context.Context, query *CampaignTargetQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *CampaignTarget)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Contact)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(campaigntarget.FieldContactID)
+	}
+	query.Where(predicate.CampaignTarget(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(contact.CampaignTargetsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ContactID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "contact_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -804,6 +1006,34 @@ func (_q *ContactQuery) WithNamedEntities(name string, opts ...func(*EntityQuery
 		_q.withNamedEntities = make(map[string]*EntityQuery)
 	}
 	_q.withNamedEntities[name] = query
+	return _q
+}
+
+// WithNamedCampaigns tells the query-builder to eager-load the nodes that are connected to the "campaigns"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ContactQuery) WithNamedCampaigns(name string, opts ...func(*CampaignQuery)) *ContactQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaigns == nil {
+		_q.withNamedCampaigns = make(map[string]*CampaignQuery)
+	}
+	_q.withNamedCampaigns[name] = query
+	return _q
+}
+
+// WithNamedCampaignTargets tells the query-builder to eager-load the nodes that are connected to the "campaign_targets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ContactQuery) WithNamedCampaignTargets(name string, opts ...func(*CampaignTargetQuery)) *ContactQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaignTargets == nil {
+		_q.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery)
+	}
+	_q.withNamedCampaignTargets[name] = query
 	return _q
 }
 

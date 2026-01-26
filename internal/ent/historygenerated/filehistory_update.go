@@ -164,6 +164,86 @@ func (_u *FileHistoryUpdate) ClearSystemInternalID() *FileHistoryUpdate {
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *FileHistoryUpdate) SetEnvironmentName(v string) *FileHistoryUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *FileHistoryUpdate) SetNillableEnvironmentName(v *string) *FileHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *FileHistoryUpdate) ClearEnvironmentName() *FileHistoryUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *FileHistoryUpdate) SetEnvironmentID(v string) *FileHistoryUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *FileHistoryUpdate) SetNillableEnvironmentID(v *string) *FileHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *FileHistoryUpdate) ClearEnvironmentID() *FileHistoryUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *FileHistoryUpdate) SetScopeName(v string) *FileHistoryUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *FileHistoryUpdate) SetNillableScopeName(v *string) *FileHistoryUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *FileHistoryUpdate) ClearScopeName() *FileHistoryUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *FileHistoryUpdate) SetScopeID(v string) *FileHistoryUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *FileHistoryUpdate) SetNillableScopeID(v *string) *FileHistoryUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *FileHistoryUpdate) ClearScopeID() *FileHistoryUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetProvidedFileName sets the "provided_file_name" field.
 func (_u *FileHistoryUpdate) SetProvidedFileName(v string) *FileHistoryUpdate {
 	_u.mutation.SetProvidedFileName(v)
@@ -625,6 +705,30 @@ func (_u *FileHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(filehistory.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(filehistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(filehistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(filehistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(filehistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(filehistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(filehistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(filehistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(filehistory.FieldScopeID, field.TypeString)
+	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)
 	}
@@ -881,6 +985,86 @@ func (_u *FileHistoryUpdateOne) SetNillableSystemInternalID(v *string) *FileHist
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *FileHistoryUpdateOne) ClearSystemInternalID() *FileHistoryUpdateOne {
 	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *FileHistoryUpdateOne) SetEnvironmentName(v string) *FileHistoryUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *FileHistoryUpdateOne) SetNillableEnvironmentName(v *string) *FileHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *FileHistoryUpdateOne) ClearEnvironmentName() *FileHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *FileHistoryUpdateOne) SetEnvironmentID(v string) *FileHistoryUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *FileHistoryUpdateOne) SetNillableEnvironmentID(v *string) *FileHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *FileHistoryUpdateOne) ClearEnvironmentID() *FileHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *FileHistoryUpdateOne) SetScopeName(v string) *FileHistoryUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *FileHistoryUpdateOne) SetNillableScopeName(v *string) *FileHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *FileHistoryUpdateOne) ClearScopeName() *FileHistoryUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *FileHistoryUpdateOne) SetScopeID(v string) *FileHistoryUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *FileHistoryUpdateOne) SetNillableScopeID(v *string) *FileHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *FileHistoryUpdateOne) ClearScopeID() *FileHistoryUpdateOne {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -1374,6 +1558,30 @@ func (_u *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHistory
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(filehistory.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(filehistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(filehistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(filehistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(filehistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(filehistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(filehistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(filehistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(filehistory.FieldScopeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)

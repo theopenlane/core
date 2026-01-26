@@ -210,12 +210,11 @@ func handleInternalPolicyMutation(ctx *soiree.EventContext, payload *events.Muta
 	// Check if status field changed - only trigger notification if this field was updated
 	statusVal := props.GetKey(internalpolicy.FieldStatus)
 	if statusVal != nil {
-		status, ok := statusVal.(string)
+		status, ok := statusVal.(enums.DocumentStatus)
 		if ok {
-			statusEnum := enums.ToDocumentStatus(status)
 
 			// Check if status is NEEDS_APPROVAL
-			if statusEnum == &enums.DocumentNeedsApproval {
+			if status == enums.DocumentNeedsApproval {
 				// Get approver_id from payload and props, fallback to database query if missing
 				fields, err := fetchPolicyFields(ctx, props, payload)
 				if err != nil {

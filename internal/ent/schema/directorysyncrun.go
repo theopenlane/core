@@ -94,6 +94,8 @@ func (r DirectorySyncRun) Mixin() []ent.Mixin {
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(r),
+			newCustomEnumMixin(r, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(r, withEnumFieldName("scope"), withGlobalEnum()),
 		},
 	}.getMixins(r)
 }

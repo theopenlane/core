@@ -37,12 +37,16 @@ type Config struct {
 
 type ResolverRoot interface {
 	ActionPlan() ActionPlanResolver
+	Campaign() CampaignResolver
+	CampaignTarget() CampaignTargetResolver
 	Control() ControlResolver
 	Evidence() EvidenceResolver
 	Group() GroupResolver
+	IdentityHolder() IdentityHolderResolver
 	InternalPolicy() InternalPolicyResolver
 	Mutation() MutationResolver
 	Notification() NotificationResolver
+	Platform() PlatformResolver
 	Procedure() ProcedureResolver
 	Query() QueryResolver
 	Subcontrol() SubcontrolResolver
@@ -53,6 +57,7 @@ type ResolverRoot interface {
 	CreateMappedControlInput() CreateMappedControlInputResolver
 	CreateNotificationInput() CreateNotificationInputResolver
 	CreateOrganizationInput() CreateOrganizationInputResolver
+	CreateScanInput() CreateScanInputResolver
 	CreateTrustCenterInput() CreateTrustCenterInputResolver
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
 	UpdateControlInput() UpdateControlInputResolver
@@ -138,7 +143,7 @@ type ComplexityRoot struct {
 		ActionPlanKind                  func(childComplexity int) int
 		ActionPlanKindID                func(childComplexity int) int
 		ActionPlanKindName              func(childComplexity int) int
-		ActiveWorkflowInstance          func(childComplexity int) int
+		ActiveWorkflowInstances         func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
@@ -164,6 +169,7 @@ type ComplexityRoot struct {
 		FileID                          func(childComplexity int) int
 		Findings                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		HasPendingWorkflow              func(childComplexity int) int
+		HasWorkflowHistory              func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
@@ -182,6 +188,7 @@ type ComplexityRoot struct {
 		Reviews                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		Revision                        func(childComplexity int) int
 		Risks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scans                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		Source                          func(childComplexity int) int
 		Status                          func(childComplexity int) int
 		Summary                         func(childComplexity int) int
@@ -198,6 +205,7 @@ type ComplexityRoot struct {
 		Vulnerabilities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 		WorkflowEligibleMarker          func(childComplexity int) int
 		WorkflowObjectRefs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	ActionPlanBulkCreatePayload struct {
@@ -240,14 +248,17 @@ type ComplexityRoot struct {
 		AssessmentResponses func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
 		AssessmentType      func(childComplexity int) int
 		BlockedGroups       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Campaigns           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		CreatedAt           func(childComplexity int) int
 		CreatedBy           func(childComplexity int) int
 		Editors             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                  func(childComplexity int) int
+		IdentityHolders     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		Jsonconfig          func(childComplexity int) int
 		Name                func(childComplexity int) int
 		Owner               func(childComplexity int) int
 		OwnerID             func(childComplexity int) int
+		Platforms           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		ResponseDueDuration func(childComplexity int) int
 		Tags                func(childComplexity int) int
 		Template            func(childComplexity int) int
@@ -282,24 +293,38 @@ type ComplexityRoot struct {
 	}
 
 	AssessmentResponse struct {
-		Assessment     func(childComplexity int) int
-		AssessmentID   func(childComplexity int) int
-		AssignedAt     func(childComplexity int) int
-		CompletedAt    func(childComplexity int) int
-		CreatedAt      func(childComplexity int) int
-		CreatedBy      func(childComplexity int) int
-		Document       func(childComplexity int) int
-		DocumentDataID func(childComplexity int) int
-		DueDate        func(childComplexity int) int
-		Email          func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Owner          func(childComplexity int) int
-		OwnerID        func(childComplexity int) int
-		SendAttempts   func(childComplexity int) int
-		StartedAt      func(childComplexity int) int
-		Status         func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
+		Assessment       func(childComplexity int) int
+		AssessmentID     func(childComplexity int) int
+		AssignedAt       func(childComplexity int) int
+		Campaign         func(childComplexity int) int
+		CampaignID       func(childComplexity int) int
+		CompletedAt      func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Document         func(childComplexity int) int
+		DocumentDataID   func(childComplexity int) int
+		DueDate          func(childComplexity int) int
+		Email            func(childComplexity int) int
+		EmailClickCount  func(childComplexity int) int
+		EmailClickedAt   func(childComplexity int) int
+		EmailDeliveredAt func(childComplexity int) int
+		EmailMetadata    func(childComplexity int) int
+		EmailOpenCount   func(childComplexity int) int
+		EmailOpenedAt    func(childComplexity int) int
+		Entity           func(childComplexity int) int
+		EntityID         func(childComplexity int) int
+		ID               func(childComplexity int) int
+		IdentityHolder   func(childComplexity int) int
+		IdentityHolderID func(childComplexity int) int
+		IsTest           func(childComplexity int) int
+		LastEmailEventAt func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		SendAttempts     func(childComplexity int) int
+		StartedAt        func(childComplexity int) int
+		Status           func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	AssessmentResponseConnection struct {
@@ -326,30 +351,74 @@ type ComplexityRoot struct {
 	}
 
 	Asset struct {
-		AssetType        func(childComplexity int) int
-		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Categories       func(childComplexity int) int
-		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		Cpe              func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Description      func(childComplexity int) int
-		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		ID               func(childComplexity int) int
-		Identifier       func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Scans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Website          func(childComplexity int) int
+		AccessModel                 func(childComplexity int) int
+		AccessModelID               func(childComplexity int) int
+		AccessModelName             func(childComplexity int) int
+		AssetDataClassification     func(childComplexity int) int
+		AssetDataClassificationID   func(childComplexity int) int
+		AssetDataClassificationName func(childComplexity int) int
+		AssetSubtype                func(childComplexity int) int
+		AssetSubtypeID              func(childComplexity int) int
+		AssetSubtypeName            func(childComplexity int) int
+		AssetType                   func(childComplexity int) int
+		BlockedGroups               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Categories                  func(childComplexity int) int
+		ConnectedAssets             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		ConnectedFrom               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		ContainsPii                 func(childComplexity int) int
+		Controls                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CostCenter                  func(childComplexity int) int
+		Cpe                         func(childComplexity int) int
+		CreatedAt                   func(childComplexity int) int
+		CreatedBy                   func(childComplexity int) int
+		Criticality                 func(childComplexity int) int
+		CriticalityID               func(childComplexity int) int
+		CriticalityName             func(childComplexity int) int
+		Description                 func(childComplexity int) int
+		Editors                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		EncryptionStatus            func(childComplexity int) int
+		EncryptionStatusID          func(childComplexity int) int
+		EncryptionStatusName        func(childComplexity int) int
+		Entities                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment                 func(childComplexity int) int
+		EnvironmentID               func(childComplexity int) int
+		EnvironmentName             func(childComplexity int) int
+		EstimatedMonthlyCost        func(childComplexity int) int
+		ID                          func(childComplexity int) int
+		Identifier                  func(childComplexity int) int
+		IdentityHolders             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
+		InternalNotes               func(childComplexity int) int
+		InternalOwner               func(childComplexity int) int
+		InternalOwnerGroup          func(childComplexity int) int
+		InternalOwnerGroupID        func(childComplexity int) int
+		InternalOwnerUser           func(childComplexity int) int
+		InternalOwnerUserID         func(childComplexity int) int
+		Name                        func(childComplexity int) int
+		OutOfScopePlatforms         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		Owner                       func(childComplexity int) int
+		OwnerID                     func(childComplexity int) int
+		PhysicalLocation            func(childComplexity int) int
+		Platforms                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		PurchaseDate                func(childComplexity int) int
+		Region                      func(childComplexity int) int
+		Scans                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Scope                       func(childComplexity int) int
+		ScopeID                     func(childComplexity int) int
+		ScopeName                   func(childComplexity int) int
+		SecurityTier                func(childComplexity int) int
+		SecurityTierID              func(childComplexity int) int
+		SecurityTierName            func(childComplexity int) int
+		SourceIdentifier            func(childComplexity int) int
+		SourcePlatform              func(childComplexity int) int
+		SourcePlatformID            func(childComplexity int) int
+		SourceType                  func(childComplexity int) int
+		SystemInternalID            func(childComplexity int) int
+		SystemOwned                 func(childComplexity int) int
+		Tags                        func(childComplexity int) int
+		UpdatedAt                   func(childComplexity int) int
+		UpdatedBy                   func(childComplexity int) int
+		Viewers                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Website                     func(childComplexity int) int
 	}
 
 	AssetBulkCreatePayload struct {
@@ -383,24 +452,169 @@ type ComplexityRoot struct {
 		Asset func(childComplexity int) int
 	}
 
+	Campaign struct {
+		ActiveWorkflowInstances func(childComplexity int) int
+		Assessment              func(childComplexity int) int
+		AssessmentID            func(childComplexity int) int
+		AssessmentResponses     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
+		BlockedGroups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		CampaignTargets         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignTargetOrder, where *generated.CampaignTargetWhereInput) int
+		CampaignType            func(childComplexity int) int
+		CompletedAt             func(childComplexity int) int
+		Contacts                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Description             func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		DueDate                 func(childComplexity int) int
+		Editors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entity                  func(childComplexity int) int
+		EntityID                func(childComplexity int) int
+		Groups                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		HasPendingWorkflow      func(childComplexity int) int
+		HasWorkflowHistory      func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IdentityHolders         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
+		InternalOwner           func(childComplexity int) int
+		InternalOwnerGroup      func(childComplexity int) int
+		InternalOwnerGroupID    func(childComplexity int) int
+		InternalOwnerUser       func(childComplexity int) int
+		InternalOwnerUserID     func(childComplexity int) int
+		IsActive                func(childComplexity int) int
+		IsRecurring             func(childComplexity int) int
+		LastResentAt            func(childComplexity int) int
+		LastRunAt               func(childComplexity int) int
+		LaunchedAt              func(childComplexity int) int
+		Metadata                func(childComplexity int) int
+		Name                    func(childComplexity int) int
+		NextRunAt               func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		RecipientCount          func(childComplexity int) int
+		RecurrenceCron          func(childComplexity int) int
+		RecurrenceEndAt         func(childComplexity int) int
+		RecurrenceFrequency     func(childComplexity int) int
+		RecurrenceInterval      func(childComplexity int) int
+		RecurrenceTimezone      func(childComplexity int) int
+		ResendCount             func(childComplexity int) int
+		ScheduledAt             func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		Template                func(childComplexity int) int
+		TemplateID              func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		Users                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
+		Viewers                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		WorkflowEligibleMarker  func(childComplexity int) int
+		WorkflowObjectRefs      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
+	}
+
+	CampaignBulkCreatePayload struct {
+		Campaigns func(childComplexity int) int
+	}
+
+	CampaignConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	CampaignCreatePayload struct {
+		Campaign func(childComplexity int) int
+	}
+
+	CampaignDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	CampaignEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	CampaignTarget struct {
+		ActiveWorkflowInstances func(childComplexity int) int
+		Campaign                func(childComplexity int) int
+		CampaignID              func(childComplexity int) int
+		CompletedAt             func(childComplexity int) int
+		Contact                 func(childComplexity int) int
+		ContactID               func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Email                   func(childComplexity int) int
+		FullName                func(childComplexity int) int
+		Group                   func(childComplexity int) int
+		GroupID                 func(childComplexity int) int
+		HasPendingWorkflow      func(childComplexity int) int
+		HasWorkflowHistory      func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		Metadata                func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		SentAt                  func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		User                    func(childComplexity int) int
+		UserID                  func(childComplexity int) int
+		WorkflowEligibleMarker  func(childComplexity int) int
+		WorkflowObjectRefs      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
+	}
+
+	CampaignTargetBulkCreatePayload struct {
+		CampaignTargets func(childComplexity int) int
+	}
+
+	CampaignTargetConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	CampaignTargetCreatePayload struct {
+		CampaignTarget func(childComplexity int) int
+	}
+
+	CampaignTargetDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	CampaignTargetEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	CampaignTargetUpdatePayload struct {
+		CampaignTarget func(childComplexity int) int
+	}
+
+	CampaignUpdatePayload struct {
+		Campaign func(childComplexity int) int
+	}
+
 	Contact struct {
-		Address     func(childComplexity int) int
-		Company     func(childComplexity int) int
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		Email       func(childComplexity int) int
-		Entities    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		Files       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		FullName    func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Owner       func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		PhoneNumber func(childComplexity int) int
-		Status      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Title       func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		Address         func(childComplexity int) int
+		CampaignTargets func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignTargetOrder, where *generated.CampaignTargetWhereInput) int
+		Campaigns       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
+		Company         func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Email           func(childComplexity int) int
+		Entities        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Files           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		FullName        func(childComplexity int) int
+		ID              func(childComplexity int) int
+		Owner           func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		PhoneNumber     func(childComplexity int) int
+		Status          func(childComplexity int) int
+		Tags            func(childComplexity int) int
+		Title           func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
 	}
 
 	ContactBulkCreatePayload struct {
@@ -441,7 +655,7 @@ type ComplexityRoot struct {
 
 	Control struct {
 		ActionPlans                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		ActiveWorkflowInstance     func(childComplexity int) int
+		ActiveWorkflowInstances    func(childComplexity int) int
 		Aliases                    func(childComplexity int) int
 		AssessmentMethods          func(childComplexity int) int
 		AssessmentObjectives       func(childComplexity int) int
@@ -469,11 +683,15 @@ type ComplexityRoot struct {
 		Discussions                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayID                  func(childComplexity int) int
 		Editors                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Environment                func(childComplexity int) int
+		EnvironmentID              func(childComplexity int) int
+		EnvironmentName            func(childComplexity int) int
 		Evidence                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
 		Findings                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		HasPendingWorkflow         func(childComplexity int) int
+		HasWorkflowHistory         func(childComplexity int) int
 		ID                         func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
@@ -482,6 +700,7 @@ type ComplexityRoot struct {
 		Narratives                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner                      func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
+		Platforms                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Procedures                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RefCode                    func(childComplexity int) int
@@ -494,6 +713,9 @@ type ComplexityRoot struct {
 		Risks                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Scans                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		ScheduledJobs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
+		Scope                      func(childComplexity int) int
+		ScopeID                    func(childComplexity int) int
+		ScopeName                  func(childComplexity int) int
 		Source                     func(childComplexity int) int
 		Standard                   func(childComplexity int) int
 		StandardID                 func(childComplexity int) int
@@ -510,6 +732,7 @@ type ComplexityRoot struct {
 		UpdatedBy                  func(childComplexity int) int
 		WorkflowEligibleMarker     func(childComplexity int) int
 		WorkflowObjectRefs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	ControlBulkCreatePayload struct {
@@ -771,6 +994,7 @@ type ComplexityRoot struct {
 		ObjectType       func(childComplexity int) int
 		Owner            func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
+		Platforms        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Procedures       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RiskCategories   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
@@ -872,6 +1096,9 @@ type ComplexityRoot struct {
 		DirectorySyncRunID func(childComplexity int) int
 		DisplayID          func(childComplexity int) int
 		DisplayName        func(childComplexity int) int
+		Environment        func(childComplexity int) int
+		EnvironmentID      func(childComplexity int) int
+		EnvironmentName    func(childComplexity int) int
 		ExternalID         func(childComplexity int) int
 		FamilyName         func(childComplexity int) int
 		GivenName          func(childComplexity int) int
@@ -891,6 +1118,9 @@ type ComplexityRoot struct {
 		Profile            func(childComplexity int) int
 		ProfileHash        func(childComplexity int) int
 		RawProfileFileID   func(childComplexity int) int
+		Scope              func(childComplexity int) int
+		ScopeID            func(childComplexity int) int
+		ScopeName          func(childComplexity int) int
 		SecondaryKey       func(childComplexity int) int
 		SourceVersion      func(childComplexity int) int
 		Status             func(childComplexity int) int
@@ -938,6 +1168,9 @@ type ComplexityRoot struct {
 		DisplayID              func(childComplexity int) int
 		DisplayName            func(childComplexity int) int
 		Email                  func(childComplexity int) int
+		Environment            func(childComplexity int) int
+		EnvironmentID          func(childComplexity int) int
+		EnvironmentName        func(childComplexity int) int
 		ExternalID             func(childComplexity int) int
 		ExternalSharingAllowed func(childComplexity int) int
 		ID                     func(childComplexity int) int
@@ -951,6 +1184,9 @@ type ComplexityRoot struct {
 		Profile                func(childComplexity int) int
 		ProfileHash            func(childComplexity int) int
 		RawProfileFileID       func(childComplexity int) int
+		Scope                  func(childComplexity int) int
+		ScopeID                func(childComplexity int) int
+		ScopeName              func(childComplexity int) int
 		SourceVersion          func(childComplexity int) int
 		Status                 func(childComplexity int) int
 		Tags                   func(childComplexity int) int
@@ -996,6 +1232,9 @@ type ComplexityRoot struct {
 		DirectorySyncRun   func(childComplexity int) int
 		DirectorySyncRunID func(childComplexity int) int
 		DisplayID          func(childComplexity int) int
+		Environment        func(childComplexity int) int
+		EnvironmentID      func(childComplexity int) int
+		EnvironmentName    func(childComplexity int) int
 		Events             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		FirstSeenAt        func(childComplexity int) int
 		ID                 func(childComplexity int) int
@@ -1008,6 +1247,9 @@ type ComplexityRoot struct {
 		Owner              func(childComplexity int) int
 		OwnerID            func(childComplexity int) int
 		Role               func(childComplexity int) int
+		Scope              func(childComplexity int) int
+		ScopeID            func(childComplexity int) int
+		ScopeName          func(childComplexity int) int
 		Source             func(childComplexity int) int
 		UpdatedAt          func(childComplexity int) int
 		UpdatedBy          func(childComplexity int) int
@@ -1050,6 +1292,9 @@ type ComplexityRoot struct {
 		DirectoryGroups      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
 		DirectoryMemberships func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
 		DisplayID            func(childComplexity int) int
+		Environment          func(childComplexity int) int
+		EnvironmentID        func(childComplexity int) int
+		EnvironmentName      func(childComplexity int) int
 		Error                func(childComplexity int) int
 		FullCount            func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -1058,6 +1303,9 @@ type ComplexityRoot struct {
 		Owner                func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
 		RawManifestFileID    func(childComplexity int) int
+		Scope                func(childComplexity int) int
+		ScopeID              func(childComplexity int) int
+		ScopeName            func(childComplexity int) int
 		SourceCursor         func(childComplexity int) int
 		StartedAt            func(childComplexity int) int
 		Stats                func(childComplexity int) int
@@ -1139,19 +1387,25 @@ type ComplexityRoot struct {
 	}
 
 	DocumentData struct {
-		CreatedAt  func(childComplexity int) int
-		CreatedBy  func(childComplexity int) int
-		Data       func(childComplexity int) int
-		Entities   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		Files      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		ID         func(childComplexity int) int
-		Owner      func(childComplexity int) int
-		OwnerID    func(childComplexity int) int
-		Tags       func(childComplexity int) int
-		Template   func(childComplexity int) int
-		TemplateID func(childComplexity int) int
-		UpdatedAt  func(childComplexity int) int
-		UpdatedBy  func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Data            func(childComplexity int) int
+		Entities        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment     func(childComplexity int) int
+		EnvironmentID   func(childComplexity int) int
+		EnvironmentName func(childComplexity int) int
+		Files           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID              func(childComplexity int) int
+		Owner           func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		Scope           func(childComplexity int) int
+		ScopeID         func(childComplexity int) int
+		ScopeName       func(childComplexity int) int
+		Tags            func(childComplexity int) int
+		Template        func(childComplexity int) int
+		TemplateID      func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
 	}
 
 	DocumentDataBulkCreatePayload struct {
@@ -1186,33 +1440,94 @@ type ComplexityRoot struct {
 	}
 
 	Entity struct {
-		Assets           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Contacts         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Description      func(childComplexity int) int
-		DisplayName      func(childComplexity int) int
-		Documents        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
-		Domains          func(childComplexity int) int
-		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		EntityType       func(childComplexity int) int
-		EntityTypeID     func(childComplexity int) int
-		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		ID               func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Notes            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Scans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		Status           func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		AnnualSpend                           func(childComplexity int) int
+		ApprovedForUse                        func(childComplexity int) int
+		AssessmentResponses                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
+		Assets                                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		AuthMethods                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomTypeEnumOrder, where *generated.CustomTypeEnumWhereInput) int
+		AutoRenews                            func(childComplexity int) int
+		BillingModel                          func(childComplexity int) int
+		BlockedGroups                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Campaigns                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
+		Contacts                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
+		ContractEndDate                       func(childComplexity int) int
+		ContractRenewalAt                     func(childComplexity int) int
+		ContractStartDate                     func(childComplexity int) int
+		CreatedAt                             func(childComplexity int) int
+		CreatedBy                             func(childComplexity int) int
+		Description                           func(childComplexity int) int
+		DisplayName                           func(childComplexity int) int
+		Documents                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
+		Domains                               func(childComplexity int) int
+		Editors                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		EmployerIdentityHolders               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
+		EntityRelationshipState               func(childComplexity int) int
+		EntityRelationshipStateID             func(childComplexity int) int
+		EntityRelationshipStateName           func(childComplexity int) int
+		EntitySecurityQuestionnaireStatus     func(childComplexity int) int
+		EntitySecurityQuestionnaireStatusID   func(childComplexity int) int
+		EntitySecurityQuestionnaireStatusName func(childComplexity int) int
+		EntitySourceType                      func(childComplexity int) int
+		EntitySourceTypeID                    func(childComplexity int) int
+		EntitySourceTypeName                  func(childComplexity int) int
+		EntityType                            func(childComplexity int) int
+		EntityTypeID                          func(childComplexity int) int
+		Environment                           func(childComplexity int) int
+		EnvironmentID                         func(childComplexity int) int
+		EnvironmentName                       func(childComplexity int) int
+		Files                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		HasSoc2                               func(childComplexity int) int
+		ID                                    func(childComplexity int) int
+		IdentityHolders                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
+		Integrations                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalNotes                         func(childComplexity int) int
+		InternalOwner                         func(childComplexity int) int
+		InternalOwnerGroup                    func(childComplexity int) int
+		InternalOwnerGroupID                  func(childComplexity int) int
+		InternalOwnerUser                     func(childComplexity int) int
+		InternalOwnerUserID                   func(childComplexity int) int
+		LastReviewedAt                        func(childComplexity int) int
+		LinkedAssetIds                        func(childComplexity int) int
+		Links                                 func(childComplexity int) int
+		MfaEnforced                           func(childComplexity int) int
+		MfaSupported                          func(childComplexity int) int
+		Name                                  func(childComplexity int) int
+		NextReviewAt                          func(childComplexity int) int
+		Notes                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		OutOfScopePlatforms                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		Owner                                 func(childComplexity int) int
+		OwnerID                               func(childComplexity int) int
+		Platforms                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		ProvidedServices                      func(childComplexity int) int
+		RenewalRisk                           func(childComplexity int) int
+		ReviewFrequency                       func(childComplexity int) int
+		ReviewedBy                            func(childComplexity int) int
+		ReviewedByGroup                       func(childComplexity int) int
+		ReviewedByGroupID                     func(childComplexity int) int
+		ReviewedByUser                        func(childComplexity int) int
+		ReviewedByUserID                      func(childComplexity int) int
+		RiskRating                            func(childComplexity int) int
+		RiskScore                             func(childComplexity int) int
+		SSOEnforced                           func(childComplexity int) int
+		Scans                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Scope                                 func(childComplexity int) int
+		ScopeID                               func(childComplexity int) int
+		ScopeName                             func(childComplexity int) int
+		Soc2PeriodEnd                         func(childComplexity int) int
+		SourcePlatforms                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		SpendCurrency                         func(childComplexity int) int
+		Status                                func(childComplexity int) int
+		StatusPageURL                         func(childComplexity int) int
+		Subprocessors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
+		SystemInternalID                      func(childComplexity int) int
+		SystemOwned                           func(childComplexity int) int
+		Tags                                  func(childComplexity int) int
+		TerminationNoticeDays                 func(childComplexity int) int
+		Tier                                  func(childComplexity int) int
+		UpdatedAt                             func(childComplexity int) int
+		UpdatedBy                             func(childComplexity int) int
+		VendorMetadata                        func(childComplexity int) int
+		Viewers                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	EntityBulkCreatePayload struct {
@@ -1350,36 +1665,46 @@ type ComplexityRoot struct {
 	}
 
 	Evidence struct {
-		ActiveWorkflowInstance func(childComplexity int) int
-		CollectionProcedure    func(childComplexity int) int
-		Comments               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		ControlImplementations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
-		ControlObjectives      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
-		Controls               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		CreationDate           func(childComplexity int) int
-		Description            func(childComplexity int) int
-		DisplayID              func(childComplexity int) int
-		Files                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		HasPendingWorkflow     func(childComplexity int) int
-		ID                     func(childComplexity int) int
-		IsAutomated            func(childComplexity int) int
-		Name                   func(childComplexity int) int
-		Owner                  func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		Programs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		RenewalDate            func(childComplexity int) int
-		Source                 func(childComplexity int) int
-		Status                 func(childComplexity int) int
-		Subcontrols            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Tags                   func(childComplexity int) int
-		Tasks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		URL                    func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
-		WorkflowEligibleMarker func(childComplexity int) int
-		WorkflowObjectRefs     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		ActiveWorkflowInstances func(childComplexity int) int
+		CollectionProcedure     func(childComplexity int) int
+		Comments                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		ControlImplementations  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
+		ControlObjectives       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		Controls                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		CreationDate            func(childComplexity int) int
+		Description             func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		Environment             func(childComplexity int) int
+		EnvironmentID           func(childComplexity int) int
+		EnvironmentName         func(childComplexity int) int
+		Files                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		HasPendingWorkflow      func(childComplexity int) int
+		HasWorkflowHistory      func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IsAutomated             func(childComplexity int) int
+		Name                    func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		Programs                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RenewalDate             func(childComplexity int) int
+		Scans                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Scope                   func(childComplexity int) int
+		ScopeID                 func(childComplexity int) int
+		ScopeName               func(childComplexity int) int
+		Source                  func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Tags                    func(childComplexity int) int
+		Tasks                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		URL                     func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		WorkflowEligibleMarker  func(childComplexity int) int
+		WorkflowObjectRefs      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	EvidenceBulkCreatePayload struct {
@@ -1478,6 +1803,9 @@ type ComplexityRoot struct {
 		DetectedMimeType       func(childComplexity int) int
 		Document               func(childComplexity int) int
 		Entity                 func(childComplexity int) int
+		Environment            func(childComplexity int) int
+		EnvironmentID          func(childComplexity int) int
+		EnvironmentName        func(childComplexity int) int
 		Events                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Evidence               func(childComplexity int) int
 		Groups                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -1491,11 +1819,16 @@ type ComplexityRoot struct {
 		OrganizationSetting    func(childComplexity int) int
 		OriginalTrustCenterDoc func(childComplexity int) int
 		PersistedFileSize      func(childComplexity int) int
+		Platform               func(childComplexity int) int
 		PresignedURL           func(childComplexity int) int
 		Program                func(childComplexity int) int
 		ProvidedFileExtension  func(childComplexity int) int
 		ProvidedFileName       func(childComplexity int) int
 		ProvidedFileSize       func(childComplexity int) int
+		Scan                   func(childComplexity int) int
+		Scope                  func(childComplexity int) int
+		ScopeID                func(childComplexity int) int
+		ScopeName              func(childComplexity int) int
 		Secrets                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
 		StoragePath            func(childComplexity int) int
 		StorageProvider        func(childComplexity int) int
@@ -1547,6 +1880,9 @@ type ComplexityRoot struct {
 		DisplayName        func(childComplexity int) int
 		Editors            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Entities           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment        func(childComplexity int) int
+		EnvironmentID      func(childComplexity int) int
+		EnvironmentName    func(childComplexity int) int
 		EventTime          func(childComplexity int) int
 		Exploitability     func(childComplexity int) int
 		ExternalID         func(childComplexity int) int
@@ -1578,6 +1914,9 @@ type ComplexityRoot struct {
 		Reviews            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		Risks              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Scans              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Scope              func(childComplexity int) int
+		ScopeID            func(childComplexity int) int
+		ScopeName          func(childComplexity int) int
 		Score              func(childComplexity int) int
 		Severity           func(childComplexity int) int
 		Source             func(childComplexity int) int
@@ -1679,6 +2018,11 @@ type ComplexityRoot struct {
 		ActionPlanBlockedGroups            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		ActionPlanEditors                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		ActionPlanViewers                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		CampaignBlockedGroups              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
+		CampaignEditors                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
+		CampaignTargets                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignTargetOrder, where *generated.CampaignTargetWhereInput) int
+		CampaignViewers                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
+		Campaigns                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		ControlBlockedGroups               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		ControlEditors                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		ControlImplementationBlockedGroups func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
@@ -1714,6 +2058,9 @@ type ComplexityRoot struct {
 		Owner                              func(childComplexity int) int
 		OwnerID                            func(childComplexity int) int
 		Permissions                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		PlatformBlockedGroups              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		PlatformEditors                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		PlatformViewers                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		ProcedureBlockedGroups             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		ProcedureEditors                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		ProgramBlockedGroups               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
@@ -1937,6 +2284,95 @@ type ComplexityRoot struct {
 		Hush func(childComplexity int) int
 	}
 
+	IdentityHolder struct {
+		AccessPlatforms         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		ActiveWorkflowInstances func(childComplexity int) int
+		AlternateEmail          func(childComplexity int) int
+		AssessmentResponses     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
+		Assessments             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
+		Assets                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Campaigns               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Department              func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		Editors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Email                   func(childComplexity int) int
+		Employer                func(childComplexity int) int
+		EmployerEntityID        func(childComplexity int) int
+		EndDate                 func(childComplexity int) int
+		Entities                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment             func(childComplexity int) int
+		EnvironmentID           func(childComplexity int) int
+		EnvironmentName         func(childComplexity int) int
+		ExternalReferenceID     func(childComplexity int) int
+		ExternalUserID          func(childComplexity int) int
+		FullName                func(childComplexity int) int
+		HasPendingWorkflow      func(childComplexity int) int
+		HasWorkflowHistory      func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IdentityHolderType      func(childComplexity int) int
+		InternalOwner           func(childComplexity int) int
+		InternalOwnerGroup      func(childComplexity int) int
+		InternalOwnerGroupID    func(childComplexity int) int
+		InternalOwnerUser       func(childComplexity int) int
+		InternalOwnerUserID     func(childComplexity int) int
+		IsActive                func(childComplexity int) int
+		IsOpenlaneUser          func(childComplexity int) int
+		Location                func(childComplexity int) int
+		Metadata                func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		PhoneNumber             func(childComplexity int) int
+		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		Scope                   func(childComplexity int) int
+		ScopeID                 func(childComplexity int) int
+		ScopeName               func(childComplexity int) int
+		StartDate               func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		Tasks                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		Team                    func(childComplexity int) int
+		Templates               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
+		Title                   func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		User                    func(childComplexity int) int
+		UserID                  func(childComplexity int) int
+		Viewers                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		WorkflowEligibleMarker  func(childComplexity int) int
+		WorkflowObjectRefs      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
+	}
+
+	IdentityHolderBulkCreatePayload struct {
+		IdentityHolders func(childComplexity int) int
+	}
+
+	IdentityHolderConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	IdentityHolderCreatePayload struct {
+		IdentityHolder func(childComplexity int) int
+	}
+
+	IdentityHolderDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	IdentityHolderEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	IdentityHolderUpdatePayload struct {
+		IdentityHolder func(childComplexity int) int
+	}
+
 	Integration struct {
 		ActionPlans          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		CreatedAt            func(childComplexity int) int
@@ -1946,6 +2382,10 @@ type ComplexityRoot struct {
 		DirectoryGroups      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
 		DirectoryMemberships func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
 		DirectorySyncRuns    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
+		Entities             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment          func(childComplexity int) int
+		EnvironmentID        func(childComplexity int) int
+		EnvironmentName      func(childComplexity int) int
 		Events               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Files                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		Findings             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
@@ -1959,6 +2399,9 @@ type ComplexityRoot struct {
 		OwnerID              func(childComplexity int) int
 		Remediations         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
 		Reviews              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
+		Scope                func(childComplexity int) int
+		ScopeID              func(childComplexity int) int
+		ScopeName            func(childComplexity int) int
 		Secrets              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
 		SystemInternalID     func(childComplexity int) int
 		SystemOwned          func(childComplexity int) int
@@ -1985,7 +2428,7 @@ type ComplexityRoot struct {
 	}
 
 	InternalPolicy struct {
-		ActiveWorkflowInstance          func(childComplexity int) int
+		ActiveWorkflowInstances         func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
@@ -2007,9 +2450,13 @@ type ComplexityRoot struct {
 		DismissedTagSuggestions         func(childComplexity int) int
 		DisplayID                       func(childComplexity int) int
 		Editors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Environment                     func(childComplexity int) int
+		EnvironmentID                   func(childComplexity int) int
+		EnvironmentName                 func(childComplexity int) int
 		File                            func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		HasPendingWorkflow              func(childComplexity int) int
+		HasWorkflowHistory              func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
@@ -2026,6 +2473,9 @@ type ComplexityRoot struct {
 		ReviewFrequency                 func(childComplexity int) int
 		Revision                        func(childComplexity int) int
 		Risks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scope                           func(childComplexity int) int
+		ScopeID                         func(childComplexity int) int
+		ScopeName                       func(childComplexity int) int
 		Status                          func(childComplexity int) int
 		Subcontrols                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Summary                         func(childComplexity int) int
@@ -2039,6 +2489,7 @@ type ComplexityRoot struct {
 		UpdatedBy                       func(childComplexity int) int
 		WorkflowEligibleMarker          func(childComplexity int) int
 		WorkflowObjectRefs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	InternalPolicyBulkCreatePayload struct {
@@ -2460,6 +2911,8 @@ type ComplexityRoot struct {
 		CreateBulkCSVAPIToken                func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVActionPlan              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVAsset                   func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVCampaign                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVCampaignTarget          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVContact                 func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVControl                 func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVControlImplementation   func(childComplexity int, input graphql.Upload) int
@@ -2483,6 +2936,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVGroupMembership         func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVGroupSetting            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVHush                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVIdentityHolder          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVInternalPolicy          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVInvite                  func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVJobTemplate             func(childComplexity int, input graphql.Upload) int
@@ -2491,6 +2945,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVNarrative               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrgMembership           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrganizationSetting     func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVPlatform                func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProcedure               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProgram                 func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProgramMembership       func(childComplexity int, input graphql.Upload) int
@@ -2513,8 +2968,8 @@ type ComplexityRoot struct {
 		CreateBulkCSVUserSetting             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVVulnerability           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVWorkflowDefinition      func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVWorkflowEvent           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVWorkflowObjectRef       func(childComplexity int, input graphql.Upload) int
+		CreateBulkCampaign                   func(childComplexity int, input []*generated.CreateCampaignInput) int
+		CreateBulkCampaignTarget             func(childComplexity int, input []*generated.CreateCampaignTargetInput) int
 		CreateBulkContact                    func(childComplexity int, input []*generated.CreateContactInput) int
 		CreateBulkControl                    func(childComplexity int, input []*generated.CreateControlInput) int
 		CreateBulkControlImplementation      func(childComplexity int, input []*generated.CreateControlImplementationInput) int
@@ -2538,6 +2993,7 @@ type ComplexityRoot struct {
 		CreateBulkGroupMembership            func(childComplexity int, input []*generated.CreateGroupMembershipInput) int
 		CreateBulkGroupSetting               func(childComplexity int, input []*generated.CreateGroupSettingInput) int
 		CreateBulkHush                       func(childComplexity int, input []*generated.CreateHushInput) int
+		CreateBulkIdentityHolder             func(childComplexity int, input []*generated.CreateIdentityHolderInput) int
 		CreateBulkInternalPolicy             func(childComplexity int, input []*generated.CreateInternalPolicyInput) int
 		CreateBulkInvite                     func(childComplexity int, input []*generated.CreateInviteInput) int
 		CreateBulkJobTemplate                func(childComplexity int, input []*generated.CreateJobTemplateInput) int
@@ -2546,6 +3002,7 @@ type ComplexityRoot struct {
 		CreateBulkNarrative                  func(childComplexity int, input []*generated.CreateNarrativeInput) int
 		CreateBulkOrgMembership              func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
 		CreateBulkOrganizationSetting        func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
+		CreateBulkPlatform                   func(childComplexity int, input []*generated.CreatePlatformInput) int
 		CreateBulkProcedure                  func(childComplexity int, input []*generated.CreateProcedureInput) int
 		CreateBulkProgram                    func(childComplexity int, input []*generated.CreateProgramInput) int
 		CreateBulkProgramMembership          func(childComplexity int, input []*generated.CreateProgramMembershipInput) int
@@ -2568,8 +3025,8 @@ type ComplexityRoot struct {
 		CreateBulkUserSetting                func(childComplexity int, input []*generated.CreateUserSettingInput) int
 		CreateBulkVulnerability              func(childComplexity int, input []*generated.CreateVulnerabilityInput) int
 		CreateBulkWorkflowDefinition         func(childComplexity int, input []*generated.CreateWorkflowDefinitionInput) int
-		CreateBulkWorkflowEvent              func(childComplexity int, input []*generated.CreateWorkflowEventInput) int
-		CreateBulkWorkflowObjectRef          func(childComplexity int, input []*generated.CreateWorkflowObjectRefInput) int
+		CreateCampaign                       func(childComplexity int, input generated.CreateCampaignInput) int
+		CreateCampaignTarget                 func(childComplexity int, input generated.CreateCampaignTargetInput) int
 		CreateContact                        func(childComplexity int, input generated.CreateContactInput) int
 		CreateControl                        func(childComplexity int, input generated.CreateControlInput) int
 		CreateControlImplementation          func(childComplexity int, input generated.CreateControlImplementationInput) int
@@ -2599,6 +3056,7 @@ type ComplexityRoot struct {
 		CreateGroupSetting                   func(childComplexity int, input generated.CreateGroupSettingInput) int
 		CreateGroupWithMembers               func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) int
 		CreateHush                           func(childComplexity int, input generated.CreateHushInput) int
+		CreateIdentityHolder                 func(childComplexity int, input generated.CreateIdentityHolderInput) int
 		CreateInternalPolicy                 func(childComplexity int, input generated.CreateInternalPolicyInput) int
 		CreateInvite                         func(childComplexity int, input generated.CreateInviteInput) int
 		CreateJobResult                      func(childComplexity int, input generated.CreateJobResultInput, jobResultFiles []*graphql.Upload) int
@@ -2615,6 +3073,7 @@ type ComplexityRoot struct {
 		CreateOrganizationSetting            func(childComplexity int, input generated.CreateOrganizationSettingInput) int
 		CreateOrganizationWithMembers        func(childComplexity int, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) int
 		CreatePersonalAccessToken            func(childComplexity int, input generated.CreatePersonalAccessTokenInput) int
+		CreatePlatform                       func(childComplexity int, input generated.CreatePlatformInput) int
 		CreateProcedure                      func(childComplexity int, input generated.CreateProcedureInput) int
 		CreateProgram                        func(childComplexity int, input generated.CreateProgramInput) int
 		CreateProgramMembership              func(childComplexity int, input generated.CreateProgramMembershipInput) int
@@ -2650,8 +3109,6 @@ type ComplexityRoot struct {
 		CreateUserSetting                    func(childComplexity int, input generated.CreateUserSettingInput) int
 		CreateVulnerability                  func(childComplexity int, input generated.CreateVulnerabilityInput) int
 		CreateWorkflowDefinition             func(childComplexity int, input generated.CreateWorkflowDefinitionInput) int
-		CreateWorkflowEvent                  func(childComplexity int, input generated.CreateWorkflowEventInput) int
-		CreateWorkflowObjectRef              func(childComplexity int, input generated.CreateWorkflowObjectRefInput) int
 		DeleteAPIToken                       func(childComplexity int, id string) int
 		DeleteActionPlan                     func(childComplexity int, id string) int
 		DeleteAssessment                     func(childComplexity int, id string) int
@@ -2699,6 +3156,8 @@ type ComplexityRoot struct {
 		DeleteBulkTrustCenterDoc             func(childComplexity int, ids []string) int
 		DeleteBulkTrustCenterSubprocessor    func(childComplexity int, ids []string) int
 		DeleteBulkUserSetting                func(childComplexity int, ids []string) int
+		DeleteCampaign                       func(childComplexity int, id string) int
+		DeleteCampaignTarget                 func(childComplexity int, id string) int
 		DeleteContact                        func(childComplexity int, id string) int
 		DeleteControl                        func(childComplexity int, id string) int
 		DeleteControlImplementation          func(childComplexity int, id string) int
@@ -2724,6 +3183,7 @@ type ComplexityRoot struct {
 		DeleteGroupMembership                func(childComplexity int, id string) int
 		DeleteGroupSetting                   func(childComplexity int, id string) int
 		DeleteHush                           func(childComplexity int, id string) int
+		DeleteIdentityHolder                 func(childComplexity int, id string) int
 		DeleteIntegration                    func(childComplexity int, id string) int
 		DeleteInternalPolicy                 func(childComplexity int, id string) int
 		DeleteInvite                         func(childComplexity int, id string) int
@@ -2740,6 +3200,7 @@ type ComplexityRoot struct {
 		DeleteOrganization                   func(childComplexity int, id string) int
 		DeleteOrganizationSetting            func(childComplexity int, id string) int
 		DeletePersonalAccessToken            func(childComplexity int, id string) int
+		DeletePlatform                       func(childComplexity int, id string) int
 		DeleteProcedure                      func(childComplexity int, id string) int
 		DeleteProgram                        func(childComplexity int, id string) int
 		DeleteProgramMembership              func(childComplexity int, id string) int
@@ -2768,11 +3229,8 @@ type ComplexityRoot struct {
 		DeleteVulnerability                  func(childComplexity int, id string) int
 		DeleteWebauthn                       func(childComplexity int, id string) int
 		DeleteWorkflowDefinition             func(childComplexity int, id string) int
-		DeleteWorkflowEvent                  func(childComplexity int, id string) int
-		DeleteWorkflowObjectRef              func(childComplexity int, id string) int
 		PublishTrustCenterSetting            func(childComplexity int) int
 		RejectWorkflowAssignment             func(childComplexity int, id string, reason *string) int
-		SendTrustCenterNDAEmail              func(childComplexity int, input model.SendTrustCenterNDAInput) int
 		SubmitTrustCenterNDAResponse         func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
 		TransferOrganizationOwnership        func(childComplexity int, newOwnerEmail string) int
 		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
@@ -2793,6 +3251,8 @@ type ComplexityRoot struct {
 		UpdateBulkTask                       func(childComplexity int, ids []string, input generated.UpdateTaskInput) int
 		UpdateBulkTrustCenterDoc             func(childComplexity int, ids []string, input generated.UpdateTrustCenterDocInput) int
 		UpdateBulkTrustCenterSubprocessor    func(childComplexity int, ids []string, input generated.UpdateTrustCenterSubprocessorInput) int
+		UpdateCampaign                       func(childComplexity int, id string, input generated.UpdateCampaignInput) int
+		UpdateCampaignTarget                 func(childComplexity int, id string, input generated.UpdateCampaignTargetInput) int
 		UpdateContact                        func(childComplexity int, id string, input generated.UpdateContactInput) int
 		UpdateControl                        func(childComplexity int, id string, input generated.UpdateControlInput) int
 		UpdateControlComment                 func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
@@ -2819,6 +3279,7 @@ type ComplexityRoot struct {
 		UpdateGroupMembership                func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
 		UpdateGroupSetting                   func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
 		UpdateHush                           func(childComplexity int, id string, input generated.UpdateHushInput) int
+		UpdateIdentityHolder                 func(childComplexity int, id string, input generated.UpdateIdentityHolderInput) int
 		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload) int
 		UpdateInternalPolicyComment          func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateInvite                         func(childComplexity int, id string, input generated.UpdateInviteInput) int
@@ -2833,6 +3294,7 @@ type ComplexityRoot struct {
 		UpdateOrganization                   func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) int
 		UpdateOrganizationSetting            func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
 		UpdatePersonalAccessToken            func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
+		UpdatePlatform                       func(childComplexity int, id string, input generated.UpdatePlatformInput) int
 		UpdateProcedure                      func(childComplexity int, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload) int
 		UpdateProcedureComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateProgram                        func(childComplexity int, id string, input generated.UpdateProgramInput) int
@@ -2869,7 +3331,6 @@ type ComplexityRoot struct {
 		UpdateUserSetting                    func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
 		UpdateVulnerability                  func(childComplexity int, id string, input generated.UpdateVulnerabilityInput) int
 		UpdateWorkflowDefinition             func(childComplexity int, id string, input generated.UpdateWorkflowDefinitionInput) int
-		UpdateWorkflowEvent                  func(childComplexity int, id string, input generated.UpdateWorkflowEventInput) int
 		ValidateCustomDomain                 func(childComplexity int, id string) int
 	}
 
@@ -3098,6 +3559,8 @@ type ComplexityRoot struct {
 		AvatarLocalFileID               func(childComplexity int) int
 		AvatarRemoteURL                 func(childComplexity int) int
 		AvatarUpdatedAt                 func(childComplexity int) int
+		CampaignTargets                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignTargetOrder, where *generated.CampaignTargetWhereInput) int
+		Campaigns                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		Children                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
 		Contacts                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
 		ControlCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -3132,6 +3595,7 @@ type ComplexityRoot struct {
 		GroupCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Groups                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                              func(childComplexity int) int
+		IdentityHolders                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalPolicies                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		InternalPolicyCreators          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -3152,6 +3616,7 @@ type ComplexityRoot struct {
 		Parent                          func(childComplexity int) int
 		PersonalAccessTokens            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
 		PersonalOrg                     func(childComplexity int) int
+		Platforms                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		ProcedureCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Procedures                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		ProgramCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -3351,8 +3816,135 @@ type ComplexityRoot struct {
 		PersonalAccessToken func(childComplexity int) int
 	}
 
+	Platform struct {
+		AccessModel                    func(childComplexity int) int
+		AccessModelID                  func(childComplexity int) int
+		AccessModelName                func(childComplexity int) int
+		ActiveWorkflowInstances        func(childComplexity int) int
+		ApplicableFrameworks           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
+		Assessments                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
+		Assets                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		BusinessOwner                  func(childComplexity int) int
+		BusinessOwnerGroup             func(childComplexity int) int
+		BusinessOwnerGroupID           func(childComplexity int) int
+		BusinessOwnerUser              func(childComplexity int) int
+		BusinessOwnerUserID            func(childComplexity int) int
+		BusinessPurpose                func(childComplexity int) int
+		ContainsPii                    func(childComplexity int) int
+		Controls                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CostCenter                     func(childComplexity int) int
+		CreatedAt                      func(childComplexity int) int
+		CreatedBy                      func(childComplexity int) int
+		Criticality                    func(childComplexity int) int
+		CriticalityID                  func(childComplexity int) int
+		CriticalityName                func(childComplexity int) int
+		DataFlowSummary                func(childComplexity int) int
+		Description                    func(childComplexity int) int
+		DisplayID                      func(childComplexity int) int
+		Editors                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		EncryptionStatus               func(childComplexity int) int
+		EncryptionStatusID             func(childComplexity int) int
+		EncryptionStatusName           func(childComplexity int) int
+		Entities                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment                    func(childComplexity int) int
+		EnvironmentID                  func(childComplexity int) int
+		EnvironmentName                func(childComplexity int) int
+		EstimatedMonthlyCost           func(childComplexity int) int
+		Evidence                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		ExternalReferenceID            func(childComplexity int) int
+		Files                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		GeneratedScans                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		HasPendingWorkflow             func(childComplexity int) int
+		HasWorkflowHistory             func(childComplexity int) int
+		ID                             func(childComplexity int) int
+		IdentityHolders                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
+		InternalOwner                  func(childComplexity int) int
+		InternalOwnerGroup             func(childComplexity int) int
+		InternalOwnerGroupID           func(childComplexity int) int
+		InternalOwnerUser              func(childComplexity int) int
+		InternalOwnerUserID            func(childComplexity int) int
+		Metadata                       func(childComplexity int) int
+		Name                           func(childComplexity int) int
+		OutOfScopeAssets               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		OutOfScopeVendors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Owner                          func(childComplexity int) int
+		OwnerID                        func(childComplexity int) int
+		PhysicalLocation               func(childComplexity int) int
+		PlatformDataClassification     func(childComplexity int) int
+		PlatformDataClassificationID   func(childComplexity int) int
+		PlatformDataClassificationName func(childComplexity int) int
+		PlatformKind                   func(childComplexity int) int
+		PlatformKindID                 func(childComplexity int) int
+		PlatformKindName               func(childComplexity int) int
+		PlatformOwner                  func(childComplexity int) int
+		PlatformOwnerID                func(childComplexity int) int
+		PurchaseDate                   func(childComplexity int) int
+		Region                         func(childComplexity int) int
+		Risks                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scans                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Scope                          func(childComplexity int) int
+		ScopeID                        func(childComplexity int) int
+		ScopeName                      func(childComplexity int) int
+		ScopeStatement                 func(childComplexity int) int
+		SecurityOwner                  func(childComplexity int) int
+		SecurityOwnerGroup             func(childComplexity int) int
+		SecurityOwnerGroupID           func(childComplexity int) int
+		SecurityOwnerUser              func(childComplexity int) int
+		SecurityOwnerUserID            func(childComplexity int) int
+		SecurityTier                   func(childComplexity int) int
+		SecurityTierID                 func(childComplexity int) int
+		SecurityTierName               func(childComplexity int) int
+		SourceAssets                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		SourceEntities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		SourceIdentifier               func(childComplexity int) int
+		SourceType                     func(childComplexity int) int
+		Status                         func(childComplexity int) int
+		Tags                           func(childComplexity int) int
+		Tasks                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		TechnicalOwner                 func(childComplexity int) int
+		TechnicalOwnerGroup            func(childComplexity int) int
+		TechnicalOwnerGroupID          func(childComplexity int) int
+		TechnicalOwnerUser             func(childComplexity int) int
+		TechnicalOwnerUserID           func(childComplexity int) int
+		TrustBoundaryDescription       func(childComplexity int) int
+		UpdatedAt                      func(childComplexity int) int
+		UpdatedBy                      func(childComplexity int) int
+		Viewers                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		WorkflowEligibleMarker         func(childComplexity int) int
+		WorkflowObjectRefs             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
+	}
+
+	PlatformBulkCreatePayload struct {
+		Platforms func(childComplexity int) int
+	}
+
+	PlatformConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	PlatformCreatePayload struct {
+		Platform func(childComplexity int) int
+	}
+
+	PlatformDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	PlatformEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	PlatformUpdatePayload struct {
+		Platform func(childComplexity int) int
+	}
+
 	Procedure struct {
-		ActiveWorkflowInstance          func(childComplexity int) int
+		ActiveWorkflowInstances         func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
@@ -3372,9 +3964,13 @@ type ComplexityRoot struct {
 		DismissedTagSuggestions         func(childComplexity int) int
 		DisplayID                       func(childComplexity int) int
 		Editors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Environment                     func(childComplexity int) int
+		EnvironmentID                   func(childComplexity int) int
+		EnvironmentName                 func(childComplexity int) int
 		File                            func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		HasPendingWorkflow              func(childComplexity int) int
+		HasWorkflowHistory              func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
@@ -3391,6 +3987,9 @@ type ComplexityRoot struct {
 		ReviewFrequency                 func(childComplexity int) int
 		Revision                        func(childComplexity int) int
 		Risks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scope                           func(childComplexity int) int
+		ScopeID                         func(childComplexity int) int
+		ScopeName                       func(childComplexity int) int
 		Status                          func(childComplexity int) int
 		Subcontrols                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Summary                         func(childComplexity int) int
@@ -3404,6 +4003,7 @@ type ComplexityRoot struct {
 		UpdatedBy                       func(childComplexity int) int
 		WorkflowEligibleMarker          func(childComplexity int) int
 		WorkflowObjectRefs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	ProcedureBulkCreatePayload struct {
@@ -3578,6 +4178,12 @@ type ComplexityRoot struct {
 		Asset                           func(childComplexity int, id string) int
 		AssetSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Assets                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		Campaign                        func(childComplexity int, id string) int
+		CampaignSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		CampaignTarget                  func(childComplexity int, id string) int
+		CampaignTargetSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		CampaignTargets                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignTargetOrder, where *generated.CampaignTargetWhereInput) int
+		Campaigns                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		Contact                         func(childComplexity int, id string) int
 		ContactSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Contacts                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
@@ -3641,6 +4247,9 @@ type ComplexityRoot struct {
 		Groups                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Hush                            func(childComplexity int, id string) int
 		Hushes                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
+		IdentityHolder                  func(childComplexity int, id string) int
+		IdentityHolderSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		IdentityHolders                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		Integration                     func(childComplexity int, id string) int
 		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalPolicies                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
@@ -3684,6 +4293,9 @@ type ComplexityRoot struct {
 		Organizations                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
 		PersonalAccessToken             func(childComplexity int, id string) int
 		PersonalAccessTokens            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
+		Platform                        func(childComplexity int, id string) int
+		PlatformSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Platforms                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Procedure                       func(childComplexity int, id string) int
 		ProcedureSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Procedures                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
@@ -3765,6 +4377,7 @@ type ComplexityRoot struct {
 		WorkflowDefinition              func(childComplexity int, id string) int
 		WorkflowDefinitions             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowDefinitionOrder, where *generated.WorkflowDefinitionWhereInput) int
 		WorkflowEvent                   func(childComplexity int, id string) int
+		WorkflowEventTimeline           func(childComplexity int, workflowInstanceID string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 		WorkflowEvents                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput) int
 		WorkflowInstance                func(childComplexity int, id string) int
 		WorkflowInstances               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowInstanceOrder, where *generated.WorkflowInstanceWhereInput) int
@@ -3786,6 +4399,9 @@ type ComplexityRoot struct {
 		DueAt            func(childComplexity int) int
 		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment      func(childComplexity int) int
+		EnvironmentID    func(childComplexity int) int
+		EnvironmentName  func(childComplexity int) int
 		Error            func(childComplexity int) int
 		Explanation      func(childComplexity int) int
 		ExternalID       func(childComplexity int) int
@@ -3808,6 +4424,10 @@ type ComplexityRoot struct {
 		RepositoryURI    func(childComplexity int) int
 		Reviews          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Scope            func(childComplexity int) int
+		ScopeID          func(childComplexity int) int
+		ScopeName        func(childComplexity int) int
 		Source           func(childComplexity int) int
 		State            func(childComplexity int) int
 		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
@@ -3866,6 +4486,9 @@ type ComplexityRoot struct {
 		Details          func(childComplexity int) int
 		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment      func(childComplexity int) int
+		EnvironmentID    func(childComplexity int) int
+		EnvironmentName  func(childComplexity int) int
 		ExternalID       func(childComplexity int) int
 		ExternalOwnerID  func(childComplexity int) int
 		ExternalURI      func(childComplexity int) int
@@ -3886,6 +4509,9 @@ type ComplexityRoot struct {
 		Reviewer         func(childComplexity int) int
 		ReviewerID       func(childComplexity int) int
 		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scope            func(childComplexity int) int
+		ScopeID          func(childComplexity int) int
+		ScopeName        func(childComplexity int) int
 		Source           func(childComplexity int) int
 		State            func(childComplexity int) int
 		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
@@ -3946,6 +4572,9 @@ type ComplexityRoot struct {
 		DisplayID         func(childComplexity int) int
 		Editors           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Entities          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment       func(childComplexity int) int
+		EnvironmentID     func(childComplexity int) int
+		EnvironmentName   func(childComplexity int) int
 		ID                func(childComplexity int) int
 		Impact            func(childComplexity int) int
 		InternalPolicies  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
@@ -3955,6 +4584,7 @@ type ComplexityRoot struct {
 		Name              func(childComplexity int) int
 		Owner             func(childComplexity int) int
 		OwnerID           func(childComplexity int) int
+		Platforms         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Procedures        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RiskCategory      func(childComplexity int) int
@@ -3964,6 +4594,9 @@ type ComplexityRoot struct {
 		RiskKindID        func(childComplexity int) int
 		RiskKindName      func(childComplexity int) int
 		Scans             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Scope             func(childComplexity int) int
+		ScopeID           func(childComplexity int) int
+		ScopeName         func(childComplexity int) int
 		Score             func(childComplexity int) int
 		Stakeholder       func(childComplexity int) int
 		StakeholderID     func(childComplexity int) int
@@ -4013,23 +4646,58 @@ type ComplexityRoot struct {
 	}
 
 	Scan struct {
-		Assets        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		BlockedGroups func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Editors       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Entities      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		ID            func(childComplexity int) int
-		Metadata      func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		ScanType      func(childComplexity int) int
-		Status        func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		Target        func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-		Viewers       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ActionPlans           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Assets                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		AssignedTo            func(childComplexity int) int
+		AssignedToGroup       func(childComplexity int) int
+		AssignedToGroupID     func(childComplexity int) int
+		AssignedToUser        func(childComplexity int) int
+		AssignedToUserID      func(childComplexity int) int
+		BlockedGroups         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Controls              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Editors               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment           func(childComplexity int) int
+		EnvironmentID         func(childComplexity int) int
+		EnvironmentName       func(childComplexity int) int
+		Evidence              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		Files                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		GeneratedByPlatform   func(childComplexity int) int
+		GeneratedByPlatformID func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		NextScanRunAt         func(childComplexity int) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		PerformedBy           func(childComplexity int) int
+		PerformedByGroup      func(childComplexity int) int
+		PerformedByGroupID    func(childComplexity int) int
+		PerformedByUser       func(childComplexity int) int
+		PerformedByUserID     func(childComplexity int) int
+		Platforms             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		Remediations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		ReviewedBy            func(childComplexity int) int
+		ReviewedByGroup       func(childComplexity int) int
+		ReviewedByGroupID     func(childComplexity int) int
+		ReviewedByUser        func(childComplexity int) int
+		ReviewedByUserID      func(childComplexity int) int
+		ScanDate              func(childComplexity int) int
+		ScanSchedule          func(childComplexity int) int
+		ScanType              func(childComplexity int) int
+		Scope                 func(childComplexity int) int
+		ScopeID               func(childComplexity int) int
+		ScopeName             func(childComplexity int) int
+		Status                func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		Target                func(childComplexity int) int
+		Tasks                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		Viewers               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Vulnerabilities       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		VulnerabilityIds      func(childComplexity int) int
 	}
 
 	ScanBulkCreatePayload struct {
@@ -4171,6 +4839,8 @@ type ComplexityRoot struct {
 		AssessmentResponses func(childComplexity int) int
 		Assessments         func(childComplexity int) int
 		Assets              func(childComplexity int) int
+		CampaignTargets     func(childComplexity int) int
+		Campaigns           func(childComplexity int) int
 		Contacts            func(childComplexity int) int
 		ControlObjectives   func(childComplexity int) int
 		Controls            func(childComplexity int) int
@@ -4179,6 +4849,7 @@ type ComplexityRoot struct {
 		Evidences           func(childComplexity int) int
 		Findings            func(childComplexity int) int
 		Groups              func(childComplexity int) int
+		IdentityHolders     func(childComplexity int) int
 		InternalPolicies    func(childComplexity int) int
 		Invites             func(childComplexity int) int
 		JobRunners          func(childComplexity int) int
@@ -4186,6 +4857,7 @@ type ComplexityRoot struct {
 		Narratives          func(childComplexity int) int
 		Organizations       func(childComplexity int) int
 		Page                func(childComplexity int) int
+		Platforms           func(childComplexity int) int
 		Procedures          func(childComplexity int) int
 		Programs            func(childComplexity int) int
 		Remediations        func(childComplexity int) int
@@ -4210,11 +4882,8 @@ type ComplexityRoot struct {
 		Text  func(childComplexity int) int
 	}
 
-	SendTrustCenterNDAEmailPayload struct {
-		Success func(childComplexity int) int
-	}
-
 	Standard struct {
+		ApplicablePlatforms    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Controls               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
@@ -4276,7 +4945,7 @@ type ComplexityRoot struct {
 
 	Subcontrol struct {
 		ActionPlans                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		ActiveWorkflowInstance     func(childComplexity int) int
+		ActiveWorkflowInstances    func(childComplexity int) int
 		Aliases                    func(childComplexity int) int
 		AssessmentMethods          func(childComplexity int) int
 		AssessmentObjectives       func(childComplexity int) int
@@ -4303,6 +4972,7 @@ type ComplexityRoot struct {
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
 		HasPendingWorkflow         func(childComplexity int) int
+		HasWorkflowHistory         func(childComplexity int) int
 		ID                         func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
@@ -4337,6 +5007,7 @@ type ComplexityRoot struct {
 		UpdatedBy                  func(childComplexity int) int
 		WorkflowEligibleMarker     func(childComplexity int) int
 		WorkflowObjectRefs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	SubcontrolBulkCreatePayload struct {
@@ -4378,6 +5049,7 @@ type ComplexityRoot struct {
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		Description              func(childComplexity int) int
+		Entities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		ID                       func(childComplexity int) int
 		InternalNotes            func(childComplexity int) int
 		LogoFile                 func(childComplexity int) int
@@ -4577,19 +5249,28 @@ type ComplexityRoot struct {
 		DetailsJSON            func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		Due                    func(childComplexity int) int
+		Environment            func(childComplexity int) int
+		EnvironmentID          func(childComplexity int) int
+		EnvironmentName        func(childComplexity int) int
 		Evidence               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		ExternalReferenceURL   func(childComplexity int) int
 		Groups                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                     func(childComplexity int) int
 		IdempotencyKey         func(childComplexity int) int
+		IdentityHolders        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		InternalPolicies       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		Owner                  func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
 		Parent                 func(childComplexity int) int
 		ParentTaskID           func(childComplexity int) int
+		Platforms              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Procedures             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scans                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Scope                  func(childComplexity int) int
+		ScopeID                func(childComplexity int) int
+		ScopeName              func(childComplexity int) int
 		Status                 func(childComplexity int) int
 		Subcontrols            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		SystemGenerated        func(childComplexity int) int
@@ -4642,18 +5323,26 @@ type ComplexityRoot struct {
 
 	Template struct {
 		Assessments      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
+		Campaigns        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		Description      func(childComplexity int) int
 		Documents        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
+		Environment      func(childComplexity int) int
+		EnvironmentID    func(childComplexity int) int
+		EnvironmentName  func(childComplexity int) int
 		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID               func(childComplexity int) int
+		IdentityHolders  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		InternalNotes    func(childComplexity int) int
 		Jsonconfig       func(childComplexity int) int
 		Kind             func(childComplexity int) int
 		Name             func(childComplexity int) int
 		Owner            func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
+		Scope            func(childComplexity int) int
+		ScopeID          func(childComplexity int) int
+		ScopeName        func(childComplexity int) int
 		SystemInternalID func(childComplexity int) int
 		SystemOwned      func(childComplexity int) int
 		Tags             func(childComplexity int) int
@@ -4968,6 +5657,7 @@ type ComplexityRoot struct {
 		AccentColor              func(childComplexity int) int
 		BackgroundColor          func(childComplexity int) int
 		BlockedGroups            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		CompanyDescription       func(childComplexity int) int
 		CompanyDomain            func(childComplexity int) int
 		CompanyName              func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
@@ -5131,47 +5821,51 @@ type ComplexityRoot struct {
 	}
 
 	User struct {
-		ActionPlans           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		AssigneeTasks         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		AssignerTasks         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		AuthProvider          func(childComplexity int) int
-		AvatarFile            func(childComplexity int) int
-		AvatarLocalFileID     func(childComplexity int) int
-		AvatarRemoteURL       func(childComplexity int) int
-		AvatarUpdatedAt       func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		DisplayID             func(childComplexity int) int
-		DisplayName           func(childComplexity int) int
-		Email                 func(childComplexity int) int
-		Events                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		FirstName             func(childComplexity int) int
-		GroupMemberships      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
-		Groups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ID                    func(childComplexity int) int
-		LastLoginProvider     func(childComplexity int) int
-		LastName              func(childComplexity int) int
-		LastSeen              func(childComplexity int) int
-		OrgMemberships        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
-		Organizations         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
-		PersonalAccessTokens  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
-		ProgramMemberships    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
-		Programs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		ProgramsOwned         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		Role                  func(childComplexity int) int
-		ScimActive            func(childComplexity int) int
-		ScimExternalID        func(childComplexity int) int
-		ScimLocale            func(childComplexity int) int
-		ScimPreferredLanguage func(childComplexity int) int
-		ScimUsername          func(childComplexity int) int
-		Setting               func(childComplexity int) int
-		Sub                   func(childComplexity int) int
-		Subcontrols           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Tags                  func(childComplexity int) int
-		TfaSettings           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TFASettingOrder, where *generated.TFASettingWhereInput) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		Webauthns             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebauthnOrder, where *generated.WebauthnWhereInput) int
+		ActionPlans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		AssigneeTasks          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		AssignerTasks          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		AuthProvider           func(childComplexity int) int
+		AvatarFile             func(childComplexity int) int
+		AvatarLocalFileID      func(childComplexity int) int
+		AvatarRemoteURL        func(childComplexity int) int
+		AvatarUpdatedAt        func(childComplexity int) int
+		CampaignTargets        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignTargetOrder, where *generated.CampaignTargetWhereInput) int
+		Campaigns              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		DisplayID              func(childComplexity int) int
+		DisplayName            func(childComplexity int) int
+		Email                  func(childComplexity int) int
+		Events                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		FirstName              func(childComplexity int) int
+		GroupMemberships       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
+		Groups                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID                     func(childComplexity int) int
+		IdentityHolderProfiles func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
+		LastLoginProvider      func(childComplexity int) int
+		LastName               func(childComplexity int) int
+		LastSeen               func(childComplexity int) int
+		OrgMemberships         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
+		Organizations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
+		PersonalAccessTokens   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
+		PlatformsOwned         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		ProgramMemberships     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
+		Programs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		ProgramsOwned          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Role                   func(childComplexity int) int
+		ScimActive             func(childComplexity int) int
+		ScimExternalID         func(childComplexity int) int
+		ScimLocale             func(childComplexity int) int
+		ScimPreferredLanguage  func(childComplexity int) int
+		ScimUsername           func(childComplexity int) int
+		Setting                func(childComplexity int) int
+		Sub                    func(childComplexity int) int
+		Subcontrols            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Tags                   func(childComplexity int) int
+		TfaSettings            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TFASettingOrder, where *generated.TFASettingWhereInput) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		Webauthns              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebauthnOrder, where *generated.WebauthnWhereInput) int
 	}
 
 	UserBulkCreatePayload struct {
@@ -5264,6 +5958,9 @@ type ComplexityRoot struct {
 		DisplayName      func(childComplexity int) int
 		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment      func(childComplexity int) int
+		EnvironmentID    func(childComplexity int) int
+		EnvironmentName  func(childComplexity int) int
 		Exploitability   func(childComplexity int) int
 		ExternalID       func(childComplexity int) int
 		ExternalOwnerID  func(childComplexity int) int
@@ -5291,6 +5988,9 @@ type ComplexityRoot struct {
 		Reviews          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Scans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Scope            func(childComplexity int) int
+		ScopeID          func(childComplexity int) int
+		ScopeName        func(childComplexity int) int
 		Score            func(childComplexity int) int
 		Severity         func(childComplexity int) int
 		Source           func(childComplexity int) int
@@ -5516,31 +6216,15 @@ type ComplexityRoot struct {
 		WorkflowInstanceID func(childComplexity int) int
 	}
 
-	WorkflowEventBulkCreatePayload struct {
-		WorkflowEvents func(childComplexity int) int
-	}
-
 	WorkflowEventConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
 	}
 
-	WorkflowEventCreatePayload struct {
-		WorkflowEvent func(childComplexity int) int
-	}
-
-	WorkflowEventDeletePayload struct {
-		DeletedID func(childComplexity int) int
-	}
-
 	WorkflowEventEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
-	}
-
-	WorkflowEventUpdatePayload struct {
-		WorkflowEvent func(childComplexity int) int
 	}
 
 	WorkflowFieldMetadata struct {
@@ -5552,6 +6236,10 @@ type ComplexityRoot struct {
 	WorkflowInstance struct {
 		ActionPlan           func(childComplexity int) int
 		ActionPlanID         func(childComplexity int) int
+		Campaign             func(childComplexity int) int
+		CampaignID           func(childComplexity int) int
+		CampaignTarget       func(childComplexity int) int
+		CampaignTargetID     func(childComplexity int) int
 		Context              func(childComplexity int) int
 		Control              func(childComplexity int) int
 		ControlID            func(childComplexity int) int
@@ -5563,11 +6251,15 @@ type ComplexityRoot struct {
 		Evidence             func(childComplexity int) int
 		EvidenceID           func(childComplexity int) int
 		ID                   func(childComplexity int) int
+		IdentityHolder       func(childComplexity int) int
+		IdentityHolderID     func(childComplexity int) int
 		InternalPolicy       func(childComplexity int) int
 		InternalPolicyID     func(childComplexity int) int
 		LastEvaluatedAt      func(childComplexity int) int
 		Owner                func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
+		Platform             func(childComplexity int) int
+		PlatformID           func(childComplexity int) int
 		Procedure            func(childComplexity int) int
 		ProcedureID          func(childComplexity int) int
 		State                func(childComplexity int) int
@@ -5602,6 +6294,10 @@ type ComplexityRoot struct {
 	WorkflowObjectRef struct {
 		ActionPlan            func(childComplexity int) int
 		ActionPlanID          func(childComplexity int) int
+		Campaign              func(childComplexity int) int
+		CampaignID            func(childComplexity int) int
+		CampaignTarget        func(childComplexity int) int
+		CampaignTargetID      func(childComplexity int) int
 		Control               func(childComplexity int) int
 		ControlID             func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
@@ -5618,10 +6314,14 @@ type ComplexityRoot struct {
 		Finding               func(childComplexity int) int
 		FindingID             func(childComplexity int) int
 		ID                    func(childComplexity int) int
+		IdentityHolder        func(childComplexity int) int
+		IdentityHolderID      func(childComplexity int) int
 		InternalPolicy        func(childComplexity int) int
 		InternalPolicyID      func(childComplexity int) int
 		Owner                 func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
+		Platform              func(childComplexity int) int
+		PlatformID            func(childComplexity int) int
 		Procedure             func(childComplexity int) int
 		ProcedureID           func(childComplexity int) int
 		Subcontrol            func(childComplexity int) int
@@ -5634,22 +6334,10 @@ type ComplexityRoot struct {
 		WorkflowInstanceID    func(childComplexity int) int
 	}
 
-	WorkflowObjectRefBulkCreatePayload struct {
-		WorkflowObjectRefs func(childComplexity int) int
-	}
-
 	WorkflowObjectRefConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
-	}
-
-	WorkflowObjectRefCreatePayload struct {
-		WorkflowObjectRef func(childComplexity int) int
-	}
-
-	WorkflowObjectRefDeletePayload struct {
-		DeletedID func(childComplexity int) int
 	}
 
 	WorkflowObjectRefEdge struct {
@@ -5909,12 +6597,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.ActionPlanKindName(childComplexity), true
 
-	case "ActionPlan.activeWorkflowInstance":
-		if e.complexity.ActionPlan.ActiveWorkflowInstance == nil {
+	case "ActionPlan.activeWorkflowInstances":
+		if e.complexity.ActionPlan.ActiveWorkflowInstances == nil {
 			break
 		}
 
-		return e.complexity.ActionPlan.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.ActionPlan.ActiveWorkflowInstances(childComplexity), true
 
 	case "ActionPlan.approvalRequired":
 		if e.complexity.ActionPlan.ApprovalRequired == nil {
@@ -6111,6 +6799,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.HasPendingWorkflow(childComplexity), true
 
+	case "ActionPlan.hasWorkflowHistory":
+		if e.complexity.ActionPlan.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.HasWorkflowHistory(childComplexity), true
+
 	case "ActionPlan.id":
 		if e.complexity.ActionPlan.ID == nil {
 			break
@@ -6262,6 +6957,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
+	case "ActionPlan.scans":
+		if e.complexity.ActionPlan.Scans == nil {
+			break
+		}
+
+		args, err := ec.field_ActionPlan_scans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ActionPlan.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
 	case "ActionPlan.source":
 		if e.complexity.ActionPlan.Source == nil {
 			break
@@ -6394,6 +7101,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
 
+	case "ActionPlan.workflowTimeline":
+		if e.complexity.ActionPlan.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_ActionPlan_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ActionPlan.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
+
 	case "ActionPlanBulkCreatePayload.actionPlans":
 		if e.complexity.ActionPlanBulkCreatePayload.ActionPlans == nil {
 			break
@@ -6509,6 +7228,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Assessment.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "Assessment.campaigns":
+		if e.complexity.Assessment.Campaigns == nil {
+			break
+		}
+
+		args, err := ec.field_Assessment_campaigns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Assessment.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+
 	case "Assessment.createdAt":
 		if e.complexity.Assessment.CreatedAt == nil {
 			break
@@ -6542,6 +7273,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Assessment.ID(childComplexity), true
 
+	case "Assessment.identityHolders":
+		if e.complexity.Assessment.IdentityHolders == nil {
+			break
+		}
+
+		args, err := ec.field_Assessment_identityHolders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Assessment.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+
 	case "Assessment.jsonconfig":
 		if e.complexity.Assessment.Jsonconfig == nil {
 			break
@@ -6569,6 +7312,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Assessment.OwnerID(childComplexity), true
+
+	case "Assessment.platforms":
+		if e.complexity.Assessment.Platforms == nil {
+			break
+		}
+
+		args, err := ec.field_Assessment_platforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Assessment.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
 
 	case "Assessment.responseDueDuration":
 		if e.complexity.Assessment.ResponseDueDuration == nil {
@@ -6708,6 +7463,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssessmentResponse.AssignedAt(childComplexity), true
 
+	case "AssessmentResponse.campaign":
+		if e.complexity.AssessmentResponse.Campaign == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.Campaign(childComplexity), true
+
+	case "AssessmentResponse.campaignID":
+		if e.complexity.AssessmentResponse.CampaignID == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.CampaignID(childComplexity), true
+
 	case "AssessmentResponse.completedAt":
 		if e.complexity.AssessmentResponse.CompletedAt == nil {
 			break
@@ -6757,12 +7526,96 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssessmentResponse.Email(childComplexity), true
 
+	case "AssessmentResponse.emailClickCount":
+		if e.complexity.AssessmentResponse.EmailClickCount == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.EmailClickCount(childComplexity), true
+
+	case "AssessmentResponse.emailClickedAt":
+		if e.complexity.AssessmentResponse.EmailClickedAt == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.EmailClickedAt(childComplexity), true
+
+	case "AssessmentResponse.emailDeliveredAt":
+		if e.complexity.AssessmentResponse.EmailDeliveredAt == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.EmailDeliveredAt(childComplexity), true
+
+	case "AssessmentResponse.emailMetadata":
+		if e.complexity.AssessmentResponse.EmailMetadata == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.EmailMetadata(childComplexity), true
+
+	case "AssessmentResponse.emailOpenCount":
+		if e.complexity.AssessmentResponse.EmailOpenCount == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.EmailOpenCount(childComplexity), true
+
+	case "AssessmentResponse.emailOpenedAt":
+		if e.complexity.AssessmentResponse.EmailOpenedAt == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.EmailOpenedAt(childComplexity), true
+
+	case "AssessmentResponse.entity":
+		if e.complexity.AssessmentResponse.Entity == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.Entity(childComplexity), true
+
+	case "AssessmentResponse.entityID":
+		if e.complexity.AssessmentResponse.EntityID == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.EntityID(childComplexity), true
+
 	case "AssessmentResponse.id":
 		if e.complexity.AssessmentResponse.ID == nil {
 			break
 		}
 
 		return e.complexity.AssessmentResponse.ID(childComplexity), true
+
+	case "AssessmentResponse.identityHolder":
+		if e.complexity.AssessmentResponse.IdentityHolder == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.IdentityHolder(childComplexity), true
+
+	case "AssessmentResponse.identityHolderID":
+		if e.complexity.AssessmentResponse.IdentityHolderID == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.IdentityHolderID(childComplexity), true
+
+	case "AssessmentResponse.isTest":
+		if e.complexity.AssessmentResponse.IsTest == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.IsTest(childComplexity), true
+
+	case "AssessmentResponse.lastEmailEventAt":
+		if e.complexity.AssessmentResponse.LastEmailEventAt == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.LastEmailEventAt(childComplexity), true
 
 	case "AssessmentResponse.owner":
 		if e.complexity.AssessmentResponse.Owner == nil {
@@ -6869,6 +7722,69 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssessmentUpdatePayload.Assessment(childComplexity), true
 
+	case "Asset.accessModel":
+		if e.complexity.Asset.AccessModel == nil {
+			break
+		}
+
+		return e.complexity.Asset.AccessModel(childComplexity), true
+
+	case "Asset.accessModelID":
+		if e.complexity.Asset.AccessModelID == nil {
+			break
+		}
+
+		return e.complexity.Asset.AccessModelID(childComplexity), true
+
+	case "Asset.accessModelName":
+		if e.complexity.Asset.AccessModelName == nil {
+			break
+		}
+
+		return e.complexity.Asset.AccessModelName(childComplexity), true
+
+	case "Asset.assetDataClassification":
+		if e.complexity.Asset.AssetDataClassification == nil {
+			break
+		}
+
+		return e.complexity.Asset.AssetDataClassification(childComplexity), true
+
+	case "Asset.assetDataClassificationID":
+		if e.complexity.Asset.AssetDataClassificationID == nil {
+			break
+		}
+
+		return e.complexity.Asset.AssetDataClassificationID(childComplexity), true
+
+	case "Asset.assetDataClassificationName":
+		if e.complexity.Asset.AssetDataClassificationName == nil {
+			break
+		}
+
+		return e.complexity.Asset.AssetDataClassificationName(childComplexity), true
+
+	case "Asset.assetSubtype":
+		if e.complexity.Asset.AssetSubtype == nil {
+			break
+		}
+
+		return e.complexity.Asset.AssetSubtype(childComplexity), true
+
+	case "Asset.assetSubtypeID":
+		if e.complexity.Asset.AssetSubtypeID == nil {
+			break
+		}
+
+		return e.complexity.Asset.AssetSubtypeID(childComplexity), true
+
+	case "Asset.assetSubtypeName":
+		if e.complexity.Asset.AssetSubtypeName == nil {
+			break
+		}
+
+		return e.complexity.Asset.AssetSubtypeName(childComplexity), true
+
 	case "Asset.assetType":
 		if e.complexity.Asset.AssetType == nil {
 			break
@@ -6895,6 +7811,37 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Asset.Categories(childComplexity), true
 
+	case "Asset.connectedAssets":
+		if e.complexity.Asset.ConnectedAssets == nil {
+			break
+		}
+
+		args, err := ec.field_Asset_connectedAssets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Asset.ConnectedAssets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "Asset.connectedFrom":
+		if e.complexity.Asset.ConnectedFrom == nil {
+			break
+		}
+
+		args, err := ec.field_Asset_connectedFrom_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Asset.ConnectedFrom(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "Asset.containsPii":
+		if e.complexity.Asset.ContainsPii == nil {
+			break
+		}
+
+		return e.complexity.Asset.ContainsPii(childComplexity), true
+
 	case "Asset.controls":
 		if e.complexity.Asset.Controls == nil {
 			break
@@ -6906,6 +7853,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Asset.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
+	case "Asset.costCenter":
+		if e.complexity.Asset.CostCenter == nil {
+			break
+		}
+
+		return e.complexity.Asset.CostCenter(childComplexity), true
 
 	case "Asset.cpe":
 		if e.complexity.Asset.Cpe == nil {
@@ -6928,6 +7882,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Asset.CreatedBy(childComplexity), true
 
+	case "Asset.criticality":
+		if e.complexity.Asset.Criticality == nil {
+			break
+		}
+
+		return e.complexity.Asset.Criticality(childComplexity), true
+
+	case "Asset.criticalityID":
+		if e.complexity.Asset.CriticalityID == nil {
+			break
+		}
+
+		return e.complexity.Asset.CriticalityID(childComplexity), true
+
+	case "Asset.criticalityName":
+		if e.complexity.Asset.CriticalityName == nil {
+			break
+		}
+
+		return e.complexity.Asset.CriticalityName(childComplexity), true
+
 	case "Asset.description":
 		if e.complexity.Asset.Description == nil {
 			break
@@ -6947,6 +7922,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Asset.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "Asset.encryptionStatus":
+		if e.complexity.Asset.EncryptionStatus == nil {
+			break
+		}
+
+		return e.complexity.Asset.EncryptionStatus(childComplexity), true
+
+	case "Asset.encryptionStatusID":
+		if e.complexity.Asset.EncryptionStatusID == nil {
+			break
+		}
+
+		return e.complexity.Asset.EncryptionStatusID(childComplexity), true
+
+	case "Asset.encryptionStatusName":
+		if e.complexity.Asset.EncryptionStatusName == nil {
+			break
+		}
+
+		return e.complexity.Asset.EncryptionStatusName(childComplexity), true
+
 	case "Asset.entities":
 		if e.complexity.Asset.Entities == nil {
 			break
@@ -6958,6 +7954,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Asset.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Asset.environment":
+		if e.complexity.Asset.Environment == nil {
+			break
+		}
+
+		return e.complexity.Asset.Environment(childComplexity), true
+
+	case "Asset.environmentID":
+		if e.complexity.Asset.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.Asset.EnvironmentID(childComplexity), true
+
+	case "Asset.environmentName":
+		if e.complexity.Asset.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.Asset.EnvironmentName(childComplexity), true
+
+	case "Asset.estimatedMonthlyCost":
+		if e.complexity.Asset.EstimatedMonthlyCost == nil {
+			break
+		}
+
+		return e.complexity.Asset.EstimatedMonthlyCost(childComplexity), true
 
 	case "Asset.id":
 		if e.complexity.Asset.ID == nil {
@@ -6973,6 +7997,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Asset.Identifier(childComplexity), true
 
+	case "Asset.identityHolders":
+		if e.complexity.Asset.IdentityHolders == nil {
+			break
+		}
+
+		args, err := ec.field_Asset_identityHolders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Asset.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+
 	case "Asset.internalNotes":
 		if e.complexity.Asset.InternalNotes == nil {
 			break
@@ -6980,12 +8016,59 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Asset.InternalNotes(childComplexity), true
 
+	case "Asset.internalOwner":
+		if e.complexity.Asset.InternalOwner == nil {
+			break
+		}
+
+		return e.complexity.Asset.InternalOwner(childComplexity), true
+
+	case "Asset.internalOwnerGroup":
+		if e.complexity.Asset.InternalOwnerGroup == nil {
+			break
+		}
+
+		return e.complexity.Asset.InternalOwnerGroup(childComplexity), true
+
+	case "Asset.internalOwnerGroupID":
+		if e.complexity.Asset.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.Asset.InternalOwnerGroupID(childComplexity), true
+
+	case "Asset.internalOwnerUser":
+		if e.complexity.Asset.InternalOwnerUser == nil {
+			break
+		}
+
+		return e.complexity.Asset.InternalOwnerUser(childComplexity), true
+
+	case "Asset.internalOwnerUserID":
+		if e.complexity.Asset.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.Asset.InternalOwnerUserID(childComplexity), true
+
 	case "Asset.name":
 		if e.complexity.Asset.Name == nil {
 			break
 		}
 
 		return e.complexity.Asset.Name(childComplexity), true
+
+	case "Asset.outOfScopePlatforms":
+		if e.complexity.Asset.OutOfScopePlatforms == nil {
+			break
+		}
+
+		args, err := ec.field_Asset_outOfScopePlatforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Asset.OutOfScopePlatforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
 
 	case "Asset.owner":
 		if e.complexity.Asset.Owner == nil {
@@ -7001,6 +8084,39 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Asset.OwnerID(childComplexity), true
 
+	case "Asset.physicalLocation":
+		if e.complexity.Asset.PhysicalLocation == nil {
+			break
+		}
+
+		return e.complexity.Asset.PhysicalLocation(childComplexity), true
+
+	case "Asset.platforms":
+		if e.complexity.Asset.Platforms == nil {
+			break
+		}
+
+		args, err := ec.field_Asset_platforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Asset.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
+
+	case "Asset.purchaseDate":
+		if e.complexity.Asset.PurchaseDate == nil {
+			break
+		}
+
+		return e.complexity.Asset.PurchaseDate(childComplexity), true
+
+	case "Asset.region":
+		if e.complexity.Asset.Region == nil {
+			break
+		}
+
+		return e.complexity.Asset.Region(childComplexity), true
+
 	case "Asset.scans":
 		if e.complexity.Asset.Scans == nil {
 			break
@@ -7012,6 +8128,76 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Asset.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
+	case "Asset.scope":
+		if e.complexity.Asset.Scope == nil {
+			break
+		}
+
+		return e.complexity.Asset.Scope(childComplexity), true
+
+	case "Asset.scopeID":
+		if e.complexity.Asset.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.Asset.ScopeID(childComplexity), true
+
+	case "Asset.scopeName":
+		if e.complexity.Asset.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.Asset.ScopeName(childComplexity), true
+
+	case "Asset.securityTier":
+		if e.complexity.Asset.SecurityTier == nil {
+			break
+		}
+
+		return e.complexity.Asset.SecurityTier(childComplexity), true
+
+	case "Asset.securityTierID":
+		if e.complexity.Asset.SecurityTierID == nil {
+			break
+		}
+
+		return e.complexity.Asset.SecurityTierID(childComplexity), true
+
+	case "Asset.securityTierName":
+		if e.complexity.Asset.SecurityTierName == nil {
+			break
+		}
+
+		return e.complexity.Asset.SecurityTierName(childComplexity), true
+
+	case "Asset.sourceIdentifier":
+		if e.complexity.Asset.SourceIdentifier == nil {
+			break
+		}
+
+		return e.complexity.Asset.SourceIdentifier(childComplexity), true
+
+	case "Asset.sourcePlatform":
+		if e.complexity.Asset.SourcePlatform == nil {
+			break
+		}
+
+		return e.complexity.Asset.SourcePlatform(childComplexity), true
+
+	case "Asset.sourcePlatformID":
+		if e.complexity.Asset.SourcePlatformID == nil {
+			break
+		}
+
+		return e.complexity.Asset.SourcePlatformID(childComplexity), true
+
+	case "Asset.sourceType":
+		if e.complexity.Asset.SourceType == nil {
+			break
+		}
+
+		return e.complexity.Asset.SourceType(childComplexity), true
 
 	case "Asset.systemInternalID":
 		if e.complexity.Asset.SystemInternalID == nil {
@@ -7137,12 +8323,808 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssetUpdatePayload.Asset(childComplexity), true
 
+	case "Campaign.activeWorkflowInstances":
+		if e.complexity.Campaign.ActiveWorkflowInstances == nil {
+			break
+		}
+
+		return e.complexity.Campaign.ActiveWorkflowInstances(childComplexity), true
+
+	case "Campaign.assessment":
+		if e.complexity.Campaign.Assessment == nil {
+			break
+		}
+
+		return e.complexity.Campaign.Assessment(childComplexity), true
+
+	case "Campaign.assessmentID":
+		if e.complexity.Campaign.AssessmentID == nil {
+			break
+		}
+
+		return e.complexity.Campaign.AssessmentID(childComplexity), true
+
+	case "Campaign.assessmentResponses":
+		if e.complexity.Campaign.AssessmentResponses == nil {
+			break
+		}
+
+		args, err := ec.field_Campaign_assessmentResponses_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Campaign.AssessmentResponses(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentResponseOrder), args["where"].(*generated.AssessmentResponseWhereInput)), true
+
+	case "Campaign.blockedGroups":
+		if e.complexity.Campaign.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Campaign_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Campaign.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Campaign.campaignTargets":
+		if e.complexity.Campaign.CampaignTargets == nil {
+			break
+		}
+
+		args, err := ec.field_Campaign_campaignTargets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Campaign.CampaignTargets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignTargetOrder), args["where"].(*generated.CampaignTargetWhereInput)), true
+
+	case "Campaign.campaignType":
+		if e.complexity.Campaign.CampaignType == nil {
+			break
+		}
+
+		return e.complexity.Campaign.CampaignType(childComplexity), true
+
+	case "Campaign.completedAt":
+		if e.complexity.Campaign.CompletedAt == nil {
+			break
+		}
+
+		return e.complexity.Campaign.CompletedAt(childComplexity), true
+
+	case "Campaign.contacts":
+		if e.complexity.Campaign.Contacts == nil {
+			break
+		}
+
+		args, err := ec.field_Campaign_contacts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Campaign.Contacts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ContactOrder), args["where"].(*generated.ContactWhereInput)), true
+
+	case "Campaign.createdAt":
+		if e.complexity.Campaign.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Campaign.CreatedAt(childComplexity), true
+
+	case "Campaign.createdBy":
+		if e.complexity.Campaign.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Campaign.CreatedBy(childComplexity), true
+
+	case "Campaign.description":
+		if e.complexity.Campaign.Description == nil {
+			break
+		}
+
+		return e.complexity.Campaign.Description(childComplexity), true
+
+	case "Campaign.displayID":
+		if e.complexity.Campaign.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Campaign.DisplayID(childComplexity), true
+
+	case "Campaign.dueDate":
+		if e.complexity.Campaign.DueDate == nil {
+			break
+		}
+
+		return e.complexity.Campaign.DueDate(childComplexity), true
+
+	case "Campaign.editors":
+		if e.complexity.Campaign.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_Campaign_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Campaign.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Campaign.entity":
+		if e.complexity.Campaign.Entity == nil {
+			break
+		}
+
+		return e.complexity.Campaign.Entity(childComplexity), true
+
+	case "Campaign.entityID":
+		if e.complexity.Campaign.EntityID == nil {
+			break
+		}
+
+		return e.complexity.Campaign.EntityID(childComplexity), true
+
+	case "Campaign.groups":
+		if e.complexity.Campaign.Groups == nil {
+			break
+		}
+
+		args, err := ec.field_Campaign_groups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Campaign.Groups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Campaign.hasPendingWorkflow":
+		if e.complexity.Campaign.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.Campaign.HasPendingWorkflow(childComplexity), true
+
+	case "Campaign.hasWorkflowHistory":
+		if e.complexity.Campaign.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.Campaign.HasWorkflowHistory(childComplexity), true
+
+	case "Campaign.id":
+		if e.complexity.Campaign.ID == nil {
+			break
+		}
+
+		return e.complexity.Campaign.ID(childComplexity), true
+
+	case "Campaign.identityHolders":
+		if e.complexity.Campaign.IdentityHolders == nil {
+			break
+		}
+
+		args, err := ec.field_Campaign_identityHolders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Campaign.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+
+	case "Campaign.internalOwner":
+		if e.complexity.Campaign.InternalOwner == nil {
+			break
+		}
+
+		return e.complexity.Campaign.InternalOwner(childComplexity), true
+
+	case "Campaign.internalOwnerGroup":
+		if e.complexity.Campaign.InternalOwnerGroup == nil {
+			break
+		}
+
+		return e.complexity.Campaign.InternalOwnerGroup(childComplexity), true
+
+	case "Campaign.internalOwnerGroupID":
+		if e.complexity.Campaign.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.Campaign.InternalOwnerGroupID(childComplexity), true
+
+	case "Campaign.internalOwnerUser":
+		if e.complexity.Campaign.InternalOwnerUser == nil {
+			break
+		}
+
+		return e.complexity.Campaign.InternalOwnerUser(childComplexity), true
+
+	case "Campaign.internalOwnerUserID":
+		if e.complexity.Campaign.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.Campaign.InternalOwnerUserID(childComplexity), true
+
+	case "Campaign.isActive":
+		if e.complexity.Campaign.IsActive == nil {
+			break
+		}
+
+		return e.complexity.Campaign.IsActive(childComplexity), true
+
+	case "Campaign.isRecurring":
+		if e.complexity.Campaign.IsRecurring == nil {
+			break
+		}
+
+		return e.complexity.Campaign.IsRecurring(childComplexity), true
+
+	case "Campaign.lastResentAt":
+		if e.complexity.Campaign.LastResentAt == nil {
+			break
+		}
+
+		return e.complexity.Campaign.LastResentAt(childComplexity), true
+
+	case "Campaign.lastRunAt":
+		if e.complexity.Campaign.LastRunAt == nil {
+			break
+		}
+
+		return e.complexity.Campaign.LastRunAt(childComplexity), true
+
+	case "Campaign.launchedAt":
+		if e.complexity.Campaign.LaunchedAt == nil {
+			break
+		}
+
+		return e.complexity.Campaign.LaunchedAt(childComplexity), true
+
+	case "Campaign.metadata":
+		if e.complexity.Campaign.Metadata == nil {
+			break
+		}
+
+		return e.complexity.Campaign.Metadata(childComplexity), true
+
+	case "Campaign.name":
+		if e.complexity.Campaign.Name == nil {
+			break
+		}
+
+		return e.complexity.Campaign.Name(childComplexity), true
+
+	case "Campaign.nextRunAt":
+		if e.complexity.Campaign.NextRunAt == nil {
+			break
+		}
+
+		return e.complexity.Campaign.NextRunAt(childComplexity), true
+
+	case "Campaign.owner":
+		if e.complexity.Campaign.Owner == nil {
+			break
+		}
+
+		return e.complexity.Campaign.Owner(childComplexity), true
+
+	case "Campaign.ownerID":
+		if e.complexity.Campaign.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Campaign.OwnerID(childComplexity), true
+
+	case "Campaign.recipientCount":
+		if e.complexity.Campaign.RecipientCount == nil {
+			break
+		}
+
+		return e.complexity.Campaign.RecipientCount(childComplexity), true
+
+	case "Campaign.recurrenceCron":
+		if e.complexity.Campaign.RecurrenceCron == nil {
+			break
+		}
+
+		return e.complexity.Campaign.RecurrenceCron(childComplexity), true
+
+	case "Campaign.recurrenceEndAt":
+		if e.complexity.Campaign.RecurrenceEndAt == nil {
+			break
+		}
+
+		return e.complexity.Campaign.RecurrenceEndAt(childComplexity), true
+
+	case "Campaign.recurrenceFrequency":
+		if e.complexity.Campaign.RecurrenceFrequency == nil {
+			break
+		}
+
+		return e.complexity.Campaign.RecurrenceFrequency(childComplexity), true
+
+	case "Campaign.recurrenceInterval":
+		if e.complexity.Campaign.RecurrenceInterval == nil {
+			break
+		}
+
+		return e.complexity.Campaign.RecurrenceInterval(childComplexity), true
+
+	case "Campaign.recurrenceTimezone":
+		if e.complexity.Campaign.RecurrenceTimezone == nil {
+			break
+		}
+
+		return e.complexity.Campaign.RecurrenceTimezone(childComplexity), true
+
+	case "Campaign.resendCount":
+		if e.complexity.Campaign.ResendCount == nil {
+			break
+		}
+
+		return e.complexity.Campaign.ResendCount(childComplexity), true
+
+	case "Campaign.scheduledAt":
+		if e.complexity.Campaign.ScheduledAt == nil {
+			break
+		}
+
+		return e.complexity.Campaign.ScheduledAt(childComplexity), true
+
+	case "Campaign.status":
+		if e.complexity.Campaign.Status == nil {
+			break
+		}
+
+		return e.complexity.Campaign.Status(childComplexity), true
+
+	case "Campaign.tags":
+		if e.complexity.Campaign.Tags == nil {
+			break
+		}
+
+		return e.complexity.Campaign.Tags(childComplexity), true
+
+	case "Campaign.template":
+		if e.complexity.Campaign.Template == nil {
+			break
+		}
+
+		return e.complexity.Campaign.Template(childComplexity), true
+
+	case "Campaign.templateID":
+		if e.complexity.Campaign.TemplateID == nil {
+			break
+		}
+
+		return e.complexity.Campaign.TemplateID(childComplexity), true
+
+	case "Campaign.updatedAt":
+		if e.complexity.Campaign.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Campaign.UpdatedAt(childComplexity), true
+
+	case "Campaign.updatedBy":
+		if e.complexity.Campaign.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Campaign.UpdatedBy(childComplexity), true
+
+	case "Campaign.users":
+		if e.complexity.Campaign.Users == nil {
+			break
+		}
+
+		args, err := ec.field_Campaign_users_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Campaign.Users(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
+
+	case "Campaign.viewers":
+		if e.complexity.Campaign.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_Campaign_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Campaign.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Campaign.workflowEligibleMarker":
+		if e.complexity.Campaign.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.Campaign.WorkflowEligibleMarker(childComplexity), true
+
+	case "Campaign.workflowObjectRefs":
+		if e.complexity.Campaign.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_Campaign_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Campaign.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "Campaign.workflowTimeline":
+		if e.complexity.Campaign.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_Campaign_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Campaign.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
+
+	case "CampaignBulkCreatePayload.campaigns":
+		if e.complexity.CampaignBulkCreatePayload.Campaigns == nil {
+			break
+		}
+
+		return e.complexity.CampaignBulkCreatePayload.Campaigns(childComplexity), true
+
+	case "CampaignConnection.edges":
+		if e.complexity.CampaignConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.CampaignConnection.Edges(childComplexity), true
+
+	case "CampaignConnection.pageInfo":
+		if e.complexity.CampaignConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.CampaignConnection.PageInfo(childComplexity), true
+
+	case "CampaignConnection.totalCount":
+		if e.complexity.CampaignConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.CampaignConnection.TotalCount(childComplexity), true
+
+	case "CampaignCreatePayload.campaign":
+		if e.complexity.CampaignCreatePayload.Campaign == nil {
+			break
+		}
+
+		return e.complexity.CampaignCreatePayload.Campaign(childComplexity), true
+
+	case "CampaignDeletePayload.deletedID":
+		if e.complexity.CampaignDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.CampaignDeletePayload.DeletedID(childComplexity), true
+
+	case "CampaignEdge.cursor":
+		if e.complexity.CampaignEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.CampaignEdge.Cursor(childComplexity), true
+
+	case "CampaignEdge.node":
+		if e.complexity.CampaignEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.CampaignEdge.Node(childComplexity), true
+
+	case "CampaignTarget.activeWorkflowInstances":
+		if e.complexity.CampaignTarget.ActiveWorkflowInstances == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.ActiveWorkflowInstances(childComplexity), true
+
+	case "CampaignTarget.campaign":
+		if e.complexity.CampaignTarget.Campaign == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.Campaign(childComplexity), true
+
+	case "CampaignTarget.campaignID":
+		if e.complexity.CampaignTarget.CampaignID == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.CampaignID(childComplexity), true
+
+	case "CampaignTarget.completedAt":
+		if e.complexity.CampaignTarget.CompletedAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.CompletedAt(childComplexity), true
+
+	case "CampaignTarget.contact":
+		if e.complexity.CampaignTarget.Contact == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.Contact(childComplexity), true
+
+	case "CampaignTarget.contactID":
+		if e.complexity.CampaignTarget.ContactID == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.ContactID(childComplexity), true
+
+	case "CampaignTarget.createdAt":
+		if e.complexity.CampaignTarget.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.CreatedAt(childComplexity), true
+
+	case "CampaignTarget.createdBy":
+		if e.complexity.CampaignTarget.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.CreatedBy(childComplexity), true
+
+	case "CampaignTarget.email":
+		if e.complexity.CampaignTarget.Email == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.Email(childComplexity), true
+
+	case "CampaignTarget.fullName":
+		if e.complexity.CampaignTarget.FullName == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.FullName(childComplexity), true
+
+	case "CampaignTarget.group":
+		if e.complexity.CampaignTarget.Group == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.Group(childComplexity), true
+
+	case "CampaignTarget.groupID":
+		if e.complexity.CampaignTarget.GroupID == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.GroupID(childComplexity), true
+
+	case "CampaignTarget.hasPendingWorkflow":
+		if e.complexity.CampaignTarget.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.HasPendingWorkflow(childComplexity), true
+
+	case "CampaignTarget.hasWorkflowHistory":
+		if e.complexity.CampaignTarget.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.HasWorkflowHistory(childComplexity), true
+
+	case "CampaignTarget.id":
+		if e.complexity.CampaignTarget.ID == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.ID(childComplexity), true
+
+	case "CampaignTarget.metadata":
+		if e.complexity.CampaignTarget.Metadata == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.Metadata(childComplexity), true
+
+	case "CampaignTarget.owner":
+		if e.complexity.CampaignTarget.Owner == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.Owner(childComplexity), true
+
+	case "CampaignTarget.ownerID":
+		if e.complexity.CampaignTarget.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.OwnerID(childComplexity), true
+
+	case "CampaignTarget.sentAt":
+		if e.complexity.CampaignTarget.SentAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.SentAt(childComplexity), true
+
+	case "CampaignTarget.status":
+		if e.complexity.CampaignTarget.Status == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.Status(childComplexity), true
+
+	case "CampaignTarget.updatedAt":
+		if e.complexity.CampaignTarget.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.UpdatedAt(childComplexity), true
+
+	case "CampaignTarget.updatedBy":
+		if e.complexity.CampaignTarget.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.UpdatedBy(childComplexity), true
+
+	case "CampaignTarget.user":
+		if e.complexity.CampaignTarget.User == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.User(childComplexity), true
+
+	case "CampaignTarget.userID":
+		if e.complexity.CampaignTarget.UserID == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.UserID(childComplexity), true
+
+	case "CampaignTarget.workflowEligibleMarker":
+		if e.complexity.CampaignTarget.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.CampaignTarget.WorkflowEligibleMarker(childComplexity), true
+
+	case "CampaignTarget.workflowObjectRefs":
+		if e.complexity.CampaignTarget.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_CampaignTarget_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.CampaignTarget.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "CampaignTarget.workflowTimeline":
+		if e.complexity.CampaignTarget.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_CampaignTarget_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.CampaignTarget.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
+
+	case "CampaignTargetBulkCreatePayload.campaignTargets":
+		if e.complexity.CampaignTargetBulkCreatePayload.CampaignTargets == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetBulkCreatePayload.CampaignTargets(childComplexity), true
+
+	case "CampaignTargetConnection.edges":
+		if e.complexity.CampaignTargetConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetConnection.Edges(childComplexity), true
+
+	case "CampaignTargetConnection.pageInfo":
+		if e.complexity.CampaignTargetConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetConnection.PageInfo(childComplexity), true
+
+	case "CampaignTargetConnection.totalCount":
+		if e.complexity.CampaignTargetConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetConnection.TotalCount(childComplexity), true
+
+	case "CampaignTargetCreatePayload.campaignTarget":
+		if e.complexity.CampaignTargetCreatePayload.CampaignTarget == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetCreatePayload.CampaignTarget(childComplexity), true
+
+	case "CampaignTargetDeletePayload.deletedID":
+		if e.complexity.CampaignTargetDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetDeletePayload.DeletedID(childComplexity), true
+
+	case "CampaignTargetEdge.cursor":
+		if e.complexity.CampaignTargetEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetEdge.Cursor(childComplexity), true
+
+	case "CampaignTargetEdge.node":
+		if e.complexity.CampaignTargetEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetEdge.Node(childComplexity), true
+
+	case "CampaignTargetUpdatePayload.campaignTarget":
+		if e.complexity.CampaignTargetUpdatePayload.CampaignTarget == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetUpdatePayload.CampaignTarget(childComplexity), true
+
+	case "CampaignUpdatePayload.campaign":
+		if e.complexity.CampaignUpdatePayload.Campaign == nil {
+			break
+		}
+
+		return e.complexity.CampaignUpdatePayload.Campaign(childComplexity), true
+
 	case "Contact.address":
 		if e.complexity.Contact.Address == nil {
 			break
 		}
 
 		return e.complexity.Contact.Address(childComplexity), true
+
+	case "Contact.campaignTargets":
+		if e.complexity.Contact.CampaignTargets == nil {
+			break
+		}
+
+		args, err := ec.field_Contact_campaignTargets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Contact.CampaignTargets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignTargetOrder), args["where"].(*generated.CampaignTargetWhereInput)), true
+
+	case "Contact.campaigns":
+		if e.complexity.Contact.Campaigns == nil {
+			break
+		}
+
+		args, err := ec.field_Contact_campaigns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Contact.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
 
 	case "Contact.company":
 		if e.complexity.Contact.Company == nil {
@@ -7362,12 +9344,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
-	case "Control.activeWorkflowInstance":
-		if e.complexity.Control.ActiveWorkflowInstance == nil {
+	case "Control.activeWorkflowInstances":
+		if e.complexity.Control.ActiveWorkflowInstances == nil {
 			break
 		}
 
-		return e.complexity.Control.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.Control.ActiveWorkflowInstances(childComplexity), true
 
 	case "Control.aliases":
 		if e.complexity.Control.Aliases == nil {
@@ -7598,6 +9580,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "Control.environment":
+		if e.complexity.Control.Environment == nil {
+			break
+		}
+
+		return e.complexity.Control.Environment(childComplexity), true
+
+	case "Control.environmentID":
+		if e.complexity.Control.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.Control.EnvironmentID(childComplexity), true
+
+	case "Control.environmentName":
+		if e.complexity.Control.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.Control.EnvironmentName(childComplexity), true
+
 	case "Control.evidence":
 		if e.complexity.Control.Evidence == nil {
 			break
@@ -7642,6 +9645,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.HasPendingWorkflow(childComplexity), true
+
+	case "Control.hasWorkflowHistory":
+		if e.complexity.Control.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.Control.HasWorkflowHistory(childComplexity), true
 
 	case "Control.id":
 		if e.complexity.Control.ID == nil {
@@ -7708,6 +9718,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.OwnerID(childComplexity), true
+
+	case "Control.platforms":
+		if e.complexity.Control.Platforms == nil {
+			break
+		}
+
+		args, err := ec.field_Control_platforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
 
 	case "Control.procedures":
 		if e.complexity.Control.Procedures == nil {
@@ -7817,6 +9839,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
+
+	case "Control.scope":
+		if e.complexity.Control.Scope == nil {
+			break
+		}
+
+		return e.complexity.Control.Scope(childComplexity), true
+
+	case "Control.scopeID":
+		if e.complexity.Control.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.Control.ScopeID(childComplexity), true
+
+	case "Control.scopeName":
+		if e.complexity.Control.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.Control.ScopeName(childComplexity), true
 
 	case "Control.source":
 		if e.complexity.Control.Source == nil {
@@ -7944,6 +9987,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "Control.workflowTimeline":
+		if e.complexity.Control.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_Control_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
 
 	case "ControlBulkCreatePayload.controls":
 		if e.complexity.ControlBulkCreatePayload.Controls == nil {
@@ -9037,6 +11092,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.CustomTypeEnum.OwnerID(childComplexity), true
 
+	case "CustomTypeEnum.platforms":
+		if e.complexity.CustomTypeEnum.Platforms == nil {
+			break
+		}
+
+		args, err := ec.field_CustomTypeEnum_platforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.CustomTypeEnum.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
+
 	case "CustomTypeEnum.procedures":
 		if e.complexity.CustomTypeEnum.Procedures == nil {
 			break
@@ -9464,6 +11531,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DirectoryAccount.DisplayName(childComplexity), true
 
+	case "DirectoryAccount.environment":
+		if e.complexity.DirectoryAccount.Environment == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.Environment(childComplexity), true
+
+	case "DirectoryAccount.environmentID":
+		if e.complexity.DirectoryAccount.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.EnvironmentID(childComplexity), true
+
+	case "DirectoryAccount.environmentName":
+		if e.complexity.DirectoryAccount.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.EnvironmentName(childComplexity), true
+
 	case "DirectoryAccount.externalID":
 		if e.complexity.DirectoryAccount.ExternalID == nil {
 			break
@@ -9606,6 +11694,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DirectoryAccount.RawProfileFileID(childComplexity), true
+
+	case "DirectoryAccount.scope":
+		if e.complexity.DirectoryAccount.Scope == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.Scope(childComplexity), true
+
+	case "DirectoryAccount.scopeID":
+		if e.complexity.DirectoryAccount.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.ScopeID(childComplexity), true
+
+	case "DirectoryAccount.scopeName":
+		if e.complexity.DirectoryAccount.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.ScopeName(childComplexity), true
 
 	case "DirectoryAccount.secondaryKey":
 		if e.complexity.DirectoryAccount.SecondaryKey == nil {
@@ -9799,6 +11908,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DirectoryGroup.Email(childComplexity), true
 
+	case "DirectoryGroup.environment":
+		if e.complexity.DirectoryGroup.Environment == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.Environment(childComplexity), true
+
+	case "DirectoryGroup.environmentID":
+		if e.complexity.DirectoryGroup.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.EnvironmentID(childComplexity), true
+
+	case "DirectoryGroup.environmentName":
+		if e.complexity.DirectoryGroup.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.EnvironmentName(childComplexity), true
+
 	case "DirectoryGroup.externalID":
 		if e.complexity.DirectoryGroup.ExternalID == nil {
 			break
@@ -9894,6 +12024,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DirectoryGroup.RawProfileFileID(childComplexity), true
+
+	case "DirectoryGroup.scope":
+		if e.complexity.DirectoryGroup.Scope == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.Scope(childComplexity), true
+
+	case "DirectoryGroup.scopeID":
+		if e.complexity.DirectoryGroup.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.ScopeID(childComplexity), true
+
+	case "DirectoryGroup.scopeName":
+		if e.complexity.DirectoryGroup.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.ScopeName(childComplexity), true
 
 	case "DirectoryGroup.sourceVersion":
 		if e.complexity.DirectoryGroup.SourceVersion == nil {
@@ -10068,6 +12219,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DirectoryMembership.DisplayID(childComplexity), true
 
+	case "DirectoryMembership.environment":
+		if e.complexity.DirectoryMembership.Environment == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.Environment(childComplexity), true
+
+	case "DirectoryMembership.environmentID":
+		if e.complexity.DirectoryMembership.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.EnvironmentID(childComplexity), true
+
+	case "DirectoryMembership.environmentName":
+		if e.complexity.DirectoryMembership.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.EnvironmentName(childComplexity), true
+
 	case "DirectoryMembership.events":
 		if e.complexity.DirectoryMembership.Events == nil {
 			break
@@ -10156,6 +12328,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DirectoryMembership.Role(childComplexity), true
+
+	case "DirectoryMembership.scope":
+		if e.complexity.DirectoryMembership.Scope == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.Scope(childComplexity), true
+
+	case "DirectoryMembership.scopeID":
+		if e.complexity.DirectoryMembership.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.ScopeID(childComplexity), true
+
+	case "DirectoryMembership.scopeName":
+		if e.complexity.DirectoryMembership.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.ScopeName(childComplexity), true
 
 	case "DirectoryMembership.source":
 		if e.complexity.DirectoryMembership.Source == nil {
@@ -10324,6 +12517,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DirectorySyncRun.DisplayID(childComplexity), true
 
+	case "DirectorySyncRun.environment":
+		if e.complexity.DirectorySyncRun.Environment == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.Environment(childComplexity), true
+
+	case "DirectorySyncRun.environmentID":
+		if e.complexity.DirectorySyncRun.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.EnvironmentID(childComplexity), true
+
+	case "DirectorySyncRun.environmentName":
+		if e.complexity.DirectorySyncRun.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.EnvironmentName(childComplexity), true
+
 	case "DirectorySyncRun.error":
 		if e.complexity.DirectorySyncRun.Error == nil {
 			break
@@ -10379,6 +12593,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DirectorySyncRun.RawManifestFileID(childComplexity), true
+
+	case "DirectorySyncRun.scope":
+		if e.complexity.DirectorySyncRun.Scope == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.Scope(childComplexity), true
+
+	case "DirectorySyncRun.scopeID":
+		if e.complexity.DirectorySyncRun.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.ScopeID(childComplexity), true
+
+	case "DirectorySyncRun.scopeName":
+		if e.complexity.DirectorySyncRun.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.ScopeName(childComplexity), true
 
 	case "DirectorySyncRun.sourceCursor":
 		if e.complexity.DirectorySyncRun.SourceCursor == nil {
@@ -10691,6 +12926,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DocumentData.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
+	case "DocumentData.environment":
+		if e.complexity.DocumentData.Environment == nil {
+			break
+		}
+
+		return e.complexity.DocumentData.Environment(childComplexity), true
+
+	case "DocumentData.environmentID":
+		if e.complexity.DocumentData.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.DocumentData.EnvironmentID(childComplexity), true
+
+	case "DocumentData.environmentName":
+		if e.complexity.DocumentData.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.DocumentData.EnvironmentName(childComplexity), true
+
 	case "DocumentData.files":
 		if e.complexity.DocumentData.Files == nil {
 			break
@@ -10723,6 +12979,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DocumentData.OwnerID(childComplexity), true
+
+	case "DocumentData.scope":
+		if e.complexity.DocumentData.Scope == nil {
+			break
+		}
+
+		return e.complexity.DocumentData.Scope(childComplexity), true
+
+	case "DocumentData.scopeID":
+		if e.complexity.DocumentData.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.DocumentData.ScopeID(childComplexity), true
+
+	case "DocumentData.scopeName":
+		if e.complexity.DocumentData.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.DocumentData.ScopeName(childComplexity), true
 
 	case "DocumentData.tags":
 		if e.complexity.DocumentData.Tags == nil {
@@ -10829,6 +13106,32 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DocumentDataUpdatePayload.DocumentData(childComplexity), true
 
+	case "Entity.annualSpend":
+		if e.complexity.Entity.AnnualSpend == nil {
+			break
+		}
+
+		return e.complexity.Entity.AnnualSpend(childComplexity), true
+
+	case "Entity.approvedForUse":
+		if e.complexity.Entity.ApprovedForUse == nil {
+			break
+		}
+
+		return e.complexity.Entity.ApprovedForUse(childComplexity), true
+
+	case "Entity.assessmentResponses":
+		if e.complexity.Entity.AssessmentResponses == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_assessmentResponses_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.AssessmentResponses(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentResponseOrder), args["where"].(*generated.AssessmentResponseWhereInput)), true
+
 	case "Entity.assets":
 		if e.complexity.Entity.Assets == nil {
 			break
@@ -10840,6 +13143,32 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Entity.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "Entity.authMethods":
+		if e.complexity.Entity.AuthMethods == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_authMethods_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.AuthMethods(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CustomTypeEnumOrder), args["where"].(*generated.CustomTypeEnumWhereInput)), true
+
+	case "Entity.autoRenews":
+		if e.complexity.Entity.AutoRenews == nil {
+			break
+		}
+
+		return e.complexity.Entity.AutoRenews(childComplexity), true
+
+	case "Entity.billingModel":
+		if e.complexity.Entity.BillingModel == nil {
+			break
+		}
+
+		return e.complexity.Entity.BillingModel(childComplexity), true
 
 	case "Entity.blockedGroups":
 		if e.complexity.Entity.BlockedGroups == nil {
@@ -10853,6 +13182,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Entity.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "Entity.campaigns":
+		if e.complexity.Entity.Campaigns == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_campaigns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+
 	case "Entity.contacts":
 		if e.complexity.Entity.Contacts == nil {
 			break
@@ -10864,6 +13205,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Entity.Contacts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ContactOrder), args["where"].(*generated.ContactWhereInput)), true
+
+	case "Entity.contractEndDate":
+		if e.complexity.Entity.ContractEndDate == nil {
+			break
+		}
+
+		return e.complexity.Entity.ContractEndDate(childComplexity), true
+
+	case "Entity.contractRenewalAt":
+		if e.complexity.Entity.ContractRenewalAt == nil {
+			break
+		}
+
+		return e.complexity.Entity.ContractRenewalAt(childComplexity), true
+
+	case "Entity.contractStartDate":
+		if e.complexity.Entity.ContractStartDate == nil {
+			break
+		}
+
+		return e.complexity.Entity.ContractStartDate(childComplexity), true
 
 	case "Entity.createdAt":
 		if e.complexity.Entity.CreatedAt == nil {
@@ -10924,6 +13286,81 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Entity.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "Entity.employerIdentityHolders":
+		if e.complexity.Entity.EmployerIdentityHolders == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_employerIdentityHolders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.EmployerIdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+
+	case "Entity.entityRelationshipState":
+		if e.complexity.Entity.EntityRelationshipState == nil {
+			break
+		}
+
+		return e.complexity.Entity.EntityRelationshipState(childComplexity), true
+
+	case "Entity.entityRelationshipStateID":
+		if e.complexity.Entity.EntityRelationshipStateID == nil {
+			break
+		}
+
+		return e.complexity.Entity.EntityRelationshipStateID(childComplexity), true
+
+	case "Entity.entityRelationshipStateName":
+		if e.complexity.Entity.EntityRelationshipStateName == nil {
+			break
+		}
+
+		return e.complexity.Entity.EntityRelationshipStateName(childComplexity), true
+
+	case "Entity.entitySecurityQuestionnaireStatus":
+		if e.complexity.Entity.EntitySecurityQuestionnaireStatus == nil {
+			break
+		}
+
+		return e.complexity.Entity.EntitySecurityQuestionnaireStatus(childComplexity), true
+
+	case "Entity.entitySecurityQuestionnaireStatusID":
+		if e.complexity.Entity.EntitySecurityQuestionnaireStatusID == nil {
+			break
+		}
+
+		return e.complexity.Entity.EntitySecurityQuestionnaireStatusID(childComplexity), true
+
+	case "Entity.entitySecurityQuestionnaireStatusName":
+		if e.complexity.Entity.EntitySecurityQuestionnaireStatusName == nil {
+			break
+		}
+
+		return e.complexity.Entity.EntitySecurityQuestionnaireStatusName(childComplexity), true
+
+	case "Entity.entitySourceType":
+		if e.complexity.Entity.EntitySourceType == nil {
+			break
+		}
+
+		return e.complexity.Entity.EntitySourceType(childComplexity), true
+
+	case "Entity.entitySourceTypeID":
+		if e.complexity.Entity.EntitySourceTypeID == nil {
+			break
+		}
+
+		return e.complexity.Entity.EntitySourceTypeID(childComplexity), true
+
+	case "Entity.entitySourceTypeName":
+		if e.complexity.Entity.EntitySourceTypeName == nil {
+			break
+		}
+
+		return e.complexity.Entity.EntitySourceTypeName(childComplexity), true
+
 	case "Entity.entityType":
 		if e.complexity.Entity.EntityType == nil {
 			break
@@ -10938,6 +13375,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Entity.EntityTypeID(childComplexity), true
 
+	case "Entity.environment":
+		if e.complexity.Entity.Environment == nil {
+			break
+		}
+
+		return e.complexity.Entity.Environment(childComplexity), true
+
+	case "Entity.environmentID":
+		if e.complexity.Entity.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.Entity.EnvironmentID(childComplexity), true
+
+	case "Entity.environmentName":
+		if e.complexity.Entity.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.Entity.EnvironmentName(childComplexity), true
+
 	case "Entity.files":
 		if e.complexity.Entity.Files == nil {
 			break
@@ -10950,12 +13408,43 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Entity.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
+	case "Entity.hasSoc2":
+		if e.complexity.Entity.HasSoc2 == nil {
+			break
+		}
+
+		return e.complexity.Entity.HasSoc2(childComplexity), true
+
 	case "Entity.id":
 		if e.complexity.Entity.ID == nil {
 			break
 		}
 
 		return e.complexity.Entity.ID(childComplexity), true
+
+	case "Entity.identityHolders":
+		if e.complexity.Entity.IdentityHolders == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_identityHolders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+
+	case "Entity.integrations":
+		if e.complexity.Entity.Integrations == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_integrations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
 
 	case "Entity.internalNotes":
 		if e.complexity.Entity.InternalNotes == nil {
@@ -10964,12 +13453,89 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Entity.InternalNotes(childComplexity), true
 
+	case "Entity.internalOwner":
+		if e.complexity.Entity.InternalOwner == nil {
+			break
+		}
+
+		return e.complexity.Entity.InternalOwner(childComplexity), true
+
+	case "Entity.internalOwnerGroup":
+		if e.complexity.Entity.InternalOwnerGroup == nil {
+			break
+		}
+
+		return e.complexity.Entity.InternalOwnerGroup(childComplexity), true
+
+	case "Entity.internalOwnerGroupID":
+		if e.complexity.Entity.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.Entity.InternalOwnerGroupID(childComplexity), true
+
+	case "Entity.internalOwnerUser":
+		if e.complexity.Entity.InternalOwnerUser == nil {
+			break
+		}
+
+		return e.complexity.Entity.InternalOwnerUser(childComplexity), true
+
+	case "Entity.internalOwnerUserID":
+		if e.complexity.Entity.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.Entity.InternalOwnerUserID(childComplexity), true
+
+	case "Entity.lastReviewedAt":
+		if e.complexity.Entity.LastReviewedAt == nil {
+			break
+		}
+
+		return e.complexity.Entity.LastReviewedAt(childComplexity), true
+
+	case "Entity.linkedAssetIds":
+		if e.complexity.Entity.LinkedAssetIds == nil {
+			break
+		}
+
+		return e.complexity.Entity.LinkedAssetIds(childComplexity), true
+
+	case "Entity.links":
+		if e.complexity.Entity.Links == nil {
+			break
+		}
+
+		return e.complexity.Entity.Links(childComplexity), true
+
+	case "Entity.mfaEnforced":
+		if e.complexity.Entity.MfaEnforced == nil {
+			break
+		}
+
+		return e.complexity.Entity.MfaEnforced(childComplexity), true
+
+	case "Entity.mfaSupported":
+		if e.complexity.Entity.MfaSupported == nil {
+			break
+		}
+
+		return e.complexity.Entity.MfaSupported(childComplexity), true
+
 	case "Entity.name":
 		if e.complexity.Entity.Name == nil {
 			break
 		}
 
 		return e.complexity.Entity.Name(childComplexity), true
+
+	case "Entity.nextReviewAt":
+		if e.complexity.Entity.NextReviewAt == nil {
+			break
+		}
+
+		return e.complexity.Entity.NextReviewAt(childComplexity), true
 
 	case "Entity.notes":
 		if e.complexity.Entity.Notes == nil {
@@ -10982,6 +13548,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Entity.Notes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+
+	case "Entity.outOfScopePlatforms":
+		if e.complexity.Entity.OutOfScopePlatforms == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_outOfScopePlatforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.OutOfScopePlatforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
 
 	case "Entity.owner":
 		if e.complexity.Entity.Owner == nil {
@@ -10997,6 +13575,95 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Entity.OwnerID(childComplexity), true
 
+	case "Entity.platforms":
+		if e.complexity.Entity.Platforms == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_platforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
+
+	case "Entity.providedServices":
+		if e.complexity.Entity.ProvidedServices == nil {
+			break
+		}
+
+		return e.complexity.Entity.ProvidedServices(childComplexity), true
+
+	case "Entity.renewalRisk":
+		if e.complexity.Entity.RenewalRisk == nil {
+			break
+		}
+
+		return e.complexity.Entity.RenewalRisk(childComplexity), true
+
+	case "Entity.reviewFrequency":
+		if e.complexity.Entity.ReviewFrequency == nil {
+			break
+		}
+
+		return e.complexity.Entity.ReviewFrequency(childComplexity), true
+
+	case "Entity.reviewedBy":
+		if e.complexity.Entity.ReviewedBy == nil {
+			break
+		}
+
+		return e.complexity.Entity.ReviewedBy(childComplexity), true
+
+	case "Entity.reviewedByGroup":
+		if e.complexity.Entity.ReviewedByGroup == nil {
+			break
+		}
+
+		return e.complexity.Entity.ReviewedByGroup(childComplexity), true
+
+	case "Entity.reviewedByGroupID":
+		if e.complexity.Entity.ReviewedByGroupID == nil {
+			break
+		}
+
+		return e.complexity.Entity.ReviewedByGroupID(childComplexity), true
+
+	case "Entity.reviewedByUser":
+		if e.complexity.Entity.ReviewedByUser == nil {
+			break
+		}
+
+		return e.complexity.Entity.ReviewedByUser(childComplexity), true
+
+	case "Entity.reviewedByUserID":
+		if e.complexity.Entity.ReviewedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Entity.ReviewedByUserID(childComplexity), true
+
+	case "Entity.riskRating":
+		if e.complexity.Entity.RiskRating == nil {
+			break
+		}
+
+		return e.complexity.Entity.RiskRating(childComplexity), true
+
+	case "Entity.riskScore":
+		if e.complexity.Entity.RiskScore == nil {
+			break
+		}
+
+		return e.complexity.Entity.RiskScore(childComplexity), true
+
+	case "Entity.ssoEnforced":
+		if e.complexity.Entity.SSOEnforced == nil {
+			break
+		}
+
+		return e.complexity.Entity.SSOEnforced(childComplexity), true
+
 	case "Entity.scans":
 		if e.complexity.Entity.Scans == nil {
 			break
@@ -11009,12 +13676,78 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Entity.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
 
+	case "Entity.scope":
+		if e.complexity.Entity.Scope == nil {
+			break
+		}
+
+		return e.complexity.Entity.Scope(childComplexity), true
+
+	case "Entity.scopeID":
+		if e.complexity.Entity.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.Entity.ScopeID(childComplexity), true
+
+	case "Entity.scopeName":
+		if e.complexity.Entity.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.Entity.ScopeName(childComplexity), true
+
+	case "Entity.soc2PeriodEnd":
+		if e.complexity.Entity.Soc2PeriodEnd == nil {
+			break
+		}
+
+		return e.complexity.Entity.Soc2PeriodEnd(childComplexity), true
+
+	case "Entity.sourcePlatforms":
+		if e.complexity.Entity.SourcePlatforms == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_sourcePlatforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.SourcePlatforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
+
+	case "Entity.spendCurrency":
+		if e.complexity.Entity.SpendCurrency == nil {
+			break
+		}
+
+		return e.complexity.Entity.SpendCurrency(childComplexity), true
+
 	case "Entity.status":
 		if e.complexity.Entity.Status == nil {
 			break
 		}
 
 		return e.complexity.Entity.Status(childComplexity), true
+
+	case "Entity.statusPageURL":
+		if e.complexity.Entity.StatusPageURL == nil {
+			break
+		}
+
+		return e.complexity.Entity.StatusPageURL(childComplexity), true
+
+	case "Entity.subprocessors":
+		if e.complexity.Entity.Subprocessors == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_subprocessors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.Subprocessors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubprocessorOrder), args["where"].(*generated.SubprocessorWhereInput)), true
 
 	case "Entity.systemInternalID":
 		if e.complexity.Entity.SystemInternalID == nil {
@@ -11037,6 +13770,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Entity.Tags(childComplexity), true
 
+	case "Entity.terminationNoticeDays":
+		if e.complexity.Entity.TerminationNoticeDays == nil {
+			break
+		}
+
+		return e.complexity.Entity.TerminationNoticeDays(childComplexity), true
+
+	case "Entity.tier":
+		if e.complexity.Entity.Tier == nil {
+			break
+		}
+
+		return e.complexity.Entity.Tier(childComplexity), true
+
 	case "Entity.updatedAt":
 		if e.complexity.Entity.UpdatedAt == nil {
 			break
@@ -11050,6 +13797,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Entity.UpdatedBy(childComplexity), true
+
+	case "Entity.vendorMetadata":
+		if e.complexity.Entity.VendorMetadata == nil {
+			break
+		}
+
+		return e.complexity.Entity.VendorMetadata(childComplexity), true
 
 	case "Entity.viewers":
 		if e.complexity.Entity.Viewers == nil {
@@ -11583,12 +14337,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EventUpdatePayload.Event(childComplexity), true
 
-	case "Evidence.activeWorkflowInstance":
-		if e.complexity.Evidence.ActiveWorkflowInstance == nil {
+	case "Evidence.activeWorkflowInstances":
+		if e.complexity.Evidence.ActiveWorkflowInstances == nil {
 			break
 		}
 
-		return e.complexity.Evidence.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.Evidence.ActiveWorkflowInstances(childComplexity), true
 
 	case "Evidence.collectionProcedure":
 		if e.complexity.Evidence.CollectionProcedure == nil {
@@ -11680,6 +14434,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Evidence.DisplayID(childComplexity), true
 
+	case "Evidence.environment":
+		if e.complexity.Evidence.Environment == nil {
+			break
+		}
+
+		return e.complexity.Evidence.Environment(childComplexity), true
+
+	case "Evidence.environmentID":
+		if e.complexity.Evidence.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.Evidence.EnvironmentID(childComplexity), true
+
+	case "Evidence.environmentName":
+		if e.complexity.Evidence.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.Evidence.EnvironmentName(childComplexity), true
+
 	case "Evidence.files":
 		if e.complexity.Evidence.Files == nil {
 			break
@@ -11698,6 +14473,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Evidence.HasPendingWorkflow(childComplexity), true
+
+	case "Evidence.hasWorkflowHistory":
+		if e.complexity.Evidence.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.Evidence.HasWorkflowHistory(childComplexity), true
 
 	case "Evidence.id":
 		if e.complexity.Evidence.ID == nil {
@@ -11734,6 +14516,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Evidence.OwnerID(childComplexity), true
 
+	case "Evidence.platforms":
+		if e.complexity.Evidence.Platforms == nil {
+			break
+		}
+
+		args, err := ec.field_Evidence_platforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Evidence.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
+
 	case "Evidence.programs":
 		if e.complexity.Evidence.Programs == nil {
 			break
@@ -11752,6 +14546,39 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Evidence.RenewalDate(childComplexity), true
+
+	case "Evidence.scans":
+		if e.complexity.Evidence.Scans == nil {
+			break
+		}
+
+		args, err := ec.field_Evidence_scans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Evidence.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
+	case "Evidence.scope":
+		if e.complexity.Evidence.Scope == nil {
+			break
+		}
+
+		return e.complexity.Evidence.Scope(childComplexity), true
+
+	case "Evidence.scopeID":
+		if e.complexity.Evidence.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.Evidence.ScopeID(childComplexity), true
+
+	case "Evidence.scopeName":
+		if e.complexity.Evidence.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.Evidence.ScopeName(childComplexity), true
 
 	case "Evidence.source":
 		if e.complexity.Evidence.Source == nil {
@@ -11837,6 +14664,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Evidence.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "Evidence.workflowTimeline":
+		if e.complexity.Evidence.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_Evidence_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Evidence.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
 
 	case "EvidenceBulkCreatePayload.evidences":
 		if e.complexity.EvidenceBulkCreatePayload.Evidences == nil {
@@ -12177,6 +15016,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.File.Entity(childComplexity), true
 
+	case "File.environment":
+		if e.complexity.File.Environment == nil {
+			break
+		}
+
+		return e.complexity.File.Environment(childComplexity), true
+
+	case "File.environmentID":
+		if e.complexity.File.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.File.EnvironmentID(childComplexity), true
+
+	case "File.environmentName":
+		if e.complexity.File.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.File.EnvironmentName(childComplexity), true
+
 	case "File.events":
 		if e.complexity.File.Events == nil {
 			break
@@ -12283,6 +15143,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.File.PersistedFileSize(childComplexity), true
 
+	case "File.platform":
+		if e.complexity.File.Platform == nil {
+			break
+		}
+
+		return e.complexity.File.Platform(childComplexity), true
+
 	case "File.presignedURL":
 		if e.complexity.File.PresignedURL == nil {
 			break
@@ -12317,6 +15184,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.File.ProvidedFileSize(childComplexity), true
+
+	case "File.scan":
+		if e.complexity.File.Scan == nil {
+			break
+		}
+
+		return e.complexity.File.Scan(childComplexity), true
+
+	case "File.scope":
+		if e.complexity.File.Scope == nil {
+			break
+		}
+
+		return e.complexity.File.Scope(childComplexity), true
+
+	case "File.scopeID":
+		if e.complexity.File.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.File.ScopeID(childComplexity), true
+
+	case "File.scopeName":
+		if e.complexity.File.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.File.ScopeName(childComplexity), true
 
 	case "File.secrets":
 		if e.complexity.File.Secrets == nil {
@@ -12641,6 +15536,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Finding.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
+	case "Finding.environment":
+		if e.complexity.Finding.Environment == nil {
+			break
+		}
+
+		return e.complexity.Finding.Environment(childComplexity), true
+
+	case "Finding.environmentID":
+		if e.complexity.Finding.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.Finding.EnvironmentID(childComplexity), true
+
+	case "Finding.environmentName":
+		if e.complexity.Finding.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.Finding.EnvironmentName(childComplexity), true
+
 	case "Finding.eventTime":
 		if e.complexity.Finding.EventTime == nil {
 			break
@@ -12892,6 +15808,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Finding.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
+	case "Finding.scope":
+		if e.complexity.Finding.Scope == nil {
+			break
+		}
+
+		return e.complexity.Finding.Scope(childComplexity), true
+
+	case "Finding.scopeID":
+		if e.complexity.Finding.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.Finding.ScopeID(childComplexity), true
+
+	case "Finding.scopeName":
+		if e.complexity.Finding.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.Finding.ScopeName(childComplexity), true
 
 	case "Finding.score":
 		if e.complexity.Finding.Score == nil {
@@ -13346,6 +16283,66 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Group.ActionPlanViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
+	case "Group.campaignBlockedGroups":
+		if e.complexity.Group.CampaignBlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Group_campaignBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.CampaignBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+
+	case "Group.campaignEditors":
+		if e.complexity.Group.CampaignEditors == nil {
+			break
+		}
+
+		args, err := ec.field_Group_campaignEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.CampaignEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+
+	case "Group.campaignTargets":
+		if e.complexity.Group.CampaignTargets == nil {
+			break
+		}
+
+		args, err := ec.field_Group_campaignTargets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.CampaignTargets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignTargetOrder), args["where"].(*generated.CampaignTargetWhereInput)), true
+
+	case "Group.campaignViewers":
+		if e.complexity.Group.CampaignViewers == nil {
+			break
+		}
+
+		args, err := ec.field_Group_campaignViewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.CampaignViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+
+	case "Group.campaigns":
+		if e.complexity.Group.Campaigns == nil {
+			break
+		}
+
+		args, err := ec.field_Group_campaigns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+
 	case "Group.controlBlockedGroups":
 		if e.complexity.Group.ControlBlockedGroups == nil {
 			break
@@ -13705,6 +16702,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Group.Permissions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Group.platformBlockedGroups":
+		if e.complexity.Group.PlatformBlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Group_platformBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.PlatformBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
+
+	case "Group.platformEditors":
+		if e.complexity.Group.PlatformEditors == nil {
+			break
+		}
+
+		args, err := ec.field_Group_platformEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.PlatformEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
+
+	case "Group.platformViewers":
+		if e.complexity.Group.PlatformViewers == nil {
+			break
+		}
+
+		args, err := ec.field_Group_platformViewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.PlatformViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
 
 	case "Group.procedureBlockedGroups":
 		if e.complexity.Group.ProcedureBlockedGroups == nil {
@@ -14603,6 +17636,552 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.HushUpdatePayload.Hush(childComplexity), true
 
+	case "IdentityHolder.accessPlatforms":
+		if e.complexity.IdentityHolder.AccessPlatforms == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_accessPlatforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.AccessPlatforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
+
+	case "IdentityHolder.activeWorkflowInstances":
+		if e.complexity.IdentityHolder.ActiveWorkflowInstances == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.ActiveWorkflowInstances(childComplexity), true
+
+	case "IdentityHolder.alternateEmail":
+		if e.complexity.IdentityHolder.AlternateEmail == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.AlternateEmail(childComplexity), true
+
+	case "IdentityHolder.assessmentResponses":
+		if e.complexity.IdentityHolder.AssessmentResponses == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_assessmentResponses_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.AssessmentResponses(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentResponseOrder), args["where"].(*generated.AssessmentResponseWhereInput)), true
+
+	case "IdentityHolder.assessments":
+		if e.complexity.IdentityHolder.Assessments == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_assessments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.Assessments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentOrder), args["where"].(*generated.AssessmentWhereInput)), true
+
+	case "IdentityHolder.assets":
+		if e.complexity.IdentityHolder.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "IdentityHolder.blockedGroups":
+		if e.complexity.IdentityHolder.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "IdentityHolder.campaigns":
+		if e.complexity.IdentityHolder.Campaigns == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_campaigns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+
+	case "IdentityHolder.createdAt":
+		if e.complexity.IdentityHolder.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.CreatedAt(childComplexity), true
+
+	case "IdentityHolder.createdBy":
+		if e.complexity.IdentityHolder.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.CreatedBy(childComplexity), true
+
+	case "IdentityHolder.department":
+		if e.complexity.IdentityHolder.Department == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.Department(childComplexity), true
+
+	case "IdentityHolder.displayID":
+		if e.complexity.IdentityHolder.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.DisplayID(childComplexity), true
+
+	case "IdentityHolder.editors":
+		if e.complexity.IdentityHolder.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "IdentityHolder.email":
+		if e.complexity.IdentityHolder.Email == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.Email(childComplexity), true
+
+	case "IdentityHolder.employer":
+		if e.complexity.IdentityHolder.Employer == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.Employer(childComplexity), true
+
+	case "IdentityHolder.employerEntityID":
+		if e.complexity.IdentityHolder.EmployerEntityID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.EmployerEntityID(childComplexity), true
+
+	case "IdentityHolder.endDate":
+		if e.complexity.IdentityHolder.EndDate == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.EndDate(childComplexity), true
+
+	case "IdentityHolder.entities":
+		if e.complexity.IdentityHolder.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "IdentityHolder.environment":
+		if e.complexity.IdentityHolder.Environment == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.Environment(childComplexity), true
+
+	case "IdentityHolder.environmentID":
+		if e.complexity.IdentityHolder.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.EnvironmentID(childComplexity), true
+
+	case "IdentityHolder.environmentName":
+		if e.complexity.IdentityHolder.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.EnvironmentName(childComplexity), true
+
+	case "IdentityHolder.externalReferenceID":
+		if e.complexity.IdentityHolder.ExternalReferenceID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.ExternalReferenceID(childComplexity), true
+
+	case "IdentityHolder.externalUserID":
+		if e.complexity.IdentityHolder.ExternalUserID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.ExternalUserID(childComplexity), true
+
+	case "IdentityHolder.fullName":
+		if e.complexity.IdentityHolder.FullName == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.FullName(childComplexity), true
+
+	case "IdentityHolder.hasPendingWorkflow":
+		if e.complexity.IdentityHolder.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.HasPendingWorkflow(childComplexity), true
+
+	case "IdentityHolder.hasWorkflowHistory":
+		if e.complexity.IdentityHolder.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.HasWorkflowHistory(childComplexity), true
+
+	case "IdentityHolder.id":
+		if e.complexity.IdentityHolder.ID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.ID(childComplexity), true
+
+	case "IdentityHolder.identityHolderType":
+		if e.complexity.IdentityHolder.IdentityHolderType == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.IdentityHolderType(childComplexity), true
+
+	case "IdentityHolder.internalOwner":
+		if e.complexity.IdentityHolder.InternalOwner == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.InternalOwner(childComplexity), true
+
+	case "IdentityHolder.internalOwnerGroup":
+		if e.complexity.IdentityHolder.InternalOwnerGroup == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.InternalOwnerGroup(childComplexity), true
+
+	case "IdentityHolder.internalOwnerGroupID":
+		if e.complexity.IdentityHolder.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.InternalOwnerGroupID(childComplexity), true
+
+	case "IdentityHolder.internalOwnerUser":
+		if e.complexity.IdentityHolder.InternalOwnerUser == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.InternalOwnerUser(childComplexity), true
+
+	case "IdentityHolder.internalOwnerUserID":
+		if e.complexity.IdentityHolder.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.InternalOwnerUserID(childComplexity), true
+
+	case "IdentityHolder.isActive":
+		if e.complexity.IdentityHolder.IsActive == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.IsActive(childComplexity), true
+
+	case "IdentityHolder.isOpenlaneUser":
+		if e.complexity.IdentityHolder.IsOpenlaneUser == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.IsOpenlaneUser(childComplexity), true
+
+	case "IdentityHolder.location":
+		if e.complexity.IdentityHolder.Location == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.Location(childComplexity), true
+
+	case "IdentityHolder.metadata":
+		if e.complexity.IdentityHolder.Metadata == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.Metadata(childComplexity), true
+
+	case "IdentityHolder.owner":
+		if e.complexity.IdentityHolder.Owner == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.Owner(childComplexity), true
+
+	case "IdentityHolder.ownerID":
+		if e.complexity.IdentityHolder.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.OwnerID(childComplexity), true
+
+	case "IdentityHolder.phoneNumber":
+		if e.complexity.IdentityHolder.PhoneNumber == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.PhoneNumber(childComplexity), true
+
+	case "IdentityHolder.platforms":
+		if e.complexity.IdentityHolder.Platforms == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_platforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
+
+	case "IdentityHolder.scope":
+		if e.complexity.IdentityHolder.Scope == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.Scope(childComplexity), true
+
+	case "IdentityHolder.scopeID":
+		if e.complexity.IdentityHolder.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.ScopeID(childComplexity), true
+
+	case "IdentityHolder.scopeName":
+		if e.complexity.IdentityHolder.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.ScopeName(childComplexity), true
+
+	case "IdentityHolder.startDate":
+		if e.complexity.IdentityHolder.StartDate == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.StartDate(childComplexity), true
+
+	case "IdentityHolder.status":
+		if e.complexity.IdentityHolder.Status == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.Status(childComplexity), true
+
+	case "IdentityHolder.tags":
+		if e.complexity.IdentityHolder.Tags == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.Tags(childComplexity), true
+
+	case "IdentityHolder.tasks":
+		if e.complexity.IdentityHolder.Tasks == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_tasks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
+
+	case "IdentityHolder.team":
+		if e.complexity.IdentityHolder.Team == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.Team(childComplexity), true
+
+	case "IdentityHolder.templates":
+		if e.complexity.IdentityHolder.Templates == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_templates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.Templates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateOrder), args["where"].(*generated.TemplateWhereInput)), true
+
+	case "IdentityHolder.title":
+		if e.complexity.IdentityHolder.Title == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.Title(childComplexity), true
+
+	case "IdentityHolder.updatedAt":
+		if e.complexity.IdentityHolder.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.UpdatedAt(childComplexity), true
+
+	case "IdentityHolder.updatedBy":
+		if e.complexity.IdentityHolder.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.UpdatedBy(childComplexity), true
+
+	case "IdentityHolder.user":
+		if e.complexity.IdentityHolder.User == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.User(childComplexity), true
+
+	case "IdentityHolder.userID":
+		if e.complexity.IdentityHolder.UserID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.UserID(childComplexity), true
+
+	case "IdentityHolder.viewers":
+		if e.complexity.IdentityHolder.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "IdentityHolder.workflowEligibleMarker":
+		if e.complexity.IdentityHolder.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolder.WorkflowEligibleMarker(childComplexity), true
+
+	case "IdentityHolder.workflowObjectRefs":
+		if e.complexity.IdentityHolder.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "IdentityHolder.workflowTimeline":
+		if e.complexity.IdentityHolder.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
+
+	case "IdentityHolderBulkCreatePayload.identityHolders":
+		if e.complexity.IdentityHolderBulkCreatePayload.IdentityHolders == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderBulkCreatePayload.IdentityHolders(childComplexity), true
+
+	case "IdentityHolderConnection.edges":
+		if e.complexity.IdentityHolderConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderConnection.Edges(childComplexity), true
+
+	case "IdentityHolderConnection.pageInfo":
+		if e.complexity.IdentityHolderConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderConnection.PageInfo(childComplexity), true
+
+	case "IdentityHolderConnection.totalCount":
+		if e.complexity.IdentityHolderConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderConnection.TotalCount(childComplexity), true
+
+	case "IdentityHolderCreatePayload.identityHolder":
+		if e.complexity.IdentityHolderCreatePayload.IdentityHolder == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderCreatePayload.IdentityHolder(childComplexity), true
+
+	case "IdentityHolderDeletePayload.deletedID":
+		if e.complexity.IdentityHolderDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderDeletePayload.DeletedID(childComplexity), true
+
+	case "IdentityHolderEdge.cursor":
+		if e.complexity.IdentityHolderEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderEdge.Cursor(childComplexity), true
+
+	case "IdentityHolderEdge.node":
+		if e.complexity.IdentityHolderEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderEdge.Node(childComplexity), true
+
+	case "IdentityHolderUpdatePayload.identityHolder":
+		if e.complexity.IdentityHolderUpdatePayload.IdentityHolder == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderUpdatePayload.IdentityHolder(childComplexity), true
+
 	case "Integration.actionPlans":
 		if e.complexity.Integration.ActionPlans == nil {
 			break
@@ -14683,6 +18262,39 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Integration.DirectorySyncRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectorySyncRunOrder), args["where"].(*generated.DirectorySyncRunWhereInput)), true
+
+	case "Integration.entities":
+		if e.complexity.Integration.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Integration.environment":
+		if e.complexity.Integration.Environment == nil {
+			break
+		}
+
+		return e.complexity.Integration.Environment(childComplexity), true
+
+	case "Integration.environmentID":
+		if e.complexity.Integration.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.Integration.EnvironmentID(childComplexity), true
+
+	case "Integration.environmentName":
+		if e.complexity.Integration.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.Integration.EnvironmentName(childComplexity), true
 
 	case "Integration.events":
 		if e.complexity.Integration.Events == nil {
@@ -14800,6 +18412,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Integration.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
 
+	case "Integration.scope":
+		if e.complexity.Integration.Scope == nil {
+			break
+		}
+
+		return e.complexity.Integration.Scope(childComplexity), true
+
+	case "Integration.scopeID":
+		if e.complexity.Integration.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.Integration.ScopeID(childComplexity), true
+
+	case "Integration.scopeName":
+		if e.complexity.Integration.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.Integration.ScopeName(childComplexity), true
+
 	case "Integration.secrets":
 		if e.complexity.Integration.Secrets == nil {
 			break
@@ -14913,12 +18546,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.IntegrationEdge.Node(childComplexity), true
 
-	case "InternalPolicy.activeWorkflowInstance":
-		if e.complexity.InternalPolicy.ActiveWorkflowInstance == nil {
+	case "InternalPolicy.activeWorkflowInstances":
+		if e.complexity.InternalPolicy.ActiveWorkflowInstances == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicy.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.InternalPolicy.ActiveWorkflowInstances(childComplexity), true
 
 	case "InternalPolicy.approvalRequired":
 		if e.complexity.InternalPolicy.ApprovalRequired == nil {
@@ -15102,6 +18735,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "InternalPolicy.environment":
+		if e.complexity.InternalPolicy.Environment == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.Environment(childComplexity), true
+
+	case "InternalPolicy.environmentID":
+		if e.complexity.InternalPolicy.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.EnvironmentID(childComplexity), true
+
+	case "InternalPolicy.environmentName":
+		if e.complexity.InternalPolicy.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.EnvironmentName(childComplexity), true
+
 	case "InternalPolicy.file":
 		if e.complexity.InternalPolicy.File == nil {
 			break
@@ -15122,6 +18776,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicy.HasPendingWorkflow(childComplexity), true
+
+	case "InternalPolicy.hasWorkflowHistory":
+		if e.complexity.InternalPolicy.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.HasWorkflowHistory(childComplexity), true
 
 	case "InternalPolicy.id":
 		if e.complexity.InternalPolicy.ID == nil {
@@ -15255,6 +18916,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
+	case "InternalPolicy.scope":
+		if e.complexity.InternalPolicy.Scope == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.Scope(childComplexity), true
+
+	case "InternalPolicy.scopeID":
+		if e.complexity.InternalPolicy.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.ScopeID(childComplexity), true
+
+	case "InternalPolicy.scopeName":
+		if e.complexity.InternalPolicy.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.ScopeName(childComplexity), true
+
 	case "InternalPolicy.status":
 		if e.complexity.InternalPolicy.Status == nil {
 			break
@@ -15360,6 +19042,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicy.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "InternalPolicy.workflowTimeline":
+		if e.complexity.InternalPolicy.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
 
 	case "InternalPolicyBulkCreatePayload.internalPolicies":
 		if e.complexity.InternalPolicyBulkCreatePayload.InternalPolicies == nil {
@@ -17068,6 +20762,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVAsset(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVCampaign":
+		if e.complexity.Mutation.CreateBulkCSVCampaign == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVCampaign_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVCampaign(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVCampaignTarget":
+		if e.complexity.Mutation.CreateBulkCSVCampaignTarget == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVCampaignTarget_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVCampaignTarget(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVContact":
 		if e.complexity.Mutation.CreateBulkCSVContact == nil {
 			break
@@ -17344,6 +21062,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVHush(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVIdentityHolder":
+		if e.complexity.Mutation.CreateBulkCSVIdentityHolder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVIdentityHolder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVIdentityHolder(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVInternalPolicy":
 		if e.complexity.Mutation.CreateBulkCSVInternalPolicy == nil {
 			break
@@ -17439,6 +21169,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkCSVOrganizationSetting(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVPlatform":
+		if e.complexity.Mutation.CreateBulkCSVPlatform == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVPlatform_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVPlatform(childComplexity, args["input"].(graphql.Upload)), true
 
 	case "Mutation.createBulkCSVProcedure":
 		if e.complexity.Mutation.CreateBulkCSVProcedure == nil {
@@ -17704,29 +21446,29 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVWorkflowDefinition(childComplexity, args["input"].(graphql.Upload)), true
 
-	case "Mutation.createBulkCSVWorkflowEvent":
-		if e.complexity.Mutation.CreateBulkCSVWorkflowEvent == nil {
+	case "Mutation.createBulkCampaign":
+		if e.complexity.Mutation.CreateBulkCampaign == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_createBulkCSVWorkflowEvent_args(ctx, rawArgs)
+		args, err := ec.field_Mutation_createBulkCampaign_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateBulkCSVWorkflowEvent(childComplexity, args["input"].(graphql.Upload)), true
+		return e.complexity.Mutation.CreateBulkCampaign(childComplexity, args["input"].([]*generated.CreateCampaignInput)), true
 
-	case "Mutation.createBulkCSVWorkflowObjectRef":
-		if e.complexity.Mutation.CreateBulkCSVWorkflowObjectRef == nil {
+	case "Mutation.createBulkCampaignTarget":
+		if e.complexity.Mutation.CreateBulkCampaignTarget == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_createBulkCSVWorkflowObjectRef_args(ctx, rawArgs)
+		args, err := ec.field_Mutation_createBulkCampaignTarget_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateBulkCSVWorkflowObjectRef(childComplexity, args["input"].(graphql.Upload)), true
+		return e.complexity.Mutation.CreateBulkCampaignTarget(childComplexity, args["input"].([]*generated.CreateCampaignTargetInput)), true
 
 	case "Mutation.createBulkContact":
 		if e.complexity.Mutation.CreateBulkContact == nil {
@@ -18004,6 +21746,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkHush(childComplexity, args["input"].([]*generated.CreateHushInput)), true
 
+	case "Mutation.createBulkIdentityHolder":
+		if e.complexity.Mutation.CreateBulkIdentityHolder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkIdentityHolder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkIdentityHolder(childComplexity, args["input"].([]*generated.CreateIdentityHolderInput)), true
+
 	case "Mutation.createBulkInternalPolicy":
 		if e.complexity.Mutation.CreateBulkInternalPolicy == nil {
 			break
@@ -18099,6 +21853,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkOrganizationSetting(childComplexity, args["input"].([]*generated.CreateOrganizationSettingInput)), true
+
+	case "Mutation.createBulkPlatform":
+		if e.complexity.Mutation.CreateBulkPlatform == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkPlatform_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkPlatform(childComplexity, args["input"].([]*generated.CreatePlatformInput)), true
 
 	case "Mutation.createBulkProcedure":
 		if e.complexity.Mutation.CreateBulkProcedure == nil {
@@ -18364,29 +22130,29 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkWorkflowDefinition(childComplexity, args["input"].([]*generated.CreateWorkflowDefinitionInput)), true
 
-	case "Mutation.createBulkWorkflowEvent":
-		if e.complexity.Mutation.CreateBulkWorkflowEvent == nil {
+	case "Mutation.createCampaign":
+		if e.complexity.Mutation.CreateCampaign == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_createBulkWorkflowEvent_args(ctx, rawArgs)
+		args, err := ec.field_Mutation_createCampaign_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateBulkWorkflowEvent(childComplexity, args["input"].([]*generated.CreateWorkflowEventInput)), true
+		return e.complexity.Mutation.CreateCampaign(childComplexity, args["input"].(generated.CreateCampaignInput)), true
 
-	case "Mutation.createBulkWorkflowObjectRef":
-		if e.complexity.Mutation.CreateBulkWorkflowObjectRef == nil {
+	case "Mutation.createCampaignTarget":
+		if e.complexity.Mutation.CreateCampaignTarget == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_createBulkWorkflowObjectRef_args(ctx, rawArgs)
+		args, err := ec.field_Mutation_createCampaignTarget_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateBulkWorkflowObjectRef(childComplexity, args["input"].([]*generated.CreateWorkflowObjectRefInput)), true
+		return e.complexity.Mutation.CreateCampaignTarget(childComplexity, args["input"].(generated.CreateCampaignTargetInput)), true
 
 	case "Mutation.createContact":
 		if e.complexity.Mutation.CreateContact == nil {
@@ -18736,6 +22502,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateHush(childComplexity, args["input"].(generated.CreateHushInput)), true
 
+	case "Mutation.createIdentityHolder":
+		if e.complexity.Mutation.CreateIdentityHolder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createIdentityHolder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateIdentityHolder(childComplexity, args["input"].(generated.CreateIdentityHolderInput)), true
+
 	case "Mutation.createInternalPolicy":
 		if e.complexity.Mutation.CreateInternalPolicy == nil {
 			break
@@ -18927,6 +22705,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreatePersonalAccessToken(childComplexity, args["input"].(generated.CreatePersonalAccessTokenInput)), true
+
+	case "Mutation.createPlatform":
+		if e.complexity.Mutation.CreatePlatform == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createPlatform_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreatePlatform(childComplexity, args["input"].(generated.CreatePlatformInput)), true
 
 	case "Mutation.createProcedure":
 		if e.complexity.Mutation.CreateProcedure == nil {
@@ -19347,30 +23137,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateWorkflowDefinition(childComplexity, args["input"].(generated.CreateWorkflowDefinitionInput)), true
-
-	case "Mutation.createWorkflowEvent":
-		if e.complexity.Mutation.CreateWorkflowEvent == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createWorkflowEvent_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateWorkflowEvent(childComplexity, args["input"].(generated.CreateWorkflowEventInput)), true
-
-	case "Mutation.createWorkflowObjectRef":
-		if e.complexity.Mutation.CreateWorkflowObjectRef == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createWorkflowObjectRef_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateWorkflowObjectRef(childComplexity, args["input"].(generated.CreateWorkflowObjectRefInput)), true
 
 	case "Mutation.deleteAPIToken":
 		if e.complexity.Mutation.DeleteAPIToken == nil {
@@ -19936,6 +23702,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteBulkUserSetting(childComplexity, args["ids"].([]string)), true
 
+	case "Mutation.deleteCampaign":
+		if e.complexity.Mutation.DeleteCampaign == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteCampaign_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteCampaign(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteCampaignTarget":
+		if e.complexity.Mutation.DeleteCampaignTarget == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteCampaignTarget_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteCampaignTarget(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteContact":
 		if e.complexity.Mutation.DeleteContact == nil {
 			break
@@ -20236,6 +24026,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteHush(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteIdentityHolder":
+		if e.complexity.Mutation.DeleteIdentityHolder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteIdentityHolder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteIdentityHolder(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteIntegration":
 		if e.complexity.Mutation.DeleteIntegration == nil {
 			break
@@ -20427,6 +24229,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeletePersonalAccessToken(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deletePlatform":
+		if e.complexity.Mutation.DeletePlatform == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deletePlatform_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeletePlatform(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteProcedure":
 		if e.complexity.Mutation.DeleteProcedure == nil {
@@ -20764,30 +24578,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteWorkflowDefinition(childComplexity, args["id"].(string)), true
 
-	case "Mutation.deleteWorkflowEvent":
-		if e.complexity.Mutation.DeleteWorkflowEvent == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteWorkflowEvent_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.DeleteWorkflowEvent(childComplexity, args["id"].(string)), true
-
-	case "Mutation.deleteWorkflowObjectRef":
-		if e.complexity.Mutation.DeleteWorkflowObjectRef == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteWorkflowObjectRef_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.DeleteWorkflowObjectRef(childComplexity, args["id"].(string)), true
-
 	case "Mutation.publishTrustCenterSetting":
 		if e.complexity.Mutation.PublishTrustCenterSetting == nil {
 			break
@@ -20806,18 +24596,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.RejectWorkflowAssignment(childComplexity, args["id"].(string), args["reason"].(*string)), true
-
-	case "Mutation.sendTrustCenterNDAEmail":
-		if e.complexity.Mutation.SendTrustCenterNDAEmail == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_sendTrustCenterNDAEmail_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.SendTrustCenterNDAEmail(childComplexity, args["input"].(model.SendTrustCenterNDAInput)), true
 
 	case "Mutation.submitTrustCenterNDAResponse":
 		if e.complexity.Mutation.SubmitTrustCenterNDAResponse == nil {
@@ -21058,6 +24836,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateBulkTrustCenterSubprocessor(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateTrustCenterSubprocessorInput)), true
+
+	case "Mutation.updateCampaign":
+		if e.complexity.Mutation.UpdateCampaign == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateCampaign_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateCampaign(childComplexity, args["id"].(string), args["input"].(generated.UpdateCampaignInput)), true
+
+	case "Mutation.updateCampaignTarget":
+		if e.complexity.Mutation.UpdateCampaignTarget == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateCampaignTarget_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateCampaignTarget(childComplexity, args["id"].(string), args["input"].(generated.UpdateCampaignTargetInput)), true
 
 	case "Mutation.updateContact":
 		if e.complexity.Mutation.UpdateContact == nil {
@@ -21371,6 +25173,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateHush(childComplexity, args["id"].(string), args["input"].(generated.UpdateHushInput)), true
 
+	case "Mutation.updateIdentityHolder":
+		if e.complexity.Mutation.UpdateIdentityHolder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateIdentityHolder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateIdentityHolder(childComplexity, args["id"].(string), args["input"].(generated.UpdateIdentityHolderInput)), true
+
 	case "Mutation.updateInternalPolicy":
 		if e.complexity.Mutation.UpdateInternalPolicy == nil {
 			break
@@ -21538,6 +25352,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdatePersonalAccessToken(childComplexity, args["id"].(string), args["input"].(generated.UpdatePersonalAccessTokenInput)), true
+
+	case "Mutation.updatePlatform":
+		if e.complexity.Mutation.UpdatePlatform == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePlatform_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePlatform(childComplexity, args["id"].(string), args["input"].(generated.UpdatePlatformInput)), true
 
 	case "Mutation.updateProcedure":
 		if e.complexity.Mutation.UpdateProcedure == nil {
@@ -21970,18 +25796,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateWorkflowDefinition(childComplexity, args["id"].(string), args["input"].(generated.UpdateWorkflowDefinitionInput)), true
-
-	case "Mutation.updateWorkflowEvent":
-		if e.complexity.Mutation.UpdateWorkflowEvent == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateWorkflowEvent_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateWorkflowEvent(childComplexity, args["id"].(string), args["input"].(generated.UpdateWorkflowEventInput)), true
 
 	case "Mutation.validateCustomDomain":
 		if e.complexity.Mutation.ValidateCustomDomain == nil {
@@ -23081,6 +26895,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.AvatarUpdatedAt(childComplexity), true
 
+	case "Organization.campaignTargets":
+		if e.complexity.Organization.CampaignTargets == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_campaignTargets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.CampaignTargets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignTargetOrder), args["where"].(*generated.CampaignTargetWhereInput)), true
+
+	case "Organization.campaigns":
+		if e.complexity.Organization.Campaigns == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_campaigns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+
 	case "Organization.children":
 		if e.complexity.Organization.Children == nil {
 			break
@@ -23459,6 +27297,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.ID(childComplexity), true
 
+	case "Organization.identityHolders":
+		if e.complexity.Organization.IdentityHolders == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_identityHolders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+
 	case "Organization.integrations":
 		if e.complexity.Organization.Integrations == nil {
 			break
@@ -23678,6 +27528,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.PersonalOrg(childComplexity), true
+
+	case "Organization.platforms":
+		if e.complexity.Organization.Platforms == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_platforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
 
 	case "Organization.procedureCreators":
 		if e.complexity.Organization.ProcedureCreators == nil {
@@ -24770,12 +28632,859 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.PersonalAccessTokenUpdatePayload.PersonalAccessToken(childComplexity), true
 
-	case "Procedure.activeWorkflowInstance":
-		if e.complexity.Procedure.ActiveWorkflowInstance == nil {
+	case "Platform.accessModel":
+		if e.complexity.Platform.AccessModel == nil {
 			break
 		}
 
-		return e.complexity.Procedure.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.Platform.AccessModel(childComplexity), true
+
+	case "Platform.accessModelID":
+		if e.complexity.Platform.AccessModelID == nil {
+			break
+		}
+
+		return e.complexity.Platform.AccessModelID(childComplexity), true
+
+	case "Platform.accessModelName":
+		if e.complexity.Platform.AccessModelName == nil {
+			break
+		}
+
+		return e.complexity.Platform.AccessModelName(childComplexity), true
+
+	case "Platform.activeWorkflowInstances":
+		if e.complexity.Platform.ActiveWorkflowInstances == nil {
+			break
+		}
+
+		return e.complexity.Platform.ActiveWorkflowInstances(childComplexity), true
+
+	case "Platform.applicableFrameworks":
+		if e.complexity.Platform.ApplicableFrameworks == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_applicableFrameworks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.ApplicableFrameworks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.StandardOrder), args["where"].(*generated.StandardWhereInput)), true
+
+	case "Platform.assessments":
+		if e.complexity.Platform.Assessments == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_assessments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.Assessments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentOrder), args["where"].(*generated.AssessmentWhereInput)), true
+
+	case "Platform.assets":
+		if e.complexity.Platform.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "Platform.blockedGroups":
+		if e.complexity.Platform.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Platform.businessOwner":
+		if e.complexity.Platform.BusinessOwner == nil {
+			break
+		}
+
+		return e.complexity.Platform.BusinessOwner(childComplexity), true
+
+	case "Platform.businessOwnerGroup":
+		if e.complexity.Platform.BusinessOwnerGroup == nil {
+			break
+		}
+
+		return e.complexity.Platform.BusinessOwnerGroup(childComplexity), true
+
+	case "Platform.businessOwnerGroupID":
+		if e.complexity.Platform.BusinessOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.Platform.BusinessOwnerGroupID(childComplexity), true
+
+	case "Platform.businessOwnerUser":
+		if e.complexity.Platform.BusinessOwnerUser == nil {
+			break
+		}
+
+		return e.complexity.Platform.BusinessOwnerUser(childComplexity), true
+
+	case "Platform.businessOwnerUserID":
+		if e.complexity.Platform.BusinessOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.Platform.BusinessOwnerUserID(childComplexity), true
+
+	case "Platform.businessPurpose":
+		if e.complexity.Platform.BusinessPurpose == nil {
+			break
+		}
+
+		return e.complexity.Platform.BusinessPurpose(childComplexity), true
+
+	case "Platform.containsPii":
+		if e.complexity.Platform.ContainsPii == nil {
+			break
+		}
+
+		return e.complexity.Platform.ContainsPii(childComplexity), true
+
+	case "Platform.controls":
+		if e.complexity.Platform.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
+	case "Platform.costCenter":
+		if e.complexity.Platform.CostCenter == nil {
+			break
+		}
+
+		return e.complexity.Platform.CostCenter(childComplexity), true
+
+	case "Platform.createdAt":
+		if e.complexity.Platform.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Platform.CreatedAt(childComplexity), true
+
+	case "Platform.createdBy":
+		if e.complexity.Platform.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Platform.CreatedBy(childComplexity), true
+
+	case "Platform.criticality":
+		if e.complexity.Platform.Criticality == nil {
+			break
+		}
+
+		return e.complexity.Platform.Criticality(childComplexity), true
+
+	case "Platform.criticalityID":
+		if e.complexity.Platform.CriticalityID == nil {
+			break
+		}
+
+		return e.complexity.Platform.CriticalityID(childComplexity), true
+
+	case "Platform.criticalityName":
+		if e.complexity.Platform.CriticalityName == nil {
+			break
+		}
+
+		return e.complexity.Platform.CriticalityName(childComplexity), true
+
+	case "Platform.dataFlowSummary":
+		if e.complexity.Platform.DataFlowSummary == nil {
+			break
+		}
+
+		return e.complexity.Platform.DataFlowSummary(childComplexity), true
+
+	case "Platform.description":
+		if e.complexity.Platform.Description == nil {
+			break
+		}
+
+		return e.complexity.Platform.Description(childComplexity), true
+
+	case "Platform.displayID":
+		if e.complexity.Platform.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Platform.DisplayID(childComplexity), true
+
+	case "Platform.editors":
+		if e.complexity.Platform.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Platform.encryptionStatus":
+		if e.complexity.Platform.EncryptionStatus == nil {
+			break
+		}
+
+		return e.complexity.Platform.EncryptionStatus(childComplexity), true
+
+	case "Platform.encryptionStatusID":
+		if e.complexity.Platform.EncryptionStatusID == nil {
+			break
+		}
+
+		return e.complexity.Platform.EncryptionStatusID(childComplexity), true
+
+	case "Platform.encryptionStatusName":
+		if e.complexity.Platform.EncryptionStatusName == nil {
+			break
+		}
+
+		return e.complexity.Platform.EncryptionStatusName(childComplexity), true
+
+	case "Platform.entities":
+		if e.complexity.Platform.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Platform.environment":
+		if e.complexity.Platform.Environment == nil {
+			break
+		}
+
+		return e.complexity.Platform.Environment(childComplexity), true
+
+	case "Platform.environmentID":
+		if e.complexity.Platform.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.Platform.EnvironmentID(childComplexity), true
+
+	case "Platform.environmentName":
+		if e.complexity.Platform.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.Platform.EnvironmentName(childComplexity), true
+
+	case "Platform.estimatedMonthlyCost":
+		if e.complexity.Platform.EstimatedMonthlyCost == nil {
+			break
+		}
+
+		return e.complexity.Platform.EstimatedMonthlyCost(childComplexity), true
+
+	case "Platform.evidence":
+		if e.complexity.Platform.Evidence == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_evidence_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.Evidence(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
+
+	case "Platform.externalReferenceID":
+		if e.complexity.Platform.ExternalReferenceID == nil {
+			break
+		}
+
+		return e.complexity.Platform.ExternalReferenceID(childComplexity), true
+
+	case "Platform.files":
+		if e.complexity.Platform.Files == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
+	case "Platform.generatedScans":
+		if e.complexity.Platform.GeneratedScans == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_generatedScans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.GeneratedScans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
+	case "Platform.hasPendingWorkflow":
+		if e.complexity.Platform.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.Platform.HasPendingWorkflow(childComplexity), true
+
+	case "Platform.hasWorkflowHistory":
+		if e.complexity.Platform.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.Platform.HasWorkflowHistory(childComplexity), true
+
+	case "Platform.id":
+		if e.complexity.Platform.ID == nil {
+			break
+		}
+
+		return e.complexity.Platform.ID(childComplexity), true
+
+	case "Platform.identityHolders":
+		if e.complexity.Platform.IdentityHolders == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_identityHolders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+
+	case "Platform.internalOwner":
+		if e.complexity.Platform.InternalOwner == nil {
+			break
+		}
+
+		return e.complexity.Platform.InternalOwner(childComplexity), true
+
+	case "Platform.internalOwnerGroup":
+		if e.complexity.Platform.InternalOwnerGroup == nil {
+			break
+		}
+
+		return e.complexity.Platform.InternalOwnerGroup(childComplexity), true
+
+	case "Platform.internalOwnerGroupID":
+		if e.complexity.Platform.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.Platform.InternalOwnerGroupID(childComplexity), true
+
+	case "Platform.internalOwnerUser":
+		if e.complexity.Platform.InternalOwnerUser == nil {
+			break
+		}
+
+		return e.complexity.Platform.InternalOwnerUser(childComplexity), true
+
+	case "Platform.internalOwnerUserID":
+		if e.complexity.Platform.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.Platform.InternalOwnerUserID(childComplexity), true
+
+	case "Platform.metadata":
+		if e.complexity.Platform.Metadata == nil {
+			break
+		}
+
+		return e.complexity.Platform.Metadata(childComplexity), true
+
+	case "Platform.name":
+		if e.complexity.Platform.Name == nil {
+			break
+		}
+
+		return e.complexity.Platform.Name(childComplexity), true
+
+	case "Platform.outOfScopeAssets":
+		if e.complexity.Platform.OutOfScopeAssets == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_outOfScopeAssets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.OutOfScopeAssets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "Platform.outOfScopeVendors":
+		if e.complexity.Platform.OutOfScopeVendors == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_outOfScopeVendors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.OutOfScopeVendors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Platform.owner":
+		if e.complexity.Platform.Owner == nil {
+			break
+		}
+
+		return e.complexity.Platform.Owner(childComplexity), true
+
+	case "Platform.ownerID":
+		if e.complexity.Platform.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Platform.OwnerID(childComplexity), true
+
+	case "Platform.physicalLocation":
+		if e.complexity.Platform.PhysicalLocation == nil {
+			break
+		}
+
+		return e.complexity.Platform.PhysicalLocation(childComplexity), true
+
+	case "Platform.platformDataClassification":
+		if e.complexity.Platform.PlatformDataClassification == nil {
+			break
+		}
+
+		return e.complexity.Platform.PlatformDataClassification(childComplexity), true
+
+	case "Platform.platformDataClassificationID":
+		if e.complexity.Platform.PlatformDataClassificationID == nil {
+			break
+		}
+
+		return e.complexity.Platform.PlatformDataClassificationID(childComplexity), true
+
+	case "Platform.platformDataClassificationName":
+		if e.complexity.Platform.PlatformDataClassificationName == nil {
+			break
+		}
+
+		return e.complexity.Platform.PlatformDataClassificationName(childComplexity), true
+
+	case "Platform.platformKind":
+		if e.complexity.Platform.PlatformKind == nil {
+			break
+		}
+
+		return e.complexity.Platform.PlatformKind(childComplexity), true
+
+	case "Platform.platformKindID":
+		if e.complexity.Platform.PlatformKindID == nil {
+			break
+		}
+
+		return e.complexity.Platform.PlatformKindID(childComplexity), true
+
+	case "Platform.platformKindName":
+		if e.complexity.Platform.PlatformKindName == nil {
+			break
+		}
+
+		return e.complexity.Platform.PlatformKindName(childComplexity), true
+
+	case "Platform.platformOwner":
+		if e.complexity.Platform.PlatformOwner == nil {
+			break
+		}
+
+		return e.complexity.Platform.PlatformOwner(childComplexity), true
+
+	case "Platform.platformOwnerID":
+		if e.complexity.Platform.PlatformOwnerID == nil {
+			break
+		}
+
+		return e.complexity.Platform.PlatformOwnerID(childComplexity), true
+
+	case "Platform.purchaseDate":
+		if e.complexity.Platform.PurchaseDate == nil {
+			break
+		}
+
+		return e.complexity.Platform.PurchaseDate(childComplexity), true
+
+	case "Platform.region":
+		if e.complexity.Platform.Region == nil {
+			break
+		}
+
+		return e.complexity.Platform.Region(childComplexity), true
+
+	case "Platform.risks":
+		if e.complexity.Platform.Risks == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_risks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "Platform.scans":
+		if e.complexity.Platform.Scans == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_scans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
+	case "Platform.scope":
+		if e.complexity.Platform.Scope == nil {
+			break
+		}
+
+		return e.complexity.Platform.Scope(childComplexity), true
+
+	case "Platform.scopeID":
+		if e.complexity.Platform.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.Platform.ScopeID(childComplexity), true
+
+	case "Platform.scopeName":
+		if e.complexity.Platform.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.Platform.ScopeName(childComplexity), true
+
+	case "Platform.scopeStatement":
+		if e.complexity.Platform.ScopeStatement == nil {
+			break
+		}
+
+		return e.complexity.Platform.ScopeStatement(childComplexity), true
+
+	case "Platform.securityOwner":
+		if e.complexity.Platform.SecurityOwner == nil {
+			break
+		}
+
+		return e.complexity.Platform.SecurityOwner(childComplexity), true
+
+	case "Platform.securityOwnerGroup":
+		if e.complexity.Platform.SecurityOwnerGroup == nil {
+			break
+		}
+
+		return e.complexity.Platform.SecurityOwnerGroup(childComplexity), true
+
+	case "Platform.securityOwnerGroupID":
+		if e.complexity.Platform.SecurityOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.Platform.SecurityOwnerGroupID(childComplexity), true
+
+	case "Platform.securityOwnerUser":
+		if e.complexity.Platform.SecurityOwnerUser == nil {
+			break
+		}
+
+		return e.complexity.Platform.SecurityOwnerUser(childComplexity), true
+
+	case "Platform.securityOwnerUserID":
+		if e.complexity.Platform.SecurityOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.Platform.SecurityOwnerUserID(childComplexity), true
+
+	case "Platform.securityTier":
+		if e.complexity.Platform.SecurityTier == nil {
+			break
+		}
+
+		return e.complexity.Platform.SecurityTier(childComplexity), true
+
+	case "Platform.securityTierID":
+		if e.complexity.Platform.SecurityTierID == nil {
+			break
+		}
+
+		return e.complexity.Platform.SecurityTierID(childComplexity), true
+
+	case "Platform.securityTierName":
+		if e.complexity.Platform.SecurityTierName == nil {
+			break
+		}
+
+		return e.complexity.Platform.SecurityTierName(childComplexity), true
+
+	case "Platform.sourceAssets":
+		if e.complexity.Platform.SourceAssets == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_sourceAssets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.SourceAssets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "Platform.sourceEntities":
+		if e.complexity.Platform.SourceEntities == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_sourceEntities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.SourceEntities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Platform.sourceIdentifier":
+		if e.complexity.Platform.SourceIdentifier == nil {
+			break
+		}
+
+		return e.complexity.Platform.SourceIdentifier(childComplexity), true
+
+	case "Platform.sourceType":
+		if e.complexity.Platform.SourceType == nil {
+			break
+		}
+
+		return e.complexity.Platform.SourceType(childComplexity), true
+
+	case "Platform.status":
+		if e.complexity.Platform.Status == nil {
+			break
+		}
+
+		return e.complexity.Platform.Status(childComplexity), true
+
+	case "Platform.tags":
+		if e.complexity.Platform.Tags == nil {
+			break
+		}
+
+		return e.complexity.Platform.Tags(childComplexity), true
+
+	case "Platform.tasks":
+		if e.complexity.Platform.Tasks == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_tasks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
+
+	case "Platform.technicalOwner":
+		if e.complexity.Platform.TechnicalOwner == nil {
+			break
+		}
+
+		return e.complexity.Platform.TechnicalOwner(childComplexity), true
+
+	case "Platform.technicalOwnerGroup":
+		if e.complexity.Platform.TechnicalOwnerGroup == nil {
+			break
+		}
+
+		return e.complexity.Platform.TechnicalOwnerGroup(childComplexity), true
+
+	case "Platform.technicalOwnerGroupID":
+		if e.complexity.Platform.TechnicalOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.Platform.TechnicalOwnerGroupID(childComplexity), true
+
+	case "Platform.technicalOwnerUser":
+		if e.complexity.Platform.TechnicalOwnerUser == nil {
+			break
+		}
+
+		return e.complexity.Platform.TechnicalOwnerUser(childComplexity), true
+
+	case "Platform.technicalOwnerUserID":
+		if e.complexity.Platform.TechnicalOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.Platform.TechnicalOwnerUserID(childComplexity), true
+
+	case "Platform.trustBoundaryDescription":
+		if e.complexity.Platform.TrustBoundaryDescription == nil {
+			break
+		}
+
+		return e.complexity.Platform.TrustBoundaryDescription(childComplexity), true
+
+	case "Platform.updatedAt":
+		if e.complexity.Platform.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Platform.UpdatedAt(childComplexity), true
+
+	case "Platform.updatedBy":
+		if e.complexity.Platform.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Platform.UpdatedBy(childComplexity), true
+
+	case "Platform.viewers":
+		if e.complexity.Platform.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Platform.workflowEligibleMarker":
+		if e.complexity.Platform.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.Platform.WorkflowEligibleMarker(childComplexity), true
+
+	case "Platform.workflowObjectRefs":
+		if e.complexity.Platform.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "Platform.workflowTimeline":
+		if e.complexity.Platform.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
+
+	case "PlatformBulkCreatePayload.platforms":
+		if e.complexity.PlatformBulkCreatePayload.Platforms == nil {
+			break
+		}
+
+		return e.complexity.PlatformBulkCreatePayload.Platforms(childComplexity), true
+
+	case "PlatformConnection.edges":
+		if e.complexity.PlatformConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.PlatformConnection.Edges(childComplexity), true
+
+	case "PlatformConnection.pageInfo":
+		if e.complexity.PlatformConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.PlatformConnection.PageInfo(childComplexity), true
+
+	case "PlatformConnection.totalCount":
+		if e.complexity.PlatformConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.PlatformConnection.TotalCount(childComplexity), true
+
+	case "PlatformCreatePayload.platform":
+		if e.complexity.PlatformCreatePayload.Platform == nil {
+			break
+		}
+
+		return e.complexity.PlatformCreatePayload.Platform(childComplexity), true
+
+	case "PlatformDeletePayload.deletedID":
+		if e.complexity.PlatformDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.PlatformDeletePayload.DeletedID(childComplexity), true
+
+	case "PlatformEdge.cursor":
+		if e.complexity.PlatformEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.PlatformEdge.Cursor(childComplexity), true
+
+	case "PlatformEdge.node":
+		if e.complexity.PlatformEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.PlatformEdge.Node(childComplexity), true
+
+	case "PlatformUpdatePayload.platform":
+		if e.complexity.PlatformUpdatePayload.Platform == nil {
+			break
+		}
+
+		return e.complexity.PlatformUpdatePayload.Platform(childComplexity), true
+
+	case "Procedure.activeWorkflowInstances":
+		if e.complexity.Procedure.ActiveWorkflowInstances == nil {
+			break
+		}
+
+		return e.complexity.Procedure.ActiveWorkflowInstances(childComplexity), true
 
 	case "Procedure.approvalRequired":
 		if e.complexity.Procedure.ApprovalRequired == nil {
@@ -24935,6 +29644,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "Procedure.environment":
+		if e.complexity.Procedure.Environment == nil {
+			break
+		}
+
+		return e.complexity.Procedure.Environment(childComplexity), true
+
+	case "Procedure.environmentID":
+		if e.complexity.Procedure.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.Procedure.EnvironmentID(childComplexity), true
+
+	case "Procedure.environmentName":
+		if e.complexity.Procedure.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.Procedure.EnvironmentName(childComplexity), true
+
 	case "Procedure.file":
 		if e.complexity.Procedure.File == nil {
 			break
@@ -24955,6 +29685,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Procedure.HasPendingWorkflow(childComplexity), true
+
+	case "Procedure.hasWorkflowHistory":
+		if e.complexity.Procedure.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.Procedure.HasWorkflowHistory(childComplexity), true
 
 	case "Procedure.id":
 		if e.complexity.Procedure.ID == nil {
@@ -25088,6 +29825,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
+	case "Procedure.scope":
+		if e.complexity.Procedure.Scope == nil {
+			break
+		}
+
+		return e.complexity.Procedure.Scope(childComplexity), true
+
+	case "Procedure.scopeID":
+		if e.complexity.Procedure.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.Procedure.ScopeID(childComplexity), true
+
+	case "Procedure.scopeName":
+		if e.complexity.Procedure.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.Procedure.ScopeName(childComplexity), true
+
 	case "Procedure.status":
 		if e.complexity.Procedure.Status == nil {
 			break
@@ -25193,6 +29951,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Procedure.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "Procedure.workflowTimeline":
+		if e.complexity.Procedure.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_Procedure_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
 
 	case "ProcedureBulkCreatePayload.procedures":
 		if e.complexity.ProcedureBulkCreatePayload.Procedures == nil {
@@ -26042,6 +30812,78 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
 
+	case "Query.campaign":
+		if e.complexity.Query.Campaign == nil {
+			break
+		}
+
+		args, err := ec.field_Query_campaign_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Campaign(childComplexity, args["id"].(string)), true
+
+	case "Query.campaignSearch":
+		if e.complexity.Query.CampaignSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_campaignSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.CampaignSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.campaignTarget":
+		if e.complexity.Query.CampaignTarget == nil {
+			break
+		}
+
+		args, err := ec.field_Query_campaignTarget_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.CampaignTarget(childComplexity, args["id"].(string)), true
+
+	case "Query.campaignTargetSearch":
+		if e.complexity.Query.CampaignTargetSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_campaignTargetSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.CampaignTargetSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.campaignTargets":
+		if e.complexity.Query.CampaignTargets == nil {
+			break
+		}
+
+		args, err := ec.field_Query_campaignTargets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.CampaignTargets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignTargetOrder), args["where"].(*generated.CampaignTargetWhereInput)), true
+
+	case "Query.campaigns":
+		if e.complexity.Query.Campaigns == nil {
+			break
+		}
+
+		args, err := ec.field_Query_campaigns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+
 	case "Query.contact":
 		if e.complexity.Query.Contact == nil {
 			break
@@ -26788,6 +31630,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.Hushes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.HushOrder), args["where"].(*generated.HushWhereInput)), true
 
+	case "Query.identityHolder":
+		if e.complexity.Query.IdentityHolder == nil {
+			break
+		}
+
+		args, err := ec.field_Query_identityHolder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.IdentityHolder(childComplexity, args["id"].(string)), true
+
+	case "Query.identityHolderSearch":
+		if e.complexity.Query.IdentityHolderSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_identityHolderSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.IdentityHolderSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.identityHolders":
+		if e.complexity.Query.IdentityHolders == nil {
+			break
+		}
+
+		args, err := ec.field_Query_identityHolders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+
 	case "Query.integration":
 		if e.complexity.Query.Integration == nil {
 			break
@@ -27303,6 +32181,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.PersonalAccessTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PersonalAccessTokenOrder), args["where"].(*generated.PersonalAccessTokenWhereInput)), true
+
+	case "Query.platform":
+		if e.complexity.Query.Platform == nil {
+			break
+		}
+
+		args, err := ec.field_Query_platform_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Platform(childComplexity, args["id"].(string)), true
+
+	case "Query.platformSearch":
+		if e.complexity.Query.PlatformSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_platformSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.PlatformSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.platforms":
+		if e.complexity.Query.Platforms == nil {
+			break
+		}
+
+		args, err := ec.field_Query_platforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
 
 	case "Query.procedure":
 		if e.complexity.Query.Procedure == nil {
@@ -28271,6 +33185,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.WorkflowEvent(childComplexity, args["id"].(string)), true
 
+	case "Query.workflowEventTimeline":
+		if e.complexity.Query.WorkflowEventTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowEventTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowEventTimeline(childComplexity, args["workflowInstanceID"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
+
 	case "Query.workflowEvents":
 		if e.complexity.Query.WorkflowEvents == nil {
 			break
@@ -28457,6 +33383,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Remediation.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
+	case "Remediation.environment":
+		if e.complexity.Remediation.Environment == nil {
+			break
+		}
+
+		return e.complexity.Remediation.Environment(childComplexity), true
+
+	case "Remediation.environmentID":
+		if e.complexity.Remediation.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.Remediation.EnvironmentID(childComplexity), true
+
+	case "Remediation.environmentName":
+		if e.complexity.Remediation.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.Remediation.EnvironmentName(childComplexity), true
+
 	case "Remediation.error":
 		if e.complexity.Remediation.Error == nil {
 			break
@@ -28640,6 +33587,39 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Remediation.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "Remediation.scans":
+		if e.complexity.Remediation.Scans == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_scans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
+	case "Remediation.scope":
+		if e.complexity.Remediation.Scope == nil {
+			break
+		}
+
+		return e.complexity.Remediation.Scope(childComplexity), true
+
+	case "Remediation.scopeID":
+		if e.complexity.Remediation.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.Remediation.ScopeID(childComplexity), true
+
+	case "Remediation.scopeName":
+		if e.complexity.Remediation.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.Remediation.ScopeName(childComplexity), true
 
 	case "Remediation.source":
 		if e.complexity.Remediation.Source == nil {
@@ -28955,6 +33935,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Review.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
+	case "Review.environment":
+		if e.complexity.Review.Environment == nil {
+			break
+		}
+
+		return e.complexity.Review.Environment(childComplexity), true
+
+	case "Review.environmentID":
+		if e.complexity.Review.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.Review.EnvironmentID(childComplexity), true
+
+	case "Review.environmentName":
+		if e.complexity.Review.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.Review.EnvironmentName(childComplexity), true
+
 	case "Review.externalID":
 		if e.complexity.Review.ExternalID == nil {
 			break
@@ -29124,6 +34125,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Review.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "Review.scope":
+		if e.complexity.Review.Scope == nil {
+			break
+		}
+
+		return e.complexity.Review.Scope(childComplexity), true
+
+	case "Review.scopeID":
+		if e.complexity.Review.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.Review.ScopeID(childComplexity), true
+
+	case "Review.scopeName":
+		if e.complexity.Review.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.Review.ScopeName(childComplexity), true
 
 	case "Review.source":
 		if e.complexity.Review.Source == nil {
@@ -29458,6 +34480,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Risk.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
+	case "Risk.environment":
+		if e.complexity.Risk.Environment == nil {
+			break
+		}
+
+		return e.complexity.Risk.Environment(childComplexity), true
+
+	case "Risk.environmentID":
+		if e.complexity.Risk.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.Risk.EnvironmentID(childComplexity), true
+
+	case "Risk.environmentName":
+		if e.complexity.Risk.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.Risk.EnvironmentName(childComplexity), true
+
 	case "Risk.id":
 		if e.complexity.Risk.ID == nil {
 			break
@@ -29525,6 +34568,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Risk.OwnerID(childComplexity), true
+
+	case "Risk.platforms":
+		if e.complexity.Risk.Platforms == nil {
+			break
+		}
+
+		args, err := ec.field_Risk_platforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
 
 	case "Risk.procedures":
 		if e.complexity.Risk.Procedures == nil {
@@ -29603,6 +34658,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Risk.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
+	case "Risk.scope":
+		if e.complexity.Risk.Scope == nil {
+			break
+		}
+
+		return e.complexity.Risk.Scope(childComplexity), true
+
+	case "Risk.scopeID":
+		if e.complexity.Risk.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.Risk.ScopeID(childComplexity), true
+
+	case "Risk.scopeName":
+		if e.complexity.Risk.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.Risk.ScopeName(childComplexity), true
 
 	case "Risk.score":
 		if e.complexity.Risk.Score == nil {
@@ -29773,6 +34849,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.RiskUpdatePayload.Risk(childComplexity), true
 
+	case "Scan.actionPlans":
+		if e.complexity.Scan.ActionPlans == nil {
+			break
+		}
+
+		args, err := ec.field_Scan_actionPlans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Scan.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
+
 	case "Scan.assets":
 		if e.complexity.Scan.Assets == nil {
 			break
@@ -29785,6 +34873,41 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Scan.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
 
+	case "Scan.assignedTo":
+		if e.complexity.Scan.AssignedTo == nil {
+			break
+		}
+
+		return e.complexity.Scan.AssignedTo(childComplexity), true
+
+	case "Scan.assignedToGroup":
+		if e.complexity.Scan.AssignedToGroup == nil {
+			break
+		}
+
+		return e.complexity.Scan.AssignedToGroup(childComplexity), true
+
+	case "Scan.assignedToGroupID":
+		if e.complexity.Scan.AssignedToGroupID == nil {
+			break
+		}
+
+		return e.complexity.Scan.AssignedToGroupID(childComplexity), true
+
+	case "Scan.assignedToUser":
+		if e.complexity.Scan.AssignedToUser == nil {
+			break
+		}
+
+		return e.complexity.Scan.AssignedToUser(childComplexity), true
+
+	case "Scan.assignedToUserID":
+		if e.complexity.Scan.AssignedToUserID == nil {
+			break
+		}
+
+		return e.complexity.Scan.AssignedToUserID(childComplexity), true
+
 	case "Scan.blockedGroups":
 		if e.complexity.Scan.BlockedGroups == nil {
 			break
@@ -29796,6 +34919,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Scan.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Scan.controls":
+		if e.complexity.Scan.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_Scan_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Scan.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Scan.createdAt":
 		if e.complexity.Scan.CreatedAt == nil {
@@ -29835,6 +34970,65 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Scan.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
+	case "Scan.environment":
+		if e.complexity.Scan.Environment == nil {
+			break
+		}
+
+		return e.complexity.Scan.Environment(childComplexity), true
+
+	case "Scan.environmentID":
+		if e.complexity.Scan.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.Scan.EnvironmentID(childComplexity), true
+
+	case "Scan.environmentName":
+		if e.complexity.Scan.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.Scan.EnvironmentName(childComplexity), true
+
+	case "Scan.evidence":
+		if e.complexity.Scan.Evidence == nil {
+			break
+		}
+
+		args, err := ec.field_Scan_evidence_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Scan.Evidence(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
+
+	case "Scan.files":
+		if e.complexity.Scan.Files == nil {
+			break
+		}
+
+		args, err := ec.field_Scan_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Scan.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
+	case "Scan.generatedByPlatform":
+		if e.complexity.Scan.GeneratedByPlatform == nil {
+			break
+		}
+
+		return e.complexity.Scan.GeneratedByPlatform(childComplexity), true
+
+	case "Scan.generatedByPlatformID":
+		if e.complexity.Scan.GeneratedByPlatformID == nil {
+			break
+		}
+
+		return e.complexity.Scan.GeneratedByPlatformID(childComplexity), true
+
 	case "Scan.id":
 		if e.complexity.Scan.ID == nil {
 			break
@@ -29848,6 +35042,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Scan.Metadata(childComplexity), true
+
+	case "Scan.nextScanRunAt":
+		if e.complexity.Scan.NextScanRunAt == nil {
+			break
+		}
+
+		return e.complexity.Scan.NextScanRunAt(childComplexity), true
 
 	case "Scan.owner":
 		if e.complexity.Scan.Owner == nil {
@@ -29863,12 +35064,141 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Scan.OwnerID(childComplexity), true
 
+	case "Scan.performedBy":
+		if e.complexity.Scan.PerformedBy == nil {
+			break
+		}
+
+		return e.complexity.Scan.PerformedBy(childComplexity), true
+
+	case "Scan.performedByGroup":
+		if e.complexity.Scan.PerformedByGroup == nil {
+			break
+		}
+
+		return e.complexity.Scan.PerformedByGroup(childComplexity), true
+
+	case "Scan.performedByGroupID":
+		if e.complexity.Scan.PerformedByGroupID == nil {
+			break
+		}
+
+		return e.complexity.Scan.PerformedByGroupID(childComplexity), true
+
+	case "Scan.performedByUser":
+		if e.complexity.Scan.PerformedByUser == nil {
+			break
+		}
+
+		return e.complexity.Scan.PerformedByUser(childComplexity), true
+
+	case "Scan.performedByUserID":
+		if e.complexity.Scan.PerformedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Scan.PerformedByUserID(childComplexity), true
+
+	case "Scan.platforms":
+		if e.complexity.Scan.Platforms == nil {
+			break
+		}
+
+		args, err := ec.field_Scan_platforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Scan.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
+
+	case "Scan.remediations":
+		if e.complexity.Scan.Remediations == nil {
+			break
+		}
+
+		args, err := ec.field_Scan_remediations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Scan.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
+
+	case "Scan.reviewedBy":
+		if e.complexity.Scan.ReviewedBy == nil {
+			break
+		}
+
+		return e.complexity.Scan.ReviewedBy(childComplexity), true
+
+	case "Scan.reviewedByGroup":
+		if e.complexity.Scan.ReviewedByGroup == nil {
+			break
+		}
+
+		return e.complexity.Scan.ReviewedByGroup(childComplexity), true
+
+	case "Scan.reviewedByGroupID":
+		if e.complexity.Scan.ReviewedByGroupID == nil {
+			break
+		}
+
+		return e.complexity.Scan.ReviewedByGroupID(childComplexity), true
+
+	case "Scan.reviewedByUser":
+		if e.complexity.Scan.ReviewedByUser == nil {
+			break
+		}
+
+		return e.complexity.Scan.ReviewedByUser(childComplexity), true
+
+	case "Scan.reviewedByUserID":
+		if e.complexity.Scan.ReviewedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Scan.ReviewedByUserID(childComplexity), true
+
+	case "Scan.scanDate":
+		if e.complexity.Scan.ScanDate == nil {
+			break
+		}
+
+		return e.complexity.Scan.ScanDate(childComplexity), true
+
+	case "Scan.scanSchedule":
+		if e.complexity.Scan.ScanSchedule == nil {
+			break
+		}
+
+		return e.complexity.Scan.ScanSchedule(childComplexity), true
+
 	case "Scan.scanType":
 		if e.complexity.Scan.ScanType == nil {
 			break
 		}
 
 		return e.complexity.Scan.ScanType(childComplexity), true
+
+	case "Scan.scope":
+		if e.complexity.Scan.Scope == nil {
+			break
+		}
+
+		return e.complexity.Scan.Scope(childComplexity), true
+
+	case "Scan.scopeID":
+		if e.complexity.Scan.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.Scan.ScopeID(childComplexity), true
+
+	case "Scan.scopeName":
+		if e.complexity.Scan.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.Scan.ScopeName(childComplexity), true
 
 	case "Scan.status":
 		if e.complexity.Scan.Status == nil {
@@ -29890,6 +35220,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Scan.Target(childComplexity), true
+
+	case "Scan.tasks":
+		if e.complexity.Scan.Tasks == nil {
+			break
+		}
+
+		args, err := ec.field_Scan_tasks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Scan.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
 	case "Scan.updatedAt":
 		if e.complexity.Scan.UpdatedAt == nil {
@@ -29916,6 +35258,25 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Scan.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Scan.vulnerabilities":
+		if e.complexity.Scan.Vulnerabilities == nil {
+			break
+		}
+
+		args, err := ec.field_Scan_vulnerabilities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Scan.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
+
+	case "Scan.vulnerabilityIds":
+		if e.complexity.Scan.VulnerabilityIds == nil {
+			break
+		}
+
+		return e.complexity.Scan.VulnerabilityIds(childComplexity), true
 
 	case "ScanBulkCreatePayload.scans":
 		if e.complexity.ScanBulkCreatePayload.Scans == nil {
@@ -30410,6 +35771,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.Assets(childComplexity), true
 
+	case "SearchResults.campaignTargets":
+		if e.complexity.SearchResults.CampaignTargets == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.CampaignTargets(childComplexity), true
+
+	case "SearchResults.campaigns":
+		if e.complexity.SearchResults.Campaigns == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.Campaigns(childComplexity), true
+
 	case "SearchResults.contacts":
 		if e.complexity.SearchResults.Contacts == nil {
 			break
@@ -30466,6 +35841,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.Groups(childComplexity), true
 
+	case "SearchResults.identityHolders":
+		if e.complexity.SearchResults.IdentityHolders == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.IdentityHolders(childComplexity), true
+
 	case "SearchResults.internalPolicies":
 		if e.complexity.SearchResults.InternalPolicies == nil {
 			break
@@ -30514,6 +35896,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.Page(childComplexity), true
+
+	case "SearchResults.platforms":
+		if e.complexity.SearchResults.Platforms == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.Platforms(childComplexity), true
 
 	case "SearchResults.procedures":
 		if e.complexity.SearchResults.Procedures == nil {
@@ -30648,12 +36037,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchSnippet.Text(childComplexity), true
 
-	case "SendTrustCenterNDAEmailPayload.success":
-		if e.complexity.SendTrustCenterNDAEmailPayload.Success == nil {
+	case "Standard.applicablePlatforms":
+		if e.complexity.Standard.ApplicablePlatforms == nil {
 			break
 		}
 
-		return e.complexity.SendTrustCenterNDAEmailPayload.Success(childComplexity), true
+		args, err := ec.field_Standard_applicablePlatforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Standard.ApplicablePlatforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
 
 	case "Standard.controls":
 		if e.complexity.Standard.Controls == nil {
@@ -30955,12 +36349,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
-	case "Subcontrol.activeWorkflowInstance":
-		if e.complexity.Subcontrol.ActiveWorkflowInstance == nil {
+	case "Subcontrol.activeWorkflowInstances":
+		if e.complexity.Subcontrol.ActiveWorkflowInstances == nil {
 			break
 		}
 
-		return e.complexity.Subcontrol.ActiveWorkflowInstance(childComplexity), true
+		return e.complexity.Subcontrol.ActiveWorkflowInstances(childComplexity), true
 
 	case "Subcontrol.aliases":
 		if e.complexity.Subcontrol.Aliases == nil {
@@ -31168,6 +36562,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Subcontrol.HasPendingWorkflow(childComplexity), true
+
+	case "Subcontrol.hasWorkflowHistory":
+		if e.complexity.Subcontrol.HasWorkflowHistory == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.HasWorkflowHistory(childComplexity), true
 
 	case "Subcontrol.id":
 		if e.complexity.Subcontrol.ID == nil {
@@ -31442,6 +36843,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
 
+	case "Subcontrol.workflowTimeline":
+		if e.complexity.Subcontrol.WorkflowTimeline == nil {
+			break
+		}
+
+		args, err := ec.field_Subcontrol_workflowTimeline_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subcontrol.WorkflowTimeline(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput), args["includeEmitFailures"].(*bool)), true
+
 	case "SubcontrolBulkCreatePayload.subcontrols":
 		if e.complexity.SubcontrolBulkCreatePayload.Subcontrols == nil {
 			break
@@ -31539,6 +36952,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Subprocessor.Description(childComplexity), true
+
+	case "Subprocessor.entities":
+		if e.complexity.Subprocessor.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_Subprocessor_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subprocessor.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
 	case "Subprocessor.id":
 		if e.complexity.Subprocessor.ID == nil {
@@ -32359,6 +37784,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Task.Due(childComplexity), true
 
+	case "Task.environment":
+		if e.complexity.Task.Environment == nil {
+			break
+		}
+
+		return e.complexity.Task.Environment(childComplexity), true
+
+	case "Task.environmentID":
+		if e.complexity.Task.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.Task.EnvironmentID(childComplexity), true
+
+	case "Task.environmentName":
+		if e.complexity.Task.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.Task.EnvironmentName(childComplexity), true
+
 	case "Task.evidence":
 		if e.complexity.Task.Evidence == nil {
 			break
@@ -32404,6 +37850,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Task.IdempotencyKey(childComplexity), true
 
+	case "Task.identityHolders":
+		if e.complexity.Task.IdentityHolders == nil {
+			break
+		}
+
+		args, err := ec.field_Task_identityHolders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Task.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+
 	case "Task.internalPolicies":
 		if e.complexity.Task.InternalPolicies == nil {
 			break
@@ -32444,6 +37902,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Task.ParentTaskID(childComplexity), true
 
+	case "Task.platforms":
+		if e.complexity.Task.Platforms == nil {
+			break
+		}
+
+		args, err := ec.field_Task_platforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Task.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
+
 	case "Task.procedures":
 		if e.complexity.Task.Procedures == nil {
 			break
@@ -32479,6 +37949,39 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Task.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "Task.scans":
+		if e.complexity.Task.Scans == nil {
+			break
+		}
+
+		args, err := ec.field_Task_scans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Task.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
+	case "Task.scope":
+		if e.complexity.Task.Scope == nil {
+			break
+		}
+
+		return e.complexity.Task.Scope(childComplexity), true
+
+	case "Task.scopeID":
+		if e.complexity.Task.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.Task.ScopeID(childComplexity), true
+
+	case "Task.scopeName":
+		if e.complexity.Task.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.Task.ScopeName(childComplexity), true
 
 	case "Task.status":
 		if e.complexity.Task.Status == nil {
@@ -32670,6 +38173,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Template.Assessments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentOrder), args["where"].(*generated.AssessmentWhereInput)), true
 
+	case "Template.campaigns":
+		if e.complexity.Template.Campaigns == nil {
+			break
+		}
+
+		args, err := ec.field_Template_campaigns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Template.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+
 	case "Template.createdAt":
 		if e.complexity.Template.CreatedAt == nil {
 			break
@@ -32703,6 +38218,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Template.Documents(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DocumentDataOrder), args["where"].(*generated.DocumentDataWhereInput)), true
 
+	case "Template.environment":
+		if e.complexity.Template.Environment == nil {
+			break
+		}
+
+		return e.complexity.Template.Environment(childComplexity), true
+
+	case "Template.environmentID":
+		if e.complexity.Template.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.Template.EnvironmentID(childComplexity), true
+
+	case "Template.environmentName":
+		if e.complexity.Template.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.Template.EnvironmentName(childComplexity), true
+
 	case "Template.files":
 		if e.complexity.Template.Files == nil {
 			break
@@ -32721,6 +38257,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Template.ID(childComplexity), true
+
+	case "Template.identityHolders":
+		if e.complexity.Template.IdentityHolders == nil {
+			break
+		}
+
+		args, err := ec.field_Template_identityHolders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Template.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
 
 	case "Template.internalNotes":
 		if e.complexity.Template.InternalNotes == nil {
@@ -32763,6 +38311,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Template.OwnerID(childComplexity), true
+
+	case "Template.scope":
+		if e.complexity.Template.Scope == nil {
+			break
+		}
+
+		return e.complexity.Template.Scope(childComplexity), true
+
+	case "Template.scopeID":
+		if e.complexity.Template.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.Template.ScopeID(childComplexity), true
+
+	case "Template.scopeName":
+		if e.complexity.Template.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.Template.ScopeName(childComplexity), true
 
 	case "Template.systemInternalID":
 		if e.complexity.Template.SystemInternalID == nil {
@@ -34049,6 +39618,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSetting.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "TrustCenterSetting.companyDescription":
+		if e.complexity.TrustCenterSetting.CompanyDescription == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.CompanyDescription(childComplexity), true
+
 	case "TrustCenterSetting.companyDomain":
 		if e.complexity.TrustCenterSetting.CompanyDomain == nil {
 			break
@@ -34782,6 +40358,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.User.AvatarUpdatedAt(childComplexity), true
 
+	case "User.campaignTargets":
+		if e.complexity.User.CampaignTargets == nil {
+			break
+		}
+
+		args, err := ec.field_User_campaignTargets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.User.CampaignTargets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignTargetOrder), args["where"].(*generated.CampaignTargetWhereInput)), true
+
+	case "User.campaigns":
+		if e.complexity.User.Campaigns == nil {
+			break
+		}
+
+		args, err := ec.field_User_campaigns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.User.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+
 	case "User.createdAt":
 		if e.complexity.User.CreatedAt == nil {
 			break
@@ -34867,6 +40467,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.User.ID(childComplexity), true
 
+	case "User.identityHolderProfiles":
+		if e.complexity.User.IdentityHolderProfiles == nil {
+			break
+		}
+
+		args, err := ec.field_User_identityHolderProfiles_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.User.IdentityHolderProfiles(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+
 	case "User.lastLoginProvider":
 		if e.complexity.User.LastLoginProvider == nil {
 			break
@@ -34923,6 +40535,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.User.PersonalAccessTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PersonalAccessTokenOrder), args["where"].(*generated.PersonalAccessTokenWhereInput)), true
+
+	case "User.platformsOwned":
+		if e.complexity.User.PlatformsOwned == nil {
+			break
+		}
+
+		args, err := ec.field_User_platformsOwned_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.User.PlatformsOwned(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
 
 	case "User.programMemberships":
 		if e.complexity.User.ProgramMemberships == nil {
@@ -35458,6 +41082,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Vulnerability.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
+	case "Vulnerability.environment":
+		if e.complexity.Vulnerability.Environment == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Environment(childComplexity), true
+
+	case "Vulnerability.environmentID":
+		if e.complexity.Vulnerability.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.EnvironmentID(childComplexity), true
+
+	case "Vulnerability.environmentName":
+		if e.complexity.Vulnerability.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.EnvironmentName(childComplexity), true
+
 	case "Vulnerability.exploitability":
 		if e.complexity.Vulnerability.Exploitability == nil {
 			break
@@ -35686,6 +41331,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Vulnerability.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
+	case "Vulnerability.scope":
+		if e.complexity.Vulnerability.Scope == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Scope(childComplexity), true
+
+	case "Vulnerability.scopeID":
+		if e.complexity.Vulnerability.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.ScopeID(childComplexity), true
+
+	case "Vulnerability.scopeName":
+		if e.complexity.Vulnerability.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.ScopeName(childComplexity), true
 
 	case "Vulnerability.score":
 		if e.complexity.Vulnerability.Score == nil {
@@ -36732,13 +42398,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowEvent.WorkflowInstanceID(childComplexity), true
 
-	case "WorkflowEventBulkCreatePayload.workflowEvents":
-		if e.complexity.WorkflowEventBulkCreatePayload.WorkflowEvents == nil {
-			break
-		}
-
-		return e.complexity.WorkflowEventBulkCreatePayload.WorkflowEvents(childComplexity), true
-
 	case "WorkflowEventConnection.edges":
 		if e.complexity.WorkflowEventConnection.Edges == nil {
 			break
@@ -36760,20 +42419,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowEventConnection.TotalCount(childComplexity), true
 
-	case "WorkflowEventCreatePayload.workflowEvent":
-		if e.complexity.WorkflowEventCreatePayload.WorkflowEvent == nil {
-			break
-		}
-
-		return e.complexity.WorkflowEventCreatePayload.WorkflowEvent(childComplexity), true
-
-	case "WorkflowEventDeletePayload.deletedID":
-		if e.complexity.WorkflowEventDeletePayload.DeletedID == nil {
-			break
-		}
-
-		return e.complexity.WorkflowEventDeletePayload.DeletedID(childComplexity), true
-
 	case "WorkflowEventEdge.cursor":
 		if e.complexity.WorkflowEventEdge.Cursor == nil {
 			break
@@ -36787,13 +42432,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowEventEdge.Node(childComplexity), true
-
-	case "WorkflowEventUpdatePayload.workflowEvent":
-		if e.complexity.WorkflowEventUpdatePayload.WorkflowEvent == nil {
-			break
-		}
-
-		return e.complexity.WorkflowEventUpdatePayload.WorkflowEvent(childComplexity), true
 
 	case "WorkflowFieldMetadata.label":
 		if e.complexity.WorkflowFieldMetadata.Label == nil {
@@ -36829,6 +42467,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowInstance.ActionPlanID(childComplexity), true
+
+	case "WorkflowInstance.campaign":
+		if e.complexity.WorkflowInstance.Campaign == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.Campaign(childComplexity), true
+
+	case "WorkflowInstance.campaignID":
+		if e.complexity.WorkflowInstance.CampaignID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.CampaignID(childComplexity), true
+
+	case "WorkflowInstance.campaignTarget":
+		if e.complexity.WorkflowInstance.CampaignTarget == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.CampaignTarget(childComplexity), true
+
+	case "WorkflowInstance.campaignTargetID":
+		if e.complexity.WorkflowInstance.CampaignTargetID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.CampaignTargetID(childComplexity), true
 
 	case "WorkflowInstance.context":
 		if e.complexity.WorkflowInstance.Context == nil {
@@ -36907,6 +42573,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowInstance.ID(childComplexity), true
 
+	case "WorkflowInstance.identityHolder":
+		if e.complexity.WorkflowInstance.IdentityHolder == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.IdentityHolder(childComplexity), true
+
+	case "WorkflowInstance.identityHolderID":
+		if e.complexity.WorkflowInstance.IdentityHolderID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.IdentityHolderID(childComplexity), true
+
 	case "WorkflowInstance.internalPolicy":
 		if e.complexity.WorkflowInstance.InternalPolicy == nil {
 			break
@@ -36941,6 +42621,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowInstance.OwnerID(childComplexity), true
+
+	case "WorkflowInstance.platform":
+		if e.complexity.WorkflowInstance.Platform == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.Platform(childComplexity), true
+
+	case "WorkflowInstance.platformID":
+		if e.complexity.WorkflowInstance.PlatformID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.PlatformID(childComplexity), true
 
 	case "WorkflowInstance.procedure":
 		if e.complexity.WorkflowInstance.Procedure == nil {
@@ -37111,6 +42805,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowObjectRef.ActionPlanID(childComplexity), true
 
+	case "WorkflowObjectRef.campaign":
+		if e.complexity.WorkflowObjectRef.Campaign == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.Campaign(childComplexity), true
+
+	case "WorkflowObjectRef.campaignID":
+		if e.complexity.WorkflowObjectRef.CampaignID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.CampaignID(childComplexity), true
+
+	case "WorkflowObjectRef.campaignTarget":
+		if e.complexity.WorkflowObjectRef.CampaignTarget == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.CampaignTarget(childComplexity), true
+
+	case "WorkflowObjectRef.campaignTargetID":
+		if e.complexity.WorkflowObjectRef.CampaignTargetID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.CampaignTargetID(childComplexity), true
+
 	case "WorkflowObjectRef.control":
 		if e.complexity.WorkflowObjectRef.Control == nil {
 			break
@@ -37223,6 +42945,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowObjectRef.ID(childComplexity), true
 
+	case "WorkflowObjectRef.identityHolder":
+		if e.complexity.WorkflowObjectRef.IdentityHolder == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.IdentityHolder(childComplexity), true
+
+	case "WorkflowObjectRef.identityHolderID":
+		if e.complexity.WorkflowObjectRef.IdentityHolderID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.IdentityHolderID(childComplexity), true
+
 	case "WorkflowObjectRef.internalPolicy":
 		if e.complexity.WorkflowObjectRef.InternalPolicy == nil {
 			break
@@ -37250,6 +42986,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowObjectRef.OwnerID(childComplexity), true
+
+	case "WorkflowObjectRef.platform":
+		if e.complexity.WorkflowObjectRef.Platform == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.Platform(childComplexity), true
+
+	case "WorkflowObjectRef.platformID":
+		if e.complexity.WorkflowObjectRef.PlatformID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.PlatformID(childComplexity), true
 
 	case "WorkflowObjectRef.procedure":
 		if e.complexity.WorkflowObjectRef.Procedure == nil {
@@ -37321,13 +43071,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowObjectRef.WorkflowInstanceID(childComplexity), true
 
-	case "WorkflowObjectRefBulkCreatePayload.workflowObjectRefs":
-		if e.complexity.WorkflowObjectRefBulkCreatePayload.WorkflowObjectRefs == nil {
-			break
-		}
-
-		return e.complexity.WorkflowObjectRefBulkCreatePayload.WorkflowObjectRefs(childComplexity), true
-
 	case "WorkflowObjectRefConnection.edges":
 		if e.complexity.WorkflowObjectRefConnection.Edges == nil {
 			break
@@ -37348,20 +43091,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowObjectRefConnection.TotalCount(childComplexity), true
-
-	case "WorkflowObjectRefCreatePayload.workflowObjectRef":
-		if e.complexity.WorkflowObjectRefCreatePayload.WorkflowObjectRef == nil {
-			break
-		}
-
-		return e.complexity.WorkflowObjectRefCreatePayload.WorkflowObjectRef(childComplexity), true
-
-	case "WorkflowObjectRefDeletePayload.deletedID":
-		if e.complexity.WorkflowObjectRefDeletePayload.DeletedID == nil {
-			break
-		}
-
-		return e.complexity.WorkflowObjectRefDeletePayload.DeletedID(childComplexity), true
 
 	case "WorkflowObjectRefEdge.cursor":
 		if e.complexity.WorkflowObjectRefEdge.Cursor == nil {
@@ -37431,6 +43160,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputAssessmentWhereInput,
 		ec.unmarshalInputAssetOrder,
 		ec.unmarshalInputAssetWhereInput,
+		ec.unmarshalInputCampaignOrder,
+		ec.unmarshalInputCampaignTargetOrder,
+		ec.unmarshalInputCampaignTargetWhereInput,
+		ec.unmarshalInputCampaignWhereInput,
 		ec.unmarshalInputCloneControlInput,
 		ec.unmarshalInputCloneControlUploadInput,
 		ec.unmarshalInputContactOrder,
@@ -37447,6 +43180,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateAssessmentInput,
 		ec.unmarshalInputCreateAssessmentResponseInput,
 		ec.unmarshalInputCreateAssetInput,
+		ec.unmarshalInputCreateCampaignInput,
+		ec.unmarshalInputCreateCampaignTargetInput,
 		ec.unmarshalInputCreateContactInput,
 		ec.unmarshalInputCreateControlImplementationInput,
 		ec.unmarshalInputCreateControlInput,
@@ -37474,6 +43209,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateGroupMembershipInput,
 		ec.unmarshalInputCreateGroupSettingInput,
 		ec.unmarshalInputCreateHushInput,
+		ec.unmarshalInputCreateIdentityHolderInput,
 		ec.unmarshalInputCreateInternalPolicyInput,
 		ec.unmarshalInputCreateInviteInput,
 		ec.unmarshalInputCreateJobResultInput,
@@ -37492,6 +43228,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateOrganizationInput,
 		ec.unmarshalInputCreateOrganizationSettingInput,
 		ec.unmarshalInputCreatePersonalAccessTokenInput,
+		ec.unmarshalInputCreatePlatformInput,
 		ec.unmarshalInputCreateProcedureInput,
 		ec.unmarshalInputCreateProgramInput,
 		ec.unmarshalInputCreateProgramMembershipInput,
@@ -37525,8 +43262,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateUserSettingInput,
 		ec.unmarshalInputCreateVulnerabilityInput,
 		ec.unmarshalInputCreateWorkflowDefinitionInput,
-		ec.unmarshalInputCreateWorkflowEventInput,
-		ec.unmarshalInputCreateWorkflowObjectRefInput,
 		ec.unmarshalInputCustomDomainOrder,
 		ec.unmarshalInputCustomDomainWhereInput,
 		ec.unmarshalInputCustomTypeEnumOrder,
@@ -37572,6 +43307,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputGroupWhereInput,
 		ec.unmarshalInputHushOrder,
 		ec.unmarshalInputHushWhereInput,
+		ec.unmarshalInputIdentityHolderOrder,
+		ec.unmarshalInputIdentityHolderWhereInput,
 		ec.unmarshalInputIntegrationOrder,
 		ec.unmarshalInputIntegrationWhereInput,
 		ec.unmarshalInputInternalPolicyOrder,
@@ -37608,6 +43345,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputOrganizationWhereInput,
 		ec.unmarshalInputPersonalAccessTokenOrder,
 		ec.unmarshalInputPersonalAccessTokenWhereInput,
+		ec.unmarshalInputPlatformOrder,
+		ec.unmarshalInputPlatformWhereInput,
 		ec.unmarshalInputProcedureOrder,
 		ec.unmarshalInputProcedureWhereInput,
 		ec.unmarshalInputProgramMembershipOrder,
@@ -37626,7 +43365,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputScheduledJobRunOrder,
 		ec.unmarshalInputScheduledJobRunWhereInput,
 		ec.unmarshalInputScheduledJobWhereInput,
-		ec.unmarshalInputSendTrustCenterNDAInput,
 		ec.unmarshalInputStandardOrder,
 		ec.unmarshalInputStandardWhereInput,
 		ec.unmarshalInputSubcontrolOrder,
@@ -37664,6 +43402,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateActionPlanInput,
 		ec.unmarshalInputUpdateAssessmentInput,
 		ec.unmarshalInputUpdateAssetInput,
+		ec.unmarshalInputUpdateCampaignInput,
+		ec.unmarshalInputUpdateCampaignTargetInput,
 		ec.unmarshalInputUpdateContactInput,
 		ec.unmarshalInputUpdateControlImplementationInput,
 		ec.unmarshalInputUpdateControlInput,
@@ -37690,6 +43430,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateGroupMembershipInput,
 		ec.unmarshalInputUpdateGroupSettingInput,
 		ec.unmarshalInputUpdateHushInput,
+		ec.unmarshalInputUpdateIdentityHolderInput,
 		ec.unmarshalInputUpdateInternalPolicyInput,
 		ec.unmarshalInputUpdateInviteInput,
 		ec.unmarshalInputUpdateJobResultInput,
@@ -37706,6 +43447,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateOrganizationInput,
 		ec.unmarshalInputUpdateOrganizationSettingInput,
 		ec.unmarshalInputUpdatePersonalAccessTokenInput,
+		ec.unmarshalInputUpdatePlatformInput,
 		ec.unmarshalInputUpdateProcedureInput,
 		ec.unmarshalInputUpdateProgramInput,
 		ec.unmarshalInputUpdateProgramMembershipInput,
@@ -37735,7 +43477,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateUserSettingInput,
 		ec.unmarshalInputUpdateVulnerabilityInput,
 		ec.unmarshalInputUpdateWorkflowDefinitionInput,
-		ec.unmarshalInputUpdateWorkflowEventInput,
 		ec.unmarshalInputUserOrder,
 		ec.unmarshalInputUserSettingOrder,
 		ec.unmarshalInputUserSettingWhereInput,
@@ -38011,10 +43752,30 @@ scalar Any`, BuiltIn: false},
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this actionPlan if one is running
+    Indicates if this actionPlan has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this actionPlan (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this actionPlan across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
+
+
 
 extend type Query {
     """
@@ -38562,6 +44323,275 @@ type AssetBulkDeletePayload {
     """
     deletedIDs: [ID!]!
 }`, BuiltIn: false},
+	{Name: "../schema/campaign.graphql", Input: `extend type Campaign {
+    """
+    Indicates if this campaign has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Indicates if this campaign has any workflow history (completed or failed instances)
+    """
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this campaign (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this campaign across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
+}
+
+
+
+
+
+extend type Query {
+    """
+    Look up campaign by ID
+    """
+     campaign(
+        """
+        ID of the campaign
+        """
+        id: ID!
+    ):  Campaign!
+}
+
+extend type Mutation{
+    """
+    Create a new campaign
+    """
+    createCampaign(
+        """
+        values of the campaign
+        """
+        input: CreateCampaignInput!
+    ): CampaignCreatePayload!
+    """
+    Create multiple new campaigns
+    """
+    createBulkCampaign(
+        """
+        values of the campaign
+        """
+        input: [CreateCampaignInput!]
+    ): CampaignBulkCreatePayload!
+    """
+    Create multiple new campaigns via file upload
+    """
+    createBulkCSVCampaign(
+        """
+        csv file containing values of the campaign
+        """
+        input: Upload!
+    ): CampaignBulkCreatePayload!
+    """
+    Update an existing campaign
+    """
+    updateCampaign(
+        """
+        ID of the campaign
+        """
+        id: ID!
+        """
+        New values for the campaign
+        """
+        input: UpdateCampaignInput!
+    ): CampaignUpdatePayload!
+    """
+    Delete an existing campaign
+    """
+    deleteCampaign(
+        """
+        ID of the campaign
+        """
+        id: ID!
+    ): CampaignDeletePayload!
+}
+
+"""
+Return response for createCampaign mutation
+"""
+type CampaignCreatePayload {
+    """
+    Created campaign
+    """
+    campaign: Campaign!
+}
+
+"""
+Return response for updateCampaign mutation
+"""
+type CampaignUpdatePayload {
+    """
+    Updated campaign
+    """
+    campaign: Campaign!
+}
+
+"""
+Return response for deleteCampaign mutation
+"""
+type CampaignDeletePayload {
+    """
+    Deleted campaign ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkCampaign mutation
+"""
+type CampaignBulkCreatePayload {
+    """
+    Created campaigns
+    """
+    campaigns: [Campaign!]
+}
+`, BuiltIn: false},
+	{Name: "../schema/campaigntarget.graphql", Input: `extend type CampaignTarget {
+    """
+    Indicates if this campaignTarget has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Indicates if this campaignTarget has any workflow history (completed or failed instances)
+    """
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this campaignTarget (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this campaignTarget across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
+}
+
+
+
+
+
+extend type Query {
+    """
+    Look up campaignTarget by ID
+    """
+     campaignTarget(
+        """
+        ID of the campaignTarget
+        """
+        id: ID!
+    ):  CampaignTarget!
+}
+
+extend type Mutation{
+    """
+    Create a new campaignTarget
+    """
+    createCampaignTarget(
+        """
+        values of the campaignTarget
+        """
+        input: CreateCampaignTargetInput!
+    ): CampaignTargetCreatePayload!
+    """
+    Create multiple new campaignTargets
+    """
+    createBulkCampaignTarget(
+        """
+        values of the campaignTarget
+        """
+        input: [CreateCampaignTargetInput!]
+    ): CampaignTargetBulkCreatePayload!
+    """
+    Create multiple new campaignTargets via file upload
+    """
+    createBulkCSVCampaignTarget(
+        """
+        csv file containing values of the campaignTarget
+        """
+        input: Upload!
+    ): CampaignTargetBulkCreatePayload!
+    """
+    Update an existing campaignTarget
+    """
+    updateCampaignTarget(
+        """
+        ID of the campaignTarget
+        """
+        id: ID!
+        """
+        New values for the campaignTarget
+        """
+        input: UpdateCampaignTargetInput!
+    ): CampaignTargetUpdatePayload!
+    """
+    Delete an existing campaignTarget
+    """
+    deleteCampaignTarget(
+        """
+        ID of the campaignTarget
+        """
+        id: ID!
+    ): CampaignTargetDeletePayload!
+}
+
+"""
+Return response for createCampaignTarget mutation
+"""
+type CampaignTargetCreatePayload {
+    """
+    Created campaignTarget
+    """
+    campaignTarget: CampaignTarget!
+}
+
+"""
+Return response for updateCampaignTarget mutation
+"""
+type CampaignTargetUpdatePayload {
+    """
+    Updated campaignTarget
+    """
+    campaignTarget: CampaignTarget!
+}
+
+"""
+Return response for deleteCampaignTarget mutation
+"""
+type CampaignTargetDeletePayload {
+    """
+    Deleted campaignTarget ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkCampaignTarget mutation
+"""
+type CampaignTargetBulkCreatePayload {
+    """
+    Created campaignTargets
+    """
+    campaignTargets: [CampaignTarget!]
+}`, BuiltIn: false},
 	{Name: "../schema/contact.graphql", Input: `extend type Query {
     """
     Look up contact by ID
@@ -38719,10 +44749,30 @@ type ContactBulkDeletePayload {
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this control if one is running
+    Indicates if this control has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this control (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this control across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
+
+
 
 extend type Query {
     """
@@ -41118,6 +47168,37 @@ type ActionPlan implements Node {
     """
     where: VulnerabilityWhereInput
   ): VulnerabilityConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
   reviews(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -41887,6 +47968,11 @@ input ActionPlanWhereInput {
   hasVulnerabilities: Boolean
   hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
   """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
+  """
   reviews edge predicates
   """
   hasReviews: Boolean
@@ -42047,6 +48133,68 @@ type Assessment implements Node {
     where: GroupWhereInput
   ): GroupConnection!
   template: Template
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  identityHolders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
   assessmentResponses(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -42078,6 +48226,37 @@ type Assessment implements Node {
     """
     where: AssessmentResponseWhereInput
   ): AssessmentResponseConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
 }
 """
 AssessmentAssessmentType is enum for the field assessment_type
@@ -42154,6 +48333,22 @@ type AssessmentResponse implements Node {
   """
   assessmentID: ID!
   """
+  whether this assessment response is for a test send
+  """
+  isTest: Boolean!
+  """
+  the campaign this response is associated with
+  """
+  campaignID: ID
+  """
+  the identity holder record for the recipient
+  """
+  identityHolderID: ID
+  """
+  the entity associated with this assessment response
+  """
+  entityID: ID
+  """
   the email address of the recipient
   """
   email: String!
@@ -42161,6 +48356,34 @@ type AssessmentResponse implements Node {
   the number of attempts made to perform email send to the recipient about this assessment, maximum of 5
   """
   sendAttempts: Int!
+  """
+  when the assessment email was delivered to the recipient
+  """
+  emailDeliveredAt: Time
+  """
+  when the assessment email was opened by the recipient
+  """
+  emailOpenedAt: Time
+  """
+  when a link in the assessment email was clicked by the recipient
+  """
+  emailClickedAt: Time
+  """
+  the number of times the assessment email was opened
+  """
+  emailOpenCount: Int
+  """
+  the number of link clicks for the assessment email
+  """
+  emailClickCount: Int
+  """
+  the most recent email event timestamp for this assessment response
+  """
+  lastEmailEventAt: Time
+  """
+  additional metadata about email delivery events
+  """
+  emailMetadata: Map
   """
   the current status of the assessment for this user
   """
@@ -42187,6 +48410,9 @@ type AssessmentResponse implements Node {
   documentDataID: ID
   owner: Organization
   assessment: Assessment!
+  campaign: Campaign
+  identityHolder: IdentityHolder
+  entity: Entity
   document: DocumentData
 }
 """
@@ -42249,6 +48475,12 @@ enum AssessmentResponseOrderField {
   updated_at
   email
   send_attempts
+  email_delivered_at
+  email_opened_at
+  email_clicked_at
+  email_open_count
+  email_click_count
+  last_email_event_at
   status
   assigned_at
   started_at
@@ -42373,6 +48605,65 @@ input AssessmentResponseWhereInput {
   assessmentIDEqualFold: ID
   assessmentIDContainsFold: ID
   """
+  is_test field predicates
+  """
+  isTest: Boolean
+  isTestNEQ: Boolean
+  """
+  campaign_id field predicates
+  """
+  campaignID: ID
+  campaignIDNEQ: ID
+  campaignIDIn: [ID!]
+  campaignIDNotIn: [ID!]
+  campaignIDGT: ID
+  campaignIDGTE: ID
+  campaignIDLT: ID
+  campaignIDLTE: ID
+  campaignIDContains: ID
+  campaignIDHasPrefix: ID
+  campaignIDHasSuffix: ID
+  campaignIDIsNil: Boolean
+  campaignIDNotNil: Boolean
+  campaignIDEqualFold: ID
+  campaignIDContainsFold: ID
+  """
+  identity_holder_id field predicates
+  """
+  identityHolderID: ID
+  identityHolderIDNEQ: ID
+  identityHolderIDIn: [ID!]
+  identityHolderIDNotIn: [ID!]
+  identityHolderIDGT: ID
+  identityHolderIDGTE: ID
+  identityHolderIDLT: ID
+  identityHolderIDLTE: ID
+  identityHolderIDContains: ID
+  identityHolderIDHasPrefix: ID
+  identityHolderIDHasSuffix: ID
+  identityHolderIDIsNil: Boolean
+  identityHolderIDNotNil: Boolean
+  identityHolderIDEqualFold: ID
+  identityHolderIDContainsFold: ID
+  """
+  entity_id field predicates
+  """
+  entityID: ID
+  entityIDNEQ: ID
+  entityIDIn: [ID!]
+  entityIDNotIn: [ID!]
+  entityIDGT: ID
+  entityIDGTE: ID
+  entityIDLT: ID
+  entityIDLTE: ID
+  entityIDContains: ID
+  entityIDHasPrefix: ID
+  entityIDHasSuffix: ID
+  entityIDIsNil: Boolean
+  entityIDNotNil: Boolean
+  entityIDEqualFold: ID
+  entityIDContainsFold: ID
+  """
   email field predicates
   """
   email: String
@@ -42399,6 +48690,84 @@ input AssessmentResponseWhereInput {
   sendAttemptsGTE: Int
   sendAttemptsLT: Int
   sendAttemptsLTE: Int
+  """
+  email_delivered_at field predicates
+  """
+  emailDeliveredAt: Time
+  emailDeliveredAtNEQ: Time
+  emailDeliveredAtIn: [Time!]
+  emailDeliveredAtNotIn: [Time!]
+  emailDeliveredAtGT: Time
+  emailDeliveredAtGTE: Time
+  emailDeliveredAtLT: Time
+  emailDeliveredAtLTE: Time
+  emailDeliveredAtIsNil: Boolean
+  emailDeliveredAtNotNil: Boolean
+  """
+  email_opened_at field predicates
+  """
+  emailOpenedAt: Time
+  emailOpenedAtNEQ: Time
+  emailOpenedAtIn: [Time!]
+  emailOpenedAtNotIn: [Time!]
+  emailOpenedAtGT: Time
+  emailOpenedAtGTE: Time
+  emailOpenedAtLT: Time
+  emailOpenedAtLTE: Time
+  emailOpenedAtIsNil: Boolean
+  emailOpenedAtNotNil: Boolean
+  """
+  email_clicked_at field predicates
+  """
+  emailClickedAt: Time
+  emailClickedAtNEQ: Time
+  emailClickedAtIn: [Time!]
+  emailClickedAtNotIn: [Time!]
+  emailClickedAtGT: Time
+  emailClickedAtGTE: Time
+  emailClickedAtLT: Time
+  emailClickedAtLTE: Time
+  emailClickedAtIsNil: Boolean
+  emailClickedAtNotNil: Boolean
+  """
+  email_open_count field predicates
+  """
+  emailOpenCount: Int
+  emailOpenCountNEQ: Int
+  emailOpenCountIn: [Int!]
+  emailOpenCountNotIn: [Int!]
+  emailOpenCountGT: Int
+  emailOpenCountGTE: Int
+  emailOpenCountLT: Int
+  emailOpenCountLTE: Int
+  emailOpenCountIsNil: Boolean
+  emailOpenCountNotNil: Boolean
+  """
+  email_click_count field predicates
+  """
+  emailClickCount: Int
+  emailClickCountNEQ: Int
+  emailClickCountIn: [Int!]
+  emailClickCountNotIn: [Int!]
+  emailClickCountGT: Int
+  emailClickCountGTE: Int
+  emailClickCountLT: Int
+  emailClickCountLTE: Int
+  emailClickCountIsNil: Boolean
+  emailClickCountNotNil: Boolean
+  """
+  last_email_event_at field predicates
+  """
+  lastEmailEventAt: Time
+  lastEmailEventAtNEQ: Time
+  lastEmailEventAtIn: [Time!]
+  lastEmailEventAtNotIn: [Time!]
+  lastEmailEventAtGT: Time
+  lastEmailEventAtGTE: Time
+  lastEmailEventAtLT: Time
+  lastEmailEventAtLTE: Time
+  lastEmailEventAtIsNil: Boolean
+  lastEmailEventAtNotNil: Boolean
   """
   status field predicates
   """
@@ -42464,6 +48833,21 @@ input AssessmentResponseWhereInput {
   """
   hasAssessment: Boolean
   hasAssessmentWith: [AssessmentWhereInput!]
+  """
+  campaign edge predicates
+  """
+  hasCampaign: Boolean
+  hasCampaignWith: [CampaignWhereInput!]
+  """
+  identity_holder edge predicates
+  """
+  hasIdentityHolder: Boolean
+  hasIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  entity edge predicates
+  """
+  hasEntity: Boolean
+  hasEntityWith: [EntityWhereInput!]
   """
   document edge predicates
   """
@@ -42651,10 +49035,25 @@ input AssessmentWhereInput {
   hasTemplate: Boolean
   hasTemplateWith: [TemplateWhereInput!]
   """
+  platforms edge predicates
+  """
+  hasPlatforms: Boolean
+  hasPlatformsWith: [PlatformWhereInput!]
+  """
+  identity_holders edge predicates
+  """
+  hasIdentityHolders: Boolean
+  hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+  """
   assessment_responses edge predicates
   """
   hasAssessmentResponses: Boolean
   hasAssessmentResponsesWith: [AssessmentResponseWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
 }
 type Asset implements Node {
   id: ID!
@@ -42670,6 +49069,82 @@ type Asset implements Node {
   the ID of the organization owner of the object
   """
   ownerID: ID
+  """
+  the internal owner for the asset when no user or group is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the asset
+  """
+  internalOwnerUserID: ID
+  """
+  the internal owner group id for the asset
+  """
+  internalOwnerGroupID: ID
+  """
+  the subtype of the asset
+  """
+  assetSubtypeName: String
+  """
+  the subtype of the asset
+  """
+  assetSubtypeID: ID
+  """
+  the data_classification of the asset
+  """
+  assetDataClassificationName: String
+  """
+  the data_classification of the asset
+  """
+  assetDataClassificationID: ID
+  """
+  the environment of the asset
+  """
+  environmentName: String
+  """
+  the environment of the asset
+  """
+  environmentID: ID
+  """
+  the scope of the asset
+  """
+  scopeName: String
+  """
+  the scope of the asset
+  """
+  scopeID: ID
+  """
+  the access_model of the asset
+  """
+  accessModelName: String
+  """
+  the access_model of the asset
+  """
+  accessModelID: ID
+  """
+  the encryption_status of the asset
+  """
+  encryptionStatusName: String
+  """
+  the encryption_status of the asset
+  """
+  encryptionStatusID: ID
+  """
+  the security_tier of the asset
+  """
+  securityTierName: String
+  """
+  the security_tier of the asset
+  """
+  securityTierID: ID
+  """
+  the criticality of the asset
+  """
+  criticalityName: String
+  """
+  the criticality of the asset
+  """
+  criticalityID: ID
   """
   indicates if the record is owned by the the openlane system and not by an organization
   """
@@ -42699,6 +49174,42 @@ type Asset implements Node {
   the website of the asset, if applicable
   """
   website: String
+  """
+  physical location of the asset, if applicable
+  """
+  physicalLocation: String
+  """
+  the region where the asset operates or is hosted
+  """
+  region: String
+  """
+  whether the asset stores or processes PII
+  """
+  containsPii: Boolean
+  """
+  the source of the asset record, e.g., manual, discovered, imported, api
+  """
+  sourceType: AssetSourceType!
+  """
+  the platform that sourced the asset record
+  """
+  sourcePlatformID: ID
+  """
+  the identifier used by the source platform for the asset
+  """
+  sourceIdentifier: String
+  """
+  cost center associated with the asset
+  """
+  costCenter: String
+  """
+  estimated monthly cost for the asset
+  """
+  estimatedMonthlyCost: Float
+  """
+  purchase date for the asset
+  """
+  purchaseDate: DateTime
   """
   the CPE (Common Platform Enumeration) of the asset, if applicable
   """
@@ -42801,6 +49312,16 @@ type Asset implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  internalOwnerUser: User
+  internalOwnerGroup: Group
+  assetSubtype: CustomTypeEnum
+  assetDataClassification: CustomTypeEnum
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
+  accessModel: CustomTypeEnum
+  encryptionStatus: CustomTypeEnum
+  securityTier: CustomTypeEnum
+  criticality: CustomTypeEnum
   scans(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -42863,6 +49384,99 @@ type Asset implements Node {
     """
     where: EntityWhereInput
   ): EntityConnection!
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  outOfScopePlatforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  identityHolders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -42894,6 +49508,69 @@ type Asset implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  sourcePlatform: Platform
+  connectedAssets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  connectedFrom(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
 }
 """
 AssetAssetType is enum for the field asset_type
@@ -42953,8 +49630,26 @@ Properties by which Asset connections can be ordered.
 enum AssetOrderField {
   created_at
   updated_at
+  internal_owner
   ASSET_TYPE
   name
+  physical_location
+  region
+  contains_pii
+  SOURCE_TYPE
+  source_identifier
+  cost_center
+  estimated_monthly_cost
+  purchase_date
+}
+"""
+AssetSourceType is enum for the field source_type
+"""
+enum AssetSourceType @goModel(model: "github.com/theopenlane/core/common/enums.SourceType") {
+  MANUAL
+  DISCOVERED
+  IMPORTED
+  API
 }
 """
 AssetWhereInput is used for filtering Asset objects.
@@ -43057,6 +49752,348 @@ input AssetWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerGT: String
+  internalOwnerGTE: String
+  internalOwnerLT: String
+  internalOwnerLTE: String
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: ID
+  internalOwnerUserIDNEQ: ID
+  internalOwnerUserIDIn: [ID!]
+  internalOwnerUserIDNotIn: [ID!]
+  internalOwnerUserIDGT: ID
+  internalOwnerUserIDGTE: ID
+  internalOwnerUserIDLT: ID
+  internalOwnerUserIDLTE: ID
+  internalOwnerUserIDContains: ID
+  internalOwnerUserIDHasPrefix: ID
+  internalOwnerUserIDHasSuffix: ID
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: ID
+  internalOwnerUserIDContainsFold: ID
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: ID
+  internalOwnerGroupIDNEQ: ID
+  internalOwnerGroupIDIn: [ID!]
+  internalOwnerGroupIDNotIn: [ID!]
+  internalOwnerGroupIDGT: ID
+  internalOwnerGroupIDGTE: ID
+  internalOwnerGroupIDLT: ID
+  internalOwnerGroupIDLTE: ID
+  internalOwnerGroupIDContains: ID
+  internalOwnerGroupIDHasPrefix: ID
+  internalOwnerGroupIDHasSuffix: ID
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: ID
+  internalOwnerGroupIDContainsFold: ID
+  """
+  asset_subtype_name field predicates
+  """
+  assetSubtypeName: String
+  assetSubtypeNameNEQ: String
+  assetSubtypeNameIn: [String!]
+  assetSubtypeNameNotIn: [String!]
+  assetSubtypeNameGT: String
+  assetSubtypeNameGTE: String
+  assetSubtypeNameLT: String
+  assetSubtypeNameLTE: String
+  assetSubtypeNameContains: String
+  assetSubtypeNameHasPrefix: String
+  assetSubtypeNameHasSuffix: String
+  assetSubtypeNameIsNil: Boolean
+  assetSubtypeNameNotNil: Boolean
+  assetSubtypeNameEqualFold: String
+  assetSubtypeNameContainsFold: String
+  """
+  asset_subtype_id field predicates
+  """
+  assetSubtypeID: ID
+  assetSubtypeIDNEQ: ID
+  assetSubtypeIDIn: [ID!]
+  assetSubtypeIDNotIn: [ID!]
+  assetSubtypeIDGT: ID
+  assetSubtypeIDGTE: ID
+  assetSubtypeIDLT: ID
+  assetSubtypeIDLTE: ID
+  assetSubtypeIDContains: ID
+  assetSubtypeIDHasPrefix: ID
+  assetSubtypeIDHasSuffix: ID
+  assetSubtypeIDIsNil: Boolean
+  assetSubtypeIDNotNil: Boolean
+  assetSubtypeIDEqualFold: ID
+  assetSubtypeIDContainsFold: ID
+  """
+  asset_data_classification_name field predicates
+  """
+  assetDataClassificationName: String
+  assetDataClassificationNameNEQ: String
+  assetDataClassificationNameIn: [String!]
+  assetDataClassificationNameNotIn: [String!]
+  assetDataClassificationNameGT: String
+  assetDataClassificationNameGTE: String
+  assetDataClassificationNameLT: String
+  assetDataClassificationNameLTE: String
+  assetDataClassificationNameContains: String
+  assetDataClassificationNameHasPrefix: String
+  assetDataClassificationNameHasSuffix: String
+  assetDataClassificationNameIsNil: Boolean
+  assetDataClassificationNameNotNil: Boolean
+  assetDataClassificationNameEqualFold: String
+  assetDataClassificationNameContainsFold: String
+  """
+  asset_data_classification_id field predicates
+  """
+  assetDataClassificationID: ID
+  assetDataClassificationIDNEQ: ID
+  assetDataClassificationIDIn: [ID!]
+  assetDataClassificationIDNotIn: [ID!]
+  assetDataClassificationIDGT: ID
+  assetDataClassificationIDGTE: ID
+  assetDataClassificationIDLT: ID
+  assetDataClassificationIDLTE: ID
+  assetDataClassificationIDContains: ID
+  assetDataClassificationIDHasPrefix: ID
+  assetDataClassificationIDHasSuffix: ID
+  assetDataClassificationIDIsNil: Boolean
+  assetDataClassificationIDNotNil: Boolean
+  assetDataClassificationIDEqualFold: ID
+  assetDataClassificationIDContainsFold: ID
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
+  access_model_name field predicates
+  """
+  accessModelName: String
+  accessModelNameNEQ: String
+  accessModelNameIn: [String!]
+  accessModelNameNotIn: [String!]
+  accessModelNameGT: String
+  accessModelNameGTE: String
+  accessModelNameLT: String
+  accessModelNameLTE: String
+  accessModelNameContains: String
+  accessModelNameHasPrefix: String
+  accessModelNameHasSuffix: String
+  accessModelNameIsNil: Boolean
+  accessModelNameNotNil: Boolean
+  accessModelNameEqualFold: String
+  accessModelNameContainsFold: String
+  """
+  access_model_id field predicates
+  """
+  accessModelID: ID
+  accessModelIDNEQ: ID
+  accessModelIDIn: [ID!]
+  accessModelIDNotIn: [ID!]
+  accessModelIDGT: ID
+  accessModelIDGTE: ID
+  accessModelIDLT: ID
+  accessModelIDLTE: ID
+  accessModelIDContains: ID
+  accessModelIDHasPrefix: ID
+  accessModelIDHasSuffix: ID
+  accessModelIDIsNil: Boolean
+  accessModelIDNotNil: Boolean
+  accessModelIDEqualFold: ID
+  accessModelIDContainsFold: ID
+  """
+  encryption_status_name field predicates
+  """
+  encryptionStatusName: String
+  encryptionStatusNameNEQ: String
+  encryptionStatusNameIn: [String!]
+  encryptionStatusNameNotIn: [String!]
+  encryptionStatusNameGT: String
+  encryptionStatusNameGTE: String
+  encryptionStatusNameLT: String
+  encryptionStatusNameLTE: String
+  encryptionStatusNameContains: String
+  encryptionStatusNameHasPrefix: String
+  encryptionStatusNameHasSuffix: String
+  encryptionStatusNameIsNil: Boolean
+  encryptionStatusNameNotNil: Boolean
+  encryptionStatusNameEqualFold: String
+  encryptionStatusNameContainsFold: String
+  """
+  encryption_status_id field predicates
+  """
+  encryptionStatusID: ID
+  encryptionStatusIDNEQ: ID
+  encryptionStatusIDIn: [ID!]
+  encryptionStatusIDNotIn: [ID!]
+  encryptionStatusIDGT: ID
+  encryptionStatusIDGTE: ID
+  encryptionStatusIDLT: ID
+  encryptionStatusIDLTE: ID
+  encryptionStatusIDContains: ID
+  encryptionStatusIDHasPrefix: ID
+  encryptionStatusIDHasSuffix: ID
+  encryptionStatusIDIsNil: Boolean
+  encryptionStatusIDNotNil: Boolean
+  encryptionStatusIDEqualFold: ID
+  encryptionStatusIDContainsFold: ID
+  """
+  security_tier_name field predicates
+  """
+  securityTierName: String
+  securityTierNameNEQ: String
+  securityTierNameIn: [String!]
+  securityTierNameNotIn: [String!]
+  securityTierNameGT: String
+  securityTierNameGTE: String
+  securityTierNameLT: String
+  securityTierNameLTE: String
+  securityTierNameContains: String
+  securityTierNameHasPrefix: String
+  securityTierNameHasSuffix: String
+  securityTierNameIsNil: Boolean
+  securityTierNameNotNil: Boolean
+  securityTierNameEqualFold: String
+  securityTierNameContainsFold: String
+  """
+  security_tier_id field predicates
+  """
+  securityTierID: ID
+  securityTierIDNEQ: ID
+  securityTierIDIn: [ID!]
+  securityTierIDNotIn: [ID!]
+  securityTierIDGT: ID
+  securityTierIDGTE: ID
+  securityTierIDLT: ID
+  securityTierIDLTE: ID
+  securityTierIDContains: ID
+  securityTierIDHasPrefix: ID
+  securityTierIDHasSuffix: ID
+  securityTierIDIsNil: Boolean
+  securityTierIDNotNil: Boolean
+  securityTierIDEqualFold: ID
+  securityTierIDContainsFold: ID
+  """
+  criticality_name field predicates
+  """
+  criticalityName: String
+  criticalityNameNEQ: String
+  criticalityNameIn: [String!]
+  criticalityNameNotIn: [String!]
+  criticalityNameGT: String
+  criticalityNameGTE: String
+  criticalityNameLT: String
+  criticalityNameLTE: String
+  criticalityNameContains: String
+  criticalityNameHasPrefix: String
+  criticalityNameHasSuffix: String
+  criticalityNameIsNil: Boolean
+  criticalityNameNotNil: Boolean
+  criticalityNameEqualFold: String
+  criticalityNameContainsFold: String
+  """
+  criticality_id field predicates
+  """
+  criticalityID: ID
+  criticalityIDNEQ: ID
+  criticalityIDIn: [ID!]
+  criticalityIDNotIn: [ID!]
+  criticalityIDGT: ID
+  criticalityIDGTE: ID
+  criticalityIDLT: ID
+  criticalityIDLTE: ID
+  criticalityIDContains: ID
+  criticalityIDHasPrefix: ID
+  criticalityIDHasSuffix: ID
+  criticalityIDIsNil: Boolean
+  criticalityIDNotNil: Boolean
+  criticalityIDEqualFold: ID
+  criticalityIDContainsFold: ID
   """
   system_owned field predicates
   """
@@ -43178,6 +50215,136 @@ input AssetWhereInput {
   websiteEqualFold: String
   websiteContainsFold: String
   """
+  physical_location field predicates
+  """
+  physicalLocation: String
+  physicalLocationNEQ: String
+  physicalLocationIn: [String!]
+  physicalLocationNotIn: [String!]
+  physicalLocationGT: String
+  physicalLocationGTE: String
+  physicalLocationLT: String
+  physicalLocationLTE: String
+  physicalLocationContains: String
+  physicalLocationHasPrefix: String
+  physicalLocationHasSuffix: String
+  physicalLocationIsNil: Boolean
+  physicalLocationNotNil: Boolean
+  physicalLocationEqualFold: String
+  physicalLocationContainsFold: String
+  """
+  region field predicates
+  """
+  region: String
+  regionNEQ: String
+  regionIn: [String!]
+  regionNotIn: [String!]
+  regionGT: String
+  regionGTE: String
+  regionLT: String
+  regionLTE: String
+  regionContains: String
+  regionHasPrefix: String
+  regionHasSuffix: String
+  regionIsNil: Boolean
+  regionNotNil: Boolean
+  regionEqualFold: String
+  regionContainsFold: String
+  """
+  contains_pii field predicates
+  """
+  containsPii: Boolean
+  containsPiiNEQ: Boolean
+  containsPiiIsNil: Boolean
+  containsPiiNotNil: Boolean
+  """
+  source_type field predicates
+  """
+  sourceType: AssetSourceType
+  sourceTypeNEQ: AssetSourceType
+  sourceTypeIn: [AssetSourceType!]
+  sourceTypeNotIn: [AssetSourceType!]
+  """
+  source_platform_id field predicates
+  """
+  sourcePlatformID: ID
+  sourcePlatformIDNEQ: ID
+  sourcePlatformIDIn: [ID!]
+  sourcePlatformIDNotIn: [ID!]
+  sourcePlatformIDGT: ID
+  sourcePlatformIDGTE: ID
+  sourcePlatformIDLT: ID
+  sourcePlatformIDLTE: ID
+  sourcePlatformIDContains: ID
+  sourcePlatformIDHasPrefix: ID
+  sourcePlatformIDHasSuffix: ID
+  sourcePlatformIDIsNil: Boolean
+  sourcePlatformIDNotNil: Boolean
+  sourcePlatformIDEqualFold: ID
+  sourcePlatformIDContainsFold: ID
+  """
+  source_identifier field predicates
+  """
+  sourceIdentifier: String
+  sourceIdentifierNEQ: String
+  sourceIdentifierIn: [String!]
+  sourceIdentifierNotIn: [String!]
+  sourceIdentifierGT: String
+  sourceIdentifierGTE: String
+  sourceIdentifierLT: String
+  sourceIdentifierLTE: String
+  sourceIdentifierContains: String
+  sourceIdentifierHasPrefix: String
+  sourceIdentifierHasSuffix: String
+  sourceIdentifierIsNil: Boolean
+  sourceIdentifierNotNil: Boolean
+  sourceIdentifierEqualFold: String
+  sourceIdentifierContainsFold: String
+  """
+  cost_center field predicates
+  """
+  costCenter: String
+  costCenterNEQ: String
+  costCenterIn: [String!]
+  costCenterNotIn: [String!]
+  costCenterGT: String
+  costCenterGTE: String
+  costCenterLT: String
+  costCenterLTE: String
+  costCenterContains: String
+  costCenterHasPrefix: String
+  costCenterHasSuffix: String
+  costCenterIsNil: Boolean
+  costCenterNotNil: Boolean
+  costCenterEqualFold: String
+  costCenterContainsFold: String
+  """
+  estimated_monthly_cost field predicates
+  """
+  estimatedMonthlyCost: Float
+  estimatedMonthlyCostNEQ: Float
+  estimatedMonthlyCostIn: [Float!]
+  estimatedMonthlyCostNotIn: [Float!]
+  estimatedMonthlyCostGT: Float
+  estimatedMonthlyCostGTE: Float
+  estimatedMonthlyCostLT: Float
+  estimatedMonthlyCostLTE: Float
+  estimatedMonthlyCostIsNil: Boolean
+  estimatedMonthlyCostNotNil: Boolean
+  """
+  purchase_date field predicates
+  """
+  purchaseDate: DateTime
+  purchaseDateNEQ: DateTime
+  purchaseDateIn: [DateTime!]
+  purchaseDateNotIn: [DateTime!]
+  purchaseDateGT: DateTime
+  purchaseDateGTE: DateTime
+  purchaseDateLT: DateTime
+  purchaseDateLTE: DateTime
+  purchaseDateIsNil: Boolean
+  purchaseDateNotNil: Boolean
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -43198,6 +50365,56 @@ input AssetWhereInput {
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
   """
+  internal_owner_user edge predicates
+  """
+  hasInternalOwnerUser: Boolean
+  hasInternalOwnerUserWith: [UserWhereInput!]
+  """
+  internal_owner_group edge predicates
+  """
+  hasInternalOwnerGroup: Boolean
+  hasInternalOwnerGroupWith: [GroupWhereInput!]
+  """
+  asset_subtype edge predicates
+  """
+  hasAssetSubtype: Boolean
+  hasAssetSubtypeWith: [CustomTypeEnumWhereInput!]
+  """
+  asset_data_classification edge predicates
+  """
+  hasAssetDataClassification: Boolean
+  hasAssetDataClassificationWith: [CustomTypeEnumWhereInput!]
+  """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
+  access_model edge predicates
+  """
+  hasAccessModel: Boolean
+  hasAccessModelWith: [CustomTypeEnumWhereInput!]
+  """
+  encryption_status edge predicates
+  """
+  hasEncryptionStatus: Boolean
+  hasEncryptionStatusWith: [CustomTypeEnumWhereInput!]
+  """
+  security_tier edge predicates
+  """
+  hasSecurityTier: Boolean
+  hasSecurityTierWith: [CustomTypeEnumWhereInput!]
+  """
+  criticality edge predicates
+  """
+  hasCriticality: Boolean
+  hasCriticalityWith: [CustomTypeEnumWhereInput!]
+  """
   scans edge predicates
   """
   hasScans: Boolean
@@ -43208,10 +50425,1557 @@ input AssetWhereInput {
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
   """
+  platforms edge predicates
+  """
+  hasPlatforms: Boolean
+  hasPlatformsWith: [PlatformWhereInput!]
+  """
+  out_of_scope_platforms edge predicates
+  """
+  hasOutOfScopePlatforms: Boolean
+  hasOutOfScopePlatformsWith: [PlatformWhereInput!]
+  """
+  identity_holders edge predicates
+  """
+  hasIdentityHolders: Boolean
+  hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+  """
   controls edge predicates
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  source_platform edge predicates
+  """
+  hasSourcePlatform: Boolean
+  hasSourcePlatformWith: [PlatformWhereInput!]
+  """
+  connected_assets edge predicates
+  """
+  hasConnectedAssets: Boolean
+  hasConnectedAssetsWith: [AssetWhereInput!]
+  """
+  connected_from edge predicates
+  """
+  hasConnectedFrom: Boolean
+  hasConnectedFromWith: [AssetWhereInput!]
+}
+type Campaign implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  the internal owner for the campaign when no user or group is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the campaign
+  """
+  internalOwnerUserID: ID
+  """
+  the internal owner group id for the campaign
+  """
+  internalOwnerGroupID: ID
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
+  the name of the campaign
+  """
+  name: String!
+  """
+  the description of the campaign
+  """
+  description: String
+  """
+  the type of campaign
+  """
+  campaignType: CampaignCampaignType!
+  """
+  the status of the campaign
+  """
+  status: CampaignCampaignStatus!
+  """
+  whether the campaign is active
+  """
+  isActive: Boolean!
+  """
+  when the campaign is scheduled to start
+  """
+  scheduledAt: DateTime
+  """
+  when the campaign was launched
+  """
+  launchedAt: DateTime
+  """
+  when the campaign completed
+  """
+  completedAt: DateTime
+  """
+  when responses are due for the campaign
+  """
+  dueDate: DateTime
+  """
+  whether the campaign recurs on a schedule
+  """
+  isRecurring: Boolean!
+  """
+  the recurrence cadence for the campaign
+  """
+  recurrenceFrequency: CampaignFrequency
+  """
+  the recurrence interval for the campaign, combined with the recurrence frequency
+  """
+  recurrenceInterval: Int
+  """
+  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  recurrenceCron: String
+  """
+  timezone used for the recurrence schedule
+  """
+  recurrenceTimezone: String
+  """
+  when the campaign was last executed
+  """
+  lastRunAt: DateTime
+  """
+  when the campaign is scheduled to run next
+  """
+  nextRunAt: DateTime
+  """
+  when the recurring campaign should stop running
+  """
+  recurrenceEndAt: DateTime
+  """
+  the number of recipients targeted by the campaign
+  """
+  recipientCount: Int
+  """
+  the number of times campaign notifications were resent
+  """
+  resendCount: Int
+  """
+  when campaign notifications were last resent
+  """
+  lastResentAt: DateTime
+  """
+  the template associated with the campaign
+  """
+  templateID: ID
+  """
+  the entity associated with the campaign
+  """
+  entityID: ID
+  """
+  the assessment associated with the campaign
+  """
+  assessmentID: ID
+  """
+  additional metadata about the campaign
+  """
+  metadata: Map
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  internalOwnerUser: User
+  internalOwnerGroup: Group
+  assessment: Assessment
+  template: Template
+  entity: Entity
+  campaignTargets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CampaignTargets returned from the connection.
+    """
+    orderBy: [CampaignTargetOrder!]
+
+    """
+    Filtering options for CampaignTargets returned from the connection.
+    """
+    where: CampaignTargetWhereInput
+  ): CampaignTargetConnection!
+  assessmentResponses(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AssessmentResponses returned from the connection.
+    """
+    orderBy: [AssessmentResponseOrder!]
+
+    """
+    Filtering options for AssessmentResponses returned from the connection.
+    """
+    where: AssessmentResponseWhereInput
+  ): AssessmentResponseConnection!
+  contacts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Contacts returned from the connection.
+    """
+    orderBy: [ContactOrder!]
+
+    """
+    Filtering options for Contacts returned from the connection.
+    """
+    where: ContactWhereInput
+  ): ContactConnection!
+  users(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Users returned from the connection.
+    """
+    orderBy: [UserOrder!]
+
+    """
+    Filtering options for Users returned from the connection.
+    """
+    where: UserWhereInput
+  ): UserConnection!
+  groups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  identityHolders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
+}
+"""
+CampaignCampaignStatus is enum for the field status
+"""
+enum CampaignCampaignStatus @goModel(model: "github.com/theopenlane/core/common/enums.CampaignStatus") {
+  DRAFT
+  SCHEDULED
+  ACTIVE
+  COMPLETED
+  CANCELED
+}
+"""
+CampaignCampaignType is enum for the field campaign_type
+"""
+enum CampaignCampaignType @goModel(model: "github.com/theopenlane/core/common/enums.CampaignType") {
+  QUESTIONNAIRE
+  TRAINING
+  POLICY_ATTESTATION
+  VENDOR_ASSESSMENT
+  CUSTOM
+}
+"""
+A connection to a list of items.
+"""
+type CampaignConnection {
+  """
+  A list of edges.
+  """
+  edges: [CampaignEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type CampaignEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Campaign
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+CampaignFrequency is enum for the field recurrence_frequency
+"""
+enum CampaignFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+  YEARLY
+  QUARTERLY
+  BIANNUALLY
+  MONTHLY
+}
+"""
+Ordering options for Campaign connections
+"""
+input CampaignOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Campaigns.
+  """
+  field: CampaignOrderField!
+}
+"""
+Properties by which Campaign connections can be ordered.
+"""
+enum CampaignOrderField {
+  created_at
+  updated_at
+  internal_owner
+  name
+  CAMPAIGN_TYPE
+  STATUS
+  is_active
+  scheduled_at
+  launched_at
+  completed_at
+  due_date
+  is_recurring
+  recurrence_frequency
+  recurrence_interval
+  recurrence_timezone
+  last_run_at
+  next_run_at
+  recurrence_end_at
+  recipient_count
+  resend_count
+  last_resent_at
+}
+type CampaignTarget implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
+  the campaign this target belongs to
+  """
+  campaignID: ID!
+  """
+  the contact associated with the campaign target
+  """
+  contactID: ID
+  """
+  the user associated with the campaign target
+  """
+  userID: ID
+  """
+  the group associated with the campaign target
+  """
+  groupID: ID
+  """
+  the email address targeted by the campaign
+  """
+  email: String!
+  """
+  the name of the campaign target, if known
+  """
+  fullName: String
+  """
+  the delivery or response status for the campaign target
+  """
+  status: CampaignTargetAssessmentResponseStatus!
+  """
+  when the campaign target was last sent a request
+  """
+  sentAt: DateTime
+  """
+  when the campaign target completed the request
+  """
+  completedAt: DateTime
+  """
+  additional metadata about the campaign target
+  """
+  metadata: Map
+  owner: Organization
+  campaign: Campaign!
+  contact: Contact
+  user: User
+  group: Group
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
+}
+"""
+CampaignTargetAssessmentResponseStatus is enum for the field status
+"""
+enum CampaignTargetAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/common/enums.AssessmentResponseStatus") {
+  NOT_STARTED
+  SENT
+  COMPLETED
+  OVERDUE
+}
+"""
+A connection to a list of items.
+"""
+type CampaignTargetConnection {
+  """
+  A list of edges.
+  """
+  edges: [CampaignTargetEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type CampaignTargetEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: CampaignTarget
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for CampaignTarget connections
+"""
+input CampaignTargetOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order CampaignTargets.
+  """
+  field: CampaignTargetOrderField!
+}
+"""
+Properties by which CampaignTarget connections can be ordered.
+"""
+enum CampaignTargetOrderField {
+  created_at
+  updated_at
+  email
+  full_name
+  STATUS
+  sent_at
+  completed_at
+}
+"""
+CampaignTargetWhereInput is used for filtering CampaignTarget objects.
+Input was generated by ent.
+"""
+input CampaignTargetWhereInput {
+  not: CampaignTargetWhereInput
+  and: [CampaignTargetWhereInput!]
+  or: [CampaignTargetWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
+  campaign_id field predicates
+  """
+  campaignID: ID
+  campaignIDNEQ: ID
+  campaignIDIn: [ID!]
+  campaignIDNotIn: [ID!]
+  campaignIDGT: ID
+  campaignIDGTE: ID
+  campaignIDLT: ID
+  campaignIDLTE: ID
+  campaignIDContains: ID
+  campaignIDHasPrefix: ID
+  campaignIDHasSuffix: ID
+  campaignIDEqualFold: ID
+  campaignIDContainsFold: ID
+  """
+  contact_id field predicates
+  """
+  contactID: ID
+  contactIDNEQ: ID
+  contactIDIn: [ID!]
+  contactIDNotIn: [ID!]
+  contactIDGT: ID
+  contactIDGTE: ID
+  contactIDLT: ID
+  contactIDLTE: ID
+  contactIDContains: ID
+  contactIDHasPrefix: ID
+  contactIDHasSuffix: ID
+  contactIDIsNil: Boolean
+  contactIDNotNil: Boolean
+  contactIDEqualFold: ID
+  contactIDContainsFold: ID
+  """
+  user_id field predicates
+  """
+  userID: ID
+  userIDNEQ: ID
+  userIDIn: [ID!]
+  userIDNotIn: [ID!]
+  userIDGT: ID
+  userIDGTE: ID
+  userIDLT: ID
+  userIDLTE: ID
+  userIDContains: ID
+  userIDHasPrefix: ID
+  userIDHasSuffix: ID
+  userIDIsNil: Boolean
+  userIDNotNil: Boolean
+  userIDEqualFold: ID
+  userIDContainsFold: ID
+  """
+  group_id field predicates
+  """
+  groupID: ID
+  groupIDNEQ: ID
+  groupIDIn: [ID!]
+  groupIDNotIn: [ID!]
+  groupIDGT: ID
+  groupIDGTE: ID
+  groupIDLT: ID
+  groupIDLTE: ID
+  groupIDContains: ID
+  groupIDHasPrefix: ID
+  groupIDHasSuffix: ID
+  groupIDIsNil: Boolean
+  groupIDNotNil: Boolean
+  groupIDEqualFold: ID
+  groupIDContainsFold: ID
+  """
+  email field predicates
+  """
+  email: String
+  emailNEQ: String
+  emailIn: [String!]
+  emailNotIn: [String!]
+  emailGT: String
+  emailGTE: String
+  emailLT: String
+  emailLTE: String
+  emailContains: String
+  emailHasPrefix: String
+  emailHasSuffix: String
+  emailEqualFold: String
+  emailContainsFold: String
+  """
+  full_name field predicates
+  """
+  fullName: String
+  fullNameNEQ: String
+  fullNameIn: [String!]
+  fullNameNotIn: [String!]
+  fullNameGT: String
+  fullNameGTE: String
+  fullNameLT: String
+  fullNameLTE: String
+  fullNameContains: String
+  fullNameHasPrefix: String
+  fullNameHasSuffix: String
+  fullNameIsNil: Boolean
+  fullNameNotNil: Boolean
+  fullNameEqualFold: String
+  fullNameContainsFold: String
+  """
+  status field predicates
+  """
+  status: CampaignTargetAssessmentResponseStatus
+  statusNEQ: CampaignTargetAssessmentResponseStatus
+  statusIn: [CampaignTargetAssessmentResponseStatus!]
+  statusNotIn: [CampaignTargetAssessmentResponseStatus!]
+  """
+  sent_at field predicates
+  """
+  sentAt: DateTime
+  sentAtNEQ: DateTime
+  sentAtIn: [DateTime!]
+  sentAtNotIn: [DateTime!]
+  sentAtGT: DateTime
+  sentAtGTE: DateTime
+  sentAtLT: DateTime
+  sentAtLTE: DateTime
+  sentAtIsNil: Boolean
+  sentAtNotNil: Boolean
+  """
+  completed_at field predicates
+  """
+  completedAt: DateTime
+  completedAtNEQ: DateTime
+  completedAtIn: [DateTime!]
+  completedAtNotIn: [DateTime!]
+  completedAtGT: DateTime
+  completedAtGTE: DateTime
+  completedAtLT: DateTime
+  completedAtLTE: DateTime
+  completedAtIsNil: Boolean
+  completedAtNotNil: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  campaign edge predicates
+  """
+  hasCampaign: Boolean
+  hasCampaignWith: [CampaignWhereInput!]
+  """
+  contact edge predicates
+  """
+  hasContact: Boolean
+  hasContactWith: [ContactWhereInput!]
+  """
+  user edge predicates
+  """
+  hasUser: Boolean
+  hasUserWith: [UserWhereInput!]
+  """
+  group edge predicates
+  """
+  hasGroup: Boolean
+  hasGroupWith: [GroupWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+}
+"""
+CampaignWhereInput is used for filtering Campaign objects.
+Input was generated by ent.
+"""
+input CampaignWhereInput {
+  not: CampaignWhereInput
+  and: [CampaignWhereInput!]
+  or: [CampaignWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerGT: String
+  internalOwnerGTE: String
+  internalOwnerLT: String
+  internalOwnerLTE: String
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: ID
+  internalOwnerUserIDNEQ: ID
+  internalOwnerUserIDIn: [ID!]
+  internalOwnerUserIDNotIn: [ID!]
+  internalOwnerUserIDGT: ID
+  internalOwnerUserIDGTE: ID
+  internalOwnerUserIDLT: ID
+  internalOwnerUserIDLTE: ID
+  internalOwnerUserIDContains: ID
+  internalOwnerUserIDHasPrefix: ID
+  internalOwnerUserIDHasSuffix: ID
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: ID
+  internalOwnerUserIDContainsFold: ID
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: ID
+  internalOwnerGroupIDNEQ: ID
+  internalOwnerGroupIDIn: [ID!]
+  internalOwnerGroupIDNotIn: [ID!]
+  internalOwnerGroupIDGT: ID
+  internalOwnerGroupIDGTE: ID
+  internalOwnerGroupIDLT: ID
+  internalOwnerGroupIDLTE: ID
+  internalOwnerGroupIDContains: ID
+  internalOwnerGroupIDHasPrefix: ID
+  internalOwnerGroupIDHasSuffix: ID
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: ID
+  internalOwnerGroupIDContainsFold: ID
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  campaign_type field predicates
+  """
+  campaignType: CampaignCampaignType
+  campaignTypeNEQ: CampaignCampaignType
+  campaignTypeIn: [CampaignCampaignType!]
+  campaignTypeNotIn: [CampaignCampaignType!]
+  """
+  status field predicates
+  """
+  status: CampaignCampaignStatus
+  statusNEQ: CampaignCampaignStatus
+  statusIn: [CampaignCampaignStatus!]
+  statusNotIn: [CampaignCampaignStatus!]
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
+  """
+  scheduled_at field predicates
+  """
+  scheduledAt: DateTime
+  scheduledAtNEQ: DateTime
+  scheduledAtIn: [DateTime!]
+  scheduledAtNotIn: [DateTime!]
+  scheduledAtGT: DateTime
+  scheduledAtGTE: DateTime
+  scheduledAtLT: DateTime
+  scheduledAtLTE: DateTime
+  scheduledAtIsNil: Boolean
+  scheduledAtNotNil: Boolean
+  """
+  launched_at field predicates
+  """
+  launchedAt: DateTime
+  launchedAtNEQ: DateTime
+  launchedAtIn: [DateTime!]
+  launchedAtNotIn: [DateTime!]
+  launchedAtGT: DateTime
+  launchedAtGTE: DateTime
+  launchedAtLT: DateTime
+  launchedAtLTE: DateTime
+  launchedAtIsNil: Boolean
+  launchedAtNotNil: Boolean
+  """
+  completed_at field predicates
+  """
+  completedAt: DateTime
+  completedAtNEQ: DateTime
+  completedAtIn: [DateTime!]
+  completedAtNotIn: [DateTime!]
+  completedAtGT: DateTime
+  completedAtGTE: DateTime
+  completedAtLT: DateTime
+  completedAtLTE: DateTime
+  completedAtIsNil: Boolean
+  completedAtNotNil: Boolean
+  """
+  due_date field predicates
+  """
+  dueDate: DateTime
+  dueDateNEQ: DateTime
+  dueDateIn: [DateTime!]
+  dueDateNotIn: [DateTime!]
+  dueDateGT: DateTime
+  dueDateGTE: DateTime
+  dueDateLT: DateTime
+  dueDateLTE: DateTime
+  dueDateIsNil: Boolean
+  dueDateNotNil: Boolean
+  """
+  is_recurring field predicates
+  """
+  isRecurring: Boolean
+  isRecurringNEQ: Boolean
+  """
+  recurrence_frequency field predicates
+  """
+  recurrenceFrequency: CampaignFrequency
+  recurrenceFrequencyNEQ: CampaignFrequency
+  recurrenceFrequencyIn: [CampaignFrequency!]
+  recurrenceFrequencyNotIn: [CampaignFrequency!]
+  recurrenceFrequencyIsNil: Boolean
+  recurrenceFrequencyNotNil: Boolean
+  """
+  recurrence_interval field predicates
+  """
+  recurrenceInterval: Int
+  recurrenceIntervalNEQ: Int
+  recurrenceIntervalIn: [Int!]
+  recurrenceIntervalNotIn: [Int!]
+  recurrenceIntervalGT: Int
+  recurrenceIntervalGTE: Int
+  recurrenceIntervalLT: Int
+  recurrenceIntervalLTE: Int
+  recurrenceIntervalIsNil: Boolean
+  recurrenceIntervalNotNil: Boolean
+  """
+  recurrence_timezone field predicates
+  """
+  recurrenceTimezone: String
+  recurrenceTimezoneNEQ: String
+  recurrenceTimezoneIn: [String!]
+  recurrenceTimezoneNotIn: [String!]
+  recurrenceTimezoneGT: String
+  recurrenceTimezoneGTE: String
+  recurrenceTimezoneLT: String
+  recurrenceTimezoneLTE: String
+  recurrenceTimezoneContains: String
+  recurrenceTimezoneHasPrefix: String
+  recurrenceTimezoneHasSuffix: String
+  recurrenceTimezoneIsNil: Boolean
+  recurrenceTimezoneNotNil: Boolean
+  recurrenceTimezoneEqualFold: String
+  recurrenceTimezoneContainsFold: String
+  """
+  last_run_at field predicates
+  """
+  lastRunAt: DateTime
+  lastRunAtNEQ: DateTime
+  lastRunAtIn: [DateTime!]
+  lastRunAtNotIn: [DateTime!]
+  lastRunAtGT: DateTime
+  lastRunAtGTE: DateTime
+  lastRunAtLT: DateTime
+  lastRunAtLTE: DateTime
+  lastRunAtIsNil: Boolean
+  lastRunAtNotNil: Boolean
+  """
+  next_run_at field predicates
+  """
+  nextRunAt: DateTime
+  nextRunAtNEQ: DateTime
+  nextRunAtIn: [DateTime!]
+  nextRunAtNotIn: [DateTime!]
+  nextRunAtGT: DateTime
+  nextRunAtGTE: DateTime
+  nextRunAtLT: DateTime
+  nextRunAtLTE: DateTime
+  nextRunAtIsNil: Boolean
+  nextRunAtNotNil: Boolean
+  """
+  recurrence_end_at field predicates
+  """
+  recurrenceEndAt: DateTime
+  recurrenceEndAtNEQ: DateTime
+  recurrenceEndAtIn: [DateTime!]
+  recurrenceEndAtNotIn: [DateTime!]
+  recurrenceEndAtGT: DateTime
+  recurrenceEndAtGTE: DateTime
+  recurrenceEndAtLT: DateTime
+  recurrenceEndAtLTE: DateTime
+  recurrenceEndAtIsNil: Boolean
+  recurrenceEndAtNotNil: Boolean
+  """
+  recipient_count field predicates
+  """
+  recipientCount: Int
+  recipientCountNEQ: Int
+  recipientCountIn: [Int!]
+  recipientCountNotIn: [Int!]
+  recipientCountGT: Int
+  recipientCountGTE: Int
+  recipientCountLT: Int
+  recipientCountLTE: Int
+  recipientCountIsNil: Boolean
+  recipientCountNotNil: Boolean
+  """
+  resend_count field predicates
+  """
+  resendCount: Int
+  resendCountNEQ: Int
+  resendCountIn: [Int!]
+  resendCountNotIn: [Int!]
+  resendCountGT: Int
+  resendCountGTE: Int
+  resendCountLT: Int
+  resendCountLTE: Int
+  resendCountIsNil: Boolean
+  resendCountNotNil: Boolean
+  """
+  last_resent_at field predicates
+  """
+  lastResentAt: DateTime
+  lastResentAtNEQ: DateTime
+  lastResentAtIn: [DateTime!]
+  lastResentAtNotIn: [DateTime!]
+  lastResentAtGT: DateTime
+  lastResentAtGTE: DateTime
+  lastResentAtLT: DateTime
+  lastResentAtLTE: DateTime
+  lastResentAtIsNil: Boolean
+  lastResentAtNotNil: Boolean
+  """
+  template_id field predicates
+  """
+  templateID: ID
+  templateIDNEQ: ID
+  templateIDIn: [ID!]
+  templateIDNotIn: [ID!]
+  templateIDGT: ID
+  templateIDGTE: ID
+  templateIDLT: ID
+  templateIDLTE: ID
+  templateIDContains: ID
+  templateIDHasPrefix: ID
+  templateIDHasSuffix: ID
+  templateIDIsNil: Boolean
+  templateIDNotNil: Boolean
+  templateIDEqualFold: ID
+  templateIDContainsFold: ID
+  """
+  entity_id field predicates
+  """
+  entityID: ID
+  entityIDNEQ: ID
+  entityIDIn: [ID!]
+  entityIDNotIn: [ID!]
+  entityIDGT: ID
+  entityIDGTE: ID
+  entityIDLT: ID
+  entityIDLTE: ID
+  entityIDContains: ID
+  entityIDHasPrefix: ID
+  entityIDHasSuffix: ID
+  entityIDIsNil: Boolean
+  entityIDNotNil: Boolean
+  entityIDEqualFold: ID
+  entityIDContainsFold: ID
+  """
+  assessment_id field predicates
+  """
+  assessmentID: ID
+  assessmentIDNEQ: ID
+  assessmentIDIn: [ID!]
+  assessmentIDNotIn: [ID!]
+  assessmentIDGT: ID
+  assessmentIDGTE: ID
+  assessmentIDLT: ID
+  assessmentIDLTE: ID
+  assessmentIDContains: ID
+  assessmentIDHasPrefix: ID
+  assessmentIDHasSuffix: ID
+  assessmentIDIsNil: Boolean
+  assessmentIDNotNil: Boolean
+  assessmentIDEqualFold: ID
+  assessmentIDContainsFold: ID
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  internal_owner_user edge predicates
+  """
+  hasInternalOwnerUser: Boolean
+  hasInternalOwnerUserWith: [UserWhereInput!]
+  """
+  internal_owner_group edge predicates
+  """
+  hasInternalOwnerGroup: Boolean
+  hasInternalOwnerGroupWith: [GroupWhereInput!]
+  """
+  assessment edge predicates
+  """
+  hasAssessment: Boolean
+  hasAssessmentWith: [AssessmentWhereInput!]
+  """
+  template edge predicates
+  """
+  hasTemplate: Boolean
+  hasTemplateWith: [TemplateWhereInput!]
+  """
+  entity edge predicates
+  """
+  hasEntity: Boolean
+  hasEntityWith: [EntityWhereInput!]
+  """
+  campaign_targets edge predicates
+  """
+  hasCampaignTargets: Boolean
+  hasCampaignTargetsWith: [CampaignTargetWhereInput!]
+  """
+  assessment_responses edge predicates
+  """
+  hasAssessmentResponses: Boolean
+  hasAssessmentResponsesWith: [AssessmentResponseWhereInput!]
+  """
+  contacts edge predicates
+  """
+  hasContacts: Boolean
+  hasContactsWith: [ContactWhereInput!]
+  """
+  users edge predicates
+  """
+  hasUsers: Boolean
+  hasUsersWith: [UserWhereInput!]
+  """
+  groups edge predicates
+  """
+  hasGroups: Boolean
+  hasGroupsWith: [GroupWhereInput!]
+  """
+  identity_holders edge predicates
+  """
+  hasIdentityHolders: Boolean
+  hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 }
 type Contact implements Node {
   id: ID!
@@ -43287,6 +52051,68 @@ type Contact implements Node {
     """
     where: EntityWhereInput
   ): EntityConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+  campaignTargets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CampaignTargets returned from the connection.
+    """
+    orderBy: [CampaignTargetOrder!]
+
+    """
+    Filtering options for CampaignTargets returned from the connection.
+    """
+    where: CampaignTargetWhereInput
+  ): CampaignTargetConnection!
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -43611,6 +52437,16 @@ input ContactWhereInput {
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
   """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
+  """
+  campaign_targets edge predicates
+  """
+  hasCampaignTargets: Boolean
+  hasCampaignTargetsWith: [CampaignTargetWhereInput!]
+  """
   files edge predicates
   """
   hasFiles: Boolean
@@ -43754,6 +52590,22 @@ type Control implements Node {
   the kind of the control
   """
   controlKindID: ID
+  """
+  the environment of the control
+  """
+  environmentName: String
+  """
+  the environment of the control
+  """
+  environmentID: ID
+  """
+  the scope of the control
+  """
+  scopeName: String
+  """
+  the scope of the control
+  """
+  scopeID: ID
   """
   internal marker field for workflow eligibility, not exposed in API
   """
@@ -44152,6 +53004,8 @@ type Control implements Node {
     where: GroupWhereInput
   ): GroupConnection!
   controlKind: CustomTypeEnum
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   standard: Standard
   programs(
     """
@@ -44184,6 +53038,37 @@ type Control implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
   assets(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -46351,6 +55236,78 @@ input ControlWhereInput {
   controlKindIDEqualFold: ID
   controlKindIDContainsFold: ID
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   workflow_eligible_marker field predicates
   """
   workflowEligibleMarker: Boolean
@@ -46477,6 +55434,16 @@ input ControlWhereInput {
   hasControlKind: Boolean
   hasControlKindWith: [CustomTypeEnumWhereInput!]
   """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
   standard edge predicates
   """
   hasStandard: Boolean
@@ -46486,6 +55453,11 @@ input ControlWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  platforms edge predicates
+  """
+  hasPlatforms: Boolean
+  hasPlatformsWith: [PlatformWhereInput!]
   """
   assets edge predicates
   """
@@ -46709,6 +55681,7 @@ input CreateActionPlanInput {
   programIDs: [ID!]
   findingIDs: [ID!]
   vulnerabilityIDs: [ID!]
+  scanIDs: [ID!]
   reviewIDs: [ID!]
   remediationIDs: [ID!]
   taskIDs: [ID!]
@@ -46747,7 +55720,10 @@ input CreateAssessmentInput {
   editorIDs: [ID!]
   viewerIDs: [ID!]
   templateID: ID
+  platformIDs: [ID!]
+  identityHolderIDs: [ID!]
   assessmentResponseIDs: [ID!]
+  campaignIDs: [ID!]
 }
 """
 CreateAssessmentResponseInput is used for create AssessmentResponse object.
@@ -46759,11 +55735,42 @@ input CreateAssessmentResponseInput {
   """
   email: String!
   """
+  when the assessment email was delivered to the recipient
+  """
+  emailDeliveredAt: Time
+  """
+  when the assessment email was opened by the recipient
+  """
+  emailOpenedAt: Time
+  """
+  when a link in the assessment email was clicked by the recipient
+  """
+  emailClickedAt: Time
+  """
+  the number of times the assessment email was opened
+  """
+  emailOpenCount: Int
+  """
+  the number of link clicks for the assessment email
+  """
+  emailClickCount: Int
+  """
+  the most recent email event timestamp for this assessment response
+  """
+  lastEmailEventAt: Time
+  """
+  additional metadata about email delivery events
+  """
+  emailMetadata: Map
+  """
   when the assessment response is due
   """
   dueDate: Time
   ownerID: ID
   assessmentID: ID!
+  campaignID: ID
+  identityHolderID: ID
+  entityID: ID
   documentID: ID
 }
 """
@@ -46775,6 +55782,42 @@ input CreateAssetInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the internal owner for the asset when no user or group is linked
+  """
+  internalOwner: String
+  """
+  the subtype of the asset
+  """
+  assetSubtypeName: String
+  """
+  the data_classification of the asset
+  """
+  assetDataClassificationName: String
+  """
+  the environment of the asset
+  """
+  environmentName: String
+  """
+  the scope of the asset
+  """
+  scopeName: String
+  """
+  the access_model of the asset
+  """
+  accessModelName: String
+  """
+  the encryption_status of the asset
+  """
+  encryptionStatusName: String
+  """
+  the security_tier of the asset
+  """
+  securityTierName: String
+  """
+  the criticality of the asset
+  """
+  criticalityName: String
   """
   internal notes about the object creation, this field is only available to system admins
   """
@@ -46801,6 +55844,38 @@ input CreateAssetInput {
   """
   website: String
   """
+  physical location of the asset, if applicable
+  """
+  physicalLocation: String
+  """
+  the region where the asset operates or is hosted
+  """
+  region: String
+  """
+  whether the asset stores or processes PII
+  """
+  containsPii: Boolean
+  """
+  the source of the asset record, e.g., manual, discovered, imported, api
+  """
+  sourceType: AssetSourceType
+  """
+  the identifier used by the source platform for the asset
+  """
+  sourceIdentifier: String
+  """
+  cost center associated with the asset
+  """
+  costCenter: String
+  """
+  estimated monthly cost for the asset
+  """
+  estimatedMonthlyCost: Float
+  """
+  purchase date for the asset
+  """
+  purchaseDate: DateTime
+  """
   the CPE (Common Platform Enumeration) of the asset, if applicable
   """
   cpe: String
@@ -46812,9 +55887,183 @@ input CreateAssetInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
+  internalOwnerUserID: ID
+  internalOwnerGroupID: ID
+  assetSubtypeID: ID
+  assetDataClassificationID: ID
+  environmentID: ID
+  scopeID: ID
+  accessModelID: ID
+  encryptionStatusID: ID
+  securityTierID: ID
+  criticalityID: ID
   scanIDs: [ID!]
   entityIDs: [ID!]
+  platformIDs: [ID!]
+  outOfScopePlatformIDs: [ID!]
+  identityHolderIDs: [ID!]
   controlIDs: [ID!]
+  sourcePlatformID: ID
+  connectedAssetIDs: [ID!]
+  connectedFromIDs: [ID!]
+}
+"""
+CreateCampaignInput is used for create Campaign object.
+Input was generated by ent.
+"""
+input CreateCampaignInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the internal owner for the campaign when no user or group is linked
+  """
+  internalOwner: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
+  the name of the campaign
+  """
+  name: String!
+  """
+  the description of the campaign
+  """
+  description: String
+  """
+  the type of campaign
+  """
+  campaignType: CampaignCampaignType
+  """
+  the status of the campaign
+  """
+  status: CampaignCampaignStatus
+  """
+  whether the campaign is active
+  """
+  isActive: Boolean
+  """
+  when the campaign is scheduled to start
+  """
+  scheduledAt: DateTime
+  """
+  when the campaign was launched
+  """
+  launchedAt: DateTime
+  """
+  when the campaign completed
+  """
+  completedAt: DateTime
+  """
+  when responses are due for the campaign
+  """
+  dueDate: DateTime
+  """
+  whether the campaign recurs on a schedule
+  """
+  isRecurring: Boolean
+  """
+  the recurrence cadence for the campaign
+  """
+  recurrenceFrequency: CampaignFrequency
+  """
+  the recurrence interval for the campaign, combined with the recurrence frequency
+  """
+  recurrenceInterval: Int
+  """
+  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  recurrenceCron: String
+  """
+  timezone used for the recurrence schedule
+  """
+  recurrenceTimezone: String
+  """
+  when the campaign was last executed
+  """
+  lastRunAt: DateTime
+  """
+  when the campaign is scheduled to run next
+  """
+  nextRunAt: DateTime
+  """
+  when the recurring campaign should stop running
+  """
+  recurrenceEndAt: DateTime
+  """
+  the number of recipients targeted by the campaign
+  """
+  recipientCount: Int
+  """
+  the number of times campaign notifications were resent
+  """
+  resendCount: Int
+  """
+  when campaign notifications were last resent
+  """
+  lastResentAt: DateTime
+  """
+  additional metadata about the campaign
+  """
+  metadata: Map
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  internalOwnerUserID: ID
+  internalOwnerGroupID: ID
+  assessmentID: ID
+  templateID: ID
+  entityID: ID
+  campaignTargetIDs: [ID!]
+  assessmentResponseIDs: [ID!]
+  contactIDs: [ID!]
+  userIDs: [ID!]
+  groupIDs: [ID!]
+  identityHolderIDs: [ID!]
+  workflowObjectRefIDs: [ID!]
+}
+"""
+CreateCampaignTargetInput is used for create CampaignTarget object.
+Input was generated by ent.
+"""
+input CreateCampaignTargetInput {
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
+  the email address targeted by the campaign
+  """
+  email: String!
+  """
+  the name of the campaign target, if known
+  """
+  fullName: String
+  """
+  the delivery or response status for the campaign target
+  """
+  status: CampaignTargetAssessmentResponseStatus
+  """
+  when the campaign target was last sent a request
+  """
+  sentAt: DateTime
+  """
+  when the campaign target completed the request
+  """
+  completedAt: DateTime
+  """
+  additional metadata about the campaign target
+  """
+  metadata: Map
+  ownerID: ID
+  campaignID: ID!
+  contactID: ID
+  userID: ID
+  groupID: ID
+  workflowObjectRefIDs: [ID!]
 }
 """
 CreateContactInput is used for create Contact object.
@@ -46855,6 +56104,8 @@ input CreateContactInput {
   status: ContactUserStatus
   ownerID: ID
   entityIDs: [ID!]
+  campaignIDs: [ID!]
+  campaignTargetIDs: [ID!]
   fileIDs: [ID!]
 }
 """
@@ -47016,6 +56267,14 @@ input CreateControlInput {
   """
   controlKindName: String
   """
+  the environment of the control
+  """
+  environmentName: String
+  """
+  the scope of the control
+  """
+  scopeName: String
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -47040,8 +56299,11 @@ input CreateControlInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   controlKindID: ID
+  environmentID: ID
+  scopeID: ID
   standardID: ID
   programIDs: [ID!]
+  platformIDs: [ID!]
   assetIDs: [ID!]
   scanIDs: [ID!]
   findingIDs: [ID!]
@@ -47156,7 +56418,7 @@ input CreateCustomTypeEnumInput {
   """
   systemInternalID: String @readOnly
   """
-  the kind of object the type applies to, for example task
+  the kind of object the type applies to, for example task, leave empty for global enums
   """
   objectType: String!
   """
@@ -47189,6 +56451,7 @@ input CreateCustomTypeEnumInput {
   procedureIDs: [ID!]
   actionPlanIDs: [ID!]
   programIDs: [ID!]
+  platformIDs: [ID!]
 }
 """
 CreateDNSVerificationInput is used for create DNSVerification object.
@@ -47243,6 +56506,14 @@ input CreateDirectoryAccountInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the environment of the directory_account
+  """
+  environmentName: String
+  """
+  the scope of the directory_account
+  """
+  scopeName: String
   """
   stable identifier from the directory system
   """
@@ -47316,6 +56587,8 @@ input CreateDirectoryAccountInput {
   """
   sourceVersion: String
   ownerID: ID
+  environmentID: ID
+  scopeID: ID
   integrationID: ID!
   directorySyncRunID: ID!
   groupIDs: [ID!]
@@ -47330,6 +56603,14 @@ input CreateDirectoryGroupInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the environment of the directory_group
+  """
+  environmentName: String
+  """
+  the scope of the directory_group
+  """
+  scopeName: String
   """
   stable identifier from the directory system
   """
@@ -47379,6 +56660,8 @@ input CreateDirectoryGroupInput {
   """
   sourceVersion: String
   ownerID: ID
+  environmentID: ID
+  scopeID: ID
   integrationID: ID!
   directorySyncRunID: ID!
   workflowObjectRefIDs: [ID!]
@@ -47388,6 +56671,14 @@ CreateDirectoryMembershipInput is used for create DirectoryMembership object.
 Input was generated by ent.
 """
 input CreateDirectoryMembershipInput {
+  """
+  the environment of the directory_membership
+  """
+  environmentName: String
+  """
+  the scope of the directory_membership
+  """
+  scopeName: String
   """
   membership role reported by the provider
   """
@@ -47417,6 +56708,8 @@ input CreateDirectoryMembershipInput {
   """
   metadata: Map
   ownerID: ID
+  environmentID: ID
+  scopeID: ID
   integrationID: ID!
   directorySyncRunID: ID!
   directoryAccountID: ID!
@@ -47429,6 +56722,14 @@ CreateDirectorySyncRunInput is used for create DirectorySyncRun object.
 Input was generated by ent.
 """
 input CreateDirectorySyncRunInput {
+  """
+  the environment of the directory_sync_run
+  """
+  environmentName: String
+  """
+  the scope of the directory_sync_run
+  """
+  scopeName: String
   """
   current state of the sync run
   """
@@ -47466,6 +56767,8 @@ input CreateDirectorySyncRunInput {
   """
   stats: Map
   ownerID: ID
+  environmentID: ID
+  scopeID: ID
   integrationID: ID!
   directoryAccountIDs: [ID!]
   directoryGroupIDs: [ID!]
@@ -47501,10 +56804,20 @@ input CreateDocumentDataInput {
   """
   tags: [String!]
   """
+  the environment of the document
+  """
+  environmentName: String
+  """
+  the scope of the document
+  """
+  scopeName: String
+  """
   the json data of the document
   """
   data: Map!
   ownerID: ID
+  environmentID: ID
+  scopeID: ID
   templateID: ID
   entityIDs: [ID!]
   fileIDs: [ID!]
@@ -47519,6 +56832,18 @@ input CreateEntityInput {
   """
   tags: [String!]
   """
+  the internal owner for the entity when no user or group is linked
+  """
+  internalOwner: String
+  """
+  who reviewed the entity when no user or group is linked
+  """
+  reviewedBy: String
+  """
+  when the entity was last reviewed
+  """
+  lastReviewedAt: DateTime
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -47526,6 +56851,26 @@ input CreateEntityInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
+  """
+  the relationship_state of the entity
+  """
+  entityRelationshipStateName: String
+  """
+  the security_questionnaire_status of the entity
+  """
+  entitySecurityQuestionnaireStatusName: String
+  """
+  the source_type of the entity
+  """
+  entitySourceTypeName: String
+  """
+  the environment of the entity
+  """
+  environmentName: String
+  """
+  the scope of the entity
+  """
+  scopeName: String
   """
   the name of the entity
   """
@@ -47546,16 +56891,135 @@ input CreateEntityInput {
   status of the entity
   """
   status: String
+  """
+  whether the entity is approved for use
+  """
+  approvedForUse: Boolean
+  """
+  asset identifiers linked to the entity
+  """
+  linkedAssetIds: [String!]
+  """
+  whether the entity has an active SOC 2 report
+  """
+  hasSoc2: Boolean
+  """
+  SOC 2 reporting period end date
+  """
+  soc2PeriodEnd: DateTime
+  """
+  start date for the entity contract
+  """
+  contractStartDate: DateTime
+  """
+  end date for the entity contract
+  """
+  contractEndDate: DateTime
+  """
+  whether the contract auto-renews
+  """
+  autoRenews: Boolean
+  """
+  number of days required for termination notice
+  """
+  terminationNoticeDays: Int
+  """
+  annual spend associated with the entity
+  """
+  annualSpend: Float
+  """
+  the currency of the annual spend
+  """
+  spendCurrency: String
+  """
+  billing model for the entity relationship
+  """
+  billingModel: String
+  """
+  renewal risk rating for the entity
+  """
+  renewalRisk: String
+  """
+  whether SSO is enforced for the entity
+  """
+  ssoEnforced: Boolean
+  """
+  whether MFA is supported by the entity
+  """
+  mfaSupported: Boolean
+  """
+  whether MFA is enforced by the entity
+  """
+  mfaEnforced: Boolean
+  """
+  status page URL for the entity
+  """
+  statusPageURL: String
+  """
+  services provided by the entity
+  """
+  providedServices: [String!]
+  """
+  external links associated with the entity
+  """
+  links: [String!]
+  """
+  the risk rating label for the entity
+  """
+  riskRating: String
+  """
+  the risk score for the entity
+  """
+  riskScore: Int
+  """
+  the tier classification for the entity
+  """
+  tier: String
+  """
+  the cadence for reviewing the entity
+  """
+  reviewFrequency: EntityFrequency
+  """
+  when the entity is due for review
+  """
+  nextReviewAt: DateTime
+  """
+  when the entity contract is up for renewal
+  """
+  contractRenewalAt: DateTime
+  """
+  vendor metadata such as additional enrichment info, company size, public, etc.
+  """
+  vendorMetadata: Map
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
+  internalOwnerUserID: ID
+  internalOwnerGroupID: ID
+  reviewedByUserID: ID
+  reviewedByGroupID: ID
+  entityRelationshipStateID: ID
+  entitySecurityQuestionnaireStatusID: ID
+  entitySourceTypeID: ID
+  environmentID: ID
+  scopeID: ID
   contactIDs: [ID!]
   documentIDs: [ID!]
   noteIDs: [ID!]
   fileIDs: [ID!]
   assetIDs: [ID!]
   scanIDs: [ID!]
+  campaignIDs: [ID!]
+  assessmentResponseIDs: [ID!]
+  integrationIDs: [ID!]
+  subprocessorIDs: [ID!]
+  authMethodIDs: [ID!]
+  employerIdentityHolderIDs: [ID!]
+  identityHolderIDs: [ID!]
+  platformIDs: [ID!]
+  outOfScopePlatformIDs: [ID!]
+  sourcePlatformIDs: [ID!]
   entityTypeID: ID
 }
 """
@@ -47616,6 +57080,14 @@ input CreateEvidenceInput {
   """
   tags: [String!]
   """
+  the environment of the evidence
+  """
+  environmentName: String
+  """
+  the scope of the evidence
+  """
+  scopeName: String
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -47656,6 +57128,8 @@ input CreateEvidenceInput {
   """
   status: EvidenceEvidenceStatus
   ownerID: ID
+  environmentID: ID
+  scopeID: ID
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
   controlObjectiveIDs: [ID!]
@@ -47663,6 +57137,8 @@ input CreateEvidenceInput {
   fileIDs: [ID!]
   programIDs: [ID!]
   taskIDs: [ID!]
+  platformIDs: [ID!]
+  scanIDs: [ID!]
   commentIDs: [ID!]
   workflowObjectRefIDs: [ID!]
 }
@@ -47708,6 +57184,14 @@ input CreateFileInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
+  """
+  the environment of the file
+  """
+  environmentName: String
+  """
+  the scope of the file
+  """
+  scopeName: String
   """
   the name of the file provided in the payload key without the extension
   """
@@ -47770,6 +57254,8 @@ input CreateFileInput {
   """
   storageProvider: String
   lastAccessedAt: Time
+  environmentID: ID
+  scopeID: ID
   organizationIDs: [ID!]
   groupIDs: [ID!]
   contactIDs: [ID!]
@@ -47778,7 +57264,9 @@ input CreateFileInput {
   templateIDs: [ID!]
   documentIDs: [ID!]
   programIDs: [ID!]
+  platformIDs: [ID!]
   evidenceIDs: [ID!]
+  scanIDs: [ID!]
   eventIDs: [ID!]
   integrationIDs: [ID!]
   secretIDs: [ID!]
@@ -47836,6 +57324,14 @@ input CreateFindingInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
+  """
+  the environment of the finding
+  """
+  environmentName: String
+  """
+  the scope of the finding
+  """
+  scopeName: String
   """
   external identifier from the integration source for the finding
   """
@@ -47988,6 +57484,8 @@ input CreateFindingInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
+  environmentID: ID
+  scopeID: ID
   integrationIDs: [ID!]
   vulnerabilityIDs: [ID!]
   actionPlanIDs: [ID!]
@@ -48071,6 +57569,12 @@ input CreateGroupInput {
   actionPlanEditorIDs: [ID!]
   actionPlanBlockedGroupIDs: [ID!]
   actionPlanViewerIDs: [ID!]
+  platformEditorIDs: [ID!]
+  platformBlockedGroupIDs: [ID!]
+  platformViewerIDs: [ID!]
+  campaignEditorIDs: [ID!]
+  campaignBlockedGroupIDs: [ID!]
+  campaignViewerIDs: [ID!]
   procedureEditorIDs: [ID!]
   procedureBlockedGroupIDs: [ID!]
   internalPolicyEditorIDs: [ID!]
@@ -48084,6 +57588,8 @@ input CreateGroupInput {
   integrationIDs: [ID!]
   fileIDs: [ID!]
   taskIDs: [ID!]
+  campaignIDs: [ID!]
+  campaignTargetIDs: [ID!]
 }
 """
 CreateGroupMembershipInput is used for create GroupMembership object.
@@ -48170,6 +57676,120 @@ input CreateHushInput {
   eventIDs: [ID!]
 }
 """
+CreateIdentityHolderInput is used for create IdentityHolder object.
+Input was generated by ent.
+"""
+input CreateIdentityHolderInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the internal owner for the identity holder when no user or group is linked
+  """
+  internalOwner: String
+  """
+  the environment of the identity_holder
+  """
+  environmentName: String
+  """
+  the scope of the identity_holder
+  """
+  scopeName: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
+  the full name of the identity holder
+  """
+  fullName: String!
+  """
+  the email address of the identity holder
+  """
+  email: String!
+  """
+  alternate email address for the identity holder
+  """
+  alternateEmail: String
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  """
+  whether the identity holder record is linked to an Openlane user account
+  """
+  isOpenlaneUser: Boolean
+  """
+  the classification of identity holders, such as employee or contractor
+  """
+  identityHolderType: IdentityHolderIdentityHolderType
+  """
+  the status of the identity holder record
+  """
+  status: IdentityHolderUserStatus
+  """
+  whether the identity holder record is active
+  """
+  isActive: Boolean
+  """
+  the job title of the identity holder
+  """
+  title: String
+  """
+  the department or function of the identity holder
+  """
+  department: String
+  """
+  the team name for the identity holder
+  """
+  team: String
+  """
+  location or office for the identity holder
+  """
+  location: String
+  """
+  the start date for the identity holder
+  """
+  startDate: DateTime
+  """
+  the end date for the identity holder, if applicable
+  """
+  endDate: DateTime
+  """
+  external user identifier for the identity holder
+  """
+  externalUserID: String
+  """
+  external identifier for the identity holder from an upstream roster
+  """
+  externalReferenceID: String
+  """
+  additional metadata about the identity holder
+  """
+  metadata: Map
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  internalOwnerUserID: ID
+  internalOwnerGroupID: ID
+  environmentID: ID
+  scopeID: ID
+  employerID: ID
+  assessmentResponseIDs: [ID!]
+  assessmentIDs: [ID!]
+  templateIDs: [ID!]
+  assetIDs: [ID!]
+  entityIDs: [ID!]
+  platformIDs: [ID!]
+  campaignIDs: [ID!]
+  taskIDs: [ID!]
+  workflowObjectRefIDs: [ID!]
+  accessPlatformIDs: [ID!]
+  userID: ID
+}
+"""
 CreateInternalPolicyInput is used for create InternalPolicy object.
 Input was generated by ent.
 """
@@ -48251,6 +57871,14 @@ input CreateInternalPolicyInput {
   """
   internalPolicyKindName: String
   """
+  the environment of the internal_policy
+  """
+  environmentName: String
+  """
+  the scope of the internal_policy
+  """
+  scopeName: String
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -48260,6 +57888,8 @@ input CreateInternalPolicyInput {
   approverID: ID
   delegateID: ID
   internalPolicyKindID: ID
+  environmentID: ID
+  scopeID: ID
   controlObjectiveIDs: [ID!]
   controlImplementationIDs: [ID!]
   controlIDs: [ID!]
@@ -48747,6 +58377,10 @@ input CreateOrganizationInput {
   inviteIDs: [ID!]
   subscriberIDs: [ID!]
   entityIDs: [ID!]
+  platformIDs: [ID!]
+  identityHolderIDs: [ID!]
+  campaignIDs: [ID!]
+  campaignTargetIDs: [ID!]
   entityTypeIDs: [ID!]
   contactIDs: [ID!]
   noteIDs: [ID!]
@@ -48930,6 +58564,174 @@ input CreatePersonalAccessTokenInput {
   eventIDs: [ID!]
 }
 """
+CreatePlatformInput is used for create Platform object.
+Input was generated by ent.
+"""
+input CreatePlatformInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the internal owner for the platform when no user or group is linked
+  """
+  internalOwner: String
+  """
+  business owner for the platform when no user or group is linked
+  """
+  businessOwner: String
+  """
+  technical owner for the platform when no user or group is linked
+  """
+  technicalOwner: String
+  """
+  security owner for the platform when no user or group is linked
+  """
+  securityOwner: String
+  """
+  the kind of the platform
+  """
+  platformKindName: String
+  """
+  the data_classification of the platform
+  """
+  platformDataClassificationName: String
+  """
+  the environment of the platform
+  """
+  environmentName: String
+  """
+  the scope of the platform
+  """
+  scopeName: String
+  """
+  the access_model of the platform
+  """
+  accessModelName: String
+  """
+  the encryption_status of the platform
+  """
+  encryptionStatusName: String
+  """
+  the security_tier of the platform
+  """
+  securityTierName: String
+  """
+  the criticality of the platform
+  """
+  criticalityName: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
+  the name of the platform
+  """
+  name: String!
+  """
+  the description of the platform boundary
+  """
+  description: String
+  """
+  the business purpose of the platform
+  """
+  businessPurpose: String
+  """
+  scope statement for the platform, used for narrative justification
+  """
+  scopeStatement: String
+  """
+  description of the platform trust boundary
+  """
+  trustBoundaryDescription: String
+  """
+  summary of platform data flows
+  """
+  dataFlowSummary: String
+  """
+  the lifecycle status of the platform
+  """
+  status: PlatformPlatformStatus
+  """
+  physical location of the platform, if applicable
+  """
+  physicalLocation: String
+  """
+  the region where the platform operates or is hosted
+  """
+  region: String
+  """
+  whether the platform stores or processes PII
+  """
+  containsPii: Boolean
+  """
+  the source of the platform record, e.g., manual, discovered, imported, api
+  """
+  sourceType: PlatformSourceType
+  """
+  the identifier used by the source system for the platform
+  """
+  sourceIdentifier: String
+  """
+  cost center associated with the platform
+  """
+  costCenter: String
+  """
+  estimated monthly cost for the platform
+  """
+  estimatedMonthlyCost: Float
+  """
+  purchase date for the platform
+  """
+  purchaseDate: DateTime
+  """
+  external identifier for the platform from an upstream inventory
+  """
+  externalReferenceID: String
+  """
+  additional metadata about the platform
+  """
+  metadata: Map
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  internalOwnerUserID: ID
+  internalOwnerGroupID: ID
+  businessOwnerUserID: ID
+  businessOwnerGroupID: ID
+  technicalOwnerUserID: ID
+  technicalOwnerGroupID: ID
+  securityOwnerUserID: ID
+  securityOwnerGroupID: ID
+  platformKindID: ID
+  platformDataClassificationID: ID
+  environmentID: ID
+  scopeID: ID
+  accessModelID: ID
+  encryptionStatusID: ID
+  securityTierID: ID
+  criticalityID: ID
+  assetIDs: [ID!]
+  entityIDs: [ID!]
+  evidenceIDs: [ID!]
+  fileIDs: [ID!]
+  riskIDs: [ID!]
+  controlIDs: [ID!]
+  assessmentIDs: [ID!]
+  scanIDs: [ID!]
+  taskIDs: [ID!]
+  identityHolderIDs: [ID!]
+  workflowObjectRefIDs: [ID!]
+  sourceAssetIDs: [ID!]
+  sourceEntityIDs: [ID!]
+  outOfScopeAssetIDs: [ID!]
+  outOfScopeVendorIDs: [ID!]
+  applicableFrameworkIDs: [ID!]
+  generatedScanIDs: [ID!]
+  platformOwnerID: ID
+}
+"""
 CreateProcedureInput is used for create Procedure object.
 Input was generated by ent.
 """
@@ -49011,6 +58813,14 @@ input CreateProcedureInput {
   """
   procedureKindName: String
   """
+  the environment of the procedure
+  """
+  environmentName: String
+  """
+  the scope of the procedure
+  """
+  scopeName: String
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -49020,6 +58830,8 @@ input CreateProcedureInput {
   approverID: ID
   delegateID: ID
   procedureKindID: ID
+  environmentID: ID
+  scopeID: ID
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
   internalPolicyIDs: [ID!]
@@ -49139,6 +58951,14 @@ input CreateRemediationInput {
   """
   systemInternalID: String @readOnly
   """
+  the environment of the remediation
+  """
+  environmentName: String
+  """
+  the scope of the remediation
+  """
+  scopeName: String
+  """
   external identifier from the integration source for the remediation
   """
   externalID: String
@@ -49218,7 +59038,10 @@ input CreateRemediationInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
+  environmentID: ID
+  scopeID: ID
   integrationIDs: [ID!]
+  scanIDs: [ID!]
   findingIDs: [ID!]
   vulnerabilityIDs: [ID!]
   actionPlanIDs: [ID!]
@@ -49250,6 +59073,14 @@ input CreateReviewInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
+  """
+  the environment of the review
+  """
+  environmentName: String
+  """
+  the scope of the review
+  """
+  scopeName: String
   """
   external identifier from the integration source for the review
   """
@@ -49322,6 +59153,8 @@ input CreateReviewInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
+  environmentID: ID
+  scopeID: ID
   integrationIDs: [ID!]
   findingIDs: [ID!]
   vulnerabilityIDs: [ID!]
@@ -49355,6 +59188,14 @@ input CreateRiskInput {
   the category of the risk
   """
   riskCategoryName: String
+  """
+  the environment of the risk
+  """
+  environmentName: String
+  """
+  the scope of the risk
+  """
+  scopeName: String
   """
   the name of the risk
   """
@@ -49405,11 +59246,14 @@ input CreateRiskInput {
   viewerIDs: [ID!]
   riskKindID: ID
   riskCategoryID: ID
+  environmentID: ID
+  scopeID: ID
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
   procedureIDs: [ID!]
   internalPolicyIDs: [ID!]
   programIDs: [ID!]
+  platformIDs: [ID!]
   actionPlanIDs: [ID!]
   taskIDs: [ID!]
   assetIDs: [ID!]
@@ -49430,6 +59274,22 @@ input CreateScanInput {
   """
   tags: [String!]
   """
+  who reviewed the scan when no user or group is linked
+  """
+  reviewedBy: String
+  """
+  who the scan is assigned to when no user or group is linked
+  """
+  assignedTo: String
+  """
+  the environment of the scan
+  """
+  environmentName: String
+  """
+  the scope of the scan
+  """
+  scopeName: String
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String!
@@ -49442,6 +59302,26 @@ input CreateScanInput {
   """
   metadata: Map
   """
+  when the scan was executed
+  """
+  scanDate: DateTime
+  """
+  cron schedule that governs the scan cadence, in cron 6-field syntax
+  """
+  scanSchedule: String
+  """
+  when the scan is scheduled to run next
+  """
+  nextScanRunAt: DateTime
+  """
+  who performed the scan when no user or group is linked
+  """
+  performedBy: String
+  """
+  identifiers of vulnerabilities discovered during the scan
+  """
+  vulnerabilityIds: [String!]
+  """
   the status of the scan, e.g., processing, completed, failed
   """
   status: ScanScanStatus
@@ -49449,8 +59329,25 @@ input CreateScanInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
+  reviewedByUserID: ID
+  reviewedByGroupID: ID
+  assignedToUserID: ID
+  assignedToGroupID: ID
+  environmentID: ID
+  scopeID: ID
   assetIDs: [ID!]
   entityIDs: [ID!]
+  evidenceIDs: [ID!]
+  fileIDs: [ID!]
+  remediationIDs: [ID!]
+  actionPlanIDs: [ID!]
+  taskIDs: [ID!]
+  platformIDs: [ID!]
+  vulnerabilityIDs: [ID!]
+  controlIDs: [ID!]
+  generatedByPlatformID: ID
+  performedByUserID: ID
+  performedByGroupID: ID
 }
 """
 CreateScheduledJobInput is used for create ScheduledJob object.
@@ -49575,6 +59472,7 @@ input CreateStandardInput {
   controlIDs: [ID!]
   trustCenterComplianceIDs: [ID!]
   trustCenterDocIDs: [ID!]
+  applicablePlatformIDs: [ID!]
   logoFileID: ID
 }
 """
@@ -49746,6 +59644,7 @@ input CreateSubprocessorInput {
   ownerID: ID
   logoFileID: ID
   trustCenterSubprocessorIDs: [ID!]
+  entityIDs: [ID!]
 }
 """
 CreateSubscriberInput is used for create Subscriber object.
@@ -49822,6 +59721,14 @@ input CreateTaskInput {
   """
   taskKindName: String
   """
+  the environment of the task
+  """
+  environmentName: String
+  """
+  the scope of the task
+  """
+  scopeName: String
+  """
   the title of the task
   """
   title: String!
@@ -49855,6 +59762,8 @@ input CreateTaskInput {
   externalReferenceURL: [String!]
   ownerID: ID
   taskKindID: ID
+  environmentID: ID
+  scopeID: ID
   assignerID: ID
   assigneeID: ID
   commentIDs: [ID!]
@@ -49866,6 +59775,9 @@ input CreateTaskInput {
   controlObjectiveIDs: [ID!]
   programIDs: [ID!]
   riskIDs: [ID!]
+  platformIDs: [ID!]
+  scanIDs: [ID!]
+  identityHolderIDs: [ID!]
   controlImplementationIDs: [ID!]
   actionPlanIDs: [ID!]
   evidenceIDs: [ID!]
@@ -49891,6 +59803,14 @@ input CreateTemplateInput {
   """
   systemInternalID: String @readOnly
   """
+  the environment of the template
+  """
+  environmentName: String
+  """
+  the scope of the template
+  """
+  scopeName: String
+  """
   the name of the template
   """
   name: String!
@@ -49915,10 +59835,14 @@ input CreateTemplateInput {
   """
   uischema: Map
   ownerID: ID
+  environmentID: ID
+  scopeID: ID
   documentIDs: [ID!]
   fileIDs: [ID!]
   trustCenterID: ID
   assessmentIDs: [ID!]
+  campaignIDs: [ID!]
+  identityHolderIDs: [ID!]
 }
 """
 CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -50086,6 +60010,10 @@ input CreateTrustCenterSettingInput {
   company name for the trust center, defaults to the organization's display name
   """
   companyName: String
+  """
+  company description for the trust center
+  """
+  companyDescription: String
   """
   overview of the trust center
   """
@@ -50289,11 +60217,15 @@ input CreateUserInput {
   avatarFileID: ID
   eventIDs: [ID!]
   actionPlanIDs: [ID!]
+  campaignIDs: [ID!]
+  campaignTargetIDs: [ID!]
   subcontrolIDs: [ID!]
   assignerTaskIDs: [ID!]
   assigneeTaskIDs: [ID!]
   programIDs: [ID!]
   programsOwnedIDs: [ID!]
+  platformsOwnedIDs: [ID!]
+  identityHolderProfileIDs: [ID!]
   impersonationEventIDs: [ID!]
   targetedImpersonationIDs: [ID!]
 }
@@ -50350,6 +60282,14 @@ input CreateVulnerabilityInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
+  """
+  the environment of the vulnerability
+  """
+  environmentName: String
+  """
+  the scope of the vulnerability
+  """
+  scopeName: String
   """
   owner of the vulnerability
   """
@@ -50470,6 +60410,8 @@ input CreateVulnerabilityInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
+  environmentID: ID
+  scopeID: ID
   integrationIDs: [ID!]
   findingIDs: [ID!]
   actionPlanIDs: [ID!]
@@ -50554,44 +60496,6 @@ input CreateWorkflowDefinitionInput {
   ownerID: ID
   tagDefinitionIDs: [ID!]
   groupIDs: [ID!]
-}
-"""
-CreateWorkflowEventInput is used for create WorkflowEvent object.
-Input was generated by ent.
-"""
-input CreateWorkflowEventInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  Type of event, typically the action kind
-  """
-  eventType: WorkflowEventWorkflowEventType!
-  """
-  Payload for the event; stored raw
-  """
-  payload: WorkflowEventPayload
-  ownerID: ID
-  workflowInstanceID: ID!
-}
-"""
-CreateWorkflowObjectRefInput is used for create WorkflowObjectRef object.
-Input was generated by ent.
-"""
-input CreateWorkflowObjectRefInput {
-  ownerID: ID
-  workflowInstanceID: ID!
-  controlID: ID
-  taskID: ID
-  internalPolicyID: ID
-  findingID: ID
-  directoryAccountID: ID
-  directoryGroupID: ID
-  evidenceID: ID
-  subcontrolID: ID
-  actionPlanID: ID
-  procedureID: ID
 }
 """
 Define a Relay Cursor type:
@@ -50924,7 +60828,7 @@ type CustomTypeEnum implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
-  the kind of object the type applies to, for example task
+  the kind of object the type applies to, for example task, leave empty for global enums
   """
   objectType: String!
   """
@@ -51227,6 +61131,37 @@ type CustomTypeEnum implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
 }
 """
 A connection to a list of items.
@@ -51577,6 +61512,11 @@ input CustomTypeEnumWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  platforms edge predicates
+  """
+  hasPlatforms: Boolean
+  hasPlatformsWith: [PlatformWhereInput!]
 }
 type DNSVerification implements Node {
   id: ID!
@@ -52023,6 +61963,22 @@ type DirectoryAccount implements Node {
   """
   ownerID: ID
   """
+  the environment of the directory_account
+  """
+  environmentName: String
+  """
+  the environment of the directory_account
+  """
+  environmentID: ID
+  """
+  the scope of the directory_account
+  """
+  scopeName: String
+  """
+  the scope of the directory_account
+  """
+  scopeID: ID
+  """
   integration that owns this directory account
   """
   integrationID: ID!
@@ -52107,6 +62063,8 @@ type DirectoryAccount implements Node {
   """
   sourceVersion: String
   owner: Organization
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   """
   integration that owns this directory account
   """
@@ -52407,6 +62365,78 @@ input DirectoryAccountWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   integration_id field predicates
   """
   integrationID: ID
@@ -52703,6 +62733,16 @@ input DirectoryAccountWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
   integration edge predicates
   """
   hasIntegration: Boolean
@@ -52746,6 +62786,22 @@ type DirectoryGroup implements Node {
   the organization id that owns the object
   """
   ownerID: ID
+  """
+  the environment of the directory_group
+  """
+  environmentName: String
+  """
+  the environment of the directory_group
+  """
+  environmentID: ID
+  """
+  the scope of the directory_group
+  """
+  scopeName: String
+  """
+  the scope of the directory_group
+  """
+  scopeID: ID
   """
   integration that owns this directory group
   """
@@ -52807,6 +62863,8 @@ type DirectoryGroup implements Node {
   """
   sourceVersion: String
   owner: Organization
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   """
   integration that owns this directory group
   """
@@ -53097,6 +63155,78 @@ input DirectoryGroupWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   integration_id field predicates
   """
   integrationID: ID
@@ -53265,6 +63395,16 @@ input DirectoryGroupWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
   integration edge predicates
   """
   hasIntegration: Boolean
@@ -53304,6 +63444,22 @@ type DirectoryMembership implements Node {
   the organization id that owns the object
   """
   ownerID: ID
+  """
+  the environment of the directory_membership
+  """
+  environmentName: String
+  """
+  the environment of the directory_membership
+  """
+  environmentID: ID
+  """
+  the scope of the directory_membership
+  """
+  scopeName: String
+  """
+  the scope of the directory_membership
+  """
+  scopeID: ID
   """
   integration that owns this directory membership
   """
@@ -53349,6 +63505,8 @@ type DirectoryMembership implements Node {
   """
   metadata: Map
   owner: Organization
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   """
   integration that owns this directory membership
   """
@@ -53580,6 +63738,42 @@ input DirectoryMembershipWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
   role field predicates
   """
   role: DirectoryMembershipDirectoryMembershipRole
@@ -53677,6 +63871,22 @@ type DirectorySyncRun implements Node {
   """
   ownerID: ID
   """
+  the environment of the directory_sync_run
+  """
+  environmentName: String
+  """
+  the environment of the directory_sync_run
+  """
+  environmentID: ID
+  """
+  the scope of the directory_sync_run
+  """
+  scopeName: String
+  """
+  the scope of the directory_sync_run
+  """
+  scopeID: ID
+  """
   integration this sync run executed for
   """
   integrationID: ID!
@@ -53717,6 +63927,8 @@ type DirectorySyncRun implements Node {
   """
   stats: Map
   owner: Organization
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   """
   integration that executed this sync run
   """
@@ -53993,6 +64205,78 @@ input DirectorySyncRunWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   integration_id field predicates
   """
   integrationID: ID
@@ -54120,6 +64404,16 @@ input DirectorySyncRunWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
   """
   integration edge predicates
   """
@@ -54422,6 +64716,22 @@ type DocumentData implements Node {
   """
   ownerID: ID
   """
+  the environment of the document
+  """
+  environmentName: String
+  """
+  the environment of the document
+  """
+  environmentID: ID
+  """
+  the scope of the document
+  """
+  scopeName: String
+  """
+  the scope of the document
+  """
+  scopeID: ID
+  """
   the template id of the document
   """
   templateID: ID
@@ -54430,6 +64740,8 @@ type DocumentData implements Node {
   """
   data: Map!
   owner: Organization
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   template: Template
   entities(
     """
@@ -54646,6 +64958,78 @@ input DocumentDataWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   template_id field predicates
   """
   templateID: ID
@@ -54668,6 +65052,16 @@ input DocumentDataWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
   """
   template edge predicates
   """
@@ -54699,6 +65093,34 @@ type Entity implements Node {
   """
   ownerID: ID
   """
+  the internal owner for the entity when no user or group is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the entity
+  """
+  internalOwnerUserID: ID
+  """
+  the internal owner group id for the entity
+  """
+  internalOwnerGroupID: ID
+  """
+  who reviewed the entity when no user or group is linked
+  """
+  reviewedBy: String
+  """
+  the user id that reviewed the entity
+  """
+  reviewedByUserID: ID
+  """
+  the group id that reviewed the entity
+  """
+  reviewedByGroupID: ID
+  """
+  when the entity was last reviewed
+  """
+  lastReviewedAt: DateTime
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -54710,6 +65132,46 @@ type Entity implements Node {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @hidden(if: true)
+  """
+  the relationship_state of the entity
+  """
+  entityRelationshipStateName: String
+  """
+  the relationship_state of the entity
+  """
+  entityRelationshipStateID: ID
+  """
+  the security_questionnaire_status of the entity
+  """
+  entitySecurityQuestionnaireStatusName: String
+  """
+  the security_questionnaire_status of the entity
+  """
+  entitySecurityQuestionnaireStatusID: ID
+  """
+  the source_type of the entity
+  """
+  entitySourceTypeName: String
+  """
+  the source_type of the entity
+  """
+  entitySourceTypeID: ID
+  """
+  the environment of the entity
+  """
+  environmentName: String
+  """
+  the environment of the entity
+  """
+  environmentID: ID
+  """
+  the scope of the entity
+  """
+  scopeName: String
+  """
+  the scope of the entity
+  """
+  scopeID: ID
   """
   the name of the entity
   """
@@ -54734,6 +65196,106 @@ type Entity implements Node {
   status of the entity
   """
   status: String
+  """
+  whether the entity is approved for use
+  """
+  approvedForUse: Boolean
+  """
+  asset identifiers linked to the entity
+  """
+  linkedAssetIds: [String!]
+  """
+  whether the entity has an active SOC 2 report
+  """
+  hasSoc2: Boolean
+  """
+  SOC 2 reporting period end date
+  """
+  soc2PeriodEnd: DateTime
+  """
+  start date for the entity contract
+  """
+  contractStartDate: DateTime
+  """
+  end date for the entity contract
+  """
+  contractEndDate: DateTime
+  """
+  whether the contract auto-renews
+  """
+  autoRenews: Boolean
+  """
+  number of days required for termination notice
+  """
+  terminationNoticeDays: Int
+  """
+  annual spend associated with the entity
+  """
+  annualSpend: Float
+  """
+  the currency of the annual spend
+  """
+  spendCurrency: String
+  """
+  billing model for the entity relationship
+  """
+  billingModel: String
+  """
+  renewal risk rating for the entity
+  """
+  renewalRisk: String
+  """
+  whether SSO is enforced for the entity
+  """
+  ssoEnforced: Boolean
+  """
+  whether MFA is supported by the entity
+  """
+  mfaSupported: Boolean
+  """
+  whether MFA is enforced by the entity
+  """
+  mfaEnforced: Boolean
+  """
+  status page URL for the entity
+  """
+  statusPageURL: String
+  """
+  services provided by the entity
+  """
+  providedServices: [String!]
+  """
+  external links associated with the entity
+  """
+  links: [String!]
+  """
+  the risk rating label for the entity
+  """
+  riskRating: String
+  """
+  the risk score for the entity
+  """
+  riskScore: Int
+  """
+  the tier classification for the entity
+  """
+  tier: String
+  """
+  the cadence for reviewing the entity
+  """
+  reviewFrequency: EntityFrequency
+  """
+  when the entity is due for review
+  """
+  nextReviewAt: DateTime
+  """
+  when the entity contract is up for renewal
+  """
+  contractRenewalAt: DateTime
+  """
+  vendor metadata such as additional enrichment info, company size, public, etc.
+  """
+  vendorMetadata: Map
   owner: Organization
   blockedGroups(
     """
@@ -54828,6 +65390,15 @@ type Entity implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  internalOwnerUser: User
+  internalOwnerGroup: Group
+  reviewedByUser: User
+  reviewedByGroup: Group
+  entityRelationshipState: CustomTypeEnum
+  entitySecurityQuestionnaireStatus: CustomTypeEnum
+  entitySourceType: CustomTypeEnum
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   contacts(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -55014,6 +65585,316 @@ type Entity implements Node {
     """
     where: ScanWhereInput
   ): ScanConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+  assessmentResponses(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AssessmentResponses returned from the connection.
+    """
+    orderBy: [AssessmentResponseOrder!]
+
+    """
+    Filtering options for AssessmentResponses returned from the connection.
+    """
+    where: AssessmentResponseWhereInput
+  ): AssessmentResponseConnection!
+  integrations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  subprocessors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subprocessors returned from the connection.
+    """
+    orderBy: [SubprocessorOrder!]
+
+    """
+    Filtering options for Subprocessors returned from the connection.
+    """
+    where: SubprocessorWhereInput
+  ): SubprocessorConnection!
+  authMethods(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CustomTypeEnums returned from the connection.
+    """
+    orderBy: [CustomTypeEnumOrder!]
+
+    """
+    Filtering options for CustomTypeEnums returned from the connection.
+    """
+    where: CustomTypeEnumWhereInput
+  ): CustomTypeEnumConnection!
+  employerIdentityHolders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
+  identityHolders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  outOfScopePlatforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  sourcePlatforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
   entityType: EntityType
 }
 """
@@ -55047,6 +65928,15 @@ type EntityEdge {
   cursor: Cursor!
 }
 """
+EntityFrequency is enum for the field review_frequency
+"""
+enum EntityFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+  YEARLY
+  QUARTERLY
+  BIANNUALLY
+  MONTHLY
+}
+"""
 Ordering options for Entity connections
 """
 input EntityOrder {
@@ -55065,9 +65955,33 @@ Properties by which Entity connections can be ordered.
 enum EntityOrderField {
   created_at
   updated_at
+  internal_owner
+  reviewed_by
+  last_reviewed_at
   name
   display_name
   status
+  approved_for_use
+  has_soc2
+  soc2_period_end
+  contract_start_date
+  contract_end_date
+  auto_renews
+  termination_notice_days
+  annual_spend
+  spend_currency
+  billing_model
+  renewal_risk
+  sso_enforced
+  mfa_supported
+  mfa_enforced
+  status_page_url
+  risk_rating
+  risk_score
+  tier
+  REVIEW_FREQUENCY
+  next_review_at
+  contract_renewal_at
 }
 type EntityType implements Node {
   id: ID!
@@ -55456,6 +66370,127 @@ input EntityWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerGT: String
+  internalOwnerGTE: String
+  internalOwnerLT: String
+  internalOwnerLTE: String
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: ID
+  internalOwnerUserIDNEQ: ID
+  internalOwnerUserIDIn: [ID!]
+  internalOwnerUserIDNotIn: [ID!]
+  internalOwnerUserIDGT: ID
+  internalOwnerUserIDGTE: ID
+  internalOwnerUserIDLT: ID
+  internalOwnerUserIDLTE: ID
+  internalOwnerUserIDContains: ID
+  internalOwnerUserIDHasPrefix: ID
+  internalOwnerUserIDHasSuffix: ID
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: ID
+  internalOwnerUserIDContainsFold: ID
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: ID
+  internalOwnerGroupIDNEQ: ID
+  internalOwnerGroupIDIn: [ID!]
+  internalOwnerGroupIDNotIn: [ID!]
+  internalOwnerGroupIDGT: ID
+  internalOwnerGroupIDGTE: ID
+  internalOwnerGroupIDLT: ID
+  internalOwnerGroupIDLTE: ID
+  internalOwnerGroupIDContains: ID
+  internalOwnerGroupIDHasPrefix: ID
+  internalOwnerGroupIDHasSuffix: ID
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: ID
+  internalOwnerGroupIDContainsFold: ID
+  """
+  reviewed_by field predicates
+  """
+  reviewedBy: String
+  reviewedByNEQ: String
+  reviewedByIn: [String!]
+  reviewedByNotIn: [String!]
+  reviewedByGT: String
+  reviewedByGTE: String
+  reviewedByLT: String
+  reviewedByLTE: String
+  reviewedByContains: String
+  reviewedByHasPrefix: String
+  reviewedByHasSuffix: String
+  reviewedByIsNil: Boolean
+  reviewedByNotNil: Boolean
+  reviewedByEqualFold: String
+  reviewedByContainsFold: String
+  """
+  reviewed_by_user_id field predicates
+  """
+  reviewedByUserID: ID
+  reviewedByUserIDNEQ: ID
+  reviewedByUserIDIn: [ID!]
+  reviewedByUserIDNotIn: [ID!]
+  reviewedByUserIDGT: ID
+  reviewedByUserIDGTE: ID
+  reviewedByUserIDLT: ID
+  reviewedByUserIDLTE: ID
+  reviewedByUserIDContains: ID
+  reviewedByUserIDHasPrefix: ID
+  reviewedByUserIDHasSuffix: ID
+  reviewedByUserIDIsNil: Boolean
+  reviewedByUserIDNotNil: Boolean
+  reviewedByUserIDEqualFold: ID
+  reviewedByUserIDContainsFold: ID
+  """
+  reviewed_by_group_id field predicates
+  """
+  reviewedByGroupID: ID
+  reviewedByGroupIDNEQ: ID
+  reviewedByGroupIDIn: [ID!]
+  reviewedByGroupIDNotIn: [ID!]
+  reviewedByGroupIDGT: ID
+  reviewedByGroupIDGTE: ID
+  reviewedByGroupIDLT: ID
+  reviewedByGroupIDLTE: ID
+  reviewedByGroupIDContains: ID
+  reviewedByGroupIDHasPrefix: ID
+  reviewedByGroupIDHasSuffix: ID
+  reviewedByGroupIDIsNil: Boolean
+  reviewedByGroupIDNotNil: Boolean
+  reviewedByGroupIDEqualFold: ID
+  reviewedByGroupIDContainsFold: ID
+  """
+  last_reviewed_at field predicates
+  """
+  lastReviewedAt: DateTime
+  lastReviewedAtNEQ: DateTime
+  lastReviewedAtIn: [DateTime!]
+  lastReviewedAtNotIn: [DateTime!]
+  lastReviewedAtGT: DateTime
+  lastReviewedAtGTE: DateTime
+  lastReviewedAtLT: DateTime
+  lastReviewedAtLTE: DateTime
+  lastReviewedAtIsNil: Boolean
+  lastReviewedAtNotNil: Boolean
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -55498,6 +66533,186 @@ input EntityWhereInput {
   systemInternalIDNotNil: Boolean
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
+  """
+  entity_relationship_state_name field predicates
+  """
+  entityRelationshipStateName: String
+  entityRelationshipStateNameNEQ: String
+  entityRelationshipStateNameIn: [String!]
+  entityRelationshipStateNameNotIn: [String!]
+  entityRelationshipStateNameGT: String
+  entityRelationshipStateNameGTE: String
+  entityRelationshipStateNameLT: String
+  entityRelationshipStateNameLTE: String
+  entityRelationshipStateNameContains: String
+  entityRelationshipStateNameHasPrefix: String
+  entityRelationshipStateNameHasSuffix: String
+  entityRelationshipStateNameIsNil: Boolean
+  entityRelationshipStateNameNotNil: Boolean
+  entityRelationshipStateNameEqualFold: String
+  entityRelationshipStateNameContainsFold: String
+  """
+  entity_relationship_state_id field predicates
+  """
+  entityRelationshipStateID: ID
+  entityRelationshipStateIDNEQ: ID
+  entityRelationshipStateIDIn: [ID!]
+  entityRelationshipStateIDNotIn: [ID!]
+  entityRelationshipStateIDGT: ID
+  entityRelationshipStateIDGTE: ID
+  entityRelationshipStateIDLT: ID
+  entityRelationshipStateIDLTE: ID
+  entityRelationshipStateIDContains: ID
+  entityRelationshipStateIDHasPrefix: ID
+  entityRelationshipStateIDHasSuffix: ID
+  entityRelationshipStateIDIsNil: Boolean
+  entityRelationshipStateIDNotNil: Boolean
+  entityRelationshipStateIDEqualFold: ID
+  entityRelationshipStateIDContainsFold: ID
+  """
+  entity_security_questionnaire_status_name field predicates
+  """
+  entitySecurityQuestionnaireStatusName: String
+  entitySecurityQuestionnaireStatusNameNEQ: String
+  entitySecurityQuestionnaireStatusNameIn: [String!]
+  entitySecurityQuestionnaireStatusNameNotIn: [String!]
+  entitySecurityQuestionnaireStatusNameGT: String
+  entitySecurityQuestionnaireStatusNameGTE: String
+  entitySecurityQuestionnaireStatusNameLT: String
+  entitySecurityQuestionnaireStatusNameLTE: String
+  entitySecurityQuestionnaireStatusNameContains: String
+  entitySecurityQuestionnaireStatusNameHasPrefix: String
+  entitySecurityQuestionnaireStatusNameHasSuffix: String
+  entitySecurityQuestionnaireStatusNameIsNil: Boolean
+  entitySecurityQuestionnaireStatusNameNotNil: Boolean
+  entitySecurityQuestionnaireStatusNameEqualFold: String
+  entitySecurityQuestionnaireStatusNameContainsFold: String
+  """
+  entity_security_questionnaire_status_id field predicates
+  """
+  entitySecurityQuestionnaireStatusID: ID
+  entitySecurityQuestionnaireStatusIDNEQ: ID
+  entitySecurityQuestionnaireStatusIDIn: [ID!]
+  entitySecurityQuestionnaireStatusIDNotIn: [ID!]
+  entitySecurityQuestionnaireStatusIDGT: ID
+  entitySecurityQuestionnaireStatusIDGTE: ID
+  entitySecurityQuestionnaireStatusIDLT: ID
+  entitySecurityQuestionnaireStatusIDLTE: ID
+  entitySecurityQuestionnaireStatusIDContains: ID
+  entitySecurityQuestionnaireStatusIDHasPrefix: ID
+  entitySecurityQuestionnaireStatusIDHasSuffix: ID
+  entitySecurityQuestionnaireStatusIDIsNil: Boolean
+  entitySecurityQuestionnaireStatusIDNotNil: Boolean
+  entitySecurityQuestionnaireStatusIDEqualFold: ID
+  entitySecurityQuestionnaireStatusIDContainsFold: ID
+  """
+  entity_source_type_name field predicates
+  """
+  entitySourceTypeName: String
+  entitySourceTypeNameNEQ: String
+  entitySourceTypeNameIn: [String!]
+  entitySourceTypeNameNotIn: [String!]
+  entitySourceTypeNameGT: String
+  entitySourceTypeNameGTE: String
+  entitySourceTypeNameLT: String
+  entitySourceTypeNameLTE: String
+  entitySourceTypeNameContains: String
+  entitySourceTypeNameHasPrefix: String
+  entitySourceTypeNameHasSuffix: String
+  entitySourceTypeNameIsNil: Boolean
+  entitySourceTypeNameNotNil: Boolean
+  entitySourceTypeNameEqualFold: String
+  entitySourceTypeNameContainsFold: String
+  """
+  entity_source_type_id field predicates
+  """
+  entitySourceTypeID: ID
+  entitySourceTypeIDNEQ: ID
+  entitySourceTypeIDIn: [ID!]
+  entitySourceTypeIDNotIn: [ID!]
+  entitySourceTypeIDGT: ID
+  entitySourceTypeIDGTE: ID
+  entitySourceTypeIDLT: ID
+  entitySourceTypeIDLTE: ID
+  entitySourceTypeIDContains: ID
+  entitySourceTypeIDHasPrefix: ID
+  entitySourceTypeIDHasSuffix: ID
+  entitySourceTypeIDIsNil: Boolean
+  entitySourceTypeIDNotNil: Boolean
+  entitySourceTypeIDEqualFold: ID
+  entitySourceTypeIDContainsFold: ID
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
   """
   name field predicates
   """
@@ -55571,6 +66786,269 @@ input EntityWhereInput {
   statusEqualFold: String
   statusContainsFold: String
   """
+  approved_for_use field predicates
+  """
+  approvedForUse: Boolean
+  approvedForUseNEQ: Boolean
+  approvedForUseIsNil: Boolean
+  approvedForUseNotNil: Boolean
+  """
+  has_soc2 field predicates
+  """
+  hasSoc2: Boolean
+  hasSoc2NEQ: Boolean
+  hasSoc2IsNil: Boolean
+  hasSoc2NotNil: Boolean
+  """
+  soc2_period_end field predicates
+  """
+  soc2PeriodEnd: DateTime
+  soc2PeriodEndNEQ: DateTime
+  soc2PeriodEndIn: [DateTime!]
+  soc2PeriodEndNotIn: [DateTime!]
+  soc2PeriodEndGT: DateTime
+  soc2PeriodEndGTE: DateTime
+  soc2PeriodEndLT: DateTime
+  soc2PeriodEndLTE: DateTime
+  soc2PeriodEndIsNil: Boolean
+  soc2PeriodEndNotNil: Boolean
+  """
+  contract_start_date field predicates
+  """
+  contractStartDate: DateTime
+  contractStartDateNEQ: DateTime
+  contractStartDateIn: [DateTime!]
+  contractStartDateNotIn: [DateTime!]
+  contractStartDateGT: DateTime
+  contractStartDateGTE: DateTime
+  contractStartDateLT: DateTime
+  contractStartDateLTE: DateTime
+  contractStartDateIsNil: Boolean
+  contractStartDateNotNil: Boolean
+  """
+  contract_end_date field predicates
+  """
+  contractEndDate: DateTime
+  contractEndDateNEQ: DateTime
+  contractEndDateIn: [DateTime!]
+  contractEndDateNotIn: [DateTime!]
+  contractEndDateGT: DateTime
+  contractEndDateGTE: DateTime
+  contractEndDateLT: DateTime
+  contractEndDateLTE: DateTime
+  contractEndDateIsNil: Boolean
+  contractEndDateNotNil: Boolean
+  """
+  auto_renews field predicates
+  """
+  autoRenews: Boolean
+  autoRenewsNEQ: Boolean
+  autoRenewsIsNil: Boolean
+  autoRenewsNotNil: Boolean
+  """
+  termination_notice_days field predicates
+  """
+  terminationNoticeDays: Int
+  terminationNoticeDaysNEQ: Int
+  terminationNoticeDaysIn: [Int!]
+  terminationNoticeDaysNotIn: [Int!]
+  terminationNoticeDaysGT: Int
+  terminationNoticeDaysGTE: Int
+  terminationNoticeDaysLT: Int
+  terminationNoticeDaysLTE: Int
+  terminationNoticeDaysIsNil: Boolean
+  terminationNoticeDaysNotNil: Boolean
+  """
+  annual_spend field predicates
+  """
+  annualSpend: Float
+  annualSpendNEQ: Float
+  annualSpendIn: [Float!]
+  annualSpendNotIn: [Float!]
+  annualSpendGT: Float
+  annualSpendGTE: Float
+  annualSpendLT: Float
+  annualSpendLTE: Float
+  annualSpendIsNil: Boolean
+  annualSpendNotNil: Boolean
+  """
+  spend_currency field predicates
+  """
+  spendCurrency: String
+  spendCurrencyNEQ: String
+  spendCurrencyIn: [String!]
+  spendCurrencyNotIn: [String!]
+  spendCurrencyGT: String
+  spendCurrencyGTE: String
+  spendCurrencyLT: String
+  spendCurrencyLTE: String
+  spendCurrencyContains: String
+  spendCurrencyHasPrefix: String
+  spendCurrencyHasSuffix: String
+  spendCurrencyIsNil: Boolean
+  spendCurrencyNotNil: Boolean
+  spendCurrencyEqualFold: String
+  spendCurrencyContainsFold: String
+  """
+  billing_model field predicates
+  """
+  billingModel: String
+  billingModelNEQ: String
+  billingModelIn: [String!]
+  billingModelNotIn: [String!]
+  billingModelGT: String
+  billingModelGTE: String
+  billingModelLT: String
+  billingModelLTE: String
+  billingModelContains: String
+  billingModelHasPrefix: String
+  billingModelHasSuffix: String
+  billingModelIsNil: Boolean
+  billingModelNotNil: Boolean
+  billingModelEqualFold: String
+  billingModelContainsFold: String
+  """
+  renewal_risk field predicates
+  """
+  renewalRisk: String
+  renewalRiskNEQ: String
+  renewalRiskIn: [String!]
+  renewalRiskNotIn: [String!]
+  renewalRiskGT: String
+  renewalRiskGTE: String
+  renewalRiskLT: String
+  renewalRiskLTE: String
+  renewalRiskContains: String
+  renewalRiskHasPrefix: String
+  renewalRiskHasSuffix: String
+  renewalRiskIsNil: Boolean
+  renewalRiskNotNil: Boolean
+  renewalRiskEqualFold: String
+  renewalRiskContainsFold: String
+  """
+  sso_enforced field predicates
+  """
+  ssoEnforced: Boolean
+  ssoEnforcedNEQ: Boolean
+  ssoEnforcedIsNil: Boolean
+  ssoEnforcedNotNil: Boolean
+  """
+  mfa_supported field predicates
+  """
+  mfaSupported: Boolean
+  mfaSupportedNEQ: Boolean
+  mfaSupportedIsNil: Boolean
+  mfaSupportedNotNil: Boolean
+  """
+  mfa_enforced field predicates
+  """
+  mfaEnforced: Boolean
+  mfaEnforcedNEQ: Boolean
+  mfaEnforcedIsNil: Boolean
+  mfaEnforcedNotNil: Boolean
+  """
+  status_page_url field predicates
+  """
+  statusPageURL: String
+  statusPageURLNEQ: String
+  statusPageURLIn: [String!]
+  statusPageURLNotIn: [String!]
+  statusPageURLGT: String
+  statusPageURLGTE: String
+  statusPageURLLT: String
+  statusPageURLLTE: String
+  statusPageURLContains: String
+  statusPageURLHasPrefix: String
+  statusPageURLHasSuffix: String
+  statusPageURLIsNil: Boolean
+  statusPageURLNotNil: Boolean
+  statusPageURLEqualFold: String
+  statusPageURLContainsFold: String
+  """
+  risk_rating field predicates
+  """
+  riskRating: String
+  riskRatingNEQ: String
+  riskRatingIn: [String!]
+  riskRatingNotIn: [String!]
+  riskRatingGT: String
+  riskRatingGTE: String
+  riskRatingLT: String
+  riskRatingLTE: String
+  riskRatingContains: String
+  riskRatingHasPrefix: String
+  riskRatingHasSuffix: String
+  riskRatingIsNil: Boolean
+  riskRatingNotNil: Boolean
+  riskRatingEqualFold: String
+  riskRatingContainsFold: String
+  """
+  risk_score field predicates
+  """
+  riskScore: Int
+  riskScoreNEQ: Int
+  riskScoreIn: [Int!]
+  riskScoreNotIn: [Int!]
+  riskScoreGT: Int
+  riskScoreGTE: Int
+  riskScoreLT: Int
+  riskScoreLTE: Int
+  riskScoreIsNil: Boolean
+  riskScoreNotNil: Boolean
+  """
+  tier field predicates
+  """
+  tier: String
+  tierNEQ: String
+  tierIn: [String!]
+  tierNotIn: [String!]
+  tierGT: String
+  tierGTE: String
+  tierLT: String
+  tierLTE: String
+  tierContains: String
+  tierHasPrefix: String
+  tierHasSuffix: String
+  tierIsNil: Boolean
+  tierNotNil: Boolean
+  tierEqualFold: String
+  tierContainsFold: String
+  """
+  review_frequency field predicates
+  """
+  reviewFrequency: EntityFrequency
+  reviewFrequencyNEQ: EntityFrequency
+  reviewFrequencyIn: [EntityFrequency!]
+  reviewFrequencyNotIn: [EntityFrequency!]
+  reviewFrequencyIsNil: Boolean
+  reviewFrequencyNotNil: Boolean
+  """
+  next_review_at field predicates
+  """
+  nextReviewAt: DateTime
+  nextReviewAtNEQ: DateTime
+  nextReviewAtIn: [DateTime!]
+  nextReviewAtNotIn: [DateTime!]
+  nextReviewAtGT: DateTime
+  nextReviewAtGTE: DateTime
+  nextReviewAtLT: DateTime
+  nextReviewAtLTE: DateTime
+  nextReviewAtIsNil: Boolean
+  nextReviewAtNotNil: Boolean
+  """
+  contract_renewal_at field predicates
+  """
+  contractRenewalAt: DateTime
+  contractRenewalAtNEQ: DateTime
+  contractRenewalAtIn: [DateTime!]
+  contractRenewalAtNotIn: [DateTime!]
+  contractRenewalAtGT: DateTime
+  contractRenewalAtGTE: DateTime
+  contractRenewalAtLT: DateTime
+  contractRenewalAtLTE: DateTime
+  contractRenewalAtIsNil: Boolean
+  contractRenewalAtNotNil: Boolean
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -55590,6 +67068,51 @@ input EntityWhereInput {
   """
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
+  """
+  internal_owner_user edge predicates
+  """
+  hasInternalOwnerUser: Boolean
+  hasInternalOwnerUserWith: [UserWhereInput!]
+  """
+  internal_owner_group edge predicates
+  """
+  hasInternalOwnerGroup: Boolean
+  hasInternalOwnerGroupWith: [GroupWhereInput!]
+  """
+  reviewed_by_user edge predicates
+  """
+  hasReviewedByUser: Boolean
+  hasReviewedByUserWith: [UserWhereInput!]
+  """
+  reviewed_by_group edge predicates
+  """
+  hasReviewedByGroup: Boolean
+  hasReviewedByGroupWith: [GroupWhereInput!]
+  """
+  entity_relationship_state edge predicates
+  """
+  hasEntityRelationshipState: Boolean
+  hasEntityRelationshipStateWith: [CustomTypeEnumWhereInput!]
+  """
+  entity_security_questionnaire_status edge predicates
+  """
+  hasEntitySecurityQuestionnaireStatus: Boolean
+  hasEntitySecurityQuestionnaireStatusWith: [CustomTypeEnumWhereInput!]
+  """
+  entity_source_type edge predicates
+  """
+  hasEntitySourceType: Boolean
+  hasEntitySourceTypeWith: [CustomTypeEnumWhereInput!]
+  """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
   """
   contacts edge predicates
   """
@@ -55620,6 +67143,56 @@ input EntityWhereInput {
   """
   hasScans: Boolean
   hasScansWith: [ScanWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
+  """
+  assessment_responses edge predicates
+  """
+  hasAssessmentResponses: Boolean
+  hasAssessmentResponsesWith: [AssessmentResponseWhereInput!]
+  """
+  integrations edge predicates
+  """
+  hasIntegrations: Boolean
+  hasIntegrationsWith: [IntegrationWhereInput!]
+  """
+  subprocessors edge predicates
+  """
+  hasSubprocessors: Boolean
+  hasSubprocessorsWith: [SubprocessorWhereInput!]
+  """
+  auth_methods edge predicates
+  """
+  hasAuthMethods: Boolean
+  hasAuthMethodsWith: [CustomTypeEnumWhereInput!]
+  """
+  employer_identity_holders edge predicates
+  """
+  hasEmployerIdentityHolders: Boolean
+  hasEmployerIdentityHoldersWith: [IdentityHolderWhereInput!]
+  """
+  identity_holders edge predicates
+  """
+  hasIdentityHolders: Boolean
+  hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+  """
+  platforms edge predicates
+  """
+  hasPlatforms: Boolean
+  hasPlatformsWith: [PlatformWhereInput!]
+  """
+  out_of_scope_platforms edge predicates
+  """
+  hasOutOfScopePlatforms: Boolean
+  hasOutOfScopePlatformsWith: [PlatformWhereInput!]
+  """
+  source_platforms edge predicates
+  """
+  hasSourcePlatforms: Boolean
+  hasSourcePlatformsWith: [PlatformWhereInput!]
   """
   entity_type edge predicates
   """
@@ -56278,6 +67851,22 @@ type Evidence implements Node {
   """
   ownerID: ID
   """
+  the environment of the evidence
+  """
+  environmentName: String
+  """
+  the environment of the evidence
+  """
+  environmentID: ID
+  """
+  the scope of the evidence
+  """
+  scopeName: String
+  """
+  the scope of the evidence
+  """
+  scopeID: ID
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -56318,6 +67907,8 @@ type Evidence implements Node {
   """
   status: EvidenceEvidenceStatus
   owner: Organization
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -56535,6 +68126,68 @@ type Evidence implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
   comments(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -56782,6 +68435,78 @@ input EvidenceWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   workflow_eligible_marker field predicates
   """
   workflowEligibleMarker: Boolean
@@ -56922,6 +68647,16 @@ input EvidenceWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
   controls edge predicates
   """
   hasControls: Boolean
@@ -56956,6 +68691,16 @@ input EvidenceWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  platforms edge predicates
+  """
+  hasPlatforms: Boolean
+  hasPlatformsWith: [PlatformWhereInput!]
+  """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
   """
   comments edge predicates
   """
@@ -57371,6 +69116,22 @@ type File implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  the environment of the file
+  """
+  environmentName: String
+  """
+  the environment of the file
+  """
+  environmentID: ID
+  """
+  the scope of the file
+  """
+  scopeName: String
+  """
+  the scope of the file
+  """
+  scopeID: ID
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -57432,6 +69193,8 @@ type File implements Node {
   """
   storageProvider: String
   lastAccessedAt: Time
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   organization: [Organization!]
   groups(
     """
@@ -57470,7 +69233,9 @@ type File implements Node {
   template: [Template!]
   document: [DocumentData!]
   program: [Program!]
+  platform: [Platform!]
   evidence: [Evidence!]
+  scan: [Scan!]
   events(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -57776,6 +69541,78 @@ input FileWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   provided_file_name field predicates
   """
   providedFileName: String
@@ -58043,6 +69880,16 @@ input FileWhereInput {
   lastAccessedAtIsNil: Boolean
   lastAccessedAtNotNil: Boolean
   """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
   organization edge predicates
   """
   hasOrganization: Boolean
@@ -58083,10 +69930,20 @@ input FileWhereInput {
   hasProgram: Boolean
   hasProgramWith: [ProgramWhereInput!]
   """
+  platform edge predicates
+  """
+  hasPlatform: Boolean
+  hasPlatformWith: [PlatformWhereInput!]
+  """
   evidence edge predicates
   """
   hasEvidence: Boolean
   hasEvidenceWith: [EvidenceWhereInput!]
+  """
+  scan edge predicates
+  """
+  hasScan: Boolean
+  hasScanWith: [ScanWhereInput!]
   """
   events edge predicates
   """
@@ -58148,6 +70005,22 @@ type Finding implements Node {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @hidden(if: true)
+  """
+  the environment of the finding
+  """
+  environmentName: String
+  """
+  the environment of the finding
+  """
+  environmentID: ID
+  """
+  the scope of the finding
+  """
+  scopeName: String
+  """
+  the scope of the finding
+  """
+  scopeID: ID
   """
   external identifier from the integration source for the finding
   """
@@ -58390,6 +70263,8 @@ type Finding implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -59398,6 +71273,78 @@ input FindingWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   external_id field predicates
   """
   externalID: String
@@ -59862,6 +71809,16 @@ input FindingWhereInput {
   """
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
+  """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
   """
   integrations edge predicates
   """
@@ -60751,6 +72708,192 @@ type Group implements Node {
     """
     where: ActionPlanWhereInput
   ): ActionPlanConnection!
+  platformEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  platformBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  platformViewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  campaignEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+  campaignBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+  campaignViewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
   procedureEditors(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -61155,6 +73298,68 @@ type Group implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+  campaignTargets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CampaignTargets returned from the connection.
+    """
+    orderBy: [CampaignTargetOrder!]
+
+    """
+    Filtering options for CampaignTargets returned from the connection.
+    """
+    where: CampaignTargetWhereInput
+  ): CampaignTargetConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -62003,6 +74208,36 @@ input GroupWhereInput {
   hasActionPlanViewers: Boolean
   hasActionPlanViewersWith: [ActionPlanWhereInput!]
   """
+  platform_editors edge predicates
+  """
+  hasPlatformEditors: Boolean
+  hasPlatformEditorsWith: [PlatformWhereInput!]
+  """
+  platform_blocked_groups edge predicates
+  """
+  hasPlatformBlockedGroups: Boolean
+  hasPlatformBlockedGroupsWith: [PlatformWhereInput!]
+  """
+  platform_viewers edge predicates
+  """
+  hasPlatformViewers: Boolean
+  hasPlatformViewersWith: [PlatformWhereInput!]
+  """
+  campaign_editors edge predicates
+  """
+  hasCampaignEditors: Boolean
+  hasCampaignEditorsWith: [CampaignWhereInput!]
+  """
+  campaign_blocked_groups edge predicates
+  """
+  hasCampaignBlockedGroups: Boolean
+  hasCampaignBlockedGroupsWith: [CampaignWhereInput!]
+  """
+  campaign_viewers edge predicates
+  """
+  hasCampaignViewers: Boolean
+  hasCampaignViewersWith: [CampaignWhereInput!]
+  """
   procedure_editors edge predicates
   """
   hasProcedureEditors: Boolean
@@ -62072,6 +74307,16 @@ input GroupWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
+  """
+  campaign_targets edge predicates
+  """
+  hasCampaignTargets: Boolean
+  hasCampaignTargetsWith: [CampaignTargetWhereInput!]
   """
   members edge predicates
   """
@@ -62521,6 +74766,1241 @@ input HushWhereInput {
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
 }
+type IdentityHolder implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  the internal owner for the identity holder when no user or group is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the identity holder
+  """
+  internalOwnerUserID: ID
+  """
+  the internal owner group id for the identity holder
+  """
+  internalOwnerGroupID: ID
+  """
+  the environment of the identity_holder
+  """
+  environmentName: String
+  """
+  the environment of the identity_holder
+  """
+  environmentID: ID
+  """
+  the scope of the identity_holder
+  """
+  scopeName: String
+  """
+  the scope of the identity_holder
+  """
+  scopeID: ID
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
+  the full name of the identity holder
+  """
+  fullName: String!
+  """
+  the email address of the identity holder
+  """
+  email: String!
+  """
+  alternate email address for the identity holder
+  """
+  alternateEmail: String
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  """
+  whether the identity holder record is linked to an Openlane user account
+  """
+  isOpenlaneUser: Boolean
+  """
+  the user id associated with the identity holder record
+  """
+  userID: ID
+  """
+  the classification of identity holders, such as employee or contractor
+  """
+  identityHolderType: IdentityHolderIdentityHolderType!
+  """
+  the status of the identity holder record
+  """
+  status: IdentityHolderUserStatus!
+  """
+  whether the identity holder record is active
+  """
+  isActive: Boolean!
+  """
+  the job title of the identity holder
+  """
+  title: String
+  """
+  the department or function of the identity holder
+  """
+  department: String
+  """
+  the team name for the identity holder
+  """
+  team: String
+  """
+  location or office for the identity holder
+  """
+  location: String
+  """
+  the start date for the identity holder
+  """
+  startDate: DateTime
+  """
+  the end date for the identity holder, if applicable
+  """
+  endDate: DateTime
+  """
+  the external entity this identity holder is affiliated with
+  """
+  employerEntityID: ID
+  """
+  external user identifier for the identity holder
+  """
+  externalUserID: String
+  """
+  external identifier for the identity holder from an upstream roster
+  """
+  externalReferenceID: String
+  """
+  additional metadata about the identity holder
+  """
+  metadata: Map
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  internalOwnerUser: User
+  internalOwnerGroup: Group
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
+  employer: Entity
+  assessmentResponses(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AssessmentResponses returned from the connection.
+    """
+    orderBy: [AssessmentResponseOrder!]
+
+    """
+    Filtering options for AssessmentResponses returned from the connection.
+    """
+    where: AssessmentResponseWhereInput
+  ): AssessmentResponseConnection!
+  assessments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assessments returned from the connection.
+    """
+    orderBy: [AssessmentOrder!]
+
+    """
+    Filtering options for Assessments returned from the connection.
+    """
+    where: AssessmentWhereInput
+  ): AssessmentConnection!
+  templates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Templates returned from the connection.
+    """
+    orderBy: [TemplateOrder!]
+
+    """
+    Filtering options for Templates returned from the connection.
+    """
+    where: TemplateWhereInput
+  ): TemplateConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
+  accessPlatforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  user: User
+}
+"""
+A connection to a list of items.
+"""
+type IdentityHolderConnection {
+  """
+  A list of edges.
+  """
+  edges: [IdentityHolderEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type IdentityHolderEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: IdentityHolder
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+IdentityHolderIdentityHolderType is enum for the field identity_holder_type
+"""
+enum IdentityHolderIdentityHolderType @goModel(model: "github.com/theopenlane/core/common/enums.IdentityHolderType") {
+  EMPLOYEE
+  CONTRACTOR
+}
+"""
+Ordering options for IdentityHolder connections
+"""
+input IdentityHolderOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order IdentityHolders.
+  """
+  field: IdentityHolderOrderField!
+}
+"""
+Properties by which IdentityHolder connections can be ordered.
+"""
+enum IdentityHolderOrderField {
+  created_at
+  updated_at
+  internal_owner
+  full_name
+  email
+  alternate_email
+  is_openlane_user
+  IDENTITY_HOLDER_TYPE
+  STATUS
+  is_active
+  title
+  department
+  team
+  location
+  start_date
+  end_date
+  external_user_id
+  external_reference_id
+}
+"""
+IdentityHolderUserStatus is enum for the field status
+"""
+enum IdentityHolderUserStatus @goModel(model: "github.com/theopenlane/core/common/enums.UserStatus") {
+  ACTIVE
+  INACTIVE
+  DEACTIVATED
+  SUSPENDED
+  ONBOARDING
+}
+"""
+IdentityHolderWhereInput is used for filtering IdentityHolder objects.
+Input was generated by ent.
+"""
+input IdentityHolderWhereInput {
+  not: IdentityHolderWhereInput
+  and: [IdentityHolderWhereInput!]
+  or: [IdentityHolderWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerGT: String
+  internalOwnerGTE: String
+  internalOwnerLT: String
+  internalOwnerLTE: String
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: ID
+  internalOwnerUserIDNEQ: ID
+  internalOwnerUserIDIn: [ID!]
+  internalOwnerUserIDNotIn: [ID!]
+  internalOwnerUserIDGT: ID
+  internalOwnerUserIDGTE: ID
+  internalOwnerUserIDLT: ID
+  internalOwnerUserIDLTE: ID
+  internalOwnerUserIDContains: ID
+  internalOwnerUserIDHasPrefix: ID
+  internalOwnerUserIDHasSuffix: ID
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: ID
+  internalOwnerUserIDContainsFold: ID
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: ID
+  internalOwnerGroupIDNEQ: ID
+  internalOwnerGroupIDIn: [ID!]
+  internalOwnerGroupIDNotIn: [ID!]
+  internalOwnerGroupIDGT: ID
+  internalOwnerGroupIDGTE: ID
+  internalOwnerGroupIDLT: ID
+  internalOwnerGroupIDLTE: ID
+  internalOwnerGroupIDContains: ID
+  internalOwnerGroupIDHasPrefix: ID
+  internalOwnerGroupIDHasSuffix: ID
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: ID
+  internalOwnerGroupIDContainsFold: ID
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
+  full_name field predicates
+  """
+  fullName: String
+  fullNameNEQ: String
+  fullNameIn: [String!]
+  fullNameNotIn: [String!]
+  fullNameGT: String
+  fullNameGTE: String
+  fullNameLT: String
+  fullNameLTE: String
+  fullNameContains: String
+  fullNameHasPrefix: String
+  fullNameHasSuffix: String
+  fullNameEqualFold: String
+  fullNameContainsFold: String
+  """
+  email field predicates
+  """
+  email: String
+  emailNEQ: String
+  emailIn: [String!]
+  emailNotIn: [String!]
+  emailGT: String
+  emailGTE: String
+  emailLT: String
+  emailLTE: String
+  emailContains: String
+  emailHasPrefix: String
+  emailHasSuffix: String
+  emailEqualFold: String
+  emailContainsFold: String
+  """
+  alternate_email field predicates
+  """
+  alternateEmail: String
+  alternateEmailNEQ: String
+  alternateEmailIn: [String!]
+  alternateEmailNotIn: [String!]
+  alternateEmailGT: String
+  alternateEmailGTE: String
+  alternateEmailLT: String
+  alternateEmailLTE: String
+  alternateEmailContains: String
+  alternateEmailHasPrefix: String
+  alternateEmailHasSuffix: String
+  alternateEmailIsNil: Boolean
+  alternateEmailNotNil: Boolean
+  alternateEmailEqualFold: String
+  alternateEmailContainsFold: String
+  """
+  phone_number field predicates
+  """
+  phoneNumber: String
+  phoneNumberNEQ: String
+  phoneNumberIn: [String!]
+  phoneNumberNotIn: [String!]
+  phoneNumberGT: String
+  phoneNumberGTE: String
+  phoneNumberLT: String
+  phoneNumberLTE: String
+  phoneNumberContains: String
+  phoneNumberHasPrefix: String
+  phoneNumberHasSuffix: String
+  phoneNumberIsNil: Boolean
+  phoneNumberNotNil: Boolean
+  phoneNumberEqualFold: String
+  phoneNumberContainsFold: String
+  """
+  is_openlane_user field predicates
+  """
+  isOpenlaneUser: Boolean
+  isOpenlaneUserNEQ: Boolean
+  isOpenlaneUserIsNil: Boolean
+  isOpenlaneUserNotNil: Boolean
+  """
+  user_id field predicates
+  """
+  userID: ID
+  userIDNEQ: ID
+  userIDIn: [ID!]
+  userIDNotIn: [ID!]
+  userIDGT: ID
+  userIDGTE: ID
+  userIDLT: ID
+  userIDLTE: ID
+  userIDContains: ID
+  userIDHasPrefix: ID
+  userIDHasSuffix: ID
+  userIDIsNil: Boolean
+  userIDNotNil: Boolean
+  userIDEqualFold: ID
+  userIDContainsFold: ID
+  """
+  identity_holder_type field predicates
+  """
+  identityHolderType: IdentityHolderIdentityHolderType
+  identityHolderTypeNEQ: IdentityHolderIdentityHolderType
+  identityHolderTypeIn: [IdentityHolderIdentityHolderType!]
+  identityHolderTypeNotIn: [IdentityHolderIdentityHolderType!]
+  """
+  status field predicates
+  """
+  status: IdentityHolderUserStatus
+  statusNEQ: IdentityHolderUserStatus
+  statusIn: [IdentityHolderUserStatus!]
+  statusNotIn: [IdentityHolderUserStatus!]
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleIsNil: Boolean
+  titleNotNil: Boolean
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  department field predicates
+  """
+  department: String
+  departmentNEQ: String
+  departmentIn: [String!]
+  departmentNotIn: [String!]
+  departmentGT: String
+  departmentGTE: String
+  departmentLT: String
+  departmentLTE: String
+  departmentContains: String
+  departmentHasPrefix: String
+  departmentHasSuffix: String
+  departmentIsNil: Boolean
+  departmentNotNil: Boolean
+  departmentEqualFold: String
+  departmentContainsFold: String
+  """
+  team field predicates
+  """
+  team: String
+  teamNEQ: String
+  teamIn: [String!]
+  teamNotIn: [String!]
+  teamGT: String
+  teamGTE: String
+  teamLT: String
+  teamLTE: String
+  teamContains: String
+  teamHasPrefix: String
+  teamHasSuffix: String
+  teamIsNil: Boolean
+  teamNotNil: Boolean
+  teamEqualFold: String
+  teamContainsFold: String
+  """
+  location field predicates
+  """
+  location: String
+  locationNEQ: String
+  locationIn: [String!]
+  locationNotIn: [String!]
+  locationGT: String
+  locationGTE: String
+  locationLT: String
+  locationLTE: String
+  locationContains: String
+  locationHasPrefix: String
+  locationHasSuffix: String
+  locationIsNil: Boolean
+  locationNotNil: Boolean
+  locationEqualFold: String
+  locationContainsFold: String
+  """
+  start_date field predicates
+  """
+  startDate: DateTime
+  startDateNEQ: DateTime
+  startDateIn: [DateTime!]
+  startDateNotIn: [DateTime!]
+  startDateGT: DateTime
+  startDateGTE: DateTime
+  startDateLT: DateTime
+  startDateLTE: DateTime
+  startDateIsNil: Boolean
+  startDateNotNil: Boolean
+  """
+  end_date field predicates
+  """
+  endDate: DateTime
+  endDateNEQ: DateTime
+  endDateIn: [DateTime!]
+  endDateNotIn: [DateTime!]
+  endDateGT: DateTime
+  endDateGTE: DateTime
+  endDateLT: DateTime
+  endDateLTE: DateTime
+  endDateIsNil: Boolean
+  endDateNotNil: Boolean
+  """
+  employer_entity_id field predicates
+  """
+  employerEntityID: ID
+  employerEntityIDNEQ: ID
+  employerEntityIDIn: [ID!]
+  employerEntityIDNotIn: [ID!]
+  employerEntityIDGT: ID
+  employerEntityIDGTE: ID
+  employerEntityIDLT: ID
+  employerEntityIDLTE: ID
+  employerEntityIDContains: ID
+  employerEntityIDHasPrefix: ID
+  employerEntityIDHasSuffix: ID
+  employerEntityIDIsNil: Boolean
+  employerEntityIDNotNil: Boolean
+  employerEntityIDEqualFold: ID
+  employerEntityIDContainsFold: ID
+  """
+  external_user_id field predicates
+  """
+  externalUserID: String
+  externalUserIDNEQ: String
+  externalUserIDIn: [String!]
+  externalUserIDNotIn: [String!]
+  externalUserIDGT: String
+  externalUserIDGTE: String
+  externalUserIDLT: String
+  externalUserIDLTE: String
+  externalUserIDContains: String
+  externalUserIDHasPrefix: String
+  externalUserIDHasSuffix: String
+  externalUserIDIsNil: Boolean
+  externalUserIDNotNil: Boolean
+  externalUserIDEqualFold: String
+  externalUserIDContainsFold: String
+  """
+  external_reference_id field predicates
+  """
+  externalReferenceID: String
+  externalReferenceIDNEQ: String
+  externalReferenceIDIn: [String!]
+  externalReferenceIDNotIn: [String!]
+  externalReferenceIDGT: String
+  externalReferenceIDGTE: String
+  externalReferenceIDLT: String
+  externalReferenceIDLTE: String
+  externalReferenceIDContains: String
+  externalReferenceIDHasPrefix: String
+  externalReferenceIDHasSuffix: String
+  externalReferenceIDIsNil: Boolean
+  externalReferenceIDNotNil: Boolean
+  externalReferenceIDEqualFold: String
+  externalReferenceIDContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  internal_owner_user edge predicates
+  """
+  hasInternalOwnerUser: Boolean
+  hasInternalOwnerUserWith: [UserWhereInput!]
+  """
+  internal_owner_group edge predicates
+  """
+  hasInternalOwnerGroup: Boolean
+  hasInternalOwnerGroupWith: [GroupWhereInput!]
+  """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
+  employer edge predicates
+  """
+  hasEmployer: Boolean
+  hasEmployerWith: [EntityWhereInput!]
+  """
+  assessment_responses edge predicates
+  """
+  hasAssessmentResponses: Boolean
+  hasAssessmentResponsesWith: [AssessmentResponseWhereInput!]
+  """
+  assessments edge predicates
+  """
+  hasAssessments: Boolean
+  hasAssessmentsWith: [AssessmentWhereInput!]
+  """
+  templates edge predicates
+  """
+  hasTemplates: Boolean
+  hasTemplatesWith: [TemplateWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  platforms edge predicates
+  """
+  hasPlatforms: Boolean
+  hasPlatformsWith: [PlatformWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  access_platforms edge predicates
+  """
+  hasAccessPlatforms: Boolean
+  hasAccessPlatformsWith: [PlatformWhereInput!]
+  """
+  user edge predicates
+  """
+  hasUser: Boolean
+  hasUserWith: [UserWhereInput!]
+}
 type Integration implements Node {
   id: ID!
   createdAt: Time
@@ -62548,6 +76028,22 @@ type Integration implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  the environment of the integration
+  """
+  environmentName: String
+  """
+  the environment of the integration
+  """
+  environmentID: ID
+  """
+  the scope of the integration
+  """
+  scopeName: String
+  """
+  the scope of the integration
+  """
+  scopeID: ID
+  """
   the name of the integration
   """
   name: String!
@@ -62568,6 +76064,8 @@ type Integration implements Node {
   """
   metadata: Map
   owner: Organization
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   secrets(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -62971,6 +76469,37 @@ type Integration implements Node {
     """
     where: DirectorySyncRunWhereInput
   ): DirectorySyncRunConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
 }
 """
 A connection to a list of items.
@@ -63170,6 +76699,78 @@ input IntegrationWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   name field predicates
   """
   name: String
@@ -63226,6 +76827,16 @@ input IntegrationWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
   """
   secrets edge predicates
   """
@@ -63291,6 +76902,11 @@ input IntegrationWhereInput {
   """
   hasDirectorySyncRuns: Boolean
   hasDirectorySyncRunsWith: [DirectorySyncRunWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
 }
 type InternalPolicy implements Node {
   id: ID!
@@ -63404,6 +77020,22 @@ type InternalPolicy implements Node {
   """
   internalPolicyKindID: ID
   """
+  the environment of the internal_policy
+  """
+  environmentName: String
+  """
+  the environment of the internal_policy
+  """
+  environmentID: ID
+  """
+  the scope of the internal_policy
+  """
+  scopeName: String
+  """
+  the scope of the internal_policy
+  """
+  scopeID: ID
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -63479,6 +77111,8 @@ type InternalPolicy implements Node {
   """
   delegate: Group
   internalPolicyKind: CustomTypeEnum
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   controlObjectives(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -64286,6 +77920,78 @@ input InternalPolicyWhereInput {
   internalPolicyKindIDEqualFold: ID
   internalPolicyKindIDContainsFold: ID
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   workflow_eligible_marker field predicates
   """
   workflowEligibleMarker: Boolean
@@ -64322,6 +78028,16 @@ input InternalPolicyWhereInput {
   """
   hasInternalPolicyKind: Boolean
   hasInternalPolicyKindWith: [CustomTypeEnumWhereInput!]
+  """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
   """
   control_objectives edge predicates
   """
@@ -69912,6 +83628,130 @@ type Organization implements Node {
     """
     where: EntityWhereInput
   ): EntityConnection!
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  identityHolders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+  campaignTargets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CampaignTargets returned from the connection.
+    """
+    orderBy: [CampaignTargetOrder!]
+
+    """
+    Filtering options for CampaignTargets returned from the connection.
+    """
+    where: CampaignTargetWhereInput
+  ): CampaignTargetConnection!
   entityTypes(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -72553,6 +86393,26 @@ input OrganizationWhereInput {
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
   """
+  platforms edge predicates
+  """
+  hasPlatforms: Boolean
+  hasPlatformsWith: [PlatformWhereInput!]
+  """
+  identity_holders edge predicates
+  """
+  hasIdentityHolders: Boolean
+  hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
+  """
+  campaign_targets edge predicates
+  """
+  hasCampaignTargets: Boolean
+  hasCampaignTargetsWith: [CampaignTargetWhereInput!]
+  """
   entity_types edge predicates
   """
   hasEntityTypes: Boolean
@@ -73195,6 +87055,1960 @@ input PersonalAccessTokenWhereInput {
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
 }
+type Platform implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  the internal owner for the platform when no user or group is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the platform
+  """
+  internalOwnerUserID: ID
+  """
+  the internal owner group id for the platform
+  """
+  internalOwnerGroupID: ID
+  """
+  business owner for the platform when no user or group is linked
+  """
+  businessOwner: String
+  """
+  the business owner user id for the platform
+  """
+  businessOwnerUserID: ID
+  """
+  the business owner group id for the platform
+  """
+  businessOwnerGroupID: ID
+  """
+  technical owner for the platform when no user or group is linked
+  """
+  technicalOwner: String
+  """
+  the technical owner user id for the platform
+  """
+  technicalOwnerUserID: ID
+  """
+  the technical owner group id for the platform
+  """
+  technicalOwnerGroupID: ID
+  """
+  security owner for the platform when no user or group is linked
+  """
+  securityOwner: String
+  """
+  the security owner user id for the platform
+  """
+  securityOwnerUserID: ID
+  """
+  the security owner group id for the platform
+  """
+  securityOwnerGroupID: ID
+  """
+  the kind of the platform
+  """
+  platformKindName: String
+  """
+  the kind of the platform
+  """
+  platformKindID: ID
+  """
+  the data_classification of the platform
+  """
+  platformDataClassificationName: String
+  """
+  the data_classification of the platform
+  """
+  platformDataClassificationID: ID
+  """
+  the environment of the platform
+  """
+  environmentName: String
+  """
+  the environment of the platform
+  """
+  environmentID: ID
+  """
+  the scope of the platform
+  """
+  scopeName: String
+  """
+  the scope of the platform
+  """
+  scopeID: ID
+  """
+  the access_model of the platform
+  """
+  accessModelName: String
+  """
+  the access_model of the platform
+  """
+  accessModelID: ID
+  """
+  the encryption_status of the platform
+  """
+  encryptionStatusName: String
+  """
+  the encryption_status of the platform
+  """
+  encryptionStatusID: ID
+  """
+  the security_tier of the platform
+  """
+  securityTierName: String
+  """
+  the security_tier of the platform
+  """
+  securityTierID: ID
+  """
+  the criticality of the platform
+  """
+  criticalityName: String
+  """
+  the criticality of the platform
+  """
+  criticalityID: ID
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
+  the name of the platform
+  """
+  name: String!
+  """
+  the description of the platform boundary
+  """
+  description: String
+  """
+  the business purpose of the platform
+  """
+  businessPurpose: String
+  """
+  scope statement for the platform, used for narrative justification
+  """
+  scopeStatement: String
+  """
+  description of the platform trust boundary
+  """
+  trustBoundaryDescription: String
+  """
+  summary of platform data flows
+  """
+  dataFlowSummary: String
+  """
+  the lifecycle status of the platform
+  """
+  status: PlatformPlatformStatus!
+  """
+  physical location of the platform, if applicable
+  """
+  physicalLocation: String
+  """
+  the region where the platform operates or is hosted
+  """
+  region: String
+  """
+  whether the platform stores or processes PII
+  """
+  containsPii: Boolean
+  """
+  the source of the platform record, e.g., manual, discovered, imported, api
+  """
+  sourceType: PlatformSourceType!
+  """
+  the identifier used by the source system for the platform
+  """
+  sourceIdentifier: String
+  """
+  cost center associated with the platform
+  """
+  costCenter: String
+  """
+  estimated monthly cost for the platform
+  """
+  estimatedMonthlyCost: Float
+  """
+  purchase date for the platform
+  """
+  purchaseDate: DateTime
+  """
+  the id of the user who is responsible for this platform
+  """
+  platformOwnerID: ID
+  """
+  external identifier for the platform from an upstream inventory
+  """
+  externalReferenceID: String
+  """
+  additional metadata about the platform
+  """
+  metadata: Map
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  internalOwnerUser: User
+  internalOwnerGroup: Group
+  businessOwnerUser: User
+  businessOwnerGroup: Group
+  technicalOwnerUser: User
+  technicalOwnerGroup: Group
+  securityOwnerUser: User
+  securityOwnerGroup: Group
+  platformKind: CustomTypeEnum
+  platformDataClassification: CustomTypeEnum
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
+  accessModel: CustomTypeEnum
+  encryptionStatus: CustomTypeEnum
+  securityTier: CustomTypeEnum
+  criticality: CustomTypeEnum
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  assessments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assessments returned from the connection.
+    """
+    orderBy: [AssessmentOrder!]
+
+    """
+    Filtering options for Assessments returned from the connection.
+    """
+    where: AssessmentWhereInput
+  ): AssessmentConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  identityHolders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
+  sourceAssets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  sourceEntities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  outOfScopeAssets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  outOfScopeVendors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  applicableFrameworks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Standards returned from the connection.
+    """
+    orderBy: [StandardOrder!]
+
+    """
+    Filtering options for Standards returned from the connection.
+    """
+    where: StandardWhereInput
+  ): StandardConnection!
+  generatedScans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
+  platformOwner: User
+}
+"""
+A connection to a list of items.
+"""
+type PlatformConnection {
+  """
+  A list of edges.
+  """
+  edges: [PlatformEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type PlatformEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Platform
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for Platform connections
+"""
+input PlatformOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Platforms.
+  """
+  field: PlatformOrderField!
+}
+"""
+Properties by which Platform connections can be ordered.
+"""
+enum PlatformOrderField {
+  created_at
+  updated_at
+  internal_owner
+  business_owner
+  technical_owner
+  security_owner
+  name
+  business_purpose
+  STATUS
+  physical_location
+  region
+  contains_pii
+  SOURCE_TYPE
+  source_identifier
+  cost_center
+  estimated_monthly_cost
+  purchase_date
+  external_reference_id
+}
+"""
+PlatformPlatformStatus is enum for the field status
+"""
+enum PlatformPlatformStatus @goModel(model: "github.com/theopenlane/core/common/enums.PlatformStatus") {
+  ACTIVE
+  INACTIVE
+  RETIRED
+}
+"""
+PlatformSourceType is enum for the field source_type
+"""
+enum PlatformSourceType @goModel(model: "github.com/theopenlane/core/common/enums.SourceType") {
+  MANUAL
+  DISCOVERED
+  IMPORTED
+  API
+}
+"""
+PlatformWhereInput is used for filtering Platform objects.
+Input was generated by ent.
+"""
+input PlatformWhereInput {
+  not: PlatformWhereInput
+  and: [PlatformWhereInput!]
+  or: [PlatformWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerGT: String
+  internalOwnerGTE: String
+  internalOwnerLT: String
+  internalOwnerLTE: String
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: ID
+  internalOwnerUserIDNEQ: ID
+  internalOwnerUserIDIn: [ID!]
+  internalOwnerUserIDNotIn: [ID!]
+  internalOwnerUserIDGT: ID
+  internalOwnerUserIDGTE: ID
+  internalOwnerUserIDLT: ID
+  internalOwnerUserIDLTE: ID
+  internalOwnerUserIDContains: ID
+  internalOwnerUserIDHasPrefix: ID
+  internalOwnerUserIDHasSuffix: ID
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: ID
+  internalOwnerUserIDContainsFold: ID
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: ID
+  internalOwnerGroupIDNEQ: ID
+  internalOwnerGroupIDIn: [ID!]
+  internalOwnerGroupIDNotIn: [ID!]
+  internalOwnerGroupIDGT: ID
+  internalOwnerGroupIDGTE: ID
+  internalOwnerGroupIDLT: ID
+  internalOwnerGroupIDLTE: ID
+  internalOwnerGroupIDContains: ID
+  internalOwnerGroupIDHasPrefix: ID
+  internalOwnerGroupIDHasSuffix: ID
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: ID
+  internalOwnerGroupIDContainsFold: ID
+  """
+  business_owner field predicates
+  """
+  businessOwner: String
+  businessOwnerNEQ: String
+  businessOwnerIn: [String!]
+  businessOwnerNotIn: [String!]
+  businessOwnerGT: String
+  businessOwnerGTE: String
+  businessOwnerLT: String
+  businessOwnerLTE: String
+  businessOwnerContains: String
+  businessOwnerHasPrefix: String
+  businessOwnerHasSuffix: String
+  businessOwnerIsNil: Boolean
+  businessOwnerNotNil: Boolean
+  businessOwnerEqualFold: String
+  businessOwnerContainsFold: String
+  """
+  business_owner_user_id field predicates
+  """
+  businessOwnerUserID: ID
+  businessOwnerUserIDNEQ: ID
+  businessOwnerUserIDIn: [ID!]
+  businessOwnerUserIDNotIn: [ID!]
+  businessOwnerUserIDGT: ID
+  businessOwnerUserIDGTE: ID
+  businessOwnerUserIDLT: ID
+  businessOwnerUserIDLTE: ID
+  businessOwnerUserIDContains: ID
+  businessOwnerUserIDHasPrefix: ID
+  businessOwnerUserIDHasSuffix: ID
+  businessOwnerUserIDIsNil: Boolean
+  businessOwnerUserIDNotNil: Boolean
+  businessOwnerUserIDEqualFold: ID
+  businessOwnerUserIDContainsFold: ID
+  """
+  business_owner_group_id field predicates
+  """
+  businessOwnerGroupID: ID
+  businessOwnerGroupIDNEQ: ID
+  businessOwnerGroupIDIn: [ID!]
+  businessOwnerGroupIDNotIn: [ID!]
+  businessOwnerGroupIDGT: ID
+  businessOwnerGroupIDGTE: ID
+  businessOwnerGroupIDLT: ID
+  businessOwnerGroupIDLTE: ID
+  businessOwnerGroupIDContains: ID
+  businessOwnerGroupIDHasPrefix: ID
+  businessOwnerGroupIDHasSuffix: ID
+  businessOwnerGroupIDIsNil: Boolean
+  businessOwnerGroupIDNotNil: Boolean
+  businessOwnerGroupIDEqualFold: ID
+  businessOwnerGroupIDContainsFold: ID
+  """
+  technical_owner field predicates
+  """
+  technicalOwner: String
+  technicalOwnerNEQ: String
+  technicalOwnerIn: [String!]
+  technicalOwnerNotIn: [String!]
+  technicalOwnerGT: String
+  technicalOwnerGTE: String
+  technicalOwnerLT: String
+  technicalOwnerLTE: String
+  technicalOwnerContains: String
+  technicalOwnerHasPrefix: String
+  technicalOwnerHasSuffix: String
+  technicalOwnerIsNil: Boolean
+  technicalOwnerNotNil: Boolean
+  technicalOwnerEqualFold: String
+  technicalOwnerContainsFold: String
+  """
+  technical_owner_user_id field predicates
+  """
+  technicalOwnerUserID: ID
+  technicalOwnerUserIDNEQ: ID
+  technicalOwnerUserIDIn: [ID!]
+  technicalOwnerUserIDNotIn: [ID!]
+  technicalOwnerUserIDGT: ID
+  technicalOwnerUserIDGTE: ID
+  technicalOwnerUserIDLT: ID
+  technicalOwnerUserIDLTE: ID
+  technicalOwnerUserIDContains: ID
+  technicalOwnerUserIDHasPrefix: ID
+  technicalOwnerUserIDHasSuffix: ID
+  technicalOwnerUserIDIsNil: Boolean
+  technicalOwnerUserIDNotNil: Boolean
+  technicalOwnerUserIDEqualFold: ID
+  technicalOwnerUserIDContainsFold: ID
+  """
+  technical_owner_group_id field predicates
+  """
+  technicalOwnerGroupID: ID
+  technicalOwnerGroupIDNEQ: ID
+  technicalOwnerGroupIDIn: [ID!]
+  technicalOwnerGroupIDNotIn: [ID!]
+  technicalOwnerGroupIDGT: ID
+  technicalOwnerGroupIDGTE: ID
+  technicalOwnerGroupIDLT: ID
+  technicalOwnerGroupIDLTE: ID
+  technicalOwnerGroupIDContains: ID
+  technicalOwnerGroupIDHasPrefix: ID
+  technicalOwnerGroupIDHasSuffix: ID
+  technicalOwnerGroupIDIsNil: Boolean
+  technicalOwnerGroupIDNotNil: Boolean
+  technicalOwnerGroupIDEqualFold: ID
+  technicalOwnerGroupIDContainsFold: ID
+  """
+  security_owner field predicates
+  """
+  securityOwner: String
+  securityOwnerNEQ: String
+  securityOwnerIn: [String!]
+  securityOwnerNotIn: [String!]
+  securityOwnerGT: String
+  securityOwnerGTE: String
+  securityOwnerLT: String
+  securityOwnerLTE: String
+  securityOwnerContains: String
+  securityOwnerHasPrefix: String
+  securityOwnerHasSuffix: String
+  securityOwnerIsNil: Boolean
+  securityOwnerNotNil: Boolean
+  securityOwnerEqualFold: String
+  securityOwnerContainsFold: String
+  """
+  security_owner_user_id field predicates
+  """
+  securityOwnerUserID: ID
+  securityOwnerUserIDNEQ: ID
+  securityOwnerUserIDIn: [ID!]
+  securityOwnerUserIDNotIn: [ID!]
+  securityOwnerUserIDGT: ID
+  securityOwnerUserIDGTE: ID
+  securityOwnerUserIDLT: ID
+  securityOwnerUserIDLTE: ID
+  securityOwnerUserIDContains: ID
+  securityOwnerUserIDHasPrefix: ID
+  securityOwnerUserIDHasSuffix: ID
+  securityOwnerUserIDIsNil: Boolean
+  securityOwnerUserIDNotNil: Boolean
+  securityOwnerUserIDEqualFold: ID
+  securityOwnerUserIDContainsFold: ID
+  """
+  security_owner_group_id field predicates
+  """
+  securityOwnerGroupID: ID
+  securityOwnerGroupIDNEQ: ID
+  securityOwnerGroupIDIn: [ID!]
+  securityOwnerGroupIDNotIn: [ID!]
+  securityOwnerGroupIDGT: ID
+  securityOwnerGroupIDGTE: ID
+  securityOwnerGroupIDLT: ID
+  securityOwnerGroupIDLTE: ID
+  securityOwnerGroupIDContains: ID
+  securityOwnerGroupIDHasPrefix: ID
+  securityOwnerGroupIDHasSuffix: ID
+  securityOwnerGroupIDIsNil: Boolean
+  securityOwnerGroupIDNotNil: Boolean
+  securityOwnerGroupIDEqualFold: ID
+  securityOwnerGroupIDContainsFold: ID
+  """
+  platform_kind_name field predicates
+  """
+  platformKindName: String
+  platformKindNameNEQ: String
+  platformKindNameIn: [String!]
+  platformKindNameNotIn: [String!]
+  platformKindNameGT: String
+  platformKindNameGTE: String
+  platformKindNameLT: String
+  platformKindNameLTE: String
+  platformKindNameContains: String
+  platformKindNameHasPrefix: String
+  platformKindNameHasSuffix: String
+  platformKindNameIsNil: Boolean
+  platformKindNameNotNil: Boolean
+  platformKindNameEqualFold: String
+  platformKindNameContainsFold: String
+  """
+  platform_kind_id field predicates
+  """
+  platformKindID: ID
+  platformKindIDNEQ: ID
+  platformKindIDIn: [ID!]
+  platformKindIDNotIn: [ID!]
+  platformKindIDGT: ID
+  platformKindIDGTE: ID
+  platformKindIDLT: ID
+  platformKindIDLTE: ID
+  platformKindIDContains: ID
+  platformKindIDHasPrefix: ID
+  platformKindIDHasSuffix: ID
+  platformKindIDIsNil: Boolean
+  platformKindIDNotNil: Boolean
+  platformKindIDEqualFold: ID
+  platformKindIDContainsFold: ID
+  """
+  platform_data_classification_name field predicates
+  """
+  platformDataClassificationName: String
+  platformDataClassificationNameNEQ: String
+  platformDataClassificationNameIn: [String!]
+  platformDataClassificationNameNotIn: [String!]
+  platformDataClassificationNameGT: String
+  platformDataClassificationNameGTE: String
+  platformDataClassificationNameLT: String
+  platformDataClassificationNameLTE: String
+  platformDataClassificationNameContains: String
+  platformDataClassificationNameHasPrefix: String
+  platformDataClassificationNameHasSuffix: String
+  platformDataClassificationNameIsNil: Boolean
+  platformDataClassificationNameNotNil: Boolean
+  platformDataClassificationNameEqualFold: String
+  platformDataClassificationNameContainsFold: String
+  """
+  platform_data_classification_id field predicates
+  """
+  platformDataClassificationID: ID
+  platformDataClassificationIDNEQ: ID
+  platformDataClassificationIDIn: [ID!]
+  platformDataClassificationIDNotIn: [ID!]
+  platformDataClassificationIDGT: ID
+  platformDataClassificationIDGTE: ID
+  platformDataClassificationIDLT: ID
+  platformDataClassificationIDLTE: ID
+  platformDataClassificationIDContains: ID
+  platformDataClassificationIDHasPrefix: ID
+  platformDataClassificationIDHasSuffix: ID
+  platformDataClassificationIDIsNil: Boolean
+  platformDataClassificationIDNotNil: Boolean
+  platformDataClassificationIDEqualFold: ID
+  platformDataClassificationIDContainsFold: ID
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
+  access_model_name field predicates
+  """
+  accessModelName: String
+  accessModelNameNEQ: String
+  accessModelNameIn: [String!]
+  accessModelNameNotIn: [String!]
+  accessModelNameGT: String
+  accessModelNameGTE: String
+  accessModelNameLT: String
+  accessModelNameLTE: String
+  accessModelNameContains: String
+  accessModelNameHasPrefix: String
+  accessModelNameHasSuffix: String
+  accessModelNameIsNil: Boolean
+  accessModelNameNotNil: Boolean
+  accessModelNameEqualFold: String
+  accessModelNameContainsFold: String
+  """
+  access_model_id field predicates
+  """
+  accessModelID: ID
+  accessModelIDNEQ: ID
+  accessModelIDIn: [ID!]
+  accessModelIDNotIn: [ID!]
+  accessModelIDGT: ID
+  accessModelIDGTE: ID
+  accessModelIDLT: ID
+  accessModelIDLTE: ID
+  accessModelIDContains: ID
+  accessModelIDHasPrefix: ID
+  accessModelIDHasSuffix: ID
+  accessModelIDIsNil: Boolean
+  accessModelIDNotNil: Boolean
+  accessModelIDEqualFold: ID
+  accessModelIDContainsFold: ID
+  """
+  encryption_status_name field predicates
+  """
+  encryptionStatusName: String
+  encryptionStatusNameNEQ: String
+  encryptionStatusNameIn: [String!]
+  encryptionStatusNameNotIn: [String!]
+  encryptionStatusNameGT: String
+  encryptionStatusNameGTE: String
+  encryptionStatusNameLT: String
+  encryptionStatusNameLTE: String
+  encryptionStatusNameContains: String
+  encryptionStatusNameHasPrefix: String
+  encryptionStatusNameHasSuffix: String
+  encryptionStatusNameIsNil: Boolean
+  encryptionStatusNameNotNil: Boolean
+  encryptionStatusNameEqualFold: String
+  encryptionStatusNameContainsFold: String
+  """
+  encryption_status_id field predicates
+  """
+  encryptionStatusID: ID
+  encryptionStatusIDNEQ: ID
+  encryptionStatusIDIn: [ID!]
+  encryptionStatusIDNotIn: [ID!]
+  encryptionStatusIDGT: ID
+  encryptionStatusIDGTE: ID
+  encryptionStatusIDLT: ID
+  encryptionStatusIDLTE: ID
+  encryptionStatusIDContains: ID
+  encryptionStatusIDHasPrefix: ID
+  encryptionStatusIDHasSuffix: ID
+  encryptionStatusIDIsNil: Boolean
+  encryptionStatusIDNotNil: Boolean
+  encryptionStatusIDEqualFold: ID
+  encryptionStatusIDContainsFold: ID
+  """
+  security_tier_name field predicates
+  """
+  securityTierName: String
+  securityTierNameNEQ: String
+  securityTierNameIn: [String!]
+  securityTierNameNotIn: [String!]
+  securityTierNameGT: String
+  securityTierNameGTE: String
+  securityTierNameLT: String
+  securityTierNameLTE: String
+  securityTierNameContains: String
+  securityTierNameHasPrefix: String
+  securityTierNameHasSuffix: String
+  securityTierNameIsNil: Boolean
+  securityTierNameNotNil: Boolean
+  securityTierNameEqualFold: String
+  securityTierNameContainsFold: String
+  """
+  security_tier_id field predicates
+  """
+  securityTierID: ID
+  securityTierIDNEQ: ID
+  securityTierIDIn: [ID!]
+  securityTierIDNotIn: [ID!]
+  securityTierIDGT: ID
+  securityTierIDGTE: ID
+  securityTierIDLT: ID
+  securityTierIDLTE: ID
+  securityTierIDContains: ID
+  securityTierIDHasPrefix: ID
+  securityTierIDHasSuffix: ID
+  securityTierIDIsNil: Boolean
+  securityTierIDNotNil: Boolean
+  securityTierIDEqualFold: ID
+  securityTierIDContainsFold: ID
+  """
+  criticality_name field predicates
+  """
+  criticalityName: String
+  criticalityNameNEQ: String
+  criticalityNameIn: [String!]
+  criticalityNameNotIn: [String!]
+  criticalityNameGT: String
+  criticalityNameGTE: String
+  criticalityNameLT: String
+  criticalityNameLTE: String
+  criticalityNameContains: String
+  criticalityNameHasPrefix: String
+  criticalityNameHasSuffix: String
+  criticalityNameIsNil: Boolean
+  criticalityNameNotNil: Boolean
+  criticalityNameEqualFold: String
+  criticalityNameContainsFold: String
+  """
+  criticality_id field predicates
+  """
+  criticalityID: ID
+  criticalityIDNEQ: ID
+  criticalityIDIn: [ID!]
+  criticalityIDNotIn: [ID!]
+  criticalityIDGT: ID
+  criticalityIDGTE: ID
+  criticalityIDLT: ID
+  criticalityIDLTE: ID
+  criticalityIDContains: ID
+  criticalityIDHasPrefix: ID
+  criticalityIDHasSuffix: ID
+  criticalityIDIsNil: Boolean
+  criticalityIDNotNil: Boolean
+  criticalityIDEqualFold: ID
+  criticalityIDContainsFold: ID
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  business_purpose field predicates
+  """
+  businessPurpose: String
+  businessPurposeNEQ: String
+  businessPurposeIn: [String!]
+  businessPurposeNotIn: [String!]
+  businessPurposeGT: String
+  businessPurposeGTE: String
+  businessPurposeLT: String
+  businessPurposeLTE: String
+  businessPurposeContains: String
+  businessPurposeHasPrefix: String
+  businessPurposeHasSuffix: String
+  businessPurposeIsNil: Boolean
+  businessPurposeNotNil: Boolean
+  businessPurposeEqualFold: String
+  businessPurposeContainsFold: String
+  """
+  status field predicates
+  """
+  status: PlatformPlatformStatus
+  statusNEQ: PlatformPlatformStatus
+  statusIn: [PlatformPlatformStatus!]
+  statusNotIn: [PlatformPlatformStatus!]
+  """
+  physical_location field predicates
+  """
+  physicalLocation: String
+  physicalLocationNEQ: String
+  physicalLocationIn: [String!]
+  physicalLocationNotIn: [String!]
+  physicalLocationGT: String
+  physicalLocationGTE: String
+  physicalLocationLT: String
+  physicalLocationLTE: String
+  physicalLocationContains: String
+  physicalLocationHasPrefix: String
+  physicalLocationHasSuffix: String
+  physicalLocationIsNil: Boolean
+  physicalLocationNotNil: Boolean
+  physicalLocationEqualFold: String
+  physicalLocationContainsFold: String
+  """
+  region field predicates
+  """
+  region: String
+  regionNEQ: String
+  regionIn: [String!]
+  regionNotIn: [String!]
+  regionGT: String
+  regionGTE: String
+  regionLT: String
+  regionLTE: String
+  regionContains: String
+  regionHasPrefix: String
+  regionHasSuffix: String
+  regionIsNil: Boolean
+  regionNotNil: Boolean
+  regionEqualFold: String
+  regionContainsFold: String
+  """
+  contains_pii field predicates
+  """
+  containsPii: Boolean
+  containsPiiNEQ: Boolean
+  containsPiiIsNil: Boolean
+  containsPiiNotNil: Boolean
+  """
+  source_type field predicates
+  """
+  sourceType: PlatformSourceType
+  sourceTypeNEQ: PlatformSourceType
+  sourceTypeIn: [PlatformSourceType!]
+  sourceTypeNotIn: [PlatformSourceType!]
+  """
+  source_identifier field predicates
+  """
+  sourceIdentifier: String
+  sourceIdentifierNEQ: String
+  sourceIdentifierIn: [String!]
+  sourceIdentifierNotIn: [String!]
+  sourceIdentifierGT: String
+  sourceIdentifierGTE: String
+  sourceIdentifierLT: String
+  sourceIdentifierLTE: String
+  sourceIdentifierContains: String
+  sourceIdentifierHasPrefix: String
+  sourceIdentifierHasSuffix: String
+  sourceIdentifierIsNil: Boolean
+  sourceIdentifierNotNil: Boolean
+  sourceIdentifierEqualFold: String
+  sourceIdentifierContainsFold: String
+  """
+  cost_center field predicates
+  """
+  costCenter: String
+  costCenterNEQ: String
+  costCenterIn: [String!]
+  costCenterNotIn: [String!]
+  costCenterGT: String
+  costCenterGTE: String
+  costCenterLT: String
+  costCenterLTE: String
+  costCenterContains: String
+  costCenterHasPrefix: String
+  costCenterHasSuffix: String
+  costCenterIsNil: Boolean
+  costCenterNotNil: Boolean
+  costCenterEqualFold: String
+  costCenterContainsFold: String
+  """
+  estimated_monthly_cost field predicates
+  """
+  estimatedMonthlyCost: Float
+  estimatedMonthlyCostNEQ: Float
+  estimatedMonthlyCostIn: [Float!]
+  estimatedMonthlyCostNotIn: [Float!]
+  estimatedMonthlyCostGT: Float
+  estimatedMonthlyCostGTE: Float
+  estimatedMonthlyCostLT: Float
+  estimatedMonthlyCostLTE: Float
+  estimatedMonthlyCostIsNil: Boolean
+  estimatedMonthlyCostNotNil: Boolean
+  """
+  purchase_date field predicates
+  """
+  purchaseDate: DateTime
+  purchaseDateNEQ: DateTime
+  purchaseDateIn: [DateTime!]
+  purchaseDateNotIn: [DateTime!]
+  purchaseDateGT: DateTime
+  purchaseDateGTE: DateTime
+  purchaseDateLT: DateTime
+  purchaseDateLTE: DateTime
+  purchaseDateIsNil: Boolean
+  purchaseDateNotNil: Boolean
+  """
+  platform_owner_id field predicates
+  """
+  platformOwnerID: ID
+  platformOwnerIDNEQ: ID
+  platformOwnerIDIn: [ID!]
+  platformOwnerIDNotIn: [ID!]
+  platformOwnerIDGT: ID
+  platformOwnerIDGTE: ID
+  platformOwnerIDLT: ID
+  platformOwnerIDLTE: ID
+  platformOwnerIDContains: ID
+  platformOwnerIDHasPrefix: ID
+  platformOwnerIDHasSuffix: ID
+  platformOwnerIDIsNil: Boolean
+  platformOwnerIDNotNil: Boolean
+  platformOwnerIDEqualFold: ID
+  platformOwnerIDContainsFold: ID
+  """
+  external_reference_id field predicates
+  """
+  externalReferenceID: String
+  externalReferenceIDNEQ: String
+  externalReferenceIDIn: [String!]
+  externalReferenceIDNotIn: [String!]
+  externalReferenceIDGT: String
+  externalReferenceIDGTE: String
+  externalReferenceIDLT: String
+  externalReferenceIDLTE: String
+  externalReferenceIDContains: String
+  externalReferenceIDHasPrefix: String
+  externalReferenceIDHasSuffix: String
+  externalReferenceIDIsNil: Boolean
+  externalReferenceIDNotNil: Boolean
+  externalReferenceIDEqualFold: String
+  externalReferenceIDContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  internal_owner_user edge predicates
+  """
+  hasInternalOwnerUser: Boolean
+  hasInternalOwnerUserWith: [UserWhereInput!]
+  """
+  internal_owner_group edge predicates
+  """
+  hasInternalOwnerGroup: Boolean
+  hasInternalOwnerGroupWith: [GroupWhereInput!]
+  """
+  business_owner_user edge predicates
+  """
+  hasBusinessOwnerUser: Boolean
+  hasBusinessOwnerUserWith: [UserWhereInput!]
+  """
+  business_owner_group edge predicates
+  """
+  hasBusinessOwnerGroup: Boolean
+  hasBusinessOwnerGroupWith: [GroupWhereInput!]
+  """
+  technical_owner_user edge predicates
+  """
+  hasTechnicalOwnerUser: Boolean
+  hasTechnicalOwnerUserWith: [UserWhereInput!]
+  """
+  technical_owner_group edge predicates
+  """
+  hasTechnicalOwnerGroup: Boolean
+  hasTechnicalOwnerGroupWith: [GroupWhereInput!]
+  """
+  security_owner_user edge predicates
+  """
+  hasSecurityOwnerUser: Boolean
+  hasSecurityOwnerUserWith: [UserWhereInput!]
+  """
+  security_owner_group edge predicates
+  """
+  hasSecurityOwnerGroup: Boolean
+  hasSecurityOwnerGroupWith: [GroupWhereInput!]
+  """
+  platform_kind edge predicates
+  """
+  hasPlatformKind: Boolean
+  hasPlatformKindWith: [CustomTypeEnumWhereInput!]
+  """
+  platform_data_classification edge predicates
+  """
+  hasPlatformDataClassification: Boolean
+  hasPlatformDataClassificationWith: [CustomTypeEnumWhereInput!]
+  """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
+  access_model edge predicates
+  """
+  hasAccessModel: Boolean
+  hasAccessModelWith: [CustomTypeEnumWhereInput!]
+  """
+  encryption_status edge predicates
+  """
+  hasEncryptionStatus: Boolean
+  hasEncryptionStatusWith: [CustomTypeEnumWhereInput!]
+  """
+  security_tier edge predicates
+  """
+  hasSecurityTier: Boolean
+  hasSecurityTierWith: [CustomTypeEnumWhereInput!]
+  """
+  criticality edge predicates
+  """
+  hasCriticality: Boolean
+  hasCriticalityWith: [CustomTypeEnumWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
+  """
+  assessments edge predicates
+  """
+  hasAssessments: Boolean
+  hasAssessmentsWith: [AssessmentWhereInput!]
+  """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
+  """
+  identity_holders edge predicates
+  """
+  hasIdentityHolders: Boolean
+  hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  source_assets edge predicates
+  """
+  hasSourceAssets: Boolean
+  hasSourceAssetsWith: [AssetWhereInput!]
+  """
+  source_entities edge predicates
+  """
+  hasSourceEntities: Boolean
+  hasSourceEntitiesWith: [EntityWhereInput!]
+  """
+  out_of_scope_assets edge predicates
+  """
+  hasOutOfScopeAssets: Boolean
+  hasOutOfScopeAssetsWith: [AssetWhereInput!]
+  """
+  out_of_scope_vendors edge predicates
+  """
+  hasOutOfScopeVendors: Boolean
+  hasOutOfScopeVendorsWith: [EntityWhereInput!]
+  """
+  applicable_frameworks edge predicates
+  """
+  hasApplicableFrameworks: Boolean
+  hasApplicableFrameworksWith: [StandardWhereInput!]
+  """
+  generated_scans edge predicates
+  """
+  hasGeneratedScans: Boolean
+  hasGeneratedScansWith: [ScanWhereInput!]
+  """
+  platform_owner edge predicates
+  """
+  hasPlatformOwner: Boolean
+  hasPlatformOwnerWith: [UserWhereInput!]
+}
 type Procedure implements Node {
   id: ID!
   createdAt: Time
@@ -73307,6 +89121,22 @@ type Procedure implements Node {
   """
   procedureKindID: ID
   """
+  the environment of the procedure
+  """
+  environmentName: String
+  """
+  the environment of the procedure
+  """
+  environmentID: ID
+  """
+  the scope of the procedure
+  """
+  scopeName: String
+  """
+  the scope of the procedure
+  """
+  scopeID: ID
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -73382,6 +89212,8 @@ type Procedure implements Node {
   """
   delegate: Group
   procedureKind: CustomTypeEnum
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -74127,6 +89959,78 @@ input ProcedureWhereInput {
   procedureKindIDEqualFold: ID
   procedureKindIDContainsFold: ID
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   workflow_eligible_marker field predicates
   """
   workflowEligibleMarker: Boolean
@@ -74163,6 +90067,16 @@ input ProcedureWhereInput {
   """
   hasProcedureKind: Boolean
   hasProcedureKindWith: [CustomTypeEnumWhereInput!]
+  """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
   """
   controls edge predicates
   """
@@ -75655,6 +91569,68 @@ type Query {
     """
     where: AssetWhereInput
   ): AssetConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+  campaignTargets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CampaignTargets returned from the connection.
+    """
+    orderBy: [CampaignTargetOrder!]
+
+    """
+    Filtering options for CampaignTargets returned from the connection.
+    """
+    where: CampaignTargetWhereInput
+  ): CampaignTargetConnection!
   contacts(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -76430,6 +92406,37 @@ type Query {
     """
     where: HushWhereInput
   ): HushConnection!
+  identityHolders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -76957,6 +92964,37 @@ type Query {
     """
     where: PersonalAccessTokenWhereInput
   ): PersonalAccessTokenConnection!
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
   procedures(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -78074,6 +94112,22 @@ type Remediation implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  the environment of the remediation
+  """
+  environmentName: String
+  """
+  the environment of the remediation
+  """
+  environmentID: ID
+  """
+  the scope of the remediation
+  """
+  scopeName: String
+  """
+  the scope of the remediation
+  """
+  scopeID: ID
+  """
   external identifier from the integration source for the remediation
   """
   externalID: String
@@ -78243,6 +94297,8 @@ type Remediation implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -78274,6 +94330,37 @@ type Remediation implements Node {
     """
     where: IntegrationWhereInput
   ): IntegrationConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
   findings(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -78893,6 +94980,78 @@ input RemediationWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   external_id field predicates
   """
   externalID: String
@@ -79222,10 +95381,25 @@ input RemediationWhereInput {
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
   """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
   integrations edge predicates
   """
   hasIntegrations: Boolean
   hasIntegrationsWith: [IntegrationWhereInput!]
+  """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
   """
   findings edge predicates
   """
@@ -79318,6 +95492,22 @@ type Review implements Node {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @hidden(if: true)
+  """
+  the environment of the review
+  """
+  environmentName: String
+  """
+  the environment of the review
+  """
+  environmentID: ID
+  """
+  the scope of the review
+  """
+  scopeName: String
+  """
+  the scope of the review
+  """
+  scopeID: ID
   """
   external identifier from the integration source for the review
   """
@@ -79484,6 +95674,8 @@ type Review implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -80122,6 +96314,78 @@ input ReviewWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   external_id field predicates
   """
   externalID: String
@@ -80402,6 +96666,16 @@ input ReviewWhereInput {
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
   """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
   integrations edge predicates
   """
   hasIntegrations: Boolean
@@ -80511,6 +96785,22 @@ type Risk implements Node {
   the category of the risk
   """
   riskCategoryID: ID
+  """
+  the environment of the risk
+  """
+  environmentName: String
+  """
+  the environment of the risk
+  """
+  environmentID: ID
+  """
+  the scope of the risk
+  """
+  scopeName: String
+  """
+  the scope of the risk
+  """
+  scopeID: ID
   """
   the name of the risk
   """
@@ -80659,6 +96949,8 @@ type Risk implements Node {
   ): GroupConnection!
   riskKind: CustomTypeEnum
   riskCategory: CustomTypeEnum
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -80814,6 +97106,37 @@ type Risk implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
   actionPlans(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -81317,6 +97640,78 @@ input RiskWhereInput {
   riskCategoryIDEqualFold: ID
   riskCategoryIDContainsFold: ID
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   name field predicates
   """
   name: String
@@ -81493,6 +97888,16 @@ input RiskWhereInput {
   hasRiskCategory: Boolean
   hasRiskCategoryWith: [CustomTypeEnumWhereInput!]
   """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
   controls edge predicates
   """
   hasControls: Boolean
@@ -81517,6 +97922,11 @@ input RiskWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  platforms edge predicates
+  """
+  hasPlatforms: Boolean
+  hasPlatformsWith: [PlatformWhereInput!]
   """
   action_plans edge predicates
   """
@@ -81578,6 +97988,46 @@ type Scan implements Node {
   """
   ownerID: ID
   """
+  who reviewed the scan when no user or group is linked
+  """
+  reviewedBy: String
+  """
+  the user id that reviewed the scan
+  """
+  reviewedByUserID: ID
+  """
+  the group id that reviewed the scan
+  """
+  reviewedByGroupID: ID
+  """
+  who the scan is assigned to when no user or group is linked
+  """
+  assignedTo: String
+  """
+  the user id assigned to the scan
+  """
+  assignedToUserID: ID
+  """
+  the group id assigned to the scan
+  """
+  assignedToGroupID: ID
+  """
+  the environment of the scan
+  """
+  environmentName: String
+  """
+  the environment of the scan
+  """
+  environmentID: ID
+  """
+  the scope of the scan
+  """
+  scopeName: String
+  """
+  the scope of the scan
+  """
+  scopeID: ID
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String!
@@ -81589,6 +98039,38 @@ type Scan implements Node {
   additional metadata for the scan, e.g., scan configuration, options, etc
   """
   metadata: Map
+  """
+  when the scan was executed
+  """
+  scanDate: DateTime
+  """
+  cron schedule that governs the scan cadence, in cron 6-field syntax
+  """
+  scanSchedule: String
+  """
+  when the scan is scheduled to run next
+  """
+  nextScanRunAt: DateTime
+  """
+  who performed the scan when no user or group is linked
+  """
+  performedBy: String
+  """
+  the user id that performed the scan
+  """
+  performedByUserID: ID
+  """
+  the group id that performed the scan
+  """
+  performedByGroupID: ID
+  """
+  the platform that generated the scan
+  """
+  generatedByPlatformID: ID
+  """
+  identifiers of vulnerabilities discovered during the scan
+  """
+  vulnerabilityIds: [String!]
   """
   the status of the scan, e.g., processing, completed, failed
   """
@@ -81687,6 +98169,12 @@ type Scan implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  reviewedByUser: User
+  reviewedByGroup: Group
+  assignedToUser: User
+  assignedToGroup: Group
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   assets(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -81749,6 +98237,257 @@ type Scan implements Node {
     """
     where: EntityWhereInput
   ): EntityConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  vulnerabilities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Vulnerabilities returned from the connection.
+    """
+    orderBy: [VulnerabilityOrder!]
+
+    """
+    Filtering options for Vulnerabilities returned from the connection.
+    """
+    where: VulnerabilityWhereInput
+  ): VulnerabilityConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  generatedByPlatform: Platform
+  performedByUser: User
+  performedByGroup: Group
 }
 """
 A connection to a list of items.
@@ -81800,6 +98539,8 @@ enum ScanOrderField {
   created_at
   updated_at
   SCAN_TYPE
+  scan_date
+  next_scan_run_at
   STATUS
 }
 """
@@ -81922,6 +98663,186 @@ input ScanWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  reviewed_by field predicates
+  """
+  reviewedBy: String
+  reviewedByNEQ: String
+  reviewedByIn: [String!]
+  reviewedByNotIn: [String!]
+  reviewedByGT: String
+  reviewedByGTE: String
+  reviewedByLT: String
+  reviewedByLTE: String
+  reviewedByContains: String
+  reviewedByHasPrefix: String
+  reviewedByHasSuffix: String
+  reviewedByIsNil: Boolean
+  reviewedByNotNil: Boolean
+  reviewedByEqualFold: String
+  reviewedByContainsFold: String
+  """
+  reviewed_by_user_id field predicates
+  """
+  reviewedByUserID: ID
+  reviewedByUserIDNEQ: ID
+  reviewedByUserIDIn: [ID!]
+  reviewedByUserIDNotIn: [ID!]
+  reviewedByUserIDGT: ID
+  reviewedByUserIDGTE: ID
+  reviewedByUserIDLT: ID
+  reviewedByUserIDLTE: ID
+  reviewedByUserIDContains: ID
+  reviewedByUserIDHasPrefix: ID
+  reviewedByUserIDHasSuffix: ID
+  reviewedByUserIDIsNil: Boolean
+  reviewedByUserIDNotNil: Boolean
+  reviewedByUserIDEqualFold: ID
+  reviewedByUserIDContainsFold: ID
+  """
+  reviewed_by_group_id field predicates
+  """
+  reviewedByGroupID: ID
+  reviewedByGroupIDNEQ: ID
+  reviewedByGroupIDIn: [ID!]
+  reviewedByGroupIDNotIn: [ID!]
+  reviewedByGroupIDGT: ID
+  reviewedByGroupIDGTE: ID
+  reviewedByGroupIDLT: ID
+  reviewedByGroupIDLTE: ID
+  reviewedByGroupIDContains: ID
+  reviewedByGroupIDHasPrefix: ID
+  reviewedByGroupIDHasSuffix: ID
+  reviewedByGroupIDIsNil: Boolean
+  reviewedByGroupIDNotNil: Boolean
+  reviewedByGroupIDEqualFold: ID
+  reviewedByGroupIDContainsFold: ID
+  """
+  assigned_to field predicates
+  """
+  assignedTo: String
+  assignedToNEQ: String
+  assignedToIn: [String!]
+  assignedToNotIn: [String!]
+  assignedToGT: String
+  assignedToGTE: String
+  assignedToLT: String
+  assignedToLTE: String
+  assignedToContains: String
+  assignedToHasPrefix: String
+  assignedToHasSuffix: String
+  assignedToIsNil: Boolean
+  assignedToNotNil: Boolean
+  assignedToEqualFold: String
+  assignedToContainsFold: String
+  """
+  assigned_to_user_id field predicates
+  """
+  assignedToUserID: ID
+  assignedToUserIDNEQ: ID
+  assignedToUserIDIn: [ID!]
+  assignedToUserIDNotIn: [ID!]
+  assignedToUserIDGT: ID
+  assignedToUserIDGTE: ID
+  assignedToUserIDLT: ID
+  assignedToUserIDLTE: ID
+  assignedToUserIDContains: ID
+  assignedToUserIDHasPrefix: ID
+  assignedToUserIDHasSuffix: ID
+  assignedToUserIDIsNil: Boolean
+  assignedToUserIDNotNil: Boolean
+  assignedToUserIDEqualFold: ID
+  assignedToUserIDContainsFold: ID
+  """
+  assigned_to_group_id field predicates
+  """
+  assignedToGroupID: ID
+  assignedToGroupIDNEQ: ID
+  assignedToGroupIDIn: [ID!]
+  assignedToGroupIDNotIn: [ID!]
+  assignedToGroupIDGT: ID
+  assignedToGroupIDGTE: ID
+  assignedToGroupIDLT: ID
+  assignedToGroupIDLTE: ID
+  assignedToGroupIDContains: ID
+  assignedToGroupIDHasPrefix: ID
+  assignedToGroupIDHasSuffix: ID
+  assignedToGroupIDIsNil: Boolean
+  assignedToGroupIDNotNil: Boolean
+  assignedToGroupIDEqualFold: ID
+  assignedToGroupIDContainsFold: ID
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   target field predicates
   """
   target: String
@@ -81944,6 +98865,104 @@ input ScanWhereInput {
   scanTypeNEQ: ScanScanType
   scanTypeIn: [ScanScanType!]
   scanTypeNotIn: [ScanScanType!]
+  """
+  scan_date field predicates
+  """
+  scanDate: DateTime
+  scanDateNEQ: DateTime
+  scanDateIn: [DateTime!]
+  scanDateNotIn: [DateTime!]
+  scanDateGT: DateTime
+  scanDateGTE: DateTime
+  scanDateLT: DateTime
+  scanDateLTE: DateTime
+  scanDateIsNil: Boolean
+  scanDateNotNil: Boolean
+  """
+  next_scan_run_at field predicates
+  """
+  nextScanRunAt: DateTime
+  nextScanRunAtNEQ: DateTime
+  nextScanRunAtIn: [DateTime!]
+  nextScanRunAtNotIn: [DateTime!]
+  nextScanRunAtGT: DateTime
+  nextScanRunAtGTE: DateTime
+  nextScanRunAtLT: DateTime
+  nextScanRunAtLTE: DateTime
+  nextScanRunAtIsNil: Boolean
+  nextScanRunAtNotNil: Boolean
+  """
+  performed_by field predicates
+  """
+  performedBy: String
+  performedByNEQ: String
+  performedByIn: [String!]
+  performedByNotIn: [String!]
+  performedByGT: String
+  performedByGTE: String
+  performedByLT: String
+  performedByLTE: String
+  performedByContains: String
+  performedByHasPrefix: String
+  performedByHasSuffix: String
+  performedByIsNil: Boolean
+  performedByNotNil: Boolean
+  performedByEqualFold: String
+  performedByContainsFold: String
+  """
+  performed_by_user_id field predicates
+  """
+  performedByUserID: ID
+  performedByUserIDNEQ: ID
+  performedByUserIDIn: [ID!]
+  performedByUserIDNotIn: [ID!]
+  performedByUserIDGT: ID
+  performedByUserIDGTE: ID
+  performedByUserIDLT: ID
+  performedByUserIDLTE: ID
+  performedByUserIDContains: ID
+  performedByUserIDHasPrefix: ID
+  performedByUserIDHasSuffix: ID
+  performedByUserIDIsNil: Boolean
+  performedByUserIDNotNil: Boolean
+  performedByUserIDEqualFold: ID
+  performedByUserIDContainsFold: ID
+  """
+  performed_by_group_id field predicates
+  """
+  performedByGroupID: ID
+  performedByGroupIDNEQ: ID
+  performedByGroupIDIn: [ID!]
+  performedByGroupIDNotIn: [ID!]
+  performedByGroupIDGT: ID
+  performedByGroupIDGTE: ID
+  performedByGroupIDLT: ID
+  performedByGroupIDLTE: ID
+  performedByGroupIDContains: ID
+  performedByGroupIDHasPrefix: ID
+  performedByGroupIDHasSuffix: ID
+  performedByGroupIDIsNil: Boolean
+  performedByGroupIDNotNil: Boolean
+  performedByGroupIDEqualFold: ID
+  performedByGroupIDContainsFold: ID
+  """
+  generated_by_platform_id field predicates
+  """
+  generatedByPlatformID: ID
+  generatedByPlatformIDNEQ: ID
+  generatedByPlatformIDIn: [ID!]
+  generatedByPlatformIDNotIn: [ID!]
+  generatedByPlatformIDGT: ID
+  generatedByPlatformIDGTE: ID
+  generatedByPlatformIDLT: ID
+  generatedByPlatformIDLTE: ID
+  generatedByPlatformIDContains: ID
+  generatedByPlatformIDHasPrefix: ID
+  generatedByPlatformIDHasSuffix: ID
+  generatedByPlatformIDIsNil: Boolean
+  generatedByPlatformIDNotNil: Boolean
+  generatedByPlatformIDEqualFold: ID
+  generatedByPlatformIDContainsFold: ID
   """
   status field predicates
   """
@@ -81972,6 +98991,36 @@ input ScanWhereInput {
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
   """
+  reviewed_by_user edge predicates
+  """
+  hasReviewedByUser: Boolean
+  hasReviewedByUserWith: [UserWhereInput!]
+  """
+  reviewed_by_group edge predicates
+  """
+  hasReviewedByGroup: Boolean
+  hasReviewedByGroupWith: [GroupWhereInput!]
+  """
+  assigned_to_user edge predicates
+  """
+  hasAssignedToUser: Boolean
+  hasAssignedToUserWith: [UserWhereInput!]
+  """
+  assigned_to_group edge predicates
+  """
+  hasAssignedToGroup: Boolean
+  hasAssignedToGroupWith: [GroupWhereInput!]
+  """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
   assets edge predicates
   """
   hasAssets: Boolean
@@ -81981,6 +99030,61 @@ input ScanWhereInput {
   """
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
+  """
+  action_plans edge predicates
+  """
+  hasActionPlans: Boolean
+  hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
+  """
+  platforms edge predicates
+  """
+  hasPlatforms: Boolean
+  hasPlatformsWith: [PlatformWhereInput!]
+  """
+  vulnerabilities edge predicates
+  """
+  hasVulnerabilities: Boolean
+  hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
+  """
+  generated_by_platform edge predicates
+  """
+  hasGeneratedByPlatform: Boolean
+  hasGeneratedByPlatformWith: [PlatformWhereInput!]
+  """
+  performed_by_user edge predicates
+  """
+  hasPerformedByUser: Boolean
+  hasPerformedByUserWith: [UserWhereInput!]
+  """
+  performed_by_group edge predicates
+  """
+  hasPerformedByGroup: Boolean
+  hasPerformedByGroupWith: [GroupWhereInput!]
 }
 type ScheduledJob implements Node {
   id: ID!
@@ -82770,6 +99874,37 @@ type Standard implements Node {
     """
     where: TrustCenterDocWhereInput
   ): TrustCenterDocConnection!
+  applicablePlatforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
   logoFile: File
 }
 """
@@ -83220,6 +100355,11 @@ input StandardWhereInput {
   """
   hasTrustCenterDocs: Boolean
   hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
+  """
+  applicable_platforms edge predicates
+  """
+  hasApplicablePlatforms: Boolean
+  hasApplicablePlatformsWith: [PlatformWhereInput!]
   """
   logo_file edge predicates
   """
@@ -84516,6 +101656,37 @@ type Subprocessor implements Node {
     """
     where: TrustCenterSubprocessorWhereInput
   ): TrustCenterSubprocessorConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
 }
 """
 A connection to a list of items.
@@ -84797,6 +101968,11 @@ input SubprocessorWhereInput {
   """
   hasTrustCenterSubprocessors: Boolean
   hasTrustCenterSubprocessorsWith: [TrustCenterSubprocessorWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
 }
 type Subscriber implements Node {
   id: ID!
@@ -85614,6 +102790,22 @@ type Task implements Node {
   """
   taskKindID: ID
   """
+  the environment of the task
+  """
+  environmentName: String
+  """
+  the environment of the task
+  """
+  environmentID: ID
+  """
+  the scope of the task
+  """
+  scopeName: String
+  """
+  the scope of the task
+  """
+  scopeID: ID
+  """
   the title of the task
   """
   title: String!
@@ -85663,6 +102855,8 @@ type Task implements Node {
   parentTaskID: ID
   owner: Organization
   taskKind: CustomTypeEnum
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   assigner: User
   assignee: User
   comments(
@@ -85944,6 +103138,99 @@ type Task implements Node {
     """
     where: RiskWhereInput
   ): RiskConnection!
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
+  identityHolders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
   controlImplementations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -86289,6 +103576,78 @@ input TaskWhereInput {
   taskKindIDEqualFold: ID
   taskKindIDContainsFold: ID
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   title field predicates
   """
   title: String
@@ -86443,6 +103802,16 @@ input TaskWhereInput {
   hasTaskKind: Boolean
   hasTaskKindWith: [CustomTypeEnumWhereInput!]
   """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
   assigner edge predicates
   """
   hasAssigner: Boolean
@@ -86497,6 +103866,21 @@ input TaskWhereInput {
   """
   hasRisks: Boolean
   hasRisksWith: [RiskWhereInput!]
+  """
+  platforms edge predicates
+  """
+  hasPlatforms: Boolean
+  hasPlatformsWith: [PlatformWhereInput!]
+  """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
+  """
+  identity_holders edge predicates
+  """
+  hasIdentityHolders: Boolean
+  hasIdentityHoldersWith: [IdentityHolderWhereInput!]
   """
   control_implementations edge predicates
   """
@@ -86555,6 +103939,22 @@ type Template implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  the environment of the template
+  """
+  environmentName: String
+  """
+  the environment of the template
+  """
+  environmentID: ID
+  """
+  the scope of the template
+  """
+  scopeName: String
+  """
+  the scope of the template
+  """
+  scopeID: ID
+  """
   the name of the template
   """
   name: String!
@@ -86583,6 +103983,8 @@ type Template implements Node {
   """
   trustCenterID: ID
   owner: Organization
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   documents(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -86677,6 +104079,68 @@ type Template implements Node {
     """
     where: AssessmentWhereInput
   ): AssessmentConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+  identityHolders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
 }
 """
 A connection to a list of items.
@@ -86890,6 +104354,78 @@ input TemplateWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   name field predicates
   """
   name: String
@@ -86963,6 +104499,16 @@ input TemplateWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
   documents edge predicates
   """
   hasDocuments: Boolean
@@ -86982,6 +104528,16 @@ input TemplateWhereInput {
   """
   hasAssessments: Boolean
   hasAssessmentsWith: [AssessmentWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
+  """
+  identity_holders edge predicates
+  """
+  hasIdentityHolders: Boolean
+  hasIdentityHoldersWith: [IdentityHolderWhereInput!]
 }
 """
 The builtin Time type
@@ -88864,6 +106420,10 @@ type TrustCenterSetting implements Node {
   """
   companyName: String
   """
+  company description for the trust center
+  """
+  companyDescription: String
+  """
   overview of the trust center
   """
   overview: String
@@ -89201,6 +106761,24 @@ input TrustCenterSettingWhereInput {
   companyNameNotNil: Boolean
   companyNameEqualFold: String
   companyNameContainsFold: String
+  """
+  company_description field predicates
+  """
+  companyDescription: String
+  companyDescriptionNEQ: String
+  companyDescriptionIn: [String!]
+  companyDescriptionNotIn: [String!]
+  companyDescriptionGT: String
+  companyDescriptionGTE: String
+  companyDescriptionLT: String
+  companyDescriptionLTE: String
+  companyDescriptionContains: String
+  companyDescriptionHasPrefix: String
+  companyDescriptionHasSuffix: String
+  companyDescriptionIsNil: Boolean
+  companyDescriptionNotNil: Boolean
+  companyDescriptionEqualFold: String
+  companyDescriptionContainsFold: String
   """
   overview field predicates
   """
@@ -90785,6 +108363,9 @@ input UpdateActionPlanInput {
   addVulnerabilityIDs: [ID!]
   removeVulnerabilityIDs: [ID!]
   clearVulnerabilities: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
   addReviewIDs: [ID!]
   removeReviewIDs: [ID!]
   clearReviews: Boolean
@@ -90846,9 +108427,18 @@ input UpdateAssessmentInput {
   clearViewers: Boolean
   templateID: ID
   clearTemplate: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatforms: Boolean
+  addIdentityHolderIDs: [ID!]
+  removeIdentityHolderIDs: [ID!]
+  clearIdentityHolders: Boolean
   addAssessmentResponseIDs: [ID!]
   removeAssessmentResponseIDs: [ID!]
   clearAssessmentResponses: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
 }
 """
 UpdateAssetInput is used for update Asset object.
@@ -90861,6 +108451,51 @@ input UpdateAssetInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  the internal owner for the asset when no user or group is linked
+  """
+  internalOwner: String
+  clearInternalOwner: Boolean
+  """
+  the subtype of the asset
+  """
+  assetSubtypeName: String
+  clearAssetSubtypeName: Boolean
+  """
+  the data_classification of the asset
+  """
+  assetDataClassificationName: String
+  clearAssetDataClassificationName: Boolean
+  """
+  the environment of the asset
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the asset
+  """
+  scopeName: String
+  clearScopeName: Boolean
+  """
+  the access_model of the asset
+  """
+  accessModelName: String
+  clearAccessModelName: Boolean
+  """
+  the encryption_status of the asset
+  """
+  encryptionStatusName: String
+  clearEncryptionStatusName: Boolean
+  """
+  the security_tier of the asset
+  """
+  securityTierName: String
+  clearSecurityTierName: Boolean
+  """
+  the criticality of the asset
+  """
+  criticalityName: String
+  clearCriticalityName: Boolean
   """
   internal notes about the object creation, this field is only available to system admins
   """
@@ -90892,6 +108527,45 @@ input UpdateAssetInput {
   website: String
   clearWebsite: Boolean
   """
+  physical location of the asset, if applicable
+  """
+  physicalLocation: String
+  clearPhysicalLocation: Boolean
+  """
+  the region where the asset operates or is hosted
+  """
+  region: String
+  clearRegion: Boolean
+  """
+  whether the asset stores or processes PII
+  """
+  containsPii: Boolean
+  clearContainsPii: Boolean
+  """
+  the source of the asset record, e.g., manual, discovered, imported, api
+  """
+  sourceType: AssetSourceType
+  """
+  the identifier used by the source platform for the asset
+  """
+  sourceIdentifier: String
+  clearSourceIdentifier: Boolean
+  """
+  cost center associated with the asset
+  """
+  costCenter: String
+  clearCostCenter: Boolean
+  """
+  estimated monthly cost for the asset
+  """
+  estimatedMonthlyCost: Float
+  clearEstimatedMonthlyCost: Boolean
+  """
+  purchase date for the asset
+  """
+  purchaseDate: DateTime
+  clearPurchaseDate: Boolean
+  """
   the CPE (Common Platform Enumeration) of the asset, if applicable
   """
   cpe: String
@@ -90911,15 +108585,263 @@ input UpdateAssetInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
+  internalOwnerUserID: ID
+  clearInternalOwnerUser: Boolean
+  internalOwnerGroupID: ID
+  clearInternalOwnerGroup: Boolean
+  assetSubtypeID: ID
+  clearAssetSubtype: Boolean
+  assetDataClassificationID: ID
+  clearAssetDataClassification: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
+  accessModelID: ID
+  clearAccessModel: Boolean
+  encryptionStatusID: ID
+  clearEncryptionStatus: Boolean
+  securityTierID: ID
+  clearSecurityTier: Boolean
+  criticalityID: ID
+  clearCriticality: Boolean
   addScanIDs: [ID!]
   removeScanIDs: [ID!]
   clearScans: Boolean
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatforms: Boolean
+  addOutOfScopePlatformIDs: [ID!]
+  removeOutOfScopePlatformIDs: [ID!]
+  clearOutOfScopePlatforms: Boolean
+  addIdentityHolderIDs: [ID!]
+  removeIdentityHolderIDs: [ID!]
+  clearIdentityHolders: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  sourcePlatformID: ID
+  clearSourcePlatform: Boolean
+  addConnectedAssetIDs: [ID!]
+  removeConnectedAssetIDs: [ID!]
+  clearConnectedAssets: Boolean
+  addConnectedFromIDs: [ID!]
+  removeConnectedFromIDs: [ID!]
+  clearConnectedFrom: Boolean
+}
+"""
+UpdateCampaignInput is used for update Campaign object.
+Input was generated by ent.
+"""
+input UpdateCampaignInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the internal owner for the campaign when no user or group is linked
+  """
+  internalOwner: String
+  clearInternalOwner: Boolean
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
+  """
+  the name of the campaign
+  """
+  name: String
+  """
+  the description of the campaign
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  the type of campaign
+  """
+  campaignType: CampaignCampaignType
+  """
+  the status of the campaign
+  """
+  status: CampaignCampaignStatus
+  """
+  whether the campaign is active
+  """
+  isActive: Boolean
+  """
+  when the campaign is scheduled to start
+  """
+  scheduledAt: DateTime
+  clearScheduledAt: Boolean
+  """
+  when the campaign was launched
+  """
+  launchedAt: DateTime
+  clearLaunchedAt: Boolean
+  """
+  when the campaign completed
+  """
+  completedAt: DateTime
+  clearCompletedAt: Boolean
+  """
+  when responses are due for the campaign
+  """
+  dueDate: DateTime
+  clearDueDate: Boolean
+  """
+  whether the campaign recurs on a schedule
+  """
+  isRecurring: Boolean
+  """
+  the recurrence cadence for the campaign
+  """
+  recurrenceFrequency: CampaignFrequency
+  clearRecurrenceFrequency: Boolean
+  """
+  the recurrence interval for the campaign, combined with the recurrence frequency
+  """
+  recurrenceInterval: Int
+  clearRecurrenceInterval: Boolean
+  """
+  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  recurrenceCron: String
+  clearRecurrenceCron: Boolean
+  """
+  timezone used for the recurrence schedule
+  """
+  recurrenceTimezone: String
+  clearRecurrenceTimezone: Boolean
+  """
+  when the campaign was last executed
+  """
+  lastRunAt: DateTime
+  clearLastRunAt: Boolean
+  """
+  when the campaign is scheduled to run next
+  """
+  nextRunAt: DateTime
+  clearNextRunAt: Boolean
+  """
+  when the recurring campaign should stop running
+  """
+  recurrenceEndAt: DateTime
+  clearRecurrenceEndAt: Boolean
+  """
+  the number of recipients targeted by the campaign
+  """
+  recipientCount: Int
+  clearRecipientCount: Boolean
+  """
+  the number of times campaign notifications were resent
+  """
+  resendCount: Int
+  clearResendCount: Boolean
+  """
+  when campaign notifications were last resent
+  """
+  lastResentAt: DateTime
+  clearLastResentAt: Boolean
+  """
+  additional metadata about the campaign
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  internalOwnerUserID: ID
+  clearInternalOwnerUser: Boolean
+  internalOwnerGroupID: ID
+  clearInternalOwnerGroup: Boolean
+  assessmentID: ID
+  clearAssessment: Boolean
+  templateID: ID
+  clearTemplate: Boolean
+  entityID: ID
+  clearEntity: Boolean
+  addCampaignTargetIDs: [ID!]
+  removeCampaignTargetIDs: [ID!]
+  clearCampaignTargets: Boolean
+  addAssessmentResponseIDs: [ID!]
+  removeAssessmentResponseIDs: [ID!]
+  clearAssessmentResponses: Boolean
+  addContactIDs: [ID!]
+  removeContactIDs: [ID!]
+  clearContacts: Boolean
+  addUserIDs: [ID!]
+  removeUserIDs: [ID!]
+  clearUsers: Boolean
+  addGroupIDs: [ID!]
+  removeGroupIDs: [ID!]
+  clearGroups: Boolean
+  addIdentityHolderIDs: [ID!]
+  removeIdentityHolderIDs: [ID!]
+  clearIdentityHolders: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
+}
+"""
+UpdateCampaignTargetInput is used for update CampaignTarget object.
+Input was generated by ent.
+"""
+input UpdateCampaignTargetInput {
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
+  """
+  the email address targeted by the campaign
+  """
+  email: String
+  """
+  the name of the campaign target, if known
+  """
+  fullName: String
+  clearFullName: Boolean
+  """
+  the delivery or response status for the campaign target
+  """
+  status: CampaignTargetAssessmentResponseStatus
+  """
+  when the campaign target was last sent a request
+  """
+  sentAt: DateTime
+  clearSentAt: Boolean
+  """
+  when the campaign target completed the request
+  """
+  completedAt: DateTime
+  clearCompletedAt: Boolean
+  """
+  additional metadata about the campaign target
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  campaignID: ID
+  contactID: ID
+  clearContact: Boolean
+  userID: ID
+  clearUser: Boolean
+  groupID: ID
+  clearGroup: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateContactInput is used for update Contact object.
@@ -90971,6 +108893,12 @@ input UpdateContactInput {
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
+  addCampaignTargetIDs: [ID!]
+  removeCampaignTargetIDs: [ID!]
+  clearCampaignTargets: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -91189,6 +109117,16 @@ input UpdateControlInput {
   controlKindName: String
   clearControlKindName: Boolean
   """
+  the environment of the control
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the control
+  """
+  scopeName: String
+  clearScopeName: Boolean
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -91241,11 +109179,18 @@ input UpdateControlInput {
   clearEditors: Boolean
   controlKindID: ID
   clearControlKind: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   standardID: ID
   clearStandard: Boolean
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatforms: Boolean
   addAssetIDs: [ID!]
   removeAssetIDs: [ID!]
   clearAssets: Boolean
@@ -91456,6 +109401,9 @@ input UpdateCustomTypeEnumInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatforms: Boolean
 }
 """
 UpdateDNSVerificationInput is used for update DNSVerification object.
@@ -91521,6 +109469,16 @@ input UpdateDirectoryAccountInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  the environment of the directory_account
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the directory_account
+  """
+  scopeName: String
+  clearScopeName: Boolean
   """
   optional secondary identifier such as Azure immutable ID
   """
@@ -91600,6 +109558,10 @@ input UpdateDirectoryAccountInput {
   clearSourceVersion: Boolean
   ownerID: ID
   clearOwner: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addGroupIDs: [ID!]
   removeGroupIDs: [ID!]
   clearGroups: Boolean
@@ -91618,6 +109580,16 @@ input UpdateDirectoryGroupInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  the environment of the directory_group
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the directory_group
+  """
+  scopeName: String
+  clearScopeName: Boolean
   """
   primary group email address, when applicable
   """
@@ -91667,6 +109639,10 @@ input UpdateDirectoryGroupInput {
   clearSourceVersion: Boolean
   ownerID: ID
   clearOwner: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean
@@ -91676,6 +109652,16 @@ UpdateDirectoryMembershipInput is used for update DirectoryMembership object.
 Input was generated by ent.
 """
 input UpdateDirectoryMembershipInput {
+  """
+  the environment of the directory_membership
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the directory_membership
+  """
+  scopeName: String
+  clearScopeName: Boolean
   """
   membership role reported by the provider
   """
@@ -91708,6 +109694,10 @@ input UpdateDirectoryMembershipInput {
   clearMetadata: Boolean
   ownerID: ID
   clearOwner: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
@@ -91720,6 +109710,16 @@ UpdateDirectorySyncRunInput is used for update DirectorySyncRun object.
 Input was generated by ent.
 """
 input UpdateDirectorySyncRunInput {
+  """
+  the environment of the directory_sync_run
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the directory_sync_run
+  """
+  scopeName: String
+  clearScopeName: Boolean
   """
   current state of the sync run
   """
@@ -91763,6 +109763,10 @@ input UpdateDirectorySyncRunInput {
   clearStats: Boolean
   ownerID: ID
   clearOwner: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addDirectoryAccountIDs: [ID!]
   removeDirectoryAccountIDs: [ID!]
   clearDirectoryAccounts: Boolean
@@ -91810,9 +109814,23 @@ input UpdateDocumentDataInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  the environment of the document
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the document
+  """
+  scopeName: String
+  clearScopeName: Boolean
+  """
   the json data of the document
   """
   data: Map
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   templateID: ID
   clearTemplate: Boolean
   addEntityIDs: [ID!]
@@ -91834,6 +109852,21 @@ input UpdateEntityInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  the internal owner for the entity when no user or group is linked
+  """
+  internalOwner: String
+  clearInternalOwner: Boolean
+  """
+  who reviewed the entity when no user or group is linked
+  """
+  reviewedBy: String
+  clearReviewedBy: Boolean
+  """
+  when the entity was last reviewed
+  """
+  lastReviewedAt: DateTime
+  clearLastReviewedAt: Boolean
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -91843,6 +109876,31 @@ input UpdateEntityInput {
   """
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
+  """
+  the relationship_state of the entity
+  """
+  entityRelationshipStateName: String
+  clearEntityRelationshipStateName: Boolean
+  """
+  the security_questionnaire_status of the entity
+  """
+  entitySecurityQuestionnaireStatusName: String
+  clearEntitySecurityQuestionnaireStatusName: Boolean
+  """
+  the source_type of the entity
+  """
+  entitySourceTypeName: String
+  clearEntitySourceTypeName: Boolean
+  """
+  the environment of the entity
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the entity
+  """
+  scopeName: String
+  clearScopeName: Boolean
   """
   the name of the entity
   """
@@ -91869,6 +109927,134 @@ input UpdateEntityInput {
   """
   status: String
   clearStatus: Boolean
+  """
+  whether the entity is approved for use
+  """
+  approvedForUse: Boolean
+  clearApprovedForUse: Boolean
+  """
+  asset identifiers linked to the entity
+  """
+  linkedAssetIds: [String!]
+  appendLinkedAssetIds: [String!]
+  clearLinkedAssetIds: Boolean
+  """
+  whether the entity has an active SOC 2 report
+  """
+  hasSoc2: Boolean
+  clearHasSoc2: Boolean
+  """
+  SOC 2 reporting period end date
+  """
+  soc2PeriodEnd: DateTime
+  clearSoc2PeriodEnd: Boolean
+  """
+  start date for the entity contract
+  """
+  contractStartDate: DateTime
+  clearContractStartDate: Boolean
+  """
+  end date for the entity contract
+  """
+  contractEndDate: DateTime
+  clearContractEndDate: Boolean
+  """
+  whether the contract auto-renews
+  """
+  autoRenews: Boolean
+  clearAutoRenews: Boolean
+  """
+  number of days required for termination notice
+  """
+  terminationNoticeDays: Int
+  clearTerminationNoticeDays: Boolean
+  """
+  annual spend associated with the entity
+  """
+  annualSpend: Float
+  clearAnnualSpend: Boolean
+  """
+  the currency of the annual spend
+  """
+  spendCurrency: String
+  clearSpendCurrency: Boolean
+  """
+  billing model for the entity relationship
+  """
+  billingModel: String
+  clearBillingModel: Boolean
+  """
+  renewal risk rating for the entity
+  """
+  renewalRisk: String
+  clearRenewalRisk: Boolean
+  """
+  whether SSO is enforced for the entity
+  """
+  ssoEnforced: Boolean
+  clearSSOEnforced: Boolean
+  """
+  whether MFA is supported by the entity
+  """
+  mfaSupported: Boolean
+  clearMfaSupported: Boolean
+  """
+  whether MFA is enforced by the entity
+  """
+  mfaEnforced: Boolean
+  clearMfaEnforced: Boolean
+  """
+  status page URL for the entity
+  """
+  statusPageURL: String
+  clearStatusPageURL: Boolean
+  """
+  services provided by the entity
+  """
+  providedServices: [String!]
+  appendProvidedServices: [String!]
+  clearProvidedServices: Boolean
+  """
+  external links associated with the entity
+  """
+  links: [String!]
+  appendLinks: [String!]
+  clearLinks: Boolean
+  """
+  the risk rating label for the entity
+  """
+  riskRating: String
+  clearRiskRating: Boolean
+  """
+  the risk score for the entity
+  """
+  riskScore: Int
+  clearRiskScore: Boolean
+  """
+  the tier classification for the entity
+  """
+  tier: String
+  clearTier: Boolean
+  """
+  the cadence for reviewing the entity
+  """
+  reviewFrequency: EntityFrequency
+  clearReviewFrequency: Boolean
+  """
+  when the entity is due for review
+  """
+  nextReviewAt: DateTime
+  clearNextReviewAt: Boolean
+  """
+  when the entity contract is up for renewal
+  """
+  contractRenewalAt: DateTime
+  clearContractRenewalAt: Boolean
+  """
+  vendor metadata such as additional enrichment info, company size, public, etc.
+  """
+  vendorMetadata: Map
+  clearVendorMetadata: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -91878,6 +110064,24 @@ input UpdateEntityInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
+  internalOwnerUserID: ID
+  clearInternalOwnerUser: Boolean
+  internalOwnerGroupID: ID
+  clearInternalOwnerGroup: Boolean
+  reviewedByUserID: ID
+  clearReviewedByUser: Boolean
+  reviewedByGroupID: ID
+  clearReviewedByGroup: Boolean
+  entityRelationshipStateID: ID
+  clearEntityRelationshipState: Boolean
+  entitySecurityQuestionnaireStatusID: ID
+  clearEntitySecurityQuestionnaireStatus: Boolean
+  entitySourceTypeID: ID
+  clearEntitySourceType: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addContactIDs: [ID!]
   removeContactIDs: [ID!]
   clearContacts: Boolean
@@ -91896,6 +110100,36 @@ input UpdateEntityInput {
   addScanIDs: [ID!]
   removeScanIDs: [ID!]
   clearScans: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
+  addAssessmentResponseIDs: [ID!]
+  removeAssessmentResponseIDs: [ID!]
+  clearAssessmentResponses: Boolean
+  addIntegrationIDs: [ID!]
+  removeIntegrationIDs: [ID!]
+  clearIntegrations: Boolean
+  addSubprocessorIDs: [ID!]
+  removeSubprocessorIDs: [ID!]
+  clearSubprocessors: Boolean
+  addAuthMethodIDs: [ID!]
+  removeAuthMethodIDs: [ID!]
+  clearAuthMethods: Boolean
+  addEmployerIdentityHolderIDs: [ID!]
+  removeEmployerIdentityHolderIDs: [ID!]
+  clearEmployerIdentityHolders: Boolean
+  addIdentityHolderIDs: [ID!]
+  removeIdentityHolderIDs: [ID!]
+  clearIdentityHolders: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatforms: Boolean
+  addOutOfScopePlatformIDs: [ID!]
+  removeOutOfScopePlatformIDs: [ID!]
+  clearOutOfScopePlatforms: Boolean
+  addSourcePlatformIDs: [ID!]
+  removeSourcePlatformIDs: [ID!]
+  clearSourcePlatforms: Boolean
   entityTypeID: ID
   clearEntityType: Boolean
 }
@@ -91991,6 +110225,16 @@ input UpdateEvidenceInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  the environment of the evidence
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the evidence
+  """
+  scopeName: String
+  clearScopeName: Boolean
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -92038,6 +110282,10 @@ input UpdateEvidenceInput {
   """
   status: EvidenceEvidenceStatus
   clearStatus: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
@@ -92059,6 +110307,12 @@ input UpdateEvidenceInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatforms: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
   addCommentIDs: [ID!]
   removeCommentIDs: [ID!]
   clearComments: Boolean
@@ -92110,6 +110364,16 @@ input UpdateFileInput {
   """
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
+  """
+  the environment of the file
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the file
+  """
+  scopeName: String
+  clearScopeName: Boolean
   """
   the name of the file provided in the payload key without the extension
   """
@@ -92186,6 +110450,10 @@ input UpdateFileInput {
   clearStorageProvider: Boolean
   lastAccessedAt: Time
   clearLastAccessedAt: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addOrganizationIDs: [ID!]
   removeOrganizationIDs: [ID!]
   clearOrganization: Boolean
@@ -92210,9 +110478,15 @@ input UpdateFileInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearProgram: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatform: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScan: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
@@ -92289,6 +110563,16 @@ input UpdateFindingInput {
   """
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
+  """
+  the environment of the finding
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the finding
+  """
+  scopeName: String
+  clearScopeName: Boolean
   """
   external identifier from the integration source for the finding
   """
@@ -92487,6 +110771,10 @@ input UpdateFindingInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
@@ -92659,6 +110947,24 @@ input UpdateGroupInput {
   addActionPlanViewerIDs: [ID!]
   removeActionPlanViewerIDs: [ID!]
   clearActionPlanViewers: Boolean
+  addPlatformEditorIDs: [ID!]
+  removePlatformEditorIDs: [ID!]
+  clearPlatformEditors: Boolean
+  addPlatformBlockedGroupIDs: [ID!]
+  removePlatformBlockedGroupIDs: [ID!]
+  clearPlatformBlockedGroups: Boolean
+  addPlatformViewerIDs: [ID!]
+  removePlatformViewerIDs: [ID!]
+  clearPlatformViewers: Boolean
+  addCampaignEditorIDs: [ID!]
+  removeCampaignEditorIDs: [ID!]
+  clearCampaignEditors: Boolean
+  addCampaignBlockedGroupIDs: [ID!]
+  removeCampaignBlockedGroupIDs: [ID!]
+  clearCampaignBlockedGroups: Boolean
+  addCampaignViewerIDs: [ID!]
+  removeCampaignViewerIDs: [ID!]
+  clearCampaignViewers: Boolean
   addProcedureEditorIDs: [ID!]
   removeProcedureEditorIDs: [ID!]
   clearProcedureEditors: Boolean
@@ -92697,6 +111003,12 @@ input UpdateGroupInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
+  addCampaignTargetIDs: [ID!]
+  removeCampaignTargetIDs: [ID!]
+  clearCampaignTargets: Boolean
 }
 """
 UpdateGroupMembershipInput is used for update GroupMembership object.
@@ -92791,6 +111103,169 @@ input UpdateHushInput {
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
+}
+"""
+UpdateIdentityHolderInput is used for update IdentityHolder object.
+Input was generated by ent.
+"""
+input UpdateIdentityHolderInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the internal owner for the identity holder when no user or group is linked
+  """
+  internalOwner: String
+  clearInternalOwner: Boolean
+  """
+  the environment of the identity_holder
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the identity_holder
+  """
+  scopeName: String
+  clearScopeName: Boolean
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
+  """
+  the full name of the identity holder
+  """
+  fullName: String
+  """
+  the email address of the identity holder
+  """
+  email: String
+  """
+  alternate email address for the identity holder
+  """
+  alternateEmail: String
+  clearAlternateEmail: Boolean
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  clearPhoneNumber: Boolean
+  """
+  whether the identity holder record is linked to an Openlane user account
+  """
+  isOpenlaneUser: Boolean
+  clearIsOpenlaneUser: Boolean
+  """
+  the classification of identity holders, such as employee or contractor
+  """
+  identityHolderType: IdentityHolderIdentityHolderType
+  """
+  the status of the identity holder record
+  """
+  status: IdentityHolderUserStatus
+  """
+  whether the identity holder record is active
+  """
+  isActive: Boolean
+  """
+  the job title of the identity holder
+  """
+  title: String
+  clearTitle: Boolean
+  """
+  the department or function of the identity holder
+  """
+  department: String
+  clearDepartment: Boolean
+  """
+  the team name for the identity holder
+  """
+  team: String
+  clearTeam: Boolean
+  """
+  location or office for the identity holder
+  """
+  location: String
+  clearLocation: Boolean
+  """
+  the start date for the identity holder
+  """
+  startDate: DateTime
+  clearStartDate: Boolean
+  """
+  the end date for the identity holder, if applicable
+  """
+  endDate: DateTime
+  clearEndDate: Boolean
+  """
+  external user identifier for the identity holder
+  """
+  externalUserID: String
+  clearExternalUserID: Boolean
+  """
+  external identifier for the identity holder from an upstream roster
+  """
+  externalReferenceID: String
+  clearExternalReferenceID: Boolean
+  """
+  additional metadata about the identity holder
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  internalOwnerUserID: ID
+  clearInternalOwnerUser: Boolean
+  internalOwnerGroupID: ID
+  clearInternalOwnerGroup: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
+  employerID: ID
+  clearEmployer: Boolean
+  addAssessmentResponseIDs: [ID!]
+  removeAssessmentResponseIDs: [ID!]
+  clearAssessmentResponses: Boolean
+  addAssessmentIDs: [ID!]
+  removeAssessmentIDs: [ID!]
+  clearAssessments: Boolean
+  addTemplateIDs: [ID!]
+  removeTemplateIDs: [ID!]
+  clearTemplates: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatforms: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
+  addAccessPlatformIDs: [ID!]
+  removeAccessPlatformIDs: [ID!]
+  clearAccessPlatforms: Boolean
+  userID: ID
+  clearUser: Boolean
 }
 """
 UpdateInternalPolicyInput is used for update InternalPolicy object.
@@ -92900,6 +111375,16 @@ input UpdateInternalPolicyInput {
   internalPolicyKindName: String
   clearInternalPolicyKindName: Boolean
   """
+  the environment of the internal_policy
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the internal_policy
+  """
+  scopeName: String
+  clearScopeName: Boolean
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -92918,6 +111403,10 @@ input UpdateInternalPolicyInput {
   clearDelegate: Boolean
   internalPolicyKindID: ID
   clearInternalPolicyKind: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addControlObjectiveIDs: [ID!]
   removeControlObjectiveIDs: [ID!]
   clearControlObjectives: Boolean
@@ -93521,6 +112010,18 @@ input UpdateOrganizationInput {
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatforms: Boolean
+  addIdentityHolderIDs: [ID!]
+  removeIdentityHolderIDs: [ID!]
+  clearIdentityHolders: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
+  addCampaignTargetIDs: [ID!]
+  removeCampaignTargetIDs: [ID!]
+  clearCampaignTargets: Boolean
   addEntityTypeIDs: [ID!]
   removeEntityTypeIDs: [ID!]
   clearEntityTypes: Boolean
@@ -93845,6 +112346,259 @@ input UpdatePersonalAccessTokenInput {
   clearEvents: Boolean
 }
 """
+UpdatePlatformInput is used for update Platform object.
+Input was generated by ent.
+"""
+input UpdatePlatformInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the internal owner for the platform when no user or group is linked
+  """
+  internalOwner: String
+  clearInternalOwner: Boolean
+  """
+  business owner for the platform when no user or group is linked
+  """
+  businessOwner: String
+  clearBusinessOwner: Boolean
+  """
+  technical owner for the platform when no user or group is linked
+  """
+  technicalOwner: String
+  clearTechnicalOwner: Boolean
+  """
+  security owner for the platform when no user or group is linked
+  """
+  securityOwner: String
+  clearSecurityOwner: Boolean
+  """
+  the kind of the platform
+  """
+  platformKindName: String
+  clearPlatformKindName: Boolean
+  """
+  the data_classification of the platform
+  """
+  platformDataClassificationName: String
+  clearPlatformDataClassificationName: Boolean
+  """
+  the environment of the platform
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the platform
+  """
+  scopeName: String
+  clearScopeName: Boolean
+  """
+  the access_model of the platform
+  """
+  accessModelName: String
+  clearAccessModelName: Boolean
+  """
+  the encryption_status of the platform
+  """
+  encryptionStatusName: String
+  clearEncryptionStatusName: Boolean
+  """
+  the security_tier of the platform
+  """
+  securityTierName: String
+  clearSecurityTierName: Boolean
+  """
+  the criticality of the platform
+  """
+  criticalityName: String
+  clearCriticalityName: Boolean
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
+  """
+  the name of the platform
+  """
+  name: String
+  """
+  the description of the platform boundary
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  the business purpose of the platform
+  """
+  businessPurpose: String
+  clearBusinessPurpose: Boolean
+  """
+  scope statement for the platform, used for narrative justification
+  """
+  scopeStatement: String
+  clearScopeStatement: Boolean
+  """
+  description of the platform trust boundary
+  """
+  trustBoundaryDescription: String
+  clearTrustBoundaryDescription: Boolean
+  """
+  summary of platform data flows
+  """
+  dataFlowSummary: String
+  clearDataFlowSummary: Boolean
+  """
+  the lifecycle status of the platform
+  """
+  status: PlatformPlatformStatus
+  """
+  physical location of the platform, if applicable
+  """
+  physicalLocation: String
+  clearPhysicalLocation: Boolean
+  """
+  the region where the platform operates or is hosted
+  """
+  region: String
+  clearRegion: Boolean
+  """
+  whether the platform stores or processes PII
+  """
+  containsPii: Boolean
+  clearContainsPii: Boolean
+  """
+  the source of the platform record, e.g., manual, discovered, imported, api
+  """
+  sourceType: PlatformSourceType
+  """
+  the identifier used by the source system for the platform
+  """
+  sourceIdentifier: String
+  clearSourceIdentifier: Boolean
+  """
+  cost center associated with the platform
+  """
+  costCenter: String
+  clearCostCenter: Boolean
+  """
+  estimated monthly cost for the platform
+  """
+  estimatedMonthlyCost: Float
+  clearEstimatedMonthlyCost: Boolean
+  """
+  purchase date for the platform
+  """
+  purchaseDate: DateTime
+  clearPurchaseDate: Boolean
+  """
+  external identifier for the platform from an upstream inventory
+  """
+  externalReferenceID: String
+  clearExternalReferenceID: Boolean
+  """
+  additional metadata about the platform
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  internalOwnerUserID: ID
+  clearInternalOwnerUser: Boolean
+  internalOwnerGroupID: ID
+  clearInternalOwnerGroup: Boolean
+  businessOwnerUserID: ID
+  clearBusinessOwnerUser: Boolean
+  businessOwnerGroupID: ID
+  clearBusinessOwnerGroup: Boolean
+  technicalOwnerUserID: ID
+  clearTechnicalOwnerUser: Boolean
+  technicalOwnerGroupID: ID
+  clearTechnicalOwnerGroup: Boolean
+  securityOwnerUserID: ID
+  clearSecurityOwnerUser: Boolean
+  securityOwnerGroupID: ID
+  clearSecurityOwnerGroup: Boolean
+  platformKindID: ID
+  clearPlatformKind: Boolean
+  platformDataClassificationID: ID
+  clearPlatformDataClassification: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
+  accessModelID: ID
+  clearAccessModel: Boolean
+  encryptionStatusID: ID
+  clearEncryptionStatus: Boolean
+  securityTierID: ID
+  clearSecurityTier: Boolean
+  criticalityID: ID
+  clearCriticality: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  addAssessmentIDs: [ID!]
+  removeAssessmentIDs: [ID!]
+  clearAssessments: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
+  addIdentityHolderIDs: [ID!]
+  removeIdentityHolderIDs: [ID!]
+  clearIdentityHolders: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
+  addSourceAssetIDs: [ID!]
+  removeSourceAssetIDs: [ID!]
+  clearSourceAssets: Boolean
+  addSourceEntityIDs: [ID!]
+  removeSourceEntityIDs: [ID!]
+  clearSourceEntities: Boolean
+  addOutOfScopeAssetIDs: [ID!]
+  removeOutOfScopeAssetIDs: [ID!]
+  clearOutOfScopeAssets: Boolean
+  addOutOfScopeVendorIDs: [ID!]
+  removeOutOfScopeVendorIDs: [ID!]
+  clearOutOfScopeVendors: Boolean
+  addApplicableFrameworkIDs: [ID!]
+  removeApplicableFrameworkIDs: [ID!]
+  clearApplicableFrameworks: Boolean
+  addGeneratedScanIDs: [ID!]
+  removeGeneratedScanIDs: [ID!]
+  clearGeneratedScans: Boolean
+  platformOwnerID: ID
+  clearPlatformOwner: Boolean
+}
+"""
 UpdateProcedureInput is used for update Procedure object.
 Input was generated by ent.
 """
@@ -93952,6 +112706,16 @@ input UpdateProcedureInput {
   procedureKindName: String
   clearProcedureKindName: Boolean
   """
+  the environment of the procedure
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the procedure
+  """
+  scopeName: String
+  clearScopeName: Boolean
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -93970,6 +112734,10 @@ input UpdateProcedureInput {
   clearDelegate: Boolean
   procedureKindID: ID
   clearProcedureKind: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
@@ -94155,6 +112923,16 @@ input UpdateRemediationInput {
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
+  the environment of the remediation
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the remediation
+  """
+  scopeName: String
+  clearScopeName: Boolean
+  """
   external identifier from the integration source for the remediation
   """
   externalID: String
@@ -94258,9 +113036,16 @@ input UpdateRemediationInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
   addFindingIDs: [ID!]
   removeFindingIDs: [ID!]
   clearFindings: Boolean
@@ -94322,6 +113107,16 @@ input UpdateReviewInput {
   """
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
+  """
+  the environment of the review
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the review
+  """
+  scopeName: String
+  clearScopeName: Boolean
   """
   external identifier from the integration source for the review
   """
@@ -94415,6 +113210,10 @@ input UpdateReviewInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
@@ -94481,6 +113280,16 @@ input UpdateRiskInput {
   """
   riskCategoryName: String
   clearRiskCategoryName: Boolean
+  """
+  the environment of the risk
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the risk
+  """
+  scopeName: String
+  clearScopeName: Boolean
   """
   the name of the risk
   """
@@ -94551,6 +113360,10 @@ input UpdateRiskInput {
   clearRiskKind: Boolean
   riskCategoryID: ID
   clearRiskCategory: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
@@ -94566,6 +113379,9 @@ input UpdateRiskInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatforms: Boolean
   addActionPlanIDs: [ID!]
   removeActionPlanIDs: [ID!]
   clearActionPlans: Boolean
@@ -94604,6 +113420,26 @@ input UpdateScanInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  who reviewed the scan when no user or group is linked
+  """
+  reviewedBy: String
+  clearReviewedBy: Boolean
+  """
+  who the scan is assigned to when no user or group is linked
+  """
+  assignedTo: String
+  clearAssignedTo: Boolean
+  """
+  the environment of the scan
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the scan
+  """
+  scopeName: String
+  clearScopeName: Boolean
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String
@@ -94616,6 +113452,32 @@ input UpdateScanInput {
   """
   metadata: Map
   clearMetadata: Boolean
+  """
+  when the scan was executed
+  """
+  scanDate: DateTime
+  clearScanDate: Boolean
+  """
+  cron schedule that governs the scan cadence, in cron 6-field syntax
+  """
+  scanSchedule: String
+  clearScanSchedule: Boolean
+  """
+  when the scan is scheduled to run next
+  """
+  nextScanRunAt: DateTime
+  clearNextScanRunAt: Boolean
+  """
+  who performed the scan when no user or group is linked
+  """
+  performedBy: String
+  clearPerformedBy: Boolean
+  """
+  identifiers of vulnerabilities discovered during the scan
+  """
+  vulnerabilityIds: [String!]
+  appendVulnerabilityIds: [String!]
+  clearVulnerabilityIds: Boolean
   """
   the status of the scan, e.g., processing, completed, failed
   """
@@ -94631,12 +113493,54 @@ input UpdateScanInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
+  reviewedByUserID: ID
+  clearReviewedByUser: Boolean
+  reviewedByGroupID: ID
+  clearReviewedByGroup: Boolean
+  assignedToUserID: ID
+  clearAssignedToUser: Boolean
+  assignedToGroupID: ID
+  clearAssignedToGroup: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addAssetIDs: [ID!]
   removeAssetIDs: [ID!]
   clearAssets: Boolean
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
+  addRemediationIDs: [ID!]
+  removeRemediationIDs: [ID!]
+  clearRemediations: Boolean
+  addActionPlanIDs: [ID!]
+  removeActionPlanIDs: [ID!]
+  clearActionPlans: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatforms: Boolean
+  addVulnerabilityIDs: [ID!]
+  removeVulnerabilityIDs: [ID!]
+  clearVulnerabilities: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  generatedByPlatformID: ID
+  clearGeneratedByPlatform: Boolean
+  performedByUserID: ID
+  clearPerformedByUser: Boolean
+  performedByGroupID: ID
+  clearPerformedByGroup: Boolean
 }
 """
 UpdateScheduledJobInput is used for update ScheduledJob object.
@@ -94785,6 +113689,9 @@ input UpdateStandardInput {
   addTrustCenterDocIDs: [ID!]
   removeTrustCenterDocIDs: [ID!]
   clearTrustCenterDocs: Boolean
+  addApplicablePlatformIDs: [ID!]
+  removeApplicablePlatformIDs: [ID!]
+  clearApplicablePlatforms: Boolean
   logoFileID: ID
   clearLogoFile: Boolean
 }
@@ -95028,6 +113935,9 @@ input UpdateSubprocessorInput {
   addTrustCenterSubprocessorIDs: [ID!]
   removeTrustCenterSubprocessorIDs: [ID!]
   clearTrustCenterSubprocessors: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
 }
 """
 UpdateSubscriberInput is used for update Subscriber object.
@@ -95125,6 +114035,16 @@ input UpdateTaskInput {
   taskKindName: String
   clearTaskKindName: Boolean
   """
+  the environment of the task
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the task
+  """
+  scopeName: String
+  clearScopeName: Boolean
+  """
   the title of the task
   """
   title: String
@@ -95165,6 +114085,10 @@ input UpdateTaskInput {
   clearExternalReferenceURL: Boolean
   taskKindID: ID
   clearTaskKind: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   assignerID: ID
   clearAssigner: Boolean
   assigneeID: ID
@@ -95196,6 +114120,15 @@ input UpdateTaskInput {
   addRiskIDs: [ID!]
   removeRiskIDs: [ID!]
   clearRisks: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatforms: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
+  addIdentityHolderIDs: [ID!]
+  removeIdentityHolderIDs: [ID!]
+  clearIdentityHolders: Boolean
   addControlImplementationIDs: [ID!]
   removeControlImplementationIDs: [ID!]
   clearControlImplementations: Boolean
@@ -95236,6 +114169,16 @@ input UpdateTemplateInput {
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
+  the environment of the template
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the template
+  """
+  scopeName: String
+  clearScopeName: Boolean
+  """
   the name of the template
   """
   name: String
@@ -95262,6 +114205,10 @@ input UpdateTemplateInput {
   """
   uischema: Map
   clearUischema: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addDocumentIDs: [ID!]
   removeDocumentIDs: [ID!]
   clearDocuments: Boolean
@@ -95273,6 +114220,12 @@ input UpdateTemplateInput {
   addAssessmentIDs: [ID!]
   removeAssessmentIDs: [ID!]
   clearAssessments: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
+  addIdentityHolderIDs: [ID!]
+  removeIdentityHolderIDs: [ID!]
+  clearIdentityHolders: Boolean
 }
 """
 UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.
@@ -95506,6 +114459,11 @@ input UpdateTrustCenterSettingInput {
   """
   companyName: String
   clearCompanyName: Boolean
+  """
+  company description for the trust center
+  """
+  companyDescription: String
+  clearCompanyDescription: Boolean
   """
   overview of the trust center
   """
@@ -95772,6 +114730,12 @@ input UpdateUserInput {
   addActionPlanIDs: [ID!]
   removeActionPlanIDs: [ID!]
   clearActionPlans: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
+  addCampaignTargetIDs: [ID!]
+  removeCampaignTargetIDs: [ID!]
+  clearCampaignTargets: Boolean
   addSubcontrolIDs: [ID!]
   removeSubcontrolIDs: [ID!]
   clearSubcontrols: Boolean
@@ -95787,6 +114751,12 @@ input UpdateUserInput {
   addProgramsOwnedIDs: [ID!]
   removeProgramsOwnedIDs: [ID!]
   clearProgramsOwned: Boolean
+  addPlatformsOwnedIDs: [ID!]
+  removePlatformsOwnedIDs: [ID!]
+  clearPlatformsOwned: Boolean
+  addIdentityHolderProfileIDs: [ID!]
+  removeIdentityHolderProfileIDs: [ID!]
+  clearIdentityHolderProfiles: Boolean
   addImpersonationEventIDs: [ID!]
   removeImpersonationEventIDs: [ID!]
   clearImpersonationEvents: Boolean
@@ -95858,6 +114828,16 @@ input UpdateVulnerabilityInput {
   """
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
+  """
+  the environment of the vulnerability
+  """
+  environmentName: String
+  clearEnvironmentName: Boolean
+  """
+  the scope of the vulnerability
+  """
+  scopeName: String
+  clearScopeName: Boolean
   """
   owner of the vulnerability
   """
@@ -96013,6 +114993,10 @@ input UpdateVulnerabilityInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
+  environmentID: ID
+  clearEnvironment: Boolean
+  scopeID: ID
+  clearScope: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
@@ -96139,28 +115123,6 @@ input UpdateWorkflowDefinitionInput {
   addGroupIDs: [ID!]
   removeGroupIDs: [ID!]
   clearGroups: Boolean
-}
-"""
-UpdateWorkflowEventInput is used for update WorkflowEvent object.
-Input was generated by ent.
-"""
-input UpdateWorkflowEventInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
-  """
-  Type of event, typically the action kind
-  """
-  eventType: WorkflowEventWorkflowEventType
-  """
-  Payload for the event; stored raw
-  """
-  payload: WorkflowEventPayload
-  clearPayload: Boolean
-  workflowInstanceID: ID
 }
 type User implements Node {
   id: ID!
@@ -96454,6 +115416,68 @@ type User implements Node {
     """
     where: ActionPlanWhereInput
   ): ActionPlanConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+  campaignTargets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CampaignTargets returned from the connection.
+    """
+    orderBy: [CampaignTargetOrder!]
+
+    """
+    Filtering options for CampaignTargets returned from the connection.
+    """
+    where: CampaignTargetWhereInput
+  ): CampaignTargetConnection!
   subcontrols(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -96609,6 +115633,68 @@ type User implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  platformsOwned(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  identityHolderProfiles(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
   groupMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -97438,6 +116524,16 @@ input UserWhereInput {
   hasActionPlans: Boolean
   hasActionPlansWith: [ActionPlanWhereInput!]
   """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
+  """
+  campaign_targets edge predicates
+  """
+  hasCampaignTargets: Boolean
+  hasCampaignTargetsWith: [CampaignTargetWhereInput!]
+  """
   subcontrols edge predicates
   """
   hasSubcontrols: Boolean
@@ -97462,6 +116558,16 @@ input UserWhereInput {
   """
   hasProgramsOwned: Boolean
   hasProgramsOwnedWith: [ProgramWhereInput!]
+  """
+  platforms_owned edge predicates
+  """
+  hasPlatformsOwned: Boolean
+  hasPlatformsOwnedWith: [PlatformWhereInput!]
+  """
+  identity_holder_profiles edge predicates
+  """
+  hasIdentityHolderProfiles: Boolean
+  hasIdentityHolderProfilesWith: [IdentityHolderWhereInput!]
   """
   group_memberships edge predicates
   """
@@ -97508,6 +116614,22 @@ type Vulnerability implements Node {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @hidden(if: true)
+  """
+  the environment of the vulnerability
+  """
+  environmentName: String
+  """
+  the environment of the vulnerability
+  """
+  environmentID: ID
+  """
+  the scope of the vulnerability
+  """
+  scopeName: String
+  """
+  the scope of the vulnerability
+  """
+  scopeID: ID
   """
   owner of the vulnerability
   """
@@ -97718,6 +116840,8 @@ type Vulnerability implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  environment: CustomTypeEnum
+  scope: CustomTypeEnum
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -98400,6 +117524,78 @@ input VulnerabilityWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: ID
+  environmentIDNEQ: ID
+  environmentIDIn: [ID!]
+  environmentIDNotIn: [ID!]
+  environmentIDGT: ID
+  environmentIDGTE: ID
+  environmentIDLT: ID
+  environmentIDLTE: ID
+  environmentIDContains: ID
+  environmentIDHasPrefix: ID
+  environmentIDHasSuffix: ID
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: ID
+  environmentIDContainsFold: ID
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: ID
+  scopeIDNEQ: ID
+  scopeIDIn: [ID!]
+  scopeIDNotIn: [ID!]
+  scopeIDGT: ID
+  scopeIDGTE: ID
+  scopeIDLT: ID
+  scopeIDLTE: ID
+  scopeIDContains: ID
+  scopeIDHasPrefix: ID
+  scopeIDHasSuffix: ID
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: ID
+  scopeIDContainsFold: ID
+  """
   external_owner_id field predicates
   """
   externalOwnerID: String
@@ -98777,6 +117973,16 @@ input VulnerabilityWhereInput {
   """
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
+  """
+  environment edge predicates
+  """
+  hasEnvironment: Boolean
+  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
+  """
+  scope edge predicates
+  """
+  hasScope: Boolean
+  hasScopeWith: [CustomTypeEnumWhereInput!]
   """
   integrations edge predicates
   """
@@ -100531,18 +119737,21 @@ enum WorkflowEventWorkflowEventType @goModel(model: "github.com/theopenlane/core
   ACTION
   TRIGGER
   DECISION
-  INSTANCE_TRIGGERED
+  WORKFLOW_TRIGGERED
   ACTION_STARTED
   ACTION_COMPLETED
   ACTION_FAILED
   ACTION_SKIPPED
   CONDITION_EVALUATED
   ASSIGNMENT_CREATED
-  ASSIGNMENT_RESOLVED
+  ASSIGNMENT_COMPLETED
   ASSIGNMENT_INVALIDATED
   INSTANCE_PAUSED
   INSTANCE_RESUMED
-  INSTANCE_COMPLETED
+  WORKFLOW_COMPLETED
+  EMIT_FAILED
+  EMIT_RECOVERED
+  EMIT_FAILED_TERMINAL
 }
 type WorkflowInstance implements Node {
   id: ID!
@@ -100614,6 +119823,22 @@ type WorkflowInstance implements Node {
   ID of the procedure this workflow instance is associated with
   """
   procedureID: ID
+  """
+  ID of the campaign this workflow instance is associated with
+  """
+  campaignID: ID
+  """
+  ID of the campaign target this workflow instance is associated with
+  """
+  campaignTargetID: ID
+  """
+  ID of the identity holder this workflow instance is associated with
+  """
+  identityHolderID: ID
+  """
+  ID of the platform this workflow instance is associated with
+  """
+  platformID: ID
   owner: Organization
   """
   Definition driving this instance
@@ -100643,6 +119868,22 @@ type WorkflowInstance implements Node {
   Procedure this workflow instance is associated with
   """
   procedure: Procedure
+  """
+  Campaign this workflow instance is associated with
+  """
+  campaign: Campaign
+  """
+  Campaign target this workflow instance is associated with
+  """
+  campaignTarget: CampaignTarget
+  """
+  Identity holder this workflow instance is associated with
+  """
+  identityHolder: IdentityHolder
+  """
+  Platform this workflow instance is associated with
+  """
+  platform: Platform
   workflowAssignments(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -101078,6 +120319,78 @@ input WorkflowInstanceWhereInput {
   procedureIDEqualFold: ID
   procedureIDContainsFold: ID
   """
+  campaign_id field predicates
+  """
+  campaignID: ID
+  campaignIDNEQ: ID
+  campaignIDIn: [ID!]
+  campaignIDNotIn: [ID!]
+  campaignIDGT: ID
+  campaignIDGTE: ID
+  campaignIDLT: ID
+  campaignIDLTE: ID
+  campaignIDContains: ID
+  campaignIDHasPrefix: ID
+  campaignIDHasSuffix: ID
+  campaignIDIsNil: Boolean
+  campaignIDNotNil: Boolean
+  campaignIDEqualFold: ID
+  campaignIDContainsFold: ID
+  """
+  campaign_target_id field predicates
+  """
+  campaignTargetID: ID
+  campaignTargetIDNEQ: ID
+  campaignTargetIDIn: [ID!]
+  campaignTargetIDNotIn: [ID!]
+  campaignTargetIDGT: ID
+  campaignTargetIDGTE: ID
+  campaignTargetIDLT: ID
+  campaignTargetIDLTE: ID
+  campaignTargetIDContains: ID
+  campaignTargetIDHasPrefix: ID
+  campaignTargetIDHasSuffix: ID
+  campaignTargetIDIsNil: Boolean
+  campaignTargetIDNotNil: Boolean
+  campaignTargetIDEqualFold: ID
+  campaignTargetIDContainsFold: ID
+  """
+  identity_holder_id field predicates
+  """
+  identityHolderID: ID
+  identityHolderIDNEQ: ID
+  identityHolderIDIn: [ID!]
+  identityHolderIDNotIn: [ID!]
+  identityHolderIDGT: ID
+  identityHolderIDGTE: ID
+  identityHolderIDLT: ID
+  identityHolderIDLTE: ID
+  identityHolderIDContains: ID
+  identityHolderIDHasPrefix: ID
+  identityHolderIDHasSuffix: ID
+  identityHolderIDIsNil: Boolean
+  identityHolderIDNotNil: Boolean
+  identityHolderIDEqualFold: ID
+  identityHolderIDContainsFold: ID
+  """
+  platform_id field predicates
+  """
+  platformID: ID
+  platformIDNEQ: ID
+  platformIDIn: [ID!]
+  platformIDNotIn: [ID!]
+  platformIDGT: ID
+  platformIDGTE: ID
+  platformIDLT: ID
+  platformIDLTE: ID
+  platformIDContains: ID
+  platformIDHasPrefix: ID
+  platformIDHasSuffix: ID
+  platformIDIsNil: Boolean
+  platformIDNotNil: Boolean
+  platformIDEqualFold: ID
+  platformIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -101117,6 +120430,26 @@ input WorkflowInstanceWhereInput {
   """
   hasProcedure: Boolean
   hasProcedureWith: [ProcedureWhereInput!]
+  """
+  campaign edge predicates
+  """
+  hasCampaign: Boolean
+  hasCampaignWith: [CampaignWhereInput!]
+  """
+  campaign_target edge predicates
+  """
+  hasCampaignTarget: Boolean
+  hasCampaignTargetWith: [CampaignTargetWhereInput!]
+  """
+  identity_holder edge predicates
+  """
+  hasIdentityHolder: Boolean
+  hasIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  platform edge predicates
+  """
+  hasPlatform: Boolean
+  hasPlatformWith: [PlatformWhereInput!]
   """
   workflow_assignments edge predicates
   """
@@ -101204,6 +120537,22 @@ type WorkflowObjectRef implements Node {
   Procedure referenced by this workflow instance
   """
   procedureID: ID
+  """
+  Campaign referenced by this workflow instance
+  """
+  campaignID: ID
+  """
+  Campaign target referenced by this workflow instance
+  """
+  campaignTargetID: ID
+  """
+  Identity holder referenced by this workflow instance
+  """
+  identityHolderID: ID
+  """
+  Platform referenced by this workflow instance
+  """
+  platformID: ID
   owner: Organization
   """
   Workflow instance this object is associated with
@@ -101253,6 +120602,22 @@ type WorkflowObjectRef implements Node {
   Procedure referenced by this workflow instance
   """
   procedure: Procedure
+  """
+  Campaign referenced by this workflow instance
+  """
+  campaign: Campaign
+  """
+  Campaign target referenced by this workflow instance
+  """
+  campaignTarget: CampaignTarget
+  """
+  Identity holder referenced by this workflow instance
+  """
+  identityHolder: IdentityHolder
+  """
+  Platform referenced by this workflow instance
+  """
+  platform: Platform
 }
 """
 A connection to a list of items.
@@ -101636,6 +121001,78 @@ input WorkflowObjectRefWhereInput {
   procedureIDEqualFold: ID
   procedureIDContainsFold: ID
   """
+  campaign_id field predicates
+  """
+  campaignID: ID
+  campaignIDNEQ: ID
+  campaignIDIn: [ID!]
+  campaignIDNotIn: [ID!]
+  campaignIDGT: ID
+  campaignIDGTE: ID
+  campaignIDLT: ID
+  campaignIDLTE: ID
+  campaignIDContains: ID
+  campaignIDHasPrefix: ID
+  campaignIDHasSuffix: ID
+  campaignIDIsNil: Boolean
+  campaignIDNotNil: Boolean
+  campaignIDEqualFold: ID
+  campaignIDContainsFold: ID
+  """
+  campaign_target_id field predicates
+  """
+  campaignTargetID: ID
+  campaignTargetIDNEQ: ID
+  campaignTargetIDIn: [ID!]
+  campaignTargetIDNotIn: [ID!]
+  campaignTargetIDGT: ID
+  campaignTargetIDGTE: ID
+  campaignTargetIDLT: ID
+  campaignTargetIDLTE: ID
+  campaignTargetIDContains: ID
+  campaignTargetIDHasPrefix: ID
+  campaignTargetIDHasSuffix: ID
+  campaignTargetIDIsNil: Boolean
+  campaignTargetIDNotNil: Boolean
+  campaignTargetIDEqualFold: ID
+  campaignTargetIDContainsFold: ID
+  """
+  identity_holder_id field predicates
+  """
+  identityHolderID: ID
+  identityHolderIDNEQ: ID
+  identityHolderIDIn: [ID!]
+  identityHolderIDNotIn: [ID!]
+  identityHolderIDGT: ID
+  identityHolderIDGTE: ID
+  identityHolderIDLT: ID
+  identityHolderIDLTE: ID
+  identityHolderIDContains: ID
+  identityHolderIDHasPrefix: ID
+  identityHolderIDHasSuffix: ID
+  identityHolderIDIsNil: Boolean
+  identityHolderIDNotNil: Boolean
+  identityHolderIDEqualFold: ID
+  identityHolderIDContainsFold: ID
+  """
+  platform_id field predicates
+  """
+  platformID: ID
+  platformIDNEQ: ID
+  platformIDIn: [ID!]
+  platformIDNotIn: [ID!]
+  platformIDGT: ID
+  platformIDGTE: ID
+  platformIDLT: ID
+  platformIDLTE: ID
+  platformIDContains: ID
+  platformIDHasPrefix: ID
+  platformIDHasSuffix: ID
+  platformIDIsNil: Boolean
+  platformIDNotNil: Boolean
+  platformIDEqualFold: ID
+  platformIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -101700,6 +121137,26 @@ input WorkflowObjectRefWhereInput {
   """
   hasProcedure: Boolean
   hasProcedureWith: [ProcedureWhereInput!]
+  """
+  campaign edge predicates
+  """
+  hasCampaign: Boolean
+  hasCampaignWith: [CampaignWhereInput!]
+  """
+  campaign_target edge predicates
+  """
+  hasCampaignTarget: Boolean
+  hasCampaignTargetWith: [CampaignTargetWhereInput!]
+  """
+  identity_holder edge predicates
+  """
+  hasIdentityHolder: Boolean
+  hasIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  platform edge predicates
+  """
+  hasPlatform: Boolean
+  hasPlatformWith: [PlatformWhereInput!]
 }
 `, BuiltIn: false},
 	{Name: "../schema/entity.graphql", Input: `extend type Query {
@@ -102082,10 +121539,30 @@ type EventBulkDeletePayload {
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this evidence if one is running
+    Indicates if this evidence has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this evidence (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this evidence across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
+
+
 
 extend type Query {
     """
@@ -103362,6 +122839,140 @@ type HushBulkDeletePayload {
     """
     deletedIDs: [ID!]!
 }`, BuiltIn: false},
+	{Name: "../schema/identityholder.graphql", Input: `extend type IdentityHolder {
+    """
+    Indicates if this identityHolder has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Indicates if this identityHolder has any workflow history (completed or failed instances)
+    """
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this identityHolder (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this identityHolder across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
+}
+
+
+
+
+
+extend type Query {
+    """
+    Look up identityHolder by ID
+    """
+     identityHolder(
+        """
+        ID of the identityHolder
+        """
+        id: ID!
+    ):  IdentityHolder!
+}
+
+extend type Mutation{
+    """
+    Create a new identityHolder
+    """
+    createIdentityHolder(
+        """
+        values of the identityHolder
+        """
+        input: CreateIdentityHolderInput!
+    ): IdentityHolderCreatePayload!
+    """
+    Create multiple new identityHolders
+    """
+    createBulkIdentityHolder(
+        """
+        values of the identityHolder
+        """
+        input: [CreateIdentityHolderInput!]
+    ): IdentityHolderBulkCreatePayload!
+    """
+    Create multiple new identityHolders via file upload
+    """
+    createBulkCSVIdentityHolder(
+        """
+        csv file containing values of the identityHolder
+        """
+        input: Upload!
+    ): IdentityHolderBulkCreatePayload!
+    """
+    Update an existing identityHolder
+    """
+    updateIdentityHolder(
+        """
+        ID of the identityHolder
+        """
+        id: ID!
+        """
+        New values for the identityHolder
+        """
+        input: UpdateIdentityHolderInput!
+    ): IdentityHolderUpdatePayload!
+    """
+    Delete an existing identityHolder
+    """
+    deleteIdentityHolder(
+        """
+        ID of the identityHolder
+        """
+        id: ID!
+    ): IdentityHolderDeletePayload!
+}
+
+"""
+Return response for createIdentityHolder mutation
+"""
+type IdentityHolderCreatePayload {
+    """
+    Created identityHolder
+    """
+    identityHolder: IdentityHolder!
+}
+
+"""
+Return response for updateIdentityHolder mutation
+"""
+type IdentityHolderUpdatePayload {
+    """
+    Updated identityHolder
+    """
+    identityHolder: IdentityHolder!
+}
+
+"""
+Return response for deleteIdentityHolder mutation
+"""
+type IdentityHolderDeletePayload {
+    """
+    Deleted identityHolder ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkIdentityHolder mutation
+"""
+type IdentityHolderBulkCreatePayload {
+    """
+    Created identityHolders
+    """
+    identityHolders: [IdentityHolder!]
+}`, BuiltIn: false},
 	{Name: "../schema/integration.graphql", Input: `extend type Query {
     """
     Look up integration by ID
@@ -103401,10 +123012,30 @@ type IntegrationDeletePayload {
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this internalPolicy if one is running
+    Indicates if this internalPolicy has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this internalPolicy (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this internalPolicy across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
+
+
 
 extend type Query {
     """
@@ -105280,16 +124911,170 @@ type PersonalAccessTokenBulkCreatePayload {
     """
     personalAccessTokens: [PersonalAccessToken!]
 }`, BuiltIn: false},
+	{Name: "../schema/platform.graphql", Input: `extend type Platform {
+    """
+    Indicates if this platform has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Indicates if this platform has any workflow history (completed or failed instances)
+    """
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this platform (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this platform across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
+}
+
+
+
+
+
+extend type Query {
+    """
+    Look up platform by ID
+    """
+     platform(
+        """
+        ID of the platform
+        """
+        id: ID!
+    ):  Platform!
+}
+
+extend type Mutation{
+    """
+    Create a new platform
+    """
+    createPlatform(
+        """
+        values of the platform
+        """
+        input: CreatePlatformInput!
+    ): PlatformCreatePayload!
+    """
+    Create multiple new platforms
+    """
+    createBulkPlatform(
+        """
+        values of the platform
+        """
+        input: [CreatePlatformInput!]
+    ): PlatformBulkCreatePayload!
+    """
+    Create multiple new platforms via file upload
+    """
+    createBulkCSVPlatform(
+        """
+        csv file containing values of the platform
+        """
+        input: Upload!
+    ): PlatformBulkCreatePayload!
+    """
+    Update an existing platform
+    """
+    updatePlatform(
+        """
+        ID of the platform
+        """
+        id: ID!
+        """
+        New values for the platform
+        """
+        input: UpdatePlatformInput!
+    ): PlatformUpdatePayload!
+    """
+    Delete an existing platform
+    """
+    deletePlatform(
+        """
+        ID of the platform
+        """
+        id: ID!
+    ): PlatformDeletePayload!
+}
+
+"""
+Return response for createPlatform mutation
+"""
+type PlatformCreatePayload {
+    """
+    Created platform
+    """
+    platform: Platform!
+}
+
+"""
+Return response for updatePlatform mutation
+"""
+type PlatformUpdatePayload {
+    """
+    Updated platform
+    """
+    platform: Platform!
+}
+
+"""
+Return response for deletePlatform mutation
+"""
+type PlatformDeletePayload {
+    """
+    Deleted platform ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkPlatform mutation
+"""
+type PlatformBulkCreatePayload {
+    """
+    Created platforms
+    """
+    platforms: [Platform!]
+}`, BuiltIn: false},
 	{Name: "../schema/procedure.graphql", Input: `extend type Procedure {
     """
     Indicates if this procedure has pending changes awaiting workflow approval
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this procedure if one is running
+    Indicates if this procedure has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this procedure (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this procedure across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
+
+
 
 extend type Query {
     """
@@ -106627,6 +126412,56 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): AssetConnection
     """
+    Search across Campaign objects
+    """
+    campaignSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): CampaignConnection
+    """
+    Search across CampaignTarget objects
+    """
+    campaignTargetSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): CampaignTargetConnection
+    """
     Search across Contact objects
     """
     contactSearch(
@@ -106827,6 +126662,31 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): GroupConnection
     """
+    Search across IdentityHolder objects
+    """
+    identityHolderSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): IdentityHolderConnection
+    """
     Search across InternalPolicy objects
     """
     internalPolicySearch(
@@ -106976,6 +126836,31 @@ type ScheduledJobRunDeletePayload {
         """
         last: Int
     ): OrganizationConnection
+    """
+    Search across Platform objects
+    """
+    platformSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): PlatformConnection
     """
     Search across Procedure objects
     """
@@ -107365,6 +127250,8 @@ type SearchResults{
   assessments: AssessmentConnection
   assessmentResponses: AssessmentResponseConnection
   assets: AssetConnection
+  campaigns: CampaignConnection
+  campaignTargets: CampaignTargetConnection
   contacts: ContactConnection
   controls: ControlConnection
   controlObjectives: ControlObjectiveConnection
@@ -107373,12 +127260,14 @@ type SearchResults{
   evidences: EvidenceConnection
   findings: FindingConnection
   groups: GroupConnection
+  identityHolders: IdentityHolderConnection
   internalPolicies: InternalPolicyConnection
   invites: InviteConnection
   jobRunners: JobRunnerConnection
   jobTemplates: JobTemplateConnection
   narratives: NarrativeConnection
   organizations: OrganizationConnection
+  platforms: PlatformConnection
   procedures: ProcedureConnection
   programs: ProgramConnection
   remediations: RemediationConnection
@@ -107563,10 +127452,30 @@ type StandardBulkCreatePayload {
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this subcontrol if one is running
+    Indicates if this subcontrol has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this subcontrol (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this subcontrol across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
+
+
 
 extend type Query {
     """
@@ -108939,12 +128848,6 @@ extend input CreateTrustCenterInput {
         templateFiles: [Upload!]
     ): TrustCenterNDAUpdatePayload!
 
-    sendTrustCenterNDAEmail(
-        """
-        values of the trustCenterNDA
-        """
-        input: SendTrustCenterNDAInput!
-    ): SendTrustCenterNDAEmailPayload!
     """
     Submit a response to a Trust Center NDA
     """
@@ -108969,21 +128872,6 @@ input CreateTrustCenterNDAInput {
 
 type TrustCenterNDAUpdatePayload {
     template: Template!
-}
-
-type SendTrustCenterNDAEmailPayload {
-    success: Boolean!
-}
-
-input SendTrustCenterNDAInput {
-    """
-    trust center id
-    """
-    trustCenterID: ID!
-    """
-    email address
-    """
-    email: String!
 }
 
 input SubmitTrustCenterNDAResponseInput {
@@ -110129,99 +130017,53 @@ type WorkflowFieldMetadata {
         """
         id: ID!
     ):  WorkflowEvent!
-}
 
-extend type Mutation{
     """
-    Create a new workflowEvent
+    Get workflow events for a workflow instance timeline
     """
-    createWorkflowEvent(
+    workflowEventTimeline(
         """
-        values of the workflowEvent
+        ID of the workflow instance
         """
-        input: CreateWorkflowEventInput!
-    ): WorkflowEventCreatePayload!
-    """
-    Create multiple new workflowEvents
-    """
-    createBulkWorkflowEvent(
-        """
-        values of the workflowEvent
-        """
-        input: [CreateWorkflowEventInput!]
-    ): WorkflowEventBulkCreatePayload!
-    """
-    Create multiple new workflowEvents via file upload
-    """
-    createBulkCSVWorkflowEvent(
-        """
-        csv file containing values of the workflowEvent
-        """
-        input: Upload!
-    ): WorkflowEventBulkCreatePayload!
-    """
-    Update an existing workflowEvent
-    """
-    updateWorkflowEvent(
-        """
-        ID of the workflowEvent
-        """
-        id: ID!
-        """
-        New values for the workflowEvent
-        """
-        input: UpdateWorkflowEventInput!
-    ): WorkflowEventUpdatePayload!
-    """
-    Delete an existing workflowEvent
-    """
-    deleteWorkflowEvent(
-        """
-        ID of the workflowEvent
-        """
-        id: ID!
-    ): WorkflowEventDeletePayload!
-}
+        workflowInstanceID: ID!
 
-"""
-Return response for createWorkflowEvent mutation
-"""
-type WorkflowEventCreatePayload {
-    """
-    Created workflowEvent
-    """
-    workflowEvent: WorkflowEvent!
-}
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
 
-"""
-Return response for updateWorkflowEvent mutation
-"""
-type WorkflowEventUpdatePayload {
-    """
-    Updated workflowEvent
-    """
-    workflowEvent: WorkflowEvent!
-}
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
 
-"""
-Return response for deleteWorkflowEvent mutation
-"""
-type WorkflowEventDeletePayload {
-    """
-    Deleted workflowEvent ID
-    """
-    deletedID: ID!
-}
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
 
-"""
-Return response for createBulkWorkflowEvent mutation
-"""
-type WorkflowEventBulkCreatePayload {
-    """
-    Created workflowEvents
-    """
-    workflowEvents: [WorkflowEvent!]
-}`, BuiltIn: false},
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+
+        """
+        Ordering options.
+        """
+        orderBy: [WorkflowEventOrder!]
+
+        """
+        Filtering options.
+        """
+        where: WorkflowEventWhereInput
+
+        """
+        Include emit failure events in the timeline
+        """
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
+}
+`, BuiltIn: false},
 	{Name: "../schema/workflowinstance.graphql", Input: `extend type Query {
     """
     Look up workflowInstance by ID
@@ -110244,75 +130086,6 @@ type WorkflowEventBulkCreatePayload {
         """
         id: ID!
     ):  WorkflowObjectRef!
-}
-
-extend type Mutation{
-    """
-    Create a new workflowObjectRef
-    """
-    createWorkflowObjectRef(
-        """
-        values of the workflowObjectRef
-        """
-        input: CreateWorkflowObjectRefInput!
-    ): WorkflowObjectRefCreatePayload!
-    """
-    Create multiple new workflowObjectRefs
-    """
-    createBulkWorkflowObjectRef(
-        """
-        values of the workflowObjectRef
-        """
-        input: [CreateWorkflowObjectRefInput!]
-    ): WorkflowObjectRefBulkCreatePayload!
-    """
-    Create multiple new workflowObjectRefs via file upload
-    """
-    createBulkCSVWorkflowObjectRef(
-        """
-        csv file containing values of the workflowObjectRef
-        """
-        input: Upload!
-    ): WorkflowObjectRefBulkCreatePayload!
-    """
-    Delete an existing workflowObjectRef
-    """
-    deleteWorkflowObjectRef(
-        """
-        ID of the workflowObjectRef
-        """
-        id: ID!
-    ): WorkflowObjectRefDeletePayload!
-}
-
-"""
-Return response for createWorkflowObjectRef mutation
-"""
-type WorkflowObjectRefCreatePayload {
-    """
-    Created workflowObjectRef
-    """
-    workflowObjectRef: WorkflowObjectRef!
-}
-
-"""
-Return response for deleteWorkflowObjectRef mutation
-"""
-type WorkflowObjectRefDeletePayload {
-    """
-    Deleted workflowObjectRef ID
-    """
-    deletedID: ID!
-}
-
-"""
-Return response for createBulkWorkflowObjectRef mutation
-"""
-type WorkflowObjectRefBulkCreatePayload {
-    """
-    Created workflowObjectRefs
-    """
-    workflowObjectRefs: [WorkflowObjectRef!]
 }
 `, BuiltIn: false},
 }

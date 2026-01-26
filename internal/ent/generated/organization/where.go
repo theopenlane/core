@@ -2335,6 +2335,122 @@ func HasEntitiesWith(preds ...predicate.Entity) predicate.Organization {
 	})
 }
 
+// HasPlatforms applies the HasEdge predicate on the "platforms" edge.
+func HasPlatforms() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PlatformsTable, PlatformsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Platform
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPlatformsWith applies the HasEdge predicate on the "platforms" edge with a given conditions (other predicates).
+func HasPlatformsWith(preds ...predicate.Platform) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newPlatformsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Platform
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasIdentityHolders applies the HasEdge predicate on the "identity_holders" edge.
+func HasIdentityHolders() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, IdentityHoldersTable, IdentityHoldersColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolder
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIdentityHoldersWith applies the HasEdge predicate on the "identity_holders" edge with a given conditions (other predicates).
+func HasIdentityHoldersWith(preds ...predicate.IdentityHolder) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newIdentityHoldersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolder
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasCampaigns applies the HasEdge predicate on the "campaigns" edge.
+func HasCampaigns() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CampaignsTable, CampaignsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCampaignsWith applies the HasEdge predicate on the "campaigns" edge with a given conditions (other predicates).
+func HasCampaignsWith(preds ...predicate.Campaign) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newCampaignsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasCampaignTargets applies the HasEdge predicate on the "campaign_targets" edge.
+func HasCampaignTargets() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CampaignTargetsTable, CampaignTargetsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCampaignTargetsWith applies the HasEdge predicate on the "campaign_targets" edge with a given conditions (other predicates).
+func HasCampaignTargetsWith(preds ...predicate.CampaignTarget) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newCampaignTargetsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasEntityTypes applies the HasEdge predicate on the "entity_types" edge.
 func HasEntityTypes() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

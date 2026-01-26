@@ -48,6 +48,14 @@ const (
 	FieldTaskKindName = "task_kind_name"
 	// FieldTaskKindID holds the string denoting the task_kind_id field in the database.
 	FieldTaskKindID = "task_kind_id"
+	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
+	FieldEnvironmentName = "environment_name"
+	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
+	FieldEnvironmentID = "environment_id"
+	// FieldScopeName holds the string denoting the scope_name field in the database.
+	FieldScopeName = "scope_name"
+	// FieldScopeID holds the string denoting the scope_id field in the database.
+	FieldScopeID = "scope_id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
 	// FieldDetails holds the string denoting the details field in the database.
@@ -93,6 +101,10 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldTaskKindName,
 	FieldTaskKindID,
+	FieldEnvironmentName,
+	FieldEnvironmentID,
+	FieldScopeName,
+	FieldScopeID,
 	FieldTitle,
 	FieldDetails,
 	FieldDetailsJSON,
@@ -235,6 +247,26 @@ func ByTaskKindName(opts ...sql.OrderTermOption) OrderOption {
 // ByTaskKindID orders the results by the task_kind_id field.
 func ByTaskKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTaskKindID, opts...).ToFunc()
+}
+
+// ByEnvironmentName orders the results by the environment_name field.
+func ByEnvironmentName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentName, opts...).ToFunc()
+}
+
+// ByEnvironmentID orders the results by the environment_id field.
+func ByEnvironmentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentID, opts...).ToFunc()
+}
+
+// ByScopeName orders the results by the scope_name field.
+func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeName, opts...).ToFunc()
+}
+
+// ByScopeID orders the results by the scope_id field.
+func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
 }
 
 // ByTitle orders the results by the title field.

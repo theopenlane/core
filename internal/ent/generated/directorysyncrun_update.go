@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
@@ -85,6 +86,86 @@ func (_u *DirectorySyncRunUpdate) SetNillableOwnerID(v *string) *DirectorySyncRu
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *DirectorySyncRunUpdate) ClearOwnerID() *DirectorySyncRunUpdate {
 	_u.mutation.ClearOwnerID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *DirectorySyncRunUpdate) SetEnvironmentName(v string) *DirectorySyncRunUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *DirectorySyncRunUpdate) SetNillableEnvironmentName(v *string) *DirectorySyncRunUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *DirectorySyncRunUpdate) ClearEnvironmentName() *DirectorySyncRunUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *DirectorySyncRunUpdate) SetEnvironmentID(v string) *DirectorySyncRunUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *DirectorySyncRunUpdate) SetNillableEnvironmentID(v *string) *DirectorySyncRunUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *DirectorySyncRunUpdate) ClearEnvironmentID() *DirectorySyncRunUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *DirectorySyncRunUpdate) SetScopeName(v string) *DirectorySyncRunUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *DirectorySyncRunUpdate) SetNillableScopeName(v *string) *DirectorySyncRunUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *DirectorySyncRunUpdate) ClearScopeName() *DirectorySyncRunUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *DirectorySyncRunUpdate) SetScopeID(v string) *DirectorySyncRunUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *DirectorySyncRunUpdate) SetNillableScopeID(v *string) *DirectorySyncRunUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *DirectorySyncRunUpdate) ClearScopeID() *DirectorySyncRunUpdate {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -255,6 +336,16 @@ func (_u *DirectorySyncRunUpdate) SetOwner(v *Organization) *DirectorySyncRunUpd
 	return _u.SetOwnerID(v.ID)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *DirectorySyncRunUpdate) SetEnvironment(v *CustomTypeEnum) *DirectorySyncRunUpdate {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *DirectorySyncRunUpdate) SetScope(v *CustomTypeEnum) *DirectorySyncRunUpdate {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
 func (_u *DirectorySyncRunUpdate) AddDirectoryAccountIDs(ids ...string) *DirectorySyncRunUpdate {
 	_u.mutation.AddDirectoryAccountIDs(ids...)
@@ -308,6 +399,18 @@ func (_u *DirectorySyncRunUpdate) Mutation() *DirectorySyncRunMutation {
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (_u *DirectorySyncRunUpdate) ClearOwner() *DirectorySyncRunUpdate {
 	_u.mutation.ClearOwner()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *DirectorySyncRunUpdate) ClearEnvironment() *DirectorySyncRunUpdate {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *DirectorySyncRunUpdate) ClearScope() *DirectorySyncRunUpdate {
+	_u.mutation.ClearScope()
 	return _u
 }
 
@@ -470,6 +573,18 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(directorysyncrun.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(directorysyncrun.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(directorysyncrun.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(directorysyncrun.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(directorysyncrun.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(directorysyncrun.FieldStatus, field.TypeEnum, value)
 	}
@@ -541,6 +656,68 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorysyncrun.EnvironmentTable,
+			Columns: []string{directorysyncrun.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorysyncrun.EnvironmentTable,
+			Columns: []string{directorysyncrun.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorysyncrun.ScopeTable,
+			Columns: []string{directorysyncrun.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorysyncrun.ScopeTable,
+			Columns: []string{directorysyncrun.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.DirectorySyncRun
@@ -769,6 +946,86 @@ func (_u *DirectorySyncRunUpdateOne) ClearOwnerID() *DirectorySyncRunUpdateOne {
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *DirectorySyncRunUpdateOne) SetEnvironmentName(v string) *DirectorySyncRunUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *DirectorySyncRunUpdateOne) SetNillableEnvironmentName(v *string) *DirectorySyncRunUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *DirectorySyncRunUpdateOne) ClearEnvironmentName() *DirectorySyncRunUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *DirectorySyncRunUpdateOne) SetEnvironmentID(v string) *DirectorySyncRunUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *DirectorySyncRunUpdateOne) SetNillableEnvironmentID(v *string) *DirectorySyncRunUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *DirectorySyncRunUpdateOne) ClearEnvironmentID() *DirectorySyncRunUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *DirectorySyncRunUpdateOne) SetScopeName(v string) *DirectorySyncRunUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *DirectorySyncRunUpdateOne) SetNillableScopeName(v *string) *DirectorySyncRunUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *DirectorySyncRunUpdateOne) ClearScopeName() *DirectorySyncRunUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *DirectorySyncRunUpdateOne) SetScopeID(v string) *DirectorySyncRunUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *DirectorySyncRunUpdateOne) SetNillableScopeID(v *string) *DirectorySyncRunUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *DirectorySyncRunUpdateOne) ClearScopeID() *DirectorySyncRunUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *DirectorySyncRunUpdateOne) SetStatus(v enums.DirectorySyncRunStatus) *DirectorySyncRunUpdateOne {
 	_u.mutation.SetStatus(v)
@@ -936,6 +1193,16 @@ func (_u *DirectorySyncRunUpdateOne) SetOwner(v *Organization) *DirectorySyncRun
 	return _u.SetOwnerID(v.ID)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *DirectorySyncRunUpdateOne) SetEnvironment(v *CustomTypeEnum) *DirectorySyncRunUpdateOne {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *DirectorySyncRunUpdateOne) SetScope(v *CustomTypeEnum) *DirectorySyncRunUpdateOne {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
 func (_u *DirectorySyncRunUpdateOne) AddDirectoryAccountIDs(ids ...string) *DirectorySyncRunUpdateOne {
 	_u.mutation.AddDirectoryAccountIDs(ids...)
@@ -989,6 +1256,18 @@ func (_u *DirectorySyncRunUpdateOne) Mutation() *DirectorySyncRunMutation {
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (_u *DirectorySyncRunUpdateOne) ClearOwner() *DirectorySyncRunUpdateOne {
 	_u.mutation.ClearOwner()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *DirectorySyncRunUpdateOne) ClearEnvironment() *DirectorySyncRunUpdateOne {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *DirectorySyncRunUpdateOne) ClearScope() *DirectorySyncRunUpdateOne {
+	_u.mutation.ClearScope()
 	return _u
 }
 
@@ -1181,6 +1460,18 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(directorysyncrun.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(directorysyncrun.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(directorysyncrun.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(directorysyncrun.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(directorysyncrun.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(directorysyncrun.FieldStatus, field.TypeEnum, value)
 	}
@@ -1252,6 +1543,68 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorysyncrun.EnvironmentTable,
+			Columns: []string{directorysyncrun.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorysyncrun.EnvironmentTable,
+			Columns: []string{directorysyncrun.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorysyncrun.ScopeTable,
+			Columns: []string{directorysyncrun.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directorysyncrun.ScopeTable,
+			Columns: []string{directorysyncrun.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.DirectorySyncRun

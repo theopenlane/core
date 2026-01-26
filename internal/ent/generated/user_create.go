@@ -12,18 +12,22 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -567,6 +571,36 @@ func (_c *UserCreate) AddActionPlans(v ...*ActionPlan) *UserCreate {
 	return _c.AddActionPlanIDs(ids...)
 }
 
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_c *UserCreate) AddCampaignIDs(ids ...string) *UserCreate {
+	_c.mutation.AddCampaignIDs(ids...)
+	return _c
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_c *UserCreate) AddCampaigns(v ...*Campaign) *UserCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignIDs(ids...)
+}
+
+// AddCampaignTargetIDs adds the "campaign_targets" edge to the CampaignTarget entity by IDs.
+func (_c *UserCreate) AddCampaignTargetIDs(ids ...string) *UserCreate {
+	_c.mutation.AddCampaignTargetIDs(ids...)
+	return _c
+}
+
+// AddCampaignTargets adds the "campaign_targets" edges to the CampaignTarget entity.
+func (_c *UserCreate) AddCampaignTargets(v ...*CampaignTarget) *UserCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignTargetIDs(ids...)
+}
+
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
 func (_c *UserCreate) AddSubcontrolIDs(ids ...string) *UserCreate {
 	_c.mutation.AddSubcontrolIDs(ids...)
@@ -640,6 +674,36 @@ func (_c *UserCreate) AddProgramsOwned(v ...*Program) *UserCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddProgramsOwnedIDs(ids...)
+}
+
+// AddPlatformsOwnedIDs adds the "platforms_owned" edge to the Platform entity by IDs.
+func (_c *UserCreate) AddPlatformsOwnedIDs(ids ...string) *UserCreate {
+	_c.mutation.AddPlatformsOwnedIDs(ids...)
+	return _c
+}
+
+// AddPlatformsOwned adds the "platforms_owned" edges to the Platform entity.
+func (_c *UserCreate) AddPlatformsOwned(v ...*Platform) *UserCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformsOwnedIDs(ids...)
+}
+
+// AddIdentityHolderProfileIDs adds the "identity_holder_profiles" edge to the IdentityHolder entity by IDs.
+func (_c *UserCreate) AddIdentityHolderProfileIDs(ids ...string) *UserCreate {
+	_c.mutation.AddIdentityHolderProfileIDs(ids...)
+	return _c
+}
+
+// AddIdentityHolderProfiles adds the "identity_holder_profiles" edges to the IdentityHolder entity.
+func (_c *UserCreate) AddIdentityHolderProfiles(v ...*IdentityHolder) *UserCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIdentityHolderProfileIDs(ids...)
 }
 
 // AddImpersonationEventIDs adds the "impersonation_events" edge to the ImpersonationEvent entity by IDs.
@@ -1233,6 +1297,40 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   user.CampaignsTable,
+			Columns: user.CampaignsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.CampaignUsers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignTargetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CampaignTargetsTable,
+			Columns: []string{user.CampaignTargetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.CampaignTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1320,6 +1418,40 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformsOwnedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.PlatformsOwnedTable,
+			Columns: []string{user.PlatformsOwnedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Platform
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IdentityHolderProfilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.IdentityHolderProfilesTable,
+			Columns: []string{user.IdentityHolderProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

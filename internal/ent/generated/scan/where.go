@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -103,9 +104,94 @@ func OwnerID(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// ReviewedBy applies equality check predicate on the "reviewed_by" field. It's identical to ReviewedByEQ.
+func ReviewedBy(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldReviewedBy, v))
+}
+
+// ReviewedByUserID applies equality check predicate on the "reviewed_by_user_id" field. It's identical to ReviewedByUserIDEQ.
+func ReviewedByUserID(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldReviewedByUserID, v))
+}
+
+// ReviewedByGroupID applies equality check predicate on the "reviewed_by_group_id" field. It's identical to ReviewedByGroupIDEQ.
+func ReviewedByGroupID(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldReviewedByGroupID, v))
+}
+
+// AssignedTo applies equality check predicate on the "assigned_to" field. It's identical to AssignedToEQ.
+func AssignedTo(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldAssignedTo, v))
+}
+
+// AssignedToUserID applies equality check predicate on the "assigned_to_user_id" field. It's identical to AssignedToUserIDEQ.
+func AssignedToUserID(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldAssignedToUserID, v))
+}
+
+// AssignedToGroupID applies equality check predicate on the "assigned_to_group_id" field. It's identical to AssignedToGroupIDEQ.
+func AssignedToGroupID(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldAssignedToGroupID, v))
+}
+
+// EnvironmentName applies equality check predicate on the "environment_name" field. It's identical to EnvironmentNameEQ.
+func EnvironmentName(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldEnvironmentName, v))
+}
+
+// EnvironmentID applies equality check predicate on the "environment_id" field. It's identical to EnvironmentIDEQ.
+func EnvironmentID(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldEnvironmentID, v))
+}
+
+// ScopeName applies equality check predicate on the "scope_name" field. It's identical to ScopeNameEQ.
+func ScopeName(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldScopeName, v))
+}
+
+// ScopeID applies equality check predicate on the "scope_id" field. It's identical to ScopeIDEQ.
+func ScopeID(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldScopeID, v))
+}
+
 // Target applies equality check predicate on the "target" field. It's identical to TargetEQ.
 func Target(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldEQ(FieldTarget, v))
+}
+
+// ScanDate applies equality check predicate on the "scan_date" field. It's identical to ScanDateEQ.
+func ScanDate(v models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldScanDate, v))
+}
+
+// ScanSchedule applies equality check predicate on the "scan_schedule" field. It's identical to ScanScheduleEQ.
+func ScanSchedule(v models.Cron) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldScanSchedule, v))
+}
+
+// NextScanRunAt applies equality check predicate on the "next_scan_run_at" field. It's identical to NextScanRunAtEQ.
+func NextScanRunAt(v models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldNextScanRunAt, v))
+}
+
+// PerformedBy applies equality check predicate on the "performed_by" field. It's identical to PerformedByEQ.
+func PerformedBy(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldPerformedBy, v))
+}
+
+// PerformedByUserID applies equality check predicate on the "performed_by_user_id" field. It's identical to PerformedByUserIDEQ.
+func PerformedByUserID(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldPerformedByUserID, v))
+}
+
+// PerformedByGroupID applies equality check predicate on the "performed_by_group_id" field. It's identical to PerformedByGroupIDEQ.
+func PerformedByGroupID(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldPerformedByGroupID, v))
+}
+
+// GeneratedByPlatformID applies equality check predicate on the "generated_by_platform_id" field. It's identical to GeneratedByPlatformIDEQ.
+func GeneratedByPlatformID(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldGeneratedByPlatformID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -568,6 +654,756 @@ func OwnerIDContainsFold(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
+// ReviewedByEQ applies the EQ predicate on the "reviewed_by" field.
+func ReviewedByEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldReviewedBy, v))
+}
+
+// ReviewedByNEQ applies the NEQ predicate on the "reviewed_by" field.
+func ReviewedByNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldReviewedBy, v))
+}
+
+// ReviewedByIn applies the In predicate on the "reviewed_by" field.
+func ReviewedByIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldReviewedBy, vs...))
+}
+
+// ReviewedByNotIn applies the NotIn predicate on the "reviewed_by" field.
+func ReviewedByNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldReviewedBy, vs...))
+}
+
+// ReviewedByGT applies the GT predicate on the "reviewed_by" field.
+func ReviewedByGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldReviewedBy, v))
+}
+
+// ReviewedByGTE applies the GTE predicate on the "reviewed_by" field.
+func ReviewedByGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldReviewedBy, v))
+}
+
+// ReviewedByLT applies the LT predicate on the "reviewed_by" field.
+func ReviewedByLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldReviewedBy, v))
+}
+
+// ReviewedByLTE applies the LTE predicate on the "reviewed_by" field.
+func ReviewedByLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldReviewedBy, v))
+}
+
+// ReviewedByContains applies the Contains predicate on the "reviewed_by" field.
+func ReviewedByContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldReviewedBy, v))
+}
+
+// ReviewedByHasPrefix applies the HasPrefix predicate on the "reviewed_by" field.
+func ReviewedByHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldReviewedBy, v))
+}
+
+// ReviewedByHasSuffix applies the HasSuffix predicate on the "reviewed_by" field.
+func ReviewedByHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldReviewedBy, v))
+}
+
+// ReviewedByIsNil applies the IsNil predicate on the "reviewed_by" field.
+func ReviewedByIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldReviewedBy))
+}
+
+// ReviewedByNotNil applies the NotNil predicate on the "reviewed_by" field.
+func ReviewedByNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldReviewedBy))
+}
+
+// ReviewedByEqualFold applies the EqualFold predicate on the "reviewed_by" field.
+func ReviewedByEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldReviewedBy, v))
+}
+
+// ReviewedByContainsFold applies the ContainsFold predicate on the "reviewed_by" field.
+func ReviewedByContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldReviewedBy, v))
+}
+
+// ReviewedByUserIDEQ applies the EQ predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDNEQ applies the NEQ predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDIn applies the In predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldReviewedByUserID, vs...))
+}
+
+// ReviewedByUserIDNotIn applies the NotIn predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldReviewedByUserID, vs...))
+}
+
+// ReviewedByUserIDGT applies the GT predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDGTE applies the GTE predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDLT applies the LT predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDLTE applies the LTE predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDContains applies the Contains predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDHasPrefix applies the HasPrefix predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDHasSuffix applies the HasSuffix predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDIsNil applies the IsNil predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldReviewedByUserID))
+}
+
+// ReviewedByUserIDNotNil applies the NotNil predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldReviewedByUserID))
+}
+
+// ReviewedByUserIDEqualFold applies the EqualFold predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDContainsFold applies the ContainsFold predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldReviewedByUserID, v))
+}
+
+// ReviewedByGroupIDEQ applies the EQ predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDNEQ applies the NEQ predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDIn applies the In predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldReviewedByGroupID, vs...))
+}
+
+// ReviewedByGroupIDNotIn applies the NotIn predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldReviewedByGroupID, vs...))
+}
+
+// ReviewedByGroupIDGT applies the GT predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDGTE applies the GTE predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDLT applies the LT predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDLTE applies the LTE predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDContains applies the Contains predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDHasPrefix applies the HasPrefix predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDHasSuffix applies the HasSuffix predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDIsNil applies the IsNil predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldReviewedByGroupID))
+}
+
+// ReviewedByGroupIDNotNil applies the NotNil predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldReviewedByGroupID))
+}
+
+// ReviewedByGroupIDEqualFold applies the EqualFold predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDContainsFold applies the ContainsFold predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldReviewedByGroupID, v))
+}
+
+// AssignedToEQ applies the EQ predicate on the "assigned_to" field.
+func AssignedToEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldAssignedTo, v))
+}
+
+// AssignedToNEQ applies the NEQ predicate on the "assigned_to" field.
+func AssignedToNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldAssignedTo, v))
+}
+
+// AssignedToIn applies the In predicate on the "assigned_to" field.
+func AssignedToIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldAssignedTo, vs...))
+}
+
+// AssignedToNotIn applies the NotIn predicate on the "assigned_to" field.
+func AssignedToNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldAssignedTo, vs...))
+}
+
+// AssignedToGT applies the GT predicate on the "assigned_to" field.
+func AssignedToGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldAssignedTo, v))
+}
+
+// AssignedToGTE applies the GTE predicate on the "assigned_to" field.
+func AssignedToGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldAssignedTo, v))
+}
+
+// AssignedToLT applies the LT predicate on the "assigned_to" field.
+func AssignedToLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldAssignedTo, v))
+}
+
+// AssignedToLTE applies the LTE predicate on the "assigned_to" field.
+func AssignedToLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldAssignedTo, v))
+}
+
+// AssignedToContains applies the Contains predicate on the "assigned_to" field.
+func AssignedToContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldAssignedTo, v))
+}
+
+// AssignedToHasPrefix applies the HasPrefix predicate on the "assigned_to" field.
+func AssignedToHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldAssignedTo, v))
+}
+
+// AssignedToHasSuffix applies the HasSuffix predicate on the "assigned_to" field.
+func AssignedToHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldAssignedTo, v))
+}
+
+// AssignedToIsNil applies the IsNil predicate on the "assigned_to" field.
+func AssignedToIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldAssignedTo))
+}
+
+// AssignedToNotNil applies the NotNil predicate on the "assigned_to" field.
+func AssignedToNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldAssignedTo))
+}
+
+// AssignedToEqualFold applies the EqualFold predicate on the "assigned_to" field.
+func AssignedToEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldAssignedTo, v))
+}
+
+// AssignedToContainsFold applies the ContainsFold predicate on the "assigned_to" field.
+func AssignedToContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldAssignedTo, v))
+}
+
+// AssignedToUserIDEQ applies the EQ predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDNEQ applies the NEQ predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDIn applies the In predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldAssignedToUserID, vs...))
+}
+
+// AssignedToUserIDNotIn applies the NotIn predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldAssignedToUserID, vs...))
+}
+
+// AssignedToUserIDGT applies the GT predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDGTE applies the GTE predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDLT applies the LT predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDLTE applies the LTE predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDContains applies the Contains predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDHasPrefix applies the HasPrefix predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDHasSuffix applies the HasSuffix predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDIsNil applies the IsNil predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldAssignedToUserID))
+}
+
+// AssignedToUserIDNotNil applies the NotNil predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldAssignedToUserID))
+}
+
+// AssignedToUserIDEqualFold applies the EqualFold predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDContainsFold applies the ContainsFold predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldAssignedToUserID, v))
+}
+
+// AssignedToGroupIDEQ applies the EQ predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDNEQ applies the NEQ predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDIn applies the In predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldAssignedToGroupID, vs...))
+}
+
+// AssignedToGroupIDNotIn applies the NotIn predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldAssignedToGroupID, vs...))
+}
+
+// AssignedToGroupIDGT applies the GT predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDGTE applies the GTE predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDLT applies the LT predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDLTE applies the LTE predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDContains applies the Contains predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDHasPrefix applies the HasPrefix predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDHasSuffix applies the HasSuffix predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDIsNil applies the IsNil predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldAssignedToGroupID))
+}
+
+// AssignedToGroupIDNotNil applies the NotNil predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldAssignedToGroupID))
+}
+
+// AssignedToGroupIDEqualFold applies the EqualFold predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDContainsFold applies the ContainsFold predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldAssignedToGroupID, v))
+}
+
+// EnvironmentNameEQ applies the EQ predicate on the "environment_name" field.
+func EnvironmentNameEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameNEQ applies the NEQ predicate on the "environment_name" field.
+func EnvironmentNameNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameIn applies the In predicate on the "environment_name" field.
+func EnvironmentNameIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldEnvironmentName, vs...))
+}
+
+// EnvironmentNameNotIn applies the NotIn predicate on the "environment_name" field.
+func EnvironmentNameNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldEnvironmentName, vs...))
+}
+
+// EnvironmentNameGT applies the GT predicate on the "environment_name" field.
+func EnvironmentNameGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameGTE applies the GTE predicate on the "environment_name" field.
+func EnvironmentNameGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameLT applies the LT predicate on the "environment_name" field.
+func EnvironmentNameLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameLTE applies the LTE predicate on the "environment_name" field.
+func EnvironmentNameLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameContains applies the Contains predicate on the "environment_name" field.
+func EnvironmentNameContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameHasPrefix applies the HasPrefix predicate on the "environment_name" field.
+func EnvironmentNameHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameHasSuffix applies the HasSuffix predicate on the "environment_name" field.
+func EnvironmentNameHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameIsNil applies the IsNil predicate on the "environment_name" field.
+func EnvironmentNameIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldEnvironmentName))
+}
+
+// EnvironmentNameNotNil applies the NotNil predicate on the "environment_name" field.
+func EnvironmentNameNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldEnvironmentName))
+}
+
+// EnvironmentNameEqualFold applies the EqualFold predicate on the "environment_name" field.
+func EnvironmentNameEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameContainsFold applies the ContainsFold predicate on the "environment_name" field.
+func EnvironmentNameContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldEnvironmentName, v))
+}
+
+// EnvironmentIDEQ applies the EQ predicate on the "environment_id" field.
+func EnvironmentIDEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDNEQ applies the NEQ predicate on the "environment_id" field.
+func EnvironmentIDNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDIn applies the In predicate on the "environment_id" field.
+func EnvironmentIDIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldEnvironmentID, vs...))
+}
+
+// EnvironmentIDNotIn applies the NotIn predicate on the "environment_id" field.
+func EnvironmentIDNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldEnvironmentID, vs...))
+}
+
+// EnvironmentIDGT applies the GT predicate on the "environment_id" field.
+func EnvironmentIDGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDGTE applies the GTE predicate on the "environment_id" field.
+func EnvironmentIDGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDLT applies the LT predicate on the "environment_id" field.
+func EnvironmentIDLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDLTE applies the LTE predicate on the "environment_id" field.
+func EnvironmentIDLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDContains applies the Contains predicate on the "environment_id" field.
+func EnvironmentIDContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDHasPrefix applies the HasPrefix predicate on the "environment_id" field.
+func EnvironmentIDHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDHasSuffix applies the HasSuffix predicate on the "environment_id" field.
+func EnvironmentIDHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDIsNil applies the IsNil predicate on the "environment_id" field.
+func EnvironmentIDIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldEnvironmentID))
+}
+
+// EnvironmentIDNotNil applies the NotNil predicate on the "environment_id" field.
+func EnvironmentIDNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldEnvironmentID))
+}
+
+// EnvironmentIDEqualFold applies the EqualFold predicate on the "environment_id" field.
+func EnvironmentIDEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDContainsFold applies the ContainsFold predicate on the "environment_id" field.
+func EnvironmentIDContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldEnvironmentID, v))
+}
+
+// ScopeNameEQ applies the EQ predicate on the "scope_name" field.
+func ScopeNameEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldScopeName, v))
+}
+
+// ScopeNameNEQ applies the NEQ predicate on the "scope_name" field.
+func ScopeNameNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldScopeName, v))
+}
+
+// ScopeNameIn applies the In predicate on the "scope_name" field.
+func ScopeNameIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldScopeName, vs...))
+}
+
+// ScopeNameNotIn applies the NotIn predicate on the "scope_name" field.
+func ScopeNameNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldScopeName, vs...))
+}
+
+// ScopeNameGT applies the GT predicate on the "scope_name" field.
+func ScopeNameGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldScopeName, v))
+}
+
+// ScopeNameGTE applies the GTE predicate on the "scope_name" field.
+func ScopeNameGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldScopeName, v))
+}
+
+// ScopeNameLT applies the LT predicate on the "scope_name" field.
+func ScopeNameLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldScopeName, v))
+}
+
+// ScopeNameLTE applies the LTE predicate on the "scope_name" field.
+func ScopeNameLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldScopeName, v))
+}
+
+// ScopeNameContains applies the Contains predicate on the "scope_name" field.
+func ScopeNameContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldScopeName, v))
+}
+
+// ScopeNameHasPrefix applies the HasPrefix predicate on the "scope_name" field.
+func ScopeNameHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldScopeName, v))
+}
+
+// ScopeNameHasSuffix applies the HasSuffix predicate on the "scope_name" field.
+func ScopeNameHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldScopeName, v))
+}
+
+// ScopeNameIsNil applies the IsNil predicate on the "scope_name" field.
+func ScopeNameIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldScopeName))
+}
+
+// ScopeNameNotNil applies the NotNil predicate on the "scope_name" field.
+func ScopeNameNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldScopeName))
+}
+
+// ScopeNameEqualFold applies the EqualFold predicate on the "scope_name" field.
+func ScopeNameEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldScopeName, v))
+}
+
+// ScopeNameContainsFold applies the ContainsFold predicate on the "scope_name" field.
+func ScopeNameContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldScopeName, v))
+}
+
+// ScopeIDEQ applies the EQ predicate on the "scope_id" field.
+func ScopeIDEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldScopeID, v))
+}
+
+// ScopeIDNEQ applies the NEQ predicate on the "scope_id" field.
+func ScopeIDNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldScopeID, v))
+}
+
+// ScopeIDIn applies the In predicate on the "scope_id" field.
+func ScopeIDIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldScopeID, vs...))
+}
+
+// ScopeIDNotIn applies the NotIn predicate on the "scope_id" field.
+func ScopeIDNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldScopeID, vs...))
+}
+
+// ScopeIDGT applies the GT predicate on the "scope_id" field.
+func ScopeIDGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldScopeID, v))
+}
+
+// ScopeIDGTE applies the GTE predicate on the "scope_id" field.
+func ScopeIDGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldScopeID, v))
+}
+
+// ScopeIDLT applies the LT predicate on the "scope_id" field.
+func ScopeIDLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldScopeID, v))
+}
+
+// ScopeIDLTE applies the LTE predicate on the "scope_id" field.
+func ScopeIDLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldScopeID, v))
+}
+
+// ScopeIDContains applies the Contains predicate on the "scope_id" field.
+func ScopeIDContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldScopeID, v))
+}
+
+// ScopeIDHasPrefix applies the HasPrefix predicate on the "scope_id" field.
+func ScopeIDHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldScopeID, v))
+}
+
+// ScopeIDHasSuffix applies the HasSuffix predicate on the "scope_id" field.
+func ScopeIDHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldScopeID, v))
+}
+
+// ScopeIDIsNil applies the IsNil predicate on the "scope_id" field.
+func ScopeIDIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldScopeID))
+}
+
+// ScopeIDNotNil applies the NotNil predicate on the "scope_id" field.
+func ScopeIDNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldScopeID))
+}
+
+// ScopeIDEqualFold applies the EqualFold predicate on the "scope_id" field.
+func ScopeIDEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldScopeID, v))
+}
+
+// ScopeIDContainsFold applies the ContainsFold predicate on the "scope_id" field.
+func ScopeIDContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldScopeID, v))
+}
+
 // TargetEQ applies the EQ predicate on the "target" field.
 func TargetEQ(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldEQ(FieldTarget, v))
@@ -671,6 +1507,496 @@ func MetadataIsNil() predicate.Scan {
 // MetadataNotNil applies the NotNil predicate on the "metadata" field.
 func MetadataNotNil() predicate.Scan {
 	return predicate.Scan(sql.FieldNotNull(FieldMetadata))
+}
+
+// ScanDateEQ applies the EQ predicate on the "scan_date" field.
+func ScanDateEQ(v models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldScanDate, v))
+}
+
+// ScanDateNEQ applies the NEQ predicate on the "scan_date" field.
+func ScanDateNEQ(v models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldScanDate, v))
+}
+
+// ScanDateIn applies the In predicate on the "scan_date" field.
+func ScanDateIn(vs ...models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldScanDate, vs...))
+}
+
+// ScanDateNotIn applies the NotIn predicate on the "scan_date" field.
+func ScanDateNotIn(vs ...models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldScanDate, vs...))
+}
+
+// ScanDateGT applies the GT predicate on the "scan_date" field.
+func ScanDateGT(v models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldScanDate, v))
+}
+
+// ScanDateGTE applies the GTE predicate on the "scan_date" field.
+func ScanDateGTE(v models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldScanDate, v))
+}
+
+// ScanDateLT applies the LT predicate on the "scan_date" field.
+func ScanDateLT(v models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldScanDate, v))
+}
+
+// ScanDateLTE applies the LTE predicate on the "scan_date" field.
+func ScanDateLTE(v models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldScanDate, v))
+}
+
+// ScanDateIsNil applies the IsNil predicate on the "scan_date" field.
+func ScanDateIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldScanDate))
+}
+
+// ScanDateNotNil applies the NotNil predicate on the "scan_date" field.
+func ScanDateNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldScanDate))
+}
+
+// ScanScheduleEQ applies the EQ predicate on the "scan_schedule" field.
+func ScanScheduleEQ(v models.Cron) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldScanSchedule, v))
+}
+
+// ScanScheduleNEQ applies the NEQ predicate on the "scan_schedule" field.
+func ScanScheduleNEQ(v models.Cron) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldScanSchedule, v))
+}
+
+// ScanScheduleIn applies the In predicate on the "scan_schedule" field.
+func ScanScheduleIn(vs ...models.Cron) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldScanSchedule, vs...))
+}
+
+// ScanScheduleNotIn applies the NotIn predicate on the "scan_schedule" field.
+func ScanScheduleNotIn(vs ...models.Cron) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldScanSchedule, vs...))
+}
+
+// ScanScheduleGT applies the GT predicate on the "scan_schedule" field.
+func ScanScheduleGT(v models.Cron) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldScanSchedule, v))
+}
+
+// ScanScheduleGTE applies the GTE predicate on the "scan_schedule" field.
+func ScanScheduleGTE(v models.Cron) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldScanSchedule, v))
+}
+
+// ScanScheduleLT applies the LT predicate on the "scan_schedule" field.
+func ScanScheduleLT(v models.Cron) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldScanSchedule, v))
+}
+
+// ScanScheduleLTE applies the LTE predicate on the "scan_schedule" field.
+func ScanScheduleLTE(v models.Cron) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldScanSchedule, v))
+}
+
+// ScanScheduleContains applies the Contains predicate on the "scan_schedule" field.
+func ScanScheduleContains(v models.Cron) predicate.Scan {
+	vc := string(v)
+	return predicate.Scan(sql.FieldContains(FieldScanSchedule, vc))
+}
+
+// ScanScheduleHasPrefix applies the HasPrefix predicate on the "scan_schedule" field.
+func ScanScheduleHasPrefix(v models.Cron) predicate.Scan {
+	vc := string(v)
+	return predicate.Scan(sql.FieldHasPrefix(FieldScanSchedule, vc))
+}
+
+// ScanScheduleHasSuffix applies the HasSuffix predicate on the "scan_schedule" field.
+func ScanScheduleHasSuffix(v models.Cron) predicate.Scan {
+	vc := string(v)
+	return predicate.Scan(sql.FieldHasSuffix(FieldScanSchedule, vc))
+}
+
+// ScanScheduleIsNil applies the IsNil predicate on the "scan_schedule" field.
+func ScanScheduleIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldScanSchedule))
+}
+
+// ScanScheduleNotNil applies the NotNil predicate on the "scan_schedule" field.
+func ScanScheduleNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldScanSchedule))
+}
+
+// ScanScheduleEqualFold applies the EqualFold predicate on the "scan_schedule" field.
+func ScanScheduleEqualFold(v models.Cron) predicate.Scan {
+	vc := string(v)
+	return predicate.Scan(sql.FieldEqualFold(FieldScanSchedule, vc))
+}
+
+// ScanScheduleContainsFold applies the ContainsFold predicate on the "scan_schedule" field.
+func ScanScheduleContainsFold(v models.Cron) predicate.Scan {
+	vc := string(v)
+	return predicate.Scan(sql.FieldContainsFold(FieldScanSchedule, vc))
+}
+
+// NextScanRunAtEQ applies the EQ predicate on the "next_scan_run_at" field.
+func NextScanRunAtEQ(v models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldNextScanRunAt, v))
+}
+
+// NextScanRunAtNEQ applies the NEQ predicate on the "next_scan_run_at" field.
+func NextScanRunAtNEQ(v models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldNextScanRunAt, v))
+}
+
+// NextScanRunAtIn applies the In predicate on the "next_scan_run_at" field.
+func NextScanRunAtIn(vs ...models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldNextScanRunAt, vs...))
+}
+
+// NextScanRunAtNotIn applies the NotIn predicate on the "next_scan_run_at" field.
+func NextScanRunAtNotIn(vs ...models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldNextScanRunAt, vs...))
+}
+
+// NextScanRunAtGT applies the GT predicate on the "next_scan_run_at" field.
+func NextScanRunAtGT(v models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldNextScanRunAt, v))
+}
+
+// NextScanRunAtGTE applies the GTE predicate on the "next_scan_run_at" field.
+func NextScanRunAtGTE(v models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldNextScanRunAt, v))
+}
+
+// NextScanRunAtLT applies the LT predicate on the "next_scan_run_at" field.
+func NextScanRunAtLT(v models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldNextScanRunAt, v))
+}
+
+// NextScanRunAtLTE applies the LTE predicate on the "next_scan_run_at" field.
+func NextScanRunAtLTE(v models.DateTime) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldNextScanRunAt, v))
+}
+
+// NextScanRunAtIsNil applies the IsNil predicate on the "next_scan_run_at" field.
+func NextScanRunAtIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldNextScanRunAt))
+}
+
+// NextScanRunAtNotNil applies the NotNil predicate on the "next_scan_run_at" field.
+func NextScanRunAtNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldNextScanRunAt))
+}
+
+// PerformedByEQ applies the EQ predicate on the "performed_by" field.
+func PerformedByEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldPerformedBy, v))
+}
+
+// PerformedByNEQ applies the NEQ predicate on the "performed_by" field.
+func PerformedByNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldPerformedBy, v))
+}
+
+// PerformedByIn applies the In predicate on the "performed_by" field.
+func PerformedByIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldPerformedBy, vs...))
+}
+
+// PerformedByNotIn applies the NotIn predicate on the "performed_by" field.
+func PerformedByNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldPerformedBy, vs...))
+}
+
+// PerformedByGT applies the GT predicate on the "performed_by" field.
+func PerformedByGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldPerformedBy, v))
+}
+
+// PerformedByGTE applies the GTE predicate on the "performed_by" field.
+func PerformedByGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldPerformedBy, v))
+}
+
+// PerformedByLT applies the LT predicate on the "performed_by" field.
+func PerformedByLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldPerformedBy, v))
+}
+
+// PerformedByLTE applies the LTE predicate on the "performed_by" field.
+func PerformedByLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldPerformedBy, v))
+}
+
+// PerformedByContains applies the Contains predicate on the "performed_by" field.
+func PerformedByContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldPerformedBy, v))
+}
+
+// PerformedByHasPrefix applies the HasPrefix predicate on the "performed_by" field.
+func PerformedByHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldPerformedBy, v))
+}
+
+// PerformedByHasSuffix applies the HasSuffix predicate on the "performed_by" field.
+func PerformedByHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldPerformedBy, v))
+}
+
+// PerformedByIsNil applies the IsNil predicate on the "performed_by" field.
+func PerformedByIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldPerformedBy))
+}
+
+// PerformedByNotNil applies the NotNil predicate on the "performed_by" field.
+func PerformedByNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldPerformedBy))
+}
+
+// PerformedByEqualFold applies the EqualFold predicate on the "performed_by" field.
+func PerformedByEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldPerformedBy, v))
+}
+
+// PerformedByContainsFold applies the ContainsFold predicate on the "performed_by" field.
+func PerformedByContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldPerformedBy, v))
+}
+
+// PerformedByUserIDEQ applies the EQ predicate on the "performed_by_user_id" field.
+func PerformedByUserIDEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldPerformedByUserID, v))
+}
+
+// PerformedByUserIDNEQ applies the NEQ predicate on the "performed_by_user_id" field.
+func PerformedByUserIDNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldPerformedByUserID, v))
+}
+
+// PerformedByUserIDIn applies the In predicate on the "performed_by_user_id" field.
+func PerformedByUserIDIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldPerformedByUserID, vs...))
+}
+
+// PerformedByUserIDNotIn applies the NotIn predicate on the "performed_by_user_id" field.
+func PerformedByUserIDNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldPerformedByUserID, vs...))
+}
+
+// PerformedByUserIDGT applies the GT predicate on the "performed_by_user_id" field.
+func PerformedByUserIDGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldPerformedByUserID, v))
+}
+
+// PerformedByUserIDGTE applies the GTE predicate on the "performed_by_user_id" field.
+func PerformedByUserIDGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldPerformedByUserID, v))
+}
+
+// PerformedByUserIDLT applies the LT predicate on the "performed_by_user_id" field.
+func PerformedByUserIDLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldPerformedByUserID, v))
+}
+
+// PerformedByUserIDLTE applies the LTE predicate on the "performed_by_user_id" field.
+func PerformedByUserIDLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldPerformedByUserID, v))
+}
+
+// PerformedByUserIDContains applies the Contains predicate on the "performed_by_user_id" field.
+func PerformedByUserIDContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldPerformedByUserID, v))
+}
+
+// PerformedByUserIDHasPrefix applies the HasPrefix predicate on the "performed_by_user_id" field.
+func PerformedByUserIDHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldPerformedByUserID, v))
+}
+
+// PerformedByUserIDHasSuffix applies the HasSuffix predicate on the "performed_by_user_id" field.
+func PerformedByUserIDHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldPerformedByUserID, v))
+}
+
+// PerformedByUserIDIsNil applies the IsNil predicate on the "performed_by_user_id" field.
+func PerformedByUserIDIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldPerformedByUserID))
+}
+
+// PerformedByUserIDNotNil applies the NotNil predicate on the "performed_by_user_id" field.
+func PerformedByUserIDNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldPerformedByUserID))
+}
+
+// PerformedByUserIDEqualFold applies the EqualFold predicate on the "performed_by_user_id" field.
+func PerformedByUserIDEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldPerformedByUserID, v))
+}
+
+// PerformedByUserIDContainsFold applies the ContainsFold predicate on the "performed_by_user_id" field.
+func PerformedByUserIDContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldPerformedByUserID, v))
+}
+
+// PerformedByGroupIDEQ applies the EQ predicate on the "performed_by_group_id" field.
+func PerformedByGroupIDEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldPerformedByGroupID, v))
+}
+
+// PerformedByGroupIDNEQ applies the NEQ predicate on the "performed_by_group_id" field.
+func PerformedByGroupIDNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldPerformedByGroupID, v))
+}
+
+// PerformedByGroupIDIn applies the In predicate on the "performed_by_group_id" field.
+func PerformedByGroupIDIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldPerformedByGroupID, vs...))
+}
+
+// PerformedByGroupIDNotIn applies the NotIn predicate on the "performed_by_group_id" field.
+func PerformedByGroupIDNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldPerformedByGroupID, vs...))
+}
+
+// PerformedByGroupIDGT applies the GT predicate on the "performed_by_group_id" field.
+func PerformedByGroupIDGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldPerformedByGroupID, v))
+}
+
+// PerformedByGroupIDGTE applies the GTE predicate on the "performed_by_group_id" field.
+func PerformedByGroupIDGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldPerformedByGroupID, v))
+}
+
+// PerformedByGroupIDLT applies the LT predicate on the "performed_by_group_id" field.
+func PerformedByGroupIDLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldPerformedByGroupID, v))
+}
+
+// PerformedByGroupIDLTE applies the LTE predicate on the "performed_by_group_id" field.
+func PerformedByGroupIDLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldPerformedByGroupID, v))
+}
+
+// PerformedByGroupIDContains applies the Contains predicate on the "performed_by_group_id" field.
+func PerformedByGroupIDContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldPerformedByGroupID, v))
+}
+
+// PerformedByGroupIDHasPrefix applies the HasPrefix predicate on the "performed_by_group_id" field.
+func PerformedByGroupIDHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldPerformedByGroupID, v))
+}
+
+// PerformedByGroupIDHasSuffix applies the HasSuffix predicate on the "performed_by_group_id" field.
+func PerformedByGroupIDHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldPerformedByGroupID, v))
+}
+
+// PerformedByGroupIDIsNil applies the IsNil predicate on the "performed_by_group_id" field.
+func PerformedByGroupIDIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldPerformedByGroupID))
+}
+
+// PerformedByGroupIDNotNil applies the NotNil predicate on the "performed_by_group_id" field.
+func PerformedByGroupIDNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldPerformedByGroupID))
+}
+
+// PerformedByGroupIDEqualFold applies the EqualFold predicate on the "performed_by_group_id" field.
+func PerformedByGroupIDEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldPerformedByGroupID, v))
+}
+
+// PerformedByGroupIDContainsFold applies the ContainsFold predicate on the "performed_by_group_id" field.
+func PerformedByGroupIDContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldPerformedByGroupID, v))
+}
+
+// GeneratedByPlatformIDEQ applies the EQ predicate on the "generated_by_platform_id" field.
+func GeneratedByPlatformIDEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldGeneratedByPlatformID, v))
+}
+
+// GeneratedByPlatformIDNEQ applies the NEQ predicate on the "generated_by_platform_id" field.
+func GeneratedByPlatformIDNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldGeneratedByPlatformID, v))
+}
+
+// GeneratedByPlatformIDIn applies the In predicate on the "generated_by_platform_id" field.
+func GeneratedByPlatformIDIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldGeneratedByPlatformID, vs...))
+}
+
+// GeneratedByPlatformIDNotIn applies the NotIn predicate on the "generated_by_platform_id" field.
+func GeneratedByPlatformIDNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldGeneratedByPlatformID, vs...))
+}
+
+// GeneratedByPlatformIDGT applies the GT predicate on the "generated_by_platform_id" field.
+func GeneratedByPlatformIDGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldGeneratedByPlatformID, v))
+}
+
+// GeneratedByPlatformIDGTE applies the GTE predicate on the "generated_by_platform_id" field.
+func GeneratedByPlatformIDGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldGeneratedByPlatformID, v))
+}
+
+// GeneratedByPlatformIDLT applies the LT predicate on the "generated_by_platform_id" field.
+func GeneratedByPlatformIDLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldGeneratedByPlatformID, v))
+}
+
+// GeneratedByPlatformIDLTE applies the LTE predicate on the "generated_by_platform_id" field.
+func GeneratedByPlatformIDLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldGeneratedByPlatformID, v))
+}
+
+// GeneratedByPlatformIDContains applies the Contains predicate on the "generated_by_platform_id" field.
+func GeneratedByPlatformIDContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldGeneratedByPlatformID, v))
+}
+
+// GeneratedByPlatformIDHasPrefix applies the HasPrefix predicate on the "generated_by_platform_id" field.
+func GeneratedByPlatformIDHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldGeneratedByPlatformID, v))
+}
+
+// GeneratedByPlatformIDHasSuffix applies the HasSuffix predicate on the "generated_by_platform_id" field.
+func GeneratedByPlatformIDHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldGeneratedByPlatformID, v))
+}
+
+// GeneratedByPlatformIDIsNil applies the IsNil predicate on the "generated_by_platform_id" field.
+func GeneratedByPlatformIDIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldGeneratedByPlatformID))
+}
+
+// GeneratedByPlatformIDNotNil applies the NotNil predicate on the "generated_by_platform_id" field.
+func GeneratedByPlatformIDNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldGeneratedByPlatformID))
+}
+
+// GeneratedByPlatformIDEqualFold applies the EqualFold predicate on the "generated_by_platform_id" field.
+func GeneratedByPlatformIDEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldGeneratedByPlatformID, v))
+}
+
+// GeneratedByPlatformIDContainsFold applies the ContainsFold predicate on the "generated_by_platform_id" field.
+func GeneratedByPlatformIDContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldGeneratedByPlatformID, v))
+}
+
+// VulnerabilityIdsIsNil applies the IsNil predicate on the "vulnerability_ids" field.
+func VulnerabilityIdsIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldVulnerabilityIds))
+}
+
+// VulnerabilityIdsNotNil applies the NotNil predicate on the "vulnerability_ids" field.
+func VulnerabilityIdsNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldVulnerabilityIds))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
@@ -819,6 +2145,180 @@ func HasViewersWith(preds ...predicate.Group) predicate.Scan {
 	})
 }
 
+// HasReviewedByUser applies the HasEdge predicate on the "reviewed_by_user" edge.
+func HasReviewedByUser() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByUserTable, ReviewedByUserColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewedByUserWith applies the HasEdge predicate on the "reviewed_by_user" edge with a given conditions (other predicates).
+func HasReviewedByUserWith(preds ...predicate.User) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newReviewedByUserStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReviewedByGroup applies the HasEdge predicate on the "reviewed_by_group" edge.
+func HasReviewedByGroup() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByGroupTable, ReviewedByGroupColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewedByGroupWith applies the HasEdge predicate on the "reviewed_by_group" edge with a given conditions (other predicates).
+func HasReviewedByGroupWith(preds ...predicate.Group) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newReviewedByGroupStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAssignedToUser applies the HasEdge predicate on the "assigned_to_user" edge.
+func HasAssignedToUser() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, AssignedToUserTable, AssignedToUserColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssignedToUserWith applies the HasEdge predicate on the "assigned_to_user" edge with a given conditions (other predicates).
+func HasAssignedToUserWith(preds ...predicate.User) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newAssignedToUserStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAssignedToGroup applies the HasEdge predicate on the "assigned_to_group" edge.
+func HasAssignedToGroup() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, AssignedToGroupTable, AssignedToGroupColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssignedToGroupWith applies the HasEdge predicate on the "assigned_to_group" edge with a given conditions (other predicates).
+func HasAssignedToGroupWith(preds ...predicate.Group) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newAssignedToGroupStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEnvironment applies the HasEdge predicate on the "environment" edge.
+func HasEnvironment() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, EnvironmentTable, EnvironmentColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEnvironmentWith applies the HasEdge predicate on the "environment" edge with a given conditions (other predicates).
+func HasEnvironmentWith(preds ...predicate.CustomTypeEnum) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newEnvironmentStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasScope applies the HasEdge predicate on the "scope" edge.
+func HasScope() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasScopeWith applies the HasEdge predicate on the "scope" edge with a given conditions (other predicates).
+func HasScopeWith(preds ...predicate.CustomTypeEnum) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newScopeStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasAssets applies the HasEdge predicate on the "assets" edge.
 func HasAssets() predicate.Scan {
 	return predicate.Scan(func(s *sql.Selector) {
@@ -869,6 +2369,325 @@ func HasEntitiesWith(preds ...predicate.Entity) predicate.Scan {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.Entity
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEvidence applies the HasEdge predicate on the "evidence" edge.
+func HasEvidence() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, EvidenceTable, EvidencePrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.ScanEvidence
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEvidenceWith applies the HasEdge predicate on the "evidence" edge with a given conditions (other predicates).
+func HasEvidenceWith(preds ...predicate.Evidence) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newEvidenceStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.ScanEvidence
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFiles applies the HasEdge predicate on the "files" edge.
+func HasFiles() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.ScanFiles
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFilesWith applies the HasEdge predicate on the "files" edge with a given conditions (other predicates).
+func HasFilesWith(preds ...predicate.File) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newFilesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.ScanFiles
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRemediations applies the HasEdge predicate on the "remediations" edge.
+func HasRemediations() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, RemediationsTable, RemediationsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.ScanRemediations
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRemediationsWith applies the HasEdge predicate on the "remediations" edge with a given conditions (other predicates).
+func HasRemediationsWith(preds ...predicate.Remediation) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newRemediationsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.ScanRemediations
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasActionPlans applies the HasEdge predicate on the "action_plans" edge.
+func HasActionPlans() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ScanActionPlans
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasActionPlansWith applies the HasEdge predicate on the "action_plans" edge with a given conditions (other predicates).
+func HasActionPlansWith(preds ...predicate.ActionPlan) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newActionPlansStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ScanActionPlans
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTasks applies the HasEdge predicate on the "tasks" edge.
+func HasTasks() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.ScanTasks
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTasksWith applies the HasEdge predicate on the "tasks" edge with a given conditions (other predicates).
+func HasTasksWith(preds ...predicate.Task) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newTasksStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.ScanTasks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPlatforms applies the HasEdge predicate on the "platforms" edge.
+func HasPlatforms() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformScans
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPlatformsWith applies the HasEdge predicate on the "platforms" edge with a given conditions (other predicates).
+func HasPlatformsWith(preds ...predicate.Platform) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newPlatformsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformScans
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasVulnerabilities applies the HasEdge predicate on the "vulnerabilities" edge.
+func HasVulnerabilities() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityScans
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVulnerabilitiesWith applies the HasEdge predicate on the "vulnerabilities" edge with a given conditions (other predicates).
+func HasVulnerabilitiesWith(preds ...predicate.Vulnerability) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newVulnerabilitiesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityScans
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasControls applies the HasEdge predicate on the "controls" edge.
+func HasControls() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlScans
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlsWith applies the HasEdge predicate on the "controls" edge with a given conditions (other predicates).
+func HasControlsWith(preds ...predicate.Control) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newControlsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlScans
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasGeneratedByPlatform applies the HasEdge predicate on the "generated_by_platform" edge.
+func HasGeneratedByPlatform() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, GeneratedByPlatformTable, GeneratedByPlatformColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasGeneratedByPlatformWith applies the HasEdge predicate on the "generated_by_platform" edge with a given conditions (other predicates).
+func HasGeneratedByPlatformWith(preds ...predicate.Platform) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newGeneratedByPlatformStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPerformedByUser applies the HasEdge predicate on the "performed_by_user" edge.
+func HasPerformedByUser() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, PerformedByUserTable, PerformedByUserColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPerformedByUserWith applies the HasEdge predicate on the "performed_by_user" edge with a given conditions (other predicates).
+func HasPerformedByUserWith(preds ...predicate.User) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newPerformedByUserStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPerformedByGroup applies the HasEdge predicate on the "performed_by_group" edge.
+func HasPerformedByGroup() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, PerformedByGroupTable, PerformedByGroupColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPerformedByGroupWith applies the HasEdge predicate on the "performed_by_group" edge with a given conditions (other predicates).
+func HasPerformedByGroupWith(preds ...predicate.Group) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newPerformedByGroupStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Scan
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

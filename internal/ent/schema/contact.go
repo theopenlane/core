@@ -116,6 +116,8 @@ func (c Contact) Mixin() []ent.Mixin {
 func (c Contact) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeFromWithPagination(c, Entity{}),
+		defaultEdgeFromWithPagination(c, Campaign{}),
+		defaultEdgeToWithPagination(c, CampaignTarget{}),
 		defaultEdgeToWithPagination(c, File{}),
 	}
 }
@@ -139,6 +141,7 @@ func (c Contact) Policy() ent.Policy {
 func (Contact) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogEntityManagementModule,
+		models.CatalogComplianceModule,
 	}
 }
 

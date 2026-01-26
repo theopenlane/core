@@ -35,29 +35,63 @@ river:
     openlaneconfig:
       openlaneapihost: "http://host.docker.internal:17608"
       openlaneapitoken: "tolp_REDACTED"
-    createCustomDomainWorker:
+    cleartrustcentercacheworker:
       config:
         enabled: false
-        cloudflareApiKey: ""
-        databaseHost: ""
-        openlaneapihost: "http://host.docker.internal:17608"
-        openlaneapitoken: "tolp_REDACTED"
-    deleteCustomDomainWorker:
+        objectstorage:
+          bucket: ""
+          credentials:
+            accesskeyid: ""
+            accountid: ""
+            secretaccesskey: ""
+          endpoint: ""
+    createcustomdomainworker:
+      config:
+        cloudflareapikey: ""
+        enabled: false
+        validateinterval: 0
+    createpirschdomainworker:
       config:
         enabled: false
-        cloudflareApiKey: ""
-        databaseHost: ""
-        openlaneapihost: "http://host.docker.internal:17608"
-        openlaneapitoken: "tolp_REDACTED"
-    validateCustomDomainWorker:
+        pirschclientid: ""
+        pirschclientsecret: ""
+    createpreviewdomainworker:
+      config:
+        cloudflareapikey: ""
+        enabled: false
+    deletecustomdomainworker:
+      config:
+        cloudflareapikey: ""
+        enabled: false
+        validateinterval: 0
+    deletepirschdomainworker:
       config:
         enabled: false
-        cloudflareApiKey: ""
-        openlaneapihost: "http://host.docker.internal:17608"
-        openlaneapitoken: "tolp_REDACTED"
-    watermarkDocWorker:
+        openlaneapihost: ""
+        openlaneapitoken: ""
+        pirschclientid: ""
+        pirschclientsecret: ""
+    deletepreviewdomainworker:
+      config:
+        cloudflareapikey: ""
+        enabled: false
+    updatepirschdomainworker:
       config:
         enabled: false
-        openlaneapihost: "http://host.docker.internal:17608"
-        openlaneapitoken: "tolp_REDACTED"
+        pirschclientid: ""
+        pirschclientsecret: ""
+    validatecustomdomainworker:
+      config:
+        cloudflareapikey: ""
+        enabled: false
+        validateinterval: 0
+    validatepreviewdomainworker:
+      config:
+        cloudflareapikey: ""
+        enabled: false
+        maxsnoozes: 0
+        snoozeduration: 0
+    watermarkdocworker:
+      config:
+        enabled: false
 refreshInterval: 600000000000

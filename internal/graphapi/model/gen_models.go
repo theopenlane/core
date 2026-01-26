@@ -154,6 +154,54 @@ type AssetUpdatePayload struct {
 	Asset *generated.Asset `json:"asset"`
 }
 
+// Return response for createBulkCampaign mutation
+type CampaignBulkCreatePayload struct {
+	// Created campaigns
+	Campaigns []*generated.Campaign `json:"campaigns,omitempty"`
+}
+
+// Return response for createCampaign mutation
+type CampaignCreatePayload struct {
+	// Created campaign
+	Campaign *generated.Campaign `json:"campaign"`
+}
+
+// Return response for deleteCampaign mutation
+type CampaignDeletePayload struct {
+	// Deleted campaign ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkCampaignTarget mutation
+type CampaignTargetBulkCreatePayload struct {
+	// Created campaignTargets
+	CampaignTargets []*generated.CampaignTarget `json:"campaignTargets,omitempty"`
+}
+
+// Return response for createCampaignTarget mutation
+type CampaignTargetCreatePayload struct {
+	// Created campaignTarget
+	CampaignTarget *generated.CampaignTarget `json:"campaignTarget"`
+}
+
+// Return response for deleteCampaignTarget mutation
+type CampaignTargetDeletePayload struct {
+	// Deleted campaignTarget ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateCampaignTarget mutation
+type CampaignTargetUpdatePayload struct {
+	// Updated campaignTarget
+	CampaignTarget *generated.CampaignTarget `json:"campaignTarget"`
+}
+
+// Return response for updateCampaign mutation
+type CampaignUpdatePayload struct {
+	// Updated campaign
+	Campaign *generated.Campaign `json:"campaign"`
+}
+
 // CloneControlInput is used to clone controls and their subcontrols
 // under an organization (ownerID)
 type CloneControlInput struct {
@@ -1146,6 +1194,30 @@ type HushUpdatePayload struct {
 	Hush *generated.Hush `json:"hush"`
 }
 
+// Return response for createBulkIdentityHolder mutation
+type IdentityHolderBulkCreatePayload struct {
+	// Created identityHolders
+	IdentityHolders []*generated.IdentityHolder `json:"identityHolders,omitempty"`
+}
+
+// Return response for createIdentityHolder mutation
+type IdentityHolderCreatePayload struct {
+	// Created identityHolder
+	IdentityHolder *generated.IdentityHolder `json:"identityHolder"`
+}
+
+// Return response for deleteIdentityHolder mutation
+type IdentityHolderDeletePayload struct {
+	// Deleted identityHolder ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateIdentityHolder mutation
+type IdentityHolderUpdatePayload struct {
+	// Updated identityHolder
+	IdentityHolder *generated.IdentityHolder `json:"identityHolder"`
+}
+
 // Return response for deleteIntegration mutation
 type IntegrationDeletePayload struct {
 	// Deleted integration ID
@@ -1553,6 +1625,30 @@ type PersonalAccessTokenUpdatePayload struct {
 	PersonalAccessToken *generated.PersonalAccessToken `json:"personalAccessToken"`
 }
 
+// Return response for createBulkPlatform mutation
+type PlatformBulkCreatePayload struct {
+	// Created platforms
+	Platforms []*generated.Platform `json:"platforms,omitempty"`
+}
+
+// Return response for createPlatform mutation
+type PlatformCreatePayload struct {
+	// Created platform
+	Platform *generated.Platform `json:"platform"`
+}
+
+// Return response for deletePlatform mutation
+type PlatformDeletePayload struct {
+	// Deleted platform ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updatePlatform mutation
+type PlatformUpdatePayload struct {
+	// Updated platform
+	Platform *generated.Platform `json:"platform"`
+}
+
 // Return response for createBulkProcedure mutation
 type ProcedureBulkCreatePayload struct {
 	// Created procedures
@@ -1832,6 +1928,8 @@ type SearchResults struct {
 	Assessments         *generated.AssessmentConnection         `json:"assessments,omitempty"`
 	AssessmentResponses *generated.AssessmentResponseConnection `json:"assessmentResponses,omitempty"`
 	Assets              *generated.AssetConnection              `json:"assets,omitempty"`
+	Campaigns           *generated.CampaignConnection           `json:"campaigns,omitempty"`
+	CampaignTargets     *generated.CampaignTargetConnection     `json:"campaignTargets,omitempty"`
 	Contacts            *generated.ContactConnection            `json:"contacts,omitempty"`
 	Controls            *generated.ControlConnection            `json:"controls,omitempty"`
 	ControlObjectives   *generated.ControlObjectiveConnection   `json:"controlObjectives,omitempty"`
@@ -1840,12 +1938,14 @@ type SearchResults struct {
 	Evidences           *generated.EvidenceConnection           `json:"evidences,omitempty"`
 	Findings            *generated.FindingConnection            `json:"findings,omitempty"`
 	Groups              *generated.GroupConnection              `json:"groups,omitempty"`
+	IdentityHolders     *generated.IdentityHolderConnection     `json:"identityHolders,omitempty"`
 	InternalPolicies    *generated.InternalPolicyConnection     `json:"internalPolicies,omitempty"`
 	Invites             *generated.InviteConnection             `json:"invites,omitempty"`
 	JobRunners          *generated.JobRunnerConnection          `json:"jobRunners,omitempty"`
 	JobTemplates        *generated.JobTemplateConnection        `json:"jobTemplates,omitempty"`
 	Narratives          *generated.NarrativeConnection          `json:"narratives,omitempty"`
 	Organizations       *generated.OrganizationConnection       `json:"organizations,omitempty"`
+	Platforms           *generated.PlatformConnection           `json:"platforms,omitempty"`
 	Procedures          *generated.ProcedureConnection          `json:"procedures,omitempty"`
 	Programs            *generated.ProgramConnection            `json:"programs,omitempty"`
 	Remediations        *generated.RemediationConnection        `json:"remediations,omitempty"`
@@ -1862,17 +1962,6 @@ type SearchResults struct {
 	TrustCenterEntities *generated.TrustCenterEntityConnection  `json:"trustCenterEntities,omitempty"`
 	Vulnerabilities     *generated.VulnerabilityConnection      `json:"vulnerabilities,omitempty"`
 	SearchContext       []*models.SearchContext                 `json:"searchContext,omitempty"`
-}
-
-type SendTrustCenterNDAEmailPayload struct {
-	Success bool `json:"success"`
-}
-
-type SendTrustCenterNDAInput struct {
-	// trust center id
-	TrustCenterID string `json:"trustCenterID"`
-	// email address
-	Email string `json:"email"`
 }
 
 // Return response for createBulkStandard mutation
@@ -2474,30 +2563,6 @@ type WorkflowDefinitionUpdatePayload struct {
 	WorkflowDefinition *generated.WorkflowDefinition `json:"workflowDefinition"`
 }
 
-// Return response for createBulkWorkflowEvent mutation
-type WorkflowEventBulkCreatePayload struct {
-	// Created workflowEvents
-	WorkflowEvents []*generated.WorkflowEvent `json:"workflowEvents,omitempty"`
-}
-
-// Return response for createWorkflowEvent mutation
-type WorkflowEventCreatePayload struct {
-	// Created workflowEvent
-	WorkflowEvent *generated.WorkflowEvent `json:"workflowEvent"`
-}
-
-// Return response for deleteWorkflowEvent mutation
-type WorkflowEventDeletePayload struct {
-	// Deleted workflowEvent ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateWorkflowEvent mutation
-type WorkflowEventUpdatePayload struct {
-	// Updated workflowEvent
-	WorkflowEvent *generated.WorkflowEvent `json:"workflowEvent"`
-}
-
 // Metadata for a workflow-eligible field
 type WorkflowFieldMetadata struct {
 	// The field name (snake_case)
@@ -2512,24 +2577,6 @@ type WorkflowFieldMetadata struct {
 type WorkflowMetadata struct {
 	// Available workflow object types
 	ObjectTypes []*WorkflowObjectTypeMetadata `json:"objectTypes"`
-}
-
-// Return response for createBulkWorkflowObjectRef mutation
-type WorkflowObjectRefBulkCreatePayload struct {
-	// Created workflowObjectRefs
-	WorkflowObjectRefs []*generated.WorkflowObjectRef `json:"workflowObjectRefs,omitempty"`
-}
-
-// Return response for createWorkflowObjectRef mutation
-type WorkflowObjectRefCreatePayload struct {
-	// Created workflowObjectRef
-	WorkflowObjectRef *generated.WorkflowObjectRef `json:"workflowObjectRef"`
-}
-
-// Return response for deleteWorkflowObjectRef mutation
-type WorkflowObjectRefDeletePayload struct {
-	// Deleted workflowObjectRef ID
-	DeletedID string `json:"deletedID"`
 }
 
 // Metadata for a workflow object type

@@ -35,6 +35,7 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -292,6 +293,41 @@ func expectUpload(t *testing.T, mockProvider *mock_shared.MockProvider, expected
 		mockProvider.On("GetScheme").Return(&mockScheme).Once()
 		mockProvider.On("ProviderType").Return(storage.DiskProvider).Maybe()
 		mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedMetadata{
+			FileMetadata: pkgobjects.FileMetadata{
+				Key:          "test-key",
+				Size:         upload.Size,
+				Folder:       "test-folder",
+				Bucket:       "test-bucket",
+				ContentType:  upload.ContentType,
+				ProviderType: storage.DiskProvider,
+				FullURI:      "file:///tmp/test-file",
+			},
+		}, nil).Once()
+
+		// Allow document hooks to download the just-uploaded content for parsing
+		mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
+			File: []byte("test content"),
+			Size: upload.Size,
+		}, nil).Maybe()
+	}
+}
+
+func expectUploadWithTemplateKind(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []graphql.Upload, kind enums.TemplateKind) {
+	assert.Assert(t, mockProvider != nil)
+
+	mockScheme := "file://"
+
+	for _, upload := range expectedUploads {
+		mockProvider.On("GetScheme").Return(&mockScheme).Once()
+		mockProvider.On("ProviderType").Return(storage.DiskProvider).Maybe()
+		uploadOpts := mock.MatchedBy(func(opts *storage.UploadOptions) bool {
+			if opts == nil || opts.ProviderHints == nil || opts.ProviderHints.Metadata == nil {
+				return false
+			}
+
+			return opts.ProviderHints.Metadata[objects.TemplateKindMetadataKey] == kind.String()
+		})
+		mockProvider.On("Upload", mock.Anything, mock.Anything, uploadOpts).Return(&storage.UploadedMetadata{
 			FileMetadata: pkgobjects.FileMetadata{
 				Key:          "test-key",
 				Size:         upload.Size,

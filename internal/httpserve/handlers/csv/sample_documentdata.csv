@@ -1,2 +1,2 @@
-Tags,Data,OwnerId,TemplateId,EntityIDs,FileIDs
-example_tags,example_data,example_ownerid,example_templateid,example_entityids,example_fileids
+Tags,EnvironmentName,ScopeName,Data,OwnerId,EnvironmentId,ScopeId,TemplateId,EntityIDs,FileIDs
+example_tags,example_environmentname,example_scopename,example_data,example_ownerid,example_environmentid,example_scopeid,example_templateid,example_entityids,example_fileids

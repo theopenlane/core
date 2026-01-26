@@ -14,10 +14,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
@@ -42,6 +44,8 @@ type IntegrationQuery struct {
 	inters                        []Interceptor
 	predicates                    []predicate.Integration
 	withOwner                     *OrganizationQuery
+	withEnvironment               *CustomTypeEnumQuery
+	withScope                     *CustomTypeEnumQuery
 	withSecrets                   *HushQuery
 	withFiles                     *FileQuery
 	withEvents                    *EventQuery
@@ -55,6 +59,7 @@ type IntegrationQuery struct {
 	withDirectoryGroups           *DirectoryGroupQuery
 	withDirectoryMemberships      *DirectoryMembershipQuery
 	withDirectorySyncRuns         *DirectorySyncRunQuery
+	withEntities                  *EntityQuery
 	withFKs                       bool
 	loadTotal                     []func(context.Context, []*Integration) error
 	modifiers                     []func(*sql.Selector)
@@ -71,6 +76,7 @@ type IntegrationQuery struct {
 	withNamedDirectoryGroups      map[string]*DirectoryGroupQuery
 	withNamedDirectoryMemberships map[string]*DirectoryMembershipQuery
 	withNamedDirectorySyncRuns    map[string]*DirectorySyncRunQuery
+	withNamedEntities             map[string]*EntityQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -125,6 +131,56 @@ func (_q *IntegrationQuery) QueryOwner() *OrganizationQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Integration
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEnvironment chains the current query on the "environment" edge.
+func (_q *IntegrationQuery) QueryEnvironment() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, integration.EnvironmentTable, integration.EnvironmentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Integration
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScope chains the current query on the "scope" edge.
+func (_q *IntegrationQuery) QueryScope() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, integration.ScopeTable, integration.ScopeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.Integration
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -457,6 +513,31 @@ func (_q *IntegrationQuery) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
 	return query
 }
 
+// QueryEntities chains the current query on the "entities" edge.
+func (_q *IntegrationQuery) QueryEntities() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, selector),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integration.EntitiesTable, integration.EntitiesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.EntityIntegrations
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Integration entity from the query.
 // Returns a *NotFoundError when no Integration was found.
 func (_q *IntegrationQuery) First(ctx context.Context) (*Integration, error) {
@@ -650,6 +731,8 @@ func (_q *IntegrationQuery) Clone() *IntegrationQuery {
 		inters:                   append([]Interceptor{}, _q.inters...),
 		predicates:               append([]predicate.Integration{}, _q.predicates...),
 		withOwner:                _q.withOwner.Clone(),
+		withEnvironment:          _q.withEnvironment.Clone(),
+		withScope:                _q.withScope.Clone(),
 		withSecrets:              _q.withSecrets.Clone(),
 		withFiles:                _q.withFiles.Clone(),
 		withEvents:               _q.withEvents.Clone(),
@@ -663,6 +746,7 @@ func (_q *IntegrationQuery) Clone() *IntegrationQuery {
 		withDirectoryGroups:      _q.withDirectoryGroups.Clone(),
 		withDirectoryMemberships: _q.withDirectoryMemberships.Clone(),
 		withDirectorySyncRuns:    _q.withDirectorySyncRuns.Clone(),
+		withEntities:             _q.withEntities.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -678,6 +762,28 @@ func (_q *IntegrationQuery) WithOwner(opts ...func(*OrganizationQuery)) *Integra
 		opt(query)
 	}
 	_q.withOwner = query
+	return _q
+}
+
+// WithEnvironment tells the query-builder to eager-load the nodes that are connected to
+// the "environment" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithEnvironment(opts ...func(*CustomTypeEnumQuery)) *IntegrationQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEnvironment = query
+	return _q
+}
+
+// WithScope tells the query-builder to eager-load the nodes that are connected to
+// the "scope" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *IntegrationQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScope = query
 	return _q
 }
 
@@ -824,6 +930,17 @@ func (_q *IntegrationQuery) WithDirectorySyncRuns(opts ...func(*DirectorySyncRun
 	return _q
 }
 
+// WithEntities tells the query-builder to eager-load the nodes that are connected to
+// the "entities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithEntities(opts ...func(*EntityQuery)) *IntegrationQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEntities = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -909,8 +1026,10 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*Integration{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [14]bool{
+		loadedTypes = [17]bool{
 			_q.withOwner != nil,
+			_q.withEnvironment != nil,
+			_q.withScope != nil,
 			_q.withSecrets != nil,
 			_q.withFiles != nil,
 			_q.withEvents != nil,
@@ -924,6 +1043,7 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withDirectoryGroups != nil,
 			_q.withDirectoryMemberships != nil,
 			_q.withDirectorySyncRuns != nil,
+			_q.withEntities != nil,
 		}
 	)
 	if withFKs {
@@ -955,6 +1075,18 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Integration, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEnvironment; query != nil {
+		if err := _q.loadEnvironment(ctx, query, nodes, nil,
+			func(n *Integration, e *CustomTypeEnum) { n.Edges.Environment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScope; query != nil {
+		if err := _q.loadScope(ctx, query, nodes, nil,
+			func(n *Integration, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1055,6 +1187,13 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	if query := _q.withEntities; query != nil {
+		if err := _q.loadEntities(ctx, query, nodes,
+			func(n *Integration) { n.Edges.Entities = []*Entity{} },
+			func(n *Integration, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedSecrets {
 		if err := _q.loadSecrets(ctx, query, nodes,
 			func(n *Integration) { n.appendNamedSecrets(name) },
@@ -1146,6 +1285,13 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedEntities {
+		if err := _q.loadEntities(ctx, query, nodes,
+			func(n *Integration) { n.appendNamedEntities(name) },
+			func(n *Integration, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range _q.loadTotal {
 		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
@@ -1176,6 +1322,64 @@ func (_q *IntegrationQuery) loadOwner(ctx context.Context, query *OrganizationQu
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *IntegrationQuery) loadEnvironment(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Integration)
+	for i := range nodes {
+		fk := nodes[i].EnvironmentID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "environment_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *IntegrationQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Integration)
+	for i := range nodes {
+		fk := nodes[i].ScopeID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1803,6 +2007,68 @@ func (_q *IntegrationQuery) loadDirectorySyncRuns(ctx context.Context, query *Di
 	}
 	return nil
 }
+func (_q *IntegrationQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *Entity)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Integration)
+	nids := make(map[string]map[*Integration]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(integration.EntitiesTable)
+		joinT.Schema(_q.schemaConfig.EntityIntegrations)
+		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(integration.EntitiesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(integration.EntitiesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(integration.EntitiesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Integration]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Entity](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "entities" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (_q *IntegrationQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1836,6 +2102,12 @@ func (_q *IntegrationQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(integration.FieldOwnerID)
+		}
+		if _q.withEnvironment != nil {
+			_spec.Node.AddColumnOnce(integration.FieldEnvironmentID)
+		}
+		if _q.withScope != nil {
+			_spec.Node.AddColumnOnce(integration.FieldScopeID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
@@ -2084,6 +2356,20 @@ func (_q *IntegrationQuery) WithNamedDirectorySyncRuns(name string, opts ...func
 		_q.withNamedDirectorySyncRuns = make(map[string]*DirectorySyncRunQuery)
 	}
 	_q.withNamedDirectorySyncRuns[name] = query
+	return _q
+}
+
+// WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *IntegrationQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEntities == nil {
+		_q.withNamedEntities = make(map[string]*EntityQuery)
+	}
+	_q.withNamedEntities[name] = query
 	return _q
 }
 

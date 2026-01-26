@@ -37,6 +37,14 @@ const (
 	FieldInternalNotes = "internal_notes"
 	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
 	FieldSystemInternalID = "system_internal_id"
+	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
+	FieldEnvironmentName = "environment_name"
+	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
+	FieldEnvironmentID = "environment_id"
+	// FieldScopeName holds the string denoting the scope_name field in the database.
+	FieldScopeName = "scope_name"
+	// FieldScopeID holds the string denoting the scope_id field in the database.
+	FieldScopeID = "scope_id"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
 	// FieldExternalOwnerID holds the string denoting the external_owner_id field in the database.
@@ -81,6 +89,10 @@ const (
 	EdgeEditors = "editors"
 	// EdgeViewers holds the string denoting the viewers edge name in mutations.
 	EdgeViewers = "viewers"
+	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
+	EdgeEnvironment = "environment"
+	// EdgeScope holds the string denoting the scope edge name in mutations.
+	EdgeScope = "scope"
 	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
 	EdgeIntegrations = "integrations"
 	// EdgeFindings holds the string denoting the findings edge name in mutations.
@@ -141,6 +153,20 @@ const (
 	ViewersInverseTable = "groups"
 	// ViewersColumn is the table column denoting the viewers relation/edge.
 	ViewersColumn = "review_viewers"
+	// EnvironmentTable is the table that holds the environment relation/edge.
+	EnvironmentTable = "reviews"
+	// EnvironmentInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	EnvironmentInverseTable = "custom_type_enums"
+	// EnvironmentColumn is the table column denoting the environment relation/edge.
+	EnvironmentColumn = "environment_id"
+	// ScopeTable is the table that holds the scope relation/edge.
+	ScopeTable = "reviews"
+	// ScopeInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ScopeInverseTable = "custom_type_enums"
+	// ScopeColumn is the table column denoting the scope relation/edge.
+	ScopeColumn = "scope_id"
 	// IntegrationsTable is the table that holds the integrations relation/edge. The primary key declared below.
 	IntegrationsTable = "integration_reviews"
 	// IntegrationsInverseTable is the table name for the Integration entity.
@@ -258,6 +284,10 @@ var Columns = []string{
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
+	FieldEnvironmentName,
+	FieldEnvironmentID,
+	FieldScopeName,
+	FieldScopeID,
 	FieldExternalID,
 	FieldExternalOwnerID,
 	FieldTitle,
@@ -316,7 +346,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [10]ent.Hook
+	Hooks        [12]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -395,6 +425,26 @@ func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
 // BySystemInternalID orders the results by the system_internal_id field.
 func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
+}
+
+// ByEnvironmentName orders the results by the environment_name field.
+func ByEnvironmentName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentName, opts...).ToFunc()
+}
+
+// ByEnvironmentID orders the results by the environment_id field.
+func ByEnvironmentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentID, opts...).ToFunc()
+}
+
+// ByScopeName orders the results by the scope_name field.
+func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeName, opts...).ToFunc()
+}
+
+// ByScopeID orders the results by the scope_id field.
+func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
 }
 
 // ByExternalID orders the results by the external_id field.
@@ -523,6 +573,20 @@ func ByViewersCount(opts ...sql.OrderTermOption) OrderOption {
 func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEnvironmentField orders the results by environment field.
+func ByEnvironmentField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEnvironmentStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByScopeField orders the results by scope field.
+func ByScopeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScopeStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -754,6 +818,20 @@ func newViewersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ViewersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ViewersTable, ViewersColumn),
+	)
+}
+func newEnvironmentStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EnvironmentInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EnvironmentTable, EnvironmentColumn),
+	)
+}
+func newScopeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScopeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
 	)
 }
 func newIntegrationsStep() *sqlgraph.Step {

@@ -15,6 +15,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -37,6 +39,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -58,6 +61,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
@@ -969,6 +973,66 @@ func (_c *OrganizationCreate) AddEntities(v ...*Entity) *OrganizationCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddEntityIDs(ids...)
+}
+
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_c *OrganizationCreate) AddPlatformIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddPlatformIDs(ids...)
+	return _c
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_c *OrganizationCreate) AddPlatforms(v ...*Platform) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_c *OrganizationCreate) AddIdentityHolderIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddIdentityHolderIDs(ids...)
+	return _c
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_c *OrganizationCreate) AddIdentityHolders(v ...*IdentityHolder) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIdentityHolderIDs(ids...)
+}
+
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_c *OrganizationCreate) AddCampaignIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddCampaignIDs(ids...)
+	return _c
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_c *OrganizationCreate) AddCampaigns(v ...*Campaign) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignIDs(ids...)
+}
+
+// AddCampaignTargetIDs adds the "campaign_targets" edge to the CampaignTarget entity by IDs.
+func (_c *OrganizationCreate) AddCampaignTargetIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddCampaignTargetIDs(ids...)
+	return _c
+}
+
+// AddCampaignTargets adds the "campaign_targets" edges to the CampaignTarget entity.
+func (_c *OrganizationCreate) AddCampaignTargets(v ...*CampaignTarget) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignTargetIDs(ids...)
 }
 
 // AddEntityTypeIDs adds the "entity_types" edge to the EntityType entity by IDs.
@@ -2720,6 +2784,74 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = _c.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PlatformsTable,
+			Columns: []string{organization.PlatformsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Platform
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IdentityHoldersTable,
+			Columns: []string{organization.IdentityHoldersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IdentityHolder
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CampaignsTable,
+			Columns: []string{organization.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignTargetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CampaignTargetsTable,
+			Columns: []string{organization.CampaignTargetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.CampaignTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

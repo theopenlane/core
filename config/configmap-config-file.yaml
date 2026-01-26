@@ -1171,4 +1171,10 @@ data:
         {{- end }}
       {{- end }}
     {{- end }}
+    {{- if .Values.openlane.coreConfiguration.emailwebhook }}
+    emailwebhook:
+      {{- if .Values.openlane.coreConfiguration.emailwebhook.enabled }}
+      enabled: {{ .Values.openlane.coreConfiguration.emailwebhook.enabled }}
+      {{- end }}
+    {{- end }}
 {{- end }}

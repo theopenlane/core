@@ -17,6 +17,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -44,6 +46,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -68,6 +71,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
@@ -169,6 +173,8 @@ func checkColumn(t, c string) error {
 			assessment.Table:                 assessment.ValidColumn,
 			assessmentresponse.Table:         assessmentresponse.ValidColumn,
 			asset.Table:                      asset.ValidColumn,
+			campaign.Table:                   campaign.ValidColumn,
+			campaigntarget.Table:             campaigntarget.ValidColumn,
 			contact.Table:                    contact.ValidColumn,
 			control.Table:                    control.ValidColumn,
 			controlimplementation.Table:      controlimplementation.ValidColumn,
@@ -196,6 +202,7 @@ func checkColumn(t, c string) error {
 			groupmembership.Table:            groupmembership.ValidColumn,
 			groupsetting.Table:               groupsetting.ValidColumn,
 			hush.Table:                       hush.ValidColumn,
+			identityholder.Table:             identityholder.ValidColumn,
 			impersonationevent.Table:         impersonationevent.ValidColumn,
 			integration.Table:                integration.ValidColumn,
 			internalpolicy.Table:             internalpolicy.ValidColumn,
@@ -220,6 +227,7 @@ func checkColumn(t, c string) error {
 			organizationsetting.Table:        organizationsetting.ValidColumn,
 			passwordresettoken.Table:         passwordresettoken.ValidColumn,
 			personalaccesstoken.Table:        personalaccesstoken.ValidColumn,
+			platform.Table:                   platform.ValidColumn,
 			procedure.Table:                  procedure.ValidColumn,
 			program.Table:                    program.ValidColumn,
 			programmembership.Table:          programmembership.ValidColumn,

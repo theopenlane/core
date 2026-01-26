@@ -36,6 +36,14 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
+	FieldEnvironmentName = "environment_name"
+	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
+	FieldEnvironmentID = "environment_id"
+	// FieldScopeName holds the string denoting the scope_name field in the database.
+	FieldScopeName = "scope_name"
+	// FieldScopeID holds the string denoting the scope_id field in the database.
+	FieldScopeID = "scope_id"
 	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
 	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldName holds the string denoting the name field in the database.
@@ -58,6 +66,10 @@ const (
 	FieldStatus = "status"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
+	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
+	EdgeEnvironment = "environment"
+	// EdgeScope holds the string denoting the scope edge name in mutations.
+	EdgeScope = "scope"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
@@ -72,6 +84,10 @@ const (
 	EdgePrograms = "programs"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
 	EdgeTasks = "tasks"
+	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
+	EdgePlatforms = "platforms"
+	// EdgeScans holds the string denoting the scans edge name in mutations.
+	EdgeScans = "scans"
 	// EdgeComments holds the string denoting the comments edge name in mutations.
 	EdgeComments = "comments"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
@@ -85,6 +101,20 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
+	// EnvironmentTable is the table that holds the environment relation/edge.
+	EnvironmentTable = "evidences"
+	// EnvironmentInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	EnvironmentInverseTable = "custom_type_enums"
+	// EnvironmentColumn is the table column denoting the environment relation/edge.
+	EnvironmentColumn = "environment_id"
+	// ScopeTable is the table that holds the scope relation/edge.
+	ScopeTable = "evidences"
+	// ScopeInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ScopeInverseTable = "custom_type_enums"
+	// ScopeColumn is the table column denoting the scope relation/edge.
+	ScopeColumn = "scope_id"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "evidence_controls"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -122,6 +152,16 @@ const (
 	// TasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
+	// PlatformsTable is the table that holds the platforms relation/edge. The primary key declared below.
+	PlatformsTable = "platform_evidence"
+	// PlatformsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformsInverseTable = "platforms"
+	// ScansTable is the table that holds the scans relation/edge. The primary key declared below.
+	ScansTable = "scan_evidence"
+	// ScansInverseTable is the table name for the Scan entity.
+	// It exists in this package in order to avoid circular dependency with the "scan" package.
+	ScansInverseTable = "scans"
 	// CommentsTable is the table that holds the comments relation/edge.
 	CommentsTable = "notes"
 	// CommentsInverseTable is the table name for the Note entity.
@@ -150,6 +190,10 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
+	FieldEnvironmentName,
+	FieldEnvironmentID,
+	FieldScopeName,
+	FieldScopeID,
 	FieldWorkflowEligibleMarker,
 	FieldName,
 	FieldDescription,
@@ -181,6 +225,12 @@ var (
 	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
 	// primary key for the tasks relation (M2M).
 	TasksPrimaryKey = []string{"task_id", "evidence_id"}
+	// PlatformsPrimaryKey and PlatformsColumn2 are the table columns denoting the
+	// primary key for the platforms relation (M2M).
+	PlatformsPrimaryKey = []string{"platform_id", "evidence_id"}
+	// ScansPrimaryKey and ScansColumn2 are the table columns denoting the
+	// primary key for the scans relation (M2M).
+	ScansPrimaryKey = []string{"scan_id", "evidence_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -199,7 +249,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [9]ent.Hook
+	Hooks        [12]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -288,6 +338,26 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// ByEnvironmentName orders the results by the environment_name field.
+func ByEnvironmentName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentName, opts...).ToFunc()
+}
+
+// ByEnvironmentID orders the results by the environment_id field.
+func ByEnvironmentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentID, opts...).ToFunc()
+}
+
+// ByScopeName orders the results by the scope_name field.
+func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeName, opts...).ToFunc()
+}
+
+// ByScopeID orders the results by the scope_id field.
+func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
+}
+
 // ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
 func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
@@ -342,6 +412,20 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEnvironmentField orders the results by environment field.
+func ByEnvironmentField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEnvironmentStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByScopeField orders the results by scope field.
+func ByScopeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScopeStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -443,6 +527,34 @@ func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByPlatformsCount orders the results by platforms count.
+func ByPlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformsStep(), opts...)
+	}
+}
+
+// ByPlatforms orders the results by platforms terms.
+func ByPlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByScansCount orders the results by scans count.
+func ByScansCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newScansStep(), opts...)
+	}
+}
+
+// ByScans orders the results by scans terms.
+func ByScans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScansStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByCommentsCount orders the results by comments count.
 func ByCommentsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -475,6 +587,20 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OwnerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
+func newEnvironmentStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EnvironmentInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EnvironmentTable, EnvironmentColumn),
+	)
+}
+func newScopeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScopeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
 	)
 }
 func newControlsStep() *sqlgraph.Step {
@@ -524,6 +650,20 @@ func newTasksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TasksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, TasksTable, TasksPrimaryKey...),
+	)
+}
+func newPlatformsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
+	)
+}
+func newScansStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScansInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ScansTable, ScansPrimaryKey...),
 	)
 }
 func newCommentsStep() *sqlgraph.Step {

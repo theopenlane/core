@@ -61,8 +61,42 @@ query GlobalSearch($query: String!) {
       edges {
         node {
           id
+          internalOwner
           name
           tags
+        }
+      }
+    }
+    campaigns {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          internalOwner
+          name
+          tags
+        }
+      }
+    }
+    campaignTargets {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          email
+          id
         }
       }
     }
@@ -154,6 +188,7 @@ query GlobalSearch($query: String!) {
           description
           displayName
           id
+          internalOwner
           name
           tags
         }
@@ -209,6 +244,25 @@ query GlobalSearch($query: String!) {
           displayName
           id
           name
+          tags
+        }
+      }
+    }
+    identityHolders {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          email
+          fullName
+          id
+          internalOwner
           tags
         }
       }
@@ -311,6 +365,24 @@ query GlobalSearch($query: String!) {
         node {
           displayName
           id
+          name
+          tags
+        }
+      }
+    }
+    platforms {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          internalOwner
           name
           tags
         }

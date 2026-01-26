@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
@@ -178,6 +179,86 @@ func (_u *FindingUpdate) SetNillableSystemInternalID(v *string) *FindingUpdate {
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *FindingUpdate) ClearSystemInternalID() *FindingUpdate {
 	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *FindingUpdate) SetEnvironmentName(v string) *FindingUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableEnvironmentName(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *FindingUpdate) ClearEnvironmentName() *FindingUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *FindingUpdate) SetEnvironmentID(v string) *FindingUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableEnvironmentID(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *FindingUpdate) ClearEnvironmentID() *FindingUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *FindingUpdate) SetScopeName(v string) *FindingUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableScopeName(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *FindingUpdate) ClearScopeName() *FindingUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *FindingUpdate) SetScopeID(v string) *FindingUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableScopeID(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *FindingUpdate) ClearScopeID() *FindingUpdate {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -969,6 +1050,16 @@ func (_u *FindingUpdate) AddViewers(v ...*Group) *FindingUpdate {
 	return _u.AddViewerIDs(ids...)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdate) SetEnvironment(v *CustomTypeEnum) *FindingUpdate {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdate) SetScope(v *CustomTypeEnum) *FindingUpdate {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (_u *FindingUpdate) AddIntegrationIDs(ids ...string) *FindingUpdate {
 	_u.mutation.AddIntegrationIDs(ids...)
@@ -1290,6 +1381,18 @@ func (_u *FindingUpdate) RemoveViewers(v ...*Group) *FindingUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveViewerIDs(ids...)
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdate) ClearEnvironment() *FindingUpdate {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdate) ClearScope() *FindingUpdate {
+	_u.mutation.ClearScope()
+	return _u
 }
 
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
@@ -1762,6 +1865,18 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(finding.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(finding.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(finding.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(finding.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(finding.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
 	}
@@ -2158,6 +2273,68 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.EnvironmentTable,
+			Columns: []string{finding.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.EnvironmentTable,
+			Columns: []string{finding.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ScopeTable,
+			Columns: []string{finding.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ScopeTable,
+			Columns: []string{finding.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3154,6 +3331,86 @@ func (_u *FindingUpdateOne) ClearSystemInternalID() *FindingUpdateOne {
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *FindingUpdateOne) SetEnvironmentName(v string) *FindingUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableEnvironmentName(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *FindingUpdateOne) ClearEnvironmentName() *FindingUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *FindingUpdateOne) SetEnvironmentID(v string) *FindingUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableEnvironmentID(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *FindingUpdateOne) ClearEnvironmentID() *FindingUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *FindingUpdateOne) SetScopeName(v string) *FindingUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableScopeName(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *FindingUpdateOne) ClearScopeName() *FindingUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *FindingUpdateOne) SetScopeID(v string) *FindingUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableScopeID(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *FindingUpdateOne) ClearScopeID() *FindingUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *FindingUpdateOne) SetExternalID(v string) *FindingUpdateOne {
 	_u.mutation.SetExternalID(v)
@@ -3942,6 +4199,16 @@ func (_u *FindingUpdateOne) AddViewers(v ...*Group) *FindingUpdateOne {
 	return _u.AddViewerIDs(ids...)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdateOne) SetEnvironment(v *CustomTypeEnum) *FindingUpdateOne {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdateOne) SetScope(v *CustomTypeEnum) *FindingUpdateOne {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (_u *FindingUpdateOne) AddIntegrationIDs(ids ...string) *FindingUpdateOne {
 	_u.mutation.AddIntegrationIDs(ids...)
@@ -4263,6 +4530,18 @@ func (_u *FindingUpdateOne) RemoveViewers(v ...*Group) *FindingUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveViewerIDs(ids...)
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdateOne) ClearEnvironment() *FindingUpdateOne {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdateOne) ClearScope() *FindingUpdateOne {
+	_u.mutation.ClearScope()
+	return _u
 }
 
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
@@ -4765,6 +5044,18 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(finding.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(finding.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(finding.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(finding.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(finding.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
 	}
@@ -5161,6 +5452,68 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 			},
 		}
 		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.EnvironmentTable,
+			Columns: []string{finding.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.EnvironmentTable,
+			Columns: []string{finding.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ScopeTable,
+			Columns: []string{finding.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ScopeTable,
+			Columns: []string{finding.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

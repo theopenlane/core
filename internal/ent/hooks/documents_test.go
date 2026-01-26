@@ -119,6 +119,9 @@ func (m *mockStatusMutation) ID() (string, bool) { return "test-id", true }
 func (m *mockStatusMutation) IDs(ctx context.Context) ([]string, error) {
 	return []string{"test-id"}, nil
 }
+func (m *mockStatusMutation) Field(name string) (ent.Value, bool)  { return nil, false }
+func (m *mockStatusMutation) Fields() []string                     { return []string{} }
+func (m *mockStatusMutation) ClearedFields() []string              { return []string{} }
 func (m *mockStatusMutation) Status() (enums.DocumentStatus, bool) { return m.status, true }
 func (m *mockStatusMutation) ApproverID() (string, bool)           { return m.approverID, m.approverID != "" }
 func (m *mockStatusMutation) DelegateID() (string, bool)           { return m.delegateID, m.delegateID != "" }

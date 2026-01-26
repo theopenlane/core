@@ -42,6 +42,44 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldInternalOwner holds the string denoting the internal_owner field in the database.
+	FieldInternalOwner = "internal_owner"
+	// FieldInternalOwnerUserID holds the string denoting the internal_owner_user_id field in the database.
+	FieldInternalOwnerUserID = "internal_owner_user_id"
+	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
+	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldAssetSubtypeName holds the string denoting the asset_subtype_name field in the database.
+	FieldAssetSubtypeName = "asset_subtype_name"
+	// FieldAssetSubtypeID holds the string denoting the asset_subtype_id field in the database.
+	FieldAssetSubtypeID = "asset_subtype_id"
+	// FieldAssetDataClassificationName holds the string denoting the asset_data_classification_name field in the database.
+	FieldAssetDataClassificationName = "asset_data_classification_name"
+	// FieldAssetDataClassificationID holds the string denoting the asset_data_classification_id field in the database.
+	FieldAssetDataClassificationID = "asset_data_classification_id"
+	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
+	FieldEnvironmentName = "environment_name"
+	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
+	FieldEnvironmentID = "environment_id"
+	// FieldScopeName holds the string denoting the scope_name field in the database.
+	FieldScopeName = "scope_name"
+	// FieldScopeID holds the string denoting the scope_id field in the database.
+	FieldScopeID = "scope_id"
+	// FieldAccessModelName holds the string denoting the access_model_name field in the database.
+	FieldAccessModelName = "access_model_name"
+	// FieldAccessModelID holds the string denoting the access_model_id field in the database.
+	FieldAccessModelID = "access_model_id"
+	// FieldEncryptionStatusName holds the string denoting the encryption_status_name field in the database.
+	FieldEncryptionStatusName = "encryption_status_name"
+	// FieldEncryptionStatusID holds the string denoting the encryption_status_id field in the database.
+	FieldEncryptionStatusID = "encryption_status_id"
+	// FieldSecurityTierName holds the string denoting the security_tier_name field in the database.
+	FieldSecurityTierName = "security_tier_name"
+	// FieldSecurityTierID holds the string denoting the security_tier_id field in the database.
+	FieldSecurityTierID = "security_tier_id"
+	// FieldCriticalityName holds the string denoting the criticality_name field in the database.
+	FieldCriticalityName = "criticality_name"
+	// FieldCriticalityID holds the string denoting the criticality_id field in the database.
+	FieldCriticalityID = "criticality_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
 	FieldSystemOwned = "system_owned"
 	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
@@ -58,6 +96,24 @@ const (
 	FieldIdentifier = "identifier"
 	// FieldWebsite holds the string denoting the website field in the database.
 	FieldWebsite = "website"
+	// FieldPhysicalLocation holds the string denoting the physical_location field in the database.
+	FieldPhysicalLocation = "physical_location"
+	// FieldRegion holds the string denoting the region field in the database.
+	FieldRegion = "region"
+	// FieldContainsPii holds the string denoting the contains_pii field in the database.
+	FieldContainsPii = "contains_pii"
+	// FieldSourceType holds the string denoting the source_type field in the database.
+	FieldSourceType = "source_type"
+	// FieldSourcePlatformID holds the string denoting the source_platform_id field in the database.
+	FieldSourcePlatformID = "source_platform_id"
+	// FieldSourceIdentifier holds the string denoting the source_identifier field in the database.
+	FieldSourceIdentifier = "source_identifier"
+	// FieldCostCenter holds the string denoting the cost_center field in the database.
+	FieldCostCenter = "cost_center"
+	// FieldEstimatedMonthlyCost holds the string denoting the estimated_monthly_cost field in the database.
+	FieldEstimatedMonthlyCost = "estimated_monthly_cost"
+	// FieldPurchaseDate holds the string denoting the purchase_date field in the database.
+	FieldPurchaseDate = "purchase_date"
 	// FieldCpe holds the string denoting the cpe field in the database.
 	FieldCpe = "cpe"
 	// FieldCategories holds the string denoting the categories field in the database.
@@ -80,6 +136,25 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldOwnerID,
+	FieldInternalOwner,
+	FieldInternalOwnerUserID,
+	FieldInternalOwnerGroupID,
+	FieldAssetSubtypeName,
+	FieldAssetSubtypeID,
+	FieldAssetDataClassificationName,
+	FieldAssetDataClassificationID,
+	FieldEnvironmentName,
+	FieldEnvironmentID,
+	FieldScopeName,
+	FieldScopeID,
+	FieldAccessModelName,
+	FieldAccessModelID,
+	FieldEncryptionStatusName,
+	FieldEncryptionStatusID,
+	FieldSecurityTierName,
+	FieldSecurityTierID,
+	FieldCriticalityName,
+	FieldCriticalityID,
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
@@ -88,6 +163,15 @@ var Columns = []string{
 	FieldDescription,
 	FieldIdentifier,
 	FieldWebsite,
+	FieldPhysicalLocation,
+	FieldRegion,
+	FieldContainsPii,
+	FieldSourceType,
+	FieldSourcePlatformID,
+	FieldSourceIdentifier,
+	FieldCostCenter,
+	FieldEstimatedMonthlyCost,
+	FieldPurchaseDate,
 	FieldCpe,
 	FieldCategories,
 }
@@ -123,6 +207,8 @@ var (
 	DefaultTags []string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultContainsPii holds the default value on creation for the "contains_pii" field.
+	DefaultContainsPii bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -146,6 +232,18 @@ func AssetTypeValidator(at enums.AssetType) error {
 		return nil
 	default:
 		return fmt.Errorf("assethistory: invalid enum value for asset_type field: %q", at)
+	}
+}
+
+const DefaultSourceType enums.SourceType = "MANUAL"
+
+// SourceTypeValidator is a validator for the "source_type" field enum values. It is called by the builders before save.
+func SourceTypeValidator(st enums.SourceType) error {
+	switch st.String() {
+	case "MANUAL", "DISCOVERED", "IMPORTED", "API":
+		return nil
+	default:
+		return fmt.Errorf("assethistory: invalid enum value for source_type field: %q", st)
 	}
 }
 
@@ -207,6 +305,101 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// ByInternalOwner orders the results by the internal_owner field.
+func ByInternalOwner(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwner, opts...).ToFunc()
+}
+
+// ByInternalOwnerUserID orders the results by the internal_owner_user_id field.
+func ByInternalOwnerUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerUserID, opts...).ToFunc()
+}
+
+// ByInternalOwnerGroupID orders the results by the internal_owner_group_id field.
+func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
+}
+
+// ByAssetSubtypeName orders the results by the asset_subtype_name field.
+func ByAssetSubtypeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssetSubtypeName, opts...).ToFunc()
+}
+
+// ByAssetSubtypeID orders the results by the asset_subtype_id field.
+func ByAssetSubtypeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssetSubtypeID, opts...).ToFunc()
+}
+
+// ByAssetDataClassificationName orders the results by the asset_data_classification_name field.
+func ByAssetDataClassificationName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssetDataClassificationName, opts...).ToFunc()
+}
+
+// ByAssetDataClassificationID orders the results by the asset_data_classification_id field.
+func ByAssetDataClassificationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssetDataClassificationID, opts...).ToFunc()
+}
+
+// ByEnvironmentName orders the results by the environment_name field.
+func ByEnvironmentName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentName, opts...).ToFunc()
+}
+
+// ByEnvironmentID orders the results by the environment_id field.
+func ByEnvironmentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentID, opts...).ToFunc()
+}
+
+// ByScopeName orders the results by the scope_name field.
+func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeName, opts...).ToFunc()
+}
+
+// ByScopeID orders the results by the scope_id field.
+func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
+}
+
+// ByAccessModelName orders the results by the access_model_name field.
+func ByAccessModelName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAccessModelName, opts...).ToFunc()
+}
+
+// ByAccessModelID orders the results by the access_model_id field.
+func ByAccessModelID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAccessModelID, opts...).ToFunc()
+}
+
+// ByEncryptionStatusName orders the results by the encryption_status_name field.
+func ByEncryptionStatusName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEncryptionStatusName, opts...).ToFunc()
+}
+
+// ByEncryptionStatusID orders the results by the encryption_status_id field.
+func ByEncryptionStatusID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEncryptionStatusID, opts...).ToFunc()
+}
+
+// BySecurityTierName orders the results by the security_tier_name field.
+func BySecurityTierName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecurityTierName, opts...).ToFunc()
+}
+
+// BySecurityTierID orders the results by the security_tier_id field.
+func BySecurityTierID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecurityTierID, opts...).ToFunc()
+}
+
+// ByCriticalityName orders the results by the criticality_name field.
+func ByCriticalityName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCriticalityName, opts...).ToFunc()
+}
+
+// ByCriticalityID orders the results by the criticality_id field.
+func ByCriticalityID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCriticalityID, opts...).ToFunc()
+}
+
 // BySystemOwned orders the results by the system_owned field.
 func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
@@ -247,6 +440,51 @@ func ByWebsite(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWebsite, opts...).ToFunc()
 }
 
+// ByPhysicalLocation orders the results by the physical_location field.
+func ByPhysicalLocation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPhysicalLocation, opts...).ToFunc()
+}
+
+// ByRegion orders the results by the region field.
+func ByRegion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRegion, opts...).ToFunc()
+}
+
+// ByContainsPii orders the results by the contains_pii field.
+func ByContainsPii(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldContainsPii, opts...).ToFunc()
+}
+
+// BySourceType orders the results by the source_type field.
+func BySourceType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceType, opts...).ToFunc()
+}
+
+// BySourcePlatformID orders the results by the source_platform_id field.
+func BySourcePlatformID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourcePlatformID, opts...).ToFunc()
+}
+
+// BySourceIdentifier orders the results by the source_identifier field.
+func BySourceIdentifier(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceIdentifier, opts...).ToFunc()
+}
+
+// ByCostCenter orders the results by the cost_center field.
+func ByCostCenter(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCostCenter, opts...).ToFunc()
+}
+
+// ByEstimatedMonthlyCost orders the results by the estimated_monthly_cost field.
+func ByEstimatedMonthlyCost(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEstimatedMonthlyCost, opts...).ToFunc()
+}
+
+// ByPurchaseDate orders the results by the purchase_date field.
+func ByPurchaseDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPurchaseDate, opts...).ToFunc()
+}
+
 // ByCpe orders the results by the cpe field.
 func ByCpe(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCpe, opts...).ToFunc()
@@ -264,4 +502,11 @@ var (
 	_ graphql.Marshaler = (*enums.AssetType)(nil)
 	// enums.AssetType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.AssetType)(nil)
+)
+
+var (
+	// enums.SourceType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.SourceType)(nil)
+	// enums.SourceType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.SourceType)(nil)
 )

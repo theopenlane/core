@@ -66,12 +66,48 @@ func (ec *executionContext) fieldContext_ScanBulkCreatePayload_scans(_ context.C
 				return ec.fieldContext_Scan_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Scan_ownerID(ctx, field)
+			case "reviewedBy":
+				return ec.fieldContext_Scan_reviewedBy(ctx, field)
+			case "reviewedByUserID":
+				return ec.fieldContext_Scan_reviewedByUserID(ctx, field)
+			case "reviewedByGroupID":
+				return ec.fieldContext_Scan_reviewedByGroupID(ctx, field)
+			case "assignedTo":
+				return ec.fieldContext_Scan_assignedTo(ctx, field)
+			case "assignedToUserID":
+				return ec.fieldContext_Scan_assignedToUserID(ctx, field)
+			case "assignedToGroupID":
+				return ec.fieldContext_Scan_assignedToGroupID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Scan_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Scan_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Scan_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Scan_scopeID(ctx, field)
 			case "target":
 				return ec.fieldContext_Scan_target(ctx, field)
 			case "scanType":
 				return ec.fieldContext_Scan_scanType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Scan_metadata(ctx, field)
+			case "scanDate":
+				return ec.fieldContext_Scan_scanDate(ctx, field)
+			case "scanSchedule":
+				return ec.fieldContext_Scan_scanSchedule(ctx, field)
+			case "nextScanRunAt":
+				return ec.fieldContext_Scan_nextScanRunAt(ctx, field)
+			case "performedBy":
+				return ec.fieldContext_Scan_performedBy(ctx, field)
+			case "performedByUserID":
+				return ec.fieldContext_Scan_performedByUserID(ctx, field)
+			case "performedByGroupID":
+				return ec.fieldContext_Scan_performedByGroupID(ctx, field)
+			case "generatedByPlatformID":
+				return ec.fieldContext_Scan_generatedByPlatformID(ctx, field)
+			case "vulnerabilityIds":
+				return ec.fieldContext_Scan_vulnerabilityIds(ctx, field)
 			case "status":
 				return ec.fieldContext_Scan_status(ctx, field)
 			case "owner":
@@ -82,10 +118,44 @@ func (ec *executionContext) fieldContext_ScanBulkCreatePayload_scans(_ context.C
 				return ec.fieldContext_Scan_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Scan_viewers(ctx, field)
+			case "reviewedByUser":
+				return ec.fieldContext_Scan_reviewedByUser(ctx, field)
+			case "reviewedByGroup":
+				return ec.fieldContext_Scan_reviewedByGroup(ctx, field)
+			case "assignedToUser":
+				return ec.fieldContext_Scan_assignedToUser(ctx, field)
+			case "assignedToGroup":
+				return ec.fieldContext_Scan_assignedToGroup(ctx, field)
+			case "environment":
+				return ec.fieldContext_Scan_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Scan_scope(ctx, field)
 			case "assets":
 				return ec.fieldContext_Scan_assets(ctx, field)
 			case "entities":
 				return ec.fieldContext_Scan_entities(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Scan_evidence(ctx, field)
+			case "files":
+				return ec.fieldContext_Scan_files(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Scan_remediations(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Scan_actionPlans(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Scan_tasks(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Scan_platforms(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_Scan_vulnerabilities(ctx, field)
+			case "controls":
+				return ec.fieldContext_Scan_controls(ctx, field)
+			case "generatedByPlatform":
+				return ec.fieldContext_Scan_generatedByPlatform(ctx, field)
+			case "performedByUser":
+				return ec.fieldContext_Scan_performedByUser(ctx, field)
+			case "performedByGroup":
+				return ec.fieldContext_Scan_performedByGroup(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Scan", field.Name)
 		},
@@ -160,12 +230,48 @@ func (ec *executionContext) fieldContext_ScanBulkUpdatePayload_scans(_ context.C
 				return ec.fieldContext_Scan_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Scan_ownerID(ctx, field)
+			case "reviewedBy":
+				return ec.fieldContext_Scan_reviewedBy(ctx, field)
+			case "reviewedByUserID":
+				return ec.fieldContext_Scan_reviewedByUserID(ctx, field)
+			case "reviewedByGroupID":
+				return ec.fieldContext_Scan_reviewedByGroupID(ctx, field)
+			case "assignedTo":
+				return ec.fieldContext_Scan_assignedTo(ctx, field)
+			case "assignedToUserID":
+				return ec.fieldContext_Scan_assignedToUserID(ctx, field)
+			case "assignedToGroupID":
+				return ec.fieldContext_Scan_assignedToGroupID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Scan_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Scan_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Scan_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Scan_scopeID(ctx, field)
 			case "target":
 				return ec.fieldContext_Scan_target(ctx, field)
 			case "scanType":
 				return ec.fieldContext_Scan_scanType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Scan_metadata(ctx, field)
+			case "scanDate":
+				return ec.fieldContext_Scan_scanDate(ctx, field)
+			case "scanSchedule":
+				return ec.fieldContext_Scan_scanSchedule(ctx, field)
+			case "nextScanRunAt":
+				return ec.fieldContext_Scan_nextScanRunAt(ctx, field)
+			case "performedBy":
+				return ec.fieldContext_Scan_performedBy(ctx, field)
+			case "performedByUserID":
+				return ec.fieldContext_Scan_performedByUserID(ctx, field)
+			case "performedByGroupID":
+				return ec.fieldContext_Scan_performedByGroupID(ctx, field)
+			case "generatedByPlatformID":
+				return ec.fieldContext_Scan_generatedByPlatformID(ctx, field)
+			case "vulnerabilityIds":
+				return ec.fieldContext_Scan_vulnerabilityIds(ctx, field)
 			case "status":
 				return ec.fieldContext_Scan_status(ctx, field)
 			case "owner":
@@ -176,10 +282,44 @@ func (ec *executionContext) fieldContext_ScanBulkUpdatePayload_scans(_ context.C
 				return ec.fieldContext_Scan_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Scan_viewers(ctx, field)
+			case "reviewedByUser":
+				return ec.fieldContext_Scan_reviewedByUser(ctx, field)
+			case "reviewedByGroup":
+				return ec.fieldContext_Scan_reviewedByGroup(ctx, field)
+			case "assignedToUser":
+				return ec.fieldContext_Scan_assignedToUser(ctx, field)
+			case "assignedToGroup":
+				return ec.fieldContext_Scan_assignedToGroup(ctx, field)
+			case "environment":
+				return ec.fieldContext_Scan_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Scan_scope(ctx, field)
 			case "assets":
 				return ec.fieldContext_Scan_assets(ctx, field)
 			case "entities":
 				return ec.fieldContext_Scan_entities(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Scan_evidence(ctx, field)
+			case "files":
+				return ec.fieldContext_Scan_files(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Scan_remediations(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Scan_actionPlans(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Scan_tasks(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Scan_platforms(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_Scan_vulnerabilities(ctx, field)
+			case "controls":
+				return ec.fieldContext_Scan_controls(ctx, field)
+			case "generatedByPlatform":
+				return ec.fieldContext_Scan_generatedByPlatform(ctx, field)
+			case "performedByUser":
+				return ec.fieldContext_Scan_performedByUser(ctx, field)
+			case "performedByGroup":
+				return ec.fieldContext_Scan_performedByGroup(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Scan", field.Name)
 		},
@@ -254,12 +394,48 @@ func (ec *executionContext) fieldContext_ScanCreatePayload_scan(_ context.Contex
 				return ec.fieldContext_Scan_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Scan_ownerID(ctx, field)
+			case "reviewedBy":
+				return ec.fieldContext_Scan_reviewedBy(ctx, field)
+			case "reviewedByUserID":
+				return ec.fieldContext_Scan_reviewedByUserID(ctx, field)
+			case "reviewedByGroupID":
+				return ec.fieldContext_Scan_reviewedByGroupID(ctx, field)
+			case "assignedTo":
+				return ec.fieldContext_Scan_assignedTo(ctx, field)
+			case "assignedToUserID":
+				return ec.fieldContext_Scan_assignedToUserID(ctx, field)
+			case "assignedToGroupID":
+				return ec.fieldContext_Scan_assignedToGroupID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Scan_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Scan_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Scan_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Scan_scopeID(ctx, field)
 			case "target":
 				return ec.fieldContext_Scan_target(ctx, field)
 			case "scanType":
 				return ec.fieldContext_Scan_scanType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Scan_metadata(ctx, field)
+			case "scanDate":
+				return ec.fieldContext_Scan_scanDate(ctx, field)
+			case "scanSchedule":
+				return ec.fieldContext_Scan_scanSchedule(ctx, field)
+			case "nextScanRunAt":
+				return ec.fieldContext_Scan_nextScanRunAt(ctx, field)
+			case "performedBy":
+				return ec.fieldContext_Scan_performedBy(ctx, field)
+			case "performedByUserID":
+				return ec.fieldContext_Scan_performedByUserID(ctx, field)
+			case "performedByGroupID":
+				return ec.fieldContext_Scan_performedByGroupID(ctx, field)
+			case "generatedByPlatformID":
+				return ec.fieldContext_Scan_generatedByPlatformID(ctx, field)
+			case "vulnerabilityIds":
+				return ec.fieldContext_Scan_vulnerabilityIds(ctx, field)
 			case "status":
 				return ec.fieldContext_Scan_status(ctx, field)
 			case "owner":
@@ -270,10 +446,44 @@ func (ec *executionContext) fieldContext_ScanCreatePayload_scan(_ context.Contex
 				return ec.fieldContext_Scan_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Scan_viewers(ctx, field)
+			case "reviewedByUser":
+				return ec.fieldContext_Scan_reviewedByUser(ctx, field)
+			case "reviewedByGroup":
+				return ec.fieldContext_Scan_reviewedByGroup(ctx, field)
+			case "assignedToUser":
+				return ec.fieldContext_Scan_assignedToUser(ctx, field)
+			case "assignedToGroup":
+				return ec.fieldContext_Scan_assignedToGroup(ctx, field)
+			case "environment":
+				return ec.fieldContext_Scan_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Scan_scope(ctx, field)
 			case "assets":
 				return ec.fieldContext_Scan_assets(ctx, field)
 			case "entities":
 				return ec.fieldContext_Scan_entities(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Scan_evidence(ctx, field)
+			case "files":
+				return ec.fieldContext_Scan_files(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Scan_remediations(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Scan_actionPlans(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Scan_tasks(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Scan_platforms(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_Scan_vulnerabilities(ctx, field)
+			case "controls":
+				return ec.fieldContext_Scan_controls(ctx, field)
+			case "generatedByPlatform":
+				return ec.fieldContext_Scan_generatedByPlatform(ctx, field)
+			case "performedByUser":
+				return ec.fieldContext_Scan_performedByUser(ctx, field)
+			case "performedByGroup":
+				return ec.fieldContext_Scan_performedByGroup(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Scan", field.Name)
 		},
@@ -348,12 +558,48 @@ func (ec *executionContext) fieldContext_ScanUpdatePayload_scan(_ context.Contex
 				return ec.fieldContext_Scan_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Scan_ownerID(ctx, field)
+			case "reviewedBy":
+				return ec.fieldContext_Scan_reviewedBy(ctx, field)
+			case "reviewedByUserID":
+				return ec.fieldContext_Scan_reviewedByUserID(ctx, field)
+			case "reviewedByGroupID":
+				return ec.fieldContext_Scan_reviewedByGroupID(ctx, field)
+			case "assignedTo":
+				return ec.fieldContext_Scan_assignedTo(ctx, field)
+			case "assignedToUserID":
+				return ec.fieldContext_Scan_assignedToUserID(ctx, field)
+			case "assignedToGroupID":
+				return ec.fieldContext_Scan_assignedToGroupID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Scan_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Scan_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Scan_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Scan_scopeID(ctx, field)
 			case "target":
 				return ec.fieldContext_Scan_target(ctx, field)
 			case "scanType":
 				return ec.fieldContext_Scan_scanType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Scan_metadata(ctx, field)
+			case "scanDate":
+				return ec.fieldContext_Scan_scanDate(ctx, field)
+			case "scanSchedule":
+				return ec.fieldContext_Scan_scanSchedule(ctx, field)
+			case "nextScanRunAt":
+				return ec.fieldContext_Scan_nextScanRunAt(ctx, field)
+			case "performedBy":
+				return ec.fieldContext_Scan_performedBy(ctx, field)
+			case "performedByUserID":
+				return ec.fieldContext_Scan_performedByUserID(ctx, field)
+			case "performedByGroupID":
+				return ec.fieldContext_Scan_performedByGroupID(ctx, field)
+			case "generatedByPlatformID":
+				return ec.fieldContext_Scan_generatedByPlatformID(ctx, field)
+			case "vulnerabilityIds":
+				return ec.fieldContext_Scan_vulnerabilityIds(ctx, field)
 			case "status":
 				return ec.fieldContext_Scan_status(ctx, field)
 			case "owner":
@@ -364,10 +610,44 @@ func (ec *executionContext) fieldContext_ScanUpdatePayload_scan(_ context.Contex
 				return ec.fieldContext_Scan_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Scan_viewers(ctx, field)
+			case "reviewedByUser":
+				return ec.fieldContext_Scan_reviewedByUser(ctx, field)
+			case "reviewedByGroup":
+				return ec.fieldContext_Scan_reviewedByGroup(ctx, field)
+			case "assignedToUser":
+				return ec.fieldContext_Scan_assignedToUser(ctx, field)
+			case "assignedToGroup":
+				return ec.fieldContext_Scan_assignedToGroup(ctx, field)
+			case "environment":
+				return ec.fieldContext_Scan_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Scan_scope(ctx, field)
 			case "assets":
 				return ec.fieldContext_Scan_assets(ctx, field)
 			case "entities":
 				return ec.fieldContext_Scan_entities(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Scan_evidence(ctx, field)
+			case "files":
+				return ec.fieldContext_Scan_files(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Scan_remediations(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Scan_actionPlans(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Scan_tasks(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Scan_platforms(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_Scan_vulnerabilities(ctx, field)
+			case "controls":
+				return ec.fieldContext_Scan_controls(ctx, field)
+			case "generatedByPlatform":
+				return ec.fieldContext_Scan_generatedByPlatform(ctx, field)
+			case "performedByUser":
+				return ec.fieldContext_Scan_performedByUser(ctx, field)
+			case "performedByGroup":
+				return ec.fieldContext_Scan_performedByGroup(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Scan", field.Name)
 		},

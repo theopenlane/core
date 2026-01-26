@@ -222,6 +222,7 @@ type CreateActionPlanInput struct {
 	ProgramIDs                      []string
 	FindingIDs                      []string
 	VulnerabilityIDs                []string
+	ScanIDs                         []string
 	ReviewIDs                       []string
 	RemediationIDs                  []string
 	TaskIDs                         []string
@@ -357,6 +358,9 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.VulnerabilityIDs; len(v) > 0 {
 		m.AddVulnerabilityIDs(v...)
 	}
+	if v := i.ScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
 	if v := i.ReviewIDs; len(v) > 0 {
 		m.AddReviewIDs(v...)
 	}
@@ -481,6 +485,9 @@ type UpdateActionPlanInput struct {
 	ClearVulnerabilities                  bool
 	AddVulnerabilityIDs                   []string
 	RemoveVulnerabilityIDs                []string
+	ClearScans                            bool
+	AddScanIDs                            []string
+	RemoveScanIDs                         []string
 	ClearReviews                          bool
 	AddReviewIDs                          []string
 	RemoveReviewIDs                       []string
@@ -790,6 +797,15 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
 		m.RemoveVulnerabilityIDs(v...)
 	}
+	if i.ClearScans {
+		m.ClearScans()
+	}
+	if v := i.AddScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.RemoveScanIDs; len(v) > 0 {
+		m.RemoveScanIDs(v...)
+	}
 	if i.ClearReviews {
 		m.ClearReviews()
 	}
@@ -868,7 +884,10 @@ type CreateAssessmentInput struct {
 	EditorIDs             []string
 	ViewerIDs             []string
 	TemplateID            *string
+	PlatformIDs           []string
+	IdentityHolderIDs     []string
 	AssessmentResponseIDs []string
+	CampaignIDs           []string
 }
 
 // Mutate applies the CreateAssessmentInput on the AssessmentMutation builder.
@@ -904,8 +923,17 @@ func (i *CreateAssessmentInput) Mutate(m *AssessmentMutation) {
 	if v := i.TemplateID; v != nil {
 		m.SetTemplateID(*v)
 	}
+	if v := i.PlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.IdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
 	if v := i.AssessmentResponseIDs; len(v) > 0 {
 		m.AddAssessmentResponseIDs(v...)
+	}
+	if v := i.CampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
 	}
 }
 
@@ -940,9 +968,18 @@ type UpdateAssessmentInput struct {
 	RemoveViewerIDs             []string
 	ClearTemplate               bool
 	TemplateID                  *string
+	ClearPlatforms              bool
+	AddPlatformIDs              []string
+	RemovePlatformIDs           []string
+	ClearIdentityHolders        bool
+	AddIdentityHolderIDs        []string
+	RemoveIdentityHolderIDs     []string
 	ClearAssessmentResponses    bool
 	AddAssessmentResponseIDs    []string
 	RemoveAssessmentResponseIDs []string
+	ClearCampaigns              bool
+	AddCampaignIDs              []string
+	RemoveCampaignIDs           []string
 }
 
 // Mutate applies the UpdateAssessmentInput on the AssessmentMutation builder.
@@ -1016,6 +1053,24 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	if v := i.TemplateID; v != nil {
 		m.SetTemplateID(*v)
 	}
+	if i.ClearPlatforms {
+		m.ClearPlatforms()
+	}
+	if v := i.AddPlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.RemovePlatformIDs; len(v) > 0 {
+		m.RemovePlatformIDs(v...)
+	}
+	if i.ClearIdentityHolders {
+		m.ClearIdentityHolders()
+	}
+	if v := i.AddIdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
+		m.RemoveIdentityHolderIDs(v...)
+	}
 	if i.ClearAssessmentResponses {
 		m.ClearAssessmentResponses()
 	}
@@ -1024,6 +1079,15 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.RemoveAssessmentResponseIDs; len(v) > 0 {
 		m.RemoveAssessmentResponseIDs(v...)
+	}
+	if i.ClearCampaigns {
+		m.ClearCampaigns()
+	}
+	if v := i.AddCampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.RemoveCampaignIDs; len(v) > 0 {
+		m.RemoveCampaignIDs(v...)
 	}
 }
 
@@ -1041,16 +1105,47 @@ func (c *AssessmentUpdateOne) SetInput(i UpdateAssessmentInput) *AssessmentUpdat
 
 // CreateAssessmentResponseInput represents a mutation input for creating assessmentresponses.
 type CreateAssessmentResponseInput struct {
-	Email        string
-	DueDate      *time.Time
-	OwnerID      *string
-	AssessmentID string
-	DocumentID   *string
+	Email            string
+	EmailDeliveredAt *time.Time
+	EmailOpenedAt    *time.Time
+	EmailClickedAt   *time.Time
+	EmailOpenCount   *int
+	EmailClickCount  *int
+	LastEmailEventAt *time.Time
+	EmailMetadata    map[string]interface{}
+	DueDate          *time.Time
+	OwnerID          *string
+	AssessmentID     string
+	CampaignID       *string
+	IdentityHolderID *string
+	EntityID         *string
+	DocumentID       *string
 }
 
 // Mutate applies the CreateAssessmentResponseInput on the AssessmentResponseMutation builder.
 func (i *CreateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
 	m.SetEmail(i.Email)
+	if v := i.EmailDeliveredAt; v != nil {
+		m.SetEmailDeliveredAt(*v)
+	}
+	if v := i.EmailOpenedAt; v != nil {
+		m.SetEmailOpenedAt(*v)
+	}
+	if v := i.EmailClickedAt; v != nil {
+		m.SetEmailClickedAt(*v)
+	}
+	if v := i.EmailOpenCount; v != nil {
+		m.SetEmailOpenCount(*v)
+	}
+	if v := i.EmailClickCount; v != nil {
+		m.SetEmailClickCount(*v)
+	}
+	if v := i.LastEmailEventAt; v != nil {
+		m.SetLastEmailEventAt(*v)
+	}
+	if v := i.EmailMetadata; v != nil {
+		m.SetEmailMetadata(v)
+	}
 	if v := i.DueDate; v != nil {
 		m.SetDueDate(*v)
 	}
@@ -1058,6 +1153,15 @@ func (i *CreateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
 		m.SetOwnerID(*v)
 	}
 	m.SetAssessmentID(i.AssessmentID)
+	if v := i.CampaignID; v != nil {
+		m.SetCampaignID(*v)
+	}
+	if v := i.IdentityHolderID; v != nil {
+		m.SetIdentityHolderID(*v)
+	}
+	if v := i.EntityID; v != nil {
+		m.SetEntityID(*v)
+	}
 	if v := i.DocumentID; v != nil {
 		m.SetDocumentID(*v)
 	}
@@ -1071,29 +1175,89 @@ func (c *AssessmentResponseCreate) SetInput(i CreateAssessmentResponseInput) *As
 
 // CreateAssetInput represents a mutation input for creating assets.
 type CreateAssetInput struct {
-	Tags             []string
-	InternalNotes    *string
-	SystemInternalID *string
-	AssetType        *enums.AssetType
-	Name             string
-	Description      *string
-	Identifier       *string
-	Website          *string
-	Cpe              *string
-	Categories       []string
-	OwnerID          *string
-	BlockedGroupIDs  []string
-	EditorIDs        []string
-	ViewerIDs        []string
-	ScanIDs          []string
-	EntityIDs        []string
-	ControlIDs       []string
+	Tags                        []string
+	InternalOwner               *string
+	AssetSubtypeName            *string
+	AssetDataClassificationName *string
+	EnvironmentName             *string
+	ScopeName                   *string
+	AccessModelName             *string
+	EncryptionStatusName        *string
+	SecurityTierName            *string
+	CriticalityName             *string
+	InternalNotes               *string
+	SystemInternalID            *string
+	AssetType                   *enums.AssetType
+	Name                        string
+	Description                 *string
+	Identifier                  *string
+	Website                     *string
+	PhysicalLocation            *string
+	Region                      *string
+	ContainsPii                 *bool
+	SourceType                  *enums.SourceType
+	SourceIdentifier            *string
+	CostCenter                  *string
+	EstimatedMonthlyCost        *float64
+	PurchaseDate                *models.DateTime
+	Cpe                         *string
+	Categories                  []string
+	OwnerID                     *string
+	BlockedGroupIDs             []string
+	EditorIDs                   []string
+	ViewerIDs                   []string
+	InternalOwnerUserID         *string
+	InternalOwnerGroupID        *string
+	AssetSubtypeID              *string
+	AssetDataClassificationID   *string
+	EnvironmentID               *string
+	ScopeID                     *string
+	AccessModelID               *string
+	EncryptionStatusID          *string
+	SecurityTierID              *string
+	CriticalityID               *string
+	ScanIDs                     []string
+	EntityIDs                   []string
+	PlatformIDs                 []string
+	OutOfScopePlatformIDs       []string
+	IdentityHolderIDs           []string
+	ControlIDs                  []string
+	SourcePlatformID            *string
+	ConnectedAssetIDs           []string
+	ConnectedFromIDs            []string
 }
 
 // Mutate applies the CreateAssetInput on the AssetMutation builder.
 func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalOwner; v != nil {
+		m.SetInternalOwner(*v)
+	}
+	if v := i.AssetSubtypeName; v != nil {
+		m.SetAssetSubtypeName(*v)
+	}
+	if v := i.AssetDataClassificationName; v != nil {
+		m.SetAssetDataClassificationName(*v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
+	if v := i.AccessModelName; v != nil {
+		m.SetAccessModelName(*v)
+	}
+	if v := i.EncryptionStatusName; v != nil {
+		m.SetEncryptionStatusName(*v)
+	}
+	if v := i.SecurityTierName; v != nil {
+		m.SetSecurityTierName(*v)
+	}
+	if v := i.CriticalityName; v != nil {
+		m.SetCriticalityName(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -1114,6 +1278,30 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	if v := i.Website; v != nil {
 		m.SetWebsite(*v)
 	}
+	if v := i.PhysicalLocation; v != nil {
+		m.SetPhysicalLocation(*v)
+	}
+	if v := i.Region; v != nil {
+		m.SetRegion(*v)
+	}
+	if v := i.ContainsPii; v != nil {
+		m.SetContainsPii(*v)
+	}
+	if v := i.SourceType; v != nil {
+		m.SetSourceType(*v)
+	}
+	if v := i.SourceIdentifier; v != nil {
+		m.SetSourceIdentifier(*v)
+	}
+	if v := i.CostCenter; v != nil {
+		m.SetCostCenter(*v)
+	}
+	if v := i.EstimatedMonthlyCost; v != nil {
+		m.SetEstimatedMonthlyCost(*v)
+	}
+	if v := i.PurchaseDate; v != nil {
+		m.SetPurchaseDate(*v)
+	}
 	if v := i.Cpe; v != nil {
 		m.SetCpe(*v)
 	}
@@ -1132,14 +1320,62 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
 	}
+	if v := i.InternalOwnerUserID; v != nil {
+		m.SetInternalOwnerUserID(*v)
+	}
+	if v := i.InternalOwnerGroupID; v != nil {
+		m.SetInternalOwnerGroupID(*v)
+	}
+	if v := i.AssetSubtypeID; v != nil {
+		m.SetAssetSubtypeID(*v)
+	}
+	if v := i.AssetDataClassificationID; v != nil {
+		m.SetAssetDataClassificationID(*v)
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
+	if v := i.AccessModelID; v != nil {
+		m.SetAccessModelID(*v)
+	}
+	if v := i.EncryptionStatusID; v != nil {
+		m.SetEncryptionStatusID(*v)
+	}
+	if v := i.SecurityTierID; v != nil {
+		m.SetSecurityTierID(*v)
+	}
+	if v := i.CriticalityID; v != nil {
+		m.SetCriticalityID(*v)
+	}
 	if v := i.ScanIDs; len(v) > 0 {
 		m.AddScanIDs(v...)
 	}
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
 	}
+	if v := i.PlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.OutOfScopePlatformIDs; len(v) > 0 {
+		m.AddOutOfScopePlatformIDs(v...)
+	}
+	if v := i.IdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
+	}
+	if v := i.SourcePlatformID; v != nil {
+		m.SetSourcePlatformID(*v)
+	}
+	if v := i.ConnectedAssetIDs; len(v) > 0 {
+		m.AddConnectedAssetIDs(v...)
+	}
+	if v := i.ConnectedFromIDs; len(v) > 0 {
+		m.AddConnectedFromIDs(v...)
 	}
 }
 
@@ -1151,44 +1387,114 @@ func (c *AssetCreate) SetInput(i CreateAssetInput) *AssetCreate {
 
 // UpdateAssetInput represents a mutation input for updating assets.
 type UpdateAssetInput struct {
-	ClearTags             bool
-	Tags                  []string
-	AppendTags            []string
-	ClearInternalNotes    bool
-	InternalNotes         *string
-	ClearSystemInternalID bool
-	SystemInternalID      *string
-	AssetType             *enums.AssetType
-	Name                  *string
-	ClearDescription      bool
-	Description           *string
-	ClearIdentifier       bool
-	Identifier            *string
-	ClearWebsite          bool
-	Website               *string
-	ClearCpe              bool
-	Cpe                   *string
-	ClearCategories       bool
-	Categories            []string
-	AppendCategories      []string
-	ClearBlockedGroups    bool
-	AddBlockedGroupIDs    []string
-	RemoveBlockedGroupIDs []string
-	ClearEditors          bool
-	AddEditorIDs          []string
-	RemoveEditorIDs       []string
-	ClearViewers          bool
-	AddViewerIDs          []string
-	RemoveViewerIDs       []string
-	ClearScans            bool
-	AddScanIDs            []string
-	RemoveScanIDs         []string
-	ClearEntities         bool
-	AddEntityIDs          []string
-	RemoveEntityIDs       []string
-	ClearControls         bool
-	AddControlIDs         []string
-	RemoveControlIDs      []string
+	ClearTags                        bool
+	Tags                             []string
+	AppendTags                       []string
+	ClearInternalOwner               bool
+	InternalOwner                    *string
+	ClearAssetSubtypeName            bool
+	AssetSubtypeName                 *string
+	ClearAssetDataClassificationName bool
+	AssetDataClassificationName      *string
+	ClearEnvironmentName             bool
+	EnvironmentName                  *string
+	ClearScopeName                   bool
+	ScopeName                        *string
+	ClearAccessModelName             bool
+	AccessModelName                  *string
+	ClearEncryptionStatusName        bool
+	EncryptionStatusName             *string
+	ClearSecurityTierName            bool
+	SecurityTierName                 *string
+	ClearCriticalityName             bool
+	CriticalityName                  *string
+	ClearInternalNotes               bool
+	InternalNotes                    *string
+	ClearSystemInternalID            bool
+	SystemInternalID                 *string
+	AssetType                        *enums.AssetType
+	Name                             *string
+	ClearDescription                 bool
+	Description                      *string
+	ClearIdentifier                  bool
+	Identifier                       *string
+	ClearWebsite                     bool
+	Website                          *string
+	ClearPhysicalLocation            bool
+	PhysicalLocation                 *string
+	ClearRegion                      bool
+	Region                           *string
+	ClearContainsPii                 bool
+	ContainsPii                      *bool
+	SourceType                       *enums.SourceType
+	ClearSourceIdentifier            bool
+	SourceIdentifier                 *string
+	ClearCostCenter                  bool
+	CostCenter                       *string
+	ClearEstimatedMonthlyCost        bool
+	EstimatedMonthlyCost             *float64
+	ClearPurchaseDate                bool
+	PurchaseDate                     *models.DateTime
+	ClearCpe                         bool
+	Cpe                              *string
+	ClearCategories                  bool
+	Categories                       []string
+	AppendCategories                 []string
+	ClearBlockedGroups               bool
+	AddBlockedGroupIDs               []string
+	RemoveBlockedGroupIDs            []string
+	ClearEditors                     bool
+	AddEditorIDs                     []string
+	RemoveEditorIDs                  []string
+	ClearViewers                     bool
+	AddViewerIDs                     []string
+	RemoveViewerIDs                  []string
+	ClearInternalOwnerUser           bool
+	InternalOwnerUserID              *string
+	ClearInternalOwnerGroup          bool
+	InternalOwnerGroupID             *string
+	ClearAssetSubtype                bool
+	AssetSubtypeID                   *string
+	ClearAssetDataClassification     bool
+	AssetDataClassificationID        *string
+	ClearEnvironment                 bool
+	EnvironmentID                    *string
+	ClearScope                       bool
+	ScopeID                          *string
+	ClearAccessModel                 bool
+	AccessModelID                    *string
+	ClearEncryptionStatus            bool
+	EncryptionStatusID               *string
+	ClearSecurityTier                bool
+	SecurityTierID                   *string
+	ClearCriticality                 bool
+	CriticalityID                    *string
+	ClearScans                       bool
+	AddScanIDs                       []string
+	RemoveScanIDs                    []string
+	ClearEntities                    bool
+	AddEntityIDs                     []string
+	RemoveEntityIDs                  []string
+	ClearPlatforms                   bool
+	AddPlatformIDs                   []string
+	RemovePlatformIDs                []string
+	ClearOutOfScopePlatforms         bool
+	AddOutOfScopePlatformIDs         []string
+	RemoveOutOfScopePlatformIDs      []string
+	ClearIdentityHolders             bool
+	AddIdentityHolderIDs             []string
+	RemoveIdentityHolderIDs          []string
+	ClearControls                    bool
+	AddControlIDs                    []string
+	RemoveControlIDs                 []string
+	ClearSourcePlatform              bool
+	SourcePlatformID                 *string
+	ClearConnectedAssets             bool
+	AddConnectedAssetIDs             []string
+	RemoveConnectedAssetIDs          []string
+	ClearConnectedFrom               bool
+	AddConnectedFromIDs              []string
+	RemoveConnectedFromIDs           []string
 }
 
 // Mutate applies the UpdateAssetInput on the AssetMutation builder.
@@ -1201,6 +1507,60 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalOwner {
+		m.ClearInternalOwner()
+	}
+	if v := i.InternalOwner; v != nil {
+		m.SetInternalOwner(*v)
+	}
+	if i.ClearAssetSubtypeName {
+		m.ClearAssetSubtypeName()
+	}
+	if v := i.AssetSubtypeName; v != nil {
+		m.SetAssetSubtypeName(*v)
+	}
+	if i.ClearAssetDataClassificationName {
+		m.ClearAssetDataClassificationName()
+	}
+	if v := i.AssetDataClassificationName; v != nil {
+		m.SetAssetDataClassificationName(*v)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
+	if i.ClearAccessModelName {
+		m.ClearAccessModelName()
+	}
+	if v := i.AccessModelName; v != nil {
+		m.SetAccessModelName(*v)
+	}
+	if i.ClearEncryptionStatusName {
+		m.ClearEncryptionStatusName()
+	}
+	if v := i.EncryptionStatusName; v != nil {
+		m.SetEncryptionStatusName(*v)
+	}
+	if i.ClearSecurityTierName {
+		m.ClearSecurityTierName()
+	}
+	if v := i.SecurityTierName; v != nil {
+		m.SetSecurityTierName(*v)
+	}
+	if i.ClearCriticalityName {
+		m.ClearCriticalityName()
+	}
+	if v := i.CriticalityName; v != nil {
+		m.SetCriticalityName(*v)
 	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
@@ -1237,6 +1597,51 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.Website; v != nil {
 		m.SetWebsite(*v)
+	}
+	if i.ClearPhysicalLocation {
+		m.ClearPhysicalLocation()
+	}
+	if v := i.PhysicalLocation; v != nil {
+		m.SetPhysicalLocation(*v)
+	}
+	if i.ClearRegion {
+		m.ClearRegion()
+	}
+	if v := i.Region; v != nil {
+		m.SetRegion(*v)
+	}
+	if i.ClearContainsPii {
+		m.ClearContainsPii()
+	}
+	if v := i.ContainsPii; v != nil {
+		m.SetContainsPii(*v)
+	}
+	if v := i.SourceType; v != nil {
+		m.SetSourceType(*v)
+	}
+	if i.ClearSourceIdentifier {
+		m.ClearSourceIdentifier()
+	}
+	if v := i.SourceIdentifier; v != nil {
+		m.SetSourceIdentifier(*v)
+	}
+	if i.ClearCostCenter {
+		m.ClearCostCenter()
+	}
+	if v := i.CostCenter; v != nil {
+		m.SetCostCenter(*v)
+	}
+	if i.ClearEstimatedMonthlyCost {
+		m.ClearEstimatedMonthlyCost()
+	}
+	if v := i.EstimatedMonthlyCost; v != nil {
+		m.SetEstimatedMonthlyCost(*v)
+	}
+	if i.ClearPurchaseDate {
+		m.ClearPurchaseDate()
+	}
+	if v := i.PurchaseDate; v != nil {
+		m.SetPurchaseDate(*v)
 	}
 	if i.ClearCpe {
 		m.ClearCpe()
@@ -1280,6 +1685,66 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
 	}
+	if i.ClearInternalOwnerUser {
+		m.ClearInternalOwnerUser()
+	}
+	if v := i.InternalOwnerUserID; v != nil {
+		m.SetInternalOwnerUserID(*v)
+	}
+	if i.ClearInternalOwnerGroup {
+		m.ClearInternalOwnerGroup()
+	}
+	if v := i.InternalOwnerGroupID; v != nil {
+		m.SetInternalOwnerGroupID(*v)
+	}
+	if i.ClearAssetSubtype {
+		m.ClearAssetSubtype()
+	}
+	if v := i.AssetSubtypeID; v != nil {
+		m.SetAssetSubtypeID(*v)
+	}
+	if i.ClearAssetDataClassification {
+		m.ClearAssetDataClassification()
+	}
+	if v := i.AssetDataClassificationID; v != nil {
+		m.SetAssetDataClassificationID(*v)
+	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
+	if i.ClearAccessModel {
+		m.ClearAccessModel()
+	}
+	if v := i.AccessModelID; v != nil {
+		m.SetAccessModelID(*v)
+	}
+	if i.ClearEncryptionStatus {
+		m.ClearEncryptionStatus()
+	}
+	if v := i.EncryptionStatusID; v != nil {
+		m.SetEncryptionStatusID(*v)
+	}
+	if i.ClearSecurityTier {
+		m.ClearSecurityTier()
+	}
+	if v := i.SecurityTierID; v != nil {
+		m.SetSecurityTierID(*v)
+	}
+	if i.ClearCriticality {
+		m.ClearCriticality()
+	}
+	if v := i.CriticalityID; v != nil {
+		m.SetCriticalityID(*v)
+	}
 	if i.ClearScans {
 		m.ClearScans()
 	}
@@ -1298,6 +1763,33 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	if v := i.RemoveEntityIDs; len(v) > 0 {
 		m.RemoveEntityIDs(v...)
 	}
+	if i.ClearPlatforms {
+		m.ClearPlatforms()
+	}
+	if v := i.AddPlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.RemovePlatformIDs; len(v) > 0 {
+		m.RemovePlatformIDs(v...)
+	}
+	if i.ClearOutOfScopePlatforms {
+		m.ClearOutOfScopePlatforms()
+	}
+	if v := i.AddOutOfScopePlatformIDs; len(v) > 0 {
+		m.AddOutOfScopePlatformIDs(v...)
+	}
+	if v := i.RemoveOutOfScopePlatformIDs; len(v) > 0 {
+		m.RemoveOutOfScopePlatformIDs(v...)
+	}
+	if i.ClearIdentityHolders {
+		m.ClearIdentityHolders()
+	}
+	if v := i.AddIdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
+		m.RemoveIdentityHolderIDs(v...)
+	}
 	if i.ClearControls {
 		m.ClearControls()
 	}
@@ -1306,6 +1798,30 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSourcePlatform {
+		m.ClearSourcePlatform()
+	}
+	if v := i.SourcePlatformID; v != nil {
+		m.SetSourcePlatformID(*v)
+	}
+	if i.ClearConnectedAssets {
+		m.ClearConnectedAssets()
+	}
+	if v := i.AddConnectedAssetIDs; len(v) > 0 {
+		m.AddConnectedAssetIDs(v...)
+	}
+	if v := i.RemoveConnectedAssetIDs; len(v) > 0 {
+		m.RemoveConnectedAssetIDs(v...)
+	}
+	if i.ClearConnectedFrom {
+		m.ClearConnectedFrom()
+	}
+	if v := i.AddConnectedFromIDs; len(v) > 0 {
+		m.AddConnectedFromIDs(v...)
+	}
+	if v := i.RemoveConnectedFromIDs; len(v) > 0 {
+		m.RemoveConnectedFromIDs(v...)
 	}
 }
 
@@ -1321,19 +1837,719 @@ func (c *AssetUpdateOne) SetInput(i UpdateAssetInput) *AssetUpdateOne {
 	return c
 }
 
+// CreateCampaignInput represents a mutation input for creating campaigns.
+type CreateCampaignInput struct {
+	Tags                   []string
+	InternalOwner          *string
+	WorkflowEligibleMarker *bool
+	Name                   string
+	Description            *string
+	CampaignType           *enums.CampaignType
+	Status                 *enums.CampaignStatus
+	IsActive               *bool
+	ScheduledAt            *models.DateTime
+	LaunchedAt             *models.DateTime
+	CompletedAt            *models.DateTime
+	DueDate                *models.DateTime
+	IsRecurring            *bool
+	RecurrenceFrequency    *enums.Frequency
+	RecurrenceInterval     *int
+	RecurrenceCron         *models.Cron
+	RecurrenceTimezone     *string
+	LastRunAt              *models.DateTime
+	NextRunAt              *models.DateTime
+	RecurrenceEndAt        *models.DateTime
+	RecipientCount         *int
+	ResendCount            *int
+	LastResentAt           *models.DateTime
+	Metadata               map[string]interface{}
+	OwnerID                *string
+	BlockedGroupIDs        []string
+	EditorIDs              []string
+	ViewerIDs              []string
+	InternalOwnerUserID    *string
+	InternalOwnerGroupID   *string
+	AssessmentID           *string
+	TemplateID             *string
+	EntityID               *string
+	CampaignTargetIDs      []string
+	AssessmentResponseIDs  []string
+	ContactIDs             []string
+	UserIDs                []string
+	GroupIDs               []string
+	IdentityHolderIDs      []string
+	WorkflowObjectRefIDs   []string
+}
+
+// Mutate applies the CreateCampaignInput on the CampaignMutation builder.
+func (i *CreateCampaignInput) Mutate(m *CampaignMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.InternalOwner; v != nil {
+		m.SetInternalOwner(*v)
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.CampaignType; v != nil {
+		m.SetCampaignType(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if v := i.ScheduledAt; v != nil {
+		m.SetScheduledAt(*v)
+	}
+	if v := i.LaunchedAt; v != nil {
+		m.SetLaunchedAt(*v)
+	}
+	if v := i.CompletedAt; v != nil {
+		m.SetCompletedAt(*v)
+	}
+	if v := i.DueDate; v != nil {
+		m.SetDueDate(*v)
+	}
+	if v := i.IsRecurring; v != nil {
+		m.SetIsRecurring(*v)
+	}
+	if v := i.RecurrenceFrequency; v != nil {
+		m.SetRecurrenceFrequency(*v)
+	}
+	if v := i.RecurrenceInterval; v != nil {
+		m.SetRecurrenceInterval(*v)
+	}
+	if v := i.RecurrenceCron; v != nil {
+		m.SetRecurrenceCron(*v)
+	}
+	if v := i.RecurrenceTimezone; v != nil {
+		m.SetRecurrenceTimezone(*v)
+	}
+	if v := i.LastRunAt; v != nil {
+		m.SetLastRunAt(*v)
+	}
+	if v := i.NextRunAt; v != nil {
+		m.SetNextRunAt(*v)
+	}
+	if v := i.RecurrenceEndAt; v != nil {
+		m.SetRecurrenceEndAt(*v)
+	}
+	if v := i.RecipientCount; v != nil {
+		m.SetRecipientCount(*v)
+	}
+	if v := i.ResendCount; v != nil {
+		m.SetResendCount(*v)
+	}
+	if v := i.LastResentAt; v != nil {
+		m.SetLastResentAt(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.InternalOwnerUserID; v != nil {
+		m.SetInternalOwnerUserID(*v)
+	}
+	if v := i.InternalOwnerGroupID; v != nil {
+		m.SetInternalOwnerGroupID(*v)
+	}
+	if v := i.AssessmentID; v != nil {
+		m.SetAssessmentID(*v)
+	}
+	if v := i.TemplateID; v != nil {
+		m.SetTemplateID(*v)
+	}
+	if v := i.EntityID; v != nil {
+		m.SetEntityID(*v)
+	}
+	if v := i.CampaignTargetIDs; len(v) > 0 {
+		m.AddCampaignTargetIDs(v...)
+	}
+	if v := i.AssessmentResponseIDs; len(v) > 0 {
+		m.AddAssessmentResponseIDs(v...)
+	}
+	if v := i.ContactIDs; len(v) > 0 {
+		m.AddContactIDs(v...)
+	}
+	if v := i.UserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
+	}
+	if v := i.GroupIDs; len(v) > 0 {
+		m.AddGroupIDs(v...)
+	}
+	if v := i.IdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateCampaignInput on the CampaignCreate builder.
+func (c *CampaignCreate) SetInput(i CreateCampaignInput) *CampaignCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateCampaignInput represents a mutation input for updating campaigns.
+type UpdateCampaignInput struct {
+	ClearTags                   bool
+	Tags                        []string
+	AppendTags                  []string
+	ClearInternalOwner          bool
+	InternalOwner               *string
+	ClearWorkflowEligibleMarker bool
+	WorkflowEligibleMarker      *bool
+	Name                        *string
+	ClearDescription            bool
+	Description                 *string
+	CampaignType                *enums.CampaignType
+	Status                      *enums.CampaignStatus
+	IsActive                    *bool
+	ClearScheduledAt            bool
+	ScheduledAt                 *models.DateTime
+	ClearLaunchedAt             bool
+	LaunchedAt                  *models.DateTime
+	ClearCompletedAt            bool
+	CompletedAt                 *models.DateTime
+	ClearDueDate                bool
+	DueDate                     *models.DateTime
+	IsRecurring                 *bool
+	ClearRecurrenceFrequency    bool
+	RecurrenceFrequency         *enums.Frequency
+	ClearRecurrenceInterval     bool
+	RecurrenceInterval          *int
+	ClearRecurrenceCron         bool
+	RecurrenceCron              *models.Cron
+	ClearRecurrenceTimezone     bool
+	RecurrenceTimezone          *string
+	ClearLastRunAt              bool
+	LastRunAt                   *models.DateTime
+	ClearNextRunAt              bool
+	NextRunAt                   *models.DateTime
+	ClearRecurrenceEndAt        bool
+	RecurrenceEndAt             *models.DateTime
+	ClearRecipientCount         bool
+	RecipientCount              *int
+	ClearResendCount            bool
+	ResendCount                 *int
+	ClearLastResentAt           bool
+	LastResentAt                *models.DateTime
+	ClearMetadata               bool
+	Metadata                    map[string]interface{}
+	ClearBlockedGroups          bool
+	AddBlockedGroupIDs          []string
+	RemoveBlockedGroupIDs       []string
+	ClearEditors                bool
+	AddEditorIDs                []string
+	RemoveEditorIDs             []string
+	ClearViewers                bool
+	AddViewerIDs                []string
+	RemoveViewerIDs             []string
+	ClearInternalOwnerUser      bool
+	InternalOwnerUserID         *string
+	ClearInternalOwnerGroup     bool
+	InternalOwnerGroupID        *string
+	ClearAssessment             bool
+	AssessmentID                *string
+	ClearTemplate               bool
+	TemplateID                  *string
+	ClearEntity                 bool
+	EntityID                    *string
+	ClearCampaignTargets        bool
+	AddCampaignTargetIDs        []string
+	RemoveCampaignTargetIDs     []string
+	ClearAssessmentResponses    bool
+	AddAssessmentResponseIDs    []string
+	RemoveAssessmentResponseIDs []string
+	ClearContacts               bool
+	AddContactIDs               []string
+	RemoveContactIDs            []string
+	ClearUsers                  bool
+	AddUserIDs                  []string
+	RemoveUserIDs               []string
+	ClearGroups                 bool
+	AddGroupIDs                 []string
+	RemoveGroupIDs              []string
+	ClearIdentityHolders        bool
+	AddIdentityHolderIDs        []string
+	RemoveIdentityHolderIDs     []string
+	ClearWorkflowObjectRefs     bool
+	AddWorkflowObjectRefIDs     []string
+	RemoveWorkflowObjectRefIDs  []string
+}
+
+// Mutate applies the UpdateCampaignInput on the CampaignMutation builder.
+func (i *UpdateCampaignInput) Mutate(m *CampaignMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalOwner {
+		m.ClearInternalOwner()
+	}
+	if v := i.InternalOwner; v != nil {
+		m.SetInternalOwner(*v)
+	}
+	if i.ClearWorkflowEligibleMarker {
+		m.ClearWorkflowEligibleMarker()
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.CampaignType; v != nil {
+		m.SetCampaignType(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if i.ClearScheduledAt {
+		m.ClearScheduledAt()
+	}
+	if v := i.ScheduledAt; v != nil {
+		m.SetScheduledAt(*v)
+	}
+	if i.ClearLaunchedAt {
+		m.ClearLaunchedAt()
+	}
+	if v := i.LaunchedAt; v != nil {
+		m.SetLaunchedAt(*v)
+	}
+	if i.ClearCompletedAt {
+		m.ClearCompletedAt()
+	}
+	if v := i.CompletedAt; v != nil {
+		m.SetCompletedAt(*v)
+	}
+	if i.ClearDueDate {
+		m.ClearDueDate()
+	}
+	if v := i.DueDate; v != nil {
+		m.SetDueDate(*v)
+	}
+	if v := i.IsRecurring; v != nil {
+		m.SetIsRecurring(*v)
+	}
+	if i.ClearRecurrenceFrequency {
+		m.ClearRecurrenceFrequency()
+	}
+	if v := i.RecurrenceFrequency; v != nil {
+		m.SetRecurrenceFrequency(*v)
+	}
+	if i.ClearRecurrenceInterval {
+		m.ClearRecurrenceInterval()
+	}
+	if v := i.RecurrenceInterval; v != nil {
+		m.SetRecurrenceInterval(*v)
+	}
+	if i.ClearRecurrenceCron {
+		m.ClearRecurrenceCron()
+	}
+	if v := i.RecurrenceCron; v != nil {
+		m.SetRecurrenceCron(*v)
+	}
+	if i.ClearRecurrenceTimezone {
+		m.ClearRecurrenceTimezone()
+	}
+	if v := i.RecurrenceTimezone; v != nil {
+		m.SetRecurrenceTimezone(*v)
+	}
+	if i.ClearLastRunAt {
+		m.ClearLastRunAt()
+	}
+	if v := i.LastRunAt; v != nil {
+		m.SetLastRunAt(*v)
+	}
+	if i.ClearNextRunAt {
+		m.ClearNextRunAt()
+	}
+	if v := i.NextRunAt; v != nil {
+		m.SetNextRunAt(*v)
+	}
+	if i.ClearRecurrenceEndAt {
+		m.ClearRecurrenceEndAt()
+	}
+	if v := i.RecurrenceEndAt; v != nil {
+		m.SetRecurrenceEndAt(*v)
+	}
+	if i.ClearRecipientCount {
+		m.ClearRecipientCount()
+	}
+	if v := i.RecipientCount; v != nil {
+		m.SetRecipientCount(*v)
+	}
+	if i.ClearResendCount {
+		m.ClearResendCount()
+	}
+	if v := i.ResendCount; v != nil {
+		m.SetResendCount(*v)
+	}
+	if i.ClearLastResentAt {
+		m.ClearLastResentAt()
+	}
+	if v := i.LastResentAt; v != nil {
+		m.SetLastResentAt(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearInternalOwnerUser {
+		m.ClearInternalOwnerUser()
+	}
+	if v := i.InternalOwnerUserID; v != nil {
+		m.SetInternalOwnerUserID(*v)
+	}
+	if i.ClearInternalOwnerGroup {
+		m.ClearInternalOwnerGroup()
+	}
+	if v := i.InternalOwnerGroupID; v != nil {
+		m.SetInternalOwnerGroupID(*v)
+	}
+	if i.ClearAssessment {
+		m.ClearAssessment()
+	}
+	if v := i.AssessmentID; v != nil {
+		m.SetAssessmentID(*v)
+	}
+	if i.ClearTemplate {
+		m.ClearTemplate()
+	}
+	if v := i.TemplateID; v != nil {
+		m.SetTemplateID(*v)
+	}
+	if i.ClearEntity {
+		m.ClearEntity()
+	}
+	if v := i.EntityID; v != nil {
+		m.SetEntityID(*v)
+	}
+	if i.ClearCampaignTargets {
+		m.ClearCampaignTargets()
+	}
+	if v := i.AddCampaignTargetIDs; len(v) > 0 {
+		m.AddCampaignTargetIDs(v...)
+	}
+	if v := i.RemoveCampaignTargetIDs; len(v) > 0 {
+		m.RemoveCampaignTargetIDs(v...)
+	}
+	if i.ClearAssessmentResponses {
+		m.ClearAssessmentResponses()
+	}
+	if v := i.AddAssessmentResponseIDs; len(v) > 0 {
+		m.AddAssessmentResponseIDs(v...)
+	}
+	if v := i.RemoveAssessmentResponseIDs; len(v) > 0 {
+		m.RemoveAssessmentResponseIDs(v...)
+	}
+	if i.ClearContacts {
+		m.ClearContacts()
+	}
+	if v := i.AddContactIDs; len(v) > 0 {
+		m.AddContactIDs(v...)
+	}
+	if v := i.RemoveContactIDs; len(v) > 0 {
+		m.RemoveContactIDs(v...)
+	}
+	if i.ClearUsers {
+		m.ClearUsers()
+	}
+	if v := i.AddUserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
+	}
+	if v := i.RemoveUserIDs; len(v) > 0 {
+		m.RemoveUserIDs(v...)
+	}
+	if i.ClearGroups {
+		m.ClearGroups()
+	}
+	if v := i.AddGroupIDs; len(v) > 0 {
+		m.AddGroupIDs(v...)
+	}
+	if v := i.RemoveGroupIDs; len(v) > 0 {
+		m.RemoveGroupIDs(v...)
+	}
+	if i.ClearIdentityHolders {
+		m.ClearIdentityHolders()
+	}
+	if v := i.AddIdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
+		m.RemoveIdentityHolderIDs(v...)
+	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateCampaignInput on the CampaignUpdate builder.
+func (c *CampaignUpdate) SetInput(i UpdateCampaignInput) *CampaignUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateCampaignInput on the CampaignUpdateOne builder.
+func (c *CampaignUpdateOne) SetInput(i UpdateCampaignInput) *CampaignUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateCampaignTargetInput represents a mutation input for creating campaigntargets.
+type CreateCampaignTargetInput struct {
+	WorkflowEligibleMarker *bool
+	Email                  string
+	FullName               *string
+	Status                 *enums.AssessmentResponseStatus
+	SentAt                 *models.DateTime
+	CompletedAt            *models.DateTime
+	Metadata               map[string]interface{}
+	OwnerID                *string
+	CampaignID             string
+	ContactID              *string
+	UserID                 *string
+	GroupID                *string
+	WorkflowObjectRefIDs   []string
+}
+
+// Mutate applies the CreateCampaignTargetInput on the CampaignTargetMutation builder.
+func (i *CreateCampaignTargetInput) Mutate(m *CampaignTargetMutation) {
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
+	}
+	m.SetEmail(i.Email)
+	if v := i.FullName; v != nil {
+		m.SetFullName(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.SentAt; v != nil {
+		m.SetSentAt(*v)
+	}
+	if v := i.CompletedAt; v != nil {
+		m.SetCompletedAt(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetCampaignID(i.CampaignID)
+	if v := i.ContactID; v != nil {
+		m.SetContactID(*v)
+	}
+	if v := i.UserID; v != nil {
+		m.SetUserID(*v)
+	}
+	if v := i.GroupID; v != nil {
+		m.SetGroupID(*v)
+	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateCampaignTargetInput on the CampaignTargetCreate builder.
+func (c *CampaignTargetCreate) SetInput(i CreateCampaignTargetInput) *CampaignTargetCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateCampaignTargetInput represents a mutation input for updating campaigntargets.
+type UpdateCampaignTargetInput struct {
+	ClearWorkflowEligibleMarker bool
+	WorkflowEligibleMarker      *bool
+	Email                       *string
+	ClearFullName               bool
+	FullName                    *string
+	Status                      *enums.AssessmentResponseStatus
+	ClearSentAt                 bool
+	SentAt                      *models.DateTime
+	ClearCompletedAt            bool
+	CompletedAt                 *models.DateTime
+	ClearMetadata               bool
+	Metadata                    map[string]interface{}
+	CampaignID                  *string
+	ClearContact                bool
+	ContactID                   *string
+	ClearUser                   bool
+	UserID                      *string
+	ClearGroup                  bool
+	GroupID                     *string
+	ClearWorkflowObjectRefs     bool
+	AddWorkflowObjectRefIDs     []string
+	RemoveWorkflowObjectRefIDs  []string
+}
+
+// Mutate applies the UpdateCampaignTargetInput on the CampaignTargetMutation builder.
+func (i *UpdateCampaignTargetInput) Mutate(m *CampaignTargetMutation) {
+	if i.ClearWorkflowEligibleMarker {
+		m.ClearWorkflowEligibleMarker()
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
+	}
+	if v := i.Email; v != nil {
+		m.SetEmail(*v)
+	}
+	if i.ClearFullName {
+		m.ClearFullName()
+	}
+	if v := i.FullName; v != nil {
+		m.SetFullName(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearSentAt {
+		m.ClearSentAt()
+	}
+	if v := i.SentAt; v != nil {
+		m.SetSentAt(*v)
+	}
+	if i.ClearCompletedAt {
+		m.ClearCompletedAt()
+	}
+	if v := i.CompletedAt; v != nil {
+		m.SetCompletedAt(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.CampaignID; v != nil {
+		m.SetCampaignID(*v)
+	}
+	if i.ClearContact {
+		m.ClearContact()
+	}
+	if v := i.ContactID; v != nil {
+		m.SetContactID(*v)
+	}
+	if i.ClearUser {
+		m.ClearUser()
+	}
+	if v := i.UserID; v != nil {
+		m.SetUserID(*v)
+	}
+	if i.ClearGroup {
+		m.ClearGroup()
+	}
+	if v := i.GroupID; v != nil {
+		m.SetGroupID(*v)
+	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateCampaignTargetInput on the CampaignTargetUpdate builder.
+func (c *CampaignTargetUpdate) SetInput(i UpdateCampaignTargetInput) *CampaignTargetUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateCampaignTargetInput on the CampaignTargetUpdateOne builder.
+func (c *CampaignTargetUpdateOne) SetInput(i UpdateCampaignTargetInput) *CampaignTargetUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateContactInput represents a mutation input for creating contacts.
 type CreateContactInput struct {
-	Tags        []string
-	FullName    *string
-	Title       *string
-	Company     *string
-	Email       *string
-	PhoneNumber *string
-	Address     *string
-	Status      *enums.UserStatus
-	OwnerID     *string
-	EntityIDs   []string
-	FileIDs     []string
+	Tags              []string
+	FullName          *string
+	Title             *string
+	Company           *string
+	Email             *string
+	PhoneNumber       *string
+	Address           *string
+	Status            *enums.UserStatus
+	OwnerID           *string
+	EntityIDs         []string
+	CampaignIDs       []string
+	CampaignTargetIDs []string
+	FileIDs           []string
 }
 
 // Mutate applies the CreateContactInput on the ContactMutation builder.
@@ -1368,6 +2584,12 @@ func (i *CreateContactInput) Mutate(m *ContactMutation) {
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
 	}
+	if v := i.CampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.CampaignTargetIDs; len(v) > 0 {
+		m.AddCampaignTargetIDs(v...)
+	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
@@ -1381,30 +2603,36 @@ func (c *ContactCreate) SetInput(i CreateContactInput) *ContactCreate {
 
 // UpdateContactInput represents a mutation input for updating contacts.
 type UpdateContactInput struct {
-	ClearTags        bool
-	Tags             []string
-	AppendTags       []string
-	ClearFullName    bool
-	FullName         *string
-	ClearTitle       bool
-	Title            *string
-	ClearCompany     bool
-	Company          *string
-	ClearEmail       bool
-	Email            *string
-	ClearPhoneNumber bool
-	PhoneNumber      *string
-	ClearAddress     bool
-	Address          *string
-	Status           *enums.UserStatus
-	ClearOwner       bool
-	OwnerID          *string
-	ClearEntities    bool
-	AddEntityIDs     []string
-	RemoveEntityIDs  []string
-	ClearFiles       bool
-	AddFileIDs       []string
-	RemoveFileIDs    []string
+	ClearTags               bool
+	Tags                    []string
+	AppendTags              []string
+	ClearFullName           bool
+	FullName                *string
+	ClearTitle              bool
+	Title                   *string
+	ClearCompany            bool
+	Company                 *string
+	ClearEmail              bool
+	Email                   *string
+	ClearPhoneNumber        bool
+	PhoneNumber             *string
+	ClearAddress            bool
+	Address                 *string
+	Status                  *enums.UserStatus
+	ClearOwner              bool
+	OwnerID                 *string
+	ClearEntities           bool
+	AddEntityIDs            []string
+	RemoveEntityIDs         []string
+	ClearCampaigns          bool
+	AddCampaignIDs          []string
+	RemoveCampaignIDs       []string
+	ClearCampaignTargets    bool
+	AddCampaignTargetIDs    []string
+	RemoveCampaignTargetIDs []string
+	ClearFiles              bool
+	AddFileIDs              []string
+	RemoveFileIDs           []string
 }
 
 // Mutate applies the UpdateContactInput on the ContactMutation builder.
@@ -1472,6 +2700,24 @@ func (i *UpdateContactInput) Mutate(m *ContactMutation) {
 	if v := i.RemoveEntityIDs; len(v) > 0 {
 		m.RemoveEntityIDs(v...)
 	}
+	if i.ClearCampaigns {
+		m.ClearCampaigns()
+	}
+	if v := i.AddCampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.RemoveCampaignIDs; len(v) > 0 {
+		m.RemoveCampaignIDs(v...)
+	}
+	if i.ClearCampaignTargets {
+		m.ClearCampaignTargets()
+	}
+	if v := i.AddCampaignTargetIDs; len(v) > 0 {
+		m.AddCampaignTargetIDs(v...)
+	}
+	if v := i.RemoveCampaignTargetIDs; len(v) > 0 {
+		m.RemoveCampaignTargetIDs(v...)
+	}
 	if i.ClearFiles {
 		m.ClearFiles()
 	}
@@ -1523,6 +2769,8 @@ type CreateControlInput struct {
 	InternalNotes              *string
 	SystemInternalID           *string
 	ControlKindName            *string
+	EnvironmentName            *string
+	ScopeName                  *string
 	WorkflowEligibleMarker     *bool
 	RefCode                    string
 	EvidenceIDs                []string
@@ -1542,8 +2790,11 @@ type CreateControlInput struct {
 	BlockedGroupIDs            []string
 	EditorIDs                  []string
 	ControlKindID              *string
+	EnvironmentID              *string
+	ScopeID                    *string
 	StandardID                 *string
 	ProgramIDs                 []string
+	PlatformIDs                []string
 	AssetIDs                   []string
 	ScanIDs                    []string
 	FindingIDs                 []string
@@ -1633,6 +2884,12 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ControlKindName; v != nil {
 		m.SetControlKindName(*v)
 	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
 	}
@@ -1688,11 +2945,20 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ControlKindID; v != nil {
 		m.SetControlKindID(*v)
 	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if v := i.StandardID; v != nil {
 		m.SetStandardID(*v)
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
+	}
+	if v := i.PlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
 	}
 	if v := i.AssetIDs; len(v) > 0 {
 		m.AddAssetIDs(v...)
@@ -1787,6 +3053,10 @@ type UpdateControlInput struct {
 	SystemInternalID                *string
 	ClearControlKindName            bool
 	ControlKindName                 *string
+	ClearEnvironmentName            bool
+	EnvironmentName                 *string
+	ClearScopeName                  bool
+	ScopeName                       *string
 	ClearWorkflowEligibleMarker     bool
 	WorkflowEligibleMarker          *bool
 	RefCode                         *string
@@ -1834,11 +3104,18 @@ type UpdateControlInput struct {
 	RemoveEditorIDs                 []string
 	ClearControlKind                bool
 	ControlKindID                   *string
+	ClearEnvironment                bool
+	EnvironmentID                   *string
+	ClearScope                      bool
+	ScopeID                         *string
 	ClearStandard                   bool
 	StandardID                      *string
 	ClearPrograms                   bool
 	AddProgramIDs                   []string
 	RemoveProgramIDs                []string
+	ClearPlatforms                  bool
+	AddPlatformIDs                  []string
+	RemovePlatformIDs               []string
 	ClearAssets                     bool
 	AddAssetIDs                     []string
 	RemoveAssetIDs                  []string
@@ -2050,6 +3327,18 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ControlKindName; v != nil {
 		m.SetControlKindName(*v)
 	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
 	if i.ClearWorkflowEligibleMarker {
 		m.ClearWorkflowEligibleMarker()
 	}
@@ -2191,6 +3480,18 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ControlKindID; v != nil {
 		m.SetControlKindID(*v)
 	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if i.ClearStandard {
 		m.ClearStandard()
 	}
@@ -2205,6 +3506,15 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearPlatforms {
+		m.ClearPlatforms()
+	}
+	if v := i.AddPlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.RemovePlatformIDs; len(v) > 0 {
+		m.RemovePlatformIDs(v...)
 	}
 	if i.ClearAssets {
 		m.ClearAssets()
@@ -3031,6 +4341,7 @@ type CreateCustomTypeEnumInput struct {
 	ProcedureIDs      []string
 	ActionPlanIDs     []string
 	ProgramIDs        []string
+	PlatformIDs       []string
 }
 
 // Mutate applies the CreateCustomTypeEnumInput on the CustomTypeEnumMutation builder.
@@ -3085,6 +4396,9 @@ func (i *CreateCustomTypeEnumInput) Mutate(m *CustomTypeEnumMutation) {
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
+	if v := i.PlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateCustomTypeEnumInput on the CustomTypeEnumCreate builder.
@@ -3134,6 +4448,9 @@ type UpdateCustomTypeEnumInput struct {
 	ClearPrograms           bool
 	AddProgramIDs           []string
 	RemoveProgramIDs        []string
+	ClearPlatforms          bool
+	AddPlatformIDs          []string
+	RemovePlatformIDs       []string
 }
 
 // Mutate applies the UpdateCustomTypeEnumInput on the CustomTypeEnumMutation builder.
@@ -3254,6 +4571,15 @@ func (i *UpdateCustomTypeEnumInput) Mutate(m *CustomTypeEnumMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearPlatforms {
+		m.ClearPlatforms()
+	}
+	if v := i.AddPlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.RemovePlatformIDs; len(v) > 0 {
+		m.RemovePlatformIDs(v...)
 	}
 }
 
@@ -3424,6 +4750,8 @@ func (c *DNSVerificationUpdateOne) SetInput(i UpdateDNSVerificationInput) *DNSVe
 // CreateDirectoryAccountInput represents a mutation input for creating directoryaccounts.
 type CreateDirectoryAccountInput struct {
 	Tags                 []string
+	EnvironmentName      *string
+	ScopeName            *string
 	ExternalID           string
 	SecondaryKey         *string
 	CanonicalEmail       *string
@@ -3443,6 +4771,8 @@ type CreateDirectoryAccountInput struct {
 	Profile              map[string]interface{}
 	SourceVersion        *string
 	OwnerID              *string
+	EnvironmentID        *string
+	ScopeID              *string
 	IntegrationID        string
 	DirectorySyncRunID   string
 	GroupIDs             []string
@@ -3453,6 +4783,12 @@ type CreateDirectoryAccountInput struct {
 func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	m.SetExternalID(i.ExternalID)
 	if v := i.SecondaryKey; v != nil {
@@ -3509,6 +4845,12 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	m.SetIntegrationID(i.IntegrationID)
 	m.SetDirectorySyncRunID(i.DirectorySyncRunID)
 	if v := i.GroupIDs; len(v) > 0 {
@@ -3530,6 +4872,10 @@ type UpdateDirectoryAccountInput struct {
 	ClearTags                  bool
 	Tags                       []string
 	AppendTags                 []string
+	ClearEnvironmentName       bool
+	EnvironmentName            *string
+	ClearScopeName             bool
+	ScopeName                  *string
 	ClearSecondaryKey          bool
 	SecondaryKey               *string
 	ClearCanonicalEmail        bool
@@ -3561,6 +4907,10 @@ type UpdateDirectoryAccountInput struct {
 	SourceVersion              *string
 	ClearOwner                 bool
 	OwnerID                    *string
+	ClearEnvironment           bool
+	EnvironmentID              *string
+	ClearScope                 bool
+	ScopeID                    *string
 	ClearGroups                bool
 	AddGroupIDs                []string
 	RemoveGroupIDs             []string
@@ -3579,6 +4929,18 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if i.ClearSecondaryKey {
 		m.ClearSecondaryKey()
@@ -3673,6 +5035,18 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if i.ClearGroups {
 		m.ClearGroups()
 	}
@@ -3708,6 +5082,8 @@ func (c *DirectoryAccountUpdateOne) SetInput(i UpdateDirectoryAccountInput) *Dir
 // CreateDirectoryGroupInput represents a mutation input for creating directorygroups.
 type CreateDirectoryGroupInput struct {
 	Tags                   []string
+	EnvironmentName        *string
+	ScopeName              *string
 	ExternalID             string
 	Email                  *string
 	DisplayName            *string
@@ -3721,6 +5097,8 @@ type CreateDirectoryGroupInput struct {
 	Profile                map[string]interface{}
 	SourceVersion          *string
 	OwnerID                *string
+	EnvironmentID          *string
+	ScopeID                *string
 	IntegrationID          string
 	DirectorySyncRunID     string
 	WorkflowObjectRefIDs   []string
@@ -3730,6 +5108,12 @@ type CreateDirectoryGroupInput struct {
 func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	m.SetExternalID(i.ExternalID)
 	if v := i.Email; v != nil {
@@ -3768,6 +5152,12 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	m.SetIntegrationID(i.IntegrationID)
 	m.SetDirectorySyncRunID(i.DirectorySyncRunID)
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
@@ -3786,6 +5176,10 @@ type UpdateDirectoryGroupInput struct {
 	ClearTags                   bool
 	Tags                        []string
 	AppendTags                  []string
+	ClearEnvironmentName        bool
+	EnvironmentName             *string
+	ClearScopeName              bool
+	ScopeName                   *string
 	ClearEmail                  bool
 	Email                       *string
 	ClearDisplayName            bool
@@ -3805,6 +5199,10 @@ type UpdateDirectoryGroupInput struct {
 	SourceVersion               *string
 	ClearOwner                  bool
 	OwnerID                     *string
+	ClearEnvironment            bool
+	EnvironmentID               *string
+	ClearScope                  bool
+	ScopeID                     *string
 	ClearWorkflowObjectRefs     bool
 	AddWorkflowObjectRefIDs     []string
 	RemoveWorkflowObjectRefIDs  []string
@@ -3820,6 +5218,18 @@ func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if i.ClearEmail {
 		m.ClearEmail()
@@ -3878,6 +5288,18 @@ func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if i.ClearWorkflowObjectRefs {
 		m.ClearWorkflowObjectRefs()
 	}
@@ -3903,6 +5325,8 @@ func (c *DirectoryGroupUpdateOne) SetInput(i UpdateDirectoryGroupInput) *Directo
 
 // CreateDirectoryMembershipInput represents a mutation input for creating directorymemberships.
 type CreateDirectoryMembershipInput struct {
+	EnvironmentName      *string
+	ScopeName            *string
 	Role                 *enums.DirectoryMembershipRole
 	Source               *string
 	FirstSeenAt          *time.Time
@@ -3911,6 +5335,8 @@ type CreateDirectoryMembershipInput struct {
 	LastConfirmedRunID   *string
 	Metadata             map[string]interface{}
 	OwnerID              *string
+	EnvironmentID        *string
+	ScopeID              *string
 	IntegrationID        string
 	DirectorySyncRunID   string
 	DirectoryAccountID   string
@@ -3921,6 +5347,12 @@ type CreateDirectoryMembershipInput struct {
 
 // Mutate applies the CreateDirectoryMembershipInput on the DirectoryMembershipMutation builder.
 func (i *CreateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) {
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
 	if v := i.Role; v != nil {
 		m.SetRole(*v)
 	}
@@ -3945,6 +5377,12 @@ func (i *CreateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	m.SetIntegrationID(i.IntegrationID)
 	m.SetDirectorySyncRunID(i.DirectorySyncRunID)
 	m.SetDirectoryAccountID(i.DirectoryAccountID)
@@ -3965,6 +5403,10 @@ func (c *DirectoryMembershipCreate) SetInput(i CreateDirectoryMembershipInput) *
 
 // UpdateDirectoryMembershipInput represents a mutation input for updating directorymemberships.
 type UpdateDirectoryMembershipInput struct {
+	ClearEnvironmentName       bool
+	EnvironmentName            *string
+	ClearScopeName             bool
+	ScopeName                  *string
 	ClearRole                  bool
 	Role                       *enums.DirectoryMembershipRole
 	ClearSource                bool
@@ -3979,6 +5421,10 @@ type UpdateDirectoryMembershipInput struct {
 	Metadata                   map[string]interface{}
 	ClearOwner                 bool
 	OwnerID                    *string
+	ClearEnvironment           bool
+	EnvironmentID              *string
+	ClearScope                 bool
+	ScopeID                    *string
 	ClearEvents                bool
 	AddEventIDs                []string
 	RemoveEventIDs             []string
@@ -3989,6 +5435,18 @@ type UpdateDirectoryMembershipInput struct {
 
 // Mutate applies the UpdateDirectoryMembershipInput on the DirectoryMembershipMutation builder.
 func (i *UpdateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) {
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
 	if i.ClearRole {
 		m.ClearRole()
 	}
@@ -4031,6 +5489,18 @@ func (i *UpdateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if i.ClearEvents {
 		m.ClearEvents()
 	}
@@ -4065,6 +5535,8 @@ func (c *DirectoryMembershipUpdateOne) SetInput(i UpdateDirectoryMembershipInput
 
 // CreateDirectorySyncRunInput represents a mutation input for creating directorysyncruns.
 type CreateDirectorySyncRunInput struct {
+	EnvironmentName     *string
+	ScopeName           *string
 	Status              *enums.DirectorySyncRunStatus
 	StartedAt           *time.Time
 	CompletedAt         *time.Time
@@ -4075,6 +5547,8 @@ type CreateDirectorySyncRunInput struct {
 	RawManifestFileID   *string
 	Stats               map[string]interface{}
 	OwnerID             *string
+	EnvironmentID       *string
+	ScopeID             *string
 	IntegrationID       string
 	DirectoryAccountIDs []string
 	DirectoryGroupIDs   []string
@@ -4082,6 +5556,12 @@ type CreateDirectorySyncRunInput struct {
 
 // Mutate applies the CreateDirectorySyncRunInput on the DirectorySyncRunMutation builder.
 func (i *CreateDirectorySyncRunInput) Mutate(m *DirectorySyncRunMutation) {
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
@@ -4112,6 +5592,12 @@ func (i *CreateDirectorySyncRunInput) Mutate(m *DirectorySyncRunMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	m.SetIntegrationID(i.IntegrationID)
 	if v := i.DirectoryAccountIDs; len(v) > 0 {
 		m.AddDirectoryAccountIDs(v...)
@@ -4129,6 +5615,10 @@ func (c *DirectorySyncRunCreate) SetInput(i CreateDirectorySyncRunInput) *Direct
 
 // UpdateDirectorySyncRunInput represents a mutation input for updating directorysyncruns.
 type UpdateDirectorySyncRunInput struct {
+	ClearEnvironmentName      bool
+	EnvironmentName           *string
+	ClearScopeName            bool
+	ScopeName                 *string
 	Status                    *enums.DirectorySyncRunStatus
 	StartedAt                 *time.Time
 	ClearCompletedAt          bool
@@ -4145,6 +5635,10 @@ type UpdateDirectorySyncRunInput struct {
 	Stats                     map[string]interface{}
 	ClearOwner                bool
 	OwnerID                   *string
+	ClearEnvironment          bool
+	EnvironmentID             *string
+	ClearScope                bool
+	ScopeID                   *string
 	ClearDirectoryAccounts    bool
 	AddDirectoryAccountIDs    []string
 	RemoveDirectoryAccountIDs []string
@@ -4155,6 +5649,18 @@ type UpdateDirectorySyncRunInput struct {
 
 // Mutate applies the UpdateDirectorySyncRunInput on the DirectorySyncRunMutation builder.
 func (i *UpdateDirectorySyncRunInput) Mutate(m *DirectorySyncRunMutation) {
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
@@ -4202,6 +5708,18 @@ func (i *UpdateDirectorySyncRunInput) Mutate(m *DirectorySyncRunMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if i.ClearDirectoryAccounts {
 		m.ClearDirectoryAccounts()
@@ -4371,12 +5889,16 @@ func (c *DiscussionUpdateOne) SetInput(i UpdateDiscussionInput) *DiscussionUpdat
 
 // CreateDocumentDataInput represents a mutation input for creating documentdataslice.
 type CreateDocumentDataInput struct {
-	Tags       []string
-	Data       map[string]interface{}
-	OwnerID    *string
-	TemplateID *string
-	EntityIDs  []string
-	FileIDs    []string
+	Tags            []string
+	EnvironmentName *string
+	ScopeName       *string
+	Data            map[string]interface{}
+	OwnerID         *string
+	EnvironmentID   *string
+	ScopeID         *string
+	TemplateID      *string
+	EntityIDs       []string
+	FileIDs         []string
 }
 
 // Mutate applies the CreateDocumentDataInput on the DocumentDataMutation builder.
@@ -4384,11 +5906,23 @@ func (i *CreateDocumentDataInput) Mutate(m *DocumentDataMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
 	if v := i.Data; v != nil {
 		m.SetData(v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if v := i.TemplateID; v != nil {
 		m.SetTemplateID(*v)
@@ -4409,18 +5943,26 @@ func (c *DocumentDataCreate) SetInput(i CreateDocumentDataInput) *DocumentDataCr
 
 // UpdateDocumentDataInput represents a mutation input for updating documentdataslice.
 type UpdateDocumentDataInput struct {
-	ClearTags       bool
-	Tags            []string
-	AppendTags      []string
-	Data            map[string]interface{}
-	ClearTemplate   bool
-	TemplateID      *string
-	ClearEntities   bool
-	AddEntityIDs    []string
-	RemoveEntityIDs []string
-	ClearFiles      bool
-	AddFileIDs      []string
-	RemoveFileIDs   []string
+	ClearTags            bool
+	Tags                 []string
+	AppendTags           []string
+	ClearEnvironmentName bool
+	EnvironmentName      *string
+	ClearScopeName       bool
+	ScopeName            *string
+	Data                 map[string]interface{}
+	ClearEnvironment     bool
+	EnvironmentID        *string
+	ClearScope           bool
+	ScopeID              *string
+	ClearTemplate        bool
+	TemplateID           *string
+	ClearEntities        bool
+	AddEntityIDs         []string
+	RemoveEntityIDs      []string
+	ClearFiles           bool
+	AddFileIDs           []string
+	RemoveFileIDs        []string
 }
 
 // Mutate applies the UpdateDocumentDataInput on the DocumentDataMutation builder.
@@ -4434,8 +5976,32 @@ func (i *UpdateDocumentDataInput) Mutate(m *DocumentDataMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
 	if v := i.Data; v != nil {
 		m.SetData(v)
+	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if i.ClearTemplate {
 		m.ClearTemplate()
@@ -4477,25 +6043,77 @@ func (c *DocumentDataUpdateOne) SetInput(i UpdateDocumentDataInput) *DocumentDat
 
 // CreateEntityInput represents a mutation input for creating entities.
 type CreateEntityInput struct {
-	Tags             []string
-	InternalNotes    *string
-	SystemInternalID *string
-	Name             *string
-	DisplayName      *string
-	Description      *string
-	Domains          []string
-	Status           *string
-	OwnerID          *string
-	BlockedGroupIDs  []string
-	EditorIDs        []string
-	ViewerIDs        []string
-	ContactIDs       []string
-	DocumentIDs      []string
-	NoteIDs          []string
-	FileIDs          []string
-	AssetIDs         []string
-	ScanIDs          []string
-	EntityTypeID     *string
+	Tags                                  []string
+	InternalOwner                         *string
+	ReviewedBy                            *string
+	LastReviewedAt                        *models.DateTime
+	InternalNotes                         *string
+	SystemInternalID                      *string
+	EntityRelationshipStateName           *string
+	EntitySecurityQuestionnaireStatusName *string
+	EntitySourceTypeName                  *string
+	EnvironmentName                       *string
+	ScopeName                             *string
+	Name                                  *string
+	DisplayName                           *string
+	Description                           *string
+	Domains                               []string
+	Status                                *string
+	ApprovedForUse                        *bool
+	LinkedAssetIds                        []string
+	HasSoc2                               *bool
+	Soc2PeriodEnd                         *models.DateTime
+	ContractStartDate                     *models.DateTime
+	ContractEndDate                       *models.DateTime
+	AutoRenews                            *bool
+	TerminationNoticeDays                 *int
+	AnnualSpend                           *float64
+	SpendCurrency                         *string
+	BillingModel                          *string
+	RenewalRisk                           *string
+	SSOEnforced                           *bool
+	MfaSupported                          *bool
+	MfaEnforced                           *bool
+	StatusPageURL                         *string
+	ProvidedServices                      []string
+	Links                                 []string
+	RiskRating                            *string
+	RiskScore                             *int
+	Tier                                  *string
+	ReviewFrequency                       *enums.Frequency
+	NextReviewAt                          *models.DateTime
+	ContractRenewalAt                     *models.DateTime
+	VendorMetadata                        map[string]interface{}
+	OwnerID                               *string
+	BlockedGroupIDs                       []string
+	EditorIDs                             []string
+	ViewerIDs                             []string
+	InternalOwnerUserID                   *string
+	InternalOwnerGroupID                  *string
+	ReviewedByUserID                      *string
+	ReviewedByGroupID                     *string
+	EntityRelationshipStateID             *string
+	EntitySecurityQuestionnaireStatusID   *string
+	EntitySourceTypeID                    *string
+	EnvironmentID                         *string
+	ScopeID                               *string
+	ContactIDs                            []string
+	DocumentIDs                           []string
+	NoteIDs                               []string
+	FileIDs                               []string
+	AssetIDs                              []string
+	ScanIDs                               []string
+	CampaignIDs                           []string
+	AssessmentResponseIDs                 []string
+	IntegrationIDs                        []string
+	SubprocessorIDs                       []string
+	AuthMethodIDs                         []string
+	EmployerIdentityHolderIDs             []string
+	IdentityHolderIDs                     []string
+	PlatformIDs                           []string
+	OutOfScopePlatformIDs                 []string
+	SourcePlatformIDs                     []string
+	EntityTypeID                          *string
 }
 
 // Mutate applies the CreateEntityInput on the EntityMutation builder.
@@ -4503,11 +6121,35 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
+	if v := i.InternalOwner; v != nil {
+		m.SetInternalOwner(*v)
+	}
+	if v := i.ReviewedBy; v != nil {
+		m.SetReviewedBy(*v)
+	}
+	if v := i.LastReviewedAt; v != nil {
+		m.SetLastReviewedAt(*v)
+	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if v := i.EntityRelationshipStateName; v != nil {
+		m.SetEntityRelationshipStateName(*v)
+	}
+	if v := i.EntitySecurityQuestionnaireStatusName; v != nil {
+		m.SetEntitySecurityQuestionnaireStatusName(*v)
+	}
+	if v := i.EntitySourceTypeName; v != nil {
+		m.SetEntitySourceTypeName(*v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -4524,6 +6166,81 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
+	if v := i.ApprovedForUse; v != nil {
+		m.SetApprovedForUse(*v)
+	}
+	if v := i.LinkedAssetIds; v != nil {
+		m.SetLinkedAssetIds(v)
+	}
+	if v := i.HasSoc2; v != nil {
+		m.SetHasSoc2(*v)
+	}
+	if v := i.Soc2PeriodEnd; v != nil {
+		m.SetSoc2PeriodEnd(*v)
+	}
+	if v := i.ContractStartDate; v != nil {
+		m.SetContractStartDate(*v)
+	}
+	if v := i.ContractEndDate; v != nil {
+		m.SetContractEndDate(*v)
+	}
+	if v := i.AutoRenews; v != nil {
+		m.SetAutoRenews(*v)
+	}
+	if v := i.TerminationNoticeDays; v != nil {
+		m.SetTerminationNoticeDays(*v)
+	}
+	if v := i.AnnualSpend; v != nil {
+		m.SetAnnualSpend(*v)
+	}
+	if v := i.SpendCurrency; v != nil {
+		m.SetSpendCurrency(*v)
+	}
+	if v := i.BillingModel; v != nil {
+		m.SetBillingModel(*v)
+	}
+	if v := i.RenewalRisk; v != nil {
+		m.SetRenewalRisk(*v)
+	}
+	if v := i.SSOEnforced; v != nil {
+		m.SetSSOEnforced(*v)
+	}
+	if v := i.MfaSupported; v != nil {
+		m.SetMfaSupported(*v)
+	}
+	if v := i.MfaEnforced; v != nil {
+		m.SetMfaEnforced(*v)
+	}
+	if v := i.StatusPageURL; v != nil {
+		m.SetStatusPageURL(*v)
+	}
+	if v := i.ProvidedServices; v != nil {
+		m.SetProvidedServices(v)
+	}
+	if v := i.Links; v != nil {
+		m.SetLinks(v)
+	}
+	if v := i.RiskRating; v != nil {
+		m.SetRiskRating(*v)
+	}
+	if v := i.RiskScore; v != nil {
+		m.SetRiskScore(*v)
+	}
+	if v := i.Tier; v != nil {
+		m.SetTier(*v)
+	}
+	if v := i.ReviewFrequency; v != nil {
+		m.SetReviewFrequency(*v)
+	}
+	if v := i.NextReviewAt; v != nil {
+		m.SetNextReviewAt(*v)
+	}
+	if v := i.ContractRenewalAt; v != nil {
+		m.SetContractRenewalAt(*v)
+	}
+	if v := i.VendorMetadata; v != nil {
+		m.SetVendorMetadata(v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -4535,6 +6252,33 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
+	}
+	if v := i.InternalOwnerUserID; v != nil {
+		m.SetInternalOwnerUserID(*v)
+	}
+	if v := i.InternalOwnerGroupID; v != nil {
+		m.SetInternalOwnerGroupID(*v)
+	}
+	if v := i.ReviewedByUserID; v != nil {
+		m.SetReviewedByUserID(*v)
+	}
+	if v := i.ReviewedByGroupID; v != nil {
+		m.SetReviewedByGroupID(*v)
+	}
+	if v := i.EntityRelationshipStateID; v != nil {
+		m.SetEntityRelationshipStateID(*v)
+	}
+	if v := i.EntitySecurityQuestionnaireStatusID; v != nil {
+		m.SetEntitySecurityQuestionnaireStatusID(*v)
+	}
+	if v := i.EntitySourceTypeID; v != nil {
+		m.SetEntitySourceTypeID(*v)
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if v := i.ContactIDs; len(v) > 0 {
 		m.AddContactIDs(v...)
@@ -4554,6 +6298,36 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.ScanIDs; len(v) > 0 {
 		m.AddScanIDs(v...)
 	}
+	if v := i.CampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.AssessmentResponseIDs; len(v) > 0 {
+		m.AddAssessmentResponseIDs(v...)
+	}
+	if v := i.IntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.SubprocessorIDs; len(v) > 0 {
+		m.AddSubprocessorIDs(v...)
+	}
+	if v := i.AuthMethodIDs; len(v) > 0 {
+		m.AddAuthMethodIDs(v...)
+	}
+	if v := i.EmployerIdentityHolderIDs; len(v) > 0 {
+		m.AddEmployerIdentityHolderIDs(v...)
+	}
+	if v := i.IdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.PlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.OutOfScopePlatformIDs; len(v) > 0 {
+		m.AddOutOfScopePlatformIDs(v...)
+	}
+	if v := i.SourcePlatformIDs; len(v) > 0 {
+		m.AddSourcePlatformIDs(v...)
+	}
 	if v := i.EntityTypeID; v != nil {
 		m.SetEntityTypeID(*v)
 	}
@@ -4567,53 +6341,170 @@ func (c *EntityCreate) SetInput(i CreateEntityInput) *EntityCreate {
 
 // UpdateEntityInput represents a mutation input for updating entities.
 type UpdateEntityInput struct {
-	ClearTags             bool
-	Tags                  []string
-	AppendTags            []string
-	ClearInternalNotes    bool
-	InternalNotes         *string
-	ClearSystemInternalID bool
-	SystemInternalID      *string
-	ClearName             bool
-	Name                  *string
-	ClearDisplayName      bool
-	DisplayName           *string
-	ClearDescription      bool
-	Description           *string
-	ClearDomains          bool
-	Domains               []string
-	AppendDomains         []string
-	ClearStatus           bool
-	Status                *string
-	ClearBlockedGroups    bool
-	AddBlockedGroupIDs    []string
-	RemoveBlockedGroupIDs []string
-	ClearEditors          bool
-	AddEditorIDs          []string
-	RemoveEditorIDs       []string
-	ClearViewers          bool
-	AddViewerIDs          []string
-	RemoveViewerIDs       []string
-	ClearContacts         bool
-	AddContactIDs         []string
-	RemoveContactIDs      []string
-	ClearDocuments        bool
-	AddDocumentIDs        []string
-	RemoveDocumentIDs     []string
-	ClearNotes            bool
-	AddNoteIDs            []string
-	RemoveNoteIDs         []string
-	ClearFiles            bool
-	AddFileIDs            []string
-	RemoveFileIDs         []string
-	ClearAssets           bool
-	AddAssetIDs           []string
-	RemoveAssetIDs        []string
-	ClearScans            bool
-	AddScanIDs            []string
-	RemoveScanIDs         []string
-	ClearEntityType       bool
-	EntityTypeID          *string
+	ClearTags                                  bool
+	Tags                                       []string
+	AppendTags                                 []string
+	ClearInternalOwner                         bool
+	InternalOwner                              *string
+	ClearReviewedBy                            bool
+	ReviewedBy                                 *string
+	ClearLastReviewedAt                        bool
+	LastReviewedAt                             *models.DateTime
+	ClearInternalNotes                         bool
+	InternalNotes                              *string
+	ClearSystemInternalID                      bool
+	SystemInternalID                           *string
+	ClearEntityRelationshipStateName           bool
+	EntityRelationshipStateName                *string
+	ClearEntitySecurityQuestionnaireStatusName bool
+	EntitySecurityQuestionnaireStatusName      *string
+	ClearEntitySourceTypeName                  bool
+	EntitySourceTypeName                       *string
+	ClearEnvironmentName                       bool
+	EnvironmentName                            *string
+	ClearScopeName                             bool
+	ScopeName                                  *string
+	ClearName                                  bool
+	Name                                       *string
+	ClearDisplayName                           bool
+	DisplayName                                *string
+	ClearDescription                           bool
+	Description                                *string
+	ClearDomains                               bool
+	Domains                                    []string
+	AppendDomains                              []string
+	ClearStatus                                bool
+	Status                                     *string
+	ClearApprovedForUse                        bool
+	ApprovedForUse                             *bool
+	ClearLinkedAssetIds                        bool
+	LinkedAssetIds                             []string
+	AppendLinkedAssetIds                       []string
+	ClearHasSoc2                               bool
+	HasSoc2                                    *bool
+	ClearSoc2PeriodEnd                         bool
+	Soc2PeriodEnd                              *models.DateTime
+	ClearContractStartDate                     bool
+	ContractStartDate                          *models.DateTime
+	ClearContractEndDate                       bool
+	ContractEndDate                            *models.DateTime
+	ClearAutoRenews                            bool
+	AutoRenews                                 *bool
+	ClearTerminationNoticeDays                 bool
+	TerminationNoticeDays                      *int
+	ClearAnnualSpend                           bool
+	AnnualSpend                                *float64
+	ClearSpendCurrency                         bool
+	SpendCurrency                              *string
+	ClearBillingModel                          bool
+	BillingModel                               *string
+	ClearRenewalRisk                           bool
+	RenewalRisk                                *string
+	ClearSSOEnforced                           bool
+	SSOEnforced                                *bool
+	ClearMfaSupported                          bool
+	MfaSupported                               *bool
+	ClearMfaEnforced                           bool
+	MfaEnforced                                *bool
+	ClearStatusPageURL                         bool
+	StatusPageURL                              *string
+	ClearProvidedServices                      bool
+	ProvidedServices                           []string
+	AppendProvidedServices                     []string
+	ClearLinks                                 bool
+	Links                                      []string
+	AppendLinks                                []string
+	ClearRiskRating                            bool
+	RiskRating                                 *string
+	ClearRiskScore                             bool
+	RiskScore                                  *int
+	ClearTier                                  bool
+	Tier                                       *string
+	ClearReviewFrequency                       bool
+	ReviewFrequency                            *enums.Frequency
+	ClearNextReviewAt                          bool
+	NextReviewAt                               *models.DateTime
+	ClearContractRenewalAt                     bool
+	ContractRenewalAt                          *models.DateTime
+	ClearVendorMetadata                        bool
+	VendorMetadata                             map[string]interface{}
+	ClearBlockedGroups                         bool
+	AddBlockedGroupIDs                         []string
+	RemoveBlockedGroupIDs                      []string
+	ClearEditors                               bool
+	AddEditorIDs                               []string
+	RemoveEditorIDs                            []string
+	ClearViewers                               bool
+	AddViewerIDs                               []string
+	RemoveViewerIDs                            []string
+	ClearInternalOwnerUser                     bool
+	InternalOwnerUserID                        *string
+	ClearInternalOwnerGroup                    bool
+	InternalOwnerGroupID                       *string
+	ClearReviewedByUser                        bool
+	ReviewedByUserID                           *string
+	ClearReviewedByGroup                       bool
+	ReviewedByGroupID                          *string
+	ClearEntityRelationshipState               bool
+	EntityRelationshipStateID                  *string
+	ClearEntitySecurityQuestionnaireStatus     bool
+	EntitySecurityQuestionnaireStatusID        *string
+	ClearEntitySourceType                      bool
+	EntitySourceTypeID                         *string
+	ClearEnvironment                           bool
+	EnvironmentID                              *string
+	ClearScope                                 bool
+	ScopeID                                    *string
+	ClearContacts                              bool
+	AddContactIDs                              []string
+	RemoveContactIDs                           []string
+	ClearDocuments                             bool
+	AddDocumentIDs                             []string
+	RemoveDocumentIDs                          []string
+	ClearNotes                                 bool
+	AddNoteIDs                                 []string
+	RemoveNoteIDs                              []string
+	ClearFiles                                 bool
+	AddFileIDs                                 []string
+	RemoveFileIDs                              []string
+	ClearAssets                                bool
+	AddAssetIDs                                []string
+	RemoveAssetIDs                             []string
+	ClearScans                                 bool
+	AddScanIDs                                 []string
+	RemoveScanIDs                              []string
+	ClearCampaigns                             bool
+	AddCampaignIDs                             []string
+	RemoveCampaignIDs                          []string
+	ClearAssessmentResponses                   bool
+	AddAssessmentResponseIDs                   []string
+	RemoveAssessmentResponseIDs                []string
+	ClearIntegrations                          bool
+	AddIntegrationIDs                          []string
+	RemoveIntegrationIDs                       []string
+	ClearSubprocessors                         bool
+	AddSubprocessorIDs                         []string
+	RemoveSubprocessorIDs                      []string
+	ClearAuthMethods                           bool
+	AddAuthMethodIDs                           []string
+	RemoveAuthMethodIDs                        []string
+	ClearEmployerIdentityHolders               bool
+	AddEmployerIdentityHolderIDs               []string
+	RemoveEmployerIdentityHolderIDs            []string
+	ClearIdentityHolders                       bool
+	AddIdentityHolderIDs                       []string
+	RemoveIdentityHolderIDs                    []string
+	ClearPlatforms                             bool
+	AddPlatformIDs                             []string
+	RemovePlatformIDs                          []string
+	ClearOutOfScopePlatforms                   bool
+	AddOutOfScopePlatformIDs                   []string
+	RemoveOutOfScopePlatformIDs                []string
+	ClearSourcePlatforms                       bool
+	AddSourcePlatformIDs                       []string
+	RemoveSourcePlatformIDs                    []string
+	ClearEntityType                            bool
+	EntityTypeID                               *string
 }
 
 // Mutate applies the UpdateEntityInput on the EntityMutation builder.
@@ -4627,6 +6518,24 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
+	if i.ClearInternalOwner {
+		m.ClearInternalOwner()
+	}
+	if v := i.InternalOwner; v != nil {
+		m.SetInternalOwner(*v)
+	}
+	if i.ClearReviewedBy {
+		m.ClearReviewedBy()
+	}
+	if v := i.ReviewedBy; v != nil {
+		m.SetReviewedBy(*v)
+	}
+	if i.ClearLastReviewedAt {
+		m.ClearLastReviewedAt()
+	}
+	if v := i.LastReviewedAt; v != nil {
+		m.SetLastReviewedAt(*v)
+	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
 	}
@@ -4638,6 +6547,36 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if i.ClearEntityRelationshipStateName {
+		m.ClearEntityRelationshipStateName()
+	}
+	if v := i.EntityRelationshipStateName; v != nil {
+		m.SetEntityRelationshipStateName(*v)
+	}
+	if i.ClearEntitySecurityQuestionnaireStatusName {
+		m.ClearEntitySecurityQuestionnaireStatusName()
+	}
+	if v := i.EntitySecurityQuestionnaireStatusName; v != nil {
+		m.SetEntitySecurityQuestionnaireStatusName(*v)
+	}
+	if i.ClearEntitySourceTypeName {
+		m.ClearEntitySourceTypeName()
+	}
+	if v := i.EntitySourceTypeName; v != nil {
+		m.SetEntitySourceTypeName(*v)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if i.ClearName {
 		m.ClearName()
@@ -4672,6 +6611,165 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
+	if i.ClearApprovedForUse {
+		m.ClearApprovedForUse()
+	}
+	if v := i.ApprovedForUse; v != nil {
+		m.SetApprovedForUse(*v)
+	}
+	if i.ClearLinkedAssetIds {
+		m.ClearLinkedAssetIds()
+	}
+	if v := i.LinkedAssetIds; v != nil {
+		m.SetLinkedAssetIds(v)
+	}
+	if i.AppendLinkedAssetIds != nil {
+		m.AppendLinkedAssetIds(i.LinkedAssetIds)
+	}
+	if i.ClearHasSoc2 {
+		m.ClearHasSoc2()
+	}
+	if v := i.HasSoc2; v != nil {
+		m.SetHasSoc2(*v)
+	}
+	if i.ClearSoc2PeriodEnd {
+		m.ClearSoc2PeriodEnd()
+	}
+	if v := i.Soc2PeriodEnd; v != nil {
+		m.SetSoc2PeriodEnd(*v)
+	}
+	if i.ClearContractStartDate {
+		m.ClearContractStartDate()
+	}
+	if v := i.ContractStartDate; v != nil {
+		m.SetContractStartDate(*v)
+	}
+	if i.ClearContractEndDate {
+		m.ClearContractEndDate()
+	}
+	if v := i.ContractEndDate; v != nil {
+		m.SetContractEndDate(*v)
+	}
+	if i.ClearAutoRenews {
+		m.ClearAutoRenews()
+	}
+	if v := i.AutoRenews; v != nil {
+		m.SetAutoRenews(*v)
+	}
+	if i.ClearTerminationNoticeDays {
+		m.ClearTerminationNoticeDays()
+	}
+	if v := i.TerminationNoticeDays; v != nil {
+		m.SetTerminationNoticeDays(*v)
+	}
+	if i.ClearAnnualSpend {
+		m.ClearAnnualSpend()
+	}
+	if v := i.AnnualSpend; v != nil {
+		m.SetAnnualSpend(*v)
+	}
+	if i.ClearSpendCurrency {
+		m.ClearSpendCurrency()
+	}
+	if v := i.SpendCurrency; v != nil {
+		m.SetSpendCurrency(*v)
+	}
+	if i.ClearBillingModel {
+		m.ClearBillingModel()
+	}
+	if v := i.BillingModel; v != nil {
+		m.SetBillingModel(*v)
+	}
+	if i.ClearRenewalRisk {
+		m.ClearRenewalRisk()
+	}
+	if v := i.RenewalRisk; v != nil {
+		m.SetRenewalRisk(*v)
+	}
+	if i.ClearSSOEnforced {
+		m.ClearSSOEnforced()
+	}
+	if v := i.SSOEnforced; v != nil {
+		m.SetSSOEnforced(*v)
+	}
+	if i.ClearMfaSupported {
+		m.ClearMfaSupported()
+	}
+	if v := i.MfaSupported; v != nil {
+		m.SetMfaSupported(*v)
+	}
+	if i.ClearMfaEnforced {
+		m.ClearMfaEnforced()
+	}
+	if v := i.MfaEnforced; v != nil {
+		m.SetMfaEnforced(*v)
+	}
+	if i.ClearStatusPageURL {
+		m.ClearStatusPageURL()
+	}
+	if v := i.StatusPageURL; v != nil {
+		m.SetStatusPageURL(*v)
+	}
+	if i.ClearProvidedServices {
+		m.ClearProvidedServices()
+	}
+	if v := i.ProvidedServices; v != nil {
+		m.SetProvidedServices(v)
+	}
+	if i.AppendProvidedServices != nil {
+		m.AppendProvidedServices(i.ProvidedServices)
+	}
+	if i.ClearLinks {
+		m.ClearLinks()
+	}
+	if v := i.Links; v != nil {
+		m.SetLinks(v)
+	}
+	if i.AppendLinks != nil {
+		m.AppendLinks(i.Links)
+	}
+	if i.ClearRiskRating {
+		m.ClearRiskRating()
+	}
+	if v := i.RiskRating; v != nil {
+		m.SetRiskRating(*v)
+	}
+	if i.ClearRiskScore {
+		m.ClearRiskScore()
+	}
+	if v := i.RiskScore; v != nil {
+		m.SetRiskScore(*v)
+	}
+	if i.ClearTier {
+		m.ClearTier()
+	}
+	if v := i.Tier; v != nil {
+		m.SetTier(*v)
+	}
+	if i.ClearReviewFrequency {
+		m.ClearReviewFrequency()
+	}
+	if v := i.ReviewFrequency; v != nil {
+		m.SetReviewFrequency(*v)
+	}
+	if i.ClearNextReviewAt {
+		m.ClearNextReviewAt()
+	}
+	if v := i.NextReviewAt; v != nil {
+		m.SetNextReviewAt(*v)
+	}
+	if i.ClearContractRenewalAt {
+		m.ClearContractRenewalAt()
+	}
+	if v := i.ContractRenewalAt; v != nil {
+		m.SetContractRenewalAt(*v)
+	}
+	if i.ClearVendorMetadata {
+		m.ClearVendorMetadata()
+	}
+	if v := i.VendorMetadata; v != nil {
+		m.SetVendorMetadata(v)
+	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
 	}
@@ -4698,6 +6796,60 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearInternalOwnerUser {
+		m.ClearInternalOwnerUser()
+	}
+	if v := i.InternalOwnerUserID; v != nil {
+		m.SetInternalOwnerUserID(*v)
+	}
+	if i.ClearInternalOwnerGroup {
+		m.ClearInternalOwnerGroup()
+	}
+	if v := i.InternalOwnerGroupID; v != nil {
+		m.SetInternalOwnerGroupID(*v)
+	}
+	if i.ClearReviewedByUser {
+		m.ClearReviewedByUser()
+	}
+	if v := i.ReviewedByUserID; v != nil {
+		m.SetReviewedByUserID(*v)
+	}
+	if i.ClearReviewedByGroup {
+		m.ClearReviewedByGroup()
+	}
+	if v := i.ReviewedByGroupID; v != nil {
+		m.SetReviewedByGroupID(*v)
+	}
+	if i.ClearEntityRelationshipState {
+		m.ClearEntityRelationshipState()
+	}
+	if v := i.EntityRelationshipStateID; v != nil {
+		m.SetEntityRelationshipStateID(*v)
+	}
+	if i.ClearEntitySecurityQuestionnaireStatus {
+		m.ClearEntitySecurityQuestionnaireStatus()
+	}
+	if v := i.EntitySecurityQuestionnaireStatusID; v != nil {
+		m.SetEntitySecurityQuestionnaireStatusID(*v)
+	}
+	if i.ClearEntitySourceType {
+		m.ClearEntitySourceType()
+	}
+	if v := i.EntitySourceTypeID; v != nil {
+		m.SetEntitySourceTypeID(*v)
+	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if i.ClearContacts {
 		m.ClearContacts()
@@ -4752,6 +6904,96 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.RemoveScanIDs; len(v) > 0 {
 		m.RemoveScanIDs(v...)
+	}
+	if i.ClearCampaigns {
+		m.ClearCampaigns()
+	}
+	if v := i.AddCampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.RemoveCampaignIDs; len(v) > 0 {
+		m.RemoveCampaignIDs(v...)
+	}
+	if i.ClearAssessmentResponses {
+		m.ClearAssessmentResponses()
+	}
+	if v := i.AddAssessmentResponseIDs; len(v) > 0 {
+		m.AddAssessmentResponseIDs(v...)
+	}
+	if v := i.RemoveAssessmentResponseIDs; len(v) > 0 {
+		m.RemoveAssessmentResponseIDs(v...)
+	}
+	if i.ClearIntegrations {
+		m.ClearIntegrations()
+	}
+	if v := i.AddIntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.RemoveIntegrationIDs; len(v) > 0 {
+		m.RemoveIntegrationIDs(v...)
+	}
+	if i.ClearSubprocessors {
+		m.ClearSubprocessors()
+	}
+	if v := i.AddSubprocessorIDs; len(v) > 0 {
+		m.AddSubprocessorIDs(v...)
+	}
+	if v := i.RemoveSubprocessorIDs; len(v) > 0 {
+		m.RemoveSubprocessorIDs(v...)
+	}
+	if i.ClearAuthMethods {
+		m.ClearAuthMethods()
+	}
+	if v := i.AddAuthMethodIDs; len(v) > 0 {
+		m.AddAuthMethodIDs(v...)
+	}
+	if v := i.RemoveAuthMethodIDs; len(v) > 0 {
+		m.RemoveAuthMethodIDs(v...)
+	}
+	if i.ClearEmployerIdentityHolders {
+		m.ClearEmployerIdentityHolders()
+	}
+	if v := i.AddEmployerIdentityHolderIDs; len(v) > 0 {
+		m.AddEmployerIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveEmployerIdentityHolderIDs; len(v) > 0 {
+		m.RemoveEmployerIdentityHolderIDs(v...)
+	}
+	if i.ClearIdentityHolders {
+		m.ClearIdentityHolders()
+	}
+	if v := i.AddIdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
+		m.RemoveIdentityHolderIDs(v...)
+	}
+	if i.ClearPlatforms {
+		m.ClearPlatforms()
+	}
+	if v := i.AddPlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.RemovePlatformIDs; len(v) > 0 {
+		m.RemovePlatformIDs(v...)
+	}
+	if i.ClearOutOfScopePlatforms {
+		m.ClearOutOfScopePlatforms()
+	}
+	if v := i.AddOutOfScopePlatformIDs; len(v) > 0 {
+		m.AddOutOfScopePlatformIDs(v...)
+	}
+	if v := i.RemoveOutOfScopePlatformIDs; len(v) > 0 {
+		m.RemoveOutOfScopePlatformIDs(v...)
+	}
+	if i.ClearSourcePlatforms {
+		m.ClearSourcePlatforms()
+	}
+	if v := i.AddSourcePlatformIDs; len(v) > 0 {
+		m.AddSourcePlatformIDs(v...)
+	}
+	if v := i.RemoveSourcePlatformIDs; len(v) > 0 {
+		m.RemoveSourcePlatformIDs(v...)
 	}
 	if i.ClearEntityType {
 		m.ClearEntityType()
@@ -5136,6 +7378,8 @@ func (c *EventUpdateOne) SetInput(i UpdateEventInput) *EventUpdateOne {
 // CreateEvidenceInput represents a mutation input for creating evidences.
 type CreateEvidenceInput struct {
 	Tags                     []string
+	EnvironmentName          *string
+	ScopeName                *string
 	WorkflowEligibleMarker   *bool
 	Name                     string
 	Description              *string
@@ -5147,6 +7391,8 @@ type CreateEvidenceInput struct {
 	URL                      *string
 	Status                   *enums.EvidenceStatus
 	OwnerID                  *string
+	EnvironmentID            *string
+	ScopeID                  *string
 	ControlIDs               []string
 	SubcontrolIDs            []string
 	ControlObjectiveIDs      []string
@@ -5154,6 +7400,8 @@ type CreateEvidenceInput struct {
 	FileIDs                  []string
 	ProgramIDs               []string
 	TaskIDs                  []string
+	PlatformIDs              []string
+	ScanIDs                  []string
 	CommentIDs               []string
 	WorkflowObjectRefIDs     []string
 }
@@ -5162,6 +7410,12 @@ type CreateEvidenceInput struct {
 func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
@@ -5194,6 +7448,12 @@ func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
@@ -5215,6 +7475,12 @@ func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
 	}
+	if v := i.PlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.ScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
 	if v := i.CommentIDs; len(v) > 0 {
 		m.AddCommentIDs(v...)
 	}
@@ -5234,6 +7500,10 @@ type UpdateEvidenceInput struct {
 	ClearTags                      bool
 	Tags                           []string
 	AppendTags                     []string
+	ClearEnvironmentName           bool
+	EnvironmentName                *string
+	ClearScopeName                 bool
+	ScopeName                      *string
 	ClearWorkflowEligibleMarker    bool
 	WorkflowEligibleMarker         *bool
 	Name                           *string
@@ -5252,6 +7522,10 @@ type UpdateEvidenceInput struct {
 	URL                            *string
 	ClearStatus                    bool
 	Status                         *enums.EvidenceStatus
+	ClearEnvironment               bool
+	EnvironmentID                  *string
+	ClearScope                     bool
+	ScopeID                        *string
 	ClearControls                  bool
 	AddControlIDs                  []string
 	RemoveControlIDs               []string
@@ -5273,6 +7547,12 @@ type UpdateEvidenceInput struct {
 	ClearTasks                     bool
 	AddTaskIDs                     []string
 	RemoveTaskIDs                  []string
+	ClearPlatforms                 bool
+	AddPlatformIDs                 []string
+	RemovePlatformIDs              []string
+	ClearScans                     bool
+	AddScanIDs                     []string
+	RemoveScanIDs                  []string
 	ClearComments                  bool
 	AddCommentIDs                  []string
 	RemoveCommentIDs               []string
@@ -5291,6 +7571,18 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if i.ClearWorkflowEligibleMarker {
 		m.ClearWorkflowEligibleMarker()
@@ -5345,6 +7637,18 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if i.ClearControls {
 		m.ClearControls()
@@ -5408,6 +7712,24 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearPlatforms {
+		m.ClearPlatforms()
+	}
+	if v := i.AddPlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.RemovePlatformIDs; len(v) > 0 {
+		m.RemovePlatformIDs(v...)
+	}
+	if i.ClearScans {
+		m.ClearScans()
+	}
+	if v := i.AddScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.RemoveScanIDs; len(v) > 0 {
+		m.RemoveScanIDs(v...)
 	}
 	if i.ClearComments {
 		m.ClearComments()
@@ -5550,6 +7872,8 @@ type CreateFileInput struct {
 	Tags                      []string
 	InternalNotes             *string
 	SystemInternalID          *string
+	EnvironmentName           *string
+	ScopeName                 *string
 	ProvidedFileName          string
 	ProvidedFileExtension     string
 	ProvidedFileSize          *int64
@@ -5567,6 +7891,8 @@ type CreateFileInput struct {
 	StorageRegion             *string
 	StorageProvider           *string
 	LastAccessedAt            *time.Time
+	EnvironmentID             *string
+	ScopeID                   *string
 	OrganizationIDs           []string
 	GroupIDs                  []string
 	ContactIDs                []string
@@ -5575,7 +7901,9 @@ type CreateFileInput struct {
 	TemplateIDs               []string
 	DocumentIDs               []string
 	ProgramIDs                []string
+	PlatformIDs               []string
 	EvidenceIDs               []string
+	ScanIDs                   []string
 	EventIDs                  []string
 	IntegrationIDs            []string
 	SecretIDs                 []string
@@ -5594,6 +7922,12 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	m.SetProvidedFileName(i.ProvidedFileName)
 	m.SetProvidedFileExtension(i.ProvidedFileExtension)
@@ -5640,6 +7974,12 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.LastAccessedAt; v != nil {
 		m.SetLastAccessedAt(*v)
 	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if v := i.OrganizationIDs; len(v) > 0 {
 		m.AddOrganizationIDs(v...)
 	}
@@ -5664,8 +8004,14 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
+	if v := i.PlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
 	if v := i.EvidenceIDs; len(v) > 0 {
 		m.AddEvidenceIDs(v...)
+	}
+	if v := i.ScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
 	}
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
@@ -5702,6 +8048,10 @@ type UpdateFileInput struct {
 	InternalNotes                   *string
 	ClearSystemInternalID           bool
 	SystemInternalID                *string
+	ClearEnvironmentName            bool
+	EnvironmentName                 *string
+	ClearScopeName                  bool
+	ScopeName                       *string
 	ProvidedFileName                *string
 	ProvidedFileExtension           *string
 	ClearProvidedFileSize           bool
@@ -5733,6 +8083,10 @@ type UpdateFileInput struct {
 	StorageProvider                 *string
 	ClearLastAccessedAt             bool
 	LastAccessedAt                  *time.Time
+	ClearEnvironment                bool
+	EnvironmentID                   *string
+	ClearScope                      bool
+	ScopeID                         *string
 	ClearOrganization               bool
 	AddOrganizationIDs              []string
 	RemoveOrganizationIDs           []string
@@ -5757,9 +8111,15 @@ type UpdateFileInput struct {
 	ClearProgram                    bool
 	AddProgramIDs                   []string
 	RemoveProgramIDs                []string
+	ClearPlatform                   bool
+	AddPlatformIDs                  []string
+	RemovePlatformIDs               []string
 	ClearEvidence                   bool
 	AddEvidenceIDs                  []string
 	RemoveEvidenceIDs               []string
+	ClearScan                       bool
+	AddScanIDs                      []string
+	RemoveScanIDs                   []string
 	ClearEvents                     bool
 	AddEventIDs                     []string
 	RemoveEventIDs                  []string
@@ -5802,6 +8162,18 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if v := i.ProvidedFileName; v != nil {
 		m.SetProvidedFileName(*v)
@@ -5896,6 +8268,18 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	if v := i.LastAccessedAt; v != nil {
 		m.SetLastAccessedAt(*v)
 	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if i.ClearOrganization {
 		m.ClearOrganization()
 	}
@@ -5968,6 +8352,15 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
 	}
+	if i.ClearPlatform {
+		m.ClearPlatform()
+	}
+	if v := i.AddPlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.RemovePlatformIDs; len(v) > 0 {
+		m.RemovePlatformIDs(v...)
+	}
 	if i.ClearEvidence {
 		m.ClearEvidence()
 	}
@@ -5976,6 +8369,15 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.RemoveEvidenceIDs; len(v) > 0 {
 		m.RemoveEvidenceIDs(v...)
+	}
+	if i.ClearScan {
+		m.ClearScan()
+	}
+	if v := i.AddScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.RemoveScanIDs; len(v) > 0 {
+		m.RemoveScanIDs(v...)
 	}
 	if i.ClearEvents {
 		m.ClearEvents()
@@ -6050,6 +8452,8 @@ type CreateFindingInput struct {
 	Tags                 []string
 	InternalNotes        *string
 	SystemInternalID     *string
+	EnvironmentName      *string
+	ScopeName            *string
 	ExternalID           *string
 	ExternalOwnerID      *string
 	Source               *string
@@ -6091,6 +8495,8 @@ type CreateFindingInput struct {
 	BlockedGroupIDs      []string
 	EditorIDs            []string
 	ViewerIDs            []string
+	EnvironmentID        *string
+	ScopeID              *string
 	IntegrationIDs       []string
 	VulnerabilityIDs     []string
 	ActionPlanIDs        []string
@@ -6119,6 +8525,12 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
@@ -6243,6 +8655,12 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
 	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
 	}
@@ -6308,6 +8726,10 @@ type UpdateFindingInput struct {
 	InternalNotes              *string
 	ClearSystemInternalID      bool
 	SystemInternalID           *string
+	ClearEnvironmentName       bool
+	EnvironmentName            *string
+	ClearScopeName             bool
+	ScopeName                  *string
 	ClearExternalID            bool
 	ExternalID                 *string
 	ClearExternalOwnerID       bool
@@ -6395,6 +8817,10 @@ type UpdateFindingInput struct {
 	ClearViewers               bool
 	AddViewerIDs               []string
 	RemoveViewerIDs            []string
+	ClearEnvironment           bool
+	EnvironmentID              *string
+	ClearScope                 bool
+	ScopeID                    *string
 	ClearIntegrations          bool
 	AddIntegrationIDs          []string
 	RemoveIntegrationIDs       []string
@@ -6467,6 +8893,18 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if i.ClearExternalID {
 		m.ClearExternalID()
@@ -6728,6 +9166,18 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if i.ClearIntegrations {
 		m.ClearIntegrations()
@@ -7037,6 +9487,12 @@ type CreateGroupInput struct {
 	ActionPlanEditorIDs                  []string
 	ActionPlanBlockedGroupIDs            []string
 	ActionPlanViewerIDs                  []string
+	PlatformEditorIDs                    []string
+	PlatformBlockedGroupIDs              []string
+	PlatformViewerIDs                    []string
+	CampaignEditorIDs                    []string
+	CampaignBlockedGroupIDs              []string
+	CampaignViewerIDs                    []string
 	ProcedureEditorIDs                   []string
 	ProcedureBlockedGroupIDs             []string
 	InternalPolicyEditorIDs              []string
@@ -7050,6 +9506,8 @@ type CreateGroupInput struct {
 	IntegrationIDs                       []string
 	FileIDs                              []string
 	TaskIDs                              []string
+	CampaignIDs                          []string
+	CampaignTargetIDs                    []string
 }
 
 // Mutate applies the CreateGroupInput on the GroupMutation builder.
@@ -7154,6 +9612,24 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.ActionPlanViewerIDs; len(v) > 0 {
 		m.AddActionPlanViewerIDs(v...)
 	}
+	if v := i.PlatformEditorIDs; len(v) > 0 {
+		m.AddPlatformEditorIDs(v...)
+	}
+	if v := i.PlatformBlockedGroupIDs; len(v) > 0 {
+		m.AddPlatformBlockedGroupIDs(v...)
+	}
+	if v := i.PlatformViewerIDs; len(v) > 0 {
+		m.AddPlatformViewerIDs(v...)
+	}
+	if v := i.CampaignEditorIDs; len(v) > 0 {
+		m.AddCampaignEditorIDs(v...)
+	}
+	if v := i.CampaignBlockedGroupIDs; len(v) > 0 {
+		m.AddCampaignBlockedGroupIDs(v...)
+	}
+	if v := i.CampaignViewerIDs; len(v) > 0 {
+		m.AddCampaignViewerIDs(v...)
+	}
 	if v := i.ProcedureEditorIDs; len(v) > 0 {
 		m.AddProcedureEditorIDs(v...)
 	}
@@ -7192,6 +9668,12 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
+	}
+	if v := i.CampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.CampaignTargetIDs; len(v) > 0 {
+		m.AddCampaignTargetIDs(v...)
 	}
 }
 
@@ -7294,6 +9776,24 @@ type UpdateGroupInput struct {
 	ClearActionPlanViewers                     bool
 	AddActionPlanViewerIDs                     []string
 	RemoveActionPlanViewerIDs                  []string
+	ClearPlatformEditors                       bool
+	AddPlatformEditorIDs                       []string
+	RemovePlatformEditorIDs                    []string
+	ClearPlatformBlockedGroups                 bool
+	AddPlatformBlockedGroupIDs                 []string
+	RemovePlatformBlockedGroupIDs              []string
+	ClearPlatformViewers                       bool
+	AddPlatformViewerIDs                       []string
+	RemovePlatformViewerIDs                    []string
+	ClearCampaignEditors                       bool
+	AddCampaignEditorIDs                       []string
+	RemoveCampaignEditorIDs                    []string
+	ClearCampaignBlockedGroups                 bool
+	AddCampaignBlockedGroupIDs                 []string
+	RemoveCampaignBlockedGroupIDs              []string
+	ClearCampaignViewers                       bool
+	AddCampaignViewerIDs                       []string
+	RemoveCampaignViewerIDs                    []string
 	ClearProcedureEditors                      bool
 	AddProcedureEditorIDs                      []string
 	RemoveProcedureEditorIDs                   []string
@@ -7332,6 +9832,12 @@ type UpdateGroupInput struct {
 	ClearTasks                                 bool
 	AddTaskIDs                                 []string
 	RemoveTaskIDs                              []string
+	ClearCampaigns                             bool
+	AddCampaignIDs                             []string
+	RemoveCampaignIDs                          []string
+	ClearCampaignTargets                       bool
+	AddCampaignTargetIDs                       []string
+	RemoveCampaignTargetIDs                    []string
 }
 
 // Mutate applies the UpdateGroupInput on the GroupMutation builder.
@@ -7609,6 +10115,60 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.RemoveActionPlanViewerIDs; len(v) > 0 {
 		m.RemoveActionPlanViewerIDs(v...)
 	}
+	if i.ClearPlatformEditors {
+		m.ClearPlatformEditors()
+	}
+	if v := i.AddPlatformEditorIDs; len(v) > 0 {
+		m.AddPlatformEditorIDs(v...)
+	}
+	if v := i.RemovePlatformEditorIDs; len(v) > 0 {
+		m.RemovePlatformEditorIDs(v...)
+	}
+	if i.ClearPlatformBlockedGroups {
+		m.ClearPlatformBlockedGroups()
+	}
+	if v := i.AddPlatformBlockedGroupIDs; len(v) > 0 {
+		m.AddPlatformBlockedGroupIDs(v...)
+	}
+	if v := i.RemovePlatformBlockedGroupIDs; len(v) > 0 {
+		m.RemovePlatformBlockedGroupIDs(v...)
+	}
+	if i.ClearPlatformViewers {
+		m.ClearPlatformViewers()
+	}
+	if v := i.AddPlatformViewerIDs; len(v) > 0 {
+		m.AddPlatformViewerIDs(v...)
+	}
+	if v := i.RemovePlatformViewerIDs; len(v) > 0 {
+		m.RemovePlatformViewerIDs(v...)
+	}
+	if i.ClearCampaignEditors {
+		m.ClearCampaignEditors()
+	}
+	if v := i.AddCampaignEditorIDs; len(v) > 0 {
+		m.AddCampaignEditorIDs(v...)
+	}
+	if v := i.RemoveCampaignEditorIDs; len(v) > 0 {
+		m.RemoveCampaignEditorIDs(v...)
+	}
+	if i.ClearCampaignBlockedGroups {
+		m.ClearCampaignBlockedGroups()
+	}
+	if v := i.AddCampaignBlockedGroupIDs; len(v) > 0 {
+		m.AddCampaignBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveCampaignBlockedGroupIDs; len(v) > 0 {
+		m.RemoveCampaignBlockedGroupIDs(v...)
+	}
+	if i.ClearCampaignViewers {
+		m.ClearCampaignViewers()
+	}
+	if v := i.AddCampaignViewerIDs; len(v) > 0 {
+		m.AddCampaignViewerIDs(v...)
+	}
+	if v := i.RemoveCampaignViewerIDs; len(v) > 0 {
+		m.RemoveCampaignViewerIDs(v...)
+	}
 	if i.ClearProcedureEditors {
 		m.ClearProcedureEditors()
 	}
@@ -7722,6 +10282,24 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearCampaigns {
+		m.ClearCampaigns()
+	}
+	if v := i.AddCampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.RemoveCampaignIDs; len(v) > 0 {
+		m.RemoveCampaignIDs(v...)
+	}
+	if i.ClearCampaignTargets {
+		m.ClearCampaignTargets()
+	}
+	if v := i.AddCampaignTargetIDs; len(v) > 0 {
+		m.AddCampaignTargetIDs(v...)
+	}
+	if v := i.RemoveCampaignTargetIDs; len(v) > 0 {
+		m.RemoveCampaignTargetIDs(v...)
 	}
 }
 
@@ -8089,6 +10667,568 @@ func (c *HushUpdateOne) SetInput(i UpdateHushInput) *HushUpdateOne {
 	return c
 }
 
+// CreateIdentityHolderInput represents a mutation input for creating identityholders.
+type CreateIdentityHolderInput struct {
+	Tags                   []string
+	InternalOwner          *string
+	EnvironmentName        *string
+	ScopeName              *string
+	WorkflowEligibleMarker *bool
+	FullName               string
+	Email                  string
+	AlternateEmail         *string
+	PhoneNumber            *string
+	IsOpenlaneUser         *bool
+	IdentityHolderType     *enums.IdentityHolderType
+	Status                 *enums.UserStatus
+	IsActive               *bool
+	Title                  *string
+	Department             *string
+	Team                   *string
+	Location               *string
+	StartDate              *models.DateTime
+	EndDate                *models.DateTime
+	ExternalUserID         *string
+	ExternalReferenceID    *string
+	Metadata               map[string]interface{}
+	OwnerID                *string
+	BlockedGroupIDs        []string
+	EditorIDs              []string
+	ViewerIDs              []string
+	InternalOwnerUserID    *string
+	InternalOwnerGroupID   *string
+	EnvironmentID          *string
+	ScopeID                *string
+	EmployerID             *string
+	AssessmentResponseIDs  []string
+	AssessmentIDs          []string
+	TemplateIDs            []string
+	AssetIDs               []string
+	EntityIDs              []string
+	PlatformIDs            []string
+	CampaignIDs            []string
+	TaskIDs                []string
+	WorkflowObjectRefIDs   []string
+	AccessPlatformIDs      []string
+	UserID                 *string
+}
+
+// Mutate applies the CreateIdentityHolderInput on the IdentityHolderMutation builder.
+func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.InternalOwner; v != nil {
+		m.SetInternalOwner(*v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
+	}
+	m.SetFullName(i.FullName)
+	m.SetEmail(i.Email)
+	if v := i.AlternateEmail; v != nil {
+		m.SetAlternateEmail(*v)
+	}
+	if v := i.PhoneNumber; v != nil {
+		m.SetPhoneNumber(*v)
+	}
+	if v := i.IsOpenlaneUser; v != nil {
+		m.SetIsOpenlaneUser(*v)
+	}
+	if v := i.IdentityHolderType; v != nil {
+		m.SetIdentityHolderType(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if v := i.Title; v != nil {
+		m.SetTitle(*v)
+	}
+	if v := i.Department; v != nil {
+		m.SetDepartment(*v)
+	}
+	if v := i.Team; v != nil {
+		m.SetTeam(*v)
+	}
+	if v := i.Location; v != nil {
+		m.SetLocation(*v)
+	}
+	if v := i.StartDate; v != nil {
+		m.SetStartDate(*v)
+	}
+	if v := i.EndDate; v != nil {
+		m.SetEndDate(*v)
+	}
+	if v := i.ExternalUserID; v != nil {
+		m.SetExternalUserID(*v)
+	}
+	if v := i.ExternalReferenceID; v != nil {
+		m.SetExternalReferenceID(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.InternalOwnerUserID; v != nil {
+		m.SetInternalOwnerUserID(*v)
+	}
+	if v := i.InternalOwnerGroupID; v != nil {
+		m.SetInternalOwnerGroupID(*v)
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
+	if v := i.EmployerID; v != nil {
+		m.SetEmployerID(*v)
+	}
+	if v := i.AssessmentResponseIDs; len(v) > 0 {
+		m.AddAssessmentResponseIDs(v...)
+	}
+	if v := i.AssessmentIDs; len(v) > 0 {
+		m.AddAssessmentIDs(v...)
+	}
+	if v := i.TemplateIDs; len(v) > 0 {
+		m.AddTemplateIDs(v...)
+	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.PlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.CampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.AccessPlatformIDs; len(v) > 0 {
+		m.AddAccessPlatformIDs(v...)
+	}
+	if v := i.UserID; v != nil {
+		m.SetUserID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateIdentityHolderInput on the IdentityHolderCreate builder.
+func (c *IdentityHolderCreate) SetInput(i CreateIdentityHolderInput) *IdentityHolderCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateIdentityHolderInput represents a mutation input for updating identityholders.
+type UpdateIdentityHolderInput struct {
+	ClearTags                   bool
+	Tags                        []string
+	AppendTags                  []string
+	ClearInternalOwner          bool
+	InternalOwner               *string
+	ClearEnvironmentName        bool
+	EnvironmentName             *string
+	ClearScopeName              bool
+	ScopeName                   *string
+	ClearWorkflowEligibleMarker bool
+	WorkflowEligibleMarker      *bool
+	FullName                    *string
+	Email                       *string
+	ClearAlternateEmail         bool
+	AlternateEmail              *string
+	ClearPhoneNumber            bool
+	PhoneNumber                 *string
+	ClearIsOpenlaneUser         bool
+	IsOpenlaneUser              *bool
+	IdentityHolderType          *enums.IdentityHolderType
+	Status                      *enums.UserStatus
+	IsActive                    *bool
+	ClearTitle                  bool
+	Title                       *string
+	ClearDepartment             bool
+	Department                  *string
+	ClearTeam                   bool
+	Team                        *string
+	ClearLocation               bool
+	Location                    *string
+	ClearStartDate              bool
+	StartDate                   *models.DateTime
+	ClearEndDate                bool
+	EndDate                     *models.DateTime
+	ClearExternalUserID         bool
+	ExternalUserID              *string
+	ClearExternalReferenceID    bool
+	ExternalReferenceID         *string
+	ClearMetadata               bool
+	Metadata                    map[string]interface{}
+	ClearBlockedGroups          bool
+	AddBlockedGroupIDs          []string
+	RemoveBlockedGroupIDs       []string
+	ClearEditors                bool
+	AddEditorIDs                []string
+	RemoveEditorIDs             []string
+	ClearViewers                bool
+	AddViewerIDs                []string
+	RemoveViewerIDs             []string
+	ClearInternalOwnerUser      bool
+	InternalOwnerUserID         *string
+	ClearInternalOwnerGroup     bool
+	InternalOwnerGroupID        *string
+	ClearEnvironment            bool
+	EnvironmentID               *string
+	ClearScope                  bool
+	ScopeID                     *string
+	ClearEmployer               bool
+	EmployerID                  *string
+	ClearAssessmentResponses    bool
+	AddAssessmentResponseIDs    []string
+	RemoveAssessmentResponseIDs []string
+	ClearAssessments            bool
+	AddAssessmentIDs            []string
+	RemoveAssessmentIDs         []string
+	ClearTemplates              bool
+	AddTemplateIDs              []string
+	RemoveTemplateIDs           []string
+	ClearAssets                 bool
+	AddAssetIDs                 []string
+	RemoveAssetIDs              []string
+	ClearEntities               bool
+	AddEntityIDs                []string
+	RemoveEntityIDs             []string
+	ClearPlatforms              bool
+	AddPlatformIDs              []string
+	RemovePlatformIDs           []string
+	ClearCampaigns              bool
+	AddCampaignIDs              []string
+	RemoveCampaignIDs           []string
+	ClearTasks                  bool
+	AddTaskIDs                  []string
+	RemoveTaskIDs               []string
+	ClearWorkflowObjectRefs     bool
+	AddWorkflowObjectRefIDs     []string
+	RemoveWorkflowObjectRefIDs  []string
+	ClearAccessPlatforms        bool
+	AddAccessPlatformIDs        []string
+	RemoveAccessPlatformIDs     []string
+	ClearUser                   bool
+	UserID                      *string
+}
+
+// Mutate applies the UpdateIdentityHolderInput on the IdentityHolderMutation builder.
+func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalOwner {
+		m.ClearInternalOwner()
+	}
+	if v := i.InternalOwner; v != nil {
+		m.SetInternalOwner(*v)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
+	if i.ClearWorkflowEligibleMarker {
+		m.ClearWorkflowEligibleMarker()
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
+	}
+	if v := i.FullName; v != nil {
+		m.SetFullName(*v)
+	}
+	if v := i.Email; v != nil {
+		m.SetEmail(*v)
+	}
+	if i.ClearAlternateEmail {
+		m.ClearAlternateEmail()
+	}
+	if v := i.AlternateEmail; v != nil {
+		m.SetAlternateEmail(*v)
+	}
+	if i.ClearPhoneNumber {
+		m.ClearPhoneNumber()
+	}
+	if v := i.PhoneNumber; v != nil {
+		m.SetPhoneNumber(*v)
+	}
+	if i.ClearIsOpenlaneUser {
+		m.ClearIsOpenlaneUser()
+	}
+	if v := i.IsOpenlaneUser; v != nil {
+		m.SetIsOpenlaneUser(*v)
+	}
+	if v := i.IdentityHolderType; v != nil {
+		m.SetIdentityHolderType(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if i.ClearTitle {
+		m.ClearTitle()
+	}
+	if v := i.Title; v != nil {
+		m.SetTitle(*v)
+	}
+	if i.ClearDepartment {
+		m.ClearDepartment()
+	}
+	if v := i.Department; v != nil {
+		m.SetDepartment(*v)
+	}
+	if i.ClearTeam {
+		m.ClearTeam()
+	}
+	if v := i.Team; v != nil {
+		m.SetTeam(*v)
+	}
+	if i.ClearLocation {
+		m.ClearLocation()
+	}
+	if v := i.Location; v != nil {
+		m.SetLocation(*v)
+	}
+	if i.ClearStartDate {
+		m.ClearStartDate()
+	}
+	if v := i.StartDate; v != nil {
+		m.SetStartDate(*v)
+	}
+	if i.ClearEndDate {
+		m.ClearEndDate()
+	}
+	if v := i.EndDate; v != nil {
+		m.SetEndDate(*v)
+	}
+	if i.ClearExternalUserID {
+		m.ClearExternalUserID()
+	}
+	if v := i.ExternalUserID; v != nil {
+		m.SetExternalUserID(*v)
+	}
+	if i.ClearExternalReferenceID {
+		m.ClearExternalReferenceID()
+	}
+	if v := i.ExternalReferenceID; v != nil {
+		m.SetExternalReferenceID(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearInternalOwnerUser {
+		m.ClearInternalOwnerUser()
+	}
+	if v := i.InternalOwnerUserID; v != nil {
+		m.SetInternalOwnerUserID(*v)
+	}
+	if i.ClearInternalOwnerGroup {
+		m.ClearInternalOwnerGroup()
+	}
+	if v := i.InternalOwnerGroupID; v != nil {
+		m.SetInternalOwnerGroupID(*v)
+	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
+	if i.ClearEmployer {
+		m.ClearEmployer()
+	}
+	if v := i.EmployerID; v != nil {
+		m.SetEmployerID(*v)
+	}
+	if i.ClearAssessmentResponses {
+		m.ClearAssessmentResponses()
+	}
+	if v := i.AddAssessmentResponseIDs; len(v) > 0 {
+		m.AddAssessmentResponseIDs(v...)
+	}
+	if v := i.RemoveAssessmentResponseIDs; len(v) > 0 {
+		m.RemoveAssessmentResponseIDs(v...)
+	}
+	if i.ClearAssessments {
+		m.ClearAssessments()
+	}
+	if v := i.AddAssessmentIDs; len(v) > 0 {
+		m.AddAssessmentIDs(v...)
+	}
+	if v := i.RemoveAssessmentIDs; len(v) > 0 {
+		m.RemoveAssessmentIDs(v...)
+	}
+	if i.ClearTemplates {
+		m.ClearTemplates()
+	}
+	if v := i.AddTemplateIDs; len(v) > 0 {
+		m.AddTemplateIDs(v...)
+	}
+	if v := i.RemoveTemplateIDs; len(v) > 0 {
+		m.RemoveTemplateIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearPlatforms {
+		m.ClearPlatforms()
+	}
+	if v := i.AddPlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.RemovePlatformIDs; len(v) > 0 {
+		m.RemovePlatformIDs(v...)
+	}
+	if i.ClearCampaigns {
+		m.ClearCampaigns()
+	}
+	if v := i.AddCampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.RemoveCampaignIDs; len(v) > 0 {
+		m.RemoveCampaignIDs(v...)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+	if i.ClearAccessPlatforms {
+		m.ClearAccessPlatforms()
+	}
+	if v := i.AddAccessPlatformIDs; len(v) > 0 {
+		m.AddAccessPlatformIDs(v...)
+	}
+	if v := i.RemoveAccessPlatformIDs; len(v) > 0 {
+		m.RemoveAccessPlatformIDs(v...)
+	}
+	if i.ClearUser {
+		m.ClearUser()
+	}
+	if v := i.UserID; v != nil {
+		m.SetUserID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateIdentityHolderInput on the IdentityHolderUpdate builder.
+func (c *IdentityHolderUpdate) SetInput(i UpdateIdentityHolderInput) *IdentityHolderUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateIdentityHolderInput on the IdentityHolderUpdateOne builder.
+func (c *IdentityHolderUpdateOne) SetInput(i UpdateIdentityHolderInput) *IdentityHolderUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateInternalPolicyInput represents a mutation input for creating internalpolicies.
 type CreateInternalPolicyInput struct {
 	Tags                            []string
@@ -8110,6 +11250,8 @@ type CreateInternalPolicyInput struct {
 	DismissedImprovementSuggestions []string
 	URL                             *string
 	InternalPolicyKindName          *string
+	EnvironmentName                 *string
+	ScopeName                       *string
 	WorkflowEligibleMarker          *bool
 	OwnerID                         *string
 	BlockedGroupIDs                 []string
@@ -8117,6 +11259,8 @@ type CreateInternalPolicyInput struct {
 	ApproverID                      *string
 	DelegateID                      *string
 	InternalPolicyKindID            *string
+	EnvironmentID                   *string
+	ScopeID                         *string
 	ControlObjectiveIDs             []string
 	ControlImplementationIDs        []string
 	ControlIDs                      []string
@@ -8189,6 +11333,12 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.InternalPolicyKindName; v != nil {
 		m.SetInternalPolicyKindName(*v)
 	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
 	}
@@ -8209,6 +11359,12 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.InternalPolicyKindID; v != nil {
 		m.SetInternalPolicyKindID(*v)
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if v := i.ControlObjectiveIDs; len(v) > 0 {
 		m.AddControlObjectiveIDs(v...)
@@ -8304,6 +11460,10 @@ type UpdateInternalPolicyInput struct {
 	URL                                   *string
 	ClearInternalPolicyKindName           bool
 	InternalPolicyKindName                *string
+	ClearEnvironmentName                  bool
+	EnvironmentName                       *string
+	ClearScopeName                        bool
+	ScopeName                             *string
 	ClearWorkflowEligibleMarker           bool
 	WorkflowEligibleMarker                *bool
 	ClearOwner                            bool
@@ -8320,6 +11480,10 @@ type UpdateInternalPolicyInput struct {
 	DelegateID                            *string
 	ClearInternalPolicyKind               bool
 	InternalPolicyKindID                  *string
+	ClearEnvironment                      bool
+	EnvironmentID                         *string
+	ClearScope                            bool
+	ScopeID                               *string
 	ClearControlObjectives                bool
 	AddControlObjectiveIDs                []string
 	RemoveControlObjectiveIDs             []string
@@ -8497,6 +11661,18 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.InternalPolicyKindName; v != nil {
 		m.SetInternalPolicyKindName(*v)
 	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
 	if i.ClearWorkflowEligibleMarker {
 		m.ClearWorkflowEligibleMarker()
 	}
@@ -8544,6 +11720,18 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.InternalPolicyKindID; v != nil {
 		m.SetInternalPolicyKindID(*v)
+	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if i.ClearControlObjectives {
 		m.ClearControlObjectives()
@@ -10390,6 +13578,10 @@ type CreateOrganizationInput struct {
 	InviteIDs                         []string
 	SubscriberIDs                     []string
 	EntityIDs                         []string
+	PlatformIDs                       []string
+	IdentityHolderIDs                 []string
+	CampaignIDs                       []string
+	CampaignTargetIDs                 []string
 	EntityTypeIDs                     []string
 	ContactIDs                        []string
 	NoteIDs                           []string
@@ -10577,6 +13769,18 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
+	}
+	if v := i.PlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.IdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.CampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.CampaignTargetIDs; len(v) > 0 {
+		m.AddCampaignTargetIDs(v...)
 	}
 	if v := i.EntityTypeIDs; len(v) > 0 {
 		m.AddEntityTypeIDs(v...)
@@ -10858,6 +14062,18 @@ type UpdateOrganizationInput struct {
 	ClearEntities                           bool
 	AddEntityIDs                            []string
 	RemoveEntityIDs                         []string
+	ClearPlatforms                          bool
+	AddPlatformIDs                          []string
+	RemovePlatformIDs                       []string
+	ClearIdentityHolders                    bool
+	AddIdentityHolderIDs                    []string
+	RemoveIdentityHolderIDs                 []string
+	ClearCampaigns                          bool
+	AddCampaignIDs                          []string
+	RemoveCampaignIDs                       []string
+	ClearCampaignTargets                    bool
+	AddCampaignTargetIDs                    []string
+	RemoveCampaignTargetIDs                 []string
 	ClearEntityTypes                        bool
 	AddEntityTypeIDs                        []string
 	RemoveEntityTypeIDs                     []string
@@ -11365,6 +14581,42 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveEntityIDs; len(v) > 0 {
 		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearPlatforms {
+		m.ClearPlatforms()
+	}
+	if v := i.AddPlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.RemovePlatformIDs; len(v) > 0 {
+		m.RemovePlatformIDs(v...)
+	}
+	if i.ClearIdentityHolders {
+		m.ClearIdentityHolders()
+	}
+	if v := i.AddIdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
+		m.RemoveIdentityHolderIDs(v...)
+	}
+	if i.ClearCampaigns {
+		m.ClearCampaigns()
+	}
+	if v := i.AddCampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.RemoveCampaignIDs; len(v) > 0 {
+		m.RemoveCampaignIDs(v...)
+	}
+	if i.ClearCampaignTargets {
+		m.ClearCampaignTargets()
+	}
+	if v := i.AddCampaignTargetIDs; len(v) > 0 {
+		m.AddCampaignTargetIDs(v...)
+	}
+	if v := i.RemoveCampaignTargetIDs; len(v) > 0 {
+		m.RemoveCampaignTargetIDs(v...)
 	}
 	if i.ClearEntityTypes {
 		m.ClearEntityTypes()
@@ -12333,6 +15585,930 @@ func (c *PersonalAccessTokenUpdateOne) SetInput(i UpdatePersonalAccessTokenInput
 	return c
 }
 
+// CreatePlatformInput represents a mutation input for creating platforms.
+type CreatePlatformInput struct {
+	Tags                           []string
+	InternalOwner                  *string
+	BusinessOwner                  *string
+	TechnicalOwner                 *string
+	SecurityOwner                  *string
+	PlatformKindName               *string
+	PlatformDataClassificationName *string
+	EnvironmentName                *string
+	ScopeName                      *string
+	AccessModelName                *string
+	EncryptionStatusName           *string
+	SecurityTierName               *string
+	CriticalityName                *string
+	WorkflowEligibleMarker         *bool
+	Name                           string
+	Description                    *string
+	BusinessPurpose                *string
+	ScopeStatement                 *string
+	TrustBoundaryDescription       *string
+	DataFlowSummary                *string
+	Status                         *enums.PlatformStatus
+	PhysicalLocation               *string
+	Region                         *string
+	ContainsPii                    *bool
+	SourceType                     *enums.SourceType
+	SourceIdentifier               *string
+	CostCenter                     *string
+	EstimatedMonthlyCost           *float64
+	PurchaseDate                   *models.DateTime
+	ExternalReferenceID            *string
+	Metadata                       map[string]interface{}
+	OwnerID                        *string
+	BlockedGroupIDs                []string
+	EditorIDs                      []string
+	ViewerIDs                      []string
+	InternalOwnerUserID            *string
+	InternalOwnerGroupID           *string
+	BusinessOwnerUserID            *string
+	BusinessOwnerGroupID           *string
+	TechnicalOwnerUserID           *string
+	TechnicalOwnerGroupID          *string
+	SecurityOwnerUserID            *string
+	SecurityOwnerGroupID           *string
+	PlatformKindID                 *string
+	PlatformDataClassificationID   *string
+	EnvironmentID                  *string
+	ScopeID                        *string
+	AccessModelID                  *string
+	EncryptionStatusID             *string
+	SecurityTierID                 *string
+	CriticalityID                  *string
+	AssetIDs                       []string
+	EntityIDs                      []string
+	EvidenceIDs                    []string
+	FileIDs                        []string
+	RiskIDs                        []string
+	ControlIDs                     []string
+	AssessmentIDs                  []string
+	ScanIDs                        []string
+	TaskIDs                        []string
+	IdentityHolderIDs              []string
+	WorkflowObjectRefIDs           []string
+	SourceAssetIDs                 []string
+	SourceEntityIDs                []string
+	OutOfScopeAssetIDs             []string
+	OutOfScopeVendorIDs            []string
+	ApplicableFrameworkIDs         []string
+	GeneratedScanIDs               []string
+	PlatformOwnerID                *string
+}
+
+// Mutate applies the CreatePlatformInput on the PlatformMutation builder.
+func (i *CreatePlatformInput) Mutate(m *PlatformMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.InternalOwner; v != nil {
+		m.SetInternalOwner(*v)
+	}
+	if v := i.BusinessOwner; v != nil {
+		m.SetBusinessOwner(*v)
+	}
+	if v := i.TechnicalOwner; v != nil {
+		m.SetTechnicalOwner(*v)
+	}
+	if v := i.SecurityOwner; v != nil {
+		m.SetSecurityOwner(*v)
+	}
+	if v := i.PlatformKindName; v != nil {
+		m.SetPlatformKindName(*v)
+	}
+	if v := i.PlatformDataClassificationName; v != nil {
+		m.SetPlatformDataClassificationName(*v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
+	if v := i.AccessModelName; v != nil {
+		m.SetAccessModelName(*v)
+	}
+	if v := i.EncryptionStatusName; v != nil {
+		m.SetEncryptionStatusName(*v)
+	}
+	if v := i.SecurityTierName; v != nil {
+		m.SetSecurityTierName(*v)
+	}
+	if v := i.CriticalityName; v != nil {
+		m.SetCriticalityName(*v)
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.BusinessPurpose; v != nil {
+		m.SetBusinessPurpose(*v)
+	}
+	if v := i.ScopeStatement; v != nil {
+		m.SetScopeStatement(*v)
+	}
+	if v := i.TrustBoundaryDescription; v != nil {
+		m.SetTrustBoundaryDescription(*v)
+	}
+	if v := i.DataFlowSummary; v != nil {
+		m.SetDataFlowSummary(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.PhysicalLocation; v != nil {
+		m.SetPhysicalLocation(*v)
+	}
+	if v := i.Region; v != nil {
+		m.SetRegion(*v)
+	}
+	if v := i.ContainsPii; v != nil {
+		m.SetContainsPii(*v)
+	}
+	if v := i.SourceType; v != nil {
+		m.SetSourceType(*v)
+	}
+	if v := i.SourceIdentifier; v != nil {
+		m.SetSourceIdentifier(*v)
+	}
+	if v := i.CostCenter; v != nil {
+		m.SetCostCenter(*v)
+	}
+	if v := i.EstimatedMonthlyCost; v != nil {
+		m.SetEstimatedMonthlyCost(*v)
+	}
+	if v := i.PurchaseDate; v != nil {
+		m.SetPurchaseDate(*v)
+	}
+	if v := i.ExternalReferenceID; v != nil {
+		m.SetExternalReferenceID(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.InternalOwnerUserID; v != nil {
+		m.SetInternalOwnerUserID(*v)
+	}
+	if v := i.InternalOwnerGroupID; v != nil {
+		m.SetInternalOwnerGroupID(*v)
+	}
+	if v := i.BusinessOwnerUserID; v != nil {
+		m.SetBusinessOwnerUserID(*v)
+	}
+	if v := i.BusinessOwnerGroupID; v != nil {
+		m.SetBusinessOwnerGroupID(*v)
+	}
+	if v := i.TechnicalOwnerUserID; v != nil {
+		m.SetTechnicalOwnerUserID(*v)
+	}
+	if v := i.TechnicalOwnerGroupID; v != nil {
+		m.SetTechnicalOwnerGroupID(*v)
+	}
+	if v := i.SecurityOwnerUserID; v != nil {
+		m.SetSecurityOwnerUserID(*v)
+	}
+	if v := i.SecurityOwnerGroupID; v != nil {
+		m.SetSecurityOwnerGroupID(*v)
+	}
+	if v := i.PlatformKindID; v != nil {
+		m.SetPlatformKindID(*v)
+	}
+	if v := i.PlatformDataClassificationID; v != nil {
+		m.SetPlatformDataClassificationID(*v)
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
+	if v := i.AccessModelID; v != nil {
+		m.SetAccessModelID(*v)
+	}
+	if v := i.EncryptionStatusID; v != nil {
+		m.SetEncryptionStatusID(*v)
+	}
+	if v := i.SecurityTierID; v != nil {
+		m.SetSecurityTierID(*v)
+	}
+	if v := i.CriticalityID; v != nil {
+		m.SetCriticalityID(*v)
+	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.EvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.AssessmentIDs; len(v) > 0 {
+		m.AddAssessmentIDs(v...)
+	}
+	if v := i.ScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.IdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.SourceAssetIDs; len(v) > 0 {
+		m.AddSourceAssetIDs(v...)
+	}
+	if v := i.SourceEntityIDs; len(v) > 0 {
+		m.AddSourceEntityIDs(v...)
+	}
+	if v := i.OutOfScopeAssetIDs; len(v) > 0 {
+		m.AddOutOfScopeAssetIDs(v...)
+	}
+	if v := i.OutOfScopeVendorIDs; len(v) > 0 {
+		m.AddOutOfScopeVendorIDs(v...)
+	}
+	if v := i.ApplicableFrameworkIDs; len(v) > 0 {
+		m.AddApplicableFrameworkIDs(v...)
+	}
+	if v := i.GeneratedScanIDs; len(v) > 0 {
+		m.AddGeneratedScanIDs(v...)
+	}
+	if v := i.PlatformOwnerID; v != nil {
+		m.SetPlatformOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreatePlatformInput on the PlatformCreate builder.
+func (c *PlatformCreate) SetInput(i CreatePlatformInput) *PlatformCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdatePlatformInput represents a mutation input for updating platforms.
+type UpdatePlatformInput struct {
+	ClearTags                           bool
+	Tags                                []string
+	AppendTags                          []string
+	ClearInternalOwner                  bool
+	InternalOwner                       *string
+	ClearBusinessOwner                  bool
+	BusinessOwner                       *string
+	ClearTechnicalOwner                 bool
+	TechnicalOwner                      *string
+	ClearSecurityOwner                  bool
+	SecurityOwner                       *string
+	ClearPlatformKindName               bool
+	PlatformKindName                    *string
+	ClearPlatformDataClassificationName bool
+	PlatformDataClassificationName      *string
+	ClearEnvironmentName                bool
+	EnvironmentName                     *string
+	ClearScopeName                      bool
+	ScopeName                           *string
+	ClearAccessModelName                bool
+	AccessModelName                     *string
+	ClearEncryptionStatusName           bool
+	EncryptionStatusName                *string
+	ClearSecurityTierName               bool
+	SecurityTierName                    *string
+	ClearCriticalityName                bool
+	CriticalityName                     *string
+	ClearWorkflowEligibleMarker         bool
+	WorkflowEligibleMarker              *bool
+	Name                                *string
+	ClearDescription                    bool
+	Description                         *string
+	ClearBusinessPurpose                bool
+	BusinessPurpose                     *string
+	ClearScopeStatement                 bool
+	ScopeStatement                      *string
+	ClearTrustBoundaryDescription       bool
+	TrustBoundaryDescription            *string
+	ClearDataFlowSummary                bool
+	DataFlowSummary                     *string
+	Status                              *enums.PlatformStatus
+	ClearPhysicalLocation               bool
+	PhysicalLocation                    *string
+	ClearRegion                         bool
+	Region                              *string
+	ClearContainsPii                    bool
+	ContainsPii                         *bool
+	SourceType                          *enums.SourceType
+	ClearSourceIdentifier               bool
+	SourceIdentifier                    *string
+	ClearCostCenter                     bool
+	CostCenter                          *string
+	ClearEstimatedMonthlyCost           bool
+	EstimatedMonthlyCost                *float64
+	ClearPurchaseDate                   bool
+	PurchaseDate                        *models.DateTime
+	ClearExternalReferenceID            bool
+	ExternalReferenceID                 *string
+	ClearMetadata                       bool
+	Metadata                            map[string]interface{}
+	ClearBlockedGroups                  bool
+	AddBlockedGroupIDs                  []string
+	RemoveBlockedGroupIDs               []string
+	ClearEditors                        bool
+	AddEditorIDs                        []string
+	RemoveEditorIDs                     []string
+	ClearViewers                        bool
+	AddViewerIDs                        []string
+	RemoveViewerIDs                     []string
+	ClearInternalOwnerUser              bool
+	InternalOwnerUserID                 *string
+	ClearInternalOwnerGroup             bool
+	InternalOwnerGroupID                *string
+	ClearBusinessOwnerUser              bool
+	BusinessOwnerUserID                 *string
+	ClearBusinessOwnerGroup             bool
+	BusinessOwnerGroupID                *string
+	ClearTechnicalOwnerUser             bool
+	TechnicalOwnerUserID                *string
+	ClearTechnicalOwnerGroup            bool
+	TechnicalOwnerGroupID               *string
+	ClearSecurityOwnerUser              bool
+	SecurityOwnerUserID                 *string
+	ClearSecurityOwnerGroup             bool
+	SecurityOwnerGroupID                *string
+	ClearPlatformKind                   bool
+	PlatformKindID                      *string
+	ClearPlatformDataClassification     bool
+	PlatformDataClassificationID        *string
+	ClearEnvironment                    bool
+	EnvironmentID                       *string
+	ClearScope                          bool
+	ScopeID                             *string
+	ClearAccessModel                    bool
+	AccessModelID                       *string
+	ClearEncryptionStatus               bool
+	EncryptionStatusID                  *string
+	ClearSecurityTier                   bool
+	SecurityTierID                      *string
+	ClearCriticality                    bool
+	CriticalityID                       *string
+	ClearAssets                         bool
+	AddAssetIDs                         []string
+	RemoveAssetIDs                      []string
+	ClearEntities                       bool
+	AddEntityIDs                        []string
+	RemoveEntityIDs                     []string
+	ClearEvidence                       bool
+	AddEvidenceIDs                      []string
+	RemoveEvidenceIDs                   []string
+	ClearFiles                          bool
+	AddFileIDs                          []string
+	RemoveFileIDs                       []string
+	ClearRisks                          bool
+	AddRiskIDs                          []string
+	RemoveRiskIDs                       []string
+	ClearControls                       bool
+	AddControlIDs                       []string
+	RemoveControlIDs                    []string
+	ClearAssessments                    bool
+	AddAssessmentIDs                    []string
+	RemoveAssessmentIDs                 []string
+	ClearScans                          bool
+	AddScanIDs                          []string
+	RemoveScanIDs                       []string
+	ClearTasks                          bool
+	AddTaskIDs                          []string
+	RemoveTaskIDs                       []string
+	ClearIdentityHolders                bool
+	AddIdentityHolderIDs                []string
+	RemoveIdentityHolderIDs             []string
+	ClearWorkflowObjectRefs             bool
+	AddWorkflowObjectRefIDs             []string
+	RemoveWorkflowObjectRefIDs          []string
+	ClearSourceAssets                   bool
+	AddSourceAssetIDs                   []string
+	RemoveSourceAssetIDs                []string
+	ClearSourceEntities                 bool
+	AddSourceEntityIDs                  []string
+	RemoveSourceEntityIDs               []string
+	ClearOutOfScopeAssets               bool
+	AddOutOfScopeAssetIDs               []string
+	RemoveOutOfScopeAssetIDs            []string
+	ClearOutOfScopeVendors              bool
+	AddOutOfScopeVendorIDs              []string
+	RemoveOutOfScopeVendorIDs           []string
+	ClearApplicableFrameworks           bool
+	AddApplicableFrameworkIDs           []string
+	RemoveApplicableFrameworkIDs        []string
+	ClearGeneratedScans                 bool
+	AddGeneratedScanIDs                 []string
+	RemoveGeneratedScanIDs              []string
+	ClearPlatformOwner                  bool
+	PlatformOwnerID                     *string
+}
+
+// Mutate applies the UpdatePlatformInput on the PlatformMutation builder.
+func (i *UpdatePlatformInput) Mutate(m *PlatformMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalOwner {
+		m.ClearInternalOwner()
+	}
+	if v := i.InternalOwner; v != nil {
+		m.SetInternalOwner(*v)
+	}
+	if i.ClearBusinessOwner {
+		m.ClearBusinessOwner()
+	}
+	if v := i.BusinessOwner; v != nil {
+		m.SetBusinessOwner(*v)
+	}
+	if i.ClearTechnicalOwner {
+		m.ClearTechnicalOwner()
+	}
+	if v := i.TechnicalOwner; v != nil {
+		m.SetTechnicalOwner(*v)
+	}
+	if i.ClearSecurityOwner {
+		m.ClearSecurityOwner()
+	}
+	if v := i.SecurityOwner; v != nil {
+		m.SetSecurityOwner(*v)
+	}
+	if i.ClearPlatformKindName {
+		m.ClearPlatformKindName()
+	}
+	if v := i.PlatformKindName; v != nil {
+		m.SetPlatformKindName(*v)
+	}
+	if i.ClearPlatformDataClassificationName {
+		m.ClearPlatformDataClassificationName()
+	}
+	if v := i.PlatformDataClassificationName; v != nil {
+		m.SetPlatformDataClassificationName(*v)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
+	if i.ClearAccessModelName {
+		m.ClearAccessModelName()
+	}
+	if v := i.AccessModelName; v != nil {
+		m.SetAccessModelName(*v)
+	}
+	if i.ClearEncryptionStatusName {
+		m.ClearEncryptionStatusName()
+	}
+	if v := i.EncryptionStatusName; v != nil {
+		m.SetEncryptionStatusName(*v)
+	}
+	if i.ClearSecurityTierName {
+		m.ClearSecurityTierName()
+	}
+	if v := i.SecurityTierName; v != nil {
+		m.SetSecurityTierName(*v)
+	}
+	if i.ClearCriticalityName {
+		m.ClearCriticalityName()
+	}
+	if v := i.CriticalityName; v != nil {
+		m.SetCriticalityName(*v)
+	}
+	if i.ClearWorkflowEligibleMarker {
+		m.ClearWorkflowEligibleMarker()
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearBusinessPurpose {
+		m.ClearBusinessPurpose()
+	}
+	if v := i.BusinessPurpose; v != nil {
+		m.SetBusinessPurpose(*v)
+	}
+	if i.ClearScopeStatement {
+		m.ClearScopeStatement()
+	}
+	if v := i.ScopeStatement; v != nil {
+		m.SetScopeStatement(*v)
+	}
+	if i.ClearTrustBoundaryDescription {
+		m.ClearTrustBoundaryDescription()
+	}
+	if v := i.TrustBoundaryDescription; v != nil {
+		m.SetTrustBoundaryDescription(*v)
+	}
+	if i.ClearDataFlowSummary {
+		m.ClearDataFlowSummary()
+	}
+	if v := i.DataFlowSummary; v != nil {
+		m.SetDataFlowSummary(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearPhysicalLocation {
+		m.ClearPhysicalLocation()
+	}
+	if v := i.PhysicalLocation; v != nil {
+		m.SetPhysicalLocation(*v)
+	}
+	if i.ClearRegion {
+		m.ClearRegion()
+	}
+	if v := i.Region; v != nil {
+		m.SetRegion(*v)
+	}
+	if i.ClearContainsPii {
+		m.ClearContainsPii()
+	}
+	if v := i.ContainsPii; v != nil {
+		m.SetContainsPii(*v)
+	}
+	if v := i.SourceType; v != nil {
+		m.SetSourceType(*v)
+	}
+	if i.ClearSourceIdentifier {
+		m.ClearSourceIdentifier()
+	}
+	if v := i.SourceIdentifier; v != nil {
+		m.SetSourceIdentifier(*v)
+	}
+	if i.ClearCostCenter {
+		m.ClearCostCenter()
+	}
+	if v := i.CostCenter; v != nil {
+		m.SetCostCenter(*v)
+	}
+	if i.ClearEstimatedMonthlyCost {
+		m.ClearEstimatedMonthlyCost()
+	}
+	if v := i.EstimatedMonthlyCost; v != nil {
+		m.SetEstimatedMonthlyCost(*v)
+	}
+	if i.ClearPurchaseDate {
+		m.ClearPurchaseDate()
+	}
+	if v := i.PurchaseDate; v != nil {
+		m.SetPurchaseDate(*v)
+	}
+	if i.ClearExternalReferenceID {
+		m.ClearExternalReferenceID()
+	}
+	if v := i.ExternalReferenceID; v != nil {
+		m.SetExternalReferenceID(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearInternalOwnerUser {
+		m.ClearInternalOwnerUser()
+	}
+	if v := i.InternalOwnerUserID; v != nil {
+		m.SetInternalOwnerUserID(*v)
+	}
+	if i.ClearInternalOwnerGroup {
+		m.ClearInternalOwnerGroup()
+	}
+	if v := i.InternalOwnerGroupID; v != nil {
+		m.SetInternalOwnerGroupID(*v)
+	}
+	if i.ClearBusinessOwnerUser {
+		m.ClearBusinessOwnerUser()
+	}
+	if v := i.BusinessOwnerUserID; v != nil {
+		m.SetBusinessOwnerUserID(*v)
+	}
+	if i.ClearBusinessOwnerGroup {
+		m.ClearBusinessOwnerGroup()
+	}
+	if v := i.BusinessOwnerGroupID; v != nil {
+		m.SetBusinessOwnerGroupID(*v)
+	}
+	if i.ClearTechnicalOwnerUser {
+		m.ClearTechnicalOwnerUser()
+	}
+	if v := i.TechnicalOwnerUserID; v != nil {
+		m.SetTechnicalOwnerUserID(*v)
+	}
+	if i.ClearTechnicalOwnerGroup {
+		m.ClearTechnicalOwnerGroup()
+	}
+	if v := i.TechnicalOwnerGroupID; v != nil {
+		m.SetTechnicalOwnerGroupID(*v)
+	}
+	if i.ClearSecurityOwnerUser {
+		m.ClearSecurityOwnerUser()
+	}
+	if v := i.SecurityOwnerUserID; v != nil {
+		m.SetSecurityOwnerUserID(*v)
+	}
+	if i.ClearSecurityOwnerGroup {
+		m.ClearSecurityOwnerGroup()
+	}
+	if v := i.SecurityOwnerGroupID; v != nil {
+		m.SetSecurityOwnerGroupID(*v)
+	}
+	if i.ClearPlatformKind {
+		m.ClearPlatformKind()
+	}
+	if v := i.PlatformKindID; v != nil {
+		m.SetPlatformKindID(*v)
+	}
+	if i.ClearPlatformDataClassification {
+		m.ClearPlatformDataClassification()
+	}
+	if v := i.PlatformDataClassificationID; v != nil {
+		m.SetPlatformDataClassificationID(*v)
+	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
+	if i.ClearAccessModel {
+		m.ClearAccessModel()
+	}
+	if v := i.AccessModelID; v != nil {
+		m.SetAccessModelID(*v)
+	}
+	if i.ClearEncryptionStatus {
+		m.ClearEncryptionStatus()
+	}
+	if v := i.EncryptionStatusID; v != nil {
+		m.SetEncryptionStatusID(*v)
+	}
+	if i.ClearSecurityTier {
+		m.ClearSecurityTier()
+	}
+	if v := i.SecurityTierID; v != nil {
+		m.SetSecurityTierID(*v)
+	}
+	if i.ClearCriticality {
+		m.ClearCriticality()
+	}
+	if v := i.CriticalityID; v != nil {
+		m.SetCriticalityID(*v)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.AddEvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.RemoveEvidenceIDs; len(v) > 0 {
+		m.RemoveEvidenceIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearAssessments {
+		m.ClearAssessments()
+	}
+	if v := i.AddAssessmentIDs; len(v) > 0 {
+		m.AddAssessmentIDs(v...)
+	}
+	if v := i.RemoveAssessmentIDs; len(v) > 0 {
+		m.RemoveAssessmentIDs(v...)
+	}
+	if i.ClearScans {
+		m.ClearScans()
+	}
+	if v := i.AddScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.RemoveScanIDs; len(v) > 0 {
+		m.RemoveScanIDs(v...)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearIdentityHolders {
+		m.ClearIdentityHolders()
+	}
+	if v := i.AddIdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
+		m.RemoveIdentityHolderIDs(v...)
+	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+	if i.ClearSourceAssets {
+		m.ClearSourceAssets()
+	}
+	if v := i.AddSourceAssetIDs; len(v) > 0 {
+		m.AddSourceAssetIDs(v...)
+	}
+	if v := i.RemoveSourceAssetIDs; len(v) > 0 {
+		m.RemoveSourceAssetIDs(v...)
+	}
+	if i.ClearSourceEntities {
+		m.ClearSourceEntities()
+	}
+	if v := i.AddSourceEntityIDs; len(v) > 0 {
+		m.AddSourceEntityIDs(v...)
+	}
+	if v := i.RemoveSourceEntityIDs; len(v) > 0 {
+		m.RemoveSourceEntityIDs(v...)
+	}
+	if i.ClearOutOfScopeAssets {
+		m.ClearOutOfScopeAssets()
+	}
+	if v := i.AddOutOfScopeAssetIDs; len(v) > 0 {
+		m.AddOutOfScopeAssetIDs(v...)
+	}
+	if v := i.RemoveOutOfScopeAssetIDs; len(v) > 0 {
+		m.RemoveOutOfScopeAssetIDs(v...)
+	}
+	if i.ClearOutOfScopeVendors {
+		m.ClearOutOfScopeVendors()
+	}
+	if v := i.AddOutOfScopeVendorIDs; len(v) > 0 {
+		m.AddOutOfScopeVendorIDs(v...)
+	}
+	if v := i.RemoveOutOfScopeVendorIDs; len(v) > 0 {
+		m.RemoveOutOfScopeVendorIDs(v...)
+	}
+	if i.ClearApplicableFrameworks {
+		m.ClearApplicableFrameworks()
+	}
+	if v := i.AddApplicableFrameworkIDs; len(v) > 0 {
+		m.AddApplicableFrameworkIDs(v...)
+	}
+	if v := i.RemoveApplicableFrameworkIDs; len(v) > 0 {
+		m.RemoveApplicableFrameworkIDs(v...)
+	}
+	if i.ClearGeneratedScans {
+		m.ClearGeneratedScans()
+	}
+	if v := i.AddGeneratedScanIDs; len(v) > 0 {
+		m.AddGeneratedScanIDs(v...)
+	}
+	if v := i.RemoveGeneratedScanIDs; len(v) > 0 {
+		m.RemoveGeneratedScanIDs(v...)
+	}
+	if i.ClearPlatformOwner {
+		m.ClearPlatformOwner()
+	}
+	if v := i.PlatformOwnerID; v != nil {
+		m.SetPlatformOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdatePlatformInput on the PlatformUpdate builder.
+func (c *PlatformUpdate) SetInput(i UpdatePlatformInput) *PlatformUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdatePlatformInput on the PlatformUpdateOne builder.
+func (c *PlatformUpdateOne) SetInput(i UpdatePlatformInput) *PlatformUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateProcedureInput represents a mutation input for creating procedures.
 type CreateProcedureInput struct {
 	Tags                            []string
@@ -12354,6 +16530,8 @@ type CreateProcedureInput struct {
 	InternalNotes                   *string
 	SystemInternalID                *string
 	ProcedureKindName               *string
+	EnvironmentName                 *string
+	ScopeName                       *string
 	WorkflowEligibleMarker          *bool
 	OwnerID                         *string
 	BlockedGroupIDs                 []string
@@ -12361,6 +16539,8 @@ type CreateProcedureInput struct {
 	ApproverID                      *string
 	DelegateID                      *string
 	ProcedureKindID                 *string
+	EnvironmentID                   *string
+	ScopeID                         *string
 	ControlIDs                      []string
 	SubcontrolIDs                   []string
 	InternalPolicyIDs               []string
@@ -12431,6 +16611,12 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.ProcedureKindName; v != nil {
 		m.SetProcedureKindName(*v)
 	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
 	}
@@ -12451,6 +16637,12 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.ProcedureKindID; v != nil {
 		m.SetProcedureKindID(*v)
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -12540,6 +16732,10 @@ type UpdateProcedureInput struct {
 	SystemInternalID                      *string
 	ClearProcedureKindName                bool
 	ProcedureKindName                     *string
+	ClearEnvironmentName                  bool
+	EnvironmentName                       *string
+	ClearScopeName                        bool
+	ScopeName                             *string
 	ClearWorkflowEligibleMarker           bool
 	WorkflowEligibleMarker                *bool
 	ClearOwner                            bool
@@ -12556,6 +16752,10 @@ type UpdateProcedureInput struct {
 	DelegateID                            *string
 	ClearProcedureKind                    bool
 	ProcedureKindID                       *string
+	ClearEnvironment                      bool
+	EnvironmentID                         *string
+	ClearScope                            bool
+	ScopeID                               *string
 	ClearControls                         bool
 	AddControlIDs                         []string
 	RemoveControlIDs                      []string
@@ -12727,6 +16927,18 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.ProcedureKindName; v != nil {
 		m.SetProcedureKindName(*v)
 	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
 	if i.ClearWorkflowEligibleMarker {
 		m.ClearWorkflowEligibleMarker()
 	}
@@ -12774,6 +16986,18 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.ProcedureKindID; v != nil {
 		m.SetProcedureKindID(*v)
+	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if i.ClearControls {
 		m.ClearControls()
@@ -13396,6 +17620,8 @@ type CreateRemediationInput struct {
 	Tags             []string
 	InternalNotes    *string
 	SystemInternalID *string
+	EnvironmentName  *string
+	ScopeName        *string
 	ExternalID       *string
 	ExternalOwnerID  *string
 	Title            *string
@@ -13419,7 +17645,10 @@ type CreateRemediationInput struct {
 	BlockedGroupIDs  []string
 	EditorIDs        []string
 	ViewerIDs        []string
+	EnvironmentID    *string
+	ScopeID          *string
 	IntegrationIDs   []string
+	ScanIDs          []string
 	FindingIDs       []string
 	VulnerabilityIDs []string
 	ActionPlanIDs    []string
@@ -13445,6 +17674,12 @@ func (i *CreateRemediationInput) Mutate(m *RemediationMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
@@ -13515,8 +17750,17 @@ func (i *CreateRemediationInput) Mutate(m *RemediationMutation) {
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
 	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
+	}
+	if v := i.ScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
 	}
 	if v := i.FindingIDs; len(v) > 0 {
 		m.AddFindingIDs(v...)
@@ -13574,6 +17818,10 @@ type UpdateRemediationInput struct {
 	InternalNotes          *string
 	ClearSystemInternalID  bool
 	SystemInternalID       *string
+	ClearEnvironmentName   bool
+	EnvironmentName        *string
+	ClearScopeName         bool
+	ScopeName              *string
 	ClearExternalID        bool
 	ExternalID             *string
 	ClearExternalOwnerID   bool
@@ -13621,9 +17869,16 @@ type UpdateRemediationInput struct {
 	ClearViewers           bool
 	AddViewerIDs           []string
 	RemoveViewerIDs        []string
+	ClearEnvironment       bool
+	EnvironmentID          *string
+	ClearScope             bool
+	ScopeID                *string
 	ClearIntegrations      bool
 	AddIntegrationIDs      []string
 	RemoveIntegrationIDs   []string
+	ClearScans             bool
+	AddScanIDs             []string
+	RemoveScanIDs          []string
 	ClearFindings          bool
 	AddFindingIDs          []string
 	RemoveFindingIDs       []string
@@ -13687,6 +17942,18 @@ func (i *UpdateRemediationInput) Mutate(m *RemediationMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if i.ClearExternalID {
 		m.ClearExternalID()
@@ -13829,6 +18096,18 @@ func (i *UpdateRemediationInput) Mutate(m *RemediationMutation) {
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
 	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if i.ClearIntegrations {
 		m.ClearIntegrations()
 	}
@@ -13837,6 +18116,15 @@ func (i *UpdateRemediationInput) Mutate(m *RemediationMutation) {
 	}
 	if v := i.RemoveIntegrationIDs; len(v) > 0 {
 		m.RemoveIntegrationIDs(v...)
+	}
+	if i.ClearScans {
+		m.ClearScans()
+	}
+	if v := i.AddScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.RemoveScanIDs; len(v) > 0 {
+		m.RemoveScanIDs(v...)
 	}
 	if i.ClearFindings {
 		m.ClearFindings()
@@ -13974,6 +18262,8 @@ type CreateReviewInput struct {
 	Tags             []string
 	InternalNotes    *string
 	SystemInternalID *string
+	EnvironmentName  *string
+	ScopeName        *string
 	ExternalID       *string
 	ExternalOwnerID  *string
 	Title            string
@@ -13995,6 +18285,8 @@ type CreateReviewInput struct {
 	BlockedGroupIDs  []string
 	EditorIDs        []string
 	ViewerIDs        []string
+	EnvironmentID    *string
+	ScopeID          *string
 	IntegrationIDs   []string
 	FindingIDs       []string
 	VulnerabilityIDs []string
@@ -14022,6 +18314,12 @@ func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
@@ -14083,6 +18381,12 @@ func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
@@ -14146,6 +18450,10 @@ type UpdateReviewInput struct {
 	InternalNotes          *string
 	ClearSystemInternalID  bool
 	SystemInternalID       *string
+	ClearEnvironmentName   bool
+	EnvironmentName        *string
+	ClearScopeName         bool
+	ScopeName              *string
 	ClearExternalID        bool
 	ExternalID             *string
 	ClearExternalOwnerID   bool
@@ -14188,6 +18496,10 @@ type UpdateReviewInput struct {
 	ClearViewers           bool
 	AddViewerIDs           []string
 	RemoveViewerIDs        []string
+	ClearEnvironment       bool
+	EnvironmentID          *string
+	ClearScope             bool
+	ScopeID                *string
 	ClearIntegrations      bool
 	AddIntegrationIDs      []string
 	RemoveIntegrationIDs   []string
@@ -14256,6 +18568,18 @@ func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if i.ClearExternalID {
 		m.ClearExternalID()
@@ -14382,6 +18706,18 @@ func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if i.ClearIntegrations {
 		m.ClearIntegrations()
@@ -14534,6 +18870,8 @@ type CreateRiskInput struct {
 	Tags              []string
 	RiskKindName      *string
 	RiskCategoryName  *string
+	EnvironmentName   *string
+	ScopeName         *string
 	Name              string
 	Status            *enums.RiskStatus
 	Impact            *enums.RiskImpact
@@ -14551,11 +18889,14 @@ type CreateRiskInput struct {
 	ViewerIDs         []string
 	RiskKindID        *string
 	RiskCategoryID    *string
+	EnvironmentID     *string
+	ScopeID           *string
 	ControlIDs        []string
 	SubcontrolIDs     []string
 	ProcedureIDs      []string
 	InternalPolicyIDs []string
 	ProgramIDs        []string
+	PlatformIDs       []string
 	ActionPlanIDs     []string
 	TaskIDs           []string
 	AssetIDs          []string
@@ -14577,6 +18918,12 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.RiskCategoryName; v != nil {
 		m.SetRiskCategoryName(*v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
@@ -14627,6 +18974,12 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.RiskCategoryID; v != nil {
 		m.SetRiskCategoryID(*v)
 	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
@@ -14641,6 +18994,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
+	}
+	if v := i.PlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
 	}
 	if v := i.ActionPlanIDs; len(v) > 0 {
 		m.AddActionPlanIDs(v...)
@@ -14686,6 +19042,10 @@ type UpdateRiskInput struct {
 	RiskKindName            *string
 	ClearRiskCategoryName   bool
 	RiskCategoryName        *string
+	ClearEnvironmentName    bool
+	EnvironmentName         *string
+	ClearScopeName          bool
+	ScopeName               *string
 	Name                    *string
 	ClearStatus             bool
 	Status                  *enums.RiskStatus
@@ -14723,6 +19083,10 @@ type UpdateRiskInput struct {
 	RiskKindID              *string
 	ClearRiskCategory       bool
 	RiskCategoryID          *string
+	ClearEnvironment        bool
+	EnvironmentID           *string
+	ClearScope              bool
+	ScopeID                 *string
 	ClearControls           bool
 	AddControlIDs           []string
 	RemoveControlIDs        []string
@@ -14738,6 +19102,9 @@ type UpdateRiskInput struct {
 	ClearPrograms           bool
 	AddProgramIDs           []string
 	RemoveProgramIDs        []string
+	ClearPlatforms          bool
+	AddPlatformIDs          []string
+	RemovePlatformIDs       []string
 	ClearActionPlans        bool
 	AddActionPlanIDs        []string
 	RemoveActionPlanIDs     []string
@@ -14787,6 +19154,18 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.RiskCategoryName; v != nil {
 		m.SetRiskCategoryName(*v)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -14899,6 +19278,18 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.RiskCategoryID; v != nil {
 		m.SetRiskCategoryID(*v)
 	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if i.ClearControls {
 		m.ClearControls()
 	}
@@ -14943,6 +19334,15 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearPlatforms {
+		m.ClearPlatforms()
+	}
+	if v := i.AddPlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.RemovePlatformIDs; len(v) > 0 {
+		m.RemovePlatformIDs(v...)
 	}
 	if i.ClearActionPlans {
 		m.ClearActionPlans()
@@ -15035,17 +19435,43 @@ func (c *RiskUpdateOne) SetInput(i UpdateRiskInput) *RiskUpdateOne {
 
 // CreateScanInput represents a mutation input for creating scans.
 type CreateScanInput struct {
-	Tags            []string
-	Target          string
-	ScanType        *enums.ScanType
-	Metadata        map[string]interface{}
-	Status          *enums.ScanStatus
-	OwnerID         *string
-	BlockedGroupIDs []string
-	EditorIDs       []string
-	ViewerIDs       []string
-	AssetIDs        []string
-	EntityIDs       []string
+	Tags                  []string
+	ReviewedBy            *string
+	AssignedTo            *string
+	EnvironmentName       *string
+	ScopeName             *string
+	Target                string
+	ScanType              *enums.ScanType
+	Metadata              map[string]interface{}
+	ScanDate              *models.DateTime
+	ScanSchedule          *models.Cron
+	NextScanRunAt         *models.DateTime
+	PerformedBy           *string
+	VulnerabilityIds      []string
+	Status                *enums.ScanStatus
+	OwnerID               *string
+	BlockedGroupIDs       []string
+	EditorIDs             []string
+	ViewerIDs             []string
+	ReviewedByUserID      *string
+	ReviewedByGroupID     *string
+	AssignedToUserID      *string
+	AssignedToGroupID     *string
+	EnvironmentID         *string
+	ScopeID               *string
+	AssetIDs              []string
+	EntityIDs             []string
+	EvidenceIDs           []string
+	FileIDs               []string
+	RemediationIDs        []string
+	ActionPlanIDs         []string
+	TaskIDs               []string
+	PlatformIDs           []string
+	VulnerabilityIDs      []string
+	ControlIDs            []string
+	GeneratedByPlatformID *string
+	PerformedByUserID     *string
+	PerformedByGroupID    *string
 }
 
 // Mutate applies the CreateScanInput on the ScanMutation builder.
@@ -15053,12 +19479,39 @@ func (i *CreateScanInput) Mutate(m *ScanMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
+	if v := i.ReviewedBy; v != nil {
+		m.SetReviewedBy(*v)
+	}
+	if v := i.AssignedTo; v != nil {
+		m.SetAssignedTo(*v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
 	m.SetTarget(i.Target)
 	if v := i.ScanType; v != nil {
 		m.SetScanType(*v)
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if v := i.ScanDate; v != nil {
+		m.SetScanDate(*v)
+	}
+	if v := i.ScanSchedule; v != nil {
+		m.SetScanSchedule(*v)
+	}
+	if v := i.NextScanRunAt; v != nil {
+		m.SetNextScanRunAt(*v)
+	}
+	if v := i.PerformedBy; v != nil {
+		m.SetPerformedBy(*v)
+	}
+	if v := i.VulnerabilityIds; v != nil {
+		m.SetVulnerabilityIds(v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
@@ -15075,11 +19528,62 @@ func (i *CreateScanInput) Mutate(m *ScanMutation) {
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
 	}
+	if v := i.ReviewedByUserID; v != nil {
+		m.SetReviewedByUserID(*v)
+	}
+	if v := i.ReviewedByGroupID; v != nil {
+		m.SetReviewedByGroupID(*v)
+	}
+	if v := i.AssignedToUserID; v != nil {
+		m.SetAssignedToUserID(*v)
+	}
+	if v := i.AssignedToGroupID; v != nil {
+		m.SetAssignedToGroupID(*v)
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if v := i.AssetIDs; len(v) > 0 {
 		m.AddAssetIDs(v...)
 	}
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
+	}
+	if v := i.EvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.ActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.PlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.GeneratedByPlatformID; v != nil {
+		m.SetGeneratedByPlatformID(*v)
+	}
+	if v := i.PerformedByUserID; v != nil {
+		m.SetPerformedByUserID(*v)
+	}
+	if v := i.PerformedByGroupID; v != nil {
+		m.SetPerformedByGroupID(*v)
 	}
 }
 
@@ -15091,31 +19595,92 @@ func (c *ScanCreate) SetInput(i CreateScanInput) *ScanCreate {
 
 // UpdateScanInput represents a mutation input for updating scans.
 type UpdateScanInput struct {
-	ClearTags             bool
-	Tags                  []string
-	AppendTags            []string
-	Target                *string
-	ScanType              *enums.ScanType
-	ClearMetadata         bool
-	Metadata              map[string]interface{}
-	Status                *enums.ScanStatus
-	ClearOwner            bool
-	OwnerID               *string
-	ClearBlockedGroups    bool
-	AddBlockedGroupIDs    []string
-	RemoveBlockedGroupIDs []string
-	ClearEditors          bool
-	AddEditorIDs          []string
-	RemoveEditorIDs       []string
-	ClearViewers          bool
-	AddViewerIDs          []string
-	RemoveViewerIDs       []string
-	ClearAssets           bool
-	AddAssetIDs           []string
-	RemoveAssetIDs        []string
-	ClearEntities         bool
-	AddEntityIDs          []string
-	RemoveEntityIDs       []string
+	ClearTags                bool
+	Tags                     []string
+	AppendTags               []string
+	ClearReviewedBy          bool
+	ReviewedBy               *string
+	ClearAssignedTo          bool
+	AssignedTo               *string
+	ClearEnvironmentName     bool
+	EnvironmentName          *string
+	ClearScopeName           bool
+	ScopeName                *string
+	Target                   *string
+	ScanType                 *enums.ScanType
+	ClearMetadata            bool
+	Metadata                 map[string]interface{}
+	ClearScanDate            bool
+	ScanDate                 *models.DateTime
+	ClearScanSchedule        bool
+	ScanSchedule             *models.Cron
+	ClearNextScanRunAt       bool
+	NextScanRunAt            *models.DateTime
+	ClearPerformedBy         bool
+	PerformedBy              *string
+	ClearVulnerabilityIds    bool
+	VulnerabilityIds         []string
+	AppendVulnerabilityIds   []string
+	Status                   *enums.ScanStatus
+	ClearOwner               bool
+	OwnerID                  *string
+	ClearBlockedGroups       bool
+	AddBlockedGroupIDs       []string
+	RemoveBlockedGroupIDs    []string
+	ClearEditors             bool
+	AddEditorIDs             []string
+	RemoveEditorIDs          []string
+	ClearViewers             bool
+	AddViewerIDs             []string
+	RemoveViewerIDs          []string
+	ClearReviewedByUser      bool
+	ReviewedByUserID         *string
+	ClearReviewedByGroup     bool
+	ReviewedByGroupID        *string
+	ClearAssignedToUser      bool
+	AssignedToUserID         *string
+	ClearAssignedToGroup     bool
+	AssignedToGroupID        *string
+	ClearEnvironment         bool
+	EnvironmentID            *string
+	ClearScope               bool
+	ScopeID                  *string
+	ClearAssets              bool
+	AddAssetIDs              []string
+	RemoveAssetIDs           []string
+	ClearEntities            bool
+	AddEntityIDs             []string
+	RemoveEntityIDs          []string
+	ClearEvidence            bool
+	AddEvidenceIDs           []string
+	RemoveEvidenceIDs        []string
+	ClearFiles               bool
+	AddFileIDs               []string
+	RemoveFileIDs            []string
+	ClearRemediations        bool
+	AddRemediationIDs        []string
+	RemoveRemediationIDs     []string
+	ClearActionPlans         bool
+	AddActionPlanIDs         []string
+	RemoveActionPlanIDs      []string
+	ClearTasks               bool
+	AddTaskIDs               []string
+	RemoveTaskIDs            []string
+	ClearPlatforms           bool
+	AddPlatformIDs           []string
+	RemovePlatformIDs        []string
+	ClearVulnerabilities     bool
+	AddVulnerabilityIDs      []string
+	RemoveVulnerabilityIDs   []string
+	ClearControls            bool
+	AddControlIDs            []string
+	RemoveControlIDs         []string
+	ClearGeneratedByPlatform bool
+	GeneratedByPlatformID    *string
+	ClearPerformedByUser     bool
+	PerformedByUserID        *string
+	ClearPerformedByGroup    bool
+	PerformedByGroupID       *string
 }
 
 // Mutate applies the UpdateScanInput on the ScanMutation builder.
@@ -15129,6 +19694,30 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
+	if i.ClearReviewedBy {
+		m.ClearReviewedBy()
+	}
+	if v := i.ReviewedBy; v != nil {
+		m.SetReviewedBy(*v)
+	}
+	if i.ClearAssignedTo {
+		m.ClearAssignedTo()
+	}
+	if v := i.AssignedTo; v != nil {
+		m.SetAssignedTo(*v)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
+	}
 	if v := i.Target; v != nil {
 		m.SetTarget(*v)
 	}
@@ -15140,6 +19729,39 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearScanDate {
+		m.ClearScanDate()
+	}
+	if v := i.ScanDate; v != nil {
+		m.SetScanDate(*v)
+	}
+	if i.ClearScanSchedule {
+		m.ClearScanSchedule()
+	}
+	if v := i.ScanSchedule; v != nil {
+		m.SetScanSchedule(*v)
+	}
+	if i.ClearNextScanRunAt {
+		m.ClearNextScanRunAt()
+	}
+	if v := i.NextScanRunAt; v != nil {
+		m.SetNextScanRunAt(*v)
+	}
+	if i.ClearPerformedBy {
+		m.ClearPerformedBy()
+	}
+	if v := i.PerformedBy; v != nil {
+		m.SetPerformedBy(*v)
+	}
+	if i.ClearVulnerabilityIds {
+		m.ClearVulnerabilityIds()
+	}
+	if v := i.VulnerabilityIds; v != nil {
+		m.SetVulnerabilityIds(v)
+	}
+	if i.AppendVulnerabilityIds != nil {
+		m.AppendVulnerabilityIds(i.VulnerabilityIds)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
@@ -15177,6 +19799,42 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
 	}
+	if i.ClearReviewedByUser {
+		m.ClearReviewedByUser()
+	}
+	if v := i.ReviewedByUserID; v != nil {
+		m.SetReviewedByUserID(*v)
+	}
+	if i.ClearReviewedByGroup {
+		m.ClearReviewedByGroup()
+	}
+	if v := i.ReviewedByGroupID; v != nil {
+		m.SetReviewedByGroupID(*v)
+	}
+	if i.ClearAssignedToUser {
+		m.ClearAssignedToUser()
+	}
+	if v := i.AssignedToUserID; v != nil {
+		m.SetAssignedToUserID(*v)
+	}
+	if i.ClearAssignedToGroup {
+		m.ClearAssignedToGroup()
+	}
+	if v := i.AssignedToGroupID; v != nil {
+		m.SetAssignedToGroupID(*v)
+	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if i.ClearAssets {
 		m.ClearAssets()
 	}
@@ -15194,6 +19852,96 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.RemoveEntityIDs; len(v) > 0 {
 		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.AddEvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.RemoveEvidenceIDs; len(v) > 0 {
+		m.RemoveEvidenceIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
+	if i.ClearRemediations {
+		m.ClearRemediations()
+	}
+	if v := i.AddRemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.RemoveRemediationIDs; len(v) > 0 {
+		m.RemoveRemediationIDs(v...)
+	}
+	if i.ClearActionPlans {
+		m.ClearActionPlans()
+	}
+	if v := i.AddActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
+	if v := i.RemoveActionPlanIDs; len(v) > 0 {
+		m.RemoveActionPlanIDs(v...)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearPlatforms {
+		m.ClearPlatforms()
+	}
+	if v := i.AddPlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.RemovePlatformIDs; len(v) > 0 {
+		m.RemovePlatformIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearGeneratedByPlatform {
+		m.ClearGeneratedByPlatform()
+	}
+	if v := i.GeneratedByPlatformID; v != nil {
+		m.SetGeneratedByPlatformID(*v)
+	}
+	if i.ClearPerformedByUser {
+		m.ClearPerformedByUser()
+	}
+	if v := i.PerformedByUserID; v != nil {
+		m.SetPerformedByUserID(*v)
+	}
+	if i.ClearPerformedByGroup {
+		m.ClearPerformedByGroup()
+	}
+	if v := i.PerformedByGroupID; v != nil {
+		m.SetPerformedByGroupID(*v)
 	}
 }
 
@@ -15426,6 +20174,7 @@ type CreateStandardInput struct {
 	ControlIDs               []string
 	TrustCenterComplianceIDs []string
 	TrustCenterDocIDs        []string
+	ApplicablePlatformIDs    []string
 	LogoFileID               *string
 }
 
@@ -15492,6 +20241,9 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.TrustCenterDocIDs; len(v) > 0 {
 		m.AddTrustCenterDocIDs(v...)
 	}
+	if v := i.ApplicablePlatformIDs; len(v) > 0 {
+		m.AddApplicablePlatformIDs(v...)
+	}
 	if v := i.LogoFileID; v != nil {
 		m.SetLogoFileID(*v)
 	}
@@ -15551,6 +20303,9 @@ type UpdateStandardInput struct {
 	ClearTrustCenterDocs           bool
 	AddTrustCenterDocIDs           []string
 	RemoveTrustCenterDocIDs        []string
+	ClearApplicablePlatforms       bool
+	AddApplicablePlatformIDs       []string
+	RemoveApplicablePlatformIDs    []string
 	ClearLogoFile                  bool
 	LogoFileID                     *string
 }
@@ -15694,6 +20449,15 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.RemoveTrustCenterDocIDs; len(v) > 0 {
 		m.RemoveTrustCenterDocIDs(v...)
+	}
+	if i.ClearApplicablePlatforms {
+		m.ClearApplicablePlatforms()
+	}
+	if v := i.AddApplicablePlatformIDs; len(v) > 0 {
+		m.AddApplicablePlatformIDs(v...)
+	}
+	if v := i.RemoveApplicablePlatformIDs; len(v) > 0 {
+		m.RemoveApplicablePlatformIDs(v...)
 	}
 	if i.ClearLogoFile {
 		m.ClearLogoFile()
@@ -16396,6 +21160,7 @@ type CreateSubprocessorInput struct {
 	OwnerID                    *string
 	LogoFileID                 *string
 	TrustCenterSubprocessorIDs []string
+	EntityIDs                  []string
 }
 
 // Mutate applies the CreateSubprocessorInput on the SubprocessorMutation builder.
@@ -16425,6 +21190,9 @@ func (i *CreateSubprocessorInput) Mutate(m *SubprocessorMutation) {
 	if v := i.TrustCenterSubprocessorIDs; len(v) > 0 {
 		m.AddTrustCenterSubprocessorIDs(v...)
 	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateSubprocessorInput on the SubprocessorCreate builder.
@@ -16452,6 +21220,9 @@ type UpdateSubprocessorInput struct {
 	ClearTrustCenterSubprocessors    bool
 	AddTrustCenterSubprocessorIDs    []string
 	RemoveTrustCenterSubprocessorIDs []string
+	ClearEntities                    bool
+	AddEntityIDs                     []string
+	RemoveEntityIDs                  []string
 }
 
 // Mutate applies the UpdateSubprocessorInput on the SubprocessorMutation builder.
@@ -16506,6 +21277,15 @@ func (i *UpdateSubprocessorInput) Mutate(m *SubprocessorMutation) {
 	}
 	if v := i.RemoveTrustCenterSubprocessorIDs; len(v) > 0 {
 		m.RemoveTrustCenterSubprocessorIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
 	}
 }
 
@@ -16787,6 +21567,8 @@ func (c *TagDefinitionUpdateOne) SetInput(i UpdateTagDefinitionInput) *TagDefini
 type CreateTaskInput struct {
 	Tags                     []string
 	TaskKindName             *string
+	EnvironmentName          *string
+	ScopeName                *string
 	Title                    string
 	Details                  *string
 	DetailsJSON              []interface{}
@@ -16797,6 +21579,8 @@ type CreateTaskInput struct {
 	ExternalReferenceURL     []string
 	OwnerID                  *string
 	TaskKindID               *string
+	EnvironmentID            *string
+	ScopeID                  *string
 	AssignerID               *string
 	AssigneeID               *string
 	CommentIDs               []string
@@ -16808,6 +21592,9 @@ type CreateTaskInput struct {
 	ControlObjectiveIDs      []string
 	ProgramIDs               []string
 	RiskIDs                  []string
+	PlatformIDs              []string
+	ScanIDs                  []string
+	IdentityHolderIDs        []string
 	ControlImplementationIDs []string
 	ActionPlanIDs            []string
 	EvidenceIDs              []string
@@ -16823,6 +21610,12 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.TaskKindName; v != nil {
 		m.SetTaskKindName(*v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	m.SetTitle(i.Title)
 	if v := i.Details; v != nil {
@@ -16851,6 +21644,12 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.TaskKindID; v != nil {
 		m.SetTaskKindID(*v)
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if v := i.AssignerID; v != nil {
 		m.SetAssignerID(*v)
@@ -16885,6 +21684,15 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.RiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
 	}
+	if v := i.PlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.ScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.IdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
 	if v := i.ControlImplementationIDs; len(v) > 0 {
 		m.AddControlImplementationIDs(v...)
 	}
@@ -16918,6 +21726,10 @@ type UpdateTaskInput struct {
 	AppendTags                     []string
 	ClearTaskKindName              bool
 	TaskKindName                   *string
+	ClearEnvironmentName           bool
+	EnvironmentName                *string
+	ClearScopeName                 bool
+	ScopeName                      *string
 	Title                          *string
 	ClearDetails                   bool
 	Details                        *string
@@ -16935,6 +21747,10 @@ type UpdateTaskInput struct {
 	AppendExternalReferenceURL     []string
 	ClearTaskKind                  bool
 	TaskKindID                     *string
+	ClearEnvironment               bool
+	EnvironmentID                  *string
+	ClearScope                     bool
+	ScopeID                        *string
 	ClearAssigner                  bool
 	AssignerID                     *string
 	ClearAssignee                  bool
@@ -16966,6 +21782,15 @@ type UpdateTaskInput struct {
 	ClearRisks                     bool
 	AddRiskIDs                     []string
 	RemoveRiskIDs                  []string
+	ClearPlatforms                 bool
+	AddPlatformIDs                 []string
+	RemovePlatformIDs              []string
+	ClearScans                     bool
+	AddScanIDs                     []string
+	RemoveScanIDs                  []string
+	ClearIdentityHolders           bool
+	AddIdentityHolderIDs           []string
+	RemoveIdentityHolderIDs        []string
 	ClearControlImplementations    bool
 	AddControlImplementationIDs    []string
 	RemoveControlImplementationIDs []string
@@ -17001,6 +21826,18 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.TaskKindName; v != nil {
 		m.SetTaskKindName(*v)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if v := i.Title; v != nil {
 		m.SetTitle(*v)
@@ -17052,6 +21889,18 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.TaskKindID; v != nil {
 		m.SetTaskKindID(*v)
+	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if i.ClearAssigner {
 		m.ClearAssigner()
@@ -17146,6 +21995,33 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.RemoveRiskIDs; len(v) > 0 {
 		m.RemoveRiskIDs(v...)
 	}
+	if i.ClearPlatforms {
+		m.ClearPlatforms()
+	}
+	if v := i.AddPlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.RemovePlatformIDs; len(v) > 0 {
+		m.RemovePlatformIDs(v...)
+	}
+	if i.ClearScans {
+		m.ClearScans()
+	}
+	if v := i.AddScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.RemoveScanIDs; len(v) > 0 {
+		m.RemoveScanIDs(v...)
+	}
+	if i.ClearIdentityHolders {
+		m.ClearIdentityHolders()
+	}
+	if v := i.AddIdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
+		m.RemoveIdentityHolderIDs(v...)
+	}
 	if i.ClearControlImplementations {
 		m.ClearControlImplementations()
 	}
@@ -17213,20 +22089,26 @@ func (c *TaskUpdateOne) SetInput(i UpdateTaskInput) *TaskUpdateOne {
 
 // CreateTemplateInput represents a mutation input for creating templates.
 type CreateTemplateInput struct {
-	Tags             []string
-	InternalNotes    *string
-	SystemInternalID *string
-	Name             string
-	TemplateType     *enums.DocumentType
-	Description      *string
-	Kind             *enums.TemplateKind
-	Jsonconfig       map[string]interface{}
-	Uischema         map[string]interface{}
-	OwnerID          *string
-	DocumentIDs      []string
-	FileIDs          []string
-	TrustCenterID    *string
-	AssessmentIDs    []string
+	Tags              []string
+	InternalNotes     *string
+	SystemInternalID  *string
+	EnvironmentName   *string
+	ScopeName         *string
+	Name              string
+	TemplateType      *enums.DocumentType
+	Description       *string
+	Kind              *enums.TemplateKind
+	Jsonconfig        map[string]interface{}
+	Uischema          map[string]interface{}
+	OwnerID           *string
+	EnvironmentID     *string
+	ScopeID           *string
+	DocumentIDs       []string
+	FileIDs           []string
+	TrustCenterID     *string
+	AssessmentIDs     []string
+	CampaignIDs       []string
+	IdentityHolderIDs []string
 }
 
 // Mutate applies the CreateTemplateInput on the TemplateMutation builder.
@@ -17239,6 +22121,12 @@ func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.TemplateType; v != nil {
@@ -17259,6 +22147,12 @@ func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if v := i.DocumentIDs; len(v) > 0 {
 		m.AddDocumentIDs(v...)
 	}
@@ -17271,6 +22165,12 @@ func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.AssessmentIDs; len(v) > 0 {
 		m.AddAssessmentIDs(v...)
 	}
+	if v := i.CampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.IdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTemplateInput on the TemplateCreate builder.
@@ -17281,33 +22181,47 @@ func (c *TemplateCreate) SetInput(i CreateTemplateInput) *TemplateCreate {
 
 // UpdateTemplateInput represents a mutation input for updating templates.
 type UpdateTemplateInput struct {
-	ClearTags             bool
-	Tags                  []string
-	AppendTags            []string
-	ClearInternalNotes    bool
-	InternalNotes         *string
-	ClearSystemInternalID bool
-	SystemInternalID      *string
-	Name                  *string
-	TemplateType          *enums.DocumentType
-	ClearDescription      bool
-	Description           *string
-	ClearKind             bool
-	Kind                  *enums.TemplateKind
-	Jsonconfig            map[string]interface{}
-	ClearUischema         bool
-	Uischema              map[string]interface{}
-	ClearDocuments        bool
-	AddDocumentIDs        []string
-	RemoveDocumentIDs     []string
-	ClearFiles            bool
-	AddFileIDs            []string
-	RemoveFileIDs         []string
-	ClearTrustCenter      bool
-	TrustCenterID         *string
-	ClearAssessments      bool
-	AddAssessmentIDs      []string
-	RemoveAssessmentIDs   []string
+	ClearTags               bool
+	Tags                    []string
+	AppendTags              []string
+	ClearInternalNotes      bool
+	InternalNotes           *string
+	ClearSystemInternalID   bool
+	SystemInternalID        *string
+	ClearEnvironmentName    bool
+	EnvironmentName         *string
+	ClearScopeName          bool
+	ScopeName               *string
+	Name                    *string
+	TemplateType            *enums.DocumentType
+	ClearDescription        bool
+	Description             *string
+	ClearKind               bool
+	Kind                    *enums.TemplateKind
+	Jsonconfig              map[string]interface{}
+	ClearUischema           bool
+	Uischema                map[string]interface{}
+	ClearEnvironment        bool
+	EnvironmentID           *string
+	ClearScope              bool
+	ScopeID                 *string
+	ClearDocuments          bool
+	AddDocumentIDs          []string
+	RemoveDocumentIDs       []string
+	ClearFiles              bool
+	AddFileIDs              []string
+	RemoveFileIDs           []string
+	ClearTrustCenter        bool
+	TrustCenterID           *string
+	ClearAssessments        bool
+	AddAssessmentIDs        []string
+	RemoveAssessmentIDs     []string
+	ClearCampaigns          bool
+	AddCampaignIDs          []string
+	RemoveCampaignIDs       []string
+	ClearIdentityHolders    bool
+	AddIdentityHolderIDs    []string
+	RemoveIdentityHolderIDs []string
 }
 
 // Mutate applies the UpdateTemplateInput on the TemplateMutation builder.
@@ -17332,6 +22246,18 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -17359,6 +22285,18 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.Uischema; v != nil {
 		m.SetUischema(v)
+	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if i.ClearDocuments {
 		m.ClearDocuments()
@@ -17392,6 +22330,24 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.RemoveAssessmentIDs; len(v) > 0 {
 		m.RemoveAssessmentIDs(v...)
+	}
+	if i.ClearCampaigns {
+		m.ClearCampaigns()
+	}
+	if v := i.AddCampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.RemoveCampaignIDs; len(v) > 0 {
+		m.RemoveCampaignIDs(v...)
+	}
+	if i.ClearIdentityHolders {
+		m.ClearIdentityHolders()
+	}
+	if v := i.AddIdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
+		m.RemoveIdentityHolderIDs(v...)
 	}
 }
 
@@ -18270,6 +23226,7 @@ type CreateTrustCenterSettingInput struct {
 	TrustCenterID            *string
 	Title                    *string
 	CompanyName              *string
+	CompanyDescription       *string
 	Overview                 *string
 	LogoRemoteURL            *string
 	FaviconRemoteURL         *string
@@ -18301,6 +23258,9 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.CompanyName; v != nil {
 		m.SetCompanyName(*v)
+	}
+	if v := i.CompanyDescription; v != nil {
+		m.SetCompanyDescription(*v)
 	}
 	if v := i.Overview; v != nil {
 		m.SetOverview(*v)
@@ -18375,6 +23335,8 @@ type UpdateTrustCenterSettingInput struct {
 	Title                         *string
 	ClearCompanyName              bool
 	CompanyName                   *string
+	ClearCompanyDescription       bool
+	CompanyDescription            *string
 	ClearOverview                 bool
 	Overview                      *string
 	ClearLogoRemoteURL            bool
@@ -18434,6 +23396,12 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.CompanyName; v != nil {
 		m.SetCompanyName(*v)
+	}
+	if i.ClearCompanyDescription {
+		m.ClearCompanyDescription()
+	}
+	if v := i.CompanyDescription; v != nil {
+		m.SetCompanyDescription(*v)
 	}
 	if i.ClearOverview {
 		m.ClearOverview()
@@ -18884,11 +23852,15 @@ type CreateUserInput struct {
 	AvatarFileID             *string
 	EventIDs                 []string
 	ActionPlanIDs            []string
+	CampaignIDs              []string
+	CampaignTargetIDs        []string
 	SubcontrolIDs            []string
 	AssignerTaskIDs          []string
 	AssigneeTaskIDs          []string
 	ProgramIDs               []string
 	ProgramsOwnedIDs         []string
+	PlatformsOwnedIDs        []string
+	IdentityHolderProfileIDs []string
 	ImpersonationEventIDs    []string
 	TargetedImpersonationIDs []string
 }
@@ -18970,6 +23942,12 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	if v := i.ActionPlanIDs; len(v) > 0 {
 		m.AddActionPlanIDs(v...)
 	}
+	if v := i.CampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.CampaignTargetIDs; len(v) > 0 {
+		m.AddCampaignTargetIDs(v...)
+	}
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
 	}
@@ -18984,6 +23962,12 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.ProgramsOwnedIDs; len(v) > 0 {
 		m.AddProgramsOwnedIDs(v...)
+	}
+	if v := i.PlatformsOwnedIDs; len(v) > 0 {
+		m.AddPlatformsOwnedIDs(v...)
+	}
+	if v := i.IdentityHolderProfileIDs; len(v) > 0 {
+		m.AddIdentityHolderProfileIDs(v...)
 	}
 	if v := i.ImpersonationEventIDs; len(v) > 0 {
 		m.AddImpersonationEventIDs(v...)
@@ -19059,6 +24043,12 @@ type UpdateUserInput struct {
 	ClearActionPlans               bool
 	AddActionPlanIDs               []string
 	RemoveActionPlanIDs            []string
+	ClearCampaigns                 bool
+	AddCampaignIDs                 []string
+	RemoveCampaignIDs              []string
+	ClearCampaignTargets           bool
+	AddCampaignTargetIDs           []string
+	RemoveCampaignTargetIDs        []string
 	ClearSubcontrols               bool
 	AddSubcontrolIDs               []string
 	RemoveSubcontrolIDs            []string
@@ -19074,6 +24064,12 @@ type UpdateUserInput struct {
 	ClearProgramsOwned             bool
 	AddProgramsOwnedIDs            []string
 	RemoveProgramsOwnedIDs         []string
+	ClearPlatformsOwned            bool
+	AddPlatformsOwnedIDs           []string
+	RemovePlatformsOwnedIDs        []string
+	ClearIdentityHolderProfiles    bool
+	AddIdentityHolderProfileIDs    []string
+	RemoveIdentityHolderProfileIDs []string
 	ClearImpersonationEvents       bool
 	AddImpersonationEventIDs       []string
 	RemoveImpersonationEventIDs    []string
@@ -19258,6 +24254,24 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	if v := i.RemoveActionPlanIDs; len(v) > 0 {
 		m.RemoveActionPlanIDs(v...)
 	}
+	if i.ClearCampaigns {
+		m.ClearCampaigns()
+	}
+	if v := i.AddCampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.RemoveCampaignIDs; len(v) > 0 {
+		m.RemoveCampaignIDs(v...)
+	}
+	if i.ClearCampaignTargets {
+		m.ClearCampaignTargets()
+	}
+	if v := i.AddCampaignTargetIDs; len(v) > 0 {
+		m.AddCampaignTargetIDs(v...)
+	}
+	if v := i.RemoveCampaignTargetIDs; len(v) > 0 {
+		m.RemoveCampaignTargetIDs(v...)
+	}
 	if i.ClearSubcontrols {
 		m.ClearSubcontrols()
 	}
@@ -19302,6 +24316,24 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.RemoveProgramsOwnedIDs; len(v) > 0 {
 		m.RemoveProgramsOwnedIDs(v...)
+	}
+	if i.ClearPlatformsOwned {
+		m.ClearPlatformsOwned()
+	}
+	if v := i.AddPlatformsOwnedIDs; len(v) > 0 {
+		m.AddPlatformsOwnedIDs(v...)
+	}
+	if v := i.RemovePlatformsOwnedIDs; len(v) > 0 {
+		m.RemovePlatformsOwnedIDs(v...)
+	}
+	if i.ClearIdentityHolderProfiles {
+		m.ClearIdentityHolderProfiles()
+	}
+	if v := i.AddIdentityHolderProfileIDs; len(v) > 0 {
+		m.AddIdentityHolderProfileIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderProfileIDs; len(v) > 0 {
+		m.RemoveIdentityHolderProfileIDs(v...)
 	}
 	if i.ClearImpersonationEvents {
 		m.ClearImpersonationEvents()
@@ -19474,6 +24506,8 @@ type CreateVulnerabilityInput struct {
 	Tags             []string
 	InternalNotes    *string
 	SystemInternalID *string
+	EnvironmentName  *string
+	ScopeName        *string
 	ExternalOwnerID  *string
 	ExternalID       string
 	CveID            *string
@@ -19507,6 +24541,8 @@ type CreateVulnerabilityInput struct {
 	BlockedGroupIDs  []string
 	EditorIDs        []string
 	ViewerIDs        []string
+	EnvironmentID    *string
+	ScopeID          *string
 	IntegrationIDs   []string
 	FindingIDs       []string
 	ActionPlanIDs    []string
@@ -19534,6 +24570,12 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
@@ -19632,6 +24674,12 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
 	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
+	}
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
 	}
@@ -19694,6 +24742,10 @@ type UpdateVulnerabilityInput struct {
 	InternalNotes         *string
 	ClearSystemInternalID bool
 	SystemInternalID      *string
+	ClearEnvironmentName  bool
+	EnvironmentName       *string
+	ClearScopeName        bool
+	ScopeName             *string
 	ClearExternalOwnerID  bool
 	ExternalOwnerID       *string
 	ExternalID            *string
@@ -19762,6 +24814,10 @@ type UpdateVulnerabilityInput struct {
 	ClearViewers          bool
 	AddViewerIDs          []string
 	RemoveViewerIDs       []string
+	ClearEnvironment      bool
+	EnvironmentID         *string
+	ClearScope            bool
+	ScopeID               *string
 	ClearIntegrations     bool
 	AddIntegrationIDs     []string
 	RemoveIntegrationIDs  []string
@@ -19831,6 +24887,18 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if i.ClearEnvironmentName {
+		m.ClearEnvironmentName()
+	}
+	if v := i.EnvironmentName; v != nil {
+		m.SetEnvironmentName(*v)
+	}
+	if i.ClearScopeName {
+		m.ClearScopeName()
+	}
+	if v := i.ScopeName; v != nil {
+		m.SetScopeName(*v)
 	}
 	if i.ClearExternalOwnerID {
 		m.ClearExternalOwnerID()
@@ -20035,6 +25103,18 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearEnvironment {
+		m.ClearEnvironment()
+	}
+	if v := i.EnvironmentID; v != nil {
+		m.SetEnvironmentID(*v)
+	}
+	if i.ClearScope {
+		m.ClearScope()
+	}
+	if v := i.ScopeID; v != nil {
+		m.SetScopeID(*v)
 	}
 	if i.ClearIntegrations {
 		m.ClearIntegrations()
@@ -20401,144 +25481,6 @@ func (c *WorkflowDefinitionUpdate) SetInput(i UpdateWorkflowDefinitionInput) *Wo
 
 // SetInput applies the change-set in the UpdateWorkflowDefinitionInput on the WorkflowDefinitionUpdateOne builder.
 func (c *WorkflowDefinitionUpdateOne) SetInput(i UpdateWorkflowDefinitionInput) *WorkflowDefinitionUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateWorkflowEventInput represents a mutation input for creating workflowevents.
-type CreateWorkflowEventInput struct {
-	Tags               []string
-	EventType          enums.WorkflowEventType
-	Payload            *models.WorkflowEventPayload
-	OwnerID            *string
-	WorkflowInstanceID string
-}
-
-// Mutate applies the CreateWorkflowEventInput on the WorkflowEventMutation builder.
-func (i *CreateWorkflowEventInput) Mutate(m *WorkflowEventMutation) {
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	m.SetEventType(i.EventType)
-	if v := i.Payload; v != nil {
-		m.SetPayload(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	m.SetWorkflowInstanceID(i.WorkflowInstanceID)
-}
-
-// SetInput applies the change-set in the CreateWorkflowEventInput on the WorkflowEventCreate builder.
-func (c *WorkflowEventCreate) SetInput(i CreateWorkflowEventInput) *WorkflowEventCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateWorkflowEventInput represents a mutation input for updating workflowevents.
-type UpdateWorkflowEventInput struct {
-	ClearTags          bool
-	Tags               []string
-	AppendTags         []string
-	EventType          *enums.WorkflowEventType
-	ClearPayload       bool
-	Payload            *models.WorkflowEventPayload
-	WorkflowInstanceID *string
-}
-
-// Mutate applies the UpdateWorkflowEventInput on the WorkflowEventMutation builder.
-func (i *UpdateWorkflowEventInput) Mutate(m *WorkflowEventMutation) {
-	if i.ClearTags {
-		m.ClearTags()
-	}
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if i.AppendTags != nil {
-		m.AppendTags(i.Tags)
-	}
-	if v := i.EventType; v != nil {
-		m.SetEventType(*v)
-	}
-	if i.ClearPayload {
-		m.ClearPayload()
-	}
-	if v := i.Payload; v != nil {
-		m.SetPayload(*v)
-	}
-	if v := i.WorkflowInstanceID; v != nil {
-		m.SetWorkflowInstanceID(*v)
-	}
-}
-
-// SetInput applies the change-set in the UpdateWorkflowEventInput on the WorkflowEventUpdate builder.
-func (c *WorkflowEventUpdate) SetInput(i UpdateWorkflowEventInput) *WorkflowEventUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateWorkflowEventInput on the WorkflowEventUpdateOne builder.
-func (c *WorkflowEventUpdateOne) SetInput(i UpdateWorkflowEventInput) *WorkflowEventUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateWorkflowObjectRefInput represents a mutation input for creating workflowobjectrefs.
-type CreateWorkflowObjectRefInput struct {
-	OwnerID            *string
-	WorkflowInstanceID string
-	ControlID          *string
-	TaskID             *string
-	InternalPolicyID   *string
-	FindingID          *string
-	DirectoryAccountID *string
-	DirectoryGroupID   *string
-	EvidenceID         *string
-	SubcontrolID       *string
-	ActionPlanID       *string
-	ProcedureID        *string
-}
-
-// Mutate applies the CreateWorkflowObjectRefInput on the WorkflowObjectRefMutation builder.
-func (i *CreateWorkflowObjectRefInput) Mutate(m *WorkflowObjectRefMutation) {
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	m.SetWorkflowInstanceID(i.WorkflowInstanceID)
-	if v := i.ControlID; v != nil {
-		m.SetControlID(*v)
-	}
-	if v := i.TaskID; v != nil {
-		m.SetTaskID(*v)
-	}
-	if v := i.InternalPolicyID; v != nil {
-		m.SetInternalPolicyID(*v)
-	}
-	if v := i.FindingID; v != nil {
-		m.SetFindingID(*v)
-	}
-	if v := i.DirectoryAccountID; v != nil {
-		m.SetDirectoryAccountID(*v)
-	}
-	if v := i.DirectoryGroupID; v != nil {
-		m.SetDirectoryGroupID(*v)
-	}
-	if v := i.EvidenceID; v != nil {
-		m.SetEvidenceID(*v)
-	}
-	if v := i.SubcontrolID; v != nil {
-		m.SetSubcontrolID(*v)
-	}
-	if v := i.ActionPlanID; v != nil {
-		m.SetActionPlanID(*v)
-	}
-	if v := i.ProcedureID; v != nil {
-		m.SetProcedureID(*v)
-	}
-}
-
-// SetInput applies the change-set in the CreateWorkflowObjectRefInput on the WorkflowObjectRefCreate builder.
-func (c *WorkflowObjectRefCreate) SetInput(i CreateWorkflowObjectRefInput) *WorkflowObjectRefCreate {
 	i.Mutate(c.Mutation())
 	return c
 }

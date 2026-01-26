@@ -89,3 +89,8 @@ func enqueueJob(ctx context.Context, jobClient riverqueue.JobClient, args river.
 
 	return err
 }
+
+// workflowEngineEnabled reports whether workflows are enabled for this client
+func workflowEngineEnabled(client *generated.Client) bool {
+	return client != nil && client.WorkflowEngine != nil
+}

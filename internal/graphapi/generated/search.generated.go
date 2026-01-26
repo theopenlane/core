@@ -244,6 +244,80 @@ func (ec *executionContext) fieldContext_SearchResults_assets(_ context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_campaigns(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_campaigns,
+		func(ctx context.Context) (any, error) {
+			return obj.Campaigns, nil
+		},
+		nil,
+		ec.marshalOCampaignConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaignConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_campaigns(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_CampaignConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_CampaignConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_CampaignConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CampaignConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SearchResults_campaignTargets(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_campaignTargets,
+		func(ctx context.Context) (any, error) {
+			return obj.CampaignTargets, nil
+		},
+		nil,
+		ec.marshalOCampaignTargetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaignTargetConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_campaignTargets(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_CampaignTargetConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_CampaignTargetConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_CampaignTargetConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CampaignTargetConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_contacts(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -540,6 +614,43 @@ func (ec *executionContext) fieldContext_SearchResults_groups(_ context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_identityHolders(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_identityHolders,
+		func(ctx context.Context) (any, error) {
+			return obj.IdentityHolders, nil
+		},
+		nil,
+		ec.marshalOIdentityHolderConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIdentityHolderConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_identityHolders(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_IdentityHolderConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_IdentityHolderConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_IdentityHolderConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type IdentityHolderConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_internalPolicies(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -757,6 +868,43 @@ func (ec *executionContext) fieldContext_SearchResults_organizations(_ context.C
 				return ec.fieldContext_OrganizationConnection_totalCount(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OrganizationConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SearchResults_platforms(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_platforms,
+		func(ctx context.Context) (any, error) {
+			return obj.Platforms, nil
+		},
+		nil,
+		ec.marshalOPlatformConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPlatformConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_platforms(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_PlatformConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_PlatformConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PlatformConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PlatformConnection", field.Name)
 		},
 	}
 	return fc, nil
@@ -1397,6 +1545,10 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_assessmentResponses(ctx, field, obj)
 		case "assets":
 			out.Values[i] = ec._SearchResults_assets(ctx, field, obj)
+		case "campaigns":
+			out.Values[i] = ec._SearchResults_campaigns(ctx, field, obj)
+		case "campaignTargets":
+			out.Values[i] = ec._SearchResults_campaignTargets(ctx, field, obj)
 		case "contacts":
 			out.Values[i] = ec._SearchResults_contacts(ctx, field, obj)
 		case "controls":
@@ -1413,6 +1565,8 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_findings(ctx, field, obj)
 		case "groups":
 			out.Values[i] = ec._SearchResults_groups(ctx, field, obj)
+		case "identityHolders":
+			out.Values[i] = ec._SearchResults_identityHolders(ctx, field, obj)
 		case "internalPolicies":
 			out.Values[i] = ec._SearchResults_internalPolicies(ctx, field, obj)
 		case "invites":
@@ -1425,6 +1579,8 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_narratives(ctx, field, obj)
 		case "organizations":
 			out.Values[i] = ec._SearchResults_organizations(ctx, field, obj)
+		case "platforms":
+			out.Values[i] = ec._SearchResults_platforms(ctx, field, obj)
 		case "procedures":
 			out.Values[i] = ec._SearchResults_procedures(ctx, field, obj)
 		case "programs":

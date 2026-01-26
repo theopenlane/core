@@ -135,6 +135,7 @@ func (r Remediation) Edges() []ent.Edge {
 			edgeSchema: Integration{},
 			comment:    "integration that produced the remediation",
 		}),
+		defaultEdgeFromWithPagination(r, Scan{}),
 		defaultEdgeToWithPagination(r, Finding{}),
 		defaultEdgeToWithPagination(r, Vulnerability{}),
 		defaultEdgeToWithPagination(r, ActionPlan{}),
@@ -185,6 +186,8 @@ func (r Remediation) Mixin() []ent.Mixin {
 			),
 			newGroupPermissionsMixin(),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
+			newCustomEnumMixin(r, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(r, withEnumFieldName("scope"), withGlobalEnum()),
 		},
 	}.getMixins(r)
 }
@@ -204,7 +207,10 @@ func (Remediation) Indexes() []ent.Index {
 func (Remediation) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.Exportable{},
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+			entx.WithSystemOwned(),
+		),
 	}
 }
 
@@ -223,5 +229,6 @@ func (Remediation) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogVulnerabilityManagementModule,
 		models.CatalogRiskManagementAddon,
+		models.CatalogComplianceModule,
 	}
 }

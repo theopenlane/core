@@ -30,8 +30,11 @@ func WorkflowMetadata() []generated.WorkflowObjectTypeInfo {
 
 // OrganizationOwnerIDs returns user IDs for owners of an organization.
 func OrganizationOwnerIDs(ctx context.Context, client *generated.Client, orgID string) ([]string, error) {
-	if client == nil || orgID == "" {
-		return nil, nil
+	if client == nil {
+		return nil, ErrNilClient
+	}
+	if orgID == "" {
+		return nil, ErrMissingOrganizationID
 	}
 
 	memberships, err := client.OrgMembership.

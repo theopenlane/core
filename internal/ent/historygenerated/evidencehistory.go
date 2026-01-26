@@ -46,6 +46,14 @@ type EvidenceHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the environment of the evidence
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the evidence
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the evidence
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the evidence
+	ScopeID string `json:"scope_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
 	// the name of the evidence
@@ -80,7 +88,7 @@ func (*EvidenceHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case evidencehistory.FieldWorkflowEligibleMarker, evidencehistory.FieldIsAutomated:
 			values[i] = new(sql.NullBool)
-		case evidencehistory.FieldID, evidencehistory.FieldRef, evidencehistory.FieldCreatedBy, evidencehistory.FieldUpdatedBy, evidencehistory.FieldDeletedBy, evidencehistory.FieldDisplayID, evidencehistory.FieldOwnerID, evidencehistory.FieldName, evidencehistory.FieldDescription, evidencehistory.FieldCollectionProcedure, evidencehistory.FieldSource, evidencehistory.FieldURL, evidencehistory.FieldStatus:
+		case evidencehistory.FieldID, evidencehistory.FieldRef, evidencehistory.FieldCreatedBy, evidencehistory.FieldUpdatedBy, evidencehistory.FieldDeletedBy, evidencehistory.FieldDisplayID, evidencehistory.FieldOwnerID, evidencehistory.FieldEnvironmentName, evidencehistory.FieldEnvironmentID, evidencehistory.FieldScopeName, evidencehistory.FieldScopeID, evidencehistory.FieldName, evidencehistory.FieldDescription, evidencehistory.FieldCollectionProcedure, evidencehistory.FieldSource, evidencehistory.FieldURL, evidencehistory.FieldStatus:
 			values[i] = new(sql.NullString)
 		case evidencehistory.FieldHistoryTime, evidencehistory.FieldCreatedAt, evidencehistory.FieldUpdatedAt, evidencehistory.FieldDeletedAt, evidencehistory.FieldCreationDate, evidencehistory.FieldRenewalDate:
 			values[i] = new(sql.NullTime)
@@ -178,6 +186,30 @@ func (_m *EvidenceHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case evidencehistory.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case evidencehistory.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case evidencehistory.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case evidencehistory.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case evidencehistory.FieldWorkflowEligibleMarker:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -310,6 +342,18 @@ func (_m *EvidenceHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))

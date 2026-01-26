@@ -12,6 +12,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -161,6 +163,104 @@ func (_c *EntityHistoryCreate) SetNillableOwnerID(v *string) *EntityHistoryCreat
 	return _c
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_c *EntityHistoryCreate) SetInternalOwner(v string) *EntityHistoryCreate {
+	_c.mutation.SetInternalOwner(v)
+	return _c
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableInternalOwner(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwner(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_c *EntityHistoryCreate) SetInternalOwnerUserID(v string) *EntityHistoryCreate {
+	_c.mutation.SetInternalOwnerUserID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableInternalOwnerUserID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerUserID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_c *EntityHistoryCreate) SetInternalOwnerGroupID(v string) *EntityHistoryCreate {
+	_c.mutation.SetInternalOwnerGroupID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableInternalOwnerGroupID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetReviewedBy sets the "reviewed_by" field.
+func (_c *EntityHistoryCreate) SetReviewedBy(v string) *EntityHistoryCreate {
+	_c.mutation.SetReviewedBy(v)
+	return _c
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableReviewedBy(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetReviewedBy(*v)
+	}
+	return _c
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_c *EntityHistoryCreate) SetReviewedByUserID(v string) *EntityHistoryCreate {
+	_c.mutation.SetReviewedByUserID(v)
+	return _c
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableReviewedByUserID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetReviewedByUserID(*v)
+	}
+	return _c
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_c *EntityHistoryCreate) SetReviewedByGroupID(v string) *EntityHistoryCreate {
+	_c.mutation.SetReviewedByGroupID(v)
+	return _c
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableReviewedByGroupID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetReviewedByGroupID(*v)
+	}
+	return _c
+}
+
+// SetLastReviewedAt sets the "last_reviewed_at" field.
+func (_c *EntityHistoryCreate) SetLastReviewedAt(v models.DateTime) *EntityHistoryCreate {
+	_c.mutation.SetLastReviewedAt(v)
+	return _c
+}
+
+// SetNillableLastReviewedAt sets the "last_reviewed_at" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableLastReviewedAt(v *models.DateTime) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetLastReviewedAt(*v)
+	}
+	return _c
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (_c *EntityHistoryCreate) SetSystemOwned(v bool) *EntityHistoryCreate {
 	_c.mutation.SetSystemOwned(v)
@@ -199,6 +299,146 @@ func (_c *EntityHistoryCreate) SetSystemInternalID(v string) *EntityHistoryCreat
 func (_c *EntityHistoryCreate) SetNillableSystemInternalID(v *string) *EntityHistoryCreate {
 	if v != nil {
 		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
+// SetEntityRelationshipStateName sets the "entity_relationship_state_name" field.
+func (_c *EntityHistoryCreate) SetEntityRelationshipStateName(v string) *EntityHistoryCreate {
+	_c.mutation.SetEntityRelationshipStateName(v)
+	return _c
+}
+
+// SetNillableEntityRelationshipStateName sets the "entity_relationship_state_name" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableEntityRelationshipStateName(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetEntityRelationshipStateName(*v)
+	}
+	return _c
+}
+
+// SetEntityRelationshipStateID sets the "entity_relationship_state_id" field.
+func (_c *EntityHistoryCreate) SetEntityRelationshipStateID(v string) *EntityHistoryCreate {
+	_c.mutation.SetEntityRelationshipStateID(v)
+	return _c
+}
+
+// SetNillableEntityRelationshipStateID sets the "entity_relationship_state_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableEntityRelationshipStateID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetEntityRelationshipStateID(*v)
+	}
+	return _c
+}
+
+// SetEntitySecurityQuestionnaireStatusName sets the "entity_security_questionnaire_status_name" field.
+func (_c *EntityHistoryCreate) SetEntitySecurityQuestionnaireStatusName(v string) *EntityHistoryCreate {
+	_c.mutation.SetEntitySecurityQuestionnaireStatusName(v)
+	return _c
+}
+
+// SetNillableEntitySecurityQuestionnaireStatusName sets the "entity_security_questionnaire_status_name" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableEntitySecurityQuestionnaireStatusName(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetEntitySecurityQuestionnaireStatusName(*v)
+	}
+	return _c
+}
+
+// SetEntitySecurityQuestionnaireStatusID sets the "entity_security_questionnaire_status_id" field.
+func (_c *EntityHistoryCreate) SetEntitySecurityQuestionnaireStatusID(v string) *EntityHistoryCreate {
+	_c.mutation.SetEntitySecurityQuestionnaireStatusID(v)
+	return _c
+}
+
+// SetNillableEntitySecurityQuestionnaireStatusID sets the "entity_security_questionnaire_status_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableEntitySecurityQuestionnaireStatusID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetEntitySecurityQuestionnaireStatusID(*v)
+	}
+	return _c
+}
+
+// SetEntitySourceTypeName sets the "entity_source_type_name" field.
+func (_c *EntityHistoryCreate) SetEntitySourceTypeName(v string) *EntityHistoryCreate {
+	_c.mutation.SetEntitySourceTypeName(v)
+	return _c
+}
+
+// SetNillableEntitySourceTypeName sets the "entity_source_type_name" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableEntitySourceTypeName(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetEntitySourceTypeName(*v)
+	}
+	return _c
+}
+
+// SetEntitySourceTypeID sets the "entity_source_type_id" field.
+func (_c *EntityHistoryCreate) SetEntitySourceTypeID(v string) *EntityHistoryCreate {
+	_c.mutation.SetEntitySourceTypeID(v)
+	return _c
+}
+
+// SetNillableEntitySourceTypeID sets the "entity_source_type_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableEntitySourceTypeID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetEntitySourceTypeID(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *EntityHistoryCreate) SetEnvironmentName(v string) *EntityHistoryCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableEnvironmentName(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *EntityHistoryCreate) SetEnvironmentID(v string) *EntityHistoryCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableEnvironmentID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *EntityHistoryCreate) SetScopeName(v string) *EntityHistoryCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableScopeName(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *EntityHistoryCreate) SetScopeID(v string) *EntityHistoryCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableScopeID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
 	}
 	return _c
 }
@@ -276,6 +516,324 @@ func (_c *EntityHistoryCreate) SetNillableStatus(v *string) *EntityHistoryCreate
 	if v != nil {
 		_c.SetStatus(*v)
 	}
+	return _c
+}
+
+// SetApprovedForUse sets the "approved_for_use" field.
+func (_c *EntityHistoryCreate) SetApprovedForUse(v bool) *EntityHistoryCreate {
+	_c.mutation.SetApprovedForUse(v)
+	return _c
+}
+
+// SetNillableApprovedForUse sets the "approved_for_use" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableApprovedForUse(v *bool) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetApprovedForUse(*v)
+	}
+	return _c
+}
+
+// SetLinkedAssetIds sets the "linked_asset_ids" field.
+func (_c *EntityHistoryCreate) SetLinkedAssetIds(v []string) *EntityHistoryCreate {
+	_c.mutation.SetLinkedAssetIds(v)
+	return _c
+}
+
+// SetHasSoc2 sets the "has_soc2" field.
+func (_c *EntityHistoryCreate) SetHasSoc2(v bool) *EntityHistoryCreate {
+	_c.mutation.SetHasSoc2(v)
+	return _c
+}
+
+// SetNillableHasSoc2 sets the "has_soc2" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableHasSoc2(v *bool) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetHasSoc2(*v)
+	}
+	return _c
+}
+
+// SetSoc2PeriodEnd sets the "soc2_period_end" field.
+func (_c *EntityHistoryCreate) SetSoc2PeriodEnd(v models.DateTime) *EntityHistoryCreate {
+	_c.mutation.SetSoc2PeriodEnd(v)
+	return _c
+}
+
+// SetNillableSoc2PeriodEnd sets the "soc2_period_end" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableSoc2PeriodEnd(v *models.DateTime) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetSoc2PeriodEnd(*v)
+	}
+	return _c
+}
+
+// SetContractStartDate sets the "contract_start_date" field.
+func (_c *EntityHistoryCreate) SetContractStartDate(v models.DateTime) *EntityHistoryCreate {
+	_c.mutation.SetContractStartDate(v)
+	return _c
+}
+
+// SetNillableContractStartDate sets the "contract_start_date" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableContractStartDate(v *models.DateTime) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetContractStartDate(*v)
+	}
+	return _c
+}
+
+// SetContractEndDate sets the "contract_end_date" field.
+func (_c *EntityHistoryCreate) SetContractEndDate(v models.DateTime) *EntityHistoryCreate {
+	_c.mutation.SetContractEndDate(v)
+	return _c
+}
+
+// SetNillableContractEndDate sets the "contract_end_date" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableContractEndDate(v *models.DateTime) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetContractEndDate(*v)
+	}
+	return _c
+}
+
+// SetAutoRenews sets the "auto_renews" field.
+func (_c *EntityHistoryCreate) SetAutoRenews(v bool) *EntityHistoryCreate {
+	_c.mutation.SetAutoRenews(v)
+	return _c
+}
+
+// SetNillableAutoRenews sets the "auto_renews" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableAutoRenews(v *bool) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetAutoRenews(*v)
+	}
+	return _c
+}
+
+// SetTerminationNoticeDays sets the "termination_notice_days" field.
+func (_c *EntityHistoryCreate) SetTerminationNoticeDays(v int) *EntityHistoryCreate {
+	_c.mutation.SetTerminationNoticeDays(v)
+	return _c
+}
+
+// SetNillableTerminationNoticeDays sets the "termination_notice_days" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableTerminationNoticeDays(v *int) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetTerminationNoticeDays(*v)
+	}
+	return _c
+}
+
+// SetAnnualSpend sets the "annual_spend" field.
+func (_c *EntityHistoryCreate) SetAnnualSpend(v float64) *EntityHistoryCreate {
+	_c.mutation.SetAnnualSpend(v)
+	return _c
+}
+
+// SetNillableAnnualSpend sets the "annual_spend" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableAnnualSpend(v *float64) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetAnnualSpend(*v)
+	}
+	return _c
+}
+
+// SetSpendCurrency sets the "spend_currency" field.
+func (_c *EntityHistoryCreate) SetSpendCurrency(v string) *EntityHistoryCreate {
+	_c.mutation.SetSpendCurrency(v)
+	return _c
+}
+
+// SetNillableSpendCurrency sets the "spend_currency" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableSpendCurrency(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetSpendCurrency(*v)
+	}
+	return _c
+}
+
+// SetBillingModel sets the "billing_model" field.
+func (_c *EntityHistoryCreate) SetBillingModel(v string) *EntityHistoryCreate {
+	_c.mutation.SetBillingModel(v)
+	return _c
+}
+
+// SetNillableBillingModel sets the "billing_model" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableBillingModel(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetBillingModel(*v)
+	}
+	return _c
+}
+
+// SetRenewalRisk sets the "renewal_risk" field.
+func (_c *EntityHistoryCreate) SetRenewalRisk(v string) *EntityHistoryCreate {
+	_c.mutation.SetRenewalRisk(v)
+	return _c
+}
+
+// SetNillableRenewalRisk sets the "renewal_risk" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableRenewalRisk(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetRenewalRisk(*v)
+	}
+	return _c
+}
+
+// SetSSOEnforced sets the "sso_enforced" field.
+func (_c *EntityHistoryCreate) SetSSOEnforced(v bool) *EntityHistoryCreate {
+	_c.mutation.SetSSOEnforced(v)
+	return _c
+}
+
+// SetNillableSSOEnforced sets the "sso_enforced" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableSSOEnforced(v *bool) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetSSOEnforced(*v)
+	}
+	return _c
+}
+
+// SetMfaSupported sets the "mfa_supported" field.
+func (_c *EntityHistoryCreate) SetMfaSupported(v bool) *EntityHistoryCreate {
+	_c.mutation.SetMfaSupported(v)
+	return _c
+}
+
+// SetNillableMfaSupported sets the "mfa_supported" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableMfaSupported(v *bool) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetMfaSupported(*v)
+	}
+	return _c
+}
+
+// SetMfaEnforced sets the "mfa_enforced" field.
+func (_c *EntityHistoryCreate) SetMfaEnforced(v bool) *EntityHistoryCreate {
+	_c.mutation.SetMfaEnforced(v)
+	return _c
+}
+
+// SetNillableMfaEnforced sets the "mfa_enforced" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableMfaEnforced(v *bool) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetMfaEnforced(*v)
+	}
+	return _c
+}
+
+// SetStatusPageURL sets the "status_page_url" field.
+func (_c *EntityHistoryCreate) SetStatusPageURL(v string) *EntityHistoryCreate {
+	_c.mutation.SetStatusPageURL(v)
+	return _c
+}
+
+// SetNillableStatusPageURL sets the "status_page_url" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableStatusPageURL(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetStatusPageURL(*v)
+	}
+	return _c
+}
+
+// SetProvidedServices sets the "provided_services" field.
+func (_c *EntityHistoryCreate) SetProvidedServices(v []string) *EntityHistoryCreate {
+	_c.mutation.SetProvidedServices(v)
+	return _c
+}
+
+// SetLinks sets the "links" field.
+func (_c *EntityHistoryCreate) SetLinks(v []string) *EntityHistoryCreate {
+	_c.mutation.SetLinks(v)
+	return _c
+}
+
+// SetRiskRating sets the "risk_rating" field.
+func (_c *EntityHistoryCreate) SetRiskRating(v string) *EntityHistoryCreate {
+	_c.mutation.SetRiskRating(v)
+	return _c
+}
+
+// SetNillableRiskRating sets the "risk_rating" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableRiskRating(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetRiskRating(*v)
+	}
+	return _c
+}
+
+// SetRiskScore sets the "risk_score" field.
+func (_c *EntityHistoryCreate) SetRiskScore(v int) *EntityHistoryCreate {
+	_c.mutation.SetRiskScore(v)
+	return _c
+}
+
+// SetNillableRiskScore sets the "risk_score" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableRiskScore(v *int) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetRiskScore(*v)
+	}
+	return _c
+}
+
+// SetTier sets the "tier" field.
+func (_c *EntityHistoryCreate) SetTier(v string) *EntityHistoryCreate {
+	_c.mutation.SetTier(v)
+	return _c
+}
+
+// SetNillableTier sets the "tier" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableTier(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetTier(*v)
+	}
+	return _c
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (_c *EntityHistoryCreate) SetReviewFrequency(v enums.Frequency) *EntityHistoryCreate {
+	_c.mutation.SetReviewFrequency(v)
+	return _c
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableReviewFrequency(v *enums.Frequency) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetReviewFrequency(*v)
+	}
+	return _c
+}
+
+// SetNextReviewAt sets the "next_review_at" field.
+func (_c *EntityHistoryCreate) SetNextReviewAt(v models.DateTime) *EntityHistoryCreate {
+	_c.mutation.SetNextReviewAt(v)
+	return _c
+}
+
+// SetNillableNextReviewAt sets the "next_review_at" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableNextReviewAt(v *models.DateTime) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetNextReviewAt(*v)
+	}
+	return _c
+}
+
+// SetContractRenewalAt sets the "contract_renewal_at" field.
+func (_c *EntityHistoryCreate) SetContractRenewalAt(v models.DateTime) *EntityHistoryCreate {
+	_c.mutation.SetContractRenewalAt(v)
+	return _c
+}
+
+// SetNillableContractRenewalAt sets the "contract_renewal_at" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableContractRenewalAt(v *models.DateTime) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetContractRenewalAt(*v)
+	}
+	return _c
+}
+
+// SetVendorMetadata sets the "vendor_metadata" field.
+func (_c *EntityHistoryCreate) SetVendorMetadata(v map[string]interface{}) *EntityHistoryCreate {
+	_c.mutation.SetVendorMetadata(v)
 	return _c
 }
 
@@ -363,6 +921,50 @@ func (_c *EntityHistoryCreate) defaults() error {
 		v := entityhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.ApprovedForUse(); !ok {
+		v := entityhistory.DefaultApprovedForUse
+		_c.mutation.SetApprovedForUse(v)
+	}
+	if _, ok := _c.mutation.LinkedAssetIds(); !ok {
+		v := entityhistory.DefaultLinkedAssetIds
+		_c.mutation.SetLinkedAssetIds(v)
+	}
+	if _, ok := _c.mutation.HasSoc2(); !ok {
+		v := entityhistory.DefaultHasSoc2
+		_c.mutation.SetHasSoc2(v)
+	}
+	if _, ok := _c.mutation.AutoRenews(); !ok {
+		v := entityhistory.DefaultAutoRenews
+		_c.mutation.SetAutoRenews(v)
+	}
+	if _, ok := _c.mutation.SpendCurrency(); !ok {
+		v := entityhistory.DefaultSpendCurrency
+		_c.mutation.SetSpendCurrency(v)
+	}
+	if _, ok := _c.mutation.SSOEnforced(); !ok {
+		v := entityhistory.DefaultSSOEnforced
+		_c.mutation.SetSSOEnforced(v)
+	}
+	if _, ok := _c.mutation.MfaSupported(); !ok {
+		v := entityhistory.DefaultMfaSupported
+		_c.mutation.SetMfaSupported(v)
+	}
+	if _, ok := _c.mutation.MfaEnforced(); !ok {
+		v := entityhistory.DefaultMfaEnforced
+		_c.mutation.SetMfaEnforced(v)
+	}
+	if _, ok := _c.mutation.ProvidedServices(); !ok {
+		v := entityhistory.DefaultProvidedServices
+		_c.mutation.SetProvidedServices(v)
+	}
+	if _, ok := _c.mutation.Links(); !ok {
+		v := entityhistory.DefaultLinks
+		_c.mutation.SetLinks(v)
+	}
+	if _, ok := _c.mutation.ReviewFrequency(); !ok {
+		v := entityhistory.DefaultReviewFrequency
+		_c.mutation.SetReviewFrequency(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if entityhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized entityhistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -384,6 +986,11 @@ func (_c *EntityHistoryCreate) check() error {
 	if v, ok := _c.mutation.Operation(); ok {
 		if err := entityhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.operation": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.ReviewFrequency(); ok {
+		if err := entityhistory.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.review_frequency": %w`, err)}
 		}
 	}
 	return nil
@@ -466,6 +1073,34 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 		_spec.SetField(entityhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
+	if value, ok := _c.mutation.InternalOwner(); ok {
+		_spec.SetField(entityhistory.FieldInternalOwner, field.TypeString, value)
+		_node.InternalOwner = value
+	}
+	if value, ok := _c.mutation.InternalOwnerUserID(); ok {
+		_spec.SetField(entityhistory.FieldInternalOwnerUserID, field.TypeString, value)
+		_node.InternalOwnerUserID = value
+	}
+	if value, ok := _c.mutation.InternalOwnerGroupID(); ok {
+		_spec.SetField(entityhistory.FieldInternalOwnerGroupID, field.TypeString, value)
+		_node.InternalOwnerGroupID = value
+	}
+	if value, ok := _c.mutation.ReviewedBy(); ok {
+		_spec.SetField(entityhistory.FieldReviewedBy, field.TypeString, value)
+		_node.ReviewedBy = value
+	}
+	if value, ok := _c.mutation.ReviewedByUserID(); ok {
+		_spec.SetField(entityhistory.FieldReviewedByUserID, field.TypeString, value)
+		_node.ReviewedByUserID = value
+	}
+	if value, ok := _c.mutation.ReviewedByGroupID(); ok {
+		_spec.SetField(entityhistory.FieldReviewedByGroupID, field.TypeString, value)
+		_node.ReviewedByGroupID = value
+	}
+	if value, ok := _c.mutation.LastReviewedAt(); ok {
+		_spec.SetField(entityhistory.FieldLastReviewedAt, field.TypeTime, value)
+		_node.LastReviewedAt = &value
+	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(entityhistory.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
@@ -477,6 +1112,46 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(entityhistory.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
+	}
+	if value, ok := _c.mutation.EntityRelationshipStateName(); ok {
+		_spec.SetField(entityhistory.FieldEntityRelationshipStateName, field.TypeString, value)
+		_node.EntityRelationshipStateName = value
+	}
+	if value, ok := _c.mutation.EntityRelationshipStateID(); ok {
+		_spec.SetField(entityhistory.FieldEntityRelationshipStateID, field.TypeString, value)
+		_node.EntityRelationshipStateID = value
+	}
+	if value, ok := _c.mutation.EntitySecurityQuestionnaireStatusName(); ok {
+		_spec.SetField(entityhistory.FieldEntitySecurityQuestionnaireStatusName, field.TypeString, value)
+		_node.EntitySecurityQuestionnaireStatusName = value
+	}
+	if value, ok := _c.mutation.EntitySecurityQuestionnaireStatusID(); ok {
+		_spec.SetField(entityhistory.FieldEntitySecurityQuestionnaireStatusID, field.TypeString, value)
+		_node.EntitySecurityQuestionnaireStatusID = value
+	}
+	if value, ok := _c.mutation.EntitySourceTypeName(); ok {
+		_spec.SetField(entityhistory.FieldEntitySourceTypeName, field.TypeString, value)
+		_node.EntitySourceTypeName = value
+	}
+	if value, ok := _c.mutation.EntitySourceTypeID(); ok {
+		_spec.SetField(entityhistory.FieldEntitySourceTypeID, field.TypeString, value)
+		_node.EntitySourceTypeID = value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(entityhistory.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.EnvironmentID(); ok {
+		_spec.SetField(entityhistory.FieldEnvironmentID, field.TypeString, value)
+		_node.EnvironmentID = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(entityhistory.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.ScopeID(); ok {
+		_spec.SetField(entityhistory.FieldScopeID, field.TypeString, value)
+		_node.ScopeID = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(entityhistory.FieldName, field.TypeString, value)
@@ -501,6 +1176,106 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(entityhistory.FieldStatus, field.TypeString, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ApprovedForUse(); ok {
+		_spec.SetField(entityhistory.FieldApprovedForUse, field.TypeBool, value)
+		_node.ApprovedForUse = value
+	}
+	if value, ok := _c.mutation.LinkedAssetIds(); ok {
+		_spec.SetField(entityhistory.FieldLinkedAssetIds, field.TypeJSON, value)
+		_node.LinkedAssetIds = value
+	}
+	if value, ok := _c.mutation.HasSoc2(); ok {
+		_spec.SetField(entityhistory.FieldHasSoc2, field.TypeBool, value)
+		_node.HasSoc2 = value
+	}
+	if value, ok := _c.mutation.Soc2PeriodEnd(); ok {
+		_spec.SetField(entityhistory.FieldSoc2PeriodEnd, field.TypeTime, value)
+		_node.Soc2PeriodEnd = &value
+	}
+	if value, ok := _c.mutation.ContractStartDate(); ok {
+		_spec.SetField(entityhistory.FieldContractStartDate, field.TypeTime, value)
+		_node.ContractStartDate = &value
+	}
+	if value, ok := _c.mutation.ContractEndDate(); ok {
+		_spec.SetField(entityhistory.FieldContractEndDate, field.TypeTime, value)
+		_node.ContractEndDate = &value
+	}
+	if value, ok := _c.mutation.AutoRenews(); ok {
+		_spec.SetField(entityhistory.FieldAutoRenews, field.TypeBool, value)
+		_node.AutoRenews = value
+	}
+	if value, ok := _c.mutation.TerminationNoticeDays(); ok {
+		_spec.SetField(entityhistory.FieldTerminationNoticeDays, field.TypeInt, value)
+		_node.TerminationNoticeDays = value
+	}
+	if value, ok := _c.mutation.AnnualSpend(); ok {
+		_spec.SetField(entityhistory.FieldAnnualSpend, field.TypeFloat64, value)
+		_node.AnnualSpend = value
+	}
+	if value, ok := _c.mutation.SpendCurrency(); ok {
+		_spec.SetField(entityhistory.FieldSpendCurrency, field.TypeString, value)
+		_node.SpendCurrency = value
+	}
+	if value, ok := _c.mutation.BillingModel(); ok {
+		_spec.SetField(entityhistory.FieldBillingModel, field.TypeString, value)
+		_node.BillingModel = value
+	}
+	if value, ok := _c.mutation.RenewalRisk(); ok {
+		_spec.SetField(entityhistory.FieldRenewalRisk, field.TypeString, value)
+		_node.RenewalRisk = value
+	}
+	if value, ok := _c.mutation.SSOEnforced(); ok {
+		_spec.SetField(entityhistory.FieldSSOEnforced, field.TypeBool, value)
+		_node.SSOEnforced = value
+	}
+	if value, ok := _c.mutation.MfaSupported(); ok {
+		_spec.SetField(entityhistory.FieldMfaSupported, field.TypeBool, value)
+		_node.MfaSupported = value
+	}
+	if value, ok := _c.mutation.MfaEnforced(); ok {
+		_spec.SetField(entityhistory.FieldMfaEnforced, field.TypeBool, value)
+		_node.MfaEnforced = value
+	}
+	if value, ok := _c.mutation.StatusPageURL(); ok {
+		_spec.SetField(entityhistory.FieldStatusPageURL, field.TypeString, value)
+		_node.StatusPageURL = value
+	}
+	if value, ok := _c.mutation.ProvidedServices(); ok {
+		_spec.SetField(entityhistory.FieldProvidedServices, field.TypeJSON, value)
+		_node.ProvidedServices = value
+	}
+	if value, ok := _c.mutation.Links(); ok {
+		_spec.SetField(entityhistory.FieldLinks, field.TypeJSON, value)
+		_node.Links = value
+	}
+	if value, ok := _c.mutation.RiskRating(); ok {
+		_spec.SetField(entityhistory.FieldRiskRating, field.TypeString, value)
+		_node.RiskRating = value
+	}
+	if value, ok := _c.mutation.RiskScore(); ok {
+		_spec.SetField(entityhistory.FieldRiskScore, field.TypeInt, value)
+		_node.RiskScore = value
+	}
+	if value, ok := _c.mutation.Tier(); ok {
+		_spec.SetField(entityhistory.FieldTier, field.TypeString, value)
+		_node.Tier = value
+	}
+	if value, ok := _c.mutation.ReviewFrequency(); ok {
+		_spec.SetField(entityhistory.FieldReviewFrequency, field.TypeEnum, value)
+		_node.ReviewFrequency = value
+	}
+	if value, ok := _c.mutation.NextReviewAt(); ok {
+		_spec.SetField(entityhistory.FieldNextReviewAt, field.TypeTime, value)
+		_node.NextReviewAt = &value
+	}
+	if value, ok := _c.mutation.ContractRenewalAt(); ok {
+		_spec.SetField(entityhistory.FieldContractRenewalAt, field.TypeTime, value)
+		_node.ContractRenewalAt = &value
+	}
+	if value, ok := _c.mutation.VendorMetadata(); ok {
+		_spec.SetField(entityhistory.FieldVendorMetadata, field.TypeJSON, value)
+		_node.VendorMetadata = value
 	}
 	return _node, _spec
 }

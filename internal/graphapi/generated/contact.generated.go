@@ -84,6 +84,10 @@ func (ec *executionContext) fieldContext_ContactBulkCreatePayload_contacts(_ con
 				return ec.fieldContext_Contact_owner(ctx, field)
 			case "entities":
 				return ec.fieldContext_Contact_entities(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Contact_campaigns(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_Contact_campaignTargets(ctx, field)
 			case "files":
 				return ec.fieldContext_Contact_files(ctx, field)
 			}
@@ -178,6 +182,10 @@ func (ec *executionContext) fieldContext_ContactBulkUpdatePayload_contacts(_ con
 				return ec.fieldContext_Contact_owner(ctx, field)
 			case "entities":
 				return ec.fieldContext_Contact_entities(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Contact_campaigns(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_Contact_campaignTargets(ctx, field)
 			case "files":
 				return ec.fieldContext_Contact_files(ctx, field)
 			}
@@ -272,6 +280,10 @@ func (ec *executionContext) fieldContext_ContactCreatePayload_contact(_ context.
 				return ec.fieldContext_Contact_owner(ctx, field)
 			case "entities":
 				return ec.fieldContext_Contact_entities(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Contact_campaigns(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_Contact_campaignTargets(ctx, field)
 			case "files":
 				return ec.fieldContext_Contact_files(ctx, field)
 			}
@@ -366,6 +378,10 @@ func (ec *executionContext) fieldContext_ContactUpdatePayload_contact(_ context.
 				return ec.fieldContext_Contact_owner(ctx, field)
 			case "entities":
 				return ec.fieldContext_Contact_entities(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Contact_campaigns(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_Contact_campaignTargets(ctx, field)
 			case "files":
 				return ec.fieldContext_Contact_files(ctx, field)
 			}

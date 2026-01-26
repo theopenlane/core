@@ -157,6 +157,26 @@ func ProcedureID(v string) predicate.WorkflowObjectRef {
 	return predicate.WorkflowObjectRef(sql.FieldEQ(FieldProcedureID, v))
 }
 
+// CampaignID applies equality check predicate on the "campaign_id" field. It's identical to CampaignIDEQ.
+func CampaignID(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldEQ(FieldCampaignID, v))
+}
+
+// CampaignTargetID applies equality check predicate on the "campaign_target_id" field. It's identical to CampaignTargetIDEQ.
+func CampaignTargetID(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldEQ(FieldCampaignTargetID, v))
+}
+
+// IdentityHolderID applies equality check predicate on the "identity_holder_id" field. It's identical to IdentityHolderIDEQ.
+func IdentityHolderID(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldEQ(FieldIdentityHolderID, v))
+}
+
+// PlatformID applies equality check predicate on the "platform_id" field. It's identical to PlatformIDEQ.
+func PlatformID(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldEQ(FieldPlatformID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.WorkflowObjectRef {
 	return predicate.WorkflowObjectRef(sql.FieldEQ(FieldCreatedAt, v))
@@ -1437,6 +1457,306 @@ func ProcedureIDContainsFold(v string) predicate.WorkflowObjectRef {
 	return predicate.WorkflowObjectRef(sql.FieldContainsFold(FieldProcedureID, v))
 }
 
+// CampaignIDEQ applies the EQ predicate on the "campaign_id" field.
+func CampaignIDEQ(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldEQ(FieldCampaignID, v))
+}
+
+// CampaignIDNEQ applies the NEQ predicate on the "campaign_id" field.
+func CampaignIDNEQ(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldNEQ(FieldCampaignID, v))
+}
+
+// CampaignIDIn applies the In predicate on the "campaign_id" field.
+func CampaignIDIn(vs ...string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldIn(FieldCampaignID, vs...))
+}
+
+// CampaignIDNotIn applies the NotIn predicate on the "campaign_id" field.
+func CampaignIDNotIn(vs ...string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldNotIn(FieldCampaignID, vs...))
+}
+
+// CampaignIDGT applies the GT predicate on the "campaign_id" field.
+func CampaignIDGT(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldGT(FieldCampaignID, v))
+}
+
+// CampaignIDGTE applies the GTE predicate on the "campaign_id" field.
+func CampaignIDGTE(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldGTE(FieldCampaignID, v))
+}
+
+// CampaignIDLT applies the LT predicate on the "campaign_id" field.
+func CampaignIDLT(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldLT(FieldCampaignID, v))
+}
+
+// CampaignIDLTE applies the LTE predicate on the "campaign_id" field.
+func CampaignIDLTE(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldLTE(FieldCampaignID, v))
+}
+
+// CampaignIDContains applies the Contains predicate on the "campaign_id" field.
+func CampaignIDContains(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldContains(FieldCampaignID, v))
+}
+
+// CampaignIDHasPrefix applies the HasPrefix predicate on the "campaign_id" field.
+func CampaignIDHasPrefix(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldHasPrefix(FieldCampaignID, v))
+}
+
+// CampaignIDHasSuffix applies the HasSuffix predicate on the "campaign_id" field.
+func CampaignIDHasSuffix(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldHasSuffix(FieldCampaignID, v))
+}
+
+// CampaignIDIsNil applies the IsNil predicate on the "campaign_id" field.
+func CampaignIDIsNil() predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldIsNull(FieldCampaignID))
+}
+
+// CampaignIDNotNil applies the NotNil predicate on the "campaign_id" field.
+func CampaignIDNotNil() predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldNotNull(FieldCampaignID))
+}
+
+// CampaignIDEqualFold applies the EqualFold predicate on the "campaign_id" field.
+func CampaignIDEqualFold(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldEqualFold(FieldCampaignID, v))
+}
+
+// CampaignIDContainsFold applies the ContainsFold predicate on the "campaign_id" field.
+func CampaignIDContainsFold(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldContainsFold(FieldCampaignID, v))
+}
+
+// CampaignTargetIDEQ applies the EQ predicate on the "campaign_target_id" field.
+func CampaignTargetIDEQ(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldEQ(FieldCampaignTargetID, v))
+}
+
+// CampaignTargetIDNEQ applies the NEQ predicate on the "campaign_target_id" field.
+func CampaignTargetIDNEQ(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldNEQ(FieldCampaignTargetID, v))
+}
+
+// CampaignTargetIDIn applies the In predicate on the "campaign_target_id" field.
+func CampaignTargetIDIn(vs ...string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldIn(FieldCampaignTargetID, vs...))
+}
+
+// CampaignTargetIDNotIn applies the NotIn predicate on the "campaign_target_id" field.
+func CampaignTargetIDNotIn(vs ...string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldNotIn(FieldCampaignTargetID, vs...))
+}
+
+// CampaignTargetIDGT applies the GT predicate on the "campaign_target_id" field.
+func CampaignTargetIDGT(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldGT(FieldCampaignTargetID, v))
+}
+
+// CampaignTargetIDGTE applies the GTE predicate on the "campaign_target_id" field.
+func CampaignTargetIDGTE(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldGTE(FieldCampaignTargetID, v))
+}
+
+// CampaignTargetIDLT applies the LT predicate on the "campaign_target_id" field.
+func CampaignTargetIDLT(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldLT(FieldCampaignTargetID, v))
+}
+
+// CampaignTargetIDLTE applies the LTE predicate on the "campaign_target_id" field.
+func CampaignTargetIDLTE(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldLTE(FieldCampaignTargetID, v))
+}
+
+// CampaignTargetIDContains applies the Contains predicate on the "campaign_target_id" field.
+func CampaignTargetIDContains(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldContains(FieldCampaignTargetID, v))
+}
+
+// CampaignTargetIDHasPrefix applies the HasPrefix predicate on the "campaign_target_id" field.
+func CampaignTargetIDHasPrefix(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldHasPrefix(FieldCampaignTargetID, v))
+}
+
+// CampaignTargetIDHasSuffix applies the HasSuffix predicate on the "campaign_target_id" field.
+func CampaignTargetIDHasSuffix(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldHasSuffix(FieldCampaignTargetID, v))
+}
+
+// CampaignTargetIDIsNil applies the IsNil predicate on the "campaign_target_id" field.
+func CampaignTargetIDIsNil() predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldIsNull(FieldCampaignTargetID))
+}
+
+// CampaignTargetIDNotNil applies the NotNil predicate on the "campaign_target_id" field.
+func CampaignTargetIDNotNil() predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldNotNull(FieldCampaignTargetID))
+}
+
+// CampaignTargetIDEqualFold applies the EqualFold predicate on the "campaign_target_id" field.
+func CampaignTargetIDEqualFold(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldEqualFold(FieldCampaignTargetID, v))
+}
+
+// CampaignTargetIDContainsFold applies the ContainsFold predicate on the "campaign_target_id" field.
+func CampaignTargetIDContainsFold(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldContainsFold(FieldCampaignTargetID, v))
+}
+
+// IdentityHolderIDEQ applies the EQ predicate on the "identity_holder_id" field.
+func IdentityHolderIDEQ(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldEQ(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDNEQ applies the NEQ predicate on the "identity_holder_id" field.
+func IdentityHolderIDNEQ(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldNEQ(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDIn applies the In predicate on the "identity_holder_id" field.
+func IdentityHolderIDIn(vs ...string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldIn(FieldIdentityHolderID, vs...))
+}
+
+// IdentityHolderIDNotIn applies the NotIn predicate on the "identity_holder_id" field.
+func IdentityHolderIDNotIn(vs ...string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldNotIn(FieldIdentityHolderID, vs...))
+}
+
+// IdentityHolderIDGT applies the GT predicate on the "identity_holder_id" field.
+func IdentityHolderIDGT(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldGT(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDGTE applies the GTE predicate on the "identity_holder_id" field.
+func IdentityHolderIDGTE(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldGTE(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDLT applies the LT predicate on the "identity_holder_id" field.
+func IdentityHolderIDLT(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldLT(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDLTE applies the LTE predicate on the "identity_holder_id" field.
+func IdentityHolderIDLTE(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldLTE(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDContains applies the Contains predicate on the "identity_holder_id" field.
+func IdentityHolderIDContains(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldContains(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDHasPrefix applies the HasPrefix predicate on the "identity_holder_id" field.
+func IdentityHolderIDHasPrefix(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldHasPrefix(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDHasSuffix applies the HasSuffix predicate on the "identity_holder_id" field.
+func IdentityHolderIDHasSuffix(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldHasSuffix(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDIsNil applies the IsNil predicate on the "identity_holder_id" field.
+func IdentityHolderIDIsNil() predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldIsNull(FieldIdentityHolderID))
+}
+
+// IdentityHolderIDNotNil applies the NotNil predicate on the "identity_holder_id" field.
+func IdentityHolderIDNotNil() predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldNotNull(FieldIdentityHolderID))
+}
+
+// IdentityHolderIDEqualFold applies the EqualFold predicate on the "identity_holder_id" field.
+func IdentityHolderIDEqualFold(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldEqualFold(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDContainsFold applies the ContainsFold predicate on the "identity_holder_id" field.
+func IdentityHolderIDContainsFold(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldContainsFold(FieldIdentityHolderID, v))
+}
+
+// PlatformIDEQ applies the EQ predicate on the "platform_id" field.
+func PlatformIDEQ(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldEQ(FieldPlatformID, v))
+}
+
+// PlatformIDNEQ applies the NEQ predicate on the "platform_id" field.
+func PlatformIDNEQ(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldNEQ(FieldPlatformID, v))
+}
+
+// PlatformIDIn applies the In predicate on the "platform_id" field.
+func PlatformIDIn(vs ...string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldIn(FieldPlatformID, vs...))
+}
+
+// PlatformIDNotIn applies the NotIn predicate on the "platform_id" field.
+func PlatformIDNotIn(vs ...string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldNotIn(FieldPlatformID, vs...))
+}
+
+// PlatformIDGT applies the GT predicate on the "platform_id" field.
+func PlatformIDGT(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldGT(FieldPlatformID, v))
+}
+
+// PlatformIDGTE applies the GTE predicate on the "platform_id" field.
+func PlatformIDGTE(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldGTE(FieldPlatformID, v))
+}
+
+// PlatformIDLT applies the LT predicate on the "platform_id" field.
+func PlatformIDLT(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldLT(FieldPlatformID, v))
+}
+
+// PlatformIDLTE applies the LTE predicate on the "platform_id" field.
+func PlatformIDLTE(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldLTE(FieldPlatformID, v))
+}
+
+// PlatformIDContains applies the Contains predicate on the "platform_id" field.
+func PlatformIDContains(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldContains(FieldPlatformID, v))
+}
+
+// PlatformIDHasPrefix applies the HasPrefix predicate on the "platform_id" field.
+func PlatformIDHasPrefix(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldHasPrefix(FieldPlatformID, v))
+}
+
+// PlatformIDHasSuffix applies the HasSuffix predicate on the "platform_id" field.
+func PlatformIDHasSuffix(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldHasSuffix(FieldPlatformID, v))
+}
+
+// PlatformIDIsNil applies the IsNil predicate on the "platform_id" field.
+func PlatformIDIsNil() predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldIsNull(FieldPlatformID))
+}
+
+// PlatformIDNotNil applies the NotNil predicate on the "platform_id" field.
+func PlatformIDNotNil() predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldNotNull(FieldPlatformID))
+}
+
+// PlatformIDEqualFold applies the EqualFold predicate on the "platform_id" field.
+func PlatformIDEqualFold(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldEqualFold(FieldPlatformID, v))
+}
+
+// PlatformIDContainsFold applies the ContainsFold predicate on the "platform_id" field.
+func PlatformIDContainsFold(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldContainsFold(FieldPlatformID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.WorkflowObjectRef {
 	return predicate.WorkflowObjectRef(func(s *sql.Selector) {
@@ -1834,6 +2154,122 @@ func HasProcedureWith(preds ...predicate.Procedure) predicate.WorkflowObjectRef 
 		step := newProcedureStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasCampaign applies the HasEdge predicate on the "campaign" edge.
+func HasCampaign() predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, CampaignTable, CampaignColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCampaignWith applies the HasEdge predicate on the "campaign" edge with a given conditions (other predicates).
+func HasCampaignWith(preds ...predicate.Campaign) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		step := newCampaignStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasCampaignTarget applies the HasEdge predicate on the "campaign_target" edge.
+func HasCampaignTarget() predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, CampaignTargetTable, CampaignTargetColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCampaignTargetWith applies the HasEdge predicate on the "campaign_target" edge with a given conditions (other predicates).
+func HasCampaignTargetWith(preds ...predicate.CampaignTarget) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		step := newCampaignTargetStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasIdentityHolder applies the HasEdge predicate on the "identity_holder" edge.
+func HasIdentityHolder() predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, IdentityHolderTable, IdentityHolderColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIdentityHolderWith applies the HasEdge predicate on the "identity_holder" edge with a given conditions (other predicates).
+func HasIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		step := newIdentityHolderStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPlatform applies the HasEdge predicate on the "platform" edge.
+func HasPlatform() predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, PlatformTable, PlatformColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPlatformWith applies the HasEdge predicate on the "platform" edge with a given conditions (other predicates).
+func HasPlatformWith(preds ...predicate.Platform) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		step := newPlatformStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
 		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

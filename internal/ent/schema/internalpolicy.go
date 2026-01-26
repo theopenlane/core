@@ -118,6 +118,8 @@ func (i InternalPolicy) Mixin() []ent.Mixin {
 			// policies are documents
 			DocumentMixin{DocumentType: "policy"}, // use short name for the document type
 			newCustomEnumMixin(i, withWorkflowEnumEdges()),
+			newCustomEnumMixin(i, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(i, withEnumFieldName("scope"), withGlobalEnum()),
 			WorkflowApprovalMixin{},
 		},
 	}.getMixins(i)
@@ -134,7 +136,9 @@ func (InternalPolicy) Modules() []models.OrgModule {
 func (i InternalPolicy) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.Exportable{},
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+		),
 	}
 }
 

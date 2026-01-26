@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -36,6 +37,14 @@ type DocumentData struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the environment of the document
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the document
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the document
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the document
+	ScopeID string `json:"scope_id,omitempty"`
 	// the template id of the document
 	TemplateID string `json:"template_id,omitempty"`
 	// the json data of the document
@@ -50,6 +59,10 @@ type DocumentData struct {
 type DocumentDataEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// Environment holds the value of the environment edge.
+	Environment *CustomTypeEnum `json:"environment,omitempty"`
+	// Scope holds the value of the scope edge.
+	Scope *CustomTypeEnum `json:"scope,omitempty"`
 	// Template holds the value of the template edge.
 	Template *Template `json:"template,omitempty"`
 	// Entities holds the value of the entities edge.
@@ -58,9 +71,9 @@ type DocumentDataEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [6]map[string]int
 
 	namedEntities map[string][]*Entity
 	namedFiles    map[string][]*File
@@ -77,12 +90,34 @@ func (e DocumentDataEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// EnvironmentOrErr returns the Environment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e DocumentDataEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
+	if e.Environment != nil {
+		return e.Environment, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "environment"}
+}
+
+// ScopeOrErr returns the Scope value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e DocumentDataEdges) ScopeOrErr() (*CustomTypeEnum, error) {
+	if e.Scope != nil {
+		return e.Scope, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "scope"}
+}
+
 // TemplateOrErr returns the Template value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e DocumentDataEdges) TemplateOrErr() (*Template, error) {
 	if e.Template != nil {
 		return e.Template, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: template.Label}
 	}
 	return nil, &NotLoadedError{edge: "template"}
@@ -91,7 +126,7 @@ func (e DocumentDataEdges) TemplateOrErr() (*Template, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e DocumentDataEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -100,7 +135,7 @@ func (e DocumentDataEdges) EntitiesOrErr() ([]*Entity, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e DocumentDataEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -113,7 +148,7 @@ func (*DocumentData) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case documentdata.FieldTags, documentdata.FieldData:
 			values[i] = new([]byte)
-		case documentdata.FieldID, documentdata.FieldCreatedBy, documentdata.FieldUpdatedBy, documentdata.FieldDeletedBy, documentdata.FieldOwnerID, documentdata.FieldTemplateID:
+		case documentdata.FieldID, documentdata.FieldCreatedBy, documentdata.FieldUpdatedBy, documentdata.FieldDeletedBy, documentdata.FieldOwnerID, documentdata.FieldEnvironmentName, documentdata.FieldEnvironmentID, documentdata.FieldScopeName, documentdata.FieldScopeID, documentdata.FieldTemplateID:
 			values[i] = new(sql.NullString)
 		case documentdata.FieldCreatedAt, documentdata.FieldUpdatedAt, documentdata.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -188,6 +223,30 @@ func (_m *DocumentData) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
+		case documentdata.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case documentdata.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case documentdata.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case documentdata.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
+			}
 		case documentdata.FieldTemplateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field template_id", values[i])
@@ -218,6 +277,16 @@ func (_m *DocumentData) Value(name string) (ent.Value, error) {
 // QueryOwner queries the "owner" edge of the DocumentData entity.
 func (_m *DocumentData) QueryOwner() *OrganizationQuery {
 	return NewDocumentDataClient(_m.config).QueryOwner(_m)
+}
+
+// QueryEnvironment queries the "environment" edge of the DocumentData entity.
+func (_m *DocumentData) QueryEnvironment() *CustomTypeEnumQuery {
+	return NewDocumentDataClient(_m.config).QueryEnvironment(_m)
+}
+
+// QueryScope queries the "scope" edge of the DocumentData entity.
+func (_m *DocumentData) QueryScope() *CustomTypeEnumQuery {
+	return NewDocumentDataClient(_m.config).QueryScope(_m)
 }
 
 // QueryTemplate queries the "template" edge of the DocumentData entity.
@@ -281,6 +350,18 @@ func (_m *DocumentData) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("template_id=")
 	builder.WriteString(_m.TemplateID)

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
@@ -104,6 +105,86 @@ func (_u *DirectoryAccountUpdate) SetNillableOwnerID(v *string) *DirectoryAccoun
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *DirectoryAccountUpdate) ClearOwnerID() *DirectoryAccountUpdate {
 	_u.mutation.ClearOwnerID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *DirectoryAccountUpdate) SetEnvironmentName(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableEnvironmentName(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *DirectoryAccountUpdate) ClearEnvironmentName() *DirectoryAccountUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *DirectoryAccountUpdate) SetEnvironmentID(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableEnvironmentID(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *DirectoryAccountUpdate) ClearEnvironmentID() *DirectoryAccountUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *DirectoryAccountUpdate) SetScopeName(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableScopeName(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *DirectoryAccountUpdate) ClearScopeName() *DirectoryAccountUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *DirectoryAccountUpdate) SetScopeID(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableScopeID(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *DirectoryAccountUpdate) ClearScopeID() *DirectoryAccountUpdate {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -426,6 +507,16 @@ func (_u *DirectoryAccountUpdate) SetOwner(v *Organization) *DirectoryAccountUpd
 	return _u.SetOwnerID(v.ID)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *DirectoryAccountUpdate) SetEnvironment(v *CustomTypeEnum) *DirectoryAccountUpdate {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *DirectoryAccountUpdate) SetScope(v *CustomTypeEnum) *DirectoryAccountUpdate {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddGroupIDs adds the "groups" edge to the DirectoryGroup entity by IDs.
 func (_u *DirectoryAccountUpdate) AddGroupIDs(ids ...string) *DirectoryAccountUpdate {
 	_u.mutation.AddGroupIDs(ids...)
@@ -479,6 +570,18 @@ func (_u *DirectoryAccountUpdate) Mutation() *DirectoryAccountMutation {
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (_u *DirectoryAccountUpdate) ClearOwner() *DirectoryAccountUpdate {
 	_u.mutation.ClearOwner()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *DirectoryAccountUpdate) ClearEnvironment() *DirectoryAccountUpdate {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *DirectoryAccountUpdate) ClearScope() *DirectoryAccountUpdate {
+	_u.mutation.ClearScope()
 	return _u
 }
 
@@ -665,6 +768,18 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(directoryaccount.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(directoryaccount.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(directoryaccount.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(directoryaccount.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(directoryaccount.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.SecondaryKey(); ok {
 		_spec.SetField(directoryaccount.FieldSecondaryKey, field.TypeString, value)
 	}
@@ -781,6 +896,68 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directoryaccount.EnvironmentTable,
+			Columns: []string{directoryaccount.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directoryaccount.EnvironmentTable,
+			Columns: []string{directoryaccount.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directoryaccount.ScopeTable,
+			Columns: []string{directoryaccount.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directoryaccount.ScopeTable,
+			Columns: []string{directoryaccount.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.DirectoryAccount
@@ -1045,6 +1222,86 @@ func (_u *DirectoryAccountUpdateOne) SetNillableOwnerID(v *string) *DirectoryAcc
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *DirectoryAccountUpdateOne) ClearOwnerID() *DirectoryAccountUpdateOne {
 	_u.mutation.ClearOwnerID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *DirectoryAccountUpdateOne) SetEnvironmentName(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableEnvironmentName(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *DirectoryAccountUpdateOne) ClearEnvironmentName() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *DirectoryAccountUpdateOne) SetEnvironmentID(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableEnvironmentID(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *DirectoryAccountUpdateOne) ClearEnvironmentID() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *DirectoryAccountUpdateOne) SetScopeName(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableScopeName(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *DirectoryAccountUpdateOne) ClearScopeName() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *DirectoryAccountUpdateOne) SetScopeID(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableScopeID(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *DirectoryAccountUpdateOne) ClearScopeID() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -1367,6 +1624,16 @@ func (_u *DirectoryAccountUpdateOne) SetOwner(v *Organization) *DirectoryAccount
 	return _u.SetOwnerID(v.ID)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *DirectoryAccountUpdateOne) SetEnvironment(v *CustomTypeEnum) *DirectoryAccountUpdateOne {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *DirectoryAccountUpdateOne) SetScope(v *CustomTypeEnum) *DirectoryAccountUpdateOne {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddGroupIDs adds the "groups" edge to the DirectoryGroup entity by IDs.
 func (_u *DirectoryAccountUpdateOne) AddGroupIDs(ids ...string) *DirectoryAccountUpdateOne {
 	_u.mutation.AddGroupIDs(ids...)
@@ -1420,6 +1687,18 @@ func (_u *DirectoryAccountUpdateOne) Mutation() *DirectoryAccountMutation {
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (_u *DirectoryAccountUpdateOne) ClearOwner() *DirectoryAccountUpdateOne {
 	_u.mutation.ClearOwner()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *DirectoryAccountUpdateOne) ClearEnvironment() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *DirectoryAccountUpdateOne) ClearScope() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearScope()
 	return _u
 }
 
@@ -1636,6 +1915,18 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(directoryaccount.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(directoryaccount.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(directoryaccount.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(directoryaccount.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(directoryaccount.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.SecondaryKey(); ok {
 		_spec.SetField(directoryaccount.FieldSecondaryKey, field.TypeString, value)
 	}
@@ -1752,6 +2043,68 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directoryaccount.EnvironmentTable,
+			Columns: []string{directoryaccount.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directoryaccount.EnvironmentTable,
+			Columns: []string{directoryaccount.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directoryaccount.ScopeTable,
+			Columns: []string{directoryaccount.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directoryaccount.ScopeTable,
+			Columns: []string{directoryaccount.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.DirectoryAccount

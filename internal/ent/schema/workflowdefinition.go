@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -168,4 +169,11 @@ func (WorkflowDefinition) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.WorkflowDefinitionMutation](),
 		),
 	)
+}
+
+// Hooks of the WorkflowDefinition
+func (WorkflowDefinition) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookWorkflowDefinitionPrefilter(),
+	}
 }

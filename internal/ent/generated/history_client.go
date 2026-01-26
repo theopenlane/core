@@ -22,6 +22,12 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*AssetMutation]() {
 		c.Asset.Use(hook)
 	}
+	for _, hook := range history.Hooks[*CampaignMutation]() {
+		c.Campaign.Use(hook)
+	}
+	for _, hook := range history.Hooks[*CampaignTargetMutation]() {
+		c.CampaignTarget.Use(hook)
+	}
 	for _, hook := range history.Hooks[*ContactMutation]() {
 		c.Contact.Use(hook)
 	}
@@ -85,6 +91,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*HushMutation]() {
 		c.Hush.Use(hook)
 	}
+	for _, hook := range history.Hooks[*IdentityHolderMutation]() {
+		c.IdentityHolder.Use(hook)
+	}
 	for _, hook := range history.Hooks[*IntegrationMutation]() {
 		c.Integration.Use(hook)
 	}
@@ -117,6 +126,9 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*OrganizationSettingMutation]() {
 		c.OrganizationSetting.Use(hook)
+	}
+	for _, hook := range history.Hooks[*PlatformMutation]() {
+		c.Platform.Use(hook)
 	}
 	for _, hook := range history.Hooks[*ProcedureMutation]() {
 		c.Procedure.Use(hook)

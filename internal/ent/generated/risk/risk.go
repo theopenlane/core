@@ -44,6 +44,14 @@ const (
 	FieldRiskCategoryName = "risk_category_name"
 	// FieldRiskCategoryID holds the string denoting the risk_category_id field in the database.
 	FieldRiskCategoryID = "risk_category_id"
+	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
+	FieldEnvironmentName = "environment_name"
+	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
+	FieldEnvironmentID = "environment_id"
+	// FieldScopeName holds the string denoting the scope_name field in the database.
+	FieldScopeName = "scope_name"
+	// FieldScopeID holds the string denoting the scope_id field in the database.
+	FieldScopeID = "scope_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldStatus holds the string denoting the status field in the database.
@@ -82,6 +90,10 @@ const (
 	EdgeRiskKind = "risk_kind"
 	// EdgeRiskCategory holds the string denoting the risk_category edge name in mutations.
 	EdgeRiskCategory = "risk_category"
+	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
+	EdgeEnvironment = "environment"
+	// EdgeScope holds the string denoting the scope edge name in mutations.
+	EdgeScope = "scope"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
@@ -92,6 +104,8 @@ const (
 	EdgeInternalPolicies = "internal_policies"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
+	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
+	EdgePlatforms = "platforms"
 	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
 	EdgeActionPlans = "action_plans"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
@@ -148,6 +162,20 @@ const (
 	RiskCategoryInverseTable = "custom_type_enums"
 	// RiskCategoryColumn is the table column denoting the risk_category relation/edge.
 	RiskCategoryColumn = "risk_category_id"
+	// EnvironmentTable is the table that holds the environment relation/edge.
+	EnvironmentTable = "risks"
+	// EnvironmentInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	EnvironmentInverseTable = "custom_type_enums"
+	// EnvironmentColumn is the table column denoting the environment relation/edge.
+	EnvironmentColumn = "environment_id"
+	// ScopeTable is the table that holds the scope relation/edge.
+	ScopeTable = "risks"
+	// ScopeInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ScopeInverseTable = "custom_type_enums"
+	// ScopeColumn is the table column denoting the scope relation/edge.
+	ScopeColumn = "scope_id"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "control_risks"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -173,6 +201,11 @@ const (
 	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramsInverseTable = "programs"
+	// PlatformsTable is the table that holds the platforms relation/edge. The primary key declared below.
+	PlatformsTable = "platform_risks"
+	// PlatformsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformsInverseTable = "platforms"
 	// ActionPlansTable is the table that holds the action_plans relation/edge. The primary key declared below.
 	ActionPlansTable = "risk_action_plans"
 	// ActionPlansInverseTable is the table name for the ActionPlan entity.
@@ -250,6 +283,10 @@ var Columns = []string{
 	FieldRiskKindID,
 	FieldRiskCategoryName,
 	FieldRiskCategoryID,
+	FieldEnvironmentName,
+	FieldEnvironmentID,
+	FieldScopeName,
+	FieldScopeID,
 	FieldName,
 	FieldStatus,
 	FieldImpact,
@@ -302,6 +339,9 @@ var (
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"program_id", "risk_id"}
+	// PlatformsPrimaryKey and PlatformsColumn2 are the table columns denoting the
+	// primary key for the platforms relation (M2M).
+	PlatformsPrimaryKey = []string{"platform_id", "risk_id"}
 	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
 	// primary key for the action_plans relation (M2M).
 	ActionPlansPrimaryKey = []string{"risk_id", "action_plan_id"}
@@ -331,7 +371,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [15]ent.Hook
+	Hooks        [17]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -456,6 +496,26 @@ func ByRiskCategoryID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRiskCategoryID, opts...).ToFunc()
 }
 
+// ByEnvironmentName orders the results by the environment_name field.
+func ByEnvironmentName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentName, opts...).ToFunc()
+}
+
+// ByEnvironmentID orders the results by the environment_id field.
+func ByEnvironmentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentID, opts...).ToFunc()
+}
+
+// ByScopeName orders the results by the scope_name field.
+func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeName, opts...).ToFunc()
+}
+
+// ByScopeID orders the results by the scope_id field.
+func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
+}
+
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
@@ -569,6 +629,20 @@ func ByRiskCategoryField(field string, opts ...sql.OrderTermOption) OrderOption 
 	}
 }
 
+// ByEnvironmentField orders the results by environment field.
+func ByEnvironmentField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEnvironmentStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByScopeField orders the results by scope field.
+func ByScopeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScopeStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByControlsCount orders the results by controls count.
 func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -636,6 +710,20 @@ func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPlatformsCount orders the results by platforms count.
+func ByPlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformsStep(), opts...)
+	}
+}
+
+// ByPlatforms orders the results by platforms terms.
+func ByPlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -792,6 +880,20 @@ func newRiskCategoryStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, RiskCategoryTable, RiskCategoryColumn),
 	)
 }
+func newEnvironmentStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EnvironmentInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EnvironmentTable, EnvironmentColumn),
+	)
+}
+func newScopeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScopeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
+	)
+}
 func newControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -825,6 +927,13 @@ func newProgramsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
+	)
+}
+func newPlatformsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
 	)
 }
 func newActionPlansStep() *sqlgraph.Step {

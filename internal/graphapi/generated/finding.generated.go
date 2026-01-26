@@ -74,6 +74,14 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Finding_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Finding_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Finding_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Finding_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Finding_scopeID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
 			case "externalOwnerID":
@@ -156,6 +164,10 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Finding_viewers(ctx, field)
+			case "environment":
+				return ec.fieldContext_Finding_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Finding_scope(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Finding_integrations(ctx, field)
 			case "vulnerabilities":
@@ -243,6 +255,14 @@ func (ec *executionContext) fieldContext_FindingCreatePayload_finding(_ context.
 				return ec.fieldContext_Finding_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Finding_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Finding_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Finding_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Finding_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Finding_scopeID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
 			case "externalOwnerID":
@@ -325,6 +345,10 @@ func (ec *executionContext) fieldContext_FindingCreatePayload_finding(_ context.
 				return ec.fieldContext_Finding_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Finding_viewers(ctx, field)
+			case "environment":
+				return ec.fieldContext_Finding_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Finding_scope(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Finding_integrations(ctx, field)
 			case "vulnerabilities":
@@ -441,6 +465,14 @@ func (ec *executionContext) fieldContext_FindingUpdatePayload_finding(_ context.
 				return ec.fieldContext_Finding_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Finding_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Finding_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Finding_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Finding_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Finding_scopeID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
 			case "externalOwnerID":
@@ -523,6 +555,10 @@ func (ec *executionContext) fieldContext_FindingUpdatePayload_finding(_ context.
 				return ec.fieldContext_Finding_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Finding_viewers(ctx, field)
+			case "environment":
+				return ec.fieldContext_Finding_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Finding_scope(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Finding_integrations(ctx, field)
 			case "vulnerabilities":

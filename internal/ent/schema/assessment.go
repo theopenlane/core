@@ -95,7 +95,10 @@ func (a Assessment) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Template{}.Name()),
 			},
 		}),
+		defaultEdgeFromWithPagination(a, Platform{}),
+		defaultEdgeFromWithPagination(a, IdentityHolder{}),
 		defaultEdgeToWithPagination(a, AssessmentResponse{}),
+		defaultEdgeToWithPagination(a, Campaign{}),
 	}
 }
 

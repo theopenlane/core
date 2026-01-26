@@ -14,18 +14,22 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
@@ -59,11 +63,15 @@ type UserQuery struct {
 	withAvatarFile                   *FileQuery
 	withEvents                       *EventQuery
 	withActionPlans                  *ActionPlanQuery
+	withCampaigns                    *CampaignQuery
+	withCampaignTargets              *CampaignTargetQuery
 	withSubcontrols                  *SubcontrolQuery
 	withAssignerTasks                *TaskQuery
 	withAssigneeTasks                *TaskQuery
 	withPrograms                     *ProgramQuery
 	withProgramsOwned                *ProgramQuery
+	withPlatformsOwned               *PlatformQuery
+	withIdentityHolderProfiles       *IdentityHolderQuery
 	withImpersonationEvents          *ImpersonationEventQuery
 	withTargetedImpersonations       *ImpersonationEventQuery
 	withNotifications                *NotificationQuery
@@ -82,11 +90,15 @@ type UserQuery struct {
 	withNamedWebauthns               map[string]*WebauthnQuery
 	withNamedEvents                  map[string]*EventQuery
 	withNamedActionPlans             map[string]*ActionPlanQuery
+	withNamedCampaigns               map[string]*CampaignQuery
+	withNamedCampaignTargets         map[string]*CampaignTargetQuery
 	withNamedSubcontrols             map[string]*SubcontrolQuery
 	withNamedAssignerTasks           map[string]*TaskQuery
 	withNamedAssigneeTasks           map[string]*TaskQuery
 	withNamedPrograms                map[string]*ProgramQuery
 	withNamedProgramsOwned           map[string]*ProgramQuery
+	withNamedPlatformsOwned          map[string]*PlatformQuery
+	withNamedIdentityHolderProfiles  map[string]*IdentityHolderQuery
 	withNamedImpersonationEvents     map[string]*ImpersonationEventQuery
 	withNamedTargetedImpersonations  map[string]*ImpersonationEventQuery
 	withNamedNotifications           map[string]*NotificationQuery
@@ -429,6 +441,56 @@ func (_q *UserQuery) QueryActionPlans() *ActionPlanQuery {
 	return query
 }
 
+// QueryCampaigns chains the current query on the "campaigns" edge.
+func (_q *UserQuery) QueryCampaigns() *CampaignQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, user.CampaignsTable, user.CampaignsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignUsers
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaignTargets chains the current query on the "campaign_targets" edge.
+func (_q *UserQuery) QueryCampaignTargets() *CampaignTargetQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.CampaignTargetsTable, user.CampaignTargetsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QuerySubcontrols chains the current query on the "subcontrols" edge.
 func (_q *UserQuery) QuerySubcontrols() *SubcontrolQuery {
 	query := (&SubcontrolClient{config: _q.config}).Query()
@@ -548,6 +610,56 @@ func (_q *UserQuery) QueryProgramsOwned() *ProgramQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.Program
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPlatformsOwned chains the current query on the "platforms_owned" edge.
+func (_q *UserQuery) QueryPlatformsOwned() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.PlatformsOwnedTable, user.PlatformsOwnedColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Platform
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIdentityHolderProfiles chains the current query on the "identity_holder_profiles" edge.
+func (_q *UserQuery) QueryIdentityHolderProfiles() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.IdentityHolderProfilesTable, user.IdentityHolderProfilesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolder
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -908,11 +1020,15 @@ func (_q *UserQuery) Clone() *UserQuery {
 		withAvatarFile:              _q.withAvatarFile.Clone(),
 		withEvents:                  _q.withEvents.Clone(),
 		withActionPlans:             _q.withActionPlans.Clone(),
+		withCampaigns:               _q.withCampaigns.Clone(),
+		withCampaignTargets:         _q.withCampaignTargets.Clone(),
 		withSubcontrols:             _q.withSubcontrols.Clone(),
 		withAssignerTasks:           _q.withAssignerTasks.Clone(),
 		withAssigneeTasks:           _q.withAssigneeTasks.Clone(),
 		withPrograms:                _q.withPrograms.Clone(),
 		withProgramsOwned:           _q.withProgramsOwned.Clone(),
+		withPlatformsOwned:          _q.withPlatformsOwned.Clone(),
+		withIdentityHolderProfiles:  _q.withIdentityHolderProfiles.Clone(),
 		withImpersonationEvents:     _q.withImpersonationEvents.Clone(),
 		withTargetedImpersonations:  _q.withTargetedImpersonations.Clone(),
 		withNotifications:           _q.withNotifications.Clone(),
@@ -1058,6 +1174,28 @@ func (_q *UserQuery) WithActionPlans(opts ...func(*ActionPlanQuery)) *UserQuery 
 	return _q
 }
 
+// WithCampaigns tells the query-builder to eager-load the nodes that are connected to
+// the "campaigns" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithCampaigns(opts ...func(*CampaignQuery)) *UserQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaigns = query
+	return _q
+}
+
+// WithCampaignTargets tells the query-builder to eager-load the nodes that are connected to
+// the "campaign_targets" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithCampaignTargets(opts ...func(*CampaignTargetQuery)) *UserQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaignTargets = query
+	return _q
+}
+
 // WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
 // the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *UserQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *UserQuery {
@@ -1110,6 +1248,28 @@ func (_q *UserQuery) WithProgramsOwned(opts ...func(*ProgramQuery)) *UserQuery {
 		opt(query)
 	}
 	_q.withProgramsOwned = query
+	return _q
+}
+
+// WithPlatformsOwned tells the query-builder to eager-load the nodes that are connected to
+// the "platforms_owned" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithPlatformsOwned(opts ...func(*PlatformQuery)) *UserQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatformsOwned = query
+	return _q
+}
+
+// WithIdentityHolderProfiles tells the query-builder to eager-load the nodes that are connected to
+// the "identity_holder_profiles" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithIdentityHolderProfiles(opts ...func(*IdentityHolderQuery)) *UserQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIdentityHolderProfiles = query
 	return _q
 }
 
@@ -1263,7 +1423,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = _q.querySpec()
-		loadedTypes = [23]bool{
+		loadedTypes = [27]bool{
 			_q.withPersonalAccessTokens != nil,
 			_q.withTfaSettings != nil,
 			_q.withSetting != nil,
@@ -1276,11 +1436,15 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			_q.withAvatarFile != nil,
 			_q.withEvents != nil,
 			_q.withActionPlans != nil,
+			_q.withCampaigns != nil,
+			_q.withCampaignTargets != nil,
 			_q.withSubcontrols != nil,
 			_q.withAssignerTasks != nil,
 			_q.withAssigneeTasks != nil,
 			_q.withPrograms != nil,
 			_q.withProgramsOwned != nil,
+			_q.withPlatformsOwned != nil,
+			_q.withIdentityHolderProfiles != nil,
 			_q.withImpersonationEvents != nil,
 			_q.withTargetedImpersonations != nil,
 			_q.withNotifications != nil,
@@ -1402,6 +1566,20 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
+	if query := _q.withCampaigns; query != nil {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *User) { n.Edges.Campaigns = []*Campaign{} },
+			func(n *User, e *Campaign) { n.Edges.Campaigns = append(n.Edges.Campaigns, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaignTargets; query != nil {
+		if err := _q.loadCampaignTargets(ctx, query, nodes,
+			func(n *User) { n.Edges.CampaignTargets = []*CampaignTarget{} },
+			func(n *User, e *CampaignTarget) { n.Edges.CampaignTargets = append(n.Edges.CampaignTargets, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withSubcontrols; query != nil {
 		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *User) { n.Edges.Subcontrols = []*Subcontrol{} },
@@ -1434,6 +1612,22 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := _q.loadProgramsOwned(ctx, query, nodes,
 			func(n *User) { n.Edges.ProgramsOwned = []*Program{} },
 			func(n *User, e *Program) { n.Edges.ProgramsOwned = append(n.Edges.ProgramsOwned, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatformsOwned; query != nil {
+		if err := _q.loadPlatformsOwned(ctx, query, nodes,
+			func(n *User) { n.Edges.PlatformsOwned = []*Platform{} },
+			func(n *User, e *Platform) { n.Edges.PlatformsOwned = append(n.Edges.PlatformsOwned, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIdentityHolderProfiles; query != nil {
+		if err := _q.loadIdentityHolderProfiles(ctx, query, nodes,
+			func(n *User) { n.Edges.IdentityHolderProfiles = []*IdentityHolder{} },
+			func(n *User, e *IdentityHolder) {
+				n.Edges.IdentityHolderProfiles = append(n.Edges.IdentityHolderProfiles, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -1555,6 +1749,20 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedCampaigns {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *User) { n.appendNamedCampaigns(name) },
+			func(n *User, e *Campaign) { n.appendNamedCampaigns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaignTargets {
+		if err := _q.loadCampaignTargets(ctx, query, nodes,
+			func(n *User) { n.appendNamedCampaignTargets(name) },
+			func(n *User, e *CampaignTarget) { n.appendNamedCampaignTargets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedSubcontrols {
 		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *User) { n.appendNamedSubcontrols(name) },
@@ -1587,6 +1795,20 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := _q.loadProgramsOwned(ctx, query, nodes,
 			func(n *User) { n.appendNamedProgramsOwned(name) },
 			func(n *User, e *Program) { n.appendNamedProgramsOwned(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPlatformsOwned {
+		if err := _q.loadPlatformsOwned(ctx, query, nodes,
+			func(n *User) { n.appendNamedPlatformsOwned(name) },
+			func(n *User, e *Platform) { n.appendNamedPlatformsOwned(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIdentityHolderProfiles {
+		if err := _q.loadIdentityHolderProfiles(ctx, query, nodes,
+			func(n *User) { n.appendNamedIdentityHolderProfiles(name) },
+			func(n *User, e *IdentityHolder) { n.appendNamedIdentityHolderProfiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2097,6 +2319,98 @@ func (_q *UserQuery) loadActionPlans(ctx context.Context, query *ActionPlanQuery
 	}
 	return nil
 }
+func (_q *UserQuery) loadCampaigns(ctx context.Context, query *CampaignQuery, nodes []*User, init func(*User), assign func(*User, *Campaign)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*User)
+	nids := make(map[string]map[*User]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(user.CampaignsTable)
+		joinT.Schema(_q.schemaConfig.CampaignUsers)
+		s.Join(joinT).On(s.C(campaign.FieldID), joinT.C(user.CampaignsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(user.CampaignsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(user.CampaignsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*User]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Campaign](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "campaigns" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *UserQuery) loadCampaignTargets(ctx context.Context, query *CampaignTargetQuery, nodes []*User, init func(*User), assign func(*User, *CampaignTarget)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(campaigntarget.FieldUserID)
+	}
+	query.Where(predicate.CampaignTarget(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.CampaignTargetsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.UserID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "user_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *UserQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*User, init func(*User), assign func(*User, *Subcontrol)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*User)
@@ -2278,6 +2592,67 @@ func (_q *UserQuery) loadProgramsOwned(ctx context.Context, query *ProgramQuery,
 		node, ok := nodeids[fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "program_owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *UserQuery) loadPlatformsOwned(ctx context.Context, query *PlatformQuery, nodes []*User, init func(*User), assign func(*User, *Platform)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(platform.FieldPlatformOwnerID)
+	}
+	query.Where(predicate.Platform(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.PlatformsOwnedColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.PlatformOwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "platform_owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *UserQuery) loadIdentityHolderProfiles(ctx context.Context, query *IdentityHolderQuery, nodes []*User, init func(*User), assign func(*User, *IdentityHolder)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(identityholder.FieldUserID)
+	}
+	query.Where(predicate.IdentityHolder(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.IdentityHolderProfilesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.UserID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "user_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -2707,6 +3082,34 @@ func (_q *UserQuery) WithNamedActionPlans(name string, opts ...func(*ActionPlanQ
 	return _q
 }
 
+// WithNamedCampaigns tells the query-builder to eager-load the nodes that are connected to the "campaigns"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNamedCampaigns(name string, opts ...func(*CampaignQuery)) *UserQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaigns == nil {
+		_q.withNamedCampaigns = make(map[string]*CampaignQuery)
+	}
+	_q.withNamedCampaigns[name] = query
+	return _q
+}
+
+// WithNamedCampaignTargets tells the query-builder to eager-load the nodes that are connected to the "campaign_targets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNamedCampaignTargets(name string, opts ...func(*CampaignTargetQuery)) *UserQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaignTargets == nil {
+		_q.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery)
+	}
+	_q.withNamedCampaignTargets[name] = query
+	return _q
+}
+
 // WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *UserQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *UserQuery {
@@ -2774,6 +3177,34 @@ func (_q *UserQuery) WithNamedProgramsOwned(name string, opts ...func(*ProgramQu
 		_q.withNamedProgramsOwned = make(map[string]*ProgramQuery)
 	}
 	_q.withNamedProgramsOwned[name] = query
+	return _q
+}
+
+// WithNamedPlatformsOwned tells the query-builder to eager-load the nodes that are connected to the "platforms_owned"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNamedPlatformsOwned(name string, opts ...func(*PlatformQuery)) *UserQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatformsOwned == nil {
+		_q.withNamedPlatformsOwned = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatformsOwned[name] = query
+	return _q
+}
+
+// WithNamedIdentityHolderProfiles tells the query-builder to eager-load the nodes that are connected to the "identity_holder_profiles"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNamedIdentityHolderProfiles(name string, opts ...func(*IdentityHolderQuery)) *UserQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIdentityHolderProfiles == nil {
+		_q.withNamedIdentityHolderProfiles = make(map[string]*IdentityHolderQuery)
+	}
+	_q.withNamedIdentityHolderProfiles[name] = query
 	return _q
 }
 

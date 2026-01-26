@@ -10,6 +10,8 @@ tool (
 	gotest.tools/gotestsum
 )
 
+replace github.com/theopenlane/core/common => ./common
+
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/secretmanager v1.16.0
@@ -19,7 +21,7 @@ require (
 	github.com/99designs/gqlgen v0.17.86
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/Yamashou/gqlgenc v0.33.0
-	github.com/alicebob/miniredis/v2 v2.36.0
+	github.com/alicebob/miniredis/v2 v2.36.1
 	github.com/alitto/pond/v2 v2.6.0
 	github.com/aws/aws-sdk-go-v2 v1.41.1
 	github.com/aws/aws-sdk-go-v2/config v1.32.7
@@ -54,7 +56,7 @@ require (
 	github.com/knadh/koanf/providers/env/v2 v2.0.0
 	github.com/knadh/koanf/providers/file v1.2.1
 	github.com/knadh/koanf/providers/posflag v1.0.1
-	github.com/knadh/koanf/v2 v2.3.0
+	github.com/knadh/koanf/v2 v2.3.1
 	github.com/labstack/echo-contrib v0.17.4
 	github.com/labstack/echo/v4 v4.15.0
 	github.com/labstack/gommon v0.4.2
@@ -66,7 +68,7 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.27
 	github.com/nyaruka/phonenumbers v1.6.8
 	github.com/oklog/ulid/v2 v2.1.1
-	github.com/openfga/go-sdk v0.7.3
+	github.com/openfga/go-sdk v0.7.4
 	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
 	github.com/pquerna/otp v1.5.0
@@ -83,17 +85,17 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v84 v84.1.0
 	github.com/theopenlane/beacon v0.3.0
-	github.com/theopenlane/core/common v1.0.3
+	github.com/theopenlane/core/common v1.0.4
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/emailtemplates v0.3.1
-	github.com/theopenlane/entx v0.20.5
-	github.com/theopenlane/go-client v0.6.0
-	github.com/theopenlane/gqlgen-plugins v0.13.2
+	github.com/theopenlane/entx v0.21.1
+	github.com/theopenlane/go-client v0.6.2
+	github.com/theopenlane/gqlgen-plugins v0.13.4
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.23.4
+	github.com/theopenlane/iam v0.23.5
 	github.com/theopenlane/newman v0.2.1
-	github.com/theopenlane/riverboat v0.8.4
+	github.com/theopenlane/riverboat v0.8.6
 	github.com/theopenlane/utils v0.6.2
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.6.2
@@ -107,7 +109,7 @@ require (
 	golang.org/x/sync v0.19.0
 	golang.org/x/text v0.33.0
 	golang.org/x/tools v0.41.0
-	google.golang.org/api v0.261.0
+	google.golang.org/api v0.262.0
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
 )
@@ -135,7 +137,7 @@ require (
 	ariga.io/atlas v1.0.0
 	cel.dev/expr v0.25.1 // indirect
 	cloud.google.com/go v0.123.0 // indirect
-	cloud.google.com/go/auth v0.18.0 // indirect
+	cloud.google.com/go/auth v0.18.1 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
 	cloud.google.com/go/compute/metadata v0.9.0 // indirect
 	cloud.google.com/go/iam v1.5.3 // indirect

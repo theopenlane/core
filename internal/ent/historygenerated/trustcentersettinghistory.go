@@ -45,6 +45,8 @@ type TrustCenterSettingHistory struct {
 	Title string `json:"title,omitempty"`
 	// company name for the trust center, defaults to the organization's display name
 	CompanyName string `json:"company_name,omitempty"`
+	// company description for the trust center
+	CompanyDescription string `json:"company_description,omitempty"`
 	// overview of the trust center
 	Overview string `json:"overview,omitempty"`
 	// URL of the logo
@@ -93,7 +95,7 @@ func (*TrustCenterSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case trustcentersettinghistory.FieldRemoveBranding, trustcentersettinghistory.FieldNdaApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldCompanyName, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor, trustcentersettinghistory.FieldEnvironment, trustcentersettinghistory.FieldCompanyDomain, trustcentersettinghistory.FieldSecurityContact:
+		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldCompanyName, trustcentersettinghistory.FieldCompanyDescription, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor, trustcentersettinghistory.FieldEnvironment, trustcentersettinghistory.FieldCompanyDomain, trustcentersettinghistory.FieldSecurityContact:
 			values[i] = new(sql.NullString)
 		case trustcentersettinghistory.FieldHistoryTime, trustcentersettinghistory.FieldCreatedAt, trustcentersettinghistory.FieldUpdatedAt, trustcentersettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -189,6 +191,12 @@ func (_m *TrustCenterSettingHistory) assignValues(columns []string, values []any
 				return fmt.Errorf("unexpected type %T for field company_name", values[i])
 			} else if value.Valid {
 				_m.CompanyName = value.String
+			}
+		case trustcentersettinghistory.FieldCompanyDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field company_description", values[i])
+			} else if value.Valid {
+				_m.CompanyDescription = value.String
 			}
 		case trustcentersettinghistory.FieldOverview:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -375,6 +383,9 @@ func (_m *TrustCenterSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("company_name=")
 	builder.WriteString(_m.CompanyName)
+	builder.WriteString(", ")
+	builder.WriteString("company_description=")
+	builder.WriteString(_m.CompanyDescription)
 	builder.WriteString(", ")
 	builder.WriteString("overview=")
 	builder.WriteString(_m.Overview)

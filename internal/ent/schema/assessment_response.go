@@ -45,6 +45,21 @@ func (AssessmentResponse) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationUpdateInput),
 			).
 			NotEmpty(),
+		field.Bool("is_test").
+			Comment("whether this assessment response is for a test send").
+			Default(false).
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			),
+		field.String("campaign_id").
+			Comment("the campaign this response is associated with").
+			Optional(),
+		field.String("identity_holder_id").
+			Comment("the identity holder record for the recipient").
+			Optional(),
+		field.String("entity_id").
+			Comment("the entity associated with this assessment response").
+			Optional(),
 
 		field.String("email").
 			Comment("the email address of the recipient").
@@ -65,6 +80,47 @@ func (AssessmentResponse) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationUpdateInput, entgql.SkipMutationCreateInput),
 			).
 			Default(1),
+		field.Time("email_delivered_at").
+			Comment("when the assessment email was delivered to the recipient").
+			Optional().
+			Annotations(
+				entgql.OrderField("email_delivered_at"),
+			),
+		field.Time("email_opened_at").
+			Comment("when the assessment email was opened by the recipient").
+			Optional().
+			Annotations(
+				entgql.OrderField("email_opened_at"),
+			),
+		field.Time("email_clicked_at").
+			Comment("when a link in the assessment email was clicked by the recipient").
+			Optional().
+			Annotations(
+				entgql.OrderField("email_clicked_at"),
+			),
+		field.Int("email_open_count").
+			Comment("the number of times the assessment email was opened").
+			Default(0).
+			Optional().
+			Annotations(
+				entgql.OrderField("email_open_count"),
+			),
+		field.Int("email_click_count").
+			Comment("the number of link clicks for the assessment email").
+			Default(0).
+			Optional().
+			Annotations(
+				entgql.OrderField("email_click_count"),
+			),
+		field.Time("last_email_event_at").
+			Comment("the most recent email event timestamp for this assessment response").
+			Optional().
+			Annotations(
+				entgql.OrderField("last_email_event_at"),
+			),
+		field.JSON("email_metadata", map[string]any{}).
+			Comment("additional metadata about email delivery events").
+			Optional(),
 
 		field.Enum("status").
 			GoType(enums.AssessmentResponseStatus("")).
@@ -118,7 +174,7 @@ func (ar AssessmentResponse) Mixin() []ent.Mixin {
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.AssessmentResponse](ar,
-				withParents(Assessment{}),
+				withParents(Assessment{}, Campaign{}, IdentityHolder{}, Entity{}),
 				withOrganizationOwner(true),
 			),
 		},
@@ -134,6 +190,30 @@ func (ar AssessmentResponse) Edges() []ent.Edge {
 			required:   true,
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
+			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: ar,
+			edgeSchema: Campaign{},
+			field:      "campaign_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Campaign{}.Name()),
+			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: ar,
+			edgeSchema: IdentityHolder{},
+			field:      "identity_holder_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(IdentityHolder{}.Name()),
+			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: ar,
+			edgeSchema: Entity{},
+			field:      "entity_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Entity{}.Name()),
 			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
@@ -152,6 +232,10 @@ func (ar AssessmentResponse) Edges() []ent.Edge {
 func (AssessmentResponse) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.CanCreateObjectsUnderParents([]string{
+				Campaign{}.PluralName(),
+				Entity{}.PluralName(),
+			}),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
@@ -180,6 +264,9 @@ func (AssessmentResponse) Indexes() []ent.Index {
 			Unique().
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 
+		index.Fields("campaign_id"),
+		index.Fields("identity_holder_id"),
+		index.Fields("entity_id"),
 		index.Fields("status"),
 		index.Fields("due_date"),
 		index.Fields("assigned_at"),

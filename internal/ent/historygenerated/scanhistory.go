@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scanhistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -44,12 +45,48 @@ type ScanHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// who reviewed the scan when no user or group is linked
+	ReviewedBy string `json:"reviewed_by,omitempty"`
+	// the user id that reviewed the scan
+	ReviewedByUserID string `json:"reviewed_by_user_id,omitempty"`
+	// the group id that reviewed the scan
+	ReviewedByGroupID string `json:"reviewed_by_group_id,omitempty"`
+	// who the scan is assigned to when no user or group is linked
+	AssignedTo string `json:"assigned_to,omitempty"`
+	// the user id assigned to the scan
+	AssignedToUserID string `json:"assigned_to_user_id,omitempty"`
+	// the group id assigned to the scan
+	AssignedToGroupID string `json:"assigned_to_group_id,omitempty"`
+	// the environment of the scan
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the scan
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the scan
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the scan
+	ScopeID string `json:"scope_id,omitempty"`
 	// the target of the scan, e.g., a domain name or IP address, codebase
 	Target string `json:"target,omitempty"`
 	// the type of scan, e.g., domain scan, vulnerability scan, provider scan
 	ScanType enums.ScanType `json:"scan_type,omitempty"`
 	// additional metadata for the scan, e.g., scan configuration, options, etc
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// when the scan was executed
+	ScanDate *models.DateTime `json:"scan_date,omitempty"`
+	// cron schedule that governs the scan cadence, in cron 6-field syntax
+	ScanSchedule *models.Cron `json:"scan_schedule,omitempty"`
+	// when the scan is scheduled to run next
+	NextScanRunAt *models.DateTime `json:"next_scan_run_at,omitempty"`
+	// who performed the scan when no user or group is linked
+	PerformedBy string `json:"performed_by,omitempty"`
+	// the user id that performed the scan
+	PerformedByUserID string `json:"performed_by_user_id,omitempty"`
+	// the group id that performed the scan
+	PerformedByGroupID string `json:"performed_by_group_id,omitempty"`
+	// the platform that generated the scan
+	GeneratedByPlatformID string `json:"generated_by_platform_id,omitempty"`
+	// identifiers of vulnerabilities discovered during the scan
+	VulnerabilityIds []string `json:"vulnerability_ids,omitempty"`
 	// the status of the scan, e.g., processing, completed, failed
 	Status       enums.ScanStatus `json:"status,omitempty"`
 	selectValues sql.SelectValues
@@ -60,11 +97,15 @@ func (*ScanHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case scanhistory.FieldTags, scanhistory.FieldMetadata:
+		case scanhistory.FieldScanSchedule:
+			values[i] = &sql.NullScanner{S: new(models.Cron)}
+		case scanhistory.FieldScanDate, scanhistory.FieldNextScanRunAt:
+			values[i] = &sql.NullScanner{S: new(models.DateTime)}
+		case scanhistory.FieldTags, scanhistory.FieldMetadata, scanhistory.FieldVulnerabilityIds:
 			values[i] = new([]byte)
 		case scanhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case scanhistory.FieldID, scanhistory.FieldRef, scanhistory.FieldCreatedBy, scanhistory.FieldUpdatedBy, scanhistory.FieldDeletedBy, scanhistory.FieldOwnerID, scanhistory.FieldTarget, scanhistory.FieldScanType, scanhistory.FieldStatus:
+		case scanhistory.FieldID, scanhistory.FieldRef, scanhistory.FieldCreatedBy, scanhistory.FieldUpdatedBy, scanhistory.FieldDeletedBy, scanhistory.FieldOwnerID, scanhistory.FieldReviewedBy, scanhistory.FieldReviewedByUserID, scanhistory.FieldReviewedByGroupID, scanhistory.FieldAssignedTo, scanhistory.FieldAssignedToUserID, scanhistory.FieldAssignedToGroupID, scanhistory.FieldEnvironmentName, scanhistory.FieldEnvironmentID, scanhistory.FieldScopeName, scanhistory.FieldScopeID, scanhistory.FieldTarget, scanhistory.FieldScanType, scanhistory.FieldPerformedBy, scanhistory.FieldPerformedByUserID, scanhistory.FieldPerformedByGroupID, scanhistory.FieldGeneratedByPlatformID, scanhistory.FieldStatus:
 			values[i] = new(sql.NullString)
 		case scanhistory.FieldHistoryTime, scanhistory.FieldCreatedAt, scanhistory.FieldUpdatedAt, scanhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -157,6 +198,66 @@ func (_m *ScanHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
+		case scanhistory.FieldReviewedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by", values[i])
+			} else if value.Valid {
+				_m.ReviewedBy = value.String
+			}
+		case scanhistory.FieldReviewedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by_user_id", values[i])
+			} else if value.Valid {
+				_m.ReviewedByUserID = value.String
+			}
+		case scanhistory.FieldReviewedByGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by_group_id", values[i])
+			} else if value.Valid {
+				_m.ReviewedByGroupID = value.String
+			}
+		case scanhistory.FieldAssignedTo:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assigned_to", values[i])
+			} else if value.Valid {
+				_m.AssignedTo = value.String
+			}
+		case scanhistory.FieldAssignedToUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assigned_to_user_id", values[i])
+			} else if value.Valid {
+				_m.AssignedToUserID = value.String
+			}
+		case scanhistory.FieldAssignedToGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assigned_to_group_id", values[i])
+			} else if value.Valid {
+				_m.AssignedToGroupID = value.String
+			}
+		case scanhistory.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case scanhistory.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case scanhistory.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case scanhistory.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
+			}
 		case scanhistory.FieldTarget:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field target", values[i])
@@ -175,6 +276,59 @@ func (_m *ScanHistory) assignValues(columns []string, values []any) error {
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
+		case scanhistory.FieldScanDate:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field scan_date", values[i])
+			} else if value.Valid {
+				_m.ScanDate = new(models.DateTime)
+				*_m.ScanDate = *value.S.(*models.DateTime)
+			}
+		case scanhistory.FieldScanSchedule:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field scan_schedule", values[i])
+			} else if value.Valid {
+				_m.ScanSchedule = new(models.Cron)
+				*_m.ScanSchedule = *value.S.(*models.Cron)
+			}
+		case scanhistory.FieldNextScanRunAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field next_scan_run_at", values[i])
+			} else if value.Valid {
+				_m.NextScanRunAt = new(models.DateTime)
+				*_m.NextScanRunAt = *value.S.(*models.DateTime)
+			}
+		case scanhistory.FieldPerformedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field performed_by", values[i])
+			} else if value.Valid {
+				_m.PerformedBy = value.String
+			}
+		case scanhistory.FieldPerformedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field performed_by_user_id", values[i])
+			} else if value.Valid {
+				_m.PerformedByUserID = value.String
+			}
+		case scanhistory.FieldPerformedByGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field performed_by_group_id", values[i])
+			} else if value.Valid {
+				_m.PerformedByGroupID = value.String
+			}
+		case scanhistory.FieldGeneratedByPlatformID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field generated_by_platform_id", values[i])
+			} else if value.Valid {
+				_m.GeneratedByPlatformID = value.String
+			}
+		case scanhistory.FieldVulnerabilityIds:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field vulnerability_ids", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.VulnerabilityIds); err != nil {
+					return fmt.Errorf("unmarshal field vulnerability_ids: %w", err)
 				}
 			}
 		case scanhistory.FieldStatus:
@@ -252,6 +406,36 @@ func (_m *ScanHistory) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
+	builder.WriteString("reviewed_by=")
+	builder.WriteString(_m.ReviewedBy)
+	builder.WriteString(", ")
+	builder.WriteString("reviewed_by_user_id=")
+	builder.WriteString(_m.ReviewedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("reviewed_by_group_id=")
+	builder.WriteString(_m.ReviewedByGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("assigned_to=")
+	builder.WriteString(_m.AssignedTo)
+	builder.WriteString(", ")
+	builder.WriteString("assigned_to_user_id=")
+	builder.WriteString(_m.AssignedToUserID)
+	builder.WriteString(", ")
+	builder.WriteString("assigned_to_group_id=")
+	builder.WriteString(_m.AssignedToGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
+	builder.WriteString(", ")
 	builder.WriteString("target=")
 	builder.WriteString(_m.Target)
 	builder.WriteString(", ")
@@ -260,6 +444,36 @@ func (_m *ScanHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	if v := _m.ScanDate; v != nil {
+		builder.WriteString("scan_date=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.ScanSchedule; v != nil {
+		builder.WriteString("scan_schedule=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.NextScanRunAt; v != nil {
+		builder.WriteString("next_scan_run_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("performed_by=")
+	builder.WriteString(_m.PerformedBy)
+	builder.WriteString(", ")
+	builder.WriteString("performed_by_user_id=")
+	builder.WriteString(_m.PerformedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("performed_by_group_id=")
+	builder.WriteString(_m.PerformedByGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("generated_by_platform_id=")
+	builder.WriteString(_m.GeneratedByPlatformID)
+	builder.WriteString(", ")
+	builder.WriteString("vulnerability_ids=")
+	builder.WriteString(fmt.Sprintf("%v", _m.VulnerabilityIds))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

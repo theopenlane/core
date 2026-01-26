@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/entx/history"
 )
@@ -112,6 +114,41 @@ func OwnerID(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// InternalOwner applies equality check predicate on the "internal_owner" field. It's identical to InternalOwnerEQ.
+func InternalOwner(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldInternalOwner, v))
+}
+
+// InternalOwnerUserID applies equality check predicate on the "internal_owner_user_id" field. It's identical to InternalOwnerUserIDEQ.
+func InternalOwnerUserID(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerGroupID applies equality check predicate on the "internal_owner_group_id" field. It's identical to InternalOwnerGroupIDEQ.
+func InternalOwnerGroupID(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldInternalOwnerGroupID, v))
+}
+
+// ReviewedBy applies equality check predicate on the "reviewed_by" field. It's identical to ReviewedByEQ.
+func ReviewedBy(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldReviewedBy, v))
+}
+
+// ReviewedByUserID applies equality check predicate on the "reviewed_by_user_id" field. It's identical to ReviewedByUserIDEQ.
+func ReviewedByUserID(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldReviewedByUserID, v))
+}
+
+// ReviewedByGroupID applies equality check predicate on the "reviewed_by_group_id" field. It's identical to ReviewedByGroupIDEQ.
+func ReviewedByGroupID(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldReviewedByGroupID, v))
+}
+
+// LastReviewedAt applies equality check predicate on the "last_reviewed_at" field. It's identical to LastReviewedAtEQ.
+func LastReviewedAt(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldLastReviewedAt, v))
+}
+
 // SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
 func SystemOwned(v bool) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldSystemOwned, v))
@@ -125,6 +162,56 @@ func InternalNotes(v string) predicate.EntityHistory {
 // SystemInternalID applies equality check predicate on the "system_internal_id" field. It's identical to SystemInternalIDEQ.
 func SystemInternalID(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldSystemInternalID, v))
+}
+
+// EntityRelationshipStateName applies equality check predicate on the "entity_relationship_state_name" field. It's identical to EntityRelationshipStateNameEQ.
+func EntityRelationshipStateName(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEntityRelationshipStateName, v))
+}
+
+// EntityRelationshipStateID applies equality check predicate on the "entity_relationship_state_id" field. It's identical to EntityRelationshipStateIDEQ.
+func EntityRelationshipStateID(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEntityRelationshipStateID, v))
+}
+
+// EntitySecurityQuestionnaireStatusName applies equality check predicate on the "entity_security_questionnaire_status_name" field. It's identical to EntitySecurityQuestionnaireStatusNameEQ.
+func EntitySecurityQuestionnaireStatusName(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEntitySecurityQuestionnaireStatusName, v))
+}
+
+// EntitySecurityQuestionnaireStatusID applies equality check predicate on the "entity_security_questionnaire_status_id" field. It's identical to EntitySecurityQuestionnaireStatusIDEQ.
+func EntitySecurityQuestionnaireStatusID(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEntitySecurityQuestionnaireStatusID, v))
+}
+
+// EntitySourceTypeName applies equality check predicate on the "entity_source_type_name" field. It's identical to EntitySourceTypeNameEQ.
+func EntitySourceTypeName(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEntitySourceTypeName, v))
+}
+
+// EntitySourceTypeID applies equality check predicate on the "entity_source_type_id" field. It's identical to EntitySourceTypeIDEQ.
+func EntitySourceTypeID(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEntitySourceTypeID, v))
+}
+
+// EnvironmentName applies equality check predicate on the "environment_name" field. It's identical to EnvironmentNameEQ.
+func EnvironmentName(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEnvironmentName, v))
+}
+
+// EnvironmentID applies equality check predicate on the "environment_id" field. It's identical to EnvironmentIDEQ.
+func EnvironmentID(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEnvironmentID, v))
+}
+
+// ScopeName applies equality check predicate on the "scope_name" field. It's identical to ScopeNameEQ.
+func ScopeName(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldScopeName, v))
+}
+
+// ScopeID applies equality check predicate on the "scope_id" field. It's identical to ScopeIDEQ.
+func ScopeID(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldScopeID, v))
 }
 
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
@@ -150,6 +237,106 @@ func EntityTypeID(v string) predicate.EntityHistory {
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
 func Status(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldStatus, v))
+}
+
+// ApprovedForUse applies equality check predicate on the "approved_for_use" field. It's identical to ApprovedForUseEQ.
+func ApprovedForUse(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldApprovedForUse, v))
+}
+
+// HasSoc2 applies equality check predicate on the "has_soc2" field. It's identical to HasSoc2EQ.
+func HasSoc2(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldHasSoc2, v))
+}
+
+// Soc2PeriodEnd applies equality check predicate on the "soc2_period_end" field. It's identical to Soc2PeriodEndEQ.
+func Soc2PeriodEnd(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSoc2PeriodEnd, v))
+}
+
+// ContractStartDate applies equality check predicate on the "contract_start_date" field. It's identical to ContractStartDateEQ.
+func ContractStartDate(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldContractStartDate, v))
+}
+
+// ContractEndDate applies equality check predicate on the "contract_end_date" field. It's identical to ContractEndDateEQ.
+func ContractEndDate(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldContractEndDate, v))
+}
+
+// AutoRenews applies equality check predicate on the "auto_renews" field. It's identical to AutoRenewsEQ.
+func AutoRenews(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldAutoRenews, v))
+}
+
+// TerminationNoticeDays applies equality check predicate on the "termination_notice_days" field. It's identical to TerminationNoticeDaysEQ.
+func TerminationNoticeDays(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldTerminationNoticeDays, v))
+}
+
+// AnnualSpend applies equality check predicate on the "annual_spend" field. It's identical to AnnualSpendEQ.
+func AnnualSpend(v float64) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldAnnualSpend, v))
+}
+
+// SpendCurrency applies equality check predicate on the "spend_currency" field. It's identical to SpendCurrencyEQ.
+func SpendCurrency(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSpendCurrency, v))
+}
+
+// BillingModel applies equality check predicate on the "billing_model" field. It's identical to BillingModelEQ.
+func BillingModel(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldBillingModel, v))
+}
+
+// RenewalRisk applies equality check predicate on the "renewal_risk" field. It's identical to RenewalRiskEQ.
+func RenewalRisk(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldRenewalRisk, v))
+}
+
+// SSOEnforced applies equality check predicate on the "sso_enforced" field. It's identical to SSOEnforcedEQ.
+func SSOEnforced(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSSOEnforced, v))
+}
+
+// MfaSupported applies equality check predicate on the "mfa_supported" field. It's identical to MfaSupportedEQ.
+func MfaSupported(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldMfaSupported, v))
+}
+
+// MfaEnforced applies equality check predicate on the "mfa_enforced" field. It's identical to MfaEnforcedEQ.
+func MfaEnforced(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldMfaEnforced, v))
+}
+
+// StatusPageURL applies equality check predicate on the "status_page_url" field. It's identical to StatusPageURLEQ.
+func StatusPageURL(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldStatusPageURL, v))
+}
+
+// RiskRating applies equality check predicate on the "risk_rating" field. It's identical to RiskRatingEQ.
+func RiskRating(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldRiskRating, v))
+}
+
+// RiskScore applies equality check predicate on the "risk_score" field. It's identical to RiskScoreEQ.
+func RiskScore(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldRiskScore, v))
+}
+
+// Tier applies equality check predicate on the "tier" field. It's identical to TierEQ.
+func Tier(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldTier, v))
+}
+
+// NextReviewAt applies equality check predicate on the "next_review_at" field. It's identical to NextReviewAtEQ.
+func NextReviewAt(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldNextReviewAt, v))
+}
+
+// ContractRenewalAt applies equality check predicate on the "contract_renewal_at" field. It's identical to ContractRenewalAtEQ.
+func ContractRenewalAt(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldContractRenewalAt, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -747,6 +934,506 @@ func OwnerIDContainsFold(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
+// InternalOwnerEQ applies the EQ predicate on the "internal_owner" field.
+func InternalOwnerEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldInternalOwner, v))
+}
+
+// InternalOwnerNEQ applies the NEQ predicate on the "internal_owner" field.
+func InternalOwnerNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldInternalOwner, v))
+}
+
+// InternalOwnerIn applies the In predicate on the "internal_owner" field.
+func InternalOwnerIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldInternalOwner, vs...))
+}
+
+// InternalOwnerNotIn applies the NotIn predicate on the "internal_owner" field.
+func InternalOwnerNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldInternalOwner, vs...))
+}
+
+// InternalOwnerGT applies the GT predicate on the "internal_owner" field.
+func InternalOwnerGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldInternalOwner, v))
+}
+
+// InternalOwnerGTE applies the GTE predicate on the "internal_owner" field.
+func InternalOwnerGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldInternalOwner, v))
+}
+
+// InternalOwnerLT applies the LT predicate on the "internal_owner" field.
+func InternalOwnerLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldInternalOwner, v))
+}
+
+// InternalOwnerLTE applies the LTE predicate on the "internal_owner" field.
+func InternalOwnerLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldInternalOwner, v))
+}
+
+// InternalOwnerContains applies the Contains predicate on the "internal_owner" field.
+func InternalOwnerContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldInternalOwner, v))
+}
+
+// InternalOwnerHasPrefix applies the HasPrefix predicate on the "internal_owner" field.
+func InternalOwnerHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldInternalOwner, v))
+}
+
+// InternalOwnerHasSuffix applies the HasSuffix predicate on the "internal_owner" field.
+func InternalOwnerHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldInternalOwner, v))
+}
+
+// InternalOwnerIsNil applies the IsNil predicate on the "internal_owner" field.
+func InternalOwnerIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldInternalOwner))
+}
+
+// InternalOwnerNotNil applies the NotNil predicate on the "internal_owner" field.
+func InternalOwnerNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldInternalOwner))
+}
+
+// InternalOwnerEqualFold applies the EqualFold predicate on the "internal_owner" field.
+func InternalOwnerEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldInternalOwner, v))
+}
+
+// InternalOwnerContainsFold applies the ContainsFold predicate on the "internal_owner" field.
+func InternalOwnerContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldInternalOwner, v))
+}
+
+// InternalOwnerUserIDEQ applies the EQ predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDNEQ applies the NEQ predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDIn applies the In predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldInternalOwnerUserID, vs...))
+}
+
+// InternalOwnerUserIDNotIn applies the NotIn predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldInternalOwnerUserID, vs...))
+}
+
+// InternalOwnerUserIDGT applies the GT predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDGTE applies the GTE predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDLT applies the LT predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDLTE applies the LTE predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDContains applies the Contains predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDHasPrefix applies the HasPrefix predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDHasSuffix applies the HasSuffix predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDIsNil applies the IsNil predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldInternalOwnerUserID))
+}
+
+// InternalOwnerUserIDNotNil applies the NotNil predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldInternalOwnerUserID))
+}
+
+// InternalOwnerUserIDEqualFold applies the EqualFold predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDContainsFold applies the ContainsFold predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerGroupIDEQ applies the EQ predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDNEQ applies the NEQ predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDIn applies the In predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldInternalOwnerGroupID, vs...))
+}
+
+// InternalOwnerGroupIDNotIn applies the NotIn predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldInternalOwnerGroupID, vs...))
+}
+
+// InternalOwnerGroupIDGT applies the GT predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDGTE applies the GTE predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDLT applies the LT predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDLTE applies the LTE predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDContains applies the Contains predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDHasPrefix applies the HasPrefix predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDHasSuffix applies the HasSuffix predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDIsNil applies the IsNil predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldInternalOwnerGroupID))
+}
+
+// InternalOwnerGroupIDNotNil applies the NotNil predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldInternalOwnerGroupID))
+}
+
+// InternalOwnerGroupIDEqualFold applies the EqualFold predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDContainsFold applies the ContainsFold predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldInternalOwnerGroupID, v))
+}
+
+// ReviewedByEQ applies the EQ predicate on the "reviewed_by" field.
+func ReviewedByEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldReviewedBy, v))
+}
+
+// ReviewedByNEQ applies the NEQ predicate on the "reviewed_by" field.
+func ReviewedByNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldReviewedBy, v))
+}
+
+// ReviewedByIn applies the In predicate on the "reviewed_by" field.
+func ReviewedByIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldReviewedBy, vs...))
+}
+
+// ReviewedByNotIn applies the NotIn predicate on the "reviewed_by" field.
+func ReviewedByNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldReviewedBy, vs...))
+}
+
+// ReviewedByGT applies the GT predicate on the "reviewed_by" field.
+func ReviewedByGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldReviewedBy, v))
+}
+
+// ReviewedByGTE applies the GTE predicate on the "reviewed_by" field.
+func ReviewedByGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldReviewedBy, v))
+}
+
+// ReviewedByLT applies the LT predicate on the "reviewed_by" field.
+func ReviewedByLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldReviewedBy, v))
+}
+
+// ReviewedByLTE applies the LTE predicate on the "reviewed_by" field.
+func ReviewedByLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldReviewedBy, v))
+}
+
+// ReviewedByContains applies the Contains predicate on the "reviewed_by" field.
+func ReviewedByContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldReviewedBy, v))
+}
+
+// ReviewedByHasPrefix applies the HasPrefix predicate on the "reviewed_by" field.
+func ReviewedByHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldReviewedBy, v))
+}
+
+// ReviewedByHasSuffix applies the HasSuffix predicate on the "reviewed_by" field.
+func ReviewedByHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldReviewedBy, v))
+}
+
+// ReviewedByIsNil applies the IsNil predicate on the "reviewed_by" field.
+func ReviewedByIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldReviewedBy))
+}
+
+// ReviewedByNotNil applies the NotNil predicate on the "reviewed_by" field.
+func ReviewedByNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldReviewedBy))
+}
+
+// ReviewedByEqualFold applies the EqualFold predicate on the "reviewed_by" field.
+func ReviewedByEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldReviewedBy, v))
+}
+
+// ReviewedByContainsFold applies the ContainsFold predicate on the "reviewed_by" field.
+func ReviewedByContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldReviewedBy, v))
+}
+
+// ReviewedByUserIDEQ applies the EQ predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDNEQ applies the NEQ predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDIn applies the In predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldReviewedByUserID, vs...))
+}
+
+// ReviewedByUserIDNotIn applies the NotIn predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldReviewedByUserID, vs...))
+}
+
+// ReviewedByUserIDGT applies the GT predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDGTE applies the GTE predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDLT applies the LT predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDLTE applies the LTE predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDContains applies the Contains predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDHasPrefix applies the HasPrefix predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDHasSuffix applies the HasSuffix predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDIsNil applies the IsNil predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldReviewedByUserID))
+}
+
+// ReviewedByUserIDNotNil applies the NotNil predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldReviewedByUserID))
+}
+
+// ReviewedByUserIDEqualFold applies the EqualFold predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDContainsFold applies the ContainsFold predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldReviewedByUserID, v))
+}
+
+// ReviewedByGroupIDEQ applies the EQ predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDNEQ applies the NEQ predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDIn applies the In predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldReviewedByGroupID, vs...))
+}
+
+// ReviewedByGroupIDNotIn applies the NotIn predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldReviewedByGroupID, vs...))
+}
+
+// ReviewedByGroupIDGT applies the GT predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDGTE applies the GTE predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDLT applies the LT predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDLTE applies the LTE predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDContains applies the Contains predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDHasPrefix applies the HasPrefix predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDHasSuffix applies the HasSuffix predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDIsNil applies the IsNil predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldReviewedByGroupID))
+}
+
+// ReviewedByGroupIDNotNil applies the NotNil predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldReviewedByGroupID))
+}
+
+// ReviewedByGroupIDEqualFold applies the EqualFold predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDContainsFold applies the ContainsFold predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldReviewedByGroupID, v))
+}
+
+// LastReviewedAtEQ applies the EQ predicate on the "last_reviewed_at" field.
+func LastReviewedAtEQ(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtNEQ applies the NEQ predicate on the "last_reviewed_at" field.
+func LastReviewedAtNEQ(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtIn applies the In predicate on the "last_reviewed_at" field.
+func LastReviewedAtIn(vs ...models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldLastReviewedAt, vs...))
+}
+
+// LastReviewedAtNotIn applies the NotIn predicate on the "last_reviewed_at" field.
+func LastReviewedAtNotIn(vs ...models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldLastReviewedAt, vs...))
+}
+
+// LastReviewedAtGT applies the GT predicate on the "last_reviewed_at" field.
+func LastReviewedAtGT(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtGTE applies the GTE predicate on the "last_reviewed_at" field.
+func LastReviewedAtGTE(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtLT applies the LT predicate on the "last_reviewed_at" field.
+func LastReviewedAtLT(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtLTE applies the LTE predicate on the "last_reviewed_at" field.
+func LastReviewedAtLTE(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtIsNil applies the IsNil predicate on the "last_reviewed_at" field.
+func LastReviewedAtIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldLastReviewedAt))
+}
+
+// LastReviewedAtNotNil applies the NotNil predicate on the "last_reviewed_at" field.
+func LastReviewedAtNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldLastReviewedAt))
+}
+
 // SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
 func SystemOwnedEQ(v bool) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldSystemOwned, v))
@@ -915,6 +1602,756 @@ func SystemInternalIDEqualFold(v string) predicate.EntityHistory {
 // SystemInternalIDContainsFold applies the ContainsFold predicate on the "system_internal_id" field.
 func SystemInternalIDContainsFold(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldContainsFold(FieldSystemInternalID, v))
+}
+
+// EntityRelationshipStateNameEQ applies the EQ predicate on the "entity_relationship_state_name" field.
+func EntityRelationshipStateNameEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEntityRelationshipStateName, v))
+}
+
+// EntityRelationshipStateNameNEQ applies the NEQ predicate on the "entity_relationship_state_name" field.
+func EntityRelationshipStateNameNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldEntityRelationshipStateName, v))
+}
+
+// EntityRelationshipStateNameIn applies the In predicate on the "entity_relationship_state_name" field.
+func EntityRelationshipStateNameIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldEntityRelationshipStateName, vs...))
+}
+
+// EntityRelationshipStateNameNotIn applies the NotIn predicate on the "entity_relationship_state_name" field.
+func EntityRelationshipStateNameNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldEntityRelationshipStateName, vs...))
+}
+
+// EntityRelationshipStateNameGT applies the GT predicate on the "entity_relationship_state_name" field.
+func EntityRelationshipStateNameGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldEntityRelationshipStateName, v))
+}
+
+// EntityRelationshipStateNameGTE applies the GTE predicate on the "entity_relationship_state_name" field.
+func EntityRelationshipStateNameGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldEntityRelationshipStateName, v))
+}
+
+// EntityRelationshipStateNameLT applies the LT predicate on the "entity_relationship_state_name" field.
+func EntityRelationshipStateNameLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldEntityRelationshipStateName, v))
+}
+
+// EntityRelationshipStateNameLTE applies the LTE predicate on the "entity_relationship_state_name" field.
+func EntityRelationshipStateNameLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldEntityRelationshipStateName, v))
+}
+
+// EntityRelationshipStateNameContains applies the Contains predicate on the "entity_relationship_state_name" field.
+func EntityRelationshipStateNameContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldEntityRelationshipStateName, v))
+}
+
+// EntityRelationshipStateNameHasPrefix applies the HasPrefix predicate on the "entity_relationship_state_name" field.
+func EntityRelationshipStateNameHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldEntityRelationshipStateName, v))
+}
+
+// EntityRelationshipStateNameHasSuffix applies the HasSuffix predicate on the "entity_relationship_state_name" field.
+func EntityRelationshipStateNameHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldEntityRelationshipStateName, v))
+}
+
+// EntityRelationshipStateNameIsNil applies the IsNil predicate on the "entity_relationship_state_name" field.
+func EntityRelationshipStateNameIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldEntityRelationshipStateName))
+}
+
+// EntityRelationshipStateNameNotNil applies the NotNil predicate on the "entity_relationship_state_name" field.
+func EntityRelationshipStateNameNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldEntityRelationshipStateName))
+}
+
+// EntityRelationshipStateNameEqualFold applies the EqualFold predicate on the "entity_relationship_state_name" field.
+func EntityRelationshipStateNameEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldEntityRelationshipStateName, v))
+}
+
+// EntityRelationshipStateNameContainsFold applies the ContainsFold predicate on the "entity_relationship_state_name" field.
+func EntityRelationshipStateNameContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldEntityRelationshipStateName, v))
+}
+
+// EntityRelationshipStateIDEQ applies the EQ predicate on the "entity_relationship_state_id" field.
+func EntityRelationshipStateIDEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEntityRelationshipStateID, v))
+}
+
+// EntityRelationshipStateIDNEQ applies the NEQ predicate on the "entity_relationship_state_id" field.
+func EntityRelationshipStateIDNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldEntityRelationshipStateID, v))
+}
+
+// EntityRelationshipStateIDIn applies the In predicate on the "entity_relationship_state_id" field.
+func EntityRelationshipStateIDIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldEntityRelationshipStateID, vs...))
+}
+
+// EntityRelationshipStateIDNotIn applies the NotIn predicate on the "entity_relationship_state_id" field.
+func EntityRelationshipStateIDNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldEntityRelationshipStateID, vs...))
+}
+
+// EntityRelationshipStateIDGT applies the GT predicate on the "entity_relationship_state_id" field.
+func EntityRelationshipStateIDGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldEntityRelationshipStateID, v))
+}
+
+// EntityRelationshipStateIDGTE applies the GTE predicate on the "entity_relationship_state_id" field.
+func EntityRelationshipStateIDGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldEntityRelationshipStateID, v))
+}
+
+// EntityRelationshipStateIDLT applies the LT predicate on the "entity_relationship_state_id" field.
+func EntityRelationshipStateIDLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldEntityRelationshipStateID, v))
+}
+
+// EntityRelationshipStateIDLTE applies the LTE predicate on the "entity_relationship_state_id" field.
+func EntityRelationshipStateIDLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldEntityRelationshipStateID, v))
+}
+
+// EntityRelationshipStateIDContains applies the Contains predicate on the "entity_relationship_state_id" field.
+func EntityRelationshipStateIDContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldEntityRelationshipStateID, v))
+}
+
+// EntityRelationshipStateIDHasPrefix applies the HasPrefix predicate on the "entity_relationship_state_id" field.
+func EntityRelationshipStateIDHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldEntityRelationshipStateID, v))
+}
+
+// EntityRelationshipStateIDHasSuffix applies the HasSuffix predicate on the "entity_relationship_state_id" field.
+func EntityRelationshipStateIDHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldEntityRelationshipStateID, v))
+}
+
+// EntityRelationshipStateIDIsNil applies the IsNil predicate on the "entity_relationship_state_id" field.
+func EntityRelationshipStateIDIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldEntityRelationshipStateID))
+}
+
+// EntityRelationshipStateIDNotNil applies the NotNil predicate on the "entity_relationship_state_id" field.
+func EntityRelationshipStateIDNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldEntityRelationshipStateID))
+}
+
+// EntityRelationshipStateIDEqualFold applies the EqualFold predicate on the "entity_relationship_state_id" field.
+func EntityRelationshipStateIDEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldEntityRelationshipStateID, v))
+}
+
+// EntityRelationshipStateIDContainsFold applies the ContainsFold predicate on the "entity_relationship_state_id" field.
+func EntityRelationshipStateIDContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldEntityRelationshipStateID, v))
+}
+
+// EntitySecurityQuestionnaireStatusNameEQ applies the EQ predicate on the "entity_security_questionnaire_status_name" field.
+func EntitySecurityQuestionnaireStatusNameEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEntitySecurityQuestionnaireStatusName, v))
+}
+
+// EntitySecurityQuestionnaireStatusNameNEQ applies the NEQ predicate on the "entity_security_questionnaire_status_name" field.
+func EntitySecurityQuestionnaireStatusNameNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldEntitySecurityQuestionnaireStatusName, v))
+}
+
+// EntitySecurityQuestionnaireStatusNameIn applies the In predicate on the "entity_security_questionnaire_status_name" field.
+func EntitySecurityQuestionnaireStatusNameIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldEntitySecurityQuestionnaireStatusName, vs...))
+}
+
+// EntitySecurityQuestionnaireStatusNameNotIn applies the NotIn predicate on the "entity_security_questionnaire_status_name" field.
+func EntitySecurityQuestionnaireStatusNameNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldEntitySecurityQuestionnaireStatusName, vs...))
+}
+
+// EntitySecurityQuestionnaireStatusNameGT applies the GT predicate on the "entity_security_questionnaire_status_name" field.
+func EntitySecurityQuestionnaireStatusNameGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldEntitySecurityQuestionnaireStatusName, v))
+}
+
+// EntitySecurityQuestionnaireStatusNameGTE applies the GTE predicate on the "entity_security_questionnaire_status_name" field.
+func EntitySecurityQuestionnaireStatusNameGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldEntitySecurityQuestionnaireStatusName, v))
+}
+
+// EntitySecurityQuestionnaireStatusNameLT applies the LT predicate on the "entity_security_questionnaire_status_name" field.
+func EntitySecurityQuestionnaireStatusNameLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldEntitySecurityQuestionnaireStatusName, v))
+}
+
+// EntitySecurityQuestionnaireStatusNameLTE applies the LTE predicate on the "entity_security_questionnaire_status_name" field.
+func EntitySecurityQuestionnaireStatusNameLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldEntitySecurityQuestionnaireStatusName, v))
+}
+
+// EntitySecurityQuestionnaireStatusNameContains applies the Contains predicate on the "entity_security_questionnaire_status_name" field.
+func EntitySecurityQuestionnaireStatusNameContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldEntitySecurityQuestionnaireStatusName, v))
+}
+
+// EntitySecurityQuestionnaireStatusNameHasPrefix applies the HasPrefix predicate on the "entity_security_questionnaire_status_name" field.
+func EntitySecurityQuestionnaireStatusNameHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldEntitySecurityQuestionnaireStatusName, v))
+}
+
+// EntitySecurityQuestionnaireStatusNameHasSuffix applies the HasSuffix predicate on the "entity_security_questionnaire_status_name" field.
+func EntitySecurityQuestionnaireStatusNameHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldEntitySecurityQuestionnaireStatusName, v))
+}
+
+// EntitySecurityQuestionnaireStatusNameIsNil applies the IsNil predicate on the "entity_security_questionnaire_status_name" field.
+func EntitySecurityQuestionnaireStatusNameIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldEntitySecurityQuestionnaireStatusName))
+}
+
+// EntitySecurityQuestionnaireStatusNameNotNil applies the NotNil predicate on the "entity_security_questionnaire_status_name" field.
+func EntitySecurityQuestionnaireStatusNameNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldEntitySecurityQuestionnaireStatusName))
+}
+
+// EntitySecurityQuestionnaireStatusNameEqualFold applies the EqualFold predicate on the "entity_security_questionnaire_status_name" field.
+func EntitySecurityQuestionnaireStatusNameEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldEntitySecurityQuestionnaireStatusName, v))
+}
+
+// EntitySecurityQuestionnaireStatusNameContainsFold applies the ContainsFold predicate on the "entity_security_questionnaire_status_name" field.
+func EntitySecurityQuestionnaireStatusNameContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldEntitySecurityQuestionnaireStatusName, v))
+}
+
+// EntitySecurityQuestionnaireStatusIDEQ applies the EQ predicate on the "entity_security_questionnaire_status_id" field.
+func EntitySecurityQuestionnaireStatusIDEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEntitySecurityQuestionnaireStatusID, v))
+}
+
+// EntitySecurityQuestionnaireStatusIDNEQ applies the NEQ predicate on the "entity_security_questionnaire_status_id" field.
+func EntitySecurityQuestionnaireStatusIDNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldEntitySecurityQuestionnaireStatusID, v))
+}
+
+// EntitySecurityQuestionnaireStatusIDIn applies the In predicate on the "entity_security_questionnaire_status_id" field.
+func EntitySecurityQuestionnaireStatusIDIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldEntitySecurityQuestionnaireStatusID, vs...))
+}
+
+// EntitySecurityQuestionnaireStatusIDNotIn applies the NotIn predicate on the "entity_security_questionnaire_status_id" field.
+func EntitySecurityQuestionnaireStatusIDNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldEntitySecurityQuestionnaireStatusID, vs...))
+}
+
+// EntitySecurityQuestionnaireStatusIDGT applies the GT predicate on the "entity_security_questionnaire_status_id" field.
+func EntitySecurityQuestionnaireStatusIDGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldEntitySecurityQuestionnaireStatusID, v))
+}
+
+// EntitySecurityQuestionnaireStatusIDGTE applies the GTE predicate on the "entity_security_questionnaire_status_id" field.
+func EntitySecurityQuestionnaireStatusIDGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldEntitySecurityQuestionnaireStatusID, v))
+}
+
+// EntitySecurityQuestionnaireStatusIDLT applies the LT predicate on the "entity_security_questionnaire_status_id" field.
+func EntitySecurityQuestionnaireStatusIDLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldEntitySecurityQuestionnaireStatusID, v))
+}
+
+// EntitySecurityQuestionnaireStatusIDLTE applies the LTE predicate on the "entity_security_questionnaire_status_id" field.
+func EntitySecurityQuestionnaireStatusIDLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldEntitySecurityQuestionnaireStatusID, v))
+}
+
+// EntitySecurityQuestionnaireStatusIDContains applies the Contains predicate on the "entity_security_questionnaire_status_id" field.
+func EntitySecurityQuestionnaireStatusIDContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldEntitySecurityQuestionnaireStatusID, v))
+}
+
+// EntitySecurityQuestionnaireStatusIDHasPrefix applies the HasPrefix predicate on the "entity_security_questionnaire_status_id" field.
+func EntitySecurityQuestionnaireStatusIDHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldEntitySecurityQuestionnaireStatusID, v))
+}
+
+// EntitySecurityQuestionnaireStatusIDHasSuffix applies the HasSuffix predicate on the "entity_security_questionnaire_status_id" field.
+func EntitySecurityQuestionnaireStatusIDHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldEntitySecurityQuestionnaireStatusID, v))
+}
+
+// EntitySecurityQuestionnaireStatusIDIsNil applies the IsNil predicate on the "entity_security_questionnaire_status_id" field.
+func EntitySecurityQuestionnaireStatusIDIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldEntitySecurityQuestionnaireStatusID))
+}
+
+// EntitySecurityQuestionnaireStatusIDNotNil applies the NotNil predicate on the "entity_security_questionnaire_status_id" field.
+func EntitySecurityQuestionnaireStatusIDNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldEntitySecurityQuestionnaireStatusID))
+}
+
+// EntitySecurityQuestionnaireStatusIDEqualFold applies the EqualFold predicate on the "entity_security_questionnaire_status_id" field.
+func EntitySecurityQuestionnaireStatusIDEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldEntitySecurityQuestionnaireStatusID, v))
+}
+
+// EntitySecurityQuestionnaireStatusIDContainsFold applies the ContainsFold predicate on the "entity_security_questionnaire_status_id" field.
+func EntitySecurityQuestionnaireStatusIDContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldEntitySecurityQuestionnaireStatusID, v))
+}
+
+// EntitySourceTypeNameEQ applies the EQ predicate on the "entity_source_type_name" field.
+func EntitySourceTypeNameEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEntitySourceTypeName, v))
+}
+
+// EntitySourceTypeNameNEQ applies the NEQ predicate on the "entity_source_type_name" field.
+func EntitySourceTypeNameNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldEntitySourceTypeName, v))
+}
+
+// EntitySourceTypeNameIn applies the In predicate on the "entity_source_type_name" field.
+func EntitySourceTypeNameIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldEntitySourceTypeName, vs...))
+}
+
+// EntitySourceTypeNameNotIn applies the NotIn predicate on the "entity_source_type_name" field.
+func EntitySourceTypeNameNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldEntitySourceTypeName, vs...))
+}
+
+// EntitySourceTypeNameGT applies the GT predicate on the "entity_source_type_name" field.
+func EntitySourceTypeNameGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldEntitySourceTypeName, v))
+}
+
+// EntitySourceTypeNameGTE applies the GTE predicate on the "entity_source_type_name" field.
+func EntitySourceTypeNameGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldEntitySourceTypeName, v))
+}
+
+// EntitySourceTypeNameLT applies the LT predicate on the "entity_source_type_name" field.
+func EntitySourceTypeNameLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldEntitySourceTypeName, v))
+}
+
+// EntitySourceTypeNameLTE applies the LTE predicate on the "entity_source_type_name" field.
+func EntitySourceTypeNameLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldEntitySourceTypeName, v))
+}
+
+// EntitySourceTypeNameContains applies the Contains predicate on the "entity_source_type_name" field.
+func EntitySourceTypeNameContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldEntitySourceTypeName, v))
+}
+
+// EntitySourceTypeNameHasPrefix applies the HasPrefix predicate on the "entity_source_type_name" field.
+func EntitySourceTypeNameHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldEntitySourceTypeName, v))
+}
+
+// EntitySourceTypeNameHasSuffix applies the HasSuffix predicate on the "entity_source_type_name" field.
+func EntitySourceTypeNameHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldEntitySourceTypeName, v))
+}
+
+// EntitySourceTypeNameIsNil applies the IsNil predicate on the "entity_source_type_name" field.
+func EntitySourceTypeNameIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldEntitySourceTypeName))
+}
+
+// EntitySourceTypeNameNotNil applies the NotNil predicate on the "entity_source_type_name" field.
+func EntitySourceTypeNameNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldEntitySourceTypeName))
+}
+
+// EntitySourceTypeNameEqualFold applies the EqualFold predicate on the "entity_source_type_name" field.
+func EntitySourceTypeNameEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldEntitySourceTypeName, v))
+}
+
+// EntitySourceTypeNameContainsFold applies the ContainsFold predicate on the "entity_source_type_name" field.
+func EntitySourceTypeNameContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldEntitySourceTypeName, v))
+}
+
+// EntitySourceTypeIDEQ applies the EQ predicate on the "entity_source_type_id" field.
+func EntitySourceTypeIDEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEntitySourceTypeID, v))
+}
+
+// EntitySourceTypeIDNEQ applies the NEQ predicate on the "entity_source_type_id" field.
+func EntitySourceTypeIDNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldEntitySourceTypeID, v))
+}
+
+// EntitySourceTypeIDIn applies the In predicate on the "entity_source_type_id" field.
+func EntitySourceTypeIDIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldEntitySourceTypeID, vs...))
+}
+
+// EntitySourceTypeIDNotIn applies the NotIn predicate on the "entity_source_type_id" field.
+func EntitySourceTypeIDNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldEntitySourceTypeID, vs...))
+}
+
+// EntitySourceTypeIDGT applies the GT predicate on the "entity_source_type_id" field.
+func EntitySourceTypeIDGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldEntitySourceTypeID, v))
+}
+
+// EntitySourceTypeIDGTE applies the GTE predicate on the "entity_source_type_id" field.
+func EntitySourceTypeIDGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldEntitySourceTypeID, v))
+}
+
+// EntitySourceTypeIDLT applies the LT predicate on the "entity_source_type_id" field.
+func EntitySourceTypeIDLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldEntitySourceTypeID, v))
+}
+
+// EntitySourceTypeIDLTE applies the LTE predicate on the "entity_source_type_id" field.
+func EntitySourceTypeIDLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldEntitySourceTypeID, v))
+}
+
+// EntitySourceTypeIDContains applies the Contains predicate on the "entity_source_type_id" field.
+func EntitySourceTypeIDContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldEntitySourceTypeID, v))
+}
+
+// EntitySourceTypeIDHasPrefix applies the HasPrefix predicate on the "entity_source_type_id" field.
+func EntitySourceTypeIDHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldEntitySourceTypeID, v))
+}
+
+// EntitySourceTypeIDHasSuffix applies the HasSuffix predicate on the "entity_source_type_id" field.
+func EntitySourceTypeIDHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldEntitySourceTypeID, v))
+}
+
+// EntitySourceTypeIDIsNil applies the IsNil predicate on the "entity_source_type_id" field.
+func EntitySourceTypeIDIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldEntitySourceTypeID))
+}
+
+// EntitySourceTypeIDNotNil applies the NotNil predicate on the "entity_source_type_id" field.
+func EntitySourceTypeIDNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldEntitySourceTypeID))
+}
+
+// EntitySourceTypeIDEqualFold applies the EqualFold predicate on the "entity_source_type_id" field.
+func EntitySourceTypeIDEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldEntitySourceTypeID, v))
+}
+
+// EntitySourceTypeIDContainsFold applies the ContainsFold predicate on the "entity_source_type_id" field.
+func EntitySourceTypeIDContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldEntitySourceTypeID, v))
+}
+
+// EnvironmentNameEQ applies the EQ predicate on the "environment_name" field.
+func EnvironmentNameEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameNEQ applies the NEQ predicate on the "environment_name" field.
+func EnvironmentNameNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameIn applies the In predicate on the "environment_name" field.
+func EnvironmentNameIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldEnvironmentName, vs...))
+}
+
+// EnvironmentNameNotIn applies the NotIn predicate on the "environment_name" field.
+func EnvironmentNameNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldEnvironmentName, vs...))
+}
+
+// EnvironmentNameGT applies the GT predicate on the "environment_name" field.
+func EnvironmentNameGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameGTE applies the GTE predicate on the "environment_name" field.
+func EnvironmentNameGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameLT applies the LT predicate on the "environment_name" field.
+func EnvironmentNameLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameLTE applies the LTE predicate on the "environment_name" field.
+func EnvironmentNameLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameContains applies the Contains predicate on the "environment_name" field.
+func EnvironmentNameContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameHasPrefix applies the HasPrefix predicate on the "environment_name" field.
+func EnvironmentNameHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameHasSuffix applies the HasSuffix predicate on the "environment_name" field.
+func EnvironmentNameHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameIsNil applies the IsNil predicate on the "environment_name" field.
+func EnvironmentNameIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldEnvironmentName))
+}
+
+// EnvironmentNameNotNil applies the NotNil predicate on the "environment_name" field.
+func EnvironmentNameNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldEnvironmentName))
+}
+
+// EnvironmentNameEqualFold applies the EqualFold predicate on the "environment_name" field.
+func EnvironmentNameEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameContainsFold applies the ContainsFold predicate on the "environment_name" field.
+func EnvironmentNameContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldEnvironmentName, v))
+}
+
+// EnvironmentIDEQ applies the EQ predicate on the "environment_id" field.
+func EnvironmentIDEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDNEQ applies the NEQ predicate on the "environment_id" field.
+func EnvironmentIDNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDIn applies the In predicate on the "environment_id" field.
+func EnvironmentIDIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldEnvironmentID, vs...))
+}
+
+// EnvironmentIDNotIn applies the NotIn predicate on the "environment_id" field.
+func EnvironmentIDNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldEnvironmentID, vs...))
+}
+
+// EnvironmentIDGT applies the GT predicate on the "environment_id" field.
+func EnvironmentIDGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDGTE applies the GTE predicate on the "environment_id" field.
+func EnvironmentIDGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDLT applies the LT predicate on the "environment_id" field.
+func EnvironmentIDLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDLTE applies the LTE predicate on the "environment_id" field.
+func EnvironmentIDLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDContains applies the Contains predicate on the "environment_id" field.
+func EnvironmentIDContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDHasPrefix applies the HasPrefix predicate on the "environment_id" field.
+func EnvironmentIDHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDHasSuffix applies the HasSuffix predicate on the "environment_id" field.
+func EnvironmentIDHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDIsNil applies the IsNil predicate on the "environment_id" field.
+func EnvironmentIDIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldEnvironmentID))
+}
+
+// EnvironmentIDNotNil applies the NotNil predicate on the "environment_id" field.
+func EnvironmentIDNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldEnvironmentID))
+}
+
+// EnvironmentIDEqualFold applies the EqualFold predicate on the "environment_id" field.
+func EnvironmentIDEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDContainsFold applies the ContainsFold predicate on the "environment_id" field.
+func EnvironmentIDContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldEnvironmentID, v))
+}
+
+// ScopeNameEQ applies the EQ predicate on the "scope_name" field.
+func ScopeNameEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldScopeName, v))
+}
+
+// ScopeNameNEQ applies the NEQ predicate on the "scope_name" field.
+func ScopeNameNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldScopeName, v))
+}
+
+// ScopeNameIn applies the In predicate on the "scope_name" field.
+func ScopeNameIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldScopeName, vs...))
+}
+
+// ScopeNameNotIn applies the NotIn predicate on the "scope_name" field.
+func ScopeNameNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldScopeName, vs...))
+}
+
+// ScopeNameGT applies the GT predicate on the "scope_name" field.
+func ScopeNameGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldScopeName, v))
+}
+
+// ScopeNameGTE applies the GTE predicate on the "scope_name" field.
+func ScopeNameGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldScopeName, v))
+}
+
+// ScopeNameLT applies the LT predicate on the "scope_name" field.
+func ScopeNameLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldScopeName, v))
+}
+
+// ScopeNameLTE applies the LTE predicate on the "scope_name" field.
+func ScopeNameLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldScopeName, v))
+}
+
+// ScopeNameContains applies the Contains predicate on the "scope_name" field.
+func ScopeNameContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldScopeName, v))
+}
+
+// ScopeNameHasPrefix applies the HasPrefix predicate on the "scope_name" field.
+func ScopeNameHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldScopeName, v))
+}
+
+// ScopeNameHasSuffix applies the HasSuffix predicate on the "scope_name" field.
+func ScopeNameHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldScopeName, v))
+}
+
+// ScopeNameIsNil applies the IsNil predicate on the "scope_name" field.
+func ScopeNameIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldScopeName))
+}
+
+// ScopeNameNotNil applies the NotNil predicate on the "scope_name" field.
+func ScopeNameNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldScopeName))
+}
+
+// ScopeNameEqualFold applies the EqualFold predicate on the "scope_name" field.
+func ScopeNameEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldScopeName, v))
+}
+
+// ScopeNameContainsFold applies the ContainsFold predicate on the "scope_name" field.
+func ScopeNameContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldScopeName, v))
+}
+
+// ScopeIDEQ applies the EQ predicate on the "scope_id" field.
+func ScopeIDEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldScopeID, v))
+}
+
+// ScopeIDNEQ applies the NEQ predicate on the "scope_id" field.
+func ScopeIDNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldScopeID, v))
+}
+
+// ScopeIDIn applies the In predicate on the "scope_id" field.
+func ScopeIDIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldScopeID, vs...))
+}
+
+// ScopeIDNotIn applies the NotIn predicate on the "scope_id" field.
+func ScopeIDNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldScopeID, vs...))
+}
+
+// ScopeIDGT applies the GT predicate on the "scope_id" field.
+func ScopeIDGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldScopeID, v))
+}
+
+// ScopeIDGTE applies the GTE predicate on the "scope_id" field.
+func ScopeIDGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldScopeID, v))
+}
+
+// ScopeIDLT applies the LT predicate on the "scope_id" field.
+func ScopeIDLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldScopeID, v))
+}
+
+// ScopeIDLTE applies the LTE predicate on the "scope_id" field.
+func ScopeIDLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldScopeID, v))
+}
+
+// ScopeIDContains applies the Contains predicate on the "scope_id" field.
+func ScopeIDContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldScopeID, v))
+}
+
+// ScopeIDHasPrefix applies the HasPrefix predicate on the "scope_id" field.
+func ScopeIDHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldScopeID, v))
+}
+
+// ScopeIDHasSuffix applies the HasSuffix predicate on the "scope_id" field.
+func ScopeIDHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldScopeID, v))
+}
+
+// ScopeIDIsNil applies the IsNil predicate on the "scope_id" field.
+func ScopeIDIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldScopeID))
+}
+
+// ScopeIDNotNil applies the NotNil predicate on the "scope_id" field.
+func ScopeIDNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldScopeID))
+}
+
+// ScopeIDEqualFold applies the EqualFold predicate on the "scope_id" field.
+func ScopeIDEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldScopeID, v))
+}
+
+// ScopeIDContainsFold applies the ContainsFold predicate on the "scope_id" field.
+func ScopeIDContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldScopeID, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -1300,6 +2737,1056 @@ func StatusEqualFold(v string) predicate.EntityHistory {
 // StatusContainsFold applies the ContainsFold predicate on the "status" field.
 func StatusContainsFold(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldContainsFold(FieldStatus, v))
+}
+
+// ApprovedForUseEQ applies the EQ predicate on the "approved_for_use" field.
+func ApprovedForUseEQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldApprovedForUse, v))
+}
+
+// ApprovedForUseNEQ applies the NEQ predicate on the "approved_for_use" field.
+func ApprovedForUseNEQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldApprovedForUse, v))
+}
+
+// ApprovedForUseIsNil applies the IsNil predicate on the "approved_for_use" field.
+func ApprovedForUseIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldApprovedForUse))
+}
+
+// ApprovedForUseNotNil applies the NotNil predicate on the "approved_for_use" field.
+func ApprovedForUseNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldApprovedForUse))
+}
+
+// LinkedAssetIdsIsNil applies the IsNil predicate on the "linked_asset_ids" field.
+func LinkedAssetIdsIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldLinkedAssetIds))
+}
+
+// LinkedAssetIdsNotNil applies the NotNil predicate on the "linked_asset_ids" field.
+func LinkedAssetIdsNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldLinkedAssetIds))
+}
+
+// HasSoc2EQ applies the EQ predicate on the "has_soc2" field.
+func HasSoc2EQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldHasSoc2, v))
+}
+
+// HasSoc2NEQ applies the NEQ predicate on the "has_soc2" field.
+func HasSoc2NEQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldHasSoc2, v))
+}
+
+// HasSoc2IsNil applies the IsNil predicate on the "has_soc2" field.
+func HasSoc2IsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldHasSoc2))
+}
+
+// HasSoc2NotNil applies the NotNil predicate on the "has_soc2" field.
+func HasSoc2NotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldHasSoc2))
+}
+
+// Soc2PeriodEndEQ applies the EQ predicate on the "soc2_period_end" field.
+func Soc2PeriodEndEQ(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSoc2PeriodEnd, v))
+}
+
+// Soc2PeriodEndNEQ applies the NEQ predicate on the "soc2_period_end" field.
+func Soc2PeriodEndNEQ(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldSoc2PeriodEnd, v))
+}
+
+// Soc2PeriodEndIn applies the In predicate on the "soc2_period_end" field.
+func Soc2PeriodEndIn(vs ...models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldSoc2PeriodEnd, vs...))
+}
+
+// Soc2PeriodEndNotIn applies the NotIn predicate on the "soc2_period_end" field.
+func Soc2PeriodEndNotIn(vs ...models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldSoc2PeriodEnd, vs...))
+}
+
+// Soc2PeriodEndGT applies the GT predicate on the "soc2_period_end" field.
+func Soc2PeriodEndGT(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldSoc2PeriodEnd, v))
+}
+
+// Soc2PeriodEndGTE applies the GTE predicate on the "soc2_period_end" field.
+func Soc2PeriodEndGTE(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldSoc2PeriodEnd, v))
+}
+
+// Soc2PeriodEndLT applies the LT predicate on the "soc2_period_end" field.
+func Soc2PeriodEndLT(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldSoc2PeriodEnd, v))
+}
+
+// Soc2PeriodEndLTE applies the LTE predicate on the "soc2_period_end" field.
+func Soc2PeriodEndLTE(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldSoc2PeriodEnd, v))
+}
+
+// Soc2PeriodEndIsNil applies the IsNil predicate on the "soc2_period_end" field.
+func Soc2PeriodEndIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldSoc2PeriodEnd))
+}
+
+// Soc2PeriodEndNotNil applies the NotNil predicate on the "soc2_period_end" field.
+func Soc2PeriodEndNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldSoc2PeriodEnd))
+}
+
+// ContractStartDateEQ applies the EQ predicate on the "contract_start_date" field.
+func ContractStartDateEQ(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldContractStartDate, v))
+}
+
+// ContractStartDateNEQ applies the NEQ predicate on the "contract_start_date" field.
+func ContractStartDateNEQ(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldContractStartDate, v))
+}
+
+// ContractStartDateIn applies the In predicate on the "contract_start_date" field.
+func ContractStartDateIn(vs ...models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldContractStartDate, vs...))
+}
+
+// ContractStartDateNotIn applies the NotIn predicate on the "contract_start_date" field.
+func ContractStartDateNotIn(vs ...models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldContractStartDate, vs...))
+}
+
+// ContractStartDateGT applies the GT predicate on the "contract_start_date" field.
+func ContractStartDateGT(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldContractStartDate, v))
+}
+
+// ContractStartDateGTE applies the GTE predicate on the "contract_start_date" field.
+func ContractStartDateGTE(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldContractStartDate, v))
+}
+
+// ContractStartDateLT applies the LT predicate on the "contract_start_date" field.
+func ContractStartDateLT(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldContractStartDate, v))
+}
+
+// ContractStartDateLTE applies the LTE predicate on the "contract_start_date" field.
+func ContractStartDateLTE(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldContractStartDate, v))
+}
+
+// ContractStartDateIsNil applies the IsNil predicate on the "contract_start_date" field.
+func ContractStartDateIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldContractStartDate))
+}
+
+// ContractStartDateNotNil applies the NotNil predicate on the "contract_start_date" field.
+func ContractStartDateNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldContractStartDate))
+}
+
+// ContractEndDateEQ applies the EQ predicate on the "contract_end_date" field.
+func ContractEndDateEQ(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldContractEndDate, v))
+}
+
+// ContractEndDateNEQ applies the NEQ predicate on the "contract_end_date" field.
+func ContractEndDateNEQ(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldContractEndDate, v))
+}
+
+// ContractEndDateIn applies the In predicate on the "contract_end_date" field.
+func ContractEndDateIn(vs ...models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldContractEndDate, vs...))
+}
+
+// ContractEndDateNotIn applies the NotIn predicate on the "contract_end_date" field.
+func ContractEndDateNotIn(vs ...models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldContractEndDate, vs...))
+}
+
+// ContractEndDateGT applies the GT predicate on the "contract_end_date" field.
+func ContractEndDateGT(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldContractEndDate, v))
+}
+
+// ContractEndDateGTE applies the GTE predicate on the "contract_end_date" field.
+func ContractEndDateGTE(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldContractEndDate, v))
+}
+
+// ContractEndDateLT applies the LT predicate on the "contract_end_date" field.
+func ContractEndDateLT(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldContractEndDate, v))
+}
+
+// ContractEndDateLTE applies the LTE predicate on the "contract_end_date" field.
+func ContractEndDateLTE(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldContractEndDate, v))
+}
+
+// ContractEndDateIsNil applies the IsNil predicate on the "contract_end_date" field.
+func ContractEndDateIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldContractEndDate))
+}
+
+// ContractEndDateNotNil applies the NotNil predicate on the "contract_end_date" field.
+func ContractEndDateNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldContractEndDate))
+}
+
+// AutoRenewsEQ applies the EQ predicate on the "auto_renews" field.
+func AutoRenewsEQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldAutoRenews, v))
+}
+
+// AutoRenewsNEQ applies the NEQ predicate on the "auto_renews" field.
+func AutoRenewsNEQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldAutoRenews, v))
+}
+
+// AutoRenewsIsNil applies the IsNil predicate on the "auto_renews" field.
+func AutoRenewsIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldAutoRenews))
+}
+
+// AutoRenewsNotNil applies the NotNil predicate on the "auto_renews" field.
+func AutoRenewsNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldAutoRenews))
+}
+
+// TerminationNoticeDaysEQ applies the EQ predicate on the "termination_notice_days" field.
+func TerminationNoticeDaysEQ(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldTerminationNoticeDays, v))
+}
+
+// TerminationNoticeDaysNEQ applies the NEQ predicate on the "termination_notice_days" field.
+func TerminationNoticeDaysNEQ(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldTerminationNoticeDays, v))
+}
+
+// TerminationNoticeDaysIn applies the In predicate on the "termination_notice_days" field.
+func TerminationNoticeDaysIn(vs ...int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldTerminationNoticeDays, vs...))
+}
+
+// TerminationNoticeDaysNotIn applies the NotIn predicate on the "termination_notice_days" field.
+func TerminationNoticeDaysNotIn(vs ...int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldTerminationNoticeDays, vs...))
+}
+
+// TerminationNoticeDaysGT applies the GT predicate on the "termination_notice_days" field.
+func TerminationNoticeDaysGT(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldTerminationNoticeDays, v))
+}
+
+// TerminationNoticeDaysGTE applies the GTE predicate on the "termination_notice_days" field.
+func TerminationNoticeDaysGTE(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldTerminationNoticeDays, v))
+}
+
+// TerminationNoticeDaysLT applies the LT predicate on the "termination_notice_days" field.
+func TerminationNoticeDaysLT(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldTerminationNoticeDays, v))
+}
+
+// TerminationNoticeDaysLTE applies the LTE predicate on the "termination_notice_days" field.
+func TerminationNoticeDaysLTE(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldTerminationNoticeDays, v))
+}
+
+// TerminationNoticeDaysIsNil applies the IsNil predicate on the "termination_notice_days" field.
+func TerminationNoticeDaysIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldTerminationNoticeDays))
+}
+
+// TerminationNoticeDaysNotNil applies the NotNil predicate on the "termination_notice_days" field.
+func TerminationNoticeDaysNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldTerminationNoticeDays))
+}
+
+// AnnualSpendEQ applies the EQ predicate on the "annual_spend" field.
+func AnnualSpendEQ(v float64) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldAnnualSpend, v))
+}
+
+// AnnualSpendNEQ applies the NEQ predicate on the "annual_spend" field.
+func AnnualSpendNEQ(v float64) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldAnnualSpend, v))
+}
+
+// AnnualSpendIn applies the In predicate on the "annual_spend" field.
+func AnnualSpendIn(vs ...float64) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldAnnualSpend, vs...))
+}
+
+// AnnualSpendNotIn applies the NotIn predicate on the "annual_spend" field.
+func AnnualSpendNotIn(vs ...float64) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldAnnualSpend, vs...))
+}
+
+// AnnualSpendGT applies the GT predicate on the "annual_spend" field.
+func AnnualSpendGT(v float64) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldAnnualSpend, v))
+}
+
+// AnnualSpendGTE applies the GTE predicate on the "annual_spend" field.
+func AnnualSpendGTE(v float64) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldAnnualSpend, v))
+}
+
+// AnnualSpendLT applies the LT predicate on the "annual_spend" field.
+func AnnualSpendLT(v float64) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldAnnualSpend, v))
+}
+
+// AnnualSpendLTE applies the LTE predicate on the "annual_spend" field.
+func AnnualSpendLTE(v float64) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldAnnualSpend, v))
+}
+
+// AnnualSpendIsNil applies the IsNil predicate on the "annual_spend" field.
+func AnnualSpendIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldAnnualSpend))
+}
+
+// AnnualSpendNotNil applies the NotNil predicate on the "annual_spend" field.
+func AnnualSpendNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldAnnualSpend))
+}
+
+// SpendCurrencyEQ applies the EQ predicate on the "spend_currency" field.
+func SpendCurrencyEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSpendCurrency, v))
+}
+
+// SpendCurrencyNEQ applies the NEQ predicate on the "spend_currency" field.
+func SpendCurrencyNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldSpendCurrency, v))
+}
+
+// SpendCurrencyIn applies the In predicate on the "spend_currency" field.
+func SpendCurrencyIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldSpendCurrency, vs...))
+}
+
+// SpendCurrencyNotIn applies the NotIn predicate on the "spend_currency" field.
+func SpendCurrencyNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldSpendCurrency, vs...))
+}
+
+// SpendCurrencyGT applies the GT predicate on the "spend_currency" field.
+func SpendCurrencyGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldSpendCurrency, v))
+}
+
+// SpendCurrencyGTE applies the GTE predicate on the "spend_currency" field.
+func SpendCurrencyGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldSpendCurrency, v))
+}
+
+// SpendCurrencyLT applies the LT predicate on the "spend_currency" field.
+func SpendCurrencyLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldSpendCurrency, v))
+}
+
+// SpendCurrencyLTE applies the LTE predicate on the "spend_currency" field.
+func SpendCurrencyLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldSpendCurrency, v))
+}
+
+// SpendCurrencyContains applies the Contains predicate on the "spend_currency" field.
+func SpendCurrencyContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldSpendCurrency, v))
+}
+
+// SpendCurrencyHasPrefix applies the HasPrefix predicate on the "spend_currency" field.
+func SpendCurrencyHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldSpendCurrency, v))
+}
+
+// SpendCurrencyHasSuffix applies the HasSuffix predicate on the "spend_currency" field.
+func SpendCurrencyHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldSpendCurrency, v))
+}
+
+// SpendCurrencyIsNil applies the IsNil predicate on the "spend_currency" field.
+func SpendCurrencyIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldSpendCurrency))
+}
+
+// SpendCurrencyNotNil applies the NotNil predicate on the "spend_currency" field.
+func SpendCurrencyNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldSpendCurrency))
+}
+
+// SpendCurrencyEqualFold applies the EqualFold predicate on the "spend_currency" field.
+func SpendCurrencyEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldSpendCurrency, v))
+}
+
+// SpendCurrencyContainsFold applies the ContainsFold predicate on the "spend_currency" field.
+func SpendCurrencyContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldSpendCurrency, v))
+}
+
+// BillingModelEQ applies the EQ predicate on the "billing_model" field.
+func BillingModelEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldBillingModel, v))
+}
+
+// BillingModelNEQ applies the NEQ predicate on the "billing_model" field.
+func BillingModelNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldBillingModel, v))
+}
+
+// BillingModelIn applies the In predicate on the "billing_model" field.
+func BillingModelIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldBillingModel, vs...))
+}
+
+// BillingModelNotIn applies the NotIn predicate on the "billing_model" field.
+func BillingModelNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldBillingModel, vs...))
+}
+
+// BillingModelGT applies the GT predicate on the "billing_model" field.
+func BillingModelGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldBillingModel, v))
+}
+
+// BillingModelGTE applies the GTE predicate on the "billing_model" field.
+func BillingModelGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldBillingModel, v))
+}
+
+// BillingModelLT applies the LT predicate on the "billing_model" field.
+func BillingModelLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldBillingModel, v))
+}
+
+// BillingModelLTE applies the LTE predicate on the "billing_model" field.
+func BillingModelLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldBillingModel, v))
+}
+
+// BillingModelContains applies the Contains predicate on the "billing_model" field.
+func BillingModelContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldBillingModel, v))
+}
+
+// BillingModelHasPrefix applies the HasPrefix predicate on the "billing_model" field.
+func BillingModelHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldBillingModel, v))
+}
+
+// BillingModelHasSuffix applies the HasSuffix predicate on the "billing_model" field.
+func BillingModelHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldBillingModel, v))
+}
+
+// BillingModelIsNil applies the IsNil predicate on the "billing_model" field.
+func BillingModelIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldBillingModel))
+}
+
+// BillingModelNotNil applies the NotNil predicate on the "billing_model" field.
+func BillingModelNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldBillingModel))
+}
+
+// BillingModelEqualFold applies the EqualFold predicate on the "billing_model" field.
+func BillingModelEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldBillingModel, v))
+}
+
+// BillingModelContainsFold applies the ContainsFold predicate on the "billing_model" field.
+func BillingModelContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldBillingModel, v))
+}
+
+// RenewalRiskEQ applies the EQ predicate on the "renewal_risk" field.
+func RenewalRiskEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldRenewalRisk, v))
+}
+
+// RenewalRiskNEQ applies the NEQ predicate on the "renewal_risk" field.
+func RenewalRiskNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldRenewalRisk, v))
+}
+
+// RenewalRiskIn applies the In predicate on the "renewal_risk" field.
+func RenewalRiskIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldRenewalRisk, vs...))
+}
+
+// RenewalRiskNotIn applies the NotIn predicate on the "renewal_risk" field.
+func RenewalRiskNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldRenewalRisk, vs...))
+}
+
+// RenewalRiskGT applies the GT predicate on the "renewal_risk" field.
+func RenewalRiskGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldRenewalRisk, v))
+}
+
+// RenewalRiskGTE applies the GTE predicate on the "renewal_risk" field.
+func RenewalRiskGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldRenewalRisk, v))
+}
+
+// RenewalRiskLT applies the LT predicate on the "renewal_risk" field.
+func RenewalRiskLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldRenewalRisk, v))
+}
+
+// RenewalRiskLTE applies the LTE predicate on the "renewal_risk" field.
+func RenewalRiskLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldRenewalRisk, v))
+}
+
+// RenewalRiskContains applies the Contains predicate on the "renewal_risk" field.
+func RenewalRiskContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldRenewalRisk, v))
+}
+
+// RenewalRiskHasPrefix applies the HasPrefix predicate on the "renewal_risk" field.
+func RenewalRiskHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldRenewalRisk, v))
+}
+
+// RenewalRiskHasSuffix applies the HasSuffix predicate on the "renewal_risk" field.
+func RenewalRiskHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldRenewalRisk, v))
+}
+
+// RenewalRiskIsNil applies the IsNil predicate on the "renewal_risk" field.
+func RenewalRiskIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldRenewalRisk))
+}
+
+// RenewalRiskNotNil applies the NotNil predicate on the "renewal_risk" field.
+func RenewalRiskNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldRenewalRisk))
+}
+
+// RenewalRiskEqualFold applies the EqualFold predicate on the "renewal_risk" field.
+func RenewalRiskEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldRenewalRisk, v))
+}
+
+// RenewalRiskContainsFold applies the ContainsFold predicate on the "renewal_risk" field.
+func RenewalRiskContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldRenewalRisk, v))
+}
+
+// SSOEnforcedEQ applies the EQ predicate on the "sso_enforced" field.
+func SSOEnforcedEQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSSOEnforced, v))
+}
+
+// SSOEnforcedNEQ applies the NEQ predicate on the "sso_enforced" field.
+func SSOEnforcedNEQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldSSOEnforced, v))
+}
+
+// SSOEnforcedIsNil applies the IsNil predicate on the "sso_enforced" field.
+func SSOEnforcedIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldSSOEnforced))
+}
+
+// SSOEnforcedNotNil applies the NotNil predicate on the "sso_enforced" field.
+func SSOEnforcedNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldSSOEnforced))
+}
+
+// MfaSupportedEQ applies the EQ predicate on the "mfa_supported" field.
+func MfaSupportedEQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldMfaSupported, v))
+}
+
+// MfaSupportedNEQ applies the NEQ predicate on the "mfa_supported" field.
+func MfaSupportedNEQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldMfaSupported, v))
+}
+
+// MfaSupportedIsNil applies the IsNil predicate on the "mfa_supported" field.
+func MfaSupportedIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldMfaSupported))
+}
+
+// MfaSupportedNotNil applies the NotNil predicate on the "mfa_supported" field.
+func MfaSupportedNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldMfaSupported))
+}
+
+// MfaEnforcedEQ applies the EQ predicate on the "mfa_enforced" field.
+func MfaEnforcedEQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldMfaEnforced, v))
+}
+
+// MfaEnforcedNEQ applies the NEQ predicate on the "mfa_enforced" field.
+func MfaEnforcedNEQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldMfaEnforced, v))
+}
+
+// MfaEnforcedIsNil applies the IsNil predicate on the "mfa_enforced" field.
+func MfaEnforcedIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldMfaEnforced))
+}
+
+// MfaEnforcedNotNil applies the NotNil predicate on the "mfa_enforced" field.
+func MfaEnforcedNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldMfaEnforced))
+}
+
+// StatusPageURLEQ applies the EQ predicate on the "status_page_url" field.
+func StatusPageURLEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldStatusPageURL, v))
+}
+
+// StatusPageURLNEQ applies the NEQ predicate on the "status_page_url" field.
+func StatusPageURLNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldStatusPageURL, v))
+}
+
+// StatusPageURLIn applies the In predicate on the "status_page_url" field.
+func StatusPageURLIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldStatusPageURL, vs...))
+}
+
+// StatusPageURLNotIn applies the NotIn predicate on the "status_page_url" field.
+func StatusPageURLNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldStatusPageURL, vs...))
+}
+
+// StatusPageURLGT applies the GT predicate on the "status_page_url" field.
+func StatusPageURLGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldStatusPageURL, v))
+}
+
+// StatusPageURLGTE applies the GTE predicate on the "status_page_url" field.
+func StatusPageURLGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldStatusPageURL, v))
+}
+
+// StatusPageURLLT applies the LT predicate on the "status_page_url" field.
+func StatusPageURLLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldStatusPageURL, v))
+}
+
+// StatusPageURLLTE applies the LTE predicate on the "status_page_url" field.
+func StatusPageURLLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldStatusPageURL, v))
+}
+
+// StatusPageURLContains applies the Contains predicate on the "status_page_url" field.
+func StatusPageURLContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldStatusPageURL, v))
+}
+
+// StatusPageURLHasPrefix applies the HasPrefix predicate on the "status_page_url" field.
+func StatusPageURLHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldStatusPageURL, v))
+}
+
+// StatusPageURLHasSuffix applies the HasSuffix predicate on the "status_page_url" field.
+func StatusPageURLHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldStatusPageURL, v))
+}
+
+// StatusPageURLIsNil applies the IsNil predicate on the "status_page_url" field.
+func StatusPageURLIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldStatusPageURL))
+}
+
+// StatusPageURLNotNil applies the NotNil predicate on the "status_page_url" field.
+func StatusPageURLNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldStatusPageURL))
+}
+
+// StatusPageURLEqualFold applies the EqualFold predicate on the "status_page_url" field.
+func StatusPageURLEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldStatusPageURL, v))
+}
+
+// StatusPageURLContainsFold applies the ContainsFold predicate on the "status_page_url" field.
+func StatusPageURLContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldStatusPageURL, v))
+}
+
+// ProvidedServicesIsNil applies the IsNil predicate on the "provided_services" field.
+func ProvidedServicesIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldProvidedServices))
+}
+
+// ProvidedServicesNotNil applies the NotNil predicate on the "provided_services" field.
+func ProvidedServicesNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldProvidedServices))
+}
+
+// LinksIsNil applies the IsNil predicate on the "links" field.
+func LinksIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldLinks))
+}
+
+// LinksNotNil applies the NotNil predicate on the "links" field.
+func LinksNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldLinks))
+}
+
+// RiskRatingEQ applies the EQ predicate on the "risk_rating" field.
+func RiskRatingEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldRiskRating, v))
+}
+
+// RiskRatingNEQ applies the NEQ predicate on the "risk_rating" field.
+func RiskRatingNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldRiskRating, v))
+}
+
+// RiskRatingIn applies the In predicate on the "risk_rating" field.
+func RiskRatingIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldRiskRating, vs...))
+}
+
+// RiskRatingNotIn applies the NotIn predicate on the "risk_rating" field.
+func RiskRatingNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldRiskRating, vs...))
+}
+
+// RiskRatingGT applies the GT predicate on the "risk_rating" field.
+func RiskRatingGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldRiskRating, v))
+}
+
+// RiskRatingGTE applies the GTE predicate on the "risk_rating" field.
+func RiskRatingGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldRiskRating, v))
+}
+
+// RiskRatingLT applies the LT predicate on the "risk_rating" field.
+func RiskRatingLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldRiskRating, v))
+}
+
+// RiskRatingLTE applies the LTE predicate on the "risk_rating" field.
+func RiskRatingLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldRiskRating, v))
+}
+
+// RiskRatingContains applies the Contains predicate on the "risk_rating" field.
+func RiskRatingContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldRiskRating, v))
+}
+
+// RiskRatingHasPrefix applies the HasPrefix predicate on the "risk_rating" field.
+func RiskRatingHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldRiskRating, v))
+}
+
+// RiskRatingHasSuffix applies the HasSuffix predicate on the "risk_rating" field.
+func RiskRatingHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldRiskRating, v))
+}
+
+// RiskRatingIsNil applies the IsNil predicate on the "risk_rating" field.
+func RiskRatingIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldRiskRating))
+}
+
+// RiskRatingNotNil applies the NotNil predicate on the "risk_rating" field.
+func RiskRatingNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldRiskRating))
+}
+
+// RiskRatingEqualFold applies the EqualFold predicate on the "risk_rating" field.
+func RiskRatingEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldRiskRating, v))
+}
+
+// RiskRatingContainsFold applies the ContainsFold predicate on the "risk_rating" field.
+func RiskRatingContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldRiskRating, v))
+}
+
+// RiskScoreEQ applies the EQ predicate on the "risk_score" field.
+func RiskScoreEQ(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldRiskScore, v))
+}
+
+// RiskScoreNEQ applies the NEQ predicate on the "risk_score" field.
+func RiskScoreNEQ(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldRiskScore, v))
+}
+
+// RiskScoreIn applies the In predicate on the "risk_score" field.
+func RiskScoreIn(vs ...int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldRiskScore, vs...))
+}
+
+// RiskScoreNotIn applies the NotIn predicate on the "risk_score" field.
+func RiskScoreNotIn(vs ...int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldRiskScore, vs...))
+}
+
+// RiskScoreGT applies the GT predicate on the "risk_score" field.
+func RiskScoreGT(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldRiskScore, v))
+}
+
+// RiskScoreGTE applies the GTE predicate on the "risk_score" field.
+func RiskScoreGTE(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldRiskScore, v))
+}
+
+// RiskScoreLT applies the LT predicate on the "risk_score" field.
+func RiskScoreLT(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldRiskScore, v))
+}
+
+// RiskScoreLTE applies the LTE predicate on the "risk_score" field.
+func RiskScoreLTE(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldRiskScore, v))
+}
+
+// RiskScoreIsNil applies the IsNil predicate on the "risk_score" field.
+func RiskScoreIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldRiskScore))
+}
+
+// RiskScoreNotNil applies the NotNil predicate on the "risk_score" field.
+func RiskScoreNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldRiskScore))
+}
+
+// TierEQ applies the EQ predicate on the "tier" field.
+func TierEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldTier, v))
+}
+
+// TierNEQ applies the NEQ predicate on the "tier" field.
+func TierNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldTier, v))
+}
+
+// TierIn applies the In predicate on the "tier" field.
+func TierIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldTier, vs...))
+}
+
+// TierNotIn applies the NotIn predicate on the "tier" field.
+func TierNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldTier, vs...))
+}
+
+// TierGT applies the GT predicate on the "tier" field.
+func TierGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldTier, v))
+}
+
+// TierGTE applies the GTE predicate on the "tier" field.
+func TierGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldTier, v))
+}
+
+// TierLT applies the LT predicate on the "tier" field.
+func TierLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldTier, v))
+}
+
+// TierLTE applies the LTE predicate on the "tier" field.
+func TierLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldTier, v))
+}
+
+// TierContains applies the Contains predicate on the "tier" field.
+func TierContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldTier, v))
+}
+
+// TierHasPrefix applies the HasPrefix predicate on the "tier" field.
+func TierHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldTier, v))
+}
+
+// TierHasSuffix applies the HasSuffix predicate on the "tier" field.
+func TierHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldTier, v))
+}
+
+// TierIsNil applies the IsNil predicate on the "tier" field.
+func TierIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldTier))
+}
+
+// TierNotNil applies the NotNil predicate on the "tier" field.
+func TierNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldTier))
+}
+
+// TierEqualFold applies the EqualFold predicate on the "tier" field.
+func TierEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldTier, v))
+}
+
+// TierContainsFold applies the ContainsFold predicate on the "tier" field.
+func TierContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldTier, v))
+}
+
+// ReviewFrequencyEQ applies the EQ predicate on the "review_frequency" field.
+func ReviewFrequencyEQ(v enums.Frequency) predicate.EntityHistory {
+	vc := v
+	return predicate.EntityHistory(sql.FieldEQ(FieldReviewFrequency, vc))
+}
+
+// ReviewFrequencyNEQ applies the NEQ predicate on the "review_frequency" field.
+func ReviewFrequencyNEQ(v enums.Frequency) predicate.EntityHistory {
+	vc := v
+	return predicate.EntityHistory(sql.FieldNEQ(FieldReviewFrequency, vc))
+}
+
+// ReviewFrequencyIn applies the In predicate on the "review_frequency" field.
+func ReviewFrequencyIn(vs ...enums.Frequency) predicate.EntityHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.EntityHistory(sql.FieldIn(FieldReviewFrequency, v...))
+}
+
+// ReviewFrequencyNotIn applies the NotIn predicate on the "review_frequency" field.
+func ReviewFrequencyNotIn(vs ...enums.Frequency) predicate.EntityHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.EntityHistory(sql.FieldNotIn(FieldReviewFrequency, v...))
+}
+
+// ReviewFrequencyIsNil applies the IsNil predicate on the "review_frequency" field.
+func ReviewFrequencyIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldReviewFrequency))
+}
+
+// ReviewFrequencyNotNil applies the NotNil predicate on the "review_frequency" field.
+func ReviewFrequencyNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldReviewFrequency))
+}
+
+// NextReviewAtEQ applies the EQ predicate on the "next_review_at" field.
+func NextReviewAtEQ(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldNextReviewAt, v))
+}
+
+// NextReviewAtNEQ applies the NEQ predicate on the "next_review_at" field.
+func NextReviewAtNEQ(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldNextReviewAt, v))
+}
+
+// NextReviewAtIn applies the In predicate on the "next_review_at" field.
+func NextReviewAtIn(vs ...models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldNextReviewAt, vs...))
+}
+
+// NextReviewAtNotIn applies the NotIn predicate on the "next_review_at" field.
+func NextReviewAtNotIn(vs ...models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldNextReviewAt, vs...))
+}
+
+// NextReviewAtGT applies the GT predicate on the "next_review_at" field.
+func NextReviewAtGT(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldNextReviewAt, v))
+}
+
+// NextReviewAtGTE applies the GTE predicate on the "next_review_at" field.
+func NextReviewAtGTE(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldNextReviewAt, v))
+}
+
+// NextReviewAtLT applies the LT predicate on the "next_review_at" field.
+func NextReviewAtLT(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldNextReviewAt, v))
+}
+
+// NextReviewAtLTE applies the LTE predicate on the "next_review_at" field.
+func NextReviewAtLTE(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldNextReviewAt, v))
+}
+
+// NextReviewAtIsNil applies the IsNil predicate on the "next_review_at" field.
+func NextReviewAtIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldNextReviewAt))
+}
+
+// NextReviewAtNotNil applies the NotNil predicate on the "next_review_at" field.
+func NextReviewAtNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldNextReviewAt))
+}
+
+// ContractRenewalAtEQ applies the EQ predicate on the "contract_renewal_at" field.
+func ContractRenewalAtEQ(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldContractRenewalAt, v))
+}
+
+// ContractRenewalAtNEQ applies the NEQ predicate on the "contract_renewal_at" field.
+func ContractRenewalAtNEQ(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldContractRenewalAt, v))
+}
+
+// ContractRenewalAtIn applies the In predicate on the "contract_renewal_at" field.
+func ContractRenewalAtIn(vs ...models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldContractRenewalAt, vs...))
+}
+
+// ContractRenewalAtNotIn applies the NotIn predicate on the "contract_renewal_at" field.
+func ContractRenewalAtNotIn(vs ...models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldContractRenewalAt, vs...))
+}
+
+// ContractRenewalAtGT applies the GT predicate on the "contract_renewal_at" field.
+func ContractRenewalAtGT(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldContractRenewalAt, v))
+}
+
+// ContractRenewalAtGTE applies the GTE predicate on the "contract_renewal_at" field.
+func ContractRenewalAtGTE(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldContractRenewalAt, v))
+}
+
+// ContractRenewalAtLT applies the LT predicate on the "contract_renewal_at" field.
+func ContractRenewalAtLT(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldContractRenewalAt, v))
+}
+
+// ContractRenewalAtLTE applies the LTE predicate on the "contract_renewal_at" field.
+func ContractRenewalAtLTE(v models.DateTime) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldContractRenewalAt, v))
+}
+
+// ContractRenewalAtIsNil applies the IsNil predicate on the "contract_renewal_at" field.
+func ContractRenewalAtIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldContractRenewalAt))
+}
+
+// ContractRenewalAtNotNil applies the NotNil predicate on the "contract_renewal_at" field.
+func ContractRenewalAtNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldContractRenewalAt))
+}
+
+// VendorMetadataIsNil applies the IsNil predicate on the "vendor_metadata" field.
+func VendorMetadataIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldVendorMetadata))
+}
+
+// VendorMetadataNotNil applies the NotNil predicate on the "vendor_metadata" field.
+func VendorMetadataNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldVendorMetadata))
 }
 
 // And groups predicates with the AND operator between them.

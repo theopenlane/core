@@ -137,24 +137,35 @@ type ComplexityRoot struct {
 	}
 
 	AssessmentResponseHistory struct {
-		AssessmentID   func(childComplexity int) int
-		AssignedAt     func(childComplexity int) int
-		CompletedAt    func(childComplexity int) int
-		CreatedAt      func(childComplexity int) int
-		CreatedBy      func(childComplexity int) int
-		DocumentDataID func(childComplexity int) int
-		DueDate        func(childComplexity int) int
-		Email          func(childComplexity int) int
-		HistoryTime    func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Operation      func(childComplexity int) int
-		OwnerID        func(childComplexity int) int
-		Ref            func(childComplexity int) int
-		SendAttempts   func(childComplexity int) int
-		StartedAt      func(childComplexity int) int
-		Status         func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
+		AssessmentID     func(childComplexity int) int
+		AssignedAt       func(childComplexity int) int
+		CampaignID       func(childComplexity int) int
+		CompletedAt      func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DocumentDataID   func(childComplexity int) int
+		DueDate          func(childComplexity int) int
+		Email            func(childComplexity int) int
+		EmailClickCount  func(childComplexity int) int
+		EmailClickedAt   func(childComplexity int) int
+		EmailDeliveredAt func(childComplexity int) int
+		EmailMetadata    func(childComplexity int) int
+		EmailOpenCount   func(childComplexity int) int
+		EmailOpenedAt    func(childComplexity int) int
+		EntityID         func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		IdentityHolderID func(childComplexity int) int
+		IsTest           func(childComplexity int) int
+		LastEmailEventAt func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		SendAttempts     func(childComplexity int) int
+		StartedAt        func(childComplexity int) int
+		Status           func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	AssessmentResponseHistoryConnection struct {
@@ -169,26 +180,54 @@ type ComplexityRoot struct {
 	}
 
 	AssetHistory struct {
-		AssetType        func(childComplexity int) int
-		Categories       func(childComplexity int) int
-		Cpe              func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Description      func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		Identifier       func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		Website          func(childComplexity int) int
+		AccessModelID               func(childComplexity int) int
+		AccessModelName             func(childComplexity int) int
+		AssetDataClassificationID   func(childComplexity int) int
+		AssetDataClassificationName func(childComplexity int) int
+		AssetSubtypeID              func(childComplexity int) int
+		AssetSubtypeName            func(childComplexity int) int
+		AssetType                   func(childComplexity int) int
+		Categories                  func(childComplexity int) int
+		ContainsPii                 func(childComplexity int) int
+		CostCenter                  func(childComplexity int) int
+		Cpe                         func(childComplexity int) int
+		CreatedAt                   func(childComplexity int) int
+		CreatedBy                   func(childComplexity int) int
+		CriticalityID               func(childComplexity int) int
+		CriticalityName             func(childComplexity int) int
+		Description                 func(childComplexity int) int
+		EncryptionStatusID          func(childComplexity int) int
+		EncryptionStatusName        func(childComplexity int) int
+		EnvironmentID               func(childComplexity int) int
+		EnvironmentName             func(childComplexity int) int
+		EstimatedMonthlyCost        func(childComplexity int) int
+		HistoryTime                 func(childComplexity int) int
+		ID                          func(childComplexity int) int
+		Identifier                  func(childComplexity int) int
+		InternalNotes               func(childComplexity int) int
+		InternalOwner               func(childComplexity int) int
+		InternalOwnerGroupID        func(childComplexity int) int
+		InternalOwnerUserID         func(childComplexity int) int
+		Name                        func(childComplexity int) int
+		Operation                   func(childComplexity int) int
+		OwnerID                     func(childComplexity int) int
+		PhysicalLocation            func(childComplexity int) int
+		PurchaseDate                func(childComplexity int) int
+		Ref                         func(childComplexity int) int
+		Region                      func(childComplexity int) int
+		ScopeID                     func(childComplexity int) int
+		ScopeName                   func(childComplexity int) int
+		SecurityTierID              func(childComplexity int) int
+		SecurityTierName            func(childComplexity int) int
+		SourceIdentifier            func(childComplexity int) int
+		SourcePlatformID            func(childComplexity int) int
+		SourceType                  func(childComplexity int) int
+		SystemInternalID            func(childComplexity int) int
+		SystemOwned                 func(childComplexity int) int
+		Tags                        func(childComplexity int) int
+		UpdatedAt                   func(childComplexity int) int
+		UpdatedBy                   func(childComplexity int) int
+		Website                     func(childComplexity int) int
 	}
 
 	AssetHistoryConnection struct {
@@ -198,6 +237,93 @@ type ComplexityRoot struct {
 	}
 
 	AssetHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	CampaignHistory struct {
+		AssessmentID           func(childComplexity int) int
+		CampaignType           func(childComplexity int) int
+		CompletedAt            func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		Description            func(childComplexity int) int
+		DisplayID              func(childComplexity int) int
+		DueDate                func(childComplexity int) int
+		EntityID               func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		InternalOwner          func(childComplexity int) int
+		InternalOwnerGroupID   func(childComplexity int) int
+		InternalOwnerUserID    func(childComplexity int) int
+		IsActive               func(childComplexity int) int
+		IsRecurring            func(childComplexity int) int
+		LastResentAt           func(childComplexity int) int
+		LastRunAt              func(childComplexity int) int
+		LaunchedAt             func(childComplexity int) int
+		Metadata               func(childComplexity int) int
+		Name                   func(childComplexity int) int
+		NextRunAt              func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		RecipientCount         func(childComplexity int) int
+		RecurrenceCron         func(childComplexity int) int
+		RecurrenceEndAt        func(childComplexity int) int
+		RecurrenceFrequency    func(childComplexity int) int
+		RecurrenceInterval     func(childComplexity int) int
+		RecurrenceTimezone     func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		ResendCount            func(childComplexity int) int
+		ScheduledAt            func(childComplexity int) int
+		Status                 func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		TemplateID             func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		WorkflowEligibleMarker func(childComplexity int) int
+	}
+
+	CampaignHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	CampaignHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	CampaignTargetHistory struct {
+		CampaignID             func(childComplexity int) int
+		CompletedAt            func(childComplexity int) int
+		ContactID              func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		Email                  func(childComplexity int) int
+		FullName               func(childComplexity int) int
+		GroupID                func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		Metadata               func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		SentAt                 func(childComplexity int) int
+		Status                 func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		UserID                 func(childComplexity int) int
+		WorkflowEligibleMarker func(childComplexity int) int
+	}
+
+	CampaignTargetHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	CampaignTargetHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
 	}
@@ -250,6 +376,8 @@ type ComplexityRoot struct {
 		Description                func(childComplexity int) int
 		DescriptionJSON            func(childComplexity int) int
 		DisplayID                  func(childComplexity int) int
+		EnvironmentID              func(childComplexity int) int
+		EnvironmentName            func(childComplexity int) int
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
 		HistoryTime                func(childComplexity int) int
@@ -266,6 +394,8 @@ type ComplexityRoot struct {
 		ReferenceID                func(childComplexity int) int
 		References                 func(childComplexity int) int
 		ResponsiblePartyID         func(childComplexity int) int
+		ScopeID                    func(childComplexity int) int
+		ScopeName                  func(childComplexity int) int
 		Source                     func(childComplexity int) int
 		StandardID                 func(childComplexity int) int
 		Status                     func(childComplexity int) int
@@ -433,6 +563,8 @@ type ComplexityRoot struct {
 		DirectorySyncRunID func(childComplexity int) int
 		DisplayID          func(childComplexity int) int
 		DisplayName        func(childComplexity int) int
+		EnvironmentID      func(childComplexity int) int
+		EnvironmentName    func(childComplexity int) int
 		ExternalID         func(childComplexity int) int
 		FamilyName         func(childComplexity int) int
 		GivenName          func(childComplexity int) int
@@ -451,6 +583,8 @@ type ComplexityRoot struct {
 		ProfileHash        func(childComplexity int) int
 		RawProfileFileID   func(childComplexity int) int
 		Ref                func(childComplexity int) int
+		ScopeID            func(childComplexity int) int
+		ScopeName          func(childComplexity int) int
 		SecondaryKey       func(childComplexity int) int
 		SourceVersion      func(childComplexity int) int
 		Status             func(childComplexity int) int
@@ -479,6 +613,8 @@ type ComplexityRoot struct {
 		DisplayID              func(childComplexity int) int
 		DisplayName            func(childComplexity int) int
 		Email                  func(childComplexity int) int
+		EnvironmentID          func(childComplexity int) int
+		EnvironmentName        func(childComplexity int) int
 		ExternalID             func(childComplexity int) int
 		ExternalSharingAllowed func(childComplexity int) int
 		HistoryTime            func(childComplexity int) int
@@ -492,6 +628,8 @@ type ComplexityRoot struct {
 		ProfileHash            func(childComplexity int) int
 		RawProfileFileID       func(childComplexity int) int
 		Ref                    func(childComplexity int) int
+		ScopeID                func(childComplexity int) int
+		ScopeName              func(childComplexity int) int
 		SourceVersion          func(childComplexity int) int
 		Status                 func(childComplexity int) int
 		Tags                   func(childComplexity int) int
@@ -517,6 +655,8 @@ type ComplexityRoot struct {
 		DirectoryGroupID   func(childComplexity int) int
 		DirectorySyncRunID func(childComplexity int) int
 		DisplayID          func(childComplexity int) int
+		EnvironmentID      func(childComplexity int) int
+		EnvironmentName    func(childComplexity int) int
 		FirstSeenAt        func(childComplexity int) int
 		HistoryTime        func(childComplexity int) int
 		ID                 func(childComplexity int) int
@@ -529,6 +669,8 @@ type ComplexityRoot struct {
 		OwnerID            func(childComplexity int) int
 		Ref                func(childComplexity int) int
 		Role               func(childComplexity int) int
+		ScopeID            func(childComplexity int) int
+		ScopeName          func(childComplexity int) int
 		Source             func(childComplexity int) int
 		UpdatedAt          func(childComplexity int) int
 		UpdatedBy          func(childComplexity int) int
@@ -571,18 +713,22 @@ type ComplexityRoot struct {
 	}
 
 	DocumentDataHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		Data        func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		TemplateID  func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Data            func(childComplexity int) int
+		EnvironmentID   func(childComplexity int) int
+		EnvironmentName func(childComplexity int) int
+		HistoryTime     func(childComplexity int) int
+		ID              func(childComplexity int) int
+		Operation       func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		Ref             func(childComplexity int) int
+		ScopeID         func(childComplexity int) int
+		ScopeName       func(childComplexity int) int
+		Tags            func(childComplexity int) int
+		TemplateID      func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
 	}
 
 	DocumentDataHistoryConnection struct {
@@ -597,25 +743,67 @@ type ComplexityRoot struct {
 	}
 
 	EntityHistory struct {
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Description      func(childComplexity int) int
-		DisplayName      func(childComplexity int) int
-		Domains          func(childComplexity int) int
-		EntityTypeID     func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		Status           func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		AnnualSpend                           func(childComplexity int) int
+		ApprovedForUse                        func(childComplexity int) int
+		AutoRenews                            func(childComplexity int) int
+		BillingModel                          func(childComplexity int) int
+		ContractEndDate                       func(childComplexity int) int
+		ContractRenewalAt                     func(childComplexity int) int
+		ContractStartDate                     func(childComplexity int) int
+		CreatedAt                             func(childComplexity int) int
+		CreatedBy                             func(childComplexity int) int
+		Description                           func(childComplexity int) int
+		DisplayName                           func(childComplexity int) int
+		Domains                               func(childComplexity int) int
+		EntityRelationshipStateID             func(childComplexity int) int
+		EntityRelationshipStateName           func(childComplexity int) int
+		EntitySecurityQuestionnaireStatusID   func(childComplexity int) int
+		EntitySecurityQuestionnaireStatusName func(childComplexity int) int
+		EntitySourceTypeID                    func(childComplexity int) int
+		EntitySourceTypeName                  func(childComplexity int) int
+		EntityTypeID                          func(childComplexity int) int
+		EnvironmentID                         func(childComplexity int) int
+		EnvironmentName                       func(childComplexity int) int
+		HasSoc2                               func(childComplexity int) int
+		HistoryTime                           func(childComplexity int) int
+		ID                                    func(childComplexity int) int
+		InternalNotes                         func(childComplexity int) int
+		InternalOwner                         func(childComplexity int) int
+		InternalOwnerGroupID                  func(childComplexity int) int
+		InternalOwnerUserID                   func(childComplexity int) int
+		LastReviewedAt                        func(childComplexity int) int
+		LinkedAssetIds                        func(childComplexity int) int
+		Links                                 func(childComplexity int) int
+		MfaEnforced                           func(childComplexity int) int
+		MfaSupported                          func(childComplexity int) int
+		Name                                  func(childComplexity int) int
+		NextReviewAt                          func(childComplexity int) int
+		Operation                             func(childComplexity int) int
+		OwnerID                               func(childComplexity int) int
+		ProvidedServices                      func(childComplexity int) int
+		Ref                                   func(childComplexity int) int
+		RenewalRisk                           func(childComplexity int) int
+		ReviewFrequency                       func(childComplexity int) int
+		ReviewedBy                            func(childComplexity int) int
+		ReviewedByGroupID                     func(childComplexity int) int
+		ReviewedByUserID                      func(childComplexity int) int
+		RiskRating                            func(childComplexity int) int
+		RiskScore                             func(childComplexity int) int
+		SSOEnforced                           func(childComplexity int) int
+		ScopeID                               func(childComplexity int) int
+		ScopeName                             func(childComplexity int) int
+		Soc2PeriodEnd                         func(childComplexity int) int
+		SpendCurrency                         func(childComplexity int) int
+		Status                                func(childComplexity int) int
+		StatusPageURL                         func(childComplexity int) int
+		SystemInternalID                      func(childComplexity int) int
+		SystemOwned                           func(childComplexity int) int
+		Tags                                  func(childComplexity int) int
+		TerminationNoticeDays                 func(childComplexity int) int
+		Tier                                  func(childComplexity int) int
+		UpdatedAt                             func(childComplexity int) int
+		UpdatedBy                             func(childComplexity int) int
+		VendorMetadata                        func(childComplexity int) int
 	}
 
 	EntityHistoryConnection struct {
@@ -664,6 +852,8 @@ type ComplexityRoot struct {
 		CreationDate           func(childComplexity int) int
 		Description            func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
+		EnvironmentID          func(childComplexity int) int
+		EnvironmentName        func(childComplexity int) int
 		HistoryTime            func(childComplexity int) int
 		ID                     func(childComplexity int) int
 		IsAutomated            func(childComplexity int) int
@@ -672,6 +862,8 @@ type ComplexityRoot struct {
 		OwnerID                func(childComplexity int) int
 		Ref                    func(childComplexity int) int
 		RenewalDate            func(childComplexity int) int
+		ScopeID                func(childComplexity int) int
+		ScopeName              func(childComplexity int) int
 		Source                 func(childComplexity int) int
 		Status                 func(childComplexity int) int
 		Tags                   func(childComplexity int) int
@@ -698,6 +890,8 @@ type ComplexityRoot struct {
 		CreatedBy             func(childComplexity int) int
 		DetectedContentType   func(childComplexity int) int
 		DetectedMimeType      func(childComplexity int) int
+		EnvironmentID         func(childComplexity int) int
+		EnvironmentName       func(childComplexity int) int
 		HistoryTime           func(childComplexity int) int
 		ID                    func(childComplexity int) int
 		InternalNotes         func(childComplexity int) int
@@ -710,6 +904,8 @@ type ComplexityRoot struct {
 		ProvidedFileName      func(childComplexity int) int
 		ProvidedFileSize      func(childComplexity int) int
 		Ref                   func(childComplexity int) int
+		ScopeID               func(childComplexity int) int
+		ScopeName             func(childComplexity int) int
 		StoragePath           func(childComplexity int) int
 		StorageProvider       func(childComplexity int) int
 		StorageRegion         func(childComplexity int) int
@@ -776,6 +972,8 @@ type ComplexityRoot struct {
 		Description        func(childComplexity int) int
 		DisplayID          func(childComplexity int) int
 		DisplayName        func(childComplexity int) int
+		EnvironmentID      func(childComplexity int) int
+		EnvironmentName    func(childComplexity int) int
 		EventTime          func(childComplexity int) int
 		Exploitability     func(childComplexity int) int
 		ExternalID         func(childComplexity int) int
@@ -802,6 +1000,8 @@ type ComplexityRoot struct {
 		RemediationSLA     func(childComplexity int) int
 		ReportedAt         func(childComplexity int) int
 		ResourceName       func(childComplexity int) int
+		ScopeID            func(childComplexity int) int
+		ScopeName          func(childComplexity int) int
 		Score              func(childComplexity int) int
 		Severity           func(childComplexity int) int
 		Source             func(childComplexity int) int
@@ -952,10 +1152,64 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	IdentityHolderHistory struct {
+		AlternateEmail         func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		Department             func(childComplexity int) int
+		DisplayID              func(childComplexity int) int
+		Email                  func(childComplexity int) int
+		EmployerEntityID       func(childComplexity int) int
+		EndDate                func(childComplexity int) int
+		EnvironmentID          func(childComplexity int) int
+		EnvironmentName        func(childComplexity int) int
+		ExternalReferenceID    func(childComplexity int) int
+		ExternalUserID         func(childComplexity int) int
+		FullName               func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		IdentityHolderType     func(childComplexity int) int
+		InternalOwner          func(childComplexity int) int
+		InternalOwnerGroupID   func(childComplexity int) int
+		InternalOwnerUserID    func(childComplexity int) int
+		IsActive               func(childComplexity int) int
+		IsOpenlaneUser         func(childComplexity int) int
+		Location               func(childComplexity int) int
+		Metadata               func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		PhoneNumber            func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		ScopeID                func(childComplexity int) int
+		ScopeName              func(childComplexity int) int
+		StartDate              func(childComplexity int) int
+		Status                 func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		Team                   func(childComplexity int) int
+		Title                  func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		UserID                 func(childComplexity int) int
+		WorkflowEligibleMarker func(childComplexity int) int
+	}
+
+	IdentityHolderHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	IdentityHolderHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	IntegrationHistory struct {
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		Description      func(childComplexity int) int
+		EnvironmentID    func(childComplexity int) int
+		EnvironmentName  func(childComplexity int) int
 		HistoryTime      func(childComplexity int) int
 		ID               func(childComplexity int) int
 		IntegrationType  func(childComplexity int) int
@@ -966,6 +1220,8 @@ type ComplexityRoot struct {
 		Operation        func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
 		Ref              func(childComplexity int) int
+		ScopeID          func(childComplexity int) int
+		ScopeName        func(childComplexity int) int
 		SystemInternalID func(childComplexity int) int
 		SystemOwned      func(childComplexity int) int
 		Tags             func(childComplexity int) int
@@ -997,6 +1253,8 @@ type ComplexityRoot struct {
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
 		DisplayID                       func(childComplexity int) int
+		EnvironmentID                   func(childComplexity int) int
+		EnvironmentName                 func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
@@ -1011,6 +1269,8 @@ type ComplexityRoot struct {
 		ReviewDue                       func(childComplexity int) int
 		ReviewFrequency                 func(childComplexity int) int
 		Revision                        func(childComplexity int) int
+		ScopeID                         func(childComplexity int) int
+		ScopeName                       func(childComplexity int) int
 		Status                          func(childComplexity int) int
 		Summary                         func(childComplexity int) int
 		SystemInternalID                func(childComplexity int) int
@@ -1328,6 +1588,78 @@ type ComplexityRoot struct {
 		StartCursor     func(childComplexity int) int
 	}
 
+	PlatformHistory struct {
+		AccessModelID                  func(childComplexity int) int
+		AccessModelName                func(childComplexity int) int
+		BusinessOwner                  func(childComplexity int) int
+		BusinessOwnerGroupID           func(childComplexity int) int
+		BusinessOwnerUserID            func(childComplexity int) int
+		BusinessPurpose                func(childComplexity int) int
+		ContainsPii                    func(childComplexity int) int
+		CostCenter                     func(childComplexity int) int
+		CreatedAt                      func(childComplexity int) int
+		CreatedBy                      func(childComplexity int) int
+		CriticalityID                  func(childComplexity int) int
+		CriticalityName                func(childComplexity int) int
+		DataFlowSummary                func(childComplexity int) int
+		Description                    func(childComplexity int) int
+		DisplayID                      func(childComplexity int) int
+		EncryptionStatusID             func(childComplexity int) int
+		EncryptionStatusName           func(childComplexity int) int
+		EnvironmentID                  func(childComplexity int) int
+		EnvironmentName                func(childComplexity int) int
+		EstimatedMonthlyCost           func(childComplexity int) int
+		ExternalReferenceID            func(childComplexity int) int
+		HistoryTime                    func(childComplexity int) int
+		ID                             func(childComplexity int) int
+		InternalOwner                  func(childComplexity int) int
+		InternalOwnerGroupID           func(childComplexity int) int
+		InternalOwnerUserID            func(childComplexity int) int
+		Metadata                       func(childComplexity int) int
+		Name                           func(childComplexity int) int
+		Operation                      func(childComplexity int) int
+		OwnerID                        func(childComplexity int) int
+		PhysicalLocation               func(childComplexity int) int
+		PlatformDataClassificationID   func(childComplexity int) int
+		PlatformDataClassificationName func(childComplexity int) int
+		PlatformKindID                 func(childComplexity int) int
+		PlatformKindName               func(childComplexity int) int
+		PlatformOwnerID                func(childComplexity int) int
+		PurchaseDate                   func(childComplexity int) int
+		Ref                            func(childComplexity int) int
+		Region                         func(childComplexity int) int
+		ScopeID                        func(childComplexity int) int
+		ScopeName                      func(childComplexity int) int
+		ScopeStatement                 func(childComplexity int) int
+		SecurityOwner                  func(childComplexity int) int
+		SecurityOwnerGroupID           func(childComplexity int) int
+		SecurityOwnerUserID            func(childComplexity int) int
+		SecurityTierID                 func(childComplexity int) int
+		SecurityTierName               func(childComplexity int) int
+		SourceIdentifier               func(childComplexity int) int
+		SourceType                     func(childComplexity int) int
+		Status                         func(childComplexity int) int
+		Tags                           func(childComplexity int) int
+		TechnicalOwner                 func(childComplexity int) int
+		TechnicalOwnerGroupID          func(childComplexity int) int
+		TechnicalOwnerUserID           func(childComplexity int) int
+		TrustBoundaryDescription       func(childComplexity int) int
+		UpdatedAt                      func(childComplexity int) int
+		UpdatedBy                      func(childComplexity int) int
+		WorkflowEligibleMarker         func(childComplexity int) int
+	}
+
+	PlatformHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	PlatformHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	ProcedureHistory struct {
 		ApprovalRequired                func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
@@ -1341,6 +1673,8 @@ type ComplexityRoot struct {
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
 		DisplayID                       func(childComplexity int) int
+		EnvironmentID                   func(childComplexity int) int
+		EnvironmentName                 func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
@@ -1355,6 +1689,8 @@ type ComplexityRoot struct {
 		ReviewDue                       func(childComplexity int) int
 		ReviewFrequency                 func(childComplexity int) int
 		Revision                        func(childComplexity int) int
+		ScopeID                         func(childComplexity int) int
+		ScopeName                       func(childComplexity int) int
 		Status                          func(childComplexity int) int
 		Summary                         func(childComplexity int) int
 		SystemInternalID                func(childComplexity int) int
@@ -1448,6 +1784,8 @@ type ComplexityRoot struct {
 		AssessmentHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentHistoryOrder, where *historygenerated.AssessmentHistoryWhereInput) int
 		AssessmentResponseHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentResponseHistoryOrder, where *historygenerated.AssessmentResponseHistoryWhereInput) int
 		AssetHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssetHistoryOrder, where *historygenerated.AssetHistoryWhereInput) int
+		CampaignHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CampaignHistoryOrder, where *historygenerated.CampaignHistoryWhereInput) int
+		CampaignTargetHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CampaignTargetHistoryOrder, where *historygenerated.CampaignTargetHistoryWhereInput) int
 		ContactHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ContactHistoryOrder, where *historygenerated.ContactHistoryWhereInput) int
 		ControlHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ControlHistoryOrder, where *historygenerated.ControlHistoryWhereInput) int
 		ControlImplementationHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ControlImplementationHistoryOrder, where *historygenerated.ControlImplementationHistoryWhereInput) int
@@ -1469,6 +1807,7 @@ type ComplexityRoot struct {
 		GroupMembershipHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.GroupMembershipHistoryOrder, where *historygenerated.GroupMembershipHistoryWhereInput) int
 		GroupSettingHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.GroupSettingHistoryOrder, where *historygenerated.GroupSettingHistoryWhereInput) int
 		HushHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.HushHistoryOrder, where *historygenerated.HushHistoryWhereInput) int
+		IdentityHolderHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.IdentityHolderHistoryOrder, where *historygenerated.IdentityHolderHistoryWhereInput) int
 		IntegrationHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.IntegrationHistoryOrder, where *historygenerated.IntegrationHistoryWhereInput) int
 		InternalPolicyHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.InternalPolicyHistoryOrder, where *historygenerated.InternalPolicyHistoryWhereInput) int
 		JobTemplateHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.JobTemplateHistoryOrder, where *historygenerated.JobTemplateHistoryWhereInput) int
@@ -1482,6 +1821,7 @@ type ComplexityRoot struct {
 		OrgSubscriptionHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrgSubscriptionHistoryOrder, where *historygenerated.OrgSubscriptionHistoryWhereInput) int
 		OrganizationHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrganizationHistoryOrder, where *historygenerated.OrganizationHistoryWhereInput) int
 		OrganizationSettingHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrganizationSettingHistoryOrder, where *historygenerated.OrganizationSettingHistoryWhereInput) int
+		PlatformHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.PlatformHistoryOrder, where *historygenerated.PlatformHistoryWhereInput) int
 		ProcedureHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ProcedureHistoryOrder, where *historygenerated.ProcedureHistoryWhereInput) int
 		ProgramHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ProgramHistoryOrder, where *historygenerated.ProgramHistoryWhereInput) int
 		ProgramMembershipHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ProgramMembershipHistoryOrder, where *historygenerated.ProgramMembershipHistoryWhereInput) int
@@ -1520,6 +1860,8 @@ type ComplexityRoot struct {
 		CreatedBy        func(childComplexity int) int
 		DisplayID        func(childComplexity int) int
 		DueAt            func(childComplexity int) int
+		EnvironmentID    func(childComplexity int) int
+		EnvironmentName  func(childComplexity int) int
 		Error            func(childComplexity int) int
 		Explanation      func(childComplexity int) int
 		ExternalID       func(childComplexity int) int
@@ -1538,6 +1880,8 @@ type ComplexityRoot struct {
 		PullRequestURI   func(childComplexity int) int
 		Ref              func(childComplexity int) int
 		RepositoryURI    func(childComplexity int) int
+		ScopeID          func(childComplexity int) int
+		ScopeName        func(childComplexity int) int
 		Source           func(childComplexity int) int
 		State            func(childComplexity int) int
 		Summary          func(childComplexity int) int
@@ -1569,6 +1913,8 @@ type ComplexityRoot struct {
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		Details          func(childComplexity int) int
+		EnvironmentID    func(childComplexity int) int
+		EnvironmentName  func(childComplexity int) int
 		ExternalID       func(childComplexity int) int
 		ExternalOwnerID  func(childComplexity int) int
 		ExternalURI      func(childComplexity int) int
@@ -1584,6 +1930,8 @@ type ComplexityRoot struct {
 		Reporter         func(childComplexity int) int
 		ReviewedAt       func(childComplexity int) int
 		ReviewerID       func(childComplexity int) int
+		ScopeID          func(childComplexity int) int
+		ScopeName        func(childComplexity int) int
 		Source           func(childComplexity int) int
 		State            func(childComplexity int) int
 		Summary          func(childComplexity int) int
@@ -1615,6 +1963,8 @@ type ComplexityRoot struct {
 		Details           func(childComplexity int) int
 		DetailsJSON       func(childComplexity int) int
 		DisplayID         func(childComplexity int) int
+		EnvironmentID     func(childComplexity int) int
+		EnvironmentName   func(childComplexity int) int
 		HistoryTime       func(childComplexity int) int
 		ID                func(childComplexity int) int
 		Impact            func(childComplexity int) int
@@ -1629,6 +1979,8 @@ type ComplexityRoot struct {
 		RiskCategoryName  func(childComplexity int) int
 		RiskKindID        func(childComplexity int) int
 		RiskKindName      func(childComplexity int) int
+		ScopeID           func(childComplexity int) int
+		ScopeName         func(childComplexity int) int
 		Score             func(childComplexity int) int
 		StakeholderID     func(childComplexity int) int
 		Status            func(childComplexity int) int
@@ -1649,20 +2001,38 @@ type ComplexityRoot struct {
 	}
 
 	ScanHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Metadata    func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		ScanType    func(childComplexity int) int
-		Status      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Target      func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		AssignedTo            func(childComplexity int) int
+		AssignedToGroupID     func(childComplexity int) int
+		AssignedToUserID      func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		EnvironmentID         func(childComplexity int) int
+		EnvironmentName       func(childComplexity int) int
+		GeneratedByPlatformID func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		NextScanRunAt         func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		PerformedBy           func(childComplexity int) int
+		PerformedByGroupID    func(childComplexity int) int
+		PerformedByUserID     func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		ReviewedBy            func(childComplexity int) int
+		ReviewedByGroupID     func(childComplexity int) int
+		ReviewedByUserID      func(childComplexity int) int
+		ScanDate              func(childComplexity int) int
+		ScanSchedule          func(childComplexity int) int
+		ScanType              func(childComplexity int) int
+		ScopeID               func(childComplexity int) int
+		ScopeName             func(childComplexity int) int
+		Status                func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		Target                func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		VulnerabilityIds      func(childComplexity int) int
 	}
 
 	ScanHistoryConnection struct {
@@ -1846,6 +2216,8 @@ type ComplexityRoot struct {
 		DetailsJSON          func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		Due                  func(childComplexity int) int
+		EnvironmentID        func(childComplexity int) int
+		EnvironmentName      func(childComplexity int) int
 		ExternalReferenceURL func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -1854,6 +2226,8 @@ type ComplexityRoot struct {
 		OwnerID              func(childComplexity int) int
 		ParentTaskID         func(childComplexity int) int
 		Ref                  func(childComplexity int) int
+		ScopeID              func(childComplexity int) int
+		ScopeName            func(childComplexity int) int
 		Status               func(childComplexity int) int
 		SystemGenerated      func(childComplexity int) int
 		Tags                 func(childComplexity int) int
@@ -1879,6 +2253,8 @@ type ComplexityRoot struct {
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		Description      func(childComplexity int) int
+		EnvironmentID    func(childComplexity int) int
+		EnvironmentName  func(childComplexity int) int
 		HistoryTime      func(childComplexity int) int
 		ID               func(childComplexity int) int
 		InternalNotes    func(childComplexity int) int
@@ -1888,6 +2264,8 @@ type ComplexityRoot struct {
 		Operation        func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
 		Ref              func(childComplexity int) int
+		ScopeID          func(childComplexity int) int
+		ScopeName        func(childComplexity int) int
 		SystemInternalID func(childComplexity int) int
 		SystemOwned      func(childComplexity int) int
 		Tags             func(childComplexity int) int
@@ -2059,6 +2437,7 @@ type ComplexityRoot struct {
 	TrustCenterSettingHistory struct {
 		AccentColor              func(childComplexity int) int
 		BackgroundColor          func(childComplexity int) int
+		CompanyDescription       func(childComplexity int) int
 		CompanyDomain            func(childComplexity int) int
 		CompanyName              func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
@@ -2239,6 +2618,8 @@ type ComplexityRoot struct {
 		DiscoveredAt     func(childComplexity int) int
 		DisplayID        func(childComplexity int) int
 		DisplayName      func(childComplexity int) int
+		EnvironmentID    func(childComplexity int) int
+		EnvironmentName  func(childComplexity int) int
 		Exploitability   func(childComplexity int) int
 		ExternalID       func(childComplexity int) int
 		ExternalOwnerID  func(childComplexity int) int
@@ -2260,6 +2641,8 @@ type ComplexityRoot struct {
 		Ref              func(childComplexity int) int
 		References       func(childComplexity int) int
 		RemediationSLA   func(childComplexity int) int
+		ScopeID          func(childComplexity int) int
+		ScopeName        func(childComplexity int) int
 		Score            func(childComplexity int) int
 		Severity         func(childComplexity int) int
 		Source           func(childComplexity int) int
@@ -2425,6 +2808,8 @@ type ComplexityRoot struct {
 
 	WorkflowInstanceHistory struct {
 		ActionPlanID         func(childComplexity int) int
+		CampaignID           func(childComplexity int) int
+		CampaignTargetID     func(childComplexity int) int
 		Context              func(childComplexity int) int
 		ControlID            func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
@@ -2435,10 +2820,12 @@ type ComplexityRoot struct {
 		EvidenceID           func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
+		IdentityHolderID     func(childComplexity int) int
 		InternalPolicyID     func(childComplexity int) int
 		LastEvaluatedAt      func(childComplexity int) int
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
+		PlatformID           func(childComplexity int) int
 		ProcedureID          func(childComplexity int) int
 		Ref                  func(childComplexity int) int
 		State                func(childComplexity int) int
@@ -2463,6 +2850,8 @@ type ComplexityRoot struct {
 
 	WorkflowObjectRefHistory struct {
 		ActionPlanID          func(childComplexity int) int
+		CampaignID            func(childComplexity int) int
+		CampaignTargetID      func(childComplexity int) int
 		ControlID             func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
@@ -2474,9 +2863,11 @@ type ComplexityRoot struct {
 		FindingID             func(childComplexity int) int
 		HistoryTime           func(childComplexity int) int
 		ID                    func(childComplexity int) int
+		IdentityHolderID      func(childComplexity int) int
 		InternalPolicyID      func(childComplexity int) int
 		Operation             func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
+		PlatformID            func(childComplexity int) int
 		ProcedureID           func(childComplexity int) int
 		Ref                   func(childComplexity int) int
 		SubcontrolID          func(childComplexity int) int
@@ -3035,6 +3426,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssessmentResponseHistory.AssignedAt(childComplexity), true
 
+	case "AssessmentResponseHistory.campaignID":
+		if e.complexity.AssessmentResponseHistory.CampaignID == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponseHistory.CampaignID(childComplexity), true
+
 	case "AssessmentResponseHistory.completedAt":
 		if e.complexity.AssessmentResponseHistory.CompletedAt == nil {
 			break
@@ -3077,6 +3475,55 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssessmentResponseHistory.Email(childComplexity), true
 
+	case "AssessmentResponseHistory.emailClickCount":
+		if e.complexity.AssessmentResponseHistory.EmailClickCount == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponseHistory.EmailClickCount(childComplexity), true
+
+	case "AssessmentResponseHistory.emailClickedAt":
+		if e.complexity.AssessmentResponseHistory.EmailClickedAt == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponseHistory.EmailClickedAt(childComplexity), true
+
+	case "AssessmentResponseHistory.emailDeliveredAt":
+		if e.complexity.AssessmentResponseHistory.EmailDeliveredAt == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponseHistory.EmailDeliveredAt(childComplexity), true
+
+	case "AssessmentResponseHistory.emailMetadata":
+		if e.complexity.AssessmentResponseHistory.EmailMetadata == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponseHistory.EmailMetadata(childComplexity), true
+
+	case "AssessmentResponseHistory.emailOpenCount":
+		if e.complexity.AssessmentResponseHistory.EmailOpenCount == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponseHistory.EmailOpenCount(childComplexity), true
+
+	case "AssessmentResponseHistory.emailOpenedAt":
+		if e.complexity.AssessmentResponseHistory.EmailOpenedAt == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponseHistory.EmailOpenedAt(childComplexity), true
+
+	case "AssessmentResponseHistory.entityID":
+		if e.complexity.AssessmentResponseHistory.EntityID == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponseHistory.EntityID(childComplexity), true
+
 	case "AssessmentResponseHistory.historyTime":
 		if e.complexity.AssessmentResponseHistory.HistoryTime == nil {
 			break
@@ -3090,6 +3537,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssessmentResponseHistory.ID(childComplexity), true
+
+	case "AssessmentResponseHistory.identityHolderID":
+		if e.complexity.AssessmentResponseHistory.IdentityHolderID == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponseHistory.IdentityHolderID(childComplexity), true
+
+	case "AssessmentResponseHistory.isTest":
+		if e.complexity.AssessmentResponseHistory.IsTest == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponseHistory.IsTest(childComplexity), true
+
+	case "AssessmentResponseHistory.lastEmailEventAt":
+		if e.complexity.AssessmentResponseHistory.LastEmailEventAt == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponseHistory.LastEmailEventAt(childComplexity), true
 
 	case "AssessmentResponseHistory.operation":
 		if e.complexity.AssessmentResponseHistory.Operation == nil {
@@ -3182,6 +3650,48 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssessmentResponseHistoryEdge.Node(childComplexity), true
 
+	case "AssetHistory.accessModelID":
+		if e.complexity.AssetHistory.AccessModelID == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.AccessModelID(childComplexity), true
+
+	case "AssetHistory.accessModelName":
+		if e.complexity.AssetHistory.AccessModelName == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.AccessModelName(childComplexity), true
+
+	case "AssetHistory.assetDataClassificationID":
+		if e.complexity.AssetHistory.AssetDataClassificationID == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.AssetDataClassificationID(childComplexity), true
+
+	case "AssetHistory.assetDataClassificationName":
+		if e.complexity.AssetHistory.AssetDataClassificationName == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.AssetDataClassificationName(childComplexity), true
+
+	case "AssetHistory.assetSubtypeID":
+		if e.complexity.AssetHistory.AssetSubtypeID == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.AssetSubtypeID(childComplexity), true
+
+	case "AssetHistory.assetSubtypeName":
+		if e.complexity.AssetHistory.AssetSubtypeName == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.AssetSubtypeName(childComplexity), true
+
 	case "AssetHistory.assetType":
 		if e.complexity.AssetHistory.AssetType == nil {
 			break
@@ -3195,6 +3705,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssetHistory.Categories(childComplexity), true
+
+	case "AssetHistory.containsPii":
+		if e.complexity.AssetHistory.ContainsPii == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.ContainsPii(childComplexity), true
+
+	case "AssetHistory.costCenter":
+		if e.complexity.AssetHistory.CostCenter == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.CostCenter(childComplexity), true
 
 	case "AssetHistory.cpe":
 		if e.complexity.AssetHistory.Cpe == nil {
@@ -3217,12 +3741,61 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssetHistory.CreatedBy(childComplexity), true
 
+	case "AssetHistory.criticalityID":
+		if e.complexity.AssetHistory.CriticalityID == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.CriticalityID(childComplexity), true
+
+	case "AssetHistory.criticalityName":
+		if e.complexity.AssetHistory.CriticalityName == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.CriticalityName(childComplexity), true
+
 	case "AssetHistory.description":
 		if e.complexity.AssetHistory.Description == nil {
 			break
 		}
 
 		return e.complexity.AssetHistory.Description(childComplexity), true
+
+	case "AssetHistory.encryptionStatusID":
+		if e.complexity.AssetHistory.EncryptionStatusID == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.EncryptionStatusID(childComplexity), true
+
+	case "AssetHistory.encryptionStatusName":
+		if e.complexity.AssetHistory.EncryptionStatusName == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.EncryptionStatusName(childComplexity), true
+
+	case "AssetHistory.environmentID":
+		if e.complexity.AssetHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.EnvironmentID(childComplexity), true
+
+	case "AssetHistory.environmentName":
+		if e.complexity.AssetHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.EnvironmentName(childComplexity), true
+
+	case "AssetHistory.estimatedMonthlyCost":
+		if e.complexity.AssetHistory.EstimatedMonthlyCost == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.EstimatedMonthlyCost(childComplexity), true
 
 	case "AssetHistory.historyTime":
 		if e.complexity.AssetHistory.HistoryTime == nil {
@@ -3252,6 +3825,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssetHistory.InternalNotes(childComplexity), true
 
+	case "AssetHistory.internalOwner":
+		if e.complexity.AssetHistory.InternalOwner == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.InternalOwner(childComplexity), true
+
+	case "AssetHistory.internalOwnerGroupID":
+		if e.complexity.AssetHistory.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.InternalOwnerGroupID(childComplexity), true
+
+	case "AssetHistory.internalOwnerUserID":
+		if e.complexity.AssetHistory.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.InternalOwnerUserID(childComplexity), true
+
 	case "AssetHistory.name":
 		if e.complexity.AssetHistory.Name == nil {
 			break
@@ -3273,12 +3867,82 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssetHistory.OwnerID(childComplexity), true
 
+	case "AssetHistory.physicalLocation":
+		if e.complexity.AssetHistory.PhysicalLocation == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.PhysicalLocation(childComplexity), true
+
+	case "AssetHistory.purchaseDate":
+		if e.complexity.AssetHistory.PurchaseDate == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.PurchaseDate(childComplexity), true
+
 	case "AssetHistory.ref":
 		if e.complexity.AssetHistory.Ref == nil {
 			break
 		}
 
 		return e.complexity.AssetHistory.Ref(childComplexity), true
+
+	case "AssetHistory.region":
+		if e.complexity.AssetHistory.Region == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.Region(childComplexity), true
+
+	case "AssetHistory.scopeID":
+		if e.complexity.AssetHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.ScopeID(childComplexity), true
+
+	case "AssetHistory.scopeName":
+		if e.complexity.AssetHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.ScopeName(childComplexity), true
+
+	case "AssetHistory.securityTierID":
+		if e.complexity.AssetHistory.SecurityTierID == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.SecurityTierID(childComplexity), true
+
+	case "AssetHistory.securityTierName":
+		if e.complexity.AssetHistory.SecurityTierName == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.SecurityTierName(childComplexity), true
+
+	case "AssetHistory.sourceIdentifier":
+		if e.complexity.AssetHistory.SourceIdentifier == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.SourceIdentifier(childComplexity), true
+
+	case "AssetHistory.sourcePlatformID":
+		if e.complexity.AssetHistory.SourcePlatformID == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.SourcePlatformID(childComplexity), true
+
+	case "AssetHistory.sourceType":
+		if e.complexity.AssetHistory.SourceType == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.SourceType(childComplexity), true
 
 	case "AssetHistory.systemInternalID":
 		if e.complexity.AssetHistory.SystemInternalID == nil {
@@ -3356,6 +4020,489 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssetHistoryEdge.Node(childComplexity), true
+
+	case "CampaignHistory.assessmentID":
+		if e.complexity.CampaignHistory.AssessmentID == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.AssessmentID(childComplexity), true
+
+	case "CampaignHistory.campaignType":
+		if e.complexity.CampaignHistory.CampaignType == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.CampaignType(childComplexity), true
+
+	case "CampaignHistory.completedAt":
+		if e.complexity.CampaignHistory.CompletedAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.CompletedAt(childComplexity), true
+
+	case "CampaignHistory.createdAt":
+		if e.complexity.CampaignHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.CreatedAt(childComplexity), true
+
+	case "CampaignHistory.createdBy":
+		if e.complexity.CampaignHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.CreatedBy(childComplexity), true
+
+	case "CampaignHistory.description":
+		if e.complexity.CampaignHistory.Description == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.Description(childComplexity), true
+
+	case "CampaignHistory.displayID":
+		if e.complexity.CampaignHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.DisplayID(childComplexity), true
+
+	case "CampaignHistory.dueDate":
+		if e.complexity.CampaignHistory.DueDate == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.DueDate(childComplexity), true
+
+	case "CampaignHistory.entityID":
+		if e.complexity.CampaignHistory.EntityID == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.EntityID(childComplexity), true
+
+	case "CampaignHistory.historyTime":
+		if e.complexity.CampaignHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.HistoryTime(childComplexity), true
+
+	case "CampaignHistory.id":
+		if e.complexity.CampaignHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.ID(childComplexity), true
+
+	case "CampaignHistory.internalOwner":
+		if e.complexity.CampaignHistory.InternalOwner == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.InternalOwner(childComplexity), true
+
+	case "CampaignHistory.internalOwnerGroupID":
+		if e.complexity.CampaignHistory.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.InternalOwnerGroupID(childComplexity), true
+
+	case "CampaignHistory.internalOwnerUserID":
+		if e.complexity.CampaignHistory.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.InternalOwnerUserID(childComplexity), true
+
+	case "CampaignHistory.isActive":
+		if e.complexity.CampaignHistory.IsActive == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.IsActive(childComplexity), true
+
+	case "CampaignHistory.isRecurring":
+		if e.complexity.CampaignHistory.IsRecurring == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.IsRecurring(childComplexity), true
+
+	case "CampaignHistory.lastResentAt":
+		if e.complexity.CampaignHistory.LastResentAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.LastResentAt(childComplexity), true
+
+	case "CampaignHistory.lastRunAt":
+		if e.complexity.CampaignHistory.LastRunAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.LastRunAt(childComplexity), true
+
+	case "CampaignHistory.launchedAt":
+		if e.complexity.CampaignHistory.LaunchedAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.LaunchedAt(childComplexity), true
+
+	case "CampaignHistory.metadata":
+		if e.complexity.CampaignHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.Metadata(childComplexity), true
+
+	case "CampaignHistory.name":
+		if e.complexity.CampaignHistory.Name == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.Name(childComplexity), true
+
+	case "CampaignHistory.nextRunAt":
+		if e.complexity.CampaignHistory.NextRunAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.NextRunAt(childComplexity), true
+
+	case "CampaignHistory.operation":
+		if e.complexity.CampaignHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.Operation(childComplexity), true
+
+	case "CampaignHistory.ownerID":
+		if e.complexity.CampaignHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.OwnerID(childComplexity), true
+
+	case "CampaignHistory.recipientCount":
+		if e.complexity.CampaignHistory.RecipientCount == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.RecipientCount(childComplexity), true
+
+	case "CampaignHistory.recurrenceCron":
+		if e.complexity.CampaignHistory.RecurrenceCron == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.RecurrenceCron(childComplexity), true
+
+	case "CampaignHistory.recurrenceEndAt":
+		if e.complexity.CampaignHistory.RecurrenceEndAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.RecurrenceEndAt(childComplexity), true
+
+	case "CampaignHistory.recurrenceFrequency":
+		if e.complexity.CampaignHistory.RecurrenceFrequency == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.RecurrenceFrequency(childComplexity), true
+
+	case "CampaignHistory.recurrenceInterval":
+		if e.complexity.CampaignHistory.RecurrenceInterval == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.RecurrenceInterval(childComplexity), true
+
+	case "CampaignHistory.recurrenceTimezone":
+		if e.complexity.CampaignHistory.RecurrenceTimezone == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.RecurrenceTimezone(childComplexity), true
+
+	case "CampaignHistory.ref":
+		if e.complexity.CampaignHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.Ref(childComplexity), true
+
+	case "CampaignHistory.resendCount":
+		if e.complexity.CampaignHistory.ResendCount == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.ResendCount(childComplexity), true
+
+	case "CampaignHistory.scheduledAt":
+		if e.complexity.CampaignHistory.ScheduledAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.ScheduledAt(childComplexity), true
+
+	case "CampaignHistory.status":
+		if e.complexity.CampaignHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.Status(childComplexity), true
+
+	case "CampaignHistory.tags":
+		if e.complexity.CampaignHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.Tags(childComplexity), true
+
+	case "CampaignHistory.templateID":
+		if e.complexity.CampaignHistory.TemplateID == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.TemplateID(childComplexity), true
+
+	case "CampaignHistory.updatedAt":
+		if e.complexity.CampaignHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.UpdatedAt(childComplexity), true
+
+	case "CampaignHistory.updatedBy":
+		if e.complexity.CampaignHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.UpdatedBy(childComplexity), true
+
+	case "CampaignHistory.workflowEligibleMarker":
+		if e.complexity.CampaignHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.WorkflowEligibleMarker(childComplexity), true
+
+	case "CampaignHistoryConnection.edges":
+		if e.complexity.CampaignHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistoryConnection.Edges(childComplexity), true
+
+	case "CampaignHistoryConnection.pageInfo":
+		if e.complexity.CampaignHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistoryConnection.PageInfo(childComplexity), true
+
+	case "CampaignHistoryConnection.totalCount":
+		if e.complexity.CampaignHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistoryConnection.TotalCount(childComplexity), true
+
+	case "CampaignHistoryEdge.cursor":
+		if e.complexity.CampaignHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistoryEdge.Cursor(childComplexity), true
+
+	case "CampaignHistoryEdge.node":
+		if e.complexity.CampaignHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistoryEdge.Node(childComplexity), true
+
+	case "CampaignTargetHistory.campaignID":
+		if e.complexity.CampaignTargetHistory.CampaignID == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.CampaignID(childComplexity), true
+
+	case "CampaignTargetHistory.completedAt":
+		if e.complexity.CampaignTargetHistory.CompletedAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.CompletedAt(childComplexity), true
+
+	case "CampaignTargetHistory.contactID":
+		if e.complexity.CampaignTargetHistory.ContactID == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.ContactID(childComplexity), true
+
+	case "CampaignTargetHistory.createdAt":
+		if e.complexity.CampaignTargetHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.CreatedAt(childComplexity), true
+
+	case "CampaignTargetHistory.createdBy":
+		if e.complexity.CampaignTargetHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.CreatedBy(childComplexity), true
+
+	case "CampaignTargetHistory.email":
+		if e.complexity.CampaignTargetHistory.Email == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.Email(childComplexity), true
+
+	case "CampaignTargetHistory.fullName":
+		if e.complexity.CampaignTargetHistory.FullName == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.FullName(childComplexity), true
+
+	case "CampaignTargetHistory.groupID":
+		if e.complexity.CampaignTargetHistory.GroupID == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.GroupID(childComplexity), true
+
+	case "CampaignTargetHistory.historyTime":
+		if e.complexity.CampaignTargetHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.HistoryTime(childComplexity), true
+
+	case "CampaignTargetHistory.id":
+		if e.complexity.CampaignTargetHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.ID(childComplexity), true
+
+	case "CampaignTargetHistory.metadata":
+		if e.complexity.CampaignTargetHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.Metadata(childComplexity), true
+
+	case "CampaignTargetHistory.operation":
+		if e.complexity.CampaignTargetHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.Operation(childComplexity), true
+
+	case "CampaignTargetHistory.ownerID":
+		if e.complexity.CampaignTargetHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.OwnerID(childComplexity), true
+
+	case "CampaignTargetHistory.ref":
+		if e.complexity.CampaignTargetHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.Ref(childComplexity), true
+
+	case "CampaignTargetHistory.sentAt":
+		if e.complexity.CampaignTargetHistory.SentAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.SentAt(childComplexity), true
+
+	case "CampaignTargetHistory.status":
+		if e.complexity.CampaignTargetHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.Status(childComplexity), true
+
+	case "CampaignTargetHistory.updatedAt":
+		if e.complexity.CampaignTargetHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.UpdatedAt(childComplexity), true
+
+	case "CampaignTargetHistory.updatedBy":
+		if e.complexity.CampaignTargetHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.UpdatedBy(childComplexity), true
+
+	case "CampaignTargetHistory.userID":
+		if e.complexity.CampaignTargetHistory.UserID == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.UserID(childComplexity), true
+
+	case "CampaignTargetHistory.workflowEligibleMarker":
+		if e.complexity.CampaignTargetHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistory.WorkflowEligibleMarker(childComplexity), true
+
+	case "CampaignTargetHistoryConnection.edges":
+		if e.complexity.CampaignTargetHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistoryConnection.Edges(childComplexity), true
+
+	case "CampaignTargetHistoryConnection.pageInfo":
+		if e.complexity.CampaignTargetHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistoryConnection.PageInfo(childComplexity), true
+
+	case "CampaignTargetHistoryConnection.totalCount":
+		if e.complexity.CampaignTargetHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistoryConnection.TotalCount(childComplexity), true
+
+	case "CampaignTargetHistoryEdge.cursor":
+		if e.complexity.CampaignTargetHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistoryEdge.Cursor(childComplexity), true
+
+	case "CampaignTargetHistoryEdge.node":
+		if e.complexity.CampaignTargetHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.CampaignTargetHistoryEdge.Node(childComplexity), true
 
 	case "ContactHistory.address":
 		if e.complexity.ContactHistory.Address == nil {
@@ -3623,6 +4770,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlHistory.DisplayID(childComplexity), true
 
+	case "ControlHistory.environmentID":
+		if e.complexity.ControlHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.EnvironmentID(childComplexity), true
+
+	case "ControlHistory.environmentName":
+		if e.complexity.ControlHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.EnvironmentName(childComplexity), true
+
 	case "ControlHistory.evidenceRequests":
 		if e.complexity.ControlHistory.EvidenceRequests == nil {
 			break
@@ -3734,6 +4895,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlHistory.ResponsiblePartyID(childComplexity), true
+
+	case "ControlHistory.scopeID":
+		if e.complexity.ControlHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.ScopeID(childComplexity), true
+
+	case "ControlHistory.scopeName":
+		if e.complexity.ControlHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.ScopeName(childComplexity), true
 
 	case "ControlHistory.source":
 		if e.complexity.ControlHistory.Source == nil {
@@ -4589,6 +5764,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DirectoryAccountHistory.DisplayName(childComplexity), true
 
+	case "DirectoryAccountHistory.environmentID":
+		if e.complexity.DirectoryAccountHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.EnvironmentID(childComplexity), true
+
+	case "DirectoryAccountHistory.environmentName":
+		if e.complexity.DirectoryAccountHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.EnvironmentName(childComplexity), true
+
 	case "DirectoryAccountHistory.externalID":
 		if e.complexity.DirectoryAccountHistory.ExternalID == nil {
 			break
@@ -4714,6 +5903,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DirectoryAccountHistory.Ref(childComplexity), true
+
+	case "DirectoryAccountHistory.scopeID":
+		if e.complexity.DirectoryAccountHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.ScopeID(childComplexity), true
+
+	case "DirectoryAccountHistory.scopeName":
+		if e.complexity.DirectoryAccountHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.ScopeName(childComplexity), true
 
 	case "DirectoryAccountHistory.secondaryKey":
 		if e.complexity.DirectoryAccountHistory.SecondaryKey == nil {
@@ -4848,6 +6051,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DirectoryGroupHistory.Email(childComplexity), true
 
+	case "DirectoryGroupHistory.environmentID":
+		if e.complexity.DirectoryGroupHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.EnvironmentID(childComplexity), true
+
+	case "DirectoryGroupHistory.environmentName":
+		if e.complexity.DirectoryGroupHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.EnvironmentName(childComplexity), true
+
 	case "DirectoryGroupHistory.externalID":
 		if e.complexity.DirectoryGroupHistory.ExternalID == nil {
 			break
@@ -4938,6 +6155,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DirectoryGroupHistory.Ref(childComplexity), true
+
+	case "DirectoryGroupHistory.scopeID":
+		if e.complexity.DirectoryGroupHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.ScopeID(childComplexity), true
+
+	case "DirectoryGroupHistory.scopeName":
+		if e.complexity.DirectoryGroupHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.ScopeName(childComplexity), true
 
 	case "DirectoryGroupHistory.sourceVersion":
 		if e.complexity.DirectoryGroupHistory.SourceVersion == nil {
@@ -5051,6 +6282,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DirectoryMembershipHistory.DisplayID(childComplexity), true
 
+	case "DirectoryMembershipHistory.environmentID":
+		if e.complexity.DirectoryMembershipHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.EnvironmentID(childComplexity), true
+
+	case "DirectoryMembershipHistory.environmentName":
+		if e.complexity.DirectoryMembershipHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.EnvironmentName(childComplexity), true
+
 	case "DirectoryMembershipHistory.firstSeenAt":
 		if e.complexity.DirectoryMembershipHistory.FirstSeenAt == nil {
 			break
@@ -5134,6 +6379,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DirectoryMembershipHistory.Role(childComplexity), true
+
+	case "DirectoryMembershipHistory.scopeID":
+		if e.complexity.DirectoryMembershipHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.ScopeID(childComplexity), true
+
+	case "DirectoryMembershipHistory.scopeName":
+		if e.complexity.DirectoryMembershipHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.ScopeName(childComplexity), true
 
 	case "DirectoryMembershipHistory.source":
 		if e.complexity.DirectoryMembershipHistory.Source == nil {
@@ -5324,6 +6583,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DocumentDataHistory.Data(childComplexity), true
 
+	case "DocumentDataHistory.environmentID":
+		if e.complexity.DocumentDataHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.DocumentDataHistory.EnvironmentID(childComplexity), true
+
+	case "DocumentDataHistory.environmentName":
+		if e.complexity.DocumentDataHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.DocumentDataHistory.EnvironmentName(childComplexity), true
+
 	case "DocumentDataHistory.historyTime":
 		if e.complexity.DocumentDataHistory.HistoryTime == nil {
 			break
@@ -5358,6 +6631,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DocumentDataHistory.Ref(childComplexity), true
+
+	case "DocumentDataHistory.scopeID":
+		if e.complexity.DocumentDataHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.DocumentDataHistory.ScopeID(childComplexity), true
+
+	case "DocumentDataHistory.scopeName":
+		if e.complexity.DocumentDataHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.DocumentDataHistory.ScopeName(childComplexity), true
 
 	case "DocumentDataHistory.tags":
 		if e.complexity.DocumentDataHistory.Tags == nil {
@@ -5422,6 +6709,55 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DocumentDataHistoryEdge.Node(childComplexity), true
 
+	case "EntityHistory.annualSpend":
+		if e.complexity.EntityHistory.AnnualSpend == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.AnnualSpend(childComplexity), true
+
+	case "EntityHistory.approvedForUse":
+		if e.complexity.EntityHistory.ApprovedForUse == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.ApprovedForUse(childComplexity), true
+
+	case "EntityHistory.autoRenews":
+		if e.complexity.EntityHistory.AutoRenews == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.AutoRenews(childComplexity), true
+
+	case "EntityHistory.billingModel":
+		if e.complexity.EntityHistory.BillingModel == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.BillingModel(childComplexity), true
+
+	case "EntityHistory.contractEndDate":
+		if e.complexity.EntityHistory.ContractEndDate == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.ContractEndDate(childComplexity), true
+
+	case "EntityHistory.contractRenewalAt":
+		if e.complexity.EntityHistory.ContractRenewalAt == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.ContractRenewalAt(childComplexity), true
+
+	case "EntityHistory.contractStartDate":
+		if e.complexity.EntityHistory.ContractStartDate == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.ContractStartDate(childComplexity), true
+
 	case "EntityHistory.createdAt":
 		if e.complexity.EntityHistory.CreatedAt == nil {
 			break
@@ -5457,12 +6793,75 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EntityHistory.Domains(childComplexity), true
 
+	case "EntityHistory.entityRelationshipStateID":
+		if e.complexity.EntityHistory.EntityRelationshipStateID == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.EntityRelationshipStateID(childComplexity), true
+
+	case "EntityHistory.entityRelationshipStateName":
+		if e.complexity.EntityHistory.EntityRelationshipStateName == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.EntityRelationshipStateName(childComplexity), true
+
+	case "EntityHistory.entitySecurityQuestionnaireStatusID":
+		if e.complexity.EntityHistory.EntitySecurityQuestionnaireStatusID == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.EntitySecurityQuestionnaireStatusID(childComplexity), true
+
+	case "EntityHistory.entitySecurityQuestionnaireStatusName":
+		if e.complexity.EntityHistory.EntitySecurityQuestionnaireStatusName == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.EntitySecurityQuestionnaireStatusName(childComplexity), true
+
+	case "EntityHistory.entitySourceTypeID":
+		if e.complexity.EntityHistory.EntitySourceTypeID == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.EntitySourceTypeID(childComplexity), true
+
+	case "EntityHistory.entitySourceTypeName":
+		if e.complexity.EntityHistory.EntitySourceTypeName == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.EntitySourceTypeName(childComplexity), true
+
 	case "EntityHistory.entityTypeID":
 		if e.complexity.EntityHistory.EntityTypeID == nil {
 			break
 		}
 
 		return e.complexity.EntityHistory.EntityTypeID(childComplexity), true
+
+	case "EntityHistory.environmentID":
+		if e.complexity.EntityHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.EnvironmentID(childComplexity), true
+
+	case "EntityHistory.environmentName":
+		if e.complexity.EntityHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.EnvironmentName(childComplexity), true
+
+	case "EntityHistory.hasSoc2":
+		if e.complexity.EntityHistory.HasSoc2 == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.HasSoc2(childComplexity), true
 
 	case "EntityHistory.historyTime":
 		if e.complexity.EntityHistory.HistoryTime == nil {
@@ -5485,12 +6884,75 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EntityHistory.InternalNotes(childComplexity), true
 
+	case "EntityHistory.internalOwner":
+		if e.complexity.EntityHistory.InternalOwner == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.InternalOwner(childComplexity), true
+
+	case "EntityHistory.internalOwnerGroupID":
+		if e.complexity.EntityHistory.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.InternalOwnerGroupID(childComplexity), true
+
+	case "EntityHistory.internalOwnerUserID":
+		if e.complexity.EntityHistory.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.InternalOwnerUserID(childComplexity), true
+
+	case "EntityHistory.lastReviewedAt":
+		if e.complexity.EntityHistory.LastReviewedAt == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.LastReviewedAt(childComplexity), true
+
+	case "EntityHistory.linkedAssetIds":
+		if e.complexity.EntityHistory.LinkedAssetIds == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.LinkedAssetIds(childComplexity), true
+
+	case "EntityHistory.links":
+		if e.complexity.EntityHistory.Links == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.Links(childComplexity), true
+
+	case "EntityHistory.mfaEnforced":
+		if e.complexity.EntityHistory.MfaEnforced == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.MfaEnforced(childComplexity), true
+
+	case "EntityHistory.mfaSupported":
+		if e.complexity.EntityHistory.MfaSupported == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.MfaSupported(childComplexity), true
+
 	case "EntityHistory.name":
 		if e.complexity.EntityHistory.Name == nil {
 			break
 		}
 
 		return e.complexity.EntityHistory.Name(childComplexity), true
+
+	case "EntityHistory.nextReviewAt":
+		if e.complexity.EntityHistory.NextReviewAt == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.NextReviewAt(childComplexity), true
 
 	case "EntityHistory.operation":
 		if e.complexity.EntityHistory.Operation == nil {
@@ -5506,6 +6968,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EntityHistory.OwnerID(childComplexity), true
 
+	case "EntityHistory.providedServices":
+		if e.complexity.EntityHistory.ProvidedServices == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.ProvidedServices(childComplexity), true
+
 	case "EntityHistory.ref":
 		if e.complexity.EntityHistory.Ref == nil {
 			break
@@ -5513,12 +6982,103 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EntityHistory.Ref(childComplexity), true
 
+	case "EntityHistory.renewalRisk":
+		if e.complexity.EntityHistory.RenewalRisk == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.RenewalRisk(childComplexity), true
+
+	case "EntityHistory.reviewFrequency":
+		if e.complexity.EntityHistory.ReviewFrequency == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.ReviewFrequency(childComplexity), true
+
+	case "EntityHistory.reviewedBy":
+		if e.complexity.EntityHistory.ReviewedBy == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.ReviewedBy(childComplexity), true
+
+	case "EntityHistory.reviewedByGroupID":
+		if e.complexity.EntityHistory.ReviewedByGroupID == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.ReviewedByGroupID(childComplexity), true
+
+	case "EntityHistory.reviewedByUserID":
+		if e.complexity.EntityHistory.ReviewedByUserID == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.ReviewedByUserID(childComplexity), true
+
+	case "EntityHistory.riskRating":
+		if e.complexity.EntityHistory.RiskRating == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.RiskRating(childComplexity), true
+
+	case "EntityHistory.riskScore":
+		if e.complexity.EntityHistory.RiskScore == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.RiskScore(childComplexity), true
+
+	case "EntityHistory.ssoEnforced":
+		if e.complexity.EntityHistory.SSOEnforced == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.SSOEnforced(childComplexity), true
+
+	case "EntityHistory.scopeID":
+		if e.complexity.EntityHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.ScopeID(childComplexity), true
+
+	case "EntityHistory.scopeName":
+		if e.complexity.EntityHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.ScopeName(childComplexity), true
+
+	case "EntityHistory.soc2PeriodEnd":
+		if e.complexity.EntityHistory.Soc2PeriodEnd == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.Soc2PeriodEnd(childComplexity), true
+
+	case "EntityHistory.spendCurrency":
+		if e.complexity.EntityHistory.SpendCurrency == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.SpendCurrency(childComplexity), true
+
 	case "EntityHistory.status":
 		if e.complexity.EntityHistory.Status == nil {
 			break
 		}
 
 		return e.complexity.EntityHistory.Status(childComplexity), true
+
+	case "EntityHistory.statusPageURL":
+		if e.complexity.EntityHistory.StatusPageURL == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.StatusPageURL(childComplexity), true
 
 	case "EntityHistory.systemInternalID":
 		if e.complexity.EntityHistory.SystemInternalID == nil {
@@ -5541,6 +7101,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EntityHistory.Tags(childComplexity), true
 
+	case "EntityHistory.terminationNoticeDays":
+		if e.complexity.EntityHistory.TerminationNoticeDays == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.TerminationNoticeDays(childComplexity), true
+
+	case "EntityHistory.tier":
+		if e.complexity.EntityHistory.Tier == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.Tier(childComplexity), true
+
 	case "EntityHistory.updatedAt":
 		if e.complexity.EntityHistory.UpdatedAt == nil {
 			break
@@ -5554,6 +7128,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.EntityHistory.UpdatedBy(childComplexity), true
+
+	case "EntityHistory.vendorMetadata":
+		if e.complexity.EntityHistory.VendorMetadata == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.VendorMetadata(childComplexity), true
 
 	case "EntityHistoryConnection.edges":
 		if e.complexity.EntityHistoryConnection.Edges == nil {
@@ -5765,6 +7346,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EvidenceHistory.DisplayID(childComplexity), true
 
+	case "EvidenceHistory.environmentID":
+		if e.complexity.EvidenceHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.EnvironmentID(childComplexity), true
+
+	case "EvidenceHistory.environmentName":
+		if e.complexity.EvidenceHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.EnvironmentName(childComplexity), true
+
 	case "EvidenceHistory.historyTime":
 		if e.complexity.EvidenceHistory.HistoryTime == nil {
 			break
@@ -5820,6 +7415,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.EvidenceHistory.RenewalDate(childComplexity), true
+
+	case "EvidenceHistory.scopeID":
+		if e.complexity.EvidenceHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.ScopeID(childComplexity), true
+
+	case "EvidenceHistory.scopeName":
+		if e.complexity.EvidenceHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.ScopeName(childComplexity), true
 
 	case "EvidenceHistory.source":
 		if e.complexity.EvidenceHistory.Source == nil {
@@ -5940,6 +7549,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.FileHistory.DetectedMimeType(childComplexity), true
 
+	case "FileHistory.environmentID":
+		if e.complexity.FileHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.EnvironmentID(childComplexity), true
+
+	case "FileHistory.environmentName":
+		if e.complexity.FileHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.EnvironmentName(childComplexity), true
+
 	case "FileHistory.historyTime":
 		if e.complexity.FileHistory.HistoryTime == nil {
 			break
@@ -6023,6 +7646,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.FileHistory.Ref(childComplexity), true
+
+	case "FileHistory.scopeID":
+		if e.complexity.FileHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.ScopeID(childComplexity), true
+
+	case "FileHistory.scopeName":
+		if e.complexity.FileHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.ScopeName(childComplexity), true
 
 	case "FileHistory.storagePath":
 		if e.complexity.FileHistory.StoragePath == nil {
@@ -6360,6 +7997,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.FindingHistory.DisplayName(childComplexity), true
 
+	case "FindingHistory.environmentID":
+		if e.complexity.FindingHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.EnvironmentID(childComplexity), true
+
+	case "FindingHistory.environmentName":
+		if e.complexity.FindingHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.EnvironmentName(childComplexity), true
+
 	case "FindingHistory.eventTime":
 		if e.complexity.FindingHistory.EventTime == nil {
 			break
@@ -6541,6 +8192,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.FindingHistory.ResourceName(childComplexity), true
+
+	case "FindingHistory.scopeID":
+		if e.complexity.FindingHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.ScopeID(childComplexity), true
+
+	case "FindingHistory.scopeName":
+		if e.complexity.FindingHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.ScopeName(childComplexity), true
 
 	case "FindingHistory.score":
 		if e.complexity.FindingHistory.Score == nil {
@@ -7284,6 +8949,307 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.HushHistoryEdge.Node(childComplexity), true
 
+	case "IdentityHolderHistory.alternateEmail":
+		if e.complexity.IdentityHolderHistory.AlternateEmail == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.AlternateEmail(childComplexity), true
+
+	case "IdentityHolderHistory.createdAt":
+		if e.complexity.IdentityHolderHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.CreatedAt(childComplexity), true
+
+	case "IdentityHolderHistory.createdBy":
+		if e.complexity.IdentityHolderHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.CreatedBy(childComplexity), true
+
+	case "IdentityHolderHistory.department":
+		if e.complexity.IdentityHolderHistory.Department == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.Department(childComplexity), true
+
+	case "IdentityHolderHistory.displayID":
+		if e.complexity.IdentityHolderHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.DisplayID(childComplexity), true
+
+	case "IdentityHolderHistory.email":
+		if e.complexity.IdentityHolderHistory.Email == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.Email(childComplexity), true
+
+	case "IdentityHolderHistory.employerEntityID":
+		if e.complexity.IdentityHolderHistory.EmployerEntityID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.EmployerEntityID(childComplexity), true
+
+	case "IdentityHolderHistory.endDate":
+		if e.complexity.IdentityHolderHistory.EndDate == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.EndDate(childComplexity), true
+
+	case "IdentityHolderHistory.environmentID":
+		if e.complexity.IdentityHolderHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.EnvironmentID(childComplexity), true
+
+	case "IdentityHolderHistory.environmentName":
+		if e.complexity.IdentityHolderHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.EnvironmentName(childComplexity), true
+
+	case "IdentityHolderHistory.externalReferenceID":
+		if e.complexity.IdentityHolderHistory.ExternalReferenceID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.ExternalReferenceID(childComplexity), true
+
+	case "IdentityHolderHistory.externalUserID":
+		if e.complexity.IdentityHolderHistory.ExternalUserID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.ExternalUserID(childComplexity), true
+
+	case "IdentityHolderHistory.fullName":
+		if e.complexity.IdentityHolderHistory.FullName == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.FullName(childComplexity), true
+
+	case "IdentityHolderHistory.historyTime":
+		if e.complexity.IdentityHolderHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.HistoryTime(childComplexity), true
+
+	case "IdentityHolderHistory.id":
+		if e.complexity.IdentityHolderHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.ID(childComplexity), true
+
+	case "IdentityHolderHistory.identityHolderType":
+		if e.complexity.IdentityHolderHistory.IdentityHolderType == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.IdentityHolderType(childComplexity), true
+
+	case "IdentityHolderHistory.internalOwner":
+		if e.complexity.IdentityHolderHistory.InternalOwner == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.InternalOwner(childComplexity), true
+
+	case "IdentityHolderHistory.internalOwnerGroupID":
+		if e.complexity.IdentityHolderHistory.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.InternalOwnerGroupID(childComplexity), true
+
+	case "IdentityHolderHistory.internalOwnerUserID":
+		if e.complexity.IdentityHolderHistory.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.InternalOwnerUserID(childComplexity), true
+
+	case "IdentityHolderHistory.isActive":
+		if e.complexity.IdentityHolderHistory.IsActive == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.IsActive(childComplexity), true
+
+	case "IdentityHolderHistory.isOpenlaneUser":
+		if e.complexity.IdentityHolderHistory.IsOpenlaneUser == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.IsOpenlaneUser(childComplexity), true
+
+	case "IdentityHolderHistory.location":
+		if e.complexity.IdentityHolderHistory.Location == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.Location(childComplexity), true
+
+	case "IdentityHolderHistory.metadata":
+		if e.complexity.IdentityHolderHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.Metadata(childComplexity), true
+
+	case "IdentityHolderHistory.operation":
+		if e.complexity.IdentityHolderHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.Operation(childComplexity), true
+
+	case "IdentityHolderHistory.ownerID":
+		if e.complexity.IdentityHolderHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.OwnerID(childComplexity), true
+
+	case "IdentityHolderHistory.phoneNumber":
+		if e.complexity.IdentityHolderHistory.PhoneNumber == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.PhoneNumber(childComplexity), true
+
+	case "IdentityHolderHistory.ref":
+		if e.complexity.IdentityHolderHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.Ref(childComplexity), true
+
+	case "IdentityHolderHistory.scopeID":
+		if e.complexity.IdentityHolderHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.ScopeID(childComplexity), true
+
+	case "IdentityHolderHistory.scopeName":
+		if e.complexity.IdentityHolderHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.ScopeName(childComplexity), true
+
+	case "IdentityHolderHistory.startDate":
+		if e.complexity.IdentityHolderHistory.StartDate == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.StartDate(childComplexity), true
+
+	case "IdentityHolderHistory.status":
+		if e.complexity.IdentityHolderHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.Status(childComplexity), true
+
+	case "IdentityHolderHistory.tags":
+		if e.complexity.IdentityHolderHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.Tags(childComplexity), true
+
+	case "IdentityHolderHistory.team":
+		if e.complexity.IdentityHolderHistory.Team == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.Team(childComplexity), true
+
+	case "IdentityHolderHistory.title":
+		if e.complexity.IdentityHolderHistory.Title == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.Title(childComplexity), true
+
+	case "IdentityHolderHistory.updatedAt":
+		if e.complexity.IdentityHolderHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.UpdatedAt(childComplexity), true
+
+	case "IdentityHolderHistory.updatedBy":
+		if e.complexity.IdentityHolderHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.UpdatedBy(childComplexity), true
+
+	case "IdentityHolderHistory.userID":
+		if e.complexity.IdentityHolderHistory.UserID == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.UserID(childComplexity), true
+
+	case "IdentityHolderHistory.workflowEligibleMarker":
+		if e.complexity.IdentityHolderHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistory.WorkflowEligibleMarker(childComplexity), true
+
+	case "IdentityHolderHistoryConnection.edges":
+		if e.complexity.IdentityHolderHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistoryConnection.Edges(childComplexity), true
+
+	case "IdentityHolderHistoryConnection.pageInfo":
+		if e.complexity.IdentityHolderHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistoryConnection.PageInfo(childComplexity), true
+
+	case "IdentityHolderHistoryConnection.totalCount":
+		if e.complexity.IdentityHolderHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistoryConnection.TotalCount(childComplexity), true
+
+	case "IdentityHolderHistoryEdge.cursor":
+		if e.complexity.IdentityHolderHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistoryEdge.Cursor(childComplexity), true
+
+	case "IdentityHolderHistoryEdge.node":
+		if e.complexity.IdentityHolderHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderHistoryEdge.Node(childComplexity), true
+
 	case "IntegrationHistory.createdAt":
 		if e.complexity.IntegrationHistory.CreatedAt == nil {
 			break
@@ -7304,6 +9270,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.IntegrationHistory.Description(childComplexity), true
+
+	case "IntegrationHistory.environmentID":
+		if e.complexity.IntegrationHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.IntegrationHistory.EnvironmentID(childComplexity), true
+
+	case "IntegrationHistory.environmentName":
+		if e.complexity.IntegrationHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.IntegrationHistory.EnvironmentName(childComplexity), true
 
 	case "IntegrationHistory.historyTime":
 		if e.complexity.IntegrationHistory.HistoryTime == nil {
@@ -7374,6 +9354,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.IntegrationHistory.Ref(childComplexity), true
+
+	case "IntegrationHistory.scopeID":
+		if e.complexity.IntegrationHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.IntegrationHistory.ScopeID(childComplexity), true
+
+	case "IntegrationHistory.scopeName":
+		if e.complexity.IntegrationHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.IntegrationHistory.ScopeName(childComplexity), true
 
 	case "IntegrationHistory.systemInternalID":
 		if e.complexity.IntegrationHistory.SystemInternalID == nil {
@@ -7529,6 +9523,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicyHistory.DisplayID(childComplexity), true
 
+	case "InternalPolicyHistory.environmentID":
+		if e.complexity.InternalPolicyHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.EnvironmentID(childComplexity), true
+
+	case "InternalPolicyHistory.environmentName":
+		if e.complexity.InternalPolicyHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.EnvironmentName(childComplexity), true
+
 	case "InternalPolicyHistory.fileID":
 		if e.complexity.InternalPolicyHistory.FileID == nil {
 			break
@@ -7626,6 +9634,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicyHistory.Revision(childComplexity), true
+
+	case "InternalPolicyHistory.scopeID":
+		if e.complexity.InternalPolicyHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.ScopeID(childComplexity), true
+
+	case "InternalPolicyHistory.scopeName":
+		if e.complexity.InternalPolicyHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.ScopeName(childComplexity), true
 
 	case "InternalPolicyHistory.status":
 		if e.complexity.InternalPolicyHistory.Status == nil {
@@ -9202,6 +11224,447 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.PageInfo.StartCursor(childComplexity), true
 
+	case "PlatformHistory.accessModelID":
+		if e.complexity.PlatformHistory.AccessModelID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.AccessModelID(childComplexity), true
+
+	case "PlatformHistory.accessModelName":
+		if e.complexity.PlatformHistory.AccessModelName == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.AccessModelName(childComplexity), true
+
+	case "PlatformHistory.businessOwner":
+		if e.complexity.PlatformHistory.BusinessOwner == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.BusinessOwner(childComplexity), true
+
+	case "PlatformHistory.businessOwnerGroupID":
+		if e.complexity.PlatformHistory.BusinessOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.BusinessOwnerGroupID(childComplexity), true
+
+	case "PlatformHistory.businessOwnerUserID":
+		if e.complexity.PlatformHistory.BusinessOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.BusinessOwnerUserID(childComplexity), true
+
+	case "PlatformHistory.businessPurpose":
+		if e.complexity.PlatformHistory.BusinessPurpose == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.BusinessPurpose(childComplexity), true
+
+	case "PlatformHistory.containsPii":
+		if e.complexity.PlatformHistory.ContainsPii == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.ContainsPii(childComplexity), true
+
+	case "PlatformHistory.costCenter":
+		if e.complexity.PlatformHistory.CostCenter == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.CostCenter(childComplexity), true
+
+	case "PlatformHistory.createdAt":
+		if e.complexity.PlatformHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.CreatedAt(childComplexity), true
+
+	case "PlatformHistory.createdBy":
+		if e.complexity.PlatformHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.CreatedBy(childComplexity), true
+
+	case "PlatformHistory.criticalityID":
+		if e.complexity.PlatformHistory.CriticalityID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.CriticalityID(childComplexity), true
+
+	case "PlatformHistory.criticalityName":
+		if e.complexity.PlatformHistory.CriticalityName == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.CriticalityName(childComplexity), true
+
+	case "PlatformHistory.dataFlowSummary":
+		if e.complexity.PlatformHistory.DataFlowSummary == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.DataFlowSummary(childComplexity), true
+
+	case "PlatformHistory.description":
+		if e.complexity.PlatformHistory.Description == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.Description(childComplexity), true
+
+	case "PlatformHistory.displayID":
+		if e.complexity.PlatformHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.DisplayID(childComplexity), true
+
+	case "PlatformHistory.encryptionStatusID":
+		if e.complexity.PlatformHistory.EncryptionStatusID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.EncryptionStatusID(childComplexity), true
+
+	case "PlatformHistory.encryptionStatusName":
+		if e.complexity.PlatformHistory.EncryptionStatusName == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.EncryptionStatusName(childComplexity), true
+
+	case "PlatformHistory.environmentID":
+		if e.complexity.PlatformHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.EnvironmentID(childComplexity), true
+
+	case "PlatformHistory.environmentName":
+		if e.complexity.PlatformHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.EnvironmentName(childComplexity), true
+
+	case "PlatformHistory.estimatedMonthlyCost":
+		if e.complexity.PlatformHistory.EstimatedMonthlyCost == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.EstimatedMonthlyCost(childComplexity), true
+
+	case "PlatformHistory.externalReferenceID":
+		if e.complexity.PlatformHistory.ExternalReferenceID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.ExternalReferenceID(childComplexity), true
+
+	case "PlatformHistory.historyTime":
+		if e.complexity.PlatformHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.HistoryTime(childComplexity), true
+
+	case "PlatformHistory.id":
+		if e.complexity.PlatformHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.ID(childComplexity), true
+
+	case "PlatformHistory.internalOwner":
+		if e.complexity.PlatformHistory.InternalOwner == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.InternalOwner(childComplexity), true
+
+	case "PlatformHistory.internalOwnerGroupID":
+		if e.complexity.PlatformHistory.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.InternalOwnerGroupID(childComplexity), true
+
+	case "PlatformHistory.internalOwnerUserID":
+		if e.complexity.PlatformHistory.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.InternalOwnerUserID(childComplexity), true
+
+	case "PlatformHistory.metadata":
+		if e.complexity.PlatformHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.Metadata(childComplexity), true
+
+	case "PlatformHistory.name":
+		if e.complexity.PlatformHistory.Name == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.Name(childComplexity), true
+
+	case "PlatformHistory.operation":
+		if e.complexity.PlatformHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.Operation(childComplexity), true
+
+	case "PlatformHistory.ownerID":
+		if e.complexity.PlatformHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.OwnerID(childComplexity), true
+
+	case "PlatformHistory.physicalLocation":
+		if e.complexity.PlatformHistory.PhysicalLocation == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.PhysicalLocation(childComplexity), true
+
+	case "PlatformHistory.platformDataClassificationID":
+		if e.complexity.PlatformHistory.PlatformDataClassificationID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.PlatformDataClassificationID(childComplexity), true
+
+	case "PlatformHistory.platformDataClassificationName":
+		if e.complexity.PlatformHistory.PlatformDataClassificationName == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.PlatformDataClassificationName(childComplexity), true
+
+	case "PlatformHistory.platformKindID":
+		if e.complexity.PlatformHistory.PlatformKindID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.PlatformKindID(childComplexity), true
+
+	case "PlatformHistory.platformKindName":
+		if e.complexity.PlatformHistory.PlatformKindName == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.PlatformKindName(childComplexity), true
+
+	case "PlatformHistory.platformOwnerID":
+		if e.complexity.PlatformHistory.PlatformOwnerID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.PlatformOwnerID(childComplexity), true
+
+	case "PlatformHistory.purchaseDate":
+		if e.complexity.PlatformHistory.PurchaseDate == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.PurchaseDate(childComplexity), true
+
+	case "PlatformHistory.ref":
+		if e.complexity.PlatformHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.Ref(childComplexity), true
+
+	case "PlatformHistory.region":
+		if e.complexity.PlatformHistory.Region == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.Region(childComplexity), true
+
+	case "PlatformHistory.scopeID":
+		if e.complexity.PlatformHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.ScopeID(childComplexity), true
+
+	case "PlatformHistory.scopeName":
+		if e.complexity.PlatformHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.ScopeName(childComplexity), true
+
+	case "PlatformHistory.scopeStatement":
+		if e.complexity.PlatformHistory.ScopeStatement == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.ScopeStatement(childComplexity), true
+
+	case "PlatformHistory.securityOwner":
+		if e.complexity.PlatformHistory.SecurityOwner == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.SecurityOwner(childComplexity), true
+
+	case "PlatformHistory.securityOwnerGroupID":
+		if e.complexity.PlatformHistory.SecurityOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.SecurityOwnerGroupID(childComplexity), true
+
+	case "PlatformHistory.securityOwnerUserID":
+		if e.complexity.PlatformHistory.SecurityOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.SecurityOwnerUserID(childComplexity), true
+
+	case "PlatformHistory.securityTierID":
+		if e.complexity.PlatformHistory.SecurityTierID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.SecurityTierID(childComplexity), true
+
+	case "PlatformHistory.securityTierName":
+		if e.complexity.PlatformHistory.SecurityTierName == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.SecurityTierName(childComplexity), true
+
+	case "PlatformHistory.sourceIdentifier":
+		if e.complexity.PlatformHistory.SourceIdentifier == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.SourceIdentifier(childComplexity), true
+
+	case "PlatformHistory.sourceType":
+		if e.complexity.PlatformHistory.SourceType == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.SourceType(childComplexity), true
+
+	case "PlatformHistory.status":
+		if e.complexity.PlatformHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.Status(childComplexity), true
+
+	case "PlatformHistory.tags":
+		if e.complexity.PlatformHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.Tags(childComplexity), true
+
+	case "PlatformHistory.technicalOwner":
+		if e.complexity.PlatformHistory.TechnicalOwner == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.TechnicalOwner(childComplexity), true
+
+	case "PlatformHistory.technicalOwnerGroupID":
+		if e.complexity.PlatformHistory.TechnicalOwnerGroupID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.TechnicalOwnerGroupID(childComplexity), true
+
+	case "PlatformHistory.technicalOwnerUserID":
+		if e.complexity.PlatformHistory.TechnicalOwnerUserID == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.TechnicalOwnerUserID(childComplexity), true
+
+	case "PlatformHistory.trustBoundaryDescription":
+		if e.complexity.PlatformHistory.TrustBoundaryDescription == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.TrustBoundaryDescription(childComplexity), true
+
+	case "PlatformHistory.updatedAt":
+		if e.complexity.PlatformHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.UpdatedAt(childComplexity), true
+
+	case "PlatformHistory.updatedBy":
+		if e.complexity.PlatformHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.UpdatedBy(childComplexity), true
+
+	case "PlatformHistory.workflowEligibleMarker":
+		if e.complexity.PlatformHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistory.WorkflowEligibleMarker(childComplexity), true
+
+	case "PlatformHistoryConnection.edges":
+		if e.complexity.PlatformHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistoryConnection.Edges(childComplexity), true
+
+	case "PlatformHistoryConnection.pageInfo":
+		if e.complexity.PlatformHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistoryConnection.PageInfo(childComplexity), true
+
+	case "PlatformHistoryConnection.totalCount":
+		if e.complexity.PlatformHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistoryConnection.TotalCount(childComplexity), true
+
+	case "PlatformHistoryEdge.cursor":
+		if e.complexity.PlatformHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistoryEdge.Cursor(childComplexity), true
+
+	case "PlatformHistoryEdge.node":
+		if e.complexity.PlatformHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.PlatformHistoryEdge.Node(childComplexity), true
+
 	case "ProcedureHistory.approvalRequired":
 		if e.complexity.ProcedureHistory.ApprovalRequired == nil {
 			break
@@ -9285,6 +11748,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProcedureHistory.DisplayID(childComplexity), true
+
+	case "ProcedureHistory.environmentID":
+		if e.complexity.ProcedureHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.EnvironmentID(childComplexity), true
+
+	case "ProcedureHistory.environmentName":
+		if e.complexity.ProcedureHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.EnvironmentName(childComplexity), true
 
 	case "ProcedureHistory.fileID":
 		if e.complexity.ProcedureHistory.FileID == nil {
@@ -9383,6 +11860,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProcedureHistory.Revision(childComplexity), true
+
+	case "ProcedureHistory.scopeID":
+		if e.complexity.ProcedureHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.ScopeID(childComplexity), true
+
+	case "ProcedureHistory.scopeName":
+		if e.complexity.ProcedureHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.ScopeName(childComplexity), true
 
 	case "ProcedureHistory.status":
 		if e.complexity.ProcedureHistory.Status == nil {
@@ -9866,6 +12357,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AssetHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.AssetHistoryOrder), args["where"].(*historygenerated.AssetHistoryWhereInput)), true
 
+	case "Query.campaignHistories":
+		if e.complexity.Query.CampaignHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_campaignHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.CampaignHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.CampaignHistoryOrder), args["where"].(*historygenerated.CampaignHistoryWhereInput)), true
+
+	case "Query.campaignTargetHistories":
+		if e.complexity.Query.CampaignTargetHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_campaignTargetHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.CampaignTargetHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.CampaignTargetHistoryOrder), args["where"].(*historygenerated.CampaignTargetHistoryWhereInput)), true
+
 	case "Query.contactHistories":
 		if e.complexity.Query.ContactHistories == nil {
 			break
@@ -10118,6 +12633,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.HushHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.HushHistoryOrder), args["where"].(*historygenerated.HushHistoryWhereInput)), true
 
+	case "Query.identityHolderHistories":
+		if e.complexity.Query.IdentityHolderHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_identityHolderHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.IdentityHolderHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.IdentityHolderHistoryOrder), args["where"].(*historygenerated.IdentityHolderHistoryWhereInput)), true
+
 	case "Query.integrationHistories":
 		if e.complexity.Query.IntegrationHistories == nil {
 			break
@@ -10273,6 +12800,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.OrganizationSettingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.OrganizationSettingHistoryOrder), args["where"].(*historygenerated.OrganizationSettingHistoryWhereInput)), true
+
+	case "Query.platformHistories":
+		if e.complexity.Query.PlatformHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_platformHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.PlatformHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.PlatformHistoryOrder), args["where"].(*historygenerated.PlatformHistoryWhereInput)), true
 
 	case "Query.procedureHistories":
 		if e.complexity.Query.ProcedureHistories == nil {
@@ -10669,6 +13208,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.RemediationHistory.DueAt(childComplexity), true
 
+	case "RemediationHistory.environmentID":
+		if e.complexity.RemediationHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.EnvironmentID(childComplexity), true
+
+	case "RemediationHistory.environmentName":
+		if e.complexity.RemediationHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.EnvironmentName(childComplexity), true
+
 	case "RemediationHistory.error":
 		if e.complexity.RemediationHistory.Error == nil {
 			break
@@ -10794,6 +13347,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.RemediationHistory.RepositoryURI(childComplexity), true
+
+	case "RemediationHistory.scopeID":
+		if e.complexity.RemediationHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.ScopeID(childComplexity), true
+
+	case "RemediationHistory.scopeName":
+		if e.complexity.RemediationHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.ScopeName(childComplexity), true
 
 	case "RemediationHistory.source":
 		if e.complexity.RemediationHistory.Source == nil {
@@ -10949,6 +13516,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ReviewHistory.Details(childComplexity), true
 
+	case "ReviewHistory.environmentID":
+		if e.complexity.ReviewHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.EnvironmentID(childComplexity), true
+
+	case "ReviewHistory.environmentName":
+		if e.complexity.ReviewHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.EnvironmentName(childComplexity), true
+
 	case "ReviewHistory.externalID":
 		if e.complexity.ReviewHistory.ExternalID == nil {
 			break
@@ -11053,6 +13634,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ReviewHistory.ReviewerID(childComplexity), true
+
+	case "ReviewHistory.scopeID":
+		if e.complexity.ReviewHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.ScopeID(childComplexity), true
+
+	case "ReviewHistory.scopeName":
+		if e.complexity.ReviewHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.ScopeName(childComplexity), true
 
 	case "ReviewHistory.source":
 		if e.complexity.ReviewHistory.Source == nil {
@@ -11208,6 +13803,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.RiskHistory.DisplayID(childComplexity), true
 
+	case "RiskHistory.environmentID":
+		if e.complexity.RiskHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.EnvironmentID(childComplexity), true
+
+	case "RiskHistory.environmentName":
+		if e.complexity.RiskHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.EnvironmentName(childComplexity), true
+
 	case "RiskHistory.historyTime":
 		if e.complexity.RiskHistory.HistoryTime == nil {
 			break
@@ -11306,6 +13915,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.RiskHistory.RiskKindName(childComplexity), true
 
+	case "RiskHistory.scopeID":
+		if e.complexity.RiskHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.ScopeID(childComplexity), true
+
+	case "RiskHistory.scopeName":
+		if e.complexity.RiskHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.ScopeName(childComplexity), true
+
 	case "RiskHistory.score":
 		if e.complexity.RiskHistory.Score == nil {
 			break
@@ -11383,6 +14006,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.RiskHistoryEdge.Node(childComplexity), true
 
+	case "ScanHistory.assignedTo":
+		if e.complexity.ScanHistory.AssignedTo == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.AssignedTo(childComplexity), true
+
+	case "ScanHistory.assignedToGroupID":
+		if e.complexity.ScanHistory.AssignedToGroupID == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.AssignedToGroupID(childComplexity), true
+
+	case "ScanHistory.assignedToUserID":
+		if e.complexity.ScanHistory.AssignedToUserID == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.AssignedToUserID(childComplexity), true
+
 	case "ScanHistory.createdAt":
 		if e.complexity.ScanHistory.CreatedAt == nil {
 			break
@@ -11396,6 +14040,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScanHistory.CreatedBy(childComplexity), true
+
+	case "ScanHistory.environmentID":
+		if e.complexity.ScanHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.EnvironmentID(childComplexity), true
+
+	case "ScanHistory.environmentName":
+		if e.complexity.ScanHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.EnvironmentName(childComplexity), true
+
+	case "ScanHistory.generatedByPlatformID":
+		if e.complexity.ScanHistory.GeneratedByPlatformID == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.GeneratedByPlatformID(childComplexity), true
 
 	case "ScanHistory.historyTime":
 		if e.complexity.ScanHistory.HistoryTime == nil {
@@ -11418,6 +14083,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScanHistory.Metadata(childComplexity), true
 
+	case "ScanHistory.nextScanRunAt":
+		if e.complexity.ScanHistory.NextScanRunAt == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.NextScanRunAt(childComplexity), true
+
 	case "ScanHistory.operation":
 		if e.complexity.ScanHistory.Operation == nil {
 			break
@@ -11432,6 +14104,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScanHistory.OwnerID(childComplexity), true
 
+	case "ScanHistory.performedBy":
+		if e.complexity.ScanHistory.PerformedBy == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.PerformedBy(childComplexity), true
+
+	case "ScanHistory.performedByGroupID":
+		if e.complexity.ScanHistory.PerformedByGroupID == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.PerformedByGroupID(childComplexity), true
+
+	case "ScanHistory.performedByUserID":
+		if e.complexity.ScanHistory.PerformedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.PerformedByUserID(childComplexity), true
+
 	case "ScanHistory.ref":
 		if e.complexity.ScanHistory.Ref == nil {
 			break
@@ -11439,12 +14132,61 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScanHistory.Ref(childComplexity), true
 
+	case "ScanHistory.reviewedBy":
+		if e.complexity.ScanHistory.ReviewedBy == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.ReviewedBy(childComplexity), true
+
+	case "ScanHistory.reviewedByGroupID":
+		if e.complexity.ScanHistory.ReviewedByGroupID == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.ReviewedByGroupID(childComplexity), true
+
+	case "ScanHistory.reviewedByUserID":
+		if e.complexity.ScanHistory.ReviewedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.ReviewedByUserID(childComplexity), true
+
+	case "ScanHistory.scanDate":
+		if e.complexity.ScanHistory.ScanDate == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.ScanDate(childComplexity), true
+
+	case "ScanHistory.scanSchedule":
+		if e.complexity.ScanHistory.ScanSchedule == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.ScanSchedule(childComplexity), true
+
 	case "ScanHistory.scanType":
 		if e.complexity.ScanHistory.ScanType == nil {
 			break
 		}
 
 		return e.complexity.ScanHistory.ScanType(childComplexity), true
+
+	case "ScanHistory.scopeID":
+		if e.complexity.ScanHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.ScopeID(childComplexity), true
+
+	case "ScanHistory.scopeName":
+		if e.complexity.ScanHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.ScopeName(childComplexity), true
 
 	case "ScanHistory.status":
 		if e.complexity.ScanHistory.Status == nil {
@@ -11480,6 +14222,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScanHistory.UpdatedBy(childComplexity), true
+
+	case "ScanHistory.vulnerabilityIds":
+		if e.complexity.ScanHistory.VulnerabilityIds == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.VulnerabilityIds(childComplexity), true
 
 	case "ScanHistoryConnection.edges":
 		if e.complexity.ScanHistoryConnection.Edges == nil {
@@ -12447,6 +15196,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TaskHistory.Due(childComplexity), true
 
+	case "TaskHistory.environmentID":
+		if e.complexity.TaskHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.EnvironmentID(childComplexity), true
+
+	case "TaskHistory.environmentName":
+		if e.complexity.TaskHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.EnvironmentName(childComplexity), true
+
 	case "TaskHistory.externalReferenceURL":
 		if e.complexity.TaskHistory.ExternalReferenceURL == nil {
 			break
@@ -12502,6 +15265,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TaskHistory.Ref(childComplexity), true
+
+	case "TaskHistory.scopeID":
+		if e.complexity.TaskHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.ScopeID(childComplexity), true
+
+	case "TaskHistory.scopeName":
+		if e.complexity.TaskHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.ScopeName(childComplexity), true
 
 	case "TaskHistory.status":
 		if e.complexity.TaskHistory.Status == nil {
@@ -12615,6 +15392,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TemplateHistory.Description(childComplexity), true
 
+	case "TemplateHistory.environmentID":
+		if e.complexity.TemplateHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.EnvironmentID(childComplexity), true
+
+	case "TemplateHistory.environmentName":
+		if e.complexity.TemplateHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.EnvironmentName(childComplexity), true
+
 	case "TemplateHistory.historyTime":
 		if e.complexity.TemplateHistory.HistoryTime == nil {
 			break
@@ -12677,6 +15468,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TemplateHistory.Ref(childComplexity), true
+
+	case "TemplateHistory.scopeID":
+		if e.complexity.TemplateHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.ScopeID(childComplexity), true
+
+	case "TemplateHistory.scopeName":
+		if e.complexity.TemplateHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.ScopeName(childComplexity), true
 
 	case "TemplateHistory.systemInternalID":
 		if e.complexity.TemplateHistory.SystemInternalID == nil {
@@ -13496,6 +16301,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSettingHistory.BackgroundColor(childComplexity), true
+
+	case "TrustCenterSettingHistory.companyDescription":
+		if e.complexity.TrustCenterSettingHistory.CompanyDescription == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.CompanyDescription(childComplexity), true
 
 	case "TrustCenterSettingHistory.companyDomain":
 		if e.complexity.TrustCenterSettingHistory.CompanyDomain == nil {
@@ -14442,6 +17254,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.VulnerabilityHistory.DisplayName(childComplexity), true
 
+	case "VulnerabilityHistory.environmentID":
+		if e.complexity.VulnerabilityHistory.EnvironmentID == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.EnvironmentID(childComplexity), true
+
+	case "VulnerabilityHistory.environmentName":
+		if e.complexity.VulnerabilityHistory.EnvironmentName == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.EnvironmentName(childComplexity), true
+
 	case "VulnerabilityHistory.exploitability":
 		if e.complexity.VulnerabilityHistory.Exploitability == nil {
 			break
@@ -14588,6 +17414,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.VulnerabilityHistory.RemediationSLA(childComplexity), true
+
+	case "VulnerabilityHistory.scopeID":
+		if e.complexity.VulnerabilityHistory.ScopeID == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.ScopeID(childComplexity), true
+
+	case "VulnerabilityHistory.scopeName":
+		if e.complexity.VulnerabilityHistory.ScopeName == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.ScopeName(childComplexity), true
 
 	case "VulnerabilityHistory.score":
 		if e.complexity.VulnerabilityHistory.Score == nil {
@@ -15429,6 +18269,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowInstanceHistory.ActionPlanID(childComplexity), true
 
+	case "WorkflowInstanceHistory.campaignID":
+		if e.complexity.WorkflowInstanceHistory.CampaignID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.CampaignID(childComplexity), true
+
+	case "WorkflowInstanceHistory.campaignTargetID":
+		if e.complexity.WorkflowInstanceHistory.CampaignTargetID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.CampaignTargetID(childComplexity), true
+
 	case "WorkflowInstanceHistory.context":
 		if e.complexity.WorkflowInstanceHistory.Context == nil {
 			break
@@ -15499,6 +18353,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowInstanceHistory.ID(childComplexity), true
 
+	case "WorkflowInstanceHistory.identityHolderID":
+		if e.complexity.WorkflowInstanceHistory.IdentityHolderID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.IdentityHolderID(childComplexity), true
+
 	case "WorkflowInstanceHistory.internalPolicyID":
 		if e.complexity.WorkflowInstanceHistory.InternalPolicyID == nil {
 			break
@@ -15526,6 +18387,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowInstanceHistory.OwnerID(childComplexity), true
+
+	case "WorkflowInstanceHistory.platformID":
+		if e.complexity.WorkflowInstanceHistory.PlatformID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.PlatformID(childComplexity), true
 
 	case "WorkflowInstanceHistory.procedureID":
 		if e.complexity.WorkflowInstanceHistory.ProcedureID == nil {
@@ -15632,6 +18500,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowObjectRefHistory.ActionPlanID(childComplexity), true
 
+	case "WorkflowObjectRefHistory.campaignID":
+		if e.complexity.WorkflowObjectRefHistory.CampaignID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.CampaignID(childComplexity), true
+
+	case "WorkflowObjectRefHistory.campaignTargetID":
+		if e.complexity.WorkflowObjectRefHistory.CampaignTargetID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.CampaignTargetID(childComplexity), true
+
 	case "WorkflowObjectRefHistory.controlID":
 		if e.complexity.WorkflowObjectRefHistory.ControlID == nil {
 			break
@@ -15709,6 +18591,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowObjectRefHistory.ID(childComplexity), true
 
+	case "WorkflowObjectRefHistory.identityHolderID":
+		if e.complexity.WorkflowObjectRefHistory.IdentityHolderID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.IdentityHolderID(childComplexity), true
+
 	case "WorkflowObjectRefHistory.internalPolicyID":
 		if e.complexity.WorkflowObjectRefHistory.InternalPolicyID == nil {
 			break
@@ -15729,6 +18618,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowObjectRefHistory.OwnerID(childComplexity), true
+
+	case "WorkflowObjectRefHistory.platformID":
+		if e.complexity.WorkflowObjectRefHistory.PlatformID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.PlatformID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.procedureID":
 		if e.complexity.WorkflowObjectRefHistory.ProcedureID == nil {
@@ -15830,6 +18726,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputAssessmentResponseHistoryWhereInput,
 		ec.unmarshalInputAssetHistoryOrder,
 		ec.unmarshalInputAssetHistoryWhereInput,
+		ec.unmarshalInputCampaignHistoryOrder,
+		ec.unmarshalInputCampaignHistoryWhereInput,
+		ec.unmarshalInputCampaignTargetHistoryOrder,
+		ec.unmarshalInputCampaignTargetHistoryWhereInput,
 		ec.unmarshalInputContactHistoryOrder,
 		ec.unmarshalInputContactHistoryWhereInput,
 		ec.unmarshalInputControlHistoryOrder,
@@ -15872,6 +18772,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputGroupSettingHistoryWhereInput,
 		ec.unmarshalInputHushHistoryOrder,
 		ec.unmarshalInputHushHistoryWhereInput,
+		ec.unmarshalInputIdentityHolderHistoryOrder,
+		ec.unmarshalInputIdentityHolderHistoryWhereInput,
 		ec.unmarshalInputIntegrationHistoryOrder,
 		ec.unmarshalInputIntegrationHistoryWhereInput,
 		ec.unmarshalInputInternalPolicyHistoryOrder,
@@ -15894,6 +18796,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputOrganizationHistoryWhereInput,
 		ec.unmarshalInputOrganizationSettingHistoryOrder,
 		ec.unmarshalInputOrganizationSettingHistoryWhereInput,
+		ec.unmarshalInputPlatformHistoryOrder,
+		ec.unmarshalInputPlatformHistoryWhereInput,
 		ec.unmarshalInputProcedureHistoryOrder,
 		ec.unmarshalInputProcedureHistoryWhereInput,
 		ec.unmarshalInputProgramHistoryOrder,
@@ -17247,6 +20151,22 @@ type AssessmentResponseHistory implements Node {
   """
   assessmentID: String!
   """
+  whether this assessment response is for a test send
+  """
+  isTest: Boolean!
+  """
+  the campaign this response is associated with
+  """
+  campaignID: String
+  """
+  the identity holder record for the recipient
+  """
+  identityHolderID: String
+  """
+  the entity associated with this assessment response
+  """
+  entityID: String
+  """
   the email address of the recipient
   """
   email: String!
@@ -17254,6 +20174,34 @@ type AssessmentResponseHistory implements Node {
   the number of attempts made to perform email send to the recipient about this assessment, maximum of 5
   """
   sendAttempts: Int!
+  """
+  when the assessment email was delivered to the recipient
+  """
+  emailDeliveredAt: Time
+  """
+  when the assessment email was opened by the recipient
+  """
+  emailOpenedAt: Time
+  """
+  when a link in the assessment email was clicked by the recipient
+  """
+  emailClickedAt: Time
+  """
+  the number of times the assessment email was opened
+  """
+  emailOpenCount: Int
+  """
+  the number of link clicks for the assessment email
+  """
+  emailClickCount: Int
+  """
+  the most recent email event timestamp for this assessment response
+  """
+  lastEmailEventAt: Time
+  """
+  additional metadata about email delivery events
+  """
+  emailMetadata: Map
   """
   the current status of the assessment for this user
   """
@@ -17348,6 +20296,12 @@ enum AssessmentResponseHistoryOrderField {
   updated_at
   email
   send_attempts
+  email_delivered_at
+  email_opened_at
+  email_clicked_at
+  email_open_count
+  email_click_count
+  last_email_event_at
   status
   assigned_at
   started_at
@@ -17508,6 +20462,65 @@ input AssessmentResponseHistoryWhereInput {
   assessmentIDEqualFold: String
   assessmentIDContainsFold: String
   """
+  is_test field predicates
+  """
+  isTest: Boolean
+  isTestNEQ: Boolean
+  """
+  campaign_id field predicates
+  """
+  campaignID: String
+  campaignIDNEQ: String
+  campaignIDIn: [String!]
+  campaignIDNotIn: [String!]
+  campaignIDGT: String
+  campaignIDGTE: String
+  campaignIDLT: String
+  campaignIDLTE: String
+  campaignIDContains: String
+  campaignIDHasPrefix: String
+  campaignIDHasSuffix: String
+  campaignIDIsNil: Boolean
+  campaignIDNotNil: Boolean
+  campaignIDEqualFold: String
+  campaignIDContainsFold: String
+  """
+  identity_holder_id field predicates
+  """
+  identityHolderID: String
+  identityHolderIDNEQ: String
+  identityHolderIDIn: [String!]
+  identityHolderIDNotIn: [String!]
+  identityHolderIDGT: String
+  identityHolderIDGTE: String
+  identityHolderIDLT: String
+  identityHolderIDLTE: String
+  identityHolderIDContains: String
+  identityHolderIDHasPrefix: String
+  identityHolderIDHasSuffix: String
+  identityHolderIDIsNil: Boolean
+  identityHolderIDNotNil: Boolean
+  identityHolderIDEqualFold: String
+  identityHolderIDContainsFold: String
+  """
+  entity_id field predicates
+  """
+  entityID: String
+  entityIDNEQ: String
+  entityIDIn: [String!]
+  entityIDNotIn: [String!]
+  entityIDGT: String
+  entityIDGTE: String
+  entityIDLT: String
+  entityIDLTE: String
+  entityIDContains: String
+  entityIDHasPrefix: String
+  entityIDHasSuffix: String
+  entityIDIsNil: Boolean
+  entityIDNotNil: Boolean
+  entityIDEqualFold: String
+  entityIDContainsFold: String
+  """
   email field predicates
   """
   email: String
@@ -17534,6 +20547,84 @@ input AssessmentResponseHistoryWhereInput {
   sendAttemptsGTE: Int
   sendAttemptsLT: Int
   sendAttemptsLTE: Int
+  """
+  email_delivered_at field predicates
+  """
+  emailDeliveredAt: Time
+  emailDeliveredAtNEQ: Time
+  emailDeliveredAtIn: [Time!]
+  emailDeliveredAtNotIn: [Time!]
+  emailDeliveredAtGT: Time
+  emailDeliveredAtGTE: Time
+  emailDeliveredAtLT: Time
+  emailDeliveredAtLTE: Time
+  emailDeliveredAtIsNil: Boolean
+  emailDeliveredAtNotNil: Boolean
+  """
+  email_opened_at field predicates
+  """
+  emailOpenedAt: Time
+  emailOpenedAtNEQ: Time
+  emailOpenedAtIn: [Time!]
+  emailOpenedAtNotIn: [Time!]
+  emailOpenedAtGT: Time
+  emailOpenedAtGTE: Time
+  emailOpenedAtLT: Time
+  emailOpenedAtLTE: Time
+  emailOpenedAtIsNil: Boolean
+  emailOpenedAtNotNil: Boolean
+  """
+  email_clicked_at field predicates
+  """
+  emailClickedAt: Time
+  emailClickedAtNEQ: Time
+  emailClickedAtIn: [Time!]
+  emailClickedAtNotIn: [Time!]
+  emailClickedAtGT: Time
+  emailClickedAtGTE: Time
+  emailClickedAtLT: Time
+  emailClickedAtLTE: Time
+  emailClickedAtIsNil: Boolean
+  emailClickedAtNotNil: Boolean
+  """
+  email_open_count field predicates
+  """
+  emailOpenCount: Int
+  emailOpenCountNEQ: Int
+  emailOpenCountIn: [Int!]
+  emailOpenCountNotIn: [Int!]
+  emailOpenCountGT: Int
+  emailOpenCountGTE: Int
+  emailOpenCountLT: Int
+  emailOpenCountLTE: Int
+  emailOpenCountIsNil: Boolean
+  emailOpenCountNotNil: Boolean
+  """
+  email_click_count field predicates
+  """
+  emailClickCount: Int
+  emailClickCountNEQ: Int
+  emailClickCountIn: [Int!]
+  emailClickCountNotIn: [Int!]
+  emailClickCountGT: Int
+  emailClickCountGTE: Int
+  emailClickCountLT: Int
+  emailClickCountLTE: Int
+  emailClickCountIsNil: Boolean
+  emailClickCountNotNil: Boolean
+  """
+  last_email_event_at field predicates
+  """
+  lastEmailEventAt: Time
+  lastEmailEventAtNEQ: Time
+  lastEmailEventAtIn: [Time!]
+  lastEmailEventAtNotIn: [Time!]
+  lastEmailEventAtGT: Time
+  lastEmailEventAtGTE: Time
+  lastEmailEventAtLT: Time
+  lastEmailEventAtLTE: Time
+  lastEmailEventAtIsNil: Boolean
+  lastEmailEventAtNotNil: Boolean
   """
   status field predicates
   """
@@ -17608,6 +20699,82 @@ type AssetHistory implements Node {
   """
   ownerID: String
   """
+  the internal owner for the asset when no user or group is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the asset
+  """
+  internalOwnerUserID: String
+  """
+  the internal owner group id for the asset
+  """
+  internalOwnerGroupID: String
+  """
+  the subtype of the asset
+  """
+  assetSubtypeName: String
+  """
+  the subtype of the asset
+  """
+  assetSubtypeID: String
+  """
+  the data_classification of the asset
+  """
+  assetDataClassificationName: String
+  """
+  the data_classification of the asset
+  """
+  assetDataClassificationID: String
+  """
+  the environment of the asset
+  """
+  environmentName: String
+  """
+  the environment of the asset
+  """
+  environmentID: String
+  """
+  the scope of the asset
+  """
+  scopeName: String
+  """
+  the scope of the asset
+  """
+  scopeID: String
+  """
+  the access_model of the asset
+  """
+  accessModelName: String
+  """
+  the access_model of the asset
+  """
+  accessModelID: String
+  """
+  the encryption_status of the asset
+  """
+  encryptionStatusName: String
+  """
+  the encryption_status of the asset
+  """
+  encryptionStatusID: String
+  """
+  the security_tier of the asset
+  """
+  securityTierName: String
+  """
+  the security_tier of the asset
+  """
+  securityTierID: String
+  """
+  the criticality of the asset
+  """
+  criticalityName: String
+  """
+  the criticality of the asset
+  """
+  criticalityID: String
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -17636,6 +20803,42 @@ type AssetHistory implements Node {
   the website of the asset, if applicable
   """
   website: String
+  """
+  physical location of the asset, if applicable
+  """
+  physicalLocation: String
+  """
+  the region where the asset operates or is hosted
+  """
+  region: String
+  """
+  whether the asset stores or processes PII
+  """
+  containsPii: Boolean
+  """
+  the source of the asset record, e.g., manual, discovered, imported, api
+  """
+  sourceType: AssetHistorySourceType!
+  """
+  the platform that sourced the asset record
+  """
+  sourcePlatformID: String
+  """
+  the identifier used by the source platform for the asset
+  """
+  sourceIdentifier: String
+  """
+  cost center associated with the asset
+  """
+  costCenter: String
+  """
+  estimated monthly cost for the asset
+  """
+  estimatedMonthlyCost: Float
+  """
+  purchase date for the asset
+  """
+  purchaseDate: DateTime
   """
   the CPE (Common Platform Enumeration) of the asset, if applicable
   """
@@ -17712,8 +20915,26 @@ enum AssetHistoryOrderField {
   history_time
   created_at
   updated_at
+  internal_owner
   ASSET_TYPE
   name
+  physical_location
+  region
+  contains_pii
+  SOURCE_TYPE
+  source_identifier
+  cost_center
+  estimated_monthly_cost
+  purchase_date
+}
+"""
+AssetHistorySourceType is enum for the field source_type
+"""
+enum AssetHistorySourceType @goModel(model: "github.com/theopenlane/core/common/enums.SourceType") {
+  MANUAL
+  DISCOVERED
+  IMPORTED
+  API
 }
 """
 AssetHistoryWhereInput is used for filtering AssetHistory objects.
@@ -17853,6 +21074,348 @@ input AssetHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerGT: String
+  internalOwnerGTE: String
+  internalOwnerLT: String
+  internalOwnerLTE: String
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: String
+  internalOwnerUserIDNEQ: String
+  internalOwnerUserIDIn: [String!]
+  internalOwnerUserIDNotIn: [String!]
+  internalOwnerUserIDGT: String
+  internalOwnerUserIDGTE: String
+  internalOwnerUserIDLT: String
+  internalOwnerUserIDLTE: String
+  internalOwnerUserIDContains: String
+  internalOwnerUserIDHasPrefix: String
+  internalOwnerUserIDHasSuffix: String
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: String
+  internalOwnerUserIDContainsFold: String
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: String
+  internalOwnerGroupIDNEQ: String
+  internalOwnerGroupIDIn: [String!]
+  internalOwnerGroupIDNotIn: [String!]
+  internalOwnerGroupIDGT: String
+  internalOwnerGroupIDGTE: String
+  internalOwnerGroupIDLT: String
+  internalOwnerGroupIDLTE: String
+  internalOwnerGroupIDContains: String
+  internalOwnerGroupIDHasPrefix: String
+  internalOwnerGroupIDHasSuffix: String
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: String
+  internalOwnerGroupIDContainsFold: String
+  """
+  asset_subtype_name field predicates
+  """
+  assetSubtypeName: String
+  assetSubtypeNameNEQ: String
+  assetSubtypeNameIn: [String!]
+  assetSubtypeNameNotIn: [String!]
+  assetSubtypeNameGT: String
+  assetSubtypeNameGTE: String
+  assetSubtypeNameLT: String
+  assetSubtypeNameLTE: String
+  assetSubtypeNameContains: String
+  assetSubtypeNameHasPrefix: String
+  assetSubtypeNameHasSuffix: String
+  assetSubtypeNameIsNil: Boolean
+  assetSubtypeNameNotNil: Boolean
+  assetSubtypeNameEqualFold: String
+  assetSubtypeNameContainsFold: String
+  """
+  asset_subtype_id field predicates
+  """
+  assetSubtypeID: String
+  assetSubtypeIDNEQ: String
+  assetSubtypeIDIn: [String!]
+  assetSubtypeIDNotIn: [String!]
+  assetSubtypeIDGT: String
+  assetSubtypeIDGTE: String
+  assetSubtypeIDLT: String
+  assetSubtypeIDLTE: String
+  assetSubtypeIDContains: String
+  assetSubtypeIDHasPrefix: String
+  assetSubtypeIDHasSuffix: String
+  assetSubtypeIDIsNil: Boolean
+  assetSubtypeIDNotNil: Boolean
+  assetSubtypeIDEqualFold: String
+  assetSubtypeIDContainsFold: String
+  """
+  asset_data_classification_name field predicates
+  """
+  assetDataClassificationName: String
+  assetDataClassificationNameNEQ: String
+  assetDataClassificationNameIn: [String!]
+  assetDataClassificationNameNotIn: [String!]
+  assetDataClassificationNameGT: String
+  assetDataClassificationNameGTE: String
+  assetDataClassificationNameLT: String
+  assetDataClassificationNameLTE: String
+  assetDataClassificationNameContains: String
+  assetDataClassificationNameHasPrefix: String
+  assetDataClassificationNameHasSuffix: String
+  assetDataClassificationNameIsNil: Boolean
+  assetDataClassificationNameNotNil: Boolean
+  assetDataClassificationNameEqualFold: String
+  assetDataClassificationNameContainsFold: String
+  """
+  asset_data_classification_id field predicates
+  """
+  assetDataClassificationID: String
+  assetDataClassificationIDNEQ: String
+  assetDataClassificationIDIn: [String!]
+  assetDataClassificationIDNotIn: [String!]
+  assetDataClassificationIDGT: String
+  assetDataClassificationIDGTE: String
+  assetDataClassificationIDLT: String
+  assetDataClassificationIDLTE: String
+  assetDataClassificationIDContains: String
+  assetDataClassificationIDHasPrefix: String
+  assetDataClassificationIDHasSuffix: String
+  assetDataClassificationIDIsNil: Boolean
+  assetDataClassificationIDNotNil: Boolean
+  assetDataClassificationIDEqualFold: String
+  assetDataClassificationIDContainsFold: String
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
+  """
+  access_model_name field predicates
+  """
+  accessModelName: String
+  accessModelNameNEQ: String
+  accessModelNameIn: [String!]
+  accessModelNameNotIn: [String!]
+  accessModelNameGT: String
+  accessModelNameGTE: String
+  accessModelNameLT: String
+  accessModelNameLTE: String
+  accessModelNameContains: String
+  accessModelNameHasPrefix: String
+  accessModelNameHasSuffix: String
+  accessModelNameIsNil: Boolean
+  accessModelNameNotNil: Boolean
+  accessModelNameEqualFold: String
+  accessModelNameContainsFold: String
+  """
+  access_model_id field predicates
+  """
+  accessModelID: String
+  accessModelIDNEQ: String
+  accessModelIDIn: [String!]
+  accessModelIDNotIn: [String!]
+  accessModelIDGT: String
+  accessModelIDGTE: String
+  accessModelIDLT: String
+  accessModelIDLTE: String
+  accessModelIDContains: String
+  accessModelIDHasPrefix: String
+  accessModelIDHasSuffix: String
+  accessModelIDIsNil: Boolean
+  accessModelIDNotNil: Boolean
+  accessModelIDEqualFold: String
+  accessModelIDContainsFold: String
+  """
+  encryption_status_name field predicates
+  """
+  encryptionStatusName: String
+  encryptionStatusNameNEQ: String
+  encryptionStatusNameIn: [String!]
+  encryptionStatusNameNotIn: [String!]
+  encryptionStatusNameGT: String
+  encryptionStatusNameGTE: String
+  encryptionStatusNameLT: String
+  encryptionStatusNameLTE: String
+  encryptionStatusNameContains: String
+  encryptionStatusNameHasPrefix: String
+  encryptionStatusNameHasSuffix: String
+  encryptionStatusNameIsNil: Boolean
+  encryptionStatusNameNotNil: Boolean
+  encryptionStatusNameEqualFold: String
+  encryptionStatusNameContainsFold: String
+  """
+  encryption_status_id field predicates
+  """
+  encryptionStatusID: String
+  encryptionStatusIDNEQ: String
+  encryptionStatusIDIn: [String!]
+  encryptionStatusIDNotIn: [String!]
+  encryptionStatusIDGT: String
+  encryptionStatusIDGTE: String
+  encryptionStatusIDLT: String
+  encryptionStatusIDLTE: String
+  encryptionStatusIDContains: String
+  encryptionStatusIDHasPrefix: String
+  encryptionStatusIDHasSuffix: String
+  encryptionStatusIDIsNil: Boolean
+  encryptionStatusIDNotNil: Boolean
+  encryptionStatusIDEqualFold: String
+  encryptionStatusIDContainsFold: String
+  """
+  security_tier_name field predicates
+  """
+  securityTierName: String
+  securityTierNameNEQ: String
+  securityTierNameIn: [String!]
+  securityTierNameNotIn: [String!]
+  securityTierNameGT: String
+  securityTierNameGTE: String
+  securityTierNameLT: String
+  securityTierNameLTE: String
+  securityTierNameContains: String
+  securityTierNameHasPrefix: String
+  securityTierNameHasSuffix: String
+  securityTierNameIsNil: Boolean
+  securityTierNameNotNil: Boolean
+  securityTierNameEqualFold: String
+  securityTierNameContainsFold: String
+  """
+  security_tier_id field predicates
+  """
+  securityTierID: String
+  securityTierIDNEQ: String
+  securityTierIDIn: [String!]
+  securityTierIDNotIn: [String!]
+  securityTierIDGT: String
+  securityTierIDGTE: String
+  securityTierIDLT: String
+  securityTierIDLTE: String
+  securityTierIDContains: String
+  securityTierIDHasPrefix: String
+  securityTierIDHasSuffix: String
+  securityTierIDIsNil: Boolean
+  securityTierIDNotNil: Boolean
+  securityTierIDEqualFold: String
+  securityTierIDContainsFold: String
+  """
+  criticality_name field predicates
+  """
+  criticalityName: String
+  criticalityNameNEQ: String
+  criticalityNameIn: [String!]
+  criticalityNameNotIn: [String!]
+  criticalityNameGT: String
+  criticalityNameGTE: String
+  criticalityNameLT: String
+  criticalityNameLTE: String
+  criticalityNameContains: String
+  criticalityNameHasPrefix: String
+  criticalityNameHasSuffix: String
+  criticalityNameIsNil: Boolean
+  criticalityNameNotNil: Boolean
+  criticalityNameEqualFold: String
+  criticalityNameContainsFold: String
+  """
+  criticality_id field predicates
+  """
+  criticalityID: String
+  criticalityIDNEQ: String
+  criticalityIDIn: [String!]
+  criticalityIDNotIn: [String!]
+  criticalityIDGT: String
+  criticalityIDGTE: String
+  criticalityIDLT: String
+  criticalityIDLTE: String
+  criticalityIDContains: String
+  criticalityIDHasPrefix: String
+  criticalityIDHasSuffix: String
+  criticalityIDIsNil: Boolean
+  criticalityIDNotNil: Boolean
+  criticalityIDEqualFold: String
+  criticalityIDContainsFold: String
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -17972,6 +21535,1287 @@ input AssetHistoryWhereInput {
   websiteNotNil: Boolean
   websiteEqualFold: String
   websiteContainsFold: String
+  """
+  physical_location field predicates
+  """
+  physicalLocation: String
+  physicalLocationNEQ: String
+  physicalLocationIn: [String!]
+  physicalLocationNotIn: [String!]
+  physicalLocationGT: String
+  physicalLocationGTE: String
+  physicalLocationLT: String
+  physicalLocationLTE: String
+  physicalLocationContains: String
+  physicalLocationHasPrefix: String
+  physicalLocationHasSuffix: String
+  physicalLocationIsNil: Boolean
+  physicalLocationNotNil: Boolean
+  physicalLocationEqualFold: String
+  physicalLocationContainsFold: String
+  """
+  region field predicates
+  """
+  region: String
+  regionNEQ: String
+  regionIn: [String!]
+  regionNotIn: [String!]
+  regionGT: String
+  regionGTE: String
+  regionLT: String
+  regionLTE: String
+  regionContains: String
+  regionHasPrefix: String
+  regionHasSuffix: String
+  regionIsNil: Boolean
+  regionNotNil: Boolean
+  regionEqualFold: String
+  regionContainsFold: String
+  """
+  contains_pii field predicates
+  """
+  containsPii: Boolean
+  containsPiiNEQ: Boolean
+  containsPiiIsNil: Boolean
+  containsPiiNotNil: Boolean
+  """
+  source_type field predicates
+  """
+  sourceType: AssetHistorySourceType
+  sourceTypeNEQ: AssetHistorySourceType
+  sourceTypeIn: [AssetHistorySourceType!]
+  sourceTypeNotIn: [AssetHistorySourceType!]
+  """
+  source_platform_id field predicates
+  """
+  sourcePlatformID: String
+  sourcePlatformIDNEQ: String
+  sourcePlatformIDIn: [String!]
+  sourcePlatformIDNotIn: [String!]
+  sourcePlatformIDGT: String
+  sourcePlatformIDGTE: String
+  sourcePlatformIDLT: String
+  sourcePlatformIDLTE: String
+  sourcePlatformIDContains: String
+  sourcePlatformIDHasPrefix: String
+  sourcePlatformIDHasSuffix: String
+  sourcePlatformIDIsNil: Boolean
+  sourcePlatformIDNotNil: Boolean
+  sourcePlatformIDEqualFold: String
+  sourcePlatformIDContainsFold: String
+  """
+  source_identifier field predicates
+  """
+  sourceIdentifier: String
+  sourceIdentifierNEQ: String
+  sourceIdentifierIn: [String!]
+  sourceIdentifierNotIn: [String!]
+  sourceIdentifierGT: String
+  sourceIdentifierGTE: String
+  sourceIdentifierLT: String
+  sourceIdentifierLTE: String
+  sourceIdentifierContains: String
+  sourceIdentifierHasPrefix: String
+  sourceIdentifierHasSuffix: String
+  sourceIdentifierIsNil: Boolean
+  sourceIdentifierNotNil: Boolean
+  sourceIdentifierEqualFold: String
+  sourceIdentifierContainsFold: String
+  """
+  cost_center field predicates
+  """
+  costCenter: String
+  costCenterNEQ: String
+  costCenterIn: [String!]
+  costCenterNotIn: [String!]
+  costCenterGT: String
+  costCenterGTE: String
+  costCenterLT: String
+  costCenterLTE: String
+  costCenterContains: String
+  costCenterHasPrefix: String
+  costCenterHasSuffix: String
+  costCenterIsNil: Boolean
+  costCenterNotNil: Boolean
+  costCenterEqualFold: String
+  costCenterContainsFold: String
+  """
+  estimated_monthly_cost field predicates
+  """
+  estimatedMonthlyCost: Float
+  estimatedMonthlyCostNEQ: Float
+  estimatedMonthlyCostIn: [Float!]
+  estimatedMonthlyCostNotIn: [Float!]
+  estimatedMonthlyCostGT: Float
+  estimatedMonthlyCostGTE: Float
+  estimatedMonthlyCostLT: Float
+  estimatedMonthlyCostLTE: Float
+  estimatedMonthlyCostIsNil: Boolean
+  estimatedMonthlyCostNotNil: Boolean
+  """
+  purchase_date field predicates
+  """
+  purchaseDate: DateTime
+  purchaseDateNEQ: DateTime
+  purchaseDateIn: [DateTime!]
+  purchaseDateNotIn: [DateTime!]
+  purchaseDateGT: DateTime
+  purchaseDateGTE: DateTime
+  purchaseDateLT: DateTime
+  purchaseDateLTE: DateTime
+  purchaseDateIsNil: Boolean
+  purchaseDateNotNil: Boolean
+}
+type CampaignHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: CampaignHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  the internal owner for the campaign when no user or group is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the campaign
+  """
+  internalOwnerUserID: String
+  """
+  the internal owner group id for the campaign
+  """
+  internalOwnerGroupID: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
+  the name of the campaign
+  """
+  name: String!
+  """
+  the description of the campaign
+  """
+  description: String
+  """
+  the type of campaign
+  """
+  campaignType: CampaignHistoryCampaignType!
+  """
+  the status of the campaign
+  """
+  status: CampaignHistoryCampaignStatus!
+  """
+  whether the campaign is active
+  """
+  isActive: Boolean!
+  """
+  when the campaign is scheduled to start
+  """
+  scheduledAt: DateTime
+  """
+  when the campaign was launched
+  """
+  launchedAt: DateTime
+  """
+  when the campaign completed
+  """
+  completedAt: DateTime
+  """
+  when responses are due for the campaign
+  """
+  dueDate: DateTime
+  """
+  whether the campaign recurs on a schedule
+  """
+  isRecurring: Boolean!
+  """
+  the recurrence cadence for the campaign
+  """
+  recurrenceFrequency: CampaignHistoryFrequency
+  """
+  the recurrence interval for the campaign, combined with the recurrence frequency
+  """
+  recurrenceInterval: Int
+  """
+  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  recurrenceCron: String
+  """
+  timezone used for the recurrence schedule
+  """
+  recurrenceTimezone: String
+  """
+  when the campaign was last executed
+  """
+  lastRunAt: DateTime
+  """
+  when the campaign is scheduled to run next
+  """
+  nextRunAt: DateTime
+  """
+  when the recurring campaign should stop running
+  """
+  recurrenceEndAt: DateTime
+  """
+  the number of recipients targeted by the campaign
+  """
+  recipientCount: Int
+  """
+  the number of times campaign notifications were resent
+  """
+  resendCount: Int
+  """
+  when campaign notifications were last resent
+  """
+  lastResentAt: DateTime
+  """
+  the template associated with the campaign
+  """
+  templateID: String
+  """
+  the entity associated with the campaign
+  """
+  entityID: String
+  """
+  the assessment associated with the campaign
+  """
+  assessmentID: String
+  """
+  additional metadata about the campaign
+  """
+  metadata: Map
+}
+"""
+CampaignHistoryCampaignStatus is enum for the field status
+"""
+enum CampaignHistoryCampaignStatus @goModel(model: "github.com/theopenlane/core/common/enums.CampaignStatus") {
+  DRAFT
+  SCHEDULED
+  ACTIVE
+  COMPLETED
+  CANCELED
+}
+"""
+CampaignHistoryCampaignType is enum for the field campaign_type
+"""
+enum CampaignHistoryCampaignType @goModel(model: "github.com/theopenlane/core/common/enums.CampaignType") {
+  QUESTIONNAIRE
+  TRAINING
+  POLICY_ATTESTATION
+  VENDOR_ASSESSMENT
+  CUSTOM
+}
+"""
+A connection to a list of items.
+"""
+type CampaignHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [CampaignHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type CampaignHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: CampaignHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+CampaignHistoryFrequency is enum for the field recurrence_frequency
+"""
+enum CampaignHistoryFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+  YEARLY
+  QUARTERLY
+  BIANNUALLY
+  MONTHLY
+}
+"""
+CampaignHistoryOpType is enum for the field operation
+"""
+enum CampaignHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for CampaignHistory connections
+"""
+input CampaignHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order CampaignHistories.
+  """
+  field: CampaignHistoryOrderField!
+}
+"""
+Properties by which CampaignHistory connections can be ordered.
+"""
+enum CampaignHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  internal_owner
+  name
+  CAMPAIGN_TYPE
+  STATUS
+  is_active
+  scheduled_at
+  launched_at
+  completed_at
+  due_date
+  is_recurring
+  recurrence_frequency
+  recurrence_interval
+  recurrence_timezone
+  last_run_at
+  next_run_at
+  recurrence_end_at
+  recipient_count
+  resend_count
+  last_resent_at
+}
+"""
+CampaignHistoryWhereInput is used for filtering CampaignHistory objects.
+Input was generated by ent.
+"""
+input CampaignHistoryWhereInput {
+  not: CampaignHistoryWhereInput
+  and: [CampaignHistoryWhereInput!]
+  or: [CampaignHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: CampaignHistoryOpType
+  operationNEQ: CampaignHistoryOpType
+  operationIn: [CampaignHistoryOpType!]
+  operationNotIn: [CampaignHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerGT: String
+  internalOwnerGTE: String
+  internalOwnerLT: String
+  internalOwnerLTE: String
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: String
+  internalOwnerUserIDNEQ: String
+  internalOwnerUserIDIn: [String!]
+  internalOwnerUserIDNotIn: [String!]
+  internalOwnerUserIDGT: String
+  internalOwnerUserIDGTE: String
+  internalOwnerUserIDLT: String
+  internalOwnerUserIDLTE: String
+  internalOwnerUserIDContains: String
+  internalOwnerUserIDHasPrefix: String
+  internalOwnerUserIDHasSuffix: String
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: String
+  internalOwnerUserIDContainsFold: String
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: String
+  internalOwnerGroupIDNEQ: String
+  internalOwnerGroupIDIn: [String!]
+  internalOwnerGroupIDNotIn: [String!]
+  internalOwnerGroupIDGT: String
+  internalOwnerGroupIDGTE: String
+  internalOwnerGroupIDLT: String
+  internalOwnerGroupIDLTE: String
+  internalOwnerGroupIDContains: String
+  internalOwnerGroupIDHasPrefix: String
+  internalOwnerGroupIDHasSuffix: String
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: String
+  internalOwnerGroupIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  campaign_type field predicates
+  """
+  campaignType: CampaignHistoryCampaignType
+  campaignTypeNEQ: CampaignHistoryCampaignType
+  campaignTypeIn: [CampaignHistoryCampaignType!]
+  campaignTypeNotIn: [CampaignHistoryCampaignType!]
+  """
+  status field predicates
+  """
+  status: CampaignHistoryCampaignStatus
+  statusNEQ: CampaignHistoryCampaignStatus
+  statusIn: [CampaignHistoryCampaignStatus!]
+  statusNotIn: [CampaignHistoryCampaignStatus!]
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
+  """
+  scheduled_at field predicates
+  """
+  scheduledAt: DateTime
+  scheduledAtNEQ: DateTime
+  scheduledAtIn: [DateTime!]
+  scheduledAtNotIn: [DateTime!]
+  scheduledAtGT: DateTime
+  scheduledAtGTE: DateTime
+  scheduledAtLT: DateTime
+  scheduledAtLTE: DateTime
+  scheduledAtIsNil: Boolean
+  scheduledAtNotNil: Boolean
+  """
+  launched_at field predicates
+  """
+  launchedAt: DateTime
+  launchedAtNEQ: DateTime
+  launchedAtIn: [DateTime!]
+  launchedAtNotIn: [DateTime!]
+  launchedAtGT: DateTime
+  launchedAtGTE: DateTime
+  launchedAtLT: DateTime
+  launchedAtLTE: DateTime
+  launchedAtIsNil: Boolean
+  launchedAtNotNil: Boolean
+  """
+  completed_at field predicates
+  """
+  completedAt: DateTime
+  completedAtNEQ: DateTime
+  completedAtIn: [DateTime!]
+  completedAtNotIn: [DateTime!]
+  completedAtGT: DateTime
+  completedAtGTE: DateTime
+  completedAtLT: DateTime
+  completedAtLTE: DateTime
+  completedAtIsNil: Boolean
+  completedAtNotNil: Boolean
+  """
+  due_date field predicates
+  """
+  dueDate: DateTime
+  dueDateNEQ: DateTime
+  dueDateIn: [DateTime!]
+  dueDateNotIn: [DateTime!]
+  dueDateGT: DateTime
+  dueDateGTE: DateTime
+  dueDateLT: DateTime
+  dueDateLTE: DateTime
+  dueDateIsNil: Boolean
+  dueDateNotNil: Boolean
+  """
+  is_recurring field predicates
+  """
+  isRecurring: Boolean
+  isRecurringNEQ: Boolean
+  """
+  recurrence_frequency field predicates
+  """
+  recurrenceFrequency: CampaignHistoryFrequency
+  recurrenceFrequencyNEQ: CampaignHistoryFrequency
+  recurrenceFrequencyIn: [CampaignHistoryFrequency!]
+  recurrenceFrequencyNotIn: [CampaignHistoryFrequency!]
+  recurrenceFrequencyIsNil: Boolean
+  recurrenceFrequencyNotNil: Boolean
+  """
+  recurrence_interval field predicates
+  """
+  recurrenceInterval: Int
+  recurrenceIntervalNEQ: Int
+  recurrenceIntervalIn: [Int!]
+  recurrenceIntervalNotIn: [Int!]
+  recurrenceIntervalGT: Int
+  recurrenceIntervalGTE: Int
+  recurrenceIntervalLT: Int
+  recurrenceIntervalLTE: Int
+  recurrenceIntervalIsNil: Boolean
+  recurrenceIntervalNotNil: Boolean
+  """
+  recurrence_timezone field predicates
+  """
+  recurrenceTimezone: String
+  recurrenceTimezoneNEQ: String
+  recurrenceTimezoneIn: [String!]
+  recurrenceTimezoneNotIn: [String!]
+  recurrenceTimezoneGT: String
+  recurrenceTimezoneGTE: String
+  recurrenceTimezoneLT: String
+  recurrenceTimezoneLTE: String
+  recurrenceTimezoneContains: String
+  recurrenceTimezoneHasPrefix: String
+  recurrenceTimezoneHasSuffix: String
+  recurrenceTimezoneIsNil: Boolean
+  recurrenceTimezoneNotNil: Boolean
+  recurrenceTimezoneEqualFold: String
+  recurrenceTimezoneContainsFold: String
+  """
+  last_run_at field predicates
+  """
+  lastRunAt: DateTime
+  lastRunAtNEQ: DateTime
+  lastRunAtIn: [DateTime!]
+  lastRunAtNotIn: [DateTime!]
+  lastRunAtGT: DateTime
+  lastRunAtGTE: DateTime
+  lastRunAtLT: DateTime
+  lastRunAtLTE: DateTime
+  lastRunAtIsNil: Boolean
+  lastRunAtNotNil: Boolean
+  """
+  next_run_at field predicates
+  """
+  nextRunAt: DateTime
+  nextRunAtNEQ: DateTime
+  nextRunAtIn: [DateTime!]
+  nextRunAtNotIn: [DateTime!]
+  nextRunAtGT: DateTime
+  nextRunAtGTE: DateTime
+  nextRunAtLT: DateTime
+  nextRunAtLTE: DateTime
+  nextRunAtIsNil: Boolean
+  nextRunAtNotNil: Boolean
+  """
+  recurrence_end_at field predicates
+  """
+  recurrenceEndAt: DateTime
+  recurrenceEndAtNEQ: DateTime
+  recurrenceEndAtIn: [DateTime!]
+  recurrenceEndAtNotIn: [DateTime!]
+  recurrenceEndAtGT: DateTime
+  recurrenceEndAtGTE: DateTime
+  recurrenceEndAtLT: DateTime
+  recurrenceEndAtLTE: DateTime
+  recurrenceEndAtIsNil: Boolean
+  recurrenceEndAtNotNil: Boolean
+  """
+  recipient_count field predicates
+  """
+  recipientCount: Int
+  recipientCountNEQ: Int
+  recipientCountIn: [Int!]
+  recipientCountNotIn: [Int!]
+  recipientCountGT: Int
+  recipientCountGTE: Int
+  recipientCountLT: Int
+  recipientCountLTE: Int
+  recipientCountIsNil: Boolean
+  recipientCountNotNil: Boolean
+  """
+  resend_count field predicates
+  """
+  resendCount: Int
+  resendCountNEQ: Int
+  resendCountIn: [Int!]
+  resendCountNotIn: [Int!]
+  resendCountGT: Int
+  resendCountGTE: Int
+  resendCountLT: Int
+  resendCountLTE: Int
+  resendCountIsNil: Boolean
+  resendCountNotNil: Boolean
+  """
+  last_resent_at field predicates
+  """
+  lastResentAt: DateTime
+  lastResentAtNEQ: DateTime
+  lastResentAtIn: [DateTime!]
+  lastResentAtNotIn: [DateTime!]
+  lastResentAtGT: DateTime
+  lastResentAtGTE: DateTime
+  lastResentAtLT: DateTime
+  lastResentAtLTE: DateTime
+  lastResentAtIsNil: Boolean
+  lastResentAtNotNil: Boolean
+  """
+  template_id field predicates
+  """
+  templateID: String
+  templateIDNEQ: String
+  templateIDIn: [String!]
+  templateIDNotIn: [String!]
+  templateIDGT: String
+  templateIDGTE: String
+  templateIDLT: String
+  templateIDLTE: String
+  templateIDContains: String
+  templateIDHasPrefix: String
+  templateIDHasSuffix: String
+  templateIDIsNil: Boolean
+  templateIDNotNil: Boolean
+  templateIDEqualFold: String
+  templateIDContainsFold: String
+  """
+  entity_id field predicates
+  """
+  entityID: String
+  entityIDNEQ: String
+  entityIDIn: [String!]
+  entityIDNotIn: [String!]
+  entityIDGT: String
+  entityIDGTE: String
+  entityIDLT: String
+  entityIDLTE: String
+  entityIDContains: String
+  entityIDHasPrefix: String
+  entityIDHasSuffix: String
+  entityIDIsNil: Boolean
+  entityIDNotNil: Boolean
+  entityIDEqualFold: String
+  entityIDContainsFold: String
+  """
+  assessment_id field predicates
+  """
+  assessmentID: String
+  assessmentIDNEQ: String
+  assessmentIDIn: [String!]
+  assessmentIDNotIn: [String!]
+  assessmentIDGT: String
+  assessmentIDGTE: String
+  assessmentIDLT: String
+  assessmentIDLTE: String
+  assessmentIDContains: String
+  assessmentIDHasPrefix: String
+  assessmentIDHasSuffix: String
+  assessmentIDIsNil: Boolean
+  assessmentIDNotNil: Boolean
+  assessmentIDEqualFold: String
+  assessmentIDContainsFold: String
+}
+type CampaignTargetHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: CampaignTargetHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
+  the campaign this target belongs to
+  """
+  campaignID: String!
+  """
+  the contact associated with the campaign target
+  """
+  contactID: String
+  """
+  the user associated with the campaign target
+  """
+  userID: String
+  """
+  the group associated with the campaign target
+  """
+  groupID: String
+  """
+  the email address targeted by the campaign
+  """
+  email: String!
+  """
+  the name of the campaign target, if known
+  """
+  fullName: String
+  """
+  the delivery or response status for the campaign target
+  """
+  status: CampaignTargetHistoryAssessmentResponseStatus!
+  """
+  when the campaign target was last sent a request
+  """
+  sentAt: DateTime
+  """
+  when the campaign target completed the request
+  """
+  completedAt: DateTime
+  """
+  additional metadata about the campaign target
+  """
+  metadata: Map
+}
+"""
+CampaignTargetHistoryAssessmentResponseStatus is enum for the field status
+"""
+enum CampaignTargetHistoryAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/common/enums.AssessmentResponseStatus") {
+  NOT_STARTED
+  SENT
+  COMPLETED
+  OVERDUE
+}
+"""
+A connection to a list of items.
+"""
+type CampaignTargetHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [CampaignTargetHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type CampaignTargetHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: CampaignTargetHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+CampaignTargetHistoryOpType is enum for the field operation
+"""
+enum CampaignTargetHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for CampaignTargetHistory connections
+"""
+input CampaignTargetHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order CampaignTargetHistories.
+  """
+  field: CampaignTargetHistoryOrderField!
+}
+"""
+Properties by which CampaignTargetHistory connections can be ordered.
+"""
+enum CampaignTargetHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  email
+  full_name
+  STATUS
+  sent_at
+  completed_at
+}
+"""
+CampaignTargetHistoryWhereInput is used for filtering CampaignTargetHistory objects.
+Input was generated by ent.
+"""
+input CampaignTargetHistoryWhereInput {
+  not: CampaignTargetHistoryWhereInput
+  and: [CampaignTargetHistoryWhereInput!]
+  or: [CampaignTargetHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: CampaignTargetHistoryOpType
+  operationNEQ: CampaignTargetHistoryOpType
+  operationIn: [CampaignTargetHistoryOpType!]
+  operationNotIn: [CampaignTargetHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
+  campaign_id field predicates
+  """
+  campaignID: String
+  campaignIDNEQ: String
+  campaignIDIn: [String!]
+  campaignIDNotIn: [String!]
+  campaignIDGT: String
+  campaignIDGTE: String
+  campaignIDLT: String
+  campaignIDLTE: String
+  campaignIDContains: String
+  campaignIDHasPrefix: String
+  campaignIDHasSuffix: String
+  campaignIDEqualFold: String
+  campaignIDContainsFold: String
+  """
+  contact_id field predicates
+  """
+  contactID: String
+  contactIDNEQ: String
+  contactIDIn: [String!]
+  contactIDNotIn: [String!]
+  contactIDGT: String
+  contactIDGTE: String
+  contactIDLT: String
+  contactIDLTE: String
+  contactIDContains: String
+  contactIDHasPrefix: String
+  contactIDHasSuffix: String
+  contactIDIsNil: Boolean
+  contactIDNotNil: Boolean
+  contactIDEqualFold: String
+  contactIDContainsFold: String
+  """
+  user_id field predicates
+  """
+  userID: String
+  userIDNEQ: String
+  userIDIn: [String!]
+  userIDNotIn: [String!]
+  userIDGT: String
+  userIDGTE: String
+  userIDLT: String
+  userIDLTE: String
+  userIDContains: String
+  userIDHasPrefix: String
+  userIDHasSuffix: String
+  userIDIsNil: Boolean
+  userIDNotNil: Boolean
+  userIDEqualFold: String
+  userIDContainsFold: String
+  """
+  group_id field predicates
+  """
+  groupID: String
+  groupIDNEQ: String
+  groupIDIn: [String!]
+  groupIDNotIn: [String!]
+  groupIDGT: String
+  groupIDGTE: String
+  groupIDLT: String
+  groupIDLTE: String
+  groupIDContains: String
+  groupIDHasPrefix: String
+  groupIDHasSuffix: String
+  groupIDIsNil: Boolean
+  groupIDNotNil: Boolean
+  groupIDEqualFold: String
+  groupIDContainsFold: String
+  """
+  email field predicates
+  """
+  email: String
+  emailNEQ: String
+  emailIn: [String!]
+  emailNotIn: [String!]
+  emailGT: String
+  emailGTE: String
+  emailLT: String
+  emailLTE: String
+  emailContains: String
+  emailHasPrefix: String
+  emailHasSuffix: String
+  emailEqualFold: String
+  emailContainsFold: String
+  """
+  full_name field predicates
+  """
+  fullName: String
+  fullNameNEQ: String
+  fullNameIn: [String!]
+  fullNameNotIn: [String!]
+  fullNameGT: String
+  fullNameGTE: String
+  fullNameLT: String
+  fullNameLTE: String
+  fullNameContains: String
+  fullNameHasPrefix: String
+  fullNameHasSuffix: String
+  fullNameIsNil: Boolean
+  fullNameNotNil: Boolean
+  fullNameEqualFold: String
+  fullNameContainsFold: String
+  """
+  status field predicates
+  """
+  status: CampaignTargetHistoryAssessmentResponseStatus
+  statusNEQ: CampaignTargetHistoryAssessmentResponseStatus
+  statusIn: [CampaignTargetHistoryAssessmentResponseStatus!]
+  statusNotIn: [CampaignTargetHistoryAssessmentResponseStatus!]
+  """
+  sent_at field predicates
+  """
+  sentAt: DateTime
+  sentAtNEQ: DateTime
+  sentAtIn: [DateTime!]
+  sentAtNotIn: [DateTime!]
+  sentAtGT: DateTime
+  sentAtGTE: DateTime
+  sentAtLT: DateTime
+  sentAtLTE: DateTime
+  sentAtIsNil: Boolean
+  sentAtNotNil: Boolean
+  """
+  completed_at field predicates
+  """
+  completedAt: DateTime
+  completedAtNEQ: DateTime
+  completedAtIn: [DateTime!]
+  completedAtNotIn: [DateTime!]
+  completedAtGT: DateTime
+  completedAtGTE: DateTime
+  completedAtLT: DateTime
+  completedAtLTE: DateTime
+  completedAtIsNil: Boolean
+  completedAtNotNil: Boolean
 }
 type ContactHistory implements Node {
   id: ID!
@@ -18487,6 +23331,22 @@ type ControlHistory implements Node {
   the kind of the control
   """
   controlKindID: String
+  """
+  the environment of the control
+  """
+  environmentName: String
+  """
+  the environment of the control
+  """
+  environmentID: String
+  """
+  the scope of the control
+  """
+  scopeName: String
+  """
+  the scope of the control
+  """
+  scopeID: String
   """
   internal marker field for workflow eligibility, not exposed in API
   """
@@ -19053,6 +23913,78 @@ input ControlHistoryWhereInput {
   controlKindIDNotNil: Boolean
   controlKindIDEqualFold: String
   controlKindIDContainsFold: String
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
   """
   workflow_eligible_marker field predicates
   """
@@ -20729,6 +25661,22 @@ type DirectoryAccountHistory implements Node {
   """
   ownerID: String
   """
+  the environment of the directory_account
+  """
+  environmentName: String
+  """
+  the environment of the directory_account
+  """
+  environmentID: String
+  """
+  the scope of the directory_account
+  """
+  scopeName: String
+  """
+  the scope of the directory_account
+  """
+  scopeID: String
+  """
   integration that owns this directory account
   """
   integrationID: String!
@@ -21056,6 +26004,78 @@ input DirectoryAccountHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
+  """
   integration_id field predicates
   """
   integrationID: String
@@ -21369,6 +26389,22 @@ type DirectoryGroupHistory implements Node {
   """
   ownerID: String
   """
+  the environment of the directory_group
+  """
+  environmentName: String
+  """
+  the environment of the directory_group
+  """
+  environmentID: String
+  """
+  the scope of the directory_group
+  """
+  scopeName: String
+  """
+  the scope of the directory_group
+  """
+  scopeID: String
+  """
   integration that owns this directory group
   """
   integrationID: String!
@@ -21662,6 +26698,78 @@ input DirectoryGroupHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
+  """
   integration_id field predicates
   """
   integrationID: String
@@ -21842,6 +26950,22 @@ type DirectoryMembershipHistory implements Node {
   the organization id that owns the object
   """
   ownerID: String
+  """
+  the environment of the directory_membership
+  """
+  environmentName: String
+  """
+  the environment of the directory_membership
+  """
+  environmentID: String
+  """
+  the scope of the directory_membership
+  """
+  scopeName: String
+  """
+  the scope of the directory_membership
+  """
+  scopeID: String
   """
   integration that owns this directory membership
   """
@@ -22107,6 +27231,78 @@ input DirectoryMembershipHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
   """
   integration_id field predicates
   """
@@ -22514,6 +27710,22 @@ type DocumentDataHistory implements Node {
   """
   ownerID: String
   """
+  the environment of the document
+  """
+  environmentName: String
+  """
+  the environment of the document
+  """
+  environmentID: String
+  """
+  the scope of the document
+  """
+  scopeName: String
+  """
+  the scope of the document
+  """
+  scopeID: String
+  """
   the template id of the document
   """
   templateID: String
@@ -22719,6 +27931,78 @@ input DocumentDataHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
+  """
   template_id field predicates
   """
   templateID: String
@@ -22755,6 +28039,34 @@ type EntityHistory implements Node {
   """
   ownerID: String
   """
+  the internal owner for the entity when no user or group is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the entity
+  """
+  internalOwnerUserID: String
+  """
+  the internal owner group id for the entity
+  """
+  internalOwnerGroupID: String
+  """
+  who reviewed the entity when no user or group is linked
+  """
+  reviewedBy: String
+  """
+  the user id that reviewed the entity
+  """
+  reviewedByUserID: String
+  """
+  the group id that reviewed the entity
+  """
+  reviewedByGroupID: String
+  """
+  when the entity was last reviewed
+  """
+  lastReviewedAt: DateTime
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -22766,6 +28078,46 @@ type EntityHistory implements Node {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @hidden(if: true)
+  """
+  the relationship_state of the entity
+  """
+  entityRelationshipStateName: String
+  """
+  the relationship_state of the entity
+  """
+  entityRelationshipStateID: String
+  """
+  the security_questionnaire_status of the entity
+  """
+  entitySecurityQuestionnaireStatusName: String
+  """
+  the security_questionnaire_status of the entity
+  """
+  entitySecurityQuestionnaireStatusID: String
+  """
+  the source_type of the entity
+  """
+  entitySourceTypeName: String
+  """
+  the source_type of the entity
+  """
+  entitySourceTypeID: String
+  """
+  the environment of the entity
+  """
+  environmentName: String
+  """
+  the environment of the entity
+  """
+  environmentID: String
+  """
+  the scope of the entity
+  """
+  scopeName: String
+  """
+  the scope of the entity
+  """
+  scopeID: String
   """
   the name of the entity
   """
@@ -22790,6 +28142,106 @@ type EntityHistory implements Node {
   status of the entity
   """
   status: String
+  """
+  whether the entity is approved for use
+  """
+  approvedForUse: Boolean
+  """
+  asset identifiers linked to the entity
+  """
+  linkedAssetIds: [String!]
+  """
+  whether the entity has an active SOC 2 report
+  """
+  hasSoc2: Boolean
+  """
+  SOC 2 reporting period end date
+  """
+  soc2PeriodEnd: DateTime
+  """
+  start date for the entity contract
+  """
+  contractStartDate: DateTime
+  """
+  end date for the entity contract
+  """
+  contractEndDate: DateTime
+  """
+  whether the contract auto-renews
+  """
+  autoRenews: Boolean
+  """
+  number of days required for termination notice
+  """
+  terminationNoticeDays: Int
+  """
+  annual spend associated with the entity
+  """
+  annualSpend: Float
+  """
+  the currency of the annual spend
+  """
+  spendCurrency: String
+  """
+  billing model for the entity relationship
+  """
+  billingModel: String
+  """
+  renewal risk rating for the entity
+  """
+  renewalRisk: String
+  """
+  whether SSO is enforced for the entity
+  """
+  ssoEnforced: Boolean
+  """
+  whether MFA is supported by the entity
+  """
+  mfaSupported: Boolean
+  """
+  whether MFA is enforced by the entity
+  """
+  mfaEnforced: Boolean
+  """
+  status page URL for the entity
+  """
+  statusPageURL: String
+  """
+  services provided by the entity
+  """
+  providedServices: [String!]
+  """
+  external links associated with the entity
+  """
+  links: [String!]
+  """
+  the risk rating label for the entity
+  """
+  riskRating: String
+  """
+  the risk score for the entity
+  """
+  riskScore: Int
+  """
+  the tier classification for the entity
+  """
+  tier: String
+  """
+  the cadence for reviewing the entity
+  """
+  reviewFrequency: EntityHistoryFrequency
+  """
+  when the entity is due for review
+  """
+  nextReviewAt: DateTime
+  """
+  when the entity contract is up for renewal
+  """
+  contractRenewalAt: DateTime
+  """
+  vendor metadata such as additional enrichment info, company size, public, etc.
+  """
+  vendorMetadata: Map
 }
 """
 A connection to a list of items.
@@ -22822,6 +28274,15 @@ type EntityHistoryEdge {
   cursor: Cursor!
 }
 """
+EntityHistoryFrequency is enum for the field review_frequency
+"""
+enum EntityHistoryFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+  YEARLY
+  QUARTERLY
+  BIANNUALLY
+  MONTHLY
+}
+"""
 EntityHistoryOpType is enum for the field operation
 """
 enum EntityHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
@@ -22849,9 +28310,33 @@ enum EntityHistoryOrderField {
   history_time
   created_at
   updated_at
+  internal_owner
+  reviewed_by
+  last_reviewed_at
   name
   display_name
   status
+  approved_for_use
+  has_soc2
+  soc2_period_end
+  contract_start_date
+  contract_end_date
+  auto_renews
+  termination_notice_days
+  annual_spend
+  spend_currency
+  billing_model
+  renewal_risk
+  sso_enforced
+  mfa_supported
+  mfa_enforced
+  status_page_url
+  risk_rating
+  risk_score
+  tier
+  REVIEW_FREQUENCY
+  next_review_at
+  contract_renewal_at
 }
 """
 EntityHistoryWhereInput is used for filtering EntityHistory objects.
@@ -22991,6 +28476,127 @@ input EntityHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerGT: String
+  internalOwnerGTE: String
+  internalOwnerLT: String
+  internalOwnerLTE: String
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: String
+  internalOwnerUserIDNEQ: String
+  internalOwnerUserIDIn: [String!]
+  internalOwnerUserIDNotIn: [String!]
+  internalOwnerUserIDGT: String
+  internalOwnerUserIDGTE: String
+  internalOwnerUserIDLT: String
+  internalOwnerUserIDLTE: String
+  internalOwnerUserIDContains: String
+  internalOwnerUserIDHasPrefix: String
+  internalOwnerUserIDHasSuffix: String
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: String
+  internalOwnerUserIDContainsFold: String
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: String
+  internalOwnerGroupIDNEQ: String
+  internalOwnerGroupIDIn: [String!]
+  internalOwnerGroupIDNotIn: [String!]
+  internalOwnerGroupIDGT: String
+  internalOwnerGroupIDGTE: String
+  internalOwnerGroupIDLT: String
+  internalOwnerGroupIDLTE: String
+  internalOwnerGroupIDContains: String
+  internalOwnerGroupIDHasPrefix: String
+  internalOwnerGroupIDHasSuffix: String
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: String
+  internalOwnerGroupIDContainsFold: String
+  """
+  reviewed_by field predicates
+  """
+  reviewedBy: String
+  reviewedByNEQ: String
+  reviewedByIn: [String!]
+  reviewedByNotIn: [String!]
+  reviewedByGT: String
+  reviewedByGTE: String
+  reviewedByLT: String
+  reviewedByLTE: String
+  reviewedByContains: String
+  reviewedByHasPrefix: String
+  reviewedByHasSuffix: String
+  reviewedByIsNil: Boolean
+  reviewedByNotNil: Boolean
+  reviewedByEqualFold: String
+  reviewedByContainsFold: String
+  """
+  reviewed_by_user_id field predicates
+  """
+  reviewedByUserID: String
+  reviewedByUserIDNEQ: String
+  reviewedByUserIDIn: [String!]
+  reviewedByUserIDNotIn: [String!]
+  reviewedByUserIDGT: String
+  reviewedByUserIDGTE: String
+  reviewedByUserIDLT: String
+  reviewedByUserIDLTE: String
+  reviewedByUserIDContains: String
+  reviewedByUserIDHasPrefix: String
+  reviewedByUserIDHasSuffix: String
+  reviewedByUserIDIsNil: Boolean
+  reviewedByUserIDNotNil: Boolean
+  reviewedByUserIDEqualFold: String
+  reviewedByUserIDContainsFold: String
+  """
+  reviewed_by_group_id field predicates
+  """
+  reviewedByGroupID: String
+  reviewedByGroupIDNEQ: String
+  reviewedByGroupIDIn: [String!]
+  reviewedByGroupIDNotIn: [String!]
+  reviewedByGroupIDGT: String
+  reviewedByGroupIDGTE: String
+  reviewedByGroupIDLT: String
+  reviewedByGroupIDLTE: String
+  reviewedByGroupIDContains: String
+  reviewedByGroupIDHasPrefix: String
+  reviewedByGroupIDHasSuffix: String
+  reviewedByGroupIDIsNil: Boolean
+  reviewedByGroupIDNotNil: Boolean
+  reviewedByGroupIDEqualFold: String
+  reviewedByGroupIDContainsFold: String
+  """
+  last_reviewed_at field predicates
+  """
+  lastReviewedAt: DateTime
+  lastReviewedAtNEQ: DateTime
+  lastReviewedAtIn: [DateTime!]
+  lastReviewedAtNotIn: [DateTime!]
+  lastReviewedAtGT: DateTime
+  lastReviewedAtGTE: DateTime
+  lastReviewedAtLT: DateTime
+  lastReviewedAtLTE: DateTime
+  lastReviewedAtIsNil: Boolean
+  lastReviewedAtNotNil: Boolean
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -23033,6 +28639,186 @@ input EntityHistoryWhereInput {
   systemInternalIDNotNil: Boolean
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
+  """
+  entity_relationship_state_name field predicates
+  """
+  entityRelationshipStateName: String
+  entityRelationshipStateNameNEQ: String
+  entityRelationshipStateNameIn: [String!]
+  entityRelationshipStateNameNotIn: [String!]
+  entityRelationshipStateNameGT: String
+  entityRelationshipStateNameGTE: String
+  entityRelationshipStateNameLT: String
+  entityRelationshipStateNameLTE: String
+  entityRelationshipStateNameContains: String
+  entityRelationshipStateNameHasPrefix: String
+  entityRelationshipStateNameHasSuffix: String
+  entityRelationshipStateNameIsNil: Boolean
+  entityRelationshipStateNameNotNil: Boolean
+  entityRelationshipStateNameEqualFold: String
+  entityRelationshipStateNameContainsFold: String
+  """
+  entity_relationship_state_id field predicates
+  """
+  entityRelationshipStateID: String
+  entityRelationshipStateIDNEQ: String
+  entityRelationshipStateIDIn: [String!]
+  entityRelationshipStateIDNotIn: [String!]
+  entityRelationshipStateIDGT: String
+  entityRelationshipStateIDGTE: String
+  entityRelationshipStateIDLT: String
+  entityRelationshipStateIDLTE: String
+  entityRelationshipStateIDContains: String
+  entityRelationshipStateIDHasPrefix: String
+  entityRelationshipStateIDHasSuffix: String
+  entityRelationshipStateIDIsNil: Boolean
+  entityRelationshipStateIDNotNil: Boolean
+  entityRelationshipStateIDEqualFold: String
+  entityRelationshipStateIDContainsFold: String
+  """
+  entity_security_questionnaire_status_name field predicates
+  """
+  entitySecurityQuestionnaireStatusName: String
+  entitySecurityQuestionnaireStatusNameNEQ: String
+  entitySecurityQuestionnaireStatusNameIn: [String!]
+  entitySecurityQuestionnaireStatusNameNotIn: [String!]
+  entitySecurityQuestionnaireStatusNameGT: String
+  entitySecurityQuestionnaireStatusNameGTE: String
+  entitySecurityQuestionnaireStatusNameLT: String
+  entitySecurityQuestionnaireStatusNameLTE: String
+  entitySecurityQuestionnaireStatusNameContains: String
+  entitySecurityQuestionnaireStatusNameHasPrefix: String
+  entitySecurityQuestionnaireStatusNameHasSuffix: String
+  entitySecurityQuestionnaireStatusNameIsNil: Boolean
+  entitySecurityQuestionnaireStatusNameNotNil: Boolean
+  entitySecurityQuestionnaireStatusNameEqualFold: String
+  entitySecurityQuestionnaireStatusNameContainsFold: String
+  """
+  entity_security_questionnaire_status_id field predicates
+  """
+  entitySecurityQuestionnaireStatusID: String
+  entitySecurityQuestionnaireStatusIDNEQ: String
+  entitySecurityQuestionnaireStatusIDIn: [String!]
+  entitySecurityQuestionnaireStatusIDNotIn: [String!]
+  entitySecurityQuestionnaireStatusIDGT: String
+  entitySecurityQuestionnaireStatusIDGTE: String
+  entitySecurityQuestionnaireStatusIDLT: String
+  entitySecurityQuestionnaireStatusIDLTE: String
+  entitySecurityQuestionnaireStatusIDContains: String
+  entitySecurityQuestionnaireStatusIDHasPrefix: String
+  entitySecurityQuestionnaireStatusIDHasSuffix: String
+  entitySecurityQuestionnaireStatusIDIsNil: Boolean
+  entitySecurityQuestionnaireStatusIDNotNil: Boolean
+  entitySecurityQuestionnaireStatusIDEqualFold: String
+  entitySecurityQuestionnaireStatusIDContainsFold: String
+  """
+  entity_source_type_name field predicates
+  """
+  entitySourceTypeName: String
+  entitySourceTypeNameNEQ: String
+  entitySourceTypeNameIn: [String!]
+  entitySourceTypeNameNotIn: [String!]
+  entitySourceTypeNameGT: String
+  entitySourceTypeNameGTE: String
+  entitySourceTypeNameLT: String
+  entitySourceTypeNameLTE: String
+  entitySourceTypeNameContains: String
+  entitySourceTypeNameHasPrefix: String
+  entitySourceTypeNameHasSuffix: String
+  entitySourceTypeNameIsNil: Boolean
+  entitySourceTypeNameNotNil: Boolean
+  entitySourceTypeNameEqualFold: String
+  entitySourceTypeNameContainsFold: String
+  """
+  entity_source_type_id field predicates
+  """
+  entitySourceTypeID: String
+  entitySourceTypeIDNEQ: String
+  entitySourceTypeIDIn: [String!]
+  entitySourceTypeIDNotIn: [String!]
+  entitySourceTypeIDGT: String
+  entitySourceTypeIDGTE: String
+  entitySourceTypeIDLT: String
+  entitySourceTypeIDLTE: String
+  entitySourceTypeIDContains: String
+  entitySourceTypeIDHasPrefix: String
+  entitySourceTypeIDHasSuffix: String
+  entitySourceTypeIDIsNil: Boolean
+  entitySourceTypeIDNotNil: Boolean
+  entitySourceTypeIDEqualFold: String
+  entitySourceTypeIDContainsFold: String
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
   """
   name field predicates
   """
@@ -23105,6 +28891,269 @@ input EntityHistoryWhereInput {
   statusNotNil: Boolean
   statusEqualFold: String
   statusContainsFold: String
+  """
+  approved_for_use field predicates
+  """
+  approvedForUse: Boolean
+  approvedForUseNEQ: Boolean
+  approvedForUseIsNil: Boolean
+  approvedForUseNotNil: Boolean
+  """
+  has_soc2 field predicates
+  """
+  hasSoc2: Boolean
+  hasSoc2NEQ: Boolean
+  hasSoc2IsNil: Boolean
+  hasSoc2NotNil: Boolean
+  """
+  soc2_period_end field predicates
+  """
+  soc2PeriodEnd: DateTime
+  soc2PeriodEndNEQ: DateTime
+  soc2PeriodEndIn: [DateTime!]
+  soc2PeriodEndNotIn: [DateTime!]
+  soc2PeriodEndGT: DateTime
+  soc2PeriodEndGTE: DateTime
+  soc2PeriodEndLT: DateTime
+  soc2PeriodEndLTE: DateTime
+  soc2PeriodEndIsNil: Boolean
+  soc2PeriodEndNotNil: Boolean
+  """
+  contract_start_date field predicates
+  """
+  contractStartDate: DateTime
+  contractStartDateNEQ: DateTime
+  contractStartDateIn: [DateTime!]
+  contractStartDateNotIn: [DateTime!]
+  contractStartDateGT: DateTime
+  contractStartDateGTE: DateTime
+  contractStartDateLT: DateTime
+  contractStartDateLTE: DateTime
+  contractStartDateIsNil: Boolean
+  contractStartDateNotNil: Boolean
+  """
+  contract_end_date field predicates
+  """
+  contractEndDate: DateTime
+  contractEndDateNEQ: DateTime
+  contractEndDateIn: [DateTime!]
+  contractEndDateNotIn: [DateTime!]
+  contractEndDateGT: DateTime
+  contractEndDateGTE: DateTime
+  contractEndDateLT: DateTime
+  contractEndDateLTE: DateTime
+  contractEndDateIsNil: Boolean
+  contractEndDateNotNil: Boolean
+  """
+  auto_renews field predicates
+  """
+  autoRenews: Boolean
+  autoRenewsNEQ: Boolean
+  autoRenewsIsNil: Boolean
+  autoRenewsNotNil: Boolean
+  """
+  termination_notice_days field predicates
+  """
+  terminationNoticeDays: Int
+  terminationNoticeDaysNEQ: Int
+  terminationNoticeDaysIn: [Int!]
+  terminationNoticeDaysNotIn: [Int!]
+  terminationNoticeDaysGT: Int
+  terminationNoticeDaysGTE: Int
+  terminationNoticeDaysLT: Int
+  terminationNoticeDaysLTE: Int
+  terminationNoticeDaysIsNil: Boolean
+  terminationNoticeDaysNotNil: Boolean
+  """
+  annual_spend field predicates
+  """
+  annualSpend: Float
+  annualSpendNEQ: Float
+  annualSpendIn: [Float!]
+  annualSpendNotIn: [Float!]
+  annualSpendGT: Float
+  annualSpendGTE: Float
+  annualSpendLT: Float
+  annualSpendLTE: Float
+  annualSpendIsNil: Boolean
+  annualSpendNotNil: Boolean
+  """
+  spend_currency field predicates
+  """
+  spendCurrency: String
+  spendCurrencyNEQ: String
+  spendCurrencyIn: [String!]
+  spendCurrencyNotIn: [String!]
+  spendCurrencyGT: String
+  spendCurrencyGTE: String
+  spendCurrencyLT: String
+  spendCurrencyLTE: String
+  spendCurrencyContains: String
+  spendCurrencyHasPrefix: String
+  spendCurrencyHasSuffix: String
+  spendCurrencyIsNil: Boolean
+  spendCurrencyNotNil: Boolean
+  spendCurrencyEqualFold: String
+  spendCurrencyContainsFold: String
+  """
+  billing_model field predicates
+  """
+  billingModel: String
+  billingModelNEQ: String
+  billingModelIn: [String!]
+  billingModelNotIn: [String!]
+  billingModelGT: String
+  billingModelGTE: String
+  billingModelLT: String
+  billingModelLTE: String
+  billingModelContains: String
+  billingModelHasPrefix: String
+  billingModelHasSuffix: String
+  billingModelIsNil: Boolean
+  billingModelNotNil: Boolean
+  billingModelEqualFold: String
+  billingModelContainsFold: String
+  """
+  renewal_risk field predicates
+  """
+  renewalRisk: String
+  renewalRiskNEQ: String
+  renewalRiskIn: [String!]
+  renewalRiskNotIn: [String!]
+  renewalRiskGT: String
+  renewalRiskGTE: String
+  renewalRiskLT: String
+  renewalRiskLTE: String
+  renewalRiskContains: String
+  renewalRiskHasPrefix: String
+  renewalRiskHasSuffix: String
+  renewalRiskIsNil: Boolean
+  renewalRiskNotNil: Boolean
+  renewalRiskEqualFold: String
+  renewalRiskContainsFold: String
+  """
+  sso_enforced field predicates
+  """
+  ssoEnforced: Boolean
+  ssoEnforcedNEQ: Boolean
+  ssoEnforcedIsNil: Boolean
+  ssoEnforcedNotNil: Boolean
+  """
+  mfa_supported field predicates
+  """
+  mfaSupported: Boolean
+  mfaSupportedNEQ: Boolean
+  mfaSupportedIsNil: Boolean
+  mfaSupportedNotNil: Boolean
+  """
+  mfa_enforced field predicates
+  """
+  mfaEnforced: Boolean
+  mfaEnforcedNEQ: Boolean
+  mfaEnforcedIsNil: Boolean
+  mfaEnforcedNotNil: Boolean
+  """
+  status_page_url field predicates
+  """
+  statusPageURL: String
+  statusPageURLNEQ: String
+  statusPageURLIn: [String!]
+  statusPageURLNotIn: [String!]
+  statusPageURLGT: String
+  statusPageURLGTE: String
+  statusPageURLLT: String
+  statusPageURLLTE: String
+  statusPageURLContains: String
+  statusPageURLHasPrefix: String
+  statusPageURLHasSuffix: String
+  statusPageURLIsNil: Boolean
+  statusPageURLNotNil: Boolean
+  statusPageURLEqualFold: String
+  statusPageURLContainsFold: String
+  """
+  risk_rating field predicates
+  """
+  riskRating: String
+  riskRatingNEQ: String
+  riskRatingIn: [String!]
+  riskRatingNotIn: [String!]
+  riskRatingGT: String
+  riskRatingGTE: String
+  riskRatingLT: String
+  riskRatingLTE: String
+  riskRatingContains: String
+  riskRatingHasPrefix: String
+  riskRatingHasSuffix: String
+  riskRatingIsNil: Boolean
+  riskRatingNotNil: Boolean
+  riskRatingEqualFold: String
+  riskRatingContainsFold: String
+  """
+  risk_score field predicates
+  """
+  riskScore: Int
+  riskScoreNEQ: Int
+  riskScoreIn: [Int!]
+  riskScoreNotIn: [Int!]
+  riskScoreGT: Int
+  riskScoreGTE: Int
+  riskScoreLT: Int
+  riskScoreLTE: Int
+  riskScoreIsNil: Boolean
+  riskScoreNotNil: Boolean
+  """
+  tier field predicates
+  """
+  tier: String
+  tierNEQ: String
+  tierIn: [String!]
+  tierNotIn: [String!]
+  tierGT: String
+  tierGTE: String
+  tierLT: String
+  tierLTE: String
+  tierContains: String
+  tierHasPrefix: String
+  tierHasSuffix: String
+  tierIsNil: Boolean
+  tierNotNil: Boolean
+  tierEqualFold: String
+  tierContainsFold: String
+  """
+  review_frequency field predicates
+  """
+  reviewFrequency: EntityHistoryFrequency
+  reviewFrequencyNEQ: EntityHistoryFrequency
+  reviewFrequencyIn: [EntityHistoryFrequency!]
+  reviewFrequencyNotIn: [EntityHistoryFrequency!]
+  reviewFrequencyIsNil: Boolean
+  reviewFrequencyNotNil: Boolean
+  """
+  next_review_at field predicates
+  """
+  nextReviewAt: DateTime
+  nextReviewAtNEQ: DateTime
+  nextReviewAtIn: [DateTime!]
+  nextReviewAtNotIn: [DateTime!]
+  nextReviewAtGT: DateTime
+  nextReviewAtGTE: DateTime
+  nextReviewAtLT: DateTime
+  nextReviewAtLTE: DateTime
+  nextReviewAtIsNil: Boolean
+  nextReviewAtNotNil: Boolean
+  """
+  contract_renewal_at field predicates
+  """
+  contractRenewalAt: DateTime
+  contractRenewalAtNEQ: DateTime
+  contractRenewalAtIn: [DateTime!]
+  contractRenewalAtNotIn: [DateTime!]
+  contractRenewalAtGT: DateTime
+  contractRenewalAtGTE: DateTime
+  contractRenewalAtLT: DateTime
+  contractRenewalAtLTE: DateTime
+  contractRenewalAtIsNil: Boolean
+  contractRenewalAtNotNil: Boolean
 }
 type EntityTypeHistory implements Node {
   id: ID!
@@ -23419,6 +29468,22 @@ type EvidenceHistory implements Node {
   """
   ownerID: String
   """
+  the environment of the evidence
+  """
+  environmentName: String
+  """
+  the environment of the evidence
+  """
+  environmentID: String
+  """
+  the scope of the evidence
+  """
+  scopeName: String
+  """
+  the scope of the evidence
+  """
+  scopeID: String
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -23688,6 +29753,78 @@ input EvidenceHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
+  """
   workflow_eligible_marker field predicates
   """
   workflowEligibleMarker: Boolean
@@ -23848,6 +29985,22 @@ type FileHistory implements Node {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @hidden(if: true)
+  """
+  the environment of the file
+  """
+  environmentName: String
+  """
+  the environment of the file
+  """
+  environmentID: String
+  """
+  the scope of the file
+  """
+  scopeName: String
+  """
+  the scope of the file
+  """
+  scopeID: String
   """
   the name of the file provided in the payload key without the extension
   """
@@ -24133,6 +30286,78 @@ input FileHistoryWhereInput {
   systemInternalIDNotNil: Boolean
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
   """
   provided_file_name field predicates
   """
@@ -24795,6 +31020,22 @@ type FindingHistory implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  the environment of the finding
+  """
+  environmentName: String
+  """
+  the environment of the finding
+  """
+  environmentID: String
+  """
+  the scope of the finding
+  """
+  scopeName: String
+  """
+  the scope of the finding
+  """
+  scopeID: String
+  """
   external identifier from the integration source for the finding
   """
   externalID: String
@@ -25202,6 +31443,78 @@ input FindingHistoryWhereInput {
   systemInternalIDNotNil: Boolean
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
   """
   external_id field predicates
   """
@@ -26912,6 +33225,779 @@ input HushHistoryWhereInput {
   expiresAtIsNil: Boolean
   expiresAtNotNil: Boolean
 }
+type IdentityHolderHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: IdentityHolderHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  the internal owner for the identity holder when no user or group is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the identity holder
+  """
+  internalOwnerUserID: String
+  """
+  the internal owner group id for the identity holder
+  """
+  internalOwnerGroupID: String
+  """
+  the environment of the identity_holder
+  """
+  environmentName: String
+  """
+  the environment of the identity_holder
+  """
+  environmentID: String
+  """
+  the scope of the identity_holder
+  """
+  scopeName: String
+  """
+  the scope of the identity_holder
+  """
+  scopeID: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
+  the full name of the identity holder
+  """
+  fullName: String!
+  """
+  the email address of the identity holder
+  """
+  email: String!
+  """
+  alternate email address for the identity holder
+  """
+  alternateEmail: String
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  """
+  whether the identity holder record is linked to an Openlane user account
+  """
+  isOpenlaneUser: Boolean
+  """
+  the user id associated with the identity holder record
+  """
+  userID: String
+  """
+  the classification of identity holders, such as employee or contractor
+  """
+  identityHolderType: IdentityHolderHistoryIdentityHolderType!
+  """
+  the status of the identity holder record
+  """
+  status: IdentityHolderHistoryUserStatus!
+  """
+  whether the identity holder record is active
+  """
+  isActive: Boolean!
+  """
+  the job title of the identity holder
+  """
+  title: String
+  """
+  the department or function of the identity holder
+  """
+  department: String
+  """
+  the team name for the identity holder
+  """
+  team: String
+  """
+  location or office for the identity holder
+  """
+  location: String
+  """
+  the start date for the identity holder
+  """
+  startDate: DateTime
+  """
+  the end date for the identity holder, if applicable
+  """
+  endDate: DateTime
+  """
+  the external entity this identity holder is affiliated with
+  """
+  employerEntityID: String
+  """
+  external user identifier for the identity holder
+  """
+  externalUserID: String
+  """
+  external identifier for the identity holder from an upstream roster
+  """
+  externalReferenceID: String
+  """
+  additional metadata about the identity holder
+  """
+  metadata: Map
+}
+"""
+A connection to a list of items.
+"""
+type IdentityHolderHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [IdentityHolderHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type IdentityHolderHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: IdentityHolderHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+IdentityHolderHistoryIdentityHolderType is enum for the field identity_holder_type
+"""
+enum IdentityHolderHistoryIdentityHolderType @goModel(model: "github.com/theopenlane/core/common/enums.IdentityHolderType") {
+  EMPLOYEE
+  CONTRACTOR
+}
+"""
+IdentityHolderHistoryOpType is enum for the field operation
+"""
+enum IdentityHolderHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for IdentityHolderHistory connections
+"""
+input IdentityHolderHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order IdentityHolderHistories.
+  """
+  field: IdentityHolderHistoryOrderField!
+}
+"""
+Properties by which IdentityHolderHistory connections can be ordered.
+"""
+enum IdentityHolderHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  internal_owner
+  full_name
+  email
+  alternate_email
+  is_openlane_user
+  IDENTITY_HOLDER_TYPE
+  STATUS
+  is_active
+  title
+  department
+  team
+  location
+  start_date
+  end_date
+  external_user_id
+  external_reference_id
+}
+"""
+IdentityHolderHistoryUserStatus is enum for the field status
+"""
+enum IdentityHolderHistoryUserStatus @goModel(model: "github.com/theopenlane/core/common/enums.UserStatus") {
+  ACTIVE
+  INACTIVE
+  DEACTIVATED
+  SUSPENDED
+  ONBOARDING
+}
+"""
+IdentityHolderHistoryWhereInput is used for filtering IdentityHolderHistory objects.
+Input was generated by ent.
+"""
+input IdentityHolderHistoryWhereInput {
+  not: IdentityHolderHistoryWhereInput
+  and: [IdentityHolderHistoryWhereInput!]
+  or: [IdentityHolderHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: IdentityHolderHistoryOpType
+  operationNEQ: IdentityHolderHistoryOpType
+  operationIn: [IdentityHolderHistoryOpType!]
+  operationNotIn: [IdentityHolderHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerGT: String
+  internalOwnerGTE: String
+  internalOwnerLT: String
+  internalOwnerLTE: String
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: String
+  internalOwnerUserIDNEQ: String
+  internalOwnerUserIDIn: [String!]
+  internalOwnerUserIDNotIn: [String!]
+  internalOwnerUserIDGT: String
+  internalOwnerUserIDGTE: String
+  internalOwnerUserIDLT: String
+  internalOwnerUserIDLTE: String
+  internalOwnerUserIDContains: String
+  internalOwnerUserIDHasPrefix: String
+  internalOwnerUserIDHasSuffix: String
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: String
+  internalOwnerUserIDContainsFold: String
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: String
+  internalOwnerGroupIDNEQ: String
+  internalOwnerGroupIDIn: [String!]
+  internalOwnerGroupIDNotIn: [String!]
+  internalOwnerGroupIDGT: String
+  internalOwnerGroupIDGTE: String
+  internalOwnerGroupIDLT: String
+  internalOwnerGroupIDLTE: String
+  internalOwnerGroupIDContains: String
+  internalOwnerGroupIDHasPrefix: String
+  internalOwnerGroupIDHasSuffix: String
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: String
+  internalOwnerGroupIDContainsFold: String
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
+  full_name field predicates
+  """
+  fullName: String
+  fullNameNEQ: String
+  fullNameIn: [String!]
+  fullNameNotIn: [String!]
+  fullNameGT: String
+  fullNameGTE: String
+  fullNameLT: String
+  fullNameLTE: String
+  fullNameContains: String
+  fullNameHasPrefix: String
+  fullNameHasSuffix: String
+  fullNameEqualFold: String
+  fullNameContainsFold: String
+  """
+  email field predicates
+  """
+  email: String
+  emailNEQ: String
+  emailIn: [String!]
+  emailNotIn: [String!]
+  emailGT: String
+  emailGTE: String
+  emailLT: String
+  emailLTE: String
+  emailContains: String
+  emailHasPrefix: String
+  emailHasSuffix: String
+  emailEqualFold: String
+  emailContainsFold: String
+  """
+  alternate_email field predicates
+  """
+  alternateEmail: String
+  alternateEmailNEQ: String
+  alternateEmailIn: [String!]
+  alternateEmailNotIn: [String!]
+  alternateEmailGT: String
+  alternateEmailGTE: String
+  alternateEmailLT: String
+  alternateEmailLTE: String
+  alternateEmailContains: String
+  alternateEmailHasPrefix: String
+  alternateEmailHasSuffix: String
+  alternateEmailIsNil: Boolean
+  alternateEmailNotNil: Boolean
+  alternateEmailEqualFold: String
+  alternateEmailContainsFold: String
+  """
+  phone_number field predicates
+  """
+  phoneNumber: String
+  phoneNumberNEQ: String
+  phoneNumberIn: [String!]
+  phoneNumberNotIn: [String!]
+  phoneNumberGT: String
+  phoneNumberGTE: String
+  phoneNumberLT: String
+  phoneNumberLTE: String
+  phoneNumberContains: String
+  phoneNumberHasPrefix: String
+  phoneNumberHasSuffix: String
+  phoneNumberIsNil: Boolean
+  phoneNumberNotNil: Boolean
+  phoneNumberEqualFold: String
+  phoneNumberContainsFold: String
+  """
+  is_openlane_user field predicates
+  """
+  isOpenlaneUser: Boolean
+  isOpenlaneUserNEQ: Boolean
+  isOpenlaneUserIsNil: Boolean
+  isOpenlaneUserNotNil: Boolean
+  """
+  user_id field predicates
+  """
+  userID: String
+  userIDNEQ: String
+  userIDIn: [String!]
+  userIDNotIn: [String!]
+  userIDGT: String
+  userIDGTE: String
+  userIDLT: String
+  userIDLTE: String
+  userIDContains: String
+  userIDHasPrefix: String
+  userIDHasSuffix: String
+  userIDIsNil: Boolean
+  userIDNotNil: Boolean
+  userIDEqualFold: String
+  userIDContainsFold: String
+  """
+  identity_holder_type field predicates
+  """
+  identityHolderType: IdentityHolderHistoryIdentityHolderType
+  identityHolderTypeNEQ: IdentityHolderHistoryIdentityHolderType
+  identityHolderTypeIn: [IdentityHolderHistoryIdentityHolderType!]
+  identityHolderTypeNotIn: [IdentityHolderHistoryIdentityHolderType!]
+  """
+  status field predicates
+  """
+  status: IdentityHolderHistoryUserStatus
+  statusNEQ: IdentityHolderHistoryUserStatus
+  statusIn: [IdentityHolderHistoryUserStatus!]
+  statusNotIn: [IdentityHolderHistoryUserStatus!]
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleIsNil: Boolean
+  titleNotNil: Boolean
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  department field predicates
+  """
+  department: String
+  departmentNEQ: String
+  departmentIn: [String!]
+  departmentNotIn: [String!]
+  departmentGT: String
+  departmentGTE: String
+  departmentLT: String
+  departmentLTE: String
+  departmentContains: String
+  departmentHasPrefix: String
+  departmentHasSuffix: String
+  departmentIsNil: Boolean
+  departmentNotNil: Boolean
+  departmentEqualFold: String
+  departmentContainsFold: String
+  """
+  team field predicates
+  """
+  team: String
+  teamNEQ: String
+  teamIn: [String!]
+  teamNotIn: [String!]
+  teamGT: String
+  teamGTE: String
+  teamLT: String
+  teamLTE: String
+  teamContains: String
+  teamHasPrefix: String
+  teamHasSuffix: String
+  teamIsNil: Boolean
+  teamNotNil: Boolean
+  teamEqualFold: String
+  teamContainsFold: String
+  """
+  location field predicates
+  """
+  location: String
+  locationNEQ: String
+  locationIn: [String!]
+  locationNotIn: [String!]
+  locationGT: String
+  locationGTE: String
+  locationLT: String
+  locationLTE: String
+  locationContains: String
+  locationHasPrefix: String
+  locationHasSuffix: String
+  locationIsNil: Boolean
+  locationNotNil: Boolean
+  locationEqualFold: String
+  locationContainsFold: String
+  """
+  start_date field predicates
+  """
+  startDate: DateTime
+  startDateNEQ: DateTime
+  startDateIn: [DateTime!]
+  startDateNotIn: [DateTime!]
+  startDateGT: DateTime
+  startDateGTE: DateTime
+  startDateLT: DateTime
+  startDateLTE: DateTime
+  startDateIsNil: Boolean
+  startDateNotNil: Boolean
+  """
+  end_date field predicates
+  """
+  endDate: DateTime
+  endDateNEQ: DateTime
+  endDateIn: [DateTime!]
+  endDateNotIn: [DateTime!]
+  endDateGT: DateTime
+  endDateGTE: DateTime
+  endDateLT: DateTime
+  endDateLTE: DateTime
+  endDateIsNil: Boolean
+  endDateNotNil: Boolean
+  """
+  employer_entity_id field predicates
+  """
+  employerEntityID: String
+  employerEntityIDNEQ: String
+  employerEntityIDIn: [String!]
+  employerEntityIDNotIn: [String!]
+  employerEntityIDGT: String
+  employerEntityIDGTE: String
+  employerEntityIDLT: String
+  employerEntityIDLTE: String
+  employerEntityIDContains: String
+  employerEntityIDHasPrefix: String
+  employerEntityIDHasSuffix: String
+  employerEntityIDIsNil: Boolean
+  employerEntityIDNotNil: Boolean
+  employerEntityIDEqualFold: String
+  employerEntityIDContainsFold: String
+  """
+  external_user_id field predicates
+  """
+  externalUserID: String
+  externalUserIDNEQ: String
+  externalUserIDIn: [String!]
+  externalUserIDNotIn: [String!]
+  externalUserIDGT: String
+  externalUserIDGTE: String
+  externalUserIDLT: String
+  externalUserIDLTE: String
+  externalUserIDContains: String
+  externalUserIDHasPrefix: String
+  externalUserIDHasSuffix: String
+  externalUserIDIsNil: Boolean
+  externalUserIDNotNil: Boolean
+  externalUserIDEqualFold: String
+  externalUserIDContainsFold: String
+  """
+  external_reference_id field predicates
+  """
+  externalReferenceID: String
+  externalReferenceIDNEQ: String
+  externalReferenceIDIn: [String!]
+  externalReferenceIDNotIn: [String!]
+  externalReferenceIDGT: String
+  externalReferenceIDGTE: String
+  externalReferenceIDLT: String
+  externalReferenceIDLTE: String
+  externalReferenceIDContains: String
+  externalReferenceIDHasPrefix: String
+  externalReferenceIDHasSuffix: String
+  externalReferenceIDIsNil: Boolean
+  externalReferenceIDNotNil: Boolean
+  externalReferenceIDEqualFold: String
+  externalReferenceIDContainsFold: String
+}
 type IntegrationHistory implements Node {
   id: ID!
   historyTime: Time!
@@ -26941,6 +34027,22 @@ type IntegrationHistory implements Node {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @hidden(if: true)
+  """
+  the environment of the integration
+  """
+  environmentName: String
+  """
+  the environment of the integration
+  """
+  environmentID: String
+  """
+  the scope of the integration
+  """
+  scopeName: String
+  """
+  the scope of the integration
+  """
+  scopeID: String
   """
   the name of the integration
   """
@@ -27205,6 +34307,78 @@ input IntegrationHistoryWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -27371,6 +34545,22 @@ type InternalPolicyHistory implements Node {
   the kind of the internal_policy
   """
   internalPolicyKindID: String
+  """
+  the environment of the internal_policy
+  """
+  environmentName: String
+  """
+  the environment of the internal_policy
+  """
+  environmentID: String
+  """
+  the scope of the internal_policy
+  """
+  scopeName: String
+  """
+  the scope of the internal_policy
+  """
+  scopeID: String
   """
   internal marker field for workflow eligibility, not exposed in API
   """
@@ -27853,6 +35043,78 @@ input InternalPolicyHistoryWhereInput {
   internalPolicyKindIDNotNil: Boolean
   internalPolicyKindIDEqualFold: String
   internalPolicyKindIDContainsFold: String
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
   """
   workflow_eligible_marker field predicates
   """
@@ -31071,6 +38333,1180 @@ type PageInfo {
   """
   endCursor: Cursor
 }
+type PlatformHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: PlatformHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  the internal owner for the platform when no user or group is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the platform
+  """
+  internalOwnerUserID: String
+  """
+  the internal owner group id for the platform
+  """
+  internalOwnerGroupID: String
+  """
+  business owner for the platform when no user or group is linked
+  """
+  businessOwner: String
+  """
+  the business owner user id for the platform
+  """
+  businessOwnerUserID: String
+  """
+  the business owner group id for the platform
+  """
+  businessOwnerGroupID: String
+  """
+  technical owner for the platform when no user or group is linked
+  """
+  technicalOwner: String
+  """
+  the technical owner user id for the platform
+  """
+  technicalOwnerUserID: String
+  """
+  the technical owner group id for the platform
+  """
+  technicalOwnerGroupID: String
+  """
+  security owner for the platform when no user or group is linked
+  """
+  securityOwner: String
+  """
+  the security owner user id for the platform
+  """
+  securityOwnerUserID: String
+  """
+  the security owner group id for the platform
+  """
+  securityOwnerGroupID: String
+  """
+  the kind of the platform
+  """
+  platformKindName: String
+  """
+  the kind of the platform
+  """
+  platformKindID: String
+  """
+  the data_classification of the platform
+  """
+  platformDataClassificationName: String
+  """
+  the data_classification of the platform
+  """
+  platformDataClassificationID: String
+  """
+  the environment of the platform
+  """
+  environmentName: String
+  """
+  the environment of the platform
+  """
+  environmentID: String
+  """
+  the scope of the platform
+  """
+  scopeName: String
+  """
+  the scope of the platform
+  """
+  scopeID: String
+  """
+  the access_model of the platform
+  """
+  accessModelName: String
+  """
+  the access_model of the platform
+  """
+  accessModelID: String
+  """
+  the encryption_status of the platform
+  """
+  encryptionStatusName: String
+  """
+  the encryption_status of the platform
+  """
+  encryptionStatusID: String
+  """
+  the security_tier of the platform
+  """
+  securityTierName: String
+  """
+  the security_tier of the platform
+  """
+  securityTierID: String
+  """
+  the criticality of the platform
+  """
+  criticalityName: String
+  """
+  the criticality of the platform
+  """
+  criticalityID: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
+  the name of the platform
+  """
+  name: String!
+  """
+  the description of the platform boundary
+  """
+  description: String
+  """
+  the business purpose of the platform
+  """
+  businessPurpose: String
+  """
+  scope statement for the platform, used for narrative justification
+  """
+  scopeStatement: String
+  """
+  description of the platform trust boundary
+  """
+  trustBoundaryDescription: String
+  """
+  summary of platform data flows
+  """
+  dataFlowSummary: String
+  """
+  the lifecycle status of the platform
+  """
+  status: PlatformHistoryPlatformStatus!
+  """
+  physical location of the platform, if applicable
+  """
+  physicalLocation: String
+  """
+  the region where the platform operates or is hosted
+  """
+  region: String
+  """
+  whether the platform stores or processes PII
+  """
+  containsPii: Boolean
+  """
+  the source of the platform record, e.g., manual, discovered, imported, api
+  """
+  sourceType: PlatformHistorySourceType!
+  """
+  the identifier used by the source system for the platform
+  """
+  sourceIdentifier: String
+  """
+  cost center associated with the platform
+  """
+  costCenter: String
+  """
+  estimated monthly cost for the platform
+  """
+  estimatedMonthlyCost: Float
+  """
+  purchase date for the platform
+  """
+  purchaseDate: DateTime
+  """
+  the id of the user who is responsible for this platform
+  """
+  platformOwnerID: String
+  """
+  external identifier for the platform from an upstream inventory
+  """
+  externalReferenceID: String
+  """
+  additional metadata about the platform
+  """
+  metadata: Map
+}
+"""
+A connection to a list of items.
+"""
+type PlatformHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [PlatformHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type PlatformHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: PlatformHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+PlatformHistoryOpType is enum for the field operation
+"""
+enum PlatformHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for PlatformHistory connections
+"""
+input PlatformHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order PlatformHistories.
+  """
+  field: PlatformHistoryOrderField!
+}
+"""
+Properties by which PlatformHistory connections can be ordered.
+"""
+enum PlatformHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  internal_owner
+  business_owner
+  technical_owner
+  security_owner
+  name
+  business_purpose
+  STATUS
+  physical_location
+  region
+  contains_pii
+  SOURCE_TYPE
+  source_identifier
+  cost_center
+  estimated_monthly_cost
+  purchase_date
+  external_reference_id
+}
+"""
+PlatformHistoryPlatformStatus is enum for the field status
+"""
+enum PlatformHistoryPlatformStatus @goModel(model: "github.com/theopenlane/core/common/enums.PlatformStatus") {
+  ACTIVE
+  INACTIVE
+  RETIRED
+}
+"""
+PlatformHistorySourceType is enum for the field source_type
+"""
+enum PlatformHistorySourceType @goModel(model: "github.com/theopenlane/core/common/enums.SourceType") {
+  MANUAL
+  DISCOVERED
+  IMPORTED
+  API
+}
+"""
+PlatformHistoryWhereInput is used for filtering PlatformHistory objects.
+Input was generated by ent.
+"""
+input PlatformHistoryWhereInput {
+  not: PlatformHistoryWhereInput
+  and: [PlatformHistoryWhereInput!]
+  or: [PlatformHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: PlatformHistoryOpType
+  operationNEQ: PlatformHistoryOpType
+  operationIn: [PlatformHistoryOpType!]
+  operationNotIn: [PlatformHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerGT: String
+  internalOwnerGTE: String
+  internalOwnerLT: String
+  internalOwnerLTE: String
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: String
+  internalOwnerUserIDNEQ: String
+  internalOwnerUserIDIn: [String!]
+  internalOwnerUserIDNotIn: [String!]
+  internalOwnerUserIDGT: String
+  internalOwnerUserIDGTE: String
+  internalOwnerUserIDLT: String
+  internalOwnerUserIDLTE: String
+  internalOwnerUserIDContains: String
+  internalOwnerUserIDHasPrefix: String
+  internalOwnerUserIDHasSuffix: String
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: String
+  internalOwnerUserIDContainsFold: String
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: String
+  internalOwnerGroupIDNEQ: String
+  internalOwnerGroupIDIn: [String!]
+  internalOwnerGroupIDNotIn: [String!]
+  internalOwnerGroupIDGT: String
+  internalOwnerGroupIDGTE: String
+  internalOwnerGroupIDLT: String
+  internalOwnerGroupIDLTE: String
+  internalOwnerGroupIDContains: String
+  internalOwnerGroupIDHasPrefix: String
+  internalOwnerGroupIDHasSuffix: String
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: String
+  internalOwnerGroupIDContainsFold: String
+  """
+  business_owner field predicates
+  """
+  businessOwner: String
+  businessOwnerNEQ: String
+  businessOwnerIn: [String!]
+  businessOwnerNotIn: [String!]
+  businessOwnerGT: String
+  businessOwnerGTE: String
+  businessOwnerLT: String
+  businessOwnerLTE: String
+  businessOwnerContains: String
+  businessOwnerHasPrefix: String
+  businessOwnerHasSuffix: String
+  businessOwnerIsNil: Boolean
+  businessOwnerNotNil: Boolean
+  businessOwnerEqualFold: String
+  businessOwnerContainsFold: String
+  """
+  business_owner_user_id field predicates
+  """
+  businessOwnerUserID: String
+  businessOwnerUserIDNEQ: String
+  businessOwnerUserIDIn: [String!]
+  businessOwnerUserIDNotIn: [String!]
+  businessOwnerUserIDGT: String
+  businessOwnerUserIDGTE: String
+  businessOwnerUserIDLT: String
+  businessOwnerUserIDLTE: String
+  businessOwnerUserIDContains: String
+  businessOwnerUserIDHasPrefix: String
+  businessOwnerUserIDHasSuffix: String
+  businessOwnerUserIDIsNil: Boolean
+  businessOwnerUserIDNotNil: Boolean
+  businessOwnerUserIDEqualFold: String
+  businessOwnerUserIDContainsFold: String
+  """
+  business_owner_group_id field predicates
+  """
+  businessOwnerGroupID: String
+  businessOwnerGroupIDNEQ: String
+  businessOwnerGroupIDIn: [String!]
+  businessOwnerGroupIDNotIn: [String!]
+  businessOwnerGroupIDGT: String
+  businessOwnerGroupIDGTE: String
+  businessOwnerGroupIDLT: String
+  businessOwnerGroupIDLTE: String
+  businessOwnerGroupIDContains: String
+  businessOwnerGroupIDHasPrefix: String
+  businessOwnerGroupIDHasSuffix: String
+  businessOwnerGroupIDIsNil: Boolean
+  businessOwnerGroupIDNotNil: Boolean
+  businessOwnerGroupIDEqualFold: String
+  businessOwnerGroupIDContainsFold: String
+  """
+  technical_owner field predicates
+  """
+  technicalOwner: String
+  technicalOwnerNEQ: String
+  technicalOwnerIn: [String!]
+  technicalOwnerNotIn: [String!]
+  technicalOwnerGT: String
+  technicalOwnerGTE: String
+  technicalOwnerLT: String
+  technicalOwnerLTE: String
+  technicalOwnerContains: String
+  technicalOwnerHasPrefix: String
+  technicalOwnerHasSuffix: String
+  technicalOwnerIsNil: Boolean
+  technicalOwnerNotNil: Boolean
+  technicalOwnerEqualFold: String
+  technicalOwnerContainsFold: String
+  """
+  technical_owner_user_id field predicates
+  """
+  technicalOwnerUserID: String
+  technicalOwnerUserIDNEQ: String
+  technicalOwnerUserIDIn: [String!]
+  technicalOwnerUserIDNotIn: [String!]
+  technicalOwnerUserIDGT: String
+  technicalOwnerUserIDGTE: String
+  technicalOwnerUserIDLT: String
+  technicalOwnerUserIDLTE: String
+  technicalOwnerUserIDContains: String
+  technicalOwnerUserIDHasPrefix: String
+  technicalOwnerUserIDHasSuffix: String
+  technicalOwnerUserIDIsNil: Boolean
+  technicalOwnerUserIDNotNil: Boolean
+  technicalOwnerUserIDEqualFold: String
+  technicalOwnerUserIDContainsFold: String
+  """
+  technical_owner_group_id field predicates
+  """
+  technicalOwnerGroupID: String
+  technicalOwnerGroupIDNEQ: String
+  technicalOwnerGroupIDIn: [String!]
+  technicalOwnerGroupIDNotIn: [String!]
+  technicalOwnerGroupIDGT: String
+  technicalOwnerGroupIDGTE: String
+  technicalOwnerGroupIDLT: String
+  technicalOwnerGroupIDLTE: String
+  technicalOwnerGroupIDContains: String
+  technicalOwnerGroupIDHasPrefix: String
+  technicalOwnerGroupIDHasSuffix: String
+  technicalOwnerGroupIDIsNil: Boolean
+  technicalOwnerGroupIDNotNil: Boolean
+  technicalOwnerGroupIDEqualFold: String
+  technicalOwnerGroupIDContainsFold: String
+  """
+  security_owner field predicates
+  """
+  securityOwner: String
+  securityOwnerNEQ: String
+  securityOwnerIn: [String!]
+  securityOwnerNotIn: [String!]
+  securityOwnerGT: String
+  securityOwnerGTE: String
+  securityOwnerLT: String
+  securityOwnerLTE: String
+  securityOwnerContains: String
+  securityOwnerHasPrefix: String
+  securityOwnerHasSuffix: String
+  securityOwnerIsNil: Boolean
+  securityOwnerNotNil: Boolean
+  securityOwnerEqualFold: String
+  securityOwnerContainsFold: String
+  """
+  security_owner_user_id field predicates
+  """
+  securityOwnerUserID: String
+  securityOwnerUserIDNEQ: String
+  securityOwnerUserIDIn: [String!]
+  securityOwnerUserIDNotIn: [String!]
+  securityOwnerUserIDGT: String
+  securityOwnerUserIDGTE: String
+  securityOwnerUserIDLT: String
+  securityOwnerUserIDLTE: String
+  securityOwnerUserIDContains: String
+  securityOwnerUserIDHasPrefix: String
+  securityOwnerUserIDHasSuffix: String
+  securityOwnerUserIDIsNil: Boolean
+  securityOwnerUserIDNotNil: Boolean
+  securityOwnerUserIDEqualFold: String
+  securityOwnerUserIDContainsFold: String
+  """
+  security_owner_group_id field predicates
+  """
+  securityOwnerGroupID: String
+  securityOwnerGroupIDNEQ: String
+  securityOwnerGroupIDIn: [String!]
+  securityOwnerGroupIDNotIn: [String!]
+  securityOwnerGroupIDGT: String
+  securityOwnerGroupIDGTE: String
+  securityOwnerGroupIDLT: String
+  securityOwnerGroupIDLTE: String
+  securityOwnerGroupIDContains: String
+  securityOwnerGroupIDHasPrefix: String
+  securityOwnerGroupIDHasSuffix: String
+  securityOwnerGroupIDIsNil: Boolean
+  securityOwnerGroupIDNotNil: Boolean
+  securityOwnerGroupIDEqualFold: String
+  securityOwnerGroupIDContainsFold: String
+  """
+  platform_kind_name field predicates
+  """
+  platformKindName: String
+  platformKindNameNEQ: String
+  platformKindNameIn: [String!]
+  platformKindNameNotIn: [String!]
+  platformKindNameGT: String
+  platformKindNameGTE: String
+  platformKindNameLT: String
+  platformKindNameLTE: String
+  platformKindNameContains: String
+  platformKindNameHasPrefix: String
+  platformKindNameHasSuffix: String
+  platformKindNameIsNil: Boolean
+  platformKindNameNotNil: Boolean
+  platformKindNameEqualFold: String
+  platformKindNameContainsFold: String
+  """
+  platform_kind_id field predicates
+  """
+  platformKindID: String
+  platformKindIDNEQ: String
+  platformKindIDIn: [String!]
+  platformKindIDNotIn: [String!]
+  platformKindIDGT: String
+  platformKindIDGTE: String
+  platformKindIDLT: String
+  platformKindIDLTE: String
+  platformKindIDContains: String
+  platformKindIDHasPrefix: String
+  platformKindIDHasSuffix: String
+  platformKindIDIsNil: Boolean
+  platformKindIDNotNil: Boolean
+  platformKindIDEqualFold: String
+  platformKindIDContainsFold: String
+  """
+  platform_data_classification_name field predicates
+  """
+  platformDataClassificationName: String
+  platformDataClassificationNameNEQ: String
+  platformDataClassificationNameIn: [String!]
+  platformDataClassificationNameNotIn: [String!]
+  platformDataClassificationNameGT: String
+  platformDataClassificationNameGTE: String
+  platformDataClassificationNameLT: String
+  platformDataClassificationNameLTE: String
+  platformDataClassificationNameContains: String
+  platformDataClassificationNameHasPrefix: String
+  platformDataClassificationNameHasSuffix: String
+  platformDataClassificationNameIsNil: Boolean
+  platformDataClassificationNameNotNil: Boolean
+  platformDataClassificationNameEqualFold: String
+  platformDataClassificationNameContainsFold: String
+  """
+  platform_data_classification_id field predicates
+  """
+  platformDataClassificationID: String
+  platformDataClassificationIDNEQ: String
+  platformDataClassificationIDIn: [String!]
+  platformDataClassificationIDNotIn: [String!]
+  platformDataClassificationIDGT: String
+  platformDataClassificationIDGTE: String
+  platformDataClassificationIDLT: String
+  platformDataClassificationIDLTE: String
+  platformDataClassificationIDContains: String
+  platformDataClassificationIDHasPrefix: String
+  platformDataClassificationIDHasSuffix: String
+  platformDataClassificationIDIsNil: Boolean
+  platformDataClassificationIDNotNil: Boolean
+  platformDataClassificationIDEqualFold: String
+  platformDataClassificationIDContainsFold: String
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
+  """
+  access_model_name field predicates
+  """
+  accessModelName: String
+  accessModelNameNEQ: String
+  accessModelNameIn: [String!]
+  accessModelNameNotIn: [String!]
+  accessModelNameGT: String
+  accessModelNameGTE: String
+  accessModelNameLT: String
+  accessModelNameLTE: String
+  accessModelNameContains: String
+  accessModelNameHasPrefix: String
+  accessModelNameHasSuffix: String
+  accessModelNameIsNil: Boolean
+  accessModelNameNotNil: Boolean
+  accessModelNameEqualFold: String
+  accessModelNameContainsFold: String
+  """
+  access_model_id field predicates
+  """
+  accessModelID: String
+  accessModelIDNEQ: String
+  accessModelIDIn: [String!]
+  accessModelIDNotIn: [String!]
+  accessModelIDGT: String
+  accessModelIDGTE: String
+  accessModelIDLT: String
+  accessModelIDLTE: String
+  accessModelIDContains: String
+  accessModelIDHasPrefix: String
+  accessModelIDHasSuffix: String
+  accessModelIDIsNil: Boolean
+  accessModelIDNotNil: Boolean
+  accessModelIDEqualFold: String
+  accessModelIDContainsFold: String
+  """
+  encryption_status_name field predicates
+  """
+  encryptionStatusName: String
+  encryptionStatusNameNEQ: String
+  encryptionStatusNameIn: [String!]
+  encryptionStatusNameNotIn: [String!]
+  encryptionStatusNameGT: String
+  encryptionStatusNameGTE: String
+  encryptionStatusNameLT: String
+  encryptionStatusNameLTE: String
+  encryptionStatusNameContains: String
+  encryptionStatusNameHasPrefix: String
+  encryptionStatusNameHasSuffix: String
+  encryptionStatusNameIsNil: Boolean
+  encryptionStatusNameNotNil: Boolean
+  encryptionStatusNameEqualFold: String
+  encryptionStatusNameContainsFold: String
+  """
+  encryption_status_id field predicates
+  """
+  encryptionStatusID: String
+  encryptionStatusIDNEQ: String
+  encryptionStatusIDIn: [String!]
+  encryptionStatusIDNotIn: [String!]
+  encryptionStatusIDGT: String
+  encryptionStatusIDGTE: String
+  encryptionStatusIDLT: String
+  encryptionStatusIDLTE: String
+  encryptionStatusIDContains: String
+  encryptionStatusIDHasPrefix: String
+  encryptionStatusIDHasSuffix: String
+  encryptionStatusIDIsNil: Boolean
+  encryptionStatusIDNotNil: Boolean
+  encryptionStatusIDEqualFold: String
+  encryptionStatusIDContainsFold: String
+  """
+  security_tier_name field predicates
+  """
+  securityTierName: String
+  securityTierNameNEQ: String
+  securityTierNameIn: [String!]
+  securityTierNameNotIn: [String!]
+  securityTierNameGT: String
+  securityTierNameGTE: String
+  securityTierNameLT: String
+  securityTierNameLTE: String
+  securityTierNameContains: String
+  securityTierNameHasPrefix: String
+  securityTierNameHasSuffix: String
+  securityTierNameIsNil: Boolean
+  securityTierNameNotNil: Boolean
+  securityTierNameEqualFold: String
+  securityTierNameContainsFold: String
+  """
+  security_tier_id field predicates
+  """
+  securityTierID: String
+  securityTierIDNEQ: String
+  securityTierIDIn: [String!]
+  securityTierIDNotIn: [String!]
+  securityTierIDGT: String
+  securityTierIDGTE: String
+  securityTierIDLT: String
+  securityTierIDLTE: String
+  securityTierIDContains: String
+  securityTierIDHasPrefix: String
+  securityTierIDHasSuffix: String
+  securityTierIDIsNil: Boolean
+  securityTierIDNotNil: Boolean
+  securityTierIDEqualFold: String
+  securityTierIDContainsFold: String
+  """
+  criticality_name field predicates
+  """
+  criticalityName: String
+  criticalityNameNEQ: String
+  criticalityNameIn: [String!]
+  criticalityNameNotIn: [String!]
+  criticalityNameGT: String
+  criticalityNameGTE: String
+  criticalityNameLT: String
+  criticalityNameLTE: String
+  criticalityNameContains: String
+  criticalityNameHasPrefix: String
+  criticalityNameHasSuffix: String
+  criticalityNameIsNil: Boolean
+  criticalityNameNotNil: Boolean
+  criticalityNameEqualFold: String
+  criticalityNameContainsFold: String
+  """
+  criticality_id field predicates
+  """
+  criticalityID: String
+  criticalityIDNEQ: String
+  criticalityIDIn: [String!]
+  criticalityIDNotIn: [String!]
+  criticalityIDGT: String
+  criticalityIDGTE: String
+  criticalityIDLT: String
+  criticalityIDLTE: String
+  criticalityIDContains: String
+  criticalityIDHasPrefix: String
+  criticalityIDHasSuffix: String
+  criticalityIDIsNil: Boolean
+  criticalityIDNotNil: Boolean
+  criticalityIDEqualFold: String
+  criticalityIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  business_purpose field predicates
+  """
+  businessPurpose: String
+  businessPurposeNEQ: String
+  businessPurposeIn: [String!]
+  businessPurposeNotIn: [String!]
+  businessPurposeGT: String
+  businessPurposeGTE: String
+  businessPurposeLT: String
+  businessPurposeLTE: String
+  businessPurposeContains: String
+  businessPurposeHasPrefix: String
+  businessPurposeHasSuffix: String
+  businessPurposeIsNil: Boolean
+  businessPurposeNotNil: Boolean
+  businessPurposeEqualFold: String
+  businessPurposeContainsFold: String
+  """
+  status field predicates
+  """
+  status: PlatformHistoryPlatformStatus
+  statusNEQ: PlatformHistoryPlatformStatus
+  statusIn: [PlatformHistoryPlatformStatus!]
+  statusNotIn: [PlatformHistoryPlatformStatus!]
+  """
+  physical_location field predicates
+  """
+  physicalLocation: String
+  physicalLocationNEQ: String
+  physicalLocationIn: [String!]
+  physicalLocationNotIn: [String!]
+  physicalLocationGT: String
+  physicalLocationGTE: String
+  physicalLocationLT: String
+  physicalLocationLTE: String
+  physicalLocationContains: String
+  physicalLocationHasPrefix: String
+  physicalLocationHasSuffix: String
+  physicalLocationIsNil: Boolean
+  physicalLocationNotNil: Boolean
+  physicalLocationEqualFold: String
+  physicalLocationContainsFold: String
+  """
+  region field predicates
+  """
+  region: String
+  regionNEQ: String
+  regionIn: [String!]
+  regionNotIn: [String!]
+  regionGT: String
+  regionGTE: String
+  regionLT: String
+  regionLTE: String
+  regionContains: String
+  regionHasPrefix: String
+  regionHasSuffix: String
+  regionIsNil: Boolean
+  regionNotNil: Boolean
+  regionEqualFold: String
+  regionContainsFold: String
+  """
+  contains_pii field predicates
+  """
+  containsPii: Boolean
+  containsPiiNEQ: Boolean
+  containsPiiIsNil: Boolean
+  containsPiiNotNil: Boolean
+  """
+  source_type field predicates
+  """
+  sourceType: PlatformHistorySourceType
+  sourceTypeNEQ: PlatformHistorySourceType
+  sourceTypeIn: [PlatformHistorySourceType!]
+  sourceTypeNotIn: [PlatformHistorySourceType!]
+  """
+  source_identifier field predicates
+  """
+  sourceIdentifier: String
+  sourceIdentifierNEQ: String
+  sourceIdentifierIn: [String!]
+  sourceIdentifierNotIn: [String!]
+  sourceIdentifierGT: String
+  sourceIdentifierGTE: String
+  sourceIdentifierLT: String
+  sourceIdentifierLTE: String
+  sourceIdentifierContains: String
+  sourceIdentifierHasPrefix: String
+  sourceIdentifierHasSuffix: String
+  sourceIdentifierIsNil: Boolean
+  sourceIdentifierNotNil: Boolean
+  sourceIdentifierEqualFold: String
+  sourceIdentifierContainsFold: String
+  """
+  cost_center field predicates
+  """
+  costCenter: String
+  costCenterNEQ: String
+  costCenterIn: [String!]
+  costCenterNotIn: [String!]
+  costCenterGT: String
+  costCenterGTE: String
+  costCenterLT: String
+  costCenterLTE: String
+  costCenterContains: String
+  costCenterHasPrefix: String
+  costCenterHasSuffix: String
+  costCenterIsNil: Boolean
+  costCenterNotNil: Boolean
+  costCenterEqualFold: String
+  costCenterContainsFold: String
+  """
+  estimated_monthly_cost field predicates
+  """
+  estimatedMonthlyCost: Float
+  estimatedMonthlyCostNEQ: Float
+  estimatedMonthlyCostIn: [Float!]
+  estimatedMonthlyCostNotIn: [Float!]
+  estimatedMonthlyCostGT: Float
+  estimatedMonthlyCostGTE: Float
+  estimatedMonthlyCostLT: Float
+  estimatedMonthlyCostLTE: Float
+  estimatedMonthlyCostIsNil: Boolean
+  estimatedMonthlyCostNotNil: Boolean
+  """
+  purchase_date field predicates
+  """
+  purchaseDate: DateTime
+  purchaseDateNEQ: DateTime
+  purchaseDateIn: [DateTime!]
+  purchaseDateNotIn: [DateTime!]
+  purchaseDateGT: DateTime
+  purchaseDateGTE: DateTime
+  purchaseDateLT: DateTime
+  purchaseDateLTE: DateTime
+  purchaseDateIsNil: Boolean
+  purchaseDateNotNil: Boolean
+  """
+  platform_owner_id field predicates
+  """
+  platformOwnerID: String
+  platformOwnerIDNEQ: String
+  platformOwnerIDIn: [String!]
+  platformOwnerIDNotIn: [String!]
+  platformOwnerIDGT: String
+  platformOwnerIDGTE: String
+  platformOwnerIDLT: String
+  platformOwnerIDLTE: String
+  platformOwnerIDContains: String
+  platformOwnerIDHasPrefix: String
+  platformOwnerIDHasSuffix: String
+  platformOwnerIDIsNil: Boolean
+  platformOwnerIDNotNil: Boolean
+  platformOwnerIDEqualFold: String
+  platformOwnerIDContainsFold: String
+  """
+  external_reference_id field predicates
+  """
+  externalReferenceID: String
+  externalReferenceIDNEQ: String
+  externalReferenceIDIn: [String!]
+  externalReferenceIDNotIn: [String!]
+  externalReferenceIDGT: String
+  externalReferenceIDGTE: String
+  externalReferenceIDLT: String
+  externalReferenceIDLTE: String
+  externalReferenceIDContains: String
+  externalReferenceIDHasPrefix: String
+  externalReferenceIDHasSuffix: String
+  externalReferenceIDIsNil: Boolean
+  externalReferenceIDNotNil: Boolean
+  externalReferenceIDEqualFold: String
+  externalReferenceIDContainsFold: String
+}
 type ProcedureHistory implements Node {
   id: ID!
   historyTime: Time!
@@ -31185,6 +39621,22 @@ type ProcedureHistory implements Node {
   the kind of the procedure
   """
   procedureKindID: String
+  """
+  the environment of the procedure
+  """
+  environmentName: String
+  """
+  the environment of the procedure
+  """
+  environmentID: String
+  """
+  the scope of the procedure
+  """
+  scopeName: String
+  """
+  the scope of the procedure
+  """
+  scopeID: String
   """
   internal marker field for workflow eligibility, not exposed in API
   """
@@ -31667,6 +40119,78 @@ input ProcedureHistoryWhereInput {
   procedureKindIDNotNil: Boolean
   procedureKindIDEqualFold: String
   procedureKindIDContainsFold: String
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
   """
   workflow_eligible_marker field predicates
   """
@@ -32576,6 +41100,68 @@ type Query {
     """
     where: AssetHistoryWhereInput
   ): AssetHistoryConnection!
+  campaignHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CampaignHistories returned from the connection.
+    """
+    orderBy: CampaignHistoryOrder
+
+    """
+    Filtering options for CampaignHistories returned from the connection.
+    """
+    where: CampaignHistoryWhereInput
+  ): CampaignHistoryConnection!
+  campaignTargetHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CampaignTargetHistories returned from the connection.
+    """
+    orderBy: CampaignTargetHistoryOrder
+
+    """
+    Filtering options for CampaignTargetHistories returned from the connection.
+    """
+    where: CampaignTargetHistoryWhereInput
+  ): CampaignTargetHistoryConnection!
   contactHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -33227,6 +41813,37 @@ type Query {
     """
     where: HushHistoryWhereInput
   ): HushHistoryConnection!
+  identityHolderHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolderHistories returned from the connection.
+    """
+    orderBy: IdentityHolderHistoryOrder
+
+    """
+    Filtering options for IdentityHolderHistories returned from the connection.
+    """
+    where: IdentityHolderHistoryWhereInput
+  ): IdentityHolderHistoryConnection!
   integrationHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -33568,6 +42185,37 @@ type Query {
     """
     where: OrganizationSettingHistoryWhereInput
   ): OrganizationSettingHistoryConnection!
+  platformHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for PlatformHistories returned from the connection.
+    """
+    orderBy: PlatformHistoryOrder
+
+    """
+    Filtering options for PlatformHistories returned from the connection.
+    """
+    where: PlatformHistoryWhereInput
+  ): PlatformHistoryConnection!
   procedureHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -34533,6 +43181,22 @@ type RemediationHistory implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  the environment of the remediation
+  """
+  environmentName: String
+  """
+  the environment of the remediation
+  """
+  environmentID: String
+  """
+  the scope of the remediation
+  """
+  scopeName: String
+  """
+  the scope of the remediation
+  """
+  scopeID: String
+  """
   external identifier from the integration source for the remediation
   """
   externalID: String
@@ -34868,6 +43532,78 @@ input RemediationHistoryWhereInput {
   systemInternalIDNotNil: Boolean
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
   """
   external_id field predicates
   """
@@ -35208,6 +43944,22 @@ type ReviewHistory implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  the environment of the review
+  """
+  environmentName: String
+  """
+  the environment of the review
+  """
+  environmentID: String
+  """
+  the scope of the review
+  """
+  scopeName: String
+  """
+  the scope of the review
+  """
+  scopeID: String
+  """
   external identifier from the integration source for the review
   """
   externalID: String
@@ -35524,6 +44276,78 @@ input ReviewHistoryWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -35821,6 +44645,22 @@ type RiskHistory implements Node {
   the category of the risk
   """
   riskCategoryID: String
+  """
+  the environment of the risk
+  """
+  environmentName: String
+  """
+  the environment of the risk
+  """
+  environmentID: String
+  """
+  the scope of the risk
+  """
+  scopeName: String
+  """
+  the scope of the risk
+  """
+  scopeID: String
   """
   the name of the risk
   """
@@ -36196,6 +45036,78 @@ input RiskHistoryWhereInput {
   riskCategoryIDEqualFold: String
   riskCategoryIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -36360,6 +45272,46 @@ type ScanHistory implements Node {
   """
   ownerID: String
   """
+  who reviewed the scan when no user or group is linked
+  """
+  reviewedBy: String
+  """
+  the user id that reviewed the scan
+  """
+  reviewedByUserID: String
+  """
+  the group id that reviewed the scan
+  """
+  reviewedByGroupID: String
+  """
+  who the scan is assigned to when no user or group is linked
+  """
+  assignedTo: String
+  """
+  the user id assigned to the scan
+  """
+  assignedToUserID: String
+  """
+  the group id assigned to the scan
+  """
+  assignedToGroupID: String
+  """
+  the environment of the scan
+  """
+  environmentName: String
+  """
+  the environment of the scan
+  """
+  environmentID: String
+  """
+  the scope of the scan
+  """
+  scopeName: String
+  """
+  the scope of the scan
+  """
+  scopeID: String
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String!
@@ -36371,6 +45323,38 @@ type ScanHistory implements Node {
   additional metadata for the scan, e.g., scan configuration, options, etc
   """
   metadata: Map
+  """
+  when the scan was executed
+  """
+  scanDate: DateTime
+  """
+  cron schedule that governs the scan cadence, in cron 6-field syntax
+  """
+  scanSchedule: String
+  """
+  when the scan is scheduled to run next
+  """
+  nextScanRunAt: DateTime
+  """
+  who performed the scan when no user or group is linked
+  """
+  performedBy: String
+  """
+  the user id that performed the scan
+  """
+  performedByUserID: String
+  """
+  the group id that performed the scan
+  """
+  performedByGroupID: String
+  """
+  the platform that generated the scan
+  """
+  generatedByPlatformID: String
+  """
+  identifiers of vulnerabilities discovered during the scan
+  """
+  vulnerabilityIds: [String!]
   """
   the status of the scan, e.g., processing, completed, failed
   """
@@ -36435,6 +45419,8 @@ enum ScanHistoryOrderField {
   created_at
   updated_at
   SCAN_TYPE
+  scan_date
+  next_scan_run_at
   STATUS
 }
 """
@@ -36593,6 +45579,186 @@ input ScanHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  reviewed_by field predicates
+  """
+  reviewedBy: String
+  reviewedByNEQ: String
+  reviewedByIn: [String!]
+  reviewedByNotIn: [String!]
+  reviewedByGT: String
+  reviewedByGTE: String
+  reviewedByLT: String
+  reviewedByLTE: String
+  reviewedByContains: String
+  reviewedByHasPrefix: String
+  reviewedByHasSuffix: String
+  reviewedByIsNil: Boolean
+  reviewedByNotNil: Boolean
+  reviewedByEqualFold: String
+  reviewedByContainsFold: String
+  """
+  reviewed_by_user_id field predicates
+  """
+  reviewedByUserID: String
+  reviewedByUserIDNEQ: String
+  reviewedByUserIDIn: [String!]
+  reviewedByUserIDNotIn: [String!]
+  reviewedByUserIDGT: String
+  reviewedByUserIDGTE: String
+  reviewedByUserIDLT: String
+  reviewedByUserIDLTE: String
+  reviewedByUserIDContains: String
+  reviewedByUserIDHasPrefix: String
+  reviewedByUserIDHasSuffix: String
+  reviewedByUserIDIsNil: Boolean
+  reviewedByUserIDNotNil: Boolean
+  reviewedByUserIDEqualFold: String
+  reviewedByUserIDContainsFold: String
+  """
+  reviewed_by_group_id field predicates
+  """
+  reviewedByGroupID: String
+  reviewedByGroupIDNEQ: String
+  reviewedByGroupIDIn: [String!]
+  reviewedByGroupIDNotIn: [String!]
+  reviewedByGroupIDGT: String
+  reviewedByGroupIDGTE: String
+  reviewedByGroupIDLT: String
+  reviewedByGroupIDLTE: String
+  reviewedByGroupIDContains: String
+  reviewedByGroupIDHasPrefix: String
+  reviewedByGroupIDHasSuffix: String
+  reviewedByGroupIDIsNil: Boolean
+  reviewedByGroupIDNotNil: Boolean
+  reviewedByGroupIDEqualFold: String
+  reviewedByGroupIDContainsFold: String
+  """
+  assigned_to field predicates
+  """
+  assignedTo: String
+  assignedToNEQ: String
+  assignedToIn: [String!]
+  assignedToNotIn: [String!]
+  assignedToGT: String
+  assignedToGTE: String
+  assignedToLT: String
+  assignedToLTE: String
+  assignedToContains: String
+  assignedToHasPrefix: String
+  assignedToHasSuffix: String
+  assignedToIsNil: Boolean
+  assignedToNotNil: Boolean
+  assignedToEqualFold: String
+  assignedToContainsFold: String
+  """
+  assigned_to_user_id field predicates
+  """
+  assignedToUserID: String
+  assignedToUserIDNEQ: String
+  assignedToUserIDIn: [String!]
+  assignedToUserIDNotIn: [String!]
+  assignedToUserIDGT: String
+  assignedToUserIDGTE: String
+  assignedToUserIDLT: String
+  assignedToUserIDLTE: String
+  assignedToUserIDContains: String
+  assignedToUserIDHasPrefix: String
+  assignedToUserIDHasSuffix: String
+  assignedToUserIDIsNil: Boolean
+  assignedToUserIDNotNil: Boolean
+  assignedToUserIDEqualFold: String
+  assignedToUserIDContainsFold: String
+  """
+  assigned_to_group_id field predicates
+  """
+  assignedToGroupID: String
+  assignedToGroupIDNEQ: String
+  assignedToGroupIDIn: [String!]
+  assignedToGroupIDNotIn: [String!]
+  assignedToGroupIDGT: String
+  assignedToGroupIDGTE: String
+  assignedToGroupIDLT: String
+  assignedToGroupIDLTE: String
+  assignedToGroupIDContains: String
+  assignedToGroupIDHasPrefix: String
+  assignedToGroupIDHasSuffix: String
+  assignedToGroupIDIsNil: Boolean
+  assignedToGroupIDNotNil: Boolean
+  assignedToGroupIDEqualFold: String
+  assignedToGroupIDContainsFold: String
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
+  """
   target field predicates
   """
   target: String
@@ -36615,6 +45781,104 @@ input ScanHistoryWhereInput {
   scanTypeNEQ: ScanHistoryScanType
   scanTypeIn: [ScanHistoryScanType!]
   scanTypeNotIn: [ScanHistoryScanType!]
+  """
+  scan_date field predicates
+  """
+  scanDate: DateTime
+  scanDateNEQ: DateTime
+  scanDateIn: [DateTime!]
+  scanDateNotIn: [DateTime!]
+  scanDateGT: DateTime
+  scanDateGTE: DateTime
+  scanDateLT: DateTime
+  scanDateLTE: DateTime
+  scanDateIsNil: Boolean
+  scanDateNotNil: Boolean
+  """
+  next_scan_run_at field predicates
+  """
+  nextScanRunAt: DateTime
+  nextScanRunAtNEQ: DateTime
+  nextScanRunAtIn: [DateTime!]
+  nextScanRunAtNotIn: [DateTime!]
+  nextScanRunAtGT: DateTime
+  nextScanRunAtGTE: DateTime
+  nextScanRunAtLT: DateTime
+  nextScanRunAtLTE: DateTime
+  nextScanRunAtIsNil: Boolean
+  nextScanRunAtNotNil: Boolean
+  """
+  performed_by field predicates
+  """
+  performedBy: String
+  performedByNEQ: String
+  performedByIn: [String!]
+  performedByNotIn: [String!]
+  performedByGT: String
+  performedByGTE: String
+  performedByLT: String
+  performedByLTE: String
+  performedByContains: String
+  performedByHasPrefix: String
+  performedByHasSuffix: String
+  performedByIsNil: Boolean
+  performedByNotNil: Boolean
+  performedByEqualFold: String
+  performedByContainsFold: String
+  """
+  performed_by_user_id field predicates
+  """
+  performedByUserID: String
+  performedByUserIDNEQ: String
+  performedByUserIDIn: [String!]
+  performedByUserIDNotIn: [String!]
+  performedByUserIDGT: String
+  performedByUserIDGTE: String
+  performedByUserIDLT: String
+  performedByUserIDLTE: String
+  performedByUserIDContains: String
+  performedByUserIDHasPrefix: String
+  performedByUserIDHasSuffix: String
+  performedByUserIDIsNil: Boolean
+  performedByUserIDNotNil: Boolean
+  performedByUserIDEqualFold: String
+  performedByUserIDContainsFold: String
+  """
+  performed_by_group_id field predicates
+  """
+  performedByGroupID: String
+  performedByGroupIDNEQ: String
+  performedByGroupIDIn: [String!]
+  performedByGroupIDNotIn: [String!]
+  performedByGroupIDGT: String
+  performedByGroupIDGTE: String
+  performedByGroupIDLT: String
+  performedByGroupIDLTE: String
+  performedByGroupIDContains: String
+  performedByGroupIDHasPrefix: String
+  performedByGroupIDHasSuffix: String
+  performedByGroupIDIsNil: Boolean
+  performedByGroupIDNotNil: Boolean
+  performedByGroupIDEqualFold: String
+  performedByGroupIDContainsFold: String
+  """
+  generated_by_platform_id field predicates
+  """
+  generatedByPlatformID: String
+  generatedByPlatformIDNEQ: String
+  generatedByPlatformIDIn: [String!]
+  generatedByPlatformIDNotIn: [String!]
+  generatedByPlatformIDGT: String
+  generatedByPlatformIDGTE: String
+  generatedByPlatformIDLT: String
+  generatedByPlatformIDLTE: String
+  generatedByPlatformIDContains: String
+  generatedByPlatformIDHasPrefix: String
+  generatedByPlatformIDHasSuffix: String
+  generatedByPlatformIDIsNil: Boolean
+  generatedByPlatformIDNotNil: Boolean
+  generatedByPlatformIDEqualFold: String
+  generatedByPlatformIDContainsFold: String
   """
   status field predicates
   """
@@ -38611,6 +47875,22 @@ type TaskHistory implements Node {
   """
   taskKindID: String
   """
+  the environment of the task
+  """
+  environmentName: String
+  """
+  the environment of the task
+  """
+  environmentID: String
+  """
+  the scope of the task
+  """
+  scopeName: String
+  """
+  the scope of the task
+  """
+  scopeID: String
+  """
   the title of the task
   """
   title: String!
@@ -38922,6 +48202,78 @@ input TaskHistoryWhereInput {
   taskKindIDEqualFold: String
   taskKindIDContainsFold: String
   """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
+  """
   title field predicates
   """
   title: String
@@ -39095,6 +48447,22 @@ type TemplateHistory implements Node {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @hidden(if: true)
+  """
+  the environment of the template
+  """
+  environmentName: String
+  """
+  the environment of the template
+  """
+  environmentID: String
+  """
+  the scope of the template
+  """
+  scopeName: String
+  """
+  the scope of the template
+  """
+  scopeID: String
   """
   the name of the template
   """
@@ -39380,6 +48748,78 @@ input TemplateHistoryWhereInput {
   systemInternalIDNotNil: Boolean
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
   """
   name field predicates
   """
@@ -41121,6 +50561,10 @@ type TrustCenterSettingHistory implements Node {
   """
   companyName: String
   """
+  company description for the trust center
+  """
+  companyDescription: String
+  """
   overview of the trust center
   """
   overview: String
@@ -41439,6 +50883,24 @@ input TrustCenterSettingHistoryWhereInput {
   companyNameNotNil: Boolean
   companyNameEqualFold: String
   companyNameContainsFold: String
+  """
+  company_description field predicates
+  """
+  companyDescription: String
+  companyDescriptionNEQ: String
+  companyDescriptionIn: [String!]
+  companyDescriptionNotIn: [String!]
+  companyDescriptionGT: String
+  companyDescriptionGTE: String
+  companyDescriptionLT: String
+  companyDescriptionLTE: String
+  companyDescriptionContains: String
+  companyDescriptionHasPrefix: String
+  companyDescriptionHasSuffix: String
+  companyDescriptionIsNil: Boolean
+  companyDescriptionNotNil: Boolean
+  companyDescriptionEqualFold: String
+  companyDescriptionContainsFold: String
   """
   overview field predicates
   """
@@ -43250,6 +52712,22 @@ type VulnerabilityHistory implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  the environment of the vulnerability
+  """
+  environmentName: String
+  """
+  the environment of the vulnerability
+  """
+  environmentID: String
+  """
+  the scope of the vulnerability
+  """
+  scopeName: String
+  """
+  the scope of the vulnerability
+  """
+  scopeID: String
+  """
   owner of the vulnerability
   """
   externalOwnerID: String
@@ -43626,6 +53104,78 @@ input VulnerabilityHistoryWhereInput {
   systemInternalIDNotNil: Boolean
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
+  """
+  environment_name field predicates
+  """
+  environmentName: String
+  environmentNameNEQ: String
+  environmentNameIn: [String!]
+  environmentNameNotIn: [String!]
+  environmentNameGT: String
+  environmentNameGTE: String
+  environmentNameLT: String
+  environmentNameLTE: String
+  environmentNameContains: String
+  environmentNameHasPrefix: String
+  environmentNameHasSuffix: String
+  environmentNameIsNil: Boolean
+  environmentNameNotNil: Boolean
+  environmentNameEqualFold: String
+  environmentNameContainsFold: String
+  """
+  environment_id field predicates
+  """
+  environmentID: String
+  environmentIDNEQ: String
+  environmentIDIn: [String!]
+  environmentIDNotIn: [String!]
+  environmentIDGT: String
+  environmentIDGTE: String
+  environmentIDLT: String
+  environmentIDLTE: String
+  environmentIDContains: String
+  environmentIDHasPrefix: String
+  environmentIDHasSuffix: String
+  environmentIDIsNil: Boolean
+  environmentIDNotNil: Boolean
+  environmentIDEqualFold: String
+  environmentIDContainsFold: String
+  """
+  scope_name field predicates
+  """
+  scopeName: String
+  scopeNameNEQ: String
+  scopeNameIn: [String!]
+  scopeNameNotIn: [String!]
+  scopeNameGT: String
+  scopeNameGTE: String
+  scopeNameLT: String
+  scopeNameLTE: String
+  scopeNameContains: String
+  scopeNameHasPrefix: String
+  scopeNameHasSuffix: String
+  scopeNameIsNil: Boolean
+  scopeNameNotNil: Boolean
+  scopeNameEqualFold: String
+  scopeNameContainsFold: String
+  """
+  scope_id field predicates
+  """
+  scopeID: String
+  scopeIDNEQ: String
+  scopeIDIn: [String!]
+  scopeIDNotIn: [String!]
+  scopeIDGT: String
+  scopeIDGTE: String
+  scopeIDLT: String
+  scopeIDLTE: String
+  scopeIDContains: String
+  scopeIDHasPrefix: String
+  scopeIDHasSuffix: String
+  scopeIDIsNil: Boolean
+  scopeIDNotNil: Boolean
+  scopeIDEqualFold: String
+  scopeIDContainsFold: String
   """
   external_owner_id field predicates
   """
@@ -45500,18 +55050,21 @@ enum WorkflowEventHistoryWorkflowEventType @goModel(model: "github.com/theopenla
   ACTION
   TRIGGER
   DECISION
-  INSTANCE_TRIGGERED
+  WORKFLOW_TRIGGERED
   ACTION_STARTED
   ACTION_COMPLETED
   ACTION_FAILED
   ACTION_SKIPPED
   CONDITION_EVALUATED
   ASSIGNMENT_CREATED
-  ASSIGNMENT_RESOLVED
+  ASSIGNMENT_COMPLETED
   ASSIGNMENT_INVALIDATED
   INSTANCE_PAUSED
   INSTANCE_RESUMED
-  INSTANCE_COMPLETED
+  WORKFLOW_COMPLETED
+  EMIT_FAILED
+  EMIT_RECOVERED
+  EMIT_FAILED_TERMINAL
 }
 type WorkflowInstanceHistory implements Node {
   id: ID!
@@ -45586,6 +55139,22 @@ type WorkflowInstanceHistory implements Node {
   ID of the procedure this workflow instance is associated with
   """
   procedureID: String
+  """
+  ID of the campaign this workflow instance is associated with
+  """
+  campaignID: String
+  """
+  ID of the campaign target this workflow instance is associated with
+  """
+  campaignTargetID: String
+  """
+  ID of the identity holder this workflow instance is associated with
+  """
+  identityHolderID: String
+  """
+  ID of the platform this workflow instance is associated with
+  """
+  platformID: String
 }
 """
 A connection to a list of items.
@@ -45972,6 +55541,78 @@ input WorkflowInstanceHistoryWhereInput {
   procedureIDNotNil: Boolean
   procedureIDEqualFold: String
   procedureIDContainsFold: String
+  """
+  campaign_id field predicates
+  """
+  campaignID: String
+  campaignIDNEQ: String
+  campaignIDIn: [String!]
+  campaignIDNotIn: [String!]
+  campaignIDGT: String
+  campaignIDGTE: String
+  campaignIDLT: String
+  campaignIDLTE: String
+  campaignIDContains: String
+  campaignIDHasPrefix: String
+  campaignIDHasSuffix: String
+  campaignIDIsNil: Boolean
+  campaignIDNotNil: Boolean
+  campaignIDEqualFold: String
+  campaignIDContainsFold: String
+  """
+  campaign_target_id field predicates
+  """
+  campaignTargetID: String
+  campaignTargetIDNEQ: String
+  campaignTargetIDIn: [String!]
+  campaignTargetIDNotIn: [String!]
+  campaignTargetIDGT: String
+  campaignTargetIDGTE: String
+  campaignTargetIDLT: String
+  campaignTargetIDLTE: String
+  campaignTargetIDContains: String
+  campaignTargetIDHasPrefix: String
+  campaignTargetIDHasSuffix: String
+  campaignTargetIDIsNil: Boolean
+  campaignTargetIDNotNil: Boolean
+  campaignTargetIDEqualFold: String
+  campaignTargetIDContainsFold: String
+  """
+  identity_holder_id field predicates
+  """
+  identityHolderID: String
+  identityHolderIDNEQ: String
+  identityHolderIDIn: [String!]
+  identityHolderIDNotIn: [String!]
+  identityHolderIDGT: String
+  identityHolderIDGTE: String
+  identityHolderIDLT: String
+  identityHolderIDLTE: String
+  identityHolderIDContains: String
+  identityHolderIDHasPrefix: String
+  identityHolderIDHasSuffix: String
+  identityHolderIDIsNil: Boolean
+  identityHolderIDNotNil: Boolean
+  identityHolderIDEqualFold: String
+  identityHolderIDContainsFold: String
+  """
+  platform_id field predicates
+  """
+  platformID: String
+  platformIDNEQ: String
+  platformIDIn: [String!]
+  platformIDNotIn: [String!]
+  platformIDGT: String
+  platformIDGTE: String
+  platformIDLT: String
+  platformIDLTE: String
+  platformIDContains: String
+  platformIDHasPrefix: String
+  platformIDHasSuffix: String
+  platformIDIsNil: Boolean
+  platformIDNotNil: Boolean
+  platformIDEqualFold: String
+  platformIDContainsFold: String
 }
 """
 WorkflowInstanceHistoryWorkflowInstanceState is enum for the field state
@@ -46047,6 +55688,22 @@ type WorkflowObjectRefHistory implements Node {
   Procedure referenced by this workflow instance
   """
   procedureID: String
+  """
+  Campaign referenced by this workflow instance
+  """
+  campaignID: String
+  """
+  Campaign target referenced by this workflow instance
+  """
+  campaignTargetID: String
+  """
+  Identity holder referenced by this workflow instance
+  """
+  identityHolderID: String
+  """
+  Platform referenced by this workflow instance
+  """
+  platformID: String
 }
 """
 A connection to a list of items.
@@ -46474,6 +56131,78 @@ input WorkflowObjectRefHistoryWhereInput {
   procedureIDNotNil: Boolean
   procedureIDEqualFold: String
   procedureIDContainsFold: String
+  """
+  campaign_id field predicates
+  """
+  campaignID: String
+  campaignIDNEQ: String
+  campaignIDIn: [String!]
+  campaignIDNotIn: [String!]
+  campaignIDGT: String
+  campaignIDGTE: String
+  campaignIDLT: String
+  campaignIDLTE: String
+  campaignIDContains: String
+  campaignIDHasPrefix: String
+  campaignIDHasSuffix: String
+  campaignIDIsNil: Boolean
+  campaignIDNotNil: Boolean
+  campaignIDEqualFold: String
+  campaignIDContainsFold: String
+  """
+  campaign_target_id field predicates
+  """
+  campaignTargetID: String
+  campaignTargetIDNEQ: String
+  campaignTargetIDIn: [String!]
+  campaignTargetIDNotIn: [String!]
+  campaignTargetIDGT: String
+  campaignTargetIDGTE: String
+  campaignTargetIDLT: String
+  campaignTargetIDLTE: String
+  campaignTargetIDContains: String
+  campaignTargetIDHasPrefix: String
+  campaignTargetIDHasSuffix: String
+  campaignTargetIDIsNil: Boolean
+  campaignTargetIDNotNil: Boolean
+  campaignTargetIDEqualFold: String
+  campaignTargetIDContainsFold: String
+  """
+  identity_holder_id field predicates
+  """
+  identityHolderID: String
+  identityHolderIDNEQ: String
+  identityHolderIDIn: [String!]
+  identityHolderIDNotIn: [String!]
+  identityHolderIDGT: String
+  identityHolderIDGTE: String
+  identityHolderIDLT: String
+  identityHolderIDLTE: String
+  identityHolderIDContains: String
+  identityHolderIDHasPrefix: String
+  identityHolderIDHasSuffix: String
+  identityHolderIDIsNil: Boolean
+  identityHolderIDNotNil: Boolean
+  identityHolderIDEqualFold: String
+  identityHolderIDContainsFold: String
+  """
+  platform_id field predicates
+  """
+  platformID: String
+  platformIDNEQ: String
+  platformIDIn: [String!]
+  platformIDNotIn: [String!]
+  platformIDGT: String
+  platformIDGTE: String
+  platformIDLT: String
+  platformIDLTE: String
+  platformIDContains: String
+  platformIDHasPrefix: String
+  platformIDHasSuffix: String
+  platformIDIsNil: Boolean
+  platformIDNotNil: Boolean
+  platformIDEqualFold: String
+  platformIDContainsFold: String
 }
 `, BuiltIn: false},
 	{Name: "../schemahistory/enums.graphql", Input: `"""

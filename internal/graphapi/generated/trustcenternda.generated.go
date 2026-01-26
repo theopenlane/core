@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"strconv"
 	"sync/atomic"
@@ -27,35 +26,6 @@ import (
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
-
-func (ec *executionContext) _SendTrustCenterNDAEmailPayload_success(ctx context.Context, field graphql.CollectedField, obj *model.SendTrustCenterNDAEmailPayload) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		ec.fieldContext_SendTrustCenterNDAEmailPayload_success,
-		func(ctx context.Context) (any, error) {
-			return obj.Success, nil
-		},
-		nil,
-		ec.marshalNBoolean2bool,
-		true,
-		true,
-	)
-}
-
-func (ec *executionContext) fieldContext_SendTrustCenterNDAEmailPayload_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SendTrustCenterNDAEmailPayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Boolean does not have child fields")
-		},
-	}
-	return fc, nil
-}
 
 func (ec *executionContext) _SubmitTrustCenterNDAResponsePayload_documentData(ctx context.Context, field graphql.CollectedField, obj *model.SubmitTrustCenterNDAResponsePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
@@ -95,12 +65,24 @@ func (ec *executionContext) fieldContext_SubmitTrustCenterNDAResponsePayload_doc
 				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_DocumentData_ownerID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_DocumentData_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_DocumentData_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_DocumentData_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_DocumentData_scopeID(ctx, field)
 			case "templateID":
 				return ec.fieldContext_DocumentData_templateID(ctx, field)
 			case "data":
 				return ec.fieldContext_DocumentData_data(ctx, field)
 			case "owner":
 				return ec.fieldContext_DocumentData_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_DocumentData_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_DocumentData_scope(ctx, field)
 			case "template":
 				return ec.fieldContext_DocumentData_template(ctx, field)
 			case "entities":
@@ -158,6 +140,14 @@ func (ec *executionContext) fieldContext_TrustCenterNDACreatePayload_template(_ 
 				return ec.fieldContext_Template_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Template_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Template_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Template_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Template_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Template_scopeID(ctx, field)
 			case "name":
 				return ec.fieldContext_Template_name(ctx, field)
 			case "templateType":
@@ -174,6 +164,10 @@ func (ec *executionContext) fieldContext_TrustCenterNDACreatePayload_template(_ 
 				return ec.fieldContext_Template_trustCenterID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Template_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_Template_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Template_scope(ctx, field)
 			case "documents":
 				return ec.fieldContext_Template_documents(ctx, field)
 			case "files":
@@ -182,6 +176,10 @@ func (ec *executionContext) fieldContext_TrustCenterNDACreatePayload_template(_ 
 				return ec.fieldContext_Template_trustCenter(ctx, field)
 			case "assessments":
 				return ec.fieldContext_Template_assessments(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Template_campaigns(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Template_identityHolders(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
 		},
@@ -233,6 +231,14 @@ func (ec *executionContext) fieldContext_TrustCenterNDAUpdatePayload_template(_ 
 				return ec.fieldContext_Template_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Template_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Template_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Template_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Template_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Template_scopeID(ctx, field)
 			case "name":
 				return ec.fieldContext_Template_name(ctx, field)
 			case "templateType":
@@ -249,6 +255,10 @@ func (ec *executionContext) fieldContext_TrustCenterNDAUpdatePayload_template(_ 
 				return ec.fieldContext_Template_trustCenterID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Template_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_Template_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Template_scope(ctx, field)
 			case "documents":
 				return ec.fieldContext_Template_documents(ctx, field)
 			case "files":
@@ -257,6 +267,10 @@ func (ec *executionContext) fieldContext_TrustCenterNDAUpdatePayload_template(_ 
 				return ec.fieldContext_Template_trustCenter(ctx, field)
 			case "assessments":
 				return ec.fieldContext_Template_assessments(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Template_campaigns(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Template_identityHolders(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
 		},
@@ -289,40 +303,6 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterNDAInput(ctx context.
 				return it, err
 			}
 			it.TrustCenterID = data
-		}
-	}
-
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputSendTrustCenterNDAInput(ctx context.Context, obj any) (model.SendTrustCenterNDAInput, error) {
-	var it model.SendTrustCenterNDAInput
-	asMap := map[string]any{}
-	for k, v := range obj.(map[string]any) {
-		asMap[k] = v
-	}
-
-	fieldsInOrder := [...]string{"trustCenterID", "email"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "trustCenterID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trustCenterID"))
-			data, err := ec.unmarshalNID2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.TrustCenterID = data
-		case "email":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-			data, err := ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Email = data
 		}
 	}
 
@@ -370,45 +350,6 @@ func (ec *executionContext) unmarshalInputSubmitTrustCenterNDAResponseInput(ctx 
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
-
-var sendTrustCenterNDAEmailPayloadImplementors = []string{"SendTrustCenterNDAEmailPayload"}
-
-func (ec *executionContext) _SendTrustCenterNDAEmailPayload(ctx context.Context, sel ast.SelectionSet, obj *model.SendTrustCenterNDAEmailPayload) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, sendTrustCenterNDAEmailPayloadImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("SendTrustCenterNDAEmailPayload")
-		case "success":
-			out.Values[i] = ec._SendTrustCenterNDAEmailPayload_success(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
 
 var submitTrustCenterNDAResponsePayloadImplementors = []string{"SubmitTrustCenterNDAResponsePayload"}
 
@@ -533,25 +474,6 @@ func (ec *executionContext) _TrustCenterNDAUpdatePayload(ctx context.Context, se
 
 func (ec *executionContext) unmarshalNCreateTrustCenterNDAInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateTrustCenterNDAInput(ctx context.Context, v any) (model.CreateTrustCenterNDAInput, error) {
 	res, err := ec.unmarshalInputCreateTrustCenterNDAInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNSendTrustCenterNDAEmailPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSendTrustCenterNDAEmailPayload(ctx context.Context, sel ast.SelectionSet, v model.SendTrustCenterNDAEmailPayload) graphql.Marshaler {
-	return ec._SendTrustCenterNDAEmailPayload(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNSendTrustCenterNDAEmailPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSendTrustCenterNDAEmailPayload(ctx context.Context, sel ast.SelectionSet, v *model.SendTrustCenterNDAEmailPayload) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._SendTrustCenterNDAEmailPayload(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNSendTrustCenterNDAInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSendTrustCenterNDAInput(ctx context.Context, v any) (model.SendTrustCenterNDAInput, error) {
-	res, err := ec.unmarshalInputSendTrustCenterNDAInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 

@@ -95,6 +95,7 @@ func (i Integration) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, DirectoryGroup{}),
 		defaultEdgeToWithPagination(i, DirectoryMembership{}),
 		defaultEdgeToWithPagination(i, DirectorySyncRun{}),
+		defaultEdgeFromWithPagination(i, Entity{}),
 	}
 }
 
@@ -104,6 +105,8 @@ func (i Integration) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(i),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
+			newCustomEnumMixin(i, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(i, withEnumFieldName("scope"), withGlobalEnum()),
 		},
 	}.getMixins(i)
 }

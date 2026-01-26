@@ -16,12 +16,15 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
@@ -38,6 +41,8 @@ type EvidenceQuery struct {
 	inters                          []Interceptor
 	predicates                      []predicate.Evidence
 	withOwner                       *OrganizationQuery
+	withEnvironment                 *CustomTypeEnumQuery
+	withScope                       *CustomTypeEnumQuery
 	withControls                    *ControlQuery
 	withSubcontrols                 *SubcontrolQuery
 	withControlObjectives           *ControlObjectiveQuery
@@ -45,6 +50,8 @@ type EvidenceQuery struct {
 	withFiles                       *FileQuery
 	withPrograms                    *ProgramQuery
 	withTasks                       *TaskQuery
+	withPlatforms                   *PlatformQuery
+	withScans                       *ScanQuery
 	withComments                    *NoteQuery
 	withWorkflowObjectRefs          *WorkflowObjectRefQuery
 	loadTotal                       []func(context.Context, []*Evidence) error
@@ -56,6 +63,8 @@ type EvidenceQuery struct {
 	withNamedFiles                  map[string]*FileQuery
 	withNamedPrograms               map[string]*ProgramQuery
 	withNamedTasks                  map[string]*TaskQuery
+	withNamedPlatforms              map[string]*PlatformQuery
+	withNamedScans                  map[string]*ScanQuery
 	withNamedComments               map[string]*NoteQuery
 	withNamedWorkflowObjectRefs     map[string]*WorkflowObjectRefQuery
 	// intermediate query (i.e. traversal path).
@@ -112,6 +121,56 @@ func (_q *EvidenceQuery) QueryOwner() *OrganizationQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Evidence
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEnvironment chains the current query on the "environment" edge.
+func (_q *EvidenceQuery) QueryEnvironment() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, evidence.EnvironmentTable, evidence.EnvironmentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Evidence
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScope chains the current query on the "scope" edge.
+func (_q *EvidenceQuery) QueryScope() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, evidence.ScopeTable, evidence.ScopeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.Evidence
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -288,6 +347,56 @@ func (_q *EvidenceQuery) QueryTasks() *TaskQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.TaskEvidence
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPlatforms chains the current query on the "platforms" edge.
+func (_q *EvidenceQuery) QueryPlatforms() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, evidence.PlatformsTable, evidence.PlatformsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformEvidence
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScans chains the current query on the "scans" edge.
+func (_q *EvidenceQuery) QueryScans() *ScanQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, selector),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, evidence.ScansTable, evidence.ScansPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanEvidence
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -537,6 +646,8 @@ func (_q *EvidenceQuery) Clone() *EvidenceQuery {
 		inters:                     append([]Interceptor{}, _q.inters...),
 		predicates:                 append([]predicate.Evidence{}, _q.predicates...),
 		withOwner:                  _q.withOwner.Clone(),
+		withEnvironment:            _q.withEnvironment.Clone(),
+		withScope:                  _q.withScope.Clone(),
 		withControls:               _q.withControls.Clone(),
 		withSubcontrols:            _q.withSubcontrols.Clone(),
 		withControlObjectives:      _q.withControlObjectives.Clone(),
@@ -544,6 +655,8 @@ func (_q *EvidenceQuery) Clone() *EvidenceQuery {
 		withFiles:                  _q.withFiles.Clone(),
 		withPrograms:               _q.withPrograms.Clone(),
 		withTasks:                  _q.withTasks.Clone(),
+		withPlatforms:              _q.withPlatforms.Clone(),
+		withScans:                  _q.withScans.Clone(),
 		withComments:               _q.withComments.Clone(),
 		withWorkflowObjectRefs:     _q.withWorkflowObjectRefs.Clone(),
 		// clone intermediate query.
@@ -561,6 +674,28 @@ func (_q *EvidenceQuery) WithOwner(opts ...func(*OrganizationQuery)) *EvidenceQu
 		opt(query)
 	}
 	_q.withOwner = query
+	return _q
+}
+
+// WithEnvironment tells the query-builder to eager-load the nodes that are connected to
+// the "environment" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithEnvironment(opts ...func(*CustomTypeEnumQuery)) *EvidenceQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEnvironment = query
+	return _q
+}
+
+// WithScope tells the query-builder to eager-load the nodes that are connected to
+// the "scope" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *EvidenceQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScope = query
 	return _q
 }
 
@@ -638,6 +773,28 @@ func (_q *EvidenceQuery) WithTasks(opts ...func(*TaskQuery)) *EvidenceQuery {
 		opt(query)
 	}
 	_q.withTasks = query
+	return _q
+}
+
+// WithPlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithPlatforms(opts ...func(*PlatformQuery)) *EvidenceQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatforms = query
+	return _q
+}
+
+// WithScans tells the query-builder to eager-load the nodes that are connected to
+// the "scans" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithScans(opts ...func(*ScanQuery)) *EvidenceQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScans = query
 	return _q
 }
 
@@ -747,8 +904,10 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 	var (
 		nodes       = []*Evidence{}
 		_spec       = _q.querySpec()
-		loadedTypes = [10]bool{
+		loadedTypes = [14]bool{
 			_q.withOwner != nil,
+			_q.withEnvironment != nil,
+			_q.withScope != nil,
 			_q.withControls != nil,
 			_q.withSubcontrols != nil,
 			_q.withControlObjectives != nil,
@@ -756,6 +915,8 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 			_q.withFiles != nil,
 			_q.withPrograms != nil,
 			_q.withTasks != nil,
+			_q.withPlatforms != nil,
+			_q.withScans != nil,
 			_q.withComments != nil,
 			_q.withWorkflowObjectRefs != nil,
 		}
@@ -786,6 +947,18 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Evidence, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEnvironment; query != nil {
+		if err := _q.loadEnvironment(ctx, query, nodes, nil,
+			func(n *Evidence, e *CustomTypeEnum) { n.Edges.Environment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScope; query != nil {
+		if err := _q.loadScope(ctx, query, nodes, nil,
+			func(n *Evidence, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -839,6 +1012,20 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *Evidence) { n.Edges.Tasks = []*Task{} },
 			func(n *Evidence, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatforms; query != nil {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Evidence) { n.Edges.Platforms = []*Platform{} },
+			func(n *Evidence, e *Platform) { n.Edges.Platforms = append(n.Edges.Platforms, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScans; query != nil {
+		if err := _q.loadScans(ctx, query, nodes,
+			func(n *Evidence) { n.Edges.Scans = []*Scan{} },
+			func(n *Evidence, e *Scan) { n.Edges.Scans = append(n.Edges.Scans, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -907,6 +1094,20 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedPlatforms {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Evidence) { n.appendNamedPlatforms(name) },
+			func(n *Evidence, e *Platform) { n.appendNamedPlatforms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedScans {
+		if err := _q.loadScans(ctx, query, nodes,
+			func(n *Evidence) { n.appendNamedScans(name) },
+			func(n *Evidence, e *Scan) { n.appendNamedScans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedComments {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Evidence) { n.appendNamedComments(name) },
@@ -951,6 +1152,64 @@ func (_q *EvidenceQuery) loadOwner(ctx context.Context, query *OrganizationQuery
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *EvidenceQuery) loadEnvironment(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Evidence, init func(*Evidence), assign func(*Evidence, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Evidence)
+	for i := range nodes {
+		fk := nodes[i].EnvironmentID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "environment_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *EvidenceQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Evidence, init func(*Evidence), assign func(*Evidence, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Evidence)
+	for i := range nodes {
+		fk := nodes[i].ScopeID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1361,6 +1620,130 @@ func (_q *EvidenceQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes 
 	}
 	return nil
 }
+func (_q *EvidenceQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*Evidence, init func(*Evidence), assign func(*Evidence, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Evidence)
+	nids := make(map[string]map[*Evidence]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(evidence.PlatformsTable)
+		joinT.Schema(_q.schemaConfig.PlatformEvidence)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(evidence.PlatformsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(evidence.PlatformsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(evidence.PlatformsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Evidence]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "platforms" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *EvidenceQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*Evidence, init func(*Evidence), assign func(*Evidence, *Scan)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Evidence)
+	nids := make(map[string]map[*Evidence]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(evidence.ScansTable)
+		joinT.Schema(_q.schemaConfig.ScanEvidence)
+		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(evidence.ScansPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(evidence.ScansPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(evidence.ScansPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Evidence]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Scan](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "scans" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *EvidenceQuery) loadComments(ctx context.Context, query *NoteQuery, nodes []*Evidence, init func(*Evidence), assign func(*Evidence, *Note)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Evidence)
@@ -1456,6 +1839,12 @@ func (_q *EvidenceQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(evidence.FieldOwnerID)
+		}
+		if _q.withEnvironment != nil {
+			_spec.Node.AddColumnOnce(evidence.FieldEnvironmentID)
+		}
+		if _q.withScope != nil {
+			_spec.Node.AddColumnOnce(evidence.FieldScopeID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
@@ -1620,6 +2009,34 @@ func (_q *EvidenceQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *
 		_q.withNamedTasks = make(map[string]*TaskQuery)
 	}
 	_q.withNamedTasks[name] = query
+	return _q
+}
+
+// WithNamedPlatforms tells the query-builder to eager-load the nodes that are connected to the "platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQuery)) *EvidenceQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatforms == nil {
+		_q.withNamedPlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatforms[name] = query
+	return _q
+}
+
+// WithNamedScans tells the query-builder to eager-load the nodes that are connected to the "scans"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *EvidenceQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedScans == nil {
+		_q.withNamedScans = make(map[string]*ScanQuery)
+	}
+	_q.withNamedScans[name] = query
 	return _q
 }
 

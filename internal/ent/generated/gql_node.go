@@ -14,6 +14,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -39,6 +41,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
@@ -58,6 +61,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
@@ -124,6 +128,16 @@ var assetImplementors = []string{"Asset", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Asset) IsNode() {}
+
+var campaignImplementors = []string{"Campaign", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Campaign) IsNode() {}
+
+var campaigntargetImplementors = []string{"CampaignTarget", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*CampaignTarget) IsNode() {}
 
 var contactImplementors = []string{"Contact", "Node"}
 
@@ -250,6 +264,11 @@ var hushImplementors = []string{"Hush", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*Hush) IsNode() {}
 
+var identityholderImplementors = []string{"IdentityHolder", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*IdentityHolder) IsNode() {}
+
 var integrationImplementors = []string{"Integration", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -344,6 +363,11 @@ var personalaccesstokenImplementors = []string{"PersonalAccessToken", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*PersonalAccessToken) IsNode() {}
+
+var platformImplementors = []string{"Platform", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Platform) IsNode() {}
 
 var procedureImplementors = []string{"Procedure", "Node"}
 
@@ -623,6 +647,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case campaign.Table:
+		query := c.Campaign.Query().
+			Where(campaign.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, campaignImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case campaigntarget.Table:
+		query := c.CampaignTarget.Query().
+			Where(campaigntarget.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, campaigntargetImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	case contact.Table:
 		query := c.Contact.Query().
 			Where(contact.ID(id))
@@ -848,6 +890,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case identityholder.Table:
+		query := c.IdentityHolder.Query().
+			Where(identityholder.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, identityholderImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	case integration.Table:
 		query := c.Integration.Query().
 			Where(integration.ID(id))
@@ -1015,6 +1066,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(personalaccesstoken.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, personalaccesstokenImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case platform.Table:
+		query := c.Platform.Query().
+			Where(platform.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, platformImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1487,6 +1547,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
+	case campaign.Table:
+		query := c.Campaign.Query().
+			Where(campaign.IDIn(ids...))
+		query, err := query.CollectFields(ctx, campaignImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case campaigntarget.Table:
+		query := c.CampaignTarget.Query().
+			Where(campaigntarget.IDIn(ids...))
+		query, err := query.CollectFields(ctx, campaigntargetImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case contact.Table:
 		query := c.Contact.Query().
 			Where(contact.IDIn(ids...))
@@ -1887,6 +1979,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
+	case identityholder.Table:
+		query := c.IdentityHolder.Query().
+			Where(identityholder.IDIn(ids...))
+		query, err := query.CollectFields(ctx, identityholderImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case integration.Table:
 		query := c.Integration.Query().
 			Where(integration.IDIn(ids...))
@@ -2179,6 +2287,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.PersonalAccessToken.Query().
 			Where(personalaccesstoken.IDIn(ids...))
 		query, err := query.CollectFields(ctx, personalaccesstokenImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case platform.Table:
+		query := c.Platform.Query().
+			Where(platform.IDIn(ids...))
+		query, err := query.CollectFields(ctx, platformImplementors...)
 		if err != nil {
 			return nil, err
 		}

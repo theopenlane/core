@@ -118,6 +118,26 @@ func AssessmentID(v string) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldAssessmentID, v))
 }
 
+// IsTest applies equality check predicate on the "is_test" field. It's identical to IsTestEQ.
+func IsTest(v bool) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldIsTest, v))
+}
+
+// CampaignID applies equality check predicate on the "campaign_id" field. It's identical to CampaignIDEQ.
+func CampaignID(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldCampaignID, v))
+}
+
+// IdentityHolderID applies equality check predicate on the "identity_holder_id" field. It's identical to IdentityHolderIDEQ.
+func IdentityHolderID(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldIdentityHolderID, v))
+}
+
+// EntityID applies equality check predicate on the "entity_id" field. It's identical to EntityIDEQ.
+func EntityID(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldEntityID, v))
+}
+
 // Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
 func Email(v string) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldEmail, v))
@@ -126,6 +146,36 @@ func Email(v string) predicate.AssessmentResponseHistory {
 // SendAttempts applies equality check predicate on the "send_attempts" field. It's identical to SendAttemptsEQ.
 func SendAttempts(v int) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldSendAttempts, v))
+}
+
+// EmailDeliveredAt applies equality check predicate on the "email_delivered_at" field. It's identical to EmailDeliveredAtEQ.
+func EmailDeliveredAt(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldEmailDeliveredAt, v))
+}
+
+// EmailOpenedAt applies equality check predicate on the "email_opened_at" field. It's identical to EmailOpenedAtEQ.
+func EmailOpenedAt(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldEmailOpenedAt, v))
+}
+
+// EmailClickedAt applies equality check predicate on the "email_clicked_at" field. It's identical to EmailClickedAtEQ.
+func EmailClickedAt(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldEmailClickedAt, v))
+}
+
+// EmailOpenCount applies equality check predicate on the "email_open_count" field. It's identical to EmailOpenCountEQ.
+func EmailOpenCount(v int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldEmailOpenCount, v))
+}
+
+// EmailClickCount applies equality check predicate on the "email_click_count" field. It's identical to EmailClickCountEQ.
+func EmailClickCount(v int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldEmailClickCount, v))
+}
+
+// LastEmailEventAt applies equality check predicate on the "last_email_event_at" field. It's identical to LastEmailEventAtEQ.
+func LastEmailEventAt(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldLastEmailEventAt, v))
 }
 
 // AssignedAt applies equality check predicate on the "assigned_at" field. It's identical to AssignedAtEQ.
@@ -803,6 +853,241 @@ func AssessmentIDContainsFold(v string) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldContainsFold(FieldAssessmentID, v))
 }
 
+// IsTestEQ applies the EQ predicate on the "is_test" field.
+func IsTestEQ(v bool) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldIsTest, v))
+}
+
+// IsTestNEQ applies the NEQ predicate on the "is_test" field.
+func IsTestNEQ(v bool) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNEQ(FieldIsTest, v))
+}
+
+// CampaignIDEQ applies the EQ predicate on the "campaign_id" field.
+func CampaignIDEQ(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldCampaignID, v))
+}
+
+// CampaignIDNEQ applies the NEQ predicate on the "campaign_id" field.
+func CampaignIDNEQ(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNEQ(FieldCampaignID, v))
+}
+
+// CampaignIDIn applies the In predicate on the "campaign_id" field.
+func CampaignIDIn(vs ...string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIn(FieldCampaignID, vs...))
+}
+
+// CampaignIDNotIn applies the NotIn predicate on the "campaign_id" field.
+func CampaignIDNotIn(vs ...string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotIn(FieldCampaignID, vs...))
+}
+
+// CampaignIDGT applies the GT predicate on the "campaign_id" field.
+func CampaignIDGT(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGT(FieldCampaignID, v))
+}
+
+// CampaignIDGTE applies the GTE predicate on the "campaign_id" field.
+func CampaignIDGTE(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGTE(FieldCampaignID, v))
+}
+
+// CampaignIDLT applies the LT predicate on the "campaign_id" field.
+func CampaignIDLT(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLT(FieldCampaignID, v))
+}
+
+// CampaignIDLTE applies the LTE predicate on the "campaign_id" field.
+func CampaignIDLTE(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLTE(FieldCampaignID, v))
+}
+
+// CampaignIDContains applies the Contains predicate on the "campaign_id" field.
+func CampaignIDContains(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldContains(FieldCampaignID, v))
+}
+
+// CampaignIDHasPrefix applies the HasPrefix predicate on the "campaign_id" field.
+func CampaignIDHasPrefix(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldHasPrefix(FieldCampaignID, v))
+}
+
+// CampaignIDHasSuffix applies the HasSuffix predicate on the "campaign_id" field.
+func CampaignIDHasSuffix(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldHasSuffix(FieldCampaignID, v))
+}
+
+// CampaignIDIsNil applies the IsNil predicate on the "campaign_id" field.
+func CampaignIDIsNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIsNull(FieldCampaignID))
+}
+
+// CampaignIDNotNil applies the NotNil predicate on the "campaign_id" field.
+func CampaignIDNotNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotNull(FieldCampaignID))
+}
+
+// CampaignIDEqualFold applies the EqualFold predicate on the "campaign_id" field.
+func CampaignIDEqualFold(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEqualFold(FieldCampaignID, v))
+}
+
+// CampaignIDContainsFold applies the ContainsFold predicate on the "campaign_id" field.
+func CampaignIDContainsFold(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldContainsFold(FieldCampaignID, v))
+}
+
+// IdentityHolderIDEQ applies the EQ predicate on the "identity_holder_id" field.
+func IdentityHolderIDEQ(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDNEQ applies the NEQ predicate on the "identity_holder_id" field.
+func IdentityHolderIDNEQ(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNEQ(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDIn applies the In predicate on the "identity_holder_id" field.
+func IdentityHolderIDIn(vs ...string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIn(FieldIdentityHolderID, vs...))
+}
+
+// IdentityHolderIDNotIn applies the NotIn predicate on the "identity_holder_id" field.
+func IdentityHolderIDNotIn(vs ...string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotIn(FieldIdentityHolderID, vs...))
+}
+
+// IdentityHolderIDGT applies the GT predicate on the "identity_holder_id" field.
+func IdentityHolderIDGT(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGT(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDGTE applies the GTE predicate on the "identity_holder_id" field.
+func IdentityHolderIDGTE(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGTE(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDLT applies the LT predicate on the "identity_holder_id" field.
+func IdentityHolderIDLT(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLT(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDLTE applies the LTE predicate on the "identity_holder_id" field.
+func IdentityHolderIDLTE(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLTE(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDContains applies the Contains predicate on the "identity_holder_id" field.
+func IdentityHolderIDContains(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldContains(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDHasPrefix applies the HasPrefix predicate on the "identity_holder_id" field.
+func IdentityHolderIDHasPrefix(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldHasPrefix(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDHasSuffix applies the HasSuffix predicate on the "identity_holder_id" field.
+func IdentityHolderIDHasSuffix(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldHasSuffix(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDIsNil applies the IsNil predicate on the "identity_holder_id" field.
+func IdentityHolderIDIsNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIsNull(FieldIdentityHolderID))
+}
+
+// IdentityHolderIDNotNil applies the NotNil predicate on the "identity_holder_id" field.
+func IdentityHolderIDNotNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotNull(FieldIdentityHolderID))
+}
+
+// IdentityHolderIDEqualFold applies the EqualFold predicate on the "identity_holder_id" field.
+func IdentityHolderIDEqualFold(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEqualFold(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDContainsFold applies the ContainsFold predicate on the "identity_holder_id" field.
+func IdentityHolderIDContainsFold(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldContainsFold(FieldIdentityHolderID, v))
+}
+
+// EntityIDEQ applies the EQ predicate on the "entity_id" field.
+func EntityIDEQ(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldEntityID, v))
+}
+
+// EntityIDNEQ applies the NEQ predicate on the "entity_id" field.
+func EntityIDNEQ(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNEQ(FieldEntityID, v))
+}
+
+// EntityIDIn applies the In predicate on the "entity_id" field.
+func EntityIDIn(vs ...string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIn(FieldEntityID, vs...))
+}
+
+// EntityIDNotIn applies the NotIn predicate on the "entity_id" field.
+func EntityIDNotIn(vs ...string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotIn(FieldEntityID, vs...))
+}
+
+// EntityIDGT applies the GT predicate on the "entity_id" field.
+func EntityIDGT(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGT(FieldEntityID, v))
+}
+
+// EntityIDGTE applies the GTE predicate on the "entity_id" field.
+func EntityIDGTE(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGTE(FieldEntityID, v))
+}
+
+// EntityIDLT applies the LT predicate on the "entity_id" field.
+func EntityIDLT(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLT(FieldEntityID, v))
+}
+
+// EntityIDLTE applies the LTE predicate on the "entity_id" field.
+func EntityIDLTE(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLTE(FieldEntityID, v))
+}
+
+// EntityIDContains applies the Contains predicate on the "entity_id" field.
+func EntityIDContains(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldContains(FieldEntityID, v))
+}
+
+// EntityIDHasPrefix applies the HasPrefix predicate on the "entity_id" field.
+func EntityIDHasPrefix(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldHasPrefix(FieldEntityID, v))
+}
+
+// EntityIDHasSuffix applies the HasSuffix predicate on the "entity_id" field.
+func EntityIDHasSuffix(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldHasSuffix(FieldEntityID, v))
+}
+
+// EntityIDIsNil applies the IsNil predicate on the "entity_id" field.
+func EntityIDIsNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIsNull(FieldEntityID))
+}
+
+// EntityIDNotNil applies the NotNil predicate on the "entity_id" field.
+func EntityIDNotNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotNull(FieldEntityID))
+}
+
+// EntityIDEqualFold applies the EqualFold predicate on the "entity_id" field.
+func EntityIDEqualFold(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEqualFold(FieldEntityID, v))
+}
+
+// EntityIDContainsFold applies the ContainsFold predicate on the "entity_id" field.
+func EntityIDContainsFold(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldContainsFold(FieldEntityID, v))
+}
+
 // EmailEQ applies the EQ predicate on the "email" field.
 func EmailEQ(v string) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldEmail, v))
@@ -906,6 +1191,316 @@ func SendAttemptsLT(v int) predicate.AssessmentResponseHistory {
 // SendAttemptsLTE applies the LTE predicate on the "send_attempts" field.
 func SendAttemptsLTE(v int) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldLTE(FieldSendAttempts, v))
+}
+
+// EmailDeliveredAtEQ applies the EQ predicate on the "email_delivered_at" field.
+func EmailDeliveredAtEQ(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldEmailDeliveredAt, v))
+}
+
+// EmailDeliveredAtNEQ applies the NEQ predicate on the "email_delivered_at" field.
+func EmailDeliveredAtNEQ(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNEQ(FieldEmailDeliveredAt, v))
+}
+
+// EmailDeliveredAtIn applies the In predicate on the "email_delivered_at" field.
+func EmailDeliveredAtIn(vs ...time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIn(FieldEmailDeliveredAt, vs...))
+}
+
+// EmailDeliveredAtNotIn applies the NotIn predicate on the "email_delivered_at" field.
+func EmailDeliveredAtNotIn(vs ...time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotIn(FieldEmailDeliveredAt, vs...))
+}
+
+// EmailDeliveredAtGT applies the GT predicate on the "email_delivered_at" field.
+func EmailDeliveredAtGT(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGT(FieldEmailDeliveredAt, v))
+}
+
+// EmailDeliveredAtGTE applies the GTE predicate on the "email_delivered_at" field.
+func EmailDeliveredAtGTE(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGTE(FieldEmailDeliveredAt, v))
+}
+
+// EmailDeliveredAtLT applies the LT predicate on the "email_delivered_at" field.
+func EmailDeliveredAtLT(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLT(FieldEmailDeliveredAt, v))
+}
+
+// EmailDeliveredAtLTE applies the LTE predicate on the "email_delivered_at" field.
+func EmailDeliveredAtLTE(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLTE(FieldEmailDeliveredAt, v))
+}
+
+// EmailDeliveredAtIsNil applies the IsNil predicate on the "email_delivered_at" field.
+func EmailDeliveredAtIsNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIsNull(FieldEmailDeliveredAt))
+}
+
+// EmailDeliveredAtNotNil applies the NotNil predicate on the "email_delivered_at" field.
+func EmailDeliveredAtNotNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotNull(FieldEmailDeliveredAt))
+}
+
+// EmailOpenedAtEQ applies the EQ predicate on the "email_opened_at" field.
+func EmailOpenedAtEQ(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldEmailOpenedAt, v))
+}
+
+// EmailOpenedAtNEQ applies the NEQ predicate on the "email_opened_at" field.
+func EmailOpenedAtNEQ(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNEQ(FieldEmailOpenedAt, v))
+}
+
+// EmailOpenedAtIn applies the In predicate on the "email_opened_at" field.
+func EmailOpenedAtIn(vs ...time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIn(FieldEmailOpenedAt, vs...))
+}
+
+// EmailOpenedAtNotIn applies the NotIn predicate on the "email_opened_at" field.
+func EmailOpenedAtNotIn(vs ...time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotIn(FieldEmailOpenedAt, vs...))
+}
+
+// EmailOpenedAtGT applies the GT predicate on the "email_opened_at" field.
+func EmailOpenedAtGT(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGT(FieldEmailOpenedAt, v))
+}
+
+// EmailOpenedAtGTE applies the GTE predicate on the "email_opened_at" field.
+func EmailOpenedAtGTE(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGTE(FieldEmailOpenedAt, v))
+}
+
+// EmailOpenedAtLT applies the LT predicate on the "email_opened_at" field.
+func EmailOpenedAtLT(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLT(FieldEmailOpenedAt, v))
+}
+
+// EmailOpenedAtLTE applies the LTE predicate on the "email_opened_at" field.
+func EmailOpenedAtLTE(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLTE(FieldEmailOpenedAt, v))
+}
+
+// EmailOpenedAtIsNil applies the IsNil predicate on the "email_opened_at" field.
+func EmailOpenedAtIsNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIsNull(FieldEmailOpenedAt))
+}
+
+// EmailOpenedAtNotNil applies the NotNil predicate on the "email_opened_at" field.
+func EmailOpenedAtNotNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotNull(FieldEmailOpenedAt))
+}
+
+// EmailClickedAtEQ applies the EQ predicate on the "email_clicked_at" field.
+func EmailClickedAtEQ(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldEmailClickedAt, v))
+}
+
+// EmailClickedAtNEQ applies the NEQ predicate on the "email_clicked_at" field.
+func EmailClickedAtNEQ(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNEQ(FieldEmailClickedAt, v))
+}
+
+// EmailClickedAtIn applies the In predicate on the "email_clicked_at" field.
+func EmailClickedAtIn(vs ...time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIn(FieldEmailClickedAt, vs...))
+}
+
+// EmailClickedAtNotIn applies the NotIn predicate on the "email_clicked_at" field.
+func EmailClickedAtNotIn(vs ...time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotIn(FieldEmailClickedAt, vs...))
+}
+
+// EmailClickedAtGT applies the GT predicate on the "email_clicked_at" field.
+func EmailClickedAtGT(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGT(FieldEmailClickedAt, v))
+}
+
+// EmailClickedAtGTE applies the GTE predicate on the "email_clicked_at" field.
+func EmailClickedAtGTE(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGTE(FieldEmailClickedAt, v))
+}
+
+// EmailClickedAtLT applies the LT predicate on the "email_clicked_at" field.
+func EmailClickedAtLT(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLT(FieldEmailClickedAt, v))
+}
+
+// EmailClickedAtLTE applies the LTE predicate on the "email_clicked_at" field.
+func EmailClickedAtLTE(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLTE(FieldEmailClickedAt, v))
+}
+
+// EmailClickedAtIsNil applies the IsNil predicate on the "email_clicked_at" field.
+func EmailClickedAtIsNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIsNull(FieldEmailClickedAt))
+}
+
+// EmailClickedAtNotNil applies the NotNil predicate on the "email_clicked_at" field.
+func EmailClickedAtNotNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotNull(FieldEmailClickedAt))
+}
+
+// EmailOpenCountEQ applies the EQ predicate on the "email_open_count" field.
+func EmailOpenCountEQ(v int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldEmailOpenCount, v))
+}
+
+// EmailOpenCountNEQ applies the NEQ predicate on the "email_open_count" field.
+func EmailOpenCountNEQ(v int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNEQ(FieldEmailOpenCount, v))
+}
+
+// EmailOpenCountIn applies the In predicate on the "email_open_count" field.
+func EmailOpenCountIn(vs ...int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIn(FieldEmailOpenCount, vs...))
+}
+
+// EmailOpenCountNotIn applies the NotIn predicate on the "email_open_count" field.
+func EmailOpenCountNotIn(vs ...int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotIn(FieldEmailOpenCount, vs...))
+}
+
+// EmailOpenCountGT applies the GT predicate on the "email_open_count" field.
+func EmailOpenCountGT(v int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGT(FieldEmailOpenCount, v))
+}
+
+// EmailOpenCountGTE applies the GTE predicate on the "email_open_count" field.
+func EmailOpenCountGTE(v int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGTE(FieldEmailOpenCount, v))
+}
+
+// EmailOpenCountLT applies the LT predicate on the "email_open_count" field.
+func EmailOpenCountLT(v int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLT(FieldEmailOpenCount, v))
+}
+
+// EmailOpenCountLTE applies the LTE predicate on the "email_open_count" field.
+func EmailOpenCountLTE(v int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLTE(FieldEmailOpenCount, v))
+}
+
+// EmailOpenCountIsNil applies the IsNil predicate on the "email_open_count" field.
+func EmailOpenCountIsNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIsNull(FieldEmailOpenCount))
+}
+
+// EmailOpenCountNotNil applies the NotNil predicate on the "email_open_count" field.
+func EmailOpenCountNotNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotNull(FieldEmailOpenCount))
+}
+
+// EmailClickCountEQ applies the EQ predicate on the "email_click_count" field.
+func EmailClickCountEQ(v int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldEmailClickCount, v))
+}
+
+// EmailClickCountNEQ applies the NEQ predicate on the "email_click_count" field.
+func EmailClickCountNEQ(v int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNEQ(FieldEmailClickCount, v))
+}
+
+// EmailClickCountIn applies the In predicate on the "email_click_count" field.
+func EmailClickCountIn(vs ...int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIn(FieldEmailClickCount, vs...))
+}
+
+// EmailClickCountNotIn applies the NotIn predicate on the "email_click_count" field.
+func EmailClickCountNotIn(vs ...int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotIn(FieldEmailClickCount, vs...))
+}
+
+// EmailClickCountGT applies the GT predicate on the "email_click_count" field.
+func EmailClickCountGT(v int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGT(FieldEmailClickCount, v))
+}
+
+// EmailClickCountGTE applies the GTE predicate on the "email_click_count" field.
+func EmailClickCountGTE(v int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGTE(FieldEmailClickCount, v))
+}
+
+// EmailClickCountLT applies the LT predicate on the "email_click_count" field.
+func EmailClickCountLT(v int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLT(FieldEmailClickCount, v))
+}
+
+// EmailClickCountLTE applies the LTE predicate on the "email_click_count" field.
+func EmailClickCountLTE(v int) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLTE(FieldEmailClickCount, v))
+}
+
+// EmailClickCountIsNil applies the IsNil predicate on the "email_click_count" field.
+func EmailClickCountIsNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIsNull(FieldEmailClickCount))
+}
+
+// EmailClickCountNotNil applies the NotNil predicate on the "email_click_count" field.
+func EmailClickCountNotNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotNull(FieldEmailClickCount))
+}
+
+// LastEmailEventAtEQ applies the EQ predicate on the "last_email_event_at" field.
+func LastEmailEventAtEQ(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldLastEmailEventAt, v))
+}
+
+// LastEmailEventAtNEQ applies the NEQ predicate on the "last_email_event_at" field.
+func LastEmailEventAtNEQ(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNEQ(FieldLastEmailEventAt, v))
+}
+
+// LastEmailEventAtIn applies the In predicate on the "last_email_event_at" field.
+func LastEmailEventAtIn(vs ...time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIn(FieldLastEmailEventAt, vs...))
+}
+
+// LastEmailEventAtNotIn applies the NotIn predicate on the "last_email_event_at" field.
+func LastEmailEventAtNotIn(vs ...time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotIn(FieldLastEmailEventAt, vs...))
+}
+
+// LastEmailEventAtGT applies the GT predicate on the "last_email_event_at" field.
+func LastEmailEventAtGT(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGT(FieldLastEmailEventAt, v))
+}
+
+// LastEmailEventAtGTE applies the GTE predicate on the "last_email_event_at" field.
+func LastEmailEventAtGTE(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGTE(FieldLastEmailEventAt, v))
+}
+
+// LastEmailEventAtLT applies the LT predicate on the "last_email_event_at" field.
+func LastEmailEventAtLT(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLT(FieldLastEmailEventAt, v))
+}
+
+// LastEmailEventAtLTE applies the LTE predicate on the "last_email_event_at" field.
+func LastEmailEventAtLTE(v time.Time) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLTE(FieldLastEmailEventAt, v))
+}
+
+// LastEmailEventAtIsNil applies the IsNil predicate on the "last_email_event_at" field.
+func LastEmailEventAtIsNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIsNull(FieldLastEmailEventAt))
+}
+
+// LastEmailEventAtNotNil applies the NotNil predicate on the "last_email_event_at" field.
+func LastEmailEventAtNotNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotNull(FieldLastEmailEventAt))
+}
+
+// EmailMetadataIsNil applies the IsNil predicate on the "email_metadata" field.
+func EmailMetadataIsNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIsNull(FieldEmailMetadata))
+}
+
+// EmailMetadataNotNil applies the NotNil predicate on the "email_metadata" field.
+func EmailMetadataNotNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotNull(FieldEmailMetadata))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
@@ -23,8 +24,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
@@ -173,6 +176,86 @@ func (_u *FileUpdate) SetNillableSystemInternalID(v *string) *FileUpdate {
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *FileUpdate) ClearSystemInternalID() *FileUpdate {
 	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *FileUpdate) SetEnvironmentName(v string) *FileUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableEnvironmentName(v *string) *FileUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *FileUpdate) ClearEnvironmentName() *FileUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *FileUpdate) SetEnvironmentID(v string) *FileUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableEnvironmentID(v *string) *FileUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *FileUpdate) ClearEnvironmentID() *FileUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *FileUpdate) SetScopeName(v string) *FileUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableScopeName(v *string) *FileUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *FileUpdate) ClearScopeName() *FileUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *FileUpdate) SetScopeID(v string) *FileUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableScopeID(v *string) *FileUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *FileUpdate) ClearScopeID() *FileUpdate {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -516,6 +599,16 @@ func (_u *FileUpdate) ClearLastAccessedAt() *FileUpdate {
 	return _u
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *FileUpdate) SetEnvironment(v *CustomTypeEnum) *FileUpdate {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *FileUpdate) SetScope(v *CustomTypeEnum) *FileUpdate {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
 func (_u *FileUpdate) AddOrganizationIDs(ids ...string) *FileUpdate {
 	_u.mutation.AddOrganizationIDs(ids...)
@@ -636,6 +729,21 @@ func (_u *FileUpdate) AddProgram(v ...*Program) *FileUpdate {
 	return _u.AddProgramIDs(ids...)
 }
 
+// AddPlatformIDs adds the "platform" edge to the Platform entity by IDs.
+func (_u *FileUpdate) AddPlatformIDs(ids ...string) *FileUpdate {
+	_u.mutation.AddPlatformIDs(ids...)
+	return _u
+}
+
+// AddPlatform adds the "platform" edges to the Platform entity.
+func (_u *FileUpdate) AddPlatform(v ...*Platform) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformIDs(ids...)
+}
+
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (_u *FileUpdate) AddEvidenceIDs(ids ...string) *FileUpdate {
 	_u.mutation.AddEvidenceIDs(ids...)
@@ -649,6 +757,21 @@ func (_u *FileUpdate) AddEvidence(v ...*Evidence) *FileUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddEvidenceIDs(ids...)
+}
+
+// AddScanIDs adds the "scan" edge to the Scan entity by IDs.
+func (_u *FileUpdate) AddScanIDs(ids ...string) *FileUpdate {
+	_u.mutation.AddScanIDs(ids...)
+	return _u
+}
+
+// AddScan adds the "scan" edges to the Scan entity.
+func (_u *FileUpdate) AddScan(v ...*Scan) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddScanIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -744,6 +867,18 @@ func (_u *FileUpdate) AddOriginalTrustCenterDoc(v ...*TrustCenterDoc) *FileUpdat
 // Mutation returns the FileMutation object of the builder.
 func (_u *FileUpdate) Mutation() *FileMutation {
 	return _u.mutation
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *FileUpdate) ClearEnvironment() *FileUpdate {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *FileUpdate) ClearScope() *FileUpdate {
+	_u.mutation.ClearScope()
+	return _u
 }
 
 // ClearOrganization clears all "organization" edges to the Organization entity.
@@ -914,6 +1049,27 @@ func (_u *FileUpdate) RemoveProgram(v ...*Program) *FileUpdate {
 	return _u.RemoveProgramIDs(ids...)
 }
 
+// ClearPlatform clears all "platform" edges to the Platform entity.
+func (_u *FileUpdate) ClearPlatform() *FileUpdate {
+	_u.mutation.ClearPlatform()
+	return _u
+}
+
+// RemovePlatformIDs removes the "platform" edge to Platform entities by IDs.
+func (_u *FileUpdate) RemovePlatformIDs(ids ...string) *FileUpdate {
+	_u.mutation.RemovePlatformIDs(ids...)
+	return _u
+}
+
+// RemovePlatform removes "platform" edges to Platform entities.
+func (_u *FileUpdate) RemovePlatform(v ...*Platform) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformIDs(ids...)
+}
+
 // ClearEvidence clears all "evidence" edges to the Evidence entity.
 func (_u *FileUpdate) ClearEvidence() *FileUpdate {
 	_u.mutation.ClearEvidence()
@@ -933,6 +1089,27 @@ func (_u *FileUpdate) RemoveEvidence(v ...*Evidence) *FileUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEvidenceIDs(ids...)
+}
+
+// ClearScan clears all "scan" edges to the Scan entity.
+func (_u *FileUpdate) ClearScan() *FileUpdate {
+	_u.mutation.ClearScan()
+	return _u
+}
+
+// RemoveScanIDs removes the "scan" edge to Scan entities by IDs.
+func (_u *FileUpdate) RemoveScanIDs(ids ...string) *FileUpdate {
+	_u.mutation.RemoveScanIDs(ids...)
+	return _u
+}
+
+// RemoveScan removes "scan" edges to Scan entities.
+func (_u *FileUpdate) RemoveScan(v ...*Scan) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveScanIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -1192,6 +1369,18 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(file.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(file.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(file.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(file.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(file.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(file.FieldProvidedFileName, field.TypeString, value)
 	}
@@ -1296,6 +1485,68 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.LastAccessedAtCleared() {
 		_spec.ClearField(file.FieldLastAccessedAt, field.TypeTime)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.EnvironmentTable,
+			Columns: []string{file.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.EnvironmentTable,
+			Columns: []string{file.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.ScopeTable,
+			Columns: []string{file.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.ScopeTable,
+			Columns: []string{file.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1681,6 +1932,54 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.PlatformCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.PlatformTable,
+			Columns: file.PlatformPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformIDs(); len(nodes) > 0 && !_u.mutation.PlatformCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.PlatformTable,
+			Columns: file.PlatformPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.PlatformTable,
+			Columns: file.PlatformPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.EvidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1724,6 +2023,54 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.EvidenceFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScanCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ScanTable,
+			Columns: file.ScanPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedScanIDs(); len(nodes) > 0 && !_u.mutation.ScanCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ScanTable,
+			Columns: file.ScanPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScanIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ScanTable,
+			Columns: file.ScanPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2171,6 +2518,86 @@ func (_u *FileUpdateOne) ClearSystemInternalID() *FileUpdateOne {
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *FileUpdateOne) SetEnvironmentName(v string) *FileUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableEnvironmentName(v *string) *FileUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *FileUpdateOne) ClearEnvironmentName() *FileUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *FileUpdateOne) SetEnvironmentID(v string) *FileUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableEnvironmentID(v *string) *FileUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *FileUpdateOne) ClearEnvironmentID() *FileUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *FileUpdateOne) SetScopeName(v string) *FileUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableScopeName(v *string) *FileUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *FileUpdateOne) ClearScopeName() *FileUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *FileUpdateOne) SetScopeID(v string) *FileUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableScopeID(v *string) *FileUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *FileUpdateOne) ClearScopeID() *FileUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetProvidedFileName sets the "provided_file_name" field.
 func (_u *FileUpdateOne) SetProvidedFileName(v string) *FileUpdateOne {
 	_u.mutation.SetProvidedFileName(v)
@@ -2511,6 +2938,16 @@ func (_u *FileUpdateOne) ClearLastAccessedAt() *FileUpdateOne {
 	return _u
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *FileUpdateOne) SetEnvironment(v *CustomTypeEnum) *FileUpdateOne {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *FileUpdateOne) SetScope(v *CustomTypeEnum) *FileUpdateOne {
+	return _u.SetScopeID(v.ID)
+}
+
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
 func (_u *FileUpdateOne) AddOrganizationIDs(ids ...string) *FileUpdateOne {
 	_u.mutation.AddOrganizationIDs(ids...)
@@ -2631,6 +3068,21 @@ func (_u *FileUpdateOne) AddProgram(v ...*Program) *FileUpdateOne {
 	return _u.AddProgramIDs(ids...)
 }
 
+// AddPlatformIDs adds the "platform" edge to the Platform entity by IDs.
+func (_u *FileUpdateOne) AddPlatformIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.AddPlatformIDs(ids...)
+	return _u
+}
+
+// AddPlatform adds the "platform" edges to the Platform entity.
+func (_u *FileUpdateOne) AddPlatform(v ...*Platform) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformIDs(ids...)
+}
+
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (_u *FileUpdateOne) AddEvidenceIDs(ids ...string) *FileUpdateOne {
 	_u.mutation.AddEvidenceIDs(ids...)
@@ -2644,6 +3096,21 @@ func (_u *FileUpdateOne) AddEvidence(v ...*Evidence) *FileUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddEvidenceIDs(ids...)
+}
+
+// AddScanIDs adds the "scan" edge to the Scan entity by IDs.
+func (_u *FileUpdateOne) AddScanIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.AddScanIDs(ids...)
+	return _u
+}
+
+// AddScan adds the "scan" edges to the Scan entity.
+func (_u *FileUpdateOne) AddScan(v ...*Scan) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddScanIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -2739,6 +3206,18 @@ func (_u *FileUpdateOne) AddOriginalTrustCenterDoc(v ...*TrustCenterDoc) *FileUp
 // Mutation returns the FileMutation object of the builder.
 func (_u *FileUpdateOne) Mutation() *FileMutation {
 	return _u.mutation
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *FileUpdateOne) ClearEnvironment() *FileUpdateOne {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *FileUpdateOne) ClearScope() *FileUpdateOne {
+	_u.mutation.ClearScope()
+	return _u
 }
 
 // ClearOrganization clears all "organization" edges to the Organization entity.
@@ -2909,6 +3388,27 @@ func (_u *FileUpdateOne) RemoveProgram(v ...*Program) *FileUpdateOne {
 	return _u.RemoveProgramIDs(ids...)
 }
 
+// ClearPlatform clears all "platform" edges to the Platform entity.
+func (_u *FileUpdateOne) ClearPlatform() *FileUpdateOne {
+	_u.mutation.ClearPlatform()
+	return _u
+}
+
+// RemovePlatformIDs removes the "platform" edge to Platform entities by IDs.
+func (_u *FileUpdateOne) RemovePlatformIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.RemovePlatformIDs(ids...)
+	return _u
+}
+
+// RemovePlatform removes "platform" edges to Platform entities.
+func (_u *FileUpdateOne) RemovePlatform(v ...*Platform) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformIDs(ids...)
+}
+
 // ClearEvidence clears all "evidence" edges to the Evidence entity.
 func (_u *FileUpdateOne) ClearEvidence() *FileUpdateOne {
 	_u.mutation.ClearEvidence()
@@ -2928,6 +3428,27 @@ func (_u *FileUpdateOne) RemoveEvidence(v ...*Evidence) *FileUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEvidenceIDs(ids...)
+}
+
+// ClearScan clears all "scan" edges to the Scan entity.
+func (_u *FileUpdateOne) ClearScan() *FileUpdateOne {
+	_u.mutation.ClearScan()
+	return _u
+}
+
+// RemoveScanIDs removes the "scan" edge to Scan entities by IDs.
+func (_u *FileUpdateOne) RemoveScanIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.RemoveScanIDs(ids...)
+	return _u
+}
+
+// RemoveScan removes "scan" edges to Scan entities.
+func (_u *FileUpdateOne) RemoveScan(v ...*Scan) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveScanIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -3217,6 +3738,18 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(file.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(file.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(file.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(file.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(file.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(file.FieldProvidedFileName, field.TypeString, value)
 	}
@@ -3321,6 +3854,68 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 	}
 	if _u.mutation.LastAccessedAtCleared() {
 		_spec.ClearField(file.FieldLastAccessedAt, field.TypeTime)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.EnvironmentTable,
+			Columns: []string{file.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.EnvironmentTable,
+			Columns: []string{file.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.ScopeTable,
+			Columns: []string{file.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.ScopeTable,
+			Columns: []string{file.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -3706,6 +4301,54 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.PlatformCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.PlatformTable,
+			Columns: file.PlatformPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformIDs(); len(nodes) > 0 && !_u.mutation.PlatformCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.PlatformTable,
+			Columns: file.PlatformPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.PlatformTable,
+			Columns: file.PlatformPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.EvidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3749,6 +4392,54 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.EvidenceFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScanCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ScanTable,
+			Columns: file.ScanPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedScanIDs(); len(nodes) > 0 && !_u.mutation.ScanCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ScanTable,
+			Columns: file.ScanPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScanIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ScanTable,
+			Columns: file.ScanPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

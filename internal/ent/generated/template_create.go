@@ -12,8 +12,11 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
@@ -172,6 +175,62 @@ func (_c *TemplateCreate) SetNillableSystemInternalID(v *string) *TemplateCreate
 	return _c
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *TemplateCreate) SetEnvironmentName(v string) *TemplateCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableEnvironmentName(v *string) *TemplateCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *TemplateCreate) SetEnvironmentID(v string) *TemplateCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableEnvironmentID(v *string) *TemplateCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *TemplateCreate) SetScopeName(v string) *TemplateCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableScopeName(v *string) *TemplateCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *TemplateCreate) SetScopeID(v string) *TemplateCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableScopeID(v *string) *TemplateCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *TemplateCreate) SetName(v string) *TemplateCreate {
 	_c.mutation.SetName(v)
@@ -265,6 +324,16 @@ func (_c *TemplateCreate) SetOwner(v *Organization) *TemplateCreate {
 	return _c.SetOwnerID(v.ID)
 }
 
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_c *TemplateCreate) SetEnvironment(v *CustomTypeEnum) *TemplateCreate {
+	return _c.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_c *TemplateCreate) SetScope(v *CustomTypeEnum) *TemplateCreate {
+	return _c.SetScopeID(v.ID)
+}
+
 // AddDocumentIDs adds the "documents" edge to the DocumentData entity by IDs.
 func (_c *TemplateCreate) AddDocumentIDs(ids ...string) *TemplateCreate {
 	_c.mutation.AddDocumentIDs(ids...)
@@ -313,6 +382,36 @@ func (_c *TemplateCreate) AddAssessments(v ...*Assessment) *TemplateCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddAssessmentIDs(ids...)
+}
+
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_c *TemplateCreate) AddCampaignIDs(ids ...string) *TemplateCreate {
+	_c.mutation.AddCampaignIDs(ids...)
+	return _c
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_c *TemplateCreate) AddCampaigns(v ...*Campaign) *TemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_c *TemplateCreate) AddIdentityHolderIDs(ids ...string) *TemplateCreate {
+	_c.mutation.AddIdentityHolderIDs(ids...)
+	return _c
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_c *TemplateCreate) AddIdentityHolders(v ...*IdentityHolder) *TemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIdentityHolderIDs(ids...)
 }
 
 // Mutation returns the TemplateMutation object of the builder.
@@ -499,6 +598,14 @@ func (_c *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 		_spec.SetField(template.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
 	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(template.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(template.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(template.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -539,6 +646,42 @@ func (_c *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   template.EnvironmentTable,
+			Columns: []string{template.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EnvironmentID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   template.ScopeTable,
+			Columns: []string{template.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ScopeID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.DocumentsIDs(); len(nodes) > 0 {
@@ -605,6 +748,40 @@ func (_c *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.Assessment
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.CampaignsTable,
+			Columns: []string{template.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   template.IdentityHoldersTable,
+			Columns: template.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IdentityHolderTemplates
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

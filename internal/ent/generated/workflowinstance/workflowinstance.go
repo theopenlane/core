@@ -62,6 +62,14 @@ const (
 	FieldActionPlanID = "action_plan_id"
 	// FieldProcedureID holds the string denoting the procedure_id field in the database.
 	FieldProcedureID = "procedure_id"
+	// FieldCampaignID holds the string denoting the campaign_id field in the database.
+	FieldCampaignID = "campaign_id"
+	// FieldCampaignTargetID holds the string denoting the campaign_target_id field in the database.
+	FieldCampaignTargetID = "campaign_target_id"
+	// FieldIdentityHolderID holds the string denoting the identity_holder_id field in the database.
+	FieldIdentityHolderID = "identity_holder_id"
+	// FieldPlatformID holds the string denoting the platform_id field in the database.
+	FieldPlatformID = "platform_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeWorkflowDefinition holds the string denoting the workflow_definition edge name in mutations.
@@ -78,6 +86,14 @@ const (
 	EdgeActionPlan = "action_plan"
 	// EdgeProcedure holds the string denoting the procedure edge name in mutations.
 	EdgeProcedure = "procedure"
+	// EdgeCampaign holds the string denoting the campaign edge name in mutations.
+	EdgeCampaign = "campaign"
+	// EdgeCampaignTarget holds the string denoting the campaign_target edge name in mutations.
+	EdgeCampaignTarget = "campaign_target"
+	// EdgeIdentityHolder holds the string denoting the identity_holder edge name in mutations.
+	EdgeIdentityHolder = "identity_holder"
+	// EdgePlatform holds the string denoting the platform edge name in mutations.
+	EdgePlatform = "platform"
 	// EdgeWorkflowProposal holds the string denoting the workflow_proposal edge name in mutations.
 	EdgeWorkflowProposal = "workflow_proposal"
 	// EdgeWorkflowAssignments holds the string denoting the workflow_assignments edge name in mutations.
@@ -144,6 +160,34 @@ const (
 	ProcedureInverseTable = "procedures"
 	// ProcedureColumn is the table column denoting the procedure relation/edge.
 	ProcedureColumn = "procedure_id"
+	// CampaignTable is the table that holds the campaign relation/edge.
+	CampaignTable = "workflow_instances"
+	// CampaignInverseTable is the table name for the Campaign entity.
+	// It exists in this package in order to avoid circular dependency with the "campaign" package.
+	CampaignInverseTable = "campaigns"
+	// CampaignColumn is the table column denoting the campaign relation/edge.
+	CampaignColumn = "campaign_id"
+	// CampaignTargetTable is the table that holds the campaign_target relation/edge.
+	CampaignTargetTable = "workflow_instances"
+	// CampaignTargetInverseTable is the table name for the CampaignTarget entity.
+	// It exists in this package in order to avoid circular dependency with the "campaigntarget" package.
+	CampaignTargetInverseTable = "campaign_targets"
+	// CampaignTargetColumn is the table column denoting the campaign_target relation/edge.
+	CampaignTargetColumn = "campaign_target_id"
+	// IdentityHolderTable is the table that holds the identity_holder relation/edge.
+	IdentityHolderTable = "workflow_instances"
+	// IdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	IdentityHolderInverseTable = "identity_holders"
+	// IdentityHolderColumn is the table column denoting the identity_holder relation/edge.
+	IdentityHolderColumn = "identity_holder_id"
+	// PlatformTable is the table that holds the platform relation/edge.
+	PlatformTable = "workflow_instances"
+	// PlatformInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformInverseTable = "platforms"
+	// PlatformColumn is the table column denoting the platform relation/edge.
+	PlatformColumn = "platform_id"
 	// WorkflowProposalTable is the table that holds the workflow_proposal relation/edge.
 	WorkflowProposalTable = "workflow_instances"
 	// WorkflowProposalInverseTable is the table name for the WorkflowProposal entity.
@@ -199,6 +243,10 @@ var Columns = []string{
 	FieldSubcontrolID,
 	FieldActionPlanID,
 	FieldProcedureID,
+	FieldCampaignID,
+	FieldCampaignTargetID,
+	FieldIdentityHolderID,
+	FieldPlatformID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -357,6 +405,26 @@ func ByProcedureID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProcedureID, opts...).ToFunc()
 }
 
+// ByCampaignID orders the results by the campaign_id field.
+func ByCampaignID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCampaignID, opts...).ToFunc()
+}
+
+// ByCampaignTargetID orders the results by the campaign_target_id field.
+func ByCampaignTargetID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCampaignTargetID, opts...).ToFunc()
+}
+
+// ByIdentityHolderID orders the results by the identity_holder_id field.
+func ByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdentityHolderID, opts...).ToFunc()
+}
+
+// ByPlatformID orders the results by the platform_id field.
+func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -410,6 +478,34 @@ func ByActionPlanField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByProcedureField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newProcedureStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByCampaignField orders the results by campaign field.
+func ByCampaignField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByCampaignTargetField orders the results by campaign_target field.
+func ByCampaignTargetField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignTargetStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByIdentityHolderField orders the results by identity_holder field.
+func ByIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIdentityHolderStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByPlatformField orders the results by platform field.
+func ByPlatformField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -515,6 +611,34 @@ func newProcedureStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProcedureInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, ProcedureTable, ProcedureColumn),
+	)
+}
+func newCampaignStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, CampaignTable, CampaignColumn),
+	)
+}
+func newCampaignTargetStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignTargetInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, CampaignTargetTable, CampaignTargetColumn),
+	)
+}
+func newIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, IdentityHolderTable, IdentityHolderColumn),
+	)
+}
+func newPlatformStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, PlatformTable, PlatformColumn),
 	)
 }
 func newWorkflowProposalStep() *sqlgraph.Step {

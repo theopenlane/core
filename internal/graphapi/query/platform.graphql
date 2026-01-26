@@ -1,0 +1,468 @@
+mutation CreateBulkCSVPlatform($input: Upload!) {
+  createBulkCSVPlatform(input: $input) {
+    platforms {
+      accessModelID
+      accessModelName
+      businessOwner
+      businessOwnerGroupID
+      businessOwnerUserID
+      businessPurpose
+      containsPii
+      costCenter
+      createdAt
+      createdBy
+      criticalityID
+      criticalityName
+      dataFlowSummary
+      description
+      displayID
+      encryptionStatusID
+      encryptionStatusName
+      environmentID
+      environmentName
+      estimatedMonthlyCost
+      externalReferenceID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      metadata
+      name
+      ownerID
+      physicalLocation
+      platformDataClassificationID
+      platformDataClassificationName
+      platformKindID
+      platformKindName
+      platformOwnerID
+      purchaseDate
+      region
+      scopeID
+      scopeName
+      scopeStatement
+      securityOwner
+      securityOwnerGroupID
+      securityOwnerUserID
+      securityTierID
+      securityTierName
+      sourceIdentifier
+      sourceType
+      status
+      tags
+      technicalOwner
+      technicalOwnerGroupID
+      technicalOwnerUserID
+      trustBoundaryDescription
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+    }
+  }
+}
+
+mutation CreateBulkPlatform($input: [CreatePlatformInput!]) {
+  createBulkPlatform(input: $input) {
+    platforms {
+      accessModelID
+      accessModelName
+      businessOwner
+      businessOwnerGroupID
+      businessOwnerUserID
+      businessPurpose
+      containsPii
+      costCenter
+      createdAt
+      createdBy
+      criticalityID
+      criticalityName
+      dataFlowSummary
+      description
+      displayID
+      encryptionStatusID
+      encryptionStatusName
+      environmentID
+      environmentName
+      estimatedMonthlyCost
+      externalReferenceID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      metadata
+      name
+      ownerID
+      physicalLocation
+      platformDataClassificationID
+      platformDataClassificationName
+      platformKindID
+      platformKindName
+      platformOwnerID
+      purchaseDate
+      region
+      scopeID
+      scopeName
+      scopeStatement
+      securityOwner
+      securityOwnerGroupID
+      securityOwnerUserID
+      securityTierID
+      securityTierName
+      sourceIdentifier
+      sourceType
+      status
+      tags
+      technicalOwner
+      technicalOwnerGroupID
+      technicalOwnerUserID
+      trustBoundaryDescription
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+    }
+  }
+}
+
+mutation CreatePlatform($input: CreatePlatformInput!) {
+  createPlatform(input: $input) {
+    platform {
+      accessModelID
+      accessModelName
+      businessOwner
+      businessOwnerGroupID
+      businessOwnerUserID
+      businessPurpose
+      containsPii
+      costCenter
+      createdAt
+      createdBy
+      criticalityID
+      criticalityName
+      dataFlowSummary
+      description
+      displayID
+      encryptionStatusID
+      encryptionStatusName
+      environmentID
+      environmentName
+      estimatedMonthlyCost
+      externalReferenceID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      metadata
+      name
+      ownerID
+      physicalLocation
+      platformDataClassificationID
+      platformDataClassificationName
+      platformKindID
+      platformKindName
+      platformOwnerID
+      purchaseDate
+      region
+      scopeID
+      scopeName
+      scopeStatement
+      securityOwner
+      securityOwnerGroupID
+      securityOwnerUserID
+      securityTierID
+      securityTierName
+      sourceIdentifier
+      sourceType
+      status
+      tags
+      technicalOwner
+      technicalOwnerGroupID
+      technicalOwnerUserID
+      trustBoundaryDescription
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+    }
+  }
+}
+
+mutation DeletePlatform($deletePlatformId: ID!) {
+  deletePlatform(id: $deletePlatformId) {
+    deletedID
+  }
+}
+
+query GetAllPlatforms($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [PlatformOrder!]) {
+  platforms(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        accessModelID
+        accessModelName
+        businessOwner
+        businessOwnerGroupID
+        businessOwnerUserID
+        businessPurpose
+        containsPii
+        costCenter
+        createdAt
+        createdBy
+        criticalityID
+        criticalityName
+        dataFlowSummary
+        description
+        displayID
+        encryptionStatusID
+        encryptionStatusName
+        environmentID
+        environmentName
+        estimatedMonthlyCost
+        externalReferenceID
+        id
+        internalOwner
+        internalOwnerGroupID
+        internalOwnerUserID
+        metadata
+        name
+        ownerID
+        physicalLocation
+        platformDataClassificationID
+        platformDataClassificationName
+        platformKindID
+        platformKindName
+        platformOwnerID
+        purchaseDate
+        region
+        scopeID
+        scopeName
+        scopeStatement
+        securityOwner
+        securityOwnerGroupID
+        securityOwnerUserID
+        securityTierID
+        securityTierName
+        sourceIdentifier
+        sourceType
+        status
+        tags
+        technicalOwner
+        technicalOwnerGroupID
+        technicalOwnerUserID
+        trustBoundaryDescription
+        updatedAt
+        updatedBy
+        workflowEligibleMarker
+      }
+    }
+  }
+}
+
+query GetPlatformByID($platformId: ID!) {
+  platform(id: $platformId) {
+    accessModelID
+    accessModelName
+    businessOwner
+    businessOwnerGroupID
+    businessOwnerUserID
+    businessPurpose
+    containsPii
+    costCenter
+    createdAt
+    createdBy
+    criticalityID
+    criticalityName
+    dataFlowSummary
+    description
+    displayID
+    encryptionStatusID
+    encryptionStatusName
+    environmentID
+    environmentName
+    estimatedMonthlyCost
+    externalReferenceID
+    id
+    internalOwner
+    internalOwnerGroupID
+    internalOwnerUserID
+    metadata
+    name
+    ownerID
+    physicalLocation
+    platformDataClassificationID
+    platformDataClassificationName
+    platformKindID
+    platformKindName
+    platformOwnerID
+    purchaseDate
+    region
+    scopeID
+    scopeName
+    scopeStatement
+    securityOwner
+    securityOwnerGroupID
+    securityOwnerUserID
+    securityTierID
+    securityTierName
+    sourceIdentifier
+    sourceType
+    status
+    tags
+    technicalOwner
+    technicalOwnerGroupID
+    technicalOwnerUserID
+    trustBoundaryDescription
+    updatedAt
+    updatedBy
+    workflowEligibleMarker
+  }
+}
+
+query GetPlatforms($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [PlatformOrder!], $where: PlatformWhereInput) {
+  platforms(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+    where: $where
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        accessModelID
+        accessModelName
+        businessOwner
+        businessOwnerGroupID
+        businessOwnerUserID
+        businessPurpose
+        containsPii
+        costCenter
+        createdAt
+        createdBy
+        criticalityID
+        criticalityName
+        dataFlowSummary
+        description
+        displayID
+        encryptionStatusID
+        encryptionStatusName
+        environmentID
+        environmentName
+        estimatedMonthlyCost
+        externalReferenceID
+        id
+        internalOwner
+        internalOwnerGroupID
+        internalOwnerUserID
+        metadata
+        name
+        ownerID
+        physicalLocation
+        platformDataClassificationID
+        platformDataClassificationName
+        platformKindID
+        platformKindName
+        platformOwnerID
+        purchaseDate
+        region
+        scopeID
+        scopeName
+        scopeStatement
+        securityOwner
+        securityOwnerGroupID
+        securityOwnerUserID
+        securityTierID
+        securityTierName
+        sourceIdentifier
+        sourceType
+        status
+        tags
+        technicalOwner
+        technicalOwnerGroupID
+        technicalOwnerUserID
+        trustBoundaryDescription
+        updatedAt
+        updatedBy
+        workflowEligibleMarker
+      }
+    }
+  }
+}
+
+mutation UpdatePlatform($updatePlatformId: ID!, $input: UpdatePlatformInput!) {
+  updatePlatform(id: $updatePlatformId, input: $input) {
+    platform {
+      accessModelID
+      accessModelName
+      businessOwner
+      businessOwnerGroupID
+      businessOwnerUserID
+      businessPurpose
+      containsPii
+      costCenter
+      createdAt
+      createdBy
+      criticalityID
+      criticalityName
+      dataFlowSummary
+      description
+      displayID
+      encryptionStatusID
+      encryptionStatusName
+      environmentID
+      environmentName
+      estimatedMonthlyCost
+      externalReferenceID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      metadata
+      name
+      ownerID
+      physicalLocation
+      platformDataClassificationID
+      platformDataClassificationName
+      platformKindID
+      platformKindName
+      platformOwnerID
+      purchaseDate
+      region
+      scopeID
+      scopeName
+      scopeStatement
+      securityOwner
+      securityOwnerGroupID
+      securityOwnerUserID
+      securityTierID
+      securityTierName
+      sourceIdentifier
+      sourceType
+      status
+      tags
+      technicalOwner
+      technicalOwnerGroupID
+      technicalOwnerUserID
+      trustBoundaryDescription
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+    }
+  }
+}

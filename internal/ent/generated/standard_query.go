@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
@@ -36,12 +37,14 @@ type StandardQuery struct {
 	withControls                    *ControlQuery
 	withTrustCenterCompliances      *TrustCenterComplianceQuery
 	withTrustCenterDocs             *TrustCenterDocQuery
+	withApplicablePlatforms         *PlatformQuery
 	withLogoFile                    *FileQuery
 	loadTotal                       []func(context.Context, []*Standard) error
 	modifiers                       []func(*sql.Selector)
 	withNamedControls               map[string]*ControlQuery
 	withNamedTrustCenterCompliances map[string]*TrustCenterComplianceQuery
 	withNamedTrustCenterDocs        map[string]*TrustCenterDocQuery
+	withNamedApplicablePlatforms    map[string]*PlatformQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -172,6 +175,31 @@ func (_q *StandardQuery) QueryTrustCenterDocs() *TrustCenterDocQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenterDoc
 		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryApplicablePlatforms chains the current query on the "applicable_platforms" edge.
+func (_q *StandardQuery) QueryApplicablePlatforms() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(standard.Table, standard.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, standard.ApplicablePlatformsTable, standard.ApplicablePlatformsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformApplicableFrameworks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -399,6 +427,7 @@ func (_q *StandardQuery) Clone() *StandardQuery {
 		withControls:               _q.withControls.Clone(),
 		withTrustCenterCompliances: _q.withTrustCenterCompliances.Clone(),
 		withTrustCenterDocs:        _q.withTrustCenterDocs.Clone(),
+		withApplicablePlatforms:    _q.withApplicablePlatforms.Clone(),
 		withLogoFile:               _q.withLogoFile.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -448,6 +477,17 @@ func (_q *StandardQuery) WithTrustCenterDocs(opts ...func(*TrustCenterDocQuery))
 		opt(query)
 	}
 	_q.withTrustCenterDocs = query
+	return _q
+}
+
+// WithApplicablePlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "applicable_platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *StandardQuery) WithApplicablePlatforms(opts ...func(*PlatformQuery)) *StandardQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withApplicablePlatforms = query
 	return _q
 }
 
@@ -546,11 +586,12 @@ func (_q *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	var (
 		nodes       = []*Standard{}
 		_spec       = _q.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [6]bool{
 			_q.withOwner != nil,
 			_q.withControls != nil,
 			_q.withTrustCenterCompliances != nil,
 			_q.withTrustCenterDocs != nil,
+			_q.withApplicablePlatforms != nil,
 			_q.withLogoFile != nil,
 		}
 	)
@@ -606,6 +647,13 @@ func (_q *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 			return nil, err
 		}
 	}
+	if query := _q.withApplicablePlatforms; query != nil {
+		if err := _q.loadApplicablePlatforms(ctx, query, nodes,
+			func(n *Standard) { n.Edges.ApplicablePlatforms = []*Platform{} },
+			func(n *Standard, e *Platform) { n.Edges.ApplicablePlatforms = append(n.Edges.ApplicablePlatforms, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withLogoFile; query != nil {
 		if err := _q.loadLogoFile(ctx, query, nodes, nil,
 			func(n *Standard, e *File) { n.Edges.LogoFile = e }); err != nil {
@@ -630,6 +678,13 @@ func (_q *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 		if err := _q.loadTrustCenterDocs(ctx, query, nodes,
 			func(n *Standard) { n.appendNamedTrustCenterDocs(name) },
 			func(n *Standard, e *TrustCenterDoc) { n.appendNamedTrustCenterDocs(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedApplicablePlatforms {
+		if err := _q.loadApplicablePlatforms(ctx, query, nodes,
+			func(n *Standard) { n.appendNamedApplicablePlatforms(name) },
+			func(n *Standard, e *Platform) { n.appendNamedApplicablePlatforms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -759,6 +814,68 @@ func (_q *StandardQuery) loadTrustCenterDocs(ctx context.Context, query *TrustCe
 			return fmt.Errorf(`unexpected referenced foreign-key "standard_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (_q *StandardQuery) loadApplicablePlatforms(ctx context.Context, query *PlatformQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Standard)
+	nids := make(map[string]map[*Standard]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(standard.ApplicablePlatformsTable)
+		joinT.Schema(_q.schemaConfig.PlatformApplicableFrameworks)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(standard.ApplicablePlatformsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(standard.ApplicablePlatformsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(standard.ApplicablePlatformsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Standard]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "applicable_platforms" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -938,6 +1055,20 @@ func (_q *StandardQuery) WithNamedTrustCenterDocs(name string, opts ...func(*Tru
 		_q.withNamedTrustCenterDocs = make(map[string]*TrustCenterDocQuery)
 	}
 	_q.withNamedTrustCenterDocs[name] = query
+	return _q
+}
+
+// WithNamedApplicablePlatforms tells the query-builder to eager-load the nodes that are connected to the "applicable_platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *StandardQuery) WithNamedApplicablePlatforms(name string, opts ...func(*PlatformQuery)) *StandardQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedApplicablePlatforms == nil {
+		_q.withNamedApplicablePlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedApplicablePlatforms[name] = query
 	return _q
 }
 

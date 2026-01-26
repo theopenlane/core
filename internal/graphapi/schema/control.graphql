@@ -4,10 +4,30 @@ extend type Control {
     """
     hasPendingWorkflow: Boolean!
     """
-    Returns the active workflow instance for this control if one is running
+    Indicates if this control has any workflow history (completed or failed instances)
     """
-    activeWorkflowInstance: WorkflowInstance
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this control (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this control across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
 }
+
+
+
+
 
 extend type Query {
     """

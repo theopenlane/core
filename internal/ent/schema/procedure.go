@@ -153,6 +153,8 @@ func (p Procedure) Mixin() []ent.Mixin {
 			NewDocumentMixin(p),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(p, withWorkflowEnumEdges()),
+			newCustomEnumMixin(p, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(p, withEnumFieldName("scope"), withGlobalEnum()),
 			WorkflowApprovalMixin{},
 		},
 	}.getMixins(p)
@@ -171,7 +173,9 @@ func (Procedure) Modules() []models.OrgModule {
 func (p Procedure) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.Exportable{},
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+		),
 	}
 }
 

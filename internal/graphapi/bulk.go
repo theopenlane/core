@@ -311,6 +311,44 @@ func (r *mutationResolver) bulkDeleteAsset(ctx context.Context, ids []string) (*
 	}, nil
 }
 
+// bulkCreateCampaign uses the CreateBulk function to create multiple Campaign entities
+func (r *mutationResolver) bulkCreateCampaign(ctx context.Context, input []*generated.CreateCampaignInput) (*model.CampaignBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.CampaignCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Campaign.Create().SetInput(*data)
+	}
+
+	res, err := c.Campaign.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "campaign"})
+	}
+
+	// return response
+	return &model.CampaignBulkCreatePayload{
+		Campaigns: res,
+	}, nil
+}
+
+// bulkCreateCampaignTarget uses the CreateBulk function to create multiple CampaignTarget entities
+func (r *mutationResolver) bulkCreateCampaignTarget(ctx context.Context, input []*generated.CreateCampaignTargetInput) (*model.CampaignTargetBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.CampaignTargetCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.CampaignTarget.Create().SetInput(*data)
+	}
+
+	res, err := c.CampaignTarget.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "campaigntarget"})
+	}
+
+	// return response
+	return &model.CampaignTargetBulkCreatePayload{
+		CampaignTargets: res,
+	}, nil
+}
+
 // bulkCreateContact uses the CreateBulk function to create multiple Contact entities
 func (r *mutationResolver) bulkCreateContact(ctx context.Context, input []*generated.CreateContactInput) (*model.ContactBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -1712,6 +1750,25 @@ func (r *mutationResolver) bulkDeleteHush(ctx context.Context, ids []string) (*m
 	}, nil
 }
 
+// bulkCreateIdentityHolder uses the CreateBulk function to create multiple IdentityHolder entities
+func (r *mutationResolver) bulkCreateIdentityHolder(ctx context.Context, input []*generated.CreateIdentityHolderInput) (*model.IdentityHolderBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.IdentityHolderCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.IdentityHolder.Create().SetInput(*data)
+	}
+
+	res, err := c.IdentityHolder.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "identityholder"})
+	}
+
+	// return response
+	return &model.IdentityHolderBulkCreatePayload{
+		IdentityHolders: res,
+	}, nil
+}
+
 // bulkCreateInternalPolicy uses the CreateBulk function to create multiple InternalPolicy entities
 func (r *mutationResolver) bulkCreateInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*model.InternalPolicyBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -2302,6 +2359,25 @@ func (r *mutationResolver) bulkDeleteOrgMembership(ctx context.Context, ids []st
 
 	return &model.OrgMembershipBulkDeletePayload{
 		DeletedIDs: deletedIDs,
+	}, nil
+}
+
+// bulkCreatePlatform uses the CreateBulk function to create multiple Platform entities
+func (r *mutationResolver) bulkCreatePlatform(ctx context.Context, input []*generated.CreatePlatformInput) (*model.PlatformBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.PlatformCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Platform.Create().SetInput(*data)
+	}
+
+	res, err := c.Platform.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "platform"})
+	}
+
+	// return response
+	return &model.PlatformBulkCreatePayload{
+		Platforms: res,
 	}, nil
 }
 
@@ -3707,43 +3783,5 @@ func (r *mutationResolver) bulkCreateWorkflowDefinition(ctx context.Context, inp
 	// return response
 	return &model.WorkflowDefinitionBulkCreatePayload{
 		WorkflowDefinitions: res,
-	}, nil
-}
-
-// bulkCreateWorkflowEvent uses the CreateBulk function to create multiple WorkflowEvent entities
-func (r *mutationResolver) bulkCreateWorkflowEvent(ctx context.Context, input []*generated.CreateWorkflowEventInput) (*model.WorkflowEventBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.WorkflowEventCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.WorkflowEvent.Create().SetInput(*data)
-	}
-
-	res, err := c.WorkflowEvent.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowevent"})
-	}
-
-	// return response
-	return &model.WorkflowEventBulkCreatePayload{
-		WorkflowEvents: res,
-	}, nil
-}
-
-// bulkCreateWorkflowObjectRef uses the CreateBulk function to create multiple WorkflowObjectRef entities
-func (r *mutationResolver) bulkCreateWorkflowObjectRef(ctx context.Context, input []*generated.CreateWorkflowObjectRefInput) (*model.WorkflowObjectRefBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.WorkflowObjectRefCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.WorkflowObjectRef.Create().SetInput(*data)
-	}
-
-	res, err := c.WorkflowObjectRef.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowobjectref"})
-	}
-
-	// return response
-	return &model.WorkflowObjectRefBulkCreatePayload{
-		WorkflowObjectRefs: res,
 	}, nil
 }

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
@@ -36,6 +37,14 @@ type DirectoryAccount struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the environment of the directory_account
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the directory_account
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the directory_account
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the directory_account
+	ScopeID string `json:"scope_id,omitempty"`
 	// integration that owns this directory account
 	IntegrationID string `json:"integration_id,omitempty"`
 	// sync run that produced this snapshot
@@ -90,6 +99,10 @@ type DirectoryAccount struct {
 type DirectoryAccountEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// Environment holds the value of the environment edge.
+	Environment *CustomTypeEnum `json:"environment,omitempty"`
+	// Scope holds the value of the scope edge.
+	Scope *CustomTypeEnum `json:"scope,omitempty"`
 	// integration that owns this directory account
 	Integration *Integration `json:"integration,omitempty"`
 	// sync run that produced this snapshot
@@ -102,9 +115,9 @@ type DirectoryAccountEdges struct {
 	Memberships []*DirectoryMembership `json:"memberships,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [8]map[string]int
 
 	namedGroups             map[string][]*DirectoryGroup
 	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
@@ -122,12 +135,34 @@ func (e DirectoryAccountEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// EnvironmentOrErr returns the Environment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e DirectoryAccountEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
+	if e.Environment != nil {
+		return e.Environment, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "environment"}
+}
+
+// ScopeOrErr returns the Scope value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e DirectoryAccountEdges) ScopeOrErr() (*CustomTypeEnum, error) {
+	if e.Scope != nil {
+		return e.Scope, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "scope"}
+}
+
 // IntegrationOrErr returns the Integration value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e DirectoryAccountEdges) IntegrationOrErr() (*Integration, error) {
 	if e.Integration != nil {
 		return e.Integration, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: integration.Label}
 	}
 	return nil, &NotLoadedError{edge: "integration"}
@@ -138,7 +173,7 @@ func (e DirectoryAccountEdges) IntegrationOrErr() (*Integration, error) {
 func (e DirectoryAccountEdges) DirectorySyncRunOrErr() (*DirectorySyncRun, error) {
 	if e.DirectorySyncRun != nil {
 		return e.DirectorySyncRun, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: directorysyncrun.Label}
 	}
 	return nil, &NotLoadedError{edge: "directory_sync_run"}
@@ -147,7 +182,7 @@ func (e DirectoryAccountEdges) DirectorySyncRunOrErr() (*DirectorySyncRun, error
 // GroupsOrErr returns the Groups value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectoryAccountEdges) GroupsOrErr() ([]*DirectoryGroup, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Groups, nil
 	}
 	return nil, &NotLoadedError{edge: "groups"}
@@ -156,7 +191,7 @@ func (e DirectoryAccountEdges) GroupsOrErr() ([]*DirectoryGroup, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectoryAccountEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -165,7 +200,7 @@ func (e DirectoryAccountEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, 
 // MembershipsOrErr returns the Memberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectoryAccountEdges) MembershipsOrErr() ([]*DirectoryMembership, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Memberships, nil
 	}
 	return nil, &NotLoadedError{edge: "memberships"}
@@ -178,7 +213,7 @@ func (*DirectoryAccount) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case directoryaccount.FieldTags, directoryaccount.FieldProfile:
 			values[i] = new([]byte)
-		case directoryaccount.FieldID, directoryaccount.FieldCreatedBy, directoryaccount.FieldUpdatedBy, directoryaccount.FieldDisplayID, directoryaccount.FieldOwnerID, directoryaccount.FieldIntegrationID, directoryaccount.FieldDirectorySyncRunID, directoryaccount.FieldExternalID, directoryaccount.FieldSecondaryKey, directoryaccount.FieldCanonicalEmail, directoryaccount.FieldDisplayName, directoryaccount.FieldGivenName, directoryaccount.FieldFamilyName, directoryaccount.FieldJobTitle, directoryaccount.FieldDepartment, directoryaccount.FieldOrganizationUnit, directoryaccount.FieldAccountType, directoryaccount.FieldStatus, directoryaccount.FieldMfaState, directoryaccount.FieldLastSeenIP, directoryaccount.FieldProfileHash, directoryaccount.FieldRawProfileFileID, directoryaccount.FieldSourceVersion:
+		case directoryaccount.FieldID, directoryaccount.FieldCreatedBy, directoryaccount.FieldUpdatedBy, directoryaccount.FieldDisplayID, directoryaccount.FieldOwnerID, directoryaccount.FieldEnvironmentName, directoryaccount.FieldEnvironmentID, directoryaccount.FieldScopeName, directoryaccount.FieldScopeID, directoryaccount.FieldIntegrationID, directoryaccount.FieldDirectorySyncRunID, directoryaccount.FieldExternalID, directoryaccount.FieldSecondaryKey, directoryaccount.FieldCanonicalEmail, directoryaccount.FieldDisplayName, directoryaccount.FieldGivenName, directoryaccount.FieldFamilyName, directoryaccount.FieldJobTitle, directoryaccount.FieldDepartment, directoryaccount.FieldOrganizationUnit, directoryaccount.FieldAccountType, directoryaccount.FieldStatus, directoryaccount.FieldMfaState, directoryaccount.FieldLastSeenIP, directoryaccount.FieldProfileHash, directoryaccount.FieldRawProfileFileID, directoryaccount.FieldSourceVersion:
 			values[i] = new(sql.NullString)
 		case directoryaccount.FieldCreatedAt, directoryaccount.FieldUpdatedAt, directoryaccount.FieldLastLoginAt, directoryaccount.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -250,6 +285,30 @@ func (_m *DirectoryAccount) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case directoryaccount.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case directoryaccount.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case directoryaccount.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case directoryaccount.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case directoryaccount.FieldIntegrationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -422,6 +481,16 @@ func (_m *DirectoryAccount) QueryOwner() *OrganizationQuery {
 	return NewDirectoryAccountClient(_m.config).QueryOwner(_m)
 }
 
+// QueryEnvironment queries the "environment" edge of the DirectoryAccount entity.
+func (_m *DirectoryAccount) QueryEnvironment() *CustomTypeEnumQuery {
+	return NewDirectoryAccountClient(_m.config).QueryEnvironment(_m)
+}
+
+// QueryScope queries the "scope" edge of the DirectoryAccount entity.
+func (_m *DirectoryAccount) QueryScope() *CustomTypeEnumQuery {
+	return NewDirectoryAccountClient(_m.config).QueryScope(_m)
+}
+
 // QueryIntegration queries the "integration" edge of the DirectoryAccount entity.
 func (_m *DirectoryAccount) QueryIntegration() *IntegrationQuery {
 	return NewDirectoryAccountClient(_m.config).QueryIntegration(_m)
@@ -490,6 +559,18 @@ func (_m *DirectoryAccount) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)

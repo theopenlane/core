@@ -89,17 +89,20 @@ type StandardEdges struct {
 	TrustCenterCompliances []*TrustCenterCompliance `json:"trust_center_compliances,omitempty"`
 	// TrustCenterDocs holds the value of the trust_center_docs edge.
 	TrustCenterDocs []*TrustCenterDoc `json:"trust_center_docs,omitempty"`
+	// ApplicablePlatforms holds the value of the applicable_platforms edge.
+	ApplicablePlatforms []*Platform `json:"applicable_platforms,omitempty"`
 	// LogoFile holds the value of the logo_file edge.
 	LogoFile *File `json:"logo_file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
 	namedControls               map[string][]*Control
 	namedTrustCenterCompliances map[string][]*TrustCenterCompliance
 	namedTrustCenterDocs        map[string][]*TrustCenterDoc
+	namedApplicablePlatforms    map[string][]*Platform
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -140,12 +143,21 @@ func (e StandardEdges) TrustCenterDocsOrErr() ([]*TrustCenterDoc, error) {
 	return nil, &NotLoadedError{edge: "trust_center_docs"}
 }
 
+// ApplicablePlatformsOrErr returns the ApplicablePlatforms value or an error if the edge
+// was not loaded in eager-loading.
+func (e StandardEdges) ApplicablePlatformsOrErr() ([]*Platform, error) {
+	if e.loadedTypes[4] {
+		return e.ApplicablePlatforms, nil
+	}
+	return nil, &NotLoadedError{edge: "applicable_platforms"}
+}
+
 // LogoFileOrErr returns the LogoFile value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e StandardEdges) LogoFileOrErr() (*File, error) {
 	if e.LogoFile != nil {
 		return e.LogoFile, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "logo_file"}
@@ -381,6 +393,11 @@ func (_m *Standard) QueryTrustCenterDocs() *TrustCenterDocQuery {
 	return NewStandardClient(_m.config).QueryTrustCenterDocs(_m)
 }
 
+// QueryApplicablePlatforms queries the "applicable_platforms" edge of the Standard entity.
+func (_m *Standard) QueryApplicablePlatforms() *PlatformQuery {
+	return NewStandardClient(_m.config).QueryApplicablePlatforms(_m)
+}
+
 // QueryLogoFile queries the "logo_file" edge of the Standard entity.
 func (_m *Standard) QueryLogoFile() *FileQuery {
 	return NewStandardClient(_m.config).QueryLogoFile(_m)
@@ -565,6 +582,30 @@ func (_m *Standard) appendNamedTrustCenterDocs(name string, edges ...*TrustCente
 		_m.Edges.namedTrustCenterDocs[name] = []*TrustCenterDoc{}
 	} else {
 		_m.Edges.namedTrustCenterDocs[name] = append(_m.Edges.namedTrustCenterDocs[name], edges...)
+	}
+}
+
+// NamedApplicablePlatforms returns the ApplicablePlatforms named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Standard) NamedApplicablePlatforms(name string) ([]*Platform, error) {
+	if _m.Edges.namedApplicablePlatforms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedApplicablePlatforms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Standard) appendNamedApplicablePlatforms(name string, edges ...*Platform) {
+	if _m.Edges.namedApplicablePlatforms == nil {
+		_m.Edges.namedApplicablePlatforms = make(map[string][]*Platform)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedApplicablePlatforms[name] = []*Platform{}
+	} else {
+		_m.Edges.namedApplicablePlatforms[name] = append(_m.Edges.namedApplicablePlatforms[name], edges...)
 	}
 }
 
