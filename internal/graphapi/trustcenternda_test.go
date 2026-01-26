@@ -428,3 +428,51 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
 }
+
+func TestUpdateTrustCenterNDA(t *testing.T) {
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	uploadFile1, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
+	assert.NilError(t, err)
+	up1 := graphql.Upload{
+		File:        uploadFile1.RawFile,
+		Filename:    uploadFile1.OriginalName,
+		Size:        uploadFile1.Size,
+		ContentType: uploadFile1.ContentType,
+	}
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{up1})
+
+	createResp, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
+		TrustCenterID: trustCenter.ID,
+	}, []*graphql.Upload{&up1})
+
+	assert.NilError(t, err)
+	assert.Assert(t, createResp != nil)
+	assert.Check(t, len(createResp.CreateTrustCenterNda.Template.Files.Edges) == 1)
+
+	fileID := createResp.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID
+
+	uploadFile2, err := storage.NewUploadFile("testdata/uploads/logo.png")
+	assert.NilError(t, err)
+
+	secondUpload := graphql.Upload{
+		File:        uploadFile2.RawFile,
+		Filename:    uploadFile2.OriginalName,
+		Size:        uploadFile2.Size,
+		ContentType: uploadFile2.ContentType,
+	}
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{secondUpload})
+
+	updateResp, err := suite.client.api.UpdateTrustCenterNda(testUser1.UserCtx, trustCenter.ID, []*graphql.Upload{&secondUpload})
+
+	assert.NilError(t, err)
+	assert.Assert(t, updateResp != nil)
+
+	assert.Check(t, len(updateResp.UpdateTrustCenterNda.Template.Files.Edges) == 1)
+
+	newFileID := updateResp.UpdateTrustCenterNda.Template.Files.Edges[0].Node.ID
+	assert.Check(t, newFileID != fileID)
+
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: createResp.CreateTrustCenterNda.Template.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+}
