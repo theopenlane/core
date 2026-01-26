@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/events"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -117,14 +118,28 @@ func handleNoteMutation(ctx *soiree.EventContext, payload *events.MutationPayloa
 	}
 
 	// Extract unique user IDs from mentions
-	mentionedUserIDs := slateparser.ExtractMentionedOrgMemberIDs(newMentions)
-	if len(mentionedUserIDs) == 0 {
+	mentionedOrgMemberIDs := slateparser.ExtractMentionedOrgMemberIDs(newMentions)
+	if len(mentionedOrgMemberIDs) == 0 {
 		return nil
 	}
 
+	client, ok := soiree.ClientAs[*generated.Client](ctx)
+	if !ok {
+		return ErrFailedToGetClient
+	}
+
+	// get user IDs from org member IDs
+	userIDs, err := client.OrgMembership.Query().Where(
+		orgmembership.IDIn(mentionedOrgMemberIDs...),
+	).Select(orgmembership.FieldUserID).Strings(ctx.Context())
+	if err != nil {
+		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to get user IDs from org membership IDs")
+		return err
+	}
+
 	input := mentionNotificationInput{
-		mentionedUserIDs: mentionedUserIDs,
 		objectType:       parentType,
+		mentionedUserIDs: userIDs,
 		objectID:         parentID,
 		objectName:       parentName,
 		ownerID:          fields.ownerID,
@@ -393,26 +408,11 @@ func addMentionNotification(ctx *soiree.EventContext, input mentionNotificationI
 	consoleURL := client.EntConfig.Notifications.ConsoleURL
 
 	// Build URL based on object type
-	var url string
-	switch input.objectType {
-	case "Task":
-		url = fmt.Sprintf("%s/tasks?id=%s", consoleURL, input.objectID)
-	case "Control":
-		url = fmt.Sprintf("%s/controls/%s", consoleURL, input.objectID)
-	case "Procedure":
-		url = fmt.Sprintf("%s/procedures/%s", consoleURL, input.objectID)
-	case "Risk":
-		url = fmt.Sprintf("%s/risks/%s", consoleURL, input.objectID)
-	case "InternalPolicy":
-		url = fmt.Sprintf("%s/policies/%s", consoleURL, input.objectID)
-	case "Evidence":
-		url = fmt.Sprintf("%s/evidence/?id=%s", consoleURL, input.objectID)
-		// default: no URL if we don't have a known parent object type
-	}
+	url := getURLPathForObject(consoleURL, input.objectID, input.objectType)
 
 	// Create the data map with context
 	dataMap := map[string]any{
-		"object_type": input.objectType,
+		"object_type": strcase.UpperSnakeCase(input.objectType),
 		"object_id":   input.objectID,
 		"object_name": input.objectName,
 		"note_id":     input.noteID,

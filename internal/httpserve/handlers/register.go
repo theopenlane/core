@@ -55,7 +55,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 
 		invitedUser, err := h.getUserByInviteToken(ctxWithToken, *req.Token)
 		if err != nil {
-			logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving invite token")
+			logx.FromContext(reqCtx).Error().Err(err).Str("email", input.Email).Msg("error retrieving invite token")
 
 			return h.BadRequest(ctx, err, openapi)
 		}
@@ -71,7 +71,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 
 	meowuser, err := h.createUser(ctxWithToken, input)
 	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error creating new user")
+		logx.FromContext(reqCtx).Error().Err(err).Str("email", input.Email).Msg("error creating new user")
 
 		if IsUniqueConstraintError(err) {
 			return h.Conflict(ctx, "user already exists", UserExistsErrCode, openapi)
@@ -98,13 +98,13 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 
 		_, _, _, err := h.processInvitation(ctx, *req.Token, meowuser.Email)
 		if err != nil {
-			logx.FromContext(reqCtx).Error().Err(err).Msg("error processing invitation")
+			logx.FromContext(reqCtx).Error().Err(err).Str("email", input.Email).Msg("error processing invitation")
 
 			return h.BadRequest(ctx, ErrUnableToVerifyEmail, openapi)
 		}
 
 		if err := h.setEmailConfirmed(userCtx, meowuser); err != nil {
-			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set email as verified")
+			logx.FromContext(reqCtx).Error().Err(err).Str("email", input.Email).Msg("unable to set email as verified")
 
 			return h.BadRequest(ctx, ErrUnableToVerifyEmail, openapi)
 		}
@@ -128,7 +128,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 
 		meowtoken, err := h.storeAndSendEmailVerificationToken(userCtx, user)
 		if err != nil {
-			logx.FromContext(reqCtx).Error().Err(err).Msg("error storing email verification token")
+			logx.FromContext(reqCtx).Error().Err(err).Str("email", input.Email).Msg("error storing email verification token")
 
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 		}
@@ -145,7 +145,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *User) (*generated.EmailVerificationToken, error) {
 	// expire all existing tokens
 	if err := h.expireAllVerificationTokensUserByEmail(ctx, user.Email); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error expiring existing tokens")
+		logx.FromContext(ctx).Error().Err(err).Str("email", user.Email).Msg("error expiring existing tokens")
 
 		return nil, err
 	}
@@ -153,7 +153,7 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 	// check if the user has attempted to verify their email too many times
 	attempts, err := h.countVerificationTokensUserByEmail(ctx, user.Email)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error getting existing tokens")
+		logx.FromContext(ctx).Error().Err(err).Str("email", user.Email).Msg("error getting existing tokens")
 
 		return nil, err
 	}
@@ -164,7 +164,7 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 
 	// create a new token and store it in the database
 	if err := user.CreateVerificationToken(); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error creating verification token")
+		logx.FromContext(ctx).Error().Err(err).Str("email", user.Email).Msg("error creating verification token")
 
 		return nil, err
 	}
