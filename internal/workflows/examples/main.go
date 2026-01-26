@@ -865,7 +865,7 @@ func runSlackWebhookDemo(ctx context.Context, config openlane.Config, apiClient 
 					"type": "section",
 					"text": map[string]any{
 						"type": "mrkdwn",
-						"text": "*Control:* <https://console.theopenlane.io/controls/{{object_id}}|{{object_id}}>\n*Status:* :white_check_mark: APPROVED",
+						"text": "*Control:* <https://console.theopenlane.io/controls/{{object_id}}|{{ref_code}} - {{title}}>\n*Status:* :white_check_mark: {{status}}",
 					},
 				},
 				map[string]any{
@@ -873,7 +873,7 @@ func runSlackWebhookDemo(ctx context.Context, config openlane.Config, apiClient 
 					"elements": []any{
 						map[string]any{
 							"type": "mrkdwn",
-							"text": "Approved by *{{approved_by}}* · {{approved_at}}",
+							"text": "Triggered by *{{initiator}}* · {{approved_at}}",
 						},
 					},
 				},
@@ -882,19 +882,19 @@ func runSlackWebhookDemo(ctx context.Context, config openlane.Config, apiClient 
 					"fields": []any{
 						map[string]any{
 							"type": "mrkdwn",
-							"text": "*Control ID*\n{{object_id}}",
+							"text": "*Control*\n{{ref_code}}",
 						},
 						map[string]any{
 							"type": "mrkdwn",
-							"text": "*Instance ID*\n{{instance_id}}",
+							"text": "*Title*\n{{title}}",
 						},
 						map[string]any{
 							"type": "mrkdwn",
-							"text": "*Approved By*\n{{approved_by}}",
+							"text": "*Triggered By*\n{{initiator}}",
 						},
 						map[string]any{
 							"type": "mrkdwn",
-							"text": "*Approved At*\n{{approved_at}}",
+							"text": "*Timestamp*\n{{approved_at}}",
 						},
 					},
 				},

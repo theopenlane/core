@@ -19,7 +19,7 @@ Schema for Openlane workflow definitions
 |[**actions**](#actions)|`array`|||
 |[**metadata**](#metadata)|`object`|||
 
-**Additional Properties:** not allowed
+**Additional Properties:** not allowed  
 **Example**
 
 ```json
@@ -51,19 +51,19 @@ Schema for Openlane workflow definitions
 |[**groupIds**](#targetsgroupids)|`string[]`|||
 |[**objectTypes**](#targetsobjecttypes)|`string[]`|||
 
-**Additional Properties:** not allowed
+**Additional Properties:** not allowed  
 <a name="targetstagids"></a>
 ### targets\.tagIds\[\]: array
 
 **Items**
 
-**Item Type:** `string`
+**Item Type:** `string`  
 <a name="targetsgroupids"></a>
 ### targets\.groupIds\[\]: array
 
 **Items**
 
-**Item Type:** `string`
+**Item Type:** `string`  
 <a name="targetsobjecttypes"></a>
 ### targets\.objectTypes\[\]: array
 
@@ -72,8 +72,8 @@ Schema for Openlane workflow definitions
 
 The object type the workflow applies to
 
-**Item Type:** `string`
-**Item Enum:** `"ActionPlan"`, `"Campaign"`, `"CampaignTarget"`, `"Control"`, `"Evidence"`, `"IdentityHolder"`, `"InternalPolicy"`, `"Platform"`, `"Procedure"`, `"Subcontrol"`
+**Item Type:** `string`  
+**Item Enum:** `"ActionPlan"`, `"Campaign"`, `"CampaignTarget"`, `"Control"`, `"Evidence"`, `"IdentityHolder"`, `"InternalPolicy"`, `"Platform"`, `"Procedure"`, `"Subcontrol"`  
 <a name="triggers"></a>
 ## triggers\[\]: array
 
