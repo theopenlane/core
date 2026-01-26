@@ -13566,6 +13566,10 @@ input CreateTrustCenterSettingInput {
   """
   companyName: String
   """
+  company description for the trust center
+  """
+  companyDescription: String
+  """
   overview of the trust center
   """
   overview: String
@@ -59971,6 +59975,10 @@ type TrustCenterSetting implements Node {
   """
   companyName: String
   """
+  company description for the trust center
+  """
+  companyDescription: String
+  """
   overview of the trust center
   """
   overview: String
@@ -60308,6 +60316,24 @@ input TrustCenterSettingWhereInput {
   companyNameNotNil: Boolean
   companyNameEqualFold: String
   companyNameContainsFold: String
+  """
+  company_description field predicates
+  """
+  companyDescription: String
+  companyDescriptionNEQ: String
+  companyDescriptionIn: [String!]
+  companyDescriptionNotIn: [String!]
+  companyDescriptionGT: String
+  companyDescriptionGTE: String
+  companyDescriptionLT: String
+  companyDescriptionLTE: String
+  companyDescriptionContains: String
+  companyDescriptionHasPrefix: String
+  companyDescriptionHasSuffix: String
+  companyDescriptionIsNil: Boolean
+  companyDescriptionNotNil: Boolean
+  companyDescriptionEqualFold: String
+  companyDescriptionContainsFold: String
   """
   overview field predicates
   """
@@ -67988,6 +68014,11 @@ input UpdateTrustCenterSettingInput {
   """
   companyName: String
   clearCompanyName: Boolean
+  """
+  company description for the trust center
+  """
+  companyDescription: String
+  clearCompanyDescription: Boolean
   """
   overview of the trust center
   """

@@ -23226,6 +23226,7 @@ type CreateTrustCenterSettingInput struct {
 	TrustCenterID            *string
 	Title                    *string
 	CompanyName              *string
+	CompanyDescription       *string
 	Overview                 *string
 	LogoRemoteURL            *string
 	FaviconRemoteURL         *string
@@ -23257,6 +23258,9 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.CompanyName; v != nil {
 		m.SetCompanyName(*v)
+	}
+	if v := i.CompanyDescription; v != nil {
+		m.SetCompanyDescription(*v)
 	}
 	if v := i.Overview; v != nil {
 		m.SetOverview(*v)
@@ -23331,6 +23335,8 @@ type UpdateTrustCenterSettingInput struct {
 	Title                         *string
 	ClearCompanyName              bool
 	CompanyName                   *string
+	ClearCompanyDescription       bool
+	CompanyDescription            *string
 	ClearOverview                 bool
 	Overview                      *string
 	ClearLogoRemoteURL            bool
@@ -23390,6 +23396,12 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.CompanyName; v != nil {
 		m.SetCompanyName(*v)
+	}
+	if i.ClearCompanyDescription {
+		m.ClearCompanyDescription()
+	}
+	if v := i.CompanyDescription; v != nil {
+		m.SetCompanyDescription(*v)
 	}
 	if i.ClearOverview {
 		m.ClearOverview()

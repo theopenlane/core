@@ -12204,6 +12204,11 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldCompanyName)
 				fieldSeen[trustcentersettinghistory.FieldCompanyName] = struct{}{}
 			}
+		case "companyDescription":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldCompanyDescription]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldCompanyDescription)
+				fieldSeen[trustcentersettinghistory.FieldCompanyDescription] = struct{}{}
+			}
 		case "overview":
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldOverview]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldOverview)

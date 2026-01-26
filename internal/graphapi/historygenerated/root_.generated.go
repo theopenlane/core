@@ -2437,6 +2437,7 @@ type ComplexityRoot struct {
 	TrustCenterSettingHistory struct {
 		AccentColor              func(childComplexity int) int
 		BackgroundColor          func(childComplexity int) int
+		CompanyDescription       func(childComplexity int) int
 		CompanyDomain            func(childComplexity int) int
 		CompanyName              func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
@@ -16300,6 +16301,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSettingHistory.BackgroundColor(childComplexity), true
+
+	case "TrustCenterSettingHistory.companyDescription":
+		if e.complexity.TrustCenterSettingHistory.CompanyDescription == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.CompanyDescription(childComplexity), true
 
 	case "TrustCenterSettingHistory.companyDomain":
 		if e.complexity.TrustCenterSettingHistory.CompanyDomain == nil {
@@ -50553,6 +50561,10 @@ type TrustCenterSettingHistory implements Node {
   """
   companyName: String
   """
+  company description for the trust center
+  """
+  companyDescription: String
+  """
   overview of the trust center
   """
   overview: String
@@ -50871,6 +50883,24 @@ input TrustCenterSettingHistoryWhereInput {
   companyNameNotNil: Boolean
   companyNameEqualFold: String
   companyNameContainsFold: String
+  """
+  company_description field predicates
+  """
+  companyDescription: String
+  companyDescriptionNEQ: String
+  companyDescriptionIn: [String!]
+  companyDescriptionNotIn: [String!]
+  companyDescriptionGT: String
+  companyDescriptionGTE: String
+  companyDescriptionLT: String
+  companyDescriptionLTE: String
+  companyDescriptionContains: String
+  companyDescriptionHasPrefix: String
+  companyDescriptionHasSuffix: String
+  companyDescriptionIsNil: Boolean
+  companyDescriptionNotNil: Boolean
+  companyDescriptionEqualFold: String
+  companyDescriptionContainsFold: String
   """
   overview field predicates
   """

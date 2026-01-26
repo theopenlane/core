@@ -166,6 +166,26 @@ func (_u *TrustCenterSettingUpdate) ClearCompanyName() *TrustCenterSettingUpdate
 	return _u
 }
 
+// SetCompanyDescription sets the "company_description" field.
+func (_u *TrustCenterSettingUpdate) SetCompanyDescription(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetCompanyDescription(v)
+	return _u
+}
+
+// SetNillableCompanyDescription sets the "company_description" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableCompanyDescription(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetCompanyDescription(*v)
+	}
+	return _u
+}
+
+// ClearCompanyDescription clears the value of the "company_description" field.
+func (_u *TrustCenterSettingUpdate) ClearCompanyDescription() *TrustCenterSettingUpdate {
+	_u.mutation.ClearCompanyDescription()
+	return _u
+}
+
 // SetOverview sets the "overview" field.
 func (_u *TrustCenterSettingUpdate) SetOverview(v string) *TrustCenterSettingUpdate {
 	_u.mutation.SetOverview(v)
@@ -692,6 +712,11 @@ func (_u *TrustCenterSettingUpdate) check() error {
 			return &ValidationError{Name: "company_name", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.company_name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.CompanyDescription(); ok {
+		if err := trustcentersetting.CompanyDescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "company_description", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.company_description": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Overview(); ok {
 		if err := trustcentersetting.OverviewValidator(v); err != nil {
 			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
@@ -820,6 +845,12 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.CompanyNameCleared() {
 		_spec.ClearField(trustcentersetting.FieldCompanyName, field.TypeString)
+	}
+	if value, ok := _u.mutation.CompanyDescription(); ok {
+		_spec.SetField(trustcentersetting.FieldCompanyDescription, field.TypeString, value)
+	}
+	if _u.mutation.CompanyDescriptionCleared() {
+		_spec.ClearField(trustcentersetting.FieldCompanyDescription, field.TypeString)
 	}
 	if value, ok := _u.mutation.Overview(); ok {
 		_spec.SetField(trustcentersetting.FieldOverview, field.TypeString, value)
@@ -1225,6 +1256,26 @@ func (_u *TrustCenterSettingUpdateOne) SetNillableCompanyName(v *string) *TrustC
 // ClearCompanyName clears the value of the "company_name" field.
 func (_u *TrustCenterSettingUpdateOne) ClearCompanyName() *TrustCenterSettingUpdateOne {
 	_u.mutation.ClearCompanyName()
+	return _u
+}
+
+// SetCompanyDescription sets the "company_description" field.
+func (_u *TrustCenterSettingUpdateOne) SetCompanyDescription(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetCompanyDescription(v)
+	return _u
+}
+
+// SetNillableCompanyDescription sets the "company_description" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableCompanyDescription(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetCompanyDescription(*v)
+	}
+	return _u
+}
+
+// ClearCompanyDescription clears the value of the "company_description" field.
+func (_u *TrustCenterSettingUpdateOne) ClearCompanyDescription() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearCompanyDescription()
 	return _u
 }
 
@@ -1767,6 +1818,11 @@ func (_u *TrustCenterSettingUpdateOne) check() error {
 			return &ValidationError{Name: "company_name", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.company_name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.CompanyDescription(); ok {
+		if err := trustcentersetting.CompanyDescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "company_description", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.company_description": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Overview(); ok {
 		if err := trustcentersetting.OverviewValidator(v); err != nil {
 			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
@@ -1912,6 +1968,12 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.CompanyNameCleared() {
 		_spec.ClearField(trustcentersetting.FieldCompanyName, field.TypeString)
+	}
+	if value, ok := _u.mutation.CompanyDescription(); ok {
+		_spec.SetField(trustcentersetting.FieldCompanyDescription, field.TypeString, value)
+	}
+	if _u.mutation.CompanyDescriptionCleared() {
+		_spec.ClearField(trustcentersetting.FieldCompanyDescription, field.TypeString)
 	}
 	if value, ok := _u.mutation.Overview(); ok {
 		_spec.SetField(trustcentersetting.FieldOverview, field.TypeString, value)

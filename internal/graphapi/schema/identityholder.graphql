@@ -27,6 +27,8 @@ extend type IdentityHolder {
 
 
 
+
+
 extend type Query {
     """
     Look up identityHolder by ID

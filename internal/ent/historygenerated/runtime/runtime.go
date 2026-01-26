@@ -2613,11 +2613,11 @@ func init() {
 	// trustcentersettinghistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	trustcentersettinghistory.UpdateDefaultUpdatedAt = trustcentersettinghistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// trustcentersettinghistoryDescRemoveBranding is the schema descriptor for remove_branding field.
-	trustcentersettinghistoryDescRemoveBranding := trustcentersettinghistoryFields[27].Descriptor()
+	trustcentersettinghistoryDescRemoveBranding := trustcentersettinghistoryFields[28].Descriptor()
 	// trustcentersettinghistory.DefaultRemoveBranding holds the default value on creation for the remove_branding field.
 	trustcentersettinghistory.DefaultRemoveBranding = trustcentersettinghistoryDescRemoveBranding.Default.(bool)
 	// trustcentersettinghistoryDescNdaApprovalRequired is the schema descriptor for nda_approval_required field.
-	trustcentersettinghistoryDescNdaApprovalRequired := trustcentersettinghistoryFields[30].Descriptor()
+	trustcentersettinghistoryDescNdaApprovalRequired := trustcentersettinghistoryFields[31].Descriptor()
 	// trustcentersettinghistory.DefaultNdaApprovalRequired holds the default value on creation for the nda_approval_required field.
 	trustcentersettinghistory.DefaultNdaApprovalRequired = trustcentersettinghistoryDescNdaApprovalRequired.Default.(bool)
 	// trustcentersettinghistoryDescID is the schema descriptor for id field.

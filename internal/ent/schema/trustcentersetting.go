@@ -58,6 +58,10 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Comment("company name for the trust center, defaults to the organization's display name").
 			MaxLen(trustCenterNameMaxLen).
 			Optional(),
+		field.Text("company_description").
+			Comment("company description for the trust center").
+			MaxLen(trustCenterDescriptionMaxLen).
+			Optional(),
 		field.Text("overview").
 			Comment("overview of the trust center").
 			MaxLen(trustCenterDescriptionMaxLen).

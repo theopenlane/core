@@ -67,6 +67,8 @@ func (ec *executionContext) fieldContext_TrustCenterPreviewSettingCreatePayload_
 				return ec.fieldContext_TrustCenterSetting_title(ctx, field)
 			case "companyName":
 				return ec.fieldContext_TrustCenterSetting_companyName(ctx, field)
+			case "companyDescription":
+				return ec.fieldContext_TrustCenterSetting_companyDescription(ctx, field)
 			case "overview":
 				return ec.fieldContext_TrustCenterSetting_overview(ctx, field)
 			case "logoRemoteURL":
