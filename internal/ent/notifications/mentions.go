@@ -440,7 +440,7 @@ func addMentionNotification(ctx *soiree.EventContext, input mentionNotificationI
 		Data:             dataMap,
 		OwnerID:          &input.ownerID,
 		Topic:            &topic,
-		ObjectType:       strcase.UpperSnakeCase(input.objectType),
+		ObjectType:       input.objectType,
 	}
 
 	// Filter out the ownerID to avoid sending self-mention notifications
