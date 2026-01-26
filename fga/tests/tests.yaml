@@ -37,10 +37,10 @@ tests:
           can_create_evidence: true
           can_create_trust_center_doc: true
           can_create_trust_center_subprocessor: true
-          can_create_workflow_object_ref: true
-          can_create_workflow_assignment_target: true
-          can_create_workflow_event: true
-          can_create_workflow_proposal: true
+          can_create_workflow_object_ref: false # system-driven, only services can create
+          can_create_workflow_assignment_target: false # system-driven, only services can create
+          can_create_workflow_event: false # system-driven, only services can create
+          can_create_workflow_proposal: false # system-driven, only services can create
       - user: user:ulid-of-member
         object: organization:openlane
         context:
@@ -172,10 +172,10 @@ tests:
           can_create_group: true
           can_create_trust_center_doc: true
           can_create_trust_center_subprocessor: true
-          can_create_workflow_object_ref: true
-          can_create_workflow_assignment_target: true
-          can_create_workflow_event: true
-          can_create_workflow_proposal: true
+          can_create_workflow_object_ref: false # system-driven, only services can create
+          can_create_workflow_assignment_target: false # system-driven, only services can create
+          can_create_workflow_event: false # system-driven, only services can create
+          can_create_workflow_proposal: false # system-driven, only services can create
       - user: user:ulid-of-audit-log-viewer
         object: organization:openlane # parent org
         context:
@@ -219,10 +219,10 @@ tests:
           can_create_evidence: true
           can_create_trust_center_doc: true
           can_create_trust_center_subprocessor: true
-          can_create_workflow_object_ref: true
-          can_create_workflow_assignment_target: true
-          can_create_workflow_event: true
-          can_create_workflow_proposal: true
+          can_create_workflow_object_ref: false # system-driven, only services can create
+          can_create_workflow_assignment_target: false # system-driven, only services can create
+          can_create_workflow_event: false # system-driven, only services can create
+          can_create_workflow_proposal: false # system-driven, only services can create
       - user: user:ulid-of-member
         object: organization:foo # child org
         context:
@@ -1450,13 +1450,13 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
-      # workflow_instance tests
-      - user: user:ulid-of-owner # org owner has full access
+      # workflow_instance tests (system-driven: users can view, only services can edit/delete)
+      - user: user:ulid-of-owner # org owner can view but not edit/delete
         object: workflow_instance:workflow_instance-1
         assertions:
           can_view: true
-          can_edit: true
-          can_delete: true
+          can_edit: false
+          can_delete: false
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view
         object: workflow_instance:workflow_instance-1
@@ -1466,25 +1466,25 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
-      - user: user:ulid-workflow-editor # group editor has edit access
+      - user: user:ulid-workflow-editor # group member can view but not edit/delete (system-driven)
         object: workflow_instance:workflow_instance-1
         assertions:
           can_view: true
-          can_edit: true
-          can_delete: true
+          can_edit: false
+          can_delete: false
       - user: user:ulid-of-owner-foobar # user of another org has no access
         object: workflow_instance:workflow_instance-1
         assertions:
           can_view: false
           can_edit: false
           can_delete: false
-      # workflow_assignment tests
-      - user: user:ulid-of-owner # org owner has full access
+      # workflow_assignment tests (system-driven: users can view, only services can edit/delete)
+      - user: user:ulid-of-owner # org owner can view but not edit/delete
         object: workflow_assignment:workflow_assignment-1
         assertions:
           can_view: true
-          can_edit: true
-          can_delete: true
+          can_edit: false
+          can_delete: false
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view
         object: workflow_assignment:workflow_assignment-1
@@ -1494,25 +1494,25 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
-      - user: user:ulid-workflow-editor # group editor has edit access
+      - user: user:ulid-workflow-editor # group member can view but not edit/delete (system-driven)
         object: workflow_assignment:workflow_assignment-1
         assertions:
           can_view: true
-          can_edit: true
-          can_delete: true
+          can_edit: false
+          can_delete: false
       - user: user:ulid-of-owner-foobar # user of another org has no access
         object: workflow_assignment:workflow_assignment-1
         assertions:
           can_view: false
           can_edit: false
           can_delete: false
-      # workflow_object_ref tests
-      - user: user:ulid-of-owner # org owner has full access
+      # workflow_object_ref tests (system-driven: users can view, only services can edit/delete)
+      - user: user:ulid-of-owner # org owner can view but not edit/delete
         object: workflow_object_ref:workflow_object_ref-1
         assertions:
           can_view: true
-          can_edit: true
-          can_delete: true
+          can_edit: false
+          can_delete: false
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view
         object: workflow_object_ref:workflow_object_ref-1
@@ -1534,13 +1534,13 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
-      # workflow_assignment_target tests
-      - user: user:ulid-of-owner # org owner has full access
+      # workflow_assignment_target tests (system-driven: users can view, only services can edit/delete)
+      - user: user:ulid-of-owner # org owner can view but not edit/delete
         object: workflow_assignment_target:workflow_assignment_target-1
         assertions:
           can_view: true
-          can_edit: true
-          can_delete: true
+          can_edit: false
+          can_delete: false
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view
         object: workflow_assignment_target:workflow_assignment_target-1
@@ -1562,13 +1562,13 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
-      # workflow_event tests
-      - user: user:ulid-of-owner # org owner has full access
+      # workflow_event tests (system-driven: users can view, only services can edit/delete)
+      - user: user:ulid-of-owner # org owner can view but not edit/delete
         object: workflow_event:workflow_event-1
         assertions:
           can_view: true
-          can_edit: true
-          can_delete: true
+          can_edit: false
+          can_delete: false
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view
         object: workflow_event:workflow_event-1
@@ -1590,13 +1590,13 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
-      # workflow_proposal tests
-      - user: user:ulid-of-owner # org owner has full access
+      # workflow_proposal tests (system-driven: users can view, only services can edit/delete)
+      - user: user:ulid-of-owner # org owner can view but not edit/delete
         object: workflow_proposal:workflow_proposal-1
         assertions:
           can_view: true
-          can_edit: true
-          can_delete: true
+          can_edit: false
+          can_delete: false
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view
         object: workflow_proposal:workflow_proposal-1
@@ -1606,12 +1606,12 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
-      - user: user:ulid-workflow-editor # group editor has edit access
+      - user: user:ulid-workflow-editor # group member can view but not edit/delete (system-driven)
         object: workflow_proposal:workflow_proposal-1
         assertions:
           can_view: true
-          can_edit: true
-          can_delete: true
+          can_edit: false
+          can_delete: false
       - user: user:ulid-blocked # blocked user has no access
         object: workflow_proposal:workflow_proposal-1
         assertions:
@@ -1639,46 +1639,36 @@ tests:
         assertions:
           can_view:
             - workflow_instance:workflow_instance-1
-          can_edit:
-            - workflow_instance:workflow_instance-1
-          can_delete:
-            - workflow_instance:workflow_instance-1
+          can_edit: # empty - system-driven, only services can edit
+          can_delete: # empty - system-driven, only services can delete
       - user: user:ulid-of-owner
         type: workflow_assignment
         assertions:
           can_view:
             - workflow_assignment:workflow_assignment-1
-          can_edit:
-            - workflow_assignment:workflow_assignment-1
-          can_delete:
-            - workflow_assignment:workflow_assignment-1
+          can_edit: # empty - system-driven, only services can edit
+          can_delete: # empty - system-driven, only services can delete
       - user: user:ulid-of-owner
         type: workflow_object_ref
         assertions:
           can_view:
             - workflow_object_ref:workflow_object_ref-1
-          can_edit:
-            - workflow_object_ref:workflow_object_ref-1
-          can_delete:
-            - workflow_object_ref:workflow_object_ref-1
+          can_edit: # empty - system-driven, only services can edit
+          can_delete: # empty - system-driven, only services can delete
       - user: user:ulid-of-owner
         type: workflow_assignment_target
         assertions:
           can_view:
             - workflow_assignment_target:workflow_assignment_target-1
-          can_edit:
-            - workflow_assignment_target:workflow_assignment_target-1
-          can_delete:
-            - workflow_assignment_target:workflow_assignment_target-1
+          can_edit: # empty - system-driven, only services can edit
+          can_delete: # empty - system-driven, only services can delete
       - user: user:ulid-of-owner
         type: workflow_event
         assertions:
           can_view:
             - workflow_event:workflow_event-1
-          can_edit:
-            - workflow_event:workflow_event-1
-          can_delete:
-            - workflow_event:workflow_event-1
+          can_edit: # empty - system-driven, only services can edit
+          can_delete: # empty - system-driven, only services can delete
       - user: user:ulid-blocked
         type: workflow_object_ref
         assertions:
@@ -1702,10 +1692,8 @@ tests:
         assertions:
           can_view:
             - workflow_proposal:workflow_proposal-1
-          can_edit:
-            - workflow_proposal:workflow_proposal-1
-          can_delete:
-            - workflow_proposal:workflow_proposal-1
+          can_edit: # empty - system-driven, only services can edit
+          can_delete: # empty - system-driven, only services can delete
       - user: user:ulid-blocked
         type: workflow_proposal
         assertions:

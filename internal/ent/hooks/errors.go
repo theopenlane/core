@@ -120,6 +120,9 @@ var (
 	ErrCacheRefreshFailed = errors.New("cache refresh request failed")
 	// ErrNoOrganizationID is returned when no organization ID is found in context
 	ErrNoOrganizationID = errors.New("no valid organization ID found")
+	// ErrNDATemplateRequired is returned when nda requests mutation runs but there is no file for the
+	// user to sign
+	ErrNDATemplateRequired = errors.New("you need a nda template before a request can be made")
 	// ErrMutationMissingID is returned when a mutation does not have an ID
 	ErrMutationMissingID = errors.New("mutation missing ID")
 	// ErrProposedChangesNotSupported is returned when proposed changes are not supported for a schema type

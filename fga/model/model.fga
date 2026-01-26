@@ -149,7 +149,7 @@ type organization
     define workflow_definition_creator: [group#member]
     define can_create_workflow_definition: can_edit or workflow_definition_creator
 
-    # workflow_instance and related types are system-driven, only services can create/modify
+    # workflow_instance and related types are system-driven, only services can create
     define can_create_workflow_instance: [service]
     define can_create_workflow_assignment: [service]
     define can_create_workflow_object_ref: [service]
