@@ -7,13 +7,13 @@ import (
 )
 
 const (
-	policyURLPath    = "policies/%s/view"
-	procedureURLPath = "procedures/%s/view"
-	riskURLPath      = "risks/%s"
-	taskURLPath      = "tasks?id=%s"
-	controlURLPath   = "controls/%s"
-	evidenceURLPath  = "evidence?id=%s"
-	trustCenterNDA   = "trust-center/NDAs"
+	policyURLPath    = "/policies/%s/view"
+	procedureURLPath = "/procedures/%s/view"
+	riskURLPath      = "/risks/%s"
+	taskURLPath      = "/tasks?id=%s"
+	controlURLPath   = "/controls/%s"
+	evidenceURLPath  = "/evidence?id=%s"
+	trustCenterNDA   = "/trust-center/NDAs"
 )
 
 // getURLPathForObject constructs the URL path for a given object type and ID
