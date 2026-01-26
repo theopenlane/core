@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/events"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -117,14 +118,28 @@ func handleNoteMutation(ctx *soiree.EventContext, payload *events.MutationPayloa
 	}
 
 	// Extract unique user IDs from mentions
-	mentionedUserIDs := slateparser.ExtractMentionedOrgMemberIDs(newMentions)
-	if len(mentionedUserIDs) == 0 {
+	mentionedOrgMemberIDs := slateparser.ExtractMentionedOrgMemberIDs(newMentions)
+	if len(mentionedOrgMemberIDs) == 0 {
 		return nil
 	}
 
+	client, ok := soiree.ClientAs[*generated.Client](ctx)
+	if !ok {
+		return ErrFailedToGetClient
+	}
+
+	// get user IDs from org member IDs
+	userIDs, err := client.OrgMembership.Query().Where(
+		orgmembership.IDIn(mentionedOrgMemberIDs...),
+	).Select(orgmembership.FieldUserID).Strings(ctx.Context())
+	if err != nil {
+		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to get user IDs from org membership IDs")
+		return err
+	}
+
 	input := mentionNotificationInput{
-		mentionedUserIDs: mentionedUserIDs,
 		objectType:       parentType,
+		mentionedUserIDs: userIDs,
 		objectID:         parentID,
 		objectName:       parentName,
 		ownerID:          fields.ownerID,
@@ -397,7 +412,7 @@ func addMentionNotification(ctx *soiree.EventContext, input mentionNotificationI
 
 	// Create the data map with context
 	dataMap := map[string]any{
-		"object_type": input.objectType,
+		"object_type": strcase.UpperSnakeCase(input.objectType),
 		"object_id":   input.objectID,
 		"object_name": input.objectName,
 		"note_id":     input.noteID,
@@ -425,7 +440,7 @@ func addMentionNotification(ctx *soiree.EventContext, input mentionNotificationI
 		Data:             dataMap,
 		OwnerID:          &input.ownerID,
 		Topic:            &topic,
-		ObjectType:       input.objectType,
+		ObjectType:       strcase.UpperSnakeCase(input.objectType),
 	}
 
 	// Filter out the ownerID to avoid sending self-mention notifications
