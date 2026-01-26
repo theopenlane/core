@@ -366,9 +366,9 @@ func queryDocumentFromDB(ctx *soiree.EventContext, fields *documentFields, paylo
 
 	switch t := payload.Mutation.(type) {
 	case *generated.InternalPolicyMutation:
-		return getInternalPolicyFromDB(ctx, fields.entityID, fields)
+		return getInternalPolicyFromDB(ctx, fields)
 	case *generated.ProcedureMutation:
-		return getProcedureFromDB(ctx, fields.entityID, fields)
+		return getProcedureFromDB(ctx, fields)
 	default:
 		logx.FromContext(ctx.Context()).Warn().Msgf("unsupported mutation type %T for document query", t)
 	}
