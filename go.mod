@@ -56,7 +56,7 @@ require (
 	github.com/knadh/koanf/providers/env/v2 v2.0.0
 	github.com/knadh/koanf/providers/file v1.2.1
 	github.com/knadh/koanf/providers/posflag v1.0.1
-	github.com/knadh/koanf/v2 v2.3.1
+	github.com/knadh/koanf/v2 v2.3.2
 	github.com/labstack/echo-contrib v0.17.4
 	github.com/labstack/echo/v4 v4.15.0
 	github.com/labstack/gommon v0.4.2
@@ -75,7 +75,7 @@ require (
 	github.com/pressly/goose/v3 v3.26.0
 	github.com/prometheus/client_golang v1.23.2
 	github.com/ravilushqa/otelgqlgen v0.19.0
-	github.com/redis/go-redis/v9 v9.17.2
+	github.com/redis/go-redis/v9 v9.17.3
 	github.com/riverqueue/river v0.30.1
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.30.1
 	github.com/rs/zerolog v1.34.0
@@ -89,7 +89,7 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/emailtemplates v0.3.1
-	github.com/theopenlane/entx v0.21.1
+	github.com/theopenlane/entx v0.21.3
 	github.com/theopenlane/go-client v0.6.2
 	github.com/theopenlane/gqlgen-plugins v0.13.4
 	github.com/theopenlane/httpsling v0.3.0

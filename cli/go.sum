@@ -105,8 +105,8 @@ github.com/knadh/koanf/providers/file v1.2.1 h1:bEWbtQwYrA+W2DtdBrQWyXqJaJSG3KrP
 github.com/knadh/koanf/providers/file v1.2.1/go.mod h1:bp1PM5f83Q+TOUu10J/0ApLBd9uIzg+n9UgthfY+nRA=
 github.com/knadh/koanf/providers/posflag v1.0.1 h1:EnMxHSrPkYCFnKgBUl5KBgrjed8gVFrcXDzaW4l/C6Y=
 github.com/knadh/koanf/providers/posflag v1.0.1/go.mod h1:3Wn3+YG3f4ljzRyCUgIwH7G0sZ1pMjCOsNBovrbKmAk=
-github.com/knadh/koanf/v2 v2.3.1 h1:2uTWFib/W7LAaAH88C2Qa5woBW/efhhcy23FnkUiyuQ=
-github.com/knadh/koanf/v2 v2.3.1/go.mod h1:gRb40VRAbd4iJMYYD5IxZ6hfuopFcXBpc9bbQpZwo28=
+github.com/knadh/koanf/v2 v2.3.2 h1:Ee6tuzQYFwcZXQpc2MiVeC6qHMandf5SMUJJNoFp/c4=
+github.com/knadh/koanf/v2 v2.3.2/go.mod h1:gRb40VRAbd4iJMYYD5IxZ6hfuopFcXBpc9bbQpZwo28=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=
 github.com/kr/pretty v0.3.1/go.mod h1:hoEshYVHaxMs3cyo3Yncou5ZscifuDolrwPKZanG3xk=
 github.com/kr/text v0.2.0 h1:5Nx0Ya0ZqY2ygV366QzturHI13Jq95ApcVaJBhpS+AY=
@@ -193,8 +193,8 @@ github.com/stretchr/objx v0.5.3/go.mod h1:rDQraq+vQZU7Fde9LOZLr8Tax6zZvy4kuNKF+Q
 github.com/stretchr/testify v1.7.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-github.com/theopenlane/core v1.5.2 h1:RJOi+fr6EDfftgFGXrnDDRGYIcef0kXFCyYYzAEbTdo=
-github.com/theopenlane/core v1.5.2/go.mod h1:OYEczPPTZ7N6u96VGYZ+HCCCTN3ktUm+YRt0kYlyaNA=
+github.com/theopenlane/core v1.5.9 h1:dVRkyb46NjsDdiNUJlrXS9QzIaRisff3NmywO59+Ueg=
+github.com/theopenlane/core v1.5.9/go.mod h1:KYKTP+f2zuZ2jGQwqww9X3mSa2Y6u5tV3sxOtSzEU8c=
 github.com/theopenlane/core/common v1.0.4 h1:im5MWihsBODAwCmUe0SAs1sfSdralks/y6fLS3FR+XU=
 github.com/theopenlane/core/common v1.0.4/go.mod h1:yZ2mx9HD5Gou0q+TXQqs/d08jZaQ/AZZkpgNVe9niFs=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
