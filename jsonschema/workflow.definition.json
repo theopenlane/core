@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openlane.io/schemas/workflow-definition.json",
+  "$id": "https://theopenlane.io/schemas/workflow-definition.json",
   "$defs": {
     "ApprovalActionParams": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
