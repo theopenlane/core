@@ -273,15 +273,15 @@ func handleProcedureMutation(ctx *soiree.EventContext, payload *events.MutationP
 	return handleObjectMentions(ctx, payload)
 }
 
-// fetchDocumentFields retrieves internal policy fields from payload, props, or queries database if missing
+// fetchDocumentFields retrieves document (policy, procedure, etc) fields from payload, props, or queries database if missing
 func fetchDocumentFields(ctx *soiree.EventContext, props soiree.Properties, payload *events.MutationPayload) (*documentFields, error) {
 	fields := &documentFields{}
 
-	extractPolicyFromPayload(payload, fields)
-	extractPolicyFromProps(props, fields)
+	extractDocumentFromPayload(payload, fields)
+	extractDocumentFromProps(props, fields)
 
-	if needsPolicyDBQuery(fields) {
-		if err := queryPolicyFromDB(ctx, fields); err != nil {
+	if needsDocumentDBQuery(fields) {
+		if err := queryDocumentFromDB(ctx, fields, payload); err != nil {
 			return nil, err
 		}
 	}
@@ -289,8 +289,15 @@ func fetchDocumentFields(ctx *soiree.EventContext, props soiree.Properties, payl
 	return fields, nil
 }
 
-// extractPolicyFromPayload extracts policy fields from mutation payload
-func extractPolicyFromPayload(payload *events.MutationPayload, fields *documentFields) {
+// approverMutation is an interface for mutations that have approver fields
+type approverMutation interface {
+	Name() (r string, exists bool)
+	ApproverID() (r string, exists bool)
+	OwnerID() (r string, exists bool)
+}
+
+// extractDocumentFromPayload extracts document fields from mutation payload
+func extractDocumentFromPayload(payload *events.MutationPayload, fields *documentFields) {
 	if payload == nil {
 		return
 	}
@@ -299,26 +306,28 @@ func extractPolicyFromPayload(payload *events.MutationPayload, fields *documentF
 		fields.entityID = payload.EntityID
 	}
 
-	policyMut, ok := payload.Mutation.(*generated.InternalPolicyMutation)
+	mut, ok := payload.Mutation.(approverMutation)
 	if !ok {
 		return
 	}
 
-	if name, exists := policyMut.Name(); exists {
+	if name, exists := mut.Name(); exists {
 		fields.name = name
 	}
 
-	if ownerID, exists := policyMut.OwnerID(); exists {
+	if ownerID, exists := mut.OwnerID(); exists {
 		fields.ownerID = ownerID
 	}
 
-	if approverID, exists := policyMut.ApproverID(); exists {
+	if approverID, exists := mut.ApproverID(); exists {
 		fields.approverID = approverID
 	}
 }
 
-// extractPolicyFromProps extracts policy fields from properties
-func extractPolicyFromProps(props soiree.Properties, fields *documentFields) {
+// extractDocumentFromProps extracts document fields from properties
+// this function uses the internalpolicy fields as they are common between policies and procedures
+// and its better than writing the field names manually
+func extractDocumentFromProps(props soiree.Properties, fields *documentFields) {
 	if fields.approverID == "" {
 		if approverID, ok := props.GetKey(internalpolicy.FieldApproverID).(string); ok {
 			fields.approverID = approverID
@@ -344,17 +353,31 @@ func extractPolicyFromProps(props soiree.Properties, fields *documentFields) {
 	}
 }
 
-// needsPolicyDBQuery checks if database query is needed
-func needsPolicyDBQuery(fields *documentFields) bool {
+// needsDocumentDBQuery checks if database query is needed
+func needsDocumentDBQuery(fields *documentFields) bool {
 	return fields.name == "" || fields.entityID == "" || fields.ownerID == "" || fields.approverID == ""
 }
 
-// queryPolicyFromDB queries policy from database to fill missing fields
-func queryPolicyFromDB(ctx *soiree.EventContext, fields *documentFields) error {
+// queryDocumentFromDB queries policy from database to fill missing fields
+func queryDocumentFromDB(ctx *soiree.EventContext, fields *documentFields, payload *events.MutationPayload) error {
 	if fields.entityID == "" {
 		return ErrEntityIDNotFound
 	}
 
+	switch t := payload.Mutation.(type) {
+	case *generated.InternalPolicyMutation:
+		return getInternalPolicyFromDB(ctx, fields.entityID, fields)
+	case *generated.ProcedureMutation:
+		return getProcedureFromDB(ctx, fields.entityID, fields)
+	default:
+		logx.FromContext(ctx.Context()).Warn().Msgf("unsupported mutation type %T for document query", t)
+	}
+
+	return nil
+}
+
+// getInternalPolicyFromDB queries internal policy from database to fill missing fields
+func getInternalPolicyFromDB(ctx *soiree.EventContext, policyID string, fields *documentFields) error {
 	client, ok := soiree.ClientAs[*generated.Client](ctx)
 	if !ok {
 		return ErrFailedToGetClient
@@ -376,6 +399,34 @@ func queryPolicyFromDB(ctx *soiree.EventContext, fields *documentFields) error {
 
 	if fields.approverID == "" && policy.ApproverID != "" {
 		fields.approverID = policy.ApproverID
+	}
+
+	return nil
+}
+
+// getProcedureFromDB queries procedure from database to fill missing fields
+func getProcedureFromDB(ctx *soiree.EventContext, procedureID string, fields *documentFields) error {
+	client, ok := soiree.ClientAs[*generated.Client](ctx)
+	if !ok {
+		return ErrFailedToGetClient
+	}
+
+	allowCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
+	procedure, err := client.Procedure.Get(allowCtx, fields.entityID)
+	if err != nil {
+		return fmt.Errorf("failed to query procedure: %w", err)
+	}
+
+	if fields.name == "" {
+		fields.name = procedure.Name
+	}
+
+	if fields.ownerID == "" {
+		fields.ownerID = procedure.OwnerID
+	}
+
+	if fields.approverID == "" && procedure.ApproverID != "" {
+		fields.approverID = procedure.ApproverID
 	}
 
 	return nil

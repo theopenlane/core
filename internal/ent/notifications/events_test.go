@@ -107,7 +107,7 @@ func TestNeedsPolicyDBQuery(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := needsPolicyDBQuery(tt.fields)
+			result := needsDocumentDBQuery(tt.fields)
 			assert.Equal(t, tt.expected, result)
 		})
 	}
@@ -171,7 +171,7 @@ func TestExtractPolicyFromPayload(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			fields := &documentFields{}
-			extractPolicyFromPayload(tt.payload, fields)
+			extractDocumentFromPayload(tt.payload, fields)
 			assert.Equal(t, tt.expected.entityID, fields.entityID)
 			assert.Equal(t, tt.expected.name, fields.name)
 			assert.Equal(t, tt.expected.ownerID, fields.ownerID)
@@ -465,7 +465,7 @@ func TestExtractPolicyFromProps_WithRealInterface(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			extractPolicyFromProps(tt.props, tt.initial)
+			extractDocumentFromProps(tt.props, tt.initial)
 			assert.Equal(t, tt.expected.name, tt.initial.name)
 			assert.Equal(t, tt.expected.entityID, tt.initial.entityID)
 			assert.Equal(t, tt.expected.ownerID, tt.initial.ownerID)
@@ -589,7 +589,7 @@ func TestFetchPolicyFields_Integration(t *testing.T) {
 				assert.Error(t, err)
 			} else {
 				// Only check fields that don't require DB query
-				if result != nil && !needsPolicyDBQuery(result) {
+				if result != nil && !needsDocumentDBQuery(result) {
 					assert.Equal(t, tt.expected.name, result.name)
 					assert.Equal(t, tt.expected.entityID, result.entityID)
 					assert.Equal(t, tt.expected.ownerID, result.ownerID)
