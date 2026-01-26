@@ -9,6 +9,10 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/contextx"
+
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
@@ -18,9 +22,6 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 )
 
 // handleOrganizationMutation routes organization mutations to the correct entitlement handler
@@ -53,7 +54,7 @@ func handleOrganizationSettingMutation(ctx *soiree.EventContext, payload *events
 	}
 }
 
-// handleOrganizationDelete deactivates an organization's customer subscription when it is deleted
+// handleOrganizationDelete cleans up organization edges and deactivates the Stripe subscription
 func handleOrganizationDelete(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	inv, ok := newEntitlementInvocation(ctx, payload, softDeleteAllowContext)
 	if !ok {
@@ -69,6 +70,13 @@ func handleOrganizationDelete(ctx *soiree.EventContext, payload *events.Mutation
 	if err != nil {
 		inv.Logger().Err(err).Str("organization_id", inv.orgID).Msg("organization delete event unable to load organization")
 		return nil
+	}
+
+	cleanupContext := entgen.NewContext(inv.Allow(), inv.client)
+	if err := entgen.OrganizationEdgeCleanup(cleanupContext, inv.orgID); err != nil {
+		inv.Logger().Error().Err(err).Str("organization_id", inv.orgID).
+			Msg("failed to cascade delete organization edges")
+		return err
 	}
 
 	if org.StripeCustomerID == nil {

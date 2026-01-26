@@ -229,7 +229,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 	// create database connection
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
-	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, opts)
+	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, nil, opts)
 	require.NoError(t, err, "failed opening connection to database")
 
 	suite.objectStore, _, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, nil)

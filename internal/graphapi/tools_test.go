@@ -248,7 +248,10 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	// create database connection
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
-	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, opts)
+	eventer := hooks.NewEventer()
+	clientOpts := []entdb.Option{entdb.WithEventer(eventer)}
+
+	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, clientOpts, opts)
 	requireNoError(t, err)
 
 	c.objectStore, c.mockProvider, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, validators.MimeTypeValidator)
@@ -442,6 +445,26 @@ func requireNoError(t *testing.T, err error) {
 		log.Error().Err(err).Msg("fatal error during test setup or teardown")
 
 		os.Exit(1)
+	}
+}
+
+func waitForCondition(t *testing.T, condition func() bool, msg string) {
+	t.Helper()
+
+	timeout := 5 * time.Second
+	interval := 50 * time.Millisecond
+
+	deadline := time.Now().Add(timeout)
+	for time.Now().Before(deadline) {
+		if condition() {
+			return
+		}
+
+		time.Sleep(interval)
+	}
+
+	if !condition() {
+		t.Fatalf("timed out waiting for condition: %s", msg)
 	}
 }
 
