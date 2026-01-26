@@ -404,22 +404,22 @@ func addInternalPolicyNotification(ctx *soiree.EventContext, input policyNotific
 	// set allow context to query the group
 	allowCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
 
-	users, err :=
+	groupMemberships, err :=
 		client.GroupMembership.Query().Where(groupmembership.GroupID(input.approverID)).All(allowCtx)
 	if err != nil {
 		logx.FromContext(ctx.Context()).Error().Err(err).Str("group_id", input.approverID).Msg("failed to get approver group")
 		return err
 	}
 
-	if len(users) == 0 {
+	if len(groupMemberships) == 0 {
 		logx.FromContext(ctx.Context()).Warn().Str("group_id", input.approverID).Msg("no users found in approver group")
 		return nil
 	}
 
 	// collect user IDs
-	userIDs := make([]string, len(users))
-	for i, user := range users {
-		userIDs[i] = user.ID
+	userIDs := make([]string, len(groupMemberships))
+	for i, gm := range groupMemberships {
+		userIDs[i] = gm.UserID
 	}
 
 	consoleURL := client.EntConfig.Notifications.ConsoleURL
