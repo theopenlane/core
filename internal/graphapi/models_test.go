@@ -357,12 +357,13 @@ type TemplateBuilder struct {
 	client *client
 
 	// Fields
-	Name         string
-	Description  string
-	Kind         enums.TemplateKind
-	TemplateType enums.DocumentType
-	JSONConfig   map[string]any
-	UISchema     map[string]any
+	Name          string
+	Description   string
+	Kind          enums.TemplateKind
+	TemplateType  enums.DocumentType
+	JSONConfig    map[string]any
+	UISchema      map[string]any
+	TrustCenterID string
 }
 
 type AssessmentBuilder struct {
@@ -2160,6 +2161,10 @@ func (tb *TemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Templ
 
 	if tb.UISchema != nil {
 		mutation.SetUischema(tb.UISchema)
+	}
+
+	if tb.TrustCenterID != "" {
+		mutation.SetTrustCenterID(tb.TrustCenterID)
 	}
 
 	template, err := mutation.Save(ctx)

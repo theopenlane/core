@@ -17,7 +17,19 @@ import (
 func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 	trustCenterNoApproval := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	ndaTemplate1 := (&TemplateBuilder{
+		client:        suite.client,
+		Kind:          enums.TemplateKindTrustCenterNda,
+		TrustCenterID: trustCenterNoApproval.ID,
+	}).MustNew(testUser1.UserCtx, t)
+
 	trustCenterWithApproval := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
+	ndaTemplate2 := (&TemplateBuilder{
+		client:        suite.client,
+		Kind:          enums.TemplateKindTrustCenterNda,
+		TrustCenterID: trustCenterWithApproval.ID,
+	}).MustNew(testUser2.UserCtx, t)
 
 	_, err := suite.client.api.UpdateTrustCenter(testUser2.UserCtx, trustCenterWithApproval.ID, testclient.UpdateTrustCenterInput{
 		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
@@ -150,12 +162,20 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 		})
 	}
 
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate1.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate2.ID}).MustDelete(testUser2.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenterNoApproval.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenterWithApproval.ID}).MustDelete(testUser2.UserCtx, t)
 }
 
 func TestQueryTrustCenterNDARequest(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	ndaTemplate := (&TemplateBuilder{
+		client:        suite.client,
+		Kind:          enums.TemplateKindTrustCenterNda,
+		TrustCenterID: trustCenter.ID,
+	}).MustNew(testUser1.UserCtx, t)
 
 	ndaRequest, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
@@ -215,11 +235,18 @@ func TestQueryTrustCenterNDARequest(t *testing.T) {
 	}
 
 	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestQueryTrustCenterNDARequests(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	ndaTemplate := (&TemplateBuilder{
+		client:        suite.client,
+		Kind:          enums.TemplateKindTrustCenterNda,
+		TrustCenterID: trustCenter.ID,
+	}).MustNew(testUser1.UserCtx, t)
 
 	ndaRequest1, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
@@ -274,11 +301,18 @@ func TestQueryTrustCenterNDARequests(t *testing.T) {
 
 	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: ndaRequest1.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: ndaRequest2.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	ndaTemplate := (&TemplateBuilder{
+		client:        suite.client,
+		Kind:          enums.TemplateKindTrustCenterNda,
+		TrustCenterID: trustCenter.ID,
+	}).MustNew(testUser1.UserCtx, t)
 
 	_, err := suite.client.api.UpdateTrustCenter(testUser1.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
 		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
@@ -361,12 +395,25 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 	}
 
 	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	otherTrustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
+	ndaTemplate := (&TemplateBuilder{
+		client:        suite.client,
+		Kind:          enums.TemplateKindTrustCenterNda,
+		TrustCenterID: trustCenter.ID,
+	}).MustNew(testUser1.UserCtx, t)
+
+	otherNdaTemplate := (&TemplateBuilder{
+		client:        suite.client,
+		Kind:          enums.TemplateKindTrustCenterNda,
+		TrustCenterID: otherTrustCenter.ID,
+	}).MustNew(testUser2.UserCtx, t)
 
 	anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, trustCenter.OwnerID)
 	wrongTrustCenterAnonCtx := createAnonymousTrustCenterContext(otherTrustCenter.ID, otherTrustCenter.OwnerID)
@@ -437,12 +484,20 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 		})
 	}
 
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: otherNdaTemplate.ID}).MustDelete(testUser2.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: otherTrustCenter.ID}).MustDelete(testUser2.UserCtx, t)
 }
 
 func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	ndaTemplate := (&TemplateBuilder{
+		client:        suite.client,
+		Kind:          enums.TemplateKindTrustCenterNda,
+		TrustCenterID: trustCenter.ID,
+	}).MustNew(testUser1.UserCtx, t)
 
 	email := gofakeit.Email()
 
@@ -511,11 +566,18 @@ func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
 	})
 
 	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	ndaTemplate := (&TemplateBuilder{
+		client:        suite.client,
+		Kind:          enums.TemplateKindTrustCenterNda,
+		TrustCenterID: trustCenter.ID,
+	}).MustNew(testUser1.UserCtx, t)
 
 	ndaRequest1, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
@@ -591,5 +653,6 @@ func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
 	}
 
 	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: ndaRequest2.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }

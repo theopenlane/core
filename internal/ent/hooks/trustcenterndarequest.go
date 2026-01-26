@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
@@ -32,6 +33,17 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			trustCenterID, ok := m.TrustCenterID()
 			if !ok || trustCenterID == "" {
 				return next.Mutate(ctx, m)
+			}
+
+			n, err := m.Client().Template.Query().
+				Where(template.KindEQ(enums.TemplateKindTrustCenterNda)).
+				Count(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			if n == 0 {
+				return nil, ErrNDATemplateRequired
 			}
 
 			email, _ := m.Email()
