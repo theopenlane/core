@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/utils/ulids"
 )
 
 type actionCompletionSummary struct {
@@ -46,8 +47,9 @@ func hasSkippedAction(events []*generated.WorkflowEvent) bool {
 func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
+	seedCtx := s.SeedContext(approver1ID, orgID)
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -70,30 +72,43 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 		Params: paramsBytes,
 	}
 
-	def := s.CreateApprovalWorkflowDefinition(userCtx, orgID, action)
+	_ = s.CreateApprovalWorkflowDefinition(seedCtx, orgID, action)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		SetStatus(enums.ControlStatusNotImplemented).
-		Save(userCtx)
+		Save(seedCtx)
 	s.Require().NoError(err)
 
-	obj := &workflows.Object{
-		ID:   control.ID,
-		Type: enums.WorkflowObjectTypeControl,
-	}
+	// Trigger workflow by updating control status - the hook intercepts and creates proposal
+	updated, err := s.client.Control.UpdateOneID(control.ID).
+		SetStatus(enums.ControlStatusApproved).
+		Save(seedCtx)
+	s.Require().NoError(err)
+	// Status should remain unchanged since it was routed to proposal
+	s.Equal(enums.ControlStatusNotImplemented, updated.Status)
 
-	proposedChanges := map[string]any{"status": enums.ControlStatusApproved}
+	// Wait for async event processing
+	s.WaitForEvents()
 
-	instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
-		EventType:       "UPDATE",
-		ChangedFields:   []string{"status"},
-		ProposedChanges: proposedChanges,
-	})
+	// Query for the workflow proposal that was created
+	domainKey := workflows.DeriveDomainKey([]string{"status"})
+	proposal, err := s.client.WorkflowProposal.Query().
+		Where(
+			workflowproposal.DomainKeyEQ(domainKey),
+			workflowproposal.OwnerIDEQ(orgID),
+		).
+		Only(seedCtx)
+	s.Require().NoError(err)
+	s.Require().NotNil(proposal)
+
+	// Query for the workflow instance
+	instance, err := s.client.WorkflowInstance.Query().
+		Where(workflowinstance.WorkflowProposalIDEQ(proposal.ID)).
+		Only(seedCtx)
 	s.Require().NoError(err)
 	s.Require().NotNil(instance)
-	s.Require().NotEmpty(instance.WorkflowProposalID)
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
@@ -116,7 +131,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 	err = wfEngine.CompleteAssignment(userCtx, assignmentsByUser[approver1ID].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
 	s.Require().NoError(err)
 
-	proposal, err := s.client.WorkflowProposal.Get(userCtx, instance.WorkflowProposalID)
+	s.WaitForEvents()
+
+	proposal, err = s.client.WorkflowProposal.Get(userCtx, proposal.ID)
 	s.Require().NoError(err)
 	s.NotEqual(enums.WorkflowProposalStateApplied, proposal.State)
 
@@ -127,7 +144,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 	err = wfEngine.CompleteAssignment(approver2Ctx, assignmentsByUser[approver2ID].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
 	s.Require().NoError(err)
 
-	proposal, err = s.client.WorkflowProposal.Get(userCtx, instance.WorkflowProposalID)
+	s.WaitForEvents()
+
+	proposal, err = s.client.WorkflowProposal.Get(userCtx, proposal.ID)
 	s.Require().NoError(err)
 	s.Equal(enums.WorkflowProposalStateApplied, proposal.State)
 	s.NotEmpty(proposal.ApprovedHash)
@@ -145,8 +164,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() {
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, _ := s.CreateTestUserInOrg(orgID, enums.RoleMember)
+	seedCtx := s.SeedContext(approver1ID, orgID)
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -168,29 +188,39 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() 
 		Params: paramsBytes,
 	}
 
-	def := s.CreateApprovalWorkflowDefinition(userCtx, orgID, action)
+	_ = s.CreateApprovalWorkflowDefinition(seedCtx, orgID, action)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		SetStatus(enums.ControlStatusNotImplemented).
-		Save(userCtx)
+		Save(seedCtx)
 	s.Require().NoError(err)
 
-	obj := &workflows.Object{
-		ID:   control.ID,
-		Type: enums.WorkflowObjectTypeControl,
-	}
-
-	proposedChanges := map[string]any{"status": enums.ControlStatusApproved}
-
-	instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
-		EventType:       "UPDATE",
-		ChangedFields:   []string{"status"},
-		ProposedChanges: proposedChanges,
-	})
+	// Trigger workflow by updating control status
+	updated, err := s.client.Control.UpdateOneID(control.ID).
+		SetStatus(enums.ControlStatusApproved).
+		Save(seedCtx)
 	s.Require().NoError(err)
-	s.Require().NotNil(instance)
+	s.Equal(enums.ControlStatusNotImplemented, updated.Status)
+
+	s.WaitForEvents()
+
+	// Query for the workflow proposal
+	domainKey := workflows.DeriveDomainKey([]string{"status"})
+	proposal, err := s.client.WorkflowProposal.Query().
+		Where(
+			workflowproposal.DomainKeyEQ(domainKey),
+			workflowproposal.OwnerIDEQ(orgID),
+		).
+		Only(seedCtx)
+	s.Require().NoError(err)
+
+	// Query for the workflow instance
+	instance, err := s.client.WorkflowInstance.Query().
+		Where(workflowinstance.WorkflowProposalIDEQ(proposal.ID)).
+		Only(seedCtx)
+	s.Require().NoError(err)
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
@@ -212,6 +242,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() 
 
 	err = wfEngine.CompleteAssignment(userCtx, assignmentsByUser[approver1ID].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
 	s.Require().NoError(err)
+
+	s.WaitForEvents()
 
 	updatedControl, err := s.client.Control.Get(userCtx, control.ID)
 	s.Require().NoError(err)
@@ -241,7 +273,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 	seedCtx := s.SeedContext(userID, orgID)
 
 	// Use engine with listeners so workflow infrastructure is created automatically
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 	s.client.WorkflowEngine = wfEngine
 
 	params := workflows.ApprovalActionParams{
@@ -309,7 +341,10 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 
 	domainKey := workflows.DeriveDomainKey([]string{"reference_id"})
 	proposal, err := s.client.WorkflowProposal.Query().
-		Where(workflowproposal.DomainKeyEQ(domainKey)).
+		Where(
+			workflowproposal.DomainKeyEQ(domainKey),
+			workflowproposal.OwnerIDEQ(orgID),
+		).
 		WithWorkflowObjectRef().
 		Only(seedCtx)
 	s.Require().NoError(err)
@@ -329,7 +364,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObject
 	seedCtx := s.SeedContext(userID, orgID)
 
 	// Enable engine + listeners so hooks and proposal submission are wired.
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 	s.client.WorkflowEngine = wfEngine
 
 	params := workflows.ApprovalActionParams{
@@ -391,7 +426,10 @@ func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObject
 
 	domainKey := workflows.DeriveDomainKey([]string{"status"})
 	proposal, err := s.client.WorkflowProposal.Query().
-		Where(workflowproposal.DomainKeyEQ(domainKey)).
+		Where(
+			workflowproposal.DomainKeyEQ(domainKey),
+			workflowproposal.OwnerIDEQ(orgID),
+		).
 		Only(seedCtx)
 	s.Require().NoError(err)
 	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
@@ -414,7 +452,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 	s.client.WorkflowEngine = wfEngine
 
 	params := workflows.ApprovalActionParams{
@@ -470,9 +508,15 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
 	s.Require().NoError(err)
 	s.Equal(enums.ControlStatusNotImplemented, updated.Status)
 
+	// Wait for async event processing to complete
+	s.WaitForEvents()
+
 	domainKey := workflows.DeriveDomainKey([]string{"status"})
 	proposal, err := s.client.WorkflowProposal.Query().
-		Where(workflowproposal.DomainKeyEQ(domainKey)).
+		Where(
+			workflowproposal.DomainKeyEQ(domainKey),
+			workflowproposal.OwnerIDEQ(orgID),
+		).
 		Only(seedCtx)
 	s.Require().NoError(err)
 	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
@@ -496,7 +540,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChanges
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 	s.client.WorkflowEngine = wfEngine
 
 	params := workflows.ApprovalActionParams{
@@ -540,7 +584,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChanges
 	s.Require().NoError(err)
 
 	control, err := s.client.Control.Create().
-		SetRefCode("CTL-PROPOSED-WHEN-SKIP-" + ulid.Make().String()).
+		SetRefCode("CTL-PROPOSED-WHEN-SKIP-" + ulids.New().String()).
 		SetOwnerID(orgID).
 		SetStatus(enums.ControlStatusNotImplemented).
 		Save(seedCtx)
@@ -552,9 +596,15 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChanges
 	s.Require().NoError(err)
 	s.Equal(enums.ControlStatusNotImplemented, updated.Status)
 
+	// Wait for async event processing to complete
+	s.WaitForEvents()
+
 	domainKey := workflows.DeriveDomainKey([]string{"status"})
 	proposal, err := s.client.WorkflowProposal.Query().
-		Where(workflowproposal.DomainKeyEQ(domainKey)).
+		Where(
+			workflowproposal.DomainKeyEQ(domainKey),
+			workflowproposal.OwnerIDEQ(orgID),
+		).
 		Only(seedCtx)
 	s.Require().NoError(err)
 	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
@@ -576,7 +626,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChanges
 func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	approvalParams := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -676,7 +726,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 	approver2ID, _ := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
 	// Use engine with listeners so workflow infrastructure is created automatically
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 	s.client.WorkflowEngine = wfEngine
 
 	// Create approval workflow definition
@@ -788,7 +838,7 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 	s.client.WorkflowEngine = wfEngine
 
 	// Create approval workflow definition for InternalPolicy details field
@@ -852,7 +902,10 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 	// Verify proposal was created
 	domainKey := workflows.DeriveDomainKey([]string{"details"})
 	proposal, err := s.client.WorkflowProposal.Query().
-		Where(workflowproposal.DomainKeyEQ(domainKey)).
+		Where(
+			workflowproposal.DomainKeyEQ(domainKey),
+			workflowproposal.OwnerIDEQ(orgID),
+		).
 		Only(seedCtx)
 	s.Require().NoError(err)
 	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
@@ -905,7 +958,7 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
 	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	action := models.WorkflowAction{
 		Type: enums.WorkflowActionTypeNotification.String(),

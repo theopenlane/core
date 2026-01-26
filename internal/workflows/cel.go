@@ -28,6 +28,7 @@ func NewCELEnvWithConfig(cfg *Config) (*cel.Env, error) {
 		cel.Variable("assignments", cel.DynType),
 		cel.Variable("instance", cel.DynType),
 		cel.Variable("initiator", cel.StringType),
+		cel.Variable("proposed_changes", cel.DynType),
 		// its safe not to check these because NewConfig sets defaults
 		cel.ParserRecursionLimit(cfg.CEL.ParserRecursionLimit),
 		cel.ParserExpressionSizeLimit(cfg.CEL.ParserExpressionSizeLimit),

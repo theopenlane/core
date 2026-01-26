@@ -348,6 +348,11 @@ func (m *EventBus) runListenerWithRetry(event Event, id string, listener Listene
 	return lastErr
 }
 
+// WaitForIdle blocks until all submitted event handlers have completed
+func (m *EventBus) WaitForIdle() {
+	m.pool.WaitForIdle()
+}
+
 // Close terminates the event pool and releases resources
 func (m *EventBus) Close() error {
 	if m.closed.Load() {

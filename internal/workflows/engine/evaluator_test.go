@@ -12,7 +12,7 @@ import (
 
 // TestWorkflowEngineEvaluator verifies evaluator setup
 func (s *WorkflowEngineTestSuite) TestWorkflowEngineEvaluator() {
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.Engine()
 	s.Require().NotNil(wfEngine)
 }
 
@@ -20,7 +20,7 @@ func (s *WorkflowEngineTestSuite) TestWorkflowEngineEvaluator() {
 func (s *WorkflowEngineTestSuite) TestEvaluateConditions() {
 	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.Engine()
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
 	testCases := []struct {
@@ -130,7 +130,7 @@ func (s *WorkflowEngineTestSuite) TestEvaluateConditions() {
 func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
 	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.Engine()
 
 	obj := &workflows.Object{ID: "test123", Type: enums.WorkflowObjectTypeControl}
 	unknownObj := &workflows.Object{ID: "test123", Type: enums.WorkflowObjectType("NonexistentType")}
@@ -174,7 +174,7 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsSelectors() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.Engine()
 
 	tag, err := s.client.TagDefinition.Create().
 		SetName("PCI-" + ulid.Make().String()).
@@ -229,7 +229,7 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsSelectors() {
 // TestFindMatchingDefinitionsEdgeTriggers verifies edge trigger matching
 func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsEdgeTriggers() {
 	_, orgID, userCtx := s.SetupTestUser()
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.Engine()
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-EDGE-" + ulid.Make().String()).
@@ -263,7 +263,7 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsEdgeTriggers() {
 // TestPrefilterBehavior verifies prefilter behavior
 func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 	_, orgID, userCtx := s.SetupTestUser()
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.Engine()
 
 	obj := &workflows.Object{ID: "test123", Type: enums.WorkflowObjectTypeControl}
 

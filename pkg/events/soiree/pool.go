@@ -1,6 +1,8 @@
 package soiree
 
 import (
+	"runtime"
+
 	"github.com/alitto/pond/v2"
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -88,6 +90,14 @@ func (p *Pool) Resize(maxWorkers int) {
 
 	p.maxWorkers = maxWorkers
 	p.pool.Resize(maxWorkers)
+}
+
+// WaitForIdle blocks until all submitted tasks have completed
+func (p *Pool) WaitForIdle() {
+	for p.pool.RunningWorkers() > 0 || p.pool.WaitingTasks() > 0 {
+		// yield to allow workers to make progress
+		runtime.Gosched()
+	}
 }
 
 // trackSubmission updates metrics when a task is submitted

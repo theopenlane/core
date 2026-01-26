@@ -35,39 +35,6 @@ func (s *failingQueueStore) DequeueEvent(ctx context.Context) (soiree.Event, err
 	return nil, ctx.Err()
 }
 
-// setupEmitterWithListeners wires the workflow engine to a synchronous event bus for tests.
-func (s *WorkflowEngineTestSuite) setupEmitterWithListeners() (*engine.WorkflowEngine, *syncBusEmitter, *soiree.EventBus) {
-	bus := soiree.New()
-	emitter := &syncBusEmitter{bus: bus}
-	wfEngine := s.NewTestEngine(emitter)
-
-	listeners := engine.NewWorkflowListeners(s.client, wfEngine, emitter)
-	bindings := []soiree.ListenerBinding{
-		soiree.BindListener(soiree.WorkflowTriggeredTopic, func(ctx *soiree.EventContext, payload soiree.WorkflowTriggeredPayload) error {
-			return listeners.HandleWorkflowTriggered(ctx, payload)
-		}),
-		soiree.BindListener(soiree.WorkflowActionStartedTopic, func(ctx *soiree.EventContext, payload soiree.WorkflowActionStartedPayload) error {
-			return listeners.HandleActionStarted(ctx, payload)
-		}),
-		soiree.BindListener(soiree.WorkflowActionCompletedTopic, func(ctx *soiree.EventContext, payload soiree.WorkflowActionCompletedPayload) error {
-			return listeners.HandleActionCompleted(ctx, payload)
-		}),
-		soiree.BindListener(soiree.WorkflowAssignmentCompletedTopic, func(ctx *soiree.EventContext, payload soiree.WorkflowAssignmentCompletedPayload) error {
-			return listeners.HandleAssignmentCompleted(ctx, payload)
-		}),
-		soiree.BindListener(soiree.WorkflowInstanceCompletedTopic, func(ctx *soiree.EventContext, payload soiree.WorkflowInstanceCompletedPayload) error {
-			return listeners.HandleInstanceCompleted(ctx, payload)
-		}),
-	}
-
-	for _, binding := range bindings {
-		_, err := binding.Register(bus)
-		s.Require().NoError(err)
-	}
-
-	return wfEngine, emitter, bus
-}
-
 // clearEmitFailedEvents removes emit failure events to isolate test cases.
 func (s *WorkflowEngineTestSuite) clearEmitFailedEvents(ctx context.Context) {
 	allowCtx := workflows.AllowContext(ctx)
@@ -97,7 +64,7 @@ func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
 	failBus := soiree.New(soiree.EventStore(&failingQueueStore{err: errors.New("enqueue failed")}))
 	defer func() { _ = failBus.Close() }()
 
-	wfEngine := s.NewTestEngine(failBus)
+	wfEngine := s.NewIsolatedEngine(failBus)
 
 	instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 		EventType: "UPDATE",
@@ -149,17 +116,15 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 	failBus := soiree.New(soiree.EventStore(&failingQueueStore{err: errors.New("enqueue failed")}))
 	defer func() { _ = failBus.Close() }()
 
-	wfEngine := s.NewTestEngine(failBus)
+	wfEngine := s.NewIsolatedEngine(failBus)
 	instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 		EventType: "UPDATE",
 	})
 	s.Require().NoError(err)
 	s.Require().NotNil(instance)
 
-	_, emitter, bus := s.setupEmitterWithListeners()
-	defer func() { _ = bus.Close() }()
-
-	rec, err := reconciler.New(s.client, emitter)
+	// Use the suite's real emitter for recovery (listeners already registered)
+	rec, err := reconciler.New(s.client, s.eventer.Emitter)
 	s.Require().NoError(err)
 
 	result, err := rec.ReconcileEmitFailures(userCtx)
@@ -202,7 +167,7 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureTerminalAfterMaxAttemp
 	failBus := soiree.New(soiree.EventStore(&failingQueueStore{err: errors.New("enqueue failed")}))
 	defer func() { _ = failBus.Close() }()
 
-	wfEngine := s.NewTestEngine(failBus)
+	wfEngine := s.NewIsolatedEngine(failBus)
 	instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 		EventType: "UPDATE",
 	})

@@ -12,7 +12,7 @@ import (
 
 var errMutationPayloadUnavailable = errors.New("soiree: mutation payload unavailable for topic")
 
-const eventerPoolWorkers = 100
+const eventerPoolWorkers = 200
 
 // Eventer coordinates the mutation listeners that will be registered against the ent client and
 // underpins the hook emission predicate

@@ -25,7 +25,7 @@ import (
 func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	s.Run("condition passes when object field matches", func() {
 		s.ClearWorkflowDefinitions()
@@ -188,7 +188,7 @@ func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 func (s *WorkflowEngineTestSuite) TestNotificationWorkflowKind() {
 	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	s.Run("notification workflow triggers and completes without approval", func() {
 		s.ClearWorkflowDefinitions()
@@ -270,7 +270,7 @@ func (s *WorkflowEngineTestSuite) TestMultiStepParallelApprovals() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	user2ID, _ := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	categoryApprovalParams := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -494,7 +494,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	approvalParams := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -766,7 +766,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 func (s *WorkflowEngineTestSuite) TestApprovalWithWebhook() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	webhookCalled := make(chan map[string]any, 1)
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -871,7 +871,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalWithWebhook() {
 func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
 	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.Engine()
 
 	s.Run("edge trigger with size condition evaluates correctly", func() {
 		s.ClearWorkflowDefinitions()
@@ -957,7 +957,7 @@ func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
 func (s *WorkflowEngineTestSuite) TestTriggerExistingInstanceResumes() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	s.Run("resumes paused instance successfully", func() {
 		s.ClearWorkflowDefinitions()
@@ -1073,7 +1073,7 @@ func (s *WorkflowEngineTestSuite) TestTriggerExistingInstanceResumes() {
 func (s *WorkflowEngineTestSuite) TestTriggerWorkflowGuardsActiveDomainInstance() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	s.Run("blocks duplicate approval workflow for same domain", func() {
 		s.ClearWorkflowDefinitions()
@@ -1144,7 +1144,7 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowGuardsActiveDomainInstance(
 func (s *WorkflowEngineTestSuite) TestTriggerWorkflowCooldownGuard() {
 	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	s.Run("cooldown blocks workflow trigger after recent completion", func() {
 		s.ClearWorkflowDefinitions()
@@ -1200,8 +1200,8 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowCooldownGuard() {
 func (s *WorkflowEngineTestSuite) TestTriggerWorkflowRecordsEmitFailure() {
 	_, orgID, userCtx := s.SetupTestUser()
 
-	// Create engine without emitter to test failure recording
-	wfEngine := s.NewTestEngine(nil)
+	// Create isolated engine without emitter to test failure recording
+	wfEngine := s.NewIsolatedEngine(nil)
 
 	s.Run("records emit failure when emitter is nil", func() {
 		s.ClearWorkflowDefinitions()
@@ -1256,7 +1256,7 @@ func (s *WorkflowEngineTestSuite) TestSelectorWithTagMismatch() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	s.Run("workflow skipped when object lacks required tag", func() {
 		s.ClearWorkflowDefinitions()
@@ -1312,7 +1312,7 @@ func (s *WorkflowEngineTestSuite) TestSelectorWithGroupMismatch() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	s.Run("workflow skipped when object lacks required group", func() {
 		s.ClearWorkflowDefinitions()
@@ -1367,7 +1367,7 @@ func (s *WorkflowEngineTestSuite) TestSelectorWithGroupMismatch() {
 func (s *WorkflowEngineTestSuite) TestOptionalApprovalSkipped() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	s.Run("optional approval skipped when when clause is false", func() {
 		s.ClearWorkflowDefinitions()
@@ -1441,7 +1441,7 @@ func (s *WorkflowEngineTestSuite) TestOptionalApprovalSkipped() {
 func (s *WorkflowEngineTestSuite) TestMultipleWebhooksInSequence() {
 	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	s.Run("multiple webhooks execute in sequence", func() {
 		s.ClearWorkflowDefinitions()
@@ -1512,7 +1512,7 @@ func (s *WorkflowEngineTestSuite) TestMultipleWebhooksInSequence() {
 func (s *WorkflowEngineTestSuite) TestResolveAssignmentStateTransitions() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	approvalParams := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{

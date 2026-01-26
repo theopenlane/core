@@ -8,7 +8,6 @@ import (
 	"sync"
 
 	"github.com/oklog/ulid/v2"
-	"github.com/theopenlane/core/pkg/events/soiree"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -24,7 +23,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -141,7 +140,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
-	wfEngine := s.SetupWorkflowEngineWithListeners()
+	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -254,34 +253,7 @@ func (s *WorkflowEngineTestSuite) TestConcurrentApprovalActionsGateUntilAllSatis
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
-	// Use a single-worker event bus so action start order is deterministic (A then B).
-	bus := soiree.New(soiree.Workers(1))
-	emitter := &syncBusEmitter{bus: bus}
-	wfEngine := s.NewTestEngine(emitter)
-	s.client.WorkflowEngine = wfEngine
-
-	listeners := engine.NewWorkflowListeners(s.client, wfEngine, emitter)
-	bindings := []soiree.ListenerBinding{
-		soiree.BindListener(soiree.WorkflowTriggeredTopic, func(ctx *soiree.EventContext, payload soiree.WorkflowTriggeredPayload) error {
-			return listeners.HandleWorkflowTriggered(ctx, payload)
-		}),
-		soiree.BindListener(soiree.WorkflowActionStartedTopic, func(ctx *soiree.EventContext, payload soiree.WorkflowActionStartedPayload) error {
-			return listeners.HandleActionStarted(ctx, payload)
-		}),
-		soiree.BindListener(soiree.WorkflowActionCompletedTopic, func(ctx *soiree.EventContext, payload soiree.WorkflowActionCompletedPayload) error {
-			return listeners.HandleActionCompleted(ctx, payload)
-		}),
-		soiree.BindListener(soiree.WorkflowAssignmentCompletedTopic, func(ctx *soiree.EventContext, payload soiree.WorkflowAssignmentCompletedPayload) error {
-			return listeners.HandleAssignmentCompleted(ctx, payload)
-		}),
-		soiree.BindListener(soiree.WorkflowInstanceCompletedTopic, func(ctx *soiree.EventContext, payload soiree.WorkflowInstanceCompletedPayload) error {
-			return listeners.HandleInstanceCompleted(ctx, payload)
-		}),
-	}
-	for _, binding := range bindings {
-		_, err := binding.Register(bus)
-		s.Require().NoError(err)
-	}
+	wfEngine := s.Engine()
 
 	paramsA := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{

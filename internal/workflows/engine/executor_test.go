@@ -20,7 +20,7 @@ import (
 
 // TestWorkflowEngineExecute verifies action execution
 func (s *WorkflowEngineTestSuite) TestWorkflowEngineExecute() {
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.Engine()
 	s.Require().NotNil(wfEngine)
 }
 
@@ -28,7 +28,7 @@ func (s *WorkflowEngineTestSuite) TestWorkflowEngineExecute() {
 func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.NewTestEngine(&mockEventEmitter{})
+	wfEngine := s.Engine()
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
@@ -121,7 +121,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
 	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.NewTestEngine(&mockEventEmitter{})
+	wfEngine := s.Engine()
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
@@ -154,7 +154,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
 func (s *WorkflowEngineTestSuite) TestExecuteNotification() {
 	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.NewTestEngine(&mockEventEmitter{})
+	wfEngine := s.Engine()
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
@@ -178,7 +178,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotification() {
 func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.NewTestEngine(&mockEventEmitter{})
+	wfEngine := s.Engine()
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
@@ -309,7 +309,7 @@ func (s *WorkflowEngineTestSuite) TestApplyObjectFieldUpdates_CoercesEnums() {
 func (s *WorkflowEngineTestSuite) TestExecuteFieldUpdate() {
 	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.NewTestEngine(&mockEventEmitter{})
+	wfEngine := s.Engine()
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 

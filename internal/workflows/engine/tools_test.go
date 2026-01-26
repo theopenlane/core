@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/rs/zerolog"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v84"
@@ -36,6 +35,7 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/summarizer"
 
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	_ "github.com/theopenlane/core/internal/ent/historygenerated/runtime"
@@ -61,6 +61,7 @@ type WorkflowEngineTestSuite struct {
 	tf                *dbtestutils.TestFixture
 	stripeMockBackend *mocks.MockStripeBackend
 	ofgaTF            *fgatest.OpenFGATestFixture
+	eventer           *hooks.Eventer
 }
 
 // TestWorkflowEngineTestSuite runs all the tests in the WorkflowEngineTestSuite
@@ -73,7 +74,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	zerolog.SetGlobalLevel(zerolog.Disabled)
 
 	if testing.Verbose() {
-		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	}
 
 	s.ctx = context.Background()
@@ -110,6 +111,10 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 		EmailValidation: validator.EmailVerificationConfig{
 			Enabled: false,
 		},
+		Summarizer: summarizer.Config{
+			Type:             summarizer.TypeLexrank,
+			MaximumSentences: 60,
+		},
 		Modules: entconfig.Modules{
 			Enabled:    true,
 			UseSandbox: true,
@@ -126,6 +131,9 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 		soiree.WithPoolName("ent_client_pool"),
 	)
 
+	summarizerClient, err := summarizer.NewSummarizer(entCfg.Summarizer)
+	s.Require().NoError(err)
+
 	opts := []generated.Option{
 		generated.EntConfig(entCfg),
 		generated.Authz(*fgaClient),
@@ -135,6 +143,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 		generated.HistoryClient(historyClient),
 		generated.EntitlementManager(entitlements),
 		generated.Pool(pool),
+		generated.Summarizer(summarizerClient),
 	}
 
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(s.tf.URI)}
@@ -144,11 +153,18 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 
 	s.client = db
 
-	// Enable mutation eventer + listeners so workflows are triggered via real entity updates.
-	eventer := hooks.NewEventer()
-	eventer.Initialize(s.client)
-	hooks.RegisterGlobalHooks(s.client, eventer)
-	s.Require().NoError(hooks.RegisterListeners(eventer))
+	// Initialize the eventer with the real event bus - this mirrors production setup
+	eventer := hooks.NewEventer(hooks.WithWorkflowListenersEnabled(true))
+	eventer.Initialize(db)
+
+	hooks.RegisterGlobalHooks(db, eventer)
+
+	// Create workflow engine using the eventer's emitter (same as production)
+	wfEngine, err := engine.NewWorkflowEngine(db, eventer.Emitter)
+	s.Require().NoError(err)
+
+	s.eventer = eventer
+	s.client.WorkflowEngine = wfEngine
 }
 
 // TearDownSuite cleans up test dependencies
@@ -174,12 +190,26 @@ func (s *WorkflowEngineTestSuite) Context() context.Context {
 	return s.ctx
 }
 
-// NewTestEngine creates a new workflow engine for testing
-func (s *WorkflowEngineTestSuite) NewTestEngine(emitter soiree.Emitter) *engine.WorkflowEngine {
+// Engine returns the suite's workflow engine initialized in SetupSuite
+func (s *WorkflowEngineTestSuite) Engine() *engine.WorkflowEngine {
+	wfEngine, ok := s.client.WorkflowEngine.(*engine.WorkflowEngine)
+	s.Require().True(ok, "workflow engine not initialized")
+
+	return wfEngine
+}
+
+// NewIsolatedEngine creates a new workflow engine with a custom emitter for tests that need
+// isolation (e.g., failure testing). Most tests should use Engine() instead.
+func (s *WorkflowEngineTestSuite) NewIsolatedEngine(emitter soiree.Emitter) *engine.WorkflowEngine {
 	wfEngine, err := engine.NewWorkflowEngine(s.client, emitter)
 	s.Require().NoError(err)
 
 	return wfEngine
+}
+
+// WaitForEvents blocks until all pending event handlers have completed processing
+func (s *WorkflowEngineTestSuite) WaitForEvents() {
+	s.eventer.Emitter.WaitForIdle()
 }
 
 // SetupSystemAdmin creates a system admin user and returns user ID, org ID, and admin context
@@ -467,128 +497,32 @@ func (s *WorkflowEngineTestSuite) TriggerInstance(ctx context.Context, wfEngine 
 	return instance
 }
 
-// syncEmitTimeout is the maximum time to wait for event handlers to complete
-const syncEmitTimeout = 10 * time.Second
-
-// syncBusEmitter is a synchronous event emitter for testing
-type syncBusEmitter struct {
-	bus *soiree.EventBus
-}
-
-// Emit publishes an event synchronously with a timeout to prevent deadlock from nested emits
-func (s *syncBusEmitter) Emit(topic string, event any) <-chan error {
-	if s == nil || s.bus == nil {
-		ch := make(chan error, 1)
-		close(ch)
-		return ch
-	}
-
-	errCh := s.bus.Emit(topic, event)
-	errs := make([]error, 0)
-	timeout := time.After(syncEmitTimeout)
-
-	for {
-		select {
-		case err, ok := <-errCh:
-			if !ok {
-				// Channel closed, return collected errors
-				ch := make(chan error, len(errs))
-				for _, e := range errs {
-					ch <- e
-				}
-				close(ch)
-				return ch
-			}
-			if err != nil {
-				errs = append(errs, err)
-			}
-		case <-timeout:
-			// Timeout reached, return what we have to prevent deadlock
-			ch := make(chan error, 1)
-			close(ch)
-			return ch
-		}
-	}
-}
-
-// mockEventEmitter is a mock event emitter for testing
-type mockEventEmitter struct {
-	emittedEvents   []string
-	emittedPayloads []any
-	clientSet       bool
-}
-
-// Emit publishes an event for testing
-func (m *mockEventEmitter) Emit(topic string, event any) <-chan error {
-	m.emittedEvents = append(m.emittedEvents, topic)
-	m.emittedPayloads = append(m.emittedPayloads, event)
-
-	// Verify client is set on event
-	if baseEvent, ok := event.(*soiree.BaseEvent); ok {
-		m.clientSet = baseEvent.Client() != nil
-	}
-
-	ch := make(chan error, 1)
-	close(ch)
-
-	return ch
-}
-
-// SetupWorkflowEngineWithListeners creates a workflow engine with all listeners registered
-func (s *WorkflowEngineTestSuite) SetupWorkflowEngineWithListeners() *engine.WorkflowEngine {
-	// Use a larger worker pool to handle nested event chains without deadlock
-	// Workflow event chains can be deep: Triggered -> ActionStarted -> ActionCompleted -> next action...
-	bus := soiree.New(soiree.Workers(50))
-	emitter := &syncBusEmitter{bus: bus}
-
-	wfEngine := s.NewTestEngine(emitter)
-	s.client.WorkflowEngine = wfEngine
-
-	listeners := engine.NewWorkflowListeners(s.client, wfEngine, emitter)
-
-	bindings := []soiree.ListenerBinding{
-		soiree.BindListener(soiree.WorkflowTriggeredTopic, func(ctx *soiree.EventContext, payload soiree.WorkflowTriggeredPayload) error {
-			return listeners.HandleWorkflowTriggered(ctx, payload)
-		}),
-		soiree.BindListener(soiree.WorkflowActionStartedTopic, func(ctx *soiree.EventContext, payload soiree.WorkflowActionStartedPayload) error {
-			return listeners.HandleActionStarted(ctx, payload)
-		}),
-		soiree.BindListener(soiree.WorkflowActionCompletedTopic, func(ctx *soiree.EventContext, payload soiree.WorkflowActionCompletedPayload) error {
-			return listeners.HandleActionCompleted(ctx, payload)
-		}),
-		soiree.BindListener(soiree.WorkflowAssignmentCompletedTopic, func(ctx *soiree.EventContext, payload soiree.WorkflowAssignmentCompletedPayload) error {
-			return listeners.HandleAssignmentCompleted(ctx, payload)
-		}),
-		soiree.BindListener(soiree.WorkflowInstanceCompletedTopic, func(ctx *soiree.EventContext, payload soiree.WorkflowInstanceCompletedPayload) error {
-			return listeners.HandleInstanceCompleted(ctx, payload)
-		}),
-	}
-
-	for _, binding := range bindings {
-		_, err := binding.Register(bus)
-		assert.NoError(s.T(), err)
-	}
-
-	return wfEngine
-}
-
 // CreateApprovalWorkflowDefinition creates an approval workflow definition for testing
 func (s *WorkflowEngineTestSuite) CreateApprovalWorkflowDefinition(ctx context.Context, orgID string, action models.WorkflowAction) *generated.WorkflowDefinition {
+	doc := models.WorkflowDefinitionDocument{
+		ApprovalSubmissionMode: enums.WorkflowApprovalSubmissionModeAutoSubmit,
+		Triggers: []models.WorkflowTrigger{
+			{Operation: "UPDATE", Fields: []string{"status"}},
+		},
+		Conditions: []models.WorkflowCondition{
+			{Expression: "true"},
+		},
+		Actions: []models.WorkflowAction{action},
+	}
+
+	operations, fields := workflows.DeriveTriggerPrefilter(doc)
+
 	def, err := s.client.WorkflowDefinition.Create().
 		SetName("Approval Workflow " + ulids.New().String()).
 		SetWorkflowKind(enums.WorkflowKindApproval).
 		SetSchemaType("Control").
 		SetActive(true).
+		SetDraft(false).
 		SetOwnerID(orgID).
-		SetDefinitionJSON(models.WorkflowDefinitionDocument{
-			Triggers: []models.WorkflowTrigger{
-				{Operation: "UPDATE", Fields: []string{"status"}},
-			},
-			Conditions: []models.WorkflowCondition{
-				{Expression: "true"},
-			},
-			Actions: []models.WorkflowAction{action},
-		}).
+		SetTriggerOperations(operations).
+		SetTriggerFields(fields).
+		SetApprovalSubmissionMode(enums.WorkflowApprovalSubmissionModeAutoSubmit).
+		SetDefinitionJSON(doc).
 		Save(ctx)
 	s.Require().NoError(err)
 
@@ -650,8 +584,11 @@ var mockCustomer = &stripe.Customer{
 	},
 }
 
+var subsID = ulids.New().String()
+var custID = ulids.New().String()
+
 var mockSubscription = &stripe.Subscription{
-	ID:     "sub_test_subscription",
+	ID:     subsID,
 	Status: "active",
 	Items: &stripe.SubscriptionItemList{
 		Data: mockItems,
@@ -660,7 +597,7 @@ var mockSubscription = &stripe.Subscription{
 		"organization_id": ulids.New().String(),
 	},
 	Customer: &stripe.Customer{
-		ID: "cus_test_customer",
+		ID: custID,
 	},
 	TrialEnd:     time.Now().Add(7 * 24 * time.Hour).Unix(), // 7 days from now
 	DaysUntilDue: 15,

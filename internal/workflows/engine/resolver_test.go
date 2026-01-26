@@ -14,7 +14,7 @@ import (
 
 // TestResolveTargetsRequiresEngine verifies missing engine handling
 func (s *WorkflowEngineTestSuite) TestResolveTargetsRequiresEngine() {
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.Engine()
 	s.Require().NotNil(wfEngine)
 }
 
@@ -22,7 +22,7 @@ func (s *WorkflowEngineTestSuite) TestResolveTargetsRequiresEngine() {
 func (s *WorkflowEngineTestSuite) TestResolveUserTarget() {
 	_, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.Engine()
 
 	internalCtx := generated.NewContext(rule.WithInternalContext(s.ctx), s.client)
 	user, err := s.client.User.Create().
@@ -67,7 +67,7 @@ func (s *WorkflowEngineTestSuite) TestResolveGroupTarget() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.Engine()
 
 	// Create a second user for the group and add them to the org
 	user2ID, _ := s.CreateTestUserInOrg(orgID, enums.RoleMember)
@@ -123,7 +123,7 @@ func (s *WorkflowEngineTestSuite) TestResolveGroupTarget() {
 
 // TestResolveRoleTarget verifies role target resolution
 func (s *WorkflowEngineTestSuite) TestResolveRoleTarget() {
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.Engine()
 
 	s.Run("role target requires ID", func() {
 		obj := &workflows.Object{
@@ -197,7 +197,7 @@ func (s *WorkflowEngineTestSuite) TestResolveRoleTarget() {
 func (s *WorkflowEngineTestSuite) TestResolveControlTarget() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.Engine()
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-TEST-" + ulid.Make().String()).
@@ -237,7 +237,7 @@ func (s *WorkflowEngineTestSuite) TestResolveControlTarget() {
 
 // TestResolveInvalidTarget verifies invalid target handling
 func (s *WorkflowEngineTestSuite) TestResolveInvalidTarget() {
-	wfEngine := s.NewTestEngine(nil)
+	wfEngine := s.Engine()
 
 	obj := &workflows.Object{
 		ID:   "test123",

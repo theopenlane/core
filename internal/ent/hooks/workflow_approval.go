@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"errors"
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
@@ -327,7 +328,7 @@ func createProposalWithInstance(ctx context.Context, client *generated.Client, d
 
 		proposal, err := proposalCreate.Save(allowCtx)
 		if err != nil {
-			return "", ErrFailedToCreateWorkflowProposal
+			return "", fmt.Errorf("%w: %v", ErrFailedToCreateWorkflowProposal, err)
 		}
 
 		// Link proposal to instance

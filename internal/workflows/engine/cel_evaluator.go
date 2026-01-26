@@ -64,7 +64,7 @@ func (e *CELEvaluator) Evaluate(ctx context.Context, expression string, vars map
 			return false, ErrEvaluationTimeout
 		}
 
-		return false, ErrConditionFailed
+		return false, fmt.Errorf("%w: %v", ErrConditionFailed, evalErr)
 	}
 
 	if out == nil {
@@ -91,7 +91,7 @@ func (e *CELEvaluator) getOrCompileProgram(expression string) (cel.Program, erro
 
 	ast, issues := e.env.Compile(expression)
 	if issues != nil && issues.Err() != nil {
-		return nil, ErrCELCompilationFailed
+		return nil, fmt.Errorf("%w: %v", ErrCELCompilationFailed, issues.Err())
 	}
 
 	opts := []cel.ProgramOption{

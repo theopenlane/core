@@ -78,8 +78,11 @@ func (e *WorkflowEngine) EvaluateConditions(ctx context.Context, def *generated.
 // EvaluateActionWhen evaluates an action's When expression with assignment context.
 // This is used for re-evaluating NOTIFY actions when assignment status changes.
 func (e *WorkflowEngine) EvaluateActionWhen(ctx context.Context, expression string, instance *generated.WorkflowInstance, obj *workflows.Object) (bool, error) {
-	var proposedChanges map[string]any
-	if instance != nil && instance.WorkflowProposalID != "" {
+	// Use proposed changes from instance context (set when workflow was triggered)
+	proposedChanges := instance.Context.TriggerProposedChanges
+
+	// Fallback to loading from proposal if instance context doesn't have proposed changes
+	if len(proposedChanges) == 0 && instance != nil && instance.WorkflowProposalID != "" {
 		allowCtx, orgID, err := workflows.AllowContextWithOrg(ctx)
 		if err != nil {
 			return false, err
@@ -91,11 +94,9 @@ func (e *WorkflowEngine) EvaluateActionWhen(ctx context.Context, expression stri
 				workflowproposal.OwnerIDEQ(orgID),
 			).
 			Only(allowCtx)
-		if err != nil {
-			return false, err
+		if err == nil && proposal != nil {
+			proposedChanges = proposal.Changes
 		}
-
-		proposedChanges = proposal.Changes
 	}
 
 	vars := workflows.BuildCELVars(

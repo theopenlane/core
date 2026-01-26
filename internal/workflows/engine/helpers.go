@@ -187,18 +187,19 @@ func resolveApproval(requiredCount int, statusCounts AssignmentStatusCounts) app
 // buildTriggerContext constructs the workflow instance context for a new trigger
 func buildTriggerContext(defID string, obj *workflows.Object, input TriggerInput, userID string) models.WorkflowInstanceContext {
 	return models.WorkflowInstanceContext{
-		WorkflowDefinitionID: defID,
-		ObjectType:           obj.Type,
-		ObjectID:             obj.ID,
-		Version:              1,
-		Assignments:          []models.WorkflowAssignmentContext{},
-		TriggerEventType:     input.EventType,
-		TriggerChangedFields: input.ChangedFields,
-		TriggerChangedEdges:  input.ChangedEdges,
-		TriggerAddedIDs:      input.AddedIDs,
-		TriggerRemovedIDs:    input.RemovedIDs,
-		TriggerUserID:        userID,
-		Data:                 nil,
+		WorkflowDefinitionID:   defID,
+		ObjectType:             obj.Type,
+		ObjectID:               obj.ID,
+		Version:                1,
+		Assignments:            []models.WorkflowAssignmentContext{},
+		TriggerEventType:       input.EventType,
+		TriggerChangedFields:   input.ChangedFields,
+		TriggerChangedEdges:    input.ChangedEdges,
+		TriggerAddedIDs:        input.AddedIDs,
+		TriggerRemovedIDs:      input.RemovedIDs,
+		TriggerUserID:          userID,
+		TriggerProposedChanges: input.ProposedChanges,
+		Data:                   nil,
 	}
 }
 
@@ -216,6 +217,7 @@ func applyTriggerContext(existing models.WorkflowInstanceContext, defID string, 
 	existing.TriggerAddedIDs = input.AddedIDs
 	existing.TriggerRemovedIDs = input.RemovedIDs
 	existing.TriggerUserID = userID
+	existing.TriggerProposedChanges = input.ProposedChanges
 
 	return existing
 }
