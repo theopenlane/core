@@ -6,13 +6,16 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/iam/auth"
 )
+
+type clearingNDAFilesKeyOp struct{}
 
 // HookTemplate runs on template create and update mutations
 func HookTemplate() ent.Hook {
@@ -40,6 +43,10 @@ func HookTemplate() ent.Hook {
 func HookTemplateFiles() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TemplateFunc(func(ctx context.Context, m *generated.TemplateMutation) (generated.Value, error) {
+			if ok, _ := ctx.Value(clearingNDAFilesKeyOp{}).(bool); ok {
+				return next.Mutate(ctx, m)
+			}
+
 			// check for uploaded files
 			fileIDs := objects.GetFileIDsFromContext(ctx)
 			if len(fileIDs) > 0 {
@@ -48,6 +55,17 @@ func HookTemplateFiles() ent.Hook {
 				ctx, err = checkTemplateFiles(ctx, m)
 				if err != nil {
 					return nil, err
+				}
+
+				if trustCenterID, ok := m.TrustCenterID(); ok && trustCenterID != "" {
+					clearCtx := context.WithValue(ctx, clearingNDAFilesKeyOp{}, true)
+					_, err = m.Client().Template.Update().
+						Where(template.TrustCenterIDEQ(trustCenterID)).
+						ClearFiles().
+						Save(clearCtx)
+					if err != nil {
+						return nil, err
+					}
 				}
 
 				m.AddFileIDs(fileIDs...)

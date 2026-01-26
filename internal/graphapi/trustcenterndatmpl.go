@@ -112,7 +112,10 @@ func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAI
 func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDAUpdatePayload, error) {
 	txnCtx := withTransactionalMutation(ctx)
 
-	ndaTemplate, err := txnCtx.Template.Query().Where(gentemplate.TrustCenterIDEQ(id)).Only(ctx)
+	ndaTemplate, err := txnCtx.Template.Query().
+		Where(gentemplate.TrustCenterIDEQ(id)).
+		Where(gentemplate.KindEQ(enums.TemplateKindTrustCenterNda)).
+		Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenternda"})
 	}
@@ -160,7 +163,9 @@ func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDA
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenternda"})
 	}
 
-	updatedTmpl, err := txnCtx.Template.UpdateOne(ndaTemplate).SetJsonconfig(outputInterface).Save(ctx)
+	updatedTmpl, err := txnCtx.Template.UpdateOne(ndaTemplate).
+		SetTrustCenterID(id). // needed so the hook can access this
+		SetJsonconfig(outputInterface).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenternda"})
 	}
