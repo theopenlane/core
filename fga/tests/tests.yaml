@@ -1639,67 +1639,67 @@ tests:
         assertions:
           can_view:
             - workflow_instance:workflow_instance-1
-          can_edit: # empty - system-driven, only services can edit
-          can_delete: # empty - system-driven, only services can delete
+          can_edit: [] # system-driven, only services can edit
+          can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-owner
         type: workflow_assignment
         assertions:
           can_view:
             - workflow_assignment:workflow_assignment-1
-          can_edit: # empty - system-driven, only services can edit
-          can_delete: # empty - system-driven, only services can delete
+          can_edit: [] # system-driven, only services can edit
+          can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-owner
         type: workflow_object_ref
         assertions:
           can_view:
             - workflow_object_ref:workflow_object_ref-1
-          can_edit: # empty - system-driven, only services can edit
-          can_delete: # empty - system-driven, only services can delete
+          can_edit: [] # system-driven, only services can edit
+          can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-owner
         type: workflow_assignment_target
         assertions:
           can_view:
             - workflow_assignment_target:workflow_assignment_target-1
-          can_edit: # empty - system-driven, only services can edit
-          can_delete: # empty - system-driven, only services can delete
+          can_edit: [] # system-driven, only services can edit
+          can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-owner
         type: workflow_event
         assertions:
           can_view:
             - workflow_event:workflow_event-1
-          can_edit: # empty - system-driven, only services can edit
-          can_delete: # empty - system-driven, only services can delete
-      - user: user:ulid-blocked
+          can_edit: [] # system-driven, only services can edit
+          can_delete: [] # system-driven, only services can delete
+      - user: user:ulid-blocked # blocked user has no access
         type: workflow_object_ref
         assertions:
-          can_view:
-          can_edit:
-          can_delete:
-      - user: user:ulid-blocked
+          can_view: [] # blocked
+          can_edit: [] # blocked + system-driven
+          can_delete: [] # blocked + system-driven
+      - user: user:ulid-blocked # blocked user has no access
         type: workflow_assignment_target
         assertions:
-          can_view:
-          can_edit:
-          can_delete:
-      - user: user:ulid-blocked
+          can_view: [] # blocked
+          can_edit: [] # blocked + system-driven
+          can_delete: [] # blocked + system-driven
+      - user: user:ulid-blocked # blocked user has no access
         type: workflow_event
         assertions:
-          can_view:
-          can_edit:
-          can_delete:
+          can_view: [] # blocked
+          can_edit: [] # blocked + system-driven
+          can_delete: [] # blocked + system-driven
       - user: user:ulid-of-owner
         type: workflow_proposal
         assertions:
           can_view:
             - workflow_proposal:workflow_proposal-1
-          can_edit: # empty - system-driven, only services can edit
-          can_delete: # empty - system-driven, only services can delete
-      - user: user:ulid-blocked
+          can_edit: [] # system-driven, only services can edit
+          can_delete: [] # system-driven, only services can delete
+      - user: user:ulid-blocked # blocked user has no access
         type: workflow_proposal
         assertions:
-          can_view:
-          can_edit:
-          can_delete:
+          can_view: [] # blocked
+          can_edit: [] # blocked + system-driven
+          can_delete: [] # blocked + system-driven
 
   - name: "trust_center_docs"
     description: "test trust center documents and their relationships"
