@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/workflowgenerated"
 	wfworkflows "github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 )
@@ -58,7 +59,8 @@ func (e *WorkflowEngine) Execute(ctx context.Context, action models.WorkflowActi
 
 // resolveTargetUsers resolves target user IDs and logs warnings if no users are found
 func (e *WorkflowEngine) resolveTargetUsers(ctx context.Context, target wfworkflows.TargetConfig, obj *wfworkflows.Object, actionType string, actionKey string) ([]string, error) {
-	userIDs, err := e.ResolveTargets(ctx, target, obj)
+	allowCtx := wfworkflows.AllowContext(ctx)
+	userIDs, err := e.ResolveTargets(allowCtx, target, obj)
 	if err != nil {
 		return nil, err
 	}
@@ -109,11 +111,7 @@ func (e *WorkflowEngine) executeApproval(ctx context.Context, action models.Work
 	if params.Required != nil {
 		required = *params.Required
 	}
-	requiredCount := params.RequiredCount
-
-	if requiredCount < 0 {
-		requiredCount = 0
-	}
+	requiredCount := max(params.RequiredCount, 0)
 	if !required && requiredCount == 0 {
 		// Optional approvals without an explicit quorum should still allow forward progress
 		requiredCount = 1
@@ -121,7 +119,7 @@ func (e *WorkflowEngine) executeApproval(ctx context.Context, action models.Work
 
 	if len(params.Targets) == 0 {
 		observability.WarnEngine(ctx, observability.OpExecuteAction, action.Type, observability.ActionFields(action.Key, nil), nil)
-		return nil
+		return ErrApprovalNoTargets
 	}
 
 	if obj == nil {
@@ -139,7 +137,15 @@ func (e *WorkflowEngine) executeApproval(ctx context.Context, action models.Work
 	}
 
 	// Capture a stable hash of the proposed changes so approvals are tied to the payload approvers saw
-	proposedHash, err := e.proposalManager.ComputeHash(ctx, obj)
+	domainKey := ""
+	if len(params.Fields) > 0 {
+		domain, err := workflowgenerated.NewWorkflowDomain(obj.Type, params.Fields)
+		if err != nil {
+			return fmt.Errorf("%w: %v", wfworkflows.ErrApprovalActionParamsInvalid, err)
+		}
+		domainKey = domain.Key()
+	}
+	proposedHash, err := e.proposalManager.ComputeHash(ctx, instance, obj, domainKey)
 	if err != nil {
 		return fmt.Errorf("%w: %w", ErrFailedToComputeProposalHash, err)
 	}
@@ -251,6 +257,10 @@ func (e *WorkflowEngine) executeApproval(ctx context.Context, action models.Work
 	if len(assignmentIDs) > 0 {
 		details := assignmentCreatedDetailsForApproval(action, actionIndex, obj, assignmentIDs, targetUserIDs, required, requiredCount, params.Label)
 		e.recordAssignmentsCreated(ctx, instance, details)
+	}
+
+	if len(assignmentIDs) == 0 {
+		return ErrApprovalNoTargets
 	}
 
 	return nil

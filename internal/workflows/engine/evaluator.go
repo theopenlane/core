@@ -81,6 +81,14 @@ func (e *WorkflowEngine) EvaluateActionWhen(ctx context.Context, expression stri
 	// Use proposed changes from instance context (set when workflow was triggered)
 	proposedChanges := instance.Context.TriggerProposedChanges
 
+	// Ensure the object node is loaded so CEL has access to concrete fields.
+	if obj != nil && obj.Node == nil {
+		allowCtx := workflows.AllowContext(ctx)
+		if _, err := e.loadObjectNode(allowCtx, obj); err != nil {
+			return false, err
+		}
+	}
+
 	// Fallback to loading from proposal if instance context doesn't have proposed changes
 	if len(proposedChanges) == 0 && instance != nil && instance.WorkflowProposalID != "" {
 		allowCtx, orgID, err := workflows.AllowContextWithOrg(ctx)

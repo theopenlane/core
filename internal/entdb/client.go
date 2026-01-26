@@ -25,6 +25,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/internal/workflows/engine"
 
 	_ "github.com/jackc/pgx/v5/stdlib" // add pgx driver
 )
@@ -53,10 +55,21 @@ type client struct {
 // options for creating the ent client
 type Option func(*ent.Client)
 
-// WithEventer adds the eventer hooks and listeners to the ent client
-func WithEventer(eventer *hooks.Eventer) Option {
+// WithEventer adds the eventer hooks and listeners to the ent client.
+// If workflowConfig is provided and enabled, it also creates and sets the WorkflowEngine on the client.
+func WithEventer(eventer *hooks.Eventer, workflowConfig *workflows.Config) Option {
 	return func(c *ent.Client) {
 		eventer.Initialize(c)
+
+		if workflowConfig != nil && workflowConfig.Enabled {
+			wfEngine, err := engine.NewWorkflowEngineWithConfig(c, eventer.Emitter, workflowConfig)
+			if err != nil {
+				log.Fatal().Err(err).Msg("failed to create workflow engine")
+			}
+
+			c.WorkflowEngine = wfEngine
+		}
+
 		hooks.RegisterGlobalHooks(c, eventer)
 
 		if err := hooks.RegisterListeners(eventer); err != nil {
@@ -416,8 +429,9 @@ func NewTestFixture() *testutils.TestFixture {
 		testutils.WithMaxConn(200)) //nolint:mnd
 }
 
-// NewTestClient creates a entdb client that can be used for TEST purposes ONLY
-func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []riverqueue.Option, entOpts []ent.Option) (*ent.Client, error) {
+// NewTestClient creates a entdb client that can be used for TEST purposes ONLY.
+// clientOpts allows passing entdb options like WithEventer; pass nil if not needed.
+func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []riverqueue.Option, clientOpts []Option, entOpts []ent.Option) (*ent.Client, error) {
 	dbconf := entx.Config{
 		Debug:           true,
 		DriverName:      ctr.Dialect,
@@ -435,11 +449,7 @@ func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []ri
 	// run migrations for tests
 	jobOpts = append(jobOpts, riverqueue.WithRunMigrations(true))
 
-	// Do not enable eventer or metrics in test clients
-	// to avoid polluting test output
-	clientOpts := []Option{
-		WithModules(),
-	}
+	clientOpts = append([]Option{WithModules()}, clientOpts...)
 
 	// If a test container is used, retry the connection to the database to ensure it is up and running
 	if ctr.Pool != nil {

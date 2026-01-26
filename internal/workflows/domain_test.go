@@ -15,40 +15,52 @@ import (
 // TestDeriveDomainKey verifies domain key generation
 func TestDeriveDomainKey(t *testing.T) {
 	tests := []struct {
-		name     string
-		fields   []string
-		expected string
+		name       string
+		objectType enums.WorkflowObjectType
+		fields     []string
+		expected   string
 	}{
 		{
-			name:     "empty fields",
-			fields:   []string{},
-			expected: "",
+			name:       "empty fields",
+			objectType: enums.WorkflowObjectTypeControl,
+			fields:     []string{},
+			expected:   "Control",
 		},
 		{
-			name:     "single field",
-			fields:   []string{"status"},
-			expected: "status",
+			name:       "empty object type",
+			objectType: "",
+			fields:     []string{"status"},
+			expected:   "status",
 		},
 		{
-			name:     "multiple fields sorted",
-			fields:   []string{"category", "status"},
-			expected: "category,status",
+			name:       "single field",
+			objectType: enums.WorkflowObjectTypeControl,
+			fields:     []string{"status"},
+			expected:   "Control:status",
 		},
 		{
-			name:     "multiple fields unsorted",
-			fields:   []string{"status", "category"},
-			expected: "category,status",
+			name:       "multiple fields sorted",
+			objectType: enums.WorkflowObjectTypeControl,
+			fields:     []string{"category", "status"},
+			expected:   "Control:category,status",
 		},
 		{
-			name:     "three fields",
-			fields:   []string{"text", "description", "name"},
-			expected: "description,name,text",
+			name:       "multiple fields unsorted",
+			objectType: enums.WorkflowObjectTypeControl,
+			fields:     []string{"status", "category"},
+			expected:   "Control:category,status",
+		},
+		{
+			name:       "three fields",
+			objectType: enums.WorkflowObjectTypeControl,
+			fields:     []string{"text", "description", "name"},
+			expected:   "Control:description,name,text",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := DeriveDomainKey(tt.fields)
+			result := DeriveDomainKey(tt.objectType, tt.fields)
 			assert.Equal(t, tt.expected, result)
 		})
 	}
@@ -59,8 +71,8 @@ func TestDeriveDomainKey_Stability(t *testing.T) {
 	fields1 := []string{"text", "description"}
 	fields2 := []string{"description", "text"}
 
-	key1 := DeriveDomainKey(fields1)
-	key2 := DeriveDomainKey(fields2)
+	key1 := DeriveDomainKey(enums.WorkflowObjectTypeControl, fields1)
+	key2 := DeriveDomainKey(enums.WorkflowObjectTypeControl, fields2)
 
 	assert.Equal(t, key1, key2, "domain keys should be stable regardless of input order")
 }
@@ -307,14 +319,14 @@ func TestSplitChangesByDomains(t *testing.T) {
 		{"missing"},
 	}
 
-	matches := SplitChangesByDomains(changes, domains)
+	matches := SplitChangesByDomains(changes, enums.WorkflowObjectTypeControl, domains)
 	assert.Len(t, matches, 2)
 
-	assert.Equal(t, DeriveDomainKey([]string{"status"}), matches[0].DomainKey)
+	assert.Equal(t, DeriveDomainKey(enums.WorkflowObjectTypeControl, []string{"status"}), matches[0].DomainKey)
 	assert.Equal(t, []string{"status"}, matches[0].Fields)
 	assert.Equal(t, map[string]any{"status": "approved"}, matches[0].Changes)
 
-	assert.Equal(t, DeriveDomainKey([]string{"description", "priority"}), matches[1].DomainKey)
+	assert.Equal(t, DeriveDomainKey(enums.WorkflowObjectTypeControl, []string{"description", "priority"}), matches[1].DomainKey)
 	assert.Equal(t, []string{"description", "priority"}, matches[1].Fields)
 	assert.Equal(t, map[string]any{"description": "update", "priority": "p1"}, matches[1].Changes)
 }
@@ -341,12 +353,12 @@ func TestDomainChangesForDefinition(t *testing.T) {
 		"description": "update",
 	}
 
-	domainChanges, err := DomainChangesForDefinition(doc, changes)
+	domainChanges, err := DomainChangesForDefinition(doc, enums.WorkflowObjectTypeControl, changes)
 	assert.NoError(t, err)
 	assert.Len(t, domainChanges, 1)
 
 	expectedFields := []string{"priority", "status"}
-	assert.Equal(t, DeriveDomainKey(expectedFields), domainChanges[0].DomainKey)
+	assert.Equal(t, DeriveDomainKey(enums.WorkflowObjectTypeControl, expectedFields), domainChanges[0].DomainKey)
 	assert.Equal(t, expectedFields, domainChanges[0].Fields)
 	assert.Equal(t, map[string]any{"status": "approved"}, domainChanges[0].Changes)
 }
@@ -364,12 +376,12 @@ func TestDomainChangesForDefinitionFallback(t *testing.T) {
 		"name":   "example",
 	}
 
-	domainChanges, err := DomainChangesForDefinition(doc, changes)
+	domainChanges, err := DomainChangesForDefinition(doc, enums.WorkflowObjectTypeControl, changes)
 	assert.NoError(t, err)
 	assert.Len(t, domainChanges, 1)
 
 	fields := lo.Keys(changes)
-	assert.Equal(t, DeriveDomainKey(fields), domainChanges[0].DomainKey)
+	assert.Equal(t, DeriveDomainKey(enums.WorkflowObjectTypeControl, fields), domainChanges[0].DomainKey)
 	assert.ElementsMatch(t, fields, domainChanges[0].Fields)
 	assert.Equal(t, changes, domainChanges[0].Changes)
 }

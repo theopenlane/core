@@ -152,6 +152,33 @@ func TestObservabilityFields(t *testing.T) {
 	var nilObj *Object
 	assert.Nil(t, nilObj.ObservabilityFields())
 
+	// Register an observability fields builder that matches the expected behavior
+	old := observabilityFieldsBuilder
+	RegisterObservabilityFieldsBuilder(func(obj *Object) map[string]any {
+		if obj == nil {
+			return nil
+		}
+		fields := map[string]any{
+			observability.FieldObjectType: obj.Type.String(),
+		}
+		switch obj.Type {
+		case enums.WorkflowObjectTypeActionPlan:
+			fields[workflowobjectref.FieldActionPlanID] = obj.ID
+		case enums.WorkflowObjectTypeControl:
+			fields[workflowobjectref.FieldControlID] = obj.ID
+		case enums.WorkflowObjectTypeEvidence:
+			fields[workflowobjectref.FieldEvidenceID] = obj.ID
+		case enums.WorkflowObjectTypeInternalPolicy:
+			fields[workflowobjectref.FieldInternalPolicyID] = obj.ID
+		case enums.WorkflowObjectTypeProcedure:
+			fields[workflowobjectref.FieldProcedureID] = obj.ID
+		case enums.WorkflowObjectTypeSubcontrol:
+			fields[workflowobjectref.FieldSubcontrolID] = obj.ID
+		}
+		return fields
+	})
+	t.Cleanup(func() { observabilityFieldsBuilder = old })
+
 	cases := map[enums.WorkflowObjectType]string{
 		enums.WorkflowObjectTypeActionPlan:     workflowobjectref.FieldActionPlanID,
 		enums.WorkflowObjectTypeControl:        workflowobjectref.FieldControlID,

@@ -49,6 +49,9 @@ func (l *WorkflowListeners) HandleWorkflowMutation(ctx *soiree.EventContext, pay
 	if workflows.IsWorkflowBypass(ctx.Context()) {
 		return nil
 	}
+	if workflows.ShouldSkipEventEmission(ctx.Context()) {
+		return nil
+	}
 
 	if payload.Operation != ent.OpUpdate.String() && payload.Operation != ent.OpUpdateOne.String() {
 		return nil
@@ -203,7 +206,13 @@ func (l *WorkflowListeners) HandleWorkflowTriggered(ctx *soiree.EventContext, pa
 	}
 
 	// Find all approval actions with When conditions and start those that match concurrently
-	startedConditionalApproval := false
+	type approvalStart struct {
+		action models.WorkflowAction
+		index  int
+		obj    *workflows.Object
+	}
+
+	approvalsToStart := make([]approvalStart, 0)
 	for i, action := range def.Actions {
 		actionType := enums.ToWorkflowActionType(action.Type)
 		if actionType == nil || *actionType != enums.WorkflowActionTypeApproval || action.When == "" {
@@ -216,16 +225,40 @@ func (l *WorkflowListeners) HandleWorkflowTriggered(ctx *soiree.EventContext, pa
 			continue
 		}
 
-		l.emitActionStarted(scope, instance, action.Key, i, enums.WorkflowActionTypeApproval, loadedObj)
-		startedConditionalApproval = true
+		approvalsToStart = append(approvalsToStart, approvalStart{
+			action: action,
+			index:  i,
+			obj:    loadedObj,
+		})
+	}
+
+	if len(approvalsToStart) > 0 {
+		keys := lo.Map(approvalsToStart, func(item approvalStart, _ int) string {
+			return item.action.Key
+		})
+		keys = workflows.NormalizeStrings(keys)
+		if len(keys) > 0 {
+			allowCtx := workflows.AllowContext(scopeCtx)
+			contextData := instance.Context
+			contextData.ParallelApprovalKeys = keys
+			if err := l.client.WorkflowInstance.UpdateOneID(instance.ID).
+				SetContext(contextData).
+				Exec(allowCtx); err != nil {
+				return scope.Fail(err, nil)
+			}
+		}
+
+		for _, start := range approvalsToStart {
+			l.emitActionStarted(scope, instance, start.action.Key, start.index, enums.WorkflowActionTypeApproval, start.obj)
+		}
+
+		return nil
 	}
 
 	// If no conditional approvals matched, start the first action normally
-	if !startedConditionalApproval {
-		actionType := enums.ToWorkflowActionType(def.Actions[0].Type)
-		if actionType != nil {
-			l.emitActionStarted(scope, instance, def.Actions[0].Key, 0, *actionType, obj)
-		}
+	actionType := enums.ToWorkflowActionType(def.Actions[0].Type)
+	if actionType != nil {
+		l.emitActionStarted(scope, instance, def.Actions[0].Key, 0, *actionType, obj)
 	}
 
 	return nil
@@ -279,6 +312,13 @@ func (l *WorkflowListeners) HandleActionStarted(ctx *soiree.EventContext, payloa
 
 	// Execute action
 	execErr := l.engine.ProcessAction(scopeCtx, instance, action)
+	if errors.Is(execErr, ErrApprovalNoTargets) {
+		if err := l.removeParallelApprovalKey(scopeCtx, instance, action.Key); err != nil {
+			scope.RecordError(err, nil)
+		}
+		l.skipAction(scope, instance, action, payload, obj)
+		return nil
+	}
 	if execErr != nil {
 		scope.RecordError(execErr, nil)
 	}
@@ -317,6 +357,28 @@ func (l *WorkflowListeners) HandleActionCompleted(ctx *soiree.EventContext, payl
 	if !payload.Success {
 		scope.RecordError(ErrActionExecutionFailed, nil)
 		return l.failInstance(scope, instance, obj, nil, nil)
+	}
+
+	if payload.ActionType == enums.WorkflowActionTypeApproval && payload.Skipped {
+		if len(instance.Context.ParallelApprovalKeys) > 0 {
+			return nil
+		}
+
+		hasRemainingApproval := false
+		for i := payload.ActionIndex + 1; i < len(def.Actions); i++ {
+			actionType := enums.ToWorkflowActionType(def.Actions[i].Type)
+			if actionType != nil && *actionType == enums.WorkflowActionTypeApproval {
+				hasRemainingApproval = true
+				break
+			}
+		}
+		if !hasRemainingApproval && instance.WorkflowProposalID != "" {
+			if err := l.engine.proposalManager.Apply(scope, instance.WorkflowProposalID, obj); err != nil {
+				return l.failInstance(scope, instance, obj, err, observability.Fields{
+					workflowinstance.FieldWorkflowProposalID: instance.WorkflowProposalID,
+				})
+			}
+		}
 	}
 
 	// If approval action, workflow pauses (listener on assignment completed will resume).
@@ -417,12 +479,31 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 		return scope.Fail(err, nil)
 	}
 
+	expectedKeys := workflows.NormalizeStrings(instance.Context.ParallelApprovalKeys)
+	expectedIndices := make(map[int]struct{})
+	for _, key := range expectedKeys {
+		if idx := actionIndexForKey(def.Actions, key); idx >= 0 {
+			expectedIndices[idx] = struct{}{}
+		}
+	}
+	useExpected := len(expectedIndices) > 0
+	if useExpected {
+		if _, ok := expectedIndices[actionIndex]; !ok {
+			useExpected = false
+		}
+	}
+
 	assignmentsByAction := make(map[int][]*generated.WorkflowAssignment)
 	maxActionIndex := -1
 	for _, a := range allAssignments {
 		idx := approvalActionIndex(def.Actions, a.AssignmentKey, a.ApprovalMetadata.ActionKey)
 		if idx == -1 {
 			continue
+		}
+		if useExpected {
+			if _, ok := expectedIndices[idx]; !ok {
+				continue
+			}
 		}
 		assignmentsByAction[idx] = append(assignmentsByAction[idx], a)
 		if idx > maxActionIndex {
@@ -435,7 +516,13 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 		scope.RecordError(ErrAssignmentActionNotFound, observability.ActionFields(def.Actions[actionIndex].Key, nil))
 		return nil
 	}
-	if maxActionIndex == -1 {
+	if useExpected {
+		for idx := range expectedIndices {
+			if idx > maxActionIndex {
+				maxActionIndex = idx
+			}
+		}
+	} else if maxActionIndex == -1 {
 		maxActionIndex = actionIndex
 	}
 
@@ -444,20 +531,24 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 	statusCounts := CountAssignmentStatus(assignments)
 	resolution := resolveApproval(requiredCount, statusCounts)
 	assignmentIDs := make([]string, 0, len(assignments))
+
 	for _, a := range assignments {
 		assignmentIDs = append(assignmentIDs, a.ID)
 	}
+
 	targetUserIDs, targetErr := assignmentTargetUserIDs(scopeCtx, l.client, assignmentIDs, orgID)
 	if targetErr != nil {
 		scope.Warn(targetErr, observability.Fields{
 			workflowevent.FieldWorkflowInstanceID: instance.ID,
 		})
 	}
+
 	if resolution != approvalPending {
 		label := approvalMeta.Label
 		details := approvalCompletedDetails(def.Actions[actionIndex], actionIndex, obj, statusCounts, requiredCount, assignmentIDs, targetUserIDs, resolution == approvalSatisfied, label, assignment.Required)
 		l.recordEvent(scope, instance, enums.WorkflowEventTypeActionCompleted, def.Actions[actionIndex].Key, details)
 	}
+
 	switch resolution {
 	case approvalFailed:
 		if statusCounts.RejectedRequired {
@@ -469,21 +560,47 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 	}
 
 	allResolved := true
-	for idx, grouped := range assignmentsByAction {
-		if len(grouped) == 0 {
-			continue
+	if useExpected {
+		for idx := range expectedIndices {
+			grouped := assignmentsByAction[idx]
+			if len(grouped) == 0 {
+				allResolved = false
+				continue
+			}
+
+			groupMeta := grouped[0].ApprovalMetadata
+			groupRequired := requiredApprovalCount(def.Actions[idx], groupMeta, grouped[0].Required)
+			groupCounts := CountAssignmentStatus(grouped)
+			groupResolution := resolveApproval(groupRequired, groupCounts)
+
+			if groupResolution == approvalFailed {
+				return l.failInstance(scope, instance, obj, nil, nil)
+			}
+
+			if groupResolution == approvalPending {
+				allResolved = false
+			}
 		}
-		groupMeta := grouped[0].ApprovalMetadata
-		groupRequired := requiredApprovalCount(def.Actions[idx], groupMeta, grouped[0].Required)
-		groupCounts := CountAssignmentStatus(grouped)
-		groupResolution := resolveApproval(groupRequired, groupCounts)
-		if groupResolution == approvalFailed {
-			return l.failInstance(scope, instance, obj, nil, nil)
-		}
-		if groupResolution == approvalPending {
-			allResolved = false
+	} else {
+		for idx, grouped := range assignmentsByAction {
+			if len(grouped) == 0 {
+				continue
+			}
+			groupMeta := grouped[0].ApprovalMetadata
+			groupRequired := requiredApprovalCount(def.Actions[idx], groupMeta, grouped[0].Required)
+			groupCounts := CountAssignmentStatus(grouped)
+			groupResolution := resolveApproval(groupRequired, groupCounts)
+
+			if groupResolution == approvalFailed {
+				return l.failInstance(scope, instance, obj, nil, nil)
+			}
+
+			if groupResolution == approvalPending {
+				allResolved = false
+			}
 		}
 	}
+
 	if !allResolved {
 		return nil
 	}
@@ -498,7 +615,8 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 	}
 
 	// Resume workflow by re-entering the normal action pipeline using compare-and-swap to prevent races.
-	if err := l.resumeWorkflowAfterApproval(scope, instance, orgID, maxActionIndex, obj, def); err != nil {
+	clearParallel := len(expectedIndices) > 0
+	if err := l.resumeWorkflowAfterApproval(scope, instance, orgID, maxActionIndex, obj, def, clearParallel); err != nil {
 		return l.failInstance(scope, instance, obj, err, nil)
 	}
 
@@ -534,10 +652,12 @@ func (l *WorkflowListeners) HandleInstanceCompleted(ctx *soiree.EventContext, pa
 	if err != nil {
 		return scope.Fail(err, nil)
 	}
+
 	if updated == 0 {
 		scope.Skip("instance_already_terminal", observability.Fields{
 			workflowinstance.FieldState: instance.State.String(),
 		})
+
 		return nil
 	}
 
@@ -553,17 +673,22 @@ func (l *WorkflowListeners) HandleAssignmentCreated(ctx *soiree.EventContext, pa
 }
 
 // resumeWorkflowAfterApproval advances a paused workflow after approvals complete
-func (l *WorkflowListeners) resumeWorkflowAfterApproval(scope *observability.Scope, instance *generated.WorkflowInstance, orgID string, actionIndex int, obj *workflows.Object, def models.WorkflowDefinitionDocument) error {
+func (l *WorkflowListeners) resumeWorkflowAfterApproval(scope *observability.Scope, instance *generated.WorkflowInstance, orgID string, actionIndex int, obj *workflows.Object, def models.WorkflowDefinitionDocument, clearParallel bool) error {
 	allowCtx := workflows.AllowContext(scope.Context())
-	updated, err := l.client.WorkflowInstance.Update().
+	update := l.client.WorkflowInstance.Update().
 		Where(
 			workflowinstance.IDEQ(instance.ID),
 			workflowinstance.StateEQ(enums.WorkflowInstanceStatePaused),
 			workflowinstance.OwnerIDEQ(orgID),
 		).
 		SetState(enums.WorkflowInstanceStateRunning).
-		SetCurrentActionIndex(actionIndex + 1).
-		Save(allowCtx)
+		SetCurrentActionIndex(actionIndex + 1)
+	if clearParallel {
+		contextData := instance.Context
+		contextData.ParallelApprovalKeys = nil
+		update = update.SetContext(contextData)
+	}
+	updated, err := update.Save(allowCtx)
 	if err != nil {
 		return err
 	}
@@ -707,4 +832,35 @@ func (l *WorkflowListeners) skipAction(scope *observability.Scope, instance *gen
 func (l *WorkflowListeners) recordActionResult(scope *observability.Scope, instance *generated.WorkflowInstance, actionKey string, payload soiree.WorkflowActionCompletedPayload) {
 	details := actionCompletedDetailsFromPayload(actionKey, payload)
 	l.recordEvent(scope, instance, enums.WorkflowEventTypeActionCompleted, actionKey, details)
+}
+
+// removeParallelApprovalKey removes an action key from the parallel approval context list.
+func (l *WorkflowListeners) removeParallelApprovalKey(ctx context.Context, instance *generated.WorkflowInstance, actionKey string) error {
+	if instance == nil || actionKey == "" {
+		return nil
+	}
+
+	keys := workflows.NormalizeStrings(instance.Context.ParallelApprovalKeys)
+	if len(keys) == 0 {
+		return nil
+	}
+
+	updatedKeys := lo.Filter(keys, func(key string, _ int) bool {
+		return key != actionKey
+	})
+	if len(updatedKeys) == len(keys) {
+		return nil
+	}
+
+	allowCtx := workflows.AllowContext(ctx)
+	contextData := instance.Context
+	contextData.ParallelApprovalKeys = updatedKeys
+	if err := l.client.WorkflowInstance.UpdateOneID(instance.ID).
+		SetContext(contextData).
+		Exec(allowCtx); err != nil {
+		return err
+	}
+
+	instance.Context = contextData
+	return nil
 }

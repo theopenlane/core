@@ -16,6 +16,7 @@ import (
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/entx"
@@ -31,9 +32,15 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				return next.Mutate(ctx, mutation)
 			}
 
+			ctx, _ = workflows.WithSkipEventEmission(ctx)
+
 			retVal, err := next.Mutate(ctx, mutation)
 			if err != nil {
 				return nil, err
+			}
+
+			if workflows.ShouldSkipEventEmission(ctx) {
+				return retVal, err
 			}
 
 			// determine the operation type

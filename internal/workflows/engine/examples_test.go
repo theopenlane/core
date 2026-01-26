@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"time"
 
 	"github.com/oklog/ulid/v2"
 
@@ -20,8 +21,29 @@ import (
 	"github.com/theopenlane/core/internal/workflows/engine"
 )
 
-// TestObjectFieldCondition verifies conditions that evaluate object field values
+// TestObjectFieldCondition verifies that workflow conditions can evaluate object field values
+// to determine whether the workflow should proceed. This enables conditional workflow execution
+// based on the state of the target object.
+//
 // Based on: conditional-approval.json, webhook-notification.json
+//
+// Test Scenarios:
+//   Subtest "condition passes when object field matches":
+//     Workflow: Trigger when Control.status == "APPROVED"
+//     Object has status = APPROVED -> Condition passes
+//
+//   Subtest "condition fails when object field does not match":
+//     Workflow: Trigger when Control.status == "APPROVED"
+//     Object has status = NOT_IMPLEMENTED -> Condition fails
+//
+//   Subtest "condition with category field check":
+//     Workflow: Trigger when Control.category == "Technical" AND 'status' in changed_fields
+//     Tests both object field evaluation AND trigger context in conditions
+//
+// Why This Matters:
+//   Conditions allow workflows to be more selective about when they execute. A workflow
+//   might only fire when an object reaches a certain state, preventing unnecessary
+//   workflow instances for irrelevant changes.
 func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 	_, orgID, userCtx := s.SetupTestUser()
 
@@ -183,8 +205,27 @@ func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 	})
 }
 
-// TestNotificationWorkflowKind verifies NOTIFICATION workflow kind execution
+// TestNotificationWorkflowKind verifies that NOTIFICATION-type workflows execute immediately
+// without creating approval assignments. These are fire-and-forget workflows.
+//
 // Based on: webhook-notification.json
+//
+// Workflow Definition (Plain English):
+//   "When Control.status changes, send a webhook notification"
+//   WorkflowKind = NOTIFICATION (not APPROVAL)
+//
+// Test Flow:
+//  1. Creates a NOTIFICATION workflow with a webhook action
+//  2. Sets up a test HTTP server to receive the webhook
+//  3. Triggers the workflow on a Control
+//  4. Verifies the webhook was called
+//  5. Confirms the workflow instance completed immediately (state = COMPLETED)
+//  6. Confirms zero approval assignments were created
+//
+// Why This Matters:
+//   NOTIFICATION workflows are distinct from APPROVAL workflows. They execute their actions
+//   immediately and complete, without pausing for human interaction. This is useful for
+//   automated notifications, audit logging, and integrations.
 func (s *WorkflowEngineTestSuite) TestNotificationWorkflowKind() {
 	_, orgID, userCtx := s.SetupTestUser()
 
@@ -264,8 +305,33 @@ func (s *WorkflowEngineTestSuite) TestNotificationWorkflowKind() {
 	})
 }
 
-// TestMultiStepParallelApprovals verifies multiple approval actions with field-conditional when clauses
+// TestMultiStepParallelApprovals verifies that a single workflow can contain multiple approval
+// actions with different "when" clauses, enabling field-specific routing of approvals.
+//
 // Based on: multi-step-approval.json
+//
+// Workflow Definition (Plain English):
+//   Actions:
+//     1. "Technical Review" approval (when: 'category' in changed_fields) - targets User1
+//     2. "Compliance Review" approval (when: 'status' in changed_fields) - targets User2
+//
+// Test Scenarios:
+//   Subtest "only category approval when category changes":
+//     - Changed fields: ["category"]
+//     - Expected: Only Technical Review assignment created
+//
+//   Subtest "only status approval when status changes":
+//     - Changed fields: ["status"]
+//     - Expected: Only Compliance Review assignment created
+//
+//   Subtest "both approvals when both fields change":
+//     - Changed fields: ["category", "status"]
+//     - Expected: Both Technical Review AND Compliance Review assignments created
+//
+// Why This Matters:
+//   Complex approval workflows may require different approvers for different field changes.
+//   Using "when" clauses on actions allows a single workflow definition to route approvals
+//   based on what actually changed.
 func (s *WorkflowEngineTestSuite) TestMultiStepParallelApprovals() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	user2ID, _ := s.CreateTestUserInOrg(orgID, enums.RoleMember)
@@ -488,8 +554,32 @@ func (s *WorkflowEngineTestSuite) TestMultiStepParallelApprovals() {
 	})
 }
 
-// TestApprovalStatusBasedNotifications verifies notifications based on approval status
+// TestApprovalStatusBasedNotifications verifies that notification actions can be triggered
+// based on approval assignment status changes, enabling real-time updates as approvals progress.
+//
 // Based on: multi-approver-with-quorum-notifications.json, approval-with-notifications.json
+//
+// Workflow Definition (Plain English):
+//   Actions:
+//     1. "Team Review" approval (requires 2 approvers)
+//     2. "First Approval Received" notification (when: approved == 1 && pending > 0)
+//     3. "Quorum Reached" notification (when: approved >= 2)
+//     4. "Request Rejected" notification (when: rejected > 0)
+//
+// Test Scenarios:
+//   Subtest "first approval triggers partial notification":
+//     - First approver approves
+//     - Expected: "First Approval Received" notification fires (1 approved, 1 pending)
+//     - Workflow remains PAUSED (quorum not met)
+//
+//   Subtest "rejection triggers rejection notification":
+//     - One approver rejects
+//     - Expected: "Request Rejected" notification fires
+//
+// Why This Matters:
+//   Approval workflows often need to notify stakeholders as progress occurs. Using
+//   assignments.by_action["action_key"].approved/rejected/pending in "when" clauses
+//   enables reactive notifications based on approval state transitions.
 func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
@@ -761,8 +851,29 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 	})
 }
 
-// TestApprovalWithWebhook verifies approval followed by webhook execution
+// TestApprovalWithWebhook verifies that workflows can combine approval and webhook actions,
+// with the webhook executing after the approval is completed.
+//
 // Based on: evidence-review-workflow.json
+//
+// Workflow Definition (Plain English):
+//   Actions:
+//     1. "Evidence Review" approval (requires 1 approver)
+//     2. Webhook notification (fires after approval completes)
+//
+// Test Flow:
+//  1. Creates a workflow with an approval followed by a webhook action
+//  2. Sets up a test HTTP server to receive the webhook
+//  3. Triggers the workflow on a Control
+//  4. Verifies an approval assignment was created
+//  5. Approves the assignment
+//  6. Verifies the webhook was called with the instance ID in the payload
+//  7. Confirms the workflow instance completed successfully
+//
+// Why This Matters:
+//   Real-world workflows often need to notify external systems after approval. This test
+//   confirms that actions execute in sequence and that post-approval webhooks receive
+//   appropriate context about the completed workflow.
 func (s *WorkflowEngineTestSuite) TestApprovalWithWebhook() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
@@ -866,8 +977,29 @@ func (s *WorkflowEngineTestSuite) TestApprovalWithWebhook() {
 	})
 }
 
-// TestEdgeTriggerWithCondition verifies edge-based triggers with size() conditions
+// TestEdgeTriggerWithCondition verifies that workflows can trigger on edge (relationship)
+// changes and use size() functions in conditions to check how many IDs were added.
+//
 // Based on: evidence-review-workflow.json
+//
+// Workflow Definition (Plain English):
+//   "Trigger when the 'controls' edge is modified AND at least one control was added"
+//   Trigger: edges = ["controls"]
+//   Condition: 'controls' in changed_edges && size(added_ids['controls']) > 0
+//
+// Test Scenarios:
+//   1. Changed edges = ["controls"], added_ids = ["control-1", "control-2"]
+//      -> Condition passes (edge changed AND controls were added)
+//
+//   2. Changed edges = ["controls"], added_ids = [] (empty)
+//      -> Condition fails (edge changed but no controls added)
+//
+//   3. Changed edges = ["other_edge"]
+//      -> Condition fails ('controls' not in changed_edges)
+//
+// Why This Matters:
+//   Edge-based workflows enable triggering on relationship changes, not just field changes.
+//   The size() function allows distinguishing between "edge touched" and "items actually added".
 func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
 	_, orgID, userCtx := s.SetupTestUser()
 
@@ -953,7 +1085,23 @@ func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
 	})
 }
 
-// TestTriggerExistingInstanceResumes verifies TriggerExistingInstance behavior for running vs completed instances
+// TestTriggerExistingInstanceResumes verifies the behavior of TriggerExistingInstance, which
+// allows resuming paused workflow instances but rejects already-completed instances.
+//
+// Test Scenarios:
+//   Subtest "resumes paused instance successfully":
+//     1. Triggers an approval workflow (instance pauses waiting for approval)
+//     2. Calls TriggerExistingInstance on the PAUSED instance
+//     3. Expected: No error (resumption allowed)
+//
+//   Subtest "rejects completed instance":
+//     1. Triggers a notification workflow (instance completes immediately)
+//     2. Calls TriggerExistingInstance on the COMPLETED instance
+//     3. Expected: ErrInvalidState error (cannot resume completed work)
+//
+// Why This Matters:
+//   Proposal submission uses TriggerExistingInstance to resume paused approval workflows.
+//   This test ensures the API correctly handles valid (PAUSED) and invalid (COMPLETED) states.
 func (s *WorkflowEngineTestSuite) TestTriggerExistingInstanceResumes() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
@@ -1069,7 +1217,22 @@ func (s *WorkflowEngineTestSuite) TestTriggerExistingInstanceResumes() {
 	})
 }
 
-// TestTriggerWorkflowGuardsActiveDomainInstance ensures per-domain guard prevents duplicate approvals
+// TestTriggerWorkflowGuardsActiveDomainInstance ensures that only one active approval workflow
+// instance can exist per domain (definition + object combination). This prevents duplicate
+// approval requests for the same change.
+//
+// Workflow Definition (Plain English):
+//   "Require approval for Control.status changes"
+//
+// Test Flow:
+//  1. Triggers an approval workflow for a Control (instance created, proposal pending)
+//  2. Attempts to trigger the SAME workflow for the SAME object again
+//  3. Expected: ErrWorkflowAlreadyActive error (duplicate blocked)
+//
+// Why This Matters:
+//   Without this guard, users could trigger multiple parallel approval workflows for the
+//   same object change, leading to confusion and potential data inconsistencies. The guard
+//   ensures at most one active approval workflow per domain.
 func (s *WorkflowEngineTestSuite) TestTriggerWorkflowGuardsActiveDomainInstance() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
@@ -1140,7 +1303,22 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowGuardsActiveDomainInstance(
 	})
 }
 
-// TestTriggerWorkflowCooldownGuard ensures cooldown blocks recent instances for non-approval workflows
+// TestTriggerWorkflowCooldownGuard ensures that non-approval workflows respect cooldown periods,
+// preventing rapid re-triggering of the same workflow within a configured time window.
+//
+// Workflow Definition (Plain English):
+//   "Send notification on Control.status change, with 1-hour cooldown"
+//   CooldownSeconds = 3600
+//
+// Test Flow:
+//  1. Triggers a notification workflow for a Control (completes immediately)
+//  2. Immediately attempts to trigger the SAME workflow for the SAME object
+//  3. Expected: ErrWorkflowAlreadyActive error (cooldown not elapsed)
+//
+// Why This Matters:
+//   Cooldowns prevent notification spam when objects are rapidly updated. Without cooldowns,
+//   a burst of updates would generate a burst of notifications. The cooldown ensures
+//   workflows have a "quiet period" after execution.
 func (s *WorkflowEngineTestSuite) TestTriggerWorkflowCooldownGuard() {
 	_, orgID, userCtx := s.SetupTestUser()
 
@@ -1196,7 +1374,19 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowCooldownGuard() {
 	})
 }
 
-// TestTriggerWorkflowRecordsEmitFailure ensures emit failures are recorded when no emitter is configured
+// TestTriggerWorkflowRecordsEmitFailure ensures that when the event emitter fails (e.g., queue
+// unavailable), the failure is recorded as a WorkflowEvent for later reconciliation.
+//
+// Test Flow:
+//  1. Creates a workflow engine with a nil/broken emitter
+//  2. Triggers a workflow (instance created successfully)
+//  3. Verifies an EMIT_FAILED event was recorded in WorkflowEvent table
+//  4. The workflow instance should still be created, but the event wasn't published
+//
+// Why This Matters:
+//   Event emission failures should not crash the workflow system. By recording failures,
+//   a reconciliation process can later retry publishing the events, ensuring eventual
+//   consistency even during infrastructure issues.
 func (s *WorkflowEngineTestSuite) TestTriggerWorkflowRecordsEmitFailure() {
 	_, orgID, userCtx := s.SetupTestUser()
 
@@ -1251,7 +1441,24 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowRecordsEmitFailure() {
 	})
 }
 
-// TestSelectorWithTagMismatch verifies workflows are skipped when tag selector doesn't match
+// TestSelectorWithTagMismatch verifies that workflows with tag selectors only match objects
+// that have the required tags. Objects without the tag should not trigger the workflow.
+//
+// Workflow Definition (Plain English):
+//   "Trigger on Control.status change, but ONLY for Controls tagged with 'RequiredTag'"
+//   Trigger selector: { tagIDs: ["tag-123"] }
+//
+// Test Flow:
+//  1. Creates a TagDefinition
+//  2. Creates a workflow definition requiring that tag in its selector
+//  3. Creates a Control WITHOUT the required tag
+//  4. Calls FindMatchingDefinitions for that Control
+//  5. Expected: Empty result (no matching definitions)
+//
+// Why This Matters:
+//   Tag selectors enable scoping workflows to specific subsets of objects. This is essential
+//   for teams that want different approval workflows for different categories of controls
+//   (e.g., PCI-tagged controls require extra approval).
 func (s *WorkflowEngineTestSuite) TestSelectorWithTagMismatch() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -1307,7 +1514,23 @@ func (s *WorkflowEngineTestSuite) TestSelectorWithTagMismatch() {
 	})
 }
 
-// TestSelectorWithGroupMismatch verifies workflows are skipped when group selector doesn't match
+// TestSelectorWithGroupMismatch verifies that workflows with group selectors only match objects
+// associated with the required group. Objects not in the group should not trigger the workflow.
+//
+// Workflow Definition (Plain English):
+//   "Trigger on Control.status change, but ONLY for Controls in 'RequiredGroup'"
+//   Trigger selector: { groupIDs: ["group-123"] }
+//
+// Test Flow:
+//  1. Creates a Group
+//  2. Creates a workflow definition requiring that group in its selector
+//  3. Creates a Control NOT associated with the required group
+//  4. Calls FindMatchingDefinitions for that Control
+//  5. Expected: Empty result (no matching definitions)
+//
+// Why This Matters:
+//   Group selectors enable department-specific workflows. Different teams can have different
+//   approval requirements for controls they own, without affecting other teams' controls.
 func (s *WorkflowEngineTestSuite) TestSelectorWithGroupMismatch() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -1363,7 +1586,24 @@ func (s *WorkflowEngineTestSuite) TestSelectorWithGroupMismatch() {
 	})
 }
 
-// TestOptionalApprovalSkipped verifies optional approvals with false when clause are skipped
+// TestOptionalApprovalSkipped verifies that optional approval actions with a "when" clause
+// evaluating to false are completely skipped, allowing the workflow to complete without blocking.
+//
+// Workflow Definition (Plain English):
+//   "Optional approval for Control.status change, but ONLY when condition is true"
+//   When expression: "false" (always skips)
+//   Required: false (optional)
+//
+// Test Flow:
+//  1. Creates an optional approval workflow with when="false"
+//  2. Triggers the workflow on a Control
+//  3. Verifies zero approval assignments were created
+//  4. Confirms the workflow completed immediately (not blocked)
+//
+// Why This Matters:
+//   Optional approvals with "when" clauses allow for conditional approval gates. When the
+//   condition is false, the approval is not needed and the workflow should proceed without
+//   creating unnecessary assignments.
 func (s *WorkflowEngineTestSuite) TestOptionalApprovalSkipped() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
@@ -1437,7 +1677,25 @@ func (s *WorkflowEngineTestSuite) TestOptionalApprovalSkipped() {
 	})
 }
 
-// TestMultipleWebhooksInSequence verifies multiple webhook actions execute in order
+// TestMultipleWebhooksInSequence verifies that multiple webhook actions in a workflow execute
+// in the order they are defined, ensuring predictable action sequencing.
+//
+// Workflow Definition (Plain English):
+//   Actions:
+//     1. Webhook to server1 (key: "webhook1")
+//     2. Webhook to server2 (key: "webhook2")
+//
+// Test Flow:
+//  1. Sets up two test HTTP servers that record call order
+//  2. Creates a workflow with two webhook actions in sequence
+//  3. Triggers the workflow
+//  4. Verifies webhook1 was called before webhook2
+//  5. Confirms the workflow completed successfully
+//
+// Why This Matters:
+//   Action ordering is often critical for integrations. For example, you might want to
+//   notify an upstream system before notifying downstream consumers. This test ensures
+//   the engine respects the defined action order.
 func (s *WorkflowEngineTestSuite) TestMultipleWebhooksInSequence() {
 	_, orgID, userCtx := s.SetupTestUser()
 
@@ -1459,8 +1717,16 @@ func (s *WorkflowEngineTestSuite) TestMultipleWebhooksInSequence() {
 		}))
 		defer server2.Close()
 
-		webhook1Params, _ := json.Marshal(workflows.WebhookActionParams{URL: server1.URL})
-		webhook2Params, _ := json.Marshal(workflows.WebhookActionParams{URL: server2.URL})
+		webhook1Params, _ := json.Marshal(workflows.WebhookActionParams{
+			URL:       server1.URL,
+			TimeoutMS: 1000,
+			Retries:   0,
+		})
+		webhook2Params, _ := json.Marshal(workflows.WebhookActionParams{
+			URL:       server2.URL,
+			TimeoutMS: 1000,
+			Retries:   0,
+		})
 
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Multi Webhook Workflow " + ulid.Make().String()).
@@ -1496,9 +1762,18 @@ func (s *WorkflowEngineTestSuite) TestMultipleWebhooksInSequence() {
 		})
 		s.Require().NoError(err)
 
-		// Wait for both webhooks
-		first := <-callOrder
-		second := <-callOrder
+		readWithTimeout := func(label string) string {
+			select {
+			case value := <-callOrder:
+				return value
+			case <-time.After(5 * time.Second):
+				s.FailNow("webhook not received", label)
+			}
+			return ""
+		}
+
+		first := readWithTimeout("webhook1")
+		second := readWithTimeout("webhook2")
 		s.Equal("webhook1", first)
 		s.Equal("webhook2", second)
 
@@ -1508,7 +1783,27 @@ func (s *WorkflowEngineTestSuite) TestMultipleWebhooksInSequence() {
 	})
 }
 
-// TestResolveAssignmentStateTransitions exercises ResolveAssignmentState for various approval states
+// TestResolveAssignmentStateTransitions exercises the workflow engine's handling of different
+// approval assignment outcomes and their effect on the workflow instance state.
+//
+// Test Scenarios:
+//   Subtest "rejected required approval fails instance":
+//     Workflow: Required approval with 1 approver
+//     1. Triggers workflow, assignment created
+//     2. Rejects the assignment
+//     3. Expected: Instance state = FAILED (required approval was rejected)
+//
+//   Subtest "approved required approval completes instance":
+//     Workflow: Required approval with 1 approver
+//     1. Triggers workflow, assignment created
+//     2. Approves the assignment
+//     3. Expected: Instance state = COMPLETED, proposal applied
+//     4. Verifies the Control.status was updated to the proposed value
+//
+// Why This Matters:
+//   The workflow engine must correctly transition instance state based on approval outcomes.
+//   Rejection of required approvals should fail the workflow, while approval should complete
+//   it and apply the proposed changes.
 func (s *WorkflowEngineTestSuite) TestResolveAssignmentStateTransitions() {
 	userID, orgID, userCtx := s.SetupTestUser()
 

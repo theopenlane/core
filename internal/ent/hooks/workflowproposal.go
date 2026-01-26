@@ -224,13 +224,22 @@ func HookWorkflowProposalTriggerOnSubmit() ent.Hook {
 				return value, err
 			}
 
-			// Use client from context which has WorkflowEngine set
-			client := generated.FromContext(ctx)
-			if client == nil {
-				client = m.Client()
+			// Prefer mutation client (transaction-aware), but ensure WorkflowEngine is available from context.
+			client := m.Client()
+			if ctxClient := generated.FromContext(ctx); ctxClient != nil {
+				if client == nil {
+					client = ctxClient
+				} else if client.WorkflowEngine == nil && ctxClient.WorkflowEngine != nil {
+					client.WorkflowEngine = ctxClient.WorkflowEngine
+				}
 			}
 
 			if !workflowEngineEnabled(ctx, client) {
+				return value, nil
+			}
+
+			// Skip workflow triggering during internal proposal creation (e.g., from approval routing hook)
+			if workflows.IsWorkflowBypass(ctx) {
 				return value, nil
 			}
 

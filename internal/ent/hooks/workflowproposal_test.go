@@ -55,7 +55,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments() {
 
 	proposal := suite.client.WorkflowProposal.Create().
 		SetWorkflowObjectRefID(objRef.ID).
-		SetDomainKey("text,description").
+		SetDomainKey(workflows.DeriveDomainKey(enums.WorkflowObjectTypeControl, []string{"text", "description"})).
 		SetState(enums.WorkflowProposalStateSubmitted).
 		SetChanges(map[string]any{"text": "original"}).
 		SetProposedHash("hash1").
@@ -150,7 +150,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments_DraftS
 
 	proposal := suite.client.WorkflowProposal.Create().
 		SetWorkflowObjectRefID(objRef.ID).
-		SetDomainKey("text,description").
+		SetDomainKey(workflows.DeriveDomainKey(enums.WorkflowObjectTypeControl, []string{"text", "description"})).
 		SetState(enums.WorkflowProposalStateDraft).
 		SetChanges(map[string]any{"text": "original"}).
 		SetProposedHash("hash1").
@@ -219,7 +219,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments_NonCha
 
 	proposal := suite.client.WorkflowProposal.Create().
 		SetWorkflowObjectRefID(objRef.ID).
-		SetDomainKey("text,description").
+		SetDomainKey(workflows.DeriveDomainKey(enums.WorkflowObjectTypeControl, []string{"text", "description"})).
 		SetState(enums.WorkflowProposalStateSubmitted).
 		SetChanges(map[string]any{"text": "original"}).
 		SetProposedHash("hash1").
@@ -317,7 +317,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalTriggerOnSubmitResumesInstan
 
 	proposal := suite.client.WorkflowProposal.Create().
 		SetWorkflowObjectRefID(objRef.ID).
-		SetDomainKey("status").
+		SetDomainKey(workflows.DeriveDomainKey(enums.WorkflowObjectTypeControl, []string{"status"})).
 		SetState(enums.WorkflowProposalStateDraft).
 		SetChanges(map[string]any{"status": enums.ControlStatusApproved}).
 		SetProposedHash(proposedHash).

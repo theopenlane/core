@@ -41,8 +41,22 @@ func CollectChangedFields(m utils.GenericMutation) []string {
 	allFields := append(append([]string(nil), fields...), cleared...)
 	uniqueFields := lo.Uniq(allFields)
 
+	if len(eligible) == 0 {
+		return uniqueFields
+	}
+
 	return lo.Filter(uniqueFields, func(f string, _ int) bool {
 		_, isEligible := eligible[f]
 		return isEligible
 	})
+}
+
+// CollectAllChangedFields returns the union of modified and cleared fields from a mutation
+// without filtering by workflow eligibility.
+func CollectAllChangedFields(m utils.GenericMutation) []string {
+	fields := m.Fields()
+	cleared := m.ClearedFields()
+
+	allFields := append(append([]string(nil), fields...), cleared...)
+	return lo.Uniq(allFields)
 }

@@ -18,13 +18,40 @@ import (
 	"github.com/theopenlane/core/internal/workflows/engine"
 )
 
-// TestWorkflowEngineExecute verifies action execution
+// TestWorkflowEngineExecute verifies basic workflow engine initialization and action execution
+// infrastructure is correctly set up.
+//
+// Test Flow:
+//  1. Retrieves the workflow engine from the test suite
+//  2. Verifies the engine is not nil (properly initialized)
+//
+// Why This Matters:
+//   Foundational test ensuring the workflow engine is available for action execution.
 func (s *WorkflowEngineTestSuite) TestWorkflowEngineExecute() {
 	wfEngine := s.Engine()
 	s.Require().NotNil(wfEngine)
 }
 
-// TestExecuteApproval verifies approval action execution
+// TestExecuteApproval verifies the approval action executor correctly creates WorkflowAssignment
+// and WorkflowAssignmentTarget records when processing an approval action.
+//
+// Test Scenarios:
+//   Subtest "creates approval assignment with user target":
+//     1. Executes an approval action targeting a specific user
+//     2. Verifies a WorkflowAssignment was created with:
+//        - Status = PENDING
+//        - Required = true
+//        - Label = "Test Approval"
+//     3. Verifies a WorkflowAssignmentTarget was created linking to the user
+//
+//   Subtest "creates assignment with no targets warns":
+//     1. Executes an approval action with an empty targets list
+//     2. Expected: ErrApprovalNoTargets error (cannot create assignment without approvers)
+//
+// Why This Matters:
+//   The approval executor is responsible for creating the database records that represent
+//   pending approval work. This test ensures the executor correctly translates action
+//   parameters into database entities.
 func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
@@ -113,11 +140,21 @@ func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 		}
 
 		err = wfEngine.Execute(userCtx, action, instance, obj)
-		s.NoError(err)
+		s.ErrorIs(err, engine.ErrApprovalNoTargets)
 	})
 }
 
-// TestExecuteInvalidActionType verifies invalid action handling
+// TestExecuteInvalidActionType verifies that the workflow engine correctly rejects unknown
+// action types with an appropriate error.
+//
+// Test Flow:
+//  1. Creates an action with Type = "INVALID_TYPE"
+//  2. Attempts to execute the action
+//  3. Expected: ErrInvalidActionType error
+//
+// Why This Matters:
+//   The workflow engine must validate action types before execution. Unknown action types
+//   should fail fast with a clear error rather than silently passing or causing cryptic failures.
 func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
 	_, orgID, userCtx := s.SetupTestUser()
 
@@ -150,7 +187,17 @@ func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
 	s.ErrorIs(err, engine.ErrInvalidActionType)
 }
 
-// TestExecuteNotification verifies notification action execution
+// TestExecuteNotification verifies that notification actions execute without error.
+// Notifications are typically no-op or delegate to external notification systems.
+//
+// Test Flow:
+//  1. Creates a notification action
+//  2. Executes the action
+//  3. Expected: No error (action completes successfully)
+//
+// Why This Matters:
+//   Notification actions should complete without blocking the workflow, even if the
+//   actual notification delivery is async or external.
 func (s *WorkflowEngineTestSuite) TestExecuteNotification() {
 	_, orgID, userCtx := s.SetupTestUser()
 
@@ -174,7 +221,29 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotification() {
 	s.NoError(err)
 }
 
-// TestExecuteWebhook verifies webhook action execution
+// TestExecuteWebhook verifies the webhook action executor correctly calls external URLs
+// and handles various success and failure scenarios.
+//
+// Test Scenarios:
+//   Subtest "executes webhook with valid URL":
+//     1. Sets up a test HTTP server
+//     2. Executes a webhook action with URL pointing to the server
+//     3. Verifies the server received the request
+//     4. Verifies the payload contains the instance ID
+//     5. Verifies the X-Workflow-Signature header is present (when secret configured)
+//
+//   Subtest "fails webhook without URL":
+//     1. Executes a webhook action with no URL configured
+//     2. Expected: ErrWebhookURLRequired error
+//
+//   Subtest "fails webhook on non-success status":
+//     1. Sets up a server that returns HTTP 418 (Teapot)
+//     2. Executes a webhook action
+//     3. Expected: Error (non-2xx response codes are failures)
+//
+// Why This Matters:
+//   Webhook actions are the primary integration point for external systems. This test
+//   ensures correct HTTP behavior, error handling, and security features like HMAC signing.
 func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 	_, orgID, userCtx := s.SetupTestUser()
 
@@ -273,7 +342,18 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 	})
 }
 
-// TestApplyObjectFieldUpdates_CoercesEnums verifies enum coercion for updates
+// TestApplyObjectFieldUpdates_CoercesEnums verifies that ApplyObjectFieldUpdates correctly
+// coerces string enum values to their typed enum equivalents when updating entities.
+//
+// Test Flow:
+//  1. Creates a Control with initial status
+//  2. Calls ApplyObjectFieldUpdates with status = "APPROVED" (string, not enum type)
+//  3. Verifies the Control.Status is now enums.ControlStatusApproved (typed enum)
+//
+// Why This Matters:
+//   Proposal changes are stored as map[string]any where enum values are serialized as strings.
+//   When applying these changes, the workflow system must coerce strings back to typed enums
+//   to match the entity schema. Without coercion, database updates would fail with type errors.
 func (s *WorkflowEngineTestSuite) TestApplyObjectFieldUpdates_CoercesEnums() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -305,7 +385,23 @@ func (s *WorkflowEngineTestSuite) TestApplyObjectFieldUpdates_CoercesEnums() {
 	s.Equal(enums.ControlStatusApproved, updated.Status)
 }
 
-// TestExecuteFieldUpdate verifies field update action execution
+// TestExecuteFieldUpdate verifies the field_update action executor correctly applies
+// field changes to the target object.
+//
+// Test Scenarios:
+//   Subtest "executes field update with valid params":
+//     1. Creates a Control with initial status
+//     2. Executes a field_update action with updates = { "status": "APPROVED" }
+//     3. Verifies the Control.status is now APPROVED
+//
+//   Subtest "fails field update without updates":
+//     1. Executes a field_update action with empty updates
+//     2. Expected: ErrMissingRequiredField error
+//
+// Why This Matters:
+//   Field update actions enable workflows to programmatically modify object fields as part
+//   of their execution. This is useful for automated status transitions after approval
+//   or other workflow-driven field changes.
 func (s *WorkflowEngineTestSuite) TestExecuteFieldUpdate() {
 	_, orgID, userCtx := s.SetupTestUser()
 

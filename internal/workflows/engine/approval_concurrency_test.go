@@ -18,7 +18,26 @@ import (
 	"github.com/theopenlane/core/internal/workflows/engine"
 )
 
-// TestApprovalFlowConcurrentApprovalsResumesOnce verifies single resume on concurrent approvals
+// TestApprovalFlowConcurrentApprovalsResumesOnce verifies that when multiple approvers submit
+// their approvals simultaneously (race condition), the workflow instance is resumed exactly once,
+// not multiple times.
+//
+// Workflow Definition (Plain English):
+//   "Require 2 approvals before changing Control.status"
+//
+// Test Flow:
+//  1. Triggers an approval workflow requiring 2 approvers
+//  2. Both approvers submit their approvals CONCURRENTLY (using goroutines)
+//  3. Waits for both goroutines to complete
+//  4. Verifies the proposal was applied exactly once
+//  5. Verifies the Control.status was updated
+//  6. Verifies the workflow completed
+//  7. Counts INSTANCE_COMPLETED events - must be exactly 1 (not 2)
+//
+// Why This Matters:
+//   In a distributed system, concurrent approvals could race to resume the workflow. The
+//   engine must ensure idempotent completion handling to prevent duplicate side effects
+//   (e.g., double-applying the proposal, sending duplicate notifications).
 func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce() {
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
@@ -135,7 +154,25 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce
 	s.Equal(1, completedCount)
 }
 
-// TestApprovalFlowLateApprovalDoesNotReapply verifies late approvals do not reapply changes
+// TestApprovalFlowLateApprovalDoesNotReapply verifies that "late" approvals (approvals submitted
+// after the quorum was already met and the workflow completed) do not re-apply changes or
+// generate duplicate completion events.
+//
+// Workflow Definition (Plain English):
+//   "Require 1 approval (out of 2 possible approvers) before changing Control.status"
+//   RequiredCount = 1, but 2 approvers are assigned
+//
+// Test Flow:
+//  1. Triggers an approval workflow with 2 approvers but only 1 required
+//  2. First approver approves - workflow completes (quorum met)
+//  3. Records the number of INSTANCE_COMPLETED events
+//  4. Second approver approves (late - after completion)
+//  5. Verifies NO new INSTANCE_COMPLETED events were generated
+//  6. Verifies the Control.status is still the correctly applied value
+//
+// Why This Matters:
+//   Users may approve workflows that have already completed. The engine must handle these
+//   "late" approvals gracefully without re-applying changes or corrupting workflow state.
 func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
@@ -248,7 +285,29 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 	s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
 }
 
-// TestConcurrentApprovalActionsGateUntilAllSatisfied ensures concurrent approvals all resolve before resuming.
+// TestConcurrentApprovalActionsGateUntilAllSatisfied ensures that when a workflow has multiple
+// INDEPENDENT approval actions (different action keys), ALL must be satisfied before the
+// workflow completes. Completing one action does not resume execution until all are done.
+//
+// Workflow Definition (Plain English):
+//   Actions:
+//     1. "Approval A" - requires User1 to approve "status" field changes
+//     2. "Approval B" - requires User2 to approve "reference_id" field changes
+//   Both actions have when="true" (always execute)
+//
+// Test Flow:
+//  1. Triggers a workflow with two independent approval actions
+//  2. Verifies 2 assignments are created (one per action)
+//  3. User2 approves "Approval B" first
+//  4. Verifies the workflow is STILL PAUSED (Approval A pending)
+//  5. Verifies the proposal is still in DRAFT state
+//  6. User1 approves "Approval A"
+//  7. Verifies the workflow COMPLETED (all approvals satisfied)
+//  8. Verifies the proposal was APPLIED
+//
+// Why This Matters:
+//   Complex workflows may require multiple independent sign-offs. The engine must gate
+//   completion until ALL required approval actions are resolved, not just the first one.
 func (s *WorkflowEngineTestSuite) TestConcurrentApprovalActionsGateUntilAllSatisfied() {
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)

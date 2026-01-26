@@ -4,7 +4,7 @@ import "github.com/theopenlane/core/pkg/events/soiree"
 
 const (
 	// defaultMaxWorkers is the default number of workers when the pool was not created on server startup
-	defaultMaxWorkers = 10
+	defaultMaxWorkers = 200
 )
 
 // withPool returns the existing pool or creates a new one if it does not exist to be used in queries

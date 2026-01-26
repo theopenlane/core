@@ -13,6 +13,9 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
@@ -48,7 +51,13 @@ func (r *Resolver) workflowInstanceProposalPreview(ctx context.Context, instance
 		return nil, err
 	}
 	if !allow {
-		return nil, rout.ErrPermissionDenied
+		isApprover, err := workflowInstanceHasApprover(ctx, r.db, instance.ID, userID)
+		if err != nil {
+			return nil, err
+		}
+		if !isApprover {
+			return nil, rout.ErrPermissionDenied
+		}
 	}
 
 	allowCtx := workflows.AllowContext(ctx)
@@ -171,6 +180,54 @@ func workflowObjectFromRefs(refs []*generated.WorkflowObjectRef) (*workflows.Obj
 	}
 
 	return nil, false
+}
+
+func workflowInstanceHasApprover(ctx context.Context, client *generated.Client, instanceID string, userID string) (bool, error) {
+	if client == nil || instanceID == "" || userID == "" {
+		return false, nil
+	}
+
+	allowCtx := workflows.AllowContext(ctx)
+
+	direct, err := client.WorkflowAssignmentTarget.Query().
+		Where(
+			workflowassignmenttarget.TargetUserIDEQ(userID),
+			workflowassignmenttarget.HasWorkflowAssignmentWith(
+				workflowassignment.WorkflowInstanceIDEQ(instanceID),
+			),
+		).
+		Exist(allowCtx)
+	if err != nil {
+		return false, err
+	}
+	if direct {
+		return true, nil
+	}
+
+	groupIDs, err := client.GroupMembership.Query().
+		Where(groupmembership.UserIDEQ(userID)).
+		Select(groupmembership.FieldGroupID).
+		Strings(allowCtx)
+	if err != nil {
+		return false, err
+	}
+	if len(groupIDs) == 0 {
+		return false, nil
+	}
+
+	groupTarget, err := client.WorkflowAssignmentTarget.Query().
+		Where(
+			workflowassignmenttarget.TargetGroupIDIn(groupIDs...),
+			workflowassignmenttarget.HasWorkflowAssignmentWith(
+				workflowassignment.WorkflowInstanceIDEQ(instanceID),
+			),
+		).
+		Exist(allowCtx)
+	if err != nil {
+		return false, err
+	}
+
+	return groupTarget, nil
 }
 
 func workflowProposalFieldMetadata(objectType enums.WorkflowObjectType) map[string]generated.WorkflowFieldInfo {

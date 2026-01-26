@@ -79,6 +79,7 @@ type WorkflowInstanceContext struct {
 	TriggerRemovedIDs      map[string][]string         `json:"triggerRemovedIds,omitempty"`
 	TriggerUserID          string                      `json:"triggerUserId,omitempty"`
 	TriggerProposedChanges map[string]any              `json:"triggerProposedChanges,omitempty"`
+	ParallelApprovalKeys   []string                    `json:"parallelApprovalKeys,omitempty"`
 	Data                   json.RawMessage             `json:"data,omitempty"` // optional payload captured at runtime
 }
 

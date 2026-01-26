@@ -149,7 +149,9 @@ var (
 	// ErrFailedToCreateWorkflowObjectRef is returned when a workflow object ref cannot be created
 	ErrFailedToCreateWorkflowObjectRef = errors.New("failed to create workflow object ref")
 	// ErrFailedToCreateWorkflowProposal is returned when a workflow proposal cannot be created
-	ErrFailedToCreateWorkflowProposal = errors.New("failed to create workflow proposal")
+	ErrFailedToCreateWorkflowProposal = errors.New("failed to create workflow proposal inside of ent hooks")
+	// ErrFailedToCreateWorkflowProposal is returned when a workflow proposal cannot be created
+	ErrFailedToUpdateWorkflowProposal = errors.New("failed to update workflow proposal inside of ent hooks")
 	// ErrFailedToLinkProposalToInstance is returned when a proposal cannot be linked to an instance
 	ErrFailedToLinkProposalToInstance = errors.New("failed to link proposal to instance")
 	// ErrFailedToCommitProposalTransaction is returned when proposal staging transaction cannot be committed

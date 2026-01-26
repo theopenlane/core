@@ -5,6 +5,7 @@ package engine_test
 import (
 	"context"
 	"encoding/json"
+	"sort"
 	"testing"
 	"time"
 
@@ -28,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
+	workflowgenerated "github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/internal/entdb"
 	coreutils "github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/internal/workflows"
@@ -39,7 +41,6 @@ import (
 
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	_ "github.com/theopenlane/core/internal/ent/historygenerated/runtime"
-	_ "github.com/theopenlane/core/internal/ent/workflowgenerated"
 )
 
 const (
@@ -115,6 +116,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 			Type:             summarizer.TypeLexrank,
 			MaximumSentences: 60,
 		},
+		MaxPoolSize: 200, //nolint:mnd
 		Modules: entconfig.Modules{
 			Enabled:    true,
 			UseSandbox: true,
@@ -126,10 +128,13 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 
 	entitlements, err := s.mockStripeClient()
 
-	pool := soiree.NewPool(
-		soiree.WithWorkers(100), //nolint:mnd
-		soiree.WithPoolName("ent_client_pool"),
-	)
+	var pool *soiree.Pool
+	if entCfg.MaxPoolSize > 0 {
+		pool = soiree.NewPool(
+			soiree.WithWorkers(entCfg.MaxPoolSize),
+			soiree.WithPoolName("ent_client_pool"),
+		)
+	}
 
 	summarizerClient, err := summarizer.NewSummarizer(entCfg.Summarizer)
 	s.Require().NoError(err)
@@ -148,23 +153,22 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(s.tf.URI)}
 
-	db, err := entdb.NewTestClient(s.ctx, s.tf, jobOpts, opts)
+	workflows.RegisterEligibleFields(workflowgenerated.WorkflowEligibleFields)
+
+	workflowCfg := workflows.NewDefaultConfig(workflows.WithEnabled(true))
+	eventer := hooks.NewEventer(hooks.WithWorkflowListenersEnabled(workflowCfg.Enabled))
+
+	clientOpts := []entdb.Option{
+		entdb.WithEventer(eventer, workflowCfg),
+	}
+
+	db, err := entdb.NewTestClient(s.ctx, s.tf, jobOpts, clientOpts, opts)
 	s.Require().NoError(err)
 
 	s.client = db
-
-	// Initialize the eventer with the real event bus - this mirrors production setup
-	eventer := hooks.NewEventer(hooks.WithWorkflowListenersEnabled(true))
-	eventer.Initialize(db)
-
-	hooks.RegisterGlobalHooks(db, eventer)
-
-	// Create workflow engine using the eventer's emitter (same as production)
-	wfEngine, err := engine.NewWorkflowEngine(db, eventer.Emitter)
-	s.Require().NoError(err)
-
 	s.eventer = eventer
-	s.client.WorkflowEngine = wfEngine
+
+	s.requireWorkflowSetup(workflowCfg, eventer)
 }
 
 // TearDownSuite cleans up test dependencies
@@ -205,6 +209,39 @@ func (s *WorkflowEngineTestSuite) NewIsolatedEngine(emitter soiree.Emitter) *eng
 	s.Require().NoError(err)
 
 	return wfEngine
+}
+
+func (s *WorkflowEngineTestSuite) requireWorkflowSetup(cfg *workflows.Config, eventer *hooks.Eventer) {
+	s.Require().NotNil(s.client, "ent client not initialized")
+	s.Require().NotNil(eventer, "eventer not initialized")
+	s.Require().NotNil(eventer.Emitter, "eventer emitter not initialized")
+
+	if eventer.Emitter != nil {
+		if busClient, ok := eventer.Emitter.Client().(*generated.Client); ok {
+			s.Require().Same(s.client, busClient, "event bus not bound to ent client")
+		} else {
+			s.Require().Fail("event bus client type mismatch")
+		}
+	}
+
+	s.Require().NotNil(s.client.WorkflowEngine, "workflow engine not initialized")
+
+	s.Require().True(
+		eventer.Emitter.InterestedIn(generated.TypeOrganization),
+		"mutation listeners not registered",
+	)
+
+	if cfg != nil && cfg.Enabled {
+		s.Require().True(
+			eventer.Emitter.InterestedIn(soiree.TopicWorkflowTriggered),
+			"workflow listeners not registered",
+		)
+	}
+
+	eligible := workflows.EligibleWorkflowFields(enums.WorkflowObjectTypeControl)
+	s.Require().NotEmpty(eligible, "workflow eligible fields not registered")
+	_, ok := eligible["reference_id"]
+	s.Require().True(ok, "workflow eligible fields missing control.reference_id")
 }
 
 // WaitForEvents blocks until all pending event handlers have completed processing
@@ -485,6 +522,11 @@ func (s *WorkflowEngineTestSuite) SeedContext(userID, orgID string) context.Cont
 	ctx := auth.NewTestContextWithOrgID(userID, orgID)
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 	ctx = generated.NewContext(ctx, s.client)
+	ctxClient := generated.FromContext(ctx)
+	s.Require().NotNil(ctxClient, "seed context missing ent client")
+	s.Require().NotNil(ctxClient.WorkflowEngine, "seed context missing workflow engine")
+	_, err := auth.GetOrganizationIDFromContext(ctx)
+	s.Require().NoError(err, "seed context missing org")
 	return ctx
 }
 
@@ -499,10 +541,22 @@ func (s *WorkflowEngineTestSuite) TriggerInstance(ctx context.Context, wfEngine 
 
 // CreateApprovalWorkflowDefinition creates an approval workflow definition for testing
 func (s *WorkflowEngineTestSuite) CreateApprovalWorkflowDefinition(ctx context.Context, orgID string, action models.WorkflowAction) *generated.WorkflowDefinition {
+	triggerFields := []string{"status"}
+	if len(action.Params) > 0 {
+		var params workflows.ApprovalActionParams
+		err := json.Unmarshal(action.Params, &params)
+		s.Require().NoError(err, "failed to parse approval action params")
+		fields := workflows.NormalizeStrings(params.Fields)
+		if len(fields) > 0 {
+			triggerFields = fields
+		}
+	}
+	sort.Strings(triggerFields)
+
 	doc := models.WorkflowDefinitionDocument{
 		ApprovalSubmissionMode: enums.WorkflowApprovalSubmissionModeAutoSubmit,
 		Triggers: []models.WorkflowTrigger{
-			{Operation: "UPDATE", Fields: []string{"status"}},
+			{Operation: "UPDATE", Fields: triggerFields},
 		},
 		Conditions: []models.WorkflowCondition{
 			{Expression: "true"},
@@ -511,6 +565,7 @@ func (s *WorkflowEngineTestSuite) CreateApprovalWorkflowDefinition(ctx context.C
 	}
 
 	operations, fields := workflows.DeriveTriggerPrefilter(doc)
+	fields = triggerFields
 
 	def, err := s.client.WorkflowDefinition.Create().
 		SetName("Approval Workflow " + ulids.New().String()).

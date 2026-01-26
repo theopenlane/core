@@ -178,12 +178,11 @@ func serve(ctx context.Context) error {
 
 	eventer := hooks.NewEventer(hooks.WithWorkflowListenersEnabled(so.Config.Settings.Workflows.Enabled))
 
-	clientOpts := []entdb.Option{}
-	clientOpts = append(clientOpts,
-		entdb.WithEventer(eventer),
+	clientOpts := []entdb.Option{
+		entdb.WithEventer(eventer, &so.Config.Settings.Workflows),
 		entdb.WithModules(),
 		entdb.WithMetricsHook(),
-	)
+	}
 
 	dbClient, err := entdb.New(ctx, so.Config.Settings.DB, jobOpts, clientOpts, entOpts...)
 	if err != nil {
@@ -191,16 +190,10 @@ func serve(ctx context.Context) error {
 	}
 
 	if so.Config.Settings.Workflows.Enabled {
-		wfEngine, err := engine.NewWorkflowEngineWithConfig(dbClient, eventer.Emitter, &so.Config.Settings.Workflows)
-		if err != nil {
-			log.Error().Err(err).Msg("failed to initialize workflow engine")
-
-			return err
+		if wfEngine, ok := dbClient.WorkflowEngine.(*engine.WorkflowEngine); ok {
+			so.AddServerOptions(serveropts.WithWorkflows(wfEngine))
+			log.Info().Msg("workflow engine initialized")
 		}
-
-		so.AddServerOptions(serveropts.WithWorkflows(wfEngine))
-
-		log.Info().Msg("workflow engine initialized")
 	}
 
 	if so.Config.Settings.CampaignWebhook.Enabled {

@@ -84,7 +84,7 @@ var (
 	// ErrFailedToComputeProposalHash is returned when a proposal hash cannot be computed
 	ErrFailedToComputeProposalHash = errors.New("failed to compute proposal hash")
 	// ErrFailedToCreateProposal is returned when a workflow proposal cannot be created
-	ErrFailedToCreateProposal = errors.New("failed to create workflow proposal")
+	ErrFailedToCreateProposal = errors.New("failed to create workflow proposal inside of proposal manager")
 	// ErrFailedToQueryObjectRefs is returned when workflow object refs cannot be queried
 	ErrFailedToQueryObjectRefs = errors.New("failed to query object refs")
 	// ErrFailedToQueryProposals is returned when workflow proposals cannot be queried
@@ -103,4 +103,6 @@ var (
 	ErrFailedToResolveTarget = errors.New("failed to resolve target")
 	// ErrFailedToResolveNotificationTarget is returned when a notification target cannot be resolved
 	ErrFailedToResolveNotificationTarget = errors.New("failed to resolve notification target")
+	// ErrApprovalNoTargets indicates an approval action resolved no targets and should be skipped
+	ErrApprovalNoTargets = errors.New("approval action has no resolved targets")
 )

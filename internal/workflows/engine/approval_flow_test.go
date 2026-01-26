@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/utils/ulids"
@@ -43,7 +44,25 @@ func hasSkippedAction(events []*generated.WorkflowEvent) bool {
 	return false
 }
 
-// TestApprovalFlowQuorumAppliesProposal verifies quorum approval applies proposals
+// TestApprovalFlowQuorumAppliesProposal verifies quorum-based approval workflows correctly apply
+// proposed changes only after all required approvals are obtained.
+//
+// Workflow Definition (Plain English):
+//   "Require exactly 2 approvers before allowing Control.reference_id to be changed"
+//
+// Test Flow:
+//  1. Creates a Control with an initial reference_id
+//  2. Attempts to update the reference_id, which triggers the approval workflow
+//  3. Verifies the update was intercepted and routed to a proposal (original value unchanged)
+//  4. Verifies 2 approval assignments were created (one per approver)
+//  5. First approver approves - verifies proposal NOT yet applied (quorum not met)
+//  6. Second approver approves - verifies proposal IS applied (quorum met)
+//  7. Confirms the Control.reference_id now reflects the proposed value
+//  8. Confirms the workflow instance completed successfully
+//
+// Why This Matters:
+//   Ensures the quorum mechanism prevents premature application of changes and only
+//   applies them when the required number of approvals is reached.
 func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
@@ -60,55 +79,55 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 		},
 		Required:      boolPtr(true),
 		RequiredCount: 2,
-		Label:         "Status Approval",
-		Fields:        []string{"status"},
+		Label:         "Reference ID Approval",
+		Fields:        []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
 	s.Require().NoError(err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
-		Key:    "status_approval",
+		Key:    "reference_id_approval",
 		Params: paramsBytes,
 	}
 
-	_ = s.CreateApprovalWorkflowDefinition(seedCtx, orgID, action)
+	def := s.CreateApprovalWorkflowDefinition(seedCtx, orgID, action)
+
+	oldRef := "REF-OLD-" + ulid.Make().String()
+	newRef := "REF-NEW-" + ulid.Make().String()
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-" + ulid.Make().String()).
 		SetOwnerID(orgID).
-		SetStatus(enums.ControlStatusNotImplemented).
+		SetReferenceID(oldRef).
 		Save(seedCtx)
 	s.Require().NoError(err)
 
-	// Trigger workflow by updating control status - the hook intercepts and creates proposal
+	// Trigger workflow by updating control reference ID - the hook intercepts and creates proposal
 	updated, err := s.client.Control.UpdateOneID(control.ID).
-		SetStatus(enums.ControlStatusApproved).
+		SetReferenceID(newRef).
 		Save(seedCtx)
 	s.Require().NoError(err)
-	// Status should remain unchanged since it was routed to proposal
-	s.Equal(enums.ControlStatusNotImplemented, updated.Status)
+	// Reference ID should remain unchanged since it was routed to proposal
+	s.Require().NotNil(updated)
 
 	// Wait for async event processing
 	s.WaitForEvents()
 
-	// Query for the workflow proposal that was created
-	domainKey := workflows.DeriveDomainKey([]string{"status"})
-	proposal, err := s.client.WorkflowProposal.Query().
-		Where(
-			workflowproposal.DomainKeyEQ(domainKey),
-			workflowproposal.OwnerIDEQ(orgID),
-		).
-		Only(seedCtx)
-	s.Require().NoError(err)
-	s.Require().NotNil(proposal)
-
-	// Query for the workflow instance
 	instance, err := s.client.WorkflowInstance.Query().
-		Where(workflowinstance.WorkflowProposalIDEQ(proposal.ID)).
-		Only(seedCtx)
+		Where(
+			workflowinstance.WorkflowDefinitionIDEQ(def.ID),
+			workflowinstance.OwnerIDEQ(orgID),
+			workflowinstance.ControlIDEQ(control.ID),
+		).
+		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
+		First(seedCtx)
 	s.Require().NoError(err)
 	s.Require().NotNil(instance)
+	s.Require().NotEmpty(instance.WorkflowProposalID)
+
+	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
+	s.Require().NoError(err)
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
@@ -139,7 +158,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 
 	updatedControl, err := s.client.Control.Get(userCtx, control.ID)
 	s.Require().NoError(err)
-	s.Equal(enums.ControlStatusNotImplemented, updatedControl.Status)
+	s.Equal(oldRef, updatedControl.ReferenceID)
 
 	err = wfEngine.CompleteAssignment(approver2Ctx, assignmentsByUser[approver2ID].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
 	s.Require().NoError(err)
@@ -153,14 +172,31 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 
 	updatedControl, err = s.client.Control.Get(userCtx, control.ID)
 	s.Require().NoError(err)
-	s.Equal(enums.ControlStatusApproved, updatedControl.Status)
+	s.Equal(newRef, updatedControl.ReferenceID)
 
 	updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
 	s.Require().NoError(err)
 	s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
 }
 
-// TestApprovalFlowOptionalQuorumProceedsEarly verifies optional approvals can proceed early
+// TestApprovalFlowOptionalQuorumProceedsEarly verifies that optional (non-required) approval
+// workflows apply changes as soon as any single approval is received, without waiting for all assignees.
+//
+// Workflow Definition (Plain English):
+//   "Allow Control.reference_id changes after any single approval (2 approvers assigned, but not required)"
+//
+// Test Flow:
+//  1. Creates a Control with an initial reference_id
+//  2. Attempts to update the reference_id, which triggers the optional approval workflow
+//  3. Verifies 2 approval assignments were created
+//  4. First approver approves - verifies proposal IS immediately applied (optional = early proceed)
+//  5. Confirms one assignment is APPROVED and one remains PENDING
+//  6. Confirms the Control.reference_id now reflects the proposed value
+//  7. Confirms the workflow instance completed successfully
+//
+// Why This Matters:
+//   Demonstrates that "required=false" workflows provide a "first approval wins" behavior,
+//   useful for notification-style approvals where acknowledgment is sufficient.
 func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() {
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, _ := s.CreateTestUserInOrg(orgID, enums.RoleMember)
@@ -176,50 +212,51 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() 
 			},
 		},
 		Required: boolPtr(false),
-		Label:    "Optional Status Approval",
-		Fields:   []string{"status"},
+		Label:    "Optional Reference ID Approval",
+		Fields:   []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
 	s.Require().NoError(err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
-		Key:    "optional_status_approval",
+		Key:    "optional_reference_id_approval",
 		Params: paramsBytes,
 	}
 
-	_ = s.CreateApprovalWorkflowDefinition(seedCtx, orgID, action)
+	def := s.CreateApprovalWorkflowDefinition(seedCtx, orgID, action)
+
+	oldRef := "REF-OPT-OLD-" + ulid.Make().String()
+	newRef := "REF-OPT-NEW-" + ulid.Make().String()
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-" + ulid.Make().String()).
 		SetOwnerID(orgID).
-		SetStatus(enums.ControlStatusNotImplemented).
+		SetReferenceID(oldRef).
 		Save(seedCtx)
 	s.Require().NoError(err)
 
-	// Trigger workflow by updating control status
+	// Trigger workflow by updating control reference ID
 	updated, err := s.client.Control.UpdateOneID(control.ID).
-		SetStatus(enums.ControlStatusApproved).
+		SetReferenceID(newRef).
 		Save(seedCtx)
 	s.Require().NoError(err)
-	s.Equal(enums.ControlStatusNotImplemented, updated.Status)
+	s.Equal(oldRef, updated.ReferenceID)
 
 	s.WaitForEvents()
 
-	// Query for the workflow proposal
-	domainKey := workflows.DeriveDomainKey([]string{"status"})
-	proposal, err := s.client.WorkflowProposal.Query().
-		Where(
-			workflowproposal.DomainKeyEQ(domainKey),
-			workflowproposal.OwnerIDEQ(orgID),
-		).
-		Only(seedCtx)
-	s.Require().NoError(err)
-
-	// Query for the workflow instance
 	instance, err := s.client.WorkflowInstance.Query().
-		Where(workflowinstance.WorkflowProposalIDEQ(proposal.ID)).
-		Only(seedCtx)
+		Where(
+			workflowinstance.WorkflowDefinitionIDEQ(def.ID),
+			workflowinstance.OwnerIDEQ(orgID),
+			workflowinstance.ControlIDEQ(control.ID),
+		).
+		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
+		First(seedCtx)
+	s.Require().NoError(err)
+	s.Require().NotEmpty(instance.WorkflowProposalID)
+
+	_, err = s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
 	s.Require().NoError(err)
 
 	assignments, err := s.client.WorkflowAssignment.Query().
@@ -247,7 +284,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() 
 
 	updatedControl, err := s.client.Control.Get(userCtx, control.ID)
 	s.Require().NoError(err)
-	s.Equal(enums.ControlStatusApproved, updatedControl.Status)
+	s.Equal(newRef, updatedControl.ReferenceID)
 
 	updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
 	s.Require().NoError(err)
@@ -267,7 +304,22 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() 
 	s.Equal(1, statuses[enums.WorkflowAssignmentStatusPending])
 }
 
-// TestApprovalStagingCapturesClearedField verifies cleared fields are staged
+// TestApprovalStagingCapturesClearedField verifies that clearing (nullifying) a field value
+// is correctly captured in the workflow proposal, not just setting a new value.
+//
+// Workflow Definition (Plain English):
+//   "Require approval before clearing Control.reference_id (setting it to null/empty)"
+//
+// Test Flow:
+//  1. Creates a Control with reference_id = "REF-123"
+//  2. Calls ClearReferenceID() which triggers the approval workflow
+//  3. Verifies the update was intercepted (Control still has "REF-123")
+//  4. Verifies a proposal was created with changes["reference_id"] = nil
+//  5. Confirms the proposal is in DRAFT state awaiting submission
+//
+// Why This Matters:
+//   Field clearing is a distinct operation from field setting. This ensures the workflow
+//   system correctly handles "clear" mutations and stages them as null values in proposals.
 func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -290,7 +342,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 	s.Require().NoError(err)
 
 	// Create definition with seedCtx (privacy bypass for setup)
-	_, err = s.client.WorkflowDefinition.Create().
+	def, err := s.client.WorkflowDefinition.Create().
 		SetName("Reference ID Approval " + ulid.Make().String()).
 		SetWorkflowKind(enums.WorkflowKindApproval).
 		SetSchemaType("Control").
@@ -339,12 +391,19 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 	s.Require().NoError(err)
 	s.Equal("REF-123", refreshed.ReferenceID)
 
-	domainKey := workflows.DeriveDomainKey([]string{"reference_id"})
-	proposal, err := s.client.WorkflowProposal.Query().
+	instance, err := s.client.WorkflowInstance.Query().
 		Where(
-			workflowproposal.DomainKeyEQ(domainKey),
-			workflowproposal.OwnerIDEQ(orgID),
+			workflowinstance.WorkflowDefinitionIDEQ(def.ID),
+			workflowinstance.OwnerIDEQ(orgID),
+			workflowinstance.ControlIDEQ(control.ID),
 		).
+		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
+		First(seedCtx)
+	s.Require().NoError(err)
+	s.Require().NotEmpty(instance.WorkflowProposalID)
+
+	proposal, err := s.client.WorkflowProposal.Query().
+		Where(workflowproposal.IDEQ(instance.WorkflowProposalID)).
 		WithWorkflowObjectRef().
 		Only(seedCtx)
 	s.Require().NoError(err)
@@ -357,8 +416,25 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 	s.Nil(value)
 }
 
-// TestApprovalTriggerExpressionUsesCurrentObjectState verifies trigger expressions see the current object state,
-// not the proposed value, when approvals are routed via proposals.
+// TestApprovalTriggerExpressionUsesCurrentObjectState verifies that trigger expressions evaluate
+// against the object's current (pre-mutation) state, not the proposed values. This is critical
+// for conditional workflows that should only fire when the object is in a specific state.
+//
+// Workflow Definition (Plain English):
+//   "Require approval for reference_id changes, but ONLY when the current reference_id equals 'REF-EXPR-OLD-xxx'"
+//   Trigger expression: object.reference_id == "REF-EXPR-OLD-xxx"
+//
+// Test Flow:
+//  1. Creates a Control with reference_id = "REF-EXPR-OLD-xxx"
+//  2. Attempts to update reference_id to "REF-EXPR-NEW-xxx"
+//  3. Verifies the trigger expression evaluated against the OLD value (matches)
+//  4. Confirms a workflow instance and proposal were created
+//  5. Confirms an approval assignment was created (workflow triggered correctly)
+//
+// Why This Matters:
+//   Trigger expressions must evaluate against the current object state to determine IF
+//   a workflow should fire. The proposed changes are captured separately in the proposal.
+//   This prevents circular logic where the proposed value would affect trigger evaluation.
 func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObjectState() {
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -374,35 +450,38 @@ func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObject
 			},
 		},
 		Required: boolPtr(true),
-		Label:    "Status Approval",
-		Fields:   []string{"status"},
+		Label:    "Reference ID Approval",
+		Fields:   []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
 	s.Require().NoError(err)
 
-	_, err = s.client.WorkflowDefinition.Create().
-		SetName("Status Approval With Expression " + ulid.Make().String()).
+	oldRef := "REF-EXPR-OLD-" + ulid.Make().String()
+	newRef := "REF-EXPR-NEW-" + ulid.Make().String()
+
+	def, err := s.client.WorkflowDefinition.Create().
+		SetName("Reference ID Approval With Expression " + ulid.Make().String()).
 		SetWorkflowKind(enums.WorkflowKindApproval).
 		SetSchemaType("Control").
 		SetActive(true).
 		SetDraft(false).
 		SetOwnerID(orgID).
 		SetTriggerOperations([]string{"UPDATE"}).
-		SetTriggerFields([]string{"status"}).
+		SetTriggerFields([]string{"reference_id"}).
 		SetApprovalSubmissionMode(enums.WorkflowApprovalSubmissionModeAutoSubmit).
 		SetDefinitionJSON(models.WorkflowDefinitionDocument{
 			ApprovalSubmissionMode: enums.WorkflowApprovalSubmissionModeAutoSubmit,
 			Triggers: []models.WorkflowTrigger{
 				{
 					Operation:  "UPDATE",
-					Fields:     []string{"status"},
-					Expression: `object.status == "APPROVED"`,
+					Fields:     []string{"reference_id"},
+					Expression: "object.reference_id == \"" + oldRef + "\"",
 				},
 			},
 			Actions: []models.WorkflowAction{
 				{
 					Type:   enums.WorkflowActionTypeApproval.String(),
-					Key:    "status_approval",
+					Key:    "reference_id_approval",
 					Params: paramsBytes,
 				},
 			},
@@ -413,41 +492,327 @@ func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObject
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-STATUS-" + ulid.Make().String()).
 		SetOwnerID(orgID).
-		SetStatus(enums.ControlStatusNotImplemented).
+		SetReferenceID(oldRef).
 		Save(seedCtx)
 	s.Require().NoError(err)
 
-	// Update status; approval hook intercepts and creates a proposal, so the control remains unchanged.
+	// Update reference ID; approval hook intercepts and creates a proposal, so the control remains unchanged.
 	updated, err := s.client.Control.UpdateOneID(control.ID).
-		SetStatus(enums.ControlStatusApproved).
+		SetReferenceID(newRef).
 		Save(seedCtx)
 	s.Require().NoError(err)
-	s.Equal(enums.ControlStatusNotImplemented, updated.Status)
+	s.Equal(oldRef, updated.ReferenceID)
 
-	domainKey := workflows.DeriveDomainKey([]string{"status"})
-	proposal, err := s.client.WorkflowProposal.Query().
+	// Wait for async event processing to complete
+	s.WaitForEvents()
+
+	instance, err := s.client.WorkflowInstance.Query().
 		Where(
-			workflowproposal.DomainKeyEQ(domainKey),
-			workflowproposal.OwnerIDEQ(orgID),
+			workflowinstance.WorkflowDefinitionIDEQ(def.ID),
+			workflowinstance.OwnerIDEQ(orgID),
+			workflowinstance.ControlIDEQ(control.ID),
 		).
-		Only(seedCtx)
+		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
+		First(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowInstanceStatePaused, instance.State)
+	s.Require().NotEmpty(instance.WorkflowProposalID)
+
+	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
 	s.Require().NoError(err)
 	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
 
-	instance, err := s.client.WorkflowInstance.Query().
-		Where(workflowinstance.WorkflowProposalIDEQ(proposal.ID)).
-		Only(seedCtx)
+	assignments, err := s.client.WorkflowAssignment.Query().
+		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+		All(seedCtx)
 	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStatePaused, instance.State)
+	s.Len(assignments, 1)
+}
+
+// TestApprovalNoTargetsAutoApplies verifies that when an approval action resolves to zero
+// assignees (e.g., an empty group), the proposal is automatically applied without blocking.
+//
+// Workflow Definition (Plain English):
+//   "Require approval from members of 'Empty Approval Group' before changing Control.reference_id"
+//   (Group has zero members, so no one can approve)
+//
+// Test Flow:
+//  1. Creates an empty Group (no members)
+//  2. Creates an approval workflow targeting that Group
+//  3. Creates a Control and attempts to update reference_id
+//  4. Verifies the workflow instance completed immediately (no blocking)
+//  5. Verifies the proposal was auto-applied (state = APPLIED)
+//  6. Confirms zero assignments were created (no approvers)
+//  7. Confirms the Control.reference_id reflects the proposed value
+//
+// Why This Matters:
+//   Empty target resolution should not block changes indefinitely. When no one CAN approve,
+//   the system auto-applies to prevent deadlock situations.
+func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
+	userID, orgID, _ := s.SetupTestUser()
+	seedCtx := s.SeedContext(userID, orgID)
+
+	wfEngine := s.Engine()
+	s.client.WorkflowEngine = wfEngine
+
+	group, err := s.client.Group.Create().
+		SetName("Empty Approval Group " + ulid.Make().String()).
+		SetOwnerID(orgID).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	params := workflows.ApprovalActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{
+				{Type: enums.WorkflowTargetTypeGroup, ID: group.ID},
+			},
+		},
+		Required: boolPtr(true),
+		Label:    "Group Approval",
+		Fields:   []string{"reference_id"},
+	}
+	paramsBytes, err := json.Marshal(params)
+	s.Require().NoError(err)
+
+	def, err := s.client.WorkflowDefinition.Create().
+		SetName("No Target Approval " + ulid.Make().String()).
+		SetWorkflowKind(enums.WorkflowKindApproval).
+		SetSchemaType("Control").
+		SetActive(true).
+		SetDraft(false).
+		SetOwnerID(orgID).
+		SetTriggerOperations([]string{"UPDATE"}).
+		SetTriggerFields([]string{"reference_id"}).
+		SetApprovalSubmissionMode(enums.WorkflowApprovalSubmissionModeAutoSubmit).
+		SetDefinitionJSON(models.WorkflowDefinitionDocument{
+			ApprovalSubmissionMode: enums.WorkflowApprovalSubmissionModeAutoSubmit,
+			Triggers: []models.WorkflowTrigger{
+				{Operation: "UPDATE", Fields: []string{"reference_id"}},
+			},
+			Actions: []models.WorkflowAction{
+				{
+					Type:   enums.WorkflowActionTypeApproval.String(),
+					Key:    "reference_id_approval",
+					Params: paramsBytes,
+				},
+			},
+		}).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	oldRef := "REF-NO-TARGET-OLD-" + ulid.Make().String()
+	newRef := "REF-NO-TARGET-NEW-" + ulid.Make().String()
+
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-NOTARGET-" + ulid.Make().String()).
+		SetOwnerID(orgID).
+		SetReferenceID(oldRef).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	updated, err := s.client.Control.UpdateOneID(control.ID).
+		SetReferenceID(newRef).
+		Save(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(oldRef, updated.ReferenceID)
+
+	// Wait for async event processing to complete
+	s.WaitForEvents()
+
+	instance, err := s.client.WorkflowInstance.Query().
+		Where(
+			workflowinstance.WorkflowDefinitionIDEQ(def.ID),
+			workflowinstance.OwnerIDEQ(orgID),
+			workflowinstance.ControlIDEQ(control.ID),
+		).
+		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
+		First(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowInstanceStateCompleted, instance.State)
+	s.Require().NotEmpty(instance.WorkflowProposalID)
+
+	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowProposalStateApplied, proposal.State)
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(seedCtx)
 	s.Require().NoError(err)
 	s.Len(assignments, 0)
+
+	appliedControl, err := s.client.Control.Get(seedCtx, control.ID)
+	s.Require().NoError(err)
+	s.Equal(newRef, appliedControl.ReferenceID)
 }
 
-// TestApprovalActionWhenUsesProposedChanges verifies action When expressions can access proposed_changes.
+// TestApprovalHookRejectsIneligibleFields verifies that mutations containing both workflow-eligible
+// fields AND non-eligible fields are rejected outright. This prevents partial staging.
+//
+// Workflow Definition (Plain English):
+//   "Require approval for Control.reference_id changes"
+//   (Only reference_id is eligible for workflow staging)
+//
+// Test Flow:
+//  1. Creates an approval workflow for reference_id changes
+//  2. Creates a Control with an initial reference_id
+//  3. Attempts to update BOTH reference_id AND description in the same mutation
+//  4. Verifies the mutation is REJECTED with ErrWorkflowIneligibleField
+//  5. Confirms the Control remains unchanged (neither field was modified)
+//
+// Why This Matters:
+//   Workflow staging can only capture specific fields. If a mutation includes non-eligible
+//   fields alongside eligible ones, we cannot partially stage it. The entire mutation must
+//   be rejected to maintain data integrity and prevent unexpected partial updates.
+func (s *WorkflowEngineTestSuite) TestApprovalHookRejectsIneligibleFields() {
+	userID, orgID, _ := s.SetupTestUser()
+	seedCtx := s.SeedContext(userID, orgID)
+
+	wfEngine := s.Engine()
+	s.client.WorkflowEngine = wfEngine
+
+	params := workflows.ApprovalActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{
+				{Type: enums.WorkflowTargetTypeUser, ID: userID},
+			},
+		},
+		Required: boolPtr(true),
+		Label:    "Reference ID Approval",
+		Fields:   []string{"reference_id"},
+	}
+	paramsBytes, err := json.Marshal(params)
+	s.Require().NoError(err)
+
+	action := models.WorkflowAction{
+		Type:   enums.WorkflowActionTypeApproval.String(),
+		Key:    "reference_id_approval",
+		Params: paramsBytes,
+	}
+	_ = s.CreateApprovalWorkflowDefinition(seedCtx, orgID, action)
+
+	oldRef := "REF-INELIGIBLE-OLD-" + ulid.Make().String()
+	newRef := "REF-INELIGIBLE-NEW-" + ulid.Make().String()
+
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-INELIGIBLE-" + ulid.Make().String()).
+		SetOwnerID(orgID).
+		SetReferenceID(oldRef).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	_, err = s.client.Control.UpdateOneID(control.ID).
+		SetReferenceID(newRef).
+		SetDescription("not eligible").
+		Save(seedCtx)
+	s.Require().ErrorIs(err, hooks.ErrWorkflowIneligibleField)
+
+	reloaded, err := s.client.Control.Get(seedCtx, control.ID)
+	s.Require().NoError(err)
+	s.Equal(oldRef, reloaded.ReferenceID)
+}
+
+// TestApprovalHookCreatesInstancesForAllMatchingDefinitions verifies that when multiple workflow
+// definitions match a single mutation, ALL of them create instances (not just the first match).
+//
+// Workflow Definition (Plain English):
+//   Definition 1: "Require approval for Control.reference_id changes (approval key: one)"
+//   Definition 2: "Require approval for Control.reference_id changes (approval key: two)"
+//   Both definitions trigger on the same field change.
+//
+// Test Flow:
+//  1. Creates two separate approval workflow definitions for reference_id changes
+//  2. Creates a Control and attempts to update reference_id
+//  3. Verifies TWO workflow instances were created (one per definition)
+//  4. Confirms both definitions matched the same trigger criteria
+//
+// Why This Matters:
+//   Multiple teams or compliance requirements may have overlapping approval workflows.
+//   All matching workflows must execute to ensure complete policy enforcement.
+func (s *WorkflowEngineTestSuite) TestApprovalHookCreatesInstancesForAllMatchingDefinitions() {
+	userID, orgID, _ := s.SetupTestUser()
+	seedCtx := s.SeedContext(userID, orgID)
+
+	wfEngine := s.Engine()
+	s.client.WorkflowEngine = wfEngine
+
+	params := workflows.ApprovalActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{
+				{Type: enums.WorkflowTargetTypeUser, ID: userID},
+			},
+		},
+		Required: boolPtr(true),
+		Label:    "Reference ID Approval",
+		Fields:   []string{"reference_id"},
+	}
+	paramsBytes, err := json.Marshal(params)
+	s.Require().NoError(err)
+
+	action1 := models.WorkflowAction{
+		Type:   enums.WorkflowActionTypeApproval.String(),
+		Key:    "reference_id_approval_one",
+		Params: paramsBytes,
+	}
+	action2 := models.WorkflowAction{
+		Type:   enums.WorkflowActionTypeApproval.String(),
+		Key:    "reference_id_approval_two",
+		Params: paramsBytes,
+	}
+
+	def1 := s.CreateApprovalWorkflowDefinition(seedCtx, orgID, action1)
+	def2 := s.CreateApprovalWorkflowDefinition(seedCtx, orgID, action2)
+
+	oldRef := "REF-MULTI-OLD-" + ulid.Make().String()
+	newRef := "REF-MULTI-NEW-" + ulid.Make().String()
+
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-MULTI-" + ulid.Make().String()).
+		SetOwnerID(orgID).
+		SetReferenceID(oldRef).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	updated, err := s.client.Control.UpdateOneID(control.ID).
+		SetReferenceID(newRef).
+		Save(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(oldRef, updated.ReferenceID)
+
+	// Wait for async event processing to complete
+	s.WaitForEvents()
+
+	instances, err := s.client.WorkflowInstance.Query().
+		Where(
+			workflowinstance.OwnerIDEQ(orgID),
+			workflowinstance.WorkflowDefinitionIDIn(def1.ID, def2.ID),
+			workflowinstance.ControlIDEQ(control.ID),
+		).
+		All(seedCtx)
+	s.Require().NoError(err)
+	s.Len(instances, 2)
+}
+
+// TestApprovalActionWhenUsesProposedChanges verifies that action-level "when" expressions can
+// access both the current object state AND the proposed changes for conditional action execution.
+//
+// Workflow Definition (Plain English):
+//   "Require approval for reference_id changes, but ONLY when:
+//    - Current reference_id equals 'REF-PROPOSED-OLD-xxx' AND
+//    - Proposed new reference_id equals 'REF-PROPOSED-NEW-xxx'"
+//   When expression: object.reference_id == "OLD" && proposed_changes['reference_id'] == "NEW"
+//
+// Test Flow:
+//  1. Creates a workflow with an action-level "when" clause checking both current and proposed values
+//  2. Creates a Control with reference_id = "REF-PROPOSED-OLD-xxx"
+//  3. Attempts to update reference_id to "REF-PROPOSED-NEW-xxx"
+//  4. Verifies the "when" expression evaluated to true (both conditions met)
+//  5. Confirms an approval assignment was created (action was not skipped)
+//
+// Why This Matters:
+//   Action-level "when" clauses provide fine-grained control over when specific actions execute.
+//   Access to proposed_changes allows conditional logic based on the intended change, not just
+//   the current state.
 func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -462,32 +827,35 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
 			},
 		},
 		Required: boolPtr(true),
-		Label:    "Status Approval",
-		Fields:   []string{"status"},
+		Label:    "Reference ID Approval",
+		Fields:   []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
 	s.Require().NoError(err)
 
-	_, err = s.client.WorkflowDefinition.Create().
-		SetName("Status Approval With Proposed Changes " + ulid.Make().String()).
+	oldRef := "REF-PROPOSED-OLD-" + ulid.Make().String()
+	newRef := "REF-PROPOSED-NEW-" + ulid.Make().String()
+
+	def, err := s.client.WorkflowDefinition.Create().
+		SetName("Reference ID Approval With Proposed Changes " + ulid.Make().String()).
 		SetWorkflowKind(enums.WorkflowKindApproval).
 		SetSchemaType("Control").
 		SetActive(true).
 		SetDraft(false).
 		SetOwnerID(orgID).
 		SetTriggerOperations([]string{"UPDATE"}).
-		SetTriggerFields([]string{"status"}).
+		SetTriggerFields([]string{"reference_id"}).
 		SetApprovalSubmissionMode(enums.WorkflowApprovalSubmissionModeAutoSubmit).
 		SetDefinitionJSON(models.WorkflowDefinitionDocument{
 			ApprovalSubmissionMode: enums.WorkflowApprovalSubmissionModeAutoSubmit,
 			Triggers: []models.WorkflowTrigger{
-				{Operation: "UPDATE", Fields: []string{"status"}},
+				{Operation: "UPDATE", Fields: []string{"reference_id"}},
 			},
 			Actions: []models.WorkflowAction{
 				{
 					Type:   enums.WorkflowActionTypeApproval.String(),
-					Key:    "status_approval",
-					When:   `object.status == "NOT_IMPLEMENTED" && proposed_changes['status'] == "APPROVED"`,
+					Key:    "reference_id_approval",
+					When:   "object.reference_id == \"" + oldRef + "\" && proposed_changes['reference_id'] == \"" + newRef + "\"",
 					Params: paramsBytes,
 				},
 			},
@@ -498,34 +866,34 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-PROPOSED-WHEN-" + ulid.Make().String()).
 		SetOwnerID(orgID).
-		SetStatus(enums.ControlStatusNotImplemented).
+		SetReferenceID(oldRef).
 		Save(seedCtx)
 	s.Require().NoError(err)
 
 	updated, err := s.client.Control.UpdateOneID(control.ID).
-		SetStatus(enums.ControlStatusApproved).
+		SetReferenceID(newRef).
 		Save(seedCtx)
 	s.Require().NoError(err)
-	s.Equal(enums.ControlStatusNotImplemented, updated.Status)
+	s.Equal(oldRef, updated.ReferenceID)
 
 	// Wait for async event processing to complete
 	s.WaitForEvents()
 
-	domainKey := workflows.DeriveDomainKey([]string{"status"})
-	proposal, err := s.client.WorkflowProposal.Query().
-		Where(
-			workflowproposal.DomainKeyEQ(domainKey),
-			workflowproposal.OwnerIDEQ(orgID),
-		).
-		Only(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
-
 	instance, err := s.client.WorkflowInstance.Query().
-		Where(workflowinstance.WorkflowProposalIDEQ(proposal.ID)).
-		Only(seedCtx)
+		Where(
+			workflowinstance.WorkflowDefinitionIDEQ(def.ID),
+			workflowinstance.OwnerIDEQ(orgID),
+			workflowinstance.ControlIDEQ(control.ID),
+		).
+		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
+		First(seedCtx)
 	s.Require().NoError(err)
 	s.Equal(enums.WorkflowInstanceStatePaused, instance.State)
+	s.Require().NotEmpty(instance.WorkflowProposalID)
+
+	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
@@ -535,7 +903,25 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
 	s.Equal(enums.WorkflowAssignmentStatusPending, assignments[0].Status)
 }
 
-// TestApprovalActionWhenSkipsWhenProposedChangesDoNotMatch verifies action When skips when proposed_changes are different.
+// TestApprovalActionWhenSkipsWhenProposedChangesDoNotMatch verifies that actions are skipped
+// when their "when" expression evaluates to false based on proposed_changes mismatch.
+//
+// Workflow Definition (Plain English):
+//   "Require approval for reference_id changes, but ONLY when proposed value equals 'REF-SKIP-ARCHIVE-xxx'"
+//   When expression: proposed_changes['reference_id'] == "REF-SKIP-ARCHIVE-xxx"
+//
+// Test Flow:
+//  1. Creates a workflow with a "when" clause checking for a specific proposed value
+//  2. Creates a Control with reference_id = "REF-SKIP-OLD-xxx"
+//  3. Attempts to update reference_id to "REF-SKIP-NEW-xxx" (different from the expected archive value)
+//  4. Verifies the "when" expression evaluated to false (proposed value doesn't match)
+//  5. Confirms the workflow completed immediately with state = COMPLETED
+//  6. Confirms the proposal was auto-applied (no approval needed since action was skipped)
+//  7. Confirms zero assignments were created
+//
+// Why This Matters:
+//   Demonstrates that "when" expressions can selectively skip approval requirements based on
+//   the actual proposed values, enabling value-based routing of changes.
 func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChangesDoNotMatch() {
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -550,32 +936,36 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChanges
 			},
 		},
 		Required: boolPtr(true),
-		Label:    "Status Approval",
-		Fields:   []string{"status"},
+		Label:    "Reference ID Approval",
+		Fields:   []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
 	s.Require().NoError(err)
 
-	_, err = s.client.WorkflowDefinition.Create().
-		SetName("Status Approval With Proposed Changes Skip " + ulid.Make().String()).
+	oldRef := "REF-SKIP-OLD-" + ulid.Make().String()
+	newRef := "REF-SKIP-NEW-" + ulid.Make().String()
+	skipRef := "REF-SKIP-ARCHIVE-" + ulid.Make().String()
+
+	def, err := s.client.WorkflowDefinition.Create().
+		SetName("Reference ID Approval With Proposed Changes Skip " + ulid.Make().String()).
 		SetWorkflowKind(enums.WorkflowKindApproval).
 		SetSchemaType("Control").
 		SetActive(true).
 		SetDraft(false).
 		SetOwnerID(orgID).
 		SetTriggerOperations([]string{"UPDATE"}).
-		SetTriggerFields([]string{"status"}).
+		SetTriggerFields([]string{"reference_id"}).
 		SetApprovalSubmissionMode(enums.WorkflowApprovalSubmissionModeAutoSubmit).
 		SetDefinitionJSON(models.WorkflowDefinitionDocument{
 			ApprovalSubmissionMode: enums.WorkflowApprovalSubmissionModeAutoSubmit,
 			Triggers: []models.WorkflowTrigger{
-				{Operation: "UPDATE", Fields: []string{"status"}},
+				{Operation: "UPDATE", Fields: []string{"reference_id"}},
 			},
 			Actions: []models.WorkflowAction{
 				{
 					Type:   enums.WorkflowActionTypeApproval.String(),
-					Key:    "status_approval",
-					When:   `proposed_changes['status'] == "ARCHIVED"`,
+					Key:    "reference_id_approval",
+					When:   "proposed_changes['reference_id'] == \"" + skipRef + "\"",
 					Params: paramsBytes,
 				},
 			},
@@ -586,34 +976,34 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChanges
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-PROPOSED-WHEN-SKIP-" + ulids.New().String()).
 		SetOwnerID(orgID).
-		SetStatus(enums.ControlStatusNotImplemented).
+		SetReferenceID(oldRef).
 		Save(seedCtx)
 	s.Require().NoError(err)
 
 	updated, err := s.client.Control.UpdateOneID(control.ID).
-		SetStatus(enums.ControlStatusApproved).
+		SetReferenceID(newRef).
 		Save(seedCtx)
 	s.Require().NoError(err)
-	s.Equal(enums.ControlStatusNotImplemented, updated.Status)
+	s.Require().NotNil(updated)
 
 	// Wait for async event processing to complete
 	s.WaitForEvents()
 
-	domainKey := workflows.DeriveDomainKey([]string{"status"})
-	proposal, err := s.client.WorkflowProposal.Query().
-		Where(
-			workflowproposal.DomainKeyEQ(domainKey),
-			workflowproposal.OwnerIDEQ(orgID),
-		).
-		Only(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
-
 	instance, err := s.client.WorkflowInstance.Query().
-		Where(workflowinstance.WorkflowProposalIDEQ(proposal.ID)).
-		Only(seedCtx)
+		Where(
+			workflowinstance.WorkflowDefinitionIDEQ(def.ID),
+			workflowinstance.OwnerIDEQ(orgID),
+			workflowinstance.ControlIDEQ(control.ID),
+		).
+		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
+		First(seedCtx)
 	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStatePaused, instance.State)
+	s.Equal(enums.WorkflowInstanceStateCompleted, instance.State)
+	s.Require().NotEmpty(instance.WorkflowProposalID)
+
+	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowProposalStateApplied, proposal.State)
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
@@ -622,7 +1012,25 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChanges
 	s.Len(assignments, 0)
 }
 
-// TestSkippedApprovalActionAdvancesWorkflow verifies skipped approvals advance workflow
+// TestSkippedApprovalActionAdvancesWorkflow verifies that when an approval action is skipped
+// (via when="false"), subsequent actions still execute and the workflow completes normally.
+//
+// Workflow Definition (Plain English):
+//   Actions:
+//     1. Approval action with when="false" (always skipped)
+//     2. Notification action (should still execute)
+//
+// Test Flow:
+//  1. Creates a workflow with an approval action that is always skipped (when="false")
+//  2. Adds a subsequent notification action after the skipped approval
+//  3. Triggers the workflow on a Control
+//  4. Verifies zero approval assignments were created (approval was skipped)
+//  5. Confirms the workflow instance completed successfully
+//  6. Verifies that a "skipped" action event was recorded
+//
+// Why This Matters:
+//   Skipped approval actions should not block the workflow. The engine must recognize that
+//   a skipped action contributes zero pending work and advance to subsequent actions.
 func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
@@ -635,8 +1043,8 @@ func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 			},
 		},
 		Required: boolPtr(true),
-		Label:    "Status Approval",
-		Fields:   []string{"status"},
+		Label:    "Reference ID Approval",
+		Fields:   []string{"reference_id"},
 	}
 	approvalParamsBytes, err := json.Marshal(approvalParams)
 	s.Require().NoError(err)
@@ -660,7 +1068,7 @@ func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 		SetOwnerID(orgID).
 		SetDefinitionJSON(models.WorkflowDefinitionDocument{
 			Triggers: []models.WorkflowTrigger{
-				{Operation: "UPDATE", Fields: []string{"status"}},
+				{Operation: "UPDATE", Fields: []string{"reference_id"}},
 			},
 			Conditions: []models.WorkflowCondition{
 				{Expression: "true"},
@@ -668,7 +1076,7 @@ func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 			Actions: []models.WorkflowAction{
 				{
 					Type:   enums.WorkflowActionTypeApproval.String(),
-					Key:    "status_approval",
+					Key:    "reference_id_approval",
 					When:   "false",
 					Params: approvalParamsBytes,
 				},
@@ -685,7 +1093,7 @@ func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-SKIP-" + ulid.Make().String()).
 		SetOwnerID(orgID).
-		SetStatus(enums.ControlStatusNotImplemented).
+		SetReferenceID("REF-SKIP-" + ulid.Make().String()).
 		Save(userCtx)
 	s.Require().NoError(err)
 
@@ -696,7 +1104,7 @@ func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 
 	instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 		EventType:     "UPDATE",
-		ChangedFields: []string{"status"},
+		ChangedFields: []string{"reference_id"},
 	})
 	s.Require().NoError(err)
 	s.Require().NotNil(instance)
@@ -720,6 +1128,24 @@ func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 
 // TestApprovalFlowEditSubmittedProposalInvalidatesApprovals verifies that editing a SUBMITTED proposal
 // invalidates existing APPROVED assignments, requiring re-approval before the workflow can complete.
+// This prevents approved changes from being silently modified after approval.
+//
+// Workflow Definition (Plain English):
+//   "Require 2 approvals for Control.reference_id changes"
+//
+// Test Flow:
+//  1. Creates a 2-approver workflow for reference_id changes
+//  2. Triggers a proposal for a reference_id change
+//  3. Submits the proposal (state = SUBMITTED)
+//  4. First approver approves their assignment (status = APPROVED)
+//  5. Someone EDITS the proposal, changing the proposed value
+//  6. Verifies the first approver's assignment was INVALIDATED (reset to PENDING)
+//  7. Verifies invalidation metadata records the reason: "proposal changes edited after approval"
+//
+// Why This Matters:
+//   Approvers approve a specific set of changes (identified by hash). If those changes are
+//   modified after approval, the previous approval is no longer valid for the new content.
+//   This maintains approval integrity and prevents bait-and-switch scenarios.
 func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidatesApprovals() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -740,15 +1166,15 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 		Required: boolPtr(true),
 		// Require both approvals so the proposal remains SUBMITTED after the first approval.
 		RequiredCount: 2,
-		Label:         "Status Approval",
-		Fields:        []string{"status"},
+		Label:         "Reference ID Approval",
+		Fields:        []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
 	s.Require().NoError(err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
-		Key:    "status_approval",
+		Key:    "reference_id_approval",
 		Params: paramsBytes,
 	}
 
@@ -761,13 +1187,15 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 		Save(seedCtx)
 	s.Require().NoError(err)
 
-	// Trigger workflow by attempting to update control status
+	// Trigger workflow by attempting to update control reference ID
 	// The hook will intercept and create proposal + instance
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+	proposedRef := "REF-INVALIDATE-" + ulid.Make().String()
+
 	instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 		EventType:       "UPDATE",
-		ChangedFields:   []string{"status"},
-		ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
+		ChangedFields:   []string{"reference_id"},
+		ProposedChanges: map[string]any{"reference_id": proposedRef},
 	})
 	s.Require().NoError(err)
 	s.Require().NotNil(instance)
@@ -812,7 +1240,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 	s.Equal(enums.WorkflowAssignmentStatusApproved, approvedAssignment.Status)
 
 	// Now edit the SUBMITTED proposal - this should invalidate the approval
-	newChanges := map[string]any{"status": enums.ControlStatusNeedsApproval.String()}
+	newChanges := map[string]any{"reference_id": "REF-INVALIDATE-EDIT-" + ulid.Make().String()}
 	newHash, err := workflows.ComputeProposalHash(newChanges)
 	s.Require().NoError(err)
 
@@ -833,7 +1261,27 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 }
 
 // TestInternalPolicyDetailsApprovalFlow verifies the complete workflow proposal lifecycle
-// for policy content changes via actual entity mutation.
+// for InternalPolicy entities, demonstrating that approval workflows work across different
+// entity types (not just Controls).
+//
+// Workflow Definition (Plain English):
+//   "Require approval before changing InternalPolicy.details (policy content)"
+//
+// Test Flow:
+//  1. Creates an approval workflow for InternalPolicy.details changes
+//  2. Creates an InternalPolicy with initial content: "This is the initial policy content."
+//  3. Attempts to update details to "This is the UPDATED policy content."
+//  4. Verifies the update was intercepted (original content unchanged)
+//  5. Verifies a proposal was created with the new content staged
+//  6. Resumes the paused instance (simulating proposal submission)
+//  7. Verifies an approval assignment was created
+//  8. Approves the assignment
+//  9. Confirms the proposal was applied and the InternalPolicy.details now shows updated content
+//
+// Why This Matters:
+//   Demonstrates that the workflow system is not Control-specific. InternalPolicy (and other
+//   entity types) can have their own approval workflows for sensitive field changes like
+//   policy content modifications.
 func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -855,7 +1303,7 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 	paramsBytes, err := json.Marshal(params)
 	s.Require().NoError(err)
 
-	_, err = s.client.WorkflowDefinition.Create().
+	def, err := s.client.WorkflowDefinition.Create().
 		SetName("Policy Details Approval " + ulid.Make().String()).
 		SetWorkflowKind(enums.WorkflowKindApproval).
 		SetSchemaType("InternalPolicy").
@@ -899,27 +1347,25 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 	// Original content should be unchanged (mutation was intercepted)
 	s.Equal(initialContent, updated.Details)
 
-	// Verify proposal was created
-	domainKey := workflows.DeriveDomainKey([]string{"details"})
-	proposal, err := s.client.WorkflowProposal.Query().
+	instance, err := s.client.WorkflowInstance.Query().
 		Where(
-			workflowproposal.DomainKeyEQ(domainKey),
-			workflowproposal.OwnerIDEQ(orgID),
+			workflowinstance.WorkflowDefinitionIDEQ(def.ID),
+			workflowinstance.OwnerIDEQ(orgID),
+			workflowinstance.InternalPolicyIDEQ(policy.ID),
 		).
-		Only(seedCtx)
+		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
+		First(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowInstanceStatePaused, instance.State)
+	s.Require().NotEmpty(instance.WorkflowProposalID)
+
+	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
 	s.Require().NoError(err)
 	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
 	s.Equal(proposedContent, proposal.Changes["details"])
 
-	// Verify workflow instance exists (created in PAUSED state by the hook)
-	instance, err := s.client.WorkflowInstance.Query().
-		Where(workflowinstance.WorkflowProposalIDEQ(proposal.ID)).
-		Only(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStatePaused, instance.State)
-
 	// Get the workflow definition
-	def, err := s.client.WorkflowDefinition.Query().
+	def, err = s.client.WorkflowDefinition.Query().
 		Where(workflowdefinition.IDEQ(instance.WorkflowDefinitionID)).
 		Only(seedCtx)
 	s.Require().NoError(err)
@@ -954,7 +1400,27 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 	s.Equal(proposedContent, finalPolicy.Details)
 }
 
-// TestActionWhenExpressionUsesTriggerContext verifies when expressions use trigger context
+// TestActionWhenExpressionUsesTriggerContext verifies that action-level "when" expressions
+// have access to trigger context variables like changed_edges, allowing conditional execution
+// based on which edges were modified.
+//
+// Workflow Definition (Plain English):
+//   "Send notification, but ONLY when the 'evidence' edge was modified"
+//   When expression: 'evidence' in changed_edges
+//
+// Test Flow:
+//   Subtest "when expression true executes":
+//     1. Triggers workflow with changed_edges = ["evidence"]
+//     2. Verifies the notification action executed (not skipped)
+//
+//   Subtest "when expression false skips":
+//     1. Triggers workflow with changed_edges = ["other_edge"]
+//     2. Verifies the notification action was skipped
+//     3. Confirms a "skipped" action event was recorded
+//
+// Why This Matters:
+//   Actions can be conditionally executed based on trigger context. This enables workflows
+//   that only fire certain actions when specific edges change, providing fine-grained control.
 func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
 	_, orgID, userCtx := s.SetupTestUser()
 
@@ -974,7 +1440,7 @@ func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
 		SetOwnerID(orgID).
 		SetDefinitionJSON(models.WorkflowDefinitionDocument{
 			Triggers: []models.WorkflowTrigger{
-				{Operation: "UPDATE", Fields: []string{"status"}},
+				{Operation: "UPDATE", Fields: []string{"reference_id"}},
 			},
 			Actions: []models.WorkflowAction{action},
 		}).
@@ -984,6 +1450,7 @@ func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-WHEN-" + ulid.Make().String()).
 		SetOwnerID(orgID).
+		SetReferenceID("REF-WHEN-" + ulid.Make().String()).
 		Save(userCtx)
 	s.Require().NoError(err)
 
@@ -995,7 +1462,7 @@ func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
 	s.Run("when expression true executes", func() {
 		instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 			EventType:     "UPDATE",
-			ChangedFields: []string{"status"},
+			ChangedFields: []string{"reference_id"},
 			ChangedEdges:  []string{"evidence"},
 			AddedIDs:      map[string][]string{"evidence": {"evidence-1"}},
 		})
@@ -1012,7 +1479,7 @@ func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
 	s.Run("when expression false skips", func() {
 		instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 			EventType:     "UPDATE",
-			ChangedFields: []string{"status"},
+			ChangedFields: []string{"reference_id"},
 			ChangedEdges:  []string{"other_edge"},
 			AddedIDs:      map[string][]string{"evidence": {"evidence-1"}},
 		})

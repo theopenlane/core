@@ -12,7 +12,7 @@ type Config struct {
 	// Summarizer contains configuration for text summarization
 	Summarizer summarizer.Config `json:"summarizer" koanf:"summarizer"`
 	// MaxPoolSize is the max worker pool size that can be used by the ent client
-	MaxPoolSize int `json:"maxpoolsize" koanf:"maxpoolsize" default:"100"`
+	MaxPoolSize int `json:"maxpoolsize" koanf:"maxpoolsize" default:"200"`
 	// Modules contains the configuration for the module system
 	Modules Modules `json:"modules" koanf:"modules"`
 	// MaxSchemaImportSize is the maximum size allowed for schema imports in bytes

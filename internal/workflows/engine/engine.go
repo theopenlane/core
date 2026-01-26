@@ -224,7 +224,7 @@ func (e *WorkflowEngine) guardTriggerPerDomain(ctx context.Context, def *generat
 	}
 
 	// Derive domain key from approval fields
-	domainKey := workflows.DeriveDomainKey(approvalFields)
+	domainKey := workflows.DeriveDomainKey(obj.Type, approvalFields)
 
 	objRefIDs, err := workflows.ObjectRefIDs(ctx, e.client, obj)
 	if err != nil {
@@ -431,11 +431,17 @@ func (e *WorkflowEngine) serializeDefinition(def *generated.WorkflowDefinition) 
 
 // approvalDomainForTrigger picks the first matching approval domain for a trigger event
 func approvalDomainForTrigger(def *generated.WorkflowDefinition, proposedChanges map[string]any, changedFields []string) (*workflows.DomainChanges, error) {
+	objectType := enums.ToWorkflowObjectType(def.SchemaType)
+	if objectType == nil {
+		return nil, workflows.ErrUnsupportedObjectType
+	}
+
 	if len(proposedChanges) > 0 {
-		matches, err := workflows.DomainChangesForDefinition(def.DefinitionJSON, proposedChanges)
+		matches, err := workflows.DomainChangesForDefinition(def.DefinitionJSON, *objectType, proposedChanges)
 		if err != nil {
 			return nil, err
 		}
+
 		if len(matches) > 0 {
 			return &matches[0], nil
 		}
@@ -450,7 +456,8 @@ func approvalDomainForTrigger(def *generated.WorkflowDefinition, proposedChanges
 		changes := lo.SliceToMap(changedFields, func(field string) (string, any) {
 			return field, true
 		})
-		matches := workflows.SplitChangesByDomains(changes, domains)
+
+		matches := workflows.SplitChangesByDomains(changes, *objectType, domains)
 		if len(matches) > 0 {
 			return &workflows.DomainChanges{
 				DomainKey: matches[0].DomainKey,

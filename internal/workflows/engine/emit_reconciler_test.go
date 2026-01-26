@@ -44,7 +44,24 @@ func (s *WorkflowEngineTestSuite) clearEmitFailedEvents(ctx context.Context) {
 	s.Require().NoError(err)
 }
 
-// TestEmitFailureRecorded verifies emit failures are recorded
+// TestEmitFailureRecorded verifies that when event emission fails (e.g., queue unavailable),
+// the failure is recorded as an EMIT_FAILED WorkflowEvent with full diagnostic details.
+//
+// Test Flow:
+//  1. Creates a workflow engine with a broken emitter (simulates queue failure)
+//  2. Triggers a workflow (instance created, but event emission fails)
+//  3. Verifies an EMIT_FAILED event was recorded with:
+//     - Topic: The intended destination topic
+//     - OriginalEventType: The event that failed to emit
+//     - ObjectID/ObjectType: Context about the trigger object
+//     - Attempts: Number of emit attempts (starts at 1)
+//     - EventID: Unique identifier for correlation
+//     - Payload: The original event payload
+//     - LastError: The error message from the failed emit
+//
+// Why This Matters:
+//   Emit failures should not be silently lost. Recording them enables monitoring, alerting,
+//   and automated recovery through the reconciliation process.
 func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
 	_, orgID, userCtx := s.SetupTestUser()
 	s.clearEmitFailedEvents(userCtx)
@@ -96,7 +113,21 @@ func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
 	s.Contains(details.LastError, "enqueue failed")
 }
 
-// TestReconcileEmitFailureRecovers verifies reconciler recovers emit failures
+// TestReconcileEmitFailureRecovers verifies that the reconciler can recover from emit failures
+// by re-emitting the event to a healthy emitter and marking the failure as recovered.
+//
+// Test Flow:
+//  1. Creates a workflow engine with a broken emitter (failure recorded)
+//  2. Triggers a workflow (EMIT_FAILED event recorded)
+//  3. Creates a reconciler using the suite's healthy emitter
+//  4. Calls ReconcileEmitFailures
+//  5. Verifies: Attempted = 1, Recovered = 1
+//  6. Verifies an EMIT_RECOVERED event was recorded
+//  7. Verifies the workflow instance eventually completed (event processed)
+//
+// Why This Matters:
+//   The reconciliation process enables self-healing. When infrastructure recovers, the
+//   reconciler can retry failed emissions without losing workflow progress.
 func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 	_, orgID, userCtx := s.SetupTestUser()
 	s.clearEmitFailedEvents(userCtx)
@@ -147,7 +178,27 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 	s.Equal(enums.WorkflowInstanceStateCompleted, updated.State)
 }
 
-// TestReconcileEmitFailureTerminalAfterMaxAttempts verifies terminal behavior after max attempts
+// TestReconcileEmitFailureTerminalAfterMaxAttempts verifies that after exhausting the maximum
+// retry attempts, the reconciler marks the failure as terminal and fails the workflow instance.
+//
+// Test Setup:
+//   - Reconciler configured with MaxAttempts = 3
+//   - Emitter that always fails (simulates persistent infrastructure issue)
+//
+// Test Flow:
+//  1. Creates a workflow engine with a broken emitter (EMIT_FAILED recorded, attempts = 1)
+//  2. First reconciliation attempt (emitter still broken):
+//     - Attempts incremented to 2
+//     - EMIT_FAILED event updated
+//  3. Second reconciliation attempt:
+//     - Attempts = 3 (max reached)
+//     - EMIT_FAILED_TERMINAL event recorded
+//     - Workflow instance marked as FAILED
+//
+// Why This Matters:
+//   Infinite retries could waste resources on permanently broken workflows. After max
+//   attempts, the system must give up gracefully, mark the failure as terminal, and
+//   fail the workflow instance for human investigation.
 func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureTerminalAfterMaxAttempts() {
 	_, orgID, userCtx := s.SetupTestUser()
 	s.clearEmitFailedEvents(userCtx)

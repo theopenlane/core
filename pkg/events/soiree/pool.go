@@ -8,7 +8,7 @@ import (
 )
 
 // defaultPoolWorkers is the default number of workers in a pool
-const defaultPoolWorkers = 10
+const defaultPoolWorkers = 200
 
 // Pool is a worker pool implementation using the pond library
 type Pool struct {

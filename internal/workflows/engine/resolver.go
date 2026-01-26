@@ -142,7 +142,6 @@ func (e *WorkflowEngine) getObjectGroups(ctx context.Context, obj *workflows.Obj
 		}
 		groupIDs = append(groupIDs, ids...)
 	}
-
 	if q, ok := entity.(interface{ QueryViewers() *generated.GroupQuery }); ok {
 		ids, err := q.QueryViewers().IDs(ctx)
 		if err != nil {
@@ -150,7 +149,6 @@ func (e *WorkflowEngine) getObjectGroups(ctx context.Context, obj *workflows.Obj
 		}
 		groupIDs = append(groupIDs, ids...)
 	}
-
 	if q, ok := entity.(interface{ QueryBlockedGroups() *generated.GroupQuery }); ok {
 		ids, err := q.QueryBlockedGroups().IDs(ctx)
 		if err != nil {
