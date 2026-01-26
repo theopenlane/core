@@ -2,22 +2,27 @@ package notifications
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
 const (
-	policyURLPath    = "/policies/%s/view"
-	procedureURLPath = "/procedures/%s/view"
-	riskURLPath      = "/risks/%s"
-	taskURLPath      = "/tasks?id=%s"
-	controlURLPath   = "/controls/%s"
-	evidenceURLPath  = "/evidence?id=%s"
-	trustCenterNDA   = "/trust-center/NDAs"
+	policyURLPath    = "policies/%s/view"
+	procedureURLPath = "procedures/%s/view"
+	riskURLPath      = "risks/%s"
+	taskURLPath      = "tasks?id=%s"
+	controlURLPath   = "controls/%s"
+	evidenceURLPath  = "evidence?id=%s"
+	trustCenterNDA   = "trust-center/NDAs"
 )
 
 // getURLPathForObject constructs the URL path for a given object type and ID
 func getURLPathForObject(base, objectID, objectType string) string {
+	if !strings.HasSuffix(base, "/") {
+		base += "/"
+	}
+
 	switch objectType {
 	case generated.TypeInternalPolicy:
 		return base + fmt.Sprintf(policyURLPath, objectID)
