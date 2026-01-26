@@ -377,7 +377,7 @@ func queryDocumentFromDB(ctx *soiree.EventContext, fields *documentFields, paylo
 }
 
 // getInternalPolicyFromDB queries internal policy from database to fill missing fields
-func getInternalPolicyFromDB(ctx *soiree.EventContext, policyID string, fields *documentFields) error {
+func getInternalPolicyFromDB(ctx *soiree.EventContext, fields *documentFields) error {
 	client, ok := soiree.ClientAs[*generated.Client](ctx)
 	if !ok {
 		return ErrFailedToGetClient
@@ -405,7 +405,7 @@ func getInternalPolicyFromDB(ctx *soiree.EventContext, policyID string, fields *
 }
 
 // getProcedureFromDB queries procedure from database to fill missing fields
-func getProcedureFromDB(ctx *soiree.EventContext, procedureID string, fields *documentFields) error {
+func getProcedureFromDB(ctx *soiree.EventContext, fields *documentFields) error {
 	client, ok := soiree.ClientAs[*generated.Client](ctx)
 	if !ok {
 		return ErrFailedToGetClient
