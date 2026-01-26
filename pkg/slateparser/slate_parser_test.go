@@ -204,7 +204,7 @@ func TestExtractMentionedUserIDs(t *testing.T) {
 		},
 	}
 
-	userIDs := ExtractMentionedUserIDs(mentions)
+	userIDs := ExtractMentionedOrgMemberIDs(mentions)
 
 	assert.Equal(t, 2, len(userIDs), "should have 2 unique valid user IDs")
 	assert.Contains(t, userIDs, validUserID1)

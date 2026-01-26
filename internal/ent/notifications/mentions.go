@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/events"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
@@ -116,7 +117,7 @@ func handleNoteMutation(ctx *soiree.EventContext, payload *events.MutationPayloa
 	}
 
 	// Extract unique user IDs from mentions
-	mentionedUserIDs := slateparser.ExtractMentionedUserIDs(newMentions)
+	mentionedUserIDs := slateparser.ExtractMentionedOrgMemberIDs(newMentions)
 	if len(mentionedUserIDs) == 0 {
 		return nil
 	}
@@ -570,14 +571,23 @@ func handleObjectMentions(ctx *soiree.EventContext, payload *events.MutationPayl
 	}
 
 	// Extract unique user IDs from mentions
-	mentionedUserIDs := slateparser.ExtractMentionedUserIDs(newMentions)
-	if len(mentionedUserIDs) == 0 {
+	mentionedOrgMemberIDs := slateparser.ExtractMentionedOrgMemberIDs(newMentions)
+	if len(mentionedOrgMemberIDs) == 0 {
 		return nil
+	}
+
+	// get user IDs from org member IDs
+	userIDs, err := client.OrgMembership.Query().Where(
+		orgmembership.IDIn(mentionedOrgMemberIDs...),
+	).Select(orgmembership.FieldUserID).Strings(allowCtx)
+	if err != nil {
+		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to get user IDs from org membership IDs")
+		return err
 	}
 
 	// Create mention notifications
 	input := mentionNotificationInput{
-		mentionedUserIDs: mentionedUserIDs,
+		mentionedUserIDs: userIDs,
 		objectType:       details.objectType,
 		objectID:         details.objectID,
 		objectName:       details.objectName,
