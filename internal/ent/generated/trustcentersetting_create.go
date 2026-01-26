@@ -148,6 +148,20 @@ func (_c *TrustCenterSettingCreate) SetNillableCompanyName(v *string) *TrustCent
 	return _c
 }
 
+// SetCompanyDescription sets the "company_description" field.
+func (_c *TrustCenterSettingCreate) SetCompanyDescription(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetCompanyDescription(v)
+	return _c
+}
+
+// SetNillableCompanyDescription sets the "company_description" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableCompanyDescription(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetCompanyDescription(*v)
+	}
+	return _c
+}
+
 // SetOverview sets the "overview" field.
 func (_c *TrustCenterSettingCreate) SetOverview(v string) *TrustCenterSettingCreate {
 	_c.mutation.SetOverview(v)
@@ -576,6 +590,11 @@ func (_c *TrustCenterSettingCreate) check() error {
 			return &ValidationError{Name: "company_name", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.company_name": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.CompanyDescription(); ok {
+		if err := trustcentersetting.CompanyDescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "company_description", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.company_description": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.Overview(); ok {
 		if err := trustcentersetting.OverviewValidator(v); err != nil {
 			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
@@ -712,6 +731,10 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 	if value, ok := _c.mutation.CompanyName(); ok {
 		_spec.SetField(trustcentersetting.FieldCompanyName, field.TypeString, value)
 		_node.CompanyName = value
+	}
+	if value, ok := _c.mutation.CompanyDescription(); ok {
+		_spec.SetField(trustcentersetting.FieldCompanyDescription, field.TypeString, value)
+		_node.CompanyDescription = value
 	}
 	if value, ok := _c.mutation.Overview(); ok {
 		_spec.SetField(trustcentersetting.FieldOverview, field.TypeString, value)

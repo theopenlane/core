@@ -68,6 +68,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingBulkCreatePayload_tru
 				return ec.fieldContext_TrustCenterSetting_title(ctx, field)
 			case "companyName":
 				return ec.fieldContext_TrustCenterSetting_companyName(ctx, field)
+			case "companyDescription":
+				return ec.fieldContext_TrustCenterSetting_companyDescription(ctx, field)
 			case "overview":
 				return ec.fieldContext_TrustCenterSetting_overview(ctx, field)
 			case "logoRemoteURL":
@@ -159,6 +161,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_title(ctx, field)
 			case "companyName":
 				return ec.fieldContext_TrustCenterSetting_companyName(ctx, field)
+			case "companyDescription":
+				return ec.fieldContext_TrustCenterSetting_companyDescription(ctx, field)
 			case "overview":
 				return ec.fieldContext_TrustCenterSetting_overview(ctx, field)
 			case "logoRemoteURL":
@@ -279,6 +283,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_title(ctx, field)
 			case "companyName":
 				return ec.fieldContext_TrustCenterSetting_companyName(ctx, field)
+			case "companyDescription":
+				return ec.fieldContext_TrustCenterSetting_companyDescription(ctx, field)
 			case "overview":
 				return ec.fieldContext_TrustCenterSetting_overview(ctx, field)
 			case "logoRemoteURL":

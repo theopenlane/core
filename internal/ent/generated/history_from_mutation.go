@@ -20408,6 +20408,10 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetCompanyName(companyName)
 	}
 
+	if companyDescription, exists := m.CompanyDescription(); exists {
+		create = create.SetCompanyDescription(companyDescription)
+	}
+
 	if overview, exists := m.Overview(); exists {
 		create = create.SetOverview(overview)
 	}
@@ -20565,6 +20569,12 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetCompanyName(trustcentersetting.CompanyName)
 		}
 
+		if companyDescription, exists := m.CompanyDescription(); exists {
+			create = create.SetCompanyDescription(companyDescription)
+		} else {
+			create = create.SetCompanyDescription(trustcentersetting.CompanyDescription)
+		}
+
 		if overview, exists := m.Overview(); exists {
 			create = create.SetOverview(overview)
 		} else {
@@ -20717,6 +20727,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetTrustCenterID(trustcentersetting.TrustCenterID).
 			SetTitle(trustcentersetting.Title).
 			SetCompanyName(trustcentersetting.CompanyName).
+			SetCompanyDescription(trustcentersetting.CompanyDescription).
 			SetOverview(trustcentersetting.Overview).
 			SetNillableLogoRemoteURL(trustcentersetting.LogoRemoteURL).
 			SetNillableLogoLocalFileID(trustcentersetting.LogoLocalFileID).

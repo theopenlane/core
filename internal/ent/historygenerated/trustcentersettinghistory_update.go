@@ -166,6 +166,26 @@ func (_u *TrustCenterSettingHistoryUpdate) ClearCompanyName() *TrustCenterSettin
 	return _u
 }
 
+// SetCompanyDescription sets the "company_description" field.
+func (_u *TrustCenterSettingHistoryUpdate) SetCompanyDescription(v string) *TrustCenterSettingHistoryUpdate {
+	_u.mutation.SetCompanyDescription(v)
+	return _u
+}
+
+// SetNillableCompanyDescription sets the "company_description" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdate) SetNillableCompanyDescription(v *string) *TrustCenterSettingHistoryUpdate {
+	if v != nil {
+		_u.SetCompanyDescription(*v)
+	}
+	return _u
+}
+
+// ClearCompanyDescription clears the value of the "company_description" field.
+func (_u *TrustCenterSettingHistoryUpdate) ClearCompanyDescription() *TrustCenterSettingHistoryUpdate {
+	_u.mutation.ClearCompanyDescription()
+	return _u
+}
+
 // SetOverview sets the "overview" field.
 func (_u *TrustCenterSettingHistoryUpdate) SetOverview(v string) *TrustCenterSettingHistoryUpdate {
 	_u.mutation.SetOverview(v)
@@ -632,6 +652,12 @@ func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.CompanyNameCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldCompanyName, field.TypeString)
 	}
+	if value, ok := _u.mutation.CompanyDescription(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldCompanyDescription, field.TypeString, value)
+	}
+	if _u.mutation.CompanyDescriptionCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldCompanyDescription, field.TypeString)
+	}
 	if value, ok := _u.mutation.Overview(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldOverview, field.TypeString, value)
 	}
@@ -890,6 +916,26 @@ func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableCompanyName(v *string) 
 // ClearCompanyName clears the value of the "company_name" field.
 func (_u *TrustCenterSettingHistoryUpdateOne) ClearCompanyName() *TrustCenterSettingHistoryUpdateOne {
 	_u.mutation.ClearCompanyName()
+	return _u
+}
+
+// SetCompanyDescription sets the "company_description" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetCompanyDescription(v string) *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.SetCompanyDescription(v)
+	return _u
+}
+
+// SetNillableCompanyDescription sets the "company_description" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableCompanyDescription(v *string) *TrustCenterSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetCompanyDescription(*v)
+	}
+	return _u
+}
+
+// ClearCompanyDescription clears the value of the "company_description" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) ClearCompanyDescription() *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.ClearCompanyDescription()
 	return _u
 }
 
@@ -1388,6 +1434,12 @@ func (_u *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.CompanyNameCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldCompanyName, field.TypeString)
+	}
+	if value, ok := _u.mutation.CompanyDescription(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldCompanyDescription, field.TypeString, value)
+	}
+	if _u.mutation.CompanyDescriptionCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldCompanyDescription, field.TypeString)
 	}
 	if value, ok := _u.mutation.Overview(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldOverview, field.TypeString, value)

@@ -36,6 +36,8 @@ const (
 	FieldTitle = "title"
 	// FieldCompanyName holds the string denoting the company_name field in the database.
 	FieldCompanyName = "company_name"
+	// FieldCompanyDescription holds the string denoting the company_description field in the database.
+	FieldCompanyDescription = "company_description"
 	// FieldOverview holds the string denoting the overview field in the database.
 	FieldOverview = "overview"
 	// FieldLogoRemoteURL holds the string denoting the logo_remote_url field in the database.
@@ -124,6 +126,7 @@ var Columns = []string{
 	FieldTrustCenterID,
 	FieldTitle,
 	FieldCompanyName,
+	FieldCompanyDescription,
 	FieldOverview,
 	FieldLogoRemoteURL,
 	FieldLogoLocalFileID,
@@ -175,6 +178,8 @@ var (
 	TitleValidator func(string) error
 	// CompanyNameValidator is a validator for the "company_name" field. It is called by the builders before save.
 	CompanyNameValidator func(string) error
+	// CompanyDescriptionValidator is a validator for the "company_description" field. It is called by the builders before save.
+	CompanyDescriptionValidator func(string) error
 	// OverviewValidator is a validator for the "overview" field. It is called by the builders before save.
 	OverviewValidator func(string) error
 	// LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
@@ -280,6 +285,11 @@ func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 // ByCompanyName orders the results by the company_name field.
 func ByCompanyName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCompanyName, opts...).ToFunc()
+}
+
+// ByCompanyDescription orders the results by the company_description field.
+func ByCompanyDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCompanyDescription, opts...).ToFunc()
 }
 
 // ByOverview orders the results by the overview field.

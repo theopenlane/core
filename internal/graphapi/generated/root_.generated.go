@@ -5657,6 +5657,7 @@ type ComplexityRoot struct {
 		AccentColor              func(childComplexity int) int
 		BackgroundColor          func(childComplexity int) int
 		BlockedGroups            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		CompanyDescription       func(childComplexity int) int
 		CompanyDomain            func(childComplexity int) int
 		CompanyName              func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
@@ -39617,6 +39618,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSetting.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "TrustCenterSetting.companyDescription":
+		if e.complexity.TrustCenterSetting.CompanyDescription == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.CompanyDescription(childComplexity), true
+
 	case "TrustCenterSetting.companyDomain":
 		if e.complexity.TrustCenterSetting.CompanyDomain == nil {
 			break
@@ -43767,6 +43775,8 @@ scalar Any`, BuiltIn: false},
 
 
 
+
+
 extend type Query {
     """
     Look up actionPlan by ID
@@ -44342,6 +44352,8 @@ type AssetBulkDeletePayload {
 
 
 
+
+
 extend type Query {
     """
     Look up campaign by ID
@@ -44472,6 +44484,8 @@ type CampaignBulkCreatePayload {
         includeEmitFailures: Boolean
     ): WorkflowEventConnection!
 }
+
+
 
 
 
@@ -44755,6 +44769,8 @@ type ContactBulkDeletePayload {
         includeEmitFailures: Boolean
     ): WorkflowEventConnection!
 }
+
+
 
 
 
@@ -59994,6 +60010,10 @@ input CreateTrustCenterSettingInput {
   company name for the trust center, defaults to the organization's display name
   """
   companyName: String
+  """
+  company description for the trust center
+  """
+  companyDescription: String
   """
   overview of the trust center
   """
@@ -106400,6 +106420,10 @@ type TrustCenterSetting implements Node {
   """
   companyName: String
   """
+  company description for the trust center
+  """
+  companyDescription: String
+  """
   overview of the trust center
   """
   overview: String
@@ -106737,6 +106761,24 @@ input TrustCenterSettingWhereInput {
   companyNameNotNil: Boolean
   companyNameEqualFold: String
   companyNameContainsFold: String
+  """
+  company_description field predicates
+  """
+  companyDescription: String
+  companyDescriptionNEQ: String
+  companyDescriptionIn: [String!]
+  companyDescriptionNotIn: [String!]
+  companyDescriptionGT: String
+  companyDescriptionGTE: String
+  companyDescriptionLT: String
+  companyDescriptionLTE: String
+  companyDescriptionContains: String
+  companyDescriptionHasPrefix: String
+  companyDescriptionHasSuffix: String
+  companyDescriptionIsNil: Boolean
+  companyDescriptionNotNil: Boolean
+  companyDescriptionEqualFold: String
+  companyDescriptionContainsFold: String
   """
   overview field predicates
   """
@@ -114418,6 +114460,11 @@ input UpdateTrustCenterSettingInput {
   companyName: String
   clearCompanyName: Boolean
   """
+  company description for the trust center
+  """
+  companyDescription: String
+  clearCompanyDescription: Boolean
+  """
   overview of the trust center
   """
   overview: String
@@ -121515,6 +121562,8 @@ type EventBulkDeletePayload {
 
 
 
+
+
 extend type Query {
     """
     Look up evidence by ID
@@ -122819,6 +122868,8 @@ type HushBulkDeletePayload {
 
 
 
+
+
 extend type Query {
     """
     Look up identityHolder by ID
@@ -122981,6 +123032,8 @@ type IntegrationDeletePayload {
         includeEmitFailures: Boolean
     ): WorkflowEventConnection!
 }
+
+
 
 
 
@@ -124887,6 +124940,8 @@ type PersonalAccessTokenBulkCreatePayload {
 
 
 
+
+
 extend type Query {
     """
     Look up platform by ID
@@ -125016,6 +125071,8 @@ type PlatformBulkCreatePayload {
         includeEmitFailures: Boolean
     ): WorkflowEventConnection!
 }
+
+
 
 
 
@@ -127415,6 +127472,8 @@ type StandardBulkCreatePayload {
         includeEmitFailures: Boolean
     ): WorkflowEventConnection!
 }
+
+
 
 
 

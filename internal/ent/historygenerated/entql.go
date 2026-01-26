@@ -2404,6 +2404,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldTrustCenterID:            {Type: field.TypeString, Column: trustcentersettinghistory.FieldTrustCenterID},
 			trustcentersettinghistory.FieldTitle:                    {Type: field.TypeString, Column: trustcentersettinghistory.FieldTitle},
 			trustcentersettinghistory.FieldCompanyName:              {Type: field.TypeString, Column: trustcentersettinghistory.FieldCompanyName},
+			trustcentersettinghistory.FieldCompanyDescription:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldCompanyDescription},
 			trustcentersettinghistory.FieldOverview:                 {Type: field.TypeString, Column: trustcentersettinghistory.FieldOverview},
 			trustcentersettinghistory.FieldLogoRemoteURL:            {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoRemoteURL},
 			trustcentersettinghistory.FieldLogoLocalFileID:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoLocalFileID},
@@ -12976,6 +12977,11 @@ func (f *TrustCenterSettingHistoryFilter) WhereTitle(p entql.StringP) {
 // WhereCompanyName applies the entql string predicate on the company_name field.
 func (f *TrustCenterSettingHistoryFilter) WhereCompanyName(p entql.StringP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldCompanyName))
+}
+
+// WhereCompanyDescription applies the entql string predicate on the company_description field.
+func (f *TrustCenterSettingHistoryFilter) WhereCompanyDescription(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldCompanyDescription))
 }
 
 // WhereOverview applies the entql string predicate on the overview field.

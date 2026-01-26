@@ -37,6 +37,8 @@ type TrustCenterSetting struct {
 	Title string `json:"title,omitempty"`
 	// company name for the trust center, defaults to the organization's display name
 	CompanyName string `json:"company_name,omitempty"`
+	// company description for the trust center
+	CompanyDescription string `json:"company_description,omitempty"`
 	// overview of the trust center
 	Overview string `json:"overview,omitempty"`
 	// URL of the logo
@@ -146,7 +148,7 @@ func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcentersetting.FieldRemoveBranding, trustcentersetting.FieldNdaApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldCompanyName, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor, trustcentersetting.FieldEnvironment, trustcentersetting.FieldCompanyDomain, trustcentersetting.FieldSecurityContact:
+		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldCompanyName, trustcentersetting.FieldCompanyDescription, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor, trustcentersetting.FieldEnvironment, trustcentersetting.FieldCompanyDomain, trustcentersetting.FieldSecurityContact:
 			values[i] = new(sql.NullString)
 		case trustcentersetting.FieldCreatedAt, trustcentersetting.FieldUpdatedAt, trustcentersetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -224,6 +226,12 @@ func (_m *TrustCenterSetting) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field company_name", values[i])
 			} else if value.Valid {
 				_m.CompanyName = value.String
+			}
+		case trustcentersetting.FieldCompanyDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field company_description", values[i])
+			} else if value.Valid {
+				_m.CompanyDescription = value.String
 			}
 		case trustcentersetting.FieldOverview:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -421,6 +429,9 @@ func (_m *TrustCenterSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("company_name=")
 	builder.WriteString(_m.CompanyName)
+	builder.WriteString(", ")
+	builder.WriteString("company_description=")
+	builder.WriteString(_m.CompanyDescription)
 	builder.WriteString(", ")
 	builder.WriteString("overview=")
 	builder.WriteString(_m.Overview)

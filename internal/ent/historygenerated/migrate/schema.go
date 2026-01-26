@@ -2554,6 +2554,7 @@ var (
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "company_name", Type: field.TypeString, Nullable: true, Size: 160},
+		{Name: "company_description", Type: field.TypeString, Nullable: true, Size: 1024},
 		{Name: "overview", Type: field.TypeString, Nullable: true, Size: 1024},
 		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},

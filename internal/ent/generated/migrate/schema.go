@@ -6697,6 +6697,7 @@ var (
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "company_name", Type: field.TypeString, Nullable: true, Size: 160},
+		{Name: "company_description", Type: field.TypeString, Nullable: true, Size: 1024},
 		{Name: "overview", Type: field.TypeString, Nullable: true, Size: 1024},
 		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "favicon_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
@@ -6724,13 +6725,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_settings_files_logo_file",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[26]},
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[27]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_settings_files_favicon_file",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[27]},
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[28]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6739,7 +6740,7 @@ var (
 			{
 				Name:    "trustcentersetting_trust_center_id_environment",
 				Unique:  true,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[7], TrustCenterSettingsColumns[21]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[7], TrustCenterSettingsColumns[22]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
