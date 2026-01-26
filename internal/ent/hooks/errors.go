@@ -120,6 +120,9 @@ var (
 	ErrCacheRefreshFailed = errors.New("cache refresh request failed")
 	// ErrNoOrganizationID is returned when no organization ID is found in context
 	ErrNoOrganizationID = errors.New("no valid organization ID found")
+	// ErrNDATemplateRequired is returned when nda requests mutation runs but there is no file for the
+	// user to sign
+	ErrNDATemplateRequired = errors.New("you need a nda template before a request can be made")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.
