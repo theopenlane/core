@@ -122974,6 +122974,13 @@ type HushBulkDeletePayload {
     ): WorkflowEventConnection!
 }
 
+extend type Query {
+    """
+    Look up identityHolder by ID
+    """
+     identityHolder(
+        """
+        ID of the identityHolder
         """
         id: ID!
     ):  IdentityHolder!
