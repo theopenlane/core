@@ -160,7 +160,9 @@ func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDA
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenternda"})
 	}
 
-	updatedTmpl, err := txnCtx.Template.UpdateOne(ndaTemplate).SetJsonconfig(outputInterface).Save(ctx)
+	updatedTmpl, err := txnCtx.Template.UpdateOne(ndaTemplate).
+		SetTrustCenterID(id). // needed so the hook can access this
+		SetJsonconfig(outputInterface).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenternda"})
 	}
