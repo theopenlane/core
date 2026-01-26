@@ -106,10 +106,10 @@ func GetNewMentions(oldText string, newText string, objectType string, objectID 
 	return result
 }
 
-// ExtractMentionedUserIDs extracts just the user IDs from a mention map.
-// It validates that each UserID is a valid ULID and skips invalid ones.
-func ExtractMentionedUserIDs(mentions map[string]Mention) []string {
-	userIDs := make([]string, 0, len(mentions))
+// ExtractMentionedOrgMemberIDs extracts just the org membership IDs from a mention map.
+// It validates that each ID is a valid ULID and skips invalid ones.
+func ExtractMentionedOrgMemberIDs(mentions map[string]Mention) []string {
+	omIDs := make([]string, 0, len(mentions))
 	seen := make(map[string]bool)
 
 	for _, mention := range mentions {
@@ -120,12 +120,12 @@ func ExtractMentionedUserIDs(mentions map[string]Mention) []string {
 
 		// Deduplicate in case the same user is mentioned multiple times
 		if !seen[mention.UserID] {
-			userIDs = append(userIDs, mention.UserID)
+			omIDs = append(omIDs, mention.UserID)
 			seen[mention.UserID] = true
 		}
 	}
 
-	return userIDs
+	return omIDs
 }
 
 // IsValidSlateText checks if the text contains valid Slate formatted content
