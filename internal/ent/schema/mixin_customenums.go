@@ -9,10 +9,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
 
-	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/entx/accessmap"
-	"github.com/theopenlane/utils/rout"
 )
 
 // CustomEnumMixin holds the schema definition for the custom enums
@@ -25,6 +23,8 @@ type CustomEnumMixin struct {
 	fieldName string
 	// WorkflowEdgeEligible marks the enum edge as workflow-eligible
 	WorkflowEdgeEligible bool
+	// GlobalEnum marks the enum as a shared set across schemas
+	GlobalEnum bool
 }
 
 // newCustomEnumMixin creates a new CustomEnumMixin with the given schema type and options
@@ -55,6 +55,13 @@ func withEnumFieldName(fieldName string) customEnumOptions {
 func withWorkflowEnumEdges() customEnumOptions {
 	return func(c *CustomEnumMixin) {
 		c.WorkflowEdgeEligible = true
+	}
+}
+
+// withGlobalEnum marks the enum as global across schemas
+func withGlobalEnum() customEnumOptions {
+	return func(c *CustomEnumMixin) {
+		c.GlobalEnum = true
 	}
 }
 
@@ -112,6 +119,7 @@ func (c CustomEnumMixin) Hooks() []ent.Hook {
 		Field:           c.fieldName,
 		EdgeFieldName:   c.getEnumEdgeName() + "_id",
 		SchemaFieldName: c.getEnumFieldName(),
+		AllowGlobal:     c.GlobalEnum,
 	}
 	return []ent.Hook{
 		hooks.HookCustomEnums(in),
@@ -121,6 +129,10 @@ func (c CustomEnumMixin) Hooks() []ent.Hook {
 // getEnumTypeValue returns the value of the enum type for the object the enum applies to
 func (c CustomEnumMixin) getEnumEdgeName() string {
 	sch := toSchemaFuncs(c.schemaType)
+
+	if c.GlobalEnum {
+		return c.fieldName
+	}
 
 	return fmt.Sprintf("%s_%s", sch.Name(), c.fieldName)
 }
@@ -134,39 +146,9 @@ func (c CustomEnumMixin) getEnumFieldName() string {
 func (c CustomEnumMixin) getEnumReverseRefName() string {
 	sch := toSchemaFuncs(c.schemaType)
 
-	if c.fieldName == "kind" {
+	if c.GlobalEnum || c.fieldName == "kind" {
 		return ""
 	}
 
 	return fmt.Sprintf("%s_%s", sch.Name(), c.fieldName)
-}
-
-// validObjectTypes is a set of valid object types for CustomTypeEnum
-var validObjectTypes = map[string]struct{}{
-	Task{}.Name():           {},
-	Control{}.Name():        {},
-	Subcontrol{}.Name():     {},
-	Risk{}.Name():           {},
-	InternalPolicy{}.Name(): {},
-	Procedure{}.Name():      {},
-	ActionPlan{}.Name():     {},
-	Program{}.Name():        {},
-	TrustCenterDoc{}.Name(): {},
-}
-
-// validateObjectType validates the object type field
-func validateObjectType(t string) error {
-	// check for empty value
-	if t == "" {
-		return rout.InvalidField("object_type")
-	}
-
-	// normalize to snake case for comparison
-	t = strcase.SnakeCase(t)
-
-	if _, ok := validObjectTypes[t]; ok {
-		return nil
-	}
-
-	return rout.InvalidField("object_type")
 }

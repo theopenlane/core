@@ -1,0 +1,132 @@
+extend type Campaign {
+    """
+    Indicates if this campaign has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Indicates if this campaign has any workflow history (completed or failed instances)
+    """
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this campaign (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this campaign across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
+}
+
+
+
+extend type Query {
+    """
+    Look up campaign by ID
+    """
+     campaign(
+        """
+        ID of the campaign
+        """
+        id: ID!
+    ):  Campaign!
+}
+
+extend type Mutation{
+    """
+    Create a new campaign
+    """
+    createCampaign(
+        """
+        values of the campaign
+        """
+        input: CreateCampaignInput!
+    ): CampaignCreatePayload!
+    """
+    Create multiple new campaigns
+    """
+    createBulkCampaign(
+        """
+        values of the campaign
+        """
+        input: [CreateCampaignInput!]
+    ): CampaignBulkCreatePayload!
+    """
+    Create multiple new campaigns via file upload
+    """
+    createBulkCSVCampaign(
+        """
+        csv file containing values of the campaign
+        """
+        input: Upload!
+    ): CampaignBulkCreatePayload!
+    """
+    Update an existing campaign
+    """
+    updateCampaign(
+        """
+        ID of the campaign
+        """
+        id: ID!
+        """
+        New values for the campaign
+        """
+        input: UpdateCampaignInput!
+    ): CampaignUpdatePayload!
+    """
+    Delete an existing campaign
+    """
+    deleteCampaign(
+        """
+        ID of the campaign
+        """
+        id: ID!
+    ): CampaignDeletePayload!
+}
+
+"""
+Return response for createCampaign mutation
+"""
+type CampaignCreatePayload {
+    """
+    Created campaign
+    """
+    campaign: Campaign!
+}
+
+"""
+Return response for updateCampaign mutation
+"""
+type CampaignUpdatePayload {
+    """
+    Updated campaign
+    """
+    campaign: Campaign!
+}
+
+"""
+Return response for deleteCampaign mutation
+"""
+type CampaignDeletePayload {
+    """
+    Deleted campaign ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkCampaign mutation
+"""
+type CampaignBulkCreatePayload {
+    """
+    Created campaigns
+    """
+    campaigns: [Campaign!]
+}

@@ -89,6 +89,14 @@ type InternalPolicy struct {
 	InternalPolicyKindName string `json:"internal_policy_kind_name,omitempty"`
 	// the kind of the internal_policy
 	InternalPolicyKindID string `json:"internal_policy_kind_id,omitempty"`
+	// the environment of the internal_policy
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the internal_policy
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the internal_policy
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the internal_policy
+	ScopeID string `json:"scope_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -112,6 +120,10 @@ type InternalPolicyEdges struct {
 	Delegate *Group `json:"delegate,omitempty"`
 	// InternalPolicyKind holds the value of the internal_policy_kind edge.
 	InternalPolicyKind *CustomTypeEnum `json:"internal_policy_kind,omitempty"`
+	// Environment holds the value of the environment edge.
+	Environment *CustomTypeEnum `json:"environment,omitempty"`
+	// Scope holds the value of the scope edge.
+	Scope *CustomTypeEnum `json:"scope,omitempty"`
 	// ControlObjectives holds the value of the control_objectives edge.
 	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
 	// ControlImplementations holds the value of the control_implementations edge.
@@ -140,9 +152,9 @@ type InternalPolicyEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [19]bool
+	loadedTypes [21]bool
 	// totalCount holds the count of the edges above.
-	totalCount [19]map[string]int
+	totalCount [21]map[string]int
 
 	namedBlockedGroups          map[string][]*Group
 	namedEditors                map[string][]*Group
@@ -222,10 +234,32 @@ func (e InternalPolicyEdges) InternalPolicyKindOrErr() (*CustomTypeEnum, error) 
 	return nil, &NotLoadedError{edge: "internal_policy_kind"}
 }
 
+// EnvironmentOrErr returns the Environment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e InternalPolicyEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
+	if e.Environment != nil {
+		return e.Environment, nil
+	} else if e.loadedTypes[6] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "environment"}
+}
+
+// ScopeOrErr returns the Scope value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e InternalPolicyEdges) ScopeOrErr() (*CustomTypeEnum, error) {
+	if e.Scope != nil {
+		return e.Scope, nil
+	} else if e.loadedTypes[7] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "scope"}
+}
+
 // ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.ControlObjectives, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objectives"}
@@ -234,7 +268,7 @@ func (e InternalPolicyEdges) ControlObjectivesOrErr() ([]*ControlObjective, erro
 // ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.ControlImplementations, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementations"}
@@ -243,7 +277,7 @@ func (e InternalPolicyEdges) ControlImplementationsOrErr() ([]*ControlImplementa
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -252,7 +286,7 @@ func (e InternalPolicyEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -261,7 +295,7 @@ func (e InternalPolicyEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -270,7 +304,7 @@ func (e InternalPolicyEdges) ProceduresOrErr() ([]*Procedure, error) {
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -279,7 +313,7 @@ func (e InternalPolicyEdges) NarrativesOrErr() ([]*Narrative, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[14] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -288,7 +322,7 @@ func (e InternalPolicyEdges) TasksOrErr() ([]*Task, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[15] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -297,7 +331,7 @@ func (e InternalPolicyEdges) RisksOrErr() ([]*Risk, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[16] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -308,7 +342,7 @@ func (e InternalPolicyEdges) ProgramsOrErr() ([]*Program, error) {
 func (e InternalPolicyEdges) FileOrErr() (*File, error) {
 	if e.File != nil {
 		return e.File, nil
-	} else if e.loadedTypes[15] {
+	} else if e.loadedTypes[17] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -317,7 +351,7 @@ func (e InternalPolicyEdges) FileOrErr() (*File, error) {
 // CommentsOrErr returns the Comments value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) CommentsOrErr() ([]*Note, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[18] {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
@@ -326,7 +360,7 @@ func (e InternalPolicyEdges) CommentsOrErr() ([]*Note, error) {
 // DiscussionsOrErr returns the Discussions value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) DiscussionsOrErr() ([]*Discussion, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[19] {
 		return e.Discussions, nil
 	}
 	return nil, &NotLoadedError{edge: "discussions"}
@@ -335,7 +369,7 @@ func (e InternalPolicyEdges) DiscussionsOrErr() ([]*Discussion, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[20] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -350,7 +384,7 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case internalpolicy.FieldSystemOwned, internalpolicy.FieldApprovalRequired, internalpolicy.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldInternalNotes, internalpolicy.FieldSystemInternalID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID, internalpolicy.FieldSummary, internalpolicy.FieldURL, internalpolicy.FieldFileID, internalpolicy.FieldInternalPolicyKindName, internalpolicy.FieldInternalPolicyKindID:
+		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldInternalNotes, internalpolicy.FieldSystemInternalID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID, internalpolicy.FieldSummary, internalpolicy.FieldURL, internalpolicy.FieldFileID, internalpolicy.FieldInternalPolicyKindName, internalpolicy.FieldInternalPolicyKindID, internalpolicy.FieldEnvironmentName, internalpolicy.FieldEnvironmentID, internalpolicy.FieldScopeName, internalpolicy.FieldScopeID:
 			values[i] = new(sql.NullString)
 		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -595,6 +629,30 @@ func (_m *InternalPolicy) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.InternalPolicyKindID = value.String
 			}
+		case internalpolicy.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case internalpolicy.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case internalpolicy.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case internalpolicy.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
+			}
 		case internalpolicy.FieldWorkflowEligibleMarker:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
@@ -649,6 +707,16 @@ func (_m *InternalPolicy) QueryDelegate() *GroupQuery {
 // QueryInternalPolicyKind queries the "internal_policy_kind" edge of the InternalPolicy entity.
 func (_m *InternalPolicy) QueryInternalPolicyKind() *CustomTypeEnumQuery {
 	return NewInternalPolicyClient(_m.config).QueryInternalPolicyKind(_m)
+}
+
+// QueryEnvironment queries the "environment" edge of the InternalPolicy entity.
+func (_m *InternalPolicy) QueryEnvironment() *CustomTypeEnumQuery {
+	return NewInternalPolicyClient(_m.config).QueryEnvironment(_m)
+}
+
+// QueryScope queries the "scope" edge of the InternalPolicy entity.
+func (_m *InternalPolicy) QueryScope() *CustomTypeEnumQuery {
+	return NewInternalPolicyClient(_m.config).QueryScope(_m)
 }
 
 // QueryControlObjectives queries the "control_objectives" edge of the InternalPolicy entity.
@@ -845,6 +913,18 @@ func (_m *InternalPolicy) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("internal_policy_kind_id=")
 	builder.WriteString(_m.InternalPolicyKindID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))

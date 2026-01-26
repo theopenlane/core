@@ -125,6 +125,21 @@
       ],
       "description": "Auth settings including oauth2 providers and token configuration"
     },
+    "config.EmailWebhook": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled is a flag to enable or disable email webhooks"
+        },
+        "resendsecret": {
+          "type": "string",
+          "description": "ResendSecret is the signing secret used to verify Resend webhook payloads"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "EmailWebhook contains webhook configuration for email providers (e.g., Resend)."
+    },
     "config.KeyWatcher": {
       "properties": {
         "enabled": {
@@ -1799,6 +1814,10 @@
     "workflows": {
       "$ref": "#/$defs/workflows.Config",
       "description": "Workflows contains the configuration for the workflows engine"
+    },
+    "emailwebhook": {
+      "$ref": "#/$defs/config.EmailWebhook",
+      "description": "EmailWebhook contains webhook configuration for email providers"
     }
   },
   "additionalProperties": false,

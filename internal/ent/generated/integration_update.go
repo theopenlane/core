@@ -13,10 +13,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
@@ -196,6 +198,86 @@ func (_u *IntegrationUpdate) ClearSystemInternalID() *IntegrationUpdate {
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *IntegrationUpdate) SetEnvironmentName(v string) *IntegrationUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableEnvironmentName(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *IntegrationUpdate) ClearEnvironmentName() *IntegrationUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *IntegrationUpdate) SetEnvironmentID(v string) *IntegrationUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableEnvironmentID(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *IntegrationUpdate) ClearEnvironmentID() *IntegrationUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *IntegrationUpdate) SetScopeName(v string) *IntegrationUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableScopeName(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *IntegrationUpdate) ClearScopeName() *IntegrationUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *IntegrationUpdate) SetScopeID(v string) *IntegrationUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableScopeID(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *IntegrationUpdate) ClearScopeID() *IntegrationUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *IntegrationUpdate) SetName(v string) *IntegrationUpdate {
 	_u.mutation.SetName(v)
@@ -285,6 +367,16 @@ func (_u *IntegrationUpdate) ClearMetadata() *IntegrationUpdate {
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *IntegrationUpdate) SetOwner(v *Organization) *IntegrationUpdate {
 	return _u.SetOwnerID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *IntegrationUpdate) SetEnvironment(v *CustomTypeEnum) *IntegrationUpdate {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *IntegrationUpdate) SetScope(v *CustomTypeEnum) *IntegrationUpdate {
+	return _u.SetScopeID(v.ID)
 }
 
 // AddSecretIDs adds the "secrets" edge to the Hush entity by IDs.
@@ -482,6 +574,21 @@ func (_u *IntegrationUpdate) AddDirectorySyncRuns(v ...*DirectorySyncRun) *Integ
 	return _u.AddDirectorySyncRunIDs(ids...)
 }
 
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (_u *IntegrationUpdate) AddEntityIDs(ids ...string) *IntegrationUpdate {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (_u *IntegrationUpdate) AddEntities(v ...*Entity) *IntegrationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEntityIDs(ids...)
+}
+
 // Mutation returns the IntegrationMutation object of the builder.
 func (_u *IntegrationUpdate) Mutation() *IntegrationMutation {
 	return _u.mutation
@@ -490,6 +597,18 @@ func (_u *IntegrationUpdate) Mutation() *IntegrationMutation {
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (_u *IntegrationUpdate) ClearOwner() *IntegrationUpdate {
 	_u.mutation.ClearOwner()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *IntegrationUpdate) ClearEnvironment() *IntegrationUpdate {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *IntegrationUpdate) ClearScope() *IntegrationUpdate {
+	_u.mutation.ClearScope()
 	return _u
 }
 
@@ -766,6 +885,27 @@ func (_u *IntegrationUpdate) RemoveDirectorySyncRuns(v ...*DirectorySyncRun) *In
 	return _u.RemoveDirectorySyncRunIDs(ids...)
 }
 
+// ClearEntities clears all "entities" edges to the Entity entity.
+func (_u *IntegrationUpdate) ClearEntities() *IntegrationUpdate {
+	_u.mutation.ClearEntities()
+	return _u
+}
+
+// RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
+func (_u *IntegrationUpdate) RemoveEntityIDs(ids ...string) *IntegrationUpdate {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
+}
+
+// RemoveEntities removes "entities" edges to Entity entities.
+func (_u *IntegrationUpdate) RemoveEntities(v ...*Entity) *IntegrationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEntityIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *IntegrationUpdate) Save(ctx context.Context) (int, error) {
 	if err := _u.defaults(); err != nil {
@@ -892,6 +1032,18 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(integration.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(integration.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(integration.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(integration.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(integration.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(integration.FieldName, field.TypeString, value)
 	}
@@ -942,6 +1094,68 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.EnvironmentTable,
+			Columns: []string{integration.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.EnvironmentTable,
+			Columns: []string{integration.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.ScopeTable,
+			Columns: []string{integration.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.ScopeTable,
+			Columns: []string{integration.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Integration
@@ -1574,6 +1788,54 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integration.EntitiesTable,
+			Columns: integration.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityIntegrations
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integration.EntitiesTable,
+			Columns: integration.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityIntegrations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integration.EntitiesTable,
+			Columns: integration.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityIntegrations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.Integration
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -1748,6 +2010,86 @@ func (_u *IntegrationUpdateOne) ClearSystemInternalID() *IntegrationUpdateOne {
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *IntegrationUpdateOne) SetEnvironmentName(v string) *IntegrationUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableEnvironmentName(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *IntegrationUpdateOne) ClearEnvironmentName() *IntegrationUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *IntegrationUpdateOne) SetEnvironmentID(v string) *IntegrationUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableEnvironmentID(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *IntegrationUpdateOne) ClearEnvironmentID() *IntegrationUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *IntegrationUpdateOne) SetScopeName(v string) *IntegrationUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableScopeName(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *IntegrationUpdateOne) ClearScopeName() *IntegrationUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *IntegrationUpdateOne) SetScopeID(v string) *IntegrationUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableScopeID(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *IntegrationUpdateOne) ClearScopeID() *IntegrationUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *IntegrationUpdateOne) SetName(v string) *IntegrationUpdateOne {
 	_u.mutation.SetName(v)
@@ -1837,6 +2179,16 @@ func (_u *IntegrationUpdateOne) ClearMetadata() *IntegrationUpdateOne {
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *IntegrationUpdateOne) SetOwner(v *Organization) *IntegrationUpdateOne {
 	return _u.SetOwnerID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *IntegrationUpdateOne) SetEnvironment(v *CustomTypeEnum) *IntegrationUpdateOne {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *IntegrationUpdateOne) SetScope(v *CustomTypeEnum) *IntegrationUpdateOne {
+	return _u.SetScopeID(v.ID)
 }
 
 // AddSecretIDs adds the "secrets" edge to the Hush entity by IDs.
@@ -2034,6 +2386,21 @@ func (_u *IntegrationUpdateOne) AddDirectorySyncRuns(v ...*DirectorySyncRun) *In
 	return _u.AddDirectorySyncRunIDs(ids...)
 }
 
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (_u *IntegrationUpdateOne) AddEntityIDs(ids ...string) *IntegrationUpdateOne {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (_u *IntegrationUpdateOne) AddEntities(v ...*Entity) *IntegrationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEntityIDs(ids...)
+}
+
 // Mutation returns the IntegrationMutation object of the builder.
 func (_u *IntegrationUpdateOne) Mutation() *IntegrationMutation {
 	return _u.mutation
@@ -2042,6 +2409,18 @@ func (_u *IntegrationUpdateOne) Mutation() *IntegrationMutation {
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (_u *IntegrationUpdateOne) ClearOwner() *IntegrationUpdateOne {
 	_u.mutation.ClearOwner()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *IntegrationUpdateOne) ClearEnvironment() *IntegrationUpdateOne {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *IntegrationUpdateOne) ClearScope() *IntegrationUpdateOne {
+	_u.mutation.ClearScope()
 	return _u
 }
 
@@ -2318,6 +2697,27 @@ func (_u *IntegrationUpdateOne) RemoveDirectorySyncRuns(v ...*DirectorySyncRun) 
 	return _u.RemoveDirectorySyncRunIDs(ids...)
 }
 
+// ClearEntities clears all "entities" edges to the Entity entity.
+func (_u *IntegrationUpdateOne) ClearEntities() *IntegrationUpdateOne {
+	_u.mutation.ClearEntities()
+	return _u
+}
+
+// RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
+func (_u *IntegrationUpdateOne) RemoveEntityIDs(ids ...string) *IntegrationUpdateOne {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
+}
+
+// RemoveEntities removes "entities" edges to Entity entities.
+func (_u *IntegrationUpdateOne) RemoveEntities(v ...*Entity) *IntegrationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEntityIDs(ids...)
+}
+
 // Where appends a list predicates to the IntegrationUpdate builder.
 func (_u *IntegrationUpdateOne) Where(ps ...predicate.Integration) *IntegrationUpdateOne {
 	_u.mutation.Where(ps...)
@@ -2474,6 +2874,18 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(integration.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(integration.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(integration.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(integration.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(integration.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(integration.FieldName, field.TypeString, value)
 	}
@@ -2524,6 +2936,68 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.EnvironmentTable,
+			Columns: []string{integration.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.EnvironmentTable,
+			Columns: []string{integration.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.ScopeTable,
+			Columns: []string{integration.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.ScopeTable,
+			Columns: []string{integration.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Integration
@@ -3151,6 +3625,54 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 			},
 		}
 		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integration.EntitiesTable,
+			Columns: integration.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityIntegrations
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integration.EntitiesTable,
+			Columns: integration.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityIntegrations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integration.EntitiesTable,
+			Columns: integration.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityIntegrations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

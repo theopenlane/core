@@ -102,6 +102,8 @@ func (t Template) Mixin() []ent.Mixin {
 				withAllowAnonymousTrustCenterAccess(true),
 			),
 			mixin.NewSystemOwnedMixin(),
+			newCustomEnumMixin(t, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(t, withEnumFieldName("scope"), withGlobalEnum()),
 		},
 	}.getMixins(t)
 }
@@ -125,6 +127,8 @@ func (t Template) Edges() []ent.Edge {
 			fromSchema: t,
 			edgeSchema: Assessment{},
 		}),
+		defaultEdgeToWithPagination(t, Campaign{}),
+		defaultEdgeFromWithPagination(t, IdentityHolder{}),
 	}
 }
 

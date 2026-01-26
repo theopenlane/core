@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 )
 
 // ApplyFieldUpdates applies field updates from a map to a ActionPlan entity
@@ -29,6 +30,180 @@ func (c *ActionPlanClient) ApplyFieldUpdates(ctx context.Context, id string, upd
 				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
 			}
 			update.SetWorkflowEligibleMarker(v)
+			applied++
+		default:
+			return fmt.Errorf("workflow: field update not eligible: %s", field)
+		}
+	}
+
+	if applied == 0 {
+		return nil
+	}
+
+	return update.Exec(ctx)
+}
+
+// ApplyFieldUpdates applies field updates from a map to a Campaign entity
+// This is a type-safe helper for workflow field updates
+func (c *CampaignClient) ApplyFieldUpdates(ctx context.Context, id string, updates map[string]any) error {
+	update := c.UpdateOneID(id)
+	applied := 0
+	for field, value := range updates {
+		switch field {
+		case "workflow_eligible_marker":
+			if value == nil {
+				update.ClearWorkflowEligibleMarker()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[bool](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetWorkflowEligibleMarker(v)
+			applied++
+		case "status":
+			v, err := coerceWorkflowValue[enums.CampaignStatus](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetStatus(v)
+			applied++
+		case "is_active":
+			v, err := coerceWorkflowValue[bool](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetIsActive(v)
+			applied++
+		case "scheduled_at":
+			if value == nil {
+				update.ClearScheduledAt()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[models.DateTime](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetScheduledAt(v)
+			applied++
+		case "due_date":
+			if value == nil {
+				update.ClearDueDate()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[models.DateTime](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetDueDate(v)
+			applied++
+		case "is_recurring":
+			v, err := coerceWorkflowValue[bool](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetIsRecurring(v)
+			applied++
+		case "recurrence_frequency":
+			if value == nil {
+				update.ClearRecurrenceFrequency()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[enums.Frequency](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetRecurrenceFrequency(v)
+			applied++
+		case "recipient_count":
+			if value == nil {
+				update.ClearRecipientCount()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[int](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetRecipientCount(v)
+			applied++
+		case "resend_count":
+			if value == nil {
+				update.ClearResendCount()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[int](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetResendCount(v)
+			applied++
+		default:
+			return fmt.Errorf("workflow: field update not eligible: %s", field)
+		}
+	}
+
+	if applied == 0 {
+		return nil
+	}
+
+	return update.Exec(ctx)
+}
+
+// ApplyFieldUpdates applies field updates from a map to a CampaignTarget entity
+// This is a type-safe helper for workflow field updates
+func (c *CampaignTargetClient) ApplyFieldUpdates(ctx context.Context, id string, updates map[string]any) error {
+	update := c.UpdateOneID(id)
+	applied := 0
+	for field, value := range updates {
+		switch field {
+		case "workflow_eligible_marker":
+			if value == nil {
+				update.ClearWorkflowEligibleMarker()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[bool](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetWorkflowEligibleMarker(v)
+			applied++
+		case "status":
+			v, err := coerceWorkflowValue[enums.AssessmentResponseStatus](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetStatus(v)
+			applied++
+		case "sent_at":
+			if value == nil {
+				update.ClearSentAt()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[models.DateTime](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetSentAt(v)
+			applied++
+		case "completed_at":
+			if value == nil {
+				update.ClearCompletedAt()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[models.DateTime](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetCompletedAt(v)
 			applied++
 		default:
 			return fmt.Errorf("workflow: field update not eligible: %s", field)
@@ -236,6 +411,75 @@ func (c *EvidenceClient) ApplyFieldUpdates(ctx context.Context, id string, updat
 	return update.Exec(ctx)
 }
 
+// ApplyFieldUpdates applies field updates from a map to a IdentityHolder entity
+// This is a type-safe helper for workflow field updates
+func (c *IdentityHolderClient) ApplyFieldUpdates(ctx context.Context, id string, updates map[string]any) error {
+	update := c.UpdateOneID(id)
+	applied := 0
+	for field, value := range updates {
+		switch field {
+		case "workflow_eligible_marker":
+			if value == nil {
+				update.ClearWorkflowEligibleMarker()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[bool](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetWorkflowEligibleMarker(v)
+			applied++
+		case "status":
+			v, err := coerceWorkflowValue[enums.UserStatus](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetStatus(v)
+			applied++
+		case "is_active":
+			v, err := coerceWorkflowValue[bool](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetIsActive(v)
+			applied++
+		case "start_date":
+			if value == nil {
+				update.ClearStartDate()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[models.DateTime](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetStartDate(v)
+			applied++
+		case "end_date":
+			if value == nil {
+				update.ClearEndDate()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[models.DateTime](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetEndDate(v)
+			applied++
+		default:
+			return fmt.Errorf("workflow: field update not eligible: %s", field)
+		}
+	}
+
+	if applied == 0 {
+		return nil
+	}
+
+	return update.Exec(ctx)
+}
+
 // ApplyFieldUpdates applies field updates from a map to a InternalPolicy entity
 // This is a type-safe helper for workflow field updates
 func (c *InternalPolicyClient) ApplyFieldUpdates(ctx context.Context, id string, updates map[string]any) error {
@@ -254,6 +498,80 @@ func (c *InternalPolicyClient) ApplyFieldUpdates(ctx context.Context, id string,
 				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
 			}
 			update.SetWorkflowEligibleMarker(v)
+			applied++
+		default:
+			return fmt.Errorf("workflow: field update not eligible: %s", field)
+		}
+	}
+
+	if applied == 0 {
+		return nil
+	}
+
+	return update.Exec(ctx)
+}
+
+// ApplyFieldUpdates applies field updates from a map to a Platform entity
+// This is a type-safe helper for workflow field updates
+func (c *PlatformClient) ApplyFieldUpdates(ctx context.Context, id string, updates map[string]any) error {
+	update := c.UpdateOneID(id)
+	applied := 0
+	for field, value := range updates {
+		switch field {
+		case "workflow_eligible_marker":
+			if value == nil {
+				update.ClearWorkflowEligibleMarker()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[bool](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetWorkflowEligibleMarker(v)
+			applied++
+		case "business_purpose":
+			if value == nil {
+				update.ClearBusinessPurpose()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[string](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetBusinessPurpose(v)
+			applied++
+		case "scope_statement":
+			if value == nil {
+				update.ClearScopeStatement()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[string](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetScopeStatement(v)
+			applied++
+		case "status":
+			v, err := coerceWorkflowValue[enums.PlatformStatus](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetStatus(v)
+			applied++
+		case "contains_pii":
+			if value == nil {
+				update.ClearContainsPii()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[bool](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetContainsPii(v)
 			applied++
 		default:
 			return fmt.Errorf("workflow: field update not eligible: %s", field)

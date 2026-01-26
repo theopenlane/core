@@ -4,6 +4,7 @@ package workflowgenerated
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -32,6 +33,18 @@ func init() {
 		if ref.ProcedureID != "" {
 			return &wf.Object{ID: ref.ProcedureID, Type: enums.WorkflowObjectTypeProcedure}, true
 		}
+		if ref.CampaignID != "" {
+			return &wf.Object{ID: ref.CampaignID, Type: enums.WorkflowObjectTypeCampaign}, true
+		}
+		if ref.CampaignTargetID != "" {
+			return &wf.Object{ID: ref.CampaignTargetID, Type: enums.WorkflowObjectTypeCampaignTarget}, true
+		}
+		if ref.IdentityHolderID != "" {
+			return &wf.Object{ID: ref.IdentityHolderID, Type: enums.WorkflowObjectTypeIdentityHolder}, true
+		}
+		if ref.PlatformID != "" {
+			return &wf.Object{ID: ref.PlatformID, Type: enums.WorkflowObjectTypePlatform}, true
+		}
 		return nil, false
 	})
 
@@ -44,12 +57,20 @@ func init() {
 		switch obj.Type {
 		case enums.WorkflowObjectTypeActionPlan:
 			return query.Where(workflowobjectref.ActionPlanIDEQ(obj.ID)), true
+		case enums.WorkflowObjectTypeCampaign:
+			return query.Where(workflowobjectref.CampaignIDEQ(obj.ID)), true
+		case enums.WorkflowObjectTypeCampaignTarget:
+			return query.Where(workflowobjectref.CampaignTargetIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeControl:
 			return query.Where(workflowobjectref.ControlIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeEvidence:
 			return query.Where(workflowobjectref.EvidenceIDEQ(obj.ID)), true
+		case enums.WorkflowObjectTypeIdentityHolder:
+			return query.Where(workflowobjectref.IdentityHolderIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeInternalPolicy:
 			return query.Where(workflowobjectref.InternalPolicyIDEQ(obj.ID)), true
+		case enums.WorkflowObjectTypePlatform:
+			return query.Where(workflowobjectref.PlatformIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeProcedure:
 			return query.Where(workflowobjectref.ProcedureIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeSubcontrol:
@@ -60,6 +81,9 @@ func init() {
 	})
 
 	// Register CEL context builders so CEL expressions can work with typed objects.
+	// Objects are converted to map[string]any via JSON to ensure:
+	// - Field names match JSON tags (lowercase)
+	// - Enum types are converted to strings
 	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
 		if obj == nil || obj.Node == nil {
 			return nil
@@ -68,8 +92,56 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
+			"changed_fields": changedFields,
+			"changed_edges":  changedEdges,
+			"added_ids":      addedIDs,
+			"removed_ids":    removedIDs,
+			"event_type":     eventType,
+			"user_id":        userID,
+		}
+	})
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+		if obj == nil || obj.Node == nil {
+			return nil
+		}
+		entObj, ok := obj.Node.(*generated.Campaign)
+		if !ok {
+			return nil
+		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
+		return map[string]any{
+			"object":         objectMap,
+			"changed_fields": changedFields,
+			"changed_edges":  changedEdges,
+			"added_ids":      addedIDs,
+			"removed_ids":    removedIDs,
+			"event_type":     eventType,
+			"user_id":        userID,
+		}
+	})
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+		if obj == nil || obj.Node == nil {
+			return nil
+		}
+		entObj, ok := obj.Node.(*generated.CampaignTarget)
+		if !ok {
+			return nil
+		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
+		return map[string]any{
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -86,8 +158,12 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -104,8 +180,34 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
+			"changed_fields": changedFields,
+			"changed_edges":  changedEdges,
+			"added_ids":      addedIDs,
+			"removed_ids":    removedIDs,
+			"event_type":     eventType,
+			"user_id":        userID,
+		}
+	})
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+		if obj == nil || obj.Node == nil {
+			return nil
+		}
+		entObj, ok := obj.Node.(*generated.IdentityHolder)
+		if !ok {
+			return nil
+		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
+		return map[string]any{
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -122,8 +224,34 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
+			"changed_fields": changedFields,
+			"changed_edges":  changedEdges,
+			"added_ids":      addedIDs,
+			"removed_ids":    removedIDs,
+			"event_type":     eventType,
+			"user_id":        userID,
+		}
+	})
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+		if obj == nil || obj.Node == nil {
+			return nil
+		}
+		entObj, ok := obj.Node.(*generated.Platform)
+		if !ok {
+			return nil
+		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
+		return map[string]any{
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -140,8 +268,12 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -158,8 +290,12 @@ func init() {
 		if !ok {
 			return nil
 		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
 		return map[string]any{
-			"object":         entObj,
+			"object":         objectMap,
 			"changed_fields": changedFields,
 			"changed_edges":  changedEdges,
 			"added_ids":      addedIDs,
@@ -171,6 +307,20 @@ func init() {
 
 	// Register assignment context builder for workflow runtime state in CEL expressions.
 	wf.RegisterAssignmentContextBuilder(buildAssignmentContext)
+}
+
+// entObjectToMap converts an ent entity to a map[string]any via JSON marshaling.
+// This ensures field names match JSON tags (lowercase) and enums are converted to strings.
+func entObjectToMap(obj any) (map[string]any, error) {
+	data, err := json.Marshal(obj)
+	if err != nil {
+		return nil, err
+	}
+	var result map[string]any
+	if err := json.Unmarshal(data, &result); err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 // buildAssignmentContext builds the workflow runtime context (assignments, instance, initiator) for CEL evaluation.

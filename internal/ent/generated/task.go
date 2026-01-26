@@ -45,6 +45,14 @@ type Task struct {
 	TaskKindName string `json:"task_kind_name,omitempty"`
 	// the kind of the task
 	TaskKindID string `json:"task_kind_id,omitempty"`
+	// the environment of the task
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the task
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the task
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the task
+	ScopeID string `json:"scope_id,omitempty"`
 	// the title of the task
 	Title string `json:"title,omitempty"`
 	// the details of the task
@@ -87,6 +95,10 @@ type TaskEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// TaskKind holds the value of the task_kind edge.
 	TaskKind *CustomTypeEnum `json:"task_kind,omitempty"`
+	// Environment holds the value of the environment edge.
+	Environment *CustomTypeEnum `json:"environment,omitempty"`
+	// Scope holds the value of the scope edge.
+	Scope *CustomTypeEnum `json:"scope,omitempty"`
 	// Assigner holds the value of the assigner edge.
 	Assigner *User `json:"assigner,omitempty"`
 	// Assignee holds the value of the assignee edge.
@@ -109,6 +121,12 @@ type TaskEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// Risks holds the value of the risks edge.
 	Risks []*Risk `json:"risks,omitempty"`
+	// Platforms holds the value of the platforms edge.
+	Platforms []*Platform `json:"platforms,omitempty"`
+	// Scans holds the value of the scans edge.
+	Scans []*Scan `json:"scans,omitempty"`
+	// IdentityHolders holds the value of the identity_holders edge.
+	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
 	// ControlImplementations holds the value of the control_implementations edge.
 	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
 	// ActionPlans holds the value of the action_plans edge.
@@ -123,9 +141,9 @@ type TaskEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [19]bool
+	loadedTypes [24]bool
 	// totalCount holds the count of the edges above.
-	totalCount [19]map[string]int
+	totalCount [24]map[string]int
 
 	namedComments               map[string][]*Note
 	namedGroups                 map[string][]*Group
@@ -136,6 +154,9 @@ type TaskEdges struct {
 	namedControlObjectives      map[string][]*ControlObjective
 	namedPrograms               map[string][]*Program
 	namedRisks                  map[string][]*Risk
+	namedPlatforms              map[string][]*Platform
+	namedScans                  map[string][]*Scan
+	namedIdentityHolders        map[string][]*IdentityHolder
 	namedControlImplementations map[string][]*ControlImplementation
 	namedActionPlans            map[string][]*ActionPlan
 	namedEvidence               map[string][]*Evidence
@@ -165,12 +186,34 @@ func (e TaskEdges) TaskKindOrErr() (*CustomTypeEnum, error) {
 	return nil, &NotLoadedError{edge: "task_kind"}
 }
 
+// EnvironmentOrErr returns the Environment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TaskEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
+	if e.Environment != nil {
+		return e.Environment, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "environment"}
+}
+
+// ScopeOrErr returns the Scope value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TaskEdges) ScopeOrErr() (*CustomTypeEnum, error) {
+	if e.Scope != nil {
+		return e.Scope, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "scope"}
+}
+
 // AssignerOrErr returns the Assigner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e TaskEdges) AssignerOrErr() (*User, error) {
 	if e.Assigner != nil {
 		return e.Assigner, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "assigner"}
@@ -181,7 +224,7 @@ func (e TaskEdges) AssignerOrErr() (*User, error) {
 func (e TaskEdges) AssigneeOrErr() (*User, error) {
 	if e.Assignee != nil {
 		return e.Assignee, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "assignee"}
@@ -190,7 +233,7 @@ func (e TaskEdges) AssigneeOrErr() (*User, error) {
 // CommentsOrErr returns the Comments value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) CommentsOrErr() ([]*Note, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
@@ -199,7 +242,7 @@ func (e TaskEdges) CommentsOrErr() ([]*Note, error) {
 // GroupsOrErr returns the Groups value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) GroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Groups, nil
 	}
 	return nil, &NotLoadedError{edge: "groups"}
@@ -208,7 +251,7 @@ func (e TaskEdges) GroupsOrErr() ([]*Group, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -217,7 +260,7 @@ func (e TaskEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -226,7 +269,7 @@ func (e TaskEdges) ProceduresOrErr() ([]*Procedure, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -235,7 +278,7 @@ func (e TaskEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -244,7 +287,7 @@ func (e TaskEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.ControlObjectives, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objectives"}
@@ -253,7 +296,7 @@ func (e TaskEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -262,16 +305,43 @@ func (e TaskEdges) ProgramsOrErr() ([]*Program, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[14] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
 }
 
+// PlatformsOrErr returns the Platforms value or an error if the edge
+// was not loaded in eager-loading.
+func (e TaskEdges) PlatformsOrErr() ([]*Platform, error) {
+	if e.loadedTypes[15] {
+		return e.Platforms, nil
+	}
+	return nil, &NotLoadedError{edge: "platforms"}
+}
+
+// ScansOrErr returns the Scans value or an error if the edge
+// was not loaded in eager-loading.
+func (e TaskEdges) ScansOrErr() ([]*Scan, error) {
+	if e.loadedTypes[16] {
+		return e.Scans, nil
+	}
+	return nil, &NotLoadedError{edge: "scans"}
+}
+
+// IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
+// was not loaded in eager-loading.
+func (e TaskEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
+	if e.loadedTypes[17] {
+		return e.IdentityHolders, nil
+	}
+	return nil, &NotLoadedError{edge: "identity_holders"}
+}
+
 // ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[18] {
 		return e.ControlImplementations, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementations"}
@@ -280,7 +350,7 @@ func (e TaskEdges) ControlImplementationsOrErr() ([]*ControlImplementation, erro
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[19] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -289,7 +359,7 @@ func (e TaskEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[20] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
@@ -298,7 +368,7 @@ func (e TaskEdges) EvidenceOrErr() ([]*Evidence, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[21] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -309,7 +379,7 @@ func (e TaskEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 func (e TaskEdges) ParentOrErr() (*Task, error) {
 	if e.Parent != nil {
 		return e.Parent, nil
-	} else if e.loadedTypes[17] {
+	} else if e.loadedTypes[22] {
 		return nil, &NotFoundError{label: task.Label}
 	}
 	return nil, &NotLoadedError{edge: "parent"}
@@ -318,7 +388,7 @@ func (e TaskEdges) ParentOrErr() (*Task, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[23] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -335,7 +405,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case task.FieldSystemGenerated:
 			values[i] = new(sql.NullBool)
-		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldDeletedBy, task.FieldDisplayID, task.FieldOwnerID, task.FieldTaskKindName, task.FieldTaskKindID, task.FieldTitle, task.FieldDetails, task.FieldStatus, task.FieldAssigneeID, task.FieldAssignerID, task.FieldIdempotencyKey, task.FieldParentTaskID:
+		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldDeletedBy, task.FieldDisplayID, task.FieldOwnerID, task.FieldTaskKindName, task.FieldTaskKindID, task.FieldEnvironmentName, task.FieldEnvironmentID, task.FieldScopeName, task.FieldScopeID, task.FieldTitle, task.FieldDetails, task.FieldStatus, task.FieldAssigneeID, task.FieldAssignerID, task.FieldIdempotencyKey, task.FieldParentTaskID:
 			values[i] = new(sql.NullString)
 		case task.FieldCreatedAt, task.FieldUpdatedAt, task.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -439,6 +509,30 @@ func (_m *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field task_kind_id", values[i])
 			} else if value.Valid {
 				_m.TaskKindID = value.String
+			}
+		case task.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case task.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case task.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case task.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case task.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -584,6 +678,16 @@ func (_m *Task) QueryTaskKind() *CustomTypeEnumQuery {
 	return NewTaskClient(_m.config).QueryTaskKind(_m)
 }
 
+// QueryEnvironment queries the "environment" edge of the Task entity.
+func (_m *Task) QueryEnvironment() *CustomTypeEnumQuery {
+	return NewTaskClient(_m.config).QueryEnvironment(_m)
+}
+
+// QueryScope queries the "scope" edge of the Task entity.
+func (_m *Task) QueryScope() *CustomTypeEnumQuery {
+	return NewTaskClient(_m.config).QueryScope(_m)
+}
+
 // QueryAssigner queries the "assigner" edge of the Task entity.
 func (_m *Task) QueryAssigner() *UserQuery {
 	return NewTaskClient(_m.config).QueryAssigner(_m)
@@ -637,6 +741,21 @@ func (_m *Task) QueryPrograms() *ProgramQuery {
 // QueryRisks queries the "risks" edge of the Task entity.
 func (_m *Task) QueryRisks() *RiskQuery {
 	return NewTaskClient(_m.config).QueryRisks(_m)
+}
+
+// QueryPlatforms queries the "platforms" edge of the Task entity.
+func (_m *Task) QueryPlatforms() *PlatformQuery {
+	return NewTaskClient(_m.config).QueryPlatforms(_m)
+}
+
+// QueryScans queries the "scans" edge of the Task entity.
+func (_m *Task) QueryScans() *ScanQuery {
+	return NewTaskClient(_m.config).QueryScans(_m)
+}
+
+// QueryIdentityHolders queries the "identity_holders" edge of the Task entity.
+func (_m *Task) QueryIdentityHolders() *IdentityHolderQuery {
+	return NewTaskClient(_m.config).QueryIdentityHolders(_m)
 }
 
 // QueryControlImplementations queries the "control_implementations" edge of the Task entity.
@@ -724,6 +843,18 @@ func (_m *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("task_kind_id=")
 	builder.WriteString(_m.TaskKindID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)
@@ -983,6 +1114,78 @@ func (_m *Task) appendNamedRisks(name string, edges ...*Risk) {
 		_m.Edges.namedRisks[name] = []*Risk{}
 	} else {
 		_m.Edges.namedRisks[name] = append(_m.Edges.namedRisks[name], edges...)
+	}
+}
+
+// NamedPlatforms returns the Platforms named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Task) NamedPlatforms(name string) ([]*Platform, error) {
+	if _m.Edges.namedPlatforms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedPlatforms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Task) appendNamedPlatforms(name string, edges ...*Platform) {
+	if _m.Edges.namedPlatforms == nil {
+		_m.Edges.namedPlatforms = make(map[string][]*Platform)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedPlatforms[name] = []*Platform{}
+	} else {
+		_m.Edges.namedPlatforms[name] = append(_m.Edges.namedPlatforms[name], edges...)
+	}
+}
+
+// NamedScans returns the Scans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Task) NamedScans(name string) ([]*Scan, error) {
+	if _m.Edges.namedScans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedScans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Task) appendNamedScans(name string, edges ...*Scan) {
+	if _m.Edges.namedScans == nil {
+		_m.Edges.namedScans = make(map[string][]*Scan)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedScans[name] = []*Scan{}
+	} else {
+		_m.Edges.namedScans[name] = append(_m.Edges.namedScans[name], edges...)
+	}
+}
+
+// NamedIdentityHolders returns the IdentityHolders named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Task) NamedIdentityHolders(name string) ([]*IdentityHolder, error) {
+	if _m.Edges.namedIdentityHolders == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIdentityHolders[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Task) appendNamedIdentityHolders(name string, edges ...*IdentityHolder) {
+	if _m.Edges.namedIdentityHolders == nil {
+		_m.Edges.namedIdentityHolders = make(map[string][]*IdentityHolder)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIdentityHolders[name] = []*IdentityHolder{}
+	} else {
+		_m.Edges.namedIdentityHolders[name] = append(_m.Edges.namedIdentityHolders[name], edges...)
 	}
 }
 

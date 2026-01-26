@@ -168,6 +168,62 @@ func (_c *EvidenceHistoryCreate) SetNillableOwnerID(v *string) *EvidenceHistoryC
 	return _c
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *EvidenceHistoryCreate) SetEnvironmentName(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *EvidenceHistoryCreate) SetNillableEnvironmentName(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *EvidenceHistoryCreate) SetEnvironmentID(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *EvidenceHistoryCreate) SetNillableEnvironmentID(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *EvidenceHistoryCreate) SetScopeName(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *EvidenceHistoryCreate) SetNillableScopeName(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *EvidenceHistoryCreate) SetScopeID(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *EvidenceHistoryCreate) SetNillableScopeID(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_c *EvidenceHistoryCreate) SetWorkflowEligibleMarker(v bool) *EvidenceHistoryCreate {
 	_c.mutation.SetWorkflowEligibleMarker(v)
@@ -515,6 +571,22 @@ func (_c *EvidenceHistoryCreate) createSpec() (*EvidenceHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(evidencehistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(evidencehistory.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.EnvironmentID(); ok {
+		_spec.SetField(evidencehistory.FieldEnvironmentID, field.TypeString, value)
+		_node.EnvironmentID = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(evidencehistory.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.ScopeID(); ok {
+		_spec.SetField(evidencehistory.FieldScopeID, field.TypeString, value)
+		_node.ScopeID = value
 	}
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(evidencehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)

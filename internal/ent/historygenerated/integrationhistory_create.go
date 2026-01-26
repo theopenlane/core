@@ -203,6 +203,62 @@ func (_c *IntegrationHistoryCreate) SetNillableSystemInternalID(v *string) *Inte
 	return _c
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *IntegrationHistoryCreate) SetEnvironmentName(v string) *IntegrationHistoryCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableEnvironmentName(v *string) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *IntegrationHistoryCreate) SetEnvironmentID(v string) *IntegrationHistoryCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableEnvironmentID(v *string) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *IntegrationHistoryCreate) SetScopeName(v string) *IntegrationHistoryCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableScopeName(v *string) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *IntegrationHistoryCreate) SetScopeID(v string) *IntegrationHistoryCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableScopeID(v *string) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *IntegrationHistoryCreate) SetName(v string) *IntegrationHistoryCreate {
 	_c.mutation.SetName(v)
@@ -454,6 +510,22 @@ func (_c *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgraph
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(integrationhistory.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(integrationhistory.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.EnvironmentID(); ok {
+		_spec.SetField(integrationhistory.FieldEnvironmentID, field.TypeString, value)
+		_node.EnvironmentID = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(integrationhistory.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.ScopeID(); ok {
+		_spec.SetField(integrationhistory.FieldScopeID, field.TypeString, value)
+		_node.ScopeID = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(integrationhistory.FieldName, field.TypeString, value)

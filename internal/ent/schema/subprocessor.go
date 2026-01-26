@@ -108,6 +108,7 @@ func (t Subprocessor) Edges() []ent.Edge {
 			edgeSchema:    TrustCenterSubprocessor{},
 			cascadeDelete: "Subprocessor",
 		}),
+		defaultEdgeFromWithPagination(t, Entity{}),
 	}
 }
 
@@ -158,6 +159,9 @@ func (t Subprocessor) Interceptors() []ent.Interceptor {
 func (Subprocessor) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.Exportable{},
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+			entx.WithSystemOwned(),
+		),
 	}
 }

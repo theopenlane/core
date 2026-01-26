@@ -16,6 +16,16 @@ type SchemaConfig struct {
 	Assessment                         string // Assessment table.
 	AssessmentResponse                 string // AssessmentResponse table.
 	Asset                              string // Asset table.
+	AssetConnectedAssets               string // Asset-connected_assets->Asset table.
+	Campaign                           string // Campaign table.
+	CampaignBlockedGroups              string // Campaign-blocked_groups->Group table.
+	CampaignEditors                    string // Campaign-editors->Group table.
+	CampaignViewers                    string // Campaign-viewers->Group table.
+	CampaignContacts                   string // Campaign-contacts->Contact table.
+	CampaignUsers                      string // Campaign-users->User table.
+	CampaignGroups                     string // Campaign-groups->Group table.
+	CampaignIdentityHolders            string // Campaign-identity_holders->IdentityHolder table.
+	CampaignTarget                     string // CampaignTarget table.
 	Contact                            string // Contact table.
 	ContactFiles                       string // Contact-files->File table.
 	Control                            string // Control table.
@@ -28,6 +38,7 @@ type SchemaConfig struct {
 	ControlBlockedGroups               string // Control-blocked_groups->Group table.
 	ControlEditors                     string // Control-editors->Group table.
 	ControlAssets                      string // Control-assets->Asset table.
+	ControlScans                       string // Control-scans->Scan table.
 	ControlControlImplementations      string // Control-control_implementations->ControlImplementation table.
 	ControlImplementation              string // ControlImplementation table.
 	ControlImplementationBlockedGroups string // ControlImplementation-blocked_groups->Group table.
@@ -59,6 +70,8 @@ type SchemaConfig struct {
 	EntityDocuments                    string // Entity-documents->DocumentData table.
 	EntityFiles                        string // Entity-files->File table.
 	EntityAssets                       string // Entity-assets->Asset table.
+	EntityIntegrations                 string // Entity-integrations->Integration table.
+	EntitySubprocessors                string // Entity-subprocessors->Subprocessor table.
 	EntityType                         string // EntityType table.
 	Event                              string // Event table.
 	Evidence                           string // Evidence table.
@@ -84,6 +97,12 @@ type SchemaConfig struct {
 	GroupSetting                       string // GroupSetting table.
 	Hush                               string // Hush table.
 	HushEvents                         string // Hush-events->Event table.
+	IdentityHolder                     string // IdentityHolder table.
+	IdentityHolderAssessments          string // IdentityHolder-assessments->Assessment table.
+	IdentityHolderTemplates            string // IdentityHolder-templates->Template table.
+	IdentityHolderAssets               string // IdentityHolder-assets->Asset table.
+	IdentityHolderEntities             string // IdentityHolder-entities->Entity table.
+	IdentityHolderTasks                string // IdentityHolder-tasks->Task table.
 	ImpersonationEvent                 string // ImpersonationEvent table.
 	Integration                        string // Integration table.
 	IntegrationSecrets                 string // Integration-secrets->Hush table.
@@ -145,6 +164,24 @@ type SchemaConfig struct {
 	PasswordResetToken                 string // PasswordResetToken table.
 	PersonalAccessToken                string // PersonalAccessToken table.
 	PersonalAccessTokenEvents          string // PersonalAccessToken-events->Event table.
+	Platform                           string // Platform table.
+	PlatformBlockedGroups              string // Platform-blocked_groups->Group table.
+	PlatformEditors                    string // Platform-editors->Group table.
+	PlatformViewers                    string // Platform-viewers->Group table.
+	PlatformAssets                     string // Platform-assets->Asset table.
+	PlatformEntities                   string // Platform-entities->Entity table.
+	PlatformEvidence                   string // Platform-evidence->Evidence table.
+	PlatformFiles                      string // Platform-files->File table.
+	PlatformRisks                      string // Platform-risks->Risk table.
+	PlatformControls                   string // Platform-controls->Control table.
+	PlatformAssessments                string // Platform-assessments->Assessment table.
+	PlatformScans                      string // Platform-scans->Scan table.
+	PlatformTasks                      string // Platform-tasks->Task table.
+	PlatformIdentityHolders            string // Platform-identity_holders->IdentityHolder table.
+	PlatformSourceEntities             string // Platform-source_entities->Entity table.
+	PlatformOutOfScopeAssets           string // Platform-out_of_scope_assets->Asset table.
+	PlatformOutOfScopeVendors          string // Platform-out_of_scope_vendors->Entity table.
+	PlatformApplicableFrameworks       string // Platform-applicable_frameworks->Standard table.
 	Procedure                          string // Procedure table.
 	ProcedureBlockedGroups             string // Procedure-blocked_groups->Group table.
 	ProcedureEditors                   string // Procedure-editors->Group table.
@@ -181,6 +218,11 @@ type SchemaConfig struct {
 	ScanEditors                        string // Scan-editors->Group table.
 	ScanViewers                        string // Scan-viewers->Group table.
 	ScanAssets                         string // Scan-assets->Asset table.
+	ScanEvidence                       string // Scan-evidence->Evidence table.
+	ScanFiles                          string // Scan-files->File table.
+	ScanRemediations                   string // Scan-remediations->Remediation table.
+	ScanActionPlans                    string // Scan-action_plans->ActionPlan table.
+	ScanTasks                          string // Scan-tasks->Task table.
 	ScheduledJob                       string // ScheduledJob table.
 	ScheduledJobControls               string // ScheduledJob-controls->Control table.
 	ScheduledJobSubcontrols            string // ScheduledJob-subcontrols->Subcontrol table.
@@ -217,6 +259,7 @@ type SchemaConfig struct {
 	UserSetting                        string // UserSetting table.
 	Vulnerability                      string // Vulnerability table.
 	VulnerabilityActionPlans           string // Vulnerability-action_plans->ActionPlan table.
+	VulnerabilityScans                 string // Vulnerability-scans->Scan table.
 	Webauthn                           string // Webauthn table.
 	WorkflowAssignment                 string // WorkflowAssignment table.
 	WorkflowAssignmentTarget           string // WorkflowAssignmentTarget table.

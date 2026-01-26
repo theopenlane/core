@@ -84,6 +84,14 @@ const (
 	FieldProcedureKindName = "procedure_kind_name"
 	// FieldProcedureKindID holds the string denoting the procedure_kind_id field in the database.
 	FieldProcedureKindID = "procedure_kind_id"
+	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
+	FieldEnvironmentName = "environment_name"
+	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
+	FieldEnvironmentID = "environment_id"
+	// FieldScopeName holds the string denoting the scope_name field in the database.
+	FieldScopeName = "scope_name"
+	// FieldScopeID holds the string denoting the scope_id field in the database.
+	FieldScopeID = "scope_id"
 	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
 	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
@@ -98,6 +106,10 @@ const (
 	EdgeDelegate = "delegate"
 	// EdgeProcedureKind holds the string denoting the procedure_kind edge name in mutations.
 	EdgeProcedureKind = "procedure_kind"
+	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
+	EdgeEnvironment = "environment"
+	// EdgeScope holds the string denoting the scope edge name in mutations.
+	EdgeScope = "scope"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
@@ -160,6 +172,20 @@ const (
 	ProcedureKindInverseTable = "custom_type_enums"
 	// ProcedureKindColumn is the table column denoting the procedure_kind relation/edge.
 	ProcedureKindColumn = "procedure_kind_id"
+	// EnvironmentTable is the table that holds the environment relation/edge.
+	EnvironmentTable = "procedures"
+	// EnvironmentInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	EnvironmentInverseTable = "custom_type_enums"
+	// EnvironmentColumn is the table column denoting the environment relation/edge.
+	EnvironmentColumn = "environment_id"
+	// ScopeTable is the table that holds the scope relation/edge.
+	ScopeTable = "procedures"
+	// ScopeInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ScopeInverseTable = "custom_type_enums"
+	// ScopeColumn is the table column denoting the scope relation/edge.
+	ScopeColumn = "scope_id"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "control_procedures"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -261,6 +287,10 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldProcedureKindName,
 	FieldProcedureKindID,
+	FieldEnvironmentName,
+	FieldEnvironmentID,
+	FieldScopeName,
+	FieldScopeID,
 	FieldWorkflowEligibleMarker,
 }
 
@@ -322,7 +352,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [18]ent.Hook
+	Hooks        [21]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -522,6 +552,26 @@ func ByProcedureKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProcedureKindID, opts...).ToFunc()
 }
 
+// ByEnvironmentName orders the results by the environment_name field.
+func ByEnvironmentName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentName, opts...).ToFunc()
+}
+
+// ByEnvironmentID orders the results by the environment_id field.
+func ByEnvironmentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentID, opts...).ToFunc()
+}
+
+// ByScopeName orders the results by the scope_name field.
+func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeName, opts...).ToFunc()
+}
+
+// ByScopeID orders the results by the scope_id field.
+func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
+}
+
 // ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
 func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
@@ -580,6 +630,20 @@ func ByDelegateField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByProcedureKindField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newProcedureKindStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEnvironmentField orders the results by environment field.
+func ByEnvironmentField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEnvironmentStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByScopeField orders the results by scope field.
+func ByScopeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScopeStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -769,6 +833,20 @@ func newProcedureKindStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProcedureKindInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, ProcedureKindTable, ProcedureKindColumn),
+	)
+}
+func newEnvironmentStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EnvironmentInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EnvironmentTable, EnvironmentColumn),
+	)
+}
+func newScopeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScopeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
 	)
 }
 func newControlsStep() *sqlgraph.Step {

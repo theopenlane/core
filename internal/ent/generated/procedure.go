@@ -89,6 +89,14 @@ type Procedure struct {
 	ProcedureKindName string `json:"procedure_kind_name,omitempty"`
 	// the kind of the procedure
 	ProcedureKindID string `json:"procedure_kind_id,omitempty"`
+	// the environment of the procedure
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the procedure
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the procedure
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the procedure
+	ScopeID string `json:"scope_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -113,6 +121,10 @@ type ProcedureEdges struct {
 	Delegate *Group `json:"delegate,omitempty"`
 	// ProcedureKind holds the value of the procedure_kind edge.
 	ProcedureKind *CustomTypeEnum `json:"procedure_kind,omitempty"`
+	// Environment holds the value of the environment edge.
+	Environment *CustomTypeEnum `json:"environment,omitempty"`
+	// Scope holds the value of the scope edge.
+	Scope *CustomTypeEnum `json:"scope,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
@@ -137,9 +149,9 @@ type ProcedureEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [17]bool
+	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [17]map[string]int
+	totalCount [19]map[string]int
 
 	namedBlockedGroups      map[string][]*Group
 	namedEditors            map[string][]*Group
@@ -217,10 +229,32 @@ func (e ProcedureEdges) ProcedureKindOrErr() (*CustomTypeEnum, error) {
 	return nil, &NotLoadedError{edge: "procedure_kind"}
 }
 
+// EnvironmentOrErr returns the Environment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProcedureEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
+	if e.Environment != nil {
+		return e.Environment, nil
+	} else if e.loadedTypes[6] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "environment"}
+}
+
+// ScopeOrErr returns the Scope value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProcedureEdges) ScopeOrErr() (*CustomTypeEnum, error) {
+	if e.Scope != nil {
+		return e.Scope, nil
+	} else if e.loadedTypes[7] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "scope"}
+}
+
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -229,7 +263,7 @@ func (e ProcedureEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -238,7 +272,7 @@ func (e ProcedureEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -247,7 +281,7 @@ func (e ProcedureEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -256,7 +290,7 @@ func (e ProcedureEdges) ProgramsOrErr() ([]*Program, error) {
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -265,7 +299,7 @@ func (e ProcedureEdges) NarrativesOrErr() ([]*Narrative, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -274,7 +308,7 @@ func (e ProcedureEdges) RisksOrErr() ([]*Risk, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[14] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -283,7 +317,7 @@ func (e ProcedureEdges) TasksOrErr() ([]*Task, error) {
 // CommentsOrErr returns the Comments value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) CommentsOrErr() ([]*Note, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[15] {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
@@ -292,7 +326,7 @@ func (e ProcedureEdges) CommentsOrErr() ([]*Note, error) {
 // DiscussionsOrErr returns the Discussions value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) DiscussionsOrErr() ([]*Discussion, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[16] {
 		return e.Discussions, nil
 	}
 	return nil, &NotLoadedError{edge: "discussions"}
@@ -303,7 +337,7 @@ func (e ProcedureEdges) DiscussionsOrErr() ([]*Discussion, error) {
 func (e ProcedureEdges) FileOrErr() (*File, error) {
 	if e.File != nil {
 		return e.File, nil
-	} else if e.loadedTypes[15] {
+	} else if e.loadedTypes[17] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -312,7 +346,7 @@ func (e ProcedureEdges) FileOrErr() (*File, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[18] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -327,7 +361,7 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case procedure.FieldApprovalRequired, procedure.FieldSystemOwned, procedure.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary, procedure.FieldURL, procedure.FieldFileID, procedure.FieldInternalNotes, procedure.FieldSystemInternalID, procedure.FieldProcedureKindName, procedure.FieldProcedureKindID:
+		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary, procedure.FieldURL, procedure.FieldFileID, procedure.FieldInternalNotes, procedure.FieldSystemInternalID, procedure.FieldProcedureKindName, procedure.FieldProcedureKindID, procedure.FieldEnvironmentName, procedure.FieldEnvironmentID, procedure.FieldScopeName, procedure.FieldScopeID:
 			values[i] = new(sql.NullString)
 		case procedure.FieldCreatedAt, procedure.FieldUpdatedAt, procedure.FieldDeletedAt, procedure.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -574,6 +608,30 @@ func (_m *Procedure) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ProcedureKindID = value.String
 			}
+		case procedure.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case procedure.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case procedure.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case procedure.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
+			}
 		case procedure.FieldWorkflowEligibleMarker:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
@@ -635,6 +693,16 @@ func (_m *Procedure) QueryDelegate() *GroupQuery {
 // QueryProcedureKind queries the "procedure_kind" edge of the Procedure entity.
 func (_m *Procedure) QueryProcedureKind() *CustomTypeEnumQuery {
 	return NewProcedureClient(_m.config).QueryProcedureKind(_m)
+}
+
+// QueryEnvironment queries the "environment" edge of the Procedure entity.
+func (_m *Procedure) QueryEnvironment() *CustomTypeEnumQuery {
+	return NewProcedureClient(_m.config).QueryEnvironment(_m)
+}
+
+// QueryScope queries the "scope" edge of the Procedure entity.
+func (_m *Procedure) QueryScope() *CustomTypeEnumQuery {
+	return NewProcedureClient(_m.config).QueryScope(_m)
 }
 
 // QueryControls queries the "controls" edge of the Procedure entity.
@@ -821,6 +889,18 @@ func (_m *Procedure) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("procedure_kind_id=")
 	builder.WriteString(_m.ProcedureKindID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))

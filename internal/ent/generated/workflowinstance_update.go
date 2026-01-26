@@ -15,9 +15,13 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -384,6 +388,86 @@ func (_u *WorkflowInstanceUpdate) ClearProcedureID() *WorkflowInstanceUpdate {
 	return _u
 }
 
+// SetCampaignID sets the "campaign_id" field.
+func (_u *WorkflowInstanceUpdate) SetCampaignID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetCampaignID(v)
+	return _u
+}
+
+// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableCampaignID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetCampaignID(*v)
+	}
+	return _u
+}
+
+// ClearCampaignID clears the value of the "campaign_id" field.
+func (_u *WorkflowInstanceUpdate) ClearCampaignID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearCampaignID()
+	return _u
+}
+
+// SetCampaignTargetID sets the "campaign_target_id" field.
+func (_u *WorkflowInstanceUpdate) SetCampaignTargetID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetCampaignTargetID(v)
+	return _u
+}
+
+// SetNillableCampaignTargetID sets the "campaign_target_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableCampaignTargetID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetCampaignTargetID(*v)
+	}
+	return _u
+}
+
+// ClearCampaignTargetID clears the value of the "campaign_target_id" field.
+func (_u *WorkflowInstanceUpdate) ClearCampaignTargetID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearCampaignTargetID()
+	return _u
+}
+
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_u *WorkflowInstanceUpdate) SetIdentityHolderID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableIdentityHolderID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
+func (_u *WorkflowInstanceUpdate) ClearIdentityHolderID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearIdentityHolderID()
+	return _u
+}
+
+// SetPlatformID sets the "platform_id" field.
+func (_u *WorkflowInstanceUpdate) SetPlatformID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetPlatformID(v)
+	return _u
+}
+
+// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillablePlatformID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetPlatformID(*v)
+	}
+	return _u
+}
+
+// ClearPlatformID clears the value of the "platform_id" field.
+func (_u *WorkflowInstanceUpdate) ClearPlatformID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearPlatformID()
+	return _u
+}
+
 // SetWorkflowDefinition sets the "workflow_definition" edge to the WorkflowDefinition entity.
 func (_u *WorkflowInstanceUpdate) SetWorkflowDefinition(v *WorkflowDefinition) *WorkflowInstanceUpdate {
 	return _u.SetWorkflowDefinitionID(v.ID)
@@ -417,6 +501,26 @@ func (_u *WorkflowInstanceUpdate) SetActionPlan(v *ActionPlan) *WorkflowInstance
 // SetProcedure sets the "procedure" edge to the Procedure entity.
 func (_u *WorkflowInstanceUpdate) SetProcedure(v *Procedure) *WorkflowInstanceUpdate {
 	return _u.SetProcedureID(v.ID)
+}
+
+// SetCampaign sets the "campaign" edge to the Campaign entity.
+func (_u *WorkflowInstanceUpdate) SetCampaign(v *Campaign) *WorkflowInstanceUpdate {
+	return _u.SetCampaignID(v.ID)
+}
+
+// SetCampaignTarget sets the "campaign_target" edge to the CampaignTarget entity.
+func (_u *WorkflowInstanceUpdate) SetCampaignTarget(v *CampaignTarget) *WorkflowInstanceUpdate {
+	return _u.SetCampaignTargetID(v.ID)
+}
+
+// SetIdentityHolder sets the "identity_holder" edge to the IdentityHolder entity.
+func (_u *WorkflowInstanceUpdate) SetIdentityHolder(v *IdentityHolder) *WorkflowInstanceUpdate {
+	return _u.SetIdentityHolderID(v.ID)
+}
+
+// SetPlatform sets the "platform" edge to the Platform entity.
+func (_u *WorkflowInstanceUpdate) SetPlatform(v *Platform) *WorkflowInstanceUpdate {
+	return _u.SetPlatformID(v.ID)
 }
 
 // SetWorkflowProposal sets the "workflow_proposal" edge to the WorkflowProposal entity.
@@ -513,6 +617,30 @@ func (_u *WorkflowInstanceUpdate) ClearActionPlan() *WorkflowInstanceUpdate {
 // ClearProcedure clears the "procedure" edge to the Procedure entity.
 func (_u *WorkflowInstanceUpdate) ClearProcedure() *WorkflowInstanceUpdate {
 	_u.mutation.ClearProcedure()
+	return _u
+}
+
+// ClearCampaign clears the "campaign" edge to the Campaign entity.
+func (_u *WorkflowInstanceUpdate) ClearCampaign() *WorkflowInstanceUpdate {
+	_u.mutation.ClearCampaign()
+	return _u
+}
+
+// ClearCampaignTarget clears the "campaign_target" edge to the CampaignTarget entity.
+func (_u *WorkflowInstanceUpdate) ClearCampaignTarget() *WorkflowInstanceUpdate {
+	_u.mutation.ClearCampaignTarget()
+	return _u
+}
+
+// ClearIdentityHolder clears the "identity_holder" edge to the IdentityHolder entity.
+func (_u *WorkflowInstanceUpdate) ClearIdentityHolder() *WorkflowInstanceUpdate {
+	_u.mutation.ClearIdentityHolder()
+	return _u
+}
+
+// ClearPlatform clears the "platform" edge to the Platform entity.
+func (_u *WorkflowInstanceUpdate) ClearPlatform() *WorkflowInstanceUpdate {
+	_u.mutation.ClearPlatform()
 	return _u
 }
 
@@ -945,6 +1073,130 @@ func (_u *WorkflowInstanceUpdate) sqlSave(ctx context.Context) (_node int, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.CampaignTable,
+			Columns: []string{workflowinstance.CampaignColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.CampaignTable,
+			Columns: []string{workflowinstance.CampaignColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignTargetCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.CampaignTargetTable,
+			Columns: []string{workflowinstance.CampaignTargetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignTargetIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.CampaignTargetTable,
+			Columns: []string{workflowinstance.CampaignTargetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.IdentityHolderTable,
+			Columns: []string{workflowinstance.IdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.IdentityHolderTable,
+			Columns: []string{workflowinstance.IdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PlatformCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.PlatformTable,
+			Columns: []string{workflowinstance.PlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.PlatformTable,
+			Columns: []string{workflowinstance.PlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.WorkflowInstance
@@ -1491,6 +1743,86 @@ func (_u *WorkflowInstanceUpdateOne) ClearProcedureID() *WorkflowInstanceUpdateO
 	return _u
 }
 
+// SetCampaignID sets the "campaign_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetCampaignID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetCampaignID(v)
+	return _u
+}
+
+// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableCampaignID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetCampaignID(*v)
+	}
+	return _u
+}
+
+// ClearCampaignID clears the value of the "campaign_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearCampaignID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearCampaignID()
+	return _u
+}
+
+// SetCampaignTargetID sets the "campaign_target_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetCampaignTargetID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetCampaignTargetID(v)
+	return _u
+}
+
+// SetNillableCampaignTargetID sets the "campaign_target_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableCampaignTargetID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetCampaignTargetID(*v)
+	}
+	return _u
+}
+
+// ClearCampaignTargetID clears the value of the "campaign_target_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearCampaignTargetID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearCampaignTargetID()
+	return _u
+}
+
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetIdentityHolderID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableIdentityHolderID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearIdentityHolderID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearIdentityHolderID()
+	return _u
+}
+
+// SetPlatformID sets the "platform_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetPlatformID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetPlatformID(v)
+	return _u
+}
+
+// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillablePlatformID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetPlatformID(*v)
+	}
+	return _u
+}
+
+// ClearPlatformID clears the value of the "platform_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearPlatformID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearPlatformID()
+	return _u
+}
+
 // SetWorkflowDefinition sets the "workflow_definition" edge to the WorkflowDefinition entity.
 func (_u *WorkflowInstanceUpdateOne) SetWorkflowDefinition(v *WorkflowDefinition) *WorkflowInstanceUpdateOne {
 	return _u.SetWorkflowDefinitionID(v.ID)
@@ -1524,6 +1856,26 @@ func (_u *WorkflowInstanceUpdateOne) SetActionPlan(v *ActionPlan) *WorkflowInsta
 // SetProcedure sets the "procedure" edge to the Procedure entity.
 func (_u *WorkflowInstanceUpdateOne) SetProcedure(v *Procedure) *WorkflowInstanceUpdateOne {
 	return _u.SetProcedureID(v.ID)
+}
+
+// SetCampaign sets the "campaign" edge to the Campaign entity.
+func (_u *WorkflowInstanceUpdateOne) SetCampaign(v *Campaign) *WorkflowInstanceUpdateOne {
+	return _u.SetCampaignID(v.ID)
+}
+
+// SetCampaignTarget sets the "campaign_target" edge to the CampaignTarget entity.
+func (_u *WorkflowInstanceUpdateOne) SetCampaignTarget(v *CampaignTarget) *WorkflowInstanceUpdateOne {
+	return _u.SetCampaignTargetID(v.ID)
+}
+
+// SetIdentityHolder sets the "identity_holder" edge to the IdentityHolder entity.
+func (_u *WorkflowInstanceUpdateOne) SetIdentityHolder(v *IdentityHolder) *WorkflowInstanceUpdateOne {
+	return _u.SetIdentityHolderID(v.ID)
+}
+
+// SetPlatform sets the "platform" edge to the Platform entity.
+func (_u *WorkflowInstanceUpdateOne) SetPlatform(v *Platform) *WorkflowInstanceUpdateOne {
+	return _u.SetPlatformID(v.ID)
 }
 
 // SetWorkflowProposal sets the "workflow_proposal" edge to the WorkflowProposal entity.
@@ -1620,6 +1972,30 @@ func (_u *WorkflowInstanceUpdateOne) ClearActionPlan() *WorkflowInstanceUpdateOn
 // ClearProcedure clears the "procedure" edge to the Procedure entity.
 func (_u *WorkflowInstanceUpdateOne) ClearProcedure() *WorkflowInstanceUpdateOne {
 	_u.mutation.ClearProcedure()
+	return _u
+}
+
+// ClearCampaign clears the "campaign" edge to the Campaign entity.
+func (_u *WorkflowInstanceUpdateOne) ClearCampaign() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearCampaign()
+	return _u
+}
+
+// ClearCampaignTarget clears the "campaign_target" edge to the CampaignTarget entity.
+func (_u *WorkflowInstanceUpdateOne) ClearCampaignTarget() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearCampaignTarget()
+	return _u
+}
+
+// ClearIdentityHolder clears the "identity_holder" edge to the IdentityHolder entity.
+func (_u *WorkflowInstanceUpdateOne) ClearIdentityHolder() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearIdentityHolder()
+	return _u
+}
+
+// ClearPlatform clears the "platform" edge to the Platform entity.
+func (_u *WorkflowInstanceUpdateOne) ClearPlatform() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearPlatform()
 	return _u
 }
 
@@ -2082,6 +2458,130 @@ func (_u *WorkflowInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Workfl
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.CampaignTable,
+			Columns: []string{workflowinstance.CampaignColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.CampaignTable,
+			Columns: []string{workflowinstance.CampaignColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignTargetCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.CampaignTargetTable,
+			Columns: []string{workflowinstance.CampaignTargetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignTargetIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.CampaignTargetTable,
+			Columns: []string{workflowinstance.CampaignTargetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.IdentityHolderTable,
+			Columns: []string{workflowinstance.IdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.IdentityHolderTable,
+			Columns: []string{workflowinstance.IdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PlatformCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.PlatformTable,
+			Columns: []string{workflowinstance.PlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.PlatformTable,
+			Columns: []string{workflowinstance.PlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.WorkflowInstance

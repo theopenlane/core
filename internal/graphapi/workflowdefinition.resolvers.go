@@ -7,6 +7,8 @@ package graphapi
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -14,19 +16,51 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateWorkflowDefinition is the resolver for the createWorkflowDefinition field.
 func (r *mutationResolver) CreateWorkflowDefinition(ctx context.Context, input generated.CreateWorkflowDefinitionInput) (*model.WorkflowDefinitionCreatePayload, error) {
-	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	if err := validateWorkflowDefinitionInput(input.SchemaType, input.DefinitionJSON); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowdefinition"})
 	}
 
-	res, err := withTransactionalMutation(ctx).WorkflowDefinition.Create().SetInput(input).Save(ctx)
+	ownerID := ""
+	if input.OwnerID != nil {
+		ownerID = *input.OwnerID
+	} else if orgID, err := auth.GetOrganizationIDFromContext(ctx); err == nil {
+		ownerID = orgID
+	}
+
+	active := true
+	if input.Active != nil {
+		active = *input.Active
+	}
+	draft := true
+	if input.Draft != nil {
+		draft = *input.Draft
+	}
+
+	if active && !draft {
+		if err := validateWorkflowDefinitionConflicts(ctx, withTransactionalMutation(ctx), input.SchemaType, ownerID, "", input.DefinitionJSON); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowdefinition"})
+		}
+	}
+
+	ops, fields, tracked := deriveWorkflowDefinitionPrefilter(input.DefinitionJSON)
+	approvalFields, approvalEdges := deriveWorkflowDefinitionApprovalFields(input.DefinitionJSON)
+	approvalMode := deriveWorkflowDefinitionApprovalSubmissionMode(input.DefinitionJSON)
+
+	builder := withTransactionalMutation(ctx).WorkflowDefinition.Create().SetInput(input)
+	builder.SetTriggerOperations(ops)
+	builder.SetTriggerFields(fields)
+	builder.SetTrackedFields(tracked)
+	builder.SetApprovalFields(approvalFields)
+	builder.SetApprovalEdges(approvalEdges)
+	builder.SetApprovalSubmissionMode(approvalMode)
+
+	res, err := builder.Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowdefinition"})
 	}
@@ -84,15 +118,50 @@ func (r *mutationResolver) UpdateWorkflowDefinition(ctx context.Context, id stri
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowdefinition"})
 	}
 
-	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.ErrPermissionDenied
+	if input.ClearDefinitionJSON {
+		return nil, parseRequestError(ctx, fmt.Errorf("definition_json cannot be cleared"), common.Action{Action: common.ActionUpdate, Object: "workflowdefinition"})
 	}
 
+	if input.SchemaType != nil && !strings.EqualFold(*input.SchemaType, res.SchemaType) {
+		return nil, parseRequestError(ctx, fmt.Errorf("schema_type cannot be changed"), common.Action{Action: common.ActionUpdate, Object: "workflowdefinition"})
+	}
+
+	doc := &res.DefinitionJSON
+	if input.DefinitionJSON != nil {
+		doc = input.DefinitionJSON
+	}
+
+	if err := validateWorkflowDefinitionInput(res.SchemaType, doc); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowdefinition"})
+	}
+
+	active := res.Active
+	if input.Active != nil {
+		active = *input.Active
+	}
+	draft := res.Draft
+	if input.Draft != nil {
+		draft = *input.Draft
+	}
+
+	if active && !draft {
+		if err := validateWorkflowDefinitionConflicts(ctx, withTransactionalMutation(ctx), res.SchemaType, res.OwnerID, res.ID, doc); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowdefinition"})
+		}
+	}
+
+	ops, fields, tracked := deriveWorkflowDefinitionPrefilter(doc)
+	approvalFields, approvalEdges := deriveWorkflowDefinitionApprovalFields(doc)
+	approvalMode := deriveWorkflowDefinitionApprovalSubmissionMode(doc)
+
 	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags).AppendTrackedFields(input.AppendTrackedFields)
+	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
+	req.SetTriggerOperations(ops)
+	req.SetTriggerFields(fields)
+	req.SetTrackedFields(tracked)
+	req.SetApprovalFields(approvalFields)
+	req.SetApprovalEdges(approvalEdges)
+	req.SetApprovalSubmissionMode(approvalMode)
 
 	res, err = req.Save(ctx)
 	if err != nil {

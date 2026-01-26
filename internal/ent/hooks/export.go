@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 
 	"entgo.io/ent"
@@ -41,24 +42,14 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 		return nil, err
 	}
 
-	values := m.Fields()
-	if len(values) == 0 {
+	fields := m.Fields()
+	if len(fields) == 0 {
 		return nil, errFieldsNotProvided
 	}
 
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
 		return nil, err
-	}
-
-	v, err := next.Mutate(ctx, m)
-	if err != nil {
-		return v, err
-	}
-
-	id, err := GetObjectIDFromEntValue(v)
-	if err != nil {
-		return v, err
 	}
 
 	orgID := au.OrganizationID
@@ -71,7 +62,26 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 	if orgID == "" || au.SubjectID == "" {
 		logx.FromContext(ctx).Error().Msg("authenticated user has no organization ID or user ID; unable to enqueue export job")
 
-		return v, ErrNoOrganizationID
+		return nil, ErrNoOrganizationID
+	}
+
+	// apply ownerID/systemOwned filters to the export filters
+	originalFilters, _ := m.Filters()
+	finalFilters, err := getFinalFilters(originalFilters, m, orgID)
+	if err != nil {
+		return nil, err
+	}
+
+	m.SetFilters(finalFilters)
+
+	v, err := next.Mutate(ctx, m)
+	if err != nil {
+		return v, err
+	}
+
+	id, err := GetObjectIDFromEntValue(v)
+	if err != nil {
+		return v, err
 	}
 
 	_, err = m.Job.Insert(ctx, jobspec.ExportContentArgs{
@@ -81,6 +91,45 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 	}, nil)
 
 	return v, err
+}
+
+// getFinalFilters applies ownerID and systemOwned filters to the export filters if needed based on the Exportable annotation
+func getFinalFilters(filters string, m *generated.ExportMutation, ownerID string) (string, error) {
+	// check if it has owner field set
+	exportType, _ := m.ExportType()
+	addOwnerField := HasOwnerField(exportType.String())
+	addSystemOwnedField := HasSystemOwnedField(exportType.String())
+
+	if !addOwnerField && !addSystemOwnedField {
+		return filters, nil
+	}
+
+	if filters == "" {
+		filters = "{}"
+	}
+
+	var filterMap map[string]any
+
+	if err := json.Unmarshal([]byte(filters), &filterMap); err != nil {
+		return "", err
+	}
+
+	// filter by owner ID
+	if addOwnerField {
+		filterMap["ownerID"] = ownerID
+	}
+
+	// filter out system owned records
+	if addSystemOwnedField {
+		filterMap["systemOwned"] = false
+	}
+
+	finalFilters, err := json.Marshal(filterMap)
+	if err != nil {
+		return "", err
+	}
+
+	return string(finalFilters), nil
 }
 
 func handleExportUpdate(ctx context.Context, m *generated.ExportMutation, next ent.Mutator) (generated.Value, error) {

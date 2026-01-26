@@ -59,6 +59,30 @@ func (f AssetHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutatio
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.AssetHistoryMutation", m)
 }
 
+// The CampaignHistoryFunc type is an adapter to allow the use of ordinary
+// function as CampaignHistory mutator.
+type CampaignHistoryFunc func(context.Context, *historygenerated.CampaignHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CampaignHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.CampaignHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.CampaignHistoryMutation", m)
+}
+
+// The CampaignTargetHistoryFunc type is an adapter to allow the use of ordinary
+// function as CampaignTargetHistory mutator.
+type CampaignTargetHistoryFunc func(context.Context, *historygenerated.CampaignTargetHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CampaignTargetHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.CampaignTargetHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.CampaignTargetHistoryMutation", m)
+}
+
 // The ContactHistoryFunc type is an adapter to allow the use of ordinary
 // function as ContactHistory mutator.
 type ContactHistoryFunc func(context.Context, *historygenerated.ContactHistoryMutation) (historygenerated.Value, error)
@@ -311,6 +335,18 @@ func (f HushHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.HushHistoryMutation", m)
 }
 
+// The IdentityHolderHistoryFunc type is an adapter to allow the use of ordinary
+// function as IdentityHolderHistory mutator.
+type IdentityHolderHistoryFunc func(context.Context, *historygenerated.IdentityHolderHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f IdentityHolderHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.IdentityHolderHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.IdentityHolderHistoryMutation", m)
+}
+
 // The IntegrationHistoryFunc type is an adapter to allow the use of ordinary
 // function as IntegrationHistory mutator.
 type IntegrationHistoryFunc func(context.Context, *historygenerated.IntegrationHistoryMutation) (historygenerated.Value, error)
@@ -441,6 +477,18 @@ func (f OrganizationSettingHistoryFunc) Mutate(ctx context.Context, m historygen
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.OrganizationSettingHistoryMutation", m)
+}
+
+// The PlatformHistoryFunc type is an adapter to allow the use of ordinary
+// function as PlatformHistory mutator.
+type PlatformHistoryFunc func(context.Context, *historygenerated.PlatformHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PlatformHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.PlatformHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.PlatformHistoryMutation", m)
 }
 
 // The ProcedureHistoryFunc type is an adapter to allow the use of ordinary

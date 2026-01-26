@@ -1,0 +1,327 @@
+
+mutation CreateBulkCSVIdentityHolder($input: Upload!) {
+  createBulkCSVIdentityHolder(input: $input) {
+    identityHolders {
+      alternateEmail
+      createdAt
+      createdBy
+      department
+      displayID
+      email
+      employerEntityID
+      endDate
+      environmentID
+      environmentName
+      externalReferenceID
+      externalUserID
+      fullName
+      id
+      identityHolderType
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      isActive
+      isOpenlaneUser
+      location
+      metadata
+      ownerID
+      phoneNumber
+      scopeID
+      scopeName
+      startDate
+      status
+      tags
+      team
+      title
+      updatedAt
+      updatedBy
+      userID
+      workflowEligibleMarker
+    }
+  }
+}
+
+mutation CreateBulkIdentityHolder($input: [CreateIdentityHolderInput!]) {
+  createBulkIdentityHolder(input: $input) {
+    identityHolders {
+      alternateEmail
+      createdAt
+      createdBy
+      department
+      displayID
+      email
+      employerEntityID
+      endDate
+      environmentID
+      environmentName
+      externalReferenceID
+      externalUserID
+      fullName
+      id
+      identityHolderType
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      isActive
+      isOpenlaneUser
+      location
+      metadata
+      ownerID
+      phoneNumber
+      scopeID
+      scopeName
+      startDate
+      status
+      tags
+      team
+      title
+      updatedAt
+      updatedBy
+      userID
+      workflowEligibleMarker
+    }
+  }
+}
+
+mutation CreateIdentityHolder($input: CreateIdentityHolderInput!) {
+  createIdentityHolder(input: $input) {
+    identityHolder {
+      alternateEmail
+      createdAt
+      createdBy
+      department
+      displayID
+      email
+      employerEntityID
+      endDate
+      environmentID
+      environmentName
+      externalReferenceID
+      externalUserID
+      fullName
+      id
+      identityHolderType
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      isActive
+      isOpenlaneUser
+      location
+      metadata
+      ownerID
+      phoneNumber
+      scopeID
+      scopeName
+      startDate
+      status
+      tags
+      team
+      title
+      updatedAt
+      updatedBy
+      userID
+      workflowEligibleMarker
+    }
+  }
+}
+
+mutation DeleteIdentityHolder($deleteIdentityHolderId: ID!) {
+  deleteIdentityHolder(id: $deleteIdentityHolderId) {
+    deletedID
+  }
+}
+
+query GetAllIdentityHolders($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [IdentityHolderOrder!]){
+  identityHolders(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        alternateEmail
+        createdAt
+        createdBy
+        department
+        displayID
+        email
+        employerEntityID
+        endDate
+        environmentID
+        environmentName
+        externalReferenceID
+        externalUserID
+        fullName
+        id
+        identityHolderType
+        internalOwner
+        internalOwnerGroupID
+        internalOwnerUserID
+        isActive
+        isOpenlaneUser
+        location
+        metadata
+        ownerID
+        phoneNumber
+        scopeID
+        scopeName
+        startDate
+        status
+        tags
+        team
+        title
+        updatedAt
+        updatedBy
+        userID
+        workflowEligibleMarker
+      }
+    }
+  }
+}
+query GetIdentityHolderByID($identityHolderId: ID!) {
+  identityHolder(id: $identityHolderId) {
+    alternateEmail
+    createdAt
+    createdBy
+    department
+    displayID
+    email
+    employerEntityID
+    endDate
+    environmentID
+    environmentName
+    externalReferenceID
+    externalUserID
+    fullName
+    id
+    identityHolderType
+    internalOwner
+    internalOwnerGroupID
+    internalOwnerUserID
+    isActive
+    isOpenlaneUser
+    location
+    metadata
+    ownerID
+    phoneNumber
+    scopeID
+    scopeName
+    startDate
+    status
+    tags
+    team
+    title
+    updatedAt
+    updatedBy
+    userID
+    workflowEligibleMarker
+  }
+}
+
+query GetIdentityHolders($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [IdentityHolderOrder!], $where: IdentityHolderWhereInput) {
+  identityHolders(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+    ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        alternateEmail
+        createdAt
+        createdBy
+        department
+        displayID
+        email
+        employerEntityID
+        endDate
+        environmentID
+        environmentName
+        externalReferenceID
+        externalUserID
+        fullName
+        id
+        identityHolderType
+        internalOwner
+        internalOwnerGroupID
+        internalOwnerUserID
+        isActive
+        isOpenlaneUser
+        location
+        metadata
+        ownerID
+        phoneNumber
+        scopeID
+        scopeName
+        startDate
+        status
+        tags
+        team
+        title
+        updatedAt
+        updatedBy
+        userID
+        workflowEligibleMarker
+      }
+    }
+  }
+}
+mutation UpdateIdentityHolder($updateIdentityHolderId: ID!, $input: UpdateIdentityHolderInput!) {
+  updateIdentityHolder(id: $updateIdentityHolderId, input: $input) {
+    identityHolder {
+      alternateEmail
+      createdAt
+      createdBy
+      department
+      displayID
+      email
+      employerEntityID
+      endDate
+      environmentID
+      environmentName
+      externalReferenceID
+      externalUserID
+      fullName
+      id
+      identityHolderType
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      isActive
+      isOpenlaneUser
+      location
+      metadata
+      ownerID
+      phoneNumber
+      scopeID
+      scopeName
+      startDate
+      status
+      tags
+      team
+      title
+      updatedAt
+      updatedBy
+      userID
+      workflowEligibleMarker
+    }
+  }
+}

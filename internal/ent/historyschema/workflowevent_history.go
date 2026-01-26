@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/schema"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // WorkflowEventHistory holds the schema definition for the WorkflowEventHistory entity.
@@ -36,6 +37,11 @@ func (WorkflowEventHistory) Annotations() []entschema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entfga.Annotations{
+			ObjectType:   "workflow_event",
+			IDField:      "Ref",
+			IncludeHooks: false,
+		},
 	}
 }
 
@@ -108,6 +114,6 @@ func (WorkflowEventHistory) Policy() ent.Policy {
 // Interceptors of the WorkflowEventHistory
 func (WorkflowEventHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
+		interceptors.FilterListQuery(),
 	}
 }

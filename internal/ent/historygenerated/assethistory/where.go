@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/entx/history"
 )
@@ -113,6 +114,101 @@ func OwnerID(v string) predicate.AssetHistory {
 	return predicate.AssetHistory(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// InternalOwner applies equality check predicate on the "internal_owner" field. It's identical to InternalOwnerEQ.
+func InternalOwner(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldInternalOwner, v))
+}
+
+// InternalOwnerUserID applies equality check predicate on the "internal_owner_user_id" field. It's identical to InternalOwnerUserIDEQ.
+func InternalOwnerUserID(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerGroupID applies equality check predicate on the "internal_owner_group_id" field. It's identical to InternalOwnerGroupIDEQ.
+func InternalOwnerGroupID(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldInternalOwnerGroupID, v))
+}
+
+// AssetSubtypeName applies equality check predicate on the "asset_subtype_name" field. It's identical to AssetSubtypeNameEQ.
+func AssetSubtypeName(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldAssetSubtypeName, v))
+}
+
+// AssetSubtypeID applies equality check predicate on the "asset_subtype_id" field. It's identical to AssetSubtypeIDEQ.
+func AssetSubtypeID(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldAssetSubtypeID, v))
+}
+
+// AssetDataClassificationName applies equality check predicate on the "asset_data_classification_name" field. It's identical to AssetDataClassificationNameEQ.
+func AssetDataClassificationName(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldAssetDataClassificationName, v))
+}
+
+// AssetDataClassificationID applies equality check predicate on the "asset_data_classification_id" field. It's identical to AssetDataClassificationIDEQ.
+func AssetDataClassificationID(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldAssetDataClassificationID, v))
+}
+
+// EnvironmentName applies equality check predicate on the "environment_name" field. It's identical to EnvironmentNameEQ.
+func EnvironmentName(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldEnvironmentName, v))
+}
+
+// EnvironmentID applies equality check predicate on the "environment_id" field. It's identical to EnvironmentIDEQ.
+func EnvironmentID(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldEnvironmentID, v))
+}
+
+// ScopeName applies equality check predicate on the "scope_name" field. It's identical to ScopeNameEQ.
+func ScopeName(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldScopeName, v))
+}
+
+// ScopeID applies equality check predicate on the "scope_id" field. It's identical to ScopeIDEQ.
+func ScopeID(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldScopeID, v))
+}
+
+// AccessModelName applies equality check predicate on the "access_model_name" field. It's identical to AccessModelNameEQ.
+func AccessModelName(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldAccessModelName, v))
+}
+
+// AccessModelID applies equality check predicate on the "access_model_id" field. It's identical to AccessModelIDEQ.
+func AccessModelID(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldAccessModelID, v))
+}
+
+// EncryptionStatusName applies equality check predicate on the "encryption_status_name" field. It's identical to EncryptionStatusNameEQ.
+func EncryptionStatusName(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldEncryptionStatusName, v))
+}
+
+// EncryptionStatusID applies equality check predicate on the "encryption_status_id" field. It's identical to EncryptionStatusIDEQ.
+func EncryptionStatusID(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldEncryptionStatusID, v))
+}
+
+// SecurityTierName applies equality check predicate on the "security_tier_name" field. It's identical to SecurityTierNameEQ.
+func SecurityTierName(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldSecurityTierName, v))
+}
+
+// SecurityTierID applies equality check predicate on the "security_tier_id" field. It's identical to SecurityTierIDEQ.
+func SecurityTierID(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldSecurityTierID, v))
+}
+
+// CriticalityName applies equality check predicate on the "criticality_name" field. It's identical to CriticalityNameEQ.
+func CriticalityName(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldCriticalityName, v))
+}
+
+// CriticalityID applies equality check predicate on the "criticality_id" field. It's identical to CriticalityIDEQ.
+func CriticalityID(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldCriticalityID, v))
+}
+
 // SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
 func SystemOwned(v bool) predicate.AssetHistory {
 	return predicate.AssetHistory(sql.FieldEQ(FieldSystemOwned, v))
@@ -146,6 +242,46 @@ func Identifier(v string) predicate.AssetHistory {
 // Website applies equality check predicate on the "website" field. It's identical to WebsiteEQ.
 func Website(v string) predicate.AssetHistory {
 	return predicate.AssetHistory(sql.FieldEQ(FieldWebsite, v))
+}
+
+// PhysicalLocation applies equality check predicate on the "physical_location" field. It's identical to PhysicalLocationEQ.
+func PhysicalLocation(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldPhysicalLocation, v))
+}
+
+// Region applies equality check predicate on the "region" field. It's identical to RegionEQ.
+func Region(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldRegion, v))
+}
+
+// ContainsPii applies equality check predicate on the "contains_pii" field. It's identical to ContainsPiiEQ.
+func ContainsPii(v bool) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldContainsPii, v))
+}
+
+// SourcePlatformID applies equality check predicate on the "source_platform_id" field. It's identical to SourcePlatformIDEQ.
+func SourcePlatformID(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldSourcePlatformID, v))
+}
+
+// SourceIdentifier applies equality check predicate on the "source_identifier" field. It's identical to SourceIdentifierEQ.
+func SourceIdentifier(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldSourceIdentifier, v))
+}
+
+// CostCenter applies equality check predicate on the "cost_center" field. It's identical to CostCenterEQ.
+func CostCenter(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldCostCenter, v))
+}
+
+// EstimatedMonthlyCost applies equality check predicate on the "estimated_monthly_cost" field. It's identical to EstimatedMonthlyCostEQ.
+func EstimatedMonthlyCost(v float64) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldEstimatedMonthlyCost, v))
+}
+
+// PurchaseDate applies equality check predicate on the "purchase_date" field. It's identical to PurchaseDateEQ.
+func PurchaseDate(v models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldPurchaseDate, v))
 }
 
 // Cpe applies equality check predicate on the "cpe" field. It's identical to CpeEQ.
@@ -748,6 +884,1431 @@ func OwnerIDContainsFold(v string) predicate.AssetHistory {
 	return predicate.AssetHistory(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
+// InternalOwnerEQ applies the EQ predicate on the "internal_owner" field.
+func InternalOwnerEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldInternalOwner, v))
+}
+
+// InternalOwnerNEQ applies the NEQ predicate on the "internal_owner" field.
+func InternalOwnerNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldInternalOwner, v))
+}
+
+// InternalOwnerIn applies the In predicate on the "internal_owner" field.
+func InternalOwnerIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldInternalOwner, vs...))
+}
+
+// InternalOwnerNotIn applies the NotIn predicate on the "internal_owner" field.
+func InternalOwnerNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldInternalOwner, vs...))
+}
+
+// InternalOwnerGT applies the GT predicate on the "internal_owner" field.
+func InternalOwnerGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldInternalOwner, v))
+}
+
+// InternalOwnerGTE applies the GTE predicate on the "internal_owner" field.
+func InternalOwnerGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldInternalOwner, v))
+}
+
+// InternalOwnerLT applies the LT predicate on the "internal_owner" field.
+func InternalOwnerLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldInternalOwner, v))
+}
+
+// InternalOwnerLTE applies the LTE predicate on the "internal_owner" field.
+func InternalOwnerLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldInternalOwner, v))
+}
+
+// InternalOwnerContains applies the Contains predicate on the "internal_owner" field.
+func InternalOwnerContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldInternalOwner, v))
+}
+
+// InternalOwnerHasPrefix applies the HasPrefix predicate on the "internal_owner" field.
+func InternalOwnerHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldInternalOwner, v))
+}
+
+// InternalOwnerHasSuffix applies the HasSuffix predicate on the "internal_owner" field.
+func InternalOwnerHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldInternalOwner, v))
+}
+
+// InternalOwnerIsNil applies the IsNil predicate on the "internal_owner" field.
+func InternalOwnerIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldInternalOwner))
+}
+
+// InternalOwnerNotNil applies the NotNil predicate on the "internal_owner" field.
+func InternalOwnerNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldInternalOwner))
+}
+
+// InternalOwnerEqualFold applies the EqualFold predicate on the "internal_owner" field.
+func InternalOwnerEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldInternalOwner, v))
+}
+
+// InternalOwnerContainsFold applies the ContainsFold predicate on the "internal_owner" field.
+func InternalOwnerContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldInternalOwner, v))
+}
+
+// InternalOwnerUserIDEQ applies the EQ predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDNEQ applies the NEQ predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDIn applies the In predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldInternalOwnerUserID, vs...))
+}
+
+// InternalOwnerUserIDNotIn applies the NotIn predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldInternalOwnerUserID, vs...))
+}
+
+// InternalOwnerUserIDGT applies the GT predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDGTE applies the GTE predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDLT applies the LT predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDLTE applies the LTE predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDContains applies the Contains predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDHasPrefix applies the HasPrefix predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDHasSuffix applies the HasSuffix predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDIsNil applies the IsNil predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldInternalOwnerUserID))
+}
+
+// InternalOwnerUserIDNotNil applies the NotNil predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldInternalOwnerUserID))
+}
+
+// InternalOwnerUserIDEqualFold applies the EqualFold predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDContainsFold applies the ContainsFold predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerGroupIDEQ applies the EQ predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDNEQ applies the NEQ predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDIn applies the In predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldInternalOwnerGroupID, vs...))
+}
+
+// InternalOwnerGroupIDNotIn applies the NotIn predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldInternalOwnerGroupID, vs...))
+}
+
+// InternalOwnerGroupIDGT applies the GT predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDGTE applies the GTE predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDLT applies the LT predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDLTE applies the LTE predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDContains applies the Contains predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDHasPrefix applies the HasPrefix predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDHasSuffix applies the HasSuffix predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDIsNil applies the IsNil predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldInternalOwnerGroupID))
+}
+
+// InternalOwnerGroupIDNotNil applies the NotNil predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldInternalOwnerGroupID))
+}
+
+// InternalOwnerGroupIDEqualFold applies the EqualFold predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDContainsFold applies the ContainsFold predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldInternalOwnerGroupID, v))
+}
+
+// AssetSubtypeNameEQ applies the EQ predicate on the "asset_subtype_name" field.
+func AssetSubtypeNameEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldAssetSubtypeName, v))
+}
+
+// AssetSubtypeNameNEQ applies the NEQ predicate on the "asset_subtype_name" field.
+func AssetSubtypeNameNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldAssetSubtypeName, v))
+}
+
+// AssetSubtypeNameIn applies the In predicate on the "asset_subtype_name" field.
+func AssetSubtypeNameIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldAssetSubtypeName, vs...))
+}
+
+// AssetSubtypeNameNotIn applies the NotIn predicate on the "asset_subtype_name" field.
+func AssetSubtypeNameNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldAssetSubtypeName, vs...))
+}
+
+// AssetSubtypeNameGT applies the GT predicate on the "asset_subtype_name" field.
+func AssetSubtypeNameGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldAssetSubtypeName, v))
+}
+
+// AssetSubtypeNameGTE applies the GTE predicate on the "asset_subtype_name" field.
+func AssetSubtypeNameGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldAssetSubtypeName, v))
+}
+
+// AssetSubtypeNameLT applies the LT predicate on the "asset_subtype_name" field.
+func AssetSubtypeNameLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldAssetSubtypeName, v))
+}
+
+// AssetSubtypeNameLTE applies the LTE predicate on the "asset_subtype_name" field.
+func AssetSubtypeNameLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldAssetSubtypeName, v))
+}
+
+// AssetSubtypeNameContains applies the Contains predicate on the "asset_subtype_name" field.
+func AssetSubtypeNameContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldAssetSubtypeName, v))
+}
+
+// AssetSubtypeNameHasPrefix applies the HasPrefix predicate on the "asset_subtype_name" field.
+func AssetSubtypeNameHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldAssetSubtypeName, v))
+}
+
+// AssetSubtypeNameHasSuffix applies the HasSuffix predicate on the "asset_subtype_name" field.
+func AssetSubtypeNameHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldAssetSubtypeName, v))
+}
+
+// AssetSubtypeNameIsNil applies the IsNil predicate on the "asset_subtype_name" field.
+func AssetSubtypeNameIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldAssetSubtypeName))
+}
+
+// AssetSubtypeNameNotNil applies the NotNil predicate on the "asset_subtype_name" field.
+func AssetSubtypeNameNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldAssetSubtypeName))
+}
+
+// AssetSubtypeNameEqualFold applies the EqualFold predicate on the "asset_subtype_name" field.
+func AssetSubtypeNameEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldAssetSubtypeName, v))
+}
+
+// AssetSubtypeNameContainsFold applies the ContainsFold predicate on the "asset_subtype_name" field.
+func AssetSubtypeNameContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldAssetSubtypeName, v))
+}
+
+// AssetSubtypeIDEQ applies the EQ predicate on the "asset_subtype_id" field.
+func AssetSubtypeIDEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldAssetSubtypeID, v))
+}
+
+// AssetSubtypeIDNEQ applies the NEQ predicate on the "asset_subtype_id" field.
+func AssetSubtypeIDNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldAssetSubtypeID, v))
+}
+
+// AssetSubtypeIDIn applies the In predicate on the "asset_subtype_id" field.
+func AssetSubtypeIDIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldAssetSubtypeID, vs...))
+}
+
+// AssetSubtypeIDNotIn applies the NotIn predicate on the "asset_subtype_id" field.
+func AssetSubtypeIDNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldAssetSubtypeID, vs...))
+}
+
+// AssetSubtypeIDGT applies the GT predicate on the "asset_subtype_id" field.
+func AssetSubtypeIDGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldAssetSubtypeID, v))
+}
+
+// AssetSubtypeIDGTE applies the GTE predicate on the "asset_subtype_id" field.
+func AssetSubtypeIDGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldAssetSubtypeID, v))
+}
+
+// AssetSubtypeIDLT applies the LT predicate on the "asset_subtype_id" field.
+func AssetSubtypeIDLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldAssetSubtypeID, v))
+}
+
+// AssetSubtypeIDLTE applies the LTE predicate on the "asset_subtype_id" field.
+func AssetSubtypeIDLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldAssetSubtypeID, v))
+}
+
+// AssetSubtypeIDContains applies the Contains predicate on the "asset_subtype_id" field.
+func AssetSubtypeIDContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldAssetSubtypeID, v))
+}
+
+// AssetSubtypeIDHasPrefix applies the HasPrefix predicate on the "asset_subtype_id" field.
+func AssetSubtypeIDHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldAssetSubtypeID, v))
+}
+
+// AssetSubtypeIDHasSuffix applies the HasSuffix predicate on the "asset_subtype_id" field.
+func AssetSubtypeIDHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldAssetSubtypeID, v))
+}
+
+// AssetSubtypeIDIsNil applies the IsNil predicate on the "asset_subtype_id" field.
+func AssetSubtypeIDIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldAssetSubtypeID))
+}
+
+// AssetSubtypeIDNotNil applies the NotNil predicate on the "asset_subtype_id" field.
+func AssetSubtypeIDNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldAssetSubtypeID))
+}
+
+// AssetSubtypeIDEqualFold applies the EqualFold predicate on the "asset_subtype_id" field.
+func AssetSubtypeIDEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldAssetSubtypeID, v))
+}
+
+// AssetSubtypeIDContainsFold applies the ContainsFold predicate on the "asset_subtype_id" field.
+func AssetSubtypeIDContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldAssetSubtypeID, v))
+}
+
+// AssetDataClassificationNameEQ applies the EQ predicate on the "asset_data_classification_name" field.
+func AssetDataClassificationNameEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldAssetDataClassificationName, v))
+}
+
+// AssetDataClassificationNameNEQ applies the NEQ predicate on the "asset_data_classification_name" field.
+func AssetDataClassificationNameNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldAssetDataClassificationName, v))
+}
+
+// AssetDataClassificationNameIn applies the In predicate on the "asset_data_classification_name" field.
+func AssetDataClassificationNameIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldAssetDataClassificationName, vs...))
+}
+
+// AssetDataClassificationNameNotIn applies the NotIn predicate on the "asset_data_classification_name" field.
+func AssetDataClassificationNameNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldAssetDataClassificationName, vs...))
+}
+
+// AssetDataClassificationNameGT applies the GT predicate on the "asset_data_classification_name" field.
+func AssetDataClassificationNameGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldAssetDataClassificationName, v))
+}
+
+// AssetDataClassificationNameGTE applies the GTE predicate on the "asset_data_classification_name" field.
+func AssetDataClassificationNameGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldAssetDataClassificationName, v))
+}
+
+// AssetDataClassificationNameLT applies the LT predicate on the "asset_data_classification_name" field.
+func AssetDataClassificationNameLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldAssetDataClassificationName, v))
+}
+
+// AssetDataClassificationNameLTE applies the LTE predicate on the "asset_data_classification_name" field.
+func AssetDataClassificationNameLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldAssetDataClassificationName, v))
+}
+
+// AssetDataClassificationNameContains applies the Contains predicate on the "asset_data_classification_name" field.
+func AssetDataClassificationNameContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldAssetDataClassificationName, v))
+}
+
+// AssetDataClassificationNameHasPrefix applies the HasPrefix predicate on the "asset_data_classification_name" field.
+func AssetDataClassificationNameHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldAssetDataClassificationName, v))
+}
+
+// AssetDataClassificationNameHasSuffix applies the HasSuffix predicate on the "asset_data_classification_name" field.
+func AssetDataClassificationNameHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldAssetDataClassificationName, v))
+}
+
+// AssetDataClassificationNameIsNil applies the IsNil predicate on the "asset_data_classification_name" field.
+func AssetDataClassificationNameIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldAssetDataClassificationName))
+}
+
+// AssetDataClassificationNameNotNil applies the NotNil predicate on the "asset_data_classification_name" field.
+func AssetDataClassificationNameNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldAssetDataClassificationName))
+}
+
+// AssetDataClassificationNameEqualFold applies the EqualFold predicate on the "asset_data_classification_name" field.
+func AssetDataClassificationNameEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldAssetDataClassificationName, v))
+}
+
+// AssetDataClassificationNameContainsFold applies the ContainsFold predicate on the "asset_data_classification_name" field.
+func AssetDataClassificationNameContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldAssetDataClassificationName, v))
+}
+
+// AssetDataClassificationIDEQ applies the EQ predicate on the "asset_data_classification_id" field.
+func AssetDataClassificationIDEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldAssetDataClassificationID, v))
+}
+
+// AssetDataClassificationIDNEQ applies the NEQ predicate on the "asset_data_classification_id" field.
+func AssetDataClassificationIDNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldAssetDataClassificationID, v))
+}
+
+// AssetDataClassificationIDIn applies the In predicate on the "asset_data_classification_id" field.
+func AssetDataClassificationIDIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldAssetDataClassificationID, vs...))
+}
+
+// AssetDataClassificationIDNotIn applies the NotIn predicate on the "asset_data_classification_id" field.
+func AssetDataClassificationIDNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldAssetDataClassificationID, vs...))
+}
+
+// AssetDataClassificationIDGT applies the GT predicate on the "asset_data_classification_id" field.
+func AssetDataClassificationIDGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldAssetDataClassificationID, v))
+}
+
+// AssetDataClassificationIDGTE applies the GTE predicate on the "asset_data_classification_id" field.
+func AssetDataClassificationIDGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldAssetDataClassificationID, v))
+}
+
+// AssetDataClassificationIDLT applies the LT predicate on the "asset_data_classification_id" field.
+func AssetDataClassificationIDLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldAssetDataClassificationID, v))
+}
+
+// AssetDataClassificationIDLTE applies the LTE predicate on the "asset_data_classification_id" field.
+func AssetDataClassificationIDLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldAssetDataClassificationID, v))
+}
+
+// AssetDataClassificationIDContains applies the Contains predicate on the "asset_data_classification_id" field.
+func AssetDataClassificationIDContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldAssetDataClassificationID, v))
+}
+
+// AssetDataClassificationIDHasPrefix applies the HasPrefix predicate on the "asset_data_classification_id" field.
+func AssetDataClassificationIDHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldAssetDataClassificationID, v))
+}
+
+// AssetDataClassificationIDHasSuffix applies the HasSuffix predicate on the "asset_data_classification_id" field.
+func AssetDataClassificationIDHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldAssetDataClassificationID, v))
+}
+
+// AssetDataClassificationIDIsNil applies the IsNil predicate on the "asset_data_classification_id" field.
+func AssetDataClassificationIDIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldAssetDataClassificationID))
+}
+
+// AssetDataClassificationIDNotNil applies the NotNil predicate on the "asset_data_classification_id" field.
+func AssetDataClassificationIDNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldAssetDataClassificationID))
+}
+
+// AssetDataClassificationIDEqualFold applies the EqualFold predicate on the "asset_data_classification_id" field.
+func AssetDataClassificationIDEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldAssetDataClassificationID, v))
+}
+
+// AssetDataClassificationIDContainsFold applies the ContainsFold predicate on the "asset_data_classification_id" field.
+func AssetDataClassificationIDContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldAssetDataClassificationID, v))
+}
+
+// EnvironmentNameEQ applies the EQ predicate on the "environment_name" field.
+func EnvironmentNameEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameNEQ applies the NEQ predicate on the "environment_name" field.
+func EnvironmentNameNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameIn applies the In predicate on the "environment_name" field.
+func EnvironmentNameIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldEnvironmentName, vs...))
+}
+
+// EnvironmentNameNotIn applies the NotIn predicate on the "environment_name" field.
+func EnvironmentNameNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldEnvironmentName, vs...))
+}
+
+// EnvironmentNameGT applies the GT predicate on the "environment_name" field.
+func EnvironmentNameGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameGTE applies the GTE predicate on the "environment_name" field.
+func EnvironmentNameGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameLT applies the LT predicate on the "environment_name" field.
+func EnvironmentNameLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameLTE applies the LTE predicate on the "environment_name" field.
+func EnvironmentNameLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameContains applies the Contains predicate on the "environment_name" field.
+func EnvironmentNameContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameHasPrefix applies the HasPrefix predicate on the "environment_name" field.
+func EnvironmentNameHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameHasSuffix applies the HasSuffix predicate on the "environment_name" field.
+func EnvironmentNameHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameIsNil applies the IsNil predicate on the "environment_name" field.
+func EnvironmentNameIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldEnvironmentName))
+}
+
+// EnvironmentNameNotNil applies the NotNil predicate on the "environment_name" field.
+func EnvironmentNameNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldEnvironmentName))
+}
+
+// EnvironmentNameEqualFold applies the EqualFold predicate on the "environment_name" field.
+func EnvironmentNameEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldEnvironmentName, v))
+}
+
+// EnvironmentNameContainsFold applies the ContainsFold predicate on the "environment_name" field.
+func EnvironmentNameContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldEnvironmentName, v))
+}
+
+// EnvironmentIDEQ applies the EQ predicate on the "environment_id" field.
+func EnvironmentIDEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDNEQ applies the NEQ predicate on the "environment_id" field.
+func EnvironmentIDNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDIn applies the In predicate on the "environment_id" field.
+func EnvironmentIDIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldEnvironmentID, vs...))
+}
+
+// EnvironmentIDNotIn applies the NotIn predicate on the "environment_id" field.
+func EnvironmentIDNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldEnvironmentID, vs...))
+}
+
+// EnvironmentIDGT applies the GT predicate on the "environment_id" field.
+func EnvironmentIDGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDGTE applies the GTE predicate on the "environment_id" field.
+func EnvironmentIDGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDLT applies the LT predicate on the "environment_id" field.
+func EnvironmentIDLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDLTE applies the LTE predicate on the "environment_id" field.
+func EnvironmentIDLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDContains applies the Contains predicate on the "environment_id" field.
+func EnvironmentIDContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDHasPrefix applies the HasPrefix predicate on the "environment_id" field.
+func EnvironmentIDHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDHasSuffix applies the HasSuffix predicate on the "environment_id" field.
+func EnvironmentIDHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDIsNil applies the IsNil predicate on the "environment_id" field.
+func EnvironmentIDIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldEnvironmentID))
+}
+
+// EnvironmentIDNotNil applies the NotNil predicate on the "environment_id" field.
+func EnvironmentIDNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldEnvironmentID))
+}
+
+// EnvironmentIDEqualFold applies the EqualFold predicate on the "environment_id" field.
+func EnvironmentIDEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldEnvironmentID, v))
+}
+
+// EnvironmentIDContainsFold applies the ContainsFold predicate on the "environment_id" field.
+func EnvironmentIDContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldEnvironmentID, v))
+}
+
+// ScopeNameEQ applies the EQ predicate on the "scope_name" field.
+func ScopeNameEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldScopeName, v))
+}
+
+// ScopeNameNEQ applies the NEQ predicate on the "scope_name" field.
+func ScopeNameNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldScopeName, v))
+}
+
+// ScopeNameIn applies the In predicate on the "scope_name" field.
+func ScopeNameIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldScopeName, vs...))
+}
+
+// ScopeNameNotIn applies the NotIn predicate on the "scope_name" field.
+func ScopeNameNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldScopeName, vs...))
+}
+
+// ScopeNameGT applies the GT predicate on the "scope_name" field.
+func ScopeNameGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldScopeName, v))
+}
+
+// ScopeNameGTE applies the GTE predicate on the "scope_name" field.
+func ScopeNameGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldScopeName, v))
+}
+
+// ScopeNameLT applies the LT predicate on the "scope_name" field.
+func ScopeNameLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldScopeName, v))
+}
+
+// ScopeNameLTE applies the LTE predicate on the "scope_name" field.
+func ScopeNameLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldScopeName, v))
+}
+
+// ScopeNameContains applies the Contains predicate on the "scope_name" field.
+func ScopeNameContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldScopeName, v))
+}
+
+// ScopeNameHasPrefix applies the HasPrefix predicate on the "scope_name" field.
+func ScopeNameHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldScopeName, v))
+}
+
+// ScopeNameHasSuffix applies the HasSuffix predicate on the "scope_name" field.
+func ScopeNameHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldScopeName, v))
+}
+
+// ScopeNameIsNil applies the IsNil predicate on the "scope_name" field.
+func ScopeNameIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldScopeName))
+}
+
+// ScopeNameNotNil applies the NotNil predicate on the "scope_name" field.
+func ScopeNameNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldScopeName))
+}
+
+// ScopeNameEqualFold applies the EqualFold predicate on the "scope_name" field.
+func ScopeNameEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldScopeName, v))
+}
+
+// ScopeNameContainsFold applies the ContainsFold predicate on the "scope_name" field.
+func ScopeNameContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldScopeName, v))
+}
+
+// ScopeIDEQ applies the EQ predicate on the "scope_id" field.
+func ScopeIDEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldScopeID, v))
+}
+
+// ScopeIDNEQ applies the NEQ predicate on the "scope_id" field.
+func ScopeIDNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldScopeID, v))
+}
+
+// ScopeIDIn applies the In predicate on the "scope_id" field.
+func ScopeIDIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldScopeID, vs...))
+}
+
+// ScopeIDNotIn applies the NotIn predicate on the "scope_id" field.
+func ScopeIDNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldScopeID, vs...))
+}
+
+// ScopeIDGT applies the GT predicate on the "scope_id" field.
+func ScopeIDGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldScopeID, v))
+}
+
+// ScopeIDGTE applies the GTE predicate on the "scope_id" field.
+func ScopeIDGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldScopeID, v))
+}
+
+// ScopeIDLT applies the LT predicate on the "scope_id" field.
+func ScopeIDLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldScopeID, v))
+}
+
+// ScopeIDLTE applies the LTE predicate on the "scope_id" field.
+func ScopeIDLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldScopeID, v))
+}
+
+// ScopeIDContains applies the Contains predicate on the "scope_id" field.
+func ScopeIDContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldScopeID, v))
+}
+
+// ScopeIDHasPrefix applies the HasPrefix predicate on the "scope_id" field.
+func ScopeIDHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldScopeID, v))
+}
+
+// ScopeIDHasSuffix applies the HasSuffix predicate on the "scope_id" field.
+func ScopeIDHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldScopeID, v))
+}
+
+// ScopeIDIsNil applies the IsNil predicate on the "scope_id" field.
+func ScopeIDIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldScopeID))
+}
+
+// ScopeIDNotNil applies the NotNil predicate on the "scope_id" field.
+func ScopeIDNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldScopeID))
+}
+
+// ScopeIDEqualFold applies the EqualFold predicate on the "scope_id" field.
+func ScopeIDEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldScopeID, v))
+}
+
+// ScopeIDContainsFold applies the ContainsFold predicate on the "scope_id" field.
+func ScopeIDContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldScopeID, v))
+}
+
+// AccessModelNameEQ applies the EQ predicate on the "access_model_name" field.
+func AccessModelNameEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldAccessModelName, v))
+}
+
+// AccessModelNameNEQ applies the NEQ predicate on the "access_model_name" field.
+func AccessModelNameNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldAccessModelName, v))
+}
+
+// AccessModelNameIn applies the In predicate on the "access_model_name" field.
+func AccessModelNameIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldAccessModelName, vs...))
+}
+
+// AccessModelNameNotIn applies the NotIn predicate on the "access_model_name" field.
+func AccessModelNameNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldAccessModelName, vs...))
+}
+
+// AccessModelNameGT applies the GT predicate on the "access_model_name" field.
+func AccessModelNameGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldAccessModelName, v))
+}
+
+// AccessModelNameGTE applies the GTE predicate on the "access_model_name" field.
+func AccessModelNameGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldAccessModelName, v))
+}
+
+// AccessModelNameLT applies the LT predicate on the "access_model_name" field.
+func AccessModelNameLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldAccessModelName, v))
+}
+
+// AccessModelNameLTE applies the LTE predicate on the "access_model_name" field.
+func AccessModelNameLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldAccessModelName, v))
+}
+
+// AccessModelNameContains applies the Contains predicate on the "access_model_name" field.
+func AccessModelNameContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldAccessModelName, v))
+}
+
+// AccessModelNameHasPrefix applies the HasPrefix predicate on the "access_model_name" field.
+func AccessModelNameHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldAccessModelName, v))
+}
+
+// AccessModelNameHasSuffix applies the HasSuffix predicate on the "access_model_name" field.
+func AccessModelNameHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldAccessModelName, v))
+}
+
+// AccessModelNameIsNil applies the IsNil predicate on the "access_model_name" field.
+func AccessModelNameIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldAccessModelName))
+}
+
+// AccessModelNameNotNil applies the NotNil predicate on the "access_model_name" field.
+func AccessModelNameNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldAccessModelName))
+}
+
+// AccessModelNameEqualFold applies the EqualFold predicate on the "access_model_name" field.
+func AccessModelNameEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldAccessModelName, v))
+}
+
+// AccessModelNameContainsFold applies the ContainsFold predicate on the "access_model_name" field.
+func AccessModelNameContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldAccessModelName, v))
+}
+
+// AccessModelIDEQ applies the EQ predicate on the "access_model_id" field.
+func AccessModelIDEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldAccessModelID, v))
+}
+
+// AccessModelIDNEQ applies the NEQ predicate on the "access_model_id" field.
+func AccessModelIDNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldAccessModelID, v))
+}
+
+// AccessModelIDIn applies the In predicate on the "access_model_id" field.
+func AccessModelIDIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldAccessModelID, vs...))
+}
+
+// AccessModelIDNotIn applies the NotIn predicate on the "access_model_id" field.
+func AccessModelIDNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldAccessModelID, vs...))
+}
+
+// AccessModelIDGT applies the GT predicate on the "access_model_id" field.
+func AccessModelIDGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldAccessModelID, v))
+}
+
+// AccessModelIDGTE applies the GTE predicate on the "access_model_id" field.
+func AccessModelIDGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldAccessModelID, v))
+}
+
+// AccessModelIDLT applies the LT predicate on the "access_model_id" field.
+func AccessModelIDLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldAccessModelID, v))
+}
+
+// AccessModelIDLTE applies the LTE predicate on the "access_model_id" field.
+func AccessModelIDLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldAccessModelID, v))
+}
+
+// AccessModelIDContains applies the Contains predicate on the "access_model_id" field.
+func AccessModelIDContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldAccessModelID, v))
+}
+
+// AccessModelIDHasPrefix applies the HasPrefix predicate on the "access_model_id" field.
+func AccessModelIDHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldAccessModelID, v))
+}
+
+// AccessModelIDHasSuffix applies the HasSuffix predicate on the "access_model_id" field.
+func AccessModelIDHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldAccessModelID, v))
+}
+
+// AccessModelIDIsNil applies the IsNil predicate on the "access_model_id" field.
+func AccessModelIDIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldAccessModelID))
+}
+
+// AccessModelIDNotNil applies the NotNil predicate on the "access_model_id" field.
+func AccessModelIDNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldAccessModelID))
+}
+
+// AccessModelIDEqualFold applies the EqualFold predicate on the "access_model_id" field.
+func AccessModelIDEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldAccessModelID, v))
+}
+
+// AccessModelIDContainsFold applies the ContainsFold predicate on the "access_model_id" field.
+func AccessModelIDContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldAccessModelID, v))
+}
+
+// EncryptionStatusNameEQ applies the EQ predicate on the "encryption_status_name" field.
+func EncryptionStatusNameEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldEncryptionStatusName, v))
+}
+
+// EncryptionStatusNameNEQ applies the NEQ predicate on the "encryption_status_name" field.
+func EncryptionStatusNameNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldEncryptionStatusName, v))
+}
+
+// EncryptionStatusNameIn applies the In predicate on the "encryption_status_name" field.
+func EncryptionStatusNameIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldEncryptionStatusName, vs...))
+}
+
+// EncryptionStatusNameNotIn applies the NotIn predicate on the "encryption_status_name" field.
+func EncryptionStatusNameNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldEncryptionStatusName, vs...))
+}
+
+// EncryptionStatusNameGT applies the GT predicate on the "encryption_status_name" field.
+func EncryptionStatusNameGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldEncryptionStatusName, v))
+}
+
+// EncryptionStatusNameGTE applies the GTE predicate on the "encryption_status_name" field.
+func EncryptionStatusNameGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldEncryptionStatusName, v))
+}
+
+// EncryptionStatusNameLT applies the LT predicate on the "encryption_status_name" field.
+func EncryptionStatusNameLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldEncryptionStatusName, v))
+}
+
+// EncryptionStatusNameLTE applies the LTE predicate on the "encryption_status_name" field.
+func EncryptionStatusNameLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldEncryptionStatusName, v))
+}
+
+// EncryptionStatusNameContains applies the Contains predicate on the "encryption_status_name" field.
+func EncryptionStatusNameContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldEncryptionStatusName, v))
+}
+
+// EncryptionStatusNameHasPrefix applies the HasPrefix predicate on the "encryption_status_name" field.
+func EncryptionStatusNameHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldEncryptionStatusName, v))
+}
+
+// EncryptionStatusNameHasSuffix applies the HasSuffix predicate on the "encryption_status_name" field.
+func EncryptionStatusNameHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldEncryptionStatusName, v))
+}
+
+// EncryptionStatusNameIsNil applies the IsNil predicate on the "encryption_status_name" field.
+func EncryptionStatusNameIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldEncryptionStatusName))
+}
+
+// EncryptionStatusNameNotNil applies the NotNil predicate on the "encryption_status_name" field.
+func EncryptionStatusNameNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldEncryptionStatusName))
+}
+
+// EncryptionStatusNameEqualFold applies the EqualFold predicate on the "encryption_status_name" field.
+func EncryptionStatusNameEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldEncryptionStatusName, v))
+}
+
+// EncryptionStatusNameContainsFold applies the ContainsFold predicate on the "encryption_status_name" field.
+func EncryptionStatusNameContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldEncryptionStatusName, v))
+}
+
+// EncryptionStatusIDEQ applies the EQ predicate on the "encryption_status_id" field.
+func EncryptionStatusIDEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldEncryptionStatusID, v))
+}
+
+// EncryptionStatusIDNEQ applies the NEQ predicate on the "encryption_status_id" field.
+func EncryptionStatusIDNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldEncryptionStatusID, v))
+}
+
+// EncryptionStatusIDIn applies the In predicate on the "encryption_status_id" field.
+func EncryptionStatusIDIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldEncryptionStatusID, vs...))
+}
+
+// EncryptionStatusIDNotIn applies the NotIn predicate on the "encryption_status_id" field.
+func EncryptionStatusIDNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldEncryptionStatusID, vs...))
+}
+
+// EncryptionStatusIDGT applies the GT predicate on the "encryption_status_id" field.
+func EncryptionStatusIDGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldEncryptionStatusID, v))
+}
+
+// EncryptionStatusIDGTE applies the GTE predicate on the "encryption_status_id" field.
+func EncryptionStatusIDGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldEncryptionStatusID, v))
+}
+
+// EncryptionStatusIDLT applies the LT predicate on the "encryption_status_id" field.
+func EncryptionStatusIDLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldEncryptionStatusID, v))
+}
+
+// EncryptionStatusIDLTE applies the LTE predicate on the "encryption_status_id" field.
+func EncryptionStatusIDLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldEncryptionStatusID, v))
+}
+
+// EncryptionStatusIDContains applies the Contains predicate on the "encryption_status_id" field.
+func EncryptionStatusIDContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldEncryptionStatusID, v))
+}
+
+// EncryptionStatusIDHasPrefix applies the HasPrefix predicate on the "encryption_status_id" field.
+func EncryptionStatusIDHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldEncryptionStatusID, v))
+}
+
+// EncryptionStatusIDHasSuffix applies the HasSuffix predicate on the "encryption_status_id" field.
+func EncryptionStatusIDHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldEncryptionStatusID, v))
+}
+
+// EncryptionStatusIDIsNil applies the IsNil predicate on the "encryption_status_id" field.
+func EncryptionStatusIDIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldEncryptionStatusID))
+}
+
+// EncryptionStatusIDNotNil applies the NotNil predicate on the "encryption_status_id" field.
+func EncryptionStatusIDNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldEncryptionStatusID))
+}
+
+// EncryptionStatusIDEqualFold applies the EqualFold predicate on the "encryption_status_id" field.
+func EncryptionStatusIDEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldEncryptionStatusID, v))
+}
+
+// EncryptionStatusIDContainsFold applies the ContainsFold predicate on the "encryption_status_id" field.
+func EncryptionStatusIDContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldEncryptionStatusID, v))
+}
+
+// SecurityTierNameEQ applies the EQ predicate on the "security_tier_name" field.
+func SecurityTierNameEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldSecurityTierName, v))
+}
+
+// SecurityTierNameNEQ applies the NEQ predicate on the "security_tier_name" field.
+func SecurityTierNameNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldSecurityTierName, v))
+}
+
+// SecurityTierNameIn applies the In predicate on the "security_tier_name" field.
+func SecurityTierNameIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldSecurityTierName, vs...))
+}
+
+// SecurityTierNameNotIn applies the NotIn predicate on the "security_tier_name" field.
+func SecurityTierNameNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldSecurityTierName, vs...))
+}
+
+// SecurityTierNameGT applies the GT predicate on the "security_tier_name" field.
+func SecurityTierNameGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldSecurityTierName, v))
+}
+
+// SecurityTierNameGTE applies the GTE predicate on the "security_tier_name" field.
+func SecurityTierNameGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldSecurityTierName, v))
+}
+
+// SecurityTierNameLT applies the LT predicate on the "security_tier_name" field.
+func SecurityTierNameLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldSecurityTierName, v))
+}
+
+// SecurityTierNameLTE applies the LTE predicate on the "security_tier_name" field.
+func SecurityTierNameLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldSecurityTierName, v))
+}
+
+// SecurityTierNameContains applies the Contains predicate on the "security_tier_name" field.
+func SecurityTierNameContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldSecurityTierName, v))
+}
+
+// SecurityTierNameHasPrefix applies the HasPrefix predicate on the "security_tier_name" field.
+func SecurityTierNameHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldSecurityTierName, v))
+}
+
+// SecurityTierNameHasSuffix applies the HasSuffix predicate on the "security_tier_name" field.
+func SecurityTierNameHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldSecurityTierName, v))
+}
+
+// SecurityTierNameIsNil applies the IsNil predicate on the "security_tier_name" field.
+func SecurityTierNameIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldSecurityTierName))
+}
+
+// SecurityTierNameNotNil applies the NotNil predicate on the "security_tier_name" field.
+func SecurityTierNameNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldSecurityTierName))
+}
+
+// SecurityTierNameEqualFold applies the EqualFold predicate on the "security_tier_name" field.
+func SecurityTierNameEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldSecurityTierName, v))
+}
+
+// SecurityTierNameContainsFold applies the ContainsFold predicate on the "security_tier_name" field.
+func SecurityTierNameContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldSecurityTierName, v))
+}
+
+// SecurityTierIDEQ applies the EQ predicate on the "security_tier_id" field.
+func SecurityTierIDEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldSecurityTierID, v))
+}
+
+// SecurityTierIDNEQ applies the NEQ predicate on the "security_tier_id" field.
+func SecurityTierIDNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldSecurityTierID, v))
+}
+
+// SecurityTierIDIn applies the In predicate on the "security_tier_id" field.
+func SecurityTierIDIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldSecurityTierID, vs...))
+}
+
+// SecurityTierIDNotIn applies the NotIn predicate on the "security_tier_id" field.
+func SecurityTierIDNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldSecurityTierID, vs...))
+}
+
+// SecurityTierIDGT applies the GT predicate on the "security_tier_id" field.
+func SecurityTierIDGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldSecurityTierID, v))
+}
+
+// SecurityTierIDGTE applies the GTE predicate on the "security_tier_id" field.
+func SecurityTierIDGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldSecurityTierID, v))
+}
+
+// SecurityTierIDLT applies the LT predicate on the "security_tier_id" field.
+func SecurityTierIDLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldSecurityTierID, v))
+}
+
+// SecurityTierIDLTE applies the LTE predicate on the "security_tier_id" field.
+func SecurityTierIDLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldSecurityTierID, v))
+}
+
+// SecurityTierIDContains applies the Contains predicate on the "security_tier_id" field.
+func SecurityTierIDContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldSecurityTierID, v))
+}
+
+// SecurityTierIDHasPrefix applies the HasPrefix predicate on the "security_tier_id" field.
+func SecurityTierIDHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldSecurityTierID, v))
+}
+
+// SecurityTierIDHasSuffix applies the HasSuffix predicate on the "security_tier_id" field.
+func SecurityTierIDHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldSecurityTierID, v))
+}
+
+// SecurityTierIDIsNil applies the IsNil predicate on the "security_tier_id" field.
+func SecurityTierIDIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldSecurityTierID))
+}
+
+// SecurityTierIDNotNil applies the NotNil predicate on the "security_tier_id" field.
+func SecurityTierIDNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldSecurityTierID))
+}
+
+// SecurityTierIDEqualFold applies the EqualFold predicate on the "security_tier_id" field.
+func SecurityTierIDEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldSecurityTierID, v))
+}
+
+// SecurityTierIDContainsFold applies the ContainsFold predicate on the "security_tier_id" field.
+func SecurityTierIDContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldSecurityTierID, v))
+}
+
+// CriticalityNameEQ applies the EQ predicate on the "criticality_name" field.
+func CriticalityNameEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldCriticalityName, v))
+}
+
+// CriticalityNameNEQ applies the NEQ predicate on the "criticality_name" field.
+func CriticalityNameNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldCriticalityName, v))
+}
+
+// CriticalityNameIn applies the In predicate on the "criticality_name" field.
+func CriticalityNameIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldCriticalityName, vs...))
+}
+
+// CriticalityNameNotIn applies the NotIn predicate on the "criticality_name" field.
+func CriticalityNameNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldCriticalityName, vs...))
+}
+
+// CriticalityNameGT applies the GT predicate on the "criticality_name" field.
+func CriticalityNameGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldCriticalityName, v))
+}
+
+// CriticalityNameGTE applies the GTE predicate on the "criticality_name" field.
+func CriticalityNameGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldCriticalityName, v))
+}
+
+// CriticalityNameLT applies the LT predicate on the "criticality_name" field.
+func CriticalityNameLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldCriticalityName, v))
+}
+
+// CriticalityNameLTE applies the LTE predicate on the "criticality_name" field.
+func CriticalityNameLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldCriticalityName, v))
+}
+
+// CriticalityNameContains applies the Contains predicate on the "criticality_name" field.
+func CriticalityNameContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldCriticalityName, v))
+}
+
+// CriticalityNameHasPrefix applies the HasPrefix predicate on the "criticality_name" field.
+func CriticalityNameHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldCriticalityName, v))
+}
+
+// CriticalityNameHasSuffix applies the HasSuffix predicate on the "criticality_name" field.
+func CriticalityNameHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldCriticalityName, v))
+}
+
+// CriticalityNameIsNil applies the IsNil predicate on the "criticality_name" field.
+func CriticalityNameIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldCriticalityName))
+}
+
+// CriticalityNameNotNil applies the NotNil predicate on the "criticality_name" field.
+func CriticalityNameNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldCriticalityName))
+}
+
+// CriticalityNameEqualFold applies the EqualFold predicate on the "criticality_name" field.
+func CriticalityNameEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldCriticalityName, v))
+}
+
+// CriticalityNameContainsFold applies the ContainsFold predicate on the "criticality_name" field.
+func CriticalityNameContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldCriticalityName, v))
+}
+
+// CriticalityIDEQ applies the EQ predicate on the "criticality_id" field.
+func CriticalityIDEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldCriticalityID, v))
+}
+
+// CriticalityIDNEQ applies the NEQ predicate on the "criticality_id" field.
+func CriticalityIDNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldCriticalityID, v))
+}
+
+// CriticalityIDIn applies the In predicate on the "criticality_id" field.
+func CriticalityIDIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldCriticalityID, vs...))
+}
+
+// CriticalityIDNotIn applies the NotIn predicate on the "criticality_id" field.
+func CriticalityIDNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldCriticalityID, vs...))
+}
+
+// CriticalityIDGT applies the GT predicate on the "criticality_id" field.
+func CriticalityIDGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldCriticalityID, v))
+}
+
+// CriticalityIDGTE applies the GTE predicate on the "criticality_id" field.
+func CriticalityIDGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldCriticalityID, v))
+}
+
+// CriticalityIDLT applies the LT predicate on the "criticality_id" field.
+func CriticalityIDLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldCriticalityID, v))
+}
+
+// CriticalityIDLTE applies the LTE predicate on the "criticality_id" field.
+func CriticalityIDLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldCriticalityID, v))
+}
+
+// CriticalityIDContains applies the Contains predicate on the "criticality_id" field.
+func CriticalityIDContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldCriticalityID, v))
+}
+
+// CriticalityIDHasPrefix applies the HasPrefix predicate on the "criticality_id" field.
+func CriticalityIDHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldCriticalityID, v))
+}
+
+// CriticalityIDHasSuffix applies the HasSuffix predicate on the "criticality_id" field.
+func CriticalityIDHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldCriticalityID, v))
+}
+
+// CriticalityIDIsNil applies the IsNil predicate on the "criticality_id" field.
+func CriticalityIDIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldCriticalityID))
+}
+
+// CriticalityIDNotNil applies the NotNil predicate on the "criticality_id" field.
+func CriticalityIDNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldCriticalityID))
+}
+
+// CriticalityIDEqualFold applies the EqualFold predicate on the "criticality_id" field.
+func CriticalityIDEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldCriticalityID, v))
+}
+
+// CriticalityIDContainsFold applies the ContainsFold predicate on the "criticality_id" field.
+func CriticalityIDContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldCriticalityID, v))
+}
+
 // SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
 func SystemOwnedEQ(v bool) predicate.AssetHistory {
 	return predicate.AssetHistory(sql.FieldEQ(FieldSystemOwned, v))
@@ -1236,6 +2797,531 @@ func WebsiteEqualFold(v string) predicate.AssetHistory {
 // WebsiteContainsFold applies the ContainsFold predicate on the "website" field.
 func WebsiteContainsFold(v string) predicate.AssetHistory {
 	return predicate.AssetHistory(sql.FieldContainsFold(FieldWebsite, v))
+}
+
+// PhysicalLocationEQ applies the EQ predicate on the "physical_location" field.
+func PhysicalLocationEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldPhysicalLocation, v))
+}
+
+// PhysicalLocationNEQ applies the NEQ predicate on the "physical_location" field.
+func PhysicalLocationNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldPhysicalLocation, v))
+}
+
+// PhysicalLocationIn applies the In predicate on the "physical_location" field.
+func PhysicalLocationIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldPhysicalLocation, vs...))
+}
+
+// PhysicalLocationNotIn applies the NotIn predicate on the "physical_location" field.
+func PhysicalLocationNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldPhysicalLocation, vs...))
+}
+
+// PhysicalLocationGT applies the GT predicate on the "physical_location" field.
+func PhysicalLocationGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldPhysicalLocation, v))
+}
+
+// PhysicalLocationGTE applies the GTE predicate on the "physical_location" field.
+func PhysicalLocationGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldPhysicalLocation, v))
+}
+
+// PhysicalLocationLT applies the LT predicate on the "physical_location" field.
+func PhysicalLocationLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldPhysicalLocation, v))
+}
+
+// PhysicalLocationLTE applies the LTE predicate on the "physical_location" field.
+func PhysicalLocationLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldPhysicalLocation, v))
+}
+
+// PhysicalLocationContains applies the Contains predicate on the "physical_location" field.
+func PhysicalLocationContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldPhysicalLocation, v))
+}
+
+// PhysicalLocationHasPrefix applies the HasPrefix predicate on the "physical_location" field.
+func PhysicalLocationHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldPhysicalLocation, v))
+}
+
+// PhysicalLocationHasSuffix applies the HasSuffix predicate on the "physical_location" field.
+func PhysicalLocationHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldPhysicalLocation, v))
+}
+
+// PhysicalLocationIsNil applies the IsNil predicate on the "physical_location" field.
+func PhysicalLocationIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldPhysicalLocation))
+}
+
+// PhysicalLocationNotNil applies the NotNil predicate on the "physical_location" field.
+func PhysicalLocationNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldPhysicalLocation))
+}
+
+// PhysicalLocationEqualFold applies the EqualFold predicate on the "physical_location" field.
+func PhysicalLocationEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldPhysicalLocation, v))
+}
+
+// PhysicalLocationContainsFold applies the ContainsFold predicate on the "physical_location" field.
+func PhysicalLocationContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldPhysicalLocation, v))
+}
+
+// RegionEQ applies the EQ predicate on the "region" field.
+func RegionEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldRegion, v))
+}
+
+// RegionNEQ applies the NEQ predicate on the "region" field.
+func RegionNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldRegion, v))
+}
+
+// RegionIn applies the In predicate on the "region" field.
+func RegionIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldRegion, vs...))
+}
+
+// RegionNotIn applies the NotIn predicate on the "region" field.
+func RegionNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldRegion, vs...))
+}
+
+// RegionGT applies the GT predicate on the "region" field.
+func RegionGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldRegion, v))
+}
+
+// RegionGTE applies the GTE predicate on the "region" field.
+func RegionGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldRegion, v))
+}
+
+// RegionLT applies the LT predicate on the "region" field.
+func RegionLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldRegion, v))
+}
+
+// RegionLTE applies the LTE predicate on the "region" field.
+func RegionLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldRegion, v))
+}
+
+// RegionContains applies the Contains predicate on the "region" field.
+func RegionContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldRegion, v))
+}
+
+// RegionHasPrefix applies the HasPrefix predicate on the "region" field.
+func RegionHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldRegion, v))
+}
+
+// RegionHasSuffix applies the HasSuffix predicate on the "region" field.
+func RegionHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldRegion, v))
+}
+
+// RegionIsNil applies the IsNil predicate on the "region" field.
+func RegionIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldRegion))
+}
+
+// RegionNotNil applies the NotNil predicate on the "region" field.
+func RegionNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldRegion))
+}
+
+// RegionEqualFold applies the EqualFold predicate on the "region" field.
+func RegionEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldRegion, v))
+}
+
+// RegionContainsFold applies the ContainsFold predicate on the "region" field.
+func RegionContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldRegion, v))
+}
+
+// ContainsPiiEQ applies the EQ predicate on the "contains_pii" field.
+func ContainsPiiEQ(v bool) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldContainsPii, v))
+}
+
+// ContainsPiiNEQ applies the NEQ predicate on the "contains_pii" field.
+func ContainsPiiNEQ(v bool) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldContainsPii, v))
+}
+
+// ContainsPiiIsNil applies the IsNil predicate on the "contains_pii" field.
+func ContainsPiiIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldContainsPii))
+}
+
+// ContainsPiiNotNil applies the NotNil predicate on the "contains_pii" field.
+func ContainsPiiNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldContainsPii))
+}
+
+// SourceTypeEQ applies the EQ predicate on the "source_type" field.
+func SourceTypeEQ(v enums.SourceType) predicate.AssetHistory {
+	vc := v
+	return predicate.AssetHistory(sql.FieldEQ(FieldSourceType, vc))
+}
+
+// SourceTypeNEQ applies the NEQ predicate on the "source_type" field.
+func SourceTypeNEQ(v enums.SourceType) predicate.AssetHistory {
+	vc := v
+	return predicate.AssetHistory(sql.FieldNEQ(FieldSourceType, vc))
+}
+
+// SourceTypeIn applies the In predicate on the "source_type" field.
+func SourceTypeIn(vs ...enums.SourceType) predicate.AssetHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.AssetHistory(sql.FieldIn(FieldSourceType, v...))
+}
+
+// SourceTypeNotIn applies the NotIn predicate on the "source_type" field.
+func SourceTypeNotIn(vs ...enums.SourceType) predicate.AssetHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.AssetHistory(sql.FieldNotIn(FieldSourceType, v...))
+}
+
+// SourcePlatformIDEQ applies the EQ predicate on the "source_platform_id" field.
+func SourcePlatformIDEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldSourcePlatformID, v))
+}
+
+// SourcePlatformIDNEQ applies the NEQ predicate on the "source_platform_id" field.
+func SourcePlatformIDNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldSourcePlatformID, v))
+}
+
+// SourcePlatformIDIn applies the In predicate on the "source_platform_id" field.
+func SourcePlatformIDIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldSourcePlatformID, vs...))
+}
+
+// SourcePlatformIDNotIn applies the NotIn predicate on the "source_platform_id" field.
+func SourcePlatformIDNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldSourcePlatformID, vs...))
+}
+
+// SourcePlatformIDGT applies the GT predicate on the "source_platform_id" field.
+func SourcePlatformIDGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldSourcePlatformID, v))
+}
+
+// SourcePlatformIDGTE applies the GTE predicate on the "source_platform_id" field.
+func SourcePlatformIDGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldSourcePlatformID, v))
+}
+
+// SourcePlatformIDLT applies the LT predicate on the "source_platform_id" field.
+func SourcePlatformIDLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldSourcePlatformID, v))
+}
+
+// SourcePlatformIDLTE applies the LTE predicate on the "source_platform_id" field.
+func SourcePlatformIDLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldSourcePlatformID, v))
+}
+
+// SourcePlatformIDContains applies the Contains predicate on the "source_platform_id" field.
+func SourcePlatformIDContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldSourcePlatformID, v))
+}
+
+// SourcePlatformIDHasPrefix applies the HasPrefix predicate on the "source_platform_id" field.
+func SourcePlatformIDHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldSourcePlatformID, v))
+}
+
+// SourcePlatformIDHasSuffix applies the HasSuffix predicate on the "source_platform_id" field.
+func SourcePlatformIDHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldSourcePlatformID, v))
+}
+
+// SourcePlatformIDIsNil applies the IsNil predicate on the "source_platform_id" field.
+func SourcePlatformIDIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldSourcePlatformID))
+}
+
+// SourcePlatformIDNotNil applies the NotNil predicate on the "source_platform_id" field.
+func SourcePlatformIDNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldSourcePlatformID))
+}
+
+// SourcePlatformIDEqualFold applies the EqualFold predicate on the "source_platform_id" field.
+func SourcePlatformIDEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldSourcePlatformID, v))
+}
+
+// SourcePlatformIDContainsFold applies the ContainsFold predicate on the "source_platform_id" field.
+func SourcePlatformIDContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldSourcePlatformID, v))
+}
+
+// SourceIdentifierEQ applies the EQ predicate on the "source_identifier" field.
+func SourceIdentifierEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldSourceIdentifier, v))
+}
+
+// SourceIdentifierNEQ applies the NEQ predicate on the "source_identifier" field.
+func SourceIdentifierNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldSourceIdentifier, v))
+}
+
+// SourceIdentifierIn applies the In predicate on the "source_identifier" field.
+func SourceIdentifierIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldSourceIdentifier, vs...))
+}
+
+// SourceIdentifierNotIn applies the NotIn predicate on the "source_identifier" field.
+func SourceIdentifierNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldSourceIdentifier, vs...))
+}
+
+// SourceIdentifierGT applies the GT predicate on the "source_identifier" field.
+func SourceIdentifierGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldSourceIdentifier, v))
+}
+
+// SourceIdentifierGTE applies the GTE predicate on the "source_identifier" field.
+func SourceIdentifierGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldSourceIdentifier, v))
+}
+
+// SourceIdentifierLT applies the LT predicate on the "source_identifier" field.
+func SourceIdentifierLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldSourceIdentifier, v))
+}
+
+// SourceIdentifierLTE applies the LTE predicate on the "source_identifier" field.
+func SourceIdentifierLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldSourceIdentifier, v))
+}
+
+// SourceIdentifierContains applies the Contains predicate on the "source_identifier" field.
+func SourceIdentifierContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldSourceIdentifier, v))
+}
+
+// SourceIdentifierHasPrefix applies the HasPrefix predicate on the "source_identifier" field.
+func SourceIdentifierHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldSourceIdentifier, v))
+}
+
+// SourceIdentifierHasSuffix applies the HasSuffix predicate on the "source_identifier" field.
+func SourceIdentifierHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldSourceIdentifier, v))
+}
+
+// SourceIdentifierIsNil applies the IsNil predicate on the "source_identifier" field.
+func SourceIdentifierIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldSourceIdentifier))
+}
+
+// SourceIdentifierNotNil applies the NotNil predicate on the "source_identifier" field.
+func SourceIdentifierNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldSourceIdentifier))
+}
+
+// SourceIdentifierEqualFold applies the EqualFold predicate on the "source_identifier" field.
+func SourceIdentifierEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldSourceIdentifier, v))
+}
+
+// SourceIdentifierContainsFold applies the ContainsFold predicate on the "source_identifier" field.
+func SourceIdentifierContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldSourceIdentifier, v))
+}
+
+// CostCenterEQ applies the EQ predicate on the "cost_center" field.
+func CostCenterEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldCostCenter, v))
+}
+
+// CostCenterNEQ applies the NEQ predicate on the "cost_center" field.
+func CostCenterNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldCostCenter, v))
+}
+
+// CostCenterIn applies the In predicate on the "cost_center" field.
+func CostCenterIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldCostCenter, vs...))
+}
+
+// CostCenterNotIn applies the NotIn predicate on the "cost_center" field.
+func CostCenterNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldCostCenter, vs...))
+}
+
+// CostCenterGT applies the GT predicate on the "cost_center" field.
+func CostCenterGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldCostCenter, v))
+}
+
+// CostCenterGTE applies the GTE predicate on the "cost_center" field.
+func CostCenterGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldCostCenter, v))
+}
+
+// CostCenterLT applies the LT predicate on the "cost_center" field.
+func CostCenterLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldCostCenter, v))
+}
+
+// CostCenterLTE applies the LTE predicate on the "cost_center" field.
+func CostCenterLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldCostCenter, v))
+}
+
+// CostCenterContains applies the Contains predicate on the "cost_center" field.
+func CostCenterContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldCostCenter, v))
+}
+
+// CostCenterHasPrefix applies the HasPrefix predicate on the "cost_center" field.
+func CostCenterHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldCostCenter, v))
+}
+
+// CostCenterHasSuffix applies the HasSuffix predicate on the "cost_center" field.
+func CostCenterHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldCostCenter, v))
+}
+
+// CostCenterIsNil applies the IsNil predicate on the "cost_center" field.
+func CostCenterIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldCostCenter))
+}
+
+// CostCenterNotNil applies the NotNil predicate on the "cost_center" field.
+func CostCenterNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldCostCenter))
+}
+
+// CostCenterEqualFold applies the EqualFold predicate on the "cost_center" field.
+func CostCenterEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldCostCenter, v))
+}
+
+// CostCenterContainsFold applies the ContainsFold predicate on the "cost_center" field.
+func CostCenterContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldCostCenter, v))
+}
+
+// EstimatedMonthlyCostEQ applies the EQ predicate on the "estimated_monthly_cost" field.
+func EstimatedMonthlyCostEQ(v float64) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldEstimatedMonthlyCost, v))
+}
+
+// EstimatedMonthlyCostNEQ applies the NEQ predicate on the "estimated_monthly_cost" field.
+func EstimatedMonthlyCostNEQ(v float64) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldEstimatedMonthlyCost, v))
+}
+
+// EstimatedMonthlyCostIn applies the In predicate on the "estimated_monthly_cost" field.
+func EstimatedMonthlyCostIn(vs ...float64) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldEstimatedMonthlyCost, vs...))
+}
+
+// EstimatedMonthlyCostNotIn applies the NotIn predicate on the "estimated_monthly_cost" field.
+func EstimatedMonthlyCostNotIn(vs ...float64) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldEstimatedMonthlyCost, vs...))
+}
+
+// EstimatedMonthlyCostGT applies the GT predicate on the "estimated_monthly_cost" field.
+func EstimatedMonthlyCostGT(v float64) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldEstimatedMonthlyCost, v))
+}
+
+// EstimatedMonthlyCostGTE applies the GTE predicate on the "estimated_monthly_cost" field.
+func EstimatedMonthlyCostGTE(v float64) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldEstimatedMonthlyCost, v))
+}
+
+// EstimatedMonthlyCostLT applies the LT predicate on the "estimated_monthly_cost" field.
+func EstimatedMonthlyCostLT(v float64) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldEstimatedMonthlyCost, v))
+}
+
+// EstimatedMonthlyCostLTE applies the LTE predicate on the "estimated_monthly_cost" field.
+func EstimatedMonthlyCostLTE(v float64) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldEstimatedMonthlyCost, v))
+}
+
+// EstimatedMonthlyCostIsNil applies the IsNil predicate on the "estimated_monthly_cost" field.
+func EstimatedMonthlyCostIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldEstimatedMonthlyCost))
+}
+
+// EstimatedMonthlyCostNotNil applies the NotNil predicate on the "estimated_monthly_cost" field.
+func EstimatedMonthlyCostNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldEstimatedMonthlyCost))
+}
+
+// PurchaseDateEQ applies the EQ predicate on the "purchase_date" field.
+func PurchaseDateEQ(v models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldPurchaseDate, v))
+}
+
+// PurchaseDateNEQ applies the NEQ predicate on the "purchase_date" field.
+func PurchaseDateNEQ(v models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldPurchaseDate, v))
+}
+
+// PurchaseDateIn applies the In predicate on the "purchase_date" field.
+func PurchaseDateIn(vs ...models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldPurchaseDate, vs...))
+}
+
+// PurchaseDateNotIn applies the NotIn predicate on the "purchase_date" field.
+func PurchaseDateNotIn(vs ...models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldPurchaseDate, vs...))
+}
+
+// PurchaseDateGT applies the GT predicate on the "purchase_date" field.
+func PurchaseDateGT(v models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldPurchaseDate, v))
+}
+
+// PurchaseDateGTE applies the GTE predicate on the "purchase_date" field.
+func PurchaseDateGTE(v models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldPurchaseDate, v))
+}
+
+// PurchaseDateLT applies the LT predicate on the "purchase_date" field.
+func PurchaseDateLT(v models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldPurchaseDate, v))
+}
+
+// PurchaseDateLTE applies the LTE predicate on the "purchase_date" field.
+func PurchaseDateLTE(v models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldPurchaseDate, v))
+}
+
+// PurchaseDateIsNil applies the IsNil predicate on the "purchase_date" field.
+func PurchaseDateIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldPurchaseDate))
+}
+
+// PurchaseDateNotNil applies the NotNil predicate on the "purchase_date" field.
+func PurchaseDateNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldPurchaseDate))
 }
 
 // CpeEQ applies the EQ predicate on the "cpe" field.

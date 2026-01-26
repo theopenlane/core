@@ -20,6 +20,10 @@ import (
 	"github.com/theopenlane/iam/auth"
 )
 
+const (
+	systemAdminOrgID = "01101101011010010111010001100010"
+)
+
 // CreateFileRecord creates a file record in the database and returns the resulting ent.File entity.
 func CreateFileRecord(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 	return createFile(ctx, f)
@@ -168,12 +172,19 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 	}
 
 	if rows.Next() {
-		var ownerID string
+		var ownerID sql.NullString
 		if err := rows.Scan(&ownerID); err != nil {
 			return "", err
 		}
 
-		return ownerID, nil
+		if ownerID.Valid {
+			return ownerID.String, nil
+		}
+	}
+
+	// use system admin org if the user is a system admin and we got to here
+	if au.IsSystemAdmin {
+		return systemAdminOrgID, nil
 	}
 
 	return "", ErrMissingOrganizationID

@@ -11,17 +11,17 @@ require (
 	github.com/knadh/koanf/providers/env/v2 v2.0.0
 	github.com/knadh/koanf/providers/file v1.2.1
 	github.com/knadh/koanf/providers/posflag v1.0.1
-	github.com/knadh/koanf/v2 v2.3.0
+	github.com/knadh/koanf/v2 v2.3.1
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.2
-	github.com/theopenlane/core v1.3.9
-	github.com/theopenlane/core/common v1.0.3
-	github.com/theopenlane/go-client v0.6.0
+	github.com/theopenlane/core v1.5.2
+	github.com/theopenlane/core/common v1.0.4
+	github.com/theopenlane/go-client v0.6.2
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.23.4
+	github.com/theopenlane/iam v0.23.5
 	github.com/theopenlane/utils v0.6.2
 	golang.org/x/oauth2 v0.34.0
 	golang.org/x/term v0.39.0
@@ -30,7 +30,6 @@ require (
 require (
 	al.essio.dev/pkg/shellescape v1.6.0 // indirect
 	github.com/Yamashou/gqlgenc v0.33.0 // indirect
-	github.com/alicebob/miniredis/v2 v2.36.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect

@@ -43,6 +43,14 @@ type DocumentDataHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the environment of the document
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the document
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the document
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the document
+	ScopeID string `json:"scope_id,omitempty"`
 	// the template id of the document
 	TemplateID string `json:"template_id,omitempty"`
 	// the json data of the document
@@ -59,7 +67,7 @@ func (*DocumentDataHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case documentdatahistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case documentdatahistory.FieldID, documentdatahistory.FieldRef, documentdatahistory.FieldCreatedBy, documentdatahistory.FieldUpdatedBy, documentdatahistory.FieldDeletedBy, documentdatahistory.FieldOwnerID, documentdatahistory.FieldTemplateID:
+		case documentdatahistory.FieldID, documentdatahistory.FieldRef, documentdatahistory.FieldCreatedBy, documentdatahistory.FieldUpdatedBy, documentdatahistory.FieldDeletedBy, documentdatahistory.FieldOwnerID, documentdatahistory.FieldEnvironmentName, documentdatahistory.FieldEnvironmentID, documentdatahistory.FieldScopeName, documentdatahistory.FieldScopeID, documentdatahistory.FieldTemplateID:
 			values[i] = new(sql.NullString)
 		case documentdatahistory.FieldHistoryTime, documentdatahistory.FieldCreatedAt, documentdatahistory.FieldUpdatedAt, documentdatahistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -152,6 +160,30 @@ func (_m *DocumentDataHistory) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
+		case documentdatahistory.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case documentdatahistory.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case documentdatahistory.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case documentdatahistory.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
+			}
 		case documentdatahistory.FieldTemplateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field template_id", values[i])
@@ -234,6 +266,18 @@ func (_m *DocumentDataHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("template_id=")
 	builder.WriteString(_m.TemplateID)

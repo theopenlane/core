@@ -135,6 +135,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 		name          string
 		input         testclient.CreateTemplateInput
 		templateFiles []*graphql.Upload
+		expectedKind  *enums.TemplateKind
 		client        *testclient.TestClient
 		ctx           context.Context
 		expectedErr   string
@@ -201,6 +202,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			name: "happy path, with single PDF file",
 			input: testclient.CreateTemplateInput{
 				Name: "Template with PDF",
+				Kind: &enums.TemplateKindQuestionnaire,
 				Jsonconfig: map[string]any{
 					"type": "object",
 					"properties": map[string]any{
@@ -212,6 +214,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 				},
 			},
 			templateFiles: []*graphql.Upload{createPDFUpload()},
+			expectedKind:  &enums.TemplateKindQuestionnaire,
 			client:        suite.client.api,
 			ctx:           testUser1.UserCtx,
 		},
@@ -220,6 +223,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			input: testclient.CreateTemplateInput{
 				Name:        "Template with Multiple Files",
 				Description: lo.ToPtr("Template with various file types"),
+				Kind:        &enums.TemplateKindQuestionnaire,
 				Jsonconfig: map[string]any{
 					"type": "object",
 					"properties": map[string]any{
@@ -231,6 +235,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 				},
 			},
 			templateFiles: []*graphql.Upload{createPDFUpload(), createPNGUpload()},
+			expectedKind:  &enums.TemplateKindQuestionnaire,
 			client:        suite.client.api,
 			ctx:           testUser1.UserCtx,
 		},
@@ -312,6 +317,26 @@ func TestMutationCreateTemplate(t *testing.T) {
 			client:        suite.client.api,
 			ctx:           testUser1.UserCtx,
 		},
+		{
+			name: "trust center NDA with trust center and file",
+			input: testclient.CreateTemplateInput{
+				Name: "Test Template With NDA File",
+				Kind: &enums.TemplateKindTrustCenterNda,
+				Jsonconfig: map[string]any{
+					"type": "object",
+					"properties": map[string]any{
+						"name": map[string]any{
+							"type": "string",
+						},
+					},
+				},
+				TrustCenterID: lo.ToPtr(trustCenter.ID),
+			},
+			templateFiles: []*graphql.Upload{createPDFUpload()},
+			expectedKind:  &enums.TemplateKindTrustCenterNda,
+			client:        suite.client.api,
+			ctx:           testUser1.UserCtx,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -322,7 +347,11 @@ func TestMutationCreateTemplate(t *testing.T) {
 				for i, file := range tc.templateFiles {
 					uploads[i] = *file
 				}
-				expectUpload(t, suite.client.mockProvider, uploads)
+				if tc.expectedKind != nil {
+					expectUploadWithTemplateKind(t, suite.client.mockProvider, uploads, *tc.expectedKind)
+				} else {
+					expectUpload(t, suite.client.mockProvider, uploads)
+				}
 			} else if len(tc.templateFiles) > 0 {
 				// For error cases with files, we still need to set up the mock but expect it not to be called
 				expectUploadCheckOnly(t, suite.client.mockProvider)

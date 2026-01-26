@@ -68,6 +68,14 @@ func (ec *executionContext) fieldContext_DirectoryAccountBulkCreatePayload_direc
 				return ec.fieldContext_DirectoryAccount_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_DirectoryAccount_ownerID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_DirectoryAccount_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_DirectoryAccount_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_DirectoryAccount_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_DirectoryAccount_scopeID(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_DirectoryAccount_integrationID(ctx, field)
 			case "directorySyncRunID":
@@ -112,6 +120,10 @@ func (ec *executionContext) fieldContext_DirectoryAccountBulkCreatePayload_direc
 				return ec.fieldContext_DirectoryAccount_sourceVersion(ctx, field)
 			case "owner":
 				return ec.fieldContext_DirectoryAccount_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_DirectoryAccount_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_DirectoryAccount_scope(ctx, field)
 			case "integration":
 				return ec.fieldContext_DirectoryAccount_integration(ctx, field)
 			case "directorySyncRun":
@@ -169,6 +181,14 @@ func (ec *executionContext) fieldContext_DirectoryAccountCreatePayload_directory
 				return ec.fieldContext_DirectoryAccount_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_DirectoryAccount_ownerID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_DirectoryAccount_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_DirectoryAccount_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_DirectoryAccount_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_DirectoryAccount_scopeID(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_DirectoryAccount_integrationID(ctx, field)
 			case "directorySyncRunID":
@@ -213,6 +233,10 @@ func (ec *executionContext) fieldContext_DirectoryAccountCreatePayload_directory
 				return ec.fieldContext_DirectoryAccount_sourceVersion(ctx, field)
 			case "owner":
 				return ec.fieldContext_DirectoryAccount_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_DirectoryAccount_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_DirectoryAccount_scope(ctx, field)
 			case "integration":
 				return ec.fieldContext_DirectoryAccount_integration(ctx, field)
 			case "directorySyncRun":
@@ -299,6 +323,14 @@ func (ec *executionContext) fieldContext_DirectoryAccountUpdatePayload_directory
 				return ec.fieldContext_DirectoryAccount_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_DirectoryAccount_ownerID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_DirectoryAccount_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_DirectoryAccount_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_DirectoryAccount_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_DirectoryAccount_scopeID(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_DirectoryAccount_integrationID(ctx, field)
 			case "directorySyncRunID":
@@ -343,6 +375,10 @@ func (ec *executionContext) fieldContext_DirectoryAccountUpdatePayload_directory
 				return ec.fieldContext_DirectoryAccount_sourceVersion(ctx, field)
 			case "owner":
 				return ec.fieldContext_DirectoryAccount_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_DirectoryAccount_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_DirectoryAccount_scope(ctx, field)
 			case "integration":
 				return ec.fieldContext_DirectoryAccount_integration(ctx, field)
 			case "directorySyncRun":

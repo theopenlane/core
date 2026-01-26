@@ -22,6 +22,10 @@ type Tx struct {
 	AssessmentResponse *AssessmentResponseClient
 	// Asset is the client for interacting with the Asset builders.
 	Asset *AssetClient
+	// Campaign is the client for interacting with the Campaign builders.
+	Campaign *CampaignClient
+	// CampaignTarget is the client for interacting with the CampaignTarget builders.
+	CampaignTarget *CampaignTargetClient
 	// Contact is the client for interacting with the Contact builders.
 	Contact *ContactClient
 	// Control is the client for interacting with the Control builders.
@@ -76,6 +80,8 @@ type Tx struct {
 	GroupSetting *GroupSettingClient
 	// Hush is the client for interacting with the Hush builders.
 	Hush *HushClient
+	// IdentityHolder is the client for interacting with the IdentityHolder builders.
+	IdentityHolder *IdentityHolderClient
 	// ImpersonationEvent is the client for interacting with the ImpersonationEvent builders.
 	ImpersonationEvent *ImpersonationEventClient
 	// Integration is the client for interacting with the Integration builders.
@@ -124,6 +130,8 @@ type Tx struct {
 	PasswordResetToken *PasswordResetTokenClient
 	// PersonalAccessToken is the client for interacting with the PersonalAccessToken builders.
 	PersonalAccessToken *PersonalAccessTokenClient
+	// Platform is the client for interacting with the Platform builders.
+	Platform *PlatformClient
 	// Procedure is the client for interacting with the Procedure builders.
 	Procedure *ProcedureClient
 	// Program is the client for interacting with the Program builders.
@@ -332,6 +340,8 @@ func (tx *Tx) init() {
 	tx.Assessment = NewAssessmentClient(tx.config)
 	tx.AssessmentResponse = NewAssessmentResponseClient(tx.config)
 	tx.Asset = NewAssetClient(tx.config)
+	tx.Campaign = NewCampaignClient(tx.config)
+	tx.CampaignTarget = NewCampaignTargetClient(tx.config)
 	tx.Contact = NewContactClient(tx.config)
 	tx.Control = NewControlClient(tx.config)
 	tx.ControlImplementation = NewControlImplementationClient(tx.config)
@@ -359,6 +369,7 @@ func (tx *Tx) init() {
 	tx.GroupMembership = NewGroupMembershipClient(tx.config)
 	tx.GroupSetting = NewGroupSettingClient(tx.config)
 	tx.Hush = NewHushClient(tx.config)
+	tx.IdentityHolder = NewIdentityHolderClient(tx.config)
 	tx.ImpersonationEvent = NewImpersonationEventClient(tx.config)
 	tx.Integration = NewIntegrationClient(tx.config)
 	tx.InternalPolicy = NewInternalPolicyClient(tx.config)
@@ -383,6 +394,7 @@ func (tx *Tx) init() {
 	tx.OrganizationSetting = NewOrganizationSettingClient(tx.config)
 	tx.PasswordResetToken = NewPasswordResetTokenClient(tx.config)
 	tx.PersonalAccessToken = NewPersonalAccessTokenClient(tx.config)
+	tx.Platform = NewPlatformClient(tx.config)
 	tx.Procedure = NewProcedureClient(tx.config)
 	tx.Program = NewProgramClient(tx.config)
 	tx.ProgramMembership = NewProgramMembershipClient(tx.config)

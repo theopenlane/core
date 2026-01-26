@@ -18,6 +18,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -40,6 +42,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -61,6 +64,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -142,6 +146,10 @@ type OrganizationQuery struct {
 	withInvites                              *InviteQuery
 	withSubscribers                          *SubscriberQuery
 	withEntities                             *EntityQuery
+	withPlatforms                            *PlatformQuery
+	withIdentityHolders                      *IdentityHolderQuery
+	withCampaigns                            *CampaignQuery
+	withCampaignTargets                      *CampaignTargetQuery
 	withEntityTypes                          *EntityTypeQuery
 	withContacts                             *ContactQuery
 	withNotes                                *NoteQuery
@@ -238,6 +246,10 @@ type OrganizationQuery struct {
 	withNamedInvites                         map[string]*InviteQuery
 	withNamedSubscribers                     map[string]*SubscriberQuery
 	withNamedEntities                        map[string]*EntityQuery
+	withNamedPlatforms                       map[string]*PlatformQuery
+	withNamedIdentityHolders                 map[string]*IdentityHolderQuery
+	withNamedCampaigns                       map[string]*CampaignQuery
+	withNamedCampaignTargets                 map[string]*CampaignTargetQuery
 	withNamedEntityTypes                     map[string]*EntityTypeQuery
 	withNamedContacts                        map[string]*ContactQuery
 	withNamedNotes                           map[string]*NoteQuery
@@ -1373,6 +1385,106 @@ func (_q *OrganizationQuery) QueryEntities() *EntityQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPlatforms chains the current query on the "platforms" edge.
+func (_q *OrganizationQuery) QueryPlatforms() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.PlatformsTable, organization.PlatformsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Platform
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders chains the current query on the "identity_holders" edge.
+func (_q *OrganizationQuery) QueryIdentityHolders() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.IdentityHoldersTable, organization.IdentityHoldersColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolder
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaigns chains the current query on the "campaigns" edge.
+func (_q *OrganizationQuery) QueryCampaigns() *CampaignQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.CampaignsTable, organization.CampaignsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaignTargets chains the current query on the "campaign_targets" edge.
+func (_q *OrganizationQuery) QueryCampaignTargets() *CampaignTargetQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.CampaignTargetsTable, organization.CampaignTargetsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2988,6 +3100,10 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withInvites:                         _q.withInvites.Clone(),
 		withSubscribers:                     _q.withSubscribers.Clone(),
 		withEntities:                        _q.withEntities.Clone(),
+		withPlatforms:                       _q.withPlatforms.Clone(),
+		withIdentityHolders:                 _q.withIdentityHolders.Clone(),
+		withCampaigns:                       _q.withCampaigns.Clone(),
+		withCampaignTargets:                 _q.withCampaignTargets.Clone(),
 		withEntityTypes:                     _q.withEntityTypes.Clone(),
 		withContacts:                        _q.withContacts.Clone(),
 		withNotes:                           _q.withNotes.Clone(),
@@ -3509,6 +3625,50 @@ func (_q *OrganizationQuery) WithEntities(opts ...func(*EntityQuery)) *Organizat
 		opt(query)
 	}
 	_q.withEntities = query
+	return _q
+}
+
+// WithPlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithPlatforms(opts ...func(*PlatformQuery)) *OrganizationQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatforms = query
+	return _q
+}
+
+// WithIdentityHolders tells the query-builder to eager-load the nodes that are connected to
+// the "identity_holders" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithIdentityHolders(opts ...func(*IdentityHolderQuery)) *OrganizationQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIdentityHolders = query
+	return _q
+}
+
+// WithCampaigns tells the query-builder to eager-load the nodes that are connected to
+// the "campaigns" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithCampaigns(opts ...func(*CampaignQuery)) *OrganizationQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaigns = query
+	return _q
+}
+
+// WithCampaignTargets tells the query-builder to eager-load the nodes that are connected to
+// the "campaign_targets" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithCampaignTargets(opts ...func(*CampaignTargetQuery)) *OrganizationQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaignTargets = query
 	return _q
 }
 
@@ -4201,7 +4361,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [97]bool{
+		loadedTypes = [101]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -4244,6 +4404,10 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withInvites != nil,
 			_q.withSubscribers != nil,
 			_q.withEntities != nil,
+			_q.withPlatforms != nil,
+			_q.withIdentityHolders != nil,
+			_q.withCampaigns != nil,
+			_q.withCampaignTargets != nil,
 			_q.withEntityTypes != nil,
 			_q.withContacts != nil,
 			_q.withNotes != nil,
@@ -4634,6 +4798,34 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Entities = []*Entity{} },
 			func(n *Organization, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatforms; query != nil {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Platforms = []*Platform{} },
+			func(n *Organization, e *Platform) { n.Edges.Platforms = append(n.Edges.Platforms, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIdentityHolders; query != nil {
+		if err := _q.loadIdentityHolders(ctx, query, nodes,
+			func(n *Organization) { n.Edges.IdentityHolders = []*IdentityHolder{} },
+			func(n *Organization, e *IdentityHolder) { n.Edges.IdentityHolders = append(n.Edges.IdentityHolders, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaigns; query != nil {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Campaigns = []*Campaign{} },
+			func(n *Organization, e *Campaign) { n.Edges.Campaigns = append(n.Edges.Campaigns, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaignTargets; query != nil {
+		if err := _q.loadCampaignTargets(ctx, query, nodes,
+			func(n *Organization) { n.Edges.CampaignTargets = []*CampaignTarget{} },
+			func(n *Organization, e *CampaignTarget) { n.Edges.CampaignTargets = append(n.Edges.CampaignTargets, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -5328,6 +5520,34 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedEntities(name) },
 			func(n *Organization, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPlatforms {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedPlatforms(name) },
+			func(n *Organization, e *Platform) { n.appendNamedPlatforms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIdentityHolders {
+		if err := _q.loadIdentityHolders(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedIdentityHolders(name) },
+			func(n *Organization, e *IdentityHolder) { n.appendNamedIdentityHolders(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaigns {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedCampaigns(name) },
+			func(n *Organization, e *Campaign) { n.appendNamedCampaigns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaignTargets {
+		if err := _q.loadCampaignTargets(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedCampaignTargets(name) },
+			func(n *Organization, e *CampaignTarget) { n.appendNamedCampaignTargets(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -7140,6 +7360,127 @@ func (_q *OrganizationQuery) loadEntities(ctx context.Context, query *EntityQuer
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Platform)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(platform.FieldOwnerID)
+	}
+	query.Where(predicate.Platform(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.PlatformsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadIdentityHolders(ctx context.Context, query *IdentityHolderQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *IdentityHolder)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(identityholder.FieldOwnerID)
+	}
+	query.Where(predicate.IdentityHolder(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.IdentityHoldersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadCampaigns(ctx context.Context, query *CampaignQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Campaign)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(campaign.FieldOwnerID)
+	}
+	query.Where(predicate.Campaign(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.CampaignsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadCampaignTargets(ctx context.Context, query *CampaignTargetQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *CampaignTarget)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(campaigntarget.FieldOwnerID)
+	}
+	query.Where(predicate.CampaignTarget(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.CampaignTargetsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadEntityTypes(ctx context.Context, query *EntityTypeQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *EntityType)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -8215,6 +8556,7 @@ func (_q *OrganizationQuery) loadCustomTypeEnums(ctx context.Context, query *Cus
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(customtypeenum.FieldOwnerID)
 	}
@@ -9467,6 +9809,62 @@ func (_q *OrganizationQuery) WithNamedEntities(name string, opts ...func(*Entity
 		_q.withNamedEntities = make(map[string]*EntityQuery)
 	}
 	_q.withNamedEntities[name] = query
+	return _q
+}
+
+// WithNamedPlatforms tells the query-builder to eager-load the nodes that are connected to the "platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQuery)) *OrganizationQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatforms == nil {
+		_q.withNamedPlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatforms[name] = query
+	return _q
+}
+
+// WithNamedIdentityHolders tells the query-builder to eager-load the nodes that are connected to the "identity_holders"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedIdentityHolders(name string, opts ...func(*IdentityHolderQuery)) *OrganizationQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIdentityHolders == nil {
+		_q.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery)
+	}
+	_q.withNamedIdentityHolders[name] = query
+	return _q
+}
+
+// WithNamedCampaigns tells the query-builder to eager-load the nodes that are connected to the "campaigns"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedCampaigns(name string, opts ...func(*CampaignQuery)) *OrganizationQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaigns == nil {
+		_q.withNamedCampaigns = make(map[string]*CampaignQuery)
+	}
+	_q.withNamedCampaigns[name] = query
+	return _q
+}
+
+// WithNamedCampaignTargets tells the query-builder to eager-load the nodes that are connected to the "campaign_targets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedCampaignTargets(name string, opts ...func(*CampaignTargetQuery)) *OrganizationQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaignTargets == nil {
+		_q.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery)
+	}
+	_q.withNamedCampaignTargets[name] = query
 	return _q
 }
 

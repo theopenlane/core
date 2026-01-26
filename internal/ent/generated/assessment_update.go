@@ -14,8 +14,11 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 
@@ -286,6 +289,36 @@ func (_u *AssessmentUpdate) SetTemplate(v *Template) *AssessmentUpdate {
 	return _u.SetTemplateID(v.ID)
 }
 
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_u *AssessmentUpdate) AddPlatformIDs(ids ...string) *AssessmentUpdate {
+	_u.mutation.AddPlatformIDs(ids...)
+	return _u
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_u *AssessmentUpdate) AddPlatforms(v ...*Platform) *AssessmentUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_u *AssessmentUpdate) AddIdentityHolderIDs(ids ...string) *AssessmentUpdate {
+	_u.mutation.AddIdentityHolderIDs(ids...)
+	return _u
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_u *AssessmentUpdate) AddIdentityHolders(v ...*IdentityHolder) *AssessmentUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIdentityHolderIDs(ids...)
+}
+
 // AddAssessmentResponseIDs adds the "assessment_responses" edge to the AssessmentResponse entity by IDs.
 func (_u *AssessmentUpdate) AddAssessmentResponseIDs(ids ...string) *AssessmentUpdate {
 	_u.mutation.AddAssessmentResponseIDs(ids...)
@@ -299,6 +332,21 @@ func (_u *AssessmentUpdate) AddAssessmentResponses(v ...*AssessmentResponse) *As
 		ids[i] = v[i].ID
 	}
 	return _u.AddAssessmentResponseIDs(ids...)
+}
+
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_u *AssessmentUpdate) AddCampaignIDs(ids ...string) *AssessmentUpdate {
+	_u.mutation.AddCampaignIDs(ids...)
+	return _u
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_u *AssessmentUpdate) AddCampaigns(v ...*Campaign) *AssessmentUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCampaignIDs(ids...)
 }
 
 // Mutation returns the AssessmentMutation object of the builder.
@@ -381,6 +429,48 @@ func (_u *AssessmentUpdate) ClearTemplate() *AssessmentUpdate {
 	return _u
 }
 
+// ClearPlatforms clears all "platforms" edges to the Platform entity.
+func (_u *AssessmentUpdate) ClearPlatforms() *AssessmentUpdate {
+	_u.mutation.ClearPlatforms()
+	return _u
+}
+
+// RemovePlatformIDs removes the "platforms" edge to Platform entities by IDs.
+func (_u *AssessmentUpdate) RemovePlatformIDs(ids ...string) *AssessmentUpdate {
+	_u.mutation.RemovePlatformIDs(ids...)
+	return _u
+}
+
+// RemovePlatforms removes "platforms" edges to Platform entities.
+func (_u *AssessmentUpdate) RemovePlatforms(v ...*Platform) *AssessmentUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformIDs(ids...)
+}
+
+// ClearIdentityHolders clears all "identity_holders" edges to the IdentityHolder entity.
+func (_u *AssessmentUpdate) ClearIdentityHolders() *AssessmentUpdate {
+	_u.mutation.ClearIdentityHolders()
+	return _u
+}
+
+// RemoveIdentityHolderIDs removes the "identity_holders" edge to IdentityHolder entities by IDs.
+func (_u *AssessmentUpdate) RemoveIdentityHolderIDs(ids ...string) *AssessmentUpdate {
+	_u.mutation.RemoveIdentityHolderIDs(ids...)
+	return _u
+}
+
+// RemoveIdentityHolders removes "identity_holders" edges to IdentityHolder entities.
+func (_u *AssessmentUpdate) RemoveIdentityHolders(v ...*IdentityHolder) *AssessmentUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIdentityHolderIDs(ids...)
+}
+
 // ClearAssessmentResponses clears all "assessment_responses" edges to the AssessmentResponse entity.
 func (_u *AssessmentUpdate) ClearAssessmentResponses() *AssessmentUpdate {
 	_u.mutation.ClearAssessmentResponses()
@@ -400,6 +490,27 @@ func (_u *AssessmentUpdate) RemoveAssessmentResponses(v ...*AssessmentResponse) 
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAssessmentResponseIDs(ids...)
+}
+
+// ClearCampaigns clears all "campaigns" edges to the Campaign entity.
+func (_u *AssessmentUpdate) ClearCampaigns() *AssessmentUpdate {
+	_u.mutation.ClearCampaigns()
+	return _u
+}
+
+// RemoveCampaignIDs removes the "campaigns" edge to Campaign entities by IDs.
+func (_u *AssessmentUpdate) RemoveCampaignIDs(ids ...string) *AssessmentUpdate {
+	_u.mutation.RemoveCampaignIDs(ids...)
+	return _u
+}
+
+// RemoveCampaigns removes "campaigns" edges to Campaign entities.
+func (_u *AssessmentUpdate) RemoveCampaigns(v ...*Campaign) *AssessmentUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCampaignIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -748,6 +859,102 @@ func (_u *AssessmentUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   assessment.PlatformsTable,
+			Columns: assessment.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformAssessments
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   assessment.PlatformsTable,
+			Columns: assessment.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformAssessments
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   assessment.PlatformsTable,
+			Columns: assessment.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformAssessments
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   assessment.IdentityHoldersTable,
+			Columns: assessment.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderAssessments
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIdentityHoldersIDs(); len(nodes) > 0 && !_u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   assessment.IdentityHoldersTable,
+			Columns: assessment.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderAssessments
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   assessment.IdentityHoldersTable,
+			Columns: assessment.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderAssessments
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.AssessmentResponsesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -791,6 +998,54 @@ func (_u *AssessmentUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 			},
 		}
 		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessment.CampaignsTable,
+			Columns: []string{assessment.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessment.CampaignsTable,
+			Columns: []string{assessment.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessment.CampaignsTable,
+			Columns: []string{assessment.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1070,6 +1325,36 @@ func (_u *AssessmentUpdateOne) SetTemplate(v *Template) *AssessmentUpdateOne {
 	return _u.SetTemplateID(v.ID)
 }
 
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_u *AssessmentUpdateOne) AddPlatformIDs(ids ...string) *AssessmentUpdateOne {
+	_u.mutation.AddPlatformIDs(ids...)
+	return _u
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_u *AssessmentUpdateOne) AddPlatforms(v ...*Platform) *AssessmentUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_u *AssessmentUpdateOne) AddIdentityHolderIDs(ids ...string) *AssessmentUpdateOne {
+	_u.mutation.AddIdentityHolderIDs(ids...)
+	return _u
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_u *AssessmentUpdateOne) AddIdentityHolders(v ...*IdentityHolder) *AssessmentUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIdentityHolderIDs(ids...)
+}
+
 // AddAssessmentResponseIDs adds the "assessment_responses" edge to the AssessmentResponse entity by IDs.
 func (_u *AssessmentUpdateOne) AddAssessmentResponseIDs(ids ...string) *AssessmentUpdateOne {
 	_u.mutation.AddAssessmentResponseIDs(ids...)
@@ -1083,6 +1368,21 @@ func (_u *AssessmentUpdateOne) AddAssessmentResponses(v ...*AssessmentResponse) 
 		ids[i] = v[i].ID
 	}
 	return _u.AddAssessmentResponseIDs(ids...)
+}
+
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_u *AssessmentUpdateOne) AddCampaignIDs(ids ...string) *AssessmentUpdateOne {
+	_u.mutation.AddCampaignIDs(ids...)
+	return _u
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_u *AssessmentUpdateOne) AddCampaigns(v ...*Campaign) *AssessmentUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCampaignIDs(ids...)
 }
 
 // Mutation returns the AssessmentMutation object of the builder.
@@ -1165,6 +1465,48 @@ func (_u *AssessmentUpdateOne) ClearTemplate() *AssessmentUpdateOne {
 	return _u
 }
 
+// ClearPlatforms clears all "platforms" edges to the Platform entity.
+func (_u *AssessmentUpdateOne) ClearPlatforms() *AssessmentUpdateOne {
+	_u.mutation.ClearPlatforms()
+	return _u
+}
+
+// RemovePlatformIDs removes the "platforms" edge to Platform entities by IDs.
+func (_u *AssessmentUpdateOne) RemovePlatformIDs(ids ...string) *AssessmentUpdateOne {
+	_u.mutation.RemovePlatformIDs(ids...)
+	return _u
+}
+
+// RemovePlatforms removes "platforms" edges to Platform entities.
+func (_u *AssessmentUpdateOne) RemovePlatforms(v ...*Platform) *AssessmentUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformIDs(ids...)
+}
+
+// ClearIdentityHolders clears all "identity_holders" edges to the IdentityHolder entity.
+func (_u *AssessmentUpdateOne) ClearIdentityHolders() *AssessmentUpdateOne {
+	_u.mutation.ClearIdentityHolders()
+	return _u
+}
+
+// RemoveIdentityHolderIDs removes the "identity_holders" edge to IdentityHolder entities by IDs.
+func (_u *AssessmentUpdateOne) RemoveIdentityHolderIDs(ids ...string) *AssessmentUpdateOne {
+	_u.mutation.RemoveIdentityHolderIDs(ids...)
+	return _u
+}
+
+// RemoveIdentityHolders removes "identity_holders" edges to IdentityHolder entities.
+func (_u *AssessmentUpdateOne) RemoveIdentityHolders(v ...*IdentityHolder) *AssessmentUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIdentityHolderIDs(ids...)
+}
+
 // ClearAssessmentResponses clears all "assessment_responses" edges to the AssessmentResponse entity.
 func (_u *AssessmentUpdateOne) ClearAssessmentResponses() *AssessmentUpdateOne {
 	_u.mutation.ClearAssessmentResponses()
@@ -1184,6 +1526,27 @@ func (_u *AssessmentUpdateOne) RemoveAssessmentResponses(v ...*AssessmentRespons
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAssessmentResponseIDs(ids...)
+}
+
+// ClearCampaigns clears all "campaigns" edges to the Campaign entity.
+func (_u *AssessmentUpdateOne) ClearCampaigns() *AssessmentUpdateOne {
+	_u.mutation.ClearCampaigns()
+	return _u
+}
+
+// RemoveCampaignIDs removes the "campaigns" edge to Campaign entities by IDs.
+func (_u *AssessmentUpdateOne) RemoveCampaignIDs(ids ...string) *AssessmentUpdateOne {
+	_u.mutation.RemoveCampaignIDs(ids...)
+	return _u
+}
+
+// RemoveCampaigns removes "campaigns" edges to Campaign entities.
+func (_u *AssessmentUpdateOne) RemoveCampaigns(v ...*Campaign) *AssessmentUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCampaignIDs(ids...)
 }
 
 // Where appends a list predicates to the AssessmentUpdate builder.
@@ -1562,6 +1925,102 @@ func (_u *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment, 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   assessment.PlatformsTable,
+			Columns: assessment.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformAssessments
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   assessment.PlatformsTable,
+			Columns: assessment.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformAssessments
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   assessment.PlatformsTable,
+			Columns: assessment.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformAssessments
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   assessment.IdentityHoldersTable,
+			Columns: assessment.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderAssessments
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIdentityHoldersIDs(); len(nodes) > 0 && !_u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   assessment.IdentityHoldersTable,
+			Columns: assessment.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderAssessments
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   assessment.IdentityHoldersTable,
+			Columns: assessment.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderAssessments
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.AssessmentResponsesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1605,6 +2064,54 @@ func (_u *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment, 
 			},
 		}
 		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessment.CampaignsTable,
+			Columns: []string{assessment.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessment.CampaignsTable,
+			Columns: []string{assessment.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessment.CampaignsTable,
+			Columns: []string{assessment.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -113,7 +113,9 @@ func (f File) Edges() []ent.Edge {
 		defaultEdgeFrom(f, Template{}),
 		defaultEdgeFrom(f, DocumentData{}),
 		defaultEdgeFrom(f, Program{}),
+		defaultEdgeFrom(f, Platform{}),
 		defaultEdgeFrom(f, Evidence{}),
+		defaultEdgeFrom(f, Scan{}),
 		defaultEdgeToWithPagination(f, Event{}),
 		defaultEdgeToWithPagination(f, Integration{}),
 		defaultEdgeToWithPagination(f, Hush{}),
@@ -139,13 +141,15 @@ func (f File) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.File](f,
 				withParents(
-					Organization{}, Program{}, Control{}, Procedure{}, Template{}, Subcontrol{}, DocumentData{},
+					Organization{}, Program{}, Platform{}, Scan{}, Control{}, Procedure{}, Template{}, Subcontrol{}, DocumentData{},
 					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}, TrustCenterSetting{}, Subprocessor{}, Export{},
 					TrustCenterDoc{}, Standard{}, TrustCenterEntity{}, TrustCenterSubprocessor{}), // used to create parent tuples for the file
 				withHookFuncs(), // use an empty hook, file processing is handled in middleware
 				withAllowAnonymousTrustCenterAccess(true),
 			),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
+			newCustomEnumMixin(f, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(f, withEnumFieldName("scope"), withGlobalEnum()),
 		},
 	}.getMixins(f)
 }

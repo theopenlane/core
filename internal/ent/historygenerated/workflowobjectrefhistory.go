@@ -61,7 +61,15 @@ type WorkflowObjectRefHistory struct {
 	// ActionPlan referenced by this workflow instance
 	ActionPlanID string `json:"action_plan_id,omitempty"`
 	// Procedure referenced by this workflow instance
-	ProcedureID  string `json:"procedure_id,omitempty"`
+	ProcedureID string `json:"procedure_id,omitempty"`
+	// Campaign referenced by this workflow instance
+	CampaignID string `json:"campaign_id,omitempty"`
+	// Campaign target referenced by this workflow instance
+	CampaignTargetID string `json:"campaign_target_id,omitempty"`
+	// Identity holder referenced by this workflow instance
+	IdentityHolderID string `json:"identity_holder_id,omitempty"`
+	// Platform referenced by this workflow instance
+	PlatformID   string `json:"platform_id,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -72,7 +80,7 @@ func (*WorkflowObjectRefHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case workflowobjectrefhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case workflowobjectrefhistory.FieldID, workflowobjectrefhistory.FieldRef, workflowobjectrefhistory.FieldCreatedBy, workflowobjectrefhistory.FieldUpdatedBy, workflowobjectrefhistory.FieldDisplayID, workflowobjectrefhistory.FieldOwnerID, workflowobjectrefhistory.FieldWorkflowInstanceID, workflowobjectrefhistory.FieldControlID, workflowobjectrefhistory.FieldTaskID, workflowobjectrefhistory.FieldInternalPolicyID, workflowobjectrefhistory.FieldFindingID, workflowobjectrefhistory.FieldDirectoryAccountID, workflowobjectrefhistory.FieldDirectoryGroupID, workflowobjectrefhistory.FieldDirectoryMembershipID, workflowobjectrefhistory.FieldEvidenceID, workflowobjectrefhistory.FieldSubcontrolID, workflowobjectrefhistory.FieldActionPlanID, workflowobjectrefhistory.FieldProcedureID:
+		case workflowobjectrefhistory.FieldID, workflowobjectrefhistory.FieldRef, workflowobjectrefhistory.FieldCreatedBy, workflowobjectrefhistory.FieldUpdatedBy, workflowobjectrefhistory.FieldDisplayID, workflowobjectrefhistory.FieldOwnerID, workflowobjectrefhistory.FieldWorkflowInstanceID, workflowobjectrefhistory.FieldControlID, workflowobjectrefhistory.FieldTaskID, workflowobjectrefhistory.FieldInternalPolicyID, workflowobjectrefhistory.FieldFindingID, workflowobjectrefhistory.FieldDirectoryAccountID, workflowobjectrefhistory.FieldDirectoryGroupID, workflowobjectrefhistory.FieldDirectoryMembershipID, workflowobjectrefhistory.FieldEvidenceID, workflowobjectrefhistory.FieldSubcontrolID, workflowobjectrefhistory.FieldActionPlanID, workflowobjectrefhistory.FieldProcedureID, workflowobjectrefhistory.FieldCampaignID, workflowobjectrefhistory.FieldCampaignTargetID, workflowobjectrefhistory.FieldIdentityHolderID, workflowobjectrefhistory.FieldPlatformID:
 			values[i] = new(sql.NullString)
 		case workflowobjectrefhistory.FieldHistoryTime, workflowobjectrefhistory.FieldCreatedAt, workflowobjectrefhistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -223,6 +231,30 @@ func (_m *WorkflowObjectRefHistory) assignValues(columns []string, values []any)
 			} else if value.Valid {
 				_m.ProcedureID = value.String
 			}
+		case workflowobjectrefhistory.FieldCampaignID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field campaign_id", values[i])
+			} else if value.Valid {
+				_m.CampaignID = value.String
+			}
+		case workflowobjectrefhistory.FieldCampaignTargetID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field campaign_target_id", values[i])
+			} else if value.Valid {
+				_m.CampaignTargetID = value.String
+			}
+		case workflowobjectrefhistory.FieldIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.IdentityHolderID = value.String
+			}
+		case workflowobjectrefhistory.FieldPlatformID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field platform_id", values[i])
+			} else if value.Valid {
+				_m.PlatformID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -321,6 +353,18 @@ func (_m *WorkflowObjectRefHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("procedure_id=")
 	builder.WriteString(_m.ProcedureID)
+	builder.WriteString(", ")
+	builder.WriteString("campaign_id=")
+	builder.WriteString(_m.CampaignID)
+	builder.WriteString(", ")
+	builder.WriteString("campaign_target_id=")
+	builder.WriteString(_m.CampaignTargetID)
+	builder.WriteString(", ")
+	builder.WriteString("identity_holder_id=")
+	builder.WriteString(_m.IdentityHolderID)
+	builder.WriteString(", ")
+	builder.WriteString("platform_id=")
+	builder.WriteString(_m.PlatformID)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -70,6 +70,14 @@ const (
 	FieldActionPlanID = "action_plan_id"
 	// FieldProcedureID holds the string denoting the procedure_id field in the database.
 	FieldProcedureID = "procedure_id"
+	// FieldCampaignID holds the string denoting the campaign_id field in the database.
+	FieldCampaignID = "campaign_id"
+	// FieldCampaignTargetID holds the string denoting the campaign_target_id field in the database.
+	FieldCampaignTargetID = "campaign_target_id"
+	// FieldIdentityHolderID holds the string denoting the identity_holder_id field in the database.
+	FieldIdentityHolderID = "identity_holder_id"
+	// FieldPlatformID holds the string denoting the platform_id field in the database.
+	FieldPlatformID = "platform_id"
 	// Table holds the table name of the workflowinstancehistory in the database.
 	Table = "workflow_instance_history"
 )
@@ -102,6 +110,10 @@ var Columns = []string{
 	FieldSubcontrolID,
 	FieldActionPlanID,
 	FieldProcedureID,
+	FieldCampaignID,
+	FieldCampaignTargetID,
+	FieldIdentityHolderID,
+	FieldPlatformID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -277,6 +289,26 @@ func ByActionPlanID(opts ...sql.OrderTermOption) OrderOption {
 // ByProcedureID orders the results by the procedure_id field.
 func ByProcedureID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProcedureID, opts...).ToFunc()
+}
+
+// ByCampaignID orders the results by the campaign_id field.
+func ByCampaignID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCampaignID, opts...).ToFunc()
+}
+
+// ByCampaignTargetID orders the results by the campaign_target_id field.
+func ByCampaignTargetID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCampaignTargetID, opts...).ToFunc()
+}
+
+// ByIdentityHolderID orders the results by the identity_holder_id field.
+func ByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdentityHolderID, opts...).ToFunc()
+}
+
+// ByPlatformID orders the results by the platform_id field.
+func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
 }
 
 var (

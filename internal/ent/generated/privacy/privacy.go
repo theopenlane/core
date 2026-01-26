@@ -231,6 +231,54 @@ func (f AssetMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mut
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.AssetMutation", m)
 }
 
+// The CampaignQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type CampaignQueryRuleFunc func(context.Context, *generated.CampaignQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f CampaignQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.CampaignQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.CampaignQuery", q)
+}
+
+// The CampaignMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type CampaignMutationRuleFunc func(context.Context, *generated.CampaignMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f CampaignMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.CampaignMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.CampaignMutation", m)
+}
+
+// The CampaignTargetQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type CampaignTargetQueryRuleFunc func(context.Context, *generated.CampaignTargetQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f CampaignTargetQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.CampaignTargetQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.CampaignTargetQuery", q)
+}
+
+// The CampaignTargetMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type CampaignTargetMutationRuleFunc func(context.Context, *generated.CampaignTargetMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f CampaignTargetMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.CampaignTargetMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.CampaignTargetMutation", m)
+}
+
 // The ContactQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type ContactQueryRuleFunc func(context.Context, *generated.ContactQuery) error
@@ -879,6 +927,30 @@ func (f HushMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Muta
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.HushMutation", m)
 }
 
+// The IdentityHolderQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type IdentityHolderQueryRuleFunc func(context.Context, *generated.IdentityHolderQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f IdentityHolderQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.IdentityHolderQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.IdentityHolderQuery", q)
+}
+
+// The IdentityHolderMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type IdentityHolderMutationRuleFunc func(context.Context, *generated.IdentityHolderMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f IdentityHolderMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.IdentityHolderMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.IdentityHolderMutation", m)
+}
+
 // The ImpersonationEventQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type ImpersonationEventQueryRuleFunc func(context.Context, *generated.ImpersonationEventQuery) error
@@ -1453,6 +1525,30 @@ func (f PersonalAccessTokenMutationRuleFunc) EvalMutation(ctx context.Context, m
 		return f(ctx, m)
 	}
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.PersonalAccessTokenMutation", m)
+}
+
+// The PlatformQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type PlatformQueryRuleFunc func(context.Context, *generated.PlatformQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f PlatformQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.PlatformQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.PlatformQuery", q)
+}
+
+// The PlatformMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type PlatformMutationRuleFunc func(context.Context, *generated.PlatformMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f PlatformMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.PlatformMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.PlatformMutation", m)
 }
 
 // The ProcedureQueryRuleFunc type is an adapter to allow the use of ordinary
@@ -2364,6 +2460,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.AssetQuery:
 		return q.Filter(), nil
+	case *generated.CampaignQuery:
+		return q.Filter(), nil
+	case *generated.CampaignTargetQuery:
+		return q.Filter(), nil
 	case *generated.ContactQuery:
 		return q.Filter(), nil
 	case *generated.ControlQuery:
@@ -2418,6 +2518,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.HushQuery:
 		return q.Filter(), nil
+	case *generated.IdentityHolderQuery:
+		return q.Filter(), nil
 	case *generated.ImpersonationEventQuery:
 		return q.Filter(), nil
 	case *generated.IntegrationQuery:
@@ -2465,6 +2567,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 	case *generated.PasswordResetTokenQuery:
 		return q.Filter(), nil
 	case *generated.PersonalAccessTokenQuery:
+		return q.Filter(), nil
+	case *generated.PlatformQuery:
 		return q.Filter(), nil
 	case *generated.ProcedureQuery:
 		return q.Filter(), nil
@@ -2555,6 +2659,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *generated.AssetMutation:
 		return m.Filter(), nil
+	case *generated.CampaignMutation:
+		return m.Filter(), nil
+	case *generated.CampaignTargetMutation:
+		return m.Filter(), nil
 	case *generated.ContactMutation:
 		return m.Filter(), nil
 	case *generated.ControlMutation:
@@ -2609,6 +2717,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *generated.HushMutation:
 		return m.Filter(), nil
+	case *generated.IdentityHolderMutation:
+		return m.Filter(), nil
 	case *generated.ImpersonationEventMutation:
 		return m.Filter(), nil
 	case *generated.IntegrationMutation:
@@ -2656,6 +2766,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.PasswordResetTokenMutation:
 		return m.Filter(), nil
 	case *generated.PersonalAccessTokenMutation:
+		return m.Filter(), nil
+	case *generated.PlatformMutation:
 		return m.Filter(), nil
 	case *generated.ProcedureMutation:
 		return m.Filter(), nil

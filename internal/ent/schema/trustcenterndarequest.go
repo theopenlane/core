@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -95,6 +96,7 @@ func (t TrustCenterNDARequest) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterNDARequest](t,
 				withParents(TrustCenter{}),
+				withAllowAnonymousTrustCenterAccess(true),
 			),
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
@@ -125,6 +127,14 @@ func (t TrustCenterNDARequest) Edges() []ent.Edge {
 func (TrustCenterNDARequest) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorTrustCenterChild(),
+	}
+}
+
+// Hooks of the TrustCenterNDARequest
+func (TrustCenterNDARequest) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookTrustCenterNDARequestCreate(),
+		hooks.HookTrustCenterNDARequestUpdate(),
 	}
 }
 

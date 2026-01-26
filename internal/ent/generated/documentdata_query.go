@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -32,6 +33,8 @@ type DocumentDataQuery struct {
 	inters            []Interceptor
 	predicates        []predicate.DocumentData
 	withOwner         *OrganizationQuery
+	withEnvironment   *CustomTypeEnumQuery
+	withScope         *CustomTypeEnumQuery
 	withTemplate      *TemplateQuery
 	withEntities      *EntityQuery
 	withFiles         *FileQuery
@@ -93,6 +96,56 @@ func (_q *DocumentDataQuery) QueryOwner() *OrganizationQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.DocumentData
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEnvironment chains the current query on the "environment" edge.
+func (_q *DocumentDataQuery) QueryEnvironment() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentdata.Table, documentdata.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.EnvironmentTable, documentdata.EnvironmentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.DocumentData
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScope chains the current query on the "scope" edge.
+func (_q *DocumentDataQuery) QueryScope() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentdata.Table, documentdata.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.ScopeTable, documentdata.ScopeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.DocumentData
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -362,15 +415,17 @@ func (_q *DocumentDataQuery) Clone() *DocumentDataQuery {
 		return nil
 	}
 	return &DocumentDataQuery{
-		config:       _q.config,
-		ctx:          _q.ctx.Clone(),
-		order:        append([]documentdata.OrderOption{}, _q.order...),
-		inters:       append([]Interceptor{}, _q.inters...),
-		predicates:   append([]predicate.DocumentData{}, _q.predicates...),
-		withOwner:    _q.withOwner.Clone(),
-		withTemplate: _q.withTemplate.Clone(),
-		withEntities: _q.withEntities.Clone(),
-		withFiles:    _q.withFiles.Clone(),
+		config:          _q.config,
+		ctx:             _q.ctx.Clone(),
+		order:           append([]documentdata.OrderOption{}, _q.order...),
+		inters:          append([]Interceptor{}, _q.inters...),
+		predicates:      append([]predicate.DocumentData{}, _q.predicates...),
+		withOwner:       _q.withOwner.Clone(),
+		withEnvironment: _q.withEnvironment.Clone(),
+		withScope:       _q.withScope.Clone(),
+		withTemplate:    _q.withTemplate.Clone(),
+		withEntities:    _q.withEntities.Clone(),
+		withFiles:       _q.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -386,6 +441,28 @@ func (_q *DocumentDataQuery) WithOwner(opts ...func(*OrganizationQuery)) *Docume
 		opt(query)
 	}
 	_q.withOwner = query
+	return _q
+}
+
+// WithEnvironment tells the query-builder to eager-load the nodes that are connected to
+// the "environment" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *DocumentDataQuery) WithEnvironment(opts ...func(*CustomTypeEnumQuery)) *DocumentDataQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEnvironment = query
+	return _q
+}
+
+// WithScope tells the query-builder to eager-load the nodes that are connected to
+// the "scope" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *DocumentDataQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *DocumentDataQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScope = query
 	return _q
 }
 
@@ -506,8 +583,10 @@ func (_q *DocumentDataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*DocumentData{}
 		_spec       = _q.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [6]bool{
 			_q.withOwner != nil,
+			_q.withEnvironment != nil,
+			_q.withScope != nil,
 			_q.withTemplate != nil,
 			_q.withEntities != nil,
 			_q.withFiles != nil,
@@ -539,6 +618,18 @@ func (_q *DocumentDataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *DocumentData, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEnvironment; query != nil {
+		if err := _q.loadEnvironment(ctx, query, nodes, nil,
+			func(n *DocumentData, e *CustomTypeEnum) { n.Edges.Environment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScope; query != nil {
+		if err := _q.loadScope(ctx, query, nodes, nil,
+			func(n *DocumentData, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -606,6 +697,64 @@ func (_q *DocumentDataQuery) loadOwner(ctx context.Context, query *OrganizationQ
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *DocumentDataQuery) loadEnvironment(ctx context.Context, query *CustomTypeEnumQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*DocumentData)
+	for i := range nodes {
+		fk := nodes[i].EnvironmentID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "environment_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *DocumentDataQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*DocumentData)
+	for i := range nodes {
+		fk := nodes[i].ScopeID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -799,6 +948,12 @@ func (_q *DocumentDataQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(documentdata.FieldOwnerID)
+		}
+		if _q.withEnvironment != nil {
+			_spec.Node.AddColumnOnce(documentdata.FieldEnvironmentID)
+		}
+		if _q.withScope != nil {
+			_spec.Node.AddColumnOnce(documentdata.FieldScopeID)
 		}
 		if _q.withTemplate != nil {
 			_spec.Node.AddColumnOnce(documentdata.FieldTemplateID)

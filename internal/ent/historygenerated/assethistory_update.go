@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 
@@ -122,6 +123,386 @@ func (_u *AssetHistoryUpdate) AppendTags(v []string) *AssetHistoryUpdate {
 // ClearTags clears the value of the "tags" field.
 func (_u *AssetHistoryUpdate) ClearTags() *AssetHistoryUpdate {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetInternalOwner sets the "internal_owner" field.
+func (_u *AssetHistoryUpdate) SetInternalOwner(v string) *AssetHistoryUpdate {
+	_u.mutation.SetInternalOwner(v)
+	return _u
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableInternalOwner(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetInternalOwner(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (_u *AssetHistoryUpdate) ClearInternalOwner() *AssetHistoryUpdate {
+	_u.mutation.ClearInternalOwner()
+	return _u
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_u *AssetHistoryUpdate) SetInternalOwnerUserID(v string) *AssetHistoryUpdate {
+	_u.mutation.SetInternalOwnerUserID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableInternalOwnerUserID(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetInternalOwnerUserID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (_u *AssetHistoryUpdate) ClearInternalOwnerUserID() *AssetHistoryUpdate {
+	_u.mutation.ClearInternalOwnerUserID()
+	return _u
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_u *AssetHistoryUpdate) SetInternalOwnerGroupID(v string) *AssetHistoryUpdate {
+	_u.mutation.SetInternalOwnerGroupID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableInternalOwnerGroupID(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetInternalOwnerGroupID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (_u *AssetHistoryUpdate) ClearInternalOwnerGroupID() *AssetHistoryUpdate {
+	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetAssetSubtypeName sets the "asset_subtype_name" field.
+func (_u *AssetHistoryUpdate) SetAssetSubtypeName(v string) *AssetHistoryUpdate {
+	_u.mutation.SetAssetSubtypeName(v)
+	return _u
+}
+
+// SetNillableAssetSubtypeName sets the "asset_subtype_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableAssetSubtypeName(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetAssetSubtypeName(*v)
+	}
+	return _u
+}
+
+// ClearAssetSubtypeName clears the value of the "asset_subtype_name" field.
+func (_u *AssetHistoryUpdate) ClearAssetSubtypeName() *AssetHistoryUpdate {
+	_u.mutation.ClearAssetSubtypeName()
+	return _u
+}
+
+// SetAssetSubtypeID sets the "asset_subtype_id" field.
+func (_u *AssetHistoryUpdate) SetAssetSubtypeID(v string) *AssetHistoryUpdate {
+	_u.mutation.SetAssetSubtypeID(v)
+	return _u
+}
+
+// SetNillableAssetSubtypeID sets the "asset_subtype_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableAssetSubtypeID(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetAssetSubtypeID(*v)
+	}
+	return _u
+}
+
+// ClearAssetSubtypeID clears the value of the "asset_subtype_id" field.
+func (_u *AssetHistoryUpdate) ClearAssetSubtypeID() *AssetHistoryUpdate {
+	_u.mutation.ClearAssetSubtypeID()
+	return _u
+}
+
+// SetAssetDataClassificationName sets the "asset_data_classification_name" field.
+func (_u *AssetHistoryUpdate) SetAssetDataClassificationName(v string) *AssetHistoryUpdate {
+	_u.mutation.SetAssetDataClassificationName(v)
+	return _u
+}
+
+// SetNillableAssetDataClassificationName sets the "asset_data_classification_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableAssetDataClassificationName(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetAssetDataClassificationName(*v)
+	}
+	return _u
+}
+
+// ClearAssetDataClassificationName clears the value of the "asset_data_classification_name" field.
+func (_u *AssetHistoryUpdate) ClearAssetDataClassificationName() *AssetHistoryUpdate {
+	_u.mutation.ClearAssetDataClassificationName()
+	return _u
+}
+
+// SetAssetDataClassificationID sets the "asset_data_classification_id" field.
+func (_u *AssetHistoryUpdate) SetAssetDataClassificationID(v string) *AssetHistoryUpdate {
+	_u.mutation.SetAssetDataClassificationID(v)
+	return _u
+}
+
+// SetNillableAssetDataClassificationID sets the "asset_data_classification_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableAssetDataClassificationID(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetAssetDataClassificationID(*v)
+	}
+	return _u
+}
+
+// ClearAssetDataClassificationID clears the value of the "asset_data_classification_id" field.
+func (_u *AssetHistoryUpdate) ClearAssetDataClassificationID() *AssetHistoryUpdate {
+	_u.mutation.ClearAssetDataClassificationID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *AssetHistoryUpdate) SetEnvironmentName(v string) *AssetHistoryUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableEnvironmentName(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *AssetHistoryUpdate) ClearEnvironmentName() *AssetHistoryUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *AssetHistoryUpdate) SetEnvironmentID(v string) *AssetHistoryUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableEnvironmentID(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *AssetHistoryUpdate) ClearEnvironmentID() *AssetHistoryUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *AssetHistoryUpdate) SetScopeName(v string) *AssetHistoryUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableScopeName(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *AssetHistoryUpdate) ClearScopeName() *AssetHistoryUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *AssetHistoryUpdate) SetScopeID(v string) *AssetHistoryUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableScopeID(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *AssetHistoryUpdate) ClearScopeID() *AssetHistoryUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetAccessModelName sets the "access_model_name" field.
+func (_u *AssetHistoryUpdate) SetAccessModelName(v string) *AssetHistoryUpdate {
+	_u.mutation.SetAccessModelName(v)
+	return _u
+}
+
+// SetNillableAccessModelName sets the "access_model_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableAccessModelName(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetAccessModelName(*v)
+	}
+	return _u
+}
+
+// ClearAccessModelName clears the value of the "access_model_name" field.
+func (_u *AssetHistoryUpdate) ClearAccessModelName() *AssetHistoryUpdate {
+	_u.mutation.ClearAccessModelName()
+	return _u
+}
+
+// SetAccessModelID sets the "access_model_id" field.
+func (_u *AssetHistoryUpdate) SetAccessModelID(v string) *AssetHistoryUpdate {
+	_u.mutation.SetAccessModelID(v)
+	return _u
+}
+
+// SetNillableAccessModelID sets the "access_model_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableAccessModelID(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetAccessModelID(*v)
+	}
+	return _u
+}
+
+// ClearAccessModelID clears the value of the "access_model_id" field.
+func (_u *AssetHistoryUpdate) ClearAccessModelID() *AssetHistoryUpdate {
+	_u.mutation.ClearAccessModelID()
+	return _u
+}
+
+// SetEncryptionStatusName sets the "encryption_status_name" field.
+func (_u *AssetHistoryUpdate) SetEncryptionStatusName(v string) *AssetHistoryUpdate {
+	_u.mutation.SetEncryptionStatusName(v)
+	return _u
+}
+
+// SetNillableEncryptionStatusName sets the "encryption_status_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableEncryptionStatusName(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetEncryptionStatusName(*v)
+	}
+	return _u
+}
+
+// ClearEncryptionStatusName clears the value of the "encryption_status_name" field.
+func (_u *AssetHistoryUpdate) ClearEncryptionStatusName() *AssetHistoryUpdate {
+	_u.mutation.ClearEncryptionStatusName()
+	return _u
+}
+
+// SetEncryptionStatusID sets the "encryption_status_id" field.
+func (_u *AssetHistoryUpdate) SetEncryptionStatusID(v string) *AssetHistoryUpdate {
+	_u.mutation.SetEncryptionStatusID(v)
+	return _u
+}
+
+// SetNillableEncryptionStatusID sets the "encryption_status_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableEncryptionStatusID(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetEncryptionStatusID(*v)
+	}
+	return _u
+}
+
+// ClearEncryptionStatusID clears the value of the "encryption_status_id" field.
+func (_u *AssetHistoryUpdate) ClearEncryptionStatusID() *AssetHistoryUpdate {
+	_u.mutation.ClearEncryptionStatusID()
+	return _u
+}
+
+// SetSecurityTierName sets the "security_tier_name" field.
+func (_u *AssetHistoryUpdate) SetSecurityTierName(v string) *AssetHistoryUpdate {
+	_u.mutation.SetSecurityTierName(v)
+	return _u
+}
+
+// SetNillableSecurityTierName sets the "security_tier_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableSecurityTierName(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetSecurityTierName(*v)
+	}
+	return _u
+}
+
+// ClearSecurityTierName clears the value of the "security_tier_name" field.
+func (_u *AssetHistoryUpdate) ClearSecurityTierName() *AssetHistoryUpdate {
+	_u.mutation.ClearSecurityTierName()
+	return _u
+}
+
+// SetSecurityTierID sets the "security_tier_id" field.
+func (_u *AssetHistoryUpdate) SetSecurityTierID(v string) *AssetHistoryUpdate {
+	_u.mutation.SetSecurityTierID(v)
+	return _u
+}
+
+// SetNillableSecurityTierID sets the "security_tier_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableSecurityTierID(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetSecurityTierID(*v)
+	}
+	return _u
+}
+
+// ClearSecurityTierID clears the value of the "security_tier_id" field.
+func (_u *AssetHistoryUpdate) ClearSecurityTierID() *AssetHistoryUpdate {
+	_u.mutation.ClearSecurityTierID()
+	return _u
+}
+
+// SetCriticalityName sets the "criticality_name" field.
+func (_u *AssetHistoryUpdate) SetCriticalityName(v string) *AssetHistoryUpdate {
+	_u.mutation.SetCriticalityName(v)
+	return _u
+}
+
+// SetNillableCriticalityName sets the "criticality_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableCriticalityName(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetCriticalityName(*v)
+	}
+	return _u
+}
+
+// ClearCriticalityName clears the value of the "criticality_name" field.
+func (_u *AssetHistoryUpdate) ClearCriticalityName() *AssetHistoryUpdate {
+	_u.mutation.ClearCriticalityName()
+	return _u
+}
+
+// SetCriticalityID sets the "criticality_id" field.
+func (_u *AssetHistoryUpdate) SetCriticalityID(v string) *AssetHistoryUpdate {
+	_u.mutation.SetCriticalityID(v)
+	return _u
+}
+
+// SetNillableCriticalityID sets the "criticality_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableCriticalityID(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetCriticalityID(*v)
+	}
+	return _u
+}
+
+// ClearCriticalityID clears the value of the "criticality_id" field.
+func (_u *AssetHistoryUpdate) ClearCriticalityID() *AssetHistoryUpdate {
+	_u.mutation.ClearCriticalityID()
 	return _u
 }
 
@@ -253,6 +634,187 @@ func (_u *AssetHistoryUpdate) ClearWebsite() *AssetHistoryUpdate {
 	return _u
 }
 
+// SetPhysicalLocation sets the "physical_location" field.
+func (_u *AssetHistoryUpdate) SetPhysicalLocation(v string) *AssetHistoryUpdate {
+	_u.mutation.SetPhysicalLocation(v)
+	return _u
+}
+
+// SetNillablePhysicalLocation sets the "physical_location" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillablePhysicalLocation(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetPhysicalLocation(*v)
+	}
+	return _u
+}
+
+// ClearPhysicalLocation clears the value of the "physical_location" field.
+func (_u *AssetHistoryUpdate) ClearPhysicalLocation() *AssetHistoryUpdate {
+	_u.mutation.ClearPhysicalLocation()
+	return _u
+}
+
+// SetRegion sets the "region" field.
+func (_u *AssetHistoryUpdate) SetRegion(v string) *AssetHistoryUpdate {
+	_u.mutation.SetRegion(v)
+	return _u
+}
+
+// SetNillableRegion sets the "region" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableRegion(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetRegion(*v)
+	}
+	return _u
+}
+
+// ClearRegion clears the value of the "region" field.
+func (_u *AssetHistoryUpdate) ClearRegion() *AssetHistoryUpdate {
+	_u.mutation.ClearRegion()
+	return _u
+}
+
+// SetContainsPii sets the "contains_pii" field.
+func (_u *AssetHistoryUpdate) SetContainsPii(v bool) *AssetHistoryUpdate {
+	_u.mutation.SetContainsPii(v)
+	return _u
+}
+
+// SetNillableContainsPii sets the "contains_pii" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableContainsPii(v *bool) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetContainsPii(*v)
+	}
+	return _u
+}
+
+// ClearContainsPii clears the value of the "contains_pii" field.
+func (_u *AssetHistoryUpdate) ClearContainsPii() *AssetHistoryUpdate {
+	_u.mutation.ClearContainsPii()
+	return _u
+}
+
+// SetSourceType sets the "source_type" field.
+func (_u *AssetHistoryUpdate) SetSourceType(v enums.SourceType) *AssetHistoryUpdate {
+	_u.mutation.SetSourceType(v)
+	return _u
+}
+
+// SetNillableSourceType sets the "source_type" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableSourceType(v *enums.SourceType) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetSourceType(*v)
+	}
+	return _u
+}
+
+// SetSourcePlatformID sets the "source_platform_id" field.
+func (_u *AssetHistoryUpdate) SetSourcePlatformID(v string) *AssetHistoryUpdate {
+	_u.mutation.SetSourcePlatformID(v)
+	return _u
+}
+
+// SetNillableSourcePlatformID sets the "source_platform_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableSourcePlatformID(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetSourcePlatformID(*v)
+	}
+	return _u
+}
+
+// ClearSourcePlatformID clears the value of the "source_platform_id" field.
+func (_u *AssetHistoryUpdate) ClearSourcePlatformID() *AssetHistoryUpdate {
+	_u.mutation.ClearSourcePlatformID()
+	return _u
+}
+
+// SetSourceIdentifier sets the "source_identifier" field.
+func (_u *AssetHistoryUpdate) SetSourceIdentifier(v string) *AssetHistoryUpdate {
+	_u.mutation.SetSourceIdentifier(v)
+	return _u
+}
+
+// SetNillableSourceIdentifier sets the "source_identifier" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableSourceIdentifier(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetSourceIdentifier(*v)
+	}
+	return _u
+}
+
+// ClearSourceIdentifier clears the value of the "source_identifier" field.
+func (_u *AssetHistoryUpdate) ClearSourceIdentifier() *AssetHistoryUpdate {
+	_u.mutation.ClearSourceIdentifier()
+	return _u
+}
+
+// SetCostCenter sets the "cost_center" field.
+func (_u *AssetHistoryUpdate) SetCostCenter(v string) *AssetHistoryUpdate {
+	_u.mutation.SetCostCenter(v)
+	return _u
+}
+
+// SetNillableCostCenter sets the "cost_center" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableCostCenter(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetCostCenter(*v)
+	}
+	return _u
+}
+
+// ClearCostCenter clears the value of the "cost_center" field.
+func (_u *AssetHistoryUpdate) ClearCostCenter() *AssetHistoryUpdate {
+	_u.mutation.ClearCostCenter()
+	return _u
+}
+
+// SetEstimatedMonthlyCost sets the "estimated_monthly_cost" field.
+func (_u *AssetHistoryUpdate) SetEstimatedMonthlyCost(v float64) *AssetHistoryUpdate {
+	_u.mutation.ResetEstimatedMonthlyCost()
+	_u.mutation.SetEstimatedMonthlyCost(v)
+	return _u
+}
+
+// SetNillableEstimatedMonthlyCost sets the "estimated_monthly_cost" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableEstimatedMonthlyCost(v *float64) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetEstimatedMonthlyCost(*v)
+	}
+	return _u
+}
+
+// AddEstimatedMonthlyCost adds value to the "estimated_monthly_cost" field.
+func (_u *AssetHistoryUpdate) AddEstimatedMonthlyCost(v float64) *AssetHistoryUpdate {
+	_u.mutation.AddEstimatedMonthlyCost(v)
+	return _u
+}
+
+// ClearEstimatedMonthlyCost clears the value of the "estimated_monthly_cost" field.
+func (_u *AssetHistoryUpdate) ClearEstimatedMonthlyCost() *AssetHistoryUpdate {
+	_u.mutation.ClearEstimatedMonthlyCost()
+	return _u
+}
+
+// SetPurchaseDate sets the "purchase_date" field.
+func (_u *AssetHistoryUpdate) SetPurchaseDate(v models.DateTime) *AssetHistoryUpdate {
+	_u.mutation.SetPurchaseDate(v)
+	return _u
+}
+
+// SetNillablePurchaseDate sets the "purchase_date" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillablePurchaseDate(v *models.DateTime) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetPurchaseDate(*v)
+	}
+	return _u
+}
+
+// ClearPurchaseDate clears the value of the "purchase_date" field.
+func (_u *AssetHistoryUpdate) ClearPurchaseDate() *AssetHistoryUpdate {
+	_u.mutation.ClearPurchaseDate()
+	return _u
+}
+
 // SetCpe sets the "cpe" field.
 func (_u *AssetHistoryUpdate) SetCpe(v string) *AssetHistoryUpdate {
 	_u.mutation.SetCpe(v)
@@ -345,6 +907,11 @@ func (_u *AssetHistoryUpdate) check() error {
 			return &ValidationError{Name: "asset_type", err: fmt.Errorf(`historygenerated: validator failed for field "AssetHistory.asset_type": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.SourceType(); ok {
+		if err := assethistory.SourceTypeValidator(v); err != nil {
+			return &ValidationError{Name: "source_type", err: fmt.Errorf(`historygenerated: validator failed for field "AssetHistory.source_type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -413,6 +980,120 @@ func (_u *AssetHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assethistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.InternalOwner(); ok {
+		_spec.SetField(assethistory.FieldInternalOwner, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(assethistory.FieldInternalOwner, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalOwnerUserID(); ok {
+		_spec.SetField(assethistory.FieldInternalOwnerUserID, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerUserIDCleared() {
+		_spec.ClearField(assethistory.FieldInternalOwnerUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalOwnerGroupID(); ok {
+		_spec.SetField(assethistory.FieldInternalOwnerGroupID, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerGroupIDCleared() {
+		_spec.ClearField(assethistory.FieldInternalOwnerGroupID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssetSubtypeName(); ok {
+		_spec.SetField(assethistory.FieldAssetSubtypeName, field.TypeString, value)
+	}
+	if _u.mutation.AssetSubtypeNameCleared() {
+		_spec.ClearField(assethistory.FieldAssetSubtypeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssetSubtypeID(); ok {
+		_spec.SetField(assethistory.FieldAssetSubtypeID, field.TypeString, value)
+	}
+	if _u.mutation.AssetSubtypeIDCleared() {
+		_spec.ClearField(assethistory.FieldAssetSubtypeID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssetDataClassificationName(); ok {
+		_spec.SetField(assethistory.FieldAssetDataClassificationName, field.TypeString, value)
+	}
+	if _u.mutation.AssetDataClassificationNameCleared() {
+		_spec.ClearField(assethistory.FieldAssetDataClassificationName, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssetDataClassificationID(); ok {
+		_spec.SetField(assethistory.FieldAssetDataClassificationID, field.TypeString, value)
+	}
+	if _u.mutation.AssetDataClassificationIDCleared() {
+		_spec.ClearField(assethistory.FieldAssetDataClassificationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(assethistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(assethistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(assethistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(assethistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(assethistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(assethistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(assethistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(assethistory.FieldScopeID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AccessModelName(); ok {
+		_spec.SetField(assethistory.FieldAccessModelName, field.TypeString, value)
+	}
+	if _u.mutation.AccessModelNameCleared() {
+		_spec.ClearField(assethistory.FieldAccessModelName, field.TypeString)
+	}
+	if value, ok := _u.mutation.AccessModelID(); ok {
+		_spec.SetField(assethistory.FieldAccessModelID, field.TypeString, value)
+	}
+	if _u.mutation.AccessModelIDCleared() {
+		_spec.ClearField(assethistory.FieldAccessModelID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EncryptionStatusName(); ok {
+		_spec.SetField(assethistory.FieldEncryptionStatusName, field.TypeString, value)
+	}
+	if _u.mutation.EncryptionStatusNameCleared() {
+		_spec.ClearField(assethistory.FieldEncryptionStatusName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EncryptionStatusID(); ok {
+		_spec.SetField(assethistory.FieldEncryptionStatusID, field.TypeString, value)
+	}
+	if _u.mutation.EncryptionStatusIDCleared() {
+		_spec.ClearField(assethistory.FieldEncryptionStatusID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityTierName(); ok {
+		_spec.SetField(assethistory.FieldSecurityTierName, field.TypeString, value)
+	}
+	if _u.mutation.SecurityTierNameCleared() {
+		_spec.ClearField(assethistory.FieldSecurityTierName, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityTierID(); ok {
+		_spec.SetField(assethistory.FieldSecurityTierID, field.TypeString, value)
+	}
+	if _u.mutation.SecurityTierIDCleared() {
+		_spec.ClearField(assethistory.FieldSecurityTierID, field.TypeString)
+	}
+	if value, ok := _u.mutation.CriticalityName(); ok {
+		_spec.SetField(assethistory.FieldCriticalityName, field.TypeString, value)
+	}
+	if _u.mutation.CriticalityNameCleared() {
+		_spec.ClearField(assethistory.FieldCriticalityName, field.TypeString)
+	}
+	if value, ok := _u.mutation.CriticalityID(); ok {
+		_spec.SetField(assethistory.FieldCriticalityID, field.TypeString, value)
+	}
+	if _u.mutation.CriticalityIDCleared() {
+		_spec.ClearField(assethistory.FieldCriticalityID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(assethistory.FieldSystemOwned, field.TypeBool)
 	}
@@ -451,6 +1132,60 @@ func (_u *AssetHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.WebsiteCleared() {
 		_spec.ClearField(assethistory.FieldWebsite, field.TypeString)
+	}
+	if value, ok := _u.mutation.PhysicalLocation(); ok {
+		_spec.SetField(assethistory.FieldPhysicalLocation, field.TypeString, value)
+	}
+	if _u.mutation.PhysicalLocationCleared() {
+		_spec.ClearField(assethistory.FieldPhysicalLocation, field.TypeString)
+	}
+	if value, ok := _u.mutation.Region(); ok {
+		_spec.SetField(assethistory.FieldRegion, field.TypeString, value)
+	}
+	if _u.mutation.RegionCleared() {
+		_spec.ClearField(assethistory.FieldRegion, field.TypeString)
+	}
+	if value, ok := _u.mutation.ContainsPii(); ok {
+		_spec.SetField(assethistory.FieldContainsPii, field.TypeBool, value)
+	}
+	if _u.mutation.ContainsPiiCleared() {
+		_spec.ClearField(assethistory.FieldContainsPii, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SourceType(); ok {
+		_spec.SetField(assethistory.FieldSourceType, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.SourcePlatformID(); ok {
+		_spec.SetField(assethistory.FieldSourcePlatformID, field.TypeString, value)
+	}
+	if _u.mutation.SourcePlatformIDCleared() {
+		_spec.ClearField(assethistory.FieldSourcePlatformID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceIdentifier(); ok {
+		_spec.SetField(assethistory.FieldSourceIdentifier, field.TypeString, value)
+	}
+	if _u.mutation.SourceIdentifierCleared() {
+		_spec.ClearField(assethistory.FieldSourceIdentifier, field.TypeString)
+	}
+	if value, ok := _u.mutation.CostCenter(); ok {
+		_spec.SetField(assethistory.FieldCostCenter, field.TypeString, value)
+	}
+	if _u.mutation.CostCenterCleared() {
+		_spec.ClearField(assethistory.FieldCostCenter, field.TypeString)
+	}
+	if value, ok := _u.mutation.EstimatedMonthlyCost(); ok {
+		_spec.SetField(assethistory.FieldEstimatedMonthlyCost, field.TypeFloat64, value)
+	}
+	if value, ok := _u.mutation.AddedEstimatedMonthlyCost(); ok {
+		_spec.AddField(assethistory.FieldEstimatedMonthlyCost, field.TypeFloat64, value)
+	}
+	if _u.mutation.EstimatedMonthlyCostCleared() {
+		_spec.ClearField(assethistory.FieldEstimatedMonthlyCost, field.TypeFloat64)
+	}
+	if value, ok := _u.mutation.PurchaseDate(); ok {
+		_spec.SetField(assethistory.FieldPurchaseDate, field.TypeTime, value)
+	}
+	if _u.mutation.PurchaseDateCleared() {
+		_spec.ClearField(assethistory.FieldPurchaseDate, field.TypeTime)
 	}
 	if value, ok := _u.mutation.Cpe(); ok {
 		_spec.SetField(assethistory.FieldCpe, field.TypeString, value)
@@ -583,6 +1318,386 @@ func (_u *AssetHistoryUpdateOne) ClearTags() *AssetHistoryUpdateOne {
 	return _u
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_u *AssetHistoryUpdateOne) SetInternalOwner(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetInternalOwner(v)
+	return _u
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableInternalOwner(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalOwner(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (_u *AssetHistoryUpdateOne) ClearInternalOwner() *AssetHistoryUpdateOne {
+	_u.mutation.ClearInternalOwner()
+	return _u
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_u *AssetHistoryUpdateOne) SetInternalOwnerUserID(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetInternalOwnerUserID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableInternalOwnerUserID(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerUserID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (_u *AssetHistoryUpdateOne) ClearInternalOwnerUserID() *AssetHistoryUpdateOne {
+	_u.mutation.ClearInternalOwnerUserID()
+	return _u
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_u *AssetHistoryUpdateOne) SetInternalOwnerGroupID(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetInternalOwnerGroupID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableInternalOwnerGroupID(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerGroupID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (_u *AssetHistoryUpdateOne) ClearInternalOwnerGroupID() *AssetHistoryUpdateOne {
+	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetAssetSubtypeName sets the "asset_subtype_name" field.
+func (_u *AssetHistoryUpdateOne) SetAssetSubtypeName(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetAssetSubtypeName(v)
+	return _u
+}
+
+// SetNillableAssetSubtypeName sets the "asset_subtype_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableAssetSubtypeName(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssetSubtypeName(*v)
+	}
+	return _u
+}
+
+// ClearAssetSubtypeName clears the value of the "asset_subtype_name" field.
+func (_u *AssetHistoryUpdateOne) ClearAssetSubtypeName() *AssetHistoryUpdateOne {
+	_u.mutation.ClearAssetSubtypeName()
+	return _u
+}
+
+// SetAssetSubtypeID sets the "asset_subtype_id" field.
+func (_u *AssetHistoryUpdateOne) SetAssetSubtypeID(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetAssetSubtypeID(v)
+	return _u
+}
+
+// SetNillableAssetSubtypeID sets the "asset_subtype_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableAssetSubtypeID(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssetSubtypeID(*v)
+	}
+	return _u
+}
+
+// ClearAssetSubtypeID clears the value of the "asset_subtype_id" field.
+func (_u *AssetHistoryUpdateOne) ClearAssetSubtypeID() *AssetHistoryUpdateOne {
+	_u.mutation.ClearAssetSubtypeID()
+	return _u
+}
+
+// SetAssetDataClassificationName sets the "asset_data_classification_name" field.
+func (_u *AssetHistoryUpdateOne) SetAssetDataClassificationName(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetAssetDataClassificationName(v)
+	return _u
+}
+
+// SetNillableAssetDataClassificationName sets the "asset_data_classification_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableAssetDataClassificationName(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssetDataClassificationName(*v)
+	}
+	return _u
+}
+
+// ClearAssetDataClassificationName clears the value of the "asset_data_classification_name" field.
+func (_u *AssetHistoryUpdateOne) ClearAssetDataClassificationName() *AssetHistoryUpdateOne {
+	_u.mutation.ClearAssetDataClassificationName()
+	return _u
+}
+
+// SetAssetDataClassificationID sets the "asset_data_classification_id" field.
+func (_u *AssetHistoryUpdateOne) SetAssetDataClassificationID(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetAssetDataClassificationID(v)
+	return _u
+}
+
+// SetNillableAssetDataClassificationID sets the "asset_data_classification_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableAssetDataClassificationID(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssetDataClassificationID(*v)
+	}
+	return _u
+}
+
+// ClearAssetDataClassificationID clears the value of the "asset_data_classification_id" field.
+func (_u *AssetHistoryUpdateOne) ClearAssetDataClassificationID() *AssetHistoryUpdateOne {
+	_u.mutation.ClearAssetDataClassificationID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *AssetHistoryUpdateOne) SetEnvironmentName(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableEnvironmentName(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *AssetHistoryUpdateOne) ClearEnvironmentName() *AssetHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *AssetHistoryUpdateOne) SetEnvironmentID(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableEnvironmentID(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *AssetHistoryUpdateOne) ClearEnvironmentID() *AssetHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *AssetHistoryUpdateOne) SetScopeName(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableScopeName(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *AssetHistoryUpdateOne) ClearScopeName() *AssetHistoryUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *AssetHistoryUpdateOne) SetScopeID(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableScopeID(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *AssetHistoryUpdateOne) ClearScopeID() *AssetHistoryUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetAccessModelName sets the "access_model_name" field.
+func (_u *AssetHistoryUpdateOne) SetAccessModelName(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetAccessModelName(v)
+	return _u
+}
+
+// SetNillableAccessModelName sets the "access_model_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableAccessModelName(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetAccessModelName(*v)
+	}
+	return _u
+}
+
+// ClearAccessModelName clears the value of the "access_model_name" field.
+func (_u *AssetHistoryUpdateOne) ClearAccessModelName() *AssetHistoryUpdateOne {
+	_u.mutation.ClearAccessModelName()
+	return _u
+}
+
+// SetAccessModelID sets the "access_model_id" field.
+func (_u *AssetHistoryUpdateOne) SetAccessModelID(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetAccessModelID(v)
+	return _u
+}
+
+// SetNillableAccessModelID sets the "access_model_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableAccessModelID(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetAccessModelID(*v)
+	}
+	return _u
+}
+
+// ClearAccessModelID clears the value of the "access_model_id" field.
+func (_u *AssetHistoryUpdateOne) ClearAccessModelID() *AssetHistoryUpdateOne {
+	_u.mutation.ClearAccessModelID()
+	return _u
+}
+
+// SetEncryptionStatusName sets the "encryption_status_name" field.
+func (_u *AssetHistoryUpdateOne) SetEncryptionStatusName(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetEncryptionStatusName(v)
+	return _u
+}
+
+// SetNillableEncryptionStatusName sets the "encryption_status_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableEncryptionStatusName(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetEncryptionStatusName(*v)
+	}
+	return _u
+}
+
+// ClearEncryptionStatusName clears the value of the "encryption_status_name" field.
+func (_u *AssetHistoryUpdateOne) ClearEncryptionStatusName() *AssetHistoryUpdateOne {
+	_u.mutation.ClearEncryptionStatusName()
+	return _u
+}
+
+// SetEncryptionStatusID sets the "encryption_status_id" field.
+func (_u *AssetHistoryUpdateOne) SetEncryptionStatusID(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetEncryptionStatusID(v)
+	return _u
+}
+
+// SetNillableEncryptionStatusID sets the "encryption_status_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableEncryptionStatusID(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetEncryptionStatusID(*v)
+	}
+	return _u
+}
+
+// ClearEncryptionStatusID clears the value of the "encryption_status_id" field.
+func (_u *AssetHistoryUpdateOne) ClearEncryptionStatusID() *AssetHistoryUpdateOne {
+	_u.mutation.ClearEncryptionStatusID()
+	return _u
+}
+
+// SetSecurityTierName sets the "security_tier_name" field.
+func (_u *AssetHistoryUpdateOne) SetSecurityTierName(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetSecurityTierName(v)
+	return _u
+}
+
+// SetNillableSecurityTierName sets the "security_tier_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableSecurityTierName(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetSecurityTierName(*v)
+	}
+	return _u
+}
+
+// ClearSecurityTierName clears the value of the "security_tier_name" field.
+func (_u *AssetHistoryUpdateOne) ClearSecurityTierName() *AssetHistoryUpdateOne {
+	_u.mutation.ClearSecurityTierName()
+	return _u
+}
+
+// SetSecurityTierID sets the "security_tier_id" field.
+func (_u *AssetHistoryUpdateOne) SetSecurityTierID(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetSecurityTierID(v)
+	return _u
+}
+
+// SetNillableSecurityTierID sets the "security_tier_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableSecurityTierID(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetSecurityTierID(*v)
+	}
+	return _u
+}
+
+// ClearSecurityTierID clears the value of the "security_tier_id" field.
+func (_u *AssetHistoryUpdateOne) ClearSecurityTierID() *AssetHistoryUpdateOne {
+	_u.mutation.ClearSecurityTierID()
+	return _u
+}
+
+// SetCriticalityName sets the "criticality_name" field.
+func (_u *AssetHistoryUpdateOne) SetCriticalityName(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetCriticalityName(v)
+	return _u
+}
+
+// SetNillableCriticalityName sets the "criticality_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableCriticalityName(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetCriticalityName(*v)
+	}
+	return _u
+}
+
+// ClearCriticalityName clears the value of the "criticality_name" field.
+func (_u *AssetHistoryUpdateOne) ClearCriticalityName() *AssetHistoryUpdateOne {
+	_u.mutation.ClearCriticalityName()
+	return _u
+}
+
+// SetCriticalityID sets the "criticality_id" field.
+func (_u *AssetHistoryUpdateOne) SetCriticalityID(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetCriticalityID(v)
+	return _u
+}
+
+// SetNillableCriticalityID sets the "criticality_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableCriticalityID(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetCriticalityID(*v)
+	}
+	return _u
+}
+
+// ClearCriticalityID clears the value of the "criticality_id" field.
+func (_u *AssetHistoryUpdateOne) ClearCriticalityID() *AssetHistoryUpdateOne {
+	_u.mutation.ClearCriticalityID()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *AssetHistoryUpdateOne) SetInternalNotes(v string) *AssetHistoryUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -711,6 +1826,187 @@ func (_u *AssetHistoryUpdateOne) ClearWebsite() *AssetHistoryUpdateOne {
 	return _u
 }
 
+// SetPhysicalLocation sets the "physical_location" field.
+func (_u *AssetHistoryUpdateOne) SetPhysicalLocation(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetPhysicalLocation(v)
+	return _u
+}
+
+// SetNillablePhysicalLocation sets the "physical_location" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillablePhysicalLocation(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetPhysicalLocation(*v)
+	}
+	return _u
+}
+
+// ClearPhysicalLocation clears the value of the "physical_location" field.
+func (_u *AssetHistoryUpdateOne) ClearPhysicalLocation() *AssetHistoryUpdateOne {
+	_u.mutation.ClearPhysicalLocation()
+	return _u
+}
+
+// SetRegion sets the "region" field.
+func (_u *AssetHistoryUpdateOne) SetRegion(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetRegion(v)
+	return _u
+}
+
+// SetNillableRegion sets the "region" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableRegion(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetRegion(*v)
+	}
+	return _u
+}
+
+// ClearRegion clears the value of the "region" field.
+func (_u *AssetHistoryUpdateOne) ClearRegion() *AssetHistoryUpdateOne {
+	_u.mutation.ClearRegion()
+	return _u
+}
+
+// SetContainsPii sets the "contains_pii" field.
+func (_u *AssetHistoryUpdateOne) SetContainsPii(v bool) *AssetHistoryUpdateOne {
+	_u.mutation.SetContainsPii(v)
+	return _u
+}
+
+// SetNillableContainsPii sets the "contains_pii" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableContainsPii(v *bool) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetContainsPii(*v)
+	}
+	return _u
+}
+
+// ClearContainsPii clears the value of the "contains_pii" field.
+func (_u *AssetHistoryUpdateOne) ClearContainsPii() *AssetHistoryUpdateOne {
+	_u.mutation.ClearContainsPii()
+	return _u
+}
+
+// SetSourceType sets the "source_type" field.
+func (_u *AssetHistoryUpdateOne) SetSourceType(v enums.SourceType) *AssetHistoryUpdateOne {
+	_u.mutation.SetSourceType(v)
+	return _u
+}
+
+// SetNillableSourceType sets the "source_type" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableSourceType(v *enums.SourceType) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetSourceType(*v)
+	}
+	return _u
+}
+
+// SetSourcePlatformID sets the "source_platform_id" field.
+func (_u *AssetHistoryUpdateOne) SetSourcePlatformID(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetSourcePlatformID(v)
+	return _u
+}
+
+// SetNillableSourcePlatformID sets the "source_platform_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableSourcePlatformID(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetSourcePlatformID(*v)
+	}
+	return _u
+}
+
+// ClearSourcePlatformID clears the value of the "source_platform_id" field.
+func (_u *AssetHistoryUpdateOne) ClearSourcePlatformID() *AssetHistoryUpdateOne {
+	_u.mutation.ClearSourcePlatformID()
+	return _u
+}
+
+// SetSourceIdentifier sets the "source_identifier" field.
+func (_u *AssetHistoryUpdateOne) SetSourceIdentifier(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetSourceIdentifier(v)
+	return _u
+}
+
+// SetNillableSourceIdentifier sets the "source_identifier" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableSourceIdentifier(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetSourceIdentifier(*v)
+	}
+	return _u
+}
+
+// ClearSourceIdentifier clears the value of the "source_identifier" field.
+func (_u *AssetHistoryUpdateOne) ClearSourceIdentifier() *AssetHistoryUpdateOne {
+	_u.mutation.ClearSourceIdentifier()
+	return _u
+}
+
+// SetCostCenter sets the "cost_center" field.
+func (_u *AssetHistoryUpdateOne) SetCostCenter(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetCostCenter(v)
+	return _u
+}
+
+// SetNillableCostCenter sets the "cost_center" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableCostCenter(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetCostCenter(*v)
+	}
+	return _u
+}
+
+// ClearCostCenter clears the value of the "cost_center" field.
+func (_u *AssetHistoryUpdateOne) ClearCostCenter() *AssetHistoryUpdateOne {
+	_u.mutation.ClearCostCenter()
+	return _u
+}
+
+// SetEstimatedMonthlyCost sets the "estimated_monthly_cost" field.
+func (_u *AssetHistoryUpdateOne) SetEstimatedMonthlyCost(v float64) *AssetHistoryUpdateOne {
+	_u.mutation.ResetEstimatedMonthlyCost()
+	_u.mutation.SetEstimatedMonthlyCost(v)
+	return _u
+}
+
+// SetNillableEstimatedMonthlyCost sets the "estimated_monthly_cost" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableEstimatedMonthlyCost(v *float64) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetEstimatedMonthlyCost(*v)
+	}
+	return _u
+}
+
+// AddEstimatedMonthlyCost adds value to the "estimated_monthly_cost" field.
+func (_u *AssetHistoryUpdateOne) AddEstimatedMonthlyCost(v float64) *AssetHistoryUpdateOne {
+	_u.mutation.AddEstimatedMonthlyCost(v)
+	return _u
+}
+
+// ClearEstimatedMonthlyCost clears the value of the "estimated_monthly_cost" field.
+func (_u *AssetHistoryUpdateOne) ClearEstimatedMonthlyCost() *AssetHistoryUpdateOne {
+	_u.mutation.ClearEstimatedMonthlyCost()
+	return _u
+}
+
+// SetPurchaseDate sets the "purchase_date" field.
+func (_u *AssetHistoryUpdateOne) SetPurchaseDate(v models.DateTime) *AssetHistoryUpdateOne {
+	_u.mutation.SetPurchaseDate(v)
+	return _u
+}
+
+// SetNillablePurchaseDate sets the "purchase_date" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillablePurchaseDate(v *models.DateTime) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetPurchaseDate(*v)
+	}
+	return _u
+}
+
+// ClearPurchaseDate clears the value of the "purchase_date" field.
+func (_u *AssetHistoryUpdateOne) ClearPurchaseDate() *AssetHistoryUpdateOne {
+	_u.mutation.ClearPurchaseDate()
+	return _u
+}
+
 // SetCpe sets the "cpe" field.
 func (_u *AssetHistoryUpdateOne) SetCpe(v string) *AssetHistoryUpdateOne {
 	_u.mutation.SetCpe(v)
@@ -816,6 +2112,11 @@ func (_u *AssetHistoryUpdateOne) check() error {
 			return &ValidationError{Name: "asset_type", err: fmt.Errorf(`historygenerated: validator failed for field "AssetHistory.asset_type": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.SourceType(); ok {
+		if err := assethistory.SourceTypeValidator(v); err != nil {
+			return &ValidationError{Name: "source_type", err: fmt.Errorf(`historygenerated: validator failed for field "AssetHistory.source_type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -901,6 +2202,120 @@ func (_u *AssetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *AssetHisto
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assethistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.InternalOwner(); ok {
+		_spec.SetField(assethistory.FieldInternalOwner, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(assethistory.FieldInternalOwner, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalOwnerUserID(); ok {
+		_spec.SetField(assethistory.FieldInternalOwnerUserID, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerUserIDCleared() {
+		_spec.ClearField(assethistory.FieldInternalOwnerUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalOwnerGroupID(); ok {
+		_spec.SetField(assethistory.FieldInternalOwnerGroupID, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerGroupIDCleared() {
+		_spec.ClearField(assethistory.FieldInternalOwnerGroupID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssetSubtypeName(); ok {
+		_spec.SetField(assethistory.FieldAssetSubtypeName, field.TypeString, value)
+	}
+	if _u.mutation.AssetSubtypeNameCleared() {
+		_spec.ClearField(assethistory.FieldAssetSubtypeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssetSubtypeID(); ok {
+		_spec.SetField(assethistory.FieldAssetSubtypeID, field.TypeString, value)
+	}
+	if _u.mutation.AssetSubtypeIDCleared() {
+		_spec.ClearField(assethistory.FieldAssetSubtypeID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssetDataClassificationName(); ok {
+		_spec.SetField(assethistory.FieldAssetDataClassificationName, field.TypeString, value)
+	}
+	if _u.mutation.AssetDataClassificationNameCleared() {
+		_spec.ClearField(assethistory.FieldAssetDataClassificationName, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssetDataClassificationID(); ok {
+		_spec.SetField(assethistory.FieldAssetDataClassificationID, field.TypeString, value)
+	}
+	if _u.mutation.AssetDataClassificationIDCleared() {
+		_spec.ClearField(assethistory.FieldAssetDataClassificationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(assethistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(assethistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(assethistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(assethistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(assethistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(assethistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(assethistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(assethistory.FieldScopeID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AccessModelName(); ok {
+		_spec.SetField(assethistory.FieldAccessModelName, field.TypeString, value)
+	}
+	if _u.mutation.AccessModelNameCleared() {
+		_spec.ClearField(assethistory.FieldAccessModelName, field.TypeString)
+	}
+	if value, ok := _u.mutation.AccessModelID(); ok {
+		_spec.SetField(assethistory.FieldAccessModelID, field.TypeString, value)
+	}
+	if _u.mutation.AccessModelIDCleared() {
+		_spec.ClearField(assethistory.FieldAccessModelID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EncryptionStatusName(); ok {
+		_spec.SetField(assethistory.FieldEncryptionStatusName, field.TypeString, value)
+	}
+	if _u.mutation.EncryptionStatusNameCleared() {
+		_spec.ClearField(assethistory.FieldEncryptionStatusName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EncryptionStatusID(); ok {
+		_spec.SetField(assethistory.FieldEncryptionStatusID, field.TypeString, value)
+	}
+	if _u.mutation.EncryptionStatusIDCleared() {
+		_spec.ClearField(assethistory.FieldEncryptionStatusID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityTierName(); ok {
+		_spec.SetField(assethistory.FieldSecurityTierName, field.TypeString, value)
+	}
+	if _u.mutation.SecurityTierNameCleared() {
+		_spec.ClearField(assethistory.FieldSecurityTierName, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityTierID(); ok {
+		_spec.SetField(assethistory.FieldSecurityTierID, field.TypeString, value)
+	}
+	if _u.mutation.SecurityTierIDCleared() {
+		_spec.ClearField(assethistory.FieldSecurityTierID, field.TypeString)
+	}
+	if value, ok := _u.mutation.CriticalityName(); ok {
+		_spec.SetField(assethistory.FieldCriticalityName, field.TypeString, value)
+	}
+	if _u.mutation.CriticalityNameCleared() {
+		_spec.ClearField(assethistory.FieldCriticalityName, field.TypeString)
+	}
+	if value, ok := _u.mutation.CriticalityID(); ok {
+		_spec.SetField(assethistory.FieldCriticalityID, field.TypeString, value)
+	}
+	if _u.mutation.CriticalityIDCleared() {
+		_spec.ClearField(assethistory.FieldCriticalityID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(assethistory.FieldSystemOwned, field.TypeBool)
 	}
@@ -939,6 +2354,60 @@ func (_u *AssetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *AssetHisto
 	}
 	if _u.mutation.WebsiteCleared() {
 		_spec.ClearField(assethistory.FieldWebsite, field.TypeString)
+	}
+	if value, ok := _u.mutation.PhysicalLocation(); ok {
+		_spec.SetField(assethistory.FieldPhysicalLocation, field.TypeString, value)
+	}
+	if _u.mutation.PhysicalLocationCleared() {
+		_spec.ClearField(assethistory.FieldPhysicalLocation, field.TypeString)
+	}
+	if value, ok := _u.mutation.Region(); ok {
+		_spec.SetField(assethistory.FieldRegion, field.TypeString, value)
+	}
+	if _u.mutation.RegionCleared() {
+		_spec.ClearField(assethistory.FieldRegion, field.TypeString)
+	}
+	if value, ok := _u.mutation.ContainsPii(); ok {
+		_spec.SetField(assethistory.FieldContainsPii, field.TypeBool, value)
+	}
+	if _u.mutation.ContainsPiiCleared() {
+		_spec.ClearField(assethistory.FieldContainsPii, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SourceType(); ok {
+		_spec.SetField(assethistory.FieldSourceType, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.SourcePlatformID(); ok {
+		_spec.SetField(assethistory.FieldSourcePlatformID, field.TypeString, value)
+	}
+	if _u.mutation.SourcePlatformIDCleared() {
+		_spec.ClearField(assethistory.FieldSourcePlatformID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceIdentifier(); ok {
+		_spec.SetField(assethistory.FieldSourceIdentifier, field.TypeString, value)
+	}
+	if _u.mutation.SourceIdentifierCleared() {
+		_spec.ClearField(assethistory.FieldSourceIdentifier, field.TypeString)
+	}
+	if value, ok := _u.mutation.CostCenter(); ok {
+		_spec.SetField(assethistory.FieldCostCenter, field.TypeString, value)
+	}
+	if _u.mutation.CostCenterCleared() {
+		_spec.ClearField(assethistory.FieldCostCenter, field.TypeString)
+	}
+	if value, ok := _u.mutation.EstimatedMonthlyCost(); ok {
+		_spec.SetField(assethistory.FieldEstimatedMonthlyCost, field.TypeFloat64, value)
+	}
+	if value, ok := _u.mutation.AddedEstimatedMonthlyCost(); ok {
+		_spec.AddField(assethistory.FieldEstimatedMonthlyCost, field.TypeFloat64, value)
+	}
+	if _u.mutation.EstimatedMonthlyCostCleared() {
+		_spec.ClearField(assethistory.FieldEstimatedMonthlyCost, field.TypeFloat64)
+	}
+	if value, ok := _u.mutation.PurchaseDate(); ok {
+		_spec.SetField(assethistory.FieldPurchaseDate, field.TypeTime, value)
+	}
+	if _u.mutation.PurchaseDateCleared() {
+		_spec.ClearField(assethistory.FieldPurchaseDate, field.TypeTime)
 	}
 	if value, ok := _u.mutation.Cpe(); ok {
 		_spec.SetField(assethistory.FieldCpe, field.TypeString, value)

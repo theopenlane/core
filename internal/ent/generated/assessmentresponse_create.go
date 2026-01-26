@@ -13,7 +13,10 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 )
 
@@ -128,6 +131,62 @@ func (_c *AssessmentResponseCreate) SetAssessmentID(v string) *AssessmentRespons
 	return _c
 }
 
+// SetIsTest sets the "is_test" field.
+func (_c *AssessmentResponseCreate) SetIsTest(v bool) *AssessmentResponseCreate {
+	_c.mutation.SetIsTest(v)
+	return _c
+}
+
+// SetNillableIsTest sets the "is_test" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableIsTest(v *bool) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetIsTest(*v)
+	}
+	return _c
+}
+
+// SetCampaignID sets the "campaign_id" field.
+func (_c *AssessmentResponseCreate) SetCampaignID(v string) *AssessmentResponseCreate {
+	_c.mutation.SetCampaignID(v)
+	return _c
+}
+
+// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableCampaignID(v *string) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetCampaignID(*v)
+	}
+	return _c
+}
+
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_c *AssessmentResponseCreate) SetIdentityHolderID(v string) *AssessmentResponseCreate {
+	_c.mutation.SetIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableIdentityHolderID(v *string) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetIdentityHolderID(*v)
+	}
+	return _c
+}
+
+// SetEntityID sets the "entity_id" field.
+func (_c *AssessmentResponseCreate) SetEntityID(v string) *AssessmentResponseCreate {
+	_c.mutation.SetEntityID(v)
+	return _c
+}
+
+// SetNillableEntityID sets the "entity_id" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableEntityID(v *string) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetEntityID(*v)
+	}
+	return _c
+}
+
 // SetEmail sets the "email" field.
 func (_c *AssessmentResponseCreate) SetEmail(v string) *AssessmentResponseCreate {
 	_c.mutation.SetEmail(v)
@@ -145,6 +204,96 @@ func (_c *AssessmentResponseCreate) SetNillableSendAttempts(v *int) *AssessmentR
 	if v != nil {
 		_c.SetSendAttempts(*v)
 	}
+	return _c
+}
+
+// SetEmailDeliveredAt sets the "email_delivered_at" field.
+func (_c *AssessmentResponseCreate) SetEmailDeliveredAt(v time.Time) *AssessmentResponseCreate {
+	_c.mutation.SetEmailDeliveredAt(v)
+	return _c
+}
+
+// SetNillableEmailDeliveredAt sets the "email_delivered_at" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableEmailDeliveredAt(v *time.Time) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetEmailDeliveredAt(*v)
+	}
+	return _c
+}
+
+// SetEmailOpenedAt sets the "email_opened_at" field.
+func (_c *AssessmentResponseCreate) SetEmailOpenedAt(v time.Time) *AssessmentResponseCreate {
+	_c.mutation.SetEmailOpenedAt(v)
+	return _c
+}
+
+// SetNillableEmailOpenedAt sets the "email_opened_at" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableEmailOpenedAt(v *time.Time) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetEmailOpenedAt(*v)
+	}
+	return _c
+}
+
+// SetEmailClickedAt sets the "email_clicked_at" field.
+func (_c *AssessmentResponseCreate) SetEmailClickedAt(v time.Time) *AssessmentResponseCreate {
+	_c.mutation.SetEmailClickedAt(v)
+	return _c
+}
+
+// SetNillableEmailClickedAt sets the "email_clicked_at" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableEmailClickedAt(v *time.Time) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetEmailClickedAt(*v)
+	}
+	return _c
+}
+
+// SetEmailOpenCount sets the "email_open_count" field.
+func (_c *AssessmentResponseCreate) SetEmailOpenCount(v int) *AssessmentResponseCreate {
+	_c.mutation.SetEmailOpenCount(v)
+	return _c
+}
+
+// SetNillableEmailOpenCount sets the "email_open_count" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableEmailOpenCount(v *int) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetEmailOpenCount(*v)
+	}
+	return _c
+}
+
+// SetEmailClickCount sets the "email_click_count" field.
+func (_c *AssessmentResponseCreate) SetEmailClickCount(v int) *AssessmentResponseCreate {
+	_c.mutation.SetEmailClickCount(v)
+	return _c
+}
+
+// SetNillableEmailClickCount sets the "email_click_count" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableEmailClickCount(v *int) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetEmailClickCount(*v)
+	}
+	return _c
+}
+
+// SetLastEmailEventAt sets the "last_email_event_at" field.
+func (_c *AssessmentResponseCreate) SetLastEmailEventAt(v time.Time) *AssessmentResponseCreate {
+	_c.mutation.SetLastEmailEventAt(v)
+	return _c
+}
+
+// SetNillableLastEmailEventAt sets the "last_email_event_at" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableLastEmailEventAt(v *time.Time) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetLastEmailEventAt(*v)
+	}
+	return _c
+}
+
+// SetEmailMetadata sets the "email_metadata" field.
+func (_c *AssessmentResponseCreate) SetEmailMetadata(v map[string]interface{}) *AssessmentResponseCreate {
+	_c.mutation.SetEmailMetadata(v)
 	return _c
 }
 
@@ -256,6 +405,21 @@ func (_c *AssessmentResponseCreate) SetAssessment(v *Assessment) *AssessmentResp
 	return _c.SetAssessmentID(v.ID)
 }
 
+// SetCampaign sets the "campaign" edge to the Campaign entity.
+func (_c *AssessmentResponseCreate) SetCampaign(v *Campaign) *AssessmentResponseCreate {
+	return _c.SetCampaignID(v.ID)
+}
+
+// SetIdentityHolder sets the "identity_holder" edge to the IdentityHolder entity.
+func (_c *AssessmentResponseCreate) SetIdentityHolder(v *IdentityHolder) *AssessmentResponseCreate {
+	return _c.SetIdentityHolderID(v.ID)
+}
+
+// SetEntity sets the "entity" edge to the Entity entity.
+func (_c *AssessmentResponseCreate) SetEntity(v *Entity) *AssessmentResponseCreate {
+	return _c.SetEntityID(v.ID)
+}
+
 // SetDocumentID sets the "document" edge to the DocumentData entity by ID.
 func (_c *AssessmentResponseCreate) SetDocumentID(id string) *AssessmentResponseCreate {
 	_c.mutation.SetDocumentID(id)
@@ -326,9 +490,21 @@ func (_c *AssessmentResponseCreate) defaults() error {
 		v := assessmentresponse.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.IsTest(); !ok {
+		v := assessmentresponse.DefaultIsTest
+		_c.mutation.SetIsTest(v)
+	}
 	if _, ok := _c.mutation.SendAttempts(); !ok {
 		v := assessmentresponse.DefaultSendAttempts
 		_c.mutation.SetSendAttempts(v)
+	}
+	if _, ok := _c.mutation.EmailOpenCount(); !ok {
+		v := assessmentresponse.DefaultEmailOpenCount
+		_c.mutation.SetEmailOpenCount(v)
+	}
+	if _, ok := _c.mutation.EmailClickCount(); !ok {
+		v := assessmentresponse.DefaultEmailClickCount
+		_c.mutation.SetEmailClickCount(v)
 	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := assessmentresponse.DefaultStatus
@@ -369,6 +545,9 @@ func (_c *AssessmentResponseCreate) check() error {
 		if err := assessmentresponse.AssessmentIDValidator(v); err != nil {
 			return &ValidationError{Name: "assessment_id", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.assessment_id": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.IsTest(); !ok {
+		return &ValidationError{Name: "is_test", err: errors.New(`generated: missing required field "AssessmentResponse.is_test"`)}
 	}
 	if _, ok := _c.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`generated: missing required field "AssessmentResponse.email"`)}
@@ -458,6 +637,10 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 		_spec.SetField(assessmentresponse.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
+	if value, ok := _c.mutation.IsTest(); ok {
+		_spec.SetField(assessmentresponse.FieldIsTest, field.TypeBool, value)
+		_node.IsTest = value
+	}
 	if value, ok := _c.mutation.Email(); ok {
 		_spec.SetField(assessmentresponse.FieldEmail, field.TypeString, value)
 		_node.Email = value
@@ -465,6 +648,34 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 	if value, ok := _c.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponse.FieldSendAttempts, field.TypeInt, value)
 		_node.SendAttempts = value
+	}
+	if value, ok := _c.mutation.EmailDeliveredAt(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailDeliveredAt, field.TypeTime, value)
+		_node.EmailDeliveredAt = value
+	}
+	if value, ok := _c.mutation.EmailOpenedAt(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailOpenedAt, field.TypeTime, value)
+		_node.EmailOpenedAt = value
+	}
+	if value, ok := _c.mutation.EmailClickedAt(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailClickedAt, field.TypeTime, value)
+		_node.EmailClickedAt = value
+	}
+	if value, ok := _c.mutation.EmailOpenCount(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailOpenCount, field.TypeInt, value)
+		_node.EmailOpenCount = value
+	}
+	if value, ok := _c.mutation.EmailClickCount(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailClickCount, field.TypeInt, value)
+		_node.EmailClickCount = value
+	}
+	if value, ok := _c.mutation.LastEmailEventAt(); ok {
+		_spec.SetField(assessmentresponse.FieldLastEmailEventAt, field.TypeTime, value)
+		_node.LastEmailEventAt = value
+	}
+	if value, ok := _c.mutation.EmailMetadata(); ok {
+		_spec.SetField(assessmentresponse.FieldEmailMetadata, field.TypeJSON, value)
+		_node.EmailMetadata = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(assessmentresponse.FieldStatus, field.TypeEnum, value)
@@ -520,6 +731,60 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.AssessmentID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   assessmentresponse.CampaignTable,
+			Columns: []string{assessmentresponse.CampaignColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CampaignID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   assessmentresponse.IdentityHolderTable,
+			Columns: []string{assessmentresponse.IdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.IdentityHolderID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EntityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   assessmentresponse.EntityTable,
+			Columns: []string{assessmentresponse.EntityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EntityID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.DocumentIDs(); len(nodes) > 0 {

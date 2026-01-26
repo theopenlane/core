@@ -808,22 +808,6 @@ func (ec *executionContext) marshalOWorkflowEventPayload2githubᚗcomᚋtheopenl
 	return v
 }
 
-func (ec *executionContext) unmarshalOWorkflowEventPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowEventPayload(ctx context.Context, v any) (*models.WorkflowEventPayload, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(models.WorkflowEventPayload)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOWorkflowEventPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowEventPayload(ctx context.Context, sel ast.SelectionSet, v *models.WorkflowEventPayload) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
-}
-
 func (ec *executionContext) unmarshalOWorkflowInstanceContext2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, v any) (models.WorkflowInstanceContext, error) {
 	var res models.WorkflowInstanceContext
 	err := res.UnmarshalGQL(v)

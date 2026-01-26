@@ -40,6 +40,14 @@ const (
 	FieldTaskKindName = "task_kind_name"
 	// FieldTaskKindID holds the string denoting the task_kind_id field in the database.
 	FieldTaskKindID = "task_kind_id"
+	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
+	FieldEnvironmentName = "environment_name"
+	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
+	FieldEnvironmentID = "environment_id"
+	// FieldScopeName holds the string denoting the scope_name field in the database.
+	FieldScopeName = "scope_name"
+	// FieldScopeID holds the string denoting the scope_id field in the database.
+	FieldScopeID = "scope_id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
 	// FieldDetails holds the string denoting the details field in the database.
@@ -68,6 +76,10 @@ const (
 	EdgeOwner = "owner"
 	// EdgeTaskKind holds the string denoting the task_kind edge name in mutations.
 	EdgeTaskKind = "task_kind"
+	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
+	EdgeEnvironment = "environment"
+	// EdgeScope holds the string denoting the scope edge name in mutations.
+	EdgeScope = "scope"
 	// EdgeAssigner holds the string denoting the assigner edge name in mutations.
 	EdgeAssigner = "assigner"
 	// EdgeAssignee holds the string denoting the assignee edge name in mutations.
@@ -90,6 +102,12 @@ const (
 	EdgePrograms = "programs"
 	// EdgeRisks holds the string denoting the risks edge name in mutations.
 	EdgeRisks = "risks"
+	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
+	EdgePlatforms = "platforms"
+	// EdgeScans holds the string denoting the scans edge name in mutations.
+	EdgeScans = "scans"
+	// EdgeIdentityHolders holds the string denoting the identity_holders edge name in mutations.
+	EdgeIdentityHolders = "identity_holders"
 	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
 	EdgeControlImplementations = "control_implementations"
 	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
@@ -118,6 +136,20 @@ const (
 	TaskKindInverseTable = "custom_type_enums"
 	// TaskKindColumn is the table column denoting the task_kind relation/edge.
 	TaskKindColumn = "task_kind_id"
+	// EnvironmentTable is the table that holds the environment relation/edge.
+	EnvironmentTable = "tasks"
+	// EnvironmentInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	EnvironmentInverseTable = "custom_type_enums"
+	// EnvironmentColumn is the table column denoting the environment relation/edge.
+	EnvironmentColumn = "environment_id"
+	// ScopeTable is the table that holds the scope relation/edge.
+	ScopeTable = "tasks"
+	// ScopeInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ScopeInverseTable = "custom_type_enums"
+	// ScopeColumn is the table column denoting the scope relation/edge.
+	ScopeColumn = "scope_id"
 	// AssignerTable is the table that holds the assigner relation/edge.
 	AssignerTable = "tasks"
 	// AssignerInverseTable is the table name for the User entity.
@@ -179,6 +211,21 @@ const (
 	// RisksInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
 	RisksInverseTable = "risks"
+	// PlatformsTable is the table that holds the platforms relation/edge. The primary key declared below.
+	PlatformsTable = "platform_tasks"
+	// PlatformsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformsInverseTable = "platforms"
+	// ScansTable is the table that holds the scans relation/edge. The primary key declared below.
+	ScansTable = "scan_tasks"
+	// ScansInverseTable is the table name for the Scan entity.
+	// It exists in this package in order to avoid circular dependency with the "scan" package.
+	ScansInverseTable = "scans"
+	// IdentityHoldersTable is the table that holds the identity_holders relation/edge. The primary key declared below.
+	IdentityHoldersTable = "identity_holder_tasks"
+	// IdentityHoldersInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	IdentityHoldersInverseTable = "identity_holders"
 	// ControlImplementationsTable is the table that holds the control_implementations relation/edge. The primary key declared below.
 	ControlImplementationsTable = "control_implementation_tasks"
 	// ControlImplementationsInverseTable is the table name for the ControlImplementation entity.
@@ -225,6 +272,10 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldTaskKindName,
 	FieldTaskKindID,
+	FieldEnvironmentName,
+	FieldEnvironmentID,
+	FieldScopeName,
+	FieldScopeID,
 	FieldTitle,
 	FieldDetails,
 	FieldDetailsJSON,
@@ -275,6 +326,15 @@ var (
 	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
 	// primary key for the risks relation (M2M).
 	RisksPrimaryKey = []string{"risk_id", "task_id"}
+	// PlatformsPrimaryKey and PlatformsColumn2 are the table columns denoting the
+	// primary key for the platforms relation (M2M).
+	PlatformsPrimaryKey = []string{"platform_id", "task_id"}
+	// ScansPrimaryKey and ScansColumn2 are the table columns denoting the
+	// primary key for the scans relation (M2M).
+	ScansPrimaryKey = []string{"scan_id", "task_id"}
+	// IdentityHoldersPrimaryKey and IdentityHoldersColumn2 are the table columns denoting the
+	// primary key for the identity_holders relation (M2M).
+	IdentityHoldersPrimaryKey = []string{"identity_holder_id", "task_id"}
 	// ControlImplementationsPrimaryKey and ControlImplementationsColumn2 are the table columns denoting the
 	// primary key for the control_implementations relation (M2M).
 	ControlImplementationsPrimaryKey = []string{"control_implementation_id", "task_id"}
@@ -307,7 +367,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [11]ent.Hook
+	Hooks        [13]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -402,6 +462,26 @@ func ByTaskKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTaskKindID, opts...).ToFunc()
 }
 
+// ByEnvironmentName orders the results by the environment_name field.
+func ByEnvironmentName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentName, opts...).ToFunc()
+}
+
+// ByEnvironmentID orders the results by the environment_id field.
+func ByEnvironmentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentID, opts...).ToFunc()
+}
+
+// ByScopeName orders the results by the scope_name field.
+func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeName, opts...).ToFunc()
+}
+
+// ByScopeID orders the results by the scope_id field.
+func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
+}
+
 // ByTitle orders the results by the title field.
 func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
@@ -463,6 +543,20 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByTaskKindField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTaskKindStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEnvironmentField orders the results by environment field.
+func ByEnvironmentField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEnvironmentStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByScopeField orders the results by scope field.
+func ByScopeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScopeStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -606,6 +700,48 @@ func ByRisks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByPlatformsCount orders the results by platforms count.
+func ByPlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformsStep(), opts...)
+	}
+}
+
+// ByPlatforms orders the results by platforms terms.
+func ByPlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByScansCount orders the results by scans count.
+func ByScansCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newScansStep(), opts...)
+	}
+}
+
+// ByScans orders the results by scans terms.
+func ByScans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScansStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIdentityHoldersCount orders the results by identity_holders count.
+func ByIdentityHoldersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIdentityHoldersStep(), opts...)
+	}
+}
+
+// ByIdentityHolders orders the results by identity_holders terms.
+func ByIdentityHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIdentityHoldersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByControlImplementationsCount orders the results by control_implementations count.
 func ByControlImplementationsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -696,6 +832,20 @@ func newTaskKindStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, TaskKindTable, TaskKindColumn),
 	)
 }
+func newEnvironmentStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EnvironmentInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EnvironmentTable, EnvironmentColumn),
+	)
+}
+func newScopeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScopeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
+	)
+}
 func newAssignerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -771,6 +921,27 @@ func newRisksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RisksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, RisksTable, RisksPrimaryKey...),
+	)
+}
+func newPlatformsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
+	)
+}
+func newScansStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScansInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ScansTable, ScansPrimaryKey...),
+	)
+}
+func newIdentityHoldersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IdentityHoldersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
 	)
 }
 func newControlImplementationsStep() *sqlgraph.Step {

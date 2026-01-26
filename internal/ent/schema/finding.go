@@ -263,6 +263,8 @@ func (f Finding) Mixin() []ent.Mixin {
 			),
 			newGroupPermissionsMixin(),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
+			newCustomEnumMixin(f, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(f, withEnumFieldName("scope"), withGlobalEnum()),
 		},
 	}.getMixins(f)
 }
@@ -282,7 +284,10 @@ func (Finding) Indexes() []ent.Index {
 func (Finding) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.Exportable{},
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+			entx.WithSystemOwned(),
+		),
 	}
 }
 

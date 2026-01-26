@@ -16,12 +16,20 @@ func SetWorkflowInstanceObjectID(builder *WorkflowInstanceCreate, objectType enu
 	switch objectType {
 	case enums.WorkflowObjectTypeActionPlan:
 		return builder.SetActionPlanID(objectID)
+	case enums.WorkflowObjectTypeCampaign:
+		return builder.SetCampaignID(objectID)
+	case enums.WorkflowObjectTypeCampaignTarget:
+		return builder.SetCampaignTargetID(objectID)
 	case enums.WorkflowObjectTypeControl:
 		return builder.SetControlID(objectID)
 	case enums.WorkflowObjectTypeEvidence:
 		return builder.SetEvidenceID(objectID)
+	case enums.WorkflowObjectTypeIdentityHolder:
+		return builder.SetIdentityHolderID(objectID)
 	case enums.WorkflowObjectTypeInternalPolicy:
 		return builder.SetInternalPolicyID(objectID)
+	case enums.WorkflowObjectTypePlatform:
+		return builder.SetPlatformID(objectID)
 	case enums.WorkflowObjectTypeProcedure:
 		return builder.SetProcedureID(objectID)
 	case enums.WorkflowObjectTypeSubcontrol:
@@ -36,12 +44,20 @@ func SetWorkflowObjectRefObjectID(builder *WorkflowObjectRefCreate, objectType e
 	switch objectType {
 	case enums.WorkflowObjectTypeActionPlan:
 		return builder.SetActionPlanID(objectID)
+	case enums.WorkflowObjectTypeCampaign:
+		return builder.SetCampaignID(objectID)
+	case enums.WorkflowObjectTypeCampaignTarget:
+		return builder.SetCampaignTargetID(objectID)
 	case enums.WorkflowObjectTypeControl:
 		return builder.SetControlID(objectID)
 	case enums.WorkflowObjectTypeEvidence:
 		return builder.SetEvidenceID(objectID)
+	case enums.WorkflowObjectTypeIdentityHolder:
+		return builder.SetIdentityHolderID(objectID)
 	case enums.WorkflowObjectTypeInternalPolicy:
 		return builder.SetInternalPolicyID(objectID)
+	case enums.WorkflowObjectTypePlatform:
+		return builder.SetPlatformID(objectID)
 	case enums.WorkflowObjectTypeProcedure:
 		return builder.SetProcedureID(objectID)
 	case enums.WorkflowObjectTypeSubcontrol:
@@ -56,12 +72,20 @@ func ApplyWorkflowInstanceObjectPredicate(query *WorkflowInstanceQuery, objectTy
 	switch objectType {
 	case enums.WorkflowObjectTypeActionPlan:
 		return query.Where(workflowinstance.ActionPlanIDEQ(objectID))
+	case enums.WorkflowObjectTypeCampaign:
+		return query.Where(workflowinstance.CampaignIDEQ(objectID))
+	case enums.WorkflowObjectTypeCampaignTarget:
+		return query.Where(workflowinstance.CampaignTargetIDEQ(objectID))
 	case enums.WorkflowObjectTypeControl:
 		return query.Where(workflowinstance.ControlIDEQ(objectID))
 	case enums.WorkflowObjectTypeEvidence:
 		return query.Where(workflowinstance.EvidenceIDEQ(objectID))
+	case enums.WorkflowObjectTypeIdentityHolder:
+		return query.Where(workflowinstance.IdentityHolderIDEQ(objectID))
 	case enums.WorkflowObjectTypeInternalPolicy:
 		return query.Where(workflowinstance.InternalPolicyIDEQ(objectID))
+	case enums.WorkflowObjectTypePlatform:
+		return query.Where(workflowinstance.PlatformIDEQ(objectID))
 	case enums.WorkflowObjectTypeProcedure:
 		return query.Where(workflowinstance.ProcedureIDEQ(objectID))
 	case enums.WorkflowObjectTypeSubcontrol:
@@ -76,12 +100,20 @@ func ApplyWorkflowObjectRefObjectPredicate(query *WorkflowObjectRefQuery, object
 	switch objectType {
 	case enums.WorkflowObjectTypeActionPlan:
 		return query.Where(workflowobjectref.ActionPlanIDEQ(objectID))
+	case enums.WorkflowObjectTypeCampaign:
+		return query.Where(workflowobjectref.CampaignIDEQ(objectID))
+	case enums.WorkflowObjectTypeCampaignTarget:
+		return query.Where(workflowobjectref.CampaignTargetIDEQ(objectID))
 	case enums.WorkflowObjectTypeControl:
 		return query.Where(workflowobjectref.ControlIDEQ(objectID))
 	case enums.WorkflowObjectTypeEvidence:
 		return query.Where(workflowobjectref.EvidenceIDEQ(objectID))
+	case enums.WorkflowObjectTypeIdentityHolder:
+		return query.Where(workflowobjectref.IdentityHolderIDEQ(objectID))
 	case enums.WorkflowObjectTypeInternalPolicy:
 		return query.Where(workflowobjectref.InternalPolicyIDEQ(objectID))
+	case enums.WorkflowObjectTypePlatform:
+		return query.Where(workflowobjectref.PlatformIDEQ(objectID))
 	case enums.WorkflowObjectTypeProcedure:
 		return query.Where(workflowobjectref.ProcedureIDEQ(objectID))
 	case enums.WorkflowObjectTypeSubcontrol:
@@ -100,6 +132,18 @@ func GetObjectOwnerID(ctx context.Context, client *Client, objectType enums.Work
 			return "", err
 		}
 		return rec.OwnerID, nil
+	case enums.WorkflowObjectTypeCampaign:
+		rec, err := client.Campaign.Get(ctx, objectID)
+		if err != nil {
+			return "", err
+		}
+		return rec.OwnerID, nil
+	case enums.WorkflowObjectTypeCampaignTarget:
+		rec, err := client.CampaignTarget.Get(ctx, objectID)
+		if err != nil {
+			return "", err
+		}
+		return rec.OwnerID, nil
 	case enums.WorkflowObjectTypeControl:
 		rec, err := client.Control.Get(ctx, objectID)
 		if err != nil {
@@ -112,8 +156,20 @@ func GetObjectOwnerID(ctx context.Context, client *Client, objectType enums.Work
 			return "", err
 		}
 		return rec.OwnerID, nil
+	case enums.WorkflowObjectTypeIdentityHolder:
+		rec, err := client.IdentityHolder.Get(ctx, objectID)
+		if err != nil {
+			return "", err
+		}
+		return rec.OwnerID, nil
 	case enums.WorkflowObjectTypeInternalPolicy:
 		rec, err := client.InternalPolicy.Get(ctx, objectID)
+		if err != nil {
+			return "", err
+		}
+		return rec.OwnerID, nil
+	case enums.WorkflowObjectTypePlatform:
+		rec, err := client.Platform.Get(ctx, objectID)
 		if err != nil {
 			return "", err
 		}
@@ -140,12 +196,20 @@ func ApplyObjectFieldUpdates(ctx context.Context, client *Client, objectType enu
 	switch objectType {
 	case enums.WorkflowObjectTypeActionPlan:
 		return client.ActionPlan.ApplyFieldUpdates(ctx, objectID, updates)
+	case enums.WorkflowObjectTypeCampaign:
+		return client.Campaign.ApplyFieldUpdates(ctx, objectID, updates)
+	case enums.WorkflowObjectTypeCampaignTarget:
+		return client.CampaignTarget.ApplyFieldUpdates(ctx, objectID, updates)
 	case enums.WorkflowObjectTypeControl:
 		return client.Control.ApplyFieldUpdates(ctx, objectID, updates)
 	case enums.WorkflowObjectTypeEvidence:
 		return client.Evidence.ApplyFieldUpdates(ctx, objectID, updates)
+	case enums.WorkflowObjectTypeIdentityHolder:
+		return client.IdentityHolder.ApplyFieldUpdates(ctx, objectID, updates)
 	case enums.WorkflowObjectTypeInternalPolicy:
 		return client.InternalPolicy.ApplyFieldUpdates(ctx, objectID, updates)
+	case enums.WorkflowObjectTypePlatform:
+		return client.Platform.ApplyFieldUpdates(ctx, objectID, updates)
 	case enums.WorkflowObjectTypeProcedure:
 		return client.Procedure.ApplyFieldUpdates(ctx, objectID, updates)
 	case enums.WorkflowObjectTypeSubcontrol:

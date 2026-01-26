@@ -128,6 +128,14 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_controlKindName(ctx, field)
 			case "controlKindID":
 				return ec.fieldContext_Control_controlKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Control_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Control_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Control_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Control_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Control_workflowEligibleMarker(ctx, field)
 			case "refCode":
@@ -168,10 +176,16 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_editors(ctx, field)
 			case "controlKind":
 				return ec.fieldContext_Control_controlKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_Control_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Control_scope(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Control_platforms(ctx, field)
 			case "assets":
 				return ec.fieldContext_Control_assets(ctx, field)
 			case "scans":
@@ -190,8 +204,12 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_controlMappings(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Control_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Control_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Control_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Control_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -328,6 +346,14 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_controlKindName(ctx, field)
 			case "controlKindID":
 				return ec.fieldContext_Control_controlKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Control_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Control_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Control_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Control_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Control_workflowEligibleMarker(ctx, field)
 			case "refCode":
@@ -368,10 +394,16 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_editors(ctx, field)
 			case "controlKind":
 				return ec.fieldContext_Control_controlKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_Control_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Control_scope(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Control_platforms(ctx, field)
 			case "assets":
 				return ec.fieldContext_Control_assets(ctx, field)
 			case "scans":
@@ -390,8 +422,12 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_controlMappings(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Control_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Control_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Control_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Control_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -528,6 +564,14 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_controlKindName(ctx, field)
 			case "controlKindID":
 				return ec.fieldContext_Control_controlKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Control_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Control_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Control_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Control_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Control_workflowEligibleMarker(ctx, field)
 			case "refCode":
@@ -568,10 +612,16 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_editors(ctx, field)
 			case "controlKind":
 				return ec.fieldContext_Control_controlKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_Control_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Control_scope(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Control_platforms(ctx, field)
 			case "assets":
 				return ec.fieldContext_Control_assets(ctx, field)
 			case "scans":
@@ -590,8 +640,12 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_controlMappings(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Control_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Control_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Control_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Control_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -728,6 +782,14 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_controlKindName(ctx, field)
 			case "controlKindID":
 				return ec.fieldContext_Control_controlKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Control_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Control_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Control_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Control_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Control_workflowEligibleMarker(ctx, field)
 			case "refCode":
@@ -768,10 +830,16 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_editors(ctx, field)
 			case "controlKind":
 				return ec.fieldContext_Control_controlKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_Control_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Control_scope(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Control_platforms(ctx, field)
 			case "assets":
 				return ec.fieldContext_Control_assets(ctx, field)
 			case "scans":
@@ -790,8 +858,12 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_controlMappings(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Control_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Control_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Control_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Control_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},

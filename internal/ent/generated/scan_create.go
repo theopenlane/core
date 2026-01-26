@@ -11,11 +11,22 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 )
 
 // ScanCreate is the builder for creating a Scan entity.
@@ -129,6 +140,146 @@ func (_c *ScanCreate) SetNillableOwnerID(v *string) *ScanCreate {
 	return _c
 }
 
+// SetReviewedBy sets the "reviewed_by" field.
+func (_c *ScanCreate) SetReviewedBy(v string) *ScanCreate {
+	_c.mutation.SetReviewedBy(v)
+	return _c
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableReviewedBy(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetReviewedBy(*v)
+	}
+	return _c
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_c *ScanCreate) SetReviewedByUserID(v string) *ScanCreate {
+	_c.mutation.SetReviewedByUserID(v)
+	return _c
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableReviewedByUserID(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetReviewedByUserID(*v)
+	}
+	return _c
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_c *ScanCreate) SetReviewedByGroupID(v string) *ScanCreate {
+	_c.mutation.SetReviewedByGroupID(v)
+	return _c
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableReviewedByGroupID(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetReviewedByGroupID(*v)
+	}
+	return _c
+}
+
+// SetAssignedTo sets the "assigned_to" field.
+func (_c *ScanCreate) SetAssignedTo(v string) *ScanCreate {
+	_c.mutation.SetAssignedTo(v)
+	return _c
+}
+
+// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableAssignedTo(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetAssignedTo(*v)
+	}
+	return _c
+}
+
+// SetAssignedToUserID sets the "assigned_to_user_id" field.
+func (_c *ScanCreate) SetAssignedToUserID(v string) *ScanCreate {
+	_c.mutation.SetAssignedToUserID(v)
+	return _c
+}
+
+// SetNillableAssignedToUserID sets the "assigned_to_user_id" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableAssignedToUserID(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetAssignedToUserID(*v)
+	}
+	return _c
+}
+
+// SetAssignedToGroupID sets the "assigned_to_group_id" field.
+func (_c *ScanCreate) SetAssignedToGroupID(v string) *ScanCreate {
+	_c.mutation.SetAssignedToGroupID(v)
+	return _c
+}
+
+// SetNillableAssignedToGroupID sets the "assigned_to_group_id" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableAssignedToGroupID(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetAssignedToGroupID(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *ScanCreate) SetEnvironmentName(v string) *ScanCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableEnvironmentName(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *ScanCreate) SetEnvironmentID(v string) *ScanCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableEnvironmentID(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *ScanCreate) SetScopeName(v string) *ScanCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableScopeName(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *ScanCreate) SetScopeID(v string) *ScanCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableScopeID(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetTarget sets the "target" field.
 func (_c *ScanCreate) SetTarget(v string) *ScanCreate {
 	_c.mutation.SetTarget(v)
@@ -152,6 +303,110 @@ func (_c *ScanCreate) SetNillableScanType(v *enums.ScanType) *ScanCreate {
 // SetMetadata sets the "metadata" field.
 func (_c *ScanCreate) SetMetadata(v map[string]interface{}) *ScanCreate {
 	_c.mutation.SetMetadata(v)
+	return _c
+}
+
+// SetScanDate sets the "scan_date" field.
+func (_c *ScanCreate) SetScanDate(v models.DateTime) *ScanCreate {
+	_c.mutation.SetScanDate(v)
+	return _c
+}
+
+// SetNillableScanDate sets the "scan_date" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableScanDate(v *models.DateTime) *ScanCreate {
+	if v != nil {
+		_c.SetScanDate(*v)
+	}
+	return _c
+}
+
+// SetScanSchedule sets the "scan_schedule" field.
+func (_c *ScanCreate) SetScanSchedule(v models.Cron) *ScanCreate {
+	_c.mutation.SetScanSchedule(v)
+	return _c
+}
+
+// SetNillableScanSchedule sets the "scan_schedule" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableScanSchedule(v *models.Cron) *ScanCreate {
+	if v != nil {
+		_c.SetScanSchedule(*v)
+	}
+	return _c
+}
+
+// SetNextScanRunAt sets the "next_scan_run_at" field.
+func (_c *ScanCreate) SetNextScanRunAt(v models.DateTime) *ScanCreate {
+	_c.mutation.SetNextScanRunAt(v)
+	return _c
+}
+
+// SetNillableNextScanRunAt sets the "next_scan_run_at" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableNextScanRunAt(v *models.DateTime) *ScanCreate {
+	if v != nil {
+		_c.SetNextScanRunAt(*v)
+	}
+	return _c
+}
+
+// SetPerformedBy sets the "performed_by" field.
+func (_c *ScanCreate) SetPerformedBy(v string) *ScanCreate {
+	_c.mutation.SetPerformedBy(v)
+	return _c
+}
+
+// SetNillablePerformedBy sets the "performed_by" field if the given value is not nil.
+func (_c *ScanCreate) SetNillablePerformedBy(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetPerformedBy(*v)
+	}
+	return _c
+}
+
+// SetPerformedByUserID sets the "performed_by_user_id" field.
+func (_c *ScanCreate) SetPerformedByUserID(v string) *ScanCreate {
+	_c.mutation.SetPerformedByUserID(v)
+	return _c
+}
+
+// SetNillablePerformedByUserID sets the "performed_by_user_id" field if the given value is not nil.
+func (_c *ScanCreate) SetNillablePerformedByUserID(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetPerformedByUserID(*v)
+	}
+	return _c
+}
+
+// SetPerformedByGroupID sets the "performed_by_group_id" field.
+func (_c *ScanCreate) SetPerformedByGroupID(v string) *ScanCreate {
+	_c.mutation.SetPerformedByGroupID(v)
+	return _c
+}
+
+// SetNillablePerformedByGroupID sets the "performed_by_group_id" field if the given value is not nil.
+func (_c *ScanCreate) SetNillablePerformedByGroupID(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetPerformedByGroupID(*v)
+	}
+	return _c
+}
+
+// SetGeneratedByPlatformID sets the "generated_by_platform_id" field.
+func (_c *ScanCreate) SetGeneratedByPlatformID(v string) *ScanCreate {
+	_c.mutation.SetGeneratedByPlatformID(v)
+	return _c
+}
+
+// SetNillableGeneratedByPlatformID sets the "generated_by_platform_id" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableGeneratedByPlatformID(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetGeneratedByPlatformID(*v)
+	}
+	return _c
+}
+
+// SetVulnerabilityIds sets the "vulnerability_ids" field.
+func (_c *ScanCreate) SetVulnerabilityIds(v []string) *ScanCreate {
+	_c.mutation.SetVulnerabilityIds(v)
 	return _c
 }
 
@@ -233,6 +488,36 @@ func (_c *ScanCreate) AddViewers(v ...*Group) *ScanCreate {
 	return _c.AddViewerIDs(ids...)
 }
 
+// SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
+func (_c *ScanCreate) SetReviewedByUser(v *User) *ScanCreate {
+	return _c.SetReviewedByUserID(v.ID)
+}
+
+// SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
+func (_c *ScanCreate) SetReviewedByGroup(v *Group) *ScanCreate {
+	return _c.SetReviewedByGroupID(v.ID)
+}
+
+// SetAssignedToUser sets the "assigned_to_user" edge to the User entity.
+func (_c *ScanCreate) SetAssignedToUser(v *User) *ScanCreate {
+	return _c.SetAssignedToUserID(v.ID)
+}
+
+// SetAssignedToGroup sets the "assigned_to_group" edge to the Group entity.
+func (_c *ScanCreate) SetAssignedToGroup(v *Group) *ScanCreate {
+	return _c.SetAssignedToGroupID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_c *ScanCreate) SetEnvironment(v *CustomTypeEnum) *ScanCreate {
+	return _c.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_c *ScanCreate) SetScope(v *CustomTypeEnum) *ScanCreate {
+	return _c.SetScopeID(v.ID)
+}
+
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
 func (_c *ScanCreate) AddAssetIDs(ids ...string) *ScanCreate {
 	_c.mutation.AddAssetIDs(ids...)
@@ -261,6 +546,141 @@ func (_c *ScanCreate) AddEntities(v ...*Entity) *ScanCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddEntityIDs(ids...)
+}
+
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (_c *ScanCreate) AddEvidenceIDs(ids ...string) *ScanCreate {
+	_c.mutation.AddEvidenceIDs(ids...)
+	return _c
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (_c *ScanCreate) AddEvidence(v ...*Evidence) *ScanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEvidenceIDs(ids...)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_c *ScanCreate) AddFileIDs(ids ...string) *ScanCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_c *ScanCreate) AddFiles(v ...*File) *ScanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFileIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_c *ScanCreate) AddRemediationIDs(ids ...string) *ScanCreate {
+	_c.mutation.AddRemediationIDs(ids...)
+	return _c
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_c *ScanCreate) AddRemediations(v ...*Remediation) *ScanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRemediationIDs(ids...)
+}
+
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (_c *ScanCreate) AddActionPlanIDs(ids ...string) *ScanCreate {
+	_c.mutation.AddActionPlanIDs(ids...)
+	return _c
+}
+
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (_c *ScanCreate) AddActionPlans(v ...*ActionPlan) *ScanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddActionPlanIDs(ids...)
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_c *ScanCreate) AddTaskIDs(ids ...string) *ScanCreate {
+	_c.mutation.AddTaskIDs(ids...)
+	return _c
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_c *ScanCreate) AddTasks(v ...*Task) *ScanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTaskIDs(ids...)
+}
+
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_c *ScanCreate) AddPlatformIDs(ids ...string) *ScanCreate {
+	_c.mutation.AddPlatformIDs(ids...)
+	return _c
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_c *ScanCreate) AddPlatforms(v ...*Platform) *ScanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_c *ScanCreate) AddVulnerabilityIDs(ids ...string) *ScanCreate {
+	_c.mutation.AddVulnerabilityIDs(ids...)
+	return _c
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_c *ScanCreate) AddVulnerabilities(v ...*Vulnerability) *ScanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVulnerabilityIDs(ids...)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (_c *ScanCreate) AddControlIDs(ids ...string) *ScanCreate {
+	_c.mutation.AddControlIDs(ids...)
+	return _c
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (_c *ScanCreate) AddControls(v ...*Control) *ScanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddControlIDs(ids...)
+}
+
+// SetGeneratedByPlatform sets the "generated_by_platform" edge to the Platform entity.
+func (_c *ScanCreate) SetGeneratedByPlatform(v *Platform) *ScanCreate {
+	return _c.SetGeneratedByPlatformID(v.ID)
+}
+
+// SetPerformedByUser sets the "performed_by_user" edge to the User entity.
+func (_c *ScanCreate) SetPerformedByUser(v *User) *ScanCreate {
+	return _c.SetPerformedByUserID(v.ID)
+}
+
+// SetPerformedByGroup sets the "performed_by_group" edge to the Group entity.
+func (_c *ScanCreate) SetPerformedByGroup(v *Group) *ScanCreate {
+	return _c.SetPerformedByGroupID(v.ID)
 }
 
 // Mutation returns the ScanMutation object of the builder.
@@ -322,6 +742,10 @@ func (_c *ScanCreate) defaults() error {
 		v := scan.DefaultScanType
 		_c.mutation.SetScanType(v)
 	}
+	if _, ok := _c.mutation.VulnerabilityIds(); !ok {
+		v := scan.DefaultVulnerabilityIds
+		_c.mutation.SetVulnerabilityIds(v)
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := scan.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -357,6 +781,11 @@ func (_c *ScanCreate) check() error {
 	if v, ok := _c.mutation.ScanType(); ok {
 		if err := scan.ScanTypeValidator(v); err != nil {
 			return &ValidationError{Name: "scan_type", err: fmt.Errorf(`generated: validator failed for field "Scan.scan_type": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.ScanSchedule(); ok {
+		if err := scan.ScanScheduleValidator(string(v)); err != nil {
+			return &ValidationError{Name: "scan_schedule", err: fmt.Errorf(`generated: validator failed for field "Scan.scan_schedule": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.Status(); !ok {
@@ -431,6 +860,22 @@ func (_c *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 		_spec.SetField(scan.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.ReviewedBy(); ok {
+		_spec.SetField(scan.FieldReviewedBy, field.TypeString, value)
+		_node.ReviewedBy = value
+	}
+	if value, ok := _c.mutation.AssignedTo(); ok {
+		_spec.SetField(scan.FieldAssignedTo, field.TypeString, value)
+		_node.AssignedTo = value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(scan.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(scan.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
 	if value, ok := _c.mutation.Target(); ok {
 		_spec.SetField(scan.FieldTarget, field.TypeString, value)
 		_node.Target = value
@@ -442,6 +887,26 @@ func (_c *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(scan.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.ScanDate(); ok {
+		_spec.SetField(scan.FieldScanDate, field.TypeTime, value)
+		_node.ScanDate = &value
+	}
+	if value, ok := _c.mutation.ScanSchedule(); ok {
+		_spec.SetField(scan.FieldScanSchedule, field.TypeString, value)
+		_node.ScanSchedule = &value
+	}
+	if value, ok := _c.mutation.NextScanRunAt(); ok {
+		_spec.SetField(scan.FieldNextScanRunAt, field.TypeTime, value)
+		_node.NextScanRunAt = &value
+	}
+	if value, ok := _c.mutation.PerformedBy(); ok {
+		_spec.SetField(scan.FieldPerformedBy, field.TypeString, value)
+		_node.PerformedBy = value
+	}
+	if value, ok := _c.mutation.VulnerabilityIds(); ok {
+		_spec.SetField(scan.FieldVulnerabilityIds, field.TypeJSON, value)
+		_node.VulnerabilityIds = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(scan.FieldStatus, field.TypeEnum, value)
@@ -516,6 +981,114 @@ func (_c *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.ReviewedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ReviewedByUserTable,
+			Columns: []string{scan.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReviewedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewedByGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ReviewedByGroupTable,
+			Columns: []string{scan.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReviewedByGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssignedToUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.AssignedToUserTable,
+			Columns: []string{scan.AssignedToUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AssignedToUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssignedToGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.AssignedToGroupTable,
+			Columns: []string{scan.AssignedToGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AssignedToGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.EnvironmentTable,
+			Columns: []string{scan.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EnvironmentID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ScopeTable,
+			Columns: []string{scan.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ScopeID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.AssetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -548,6 +1121,196 @@ func (_c *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.EvidenceTable,
+			Columns: scan.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ScanEvidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.FilesTable,
+			Columns: scan.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ScanFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.RemediationsTable,
+			Columns: scan.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ScanRemediations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ActionPlansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.ActionPlansTable,
+			Columns: scan.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ScanActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scan.TasksTable,
+			Columns: scan.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ScanTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.PlatformsTable,
+			Columns: scan.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.PlatformScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.VulnerabilitiesTable,
+			Columns: scan.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.VulnerabilityScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.ControlsTable,
+			Columns: scan.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ControlScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.GeneratedByPlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scan.GeneratedByPlatformTable,
+			Columns: []string{scan.GeneratedByPlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.GeneratedByPlatformID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PerformedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.PerformedByUserTable,
+			Columns: []string{scan.PerformedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.PerformedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PerformedByGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.PerformedByGroupTable,
+			Columns: []string{scan.PerformedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.PerformedByGroupID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

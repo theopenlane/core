@@ -29,12 +29,20 @@ func (c *Client) CreateWorkflowInstanceForObject(ctx context.Context, definition
 	switch objectType {
 	case enums.WorkflowObjectTypeActionPlan:
 		refCreate.SetActionPlanID(objectID)
+	case enums.WorkflowObjectTypeCampaign:
+		refCreate.SetCampaignID(objectID)
+	case enums.WorkflowObjectTypeCampaignTarget:
+		refCreate.SetCampaignTargetID(objectID)
 	case enums.WorkflowObjectTypeControl:
 		refCreate.SetControlID(objectID)
 	case enums.WorkflowObjectTypeEvidence:
 		refCreate.SetEvidenceID(objectID)
+	case enums.WorkflowObjectTypeIdentityHolder:
+		refCreate.SetIdentityHolderID(objectID)
 	case enums.WorkflowObjectTypeInternalPolicy:
 		refCreate.SetInternalPolicyID(objectID)
+	case enums.WorkflowObjectTypePlatform:
+		refCreate.SetPlatformID(objectID)
 	case enums.WorkflowObjectTypeProcedure:
 		refCreate.SetProcedureID(objectID)
 	case enums.WorkflowObjectTypeSubcontrol:
@@ -64,6 +72,50 @@ func (c *Client) CreateWorkflowInstanceForActionPlan(ctx context.Context, defini
 	if _, err := c.WorkflowObjectRef.Create().
 		SetWorkflowInstanceID(instance.ID).
 		SetActionPlanID(actionplanID).
+		SetOwnerID(orgID).
+		Save(ctx); err != nil {
+		return nil, err
+	}
+
+	return instance, nil
+}
+
+// CreateWorkflowInstanceForCampaign creates a workflow instance and object ref for a Campaign
+func (c *Client) CreateWorkflowInstanceForCampaign(ctx context.Context, definitionID string, campaignID string, orgID string) (*WorkflowInstance, error) {
+	instance, err := c.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(definitionID).
+		SetOwnerID(orgID).
+		SetState(enums.WorkflowInstanceStateRunning).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := c.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetCampaignID(campaignID).
+		SetOwnerID(orgID).
+		Save(ctx); err != nil {
+		return nil, err
+	}
+
+	return instance, nil
+}
+
+// CreateWorkflowInstanceForCampaignTarget creates a workflow instance and object ref for a CampaignTarget
+func (c *Client) CreateWorkflowInstanceForCampaignTarget(ctx context.Context, definitionID string, campaigntargetID string, orgID string) (*WorkflowInstance, error) {
+	instance, err := c.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(definitionID).
+		SetOwnerID(orgID).
+		SetState(enums.WorkflowInstanceStateRunning).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := c.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetCampaignTargetID(campaigntargetID).
 		SetOwnerID(orgID).
 		Save(ctx); err != nil {
 		return nil, err
@@ -116,6 +168,28 @@ func (c *Client) CreateWorkflowInstanceForEvidence(ctx context.Context, definiti
 	return instance, nil
 }
 
+// CreateWorkflowInstanceForIdentityHolder creates a workflow instance and object ref for a IdentityHolder
+func (c *Client) CreateWorkflowInstanceForIdentityHolder(ctx context.Context, definitionID string, identityholderID string, orgID string) (*WorkflowInstance, error) {
+	instance, err := c.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(definitionID).
+		SetOwnerID(orgID).
+		SetState(enums.WorkflowInstanceStateRunning).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := c.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetIdentityHolderID(identityholderID).
+		SetOwnerID(orgID).
+		Save(ctx); err != nil {
+		return nil, err
+	}
+
+	return instance, nil
+}
+
 // CreateWorkflowInstanceForInternalPolicy creates a workflow instance and object ref for a InternalPolicy
 func (c *Client) CreateWorkflowInstanceForInternalPolicy(ctx context.Context, definitionID string, internalpolicyID string, orgID string) (*WorkflowInstance, error) {
 	instance, err := c.WorkflowInstance.Create().
@@ -130,6 +204,28 @@ func (c *Client) CreateWorkflowInstanceForInternalPolicy(ctx context.Context, de
 	if _, err := c.WorkflowObjectRef.Create().
 		SetWorkflowInstanceID(instance.ID).
 		SetInternalPolicyID(internalpolicyID).
+		SetOwnerID(orgID).
+		Save(ctx); err != nil {
+		return nil, err
+	}
+
+	return instance, nil
+}
+
+// CreateWorkflowInstanceForPlatform creates a workflow instance and object ref for a Platform
+func (c *Client) CreateWorkflowInstanceForPlatform(ctx context.Context, definitionID string, platformID string, orgID string) (*WorkflowInstance, error) {
+	instance, err := c.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(definitionID).
+		SetOwnerID(orgID).
+		SetState(enums.WorkflowInstanceStateRunning).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := c.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetPlatformID(platformID).
 		SetOwnerID(orgID).
 		Save(ctx); err != nil {
 		return nil, err

@@ -50,6 +50,14 @@ type ReviewHistory struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the environment of the review
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the review
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the review
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the review
+	ScopeID string `json:"scope_id,omitempty"`
 	// external identifier from the integration source for the review
 	ExternalID string `json:"external_id,omitempty"`
 	// external identifier from the integration source for the review
@@ -102,7 +110,7 @@ func (*ReviewHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case reviewhistory.FieldSystemOwned, reviewhistory.FieldApproved:
 			values[i] = new(sql.NullBool)
-		case reviewhistory.FieldID, reviewhistory.FieldRef, reviewhistory.FieldCreatedBy, reviewhistory.FieldUpdatedBy, reviewhistory.FieldDeletedBy, reviewhistory.FieldOwnerID, reviewhistory.FieldInternalNotes, reviewhistory.FieldSystemInternalID, reviewhistory.FieldExternalID, reviewhistory.FieldExternalOwnerID, reviewhistory.FieldTitle, reviewhistory.FieldState, reviewhistory.FieldCategory, reviewhistory.FieldClassification, reviewhistory.FieldSummary, reviewhistory.FieldDetails, reviewhistory.FieldReporter, reviewhistory.FieldReviewerID, reviewhistory.FieldSource, reviewhistory.FieldExternalURI:
+		case reviewhistory.FieldID, reviewhistory.FieldRef, reviewhistory.FieldCreatedBy, reviewhistory.FieldUpdatedBy, reviewhistory.FieldDeletedBy, reviewhistory.FieldOwnerID, reviewhistory.FieldInternalNotes, reviewhistory.FieldSystemInternalID, reviewhistory.FieldEnvironmentName, reviewhistory.FieldEnvironmentID, reviewhistory.FieldScopeName, reviewhistory.FieldScopeID, reviewhistory.FieldExternalID, reviewhistory.FieldExternalOwnerID, reviewhistory.FieldTitle, reviewhistory.FieldState, reviewhistory.FieldCategory, reviewhistory.FieldClassification, reviewhistory.FieldSummary, reviewhistory.FieldDetails, reviewhistory.FieldReporter, reviewhistory.FieldReviewerID, reviewhistory.FieldSource, reviewhistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case reviewhistory.FieldHistoryTime, reviewhistory.FieldCreatedAt, reviewhistory.FieldUpdatedAt, reviewhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -214,6 +222,30 @@ func (_m *ReviewHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
+			}
+		case reviewhistory.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case reviewhistory.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case reviewhistory.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case reviewhistory.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case reviewhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -411,6 +443,18 @@ func (_m *ReviewHistory) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

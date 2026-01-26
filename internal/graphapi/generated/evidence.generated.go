@@ -68,6 +68,14 @@ func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Evidence_ownerID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Evidence_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Evidence_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Evidence_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Evidence_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
 			case "name":
@@ -90,6 +98,10 @@ func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_status(ctx, field)
 			case "owner":
 				return ec.fieldContext_Evidence_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_Evidence_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Evidence_scope(ctx, field)
 			case "controls":
 				return ec.fieldContext_Evidence_controls(ctx, field)
 			case "subcontrols":
@@ -104,14 +116,22 @@ func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_programs(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Evidence_tasks(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Evidence_platforms(ctx, field)
+			case "scans":
+				return ec.fieldContext_Evidence_scans(ctx, field)
 			case "comments":
 				return ec.fieldContext_Evidence_comments(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Evidence_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Evidence_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Evidence_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Evidence_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Evidence_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Evidence_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Evidence", field.Name)
 		},
@@ -188,6 +208,14 @@ func (ec *executionContext) fieldContext_EvidenceBulkUpdatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Evidence_ownerID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Evidence_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Evidence_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Evidence_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Evidence_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
 			case "name":
@@ -210,6 +238,10 @@ func (ec *executionContext) fieldContext_EvidenceBulkUpdatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_status(ctx, field)
 			case "owner":
 				return ec.fieldContext_Evidence_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_Evidence_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Evidence_scope(ctx, field)
 			case "controls":
 				return ec.fieldContext_Evidence_controls(ctx, field)
 			case "subcontrols":
@@ -224,14 +256,22 @@ func (ec *executionContext) fieldContext_EvidenceBulkUpdatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_programs(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Evidence_tasks(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Evidence_platforms(ctx, field)
+			case "scans":
+				return ec.fieldContext_Evidence_scans(ctx, field)
 			case "comments":
 				return ec.fieldContext_Evidence_comments(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Evidence_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Evidence_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Evidence_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Evidence_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Evidence_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Evidence_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Evidence", field.Name)
 		},
@@ -308,6 +348,14 @@ func (ec *executionContext) fieldContext_EvidenceCreatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Evidence_ownerID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Evidence_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Evidence_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Evidence_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Evidence_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
 			case "name":
@@ -330,6 +378,10 @@ func (ec *executionContext) fieldContext_EvidenceCreatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_status(ctx, field)
 			case "owner":
 				return ec.fieldContext_Evidence_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_Evidence_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Evidence_scope(ctx, field)
 			case "controls":
 				return ec.fieldContext_Evidence_controls(ctx, field)
 			case "subcontrols":
@@ -344,14 +396,22 @@ func (ec *executionContext) fieldContext_EvidenceCreatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_programs(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Evidence_tasks(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Evidence_platforms(ctx, field)
+			case "scans":
+				return ec.fieldContext_Evidence_scans(ctx, field)
 			case "comments":
 				return ec.fieldContext_Evidence_comments(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Evidence_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Evidence_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Evidence_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Evidence_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Evidence_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Evidence_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Evidence", field.Name)
 		},
@@ -428,6 +488,14 @@ func (ec *executionContext) fieldContext_EvidenceUpdatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Evidence_ownerID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Evidence_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Evidence_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Evidence_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Evidence_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
 			case "name":
@@ -450,6 +518,10 @@ func (ec *executionContext) fieldContext_EvidenceUpdatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_status(ctx, field)
 			case "owner":
 				return ec.fieldContext_Evidence_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_Evidence_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Evidence_scope(ctx, field)
 			case "controls":
 				return ec.fieldContext_Evidence_controls(ctx, field)
 			case "subcontrols":
@@ -464,14 +536,22 @@ func (ec *executionContext) fieldContext_EvidenceUpdatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_programs(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Evidence_tasks(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Evidence_platforms(ctx, field)
+			case "scans":
+				return ec.fieldContext_Evidence_scans(ctx, field)
 			case "comments":
 				return ec.fieldContext_Evidence_comments(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Evidence_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Evidence_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Evidence_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Evidence_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Evidence_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Evidence_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Evidence", field.Name)
 		},

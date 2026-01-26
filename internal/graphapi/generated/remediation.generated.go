@@ -74,6 +74,14 @@ func (ec *executionContext) fieldContext_RemediationBulkCreatePayload_remediatio
 				return ec.fieldContext_Remediation_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Remediation_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Remediation_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Remediation_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Remediation_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Remediation_scopeID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Remediation_externalID(ctx, field)
 			case "externalOwnerID":
@@ -120,8 +128,14 @@ func (ec *executionContext) fieldContext_RemediationBulkCreatePayload_remediatio
 				return ec.fieldContext_Remediation_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Remediation_viewers(ctx, field)
+			case "environment":
+				return ec.fieldContext_Remediation_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Remediation_scope(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Remediation_integrations(ctx, field)
+			case "scans":
+				return ec.fieldContext_Remediation_scans(ctx, field)
 			case "findings":
 				return ec.fieldContext_Remediation_findings(ctx, field)
 			case "vulnerabilities":
@@ -201,6 +215,14 @@ func (ec *executionContext) fieldContext_RemediationCreatePayload_remediation(_ 
 				return ec.fieldContext_Remediation_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Remediation_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Remediation_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Remediation_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Remediation_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Remediation_scopeID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Remediation_externalID(ctx, field)
 			case "externalOwnerID":
@@ -247,8 +269,14 @@ func (ec *executionContext) fieldContext_RemediationCreatePayload_remediation(_ 
 				return ec.fieldContext_Remediation_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Remediation_viewers(ctx, field)
+			case "environment":
+				return ec.fieldContext_Remediation_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Remediation_scope(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Remediation_integrations(ctx, field)
+			case "scans":
+				return ec.fieldContext_Remediation_scans(ctx, field)
 			case "findings":
 				return ec.fieldContext_Remediation_findings(ctx, field)
 			case "vulnerabilities":
@@ -357,6 +385,14 @@ func (ec *executionContext) fieldContext_RemediationUpdatePayload_remediation(_ 
 				return ec.fieldContext_Remediation_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Remediation_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Remediation_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Remediation_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Remediation_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Remediation_scopeID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Remediation_externalID(ctx, field)
 			case "externalOwnerID":
@@ -403,8 +439,14 @@ func (ec *executionContext) fieldContext_RemediationUpdatePayload_remediation(_ 
 				return ec.fieldContext_Remediation_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Remediation_viewers(ctx, field)
+			case "environment":
+				return ec.fieldContext_Remediation_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Remediation_scope(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Remediation_integrations(ctx, field)
+			case "scans":
+				return ec.fieldContext_Remediation_scans(ctx, field)
 			case "findings":
 				return ec.fieldContext_Remediation_findings(ctx, field)
 			case "vulnerabilities":

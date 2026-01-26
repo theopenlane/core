@@ -42,6 +42,14 @@ type DirectoryGroupHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the environment of the directory_group
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the directory_group
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the directory_group
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the directory_group
+	ScopeID string `json:"scope_id,omitempty"`
 	// integration that owns this directory group
 	IntegrationID string `json:"integration_id,omitempty"`
 	// sync run that produced this snapshot
@@ -88,7 +96,7 @@ func (*DirectoryGroupHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case directorygrouphistory.FieldMemberCount:
 			values[i] = new(sql.NullInt64)
-		case directorygrouphistory.FieldID, directorygrouphistory.FieldRef, directorygrouphistory.FieldCreatedBy, directorygrouphistory.FieldUpdatedBy, directorygrouphistory.FieldDisplayID, directorygrouphistory.FieldOwnerID, directorygrouphistory.FieldIntegrationID, directorygrouphistory.FieldDirectorySyncRunID, directorygrouphistory.FieldExternalID, directorygrouphistory.FieldEmail, directorygrouphistory.FieldDisplayName, directorygrouphistory.FieldDescription, directorygrouphistory.FieldClassification, directorygrouphistory.FieldStatus, directorygrouphistory.FieldProfileHash, directorygrouphistory.FieldRawProfileFileID, directorygrouphistory.FieldSourceVersion:
+		case directorygrouphistory.FieldID, directorygrouphistory.FieldRef, directorygrouphistory.FieldCreatedBy, directorygrouphistory.FieldUpdatedBy, directorygrouphistory.FieldDisplayID, directorygrouphistory.FieldOwnerID, directorygrouphistory.FieldEnvironmentName, directorygrouphistory.FieldEnvironmentID, directorygrouphistory.FieldScopeName, directorygrouphistory.FieldScopeID, directorygrouphistory.FieldIntegrationID, directorygrouphistory.FieldDirectorySyncRunID, directorygrouphistory.FieldExternalID, directorygrouphistory.FieldEmail, directorygrouphistory.FieldDisplayName, directorygrouphistory.FieldDescription, directorygrouphistory.FieldClassification, directorygrouphistory.FieldStatus, directorygrouphistory.FieldProfileHash, directorygrouphistory.FieldRawProfileFileID, directorygrouphistory.FieldSourceVersion:
 			values[i] = new(sql.NullString)
 		case directorygrouphistory.FieldHistoryTime, directorygrouphistory.FieldCreatedAt, directorygrouphistory.FieldUpdatedAt, directorygrouphistory.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -174,6 +182,30 @@ func (_m *DirectoryGroupHistory) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case directorygrouphistory.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case directorygrouphistory.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case directorygrouphistory.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case directorygrouphistory.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case directorygrouphistory.FieldIntegrationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -336,6 +368,18 @@ func (_m *DirectoryGroupHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)

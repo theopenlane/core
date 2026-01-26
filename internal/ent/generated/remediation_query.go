@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
@@ -28,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
@@ -47,7 +49,10 @@ type RemediationQuery struct {
 	withBlockedGroups        *GroupQuery
 	withEditors              *GroupQuery
 	withViewers              *GroupQuery
+	withEnvironment          *CustomTypeEnumQuery
+	withScope                *CustomTypeEnumQuery
 	withIntegrations         *IntegrationQuery
+	withScans                *ScanQuery
 	withFindings             *FindingQuery
 	withVulnerabilities      *VulnerabilityQuery
 	withActionPlans          *ActionPlanQuery
@@ -68,6 +73,7 @@ type RemediationQuery struct {
 	withNamedEditors         map[string]*GroupQuery
 	withNamedViewers         map[string]*GroupQuery
 	withNamedIntegrations    map[string]*IntegrationQuery
+	withNamedScans           map[string]*ScanQuery
 	withNamedFindings        map[string]*FindingQuery
 	withNamedVulnerabilities map[string]*VulnerabilityQuery
 	withNamedActionPlans     map[string]*ActionPlanQuery
@@ -217,6 +223,56 @@ func (_q *RemediationQuery) QueryViewers() *GroupQuery {
 	return query
 }
 
+// QueryEnvironment chains the current query on the "environment" edge.
+func (_q *RemediationQuery) QueryEnvironment() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, remediation.EnvironmentTable, remediation.EnvironmentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Remediation
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScope chains the current query on the "scope" edge.
+func (_q *RemediationQuery) QueryScope() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, remediation.ScopeTable, remediation.ScopeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Remediation
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryIntegrations chains the current query on the "integrations" edge.
 func (_q *RemediationQuery) QueryIntegrations() *IntegrationQuery {
 	query := (&IntegrationClient{config: _q.config}).Query()
@@ -236,6 +292,31 @@ func (_q *RemediationQuery) QueryIntegrations() *IntegrationQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Integration
 		step.Edge.Schema = schemaConfig.IntegrationRemediations
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScans chains the current query on the "scans" edge.
+func (_q *RemediationQuery) QueryScans() *ScanQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, selector),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, remediation.ScansTable, remediation.ScansPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanRemediations
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -763,7 +844,10 @@ func (_q *RemediationQuery) Clone() *RemediationQuery {
 		withBlockedGroups:   _q.withBlockedGroups.Clone(),
 		withEditors:         _q.withEditors.Clone(),
 		withViewers:         _q.withViewers.Clone(),
+		withEnvironment:     _q.withEnvironment.Clone(),
+		withScope:           _q.withScope.Clone(),
 		withIntegrations:    _q.withIntegrations.Clone(),
+		withScans:           _q.withScans.Clone(),
 		withFindings:        _q.withFindings.Clone(),
 		withVulnerabilities: _q.withVulnerabilities.Clone(),
 		withActionPlans:     _q.withActionPlans.Clone(),
@@ -828,6 +912,28 @@ func (_q *RemediationQuery) WithViewers(opts ...func(*GroupQuery)) *RemediationQ
 	return _q
 }
 
+// WithEnvironment tells the query-builder to eager-load the nodes that are connected to
+// the "environment" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RemediationQuery) WithEnvironment(opts ...func(*CustomTypeEnumQuery)) *RemediationQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEnvironment = query
+	return _q
+}
+
+// WithScope tells the query-builder to eager-load the nodes that are connected to
+// the "scope" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RemediationQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *RemediationQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScope = query
+	return _q
+}
+
 // WithIntegrations tells the query-builder to eager-load the nodes that are connected to
 // the "integrations" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *RemediationQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *RemediationQuery {
@@ -836,6 +942,17 @@ func (_q *RemediationQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *R
 		opt(query)
 	}
 	_q.withIntegrations = query
+	return _q
+}
+
+// WithScans tells the query-builder to eager-load the nodes that are connected to
+// the "scans" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RemediationQuery) WithScans(opts ...func(*ScanQuery)) *RemediationQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScans = query
 	return _q
 }
 
@@ -1067,12 +1184,15 @@ func (_q *RemediationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*Remediation{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [18]bool{
+		loadedTypes = [21]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
+			_q.withEnvironment != nil,
+			_q.withScope != nil,
 			_q.withIntegrations != nil,
+			_q.withScans != nil,
 			_q.withFindings != nil,
 			_q.withVulnerabilities != nil,
 			_q.withActionPlans != nil,
@@ -1141,10 +1261,29 @@ func (_q *RemediationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	if query := _q.withEnvironment; query != nil {
+		if err := _q.loadEnvironment(ctx, query, nodes, nil,
+			func(n *Remediation, e *CustomTypeEnum) { n.Edges.Environment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScope; query != nil {
+		if err := _q.loadScope(ctx, query, nodes, nil,
+			func(n *Remediation, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withIntegrations; query != nil {
 		if err := _q.loadIntegrations(ctx, query, nodes,
 			func(n *Remediation) { n.Edges.Integrations = []*Integration{} },
 			func(n *Remediation, e *Integration) { n.Edges.Integrations = append(n.Edges.Integrations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScans; query != nil {
+		if err := _q.loadScans(ctx, query, nodes,
+			func(n *Remediation) { n.Edges.Scans = []*Scan{} },
+			func(n *Remediation, e *Scan) { n.Edges.Scans = append(n.Edges.Scans, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1264,6 +1403,13 @@ func (_q *RemediationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := _q.loadIntegrations(ctx, query, nodes,
 			func(n *Remediation) { n.appendNamedIntegrations(name) },
 			func(n *Remediation, e *Integration) { n.appendNamedIntegrations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedScans {
+		if err := _q.loadScans(ctx, query, nodes,
+			func(n *Remediation) { n.appendNamedScans(name) },
+			func(n *Remediation, e *Scan) { n.appendNamedScans(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1488,6 +1634,64 @@ func (_q *RemediationQuery) loadViewers(ctx context.Context, query *GroupQuery, 
 	}
 	return nil
 }
+func (_q *RemediationQuery) loadEnvironment(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Remediation, init func(*Remediation), assign func(*Remediation, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Remediation)
+	for i := range nodes {
+		fk := nodes[i].EnvironmentID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "environment_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *RemediationQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Remediation, init func(*Remediation), assign func(*Remediation, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Remediation)
+	for i := range nodes {
+		fk := nodes[i].ScopeID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *RemediationQuery) loadIntegrations(ctx context.Context, query *IntegrationQuery, nodes []*Remediation, init func(*Remediation), assign func(*Remediation, *Integration)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Remediation)
@@ -1543,6 +1747,68 @@ func (_q *RemediationQuery) loadIntegrations(ctx context.Context, query *Integra
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "integrations" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *RemediationQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*Remediation, init func(*Remediation), assign func(*Remediation, *Scan)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Remediation)
+	nids := make(map[string]map[*Remediation]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(remediation.ScansTable)
+		joinT.Schema(_q.schemaConfig.ScanRemediations)
+		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(remediation.ScansPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(remediation.ScansPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(remediation.ScansPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Remediation]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Scan](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "scans" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -2018,6 +2284,12 @@ func (_q *RemediationQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(remediation.FieldOwnerID)
 		}
+		if _q.withEnvironment != nil {
+			_spec.Node.AddColumnOnce(remediation.FieldEnvironmentID)
+		}
+		if _q.withScope != nil {
+			_spec.Node.AddColumnOnce(remediation.FieldScopeID)
+		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -2139,6 +2411,20 @@ func (_q *RemediationQuery) WithNamedIntegrations(name string, opts ...func(*Int
 		_q.withNamedIntegrations = make(map[string]*IntegrationQuery)
 	}
 	_q.withNamedIntegrations[name] = query
+	return _q
+}
+
+// WithNamedScans tells the query-builder to eager-load the nodes that are connected to the "scans"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *RemediationQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *RemediationQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedScans == nil {
+		_q.withNamedScans = make(map[string]*ScanQuery)
+	}
+	_q.withNamedScans[name] = query
 	return _q
 }
 

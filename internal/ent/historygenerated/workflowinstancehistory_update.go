@@ -375,6 +375,86 @@ func (_u *WorkflowInstanceHistoryUpdate) ClearProcedureID() *WorkflowInstanceHis
 	return _u
 }
 
+// SetCampaignID sets the "campaign_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) SetCampaignID(v string) *WorkflowInstanceHistoryUpdate {
+	_u.mutation.SetCampaignID(v)
+	return _u
+}
+
+// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdate) SetNillableCampaignID(v *string) *WorkflowInstanceHistoryUpdate {
+	if v != nil {
+		_u.SetCampaignID(*v)
+	}
+	return _u
+}
+
+// ClearCampaignID clears the value of the "campaign_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) ClearCampaignID() *WorkflowInstanceHistoryUpdate {
+	_u.mutation.ClearCampaignID()
+	return _u
+}
+
+// SetCampaignTargetID sets the "campaign_target_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) SetCampaignTargetID(v string) *WorkflowInstanceHistoryUpdate {
+	_u.mutation.SetCampaignTargetID(v)
+	return _u
+}
+
+// SetNillableCampaignTargetID sets the "campaign_target_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdate) SetNillableCampaignTargetID(v *string) *WorkflowInstanceHistoryUpdate {
+	if v != nil {
+		_u.SetCampaignTargetID(*v)
+	}
+	return _u
+}
+
+// ClearCampaignTargetID clears the value of the "campaign_target_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) ClearCampaignTargetID() *WorkflowInstanceHistoryUpdate {
+	_u.mutation.ClearCampaignTargetID()
+	return _u
+}
+
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) SetIdentityHolderID(v string) *WorkflowInstanceHistoryUpdate {
+	_u.mutation.SetIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdate) SetNillableIdentityHolderID(v *string) *WorkflowInstanceHistoryUpdate {
+	if v != nil {
+		_u.SetIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) ClearIdentityHolderID() *WorkflowInstanceHistoryUpdate {
+	_u.mutation.ClearIdentityHolderID()
+	return _u
+}
+
+// SetPlatformID sets the "platform_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) SetPlatformID(v string) *WorkflowInstanceHistoryUpdate {
+	_u.mutation.SetPlatformID(v)
+	return _u
+}
+
+// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdate) SetNillablePlatformID(v *string) *WorkflowInstanceHistoryUpdate {
+	if v != nil {
+		_u.SetPlatformID(*v)
+	}
+	return _u
+}
+
+// ClearPlatformID clears the value of the "platform_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) ClearPlatformID() *WorkflowInstanceHistoryUpdate {
+	_u.mutation.ClearPlatformID()
+	return _u
+}
+
 // Mutation returns the WorkflowInstanceHistoryMutation object of the builder.
 func (_u *WorkflowInstanceHistoryUpdate) Mutation() *WorkflowInstanceHistoryMutation {
 	return _u.mutation
@@ -568,6 +648,30 @@ func (_u *WorkflowInstanceHistoryUpdate) sqlSave(ctx context.Context) (_node int
 	}
 	if _u.mutation.ProcedureIDCleared() {
 		_spec.ClearField(workflowinstancehistory.FieldProcedureID, field.TypeString)
+	}
+	if value, ok := _u.mutation.CampaignID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldCampaignID, field.TypeString, value)
+	}
+	if _u.mutation.CampaignIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldCampaignID, field.TypeString)
+	}
+	if value, ok := _u.mutation.CampaignTargetID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldCampaignTargetID, field.TypeString, value)
+	}
+	if _u.mutation.CampaignTargetIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldCampaignTargetID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IdentityHolderID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldIdentityHolderID, field.TypeString, value)
+	}
+	if _u.mutation.IdentityHolderIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldIdentityHolderID, field.TypeString)
+	}
+	if value, ok := _u.mutation.PlatformID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldPlatformID, field.TypeString, value)
+	}
+	if _u.mutation.PlatformIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldPlatformID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowInstanceHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -932,6 +1036,86 @@ func (_u *WorkflowInstanceHistoryUpdateOne) ClearProcedureID() *WorkflowInstance
 	return _u
 }
 
+// SetCampaignID sets the "campaign_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetCampaignID(v string) *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.SetCampaignID(v)
+	return _u
+}
+
+// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableCampaignID(v *string) *WorkflowInstanceHistoryUpdateOne {
+	if v != nil {
+		_u.SetCampaignID(*v)
+	}
+	return _u
+}
+
+// ClearCampaignID clears the value of the "campaign_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) ClearCampaignID() *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.ClearCampaignID()
+	return _u
+}
+
+// SetCampaignTargetID sets the "campaign_target_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetCampaignTargetID(v string) *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.SetCampaignTargetID(v)
+	return _u
+}
+
+// SetNillableCampaignTargetID sets the "campaign_target_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableCampaignTargetID(v *string) *WorkflowInstanceHistoryUpdateOne {
+	if v != nil {
+		_u.SetCampaignTargetID(*v)
+	}
+	return _u
+}
+
+// ClearCampaignTargetID clears the value of the "campaign_target_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) ClearCampaignTargetID() *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.ClearCampaignTargetID()
+	return _u
+}
+
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetIdentityHolderID(v string) *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.SetIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableIdentityHolderID(v *string) *WorkflowInstanceHistoryUpdateOne {
+	if v != nil {
+		_u.SetIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) ClearIdentityHolderID() *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.ClearIdentityHolderID()
+	return _u
+}
+
+// SetPlatformID sets the "platform_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetPlatformID(v string) *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.SetPlatformID(v)
+	return _u
+}
+
+// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetNillablePlatformID(v *string) *WorkflowInstanceHistoryUpdateOne {
+	if v != nil {
+		_u.SetPlatformID(*v)
+	}
+	return _u
+}
+
+// ClearPlatformID clears the value of the "platform_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) ClearPlatformID() *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.ClearPlatformID()
+	return _u
+}
+
 // Mutation returns the WorkflowInstanceHistoryMutation object of the builder.
 func (_u *WorkflowInstanceHistoryUpdateOne) Mutation() *WorkflowInstanceHistoryMutation {
 	return _u.mutation
@@ -1155,6 +1339,30 @@ func (_u *WorkflowInstanceHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.ProcedureIDCleared() {
 		_spec.ClearField(workflowinstancehistory.FieldProcedureID, field.TypeString)
+	}
+	if value, ok := _u.mutation.CampaignID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldCampaignID, field.TypeString, value)
+	}
+	if _u.mutation.CampaignIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldCampaignID, field.TypeString)
+	}
+	if value, ok := _u.mutation.CampaignTargetID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldCampaignTargetID, field.TypeString, value)
+	}
+	if _u.mutation.CampaignTargetIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldCampaignTargetID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IdentityHolderID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldIdentityHolderID, field.TypeString, value)
+	}
+	if _u.mutation.IdentityHolderIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldIdentityHolderID, field.TypeString)
+	}
+	if value, ok := _u.mutation.PlatformID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldPlatformID, field.TypeString, value)
+	}
+	if _u.mutation.PlatformIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldPlatformID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowInstanceHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

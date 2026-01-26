@@ -116,6 +116,14 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
 			case "procedureKindID":
 				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Procedure_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Procedure_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Procedure_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Procedure_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Procedure_workflowEligibleMarker(ctx, field)
 			case "owner":
@@ -130,6 +138,10 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_delegate(ctx, field)
 			case "procedureKind":
 				return ec.fieldContext_Procedure_procedureKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_Procedure_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Procedure_scope(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "subcontrols":
@@ -154,8 +166,12 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Procedure_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Procedure_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Procedure_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Procedure_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Procedure_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -280,6 +296,14 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
 			case "procedureKindID":
 				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Procedure_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Procedure_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Procedure_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Procedure_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Procedure_workflowEligibleMarker(ctx, field)
 			case "owner":
@@ -294,6 +318,10 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_delegate(ctx, field)
 			case "procedureKind":
 				return ec.fieldContext_Procedure_procedureKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_Procedure_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Procedure_scope(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "subcontrols":
@@ -318,8 +346,12 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Procedure_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Procedure_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Procedure_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Procedure_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Procedure_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -444,6 +476,14 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
 			case "procedureKindID":
 				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Procedure_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Procedure_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Procedure_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Procedure_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Procedure_workflowEligibleMarker(ctx, field)
 			case "owner":
@@ -458,6 +498,10 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_delegate(ctx, field)
 			case "procedureKind":
 				return ec.fieldContext_Procedure_procedureKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_Procedure_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Procedure_scope(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "subcontrols":
@@ -482,8 +526,12 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Procedure_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Procedure_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Procedure_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Procedure_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Procedure_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -608,6 +656,14 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
 			case "procedureKindID":
 				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Procedure_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Procedure_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Procedure_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Procedure_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Procedure_workflowEligibleMarker(ctx, field)
 			case "owner":
@@ -622,6 +678,10 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_delegate(ctx, field)
 			case "procedureKind":
 				return ec.fieldContext_Procedure_procedureKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_Procedure_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Procedure_scope(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "subcontrols":
@@ -646,8 +706,12 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Procedure_hasPendingWorkflow(ctx, field)
-			case "activeWorkflowInstance":
-				return ec.fieldContext_Procedure_activeWorkflowInstance(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Procedure_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Procedure_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Procedure_workflowTimeline(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
