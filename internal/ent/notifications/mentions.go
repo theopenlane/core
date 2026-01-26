@@ -393,22 +393,7 @@ func addMentionNotification(ctx *soiree.EventContext, input mentionNotificationI
 	consoleURL := client.EntConfig.Notifications.ConsoleURL
 
 	// Build URL based on object type
-	var url string
-	switch input.objectType {
-	case "Task":
-		url = fmt.Sprintf("%s/tasks?id=%s", consoleURL, input.objectID)
-	case "Control":
-		url = fmt.Sprintf("%s/controls/%s", consoleURL, input.objectID)
-	case "Procedure":
-		url = fmt.Sprintf("%s/procedures/%s", consoleURL, input.objectID)
-	case "Risk":
-		url = fmt.Sprintf("%s/risks/%s", consoleURL, input.objectID)
-	case "InternalPolicy":
-		url = fmt.Sprintf("%s/policies/%s", consoleURL, input.objectID)
-	case "Evidence":
-		url = fmt.Sprintf("%s/evidence/?id=%s", consoleURL, input.objectID)
-		// default: no URL if we don't have a known parent object type
-	}
+	url := getURLPathForObject(consoleURL, input.objectID, input.objectType)
 
 	// Create the data map with context
 	dataMap := map[string]any{

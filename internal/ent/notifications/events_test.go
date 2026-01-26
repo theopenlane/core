@@ -67,17 +67,17 @@ func TestNeedsTaskDBQuery(t *testing.T) {
 func TestNeedsPolicyDBQuery(t *testing.T) {
 	tests := []struct {
 		name     string
-		fields   *policyFields
+		fields   *documentFields
 		expected bool
 	}{
 		{
 			name:     "all fields empty",
-			fields:   &policyFields{},
+			fields:   &documentFields{},
 			expected: true,
 		},
 		{
 			name: "missing name",
-			fields: &policyFields{
+			fields: &documentFields{
 				entityID:   "policy-123",
 				ownerID:    "owner-456",
 				approverID: "approver-789",
@@ -86,7 +86,7 @@ func TestNeedsPolicyDBQuery(t *testing.T) {
 		},
 		{
 			name: "missing approver ID",
-			fields: &policyFields{
+			fields: &documentFields{
 				name:     "Test Policy",
 				entityID: "policy-123",
 				ownerID:  "owner-456",
@@ -95,7 +95,7 @@ func TestNeedsPolicyDBQuery(t *testing.T) {
 		},
 		{
 			name: "all fields present",
-			fields: &policyFields{
+			fields: &documentFields{
 				name:       "Test Policy",
 				entityID:   "policy-123",
 				ownerID:    "owner-456",
@@ -107,7 +107,7 @@ func TestNeedsPolicyDBQuery(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := needsPolicyDBQuery(tt.fields)
+			result := needsDocumentDBQuery(tt.fields)
 			assert.Equal(t, tt.expected, result)
 		})
 	}
@@ -150,19 +150,19 @@ func TestExtractPolicyFromPayload(t *testing.T) {
 	tests := []struct {
 		name     string
 		payload  *events.MutationPayload
-		expected *policyFields
+		expected *documentFields
 	}{
 		{
 			name:     "nil payload",
 			payload:  nil,
-			expected: &policyFields{},
+			expected: &documentFields{},
 		},
 		{
 			name: "valid payload with entity ID only",
 			payload: &events.MutationPayload{
 				EntityID: "policy-123",
 			},
-			expected: &policyFields{
+			expected: &documentFields{
 				entityID: "policy-123",
 			},
 		},
@@ -170,8 +170,8 @@ func TestExtractPolicyFromPayload(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			fields := &policyFields{}
-			extractPolicyFromPayload(tt.payload, fields)
+			fields := &documentFields{}
+			extractDocumentFromPayload(tt.payload, fields)
 			assert.Equal(t, tt.expected.entityID, fields.entityID)
 			assert.Equal(t, tt.expected.name, fields.name)
 			assert.Equal(t, tt.expected.ownerID, fields.ownerID)
@@ -214,16 +214,16 @@ func TestTaskNotificationInput(t *testing.T) {
 }
 
 func TestPolicyNotificationInput(t *testing.T) {
-	input := policyNotificationInput{
+	input := documentNotificationInput{
 		approverID: "group-123",
-		policyName: "Test Policy",
-		policyID:   "policy-456",
+		name:       "Test Policy",
+		docID:      "policy-456",
 		ownerID:    "owner-789",
 	}
 
 	assert.Equal(t, "group-123", input.approverID)
-	assert.Equal(t, "Test Policy", input.policyName)
-	assert.Equal(t, "policy-456", input.policyID)
+	assert.Equal(t, "Test Policy", input.name)
+	assert.Equal(t, "policy-456", input.docID)
 	assert.Equal(t, "owner-789", input.ownerID)
 }
 
@@ -256,7 +256,7 @@ func TestTaskFields(t *testing.T) {
 }
 
 func TestPolicyFields(t *testing.T) {
-	fields := &policyFields{
+	fields := &documentFields{
 		approverID: "approver-123",
 		name:       "Policy Name",
 		entityID:   "policy-456",
@@ -383,14 +383,14 @@ func TestExtractPolicyFromProps_WithRealInterface(t *testing.T) {
 	tests := []struct {
 		name     string
 		props    soiree.Properties
-		initial  *policyFields
-		expected *policyFields
+		initial  *documentFields
+		expected *documentFields
 	}{
 		{
 			name:    "empty props",
 			props:   mockProps(make(map[string]interface{})),
-			initial: &policyFields{},
-			expected: &policyFields{
+			initial: &documentFields{},
+			expected: &documentFields{
 				name:       "",
 				entityID:   "",
 				ownerID:    "",
@@ -402,8 +402,8 @@ func TestExtractPolicyFromProps_WithRealInterface(t *testing.T) {
 			props: mockProps(map[string]interface{}{
 				"name": "Security Policy",
 			}),
-			initial: &policyFields{},
-			expected: &policyFields{
+			initial: &documentFields{},
+			expected: &documentFields{
 				name:       "Security Policy",
 				entityID:   "",
 				ownerID:    "",
@@ -418,8 +418,8 @@ func TestExtractPolicyFromProps_WithRealInterface(t *testing.T) {
 				"owner_id":    "owner-666",
 				"approver_id": "approver-555",
 			}),
-			initial: &policyFields{},
-			expected: &policyFields{
+			initial: &documentFields{},
+			expected: &documentFields{
 				name:       "Data Protection Policy",
 				entityID:   "policy-777",
 				ownerID:    "owner-666",
@@ -434,8 +434,8 @@ func TestExtractPolicyFromProps_WithRealInterface(t *testing.T) {
 				"owner_id":    nil,
 				"approver_id": 456.78,
 			}),
-			initial: &policyFields{},
-			expected: &policyFields{
+			initial: &documentFields{},
+			expected: &documentFields{
 				name:       "",
 				entityID:   "",
 				ownerID:    "",
@@ -450,11 +450,11 @@ func TestExtractPolicyFromProps_WithRealInterface(t *testing.T) {
 				"owner_id":    "new-owner",
 				"approver_id": "new-approver",
 			}),
-			initial: &policyFields{
+			initial: &documentFields{
 				name:     "Existing Name",
 				entityID: "existing-id",
 			},
-			expected: &policyFields{
+			expected: &documentFields{
 				name:       "Existing Name",
 				entityID:   "existing-id",
 				ownerID:    "new-owner",
@@ -465,7 +465,7 @@ func TestExtractPolicyFromProps_WithRealInterface(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			extractPolicyFromProps(tt.props, tt.initial)
+			extractDocumentFromProps(tt.props, tt.initial)
 			assert.Equal(t, tt.expected.name, tt.initial.name)
 			assert.Equal(t, tt.expected.entityID, tt.initial.entityID)
 			assert.Equal(t, tt.expected.ownerID, tt.initial.ownerID)
@@ -549,7 +549,7 @@ func TestFetchPolicyFields_Integration(t *testing.T) {
 		props       soiree.Properties
 		payload     *events.MutationPayload
 		expectError bool
-		expected    *policyFields
+		expected    *documentFields
 	}{
 		{
 			name: "all fields from props",
@@ -561,7 +561,7 @@ func TestFetchPolicyFields_Integration(t *testing.T) {
 			}),
 			payload:     nil,
 			expectError: false,
-			expected: &policyFields{
+			expected: &documentFields{
 				name:       "Policy from props",
 				entityID:   "policy-prop-1",
 				ownerID:    "owner-prop-1",
@@ -575,7 +575,7 @@ func TestFetchPolicyFields_Integration(t *testing.T) {
 				EntityID: "policy-payload-1",
 			},
 			expectError: false,
-			expected: &policyFields{
+			expected: &documentFields{
 				entityID: "policy-payload-1",
 			},
 		},
@@ -583,13 +583,13 @@ func TestFetchPolicyFields_Integration(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := fetchPolicyFields(nil, tt.props, tt.payload)
+			result, err := fetchDocumentFields(nil, tt.props, tt.payload)
 
 			if tt.expectError {
 				assert.Error(t, err)
 			} else {
 				// Only check fields that don't require DB query
-				if result != nil && !needsPolicyDBQuery(result) {
+				if result != nil && !needsDocumentDBQuery(result) {
 					assert.Equal(t, tt.expected.name, result.name)
 					assert.Equal(t, tt.expected.entityID, result.entityID)
 					assert.Equal(t, tt.expected.ownerID, result.ownerID)
