@@ -629,12 +629,21 @@ func marshalParams(label string, params any) (json.RawMessage, error) {
 
 // createControl standardizes control creation for workflow demos.
 func createControl(ctx context.Context, apiClient *openlane.Client, orgID, title, description, category string) (*graphclient.CreateControl_CreateControl_Control, error) {
+	return createControlWithRefCode(ctx, apiClient, orgID, title, description, category, "")
+}
+
+// createControlWithRefCode creates a control with an optional custom refCode.
+func createControlWithRefCode(ctx context.Context, apiClient *openlane.Client, orgID, title, description, category, refCode string) (*graphclient.CreateControl_CreateControl_Control, error) {
 	if strings.TrimSpace(orgID) == "" {
 		return nil, fmt.Errorf("organization ID is required to create a control")
 	}
 
+	if refCode == "" {
+		refCode = fmt.Sprintf("CTL-%s", ulids.New().String())
+	}
+
 	input := graphclient.CreateControlInput{
-		RefCode:     fmt.Sprintf("CTL-%s", ulids.New().String()),
+		RefCode:     refCode,
 		Title:       ptr(title),
 		Description: ptr(description),
 		Status:      ptr(enums.ControlStatusNotImplemented),
@@ -852,67 +861,63 @@ func runSlackWebhookDemo(ctx context.Context, config openlane.Config, apiClient 
 			"Content-Type": "application/json",
 		},
 		Payload: map[string]any{
-			"blocks": []any{
+			"attachments": []any{
 				map[string]any{
-					"type": "header",
-					"text": map[string]any{
-						"type":  "plain_text",
-						"text":  "✅ Control Approved",
-						"emoji": true,
-					},
-				},
-				map[string]any{
-					"type": "section",
-					"text": map[string]any{
-						"type": "mrkdwn",
-						"text": "*Control:* <https://console.theopenlane.io/controls/{{object_id}}|{{ref_code}} - {{title}}>\n*Status:* :white_check_mark: {{status}}",
-					},
-				},
-				map[string]any{
-					"type": "context",
-					"elements": []any{
+					"color": "#36a64f", // green bar on the left
+					"blocks": []any{
 						map[string]any{
-							"type": "mrkdwn",
-							"text": "Triggered by *{{initiator}}* · {{approved_at}}",
-						},
-					},
-				},
-				map[string]any{
-					"type": "section",
-					"fields": []any{
-						map[string]any{
-							"type": "mrkdwn",
-							"text": "*Control*\n{{ref_code}}",
-						},
-						map[string]any{
-							"type": "mrkdwn",
-							"text": "*Title*\n{{title}}",
-						},
-						map[string]any{
-							"type": "mrkdwn",
-							"text": "*Triggered By*\n{{initiator}}",
-						},
-						map[string]any{
-							"type": "mrkdwn",
-							"text": "*Timestamp*\n{{approved_at}}",
-						},
-					},
-				},
-				map[string]any{
-					"type": "divider",
-				},
-				map[string]any{
-					"type": "actions",
-					"elements": []any{
-						map[string]any{
-							"type": "button",
+							"type": "header",
 							"text": map[string]any{
 								"type":  "plain_text",
-								"text":  "View Control",
+								"text":  "✅ Control Approved",
 								"emoji": true,
 							},
-							"style": "primary",
-							"url":   "https://console.theopenlane.io/controls/{{object_id}}",
+						},
+						map[string]any{
+							"type": "section",
+							"text": map[string]any{
+								"type": "mrkdwn",
+								"text": "*Control:* <https://console.theopenlane.io/controls/{{object_id}}|{{ref_code}} - {{title}}>\n*Status:* :white_check_mark: {{status}}",
+							},
+						},
+						map[string]any{
+							"type": "section",
+							"fields": []any{
+								map[string]any{
+									"type": "mrkdwn",
+									"text": "*Control*\n{{ref_code}}",
+								},
+								map[string]any{
+									"type": "mrkdwn",
+									"text": "*Title*\n{{title}}",
+								},
+								map[string]any{
+									"type": "mrkdwn",
+									"text": "*Triggered By*\n{{initiator}}",
+								},
+								map[string]any{
+									"type": "mrkdwn",
+									"text": "*Timestamp*\n{{timestamp}}",
+								},
+							},
+						},
+						map[string]any{
+							"type": "divider",
+						},
+						map[string]any{
+							"type": "actions",
+							"elements": []any{
+								map[string]any{
+									"type": "button",
+									"text": map[string]any{
+										"type":  "plain_text",
+										"text":  "View Control",
+										"emoji": true,
+									},
+									"style": "primary",
+									"url":   "https://console.theopenlane.io/controls/{{object_id}}",
+								},
+							},
 						},
 					},
 				},
@@ -966,10 +971,11 @@ func runSlackWebhookDemo(ctx context.Context, config openlane.Config, apiClient 
 	fmt.Printf("   - Action: send Slack webhook\n")
 
 	fmt.Println("\n4. Creating control to trigger workflow...")
-	control, err := createControl(ctx, client, seed.OrganizationID,
-		"Slack Webhook Demo Control",
-		"Control that will be approved to fire Slack webhook",
-		"Automation",
+	control, err := createControlWithRefCode(ctx, client, seed.OrganizationID,
+		"Change Management Authorization",
+		"Changes to infrastructure and software are authorized prior to implementation",
+		"Change Management",
+		"CC6.9",
 	)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to create control: %w", err)

@@ -385,7 +385,9 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 
 	replacements["initiator"] = initiatorName
 	replacements["approved_by"] = approverName
-	replacements["approved_at"] = time.Now().UTC().Format(time.RFC3339)
+	now := time.Now().UTC()
+	replacements["approved_at"] = now.Format(time.RFC3339)
+	replacements["timestamp"] = now.Format("01/02/2006")
 
 	// Enrich with object-specific details when possible using generated helper.
 	// This adds fields like ref_code, title, name, status based on schema annotations.
@@ -395,10 +397,16 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 
 	// Copy enriched fields to replacements for template substitution
 	for key, value := range basePayload {
-		if strVal, ok := value.(string); ok {
-			if _, exists := replacements[key]; !exists {
-				replacements[key] = strVal
-			}
+		if _, exists := replacements[key]; exists {
+			continue
+		}
+		switch v := value.(type) {
+		case string:
+			replacements[key] = v
+		case fmt.Stringer:
+			replacements[key] = v.String()
+		default:
+			replacements[key] = fmt.Sprintf("%v", value)
 		}
 	}
 
