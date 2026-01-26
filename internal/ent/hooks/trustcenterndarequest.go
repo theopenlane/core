@@ -36,6 +36,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			}
 
 			n, err := m.Client().Template.Query().
+				Select(template.FieldID).
 				Where(template.KindEQ(enums.TemplateKindTrustCenterNda)).
 				Count(ctx)
 			if err != nil {
