@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/events"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -523,6 +524,9 @@ func newNotificationCreation(ctx *soiree.EventContext, userIDs []string, input *
 	if !ok {
 		return nil
 	}
+
+	// sure objectType is set as UPPER_SNAKE_CASE
+	input.ObjectType = strcase.UpperSnakeCase(input.ObjectType)
 
 	// set allow context
 	allowCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
