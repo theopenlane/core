@@ -43,7 +43,7 @@ func WithTx[T any](ctx context.Context, client *generated.Client, scope *observa
 	var zero T
 
 	if client == nil {
-		return zero, &TxError{Stage: ErrTxBegin, Err: errors.New("nil client")}
+		return zero, &TxError{Stage: ErrTxBegin, Err: ErrNilClient}
 	}
 
 	tx, err := client.Tx(ctx)
