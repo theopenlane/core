@@ -105,4 +105,6 @@ var (
 	ErrFailedToResolveNotificationTarget = errors.New("failed to resolve notification target")
 	// ErrApprovalNoTargets indicates an approval action resolved no targets and should be skipped
 	ErrApprovalNoTargets = errors.New("approval action has no resolved targets")
+	// ErrMissingObjectRef is returned when a workflow object ref is nil
+	ErrMissingObjectRef = errors.New("workflow object ref is required")
 )

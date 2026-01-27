@@ -376,7 +376,12 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 
 	// Resolve user IDs to display names for human-readable webhook payloads
 	allowCtx := wfworkflows.AllowContext(ctx)
-	initiatorName := wfworkflows.ResolveUserDisplayName(allowCtx, e.client, instance.CreatedBy)
+	// Get initiator from the object that triggered the workflow (not the service that created the instance)
+	initiatorID := wfworkflows.GetObjectUpdatedBy(obj)
+	if initiatorID == "" {
+		initiatorID = instance.CreatedBy
+	}
+	initiatorName := wfworkflows.ResolveUserDisplayName(allowCtx, e.client, initiatorID)
 	approverName := wfworkflows.ResolveUserDisplayName(allowCtx, e.client, instance.UpdatedBy)
 
 	basePayload["approved_by"] = approverName

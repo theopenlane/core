@@ -298,7 +298,7 @@ func (l *WorkflowListeners) HandleActionStarted(ctx *soiree.EventContext, payloa
 	}
 
 	// Evaluate optional when expression
-	shouldExecute := true
+	var shouldExecute bool
 	obj, shouldExecute, err = l.evaluateActionWhen(scopeCtx, instance, action, obj, orgID)
 	if err != nil {
 		l.recordActionFailure(scope, instance, actionFailureDetails(action.Key, payload.ActionIndex, payload.ActionType, obj, err), obj)

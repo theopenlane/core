@@ -26,6 +26,10 @@ func NewProposalManager(client *generated.Client) *ProposalManager {
 
 // Create creates a WorkflowProposal for the approval domain within a transaction
 func (m *ProposalManager) Create(ctx context.Context, tx *generated.Tx, objRef *generated.WorkflowObjectRef, domain *workflows.DomainChanges) (*generated.WorkflowProposal, error) {
+	if objRef == nil {
+		return nil, ErrMissingObjectRef
+	}
+
 	proposedHash, err := workflows.ComputeProposalHash(domain.Changes)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrFailedToComputeProposalHash, err)
@@ -42,7 +46,7 @@ func (m *ProposalManager) Create(ctx context.Context, tx *generated.Tx, objRef *
 		SetProposedHash(proposedHash).
 		SetUpdatedAt(now)
 
-	if objRef != nil && objRef.OwnerID != "" {
+	if objRef.OwnerID != "" {
 		proposalCreate = proposalCreate.SetOwnerID(objRef.OwnerID)
 	}
 

@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // WorkflowAssignment stores approval assignment records for workflow instances
@@ -167,7 +166,6 @@ func (WorkflowAssignment) Annotations() []schema.Annotation {
 func (WorkflowAssignment) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.AllowIfInternalRequest(),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.WorkflowAssignmentMutation](),
 		),

@@ -215,11 +215,6 @@ func skipFilter(ctx context.Context, customSkipperFunc ...skipperFunc) bool {
 		return true
 	}
 
-	// skip filtering for internal requests
-	if rule.IsInternalRequest(ctx) {
-		return true
-	}
-
 	if ok := history.IsHistoryRequest(ctx); ok {
 		// skip filtering for history requests
 		return true

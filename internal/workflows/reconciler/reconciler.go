@@ -34,10 +34,10 @@ type EmitReconcileResult struct {
 type Option func(*Reconciler)
 
 // WithMaxAttempts overrides the default max retry attempts
-func WithMaxAttempts(max int) Option {
+func WithMaxAttempts(maxRetries int) Option {
 	return func(r *Reconciler) {
-		if max > 0 {
-			r.maxAttempts = max
+		if maxRetries > 0 {
+			r.maxAttempts = maxRetries
 		}
 	}
 }
@@ -131,7 +131,7 @@ func (r *Reconciler) processEmitFailure(ctx context.Context, evt *generated.Work
 	}
 
 	result.Attempted++
-	receipt := r.reemit(ctx, evt, &details)
+	receipt := r.reemit(ctx, &details)
 	if details.EventID == "" && receipt.EventID != "" {
 		details.EventID = receipt.EventID
 		detailsUpdated = true
@@ -158,7 +158,7 @@ func (r *Reconciler) processEmitFailure(ctx context.Context, evt *generated.Work
 }
 
 // reemit builds an event from stored details and emits it through the configured emitter
-func (r *Reconciler) reemit(ctx context.Context, evt *generated.WorkflowEvent, details *workflows.EmitFailureDetails) workflows.EmitReceipt {
+func (r *Reconciler) reemit(ctx context.Context, details *workflows.EmitFailureDetails) workflows.EmitReceipt {
 	event := soiree.NewBaseEvent(details.Topic, json.RawMessage(details.Payload))
 	props := event.Properties()
 	if details.EventID != "" {

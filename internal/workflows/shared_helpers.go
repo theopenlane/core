@@ -2,6 +2,7 @@ package workflows
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -275,6 +276,29 @@ func ResolveUserDisplayName(ctx context.Context, client *generated.Client, userI
 	}
 
 	return name
+}
+
+// GetObjectUpdatedBy extracts the UpdatedBy field from an Object's Node if available.
+// Returns empty string if the object or node is nil, or if UpdatedBy is not accessible.
+func GetObjectUpdatedBy(obj *Object) string {
+	if obj == nil || obj.Node == nil {
+		return ""
+	}
+
+	data, err := json.Marshal(obj.Node)
+	if err != nil {
+		return ""
+	}
+
+	var fields struct {
+		UpdatedBy string `json:"updated_by"`
+	}
+
+	if err := json.Unmarshal(data, &fields); err != nil {
+		return ""
+	}
+
+	return fields.UpdatedBy
 }
 
 // MutationPayload carries the raw ent mutation, the resolved operation, the entity ID and the ent

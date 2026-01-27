@@ -14,9 +14,7 @@ import (
 // Used to bypass workflow approval checks during system operations (e.g., applying approved changes)
 type WorkflowBypassContextKey struct{}
 
-// skipEventEmissionKey is used to share a mutable skip flag across hook layers.
-type skipEventEmissionKey struct{}
-
+// skipEventEmissionFlag is used to share a mutable skip flag across hook layers.
 type skipEventEmissionFlag struct {
 	skip bool
 }
@@ -40,16 +38,15 @@ func IsWorkflowBypass(ctx context.Context) bool {
 }
 
 // WithSkipEventEmission installs a mutable flag in the context so inner hooks can
-// signal that mutation events should not be emitted.
-func WithSkipEventEmission(ctx context.Context) (context.Context, *skipEventEmissionFlag) {
+// signal that mutation events should not be emitted via MarkSkipEventEmission.
+func WithSkipEventEmission(ctx context.Context) context.Context {
 	if ctx == nil {
-		return ctx, nil
+		return ctx
 	}
-	if existing, ok := ctx.Value(skipEventEmissionKey{}).(*skipEventEmissionFlag); ok && existing != nil {
-		return ctx, existing
+	if existing, ok := contextx.From[*skipEventEmissionFlag](ctx); ok && existing != nil {
+		return ctx
 	}
-	flag := &skipEventEmissionFlag{}
-	return context.WithValue(ctx, skipEventEmissionKey{}, flag), flag
+	return contextx.With(ctx, &skipEventEmissionFlag{})
 }
 
 // MarkSkipEventEmission marks the context to skip emitting mutation events.
@@ -57,7 +54,7 @@ func MarkSkipEventEmission(ctx context.Context) {
 	if ctx == nil {
 		return
 	}
-	if flag, ok := ctx.Value(skipEventEmissionKey{}).(*skipEventEmissionFlag); ok && flag != nil {
+	if flag, ok := contextx.From[*skipEventEmissionFlag](ctx); ok && flag != nil {
 		flag.skip = true
 	}
 }
@@ -67,7 +64,7 @@ func ShouldSkipEventEmission(ctx context.Context) bool {
 	if ctx == nil {
 		return false
 	}
-	if flag, ok := ctx.Value(skipEventEmissionKey{}).(*skipEventEmissionFlag); ok && flag != nil {
+	if flag, ok := contextx.From[*skipEventEmissionFlag](ctx); ok && flag != nil {
 		return flag.skip
 	}
 	return false

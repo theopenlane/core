@@ -248,17 +248,8 @@ func HookWorkflowProposalTriggerOnSubmit() ent.Hook {
 				return value, nil
 			}
 
-			ids, err := GetObjectIDsFromMutation(ctx, m, value)
-			if err != nil {
-				return value, err
-			}
-			var id string
-			if len(ids) == 1 {
-				id = ids[0]
-			} else if proposal, ok := value.(*generated.WorkflowProposal); ok {
-				id = proposal.ID
-			}
-			if id == "" {
+			id, ok := getSingleMutationID(ctx, m)
+			if !ok {
 				return value, nil
 			}
 

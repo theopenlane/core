@@ -32,7 +32,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				return next.Mutate(ctx, mutation)
 			}
 
-			ctx, _ = workflows.WithSkipEventEmission(ctx)
+			ctx = workflows.WithSkipEventEmission(ctx)
 
 			retVal, err := next.Mutate(ctx, mutation)
 			if err != nil {

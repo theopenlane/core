@@ -22,6 +22,9 @@ import (
 	"github.com/theopenlane/core/internal/workflows"
 )
 
+// diffContextLines is the number of context lines to show around changes in unified diffs
+const diffContextLines = 3
+
 func (r *Resolver) workflowInstanceProposalPreview(ctx context.Context, instance *generated.WorkflowInstance) (*model.WorkflowProposalPreview, error) {
 	if instance == nil || instance.WorkflowProposalID == "" {
 		return nil, nil
@@ -299,7 +302,7 @@ func workflowProposalDiff(currentValue any, proposedValue any) string {
 		B:        difflib.SplitLines(proposedStr),
 		FromFile: "current",
 		ToFile:   "proposed",
-		Context:  3,
+		Context:  diffContextLines,
 	}
 
 	diff, _ := difflib.GetUnifiedDiffString(ud)

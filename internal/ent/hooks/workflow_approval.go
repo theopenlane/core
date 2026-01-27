@@ -123,13 +123,13 @@ func HookWorkflowApprovalRouting() ent.Hook {
 
 			// Route to proposed changes instead of applying directly
 			workflows.MarkSkipEventEmission(ctx)
-			return routeMutationToProposals(ctx, client, mut, changedFields, proposedChanges, matchingDefs)
+			return routeMutationToProposals(ctx, client, mut, proposedChanges, matchingDefs)
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne)
 }
 
 // routeMutationToProposals stores the mutation in WorkflowProposal records instead of applying it directly.
-func routeMutationToProposals(ctx context.Context, client *generated.Client, m utils.GenericMutation, changedFields []string, proposedChanges map[string]any, defs []*generated.WorkflowDefinition) (ent.Value, error) {
+func routeMutationToProposals(ctx context.Context, client *generated.Client, m utils.GenericMutation, proposedChanges map[string]any, defs []*generated.WorkflowDefinition) (ent.Value, error) {
 	user, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
 		return nil, ErrFailedToGetUserFromContext
