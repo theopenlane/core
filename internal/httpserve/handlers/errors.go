@@ -149,6 +149,10 @@ var (
 	ErrLoginFailed = errors.New("login failed, please check your credentials and try again")
 	// ErrUnableToVerifyToken is returned when unable to verify a token
 	ErrUnableToVerifyToken = errors.New("unable to verify token, please try again")
+	// ErrResendWebhookDisabled is returned when resend webhook is not enabled
+	ErrResendWebhookDisabled = errors.New("resend webhook is not enabled")
+	// ErrResendWebhookMissingID is returned when resend webhook is missing svix-id header
+	ErrResendWebhookMissingID = errors.New("resend webhook is missing svix-id header")
 )
 
 var (

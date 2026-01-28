@@ -135,6 +135,18 @@ type Handler struct {
 	KeymakerService *keymaker.Service
 	// WorkflowEngine orchestrates workflow execution.
 	WorkflowEngine *engine.WorkflowEngine
+	// CampaignWebhook contains the configuration for campaign-related email webhooks
+	CampaignWebhook CampaignWebhookConfig
+}
+
+// CampaignWebhookConfig contains webhook configuration for campaign-related email providers.
+type CampaignWebhookConfig struct {
+	// Enabled toggles the campaign webhook handler
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// ResendAPIKey is the API key used for Resend client initialization
+	ResendAPIKey string `json:"resendapikey" koanf:"resendapikey" default:"" sensitive:"true"`
+	// ResendSecret is the signing secret used to verify Resend webhook payloads
+	ResendSecret string `json:"resendsecret" koanf:"resendsecret" default:"" sensitive:"true"`
 }
 
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user

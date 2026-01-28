@@ -618,3 +618,10 @@ func WithWorkflows(wf *engine.WorkflowEngine) ServerOption {
 		}
 	})
 }
+
+// WithCampaignWebhookConfig sets up webhook configuration for campaign-related email providers.
+func WithCampaignWebhookConfig() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		s.Config.Handler.CampaignWebhook = s.Config.Settings.CampaignWebhook
+	})
+}

@@ -77,6 +77,10 @@ authz:
     modelid: ""
     storeid: ""
     storename: openlane
+campaignwebhook:
+    enabled: false
+    resendapikey: ""
+    resendsecret: ""
 db:
     cachettl: 1000000000
     databasename: openlane
@@ -111,9 +115,6 @@ email:
         verifybilling: ""
         verifysubscriber: ""
     year: 0
-emailwebhook:
-    enabled: false
-    resendsecret: ""
 entconfig:
     billing:
         bypassemaildomains: null

@@ -1248,6 +1248,75 @@ tests:
         assertions:
           can_delete:
             - assessment_response:response-1
+  - name: campaigns
+    description: test campaign and campaign_target relationships with various parent types
+    tuple_file: tuples/campaigns.yaml
+    check:
+      # campaign with organization parent - org owner has full access
+      - user: user:ulid-of-owner
+        object: campaign:campaign-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      # campaign with organization parent - org member can view
+      - user: user:ulid-of-member
+        object: campaign:campaign-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      # campaign with organization parent - blocked user has no access
+      - user: user:ulid-blocked
+        object: campaign:campaign-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      # campaign with user parent - the parent user has edit access
+      - user: user:ulid-of-owner
+        object: campaign:campaign-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      # campaign with service parent - the service has edit access
+      - user: service:ulid-of-service-editor
+        object: campaign:campaign-3
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      # campaign_target with campaign parent - org owner has access via campaign
+      - user: user:ulid-of-owner
+        object: campaign_target:target-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      # campaign_target with campaign parent - blocked user has no access
+      - user: user:ulid-blocked
+        object: campaign_target:target-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      # campaign_target with user parent
+      - user: user:ulid-of-owner
+        object: campaign_target:target-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      # campaign_target with service parent
+      - user: service:ulid-of-service-editor
+        object: campaign_target:target-3
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
   - name: exports
     description: test export relationships and permissions
     tuple_file: tuples/exports.yaml
