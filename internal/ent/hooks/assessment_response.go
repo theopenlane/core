@@ -28,13 +28,17 @@ import (
 )
 
 // HookCreateAssessmentResponse sends the email to the user to fill in and input their data.
-// It also makes sure to bump up the send attempts if needed.
+// It also makes sure to bump up the send attempts if needed. The hook is idempotent: multiple
+// create calls for the same assessment/email/campaign combination will update the existing
+// record rather than creating duplicates.
 func HookCreateAssessmentResponse() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.AssessmentResponseFunc(func(ctx context.Context, m *generated.AssessmentResponseMutation) (generated.Value, error) {
-			id, ok := m.AssessmentID()
+			assessmentID, ok := m.AssessmentID()
 			email, emailExists := m.Email()
 			campaignID, _ := m.CampaignID()
+			ownerID, _ := m.OwnerID()
+
 			isTest := false
 			if value, exists := m.IsTest(); exists {
 				isTest = value
@@ -49,91 +53,165 @@ func HookCreateAssessmentResponse() ent.Hook {
 				return nil, err
 			}
 
-			query := m.Client().AssessmentResponse.Query().
-				Where(
-					assessmentresponse.AssessmentID(id),
-					assessmentresponse.EmailEqualFold(email),
-					assessmentresponse.IsTestEQ(isTest),
-				)
-			if campaignID != "" {
-				query = query.Where(assessmentresponse.CampaignIDEQ(campaignID))
-			} else {
-				query = query.Where(assessmentresponse.CampaignIDIsNil())
-			}
-
-			existingResponse, err := query.Only(ctx)
-
-			if err != nil {
-				if !generated.IsNotFound(err) {
-					return nil, err
-				}
-
-				// not found so this is a new user
-				m.ClearDocumentDataID()
-
-				// try to make email unique per org
-				count, err := m.Client().Contact.Query().Select(contact.FieldEmail).
-					Where(contact.EmailEqualFold(email)).
-					Count(ctx)
-				if err != nil {
-					logx.FromContext(ctx).Err(err).Msg("could not fetch existing contacts")
-					return nil, ErrUnableToCreateContact
-				}
-
-				if count == 0 {
-					err = m.Client().Contact.Create().SetEmail(email).
-						Exec(ctx)
-					if err != nil {
-						logx.FromContext(ctx).Err(err).Msg("could not create contact for assessment response")
-					}
-				}
-
-				value, err := next.Mutate(ctx, m)
-				if err != nil {
-					return nil, err
-				}
-
-				var responseID string
-				if resp, ok := value.(*generated.AssessmentResponse); ok && resp != nil {
-					responseID = resp.ID
-				}
-
-				if err := createResponseEmail(ctx, m, responseID); err != nil {
-					logx.FromContext(ctx).Error().Err(err).Msg("failed to send assessment response email")
-				}
-
-				return value, nil
-			}
-
-			// if started, we cannot send an invitation again (unless this is a test send)
-			if existingResponse.Status != enums.AssessmentResponseStatusSent &&
-				existingResponse.Status != enums.AssessmentResponseStatusOverdue &&
-				!isTest {
-				return nil, ErrAssessmentInProgress
-			}
-
-			newAttempts := existingResponse.SendAttempts + 1
-			if newAttempts > maxAttempts {
-				return nil, gqlerrors.NewCustomError(
-					gqlerrors.MaxAttemptsErrorCode,
-					"max attempts reached for this email, please delete the questionnaire request and try again",
-					ErrMaxAttemptsAssessments)
-			}
-
-			updatedResponse, err := m.Client().AssessmentResponse.UpdateOneID(existingResponse.ID).
-				SetSendAttempts(newAttempts).
-				Save(ctx)
+			existingResponse, err := findExistingAssessmentResponse(ctx, m.Client(), assessmentID, email, campaignID, ownerID, isTest)
 			if err != nil {
 				return nil, err
 			}
 
-			if err := createResponseEmail(ctx, m, updatedResponse.ID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("failed to resend assessment response email")
+			if existingResponse != nil {
+				return handleExistingAssessmentResponse(ctx, m, existingResponse, isTest)
 			}
 
-			return updatedResponse, nil
+			return createNewAssessmentResponse(ctx, m, next, email)
 		})
 	}, ent.OpCreate)
+}
+
+// findExistingAssessmentResponse queries for an existing assessment response matching the given criteria.
+func findExistingAssessmentResponse(ctx context.Context, client *generated.Client, assessmentID, email, campaignID, ownerID string, isTest bool) (*generated.AssessmentResponse, error) {
+	query := client.AssessmentResponse.Query().
+		Where(
+			assessmentresponse.AssessmentID(assessmentID),
+			assessmentresponse.EmailEqualFold(email),
+			assessmentresponse.IsTestEQ(isTest),
+		)
+
+	if ownerID != "" {
+		query = query.Where(assessmentresponse.OwnerID(ownerID))
+	}
+
+	if campaignID != "" {
+		query = query.Where(assessmentresponse.CampaignIDEQ(campaignID))
+	} else {
+		query = query.Where(assessmentresponse.CampaignIDIsNil())
+	}
+
+	existingResponse, err := query.Only(ctx)
+	if err != nil {
+		if generated.IsNotFound(err) {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	return existingResponse, nil
+}
+
+// handleExistingAssessmentResponse processes a resend request for an existing assessment response.
+// It validates the response can be resent, increments send attempts, updates due date if provided,
+// and sends a new email invitation.
+func handleExistingAssessmentResponse(ctx context.Context, m *generated.AssessmentResponseMutation, existingResponse *generated.AssessmentResponse, isTest bool) (*generated.AssessmentResponse, error) {
+	if existingResponse.Status != enums.AssessmentResponseStatusSent &&
+		existingResponse.Status != enums.AssessmentResponseStatusOverdue &&
+		!isTest {
+		return nil, ErrAssessmentInProgress
+	}
+
+	newAttempts := existingResponse.SendAttempts + 1
+	if newAttempts > maxAttempts {
+		return nil, gqlerrors.NewCustomError(
+			gqlerrors.MaxAttemptsErrorCode,
+			"max attempts reached for this email, please delete the questionnaire request and try again",
+			ErrMaxAttemptsAssessments)
+	}
+
+	update := m.Client().AssessmentResponse.UpdateOneID(existingResponse.ID).
+		SetSendAttempts(newAttempts)
+
+	if dueDate, ok := m.DueDate(); ok {
+		update = update.SetDueDate(dueDate)
+	}
+
+	if existingResponse.Status == enums.AssessmentResponseStatusOverdue {
+		update = update.SetStatus(enums.AssessmentResponseStatusSent)
+	}
+
+	updatedResponse, err := update.Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := createResponseEmail(ctx, m, updatedResponse.ID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to resend assessment response email")
+	}
+
+	return updatedResponse, nil
+}
+
+// createNewAssessmentResponse creates a new assessment response record, handles contact creation,
+// and sends the initial email invitation. It handles race conditions by detecting unique constraint
+// violations and re-querying to update the existing record.
+func createNewAssessmentResponse(ctx context.Context, m *generated.AssessmentResponseMutation, next ent.Mutator, email string) (generated.Value, error) {
+	m.ClearDocumentDataID()
+
+	count, err := m.Client().Contact.Query().Select(contact.FieldEmail).
+		Where(contact.EmailEqualFold(email)).
+		Count(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Err(err).Msg("could not fetch existing contacts")
+		return nil, ErrUnableToCreateContact
+	}
+
+	if count == 0 {
+		if err := m.Client().Contact.Create().SetEmail(email).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Err(err).Msg("could not create contact for assessment response")
+		}
+	}
+
+	value, err := next.Mutate(ctx, m)
+	if err != nil {
+		if isUniqueConstraintError(err) {
+			return handleConstraintViolation(ctx, m)
+		}
+
+		return nil, err
+	}
+
+	var responseID string
+	if resp, ok := value.(*generated.AssessmentResponse); ok && resp != nil {
+		responseID = resp.ID
+	}
+
+	if err := createResponseEmail(ctx, m, responseID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to send assessment response email")
+	}
+
+	return value, nil
+}
+
+// handleConstraintViolation handles the case where a unique constraint violation occurs during
+// creation due to a race condition. It re-queries for the existing record and updates it.
+func handleConstraintViolation(ctx context.Context, m *generated.AssessmentResponseMutation) (*generated.AssessmentResponse, error) {
+	assessmentID, _ := m.AssessmentID()
+	email, _ := m.Email()
+	campaignID, _ := m.CampaignID()
+	ownerID, _ := m.OwnerID()
+
+	isTest := false
+	if value, exists := m.IsTest(); exists {
+		isTest = value
+	}
+
+	existingResponse, err := findExistingAssessmentResponse(ctx, m.Client(), assessmentID, email, campaignID, ownerID, isTest)
+	if err != nil {
+		return nil, err
+	}
+
+	if existingResponse == nil {
+		return nil, ErrUnableToCreateAssessmentResponse
+	}
+
+	return handleExistingAssessmentResponse(ctx, m, existingResponse, isTest)
+}
+
+// isUniqueConstraintError checks if the error is a unique constraint violation.
+func isUniqueConstraintError(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	return generated.IsConstraintError(err)
 }
 
 // createResponseEmail builds and queues the assessment response email for a recipient.
