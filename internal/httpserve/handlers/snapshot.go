@@ -41,7 +41,7 @@ func (h *Handler) SnapshotHandler(ctx echo.Context, openapi *OpenAPIContext) err
 	client := cloudflare.NewClient(opts...)
 
 	params := browser_rendering.SnapshotNewParams{
-		AccountID: cloudflare.F(h.CloudflareConfig.AccountID), // add account id here if needed
+		AccountID: cloudflare.F(h.CloudflareConfig.AccountID),
 		Body: browser_rendering.SnapshotNewParamsBody{
 			URL: cloudflare.F(in.URL),
 		},
