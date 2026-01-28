@@ -99,7 +99,7 @@ func (r *Router) handleSpecialResponses(operationID string, openAPIContext *hand
 		r.addJSONResponse(openAPIContext, "User information", "application/json")
 	case "Livez", "Ready":
 		r.addJSONResponse(openAPIContext, "Health check status", "application/json")
-	case "StripeWebhook":
+	case "StripeWebhook", "ResendWebhook":
 		r.addPlainTextResponse(openAPIContext, "Webhook acknowledgment")
 	default:
 		// All other endpoints register their responses via h.Success() calls during registration
