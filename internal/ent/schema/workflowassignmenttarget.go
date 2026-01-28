@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // WorkflowAssignmentTarget links an assignment to specific targets (user/group/resolver)
@@ -124,7 +123,6 @@ func (WorkflowAssignmentTarget) Policy() ent.Policy {
 			policy.CheckOrgReadAccess(),
 		),
 		policy.WithMutationRules(
-			rule.AllowIfInternalRequest(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

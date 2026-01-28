@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // WorkflowInstance tracks execution of a workflow definition for a specific object
@@ -243,7 +242,6 @@ func (WorkflowInstance) Annotations() []schema.Annotation {
 func (WorkflowInstance) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.AllowIfInternalRequest(),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.WorkflowInstanceMutation](),
 		),

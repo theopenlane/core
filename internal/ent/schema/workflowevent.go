@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -91,7 +90,6 @@ func (WorkflowEvent) Policy() ent.Policy {
 			policy.CheckOrgReadAccess(),
 		),
 		policy.WithMutationRules(
-			rule.AllowIfInternalRequest(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
