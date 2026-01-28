@@ -13,13 +13,11 @@ import (
 	"net/http/httptest"
 	"strconv"
 	"strings"
-	"testing"
 	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/resend/resend-go/v2"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -63,13 +61,12 @@ func signResendWebhook(secret, id, timestamp string, payload []byte) (string, er
 	return "v1," + signature, nil
 }
 
-// TestResendWebhookHandlerEventTypes tests processing of different Resend webhook event types
-// and verifies that assessment responses and campaign targets are updated correctly.
-func (suite *HandlerTestSuite) TestResendWebhookHandlerEventTypes() {
+// TestResendWebhookHandlerEmailSent tests processing of email.sent events.
+func (suite *HandlerTestSuite) TestResendWebhookHandlerEmailSent() {
 	t := suite.T()
 
 	operation := openapi3.NewOperation()
-	operation.OperationID = "ResendWebhookEventTypes"
+	operation.OperationID = "ResendWebhookEmailSent"
 	suite.registerTestHandler(http.MethodPost, "/resend/webhook", operation, suite.h.ResendWebhookHandler)
 
 	secret := "whsec_" + base64.StdEncoding.EncodeToString([]byte("resend-webhook-secret"))
@@ -78,198 +75,465 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerEventTypes() {
 
 	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
-	// create shared template and assessment for all test cases
 	template, err := suite.db.Template.Create().
-		SetName("Event Types Template").
-		SetDescription("Template for event type tests").
-		SetJsonconfig(map[string]any{"title": "Event Types Test"}).
+		SetName("Email Sent Template").
+		SetDescription("Template for email sent test").
+		SetJsonconfig(map[string]any{"title": "Email Sent Test"}).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetOwnerID(testUser1.OrganizationID).
-		SetName("Event Types Assessment").
+		SetName("Email Sent Assessment").
 		SetTemplateID(template.ID).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
-	testCases := []struct {
-		name                       string
-		eventType                  string
-		emailID                    string
-		msgID                      string
-		expectedStatus             enums.AssessmentResponseStatus
-		expectedTargetStatus       enums.AssessmentResponseStatus
-		checkDeliveredAt           bool
-		checkOpenedAt              bool
-		checkClickedAt             bool
-		checkEmailMetadata         bool
-		expectedEmailMetadataEvent string
+	campaign, err := suite.db.Campaign.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetName("Email Sent Campaign").
+		SetCampaignType(enums.CampaignTypeQuestionnaire).
+		SetAssessmentID(assessment.ID).
+		SetStatus(enums.CampaignStatusActive).
+		SetIsActive(true).
+		Save(ctx)
+	assert.NoError(t, err)
+
+	target, err := suite.db.CampaignTarget.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetCampaignID(campaign.ID).
+		SetEmail("emailsent@example.com").
+		Save(ctx)
+	assert.NoError(t, err)
+
+	response, err := suite.db.AssessmentResponse.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetAssessmentID(assessment.ID).
+		SetCampaignID(campaign.ID).
+		SetEmail(target.Email).
+		Save(ctx)
+	assert.NoError(t, err)
+
+	eventTime := time.Now().UTC().Format(time.RFC3339Nano)
+	payload := testResendWebhookEvent{Type: resend.EventEmailSent}
+	payload.Data.EmailID = "email_sent_001"
+	payload.Data.CreatedAt = eventTime
+	payload.Data.Tags = []struct {
+		Name  string `json:"name"`
+		Value string `json:"value"`
 	}{
-		{
-			name:                 "email_sent_updates_status",
-			eventType:            resend.EventEmailSent,
-			emailID:              "email_sent_001",
-			msgID:                "msg_sent_001",
-			expectedStatus:       enums.AssessmentResponseStatusSent,
-			expectedTargetStatus: enums.AssessmentResponseStatusSent,
-		},
-		{
-			name:                 "email_delivered_sets_delivered_at",
-			eventType:            resend.EventEmailDelivered,
-			emailID:              "email_delivered_001",
-			msgID:                "msg_delivered_001",
-			expectedStatus:       enums.AssessmentResponseStatusNotStarted,
-			expectedTargetStatus: enums.AssessmentResponseStatusSent,
-			checkDeliveredAt:     true,
-		},
-		{
-			name:                 "email_opened_sets_opened_at_and_increments_count",
-			eventType:            resend.EventEmailOpened,
-			emailID:              "email_opened_001",
-			msgID:                "msg_opened_001",
-			expectedStatus:       enums.AssessmentResponseStatusNotStarted,
-			expectedTargetStatus: enums.AssessmentResponseStatusSent,
-			checkOpenedAt:        true,
-		},
-		{
-			name:                 "email_clicked_sets_clicked_at_and_increments_count",
-			eventType:            resend.EventEmailClicked,
-			emailID:              "email_clicked_001",
-			msgID:                "msg_clicked_001",
-			expectedStatus:       enums.AssessmentResponseStatusNotStarted,
-			expectedTargetStatus: enums.AssessmentResponseStatusSent,
-			checkClickedAt:       true,
-		},
-		{
-			name:                       "email_bounced_sets_metadata",
-			eventType:                  resend.EventEmailBounced,
-			emailID:                    "email_bounced_001",
-			msgID:                      "msg_bounced_001",
-			expectedStatus:             enums.AssessmentResponseStatusNotStarted,
-			expectedTargetStatus:       enums.AssessmentResponseStatusNotStarted,
-			checkEmailMetadata:         true,
-			expectedEmailMetadataEvent: resend.EventEmailBounced,
-		},
-		{
-			name:                       "email_failed_sets_metadata",
-			eventType:                  resend.EventEmailFailed,
-			emailID:                    "email_failed_001",
-			msgID:                      "msg_failed_001",
-			expectedStatus:             enums.AssessmentResponseStatusNotStarted,
-			expectedTargetStatus:       enums.AssessmentResponseStatusNotStarted,
-			checkEmailMetadata:         true,
-			expectedEmailMetadataEvent: resend.EventEmailFailed,
-		},
+		{Name: "assessment_response_id", Value: response.ID},
+		{Name: "campaign_target_id", Value: target.ID},
 	}
 
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			// create fresh campaign, target, and response for each test case
-			campaign, err := suite.db.Campaign.Create().
-				SetOwnerID(testUser1.OrganizationID).
-				SetName("Campaign " + tc.name).
-				SetCampaignType(enums.CampaignTypeQuestionnaire).
-				SetAssessmentID(assessment.ID).
-				SetStatus(enums.CampaignStatusActive).
-				SetIsActive(true).
-				Save(ctx)
-			require.NoError(t, err)
+	body, err := json.Marshal(payload)
+	assert.NoError(t, err)
 
-			targetEmail := tc.name + "@example.com"
-			target, err := suite.db.CampaignTarget.Create().
-				SetOwnerID(testUser1.OrganizationID).
-				SetCampaignID(campaign.ID).
-				SetEmail(targetEmail).
-				Save(ctx)
-			require.NoError(t, err)
+	msgID := "msg_sent_001"
+	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
+	signature, err := signResendWebhook(secret, msgID, timestamp, body)
+	assert.NoError(t, err)
 
-			response, err := suite.db.AssessmentResponse.Create().
-				SetOwnerID(testUser1.OrganizationID).
-				SetAssessmentID(assessment.ID).
-				SetCampaignID(campaign.ID).
-				SetEmail(targetEmail).
-				Save(ctx)
-			require.NoError(t, err)
+	req := httptest.NewRequest(http.MethodPost, "/resend/webhook", bytes.NewReader(body))
+	req.Header.Set("svix-id", msgID)
+	req.Header.Set("svix-timestamp", timestamp)
+	req.Header.Set("svix-signature", signature)
 
-			eventTime := time.Now().UTC().Format(time.RFC3339Nano)
-			payload := testResendWebhookEvent{
-				Type: tc.eventType,
-			}
-			payload.Data.EmailID = tc.emailID
-			payload.Data.CreatedAt = eventTime
-			payload.Data.Tags = []struct {
-				Name  string `json:"name"`
-				Value string `json:"value"`
-			}{
-				{Name: "assessment_response_id", Value: response.ID},
-				{Name: "campaign_target_id", Value: target.ID},
-			}
+	recorder := httptest.NewRecorder()
+	suite.e.ServeHTTP(recorder, req)
 
-			body, err := json.Marshal(payload)
-			require.NoError(t, err)
+	res := recorder.Result()
+	defer res.Body.Close()
 
-			timestamp := strconv.FormatInt(time.Now().Unix(), 10)
-			signature, err := signResendWebhook(secret, tc.msgID, timestamp, body)
-			require.NoError(t, err)
+	assert.Equal(t, http.StatusOK, res.StatusCode)
 
-			req := httptest.NewRequest(http.MethodPost, "/resend/webhook", bytes.NewReader(body))
-			req.Header.Set("svix-id", tc.msgID)
-			req.Header.Set("svix-timestamp", timestamp)
-			req.Header.Set("svix-signature", signature)
+	updatedResp, err := suite.db.AssessmentResponse.Get(ctx, response.ID)
+	assert.NoError(t, err)
+	assert.Equal(t, enums.AssessmentResponseStatusSent, updatedResp.Status)
+	assert.NotNil(t, updatedResp.LastEmailEventAt)
 
-			recorder := httptest.NewRecorder()
-			suite.e.ServeHTTP(recorder, req)
+	updatedTarget, err := suite.db.CampaignTarget.Get(ctx, target.ID)
+	assert.NoError(t, err)
+	assert.Equal(t, enums.AssessmentResponseStatusSent, updatedTarget.Status)
+	assert.NotNil(t, updatedTarget.SentAt)
+}
 
-			res := recorder.Result()
-			defer res.Body.Close()
+// TestResendWebhookHandlerEmailDelivered tests processing of email.delivered events.
+func (suite *HandlerTestSuite) TestResendWebhookHandlerEmailDelivered() {
+	t := suite.T()
 
-			require.Equal(t, http.StatusOK, res.StatusCode)
+	operation := openapi3.NewOperation()
+	operation.OperationID = "ResendWebhookEmailDelivered"
+	suite.registerTestHandler(http.MethodPost, "/resend/webhook", operation, suite.h.ResendWebhookHandler)
 
-			// verify assessment response updates
-			updatedResp, err := suite.db.AssessmentResponse.Get(ctx, response.ID)
-			require.NoError(t, err)
+	secret := "whsec_" + base64.StdEncoding.EncodeToString([]byte("resend-webhook-secret"))
+	suite.h.CampaignWebhook.Enabled = true
+	suite.h.CampaignWebhook.ResendSecret = secret
 
-			assert.Equal(t, tc.expectedStatus, updatedResp.Status, "assessment response status mismatch")
-			assert.NotNil(t, updatedResp.LastEmailEventAt, "LastEmailEventAt should be set")
+	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
-			if tc.checkDeliveredAt {
-				assert.False(t, updatedResp.EmailDeliveredAt.IsZero(), "EmailDeliveredAt should be set")
-			}
+	template, err := suite.db.Template.Create().
+		SetName("Email Delivered Template").
+		SetDescription("Template for email delivered test").
+		SetJsonconfig(map[string]any{"title": "Email Delivered Test"}).
+		Save(ctx)
+	assert.NoError(t, err)
 
-			if tc.checkOpenedAt {
-				assert.False(t, updatedResp.EmailOpenedAt.IsZero(), "EmailOpenedAt should be set")
-				assert.Equal(t, 1, updatedResp.EmailOpenCount, "EmailOpenCount should be incremented")
-			}
+	assessment, err := suite.db.Assessment.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetName("Email Delivered Assessment").
+		SetTemplateID(template.ID).
+		Save(ctx)
+	assert.NoError(t, err)
 
-			if tc.checkClickedAt {
-				assert.False(t, updatedResp.EmailClickedAt.IsZero(), "EmailClickedAt should be set")
-				assert.Equal(t, 1, updatedResp.EmailClickCount, "EmailClickCount should be incremented")
-			}
+	campaign, err := suite.db.Campaign.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetName("Email Delivered Campaign").
+		SetCampaignType(enums.CampaignTypeQuestionnaire).
+		SetAssessmentID(assessment.ID).
+		SetStatus(enums.CampaignStatusActive).
+		SetIsActive(true).
+		Save(ctx)
+	assert.NoError(t, err)
 
-			if tc.checkEmailMetadata {
-				require.NotNil(t, updatedResp.EmailMetadata, "EmailMetadata should be set")
-				assert.Equal(t, tc.expectedEmailMetadataEvent, updatedResp.EmailMetadata["resend_event"])
-				assert.Equal(t, tc.emailID, updatedResp.EmailMetadata["resend_email_id"])
-				assert.Equal(t, eventTime, updatedResp.EmailMetadata["resend_timestamp"])
-			}
+	target, err := suite.db.CampaignTarget.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetCampaignID(campaign.ID).
+		SetEmail("emaildelivered@example.com").
+		Save(ctx)
+	assert.NoError(t, err)
 
-			// verify campaign target updates
-			updatedTarget, err := suite.db.CampaignTarget.Get(ctx, target.ID)
-			require.NoError(t, err)
+	response, err := suite.db.AssessmentResponse.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetAssessmentID(assessment.ID).
+		SetCampaignID(campaign.ID).
+		SetEmail(target.Email).
+		Save(ctx)
+	assert.NoError(t, err)
 
-			assert.Equal(t, tc.expectedTargetStatus, updatedTarget.Status, "campaign target status mismatch")
-
-			if tc.expectedTargetStatus == enums.AssessmentResponseStatusSent {
-				assert.NotNil(t, updatedTarget.SentAt, "SentAt should be set for sent status")
-			}
-
-			if tc.checkEmailMetadata {
-				require.NotNil(t, updatedTarget.Metadata, "campaign target Metadata should be set for bounce/fail")
-				assert.Equal(t, tc.expectedEmailMetadataEvent, updatedTarget.Metadata["resend_event"])
-			}
-		})
+	eventTime := time.Now().UTC().Format(time.RFC3339Nano)
+	payload := testResendWebhookEvent{Type: resend.EventEmailDelivered}
+	payload.Data.EmailID = "email_delivered_001"
+	payload.Data.CreatedAt = eventTime
+	payload.Data.Tags = []struct {
+		Name  string `json:"name"`
+		Value string `json:"value"`
+	}{
+		{Name: "assessment_response_id", Value: response.ID},
+		{Name: "campaign_target_id", Value: target.ID},
 	}
+
+	body, err := json.Marshal(payload)
+	assert.NoError(t, err)
+
+	msgID := "msg_delivered_001"
+	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
+	signature, err := signResendWebhook(secret, msgID, timestamp, body)
+	assert.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/resend/webhook", bytes.NewReader(body))
+	req.Header.Set("svix-id", msgID)
+	req.Header.Set("svix-timestamp", timestamp)
+	req.Header.Set("svix-signature", signature)
+
+	recorder := httptest.NewRecorder()
+	suite.e.ServeHTTP(recorder, req)
+
+	res := recorder.Result()
+	defer res.Body.Close()
+
+	assert.Equal(t, http.StatusOK, res.StatusCode)
+
+	updatedResp, err := suite.db.AssessmentResponse.Get(ctx, response.ID)
+	assert.NoError(t, err)
+	assert.NotNil(t, updatedResp.LastEmailEventAt)
+	assert.False(t, updatedResp.EmailDeliveredAt.IsZero(), "EmailDeliveredAt should be set")
+}
+
+// TestResendWebhookHandlerEmailOpened tests processing of email.opened events.
+func (suite *HandlerTestSuite) TestResendWebhookHandlerEmailOpened() {
+	t := suite.T()
+
+	operation := openapi3.NewOperation()
+	operation.OperationID = "ResendWebhookEmailOpened"
+	suite.registerTestHandler(http.MethodPost, "/resend/webhook", operation, suite.h.ResendWebhookHandler)
+
+	secret := "whsec_" + base64.StdEncoding.EncodeToString([]byte("resend-webhook-secret"))
+	suite.h.CampaignWebhook.Enabled = true
+	suite.h.CampaignWebhook.ResendSecret = secret
+
+	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+
+	template, err := suite.db.Template.Create().
+		SetName("Email Opened Template").
+		SetDescription("Template for email opened test").
+		SetJsonconfig(map[string]any{"title": "Email Opened Test"}).
+		Save(ctx)
+	assert.NoError(t, err)
+
+	assessment, err := suite.db.Assessment.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetName("Email Opened Assessment").
+		SetTemplateID(template.ID).
+		Save(ctx)
+	assert.NoError(t, err)
+
+	campaign, err := suite.db.Campaign.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetName("Email Opened Campaign").
+		SetCampaignType(enums.CampaignTypeQuestionnaire).
+		SetAssessmentID(assessment.ID).
+		SetStatus(enums.CampaignStatusActive).
+		SetIsActive(true).
+		Save(ctx)
+	assert.NoError(t, err)
+
+	target, err := suite.db.CampaignTarget.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetCampaignID(campaign.ID).
+		SetEmail("emailopened@example.com").
+		Save(ctx)
+	assert.NoError(t, err)
+
+	response, err := suite.db.AssessmentResponse.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetAssessmentID(assessment.ID).
+		SetCampaignID(campaign.ID).
+		SetEmail(target.Email).
+		Save(ctx)
+	assert.NoError(t, err)
+
+	eventTime := time.Now().UTC().Format(time.RFC3339Nano)
+	payload := testResendWebhookEvent{Type: resend.EventEmailOpened}
+	payload.Data.EmailID = "email_opened_001"
+	payload.Data.CreatedAt = eventTime
+	payload.Data.Tags = []struct {
+		Name  string `json:"name"`
+		Value string `json:"value"`
+	}{
+		{Name: "assessment_response_id", Value: response.ID},
+		{Name: "campaign_target_id", Value: target.ID},
+	}
+
+	body, err := json.Marshal(payload)
+	assert.NoError(t, err)
+
+	msgID := "msg_opened_001"
+	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
+	signature, err := signResendWebhook(secret, msgID, timestamp, body)
+	assert.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/resend/webhook", bytes.NewReader(body))
+	req.Header.Set("svix-id", msgID)
+	req.Header.Set("svix-timestamp", timestamp)
+	req.Header.Set("svix-signature", signature)
+
+	recorder := httptest.NewRecorder()
+	suite.e.ServeHTTP(recorder, req)
+
+	res := recorder.Result()
+	defer res.Body.Close()
+
+	assert.Equal(t, http.StatusOK, res.StatusCode)
+
+	updatedResp, err := suite.db.AssessmentResponse.Get(ctx, response.ID)
+	assert.NoError(t, err)
+	assert.NotNil(t, updatedResp.LastEmailEventAt)
+	assert.False(t, updatedResp.EmailOpenedAt.IsZero(), "EmailOpenedAt should be set")
+	assert.Equal(t, 1, updatedResp.EmailOpenCount, "EmailOpenCount should be incremented")
+}
+
+// TestResendWebhookHandlerEmailClicked tests processing of email.clicked events.
+func (suite *HandlerTestSuite) TestResendWebhookHandlerEmailClicked() {
+	t := suite.T()
+
+	operation := openapi3.NewOperation()
+	operation.OperationID = "ResendWebhookEmailClicked"
+	suite.registerTestHandler(http.MethodPost, "/resend/webhook", operation, suite.h.ResendWebhookHandler)
+
+	secret := "whsec_" + base64.StdEncoding.EncodeToString([]byte("resend-webhook-secret"))
+	suite.h.CampaignWebhook.Enabled = true
+	suite.h.CampaignWebhook.ResendSecret = secret
+
+	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+
+	template, err := suite.db.Template.Create().
+		SetName("Email Clicked Template").
+		SetDescription("Template for email clicked test").
+		SetJsonconfig(map[string]any{"title": "Email Clicked Test"}).
+		Save(ctx)
+	assert.NoError(t, err)
+
+	assessment, err := suite.db.Assessment.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetName("Email Clicked Assessment").
+		SetTemplateID(template.ID).
+		Save(ctx)
+	assert.NoError(t, err)
+
+	campaign, err := suite.db.Campaign.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetName("Email Clicked Campaign").
+		SetCampaignType(enums.CampaignTypeQuestionnaire).
+		SetAssessmentID(assessment.ID).
+		SetStatus(enums.CampaignStatusActive).
+		SetIsActive(true).
+		Save(ctx)
+	assert.NoError(t, err)
+
+	target, err := suite.db.CampaignTarget.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetCampaignID(campaign.ID).
+		SetEmail("emailclicked@example.com").
+		Save(ctx)
+	assert.NoError(t, err)
+
+	response, err := suite.db.AssessmentResponse.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetAssessmentID(assessment.ID).
+		SetCampaignID(campaign.ID).
+		SetEmail(target.Email).
+		Save(ctx)
+	assert.NoError(t, err)
+
+	eventTime := time.Now().UTC().Format(time.RFC3339Nano)
+	payload := testResendWebhookEvent{Type: resend.EventEmailClicked}
+	payload.Data.EmailID = "email_clicked_001"
+	payload.Data.CreatedAt = eventTime
+	payload.Data.Tags = []struct {
+		Name  string `json:"name"`
+		Value string `json:"value"`
+	}{
+		{Name: "assessment_response_id", Value: response.ID},
+		{Name: "campaign_target_id", Value: target.ID},
+	}
+
+	body, err := json.Marshal(payload)
+	assert.NoError(t, err)
+
+	msgID := "msg_clicked_001"
+	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
+	signature, err := signResendWebhook(secret, msgID, timestamp, body)
+	assert.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/resend/webhook", bytes.NewReader(body))
+	req.Header.Set("svix-id", msgID)
+	req.Header.Set("svix-timestamp", timestamp)
+	req.Header.Set("svix-signature", signature)
+
+	recorder := httptest.NewRecorder()
+	suite.e.ServeHTTP(recorder, req)
+
+	res := recorder.Result()
+	defer res.Body.Close()
+
+	assert.Equal(t, http.StatusOK, res.StatusCode)
+
+	updatedResp, err := suite.db.AssessmentResponse.Get(ctx, response.ID)
+	assert.NoError(t, err)
+	assert.NotNil(t, updatedResp.LastEmailEventAt)
+	assert.False(t, updatedResp.EmailClickedAt.IsZero(), "EmailClickedAt should be set")
+	assert.Equal(t, 1, updatedResp.EmailClickCount, "EmailClickCount should be incremented")
+}
+
+// TestResendWebhookHandlerEmailBounced tests processing of email.bounced events.
+func (suite *HandlerTestSuite) TestResendWebhookHandlerEmailBounced() {
+	t := suite.T()
+
+	operation := openapi3.NewOperation()
+	operation.OperationID = "ResendWebhookEmailBounced"
+	suite.registerTestHandler(http.MethodPost, "/resend/webhook", operation, suite.h.ResendWebhookHandler)
+
+	secret := "whsec_" + base64.StdEncoding.EncodeToString([]byte("resend-webhook-secret"))
+	suite.h.CampaignWebhook.Enabled = true
+	suite.h.CampaignWebhook.ResendSecret = secret
+
+	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+
+	template, err := suite.db.Template.Create().
+		SetName("Email Bounced Template").
+		SetDescription("Template for email bounced test").
+		SetJsonconfig(map[string]any{"title": "Email Bounced Test"}).
+		Save(ctx)
+	assert.NoError(t, err)
+
+	assessment, err := suite.db.Assessment.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetName("Email Bounced Assessment").
+		SetTemplateID(template.ID).
+		Save(ctx)
+	assert.NoError(t, err)
+
+	campaign, err := suite.db.Campaign.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetName("Email Bounced Campaign").
+		SetCampaignType(enums.CampaignTypeQuestionnaire).
+		SetAssessmentID(assessment.ID).
+		SetStatus(enums.CampaignStatusActive).
+		SetIsActive(true).
+		Save(ctx)
+	assert.NoError(t, err)
+
+	target, err := suite.db.CampaignTarget.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetCampaignID(campaign.ID).
+		SetEmail("emailbounced@example.com").
+		Save(ctx)
+	assert.NoError(t, err)
+
+	response, err := suite.db.AssessmentResponse.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetAssessmentID(assessment.ID).
+		SetCampaignID(campaign.ID).
+		SetEmail(target.Email).
+		Save(ctx)
+	assert.NoError(t, err)
+
+	eventTime := time.Now().UTC().Format(time.RFC3339Nano)
+	emailID := "email_bounced_001"
+	payload := testResendWebhookEvent{Type: resend.EventEmailBounced}
+	payload.Data.EmailID = emailID
+	payload.Data.CreatedAt = eventTime
+	payload.Data.Tags = []struct {
+		Name  string `json:"name"`
+		Value string `json:"value"`
+	}{
+		{Name: "assessment_response_id", Value: response.ID},
+		{Name: "campaign_target_id", Value: target.ID},
+	}
+
+	body, err := json.Marshal(payload)
+	assert.NoError(t, err)
+
+	msgID := "msg_bounced_001"
+	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
+	signature, err := signResendWebhook(secret, msgID, timestamp, body)
+	assert.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/resend/webhook", bytes.NewReader(body))
+	req.Header.Set("svix-id", msgID)
+	req.Header.Set("svix-timestamp", timestamp)
+	req.Header.Set("svix-signature", signature)
+
+	recorder := httptest.NewRecorder()
+	suite.e.ServeHTTP(recorder, req)
+
+	res := recorder.Result()
+	defer res.Body.Close()
+
+	assert.Equal(t, http.StatusOK, res.StatusCode)
+
+	updatedResp, err := suite.db.AssessmentResponse.Get(ctx, response.ID)
+	assert.NoError(t, err)
+	assert.NotNil(t, updatedResp.EmailMetadata, "EmailMetadata should be set")
+	assert.Equal(t, resend.EventEmailBounced, updatedResp.EmailMetadata["resend_event"])
+	assert.Equal(t, emailID, updatedResp.EmailMetadata["resend_email_id"])
+	assert.Equal(t, eventTime, updatedResp.EmailMetadata["resend_timestamp"])
+
+	updatedTarget, err := suite.db.CampaignTarget.Get(ctx, target.ID)
+	assert.NoError(t, err)
+	assert.NotNil(t, updatedTarget.Metadata, "campaign target Metadata should be set")
+	assert.Equal(t, resend.EventEmailBounced, updatedTarget.Metadata["resend_event"])
 }
 
 // TestResendWebhookHandlerIsTestTag tests that when is_test tag is set to true,
@@ -292,14 +556,14 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerIsTestTag() {
 		SetDescription("Template for is_test tag test").
 		SetJsonconfig(map[string]any{"title": "IsTest Test"}).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetOwnerID(testUser1.OrganizationID).
 		SetName("IsTest Assessment").
 		SetTemplateID(template.ID).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	campaign, err := suite.db.Campaign.Create().
 		SetOwnerID(testUser1.OrganizationID).
@@ -309,14 +573,14 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerIsTestTag() {
 		SetStatus(enums.CampaignStatusActive).
 		SetIsActive(true).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	target, err := suite.db.CampaignTarget.Create().
 		SetOwnerID(testUser1.OrganizationID).
 		SetCampaignID(campaign.ID).
 		SetEmail("istest@example.com").
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	response, err := suite.db.AssessmentResponse.Create().
 		SetOwnerID(testUser1.OrganizationID).
@@ -324,11 +588,11 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerIsTestTag() {
 		SetCampaignID(campaign.ID).
 		SetEmail(target.Email).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	// capture initial target state
 	initialTarget, err := suite.db.CampaignTarget.Get(ctx, target.ID)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	initialTargetStatus := initialTarget.Status
 
 	eventTime := time.Now().UTC().Format(time.RFC3339Nano)
@@ -347,12 +611,12 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerIsTestTag() {
 	}
 
 	body, err := json.Marshal(payload)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	msgID := "msg_istest_001"
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	signature, err := signResendWebhook(secret, msgID, timestamp, body)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, "/resend/webhook", bytes.NewReader(body))
 	req.Header.Set("svix-id", msgID)
@@ -365,17 +629,17 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerIsTestTag() {
 	res := recorder.Result()
 	defer res.Body.Close()
 
-	require.Equal(t, http.StatusOK, res.StatusCode)
+	assert.Equal(t, http.StatusOK, res.StatusCode)
 
 	// verify assessment response was updated
 	updatedResp, err := suite.db.AssessmentResponse.Get(ctx, response.ID)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, enums.AssessmentResponseStatusSent, updatedResp.Status, "assessment response should be updated")
 	assert.NotNil(t, updatedResp.LastEmailEventAt, "LastEmailEventAt should be set")
 
 	// verify campaign target was NOT updated due to is_test tag
 	updatedTarget, err := suite.db.CampaignTarget.Get(ctx, target.ID)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, initialTargetStatus, updatedTarget.Status, "campaign target status should not change with is_test=true")
 	assert.Nil(t, updatedTarget.SentAt, "SentAt should not be set with is_test=true")
 }
@@ -400,14 +664,14 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerSequentialEvents() {
 		SetDescription("Template for sequential events test").
 		SetJsonconfig(map[string]any{"title": "Sequential Test"}).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetOwnerID(testUser1.OrganizationID).
 		SetName("Sequential Assessment").
 		SetTemplateID(template.ID).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	campaign, err := suite.db.Campaign.Create().
 		SetOwnerID(testUser1.OrganizationID).
@@ -417,14 +681,14 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerSequentialEvents() {
 		SetStatus(enums.CampaignStatusActive).
 		SetIsActive(true).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	target, err := suite.db.CampaignTarget.Create().
 		SetOwnerID(testUser1.OrganizationID).
 		SetCampaignID(campaign.ID).
 		SetEmail("sequential@example.com").
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	response, err := suite.db.AssessmentResponse.Create().
 		SetOwnerID(testUser1.OrganizationID).
@@ -432,7 +696,7 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerSequentialEvents() {
 		SetCampaignID(campaign.ID).
 		SetEmail(target.Email).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	// helper to send webhook event
 	sendEvent := func(eventType, emailID, msgID string) {
@@ -451,11 +715,11 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerSequentialEvents() {
 		}
 
 		body, err := json.Marshal(payload)
-		require.NoError(t, err)
+		assert.NoError(t, err)
 
 		timestamp := strconv.FormatInt(time.Now().Unix(), 10)
 		signature, err := signResendWebhook(secret, msgID, timestamp, body)
-		require.NoError(t, err)
+		assert.NoError(t, err)
 
 		req := httptest.NewRequest(http.MethodPost, "/resend/webhook", bytes.NewReader(body))
 		req.Header.Set("svix-id", msgID)
@@ -467,7 +731,7 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerSequentialEvents() {
 
 		res := recorder.Result()
 		defer res.Body.Close()
-		require.Equal(t, http.StatusOK, res.StatusCode)
+		assert.Equal(t, http.StatusOK, res.StatusCode)
 	}
 
 	// simulate realistic email lifecycle: sent -> delivered -> opened -> opened again -> clicked
@@ -481,7 +745,7 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerSequentialEvents() {
 
 	// verify final state of assessment response
 	updatedResp, err := suite.db.AssessmentResponse.Get(ctx, response.ID)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	assert.Equal(t, enums.AssessmentResponseStatusSent, updatedResp.Status, "status should be Sent")
 	assert.NotNil(t, updatedResp.LastEmailEventAt, "LastEmailEventAt should be set")
@@ -493,7 +757,7 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerSequentialEvents() {
 
 	// verify campaign target state
 	updatedTarget, err := suite.db.CampaignTarget.Get(ctx, target.ID)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, enums.AssessmentResponseStatusSent, updatedTarget.Status, "campaign target status should be Sent")
 	assert.NotNil(t, updatedTarget.SentAt, "SentAt should be set")
 }
@@ -518,12 +782,12 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerInvalidSignature() {
 	payload.Data.CreatedAt = time.Now().UTC().Format(time.RFC3339Nano)
 
 	body, err := json.Marshal(payload)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	id := "msg_invalid"
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	signature, err := signResendWebhook("whsec_"+base64.StdEncoding.EncodeToString([]byte("wrong-secret")), id, timestamp, body)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, "/resend/webhook", bytes.NewReader(body))
 	req.Header.Set("svix-id", id)
@@ -536,7 +800,7 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerInvalidSignature() {
 	res := recorder.Result()
 	defer res.Body.Close()
 
-	require.Equal(t, http.StatusBadRequest, res.StatusCode)
+	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
 }
 
 // TestResendWebhookHandlerIdempotent tests that duplicate webhook events with the same
@@ -559,14 +823,14 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerIdempotent() {
 		SetDescription("Campaign template").
 		SetJsonconfig(map[string]any{"title": "Webhook Test"}).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetOwnerID(testUser1.OrganizationID).
 		SetName("Webhook Assessment").
 		SetTemplateID(template.ID).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	campaign, err := suite.db.Campaign.Create().
 		SetOwnerID(testUser1.OrganizationID).
@@ -576,14 +840,14 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerIdempotent() {
 		SetStatus(enums.CampaignStatusActive).
 		SetIsActive(true).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	target, err := suite.db.CampaignTarget.Create().
 		SetOwnerID(testUser1.OrganizationID).
 		SetCampaignID(campaign.ID).
 		SetEmail("webhook.idempotent@example.com").
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	response, err := suite.db.AssessmentResponse.Create().
 		SetOwnerID(testUser1.OrganizationID).
@@ -591,7 +855,7 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerIdempotent() {
 		SetCampaignID(campaign.ID).
 		SetEmail(target.Email).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	eventTime := time.Now().UTC().Format(time.RFC3339Nano)
 	payload := testResendWebhookEvent{
@@ -608,12 +872,12 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerIdempotent() {
 	}
 
 	body, err := json.Marshal(payload)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	id := "msg_idempotent"
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	signature, err := signResendWebhook(secret, id, timestamp, body)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	makeRequest := func() *http.Response {
 		req := httptest.NewRequest(http.MethodPost, "/resend/webhook", bytes.NewReader(body))
@@ -629,14 +893,14 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerIdempotent() {
 
 	res := makeRequest()
 	defer res.Body.Close()
-	require.Equal(t, http.StatusOK, res.StatusCode)
+	assert.Equal(t, http.StatusOK, res.StatusCode)
 
 	res = makeRequest()
 	defer res.Body.Close()
-	require.Equal(t, http.StatusOK, res.StatusCode)
+	assert.Equal(t, http.StatusOK, res.StatusCode)
 
 	updatedResp, err := suite.db.AssessmentResponse.Get(ctx, response.ID)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, 1, updatedResp.EmailOpenCount)
 }
 
@@ -660,7 +924,7 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerMissingEventID() {
 	payload.Data.CreatedAt = time.Now().UTC().Format(time.RFC3339Nano)
 
 	body, err := json.Marshal(payload)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, "/resend/webhook", bytes.NewReader(body))
 	req.Header.Set("svix-timestamp", strconv.FormatInt(time.Now().Unix(), 10))
@@ -672,5 +936,5 @@ func (suite *HandlerTestSuite) TestResendWebhookHandlerMissingEventID() {
 	res := recorder.Result()
 	defer res.Body.Close()
 
-	require.Equal(t, http.StatusBadRequest, res.StatusCode)
+	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
 }

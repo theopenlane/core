@@ -232,7 +232,7 @@ func (h *Handler) handleResendWebhookEvent(ctx context.Context, event resendWebh
 	campaignTargetID := tagMap["campaign_target_id"]
 
 	if assessmentResponseID != "" {
-		if err := h.updateAssessmentResponseFromResend(ctx, assessmentResponseID, event); err != nil {
+		if err := h.updateAssessmentResponseFromResend(ctx, assessmentResponseID, event, isTest); err != nil {
 			return err
 		}
 	}
@@ -247,7 +247,9 @@ func (h *Handler) handleResendWebhookEvent(ctx context.Context, event resendWebh
 }
 
 // updateAssessmentResponseFromResend applies delivery events to an assessment response record.
-func (h *Handler) updateAssessmentResponseFromResend(ctx context.Context, responseID string, event resendWebhookEvent) error {
+// The isTest parameter indicates whether the webhook event has the is_test tag set, which
+// prevents cascading updates to campaign targets.
+func (h *Handler) updateAssessmentResponseFromResend(ctx context.Context, responseID string, event resendWebhookEvent, isTest bool) error {
 	resp, err := h.DBClient.AssessmentResponse.Get(ctx, responseID)
 	if err != nil {
 		return err
@@ -292,7 +294,7 @@ func (h *Handler) updateAssessmentResponseFromResend(ctx context.Context, respon
 		return err
 	}
 
-	if resp.CampaignID != "" && !resp.IsTest {
+	if resp.CampaignID != "" && !resp.IsTest && !isTest {
 		return h.updateCampaignTargetFromResend(ctx, "", resp.CampaignID, event, resp.Email)
 	}
 
