@@ -154,6 +154,132 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkDeletePayload_de
 	return fc, nil
 }
 
+func (ec *executionContext) _OrganizationSettingBulkUpdatePayload_organizationSettings(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_OrganizationSettingBulkUpdatePayload_organizationSettings,
+		func(ctx context.Context) (any, error) {
+			return obj.OrganizationSettings, nil
+		},
+		nil,
+		ec.marshalOOrganizationSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSettingᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_OrganizationSettingBulkUpdatePayload_organizationSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OrganizationSettingBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_OrganizationSetting_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_OrganizationSetting_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_OrganizationSetting_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_OrganizationSetting_tags(ctx, field)
+			case "domains":
+				return ec.fieldContext_OrganizationSetting_domains(ctx, field)
+			case "billingContact":
+				return ec.fieldContext_OrganizationSetting_billingContact(ctx, field)
+			case "billingEmail":
+				return ec.fieldContext_OrganizationSetting_billingEmail(ctx, field)
+			case "billingPhone":
+				return ec.fieldContext_OrganizationSetting_billingPhone(ctx, field)
+			case "billingAddress":
+				return ec.fieldContext_OrganizationSetting_billingAddress(ctx, field)
+			case "taxIdentifier":
+				return ec.fieldContext_OrganizationSetting_taxIdentifier(ctx, field)
+			case "geoLocation":
+				return ec.fieldContext_OrganizationSetting_geoLocation(ctx, field)
+			case "organizationID":
+				return ec.fieldContext_OrganizationSetting_organizationID(ctx, field)
+			case "billingNotificationsEnabled":
+				return ec.fieldContext_OrganizationSetting_billingNotificationsEnabled(ctx, field)
+			case "allowedEmailDomains":
+				return ec.fieldContext_OrganizationSetting_allowedEmailDomains(ctx, field)
+			case "allowMatchingDomainsAutojoin":
+				return ec.fieldContext_OrganizationSetting_allowMatchingDomainsAutojoin(ctx, field)
+			case "identityProvider":
+				return ec.fieldContext_OrganizationSetting_identityProvider(ctx, field)
+			case "identityProviderClientID":
+				return ec.fieldContext_OrganizationSetting_identityProviderClientID(ctx, field)
+			case "identityProviderClientSecret":
+				return ec.fieldContext_OrganizationSetting_identityProviderClientSecret(ctx, field)
+			case "identityProviderMetadataEndpoint":
+				return ec.fieldContext_OrganizationSetting_identityProviderMetadataEndpoint(ctx, field)
+			case "identityProviderAuthTested":
+				return ec.fieldContext_OrganizationSetting_identityProviderAuthTested(ctx, field)
+			case "identityProviderEntityID":
+				return ec.fieldContext_OrganizationSetting_identityProviderEntityID(ctx, field)
+			case "oidcDiscoveryEndpoint":
+				return ec.fieldContext_OrganizationSetting_oidcDiscoveryEndpoint(ctx, field)
+			case "samlSigninURL":
+				return ec.fieldContext_OrganizationSetting_samlSigninURL(ctx, field)
+			case "samlIssuer":
+				return ec.fieldContext_OrganizationSetting_samlIssuer(ctx, field)
+			case "samlCert":
+				return ec.fieldContext_OrganizationSetting_samlCert(ctx, field)
+			case "identityProviderLoginEnforced":
+				return ec.fieldContext_OrganizationSetting_identityProviderLoginEnforced(ctx, field)
+			case "multifactorAuthEnforced":
+				return ec.fieldContext_OrganizationSetting_multifactorAuthEnforced(ctx, field)
+			case "complianceWebhookToken":
+				return ec.fieldContext_OrganizationSetting_complianceWebhookToken(ctx, field)
+			case "paymentMethodAdded":
+				return ec.fieldContext_OrganizationSetting_paymentMethodAdded(ctx, field)
+			case "organization":
+				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
+			case "files":
+				return ec.fieldContext_OrganizationSetting_files(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OrganizationSetting", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OrganizationSettingBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_OrganizationSettingBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_OrganizationSettingBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OrganizationSettingBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _OrganizationSettingCreatePayload_organizationSetting(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -464,6 +590,44 @@ func (ec *executionContext) _OrganizationSettingBulkDeletePayload(ctx context.Co
 	return out
 }
 
+var organizationSettingBulkUpdatePayloadImplementors = []string{"OrganizationSettingBulkUpdatePayload"}
+
+func (ec *executionContext) _OrganizationSettingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.OrganizationSettingBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, organizationSettingBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("OrganizationSettingBulkUpdatePayload")
+		case "organizationSettings":
+			out.Values[i] = ec._OrganizationSettingBulkUpdatePayload_organizationSettings(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._OrganizationSettingBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var organizationSettingCreatePayloadImplementors = []string{"OrganizationSettingCreatePayload"}
 
 func (ec *executionContext) _OrganizationSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.OrganizationSettingCreatePayload) graphql.Marshaler {
@@ -611,6 +775,20 @@ func (ec *executionContext) marshalNOrganizationSettingBulkDeletePayload2ᚖgith
 		return graphql.Null
 	}
 	return ec._OrganizationSettingBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNOrganizationSettingBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingBulkUpdatePayload) graphql.Marshaler {
+	return ec._OrganizationSettingBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNOrganizationSettingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._OrganizationSettingBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNOrganizationSettingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingCreatePayload) graphql.Marshaler {

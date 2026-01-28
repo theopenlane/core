@@ -383,6 +383,11 @@ type CSVSchemaInfo struct {
 
 // CSVReferenceRegistry maps schema names to their CSV reference info.
 var CSVReferenceRegistry = map[string]CSVSchemaInfo{
+	"APIToken": {
+		SchemaName: "APIToken",
+		Rules: []CSVReferenceRule{
+		},
+	},
 	"ActionPlan": {
 		SchemaName: "ActionPlan",
 		Rules: []CSVReferenceRule{
@@ -525,6 +530,11 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 			},
 		},
 	},
+	"Contact": {
+		SchemaName: "Contact",
+		Rules: []CSVReferenceRule{
+		},
+	},
 	"Control": {
 		SchemaName: "Control",
 		Rules: []CSVReferenceRule{
@@ -552,6 +562,61 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				IsSlice:         false,
 				CreateIfMissing: false,
 			},
+		},
+	},
+	"ControlImplementation": {
+		SchemaName: "ControlImplementation",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"ControlObjective": {
+		SchemaName: "ControlObjective",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"CustomDomain": {
+		SchemaName: "CustomDomain",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"CustomTypeEnum": {
+		SchemaName: "CustomTypeEnum",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"DNSVerification": {
+		SchemaName: "DNSVerification",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"DirectoryAccount": {
+		SchemaName: "DirectoryAccount",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"DirectoryGroup": {
+		SchemaName: "DirectoryGroup",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"DirectoryMembership": {
+		SchemaName: "DirectoryMembership",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"DirectorySyncRun": {
+		SchemaName: "DirectorySyncRun",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Discussion": {
+		SchemaName: "Discussion",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"DocumentData": {
+		SchemaName: "DocumentData",
+		Rules: []CSVReferenceRule{
 		},
 	},
 	"Entity": {
@@ -589,6 +654,61 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				IsSlice:         false,
 				CreateIfMissing: false,
 			},
+		},
+	},
+	"EntityType": {
+		SchemaName: "EntityType",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Event": {
+		SchemaName: "Event",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Evidence": {
+		SchemaName: "Evidence",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Export": {
+		SchemaName: "Export",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"File": {
+		SchemaName: "File",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Finding": {
+		SchemaName: "Finding",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"FindingControl": {
+		SchemaName: "FindingControl",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Group": {
+		SchemaName: "Group",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"GroupMembership": {
+		SchemaName: "GroupMembership",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"GroupSetting": {
+		SchemaName: "GroupSetting",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Hush": {
+		SchemaName: "Hush",
+		Rules: []CSVReferenceRule{
 		},
 	},
 	"IdentityHolder": {
@@ -647,6 +767,81 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				IsSlice:         false,
 				CreateIfMissing: false,
 			},
+		},
+	},
+	"Invite": {
+		SchemaName: "Invite",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"JobResult": {
+		SchemaName: "JobResult",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"JobRunner": {
+		SchemaName: "JobRunner",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"JobRunnerRegistrationToken": {
+		SchemaName: "JobRunnerRegistrationToken",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"JobRunnerToken": {
+		SchemaName: "JobRunnerToken",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"JobTemplate": {
+		SchemaName: "JobTemplate",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"MappableDomain": {
+		SchemaName: "MappableDomain",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"MappedControl": {
+		SchemaName: "MappedControl",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Narrative": {
+		SchemaName: "Narrative",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Notification": {
+		SchemaName: "Notification",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Onboarding": {
+		SchemaName: "Onboarding",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"OrgMembership": {
+		SchemaName: "OrgMembership",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Organization": {
+		SchemaName: "Organization",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"OrganizationSetting": {
+		SchemaName: "OrganizationSetting",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"PersonalAccessToken": {
+		SchemaName: "PersonalAccessToken",
+		Rules: []CSVReferenceRule{
 		},
 	},
 	"Platform": {
@@ -760,6 +955,21 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 			},
 		},
 	},
+	"ProgramMembership": {
+		SchemaName: "ProgramMembership",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Remediation": {
+		SchemaName: "Remediation",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Review": {
+		SchemaName: "Review",
+		Rules: []CSVReferenceRule{
+		},
+	},
 	"Risk": {
 		SchemaName: "Risk",
 		Rules: []CSVReferenceRule{
@@ -842,6 +1052,21 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 			},
 		},
 	},
+	"ScheduledJob": {
+		SchemaName: "ScheduledJob",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"ScheduledJobRun": {
+		SchemaName: "ScheduledJobRun",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Standard": {
+		SchemaName: "Standard",
+		Rules: []CSVReferenceRule{
+		},
+	},
 	"Subcontrol": {
 		SchemaName: "Subcontrol",
 		Rules: []CSVReferenceRule{
@@ -871,6 +1096,26 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 			},
 		},
 	},
+	"Subprocessor": {
+		SchemaName: "Subprocessor",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Subscriber": {
+		SchemaName: "Subscriber",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"TFASetting": {
+		SchemaName: "TFASetting",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"TagDefinition": {
+		SchemaName: "TagDefinition",
+		Rules: []CSVReferenceRule{
+		},
+	},
 	"Task": {
 		SchemaName: "Task",
 		Rules: []CSVReferenceRule{
@@ -892,6 +1137,71 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 			},
 		},
 	},
+	"Template": {
+		SchemaName: "Template",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"TrustCenter": {
+		SchemaName: "TrustCenter",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"TrustCenterCompliance": {
+		SchemaName: "TrustCenterCompliance",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"TrustCenterDoc": {
+		SchemaName: "TrustCenterDoc",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"TrustCenterEntity": {
+		SchemaName: "TrustCenterEntity",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"TrustCenterNDARequest": {
+		SchemaName: "TrustCenterNDARequest",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"TrustCenterSetting": {
+		SchemaName: "TrustCenterSetting",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"TrustCenterSubprocessor": {
+		SchemaName: "TrustCenterSubprocessor",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"TrustCenterWatermarkConfig": {
+		SchemaName: "TrustCenterWatermarkConfig",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"User": {
+		SchemaName: "User",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"UserSetting": {
+		SchemaName: "UserSetting",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"Vulnerability": {
+		SchemaName: "Vulnerability",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"WorkflowDefinition": {
+		SchemaName: "WorkflowDefinition",
+		Rules: []CSVReferenceRule{
+		},
+	},
 }
 
 // GetCSVReferenceRules returns the CSV reference rules for a schema.
@@ -910,6 +1220,24 @@ func HasCSVReferences(schemaName string) bool {
 	return ok && len(info.Rules) > 0
 }
 
+// APITokenCSVInput wraps CreateAPITokenInput with CSV reference columns.
+type APITokenCSVInput struct {
+	Input generated.CreateAPITokenInput
+}
+
+// CSVInputWrapper marks APITokenCSVInput for CSV header preprocessing.
+func (APITokenCSVInput) CSVInputWrapper() {}
+
+// APITokenCSVUpdateInput wraps UpdateAPITokenInput with CSV reference columns for bulk updates.
+type APITokenCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateAPITokenInput
+}
+
+// CSVInputWrapper marks APITokenCSVUpdateInput for CSV header preprocessing.
+func (APITokenCSVUpdateInput) CSVInputWrapper() {}
+
 // ActionPlanCSVInput wraps CreateActionPlanInput with CSV reference columns.
 type ActionPlanCSVInput struct {
 	Input generated.CreateActionPlanInput
@@ -920,6 +1248,18 @@ type ActionPlanCSVInput struct {
 // CSVInputWrapper marks ActionPlanCSVInput for CSV header preprocessing.
 func (ActionPlanCSVInput) CSVInputWrapper() {}
 
+// ActionPlanCSVUpdateInput wraps UpdateActionPlanInput with CSV reference columns for bulk updates.
+type ActionPlanCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateActionPlanInput
+	ApproverGroupName string `csv:"ApproverGroupName"`
+	DocumentDelegateGroupName string `csv:"DocumentDelegateGroupName"`
+}
+
+// CSVInputWrapper marks ActionPlanCSVUpdateInput for CSV header preprocessing.
+func (ActionPlanCSVUpdateInput) CSVInputWrapper() {}
+
 // AssessmentCSVInput wraps CreateAssessmentInput with CSV reference columns.
 type AssessmentCSVInput struct {
 	Input generated.CreateAssessmentInput
@@ -928,6 +1268,17 @@ type AssessmentCSVInput struct {
 
 // CSVInputWrapper marks AssessmentCSVInput for CSV header preprocessing.
 func (AssessmentCSVInput) CSVInputWrapper() {}
+
+// AssessmentCSVUpdateInput wraps UpdateAssessmentInput with CSV reference columns for bulk updates.
+type AssessmentCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateAssessmentInput
+	AssessmentTemplateRef string `csv:"AssessmentTemplateRef"`
+}
+
+// CSVInputWrapper marks AssessmentCSVUpdateInput for CSV header preprocessing.
+func (AssessmentCSVUpdateInput) CSVInputWrapper() {}
 
 // AssessmentResponseCSVInput wraps CreateAssessmentResponseInput with CSV reference columns.
 type AssessmentResponseCSVInput struct {
@@ -950,6 +1301,19 @@ type AssetCSVInput struct {
 // CSVInputWrapper marks AssetCSVInput for CSV header preprocessing.
 func (AssetCSVInput) CSVInputWrapper() {}
 
+// AssetCSVUpdateInput wraps UpdateAssetInput with CSV reference columns for bulk updates.
+type AssetCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateAssetInput
+	InternalOwnerGroupName string `csv:"InternalOwnerGroupName"`
+	InternalOwnerUserEmail string `csv:"InternalOwnerUserEmail"`
+	SourcePlatformName string `csv:"SourcePlatformName"`
+}
+
+// CSVInputWrapper marks AssetCSVUpdateInput for CSV header preprocessing.
+func (AssetCSVUpdateInput) CSVInputWrapper() {}
+
 // CampaignCSVInput wraps CreateCampaignInput with CSV reference columns.
 type CampaignCSVInput struct {
 	Input generated.CreateCampaignInput
@@ -962,6 +1326,20 @@ type CampaignCSVInput struct {
 // CSVInputWrapper marks CampaignCSVInput for CSV header preprocessing.
 func (CampaignCSVInput) CSVInputWrapper() {}
 
+// CampaignCSVUpdateInput wraps UpdateCampaignInput with CSV reference columns for bulk updates.
+type CampaignCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateCampaignInput
+	CampaignEntityName string `csv:"CampaignEntityName"`
+	CampaignTemplateRef string `csv:"CampaignTemplateRef"`
+	InternalOwnerGroupName string `csv:"InternalOwnerGroupName"`
+	InternalOwnerUserEmail string `csv:"InternalOwnerUserEmail"`
+}
+
+// CSVInputWrapper marks CampaignCSVUpdateInput for CSV header preprocessing.
+func (CampaignCSVUpdateInput) CSVInputWrapper() {}
+
 // CampaignTargetCSVInput wraps CreateCampaignTargetInput with CSV reference columns.
 type CampaignTargetCSVInput struct {
 	Input generated.CreateCampaignTargetInput
@@ -971,6 +1349,36 @@ type CampaignTargetCSVInput struct {
 
 // CSVInputWrapper marks CampaignTargetCSVInput for CSV header preprocessing.
 func (CampaignTargetCSVInput) CSVInputWrapper() {}
+
+// CampaignTargetCSVUpdateInput wraps UpdateCampaignTargetInput with CSV reference columns for bulk updates.
+type CampaignTargetCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateCampaignTargetInput
+	CampaignTargetGroupName string `csv:"CampaignTargetGroupName"`
+	CampaignTargetUserEmail string `csv:"CampaignTargetUserEmail"`
+}
+
+// CSVInputWrapper marks CampaignTargetCSVUpdateInput for CSV header preprocessing.
+func (CampaignTargetCSVUpdateInput) CSVInputWrapper() {}
+
+// ContactCSVInput wraps CreateContactInput with CSV reference columns.
+type ContactCSVInput struct {
+	Input generated.CreateContactInput
+}
+
+// CSVInputWrapper marks ContactCSVInput for CSV header preprocessing.
+func (ContactCSVInput) CSVInputWrapper() {}
+
+// ContactCSVUpdateInput wraps UpdateContactInput with CSV reference columns for bulk updates.
+type ContactCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateContactInput
+}
+
+// CSVInputWrapper marks ContactCSVUpdateInput for CSV header preprocessing.
+func (ContactCSVUpdateInput) CSVInputWrapper() {}
 
 // ControlCSVInput wraps CreateControlInput with CSV reference columns.
 type ControlCSVInput struct {
@@ -982,6 +1390,217 @@ type ControlCSVInput struct {
 
 // CSVInputWrapper marks ControlCSVInput for CSV header preprocessing.
 func (ControlCSVInput) CSVInputWrapper() {}
+
+// ControlCSVUpdateInput wraps UpdateControlInput with CSV reference columns for bulk updates.
+type ControlCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateControlInput
+	ControlDelegateGroupName string `csv:"ControlDelegateGroupName"`
+	ControlOwnerGroupName string `csv:"ControlOwnerGroupName"`
+	ResponsiblePartyEntityName string `csv:"ResponsiblePartyEntityName"`
+}
+
+// CSVInputWrapper marks ControlCSVUpdateInput for CSV header preprocessing.
+func (ControlCSVUpdateInput) CSVInputWrapper() {}
+
+// ControlImplementationCSVInput wraps CreateControlImplementationInput with CSV reference columns.
+type ControlImplementationCSVInput struct {
+	Input generated.CreateControlImplementationInput
+}
+
+// CSVInputWrapper marks ControlImplementationCSVInput for CSV header preprocessing.
+func (ControlImplementationCSVInput) CSVInputWrapper() {}
+
+// ControlImplementationCSVUpdateInput wraps UpdateControlImplementationInput with CSV reference columns for bulk updates.
+type ControlImplementationCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateControlImplementationInput
+}
+
+// CSVInputWrapper marks ControlImplementationCSVUpdateInput for CSV header preprocessing.
+func (ControlImplementationCSVUpdateInput) CSVInputWrapper() {}
+
+// ControlObjectiveCSVInput wraps CreateControlObjectiveInput with CSV reference columns.
+type ControlObjectiveCSVInput struct {
+	Input generated.CreateControlObjectiveInput
+}
+
+// CSVInputWrapper marks ControlObjectiveCSVInput for CSV header preprocessing.
+func (ControlObjectiveCSVInput) CSVInputWrapper() {}
+
+// ControlObjectiveCSVUpdateInput wraps UpdateControlObjectiveInput with CSV reference columns for bulk updates.
+type ControlObjectiveCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateControlObjectiveInput
+}
+
+// CSVInputWrapper marks ControlObjectiveCSVUpdateInput for CSV header preprocessing.
+func (ControlObjectiveCSVUpdateInput) CSVInputWrapper() {}
+
+// CustomDomainCSVInput wraps CreateCustomDomainInput with CSV reference columns.
+type CustomDomainCSVInput struct {
+	Input generated.CreateCustomDomainInput
+}
+
+// CSVInputWrapper marks CustomDomainCSVInput for CSV header preprocessing.
+func (CustomDomainCSVInput) CSVInputWrapper() {}
+
+// CustomDomainCSVUpdateInput wraps UpdateCustomDomainInput with CSV reference columns for bulk updates.
+type CustomDomainCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateCustomDomainInput
+}
+
+// CSVInputWrapper marks CustomDomainCSVUpdateInput for CSV header preprocessing.
+func (CustomDomainCSVUpdateInput) CSVInputWrapper() {}
+
+// CustomTypeEnumCSVInput wraps CreateCustomTypeEnumInput with CSV reference columns.
+type CustomTypeEnumCSVInput struct {
+	Input generated.CreateCustomTypeEnumInput
+}
+
+// CSVInputWrapper marks CustomTypeEnumCSVInput for CSV header preprocessing.
+func (CustomTypeEnumCSVInput) CSVInputWrapper() {}
+
+// CustomTypeEnumCSVUpdateInput wraps UpdateCustomTypeEnumInput with CSV reference columns for bulk updates.
+type CustomTypeEnumCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateCustomTypeEnumInput
+}
+
+// CSVInputWrapper marks CustomTypeEnumCSVUpdateInput for CSV header preprocessing.
+func (CustomTypeEnumCSVUpdateInput) CSVInputWrapper() {}
+
+// DNSVerificationCSVInput wraps CreateDNSVerificationInput with CSV reference columns.
+type DNSVerificationCSVInput struct {
+	Input generated.CreateDNSVerificationInput
+}
+
+// CSVInputWrapper marks DNSVerificationCSVInput for CSV header preprocessing.
+func (DNSVerificationCSVInput) CSVInputWrapper() {}
+
+// DNSVerificationCSVUpdateInput wraps UpdateDNSVerificationInput with CSV reference columns for bulk updates.
+type DNSVerificationCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateDNSVerificationInput
+}
+
+// CSVInputWrapper marks DNSVerificationCSVUpdateInput for CSV header preprocessing.
+func (DNSVerificationCSVUpdateInput) CSVInputWrapper() {}
+
+// DirectoryAccountCSVInput wraps CreateDirectoryAccountInput with CSV reference columns.
+type DirectoryAccountCSVInput struct {
+	Input generated.CreateDirectoryAccountInput
+}
+
+// CSVInputWrapper marks DirectoryAccountCSVInput for CSV header preprocessing.
+func (DirectoryAccountCSVInput) CSVInputWrapper() {}
+
+// DirectoryAccountCSVUpdateInput wraps UpdateDirectoryAccountInput with CSV reference columns for bulk updates.
+type DirectoryAccountCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateDirectoryAccountInput
+}
+
+// CSVInputWrapper marks DirectoryAccountCSVUpdateInput for CSV header preprocessing.
+func (DirectoryAccountCSVUpdateInput) CSVInputWrapper() {}
+
+// DirectoryGroupCSVInput wraps CreateDirectoryGroupInput with CSV reference columns.
+type DirectoryGroupCSVInput struct {
+	Input generated.CreateDirectoryGroupInput
+}
+
+// CSVInputWrapper marks DirectoryGroupCSVInput for CSV header preprocessing.
+func (DirectoryGroupCSVInput) CSVInputWrapper() {}
+
+// DirectoryGroupCSVUpdateInput wraps UpdateDirectoryGroupInput with CSV reference columns for bulk updates.
+type DirectoryGroupCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateDirectoryGroupInput
+}
+
+// CSVInputWrapper marks DirectoryGroupCSVUpdateInput for CSV header preprocessing.
+func (DirectoryGroupCSVUpdateInput) CSVInputWrapper() {}
+
+// DirectoryMembershipCSVInput wraps CreateDirectoryMembershipInput with CSV reference columns.
+type DirectoryMembershipCSVInput struct {
+	Input generated.CreateDirectoryMembershipInput
+}
+
+// CSVInputWrapper marks DirectoryMembershipCSVInput for CSV header preprocessing.
+func (DirectoryMembershipCSVInput) CSVInputWrapper() {}
+
+// DirectoryMembershipCSVUpdateInput wraps UpdateDirectoryMembershipInput with CSV reference columns for bulk updates.
+type DirectoryMembershipCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateDirectoryMembershipInput
+}
+
+// CSVInputWrapper marks DirectoryMembershipCSVUpdateInput for CSV header preprocessing.
+func (DirectoryMembershipCSVUpdateInput) CSVInputWrapper() {}
+
+// DirectorySyncRunCSVInput wraps CreateDirectorySyncRunInput with CSV reference columns.
+type DirectorySyncRunCSVInput struct {
+	Input generated.CreateDirectorySyncRunInput
+}
+
+// CSVInputWrapper marks DirectorySyncRunCSVInput for CSV header preprocessing.
+func (DirectorySyncRunCSVInput) CSVInputWrapper() {}
+
+// DirectorySyncRunCSVUpdateInput wraps UpdateDirectorySyncRunInput with CSV reference columns for bulk updates.
+type DirectorySyncRunCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateDirectorySyncRunInput
+}
+
+// CSVInputWrapper marks DirectorySyncRunCSVUpdateInput for CSV header preprocessing.
+func (DirectorySyncRunCSVUpdateInput) CSVInputWrapper() {}
+
+// DiscussionCSVInput wraps CreateDiscussionInput with CSV reference columns.
+type DiscussionCSVInput struct {
+	Input generated.CreateDiscussionInput
+}
+
+// CSVInputWrapper marks DiscussionCSVInput for CSV header preprocessing.
+func (DiscussionCSVInput) CSVInputWrapper() {}
+
+// DiscussionCSVUpdateInput wraps UpdateDiscussionInput with CSV reference columns for bulk updates.
+type DiscussionCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateDiscussionInput
+}
+
+// CSVInputWrapper marks DiscussionCSVUpdateInput for CSV header preprocessing.
+func (DiscussionCSVUpdateInput) CSVInputWrapper() {}
+
+// DocumentDataCSVInput wraps CreateDocumentDataInput with CSV reference columns.
+type DocumentDataCSVInput struct {
+	Input generated.CreateDocumentDataInput
+}
+
+// CSVInputWrapper marks DocumentDataCSVInput for CSV header preprocessing.
+func (DocumentDataCSVInput) CSVInputWrapper() {}
+
+// DocumentDataCSVUpdateInput wraps UpdateDocumentDataInput with CSV reference columns for bulk updates.
+type DocumentDataCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateDocumentDataInput
+}
+
+// CSVInputWrapper marks DocumentDataCSVUpdateInput for CSV header preprocessing.
+func (DocumentDataCSVUpdateInput) CSVInputWrapper() {}
 
 // EntityCSVInput wraps CreateEntityInput with CSV reference columns.
 type EntityCSVInput struct {
@@ -995,6 +1614,218 @@ type EntityCSVInput struct {
 // CSVInputWrapper marks EntityCSVInput for CSV header preprocessing.
 func (EntityCSVInput) CSVInputWrapper() {}
 
+// EntityCSVUpdateInput wraps UpdateEntityInput with CSV reference columns for bulk updates.
+type EntityCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateEntityInput
+	InternalOwnerGroupName string `csv:"InternalOwnerGroupName"`
+	InternalOwnerUserEmail string `csv:"InternalOwnerUserEmail"`
+	ReviewedByGroupName string `csv:"ReviewedByGroupName"`
+	ReviewedByUserEmail string `csv:"ReviewedByUserEmail"`
+}
+
+// CSVInputWrapper marks EntityCSVUpdateInput for CSV header preprocessing.
+func (EntityCSVUpdateInput) CSVInputWrapper() {}
+
+// EntityTypeCSVInput wraps CreateEntityTypeInput with CSV reference columns.
+type EntityTypeCSVInput struct {
+	Input generated.CreateEntityTypeInput
+}
+
+// CSVInputWrapper marks EntityTypeCSVInput for CSV header preprocessing.
+func (EntityTypeCSVInput) CSVInputWrapper() {}
+
+// EntityTypeCSVUpdateInput wraps UpdateEntityTypeInput with CSV reference columns for bulk updates.
+type EntityTypeCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateEntityTypeInput
+}
+
+// CSVInputWrapper marks EntityTypeCSVUpdateInput for CSV header preprocessing.
+func (EntityTypeCSVUpdateInput) CSVInputWrapper() {}
+
+// EventCSVInput wraps CreateEventInput with CSV reference columns.
+type EventCSVInput struct {
+	Input generated.CreateEventInput
+}
+
+// CSVInputWrapper marks EventCSVInput for CSV header preprocessing.
+func (EventCSVInput) CSVInputWrapper() {}
+
+// EventCSVUpdateInput wraps UpdateEventInput with CSV reference columns for bulk updates.
+type EventCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateEventInput
+}
+
+// CSVInputWrapper marks EventCSVUpdateInput for CSV header preprocessing.
+func (EventCSVUpdateInput) CSVInputWrapper() {}
+
+// EvidenceCSVInput wraps CreateEvidenceInput with CSV reference columns.
+type EvidenceCSVInput struct {
+	Input generated.CreateEvidenceInput
+}
+
+// CSVInputWrapper marks EvidenceCSVInput for CSV header preprocessing.
+func (EvidenceCSVInput) CSVInputWrapper() {}
+
+// EvidenceCSVUpdateInput wraps UpdateEvidenceInput with CSV reference columns for bulk updates.
+type EvidenceCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateEvidenceInput
+}
+
+// CSVInputWrapper marks EvidenceCSVUpdateInput for CSV header preprocessing.
+func (EvidenceCSVUpdateInput) CSVInputWrapper() {}
+
+// ExportCSVInput wraps CreateExportInput with CSV reference columns.
+type ExportCSVInput struct {
+	Input generated.CreateExportInput
+}
+
+// CSVInputWrapper marks ExportCSVInput for CSV header preprocessing.
+func (ExportCSVInput) CSVInputWrapper() {}
+
+// ExportCSVUpdateInput wraps UpdateExportInput with CSV reference columns for bulk updates.
+type ExportCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateExportInput
+}
+
+// CSVInputWrapper marks ExportCSVUpdateInput for CSV header preprocessing.
+func (ExportCSVUpdateInput) CSVInputWrapper() {}
+
+// FileCSVInput wraps CreateFileInput with CSV reference columns.
+type FileCSVInput struct {
+	Input generated.CreateFileInput
+}
+
+// CSVInputWrapper marks FileCSVInput for CSV header preprocessing.
+func (FileCSVInput) CSVInputWrapper() {}
+
+// FileCSVUpdateInput wraps UpdateFileInput with CSV reference columns for bulk updates.
+type FileCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateFileInput
+}
+
+// CSVInputWrapper marks FileCSVUpdateInput for CSV header preprocessing.
+func (FileCSVUpdateInput) CSVInputWrapper() {}
+
+// FindingCSVInput wraps CreateFindingInput with CSV reference columns.
+type FindingCSVInput struct {
+	Input generated.CreateFindingInput
+}
+
+// CSVInputWrapper marks FindingCSVInput for CSV header preprocessing.
+func (FindingCSVInput) CSVInputWrapper() {}
+
+// FindingCSVUpdateInput wraps UpdateFindingInput with CSV reference columns for bulk updates.
+type FindingCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateFindingInput
+}
+
+// CSVInputWrapper marks FindingCSVUpdateInput for CSV header preprocessing.
+func (FindingCSVUpdateInput) CSVInputWrapper() {}
+
+// FindingControlCSVInput wraps CreateFindingControlInput with CSV reference columns.
+type FindingControlCSVInput struct {
+	Input generated.CreateFindingControlInput
+}
+
+// CSVInputWrapper marks FindingControlCSVInput for CSV header preprocessing.
+func (FindingControlCSVInput) CSVInputWrapper() {}
+
+// FindingControlCSVUpdateInput wraps UpdateFindingControlInput with CSV reference columns for bulk updates.
+type FindingControlCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateFindingControlInput
+}
+
+// CSVInputWrapper marks FindingControlCSVUpdateInput for CSV header preprocessing.
+func (FindingControlCSVUpdateInput) CSVInputWrapper() {}
+
+// GroupCSVInput wraps CreateGroupInput with CSV reference columns.
+type GroupCSVInput struct {
+	Input generated.CreateGroupInput
+}
+
+// CSVInputWrapper marks GroupCSVInput for CSV header preprocessing.
+func (GroupCSVInput) CSVInputWrapper() {}
+
+// GroupCSVUpdateInput wraps UpdateGroupInput with CSV reference columns for bulk updates.
+type GroupCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateGroupInput
+}
+
+// CSVInputWrapper marks GroupCSVUpdateInput for CSV header preprocessing.
+func (GroupCSVUpdateInput) CSVInputWrapper() {}
+
+// GroupMembershipCSVInput wraps CreateGroupMembershipInput with CSV reference columns.
+type GroupMembershipCSVInput struct {
+	Input generated.CreateGroupMembershipInput
+}
+
+// CSVInputWrapper marks GroupMembershipCSVInput for CSV header preprocessing.
+func (GroupMembershipCSVInput) CSVInputWrapper() {}
+
+// GroupMembershipCSVUpdateInput wraps UpdateGroupMembershipInput with CSV reference columns for bulk updates.
+type GroupMembershipCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateGroupMembershipInput
+}
+
+// CSVInputWrapper marks GroupMembershipCSVUpdateInput for CSV header preprocessing.
+func (GroupMembershipCSVUpdateInput) CSVInputWrapper() {}
+
+// GroupSettingCSVInput wraps CreateGroupSettingInput with CSV reference columns.
+type GroupSettingCSVInput struct {
+	Input generated.CreateGroupSettingInput
+}
+
+// CSVInputWrapper marks GroupSettingCSVInput for CSV header preprocessing.
+func (GroupSettingCSVInput) CSVInputWrapper() {}
+
+// GroupSettingCSVUpdateInput wraps UpdateGroupSettingInput with CSV reference columns for bulk updates.
+type GroupSettingCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateGroupSettingInput
+}
+
+// CSVInputWrapper marks GroupSettingCSVUpdateInput for CSV header preprocessing.
+func (GroupSettingCSVUpdateInput) CSVInputWrapper() {}
+
+// HushCSVInput wraps CreateHushInput with CSV reference columns.
+type HushCSVInput struct {
+	Input generated.CreateHushInput
+}
+
+// CSVInputWrapper marks HushCSVInput for CSV header preprocessing.
+func (HushCSVInput) CSVInputWrapper() {}
+
+// HushCSVUpdateInput wraps UpdateHushInput with CSV reference columns for bulk updates.
+type HushCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateHushInput
+}
+
+// CSVInputWrapper marks HushCSVUpdateInput for CSV header preprocessing.
+func (HushCSVUpdateInput) CSVInputWrapper() {}
+
 // IdentityHolderCSVInput wraps CreateIdentityHolderInput with CSV reference columns.
 type IdentityHolderCSVInput struct {
 	Input generated.CreateIdentityHolderInput
@@ -1007,6 +1838,20 @@ type IdentityHolderCSVInput struct {
 // CSVInputWrapper marks IdentityHolderCSVInput for CSV header preprocessing.
 func (IdentityHolderCSVInput) CSVInputWrapper() {}
 
+// IdentityHolderCSVUpdateInput wraps UpdateIdentityHolderInput with CSV reference columns for bulk updates.
+type IdentityHolderCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateIdentityHolderInput
+	EmployerEntityName string `csv:"EmployerEntityName"`
+	IdentityHolderUserEmail string `csv:"IdentityHolderUserEmail"`
+	InternalOwnerGroupName string `csv:"InternalOwnerGroupName"`
+	InternalOwnerUserEmail string `csv:"InternalOwnerUserEmail"`
+}
+
+// CSVInputWrapper marks IdentityHolderCSVUpdateInput for CSV header preprocessing.
+func (IdentityHolderCSVUpdateInput) CSVInputWrapper() {}
+
 // InternalPolicyCSVInput wraps CreateInternalPolicyInput with CSV reference columns.
 type InternalPolicyCSVInput struct {
 	Input generated.CreateInternalPolicyInput
@@ -1016,6 +1861,278 @@ type InternalPolicyCSVInput struct {
 
 // CSVInputWrapper marks InternalPolicyCSVInput for CSV header preprocessing.
 func (InternalPolicyCSVInput) CSVInputWrapper() {}
+
+// InternalPolicyCSVUpdateInput wraps UpdateInternalPolicyInput with CSV reference columns for bulk updates.
+type InternalPolicyCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateInternalPolicyInput
+	ApproverGroupName string `csv:"ApproverGroupName"`
+	DocumentDelegateGroupName string `csv:"DocumentDelegateGroupName"`
+}
+
+// CSVInputWrapper marks InternalPolicyCSVUpdateInput for CSV header preprocessing.
+func (InternalPolicyCSVUpdateInput) CSVInputWrapper() {}
+
+// InviteCSVInput wraps CreateInviteInput with CSV reference columns.
+type InviteCSVInput struct {
+	Input generated.CreateInviteInput
+}
+
+// CSVInputWrapper marks InviteCSVInput for CSV header preprocessing.
+func (InviteCSVInput) CSVInputWrapper() {}
+
+// InviteCSVUpdateInput wraps UpdateInviteInput with CSV reference columns for bulk updates.
+type InviteCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateInviteInput
+}
+
+// CSVInputWrapper marks InviteCSVUpdateInput for CSV header preprocessing.
+func (InviteCSVUpdateInput) CSVInputWrapper() {}
+
+// JobResultCSVInput wraps CreateJobResultInput with CSV reference columns.
+type JobResultCSVInput struct {
+	Input generated.CreateJobResultInput
+}
+
+// CSVInputWrapper marks JobResultCSVInput for CSV header preprocessing.
+func (JobResultCSVInput) CSVInputWrapper() {}
+
+// JobResultCSVUpdateInput wraps UpdateJobResultInput with CSV reference columns for bulk updates.
+type JobResultCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateJobResultInput
+}
+
+// CSVInputWrapper marks JobResultCSVUpdateInput for CSV header preprocessing.
+func (JobResultCSVUpdateInput) CSVInputWrapper() {}
+
+// JobRunnerCSVInput wraps CreateJobRunnerInput with CSV reference columns.
+type JobRunnerCSVInput struct {
+	Input generated.CreateJobRunnerInput
+}
+
+// CSVInputWrapper marks JobRunnerCSVInput for CSV header preprocessing.
+func (JobRunnerCSVInput) CSVInputWrapper() {}
+
+// JobRunnerCSVUpdateInput wraps UpdateJobRunnerInput with CSV reference columns for bulk updates.
+type JobRunnerCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateJobRunnerInput
+}
+
+// CSVInputWrapper marks JobRunnerCSVUpdateInput for CSV header preprocessing.
+func (JobRunnerCSVUpdateInput) CSVInputWrapper() {}
+
+// JobRunnerRegistrationTokenCSVInput wraps CreateJobRunnerRegistrationTokenInput with CSV reference columns.
+type JobRunnerRegistrationTokenCSVInput struct {
+	Input generated.CreateJobRunnerRegistrationTokenInput
+}
+
+// CSVInputWrapper marks JobRunnerRegistrationTokenCSVInput for CSV header preprocessing.
+func (JobRunnerRegistrationTokenCSVInput) CSVInputWrapper() {}
+
+// JobRunnerRegistrationTokenCSVUpdateInput wraps UpdateJobRunnerRegistrationTokenInput with CSV reference columns for bulk updates.
+type JobRunnerRegistrationTokenCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateJobRunnerRegistrationTokenInput
+}
+
+// CSVInputWrapper marks JobRunnerRegistrationTokenCSVUpdateInput for CSV header preprocessing.
+func (JobRunnerRegistrationTokenCSVUpdateInput) CSVInputWrapper() {}
+
+// JobRunnerTokenCSVInput wraps CreateJobRunnerTokenInput with CSV reference columns.
+type JobRunnerTokenCSVInput struct {
+	Input generated.CreateJobRunnerTokenInput
+}
+
+// CSVInputWrapper marks JobRunnerTokenCSVInput for CSV header preprocessing.
+func (JobRunnerTokenCSVInput) CSVInputWrapper() {}
+
+// JobRunnerTokenCSVUpdateInput wraps UpdateJobRunnerTokenInput with CSV reference columns for bulk updates.
+type JobRunnerTokenCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateJobRunnerTokenInput
+}
+
+// CSVInputWrapper marks JobRunnerTokenCSVUpdateInput for CSV header preprocessing.
+func (JobRunnerTokenCSVUpdateInput) CSVInputWrapper() {}
+
+// JobTemplateCSVInput wraps CreateJobTemplateInput with CSV reference columns.
+type JobTemplateCSVInput struct {
+	Input generated.CreateJobTemplateInput
+}
+
+// CSVInputWrapper marks JobTemplateCSVInput for CSV header preprocessing.
+func (JobTemplateCSVInput) CSVInputWrapper() {}
+
+// JobTemplateCSVUpdateInput wraps UpdateJobTemplateInput with CSV reference columns for bulk updates.
+type JobTemplateCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateJobTemplateInput
+}
+
+// CSVInputWrapper marks JobTemplateCSVUpdateInput for CSV header preprocessing.
+func (JobTemplateCSVUpdateInput) CSVInputWrapper() {}
+
+// MappableDomainCSVInput wraps CreateMappableDomainInput with CSV reference columns.
+type MappableDomainCSVInput struct {
+	Input generated.CreateMappableDomainInput
+}
+
+// CSVInputWrapper marks MappableDomainCSVInput for CSV header preprocessing.
+func (MappableDomainCSVInput) CSVInputWrapper() {}
+
+// MappableDomainCSVUpdateInput wraps UpdateMappableDomainInput with CSV reference columns for bulk updates.
+type MappableDomainCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateMappableDomainInput
+}
+
+// CSVInputWrapper marks MappableDomainCSVUpdateInput for CSV header preprocessing.
+func (MappableDomainCSVUpdateInput) CSVInputWrapper() {}
+
+// MappedControlCSVInput wraps CreateMappedControlInput with CSV reference columns.
+type MappedControlCSVInput struct {
+	Input generated.CreateMappedControlInput
+}
+
+// CSVInputWrapper marks MappedControlCSVInput for CSV header preprocessing.
+func (MappedControlCSVInput) CSVInputWrapper() {}
+
+// MappedControlCSVUpdateInput wraps UpdateMappedControlInput with CSV reference columns for bulk updates.
+type MappedControlCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateMappedControlInput
+}
+
+// CSVInputWrapper marks MappedControlCSVUpdateInput for CSV header preprocessing.
+func (MappedControlCSVUpdateInput) CSVInputWrapper() {}
+
+// NarrativeCSVInput wraps CreateNarrativeInput with CSV reference columns.
+type NarrativeCSVInput struct {
+	Input generated.CreateNarrativeInput
+}
+
+// CSVInputWrapper marks NarrativeCSVInput for CSV header preprocessing.
+func (NarrativeCSVInput) CSVInputWrapper() {}
+
+// NarrativeCSVUpdateInput wraps UpdateNarrativeInput with CSV reference columns for bulk updates.
+type NarrativeCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateNarrativeInput
+}
+
+// CSVInputWrapper marks NarrativeCSVUpdateInput for CSV header preprocessing.
+func (NarrativeCSVUpdateInput) CSVInputWrapper() {}
+
+// NotificationCSVInput wraps CreateNotificationInput with CSV reference columns.
+type NotificationCSVInput struct {
+	Input generated.CreateNotificationInput
+}
+
+// CSVInputWrapper marks NotificationCSVInput for CSV header preprocessing.
+func (NotificationCSVInput) CSVInputWrapper() {}
+
+// NotificationCSVUpdateInput wraps UpdateNotificationInput with CSV reference columns for bulk updates.
+type NotificationCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateNotificationInput
+}
+
+// CSVInputWrapper marks NotificationCSVUpdateInput for CSV header preprocessing.
+func (NotificationCSVUpdateInput) CSVInputWrapper() {}
+
+// OnboardingCSVInput wraps CreateOnboardingInput with CSV reference columns.
+type OnboardingCSVInput struct {
+	Input generated.CreateOnboardingInput
+}
+
+// CSVInputWrapper marks OnboardingCSVInput for CSV header preprocessing.
+func (OnboardingCSVInput) CSVInputWrapper() {}
+
+// OrgMembershipCSVInput wraps CreateOrgMembershipInput with CSV reference columns.
+type OrgMembershipCSVInput struct {
+	Input generated.CreateOrgMembershipInput
+}
+
+// CSVInputWrapper marks OrgMembershipCSVInput for CSV header preprocessing.
+func (OrgMembershipCSVInput) CSVInputWrapper() {}
+
+// OrgMembershipCSVUpdateInput wraps UpdateOrgMembershipInput with CSV reference columns for bulk updates.
+type OrgMembershipCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateOrgMembershipInput
+}
+
+// CSVInputWrapper marks OrgMembershipCSVUpdateInput for CSV header preprocessing.
+func (OrgMembershipCSVUpdateInput) CSVInputWrapper() {}
+
+// OrganizationCSVInput wraps CreateOrganizationInput with CSV reference columns.
+type OrganizationCSVInput struct {
+	Input generated.CreateOrganizationInput
+}
+
+// CSVInputWrapper marks OrganizationCSVInput for CSV header preprocessing.
+func (OrganizationCSVInput) CSVInputWrapper() {}
+
+// OrganizationCSVUpdateInput wraps UpdateOrganizationInput with CSV reference columns for bulk updates.
+type OrganizationCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateOrganizationInput
+}
+
+// CSVInputWrapper marks OrganizationCSVUpdateInput for CSV header preprocessing.
+func (OrganizationCSVUpdateInput) CSVInputWrapper() {}
+
+// OrganizationSettingCSVInput wraps CreateOrganizationSettingInput with CSV reference columns.
+type OrganizationSettingCSVInput struct {
+	Input generated.CreateOrganizationSettingInput
+}
+
+// CSVInputWrapper marks OrganizationSettingCSVInput for CSV header preprocessing.
+func (OrganizationSettingCSVInput) CSVInputWrapper() {}
+
+// OrganizationSettingCSVUpdateInput wraps UpdateOrganizationSettingInput with CSV reference columns for bulk updates.
+type OrganizationSettingCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateOrganizationSettingInput
+}
+
+// CSVInputWrapper marks OrganizationSettingCSVUpdateInput for CSV header preprocessing.
+func (OrganizationSettingCSVUpdateInput) CSVInputWrapper() {}
+
+// PersonalAccessTokenCSVInput wraps CreatePersonalAccessTokenInput with CSV reference columns.
+type PersonalAccessTokenCSVInput struct {
+	Input generated.CreatePersonalAccessTokenInput
+}
+
+// CSVInputWrapper marks PersonalAccessTokenCSVInput for CSV header preprocessing.
+func (PersonalAccessTokenCSVInput) CSVInputWrapper() {}
+
+// PersonalAccessTokenCSVUpdateInput wraps UpdatePersonalAccessTokenInput with CSV reference columns for bulk updates.
+type PersonalAccessTokenCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdatePersonalAccessTokenInput
+}
+
+// CSVInputWrapper marks PersonalAccessTokenCSVUpdateInput for CSV header preprocessing.
+func (PersonalAccessTokenCSVUpdateInput) CSVInputWrapper() {}
 
 // PlatformCSVInput wraps CreatePlatformInput with CSV reference columns.
 type PlatformCSVInput struct {
@@ -1034,6 +2151,25 @@ type PlatformCSVInput struct {
 // CSVInputWrapper marks PlatformCSVInput for CSV header preprocessing.
 func (PlatformCSVInput) CSVInputWrapper() {}
 
+// PlatformCSVUpdateInput wraps UpdatePlatformInput with CSV reference columns for bulk updates.
+type PlatformCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdatePlatformInput
+	BusinessOwnerGroupName string `csv:"BusinessOwnerGroupName"`
+	BusinessOwnerUserEmail string `csv:"BusinessOwnerUserEmail"`
+	InternalOwnerGroupName string `csv:"InternalOwnerGroupName"`
+	InternalOwnerUserEmail string `csv:"InternalOwnerUserEmail"`
+	PlatformOwnerEmail string `csv:"PlatformOwnerEmail"`
+	SecurityOwnerGroupName string `csv:"SecurityOwnerGroupName"`
+	SecurityOwnerUserEmail string `csv:"SecurityOwnerUserEmail"`
+	TechnicalOwnerGroupName string `csv:"TechnicalOwnerGroupName"`
+	TechnicalOwnerUserEmail string `csv:"TechnicalOwnerUserEmail"`
+}
+
+// CSVInputWrapper marks PlatformCSVUpdateInput for CSV header preprocessing.
+func (PlatformCSVUpdateInput) CSVInputWrapper() {}
+
 // ProcedureCSVInput wraps CreateProcedureInput with CSV reference columns.
 type ProcedureCSVInput struct {
 	Input generated.CreateProcedureInput
@@ -1044,6 +2180,18 @@ type ProcedureCSVInput struct {
 // CSVInputWrapper marks ProcedureCSVInput for CSV header preprocessing.
 func (ProcedureCSVInput) CSVInputWrapper() {}
 
+// ProcedureCSVUpdateInput wraps UpdateProcedureInput with CSV reference columns for bulk updates.
+type ProcedureCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateProcedureInput
+	ApproverGroupName string `csv:"ApproverGroupName"`
+	DocumentDelegateGroupName string `csv:"DocumentDelegateGroupName"`
+}
+
+// CSVInputWrapper marks ProcedureCSVUpdateInput for CSV header preprocessing.
+func (ProcedureCSVUpdateInput) CSVInputWrapper() {}
+
 // ProgramCSVInput wraps CreateProgramInput with CSV reference columns.
 type ProgramCSVInput struct {
 	Input generated.CreateProgramInput
@@ -1052,6 +2200,71 @@ type ProgramCSVInput struct {
 
 // CSVInputWrapper marks ProgramCSVInput for CSV header preprocessing.
 func (ProgramCSVInput) CSVInputWrapper() {}
+
+// ProgramCSVUpdateInput wraps UpdateProgramInput with CSV reference columns for bulk updates.
+type ProgramCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateProgramInput
+	ProgramOwnerEmail string `csv:"ProgramOwnerEmail"`
+}
+
+// CSVInputWrapper marks ProgramCSVUpdateInput for CSV header preprocessing.
+func (ProgramCSVUpdateInput) CSVInputWrapper() {}
+
+// ProgramMembershipCSVInput wraps CreateProgramMembershipInput with CSV reference columns.
+type ProgramMembershipCSVInput struct {
+	Input generated.CreateProgramMembershipInput
+}
+
+// CSVInputWrapper marks ProgramMembershipCSVInput for CSV header preprocessing.
+func (ProgramMembershipCSVInput) CSVInputWrapper() {}
+
+// ProgramMembershipCSVUpdateInput wraps UpdateProgramMembershipInput with CSV reference columns for bulk updates.
+type ProgramMembershipCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateProgramMembershipInput
+}
+
+// CSVInputWrapper marks ProgramMembershipCSVUpdateInput for CSV header preprocessing.
+func (ProgramMembershipCSVUpdateInput) CSVInputWrapper() {}
+
+// RemediationCSVInput wraps CreateRemediationInput with CSV reference columns.
+type RemediationCSVInput struct {
+	Input generated.CreateRemediationInput
+}
+
+// CSVInputWrapper marks RemediationCSVInput for CSV header preprocessing.
+func (RemediationCSVInput) CSVInputWrapper() {}
+
+// RemediationCSVUpdateInput wraps UpdateRemediationInput with CSV reference columns for bulk updates.
+type RemediationCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateRemediationInput
+}
+
+// CSVInputWrapper marks RemediationCSVUpdateInput for CSV header preprocessing.
+func (RemediationCSVUpdateInput) CSVInputWrapper() {}
+
+// ReviewCSVInput wraps CreateReviewInput with CSV reference columns.
+type ReviewCSVInput struct {
+	Input generated.CreateReviewInput
+}
+
+// CSVInputWrapper marks ReviewCSVInput for CSV header preprocessing.
+func (ReviewCSVInput) CSVInputWrapper() {}
+
+// ReviewCSVUpdateInput wraps UpdateReviewInput with CSV reference columns for bulk updates.
+type ReviewCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateReviewInput
+}
+
+// CSVInputWrapper marks ReviewCSVUpdateInput for CSV header preprocessing.
+func (ReviewCSVUpdateInput) CSVInputWrapper() {}
 
 // RiskCSVInput wraps CreateRiskInput with CSV reference columns.
 type RiskCSVInput struct {
@@ -1062,6 +2275,18 @@ type RiskCSVInput struct {
 
 // CSVInputWrapper marks RiskCSVInput for CSV header preprocessing.
 func (RiskCSVInput) CSVInputWrapper() {}
+
+// RiskCSVUpdateInput wraps UpdateRiskInput with CSV reference columns for bulk updates.
+type RiskCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateRiskInput
+	RiskDelegateGroupName string `csv:"RiskDelegateGroupName"`
+	StakeholderGroupName string `csv:"StakeholderGroupName"`
+}
+
+// CSVInputWrapper marks RiskCSVUpdateInput for CSV header preprocessing.
+func (RiskCSVUpdateInput) CSVInputWrapper() {}
 
 // ScanCSVInput wraps CreateScanInput with CSV reference columns.
 type ScanCSVInput struct {
@@ -1078,6 +2303,77 @@ type ScanCSVInput struct {
 // CSVInputWrapper marks ScanCSVInput for CSV header preprocessing.
 func (ScanCSVInput) CSVInputWrapper() {}
 
+// ScanCSVUpdateInput wraps UpdateScanInput with CSV reference columns for bulk updates.
+type ScanCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateScanInput
+	AssignedToGroupName string `csv:"AssignedToGroupName"`
+	AssignedToUserEmail string `csv:"AssignedToUserEmail"`
+	GeneratedByPlatformName string `csv:"GeneratedByPlatformName"`
+	PerformedByGroupName string `csv:"PerformedByGroupName"`
+	PerformedByUserEmail string `csv:"PerformedByUserEmail"`
+	ReviewedByGroupName string `csv:"ReviewedByGroupName"`
+	ReviewedByUserEmail string `csv:"ReviewedByUserEmail"`
+}
+
+// CSVInputWrapper marks ScanCSVUpdateInput for CSV header preprocessing.
+func (ScanCSVUpdateInput) CSVInputWrapper() {}
+
+// ScheduledJobCSVInput wraps CreateScheduledJobInput with CSV reference columns.
+type ScheduledJobCSVInput struct {
+	Input generated.CreateScheduledJobInput
+}
+
+// CSVInputWrapper marks ScheduledJobCSVInput for CSV header preprocessing.
+func (ScheduledJobCSVInput) CSVInputWrapper() {}
+
+// ScheduledJobCSVUpdateInput wraps UpdateScheduledJobInput with CSV reference columns for bulk updates.
+type ScheduledJobCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateScheduledJobInput
+}
+
+// CSVInputWrapper marks ScheduledJobCSVUpdateInput for CSV header preprocessing.
+func (ScheduledJobCSVUpdateInput) CSVInputWrapper() {}
+
+// ScheduledJobRunCSVInput wraps CreateScheduledJobRunInput with CSV reference columns.
+type ScheduledJobRunCSVInput struct {
+	Input generated.CreateScheduledJobRunInput
+}
+
+// CSVInputWrapper marks ScheduledJobRunCSVInput for CSV header preprocessing.
+func (ScheduledJobRunCSVInput) CSVInputWrapper() {}
+
+// ScheduledJobRunCSVUpdateInput wraps UpdateScheduledJobRunInput with CSV reference columns for bulk updates.
+type ScheduledJobRunCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateScheduledJobRunInput
+}
+
+// CSVInputWrapper marks ScheduledJobRunCSVUpdateInput for CSV header preprocessing.
+func (ScheduledJobRunCSVUpdateInput) CSVInputWrapper() {}
+
+// StandardCSVInput wraps CreateStandardInput with CSV reference columns.
+type StandardCSVInput struct {
+	Input generated.CreateStandardInput
+}
+
+// CSVInputWrapper marks StandardCSVInput for CSV header preprocessing.
+func (StandardCSVInput) CSVInputWrapper() {}
+
+// StandardCSVUpdateInput wraps UpdateStandardInput with CSV reference columns for bulk updates.
+type StandardCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateStandardInput
+}
+
+// CSVInputWrapper marks StandardCSVUpdateInput for CSV header preprocessing.
+func (StandardCSVUpdateInput) CSVInputWrapper() {}
+
 // SubcontrolCSVInput wraps CreateSubcontrolInput with CSV reference columns.
 type SubcontrolCSVInput struct {
 	Input generated.CreateSubcontrolInput
@@ -1089,6 +2385,91 @@ type SubcontrolCSVInput struct {
 // CSVInputWrapper marks SubcontrolCSVInput for CSV header preprocessing.
 func (SubcontrolCSVInput) CSVInputWrapper() {}
 
+// SubcontrolCSVUpdateInput wraps UpdateSubcontrolInput with CSV reference columns for bulk updates.
+type SubcontrolCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateSubcontrolInput
+	ControlDelegateGroupName string `csv:"ControlDelegateGroupName"`
+	ControlOwnerGroupName string `csv:"ControlOwnerGroupName"`
+	ResponsiblePartyEntityName string `csv:"ResponsiblePartyEntityName"`
+}
+
+// CSVInputWrapper marks SubcontrolCSVUpdateInput for CSV header preprocessing.
+func (SubcontrolCSVUpdateInput) CSVInputWrapper() {}
+
+// SubprocessorCSVInput wraps CreateSubprocessorInput with CSV reference columns.
+type SubprocessorCSVInput struct {
+	Input generated.CreateSubprocessorInput
+}
+
+// CSVInputWrapper marks SubprocessorCSVInput for CSV header preprocessing.
+func (SubprocessorCSVInput) CSVInputWrapper() {}
+
+// SubprocessorCSVUpdateInput wraps UpdateSubprocessorInput with CSV reference columns for bulk updates.
+type SubprocessorCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateSubprocessorInput
+}
+
+// CSVInputWrapper marks SubprocessorCSVUpdateInput for CSV header preprocessing.
+func (SubprocessorCSVUpdateInput) CSVInputWrapper() {}
+
+// SubscriberCSVInput wraps CreateSubscriberInput with CSV reference columns.
+type SubscriberCSVInput struct {
+	Input generated.CreateSubscriberInput
+}
+
+// CSVInputWrapper marks SubscriberCSVInput for CSV header preprocessing.
+func (SubscriberCSVInput) CSVInputWrapper() {}
+
+// SubscriberCSVUpdateInput wraps UpdateSubscriberInput with CSV reference columns for bulk updates.
+type SubscriberCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateSubscriberInput
+}
+
+// CSVInputWrapper marks SubscriberCSVUpdateInput for CSV header preprocessing.
+func (SubscriberCSVUpdateInput) CSVInputWrapper() {}
+
+// TFASettingCSVInput wraps CreateTFASettingInput with CSV reference columns.
+type TFASettingCSVInput struct {
+	Input generated.CreateTFASettingInput
+}
+
+// CSVInputWrapper marks TFASettingCSVInput for CSV header preprocessing.
+func (TFASettingCSVInput) CSVInputWrapper() {}
+
+// TFASettingCSVUpdateInput wraps UpdateTFASettingInput with CSV reference columns for bulk updates.
+type TFASettingCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateTFASettingInput
+}
+
+// CSVInputWrapper marks TFASettingCSVUpdateInput for CSV header preprocessing.
+func (TFASettingCSVUpdateInput) CSVInputWrapper() {}
+
+// TagDefinitionCSVInput wraps CreateTagDefinitionInput with CSV reference columns.
+type TagDefinitionCSVInput struct {
+	Input generated.CreateTagDefinitionInput
+}
+
+// CSVInputWrapper marks TagDefinitionCSVInput for CSV header preprocessing.
+func (TagDefinitionCSVInput) CSVInputWrapper() {}
+
+// TagDefinitionCSVUpdateInput wraps UpdateTagDefinitionInput with CSV reference columns for bulk updates.
+type TagDefinitionCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateTagDefinitionInput
+}
+
+// CSVInputWrapper marks TagDefinitionCSVUpdateInput for CSV header preprocessing.
+func (TagDefinitionCSVUpdateInput) CSVInputWrapper() {}
+
 // TaskCSVInput wraps CreateTaskInput with CSV reference columns.
 type TaskCSVInput struct {
 	Input generated.CreateTaskInput
@@ -1098,3 +2479,249 @@ type TaskCSVInput struct {
 
 // CSVInputWrapper marks TaskCSVInput for CSV header preprocessing.
 func (TaskCSVInput) CSVInputWrapper() {}
+
+// TaskCSVUpdateInput wraps UpdateTaskInput with CSV reference columns for bulk updates.
+type TaskCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateTaskInput
+	AssigneeEmail string `csv:"AssigneeEmail"`
+	AssignerEmail string `csv:"AssignerEmail"`
+}
+
+// CSVInputWrapper marks TaskCSVUpdateInput for CSV header preprocessing.
+func (TaskCSVUpdateInput) CSVInputWrapper() {}
+
+// TemplateCSVInput wraps CreateTemplateInput with CSV reference columns.
+type TemplateCSVInput struct {
+	Input generated.CreateTemplateInput
+}
+
+// CSVInputWrapper marks TemplateCSVInput for CSV header preprocessing.
+func (TemplateCSVInput) CSVInputWrapper() {}
+
+// TemplateCSVUpdateInput wraps UpdateTemplateInput with CSV reference columns for bulk updates.
+type TemplateCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateTemplateInput
+}
+
+// CSVInputWrapper marks TemplateCSVUpdateInput for CSV header preprocessing.
+func (TemplateCSVUpdateInput) CSVInputWrapper() {}
+
+// TrustCenterCSVInput wraps CreateTrustCenterInput with CSV reference columns.
+type TrustCenterCSVInput struct {
+	Input generated.CreateTrustCenterInput
+}
+
+// CSVInputWrapper marks TrustCenterCSVInput for CSV header preprocessing.
+func (TrustCenterCSVInput) CSVInputWrapper() {}
+
+// TrustCenterCSVUpdateInput wraps UpdateTrustCenterInput with CSV reference columns for bulk updates.
+type TrustCenterCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateTrustCenterInput
+}
+
+// CSVInputWrapper marks TrustCenterCSVUpdateInput for CSV header preprocessing.
+func (TrustCenterCSVUpdateInput) CSVInputWrapper() {}
+
+// TrustCenterComplianceCSVInput wraps CreateTrustCenterComplianceInput with CSV reference columns.
+type TrustCenterComplianceCSVInput struct {
+	Input generated.CreateTrustCenterComplianceInput
+}
+
+// CSVInputWrapper marks TrustCenterComplianceCSVInput for CSV header preprocessing.
+func (TrustCenterComplianceCSVInput) CSVInputWrapper() {}
+
+// TrustCenterComplianceCSVUpdateInput wraps UpdateTrustCenterComplianceInput with CSV reference columns for bulk updates.
+type TrustCenterComplianceCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateTrustCenterComplianceInput
+}
+
+// CSVInputWrapper marks TrustCenterComplianceCSVUpdateInput for CSV header preprocessing.
+func (TrustCenterComplianceCSVUpdateInput) CSVInputWrapper() {}
+
+// TrustCenterDocCSVInput wraps CreateTrustCenterDocInput with CSV reference columns.
+type TrustCenterDocCSVInput struct {
+	Input generated.CreateTrustCenterDocInput
+}
+
+// CSVInputWrapper marks TrustCenterDocCSVInput for CSV header preprocessing.
+func (TrustCenterDocCSVInput) CSVInputWrapper() {}
+
+// TrustCenterDocCSVUpdateInput wraps UpdateTrustCenterDocInput with CSV reference columns for bulk updates.
+type TrustCenterDocCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateTrustCenterDocInput
+}
+
+// CSVInputWrapper marks TrustCenterDocCSVUpdateInput for CSV header preprocessing.
+func (TrustCenterDocCSVUpdateInput) CSVInputWrapper() {}
+
+// TrustCenterEntityCSVInput wraps CreateTrustCenterEntityInput with CSV reference columns.
+type TrustCenterEntityCSVInput struct {
+	Input generated.CreateTrustCenterEntityInput
+}
+
+// CSVInputWrapper marks TrustCenterEntityCSVInput for CSV header preprocessing.
+func (TrustCenterEntityCSVInput) CSVInputWrapper() {}
+
+// TrustCenterEntityCSVUpdateInput wraps UpdateTrustCenterEntityInput with CSV reference columns for bulk updates.
+type TrustCenterEntityCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateTrustCenterEntityInput
+}
+
+// CSVInputWrapper marks TrustCenterEntityCSVUpdateInput for CSV header preprocessing.
+func (TrustCenterEntityCSVUpdateInput) CSVInputWrapper() {}
+
+// TrustCenterNDARequestCSVInput wraps CreateTrustCenterNDARequestInput with CSV reference columns.
+type TrustCenterNDARequestCSVInput struct {
+	Input generated.CreateTrustCenterNDARequestInput
+}
+
+// CSVInputWrapper marks TrustCenterNDARequestCSVInput for CSV header preprocessing.
+func (TrustCenterNDARequestCSVInput) CSVInputWrapper() {}
+
+// TrustCenterNDARequestCSVUpdateInput wraps UpdateTrustCenterNDARequestInput with CSV reference columns for bulk updates.
+type TrustCenterNDARequestCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateTrustCenterNDARequestInput
+}
+
+// CSVInputWrapper marks TrustCenterNDARequestCSVUpdateInput for CSV header preprocessing.
+func (TrustCenterNDARequestCSVUpdateInput) CSVInputWrapper() {}
+
+// TrustCenterSettingCSVInput wraps CreateTrustCenterSettingInput with CSV reference columns.
+type TrustCenterSettingCSVInput struct {
+	Input generated.CreateTrustCenterSettingInput
+}
+
+// CSVInputWrapper marks TrustCenterSettingCSVInput for CSV header preprocessing.
+func (TrustCenterSettingCSVInput) CSVInputWrapper() {}
+
+// TrustCenterSettingCSVUpdateInput wraps UpdateTrustCenterSettingInput with CSV reference columns for bulk updates.
+type TrustCenterSettingCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateTrustCenterSettingInput
+}
+
+// CSVInputWrapper marks TrustCenterSettingCSVUpdateInput for CSV header preprocessing.
+func (TrustCenterSettingCSVUpdateInput) CSVInputWrapper() {}
+
+// TrustCenterSubprocessorCSVInput wraps CreateTrustCenterSubprocessorInput with CSV reference columns.
+type TrustCenterSubprocessorCSVInput struct {
+	Input generated.CreateTrustCenterSubprocessorInput
+}
+
+// CSVInputWrapper marks TrustCenterSubprocessorCSVInput for CSV header preprocessing.
+func (TrustCenterSubprocessorCSVInput) CSVInputWrapper() {}
+
+// TrustCenterSubprocessorCSVUpdateInput wraps UpdateTrustCenterSubprocessorInput with CSV reference columns for bulk updates.
+type TrustCenterSubprocessorCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateTrustCenterSubprocessorInput
+}
+
+// CSVInputWrapper marks TrustCenterSubprocessorCSVUpdateInput for CSV header preprocessing.
+func (TrustCenterSubprocessorCSVUpdateInput) CSVInputWrapper() {}
+
+// TrustCenterWatermarkConfigCSVInput wraps CreateTrustCenterWatermarkConfigInput with CSV reference columns.
+type TrustCenterWatermarkConfigCSVInput struct {
+	Input generated.CreateTrustCenterWatermarkConfigInput
+}
+
+// CSVInputWrapper marks TrustCenterWatermarkConfigCSVInput for CSV header preprocessing.
+func (TrustCenterWatermarkConfigCSVInput) CSVInputWrapper() {}
+
+// TrustCenterWatermarkConfigCSVUpdateInput wraps UpdateTrustCenterWatermarkConfigInput with CSV reference columns for bulk updates.
+type TrustCenterWatermarkConfigCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateTrustCenterWatermarkConfigInput
+}
+
+// CSVInputWrapper marks TrustCenterWatermarkConfigCSVUpdateInput for CSV header preprocessing.
+func (TrustCenterWatermarkConfigCSVUpdateInput) CSVInputWrapper() {}
+
+// UserCSVInput wraps CreateUserInput with CSV reference columns.
+type UserCSVInput struct {
+	Input generated.CreateUserInput
+}
+
+// CSVInputWrapper marks UserCSVInput for CSV header preprocessing.
+func (UserCSVInput) CSVInputWrapper() {}
+
+// UserCSVUpdateInput wraps UpdateUserInput with CSV reference columns for bulk updates.
+type UserCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateUserInput
+}
+
+// CSVInputWrapper marks UserCSVUpdateInput for CSV header preprocessing.
+func (UserCSVUpdateInput) CSVInputWrapper() {}
+
+// UserSettingCSVInput wraps CreateUserSettingInput with CSV reference columns.
+type UserSettingCSVInput struct {
+	Input generated.CreateUserSettingInput
+}
+
+// CSVInputWrapper marks UserSettingCSVInput for CSV header preprocessing.
+func (UserSettingCSVInput) CSVInputWrapper() {}
+
+// UserSettingCSVUpdateInput wraps UpdateUserSettingInput with CSV reference columns for bulk updates.
+type UserSettingCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateUserSettingInput
+}
+
+// CSVInputWrapper marks UserSettingCSVUpdateInput for CSV header preprocessing.
+func (UserSettingCSVUpdateInput) CSVInputWrapper() {}
+
+// VulnerabilityCSVInput wraps CreateVulnerabilityInput with CSV reference columns.
+type VulnerabilityCSVInput struct {
+	Input generated.CreateVulnerabilityInput
+}
+
+// CSVInputWrapper marks VulnerabilityCSVInput for CSV header preprocessing.
+func (VulnerabilityCSVInput) CSVInputWrapper() {}
+
+// VulnerabilityCSVUpdateInput wraps UpdateVulnerabilityInput with CSV reference columns for bulk updates.
+type VulnerabilityCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateVulnerabilityInput
+}
+
+// CSVInputWrapper marks VulnerabilityCSVUpdateInput for CSV header preprocessing.
+func (VulnerabilityCSVUpdateInput) CSVInputWrapper() {}
+
+// WorkflowDefinitionCSVInput wraps CreateWorkflowDefinitionInput with CSV reference columns.
+type WorkflowDefinitionCSVInput struct {
+	Input generated.CreateWorkflowDefinitionInput
+}
+
+// CSVInputWrapper marks WorkflowDefinitionCSVInput for CSV header preprocessing.
+func (WorkflowDefinitionCSVInput) CSVInputWrapper() {}
+
+// WorkflowDefinitionCSVUpdateInput wraps UpdateWorkflowDefinitionInput with CSV reference columns for bulk updates.
+type WorkflowDefinitionCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateWorkflowDefinitionInput
+}
+
+// CSVInputWrapper marks WorkflowDefinitionCSVUpdateInput for CSV header preprocessing.
+func (WorkflowDefinitionCSVUpdateInput) CSVInputWrapper() {}

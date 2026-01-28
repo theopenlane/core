@@ -71,13 +71,9 @@ func (r *mutationResolver) CreateBulkCampaign(ctx context.Context, input []*gene
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		if _, ownerErr := common.GetBulkUploadOwnerInput(input); ownerErr != nil {
-			return nil, ownerErr
-		}
-
-		return nil, rout.ErrPermissionDenied
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	return r.bulkCreateCampaign(ctx, input)

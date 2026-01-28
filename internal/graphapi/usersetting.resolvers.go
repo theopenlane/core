@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -40,7 +41,7 @@ func (r *mutationResolver) CreateBulkUserSetting(ctx context.Context, input []*g
 
 // CreateBulkCSVUserSetting is the resolver for the createBulkCSVUserSetting field.
 func (r *mutationResolver) CreateBulkCSVUserSetting(ctx context.Context, input graphql.Upload) (*model.UserSettingBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateUserSettingInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.UserSettingCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -51,7 +52,16 @@ func (r *mutationResolver) CreateBulkCSVUserSetting(ctx context.Context, input g
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	return r.bulkCreateUserSetting(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "UserSetting", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateUserSettingInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateUserSetting(ctx, inputs)
 }
 
 // UpdateUserSetting is the resolver for the updateUserSetting field.
@@ -81,6 +91,35 @@ func (r *mutationResolver) DeleteBulkUserSetting(ctx context.Context, ids []stri
 	}
 
 	return r.bulkDeleteUserSetting(ctx, ids)
+}
+
+// UpdateBulkUserSetting is the resolver for the updateBulkUserSetting field.
+func (r *mutationResolver) UpdateBulkUserSetting(ctx context.Context, ids []string, input generated.UpdateUserSettingInput) (*model.UserSettingBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateUserSetting(ctx, ids, input)
+}
+
+// UpdateBulkCSVUserSetting is the resolver for the updateBulkCSVUserSetting field.
+func (r *mutationResolver) UpdateBulkCSVUserSetting(ctx context.Context, input graphql.Upload) (*model.UserSettingBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.UserSettingCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "usersetting"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "UserSetting", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVUserSetting(ctx, data)
 }
 
 // UserSetting is the resolver for the userSetting field.

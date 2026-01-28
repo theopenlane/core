@@ -154,6 +154,132 @@ func (ec *executionContext) fieldContext_ControlObjectiveBulkDeletePayload_delet
 	return fc, nil
 }
 
+func (ec *executionContext) _ControlObjectiveBulkUpdatePayload_controlObjectives(ctx context.Context, field graphql.CollectedField, obj *model.ControlObjectiveBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ControlObjectiveBulkUpdatePayload_controlObjectives,
+		func(ctx context.Context) (any, error) {
+			return obj.ControlObjectives, nil
+		},
+		nil,
+		ec.marshalOControlObjective2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlObjectiveᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_ControlObjectiveBulkUpdatePayload_controlObjectives(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlObjectiveBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ControlObjective_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ControlObjective_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ControlObjective_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ControlObjective_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ControlObjective_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_ControlObjective_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_ControlObjective_tags(ctx, field)
+			case "revision":
+				return ec.fieldContext_ControlObjective_revision(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_ControlObjective_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_ControlObjective_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_ControlObjective_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_ControlObjective_systemInternalID(ctx, field)
+			case "name":
+				return ec.fieldContext_ControlObjective_name(ctx, field)
+			case "desiredOutcome":
+				return ec.fieldContext_ControlObjective_desiredOutcome(ctx, field)
+			case "desiredOutcomeJSON":
+				return ec.fieldContext_ControlObjective_desiredOutcomeJSON(ctx, field)
+			case "status":
+				return ec.fieldContext_ControlObjective_status(ctx, field)
+			case "source":
+				return ec.fieldContext_ControlObjective_source(ctx, field)
+			case "controlObjectiveType":
+				return ec.fieldContext_ControlObjective_controlObjectiveType(ctx, field)
+			case "category":
+				return ec.fieldContext_ControlObjective_category(ctx, field)
+			case "subcategory":
+				return ec.fieldContext_ControlObjective_subcategory(ctx, field)
+			case "owner":
+				return ec.fieldContext_ControlObjective_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_ControlObjective_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_ControlObjective_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_ControlObjective_viewers(ctx, field)
+			case "programs":
+				return ec.fieldContext_ControlObjective_programs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_ControlObjective_evidence(ctx, field)
+			case "controls":
+				return ec.fieldContext_ControlObjective_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_ControlObjective_subcontrols(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_ControlObjective_internalPolicies(ctx, field)
+			case "procedures":
+				return ec.fieldContext_ControlObjective_procedures(ctx, field)
+			case "risks":
+				return ec.fieldContext_ControlObjective_risks(ctx, field)
+			case "narratives":
+				return ec.fieldContext_ControlObjective_narratives(ctx, field)
+			case "tasks":
+				return ec.fieldContext_ControlObjective_tasks(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ControlObjective", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ControlObjectiveBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ControlObjectiveBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ControlObjectiveBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_ControlObjectiveBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlObjectiveBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ControlObjectiveCreatePayload_controlObjective(ctx context.Context, field graphql.CollectedField, obj *model.ControlObjectiveCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -464,6 +590,44 @@ func (ec *executionContext) _ControlObjectiveBulkDeletePayload(ctx context.Conte
 	return out
 }
 
+var controlObjectiveBulkUpdatePayloadImplementors = []string{"ControlObjectiveBulkUpdatePayload"}
+
+func (ec *executionContext) _ControlObjectiveBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ControlObjectiveBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, controlObjectiveBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ControlObjectiveBulkUpdatePayload")
+		case "controlObjectives":
+			out.Values[i] = ec._ControlObjectiveBulkUpdatePayload_controlObjectives(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._ControlObjectiveBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var controlObjectiveCreatePayloadImplementors = []string{"ControlObjectiveCreatePayload"}
 
 func (ec *executionContext) _ControlObjectiveCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ControlObjectiveCreatePayload) graphql.Marshaler {
@@ -611,6 +775,20 @@ func (ec *executionContext) marshalNControlObjectiveBulkDeletePayload2ᚖgithub�
 		return graphql.Null
 	}
 	return ec._ControlObjectiveBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNControlObjectiveBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlObjectiveBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ControlObjectiveBulkUpdatePayload) graphql.Marshaler {
+	return ec._ControlObjectiveBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNControlObjectiveBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlObjectiveBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ControlObjectiveBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ControlObjectiveBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNControlObjectiveCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlObjectiveCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ControlObjectiveCreatePayload) graphql.Marshaler {

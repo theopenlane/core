@@ -70,6 +70,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): APITokenBulkDeletePayload!
+    """
+    Update multiple existing apiTokens
+    """
+    updateBulkAPIToken(
+        """
+        IDs of the apiTokens to update
+        """
+        ids: [ID!]!
+        """
+        values to update the apiTokens with
+        """
+        input: UpdateAPITokenInput!
+    ): APITokenBulkUpdatePayload!
+    """
+    Update multiple existing apiTokens via file upload
+    """
+    updateBulkCSVAPIToken(
+        """
+        csv file containing values of the apiToken, must include ID column
+        """
+        input: Upload!
+    ): APITokenBulkUpdatePayload!
 }
 
 """
@@ -122,3 +144,16 @@ type APITokenBulkDeletePayload {
     deletedIDs: [ID!]!
 }
 
+"""
+Return response for updateBulkAPIToken mutation
+"""
+type APITokenBulkUpdatePayload {
+    """
+    Updated apiTokens
+    """
+    apiTokens: [APIToken!]
+    """
+    IDs of the updated apiTokens
+    """
+    updatedIDs: [ID!]
+}

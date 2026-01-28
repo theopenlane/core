@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -72,7 +73,11 @@ func (r *mutationResolver) CreateBulkCSVMappedControl(ctx context.Context, input
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
 	var inputData []*generated.CreateMappedControlInput
@@ -107,7 +112,6 @@ func (r *mutationResolver) CreateBulkCSVMappedControl(ctx context.Context, input
 		obj.ToSubcontrolIDs = ids
 
 		inputData = append(inputData, &obj.CreateMappedControlInput)
-
 	}
 
 	return r.bulkCreateMappedControl(ctx, inputData)
@@ -162,6 +166,35 @@ func (r *mutationResolver) DeleteBulkMappedControl(ctx context.Context, ids []st
 	}
 
 	return r.bulkDeleteMappedControl(ctx, ids)
+}
+
+// UpdateBulkMappedControl is the resolver for the updateBulkMappedControl field.
+func (r *mutationResolver) UpdateBulkMappedControl(ctx context.Context, ids []string, input generated.UpdateMappedControlInput) (*model.MappedControlBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateMappedControl(ctx, ids, input)
+}
+
+// UpdateBulkCSVMappedControl is the resolver for the updateBulkCSVMappedControl field.
+func (r *mutationResolver) UpdateBulkCSVMappedControl(ctx context.Context, input graphql.Upload) (*model.MappedControlBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.MappedControlCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "mappedcontrol"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "MappedControl", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVMappedControl(ctx, data)
 }
 
 // MappedControl is the resolver for the mappedControl field.

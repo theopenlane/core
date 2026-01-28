@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -38,6 +39,10 @@ func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated
 
 // CreateBulkSubscriber is the resolver for the createBulkSubscriber field.
 func (r *mutationResolver) CreateBulkSubscriber(ctx context.Context, input []*generated.CreateSubscriberInput) (*model.SubscriberBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
@@ -51,11 +56,15 @@ func (r *mutationResolver) CreateBulkSubscriber(ctx context.Context, input []*ge
 
 // CreateBulkCSVSubscriber is the resolver for the createBulkCSVSubscriber field.
 func (r *mutationResolver) CreateBulkCSVSubscriber(ctx context.Context, input graphql.Upload) (*model.SubscriberBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateSubscriberInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.SubscriberCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "subscriber"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -63,10 +72,23 @@ func (r *mutationResolver) CreateBulkCSVSubscriber(ctx context.Context, input gr
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateSubscriber(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "Subscriber", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateSubscriberInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateSubscriber(ctx, inputs)
 }
 
 // UpdateSubscriber is the resolver for the updateSubscriber field.

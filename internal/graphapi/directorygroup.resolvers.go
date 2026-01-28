@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -45,7 +46,7 @@ func (r *mutationResolver) CreateBulkDirectoryGroup(ctx context.Context, input [
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -55,7 +56,7 @@ func (r *mutationResolver) CreateBulkDirectoryGroup(ctx context.Context, input [
 
 // CreateBulkCSVDirectoryGroup is the resolver for the createBulkCSVDirectoryGroup field.
 func (r *mutationResolver) CreateBulkCSVDirectoryGroup(ctx context.Context, input graphql.Upload) (*model.DirectoryGroupBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateDirectoryGroupInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.DirectoryGroupCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -71,10 +72,23 @@ func (r *mutationResolver) CreateBulkCSVDirectoryGroup(ctx context.Context, inpu
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateDirectoryGroup(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "DirectoryGroup", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateDirectoryGroupInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateDirectoryGroup(ctx, inputs)
 }
 
 // UpdateDirectoryGroup is the resolver for the updateDirectoryGroup field.

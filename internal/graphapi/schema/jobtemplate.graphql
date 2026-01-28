@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): JobTemplateBulkDeletePayload!
+    """
+    Update multiple existing jobTemplates
+    """
+    updateBulkJobTemplate(
+        """
+        IDs of the jobTemplates to update
+        """
+        ids: [ID!]!
+        """
+        values to update the jobTemplates with
+        """
+        input: UpdateJobTemplateInput!
+    ): JobTemplateBulkUpdatePayload!
+    """
+    Update multiple existing jobTemplates via file upload
+    """
+    updateBulkCSVJobTemplate(
+        """
+        csv file containing values of the jobTemplate, must include ID column
+        """
+        input: Upload!
+    ): JobTemplateBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type JobTemplateBulkDeletePayload {
     Deleted jobTemplate IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkJobTemplate mutation
+"""
+type JobTemplateBulkUpdatePayload {
+    """
+    Updated jobTemplates
+    """
+    jobTemplates: [JobTemplate!]
+    """
+    IDs of the updated jobTemplates
+    """
+    updatedIDs: [ID!]
 }

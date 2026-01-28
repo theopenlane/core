@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -40,7 +41,7 @@ func (r *mutationResolver) CreateBulkEvent(ctx context.Context, input []*generat
 
 // CreateBulkCSVEvent is the resolver for the createBulkCSVEvent field.
 func (r *mutationResolver) CreateBulkCSVEvent(ctx context.Context, input graphql.Upload) (*model.EventBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateEventInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.EventCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -51,7 +52,16 @@ func (r *mutationResolver) CreateBulkCSVEvent(ctx context.Context, input graphql
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	return r.bulkCreateEvent(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "Event", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateEventInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateEvent(ctx, inputs)
 }
 
 // UpdateEvent is the resolver for the updateEvent field.
@@ -96,6 +106,35 @@ func (r *mutationResolver) DeleteBulkEvent(ctx context.Context, ids []string) (*
 	}
 
 	return r.bulkDeleteEvent(ctx, ids)
+}
+
+// UpdateBulkEvent is the resolver for the updateBulkEvent field.
+func (r *mutationResolver) UpdateBulkEvent(ctx context.Context, ids []string, input generated.UpdateEventInput) (*model.EventBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateEvent(ctx, ids, input)
+}
+
+// UpdateBulkCSVEvent is the resolver for the updateBulkCSVEvent field.
+func (r *mutationResolver) UpdateBulkCSVEvent(ctx context.Context, input graphql.Upload) (*model.EventBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.EventCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "event"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Event", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVEvent(ctx, data)
 }
 
 // Event is the resolver for the event field.

@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): InviteBulkDeletePayload!
+    """
+    Update multiple existing invites
+    """
+    updateBulkInvite(
+        """
+        IDs of the invites to update
+        """
+        ids: [ID!]!
+        """
+        values to update the invites with
+        """
+        input: UpdateInviteInput!
+    ): InviteBulkUpdatePayload!
+    """
+    Update multiple existing invites via file upload
+    """
+    updateBulkCSVInvite(
+        """
+        csv file containing values of the invite, must include ID column
+        """
+        input: Upload!
+    ): InviteBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type InviteBulkDeletePayload {
     Deleted invite IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkInvite mutation
+"""
+type InviteBulkUpdatePayload {
+    """
+    Updated invites
+    """
+    invites: [Invite!]
+    """
+    IDs of the updated invites
+    """
+    updatedIDs: [ID!]
 }

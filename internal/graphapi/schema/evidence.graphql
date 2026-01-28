@@ -111,6 +111,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): EvidenceBulkDeletePayload!
+    """
+    Update multiple existing evidences via file upload
+    """
+    updateBulkCSVEvidence(
+        """
+        csv file containing values of the evidence, must include ID column
+        """
+        input: Upload!
+    ): EvidenceBulkUpdatePayload!
 }
 
 """

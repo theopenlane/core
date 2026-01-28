@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -40,7 +41,7 @@ func (r *mutationResolver) CreateBulkMappableDomain(ctx context.Context, input [
 
 // CreateBulkCSVMappableDomain is the resolver for the createBulkCSVMappableDomain field.
 func (r *mutationResolver) CreateBulkCSVMappableDomain(ctx context.Context, input graphql.Upload) (*model.MappableDomainBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateMappableDomainInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.MappableDomainCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -51,7 +52,16 @@ func (r *mutationResolver) CreateBulkCSVMappableDomain(ctx context.Context, inpu
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	return r.bulkCreateMappableDomain(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "MappableDomain", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateMappableDomainInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateMappableDomain(ctx, inputs)
 }
 
 // UpdateMappableDomain is the resolver for the updateMappableDomain field.
@@ -96,6 +106,35 @@ func (r *mutationResolver) DeleteBulkMappableDomain(ctx context.Context, ids []s
 	}
 
 	return r.bulkDeleteMappableDomain(ctx, ids)
+}
+
+// UpdateBulkMappableDomain is the resolver for the updateBulkMappableDomain field.
+func (r *mutationResolver) UpdateBulkMappableDomain(ctx context.Context, ids []string, input generated.UpdateMappableDomainInput) (*model.MappableDomainBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateMappableDomain(ctx, ids, input)
+}
+
+// UpdateBulkCSVMappableDomain is the resolver for the updateBulkCSVMappableDomain field.
+func (r *mutationResolver) UpdateBulkCSVMappableDomain(ctx context.Context, input graphql.Upload) (*model.MappableDomainBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.MappableDomainCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "mappabledomain"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "MappableDomain", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVMappableDomain(ctx, data)
 }
 
 // MappableDomain is the resolver for the mappableDomain field.

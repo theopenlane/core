@@ -84,6 +84,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): RiskBulkDeletePayload!
+    """
+    Update multiple existing risks via file upload
+    """
+    updateBulkCSVRisk(
+        """
+        csv file containing values of the risk, must include ID column
+        """
+        input: Upload!
+    ): RiskBulkUpdatePayload!
 }
 
 """

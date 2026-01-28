@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -47,7 +48,7 @@ func (r *mutationResolver) CreateBulkGroupSetting(ctx context.Context, input []*
 
 // CreateBulkCSVGroupSetting is the resolver for the createBulkCSVGroupSetting field.
 func (r *mutationResolver) CreateBulkCSVGroupSetting(ctx context.Context, input graphql.Upload) (*model.GroupSettingBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateGroupSettingInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.GroupSettingCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -58,7 +59,16 @@ func (r *mutationResolver) CreateBulkCSVGroupSetting(ctx context.Context, input 
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	return r.bulkCreateGroupSetting(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "GroupSetting", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateGroupSettingInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateGroupSetting(ctx, inputs)
 }
 
 // UpdateGroupSetting is the resolver for the updateGroupSetting field.
@@ -103,6 +113,35 @@ func (r *mutationResolver) DeleteBulkGroupSetting(ctx context.Context, ids []str
 	}
 
 	return r.bulkDeleteGroupSetting(ctx, ids)
+}
+
+// UpdateBulkGroupSetting is the resolver for the updateBulkGroupSetting field.
+func (r *mutationResolver) UpdateBulkGroupSetting(ctx context.Context, ids []string, input generated.UpdateGroupSettingInput) (*model.GroupSettingBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateGroupSetting(ctx, ids, input)
+}
+
+// UpdateBulkCSVGroupSetting is the resolver for the updateBulkCSVGroupSetting field.
+func (r *mutationResolver) UpdateBulkCSVGroupSetting(ctx context.Context, input graphql.Upload) (*model.GroupSettingBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.GroupSettingCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "groupsetting"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "GroupSetting", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVGroupSetting(ctx, data)
 }
 
 // GroupSetting is the resolver for the groupSetting field.

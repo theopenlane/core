@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): MappedControlBulkDeletePayload!
+    """
+    Update multiple existing mappedControls
+    """
+    updateBulkMappedControl(
+        """
+        IDs of the mappedControls to update
+        """
+        ids: [ID!]!
+        """
+        values to update the mappedControls with
+        """
+        input: UpdateMappedControlInput!
+    ): MappedControlBulkUpdatePayload!
+    """
+    Update multiple existing mappedControls via file upload
+    """
+    updateBulkCSVMappedControl(
+        """
+        csv file containing values of the mappedControl, must include ID column
+        """
+        input: Upload!
+    ): MappedControlBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type MappedControlBulkDeletePayload {
     Deleted mappedControl IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkMappedControl mutation
+"""
+type MappedControlBulkUpdatePayload {
+    """
+    Updated mappedControls
+    """
+    mappedControls: [MappedControl!]
+    """
+    IDs of the updated mappedControls
+    """
+    updatedIDs: [ID!]
 }

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -77,7 +78,7 @@ func (r *mutationResolver) CreateBulkActionPlan(ctx context.Context, input []*ge
 
 // CreateBulkCSVActionPlan is the resolver for the createBulkCSVActionPlan field.
 func (r *mutationResolver) CreateBulkCSVActionPlan(ctx context.Context, input graphql.Upload) (*model.ActionPlanBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateActionPlanInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.ActionPlanCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -93,10 +94,23 @@ func (r *mutationResolver) CreateBulkCSVActionPlan(ctx context.Context, input gr
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateActionPlan(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "ActionPlan", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateActionPlanInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateActionPlan(ctx, inputs)
 }
 
 // UpdateBulkActionPlan is the resolver for the updateBulkActionPlan field.
@@ -157,6 +171,26 @@ func (r *mutationResolver) DeleteBulkActionPlan(ctx context.Context, ids []strin
 	}
 
 	return r.bulkDeleteActionPlan(ctx, ids)
+}
+
+// UpdateBulkCSVActionPlan is the resolver for the updateBulkCSVActionPlan field.
+func (r *mutationResolver) UpdateBulkCSVActionPlan(ctx context.Context, input graphql.Upload) (*model.ActionPlanBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.ActionPlanCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "actionplan"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "ActionPlan", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVActionPlan(ctx, data)
 }
 
 // ActionPlan is the resolver for the actionPlan field.

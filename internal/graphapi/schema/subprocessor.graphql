@@ -90,6 +90,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): SubprocessorBulkDeletePayload!
+    """
+    Update multiple existing subprocessors via file upload
+    """
+    updateBulkCSVSubprocessor(
+        """
+        csv file containing values of the subprocessor, must include ID column
+        """
+        input: Upload!
+    ): SubprocessorBulkUpdatePayload!
 }
 
 """

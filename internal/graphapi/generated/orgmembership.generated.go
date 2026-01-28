@@ -110,6 +110,88 @@ func (ec *executionContext) fieldContext_OrgMembershipBulkDeletePayload_deletedI
 	return fc, nil
 }
 
+func (ec *executionContext) _OrgMembershipBulkUpdatePayload_orgMemberships(ctx context.Context, field graphql.CollectedField, obj *model.OrgMembershipBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_OrgMembershipBulkUpdatePayload_orgMemberships,
+		func(ctx context.Context) (any, error) {
+			return obj.OrgMemberships, nil
+		},
+		nil,
+		ec.marshalOOrgMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrgMembershipᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_OrgMembershipBulkUpdatePayload_orgMemberships(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OrgMembershipBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_OrgMembership_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_OrgMembership_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_OrgMembership_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_OrgMembership_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_OrgMembership_updatedBy(ctx, field)
+			case "role":
+				return ec.fieldContext_OrgMembership_role(ctx, field)
+			case "organizationID":
+				return ec.fieldContext_OrgMembership_organizationID(ctx, field)
+			case "userID":
+				return ec.fieldContext_OrgMembership_userID(ctx, field)
+			case "organization":
+				return ec.fieldContext_OrgMembership_organization(ctx, field)
+			case "user":
+				return ec.fieldContext_OrgMembership_user(ctx, field)
+			case "events":
+				return ec.fieldContext_OrgMembership_events(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OrgMembership", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OrgMembershipBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.OrgMembershipBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_OrgMembershipBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_OrgMembershipBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OrgMembershipBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _OrgMembershipCreatePayload_orgMembership(ctx context.Context, field graphql.CollectedField, obj *model.OrgMembershipCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -332,6 +414,44 @@ func (ec *executionContext) _OrgMembershipBulkDeletePayload(ctx context.Context,
 	return out
 }
 
+var orgMembershipBulkUpdatePayloadImplementors = []string{"OrgMembershipBulkUpdatePayload"}
+
+func (ec *executionContext) _OrgMembershipBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.OrgMembershipBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, orgMembershipBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("OrgMembershipBulkUpdatePayload")
+		case "orgMemberships":
+			out.Values[i] = ec._OrgMembershipBulkUpdatePayload_orgMemberships(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._OrgMembershipBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var orgMembershipCreatePayloadImplementors = []string{"OrgMembershipCreatePayload"}
 
 func (ec *executionContext) _OrgMembershipCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.OrgMembershipCreatePayload) graphql.Marshaler {
@@ -479,6 +599,20 @@ func (ec *executionContext) marshalNOrgMembershipBulkDeletePayload2ᚖgithubᚗc
 		return graphql.Null
 	}
 	return ec._OrgMembershipBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNOrgMembershipBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembershipBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrgMembershipBulkUpdatePayload) graphql.Marshaler {
+	return ec._OrgMembershipBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNOrgMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembershipBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrgMembershipBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._OrgMembershipBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNOrgMembershipCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembershipCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrgMembershipCreatePayload) graphql.Marshaler {

@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -35,12 +36,20 @@ func (r *mutationResolver) CreateBulkFinding(ctx context.Context, input []*gener
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	return r.bulkCreateFinding(ctx, input)
 }
 
 // CreateBulkCSVFinding is the resolver for the createBulkCSVFinding field.
 func (r *mutationResolver) CreateBulkCSVFinding(ctx context.Context, input graphql.Upload) (*model.FindingBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateFindingInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.FindingCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -51,7 +60,28 @@ func (r *mutationResolver) CreateBulkCSVFinding(ctx context.Context, input graph
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	return r.bulkCreateFinding(ctx, data)
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Finding", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateFindingInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateFinding(ctx, inputs)
 }
 
 // UpdateFinding is the resolver for the updateFinding field.

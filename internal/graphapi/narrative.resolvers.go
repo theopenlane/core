@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -55,7 +56,7 @@ func (r *mutationResolver) CreateBulkNarrative(ctx context.Context, input []*gen
 
 // CreateBulkCSVNarrative is the resolver for the createBulkCSVNarrative field.
 func (r *mutationResolver) CreateBulkCSVNarrative(ctx context.Context, input graphql.Upload) (*model.NarrativeBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateNarrativeInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.NarrativeCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -71,10 +72,23 @@ func (r *mutationResolver) CreateBulkCSVNarrative(ctx context.Context, input gra
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateNarrative(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "Narrative", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateNarrativeInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateNarrative(ctx, inputs)
 }
 
 // UpdateNarrative is the resolver for the updateNarrative field.
@@ -126,6 +140,35 @@ func (r *mutationResolver) DeleteBulkNarrative(ctx context.Context, ids []string
 	}
 
 	return r.bulkDeleteNarrative(ctx, ids)
+}
+
+// UpdateBulkNarrative is the resolver for the updateBulkNarrative field.
+func (r *mutationResolver) UpdateBulkNarrative(ctx context.Context, ids []string, input generated.UpdateNarrativeInput) (*model.NarrativeBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateNarrative(ctx, ids, input)
+}
+
+// UpdateBulkCSVNarrative is the resolver for the updateBulkCSVNarrative field.
+func (r *mutationResolver) UpdateBulkCSVNarrative(ctx context.Context, input graphql.Upload) (*model.NarrativeBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.NarrativeCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "narrative"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Narrative", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVNarrative(ctx, data)
 }
 
 // Narrative is the resolver for the narrative field.
