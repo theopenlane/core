@@ -203,6 +203,10 @@ func serve(ctx context.Context) error {
 		log.Info().Msg("workflow engine initialized")
 	}
 
+	if so.Config.Settings.CampaignWebhook.Enabled {
+		so.AddServerOptions(serveropts.WithCampaignWebhookConfig())
+	}
+
 	go func() {
 		<-ctx.Done()
 

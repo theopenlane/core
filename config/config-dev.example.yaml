@@ -27,7 +27,10 @@ server:
   # tls settings
   tls:
     enabled: false
-
+campaignwebhook:
+    enabled: false
+    resendapikey: ""
+    resendsecret: ""
 # db settings
 db:
   debug: true

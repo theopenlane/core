@@ -27,7 +27,7 @@ Config contains the configuration for the core server
 |[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
 |[**integrationoauthprovider**](#integrationoauthprovider)|`object`|IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.<br/>||
 |[**workflows**](#workflows)|`object`|||
-|[**emailwebhook**](#emailwebhook)|`object`|EmailWebhook contains webhook configuration for email providers (e.g., Resend).<br/>||
+|[**campaignwebhook**](#campaignwebhook)|`object`|CampaignWebhookConfig contains webhook configuration for campaign-related email providers.<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -137,7 +137,7 @@ Config contains the configuration for the core server
     "workflows": {
         "cel": {}
     },
-    "emailwebhook": {}
+    "campaignwebhook": {}
 }
 ```
 
@@ -1721,17 +1721,18 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |**trackstate**|`boolean`|||
 
 **Additional Properties:** not allowed  
-<a name="emailwebhook"></a>
-## emailwebhook: object
+<a name="campaignwebhook"></a>
+## campaignwebhook: object
 
-EmailWebhook contains webhook configuration for email providers (e.g., Resend).
+CampaignWebhookConfig contains webhook configuration for campaign-related email providers.
 
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled is a flag to enable or disable email webhooks<br/>||
+|**enabled**|`boolean`|Enabled toggles the campaign webhook handler<br/>||
+|**resendapikey**|`string`|ResendAPIKey is the API key used for Resend client initialization<br/>||
 |**resendsecret**|`string`|ResendSecret is the signing secret used to verify Resend webhook payloads<br/>||
 
 **Additional Properties:** not allowed  

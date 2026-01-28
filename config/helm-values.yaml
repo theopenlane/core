@@ -572,9 +572,9 @@ coreConfiguration:
       macrocalltracking: false  # @schema type:boolean; default:false
       evaloptimize: true  # @schema type:boolean; default:true
       trackstate: false  # @schema type:boolean; default:false
-  # -- EmailWebhook contains webhook configuration for email providers
-  emailwebhook:
-    # -- Enabled is a flag to enable or disable email webhooks
+  # -- CampaignWebhook contains webhook configuration for campaign-related email providers
+  campaignwebhook:
+    # -- Enabled toggles the campaign webhook handler
     enabled: false  # @schema type:boolean; default:false
 
 # -- External Secrets configuration
@@ -887,11 +887,19 @@ externalSecrets:
       secretKey: "CORE_SLACK_WEBHOOKURL"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-slack-webhookurl"  # @schema type:string
-    # -- core-emailwebhook-resendsecret secret configuration
-    core-emailwebhook-resendsecret:
+    # -- core-campaignwebhook-resendapikey secret configuration
+    core-campaignwebhook-resendapikey:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for emailwebhook.resendsecret
-      secretKey: "CORE_EMAILWEBHOOK_RESENDSECRET"  # @schema type:string
+      # -- Environment variable key for campaignwebhook.resendapikey
+      secretKey: "CORE_CAMPAIGNWEBHOOK_RESENDAPIKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
-      remoteKey: "core-emailwebhook-resendsecret"  # @schema type:string
+      remoteKey: "core-campaignwebhook-resendapikey"  # @schema type:string
+    # -- core-campaignwebhook-resendsecret secret configuration
+    core-campaignwebhook-resendsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for campaignwebhook.resendsecret
+      secretKey: "CORE_CAMPAIGNWEBHOOK_RESENDSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-campaignwebhook-resendsecret"  # @schema type:string

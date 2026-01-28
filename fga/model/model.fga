@@ -765,12 +765,34 @@ type assessment
     # delegate is a user or group that is given temporary access to the assessment, they will have edit but not delete access
     define delegate: [user, group#member]
 
+type campaign
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, organization]
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent
+    define blocked: [user, group#member]
+
+type campaign_target
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, campaign]
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent
+    define blocked: [user, group#member]
+
 type assessment_response
   relations
     define can_view: [user] or response_owner or admin_viewer or viewer
     define can_delete: admin_viewer
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, organization, assessment]
+    define parent: [user, service, organization, assessment, campaign]
     # the user who filled out the assessment response - they can view their own response
     define response_owner: [user]
     # org admins and owners can view all responses for oversight/management
