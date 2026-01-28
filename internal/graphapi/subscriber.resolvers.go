@@ -39,10 +39,6 @@ func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated
 
 // CreateBulkSubscriber is the resolver for the createBulkSubscriber field.
 func (r *mutationResolver) CreateBulkSubscriber(ctx context.Context, input []*generated.CreateSubscriberInput) (*model.SubscriberBulkCreatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {

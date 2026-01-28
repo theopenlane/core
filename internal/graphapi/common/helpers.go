@@ -254,7 +254,11 @@ func jsonColumnHint(err error) string {
 
 	var syntaxErr *json.SyntaxError
 	var typeErr *json.UnmarshalTypeError
-	if !errors.As(err, &syntaxErr) && !errors.As(err, &typeErr) {
+
+	isJSONError := errors.As(err, &syntaxErr) || errors.As(err, &typeErr)
+	isTypeUnmarshalError := strings.Contains(err.Error(), "TypeUnmarshaller")
+
+	if !isJSONError && !isTypeUnmarshalError {
 		return ""
 	}
 
