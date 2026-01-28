@@ -530,6 +530,11 @@ type ComplexityRoot struct {
 		Campaign func(childComplexity int) int
 	}
 
+	CampaignCreateWithTargetsPayload struct {
+		Campaign        func(childComplexity int) int
+		CampaignTargets func(childComplexity int) int
+	}
+
 	CampaignDeletePayload struct {
 		DeletedID func(childComplexity int) int
 	}
@@ -537,6 +542,12 @@ type ComplexityRoot struct {
 	CampaignEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	CampaignLaunchPayload struct {
+		Campaign     func(childComplexity int) int
+		QueuedCount  func(childComplexity int) int
+		SkippedCount func(childComplexity int) int
 	}
 
 	CampaignTarget struct {
@@ -594,6 +605,12 @@ type ComplexityRoot struct {
 
 	CampaignTargetUpdatePayload struct {
 		CampaignTarget func(childComplexity int) int
+	}
+
+	CampaignTestEmailPayload struct {
+		Campaign     func(childComplexity int) int
+		QueuedCount  func(childComplexity int) int
+		SkippedCount func(childComplexity int) int
 	}
 
 	CampaignUpdatePayload struct {
@@ -3033,6 +3050,8 @@ type ComplexityRoot struct {
 		CreateBulkWorkflowDefinition         func(childComplexity int, input []*generated.CreateWorkflowDefinitionInput) int
 		CreateCampaign                       func(childComplexity int, input generated.CreateCampaignInput) int
 		CreateCampaignTarget                 func(childComplexity int, input generated.CreateCampaignTargetInput) int
+		CreateCampaignWithTargets            func(childComplexity int, input model.CreateCampaignWithTargetsInput) int
+		CreateCampaignWithTargetsCSV         func(childComplexity int, campaign generated.CreateCampaignInput, targets graphql.Upload) int
 		CreateContact                        func(childComplexity int, input generated.CreateContactInput) int
 		CreateControl                        func(childComplexity int, input generated.CreateControlInput) int
 		CreateControlImplementation          func(childComplexity int, input generated.CreateControlImplementationInput) int
@@ -3236,8 +3255,11 @@ type ComplexityRoot struct {
 		DeleteWebauthn                       func(childComplexity int, id string) int
 		DeleteWorkflowDefinition             func(childComplexity int, id string) int
 		DenyNDARequests                      func(childComplexity int, ids []string) int
+		LaunchCampaign                       func(childComplexity int, input model.LaunchCampaignInput) int
 		PublishTrustCenterSetting            func(childComplexity int) int
 		RejectWorkflowAssignment             func(childComplexity int, id string, reason *string) int
+		ResendCampaignIncompleteTargets      func(childComplexity int, input model.ResendCampaignIncompleteInput) int
+		SendCampaignTestEmail                func(childComplexity int, input model.SendCampaignTestEmailInput) int
 		SubmitTrustCenterNDAResponse         func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
 		TransferOrganizationOwnership        func(childComplexity int, newOwnerEmail string) int
 		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
@@ -8848,6 +8870,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.CampaignCreatePayload.Campaign(childComplexity), true
 
+	case "CampaignCreateWithTargetsPayload.campaign":
+		if e.complexity.CampaignCreateWithTargetsPayload.Campaign == nil {
+			break
+		}
+
+		return e.complexity.CampaignCreateWithTargetsPayload.Campaign(childComplexity), true
+
+	case "CampaignCreateWithTargetsPayload.campaignTargets":
+		if e.complexity.CampaignCreateWithTargetsPayload.CampaignTargets == nil {
+			break
+		}
+
+		return e.complexity.CampaignCreateWithTargetsPayload.CampaignTargets(childComplexity), true
+
 	case "CampaignDeletePayload.deletedID":
 		if e.complexity.CampaignDeletePayload.DeletedID == nil {
 			break
@@ -8868,6 +8904,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CampaignEdge.Node(childComplexity), true
+
+	case "CampaignLaunchPayload.campaign":
+		if e.complexity.CampaignLaunchPayload.Campaign == nil {
+			break
+		}
+
+		return e.complexity.CampaignLaunchPayload.Campaign(childComplexity), true
+
+	case "CampaignLaunchPayload.queuedCount":
+		if e.complexity.CampaignLaunchPayload.QueuedCount == nil {
+			break
+		}
+
+		return e.complexity.CampaignLaunchPayload.QueuedCount(childComplexity), true
+
+	case "CampaignLaunchPayload.skippedCount":
+		if e.complexity.CampaignLaunchPayload.SkippedCount == nil {
+			break
+		}
+
+		return e.complexity.CampaignLaunchPayload.SkippedCount(childComplexity), true
 
 	case "CampaignTarget.activeWorkflowInstances":
 		if e.complexity.CampaignTarget.ActiveWorkflowInstances == nil {
@@ -9130,6 +9187,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CampaignTargetUpdatePayload.CampaignTarget(childComplexity), true
+
+	case "CampaignTestEmailPayload.campaign":
+		if e.complexity.CampaignTestEmailPayload.Campaign == nil {
+			break
+		}
+
+		return e.complexity.CampaignTestEmailPayload.Campaign(childComplexity), true
+
+	case "CampaignTestEmailPayload.queuedCount":
+		if e.complexity.CampaignTestEmailPayload.QueuedCount == nil {
+			break
+		}
+
+		return e.complexity.CampaignTestEmailPayload.QueuedCount(childComplexity), true
+
+	case "CampaignTestEmailPayload.skippedCount":
+		if e.complexity.CampaignTestEmailPayload.SkippedCount == nil {
+			break
+		}
+
+		return e.complexity.CampaignTestEmailPayload.SkippedCount(childComplexity), true
 
 	case "CampaignUpdatePayload.campaign":
 		if e.complexity.CampaignUpdatePayload.Campaign == nil {
@@ -22209,6 +22287,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateCampaignTarget(childComplexity, args["input"].(generated.CreateCampaignTargetInput)), true
 
+	case "Mutation.createCampaignWithTargets":
+		if e.complexity.Mutation.CreateCampaignWithTargets == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createCampaignWithTargets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateCampaignWithTargets(childComplexity, args["input"].(model.CreateCampaignWithTargetsInput)), true
+
+	case "Mutation.createCampaignWithTargetsCSV":
+		if e.complexity.Mutation.CreateCampaignWithTargetsCSV == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createCampaignWithTargetsCSV_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateCampaignWithTargetsCSV(childComplexity, args["campaign"].(generated.CreateCampaignInput), args["targets"].(graphql.Upload)), true
+
 	case "Mutation.createContact":
 		if e.complexity.Mutation.CreateContact == nil {
 			break
@@ -24633,18 +24735,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteWorkflowDefinition(childComplexity, args["id"].(string)), true
 
-	case "Mutation.denyNDARequests":
-		if e.complexity.Mutation.DenyNDARequests == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_denyNDARequests_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.DenyNDARequests(childComplexity, args["ids"].([]string)), true
-
 	case "Mutation.publishTrustCenterSetting":
 		if e.complexity.Mutation.PublishTrustCenterSetting == nil {
 			break
@@ -24663,6 +24753,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.RejectWorkflowAssignment(childComplexity, args["id"].(string), args["reason"].(*string)), true
+
+	case "Mutation.resendCampaignIncompleteTargets":
+		if e.complexity.Mutation.ResendCampaignIncompleteTargets == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_resendCampaignIncompleteTargets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ResendCampaignIncompleteTargets(childComplexity, args["input"].(model.ResendCampaignIncompleteInput)), true
+
+	case "Mutation.sendCampaignTestEmail":
+		if e.complexity.Mutation.SendCampaignTestEmail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_sendCampaignTestEmail_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.SendCampaignTestEmail(childComplexity, args["input"].(model.SendCampaignTestEmailInput)), true
 
 	case "Mutation.submitTrustCenterNDAResponse":
 		if e.complexity.Mutation.SubmitTrustCenterNDAResponse == nil {
@@ -43410,6 +43524,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateAssetInput,
 		ec.unmarshalInputCreateCampaignInput,
 		ec.unmarshalInputCreateCampaignTargetInput,
+		ec.unmarshalInputCreateCampaignWithTargetsInput,
 		ec.unmarshalInputCreateContactInput,
 		ec.unmarshalInputCreateControlImplementationInput,
 		ec.unmarshalInputCreateControlInput,
@@ -43553,6 +43668,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputJobRunnerWhereInput,
 		ec.unmarshalInputJobTemplateOrder,
 		ec.unmarshalInputJobTemplateWhereInput,
+		ec.unmarshalInputLaunchCampaignInput,
 		ec.unmarshalInputMappableDomainOrder,
 		ec.unmarshalInputMappableDomainWhereInput,
 		ec.unmarshalInputMappedControlOrder,
@@ -43583,6 +43699,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputProgramWhereInput,
 		ec.unmarshalInputRemediationOrder,
 		ec.unmarshalInputRemediationWhereInput,
+		ec.unmarshalInputResendCampaignIncompleteInput,
 		ec.unmarshalInputReviewOrder,
 		ec.unmarshalInputReviewWhereInput,
 		ec.unmarshalInputRiskOrder,
@@ -43593,6 +43710,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputScheduledJobRunOrder,
 		ec.unmarshalInputScheduledJobRunWhereInput,
 		ec.unmarshalInputScheduledJobWhereInput,
+		ec.unmarshalInputSendCampaignTestEmailInput,
 		ec.unmarshalInputStandardOrder,
 		ec.unmarshalInputStandardWhereInput,
 		ec.unmarshalInputSubcontrolOrder,
@@ -44677,6 +44795,168 @@ type CampaignBulkCreatePayload {
     Created campaigns
     """
     campaigns: [Campaign!]
+}
+`, BuiltIn: false},
+	{Name: "../schema/campaignextended.graphql", Input: `"""
+Input for createCampaignWithTargets mutation
+"""
+input CreateCampaignWithTargetsInput {
+    """
+    values of the campaign
+    """
+    campaign: CreateCampaignInput!
+    """
+    list of targets to create for the campaign
+    """
+    targets: [CreateCampaignTargetInput!]
+}
+
+"""
+Return response for createCampaignWithTargets mutation
+"""
+type CampaignCreateWithTargetsPayload {
+    """
+    Created campaign
+    """
+    campaign: Campaign!
+    """
+    Created campaign targets
+    """
+    campaignTargets: [CampaignTarget!]
+}
+
+"""
+Input for launchCampaign mutation
+"""
+input LaunchCampaignInput {
+    """
+    ID of the campaign
+    """
+    campaignID: ID!
+    """
+    Whether to resend emails to previously-sent targets
+    """
+    resend: Boolean
+    """
+    Optional time to schedule the campaign launch or resend
+    """
+    scheduledAt: DateTime
+}
+
+"""
+Input for resendCampaignIncompleteTargets mutation
+"""
+input ResendCampaignIncompleteInput {
+    """
+    ID of the campaign
+    """
+    campaignID: ID!
+    """
+    Optional time to schedule the resend for incomplete targets
+    """
+    scheduledAt: DateTime
+}
+
+"""
+Return response for launchCampaign mutation
+"""
+type CampaignLaunchPayload {
+    """
+    Updated campaign
+    """
+    campaign: Campaign!
+    """
+    Number of targets queued for send
+    """
+    queuedCount: Int!
+    """
+    Number of targets skipped
+    """
+    skippedCount: Int!
+}
+
+"""
+Input for sendCampaignTestEmail mutation
+"""
+input SendCampaignTestEmailInput {
+    """
+    ID of the campaign
+    """
+    campaignID: ID!
+    """
+    List of recipient emails to send the test to
+    """
+    emails: [String!]!
+}
+
+"""
+Return response for sendCampaignTestEmail mutation
+"""
+type CampaignTestEmailPayload {
+    """
+    Campaign used for the test send
+    """
+    campaign: Campaign!
+    """
+    Number of emails queued for send
+    """
+    queuedCount: Int!
+    """
+    Number of emails skipped
+    """
+    skippedCount: Int!
+}
+
+extend type Mutation {
+    """
+    Create a new campaign with associated targets
+    """
+    createCampaignWithTargets(
+        """
+        values of the campaign and targets
+        """
+        input: CreateCampaignWithTargetsInput!
+    ): CampaignCreateWithTargetsPayload!
+    """
+    Create a new campaign with associated targets via file upload
+    """
+    createCampaignWithTargetsCSV(
+        """
+        values of the campaign
+        """
+        campaign: CreateCampaignInput!
+        """
+        csv file containing target values
+        """
+        targets: Upload!
+    ): CampaignCreateWithTargetsPayload!
+    """
+    Launch a campaign and send emails to its targets
+    """
+    launchCampaign(
+        """
+        values for launching a campaign
+        """
+        input: LaunchCampaignInput!
+    ): CampaignLaunchPayload!
+    """
+    Resend a campaign to only incomplete targets
+    """
+    resendCampaignIncompleteTargets(
+        """
+        values for resending a campaign to incomplete targets
+        """
+        input: ResendCampaignIncompleteInput!
+    ): CampaignLaunchPayload!
+    """
+    Send a test email for a campaign without creating campaign targets
+    """
+    sendCampaignTestEmail(
+        """
+        values for sending a campaign test email
+        """
+        input: SendCampaignTestEmailInput!
+    ): CampaignTestEmailPayload!
 }
 `, BuiltIn: false},
 	{Name: "../schema/campaigntarget.graphql", Input: `extend type CampaignTarget {

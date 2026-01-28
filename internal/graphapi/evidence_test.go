@@ -583,9 +583,6 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 	bulkFile, err := storage.NewUploadFile("testdata/uploads/evidence.csv")
 	assert.NilError(t, err)
 
-	invalidBulkFile, err := storage.NewUploadFile("testdata/uploads/evidence_invalid.csv")
-	assert.NilError(t, err)
-
 	evidences := []string{}
 	testCases := []struct {
 		name        string
@@ -605,18 +602,9 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 				ContentType: bulkFile.ContentType,
 			},
 		},
-		{
-			name:   "happy path, invalid tag column",
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-			fileInput: graphql.Upload{
-				File:        invalidBulkFile.RawFile,
-				Filename:    invalidBulkFile.OriginalName,
-				Size:        invalidBulkFile.Size,
-				ContentType: invalidBulkFile.ContentType,
-			},
-			expectedErr: "invalid input provided for Tags",
-		},
+		// Note: The "invalid tag column" test case was removed because CSV preprocessing
+		// now converts plain strings to valid single-element arrays. The value "evidence"
+		// in the Tags column is now valid as it's converted to ["evidence"].
 	}
 
 	for _, tc := range testCases {

@@ -10,12 +10,15 @@ import (
 	"github.com/google/uuid"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/newman"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -31,6 +34,11 @@ func HookCreateAssessmentResponse() ent.Hook {
 		return hook.AssessmentResponseFunc(func(ctx context.Context, m *generated.AssessmentResponseMutation) (generated.Value, error) {
 			id, ok := m.AssessmentID()
 			email, emailExists := m.Email()
+			campaignID, _ := m.CampaignID()
+			isTest := false
+			if value, exists := m.IsTest(); exists {
+				isTest = value
+			}
 
 			if !ok || !emailExists {
 				m.ClearDocumentDataID()
@@ -41,12 +49,19 @@ func HookCreateAssessmentResponse() ent.Hook {
 				return nil, err
 			}
 
-			existingResponse, err := m.Client().AssessmentResponse.Query().
+			query := m.Client().AssessmentResponse.Query().
 				Where(
 					assessmentresponse.AssessmentID(id),
 					assessmentresponse.EmailEqualFold(email),
-				).
-				Only(ctx)
+					assessmentresponse.IsTestEQ(isTest),
+				)
+			if campaignID != "" {
+				query = query.Where(assessmentresponse.CampaignIDEQ(campaignID))
+			} else {
+				query = query.Where(assessmentresponse.CampaignIDIsNil())
+			}
+
+			existingResponse, err := query.Only(ctx)
 
 			if err != nil {
 				if !generated.IsNotFound(err) {
@@ -78,15 +93,22 @@ func HookCreateAssessmentResponse() ent.Hook {
 					return nil, err
 				}
 
-				if err := createResponseEmail(ctx, m); err != nil {
+				var responseID string
+				if resp, ok := value.(*generated.AssessmentResponse); ok && resp != nil {
+					responseID = resp.ID
+				}
+
+				if err := createResponseEmail(ctx, m, responseID); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to send assessment response email")
 				}
 
 				return value, nil
 			}
 
-			// if started, we cannot send an invitation again
-			if existingResponse.Status != enums.AssessmentResponseStatusSent {
+			// if started, we cannot send an invitation again (unless this is a test send)
+			if existingResponse.Status != enums.AssessmentResponseStatusSent &&
+				existingResponse.Status != enums.AssessmentResponseStatusOverdue &&
+				!isTest {
 				return nil, ErrAssessmentInProgress
 			}
 
@@ -105,7 +127,7 @@ func HookCreateAssessmentResponse() ent.Hook {
 				return nil, err
 			}
 
-			if err := createResponseEmail(ctx, m); err != nil {
+			if err := createResponseEmail(ctx, m, updatedResponse.ID); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed to resend assessment response email")
 			}
 
@@ -114,10 +136,12 @@ func HookCreateAssessmentResponse() ent.Hook {
 	}, ent.OpCreate)
 }
 
-func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMutation) error {
+// createResponseEmail builds and queues the assessment response email for a recipient.
+func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMutation, responseID string) error {
 	orgID, _ := m.OwnerID()
 	assessmentID, _ := m.AssessmentID()
 	emailAddress, _ := m.Email()
+	campaignID, _ := m.CampaignID()
 
 	org, err := m.Client().Organization.Query().
 		Where(organization.ID(orgID)).
@@ -162,6 +186,32 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 		return err
 	}
 
+	tags := []newman.Tag{}
+	if responseID != "" {
+		tags = append(tags, newman.Tag{Name: "assessment_response_id", Value: responseID})
+	}
+
+	if campaignID != "" {
+		tags = append(tags, newman.Tag{Name: "campaign_id", Value: campaignID})
+	}
+
+	if isTest, ok := m.IsTest(); ok && isTest {
+		tags = append(tags, newman.Tag{Name: "is_test", Value: "true"})
+	}
+
+	if ctxData, ok := CampaignEmailContextFrom(ctx); ok {
+		if ctxData.CampaignID != "" && campaignID == "" {
+			tags = append(tags, newman.Tag{Name: "campaign_id", Value: ctxData.CampaignID})
+		}
+		if ctxData.CampaignTargetID != "" {
+			tags = append(tags, newman.Tag{Name: "campaign_target_id", Value: ctxData.CampaignTargetID})
+		}
+	}
+
+	if len(tags) > 0 {
+		email.Tags = append(email.Tags, tags...)
+	}
+
 	_, err = m.Job.Insert(ctx, jobs.EmailArgs{
 		Message: *email,
 	}, nil)
@@ -194,9 +244,115 @@ func HookUpdateAssessmentResponse() ent.Hook {
 				}
 			}
 
-			return next.Mutate(ctx, m)
+			newStatus, statusBeingSet := m.Status()
+			value, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			updatedResp, ok := value.(*generated.AssessmentResponse)
+			if !ok || updatedResp == nil {
+				return value, nil
+			}
+
+			if updatedResp.CampaignID != "" && !updatedResp.IsTest && statusBeingSet {
+				if err := updateCampaignTargetFromAssessmentResponse(ctx, m.Client(), updatedResp); err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to update campaign target status from assessment response")
+				}
+
+				if newStatus == enums.AssessmentResponseStatusCompleted {
+					if err := updateCampaignCompletionFromTargets(ctx, m.Client(), updatedResp.CampaignID); err != nil {
+						logx.FromContext(ctx).Error().Err(err).Msg("failed to update campaign completion status")
+					}
+				}
+			}
+
+			return value, nil
 		})
 	}, ent.OpUpdateOne)
+}
+
+// updateCampaignTargetFromAssessmentResponse mirrors response status into the campaign target record.
+func updateCampaignTargetFromAssessmentResponse(ctx context.Context, client *generated.Client, resp *generated.AssessmentResponse) error {
+	if resp == nil || resp.CampaignID == "" {
+		return nil
+	}
+
+	update := client.CampaignTarget.Update().
+		Where(
+			campaigntarget.CampaignIDEQ(resp.CampaignID),
+			campaigntarget.EmailEqualFold(resp.Email),
+		)
+
+	switch resp.Status {
+	case enums.AssessmentResponseStatusCompleted:
+		update.SetStatus(enums.AssessmentResponseStatusCompleted)
+		if !resp.CompletedAt.IsZero() {
+			update.SetCompletedAt(models.DateTime(resp.CompletedAt))
+		} else {
+			update.SetCompletedAt(models.DateTime(time.Now()))
+		}
+	case enums.AssessmentResponseStatusOverdue:
+		update.SetStatus(enums.AssessmentResponseStatusOverdue)
+	default:
+		return nil
+	}
+
+	return update.Exec(ctx)
+}
+
+// updateCampaignCompletionFromTargets marks campaigns complete when all targets are completed.
+func updateCampaignCompletionFromTargets(ctx context.Context, client *generated.Client, campaignID string) error {
+	if campaignID == "" {
+		return nil
+	}
+
+	campaignObj, err := client.Campaign.Get(ctx, campaignID)
+	if err != nil {
+		if generated.IsNotFound(err) {
+			return nil
+		}
+		return err
+	}
+
+	if campaignObj.Status == enums.CampaignStatusCompleted || campaignObj.Status == enums.CampaignStatusCanceled {
+		return nil
+	}
+
+	total, err := client.CampaignTarget.Query().
+		Where(campaigntarget.CampaignIDEQ(campaignID)).
+		Count(ctx)
+	if err != nil {
+		return err
+	}
+
+	if total == 0 {
+		return nil
+	}
+
+	completed, err := client.CampaignTarget.Query().
+		Where(
+			campaigntarget.CampaignIDEQ(campaignID),
+			campaigntarget.StatusEQ(enums.AssessmentResponseStatusCompleted),
+		).
+		Count(ctx)
+	if err != nil {
+		return err
+	}
+
+	if completed != total {
+		return nil
+	}
+
+	update := client.Campaign.UpdateOneID(campaignID).
+		SetStatus(enums.CampaignStatusCompleted).
+		SetIsActive(false)
+
+	if campaignObj.CompletedAt == nil || campaignObj.CompletedAt.IsZero() {
+		update.SetCompletedAt(models.DateTime(time.Now()))
+	}
+
+	return update.Exec(ctx)
 }
 
 // validateAndSetDueDate validates the due_date field and sets it based on the assessment's response_due_duration if not provided

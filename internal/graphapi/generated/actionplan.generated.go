@@ -48,6 +48,11 @@ type MutationResolver interface {
 	CreateBulkCSVCampaign(ctx context.Context, input graphql.Upload) (*model.CampaignBulkCreatePayload, error)
 	UpdateCampaign(ctx context.Context, id string, input generated.UpdateCampaignInput) (*model.CampaignUpdatePayload, error)
 	DeleteCampaign(ctx context.Context, id string) (*model.CampaignDeletePayload, error)
+	CreateCampaignWithTargets(ctx context.Context, input model.CreateCampaignWithTargetsInput) (*model.CampaignCreateWithTargetsPayload, error)
+	CreateCampaignWithTargetsCSV(ctx context.Context, campaign generated.CreateCampaignInput, targets graphql.Upload) (*model.CampaignCreateWithTargetsPayload, error)
+	LaunchCampaign(ctx context.Context, input model.LaunchCampaignInput) (*model.CampaignLaunchPayload, error)
+	ResendCampaignIncompleteTargets(ctx context.Context, input model.ResendCampaignIncompleteInput) (*model.CampaignLaunchPayload, error)
+	SendCampaignTestEmail(ctx context.Context, input model.SendCampaignTestEmailInput) (*model.CampaignTestEmailPayload, error)
 	CreateCampaignTarget(ctx context.Context, input generated.CreateCampaignTargetInput) (*model.CampaignTargetCreatePayload, error)
 	CreateBulkCampaignTarget(ctx context.Context, input []*generated.CreateCampaignTargetInput) (*model.CampaignTargetBulkCreatePayload, error)
 	CreateBulkCSVCampaignTarget(ctx context.Context, input graphql.Upload) (*model.CampaignTargetBulkCreatePayload, error)
@@ -1872,6 +1877,33 @@ func (ec *executionContext) field_Mutation_createCampaignTarget_args(ctx context
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateCampaignTargetInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCampaignTargetInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createCampaignWithTargetsCSV_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "campaign", ec.unmarshalNCreateCampaignInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCampaignInput)
+	if err != nil {
+		return nil, err
+	}
+	args["campaign"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "targets", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["targets"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createCampaignWithTargets_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateCampaignWithTargetsInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateCampaignWithTargetsInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4243,6 +4275,17 @@ func (ec *executionContext) field_Mutation_denyNDARequests_args(ctx context.Cont
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_launchCampaign_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNLaunchCampaignInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐLaunchCampaignInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_rejectWorkflowAssignment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -4256,6 +4299,28 @@ func (ec *executionContext) field_Mutation_rejectWorkflowAssignment_args(ctx con
 		return nil, err
 	}
 	args["reason"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_resendCampaignIncompleteTargets_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNResendCampaignIncompleteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐResendCampaignIncompleteInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_sendCampaignTestEmail_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNSendCampaignTestEmailInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSendCampaignTestEmailInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -8073,6 +8138,247 @@ func (ec *executionContext) fieldContext_Mutation_deleteCampaign(ctx context.Con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteCampaign_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createCampaignWithTargets(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createCampaignWithTargets,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateCampaignWithTargets(ctx, fc.Args["input"].(model.CreateCampaignWithTargetsInput))
+		},
+		nil,
+		ec.marshalNCampaignCreateWithTargetsPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignCreateWithTargetsPayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createCampaignWithTargets(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "campaign":
+				return ec.fieldContext_CampaignCreateWithTargetsPayload_campaign(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_CampaignCreateWithTargetsPayload_campaignTargets(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CampaignCreateWithTargetsPayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createCampaignWithTargets_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createCampaignWithTargetsCSV(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createCampaignWithTargetsCSV,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateCampaignWithTargetsCSV(ctx, fc.Args["campaign"].(generated.CreateCampaignInput), fc.Args["targets"].(graphql.Upload))
+		},
+		nil,
+		ec.marshalNCampaignCreateWithTargetsPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignCreateWithTargetsPayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createCampaignWithTargetsCSV(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "campaign":
+				return ec.fieldContext_CampaignCreateWithTargetsPayload_campaign(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_CampaignCreateWithTargetsPayload_campaignTargets(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CampaignCreateWithTargetsPayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createCampaignWithTargetsCSV_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_launchCampaign(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_launchCampaign,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().LaunchCampaign(ctx, fc.Args["input"].(model.LaunchCampaignInput))
+		},
+		nil,
+		ec.marshalNCampaignLaunchPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignLaunchPayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_launchCampaign(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "campaign":
+				return ec.fieldContext_CampaignLaunchPayload_campaign(ctx, field)
+			case "queuedCount":
+				return ec.fieldContext_CampaignLaunchPayload_queuedCount(ctx, field)
+			case "skippedCount":
+				return ec.fieldContext_CampaignLaunchPayload_skippedCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CampaignLaunchPayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_launchCampaign_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_resendCampaignIncompleteTargets(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_resendCampaignIncompleteTargets,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().ResendCampaignIncompleteTargets(ctx, fc.Args["input"].(model.ResendCampaignIncompleteInput))
+		},
+		nil,
+		ec.marshalNCampaignLaunchPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignLaunchPayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_resendCampaignIncompleteTargets(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "campaign":
+				return ec.fieldContext_CampaignLaunchPayload_campaign(ctx, field)
+			case "queuedCount":
+				return ec.fieldContext_CampaignLaunchPayload_queuedCount(ctx, field)
+			case "skippedCount":
+				return ec.fieldContext_CampaignLaunchPayload_skippedCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CampaignLaunchPayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_resendCampaignIncompleteTargets_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_sendCampaignTestEmail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_sendCampaignTestEmail,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().SendCampaignTestEmail(ctx, fc.Args["input"].(model.SendCampaignTestEmailInput))
+		},
+		nil,
+		ec.marshalNCampaignTestEmailPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignTestEmailPayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_sendCampaignTestEmail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "campaign":
+				return ec.fieldContext_CampaignTestEmailPayload_campaign(ctx, field)
+			case "queuedCount":
+				return ec.fieldContext_CampaignTestEmailPayload_queuedCount(ctx, field)
+			case "skippedCount":
+				return ec.fieldContext_CampaignTestEmailPayload_skippedCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CampaignTestEmailPayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_sendCampaignTestEmail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -26842,6 +27148,41 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteCampaign":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteCampaign(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createCampaignWithTargets":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createCampaignWithTargets(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createCampaignWithTargetsCSV":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createCampaignWithTargetsCSV(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "launchCampaign":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_launchCampaign(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "resendCampaignIncompleteTargets":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_resendCampaignIncompleteTargets(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "sendCampaignTestEmail":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_sendCampaignTestEmail(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

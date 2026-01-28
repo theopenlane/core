@@ -4812,6 +4812,19 @@ type CampaignCreatePayload {
 	campaign: Campaign!
 }
 """
+Return response for createCampaignWithTargets mutation
+"""
+type CampaignCreateWithTargetsPayload {
+	"""
+	Created campaign
+	"""
+	campaign: Campaign!
+	"""
+	Created campaign targets
+	"""
+	campaignTargets: [CampaignTarget!]
+}
+"""
 Return response for deleteCampaign mutation
 """
 type CampaignDeletePayload {
@@ -4841,6 +4854,23 @@ enum CampaignFrequency @goModel(model: "github.com/theopenlane/core/common/enums
 	QUARTERLY
 	BIANNUALLY
 	MONTHLY
+}
+"""
+Return response for launchCampaign mutation
+"""
+type CampaignLaunchPayload {
+	"""
+	Updated campaign
+	"""
+	campaign: Campaign!
+	"""
+	Number of targets queued for send
+	"""
+	queuedCount: Int!
+	"""
+	Number of targets skipped
+	"""
+	skippedCount: Int!
 }
 """
 Ordering options for Campaign connections
@@ -5363,6 +5393,23 @@ input CampaignTargetWhereInput {
 	"""
 	hasWorkflowObjectRefs: Boolean
 	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+}
+"""
+Return response for sendCampaignTestEmail mutation
+"""
+type CampaignTestEmailPayload {
+	"""
+	Campaign used for the test send
+	"""
+	campaign: Campaign!
+	"""
+	Number of emails queued for send
+	"""
+	queuedCount: Int!
+	"""
+	Number of emails skipped
+	"""
+	skippedCount: Int!
 }
 """
 Return response for updateCampaign mutation
@@ -10386,6 +10433,19 @@ input CreateCampaignTargetInput {
 	userID: ID
 	groupID: ID
 	workflowObjectRefIDs: [ID!]
+}
+"""
+Input for createCampaignWithTargets mutation
+"""
+input CreateCampaignWithTargetsInput {
+	"""
+	values of the campaign
+	"""
+	campaign: CreateCampaignInput!
+	"""
+	list of targets to create for the campaign
+	"""
+	targets: [CreateCampaignTargetInput!]
 }
 """
 CreateContactInput is used for create Contact object.
@@ -35986,6 +36046,23 @@ input JobTemplateWhereInput {
 	hasScheduledJobsWith: [ScheduledJobWhereInput!]
 }
 """
+Input for launchCampaign mutation
+"""
+input LaunchCampaignInput {
+	"""
+	ID of the campaign
+	"""
+	campaignID: ID!
+	"""
+	Whether to resend emails to previously-sent targets
+	"""
+	resend: Boolean
+	"""
+	Optional time to schedule the campaign launch or resend
+	"""
+	scheduledAt: DateTime
+}
+"""
 The builtin Map type
 """
 scalar Map
@@ -37129,6 +37206,56 @@ type Mutation {
 		"""
 		id: ID!
 	): CampaignDeletePayload!
+	"""
+	Create a new campaign with associated targets
+	"""
+	createCampaignWithTargets(
+		"""
+		values of the campaign and targets
+		"""
+		input: CreateCampaignWithTargetsInput!
+	): CampaignCreateWithTargetsPayload!
+	"""
+	Create a new campaign with associated targets via file upload
+	"""
+	createCampaignWithTargetsCSV(
+		"""
+		values of the campaign
+		"""
+		campaign: CreateCampaignInput!
+
+		"""
+		csv file containing target values
+		"""
+		targets: Upload!
+	): CampaignCreateWithTargetsPayload!
+	"""
+	Launch a campaign and send emails to its targets
+	"""
+	launchCampaign(
+		"""
+		values for launching a campaign
+		"""
+		input: LaunchCampaignInput!
+	): CampaignLaunchPayload!
+	"""
+	Resend a campaign to only incomplete targets
+	"""
+	resendCampaignIncompleteTargets(
+		"""
+		values for resending a campaign to incomplete targets
+		"""
+		input: ResendCampaignIncompleteInput!
+	): CampaignLaunchPayload!
+	"""
+	Send a test email for a campaign without creating campaign targets
+	"""
+	sendCampaignTestEmail(
+		"""
+		values for sending a campaign test email
+		"""
+		input: SendCampaignTestEmailInput!
+	): CampaignTestEmailPayload!
 	"""
 	Create a new campaignTarget
 	"""
@@ -58562,6 +58689,19 @@ input RemediationWhereInput {
 	hasFiles: Boolean
 	hasFilesWith: [FileWhereInput!]
 }
+"""
+Input for resendCampaignIncompleteTargets mutation
+"""
+input ResendCampaignIncompleteInput {
+	"""
+	ID of the campaign
+	"""
+	campaignID: ID!
+	"""
+	Optional time to schedule the resend for incomplete targets
+	"""
+	scheduledAt: DateTime
+}
 type Review implements Node {
 	id: ID!
 	createdAt: Time
@@ -63100,6 +63240,19 @@ type SearchSnippet {
 	The matched text with surrounding context (with highlighting markers if applicable)
 	"""
 	text: String!
+}
+"""
+Input for sendCampaignTestEmail mutation
+"""
+input SendCampaignTestEmailInput {
+	"""
+	ID of the campaign
+	"""
+	campaignID: ID!
+	"""
+	List of recipient emails to send the test to
+	"""
+	emails: [String!]!
 }
 type Standard implements Node {
 	id: ID!

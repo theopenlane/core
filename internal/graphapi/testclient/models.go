@@ -2538,6 +2538,14 @@ type CampaignCreatePayload struct {
 	Campaign *Campaign `json:"campaign"`
 }
 
+// Return response for createCampaignWithTargets mutation
+type CampaignCreateWithTargetsPayload struct {
+	// Created campaign
+	Campaign *Campaign `json:"campaign"`
+	// Created campaign targets
+	CampaignTargets []*CampaignTarget `json:"campaignTargets,omitempty"`
+}
+
 // Return response for deleteCampaign mutation
 type CampaignDeletePayload struct {
 	// Deleted campaign ID
@@ -2550,6 +2558,16 @@ type CampaignEdge struct {
 	Node *Campaign `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Return response for launchCampaign mutation
+type CampaignLaunchPayload struct {
+	// Updated campaign
+	Campaign *Campaign `json:"campaign"`
+	// Number of targets queued for send
+	QueuedCount int64 `json:"queuedCount"`
+	// Number of targets skipped
+	SkippedCount int64 `json:"skippedCount"`
 }
 
 // Ordering options for Campaign connections
@@ -2887,6 +2905,16 @@ type CampaignTargetWhereInput struct {
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
+}
+
+// Return response for sendCampaignTestEmail mutation
+type CampaignTestEmailPayload struct {
+	// Campaign used for the test send
+	Campaign *Campaign `json:"campaign"`
+	// Number of emails queued for send
+	QueuedCount int64 `json:"queuedCount"`
+	// Number of emails skipped
+	SkippedCount int64 `json:"skippedCount"`
 }
 
 // Return response for updateCampaign mutation
@@ -5520,6 +5548,14 @@ type CreateCampaignTargetInput struct {
 	UserID               *string        `json:"userID,omitempty"`
 	GroupID              *string        `json:"groupID,omitempty"`
 	WorkflowObjectRefIDs []string       `json:"workflowObjectRefIDs,omitempty"`
+}
+
+// Input for createCampaignWithTargets mutation
+type CreateCampaignWithTargetsInput struct {
+	// values of the campaign
+	Campaign *CreateCampaignInput `json:"campaign"`
+	// list of targets to create for the campaign
+	Targets []*CreateCampaignTargetInput `json:"targets,omitempty"`
 }
 
 // CreateContactInput is used for create Contact object.
@@ -19615,6 +19651,16 @@ type JobTemplateWhereInput struct {
 	HasScheduledJobsWith []*ScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
 }
 
+// Input for launchCampaign mutation
+type LaunchCampaignInput struct {
+	// ID of the campaign
+	CampaignID string `json:"campaignID"`
+	// Whether to resend emails to previously-sent targets
+	Resend *bool `json:"resend,omitempty"`
+	// Optional time to schedule the campaign launch or resend
+	ScheduledAt *models.DateTime `json:"scheduledAt,omitempty"`
+}
+
 type MappableDomain struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -25453,6 +25499,14 @@ type RemediationWhereInput struct {
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 }
 
+// Input for resendCampaignIncompleteTargets mutation
+type ResendCampaignIncompleteInput struct {
+	// ID of the campaign
+	CampaignID string `json:"campaignID"`
+	// Optional time to schedule the resend for incomplete targets
+	ScheduledAt *models.DateTime `json:"scheduledAt,omitempty"`
+}
+
 type Review struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -27740,6 +27794,14 @@ type SearchSnippet struct {
 	Field string `json:"field"`
 	// The matched text with surrounding context (with highlighting markers if applicable)
 	Text string `json:"text"`
+}
+
+// Input for sendCampaignTestEmail mutation
+type SendCampaignTestEmailInput struct {
+	// ID of the campaign
+	CampaignID string `json:"campaignID"`
+	// List of recipient emails to send the test to
+	Emails []string `json:"emails"`
 }
 
 type Standard struct {
