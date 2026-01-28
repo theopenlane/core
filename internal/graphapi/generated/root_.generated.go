@@ -43773,10 +43773,6 @@ scalar Any`, BuiltIn: false},
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up actionPlan by ID
@@ -44350,10 +44346,6 @@ type AssetBulkDeletePayload {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up campaign by ID
@@ -44484,10 +44476,6 @@ type CampaignBulkCreatePayload {
         includeEmitFailures: Boolean
     ): WorkflowEventConnection!
 }
-
-
-
-
 
 extend type Query {
     """
@@ -44769,10 +44757,6 @@ type ContactBulkDeletePayload {
         includeEmitFailures: Boolean
     ): WorkflowEventConnection!
 }
-
-
-
-
 
 extend type Query {
     """
@@ -121560,10 +121544,6 @@ type EventBulkDeletePayload {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up evidence by ID
@@ -122866,10 +122846,6 @@ type HushBulkDeletePayload {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up identityHolder by ID
@@ -123032,10 +123008,6 @@ type IntegrationDeletePayload {
         includeEmitFailures: Boolean
     ): WorkflowEventConnection!
 }
-
-
-
-
 
 extend type Query {
     """
@@ -124938,10 +124910,6 @@ type PersonalAccessTokenBulkCreatePayload {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up platform by ID
@@ -125071,10 +125039,6 @@ type PlatformBulkCreatePayload {
         includeEmitFailures: Boolean
     ): WorkflowEventConnection!
 }
-
-
-
-
 
 extend type Query {
     """
@@ -127472,10 +127436,6 @@ type StandardBulkCreatePayload {
         includeEmitFailures: Boolean
     ): WorkflowEventConnection!
 }
-
-
-
-
 
 extend type Query {
     """

@@ -25,10 +25,6 @@ extend type Campaign {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up campaign by ID

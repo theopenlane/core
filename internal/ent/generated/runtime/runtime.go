@@ -6828,10 +6828,6 @@ func init() {
 	trustcenterdocDescTitle := trustcenterdocFields[1].Descriptor()
 	// trustcenterdoc.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	trustcenterdoc.TitleValidator = trustcenterdocDescTitle.Validators[0].(func(string) error)
-	// trustcenterdocDescStandardID is the schema descriptor for standard_id field.
-	trustcenterdocDescStandardID := trustcenterdocFields[7].Descriptor()
-	// trustcenterdoc.StandardIDValidator is a validator for the "standard_id" field. It is called by the builders before save.
-	trustcenterdoc.StandardIDValidator = trustcenterdocDescStandardID.Validators[0].(func(string) error)
 	// trustcenterdocDescID is the schema descriptor for id field.
 	trustcenterdocDescID := trustcenterdocMixinFields2[0].Descriptor()
 	// trustcenterdoc.DefaultID holds the default value on creation for the id field.
