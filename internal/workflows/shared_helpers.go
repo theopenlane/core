@@ -2,9 +2,11 @@ package workflows
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strings"
 
+	"entgo.io/ent"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
@@ -12,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -257,4 +260,105 @@ func ValidateCELExpression(expression string) error {
 	}
 
 	return nil
+}
+
+// ResolveUserDisplayName fetches a user by ID and returns their display name (FirstName LastName).
+// If the user cannot be found or has no name, returns the original userID as fallback.
+func ResolveUserDisplayName(ctx context.Context, client *generated.Client, userID string) string {
+	user, err := client.User.Get(ctx, userID)
+	if err != nil {
+		return userID
+	}
+
+	name := strings.TrimSpace(user.FirstName + " " + user.LastName)
+	if name == "" {
+		return userID
+	}
+
+	return name
+}
+
+// GetObjectUpdatedBy extracts the UpdatedBy field from an Object's Node if available.
+// Returns empty string if the object or node is nil, or if UpdatedBy is not accessible.
+func GetObjectUpdatedBy(obj *Object) string {
+	if obj == nil || obj.Node == nil {
+		return ""
+	}
+
+	data, err := json.Marshal(obj.Node)
+	if err != nil {
+		return ""
+	}
+
+	var fields struct {
+		UpdatedBy string `json:"updated_by"`
+	}
+
+	if err := json.Unmarshal(data, &fields); err != nil {
+		return ""
+	}
+
+	return fields.UpdatedBy
+}
+
+// MutationPayload carries the raw ent mutation, the resolved operation, the entity ID and the ent
+// client so listeners can act without additional lookups
+type MutationPayload struct {
+	// Mutation is the raw ent mutation that triggered the event
+	Mutation ent.Mutation
+	// Operation is the string representation of the mutation operation
+	Operation string
+	// EntityID is the ID of the entity that was mutated
+	EntityID string
+	// Client is the ent client that can be used to perform additional queries or mutations
+	Client *generated.Client
+}
+
+// MutationEntityID derives the entity identifier from the payload or event properties.
+func MutationEntityID(ctx *soiree.EventContext, payload *MutationPayload) (string, bool) {
+	if payload != nil && payload.EntityID != "" {
+		return payload.EntityID, true
+	}
+
+	if ctx == nil {
+		return "", false
+	}
+
+	if id, ok := ctx.PropertyString("ID"); ok && id != "" {
+		return id, true
+	}
+
+	if raw, ok := ctx.Property("ID"); ok && raw != nil {
+		if str, ok := raw.(fmt.Stringer); ok {
+			value := str.String()
+			if value == "" {
+				return "", false
+			}
+
+			return value, true
+		}
+
+		value := fmt.Sprint(raw)
+		if value == "" || value == "<nil>" {
+			return "", false
+		}
+
+		return value, true
+	}
+
+	return "", false
+}
+
+// MutationClient returns the ent client associated with the mutation.
+func MutationClient(ctx *soiree.EventContext, payload *MutationPayload) *generated.Client {
+	if payload != nil && payload.Client != nil {
+		return payload.Client
+	}
+
+	client, ok := soiree.ClientAs[*generated.Client](ctx)
+	if !ok {
+		return nil
+	}
+
+	return client
 }

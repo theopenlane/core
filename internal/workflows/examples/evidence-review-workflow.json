@@ -1,0 +1,57 @@
+{
+  "$schema": "https://raw.githubusercontent.com/theopenlane/core/main/jsonschema/workflow-definition.schema.json",
+  "name": "Evidence Review (Edge Trigger)",
+  "description": "Request review when evidence is linked to a control",
+  "schemaType": "Evidence",
+  "workflowKind": "APPROVAL",
+  "version": "1.0",
+  "triggers": [
+    {
+      "operation": "UPDATE",
+      "objectType": "Evidence",
+      "edges": ["controls"],
+      "description": "Triggered when evidence is linked to a control"
+    }
+  ],
+  "conditions": [
+    {
+      "expression": "'controls' in changed_edges && size(added_ids['controls']) > 0",
+      "description": "Only when controls are added"
+    }
+  ],
+  "actions": [
+    {
+      "key": "evidence_review",
+      "type": "REQUEST_APPROVAL",
+      "description": "Request reviewer approval after evidence is attached to a control",
+      "params": {
+        "targets": [
+          {"type": "GROUP", "id": "<REPLACE_WITH_REVIEWER_GROUP_ID>"}
+        ],
+        "required": true,
+        "label": "Evidence review",
+        "fields": ["workflow_eligible_marker"]
+      }
+    },
+    {
+      "key": "notify_review_complete",
+      "type": "WEBHOOK",
+      "description": "Notify external systems after review is approved",
+      "params": {
+        "url": "<REPLACE_WITH_WEBHOOK_URL>",
+        "method": "POST",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "payload": {
+          "text": "Evidence review completed for {{object_id}}"
+        },
+        "timeout_ms": 5000
+      }
+    }
+  ],
+  "metadata": {
+    "author": "Openlane",
+    "category": "evidence"
+  }
+}

@@ -25,10 +25,6 @@ extend type InternalPolicy {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up internalPolicy by ID

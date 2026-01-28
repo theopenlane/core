@@ -167,7 +167,7 @@ coreConfiguration:
       # -- MaximumSentences specifies the maximum number of sentences in the summary
       maximumsentences: 10  # @schema type:integer; default:10
     # -- MaxPoolSize is the max worker pool size that can be used by the ent client
-    maxpoolsize: 100  # @schema type:integer; default:100
+    maxpoolsize: 200  # @schema type:integer; default:200
     # -- Modules contains the configuration for the module system
     modules:
       # -- Enabled indicates whether to check and verify module access

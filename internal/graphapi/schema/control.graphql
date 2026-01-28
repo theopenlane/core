@@ -25,10 +25,6 @@ extend type Control {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up control by ID

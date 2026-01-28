@@ -81,4 +81,30 @@ var (
 	ErrCELProgramCreationFailed = errors.New("failed to create CEL program")
 	// ErrCELCompilationFailed is returned when CEL fails to compile
 	ErrCELCompilationFailed = errors.New("failed to compile CEL")
+	// ErrFailedToComputeProposalHash is returned when a proposal hash cannot be computed
+	ErrFailedToComputeProposalHash = errors.New("failed to compute proposal hash")
+	// ErrFailedToCreateProposal is returned when a workflow proposal cannot be created
+	ErrFailedToCreateProposal = errors.New("failed to create workflow proposal inside of proposal manager")
+	// ErrFailedToQueryObjectRefs is returned when workflow object refs cannot be queried
+	ErrFailedToQueryObjectRefs = errors.New("failed to query object refs")
+	// ErrFailedToQueryProposals is returned when workflow proposals cannot be queried
+	ErrFailedToQueryProposals = errors.New("failed to query proposals")
+	// ErrFailedToLoadProposal is returned when a workflow proposal cannot be loaded
+	ErrFailedToLoadProposal = errors.New("failed to load proposal")
+	// ErrFailedToApplyFieldUpdates is returned when proposal field updates cannot be applied
+	ErrFailedToApplyFieldUpdates = errors.New("failed to apply field updates")
+	// ErrFailedToCreateAssignmentTarget is returned when an assignment target cannot be created
+	ErrFailedToCreateAssignmentTarget = errors.New("failed to create assignment target")
+	// ErrFailedToEnrichWebhookPayload is returned when webhook payload enrichment fails
+	ErrFailedToEnrichWebhookPayload = errors.New("failed to enrich webhook payload")
+	// ErrFailedToQueryDefinitions is returned when workflow definitions cannot be queried
+	ErrFailedToQueryDefinitions = errors.New("failed to query workflow definitions")
+	// ErrFailedToResolveTarget is returned when a target cannot be resolved
+	ErrFailedToResolveTarget = errors.New("failed to resolve target")
+	// ErrFailedToResolveNotificationTarget is returned when a notification target cannot be resolved
+	ErrFailedToResolveNotificationTarget = errors.New("failed to resolve notification target")
+	// ErrApprovalNoTargets indicates an approval action resolved no targets and should be skipped
+	ErrApprovalNoTargets = errors.New("approval action has no resolved targets")
+	// ErrMissingObjectRef is returned when a workflow object ref is nil
+	ErrMissingObjectRef = errors.New("workflow object ref is required")
 )

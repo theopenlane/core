@@ -40962,6 +40962,22 @@ type WorkflowEventWhereInput struct {
 	HasWorkflowInstanceWith []*WorkflowInstanceWhereInput `json:"hasWorkflowInstanceWith,omitempty"`
 }
 
+// WorkflowFieldDiff describes a proposed change for a single field.
+type WorkflowFieldDiff struct {
+	// Field name (snake_case)
+	Field string `json:"field"`
+	// Human-friendly field label when available
+	Label *string `json:"label,omitempty"`
+	// Field type metadata when available
+	Type *string `json:"type,omitempty"`
+	// Current field value
+	CurrentValue any `json:"currentValue,omitempty"`
+	// Proposed field value
+	ProposedValue any `json:"proposedValue,omitempty"`
+	// Unified diff for the field (when applicable)
+	Diff *string `json:"diff,omitempty"`
+}
+
 // Metadata for a workflow-eligible field
 type WorkflowFieldMetadata struct {
 	// The field name (snake_case)
@@ -41044,6 +41060,9 @@ type WorkflowInstance struct {
 	WorkflowAssignments *WorkflowAssignmentConnection `json:"workflowAssignments"`
 	WorkflowEvents      *WorkflowEventConnection      `json:"workflowEvents"`
 	WorkflowObjectRefs  *WorkflowObjectRefConnection  `json:"workflowObjectRefs"`
+	// Precomputed proposal preview (diff + values) for approval workflows.
+	// Only available to editors/owners of the target object.
+	ProposalPreview *WorkflowProposalPreview `json:"proposalPreview,omitempty"`
 }
 
 func (WorkflowInstance) IsNode() {}
@@ -41968,6 +41987,26 @@ type WorkflowObjectTypeMetadata struct {
 	EligibleFields []*WorkflowFieldMetadata `json:"eligibleFields"`
 	// Available resolver keys for this object type
 	ResolverKeys []string `json:"resolverKeys"`
+}
+
+// WorkflowProposalPreview describes the proposed changes alongside current values and diffs.
+type WorkflowProposalPreview struct {
+	// ID of the workflow proposal
+	ProposalID string `json:"proposalID"`
+	// Stable key representing the approval domain for this proposal
+	DomainKey string `json:"domainKey"`
+	// Current state of the proposal
+	State enums.WorkflowProposalState `json:"state"`
+	// Timestamp when the proposal was submitted
+	SubmittedAt *models.DateTime `json:"submittedAt,omitempty"`
+	// User who submitted the proposal
+	SubmittedByUserID *string `json:"submittedByUserID,omitempty"`
+	// Proposed changes for the approval domain
+	ProposedChanges map[string]any `json:"proposedChanges,omitempty"`
+	// Current values for the proposed fields
+	CurrentValues map[string]any `json:"currentValues,omitempty"`
+	// Field-level diffs for the proposed changes
+	Diffs []*WorkflowFieldDiff `json:"diffs"`
 }
 
 // Properties by which APIToken connections can be ordered.

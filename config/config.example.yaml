@@ -129,7 +129,7 @@ entconfig:
         enablegravatarcheck: true
         enablesmtpcheck: false
     entitytypes: null
-    maxpoolsize: 100
+    maxpoolsize: 200
     maxschemaimportsize: 262144
     modules:
         devmode: false

@@ -1,0 +1,83 @@
+extend type WorkflowInstance {
+    """
+    Precomputed proposal preview (diff + values) for approval workflows.
+    Only available to editors/owners of the target object.
+    """
+    proposalPreview: WorkflowProposalPreview
+}
+
+"""
+WorkflowProposalPreview describes the proposed changes alongside current values and diffs.
+"""
+type WorkflowProposalPreview {
+    """
+    ID of the workflow proposal
+    """
+    proposalID: ID!
+    """
+    Stable key representing the approval domain for this proposal
+    """
+    domainKey: String!
+    """
+    Current state of the proposal
+    """
+    state: WorkflowProposalState!
+    """
+    Timestamp when the proposal was submitted
+    """
+    submittedAt: DateTime
+    """
+    User who submitted the proposal
+    """
+    submittedByUserID: ID
+    """
+    Proposed changes for the approval domain
+    """
+    proposedChanges: Map
+    """
+    Current values for the proposed fields
+    """
+    currentValues: Map
+    """
+    Field-level diffs for the proposed changes
+    """
+    diffs: [WorkflowFieldDiff!]!
+}
+
+"""
+WorkflowFieldDiff describes a proposed change for a single field.
+"""
+type WorkflowFieldDiff {
+    """
+    Field name (snake_case)
+    """
+    field: String!
+    """
+    Human-friendly field label when available
+    """
+    label: String
+    """
+    Field type metadata when available
+    """
+    type: String
+    """
+    Current field value
+    """
+    currentValue: Any
+    """
+    Proposed field value
+    """
+    proposedValue: Any
+    """
+    Unified diff for the field (when applicable)
+    """
+    diff: String
+}
+
+enum WorkflowProposalState @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowProposalState") {
+    DRAFT
+    SUBMITTED
+    APPLIED
+    REJECTED
+    SUPERSEDED
+}

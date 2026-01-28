@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
@@ -41,6 +42,9 @@ func (r *mutationResolver) ApproveWorkflowAssignment(ctx context.Context, id str
 	approvalMeta.ApprovedAt = decidedAt.Format(time.RFC3339)
 	approvalMeta.ApprovedByUserID = decisionCtx.UserID
 
+	// Use allow context for the update since we've already validated the user is an authorized target
+	allowCtx := workflows.AllowContext(ctx)
+
 	updatedCount, err := withTransactionalMutation(ctx).WorkflowAssignment.Update().
 		Where(
 			workflowassignment.ID(assignment.ID),
@@ -50,7 +54,7 @@ func (r *mutationResolver) ApproveWorkflowAssignment(ctx context.Context, id str
 		SetApprovalMetadata(approvalMeta).
 		SetDecidedAt(decidedAt).
 		SetActorUserID(decisionCtx.UserID).
-		Save(ctx)
+		Save(allowCtx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowassignment"})
 	}
@@ -58,7 +62,7 @@ func (r *mutationResolver) ApproveWorkflowAssignment(ctx context.Context, id str
 		return nil, rout.ErrPermissionDenied
 	}
 
-	updated, err := withTransactionalMutation(ctx).WorkflowAssignment.Get(ctx, assignment.ID)
+	updated, err := withTransactionalMutation(ctx).WorkflowAssignment.Get(allowCtx, assignment.ID)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignment"})
 	}
@@ -88,6 +92,9 @@ func (r *mutationResolver) RejectWorkflowAssignment(ctx context.Context, id stri
 		rejectionMeta.RejectionReason = *reason
 	}
 
+	// Use allow context for the update since we've already validated the user is an authorized target
+	allowCtx := workflows.AllowContext(ctx)
+
 	updatedCount, err := withTransactionalMutation(ctx).WorkflowAssignment.Update().
 		Where(
 			workflowassignment.ID(assignment.ID),
@@ -97,7 +104,7 @@ func (r *mutationResolver) RejectWorkflowAssignment(ctx context.Context, id stri
 		SetRejectionMetadata(rejectionMeta).
 		SetDecidedAt(decidedAt).
 		SetActorUserID(decisionCtx.UserID).
-		Save(ctx)
+		Save(allowCtx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowassignment"})
 	}
@@ -105,7 +112,7 @@ func (r *mutationResolver) RejectWorkflowAssignment(ctx context.Context, id stri
 		return nil, rout.ErrPermissionDenied
 	}
 
-	updated, err := withTransactionalMutation(ctx).WorkflowAssignment.Get(ctx, assignment.ID)
+	updated, err := withTransactionalMutation(ctx).WorkflowAssignment.Get(allowCtx, assignment.ID)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignment"})
 	}

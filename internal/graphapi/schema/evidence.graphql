@@ -25,10 +25,6 @@ extend type Evidence {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
 extend type Query {
     """
     Look up evidence by ID

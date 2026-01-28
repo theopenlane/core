@@ -13,15 +13,24 @@ import (
 	"github.com/theopenlane/core/common/models"
 )
 
-// DeriveDomainKey generates a stable domain key from a sorted list of field names
-// a "domain key" is a canonicalized list of approval fields used as a consistent ID for approval scope
-// its used to identify which proposal/approval bucket a set of changes belongs to
-func DeriveDomainKey(fields []string) string {
+// DeriveDomainKey generates a stable domain key from a sorted list of field names.
+// A "domain key" is a canonicalized list of approval fields scoped to the object type.
+// Format: "ObjectType:field1,field2" (fields are sorted); if fields are empty, returns the object type string.
+func DeriveDomainKey(objectType enums.WorkflowObjectType, fields []string) string {
 	sorted := make([]string, len(fields))
 	copy(sorted, fields)
 	sort.Strings(sorted)
 
-	return strings.Join(sorted, ",")
+	prefix := objectType.String()
+	if prefix == "" {
+		return strings.Join(sorted, ",")
+	}
+
+	if len(sorted) == 0 {
+		return prefix
+	}
+
+	return prefix + ":" + strings.Join(sorted, ",")
 }
 
 // DomainChanges represents changes grouped by approval domain
@@ -105,7 +114,7 @@ func ApprovalDomains(doc models.WorkflowDefinitionDocument) ([][]string, error) 
 		}
 
 		sort.Strings(fields)
-		key := DeriveDomainKey(fields)
+		key := DeriveDomainKey("", fields)
 		if _, ok := seen[key]; ok {
 			continue
 		}
@@ -117,19 +126,19 @@ func ApprovalDomains(doc models.WorkflowDefinitionDocument) ([][]string, error) 
 }
 
 // DomainChangesForDefinition splits proposed changes by approval domains for a workflow definition
-func DomainChangesForDefinition(doc models.WorkflowDefinitionDocument, proposedChanges map[string]any) ([]DomainChanges, error) {
+func DomainChangesForDefinition(doc models.WorkflowDefinitionDocument, objectType enums.WorkflowObjectType, proposedChanges map[string]any) ([]DomainChanges, error) {
 	domains, err := ApprovalDomains(doc)
 	if err != nil {
 		return nil, err
 	}
 
-	domainChanges := SplitChangesByDomains(proposedChanges, domains)
+	domainChanges := SplitChangesByDomains(proposedChanges, objectType, domains)
 	if len(domainChanges) == 0 {
 		fields := lo.Keys(proposedChanges)
 		if len(fields) > 0 {
 			sort.Strings(fields)
 			domainChanges = []DomainChanges{{
-				DomainKey: DeriveDomainKey(fields),
+				DomainKey: DeriveDomainKey(objectType, fields),
 				Fields:    fields,
 				Changes:   proposedChanges,
 			}}
@@ -140,7 +149,7 @@ func DomainChangesForDefinition(doc models.WorkflowDefinitionDocument, proposedC
 }
 
 // SplitChangesByDomains filters changes into per-domain buckets based on approval field sets
-func SplitChangesByDomains(changes map[string]any, domains [][]string) []DomainChanges {
+func SplitChangesByDomains(changes map[string]any, objectType enums.WorkflowObjectType, domains [][]string) []DomainChanges {
 	out := make([]DomainChanges, 0, len(domains))
 	for _, domainFields := range domains {
 		domainChanges := FilterChangesForDomain(changes, domainFields)
@@ -151,7 +160,7 @@ func SplitChangesByDomains(changes map[string]any, domains [][]string) []DomainC
 		fields := make([]string, len(domainFields))
 		copy(fields, domainFields)
 		out = append(out, DomainChanges{
-			DomainKey: DeriveDomainKey(fields),
+			DomainKey: DeriveDomainKey(objectType, fields),
 			Fields:    fields,
 			Changes:   domainChanges,
 		})

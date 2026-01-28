@@ -1,0 +1,52 @@
+{
+  "$schema": "https://raw.githubusercontent.com/theopenlane/core/main/jsonschema/workflow-definition.schema.json",
+  "name": "Multi-Step Control Approval",
+  "description": "Sequential approvals for different control fields",
+  "schemaType": "Control",
+  "workflowKind": "APPROVAL",
+  "version": "1.0",
+  "triggers": [
+    {
+      "operation": "UPDATE",
+      "objectType": "Control",
+      "fields": ["category", "status"],
+      "description": "Triggered on control category or status updates"
+    }
+  ],
+  "conditions": [],
+  "actions": [
+    {
+      "key": "technical-review",
+      "type": "REQUEST_APPROVAL",
+      "description": "Category review by engineering team",
+      "when": "'category' in changed_fields",
+      "params": {
+        "targets": [
+          {"type": "GROUP", "id": "<ENGINEERING_GROUP_ID>"}
+        ],
+        "required": true,
+        "label": "Category review",
+        "fields": ["category"]
+      }
+    },
+    {
+      "key": "compliance-review",
+      "type": "REQUEST_APPROVAL",
+      "description": "Final approval by compliance team",
+      "when": "'status' in changed_fields",
+      "params": {
+        "targets": [
+          {"type": "GROUP", "id": "<COMPLIANCE_GROUP_ID>"}
+        ],
+        "required": true,
+        "label": "Compliance approval",
+        "fields": ["status"]
+      }
+    }
+  ],
+  "metadata": {
+    "author": "Openlane",
+    "category": "compliance",
+    "reviewChain": ["engineering", "compliance"]
+  }
+}

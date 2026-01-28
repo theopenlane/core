@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -100,7 +99,7 @@ func TestBuildWorkflowActionContext(t *testing.T) {
 	assert.Equal(t, obj.Type.String(), replacements["object_type"])
 	assert.Equal(t, "action-1", replacements["action_key"])
 
-	require.Contains(t, data, "instance_id")
+	assert.Contains(t, data, "instance_id")
 	assert.Equal(t, replacements["object_id"], data["object_id"])
 }
 

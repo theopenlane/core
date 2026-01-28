@@ -78,6 +78,18 @@ func getMutationIDs(ctx context.Context, m utils.GenericMutation) []string {
 	return nil
 }
 
+// getSingleMutationID retrieves a single ID from the mutation, returning empty string and false if
+// zero or multiple IDs are present. This is a convenience wrapper around getMutationIDs for hooks
+// that only operate on single-entity mutations.
+func getSingleMutationID(ctx context.Context, m utils.GenericMutation) (string, bool) {
+	ids := getMutationIDs(ctx, m)
+	if len(ids) != 1 || ids[0] == "" {
+		return "", false
+	}
+
+	return ids[0], true
+}
+
 // enqueueJob inserts a job when a job client is available, otherwise logs and skips.
 func enqueueJob(ctx context.Context, jobClient riverqueue.JobClient, args river.JobArgs, opts *river.InsertOpts) error {
 	if jobClient == nil {
@@ -90,7 +102,14 @@ func enqueueJob(ctx context.Context, jobClient riverqueue.JobClient, args river.
 	return err
 }
 
-// workflowEngineEnabled reports whether workflows are enabled for this client
-func workflowEngineEnabled(client *generated.Client) bool {
+// workflowEngineEnabled reports whether workflows are enabled for this client.
+// It checks the context first (for the original client with WorkflowEngine set),
+// falling back to the provided client. This handles the case where WorkflowEngine
+// is set after client initialization, since entity clients copy config by value.
+func workflowEngineEnabled(ctx context.Context, client *generated.Client) bool {
+	if ctxClient := generated.FromContext(ctx); ctxClient != nil && ctxClient.WorkflowEngine != nil {
+		return true
+	}
+
 	return client != nil && client.WorkflowEngine != nil
 }

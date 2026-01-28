@@ -142,6 +142,65 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	}, ent.OpCreate)
 }
 
+// orgHookCreateServiceOnlyFunc is a HookFunc that sets the owner on create mutations
+// and creates a parent relation tuple (not editor). This is for system-driven objects
+// where only services should be able to create/edit/delete, but users can view through org membership.
+var orgHookCreateServiceOnlyFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			skip, err := o.skipOrgHookForAdmins(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			if skip {
+				return next.Mutate(ctx, m)
+			}
+
+			// set owner on create mutation
+			if err := o.setOwnerIDField(ctx, m); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to set owner id field")
+
+				return nil, err
+			}
+
+			retVal, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			// add organization owner parent relation to the object (not editor)
+			// this allows users to view through org membership
+			id, err := hooks.GetObjectIDFromEntValue(retVal)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to get object id from ent value")
+
+				return nil, err
+			}
+
+			if err := addOrganizationOwnerParentRelation(ctx, m, id); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to add organization owner parent relation")
+
+				return nil, err
+			}
+
+			return retVal, err
+		})
+	}, ent.OpCreate)
+}
+
+// skipUserParentTupleFunc returns a skip function that always skips creating user parent tuples.
+// This is used for service-only objects where the parent relation only allows organization/service types.
+func skipUserParentTupleFunc(_ context.Context, m ent.Mutation) bool {
+	// Always skip creating user permissions for service-only objects
+	// because users are not allowed as parent types in the FGA model
+	if m.Op() == ent.OpCreate {
+		return true
+	}
+
+	return false
+}
+
 // setOwnerIDField sets the owner id field on the mutation based on the current organization
 func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) error {
 	// if the context has the organization creation context key, skip the hook
@@ -179,6 +238,34 @@ func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id 
 		ObjectID:        id,                                    // this is the object id being created
 		ObjectType:      hooks.GetObjectTypeFromEntMutation(m), // this is the object type being created
 		Relation:        fgax.EditorRelation,
+	}
+
+	t := fgax.GetTupleKey(tr)
+
+	if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, []fgax.TupleKey{t}, nil); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// addOrganizationOwnerParentRelation adds the organization as a parent to the object
+// This is used for service-only objects where users can view through org membership
+// but cannot edit (unlike addOrganizationOwnerEditorRelation which grants editor access)
+func addOrganizationOwnerParentRelation(ctx context.Context, m ent.Mutation, id string) (err error) {
+	var orgID string
+
+	orgID, err = auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get organization id from context: %w", err)
+	}
+
+	tr := fgax.TupleRequest{
+		SubjectType: generated.TypeOrganization,
+		SubjectID:   orgID,
+		ObjectID:    id,
+		ObjectType:  hooks.GetObjectTypeFromEntMutation(m),
+		Relation:    fgax.ParentRelation,
 	}
 
 	t := fgax.GetTupleKey(tr)

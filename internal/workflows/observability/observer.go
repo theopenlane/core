@@ -56,6 +56,19 @@ const (
 	FieldSkipReason = "skip_reason"
 )
 
+// ActionFields returns an action-aware set of observability fields with optional overrides.
+func ActionFields(actionKey string, extra Fields) Fields {
+	if len(extra) == 0 {
+		return Fields{
+			FieldActionKey: actionKey,
+		}
+	}
+
+	return lo.Assign(Fields{
+		FieldActionKey: actionKey,
+	}, extra)
+}
+
 const (
 	msgOpFailed   = "workflow op failed"
 	msgOpSkipped  = "workflow op skipped"

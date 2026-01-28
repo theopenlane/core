@@ -219,7 +219,7 @@ func (WorkflowInstance) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowInstance](WorkflowInstance{},
 				withParents(Control{}, InternalPolicy{}, Evidence{}, Subcontrol{}, ActionPlan{}, Procedure{}, Campaign{}, CampaignTarget{}, IdentityHolder{}, Platform{}),
-				withOrganizationOwner(true),
+				withOrganizationOwnerServiceOnly(true),
 			),
 		},
 	}.getMixins(WorkflowInstance{})

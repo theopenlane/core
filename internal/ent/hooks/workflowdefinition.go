@@ -14,7 +14,7 @@ import (
 func HookWorkflowDefinitionPrefilter() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.WorkflowDefinitionFunc(func(ctx context.Context, m *generated.WorkflowDefinitionMutation) (generated.Value, error) {
-			if !workflowEngineEnabled(m.Client()) {
+			if !workflowEngineEnabled(ctx, m.Client()) {
 				return next.Mutate(ctx, m)
 			}
 

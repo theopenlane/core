@@ -1,0 +1,437 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://theopenlane.io/schemas/workflow-definition.json",
+  "$defs": {
+    "ApprovalActionParams": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/internal/workflows/approval-action-params",
+      "properties": {
+        "targets": {
+          "items": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "USER",
+                  "GROUP",
+                  "ROLE",
+                  "RESOLVER"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "resolver_key": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "array",
+          "description": "List of users, groups, roles, or resolvers who can approve"
+        },
+        "required": {
+          "type": "boolean",
+          "description": "Whether this approval is required for workflow completion (defaults to true)"
+        },
+        "label": {
+          "type": "string",
+          "description": "Optional display label for the approval action"
+        },
+        "required_count": {
+          "type": "integer",
+          "description": "Number of approvals needed (quorum threshold); 0 means all targets must approve"
+        },
+        "fields": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Fields that are gated by this approval action (used for domain derivation)"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "title": "ApprovalActionParams",
+      "description": "Parameters for REQUEST_APPROVAL actions that require user or group approval"
+    },
+    "FieldUpdateActionParams": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/internal/workflows/field-update-action-params",
+      "properties": {
+        "updates": {
+          "type": "object",
+          "description": "Map of field names to new values to apply"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "title": "FieldUpdateActionParams",
+      "description": "Parameters for UPDATE_FIELD actions that modify object fields"
+    },
+    "IntegrationActionParams": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/internal/workflows/integration-action-params",
+      "properties": {
+        "integration": {
+          "type": "string",
+          "description": "Integration identifier"
+        },
+        "provider": {
+          "type": "string",
+          "description": "Provider override for the integration"
+        },
+        "operation": {
+          "type": "string",
+          "description": "The integration operation to perform"
+        },
+        "config": {
+          "type": "object",
+          "description": "Integration-specific configuration payload"
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "description": "Operation timeout in milliseconds"
+        },
+        "retries": {
+          "type": "integer",
+          "description": "Number of retry attempts on failure"
+        },
+        "force_refresh": {
+          "type": "boolean",
+          "description": "Request a provider-side refresh"
+        },
+        "client_force": {
+          "type": "boolean",
+          "description": "Request a client-side refresh"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "title": "IntegrationActionParams",
+      "description": "Parameters for INTEGRATION actions that interact with external systems"
+    },
+    "NotificationActionParams": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/internal/workflows/notification-action-params",
+      "properties": {
+        "targets": {
+          "items": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "USER",
+                  "GROUP",
+                  "ROLE",
+                  "RESOLVER"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "resolver_key": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "array",
+          "description": "List of users, groups, roles, or resolvers to receive the notification"
+        },
+        "channels": {
+          "items": {
+            "type": "string",
+            "enum": [
+              "IN_APP",
+              "SLACK",
+              "EMAIL"
+            ],
+            "description": "Notification delivery channel"
+          },
+          "type": "array",
+          "description": "Notification delivery channels (IN_APP, SLACK, EMAIL)"
+        },
+        "topic": {
+          "type": "string",
+          "description": "Optional notification topic for categorization"
+        },
+        "title": {
+          "type": "string",
+          "description": "Notification title"
+        },
+        "body": {
+          "type": "string",
+          "description": "Notification body content"
+        },
+        "data": {
+          "type": "object",
+          "description": "Optional additional data to include in the notification payload"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "title": "NotificationActionParams",
+      "description": "Parameters for NOTIFY actions that send notifications to users"
+    },
+    "TargetConfig": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/internal/workflows/target-config",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "USER",
+            "GROUP",
+            "ROLE",
+            "RESOLVER"
+          ],
+          "description": "Target type: USER (specific user), GROUP (group members), ROLE (role holders), or RESOLVER (dynamic resolution)"
+        },
+        "id": {
+          "type": "string",
+          "description": "The ID of the target user, group, or role (required for USER, GROUP, ROLE types)"
+        },
+        "resolver_key": {
+          "type": "string",
+          "description": "The resolver key for dynamic target resolution (required for RESOLVER type)"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "title": "TargetConfig",
+      "description": "Defines who should receive workflow actions"
+    },
+    "WebhookActionParams": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/internal/workflows/webhook-action-params",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "The webhook endpoint URL"
+        },
+        "method": {
+          "type": "string",
+          "description": "HTTP method (GET, POST, PUT, DELETE, etc.)"
+        },
+        "headers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Additional HTTP headers to include in the request"
+        },
+        "payload": {
+          "type": "object",
+          "description": "Additional data to merge into the webhook payload"
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "description": "Request timeout in milliseconds"
+        },
+        "secret": {
+          "type": "string",
+          "description": "Secret key for signing the webhook payload (HMAC-SHA256)"
+        },
+        "retries": {
+          "type": "integer",
+          "description": "Number of retry attempts on failure"
+        },
+        "idempotency_key": {
+          "type": "string",
+          "description": "Optional idempotency key header override"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "title": "WebhookActionParams",
+      "description": "Parameters for WEBHOOK actions that call external HTTP endpoints"
+    },
+    "WorkflowAction": {
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Unique key identifying this action within the workflow"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "REQUEST_APPROVAL",
+            "NOTIFY",
+            "WEBHOOK",
+            "UPDATE_FIELD",
+            "INTEGRATION"
+          ],
+          "description": "Action type: REQUEST_APPROVAL, NOTIFY, WEBHOOK, UPDATE_FIELD, or INTEGRATION"
+        },
+        "params": {
+          "description": "Action-specific parameters. Schema depends on the action type:\n- REQUEST_APPROVAL: ApprovalActionParams\n- NOTIFY: NotificationActionParams\n- WEBHOOK: WebhookActionParams\n- UPDATE_FIELD: FieldUpdateActionParams\n- INTEGRATION: IntegrationActionParams"
+        },
+        "when": {
+          "type": "string",
+          "description": "Optional CEL expression to conditionally execute this action"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of what this action does"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Represents an action performed by the workflow"
+    },
+    "WorkflowCondition": {
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "WorkflowSelector": {
+      "properties": {
+        "tagIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "groupIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "objectTypes": {
+          "items": {
+            "type": "string",
+            "enum": [
+              "ActionPlan",
+              "Campaign",
+              "CampaignTarget",
+              "Control",
+              "Evidence",
+              "IdentityHolder",
+              "InternalPolicy",
+              "Platform",
+              "Procedure",
+              "Subcontrol"
+            ],
+            "description": "The object type the workflow applies to"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "WorkflowTrigger": {
+      "properties": {
+        "operation": {
+          "type": "string"
+        },
+        "objectType": {
+          "type": "string",
+          "enum": [
+            "ActionPlan",
+            "Campaign",
+            "CampaignTarget",
+            "Control",
+            "Evidence",
+            "IdentityHolder",
+            "InternalPolicy",
+            "Platform",
+            "Procedure",
+            "Subcontrol"
+          ]
+        },
+        "fields": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "edges": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "selector": {
+          "$ref": "#/$defs/WorkflowSelector"
+        },
+        "expression": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    }
+  },
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "schemaType": {
+      "type": "string"
+    },
+    "workflowKind": {
+      "type": "string",
+      "enum": [
+        "APPROVAL",
+        "LIFECYCLE",
+        "NOTIFICATION"
+      ]
+    },
+    "approvalSubmissionMode": {
+      "type": "string",
+      "enum": [
+        "MANUAL_SUBMIT",
+        "AUTO_SUBMIT"
+      ]
+    },
+    "version": {
+      "type": "string"
+    },
+    "targets": {
+      "$ref": "#/$defs/WorkflowSelector"
+    },
+    "triggers": {
+      "items": {
+        "$ref": "#/$defs/WorkflowTrigger"
+      },
+      "type": "array"
+    },
+    "conditions": {
+      "items": {
+        "$ref": "#/$defs/WorkflowCondition"
+      },
+      "type": "array"
+    },
+    "actions": {
+      "items": {
+        "$ref": "#/$defs/WorkflowAction"
+      },
+      "type": "array"
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "title": "Workflow Definition",
+  "description": "Schema for Openlane workflow definitions"
+}

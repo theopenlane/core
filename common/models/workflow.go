@@ -67,18 +67,20 @@ type WorkflowDefinitionSchema struct {
 
 // WorkflowInstanceContext holds runtime context for a workflow instance.
 type WorkflowInstanceContext struct {
-	WorkflowDefinitionID string                      `json:"workflowDefinitionId,omitempty"`
-	ObjectType           enums.WorkflowObjectType    `json:"objectType,omitempty"`
-	ObjectID             string                      `json:"objectId,omitempty"`
-	Version              int                         `json:"version,omitempty"`
-	Assignments          []WorkflowAssignmentContext `json:"assignments,omitempty"`
-	TriggerEventType     string                      `json:"triggerEventType,omitempty"`
-	TriggerChangedFields []string                    `json:"triggerChangedFields,omitempty"`
-	TriggerChangedEdges  []string                    `json:"triggerChangedEdges,omitempty"`
-	TriggerAddedIDs      map[string][]string         `json:"triggerAddedIds,omitempty"`
-	TriggerRemovedIDs    map[string][]string         `json:"triggerRemovedIds,omitempty"`
-	TriggerUserID        string                      `json:"triggerUserId,omitempty"`
-	Data                 json.RawMessage             `json:"data,omitempty"` // optional payload captured at runtime
+	WorkflowDefinitionID   string                      `json:"workflowDefinitionId,omitempty"`
+	ObjectType             enums.WorkflowObjectType    `json:"objectType,omitempty"`
+	ObjectID               string                      `json:"objectId,omitempty"`
+	Version                int                         `json:"version,omitempty"`
+	Assignments            []WorkflowAssignmentContext `json:"assignments,omitempty"`
+	TriggerEventType       string                      `json:"triggerEventType,omitempty"`
+	TriggerChangedFields   []string                    `json:"triggerChangedFields,omitempty"`
+	TriggerChangedEdges    []string                    `json:"triggerChangedEdges,omitempty"`
+	TriggerAddedIDs        map[string][]string         `json:"triggerAddedIds,omitempty"`
+	TriggerRemovedIDs      map[string][]string         `json:"triggerRemovedIds,omitempty"`
+	TriggerUserID          string                      `json:"triggerUserId,omitempty"`
+	TriggerProposedChanges map[string]any              `json:"triggerProposedChanges,omitempty"`
+	ParallelApprovalKeys   []string                    `json:"parallelApprovalKeys,omitempty"`
+	Data                   json.RawMessage             `json:"data,omitempty"` // optional payload captured at runtime
 }
 
 // WorkflowAssignmentContext tracks an assignment decision within an instance.

@@ -16,6 +16,7 @@ import (
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/entx"
@@ -31,9 +32,15 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				return next.Mutate(ctx, mutation)
 			}
 
+			ctx = workflows.WithSkipEventEmission(ctx)
+
 			retVal, err := next.Mutate(ctx, mutation)
 			if err != nil {
 				return nil, err
+			}
+
+			if workflows.ShouldSkipEventEmission(ctx) {
+				return retVal, err
 			}
 
 			// determine the operation type
@@ -234,6 +241,8 @@ func RegisterListeners(e *Eventer) error {
 		total += len(entries)
 	}
 
+	total += len(e.bindings)
+
 	if total == 0 {
 		return nil
 	}
@@ -242,6 +251,8 @@ func RegisterListeners(e *Eventer) error {
 	for _, entries := range e.listeners {
 		bindings = append(bindings, entries...)
 	}
+
+	bindings = append(bindings, e.bindings...)
 
 	if _, err := e.Emitter.RegisterListeners(bindings...); err != nil {
 		log.Error().Err(err).Msg("failed to register listeners")

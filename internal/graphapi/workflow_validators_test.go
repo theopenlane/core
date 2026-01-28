@@ -415,6 +415,43 @@ func TestExtractFieldSetKey(t *testing.T) {
 	}
 }
 
+func TestValidateApprovalSubmissionMode(t *testing.T) {
+	tests := []struct {
+		name    string
+		mode    enums.WorkflowApprovalSubmissionMode
+		wantErr error
+	}{
+		{
+			name:    "empty mode is valid",
+			mode:    "",
+			wantErr: nil,
+		},
+		{
+			name:    "auto submit mode is valid",
+			mode:    enums.WorkflowApprovalSubmissionModeAutoSubmit,
+			wantErr: nil,
+		},
+		{
+			name:    "manual submit mode is not supported",
+			mode:    enums.WorkflowApprovalSubmissionModeManualSubmit,
+			wantErr: ErrManualSubmitModeNotSupported,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateApprovalSubmissionMode(tt.mode)
+
+			if tt.wantErr != nil {
+				require.Error(t, err)
+				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
 func TestValidateRequiredField(t *testing.T) {
 	tests := []struct {
 		name     string

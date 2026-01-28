@@ -41,6 +41,7 @@ linters:
       - internal/graphapi/generated
       - internal/graphapi/historygenerated
       - internal/httpserve/handlers/internal
+      - internal/workflows/examples
 formatters:
   enable:
     - gofmt
@@ -54,3 +55,4 @@ formatters:
       - cli/cmd/*
       - pkg/events/soiree/examples/*
       - internal/ent/hush/examples/*
+      - internal/workflows/examples/*

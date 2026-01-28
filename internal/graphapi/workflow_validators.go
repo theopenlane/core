@@ -320,12 +320,21 @@ func validateApprovalSubmissionMode(mode enums.WorkflowApprovalSubmissionMode) e
 		return fmt.Errorf("%w: %q", ErrApprovalSubmissionModeInvalid, mode)
 	}
 
+	if mode == enums.WorkflowApprovalSubmissionModeManualSubmit {
+		return ErrManualSubmitModeNotSupported
+	}
+
 	return nil
 }
 
 // validateWorkflowDefinitionConflicts checks for conflicting approval domains with existing definitions
 func validateWorkflowDefinitionConflicts(ctx context.Context, client *generated.Client, schemaType string, ownerID string, currentID string, doc *models.WorkflowDefinitionDocument) error {
-	domainKeys, err := extractDomainKeys(doc)
+	objectType := enums.ToWorkflowObjectType(schemaType)
+	if objectType == nil {
+		return ErrInvalidWorkflowSchema
+	}
+
+	domainKeys, err := extractDomainKeys(doc, *objectType)
 	if err != nil {
 		return err
 	}
@@ -342,7 +351,7 @@ func validateWorkflowDefinitionConflicts(ctx context.Context, client *generated.
 }
 
 // extractDomainKeys extracts all domain keys from a workflow definition document
-func extractDomainKeys(doc *models.WorkflowDefinitionDocument) (map[string]struct{}, error) {
+func extractDomainKeys(doc *models.WorkflowDefinitionDocument, objectType enums.WorkflowObjectType) (map[string]struct{}, error) {
 	domains, err := workflows.ApprovalDomains(*doc)
 	if err != nil {
 		return nil, err
@@ -354,7 +363,7 @@ func extractDomainKeys(doc *models.WorkflowDefinitionDocument) (map[string]struc
 	domainKeys := make(map[string]struct{}, len(domains))
 
 	for _, domain := range domains {
-		key := workflows.DeriveDomainKey(domain)
+		key := workflows.DeriveDomainKey(objectType, domain)
 		if key != "" {
 			domainKeys[key] = struct{}{}
 		}
@@ -386,6 +395,10 @@ func queryActiveDefinitions(ctx context.Context, client *generated.Client, schem
 // checkDomainConflicts checks if any existing definitions conflict with the given domain keys
 func checkDomainConflicts(definitions []*generated.WorkflowDefinition, domainKeys map[string]struct{}) error {
 	for _, def := range definitions {
+		objectType := enums.ToWorkflowObjectType(def.SchemaType)
+		if objectType == nil {
+			continue
+		}
 		otherDomains, err := workflows.ApprovalDomains(def.DefinitionJSON)
 		if err != nil {
 			return err
@@ -395,7 +408,7 @@ func checkDomainConflicts(definitions []*generated.WorkflowDefinition, domainKey
 		}
 
 		for _, domain := range otherDomains {
-			key := workflows.DeriveDomainKey(domain)
+			key := workflows.DeriveDomainKey(*objectType, domain)
 			if key == "" {
 				continue
 			}

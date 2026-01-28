@@ -192,6 +192,25 @@ func withOrganizationOwner(skipSystemAdmin bool) objectOwnedOption {
 	}
 }
 
+// withOrganizationOwnerServiceOnly adds the organization owner_id field and interceptor
+// but does NOT add the editor relation tuple. This is for system-driven objects where
+// only services should be able to create/edit/delete, but users can view based on org membership.
+// It also replaces the default tuple update hook with one that skips creating user parent tuples.
+func withOrganizationOwnerServiceOnly(skipSystemAdmin bool) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.IncludeOrganizationOwner = true
+
+		if skipSystemAdmin {
+			o.AllowEmptyForSystemAdmin = skipSystemAdmin
+		}
+
+		// Replace the default tuple update hook with a service-only version
+		// that skips creating user parent tuples (since users are not allowed as parent types)
+		o.HookFuncs = []HookFunc{serviceOnlyTupleUpdateFunc, orgHookCreateServiceOnlyFunc}
+		o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
+	}
+}
+
 // withListObjectsFilter allows to use the list objects filter for the object owned mixin instead of batch checks
 func withListObjectsFilter() objectOwnedOption { //nolint:unused
 	return func(o *ObjectOwnedMixin) {
@@ -378,6 +397,20 @@ var defaultTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 	return hook.On(
 		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation, defaultSkipCreateUserPermissionsFunc),
+		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+	)
+}
+
+// serviceOnlyTupleUpdateFunc is a hook function for service-only objects that skips
+// creating user parent tuples (since users are not allowed as parent types in the FGA model)
+var serviceOnlyTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
+	ownerRelation := fgax.ParentRelation
+	if o.OwnerRelation != "" {
+		ownerRelation = o.OwnerRelation
+	}
+
+	return hook.On(
+		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation, skipUserParentTupleFunc),
 		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 	)
 }

@@ -129,7 +129,7 @@ func (w WorkflowProposal) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowObjectRef](w,
 				withParents(WorkflowObjectRef{}),
-				withOrganizationOwner(true),
+				withOrganizationOwnerServiceOnly(true),
 			),
 		},
 	}.getMixins(w)

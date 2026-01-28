@@ -1,0 +1,91 @@
+{
+  "$schema": "https://raw.githubusercontent.com/theopenlane/core/main/jsonschema/workflow-definition.schema.json",
+  "name": "Control Status Approval with Notifications",
+  "description": "Requires manager approval for control status changes and sends notifications based on approval outcome",
+  "schemaType": "Control",
+  "workflowKind": "APPROVAL",
+  "version": "1.0.0",
+  "triggers": [
+    {
+      "operation": "UPDATE",
+      "objectType": "Control",
+      "fields": ["status"],
+      "expression": "'status' in changed_fields"
+    }
+  ],
+  "conditions": [
+    {
+      "expression": "object.status != \"NOT_IMPLEMENTED\"",
+      "description": "Only trigger for controls that are being implemented"
+    }
+  ],
+  "actions": [
+    {
+      "key": "manager_approval",
+      "type": "REQUEST_APPROVAL",
+      "description": "Request approval from control owner",
+      "params": {
+        "targets": [
+          {
+            "type": "RESOLVER",
+            "resolver_key": "CONTROL_OWNER"
+          }
+        ],
+        "required": true,
+        "label": "Control Status Change Approval",
+        "fields": ["status"]
+      }
+    },
+    {
+      "key": "notify_creator_approved",
+      "type": "NOTIFY",
+      "description": "Notify the object creator when the request is approved",
+      "when": "assignments.by_action[\"manager_approval\"].status == \"APPROVED\"",
+      "params": {
+        "targets": [
+          {
+            "type": "RESOLVER",
+            "resolver_key": "OBJECT_CREATOR"
+          }
+        ],
+        "title": "Control Status Change Approved",
+        "body": "Your request to change the status of control {{object_id}} has been approved.",
+        "channels": ["IN_APP"]
+      }
+    },
+    {
+      "key": "notify_creator_rejected",
+      "type": "NOTIFY",
+      "description": "Notify the object creator when the request is rejected",
+      "when": "assignments.by_action[\"manager_approval\"].rejected > 0",
+      "params": {
+        "targets": [
+          {
+            "type": "RESOLVER",
+            "resolver_key": "OBJECT_CREATOR"
+          }
+        ],
+        "title": "Control Status Change Rejected",
+        "body": "Your request to change the status of control {{object_id}} has been rejected. Please contact your control owner for details.",
+        "channels": ["IN_APP"]
+      }
+    },
+    {
+      "key": "notify_delegate_on_rejection",
+      "type": "NOTIFY",
+      "description": "Notify the governance group when a request is rejected for visibility",
+      "when": "assignments.rejected > 0",
+      "params": {
+        "targets": [
+          {
+            "type": "GROUP",
+            "id": "<REPLACE_WITH_GROUP_ID>"
+          }
+        ],
+        "title": "Control Change Request Rejected",
+        "body": "A control status change request for {{object_id}} was rejected.",
+        "channels": ["IN_APP"]
+      }
+    }
+  ]
+}
