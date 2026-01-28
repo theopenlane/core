@@ -27,7 +27,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.32.7
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.7
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.21.0
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.95.1
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.96.0
 	github.com/brianvoe/gofakeit/v7 v7.14.0
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/didasy/tldr v0.7.0
@@ -313,7 +313,7 @@ require (
 	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.67.5 // indirect
 	github.com/prometheus/procfs v0.19.2 // indirect
-	github.com/resend/resend-go/v2 v2.28.0 // indirect
+	github.com/resend/resend-go/v2 v2.28.0
 	github.com/riverqueue/river/riverdriver v0.30.1 // indirect
 	github.com/riverqueue/river/rivershared v0.30.1 // indirect
 	github.com/riverqueue/rivercontrib/otelriver v0.7.0 // indirect
