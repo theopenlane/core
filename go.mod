@@ -12,6 +12,10 @@ tool (
 
 replace github.com/theopenlane/core/common => ./common
 
+replace github.com/theopenlane/entx => /Users/manderson/newentx/entx
+
+replace github.com/theopenlane/gqlgen-plugins => /Users/manderson/openlane/gqlgen-plugins
+
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/secretmanager v1.16.0

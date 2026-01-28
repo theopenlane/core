@@ -72,6 +72,7 @@ func gqlGenerate() {
 
 	modelImport := "github.com/theopenlane/core/internal/graphapi/model"
 	entPackage := "github.com/theopenlane/core/internal/ent/generated"
+	csvGeneratedPackage := "github.com/theopenlane/core/internal/ent/csvgenerated"
 	rulePackage := "github.com/theopenlane/core/internal/ent/privacy/rule"
 
 	if err := api.Generate(cfg,
@@ -79,12 +80,15 @@ func gqlGenerate() {
 			resolvergen.WithEntGeneratedPackage(entPackage),
 			resolvergen.WithArchivableSchemas([]string{schema.Program{}.Name()}),
 			resolvergen.WithGraphQLImport(graphqlImport),
+			resolvergen.WithCSVGeneratedPackage(csvGeneratedPackage),
+			resolvergen.WithForceRegenerateBulkResolvers(true),
 		)), // replace the resolvergen plugin
 		api.AddPlugin(bulkgen.NewWithOptions(
 			bulkgen.WithModelPackage(modelImport),
 			bulkgen.WithEntGeneratedPackage(entPackage),
 			bulkgen.WithCSVOutputPath(csvDir),
 			bulkgen.WithGraphQLImport(graphqlImport),
+			bulkgen.WithCSVGeneratedPackage(csvGeneratedPackage),
 		)), // add the bulkgen plugin
 		api.AddPlugin(searchgen.NewWithOptions(
 			searchgen.WithEntGeneratedPackage(entPackage),

@@ -53,6 +53,9 @@ func (Assessment) Fields() []ent.Field {
 
 		field.String("template_id").
 			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("AssessmentTemplateRef").MatchOn("name"),
+			).
 			Comment("the template id associated with this assessment. You can either provide this alone or provide both the jsonconfig and uischema"),
 
 		field.JSON("jsonconfig", map[string]any{}).

@@ -166,10 +166,28 @@ type CampaignCreatePayload struct {
 	Campaign *generated.Campaign `json:"campaign"`
 }
 
+// Return response for createCampaignWithTargets mutation
+type CampaignCreateWithTargetsPayload struct {
+	// Created campaign
+	Campaign *generated.Campaign `json:"campaign"`
+	// Created campaign targets
+	CampaignTargets []*generated.CampaignTarget `json:"campaignTargets,omitempty"`
+}
+
 // Return response for deleteCampaign mutation
 type CampaignDeletePayload struct {
 	// Deleted campaign ID
 	DeletedID string `json:"deletedID"`
+}
+
+// Return response for launchCampaign mutation
+type CampaignLaunchPayload struct {
+	// Updated campaign
+	Campaign *generated.Campaign `json:"campaign"`
+	// Number of targets queued for send
+	QueuedCount int `json:"queuedCount"`
+	// Number of targets skipped
+	SkippedCount int `json:"skippedCount"`
 }
 
 // Return response for createBulkCampaignTarget mutation
@@ -194,6 +212,16 @@ type CampaignTargetDeletePayload struct {
 type CampaignTargetUpdatePayload struct {
 	// Updated campaignTarget
 	CampaignTarget *generated.CampaignTarget `json:"campaignTarget"`
+}
+
+// Return response for sendCampaignTestEmail mutation
+type CampaignTestEmailPayload struct {
+	// Campaign used for the test send
+	Campaign *generated.Campaign `json:"campaign"`
+	// Number of emails queued for send
+	QueuedCount int `json:"queuedCount"`
+	// Number of emails skipped
+	SkippedCount int `json:"skippedCount"`
 }
 
 // Return response for updateCampaign mutation
@@ -430,6 +458,14 @@ type ControlObjectiveUpdatePayload struct {
 type ControlUpdatePayload struct {
 	// Updated control
 	Control *generated.Control `json:"control"`
+}
+
+// Input for createCampaignWithTargets mutation
+type CreateCampaignWithTargetsInput struct {
+	// values of the campaign
+	Campaign *generated.CreateCampaignInput `json:"campaign"`
+	// list of targets to create for the campaign
+	Targets []*generated.CreateCampaignTargetInput `json:"targets,omitempty"`
 }
 
 type CreateControlWithSubcontrolsInput struct {
@@ -1394,6 +1430,16 @@ type JobTemplateUpdatePayload struct {
 	JobTemplate *generated.JobTemplate `json:"jobTemplate"`
 }
 
+// Input for launchCampaign mutation
+type LaunchCampaignInput struct {
+	// ID of the campaign
+	CampaignID string `json:"campaignID"`
+	// Whether to resend emails to previously-sent targets
+	Resend *bool `json:"resend,omitempty"`
+	// Optional time to schedule the campaign launch or resend
+	ScheduledAt *models.DateTime `json:"scheduledAt,omitempty"`
+}
+
 // Return response for createBulkMappableDomain mutation
 type MappableDomainBulkCreatePayload struct {
 	// Created mappableDomains
@@ -1771,6 +1817,14 @@ type RemediationUpdatePayload struct {
 	Remediation *generated.Remediation `json:"remediation"`
 }
 
+// Input for resendCampaignIncompleteTargets mutation
+type ResendCampaignIncompleteInput struct {
+	// ID of the campaign
+	CampaignID string `json:"campaignID"`
+	// Optional time to schedule the resend for incomplete targets
+	ScheduledAt *models.DateTime `json:"scheduledAt,omitempty"`
+}
+
 // Return response for createBulkReview mutation
 type ReviewBulkCreatePayload struct {
 	// Created reviews
@@ -1962,6 +2016,14 @@ type SearchResults struct {
 	TrustCenterEntities *generated.TrustCenterEntityConnection  `json:"trustCenterEntities,omitempty"`
 	Vulnerabilities     *generated.VulnerabilityConnection      `json:"vulnerabilities,omitempty"`
 	SearchContext       []*models.SearchContext                 `json:"searchContext,omitempty"`
+}
+
+// Input for sendCampaignTestEmail mutation
+type SendCampaignTestEmailInput struct {
+	// ID of the campaign
+	CampaignID string `json:"campaignID"`
+	// List of recipient emails to send the test to
+	Emails []string `json:"emails"`
 }
 
 // Return response for createBulkStandard mutation

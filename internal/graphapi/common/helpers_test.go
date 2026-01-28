@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 )
 
+// TestStripOperation validates operation prefix stripping behavior.
 func TestStripOperation(t *testing.T) {
 	t.Parallel()
 
@@ -80,6 +81,7 @@ func TestStripOperation(t *testing.T) {
 	}
 }
 
+// TestRetrieveObjectDetails verifies upload object metadata extraction.
 func TestRetrieveObjectDetails(t *testing.T) {
 	t.Parallel()
 
@@ -185,6 +187,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 	}
 }
 
+// TestTemplateKindFromVariables ensures template kind is parsed from variables.
 func TestTemplateKindFromVariables(t *testing.T) {
 	t.Parallel()
 
@@ -199,6 +202,7 @@ func TestTemplateKindFromVariables(t *testing.T) {
 	assert.Check(t, is.Equal(enums.TemplateKindTrustCenterNda, *kind))
 }
 
+// TestRetrieveObjectDetailsTemplateKindFromInput ensures template kind metadata is applied from input.
 func TestRetrieveObjectDetailsTemplateKindFromInput(t *testing.T) {
 	t.Parallel()
 
@@ -236,6 +240,7 @@ func TestRetrieveObjectDetailsTemplateKindFromInput(t *testing.T) {
 	assert.Check(t, is.Equal(enums.TemplateKindTrustCenterNda.String(), result.ProviderHints.Metadata[objects.TemplateKindMetadataKey]))
 }
 
+// TestRetrieveObjectDetailsTemplateKindFromFieldName ensures template kind fallback by field name.
 func TestRetrieveObjectDetailsTemplateKindFromFieldName(t *testing.T) {
 	t.Parallel()
 
@@ -266,6 +271,8 @@ func TestRetrieveObjectDetailsTemplateKindFromFieldName(t *testing.T) {
 	assert.Check(t, result.ProviderHints != nil)
 	assert.Check(t, is.Equal(enums.TemplateKindTrustCenterNda.String(), result.ProviderHints.Metadata[objects.TemplateKindMetadataKey]))
 }
+
+// TestGetOrgOwnerFromInput validates owner ID extraction from inputs.
 func TestGetOrgOwnerFromInput(t *testing.T) {
 	t.Parallel()
 
@@ -324,6 +331,8 @@ func TestGetOrgOwnerFromInput(t *testing.T) {
 		})
 	}
 }
+
+// TestGetBulkUploadOwnerInput validates owner ID resolution for bulk uploads.
 func TestGetBulkUploadOwnerInput(t *testing.T) {
 	t.Parallel()
 
@@ -396,6 +405,7 @@ func TestGetBulkUploadOwnerInput(t *testing.T) {
 	}
 }
 
+// TestNormalizeCSVEnumInputs ensures CSV enum normalization behavior.
 func TestNormalizeCSVEnumInputs(t *testing.T) {
 	t.Parallel()
 
@@ -442,6 +452,7 @@ func TestNormalizeCSVEnumInputs(t *testing.T) {
 	assert.Check(t, is.Equal(enums.TaskStatusCompleted, data[2].State))
 }
 
+// TestNormalizeCSVDateTimePointers ensures zero DateTime pointers are cleared.
 func TestNormalizeCSVDateTimePointers(t *testing.T) {
 	t.Parallel()
 
@@ -472,6 +483,7 @@ func TestNormalizeCSVDateTimePointers(t *testing.T) {
 	assert.Check(t, is.Nil(data[1].Completed))
 }
 
+// TestWrapCSVUnmarshalErrorAddsHeader verifies CSV error wrapping adds headers.
 func TestWrapCSVUnmarshalErrorAddsHeader(t *testing.T) {
 	t.Parallel()
 
@@ -492,6 +504,7 @@ func TestWrapCSVUnmarshalErrorAddsHeader(t *testing.T) {
 	assert.Check(t, strings.Contains(strings.ToLower(vErr.Message()), "json"))
 }
 
+// TestIsEmpty validates empty-value detection across types.
 func TestIsEmpty(t *testing.T) {
 	t.Parallel()
 
@@ -575,6 +588,7 @@ func TestIsEmpty(t *testing.T) {
 	}
 }
 
+// TestSetOrganizationForUploads verifies org selection rules for uploads.
 func TestSetOrganizationForUploads(t *testing.T) {
 	t.Parallel()
 
@@ -661,4 +675,95 @@ func TestSetOrganizationForUploads(t *testing.T) {
 			assert.Check(t, is.Equal(tt.expectedOrg, orgID))
 		})
 	}
+}
+
+// csvListRow is a helper struct for list parsing tests.
+type csvListRow struct {
+	Tags  []string `csv:"Tags"`
+	Names []string `csv:"Names"`
+}
+
+// TestUnmarshalBulkDataListParsingMixedDelimiters ensures mixed delimiters are handled.
+func TestUnmarshalBulkDataListParsingMixedDelimiters(t *testing.T) {
+	t.Parallel()
+
+	csvData := "Tags,Names\n\"foo,bar\",alpha|beta\n"
+	upload := graphql.Upload{
+		File:        strings.NewReader(csvData),
+		Filename:    "list.csv",
+		Size:        int64(len(csvData)),
+		ContentType: "text/csv",
+	}
+
+	rows, err := UnmarshalBulkData[csvListRow](upload)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(rows, 1))
+
+	assert.Check(t, is.DeepEqual(rows[0].Tags, []string{"foo", "bar"}))
+	assert.Check(t, is.DeepEqual(rows[0].Names, []string{"alpha", "beta"}))
+}
+
+// TestUnmarshalBulkDataListParsing validates basic list parsing.
+func TestUnmarshalBulkDataListParsing(t *testing.T) {
+	t.Parallel()
+
+	type csvRow struct {
+		Tags []string
+	}
+
+	csvData := "Tags\nsecurity;compliance\n"
+	upload := graphql.Upload{
+		File:        strings.NewReader(csvData),
+		Filename:    "list.csv",
+		Size:        int64(len(csvData)),
+		ContentType: "text/csv",
+	}
+
+	rows, err := UnmarshalBulkData[csvRow](upload)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(rows, 1))
+	assert.Check(t, is.DeepEqual([]string{"security", "compliance"}, rows[0].Tags))
+}
+
+// TestUnmarshalBulkDataInvalidJSONMap verifies JSON map validation errors.
+func TestUnmarshalBulkDataInvalidJSONMap(t *testing.T) {
+	t.Parallel()
+
+	type csvRow struct {
+		Metadata map[string]any
+	}
+
+	csvData := "Metadata\n{not-json}\n"
+	upload := graphql.Upload{
+		File:        strings.NewReader(csvData),
+		Filename:    "map.csv",
+		Size:        int64(len(csvData)),
+		ContentType: "text/csv",
+	}
+
+	_, err := UnmarshalBulkData[csvRow](upload)
+	assert.Assert(t, err != nil)
+	assert.Check(t, strings.Contains(err.Error(), "list or object values must be valid JSON"))
+}
+
+// TestGetOrgOwnerFromInputWrapped verifies wrapped Input owner extraction.
+func TestGetOrgOwnerFromInputWrapped(t *testing.T) {
+	t.Parallel()
+
+	type ownerInput struct {
+		OwnerID *string `json:"ownerID"`
+	}
+	type wrappedInput struct {
+		Input ownerInput
+	}
+
+	orgID := "org-123"
+	input := &wrappedInput{
+		Input: ownerInput{OwnerID: &orgID},
+	}
+
+	owner, err := GetOrgOwnerFromInput(input)
+	assert.NilError(t, err)
+	assert.Assert(t, owner != nil)
+	assert.Check(t, is.Equal(*owner, orgID))
 }

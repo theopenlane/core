@@ -146,7 +146,10 @@ func (Platform) Fields() []ent.Field {
 			),
 		field.String("platform_owner_id").
 			Comment("the id of the user who is responsible for this platform").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("PlatformOwnerEmail").MatchOn("email"),
+			),
 		field.String("external_reference_id").
 			Comment("external identifier for the platform from an upstream inventory").
 			Optional().
