@@ -1,0 +1,61 @@
+package handlers
+
+import (
+	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/browser_rendering"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+
+	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/pkg/logx"
+	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/utils/rout"
+)
+
+const (
+	snapshotCacheTTL = 86400 // 1 day in seconds
+)
+
+// Snapshot will take a snapshot of a provided domain
+func (h *Handler) SnapshotHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleSnapshotSuccessRequest, models.ExampleSnapshotSuccessResponse, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
+	}
+
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
+	reqCtx := ctx.Request().Context()
+
+	out := &models.SnapshotReply{
+		Reply: rout.Reply{Success: true},
+	}
+
+	opts := []option.RequestOption{
+		option.WithAPIToken(h.CloudflareConfig.APIToken),
+		option.WithHeader(httpsling.HeaderContentType, httpsling.ContentTypeJSON),
+	}
+
+	client := cloudflare.NewClient(opts...)
+
+	params := browser_rendering.SnapshotNewParams{
+		AccountID: cloudflare.F(h.CloudflareConfig.AccountID), // add account id here if needed
+		Body: browser_rendering.SnapshotNewParamsBody{
+			URL: cloudflare.F(in.URL),
+		},
+		CacheTTL: cloudflare.Float(snapshotCacheTTL),
+	}
+
+	resp, err := client.BrowserRendering.Snapshot.New(reqCtx, params)
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Str("url", in.URL).Err(err).Msg("failed to take snapshot")
+
+		return h.InternalServerError(ctx, err, openapi)
+	}
+
+	out.Image = resp.Screenshot
+
+	return h.Success(ctx, out, openapi)
+}

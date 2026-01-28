@@ -179,3 +179,8 @@ subscription:
 integrationoauthprovider:
     enabled: false
     successredirecturl: ""
+
+cloudflare:
+    apitoken: ""
+    accountid: ""
+    enabled: false

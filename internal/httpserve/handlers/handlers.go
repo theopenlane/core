@@ -137,6 +137,8 @@ type Handler struct {
 	WorkflowEngine *engine.WorkflowEngine
 	// CampaignWebhook contains the configuration for campaign-related email webhooks
 	CampaignWebhook CampaignWebhookConfig
+	// CloudflareConfig contains the configuration for Cloudflare integration
+	CloudflareConfig CloudflareConfig
 }
 
 // CampaignWebhookConfig contains webhook configuration for campaign-related email providers.
@@ -147,6 +149,16 @@ type CampaignWebhookConfig struct {
 	ResendAPIKey string `json:"resendapikey" koanf:"resendapikey" default:"" sensitive:"true"`
 	// ResendSecret is the signing secret used to verify Resend webhook payloads
 	ResendSecret string `json:"resendsecret" koanf:"resendsecret" default:"" sensitive:"true"`
+}
+
+// CloudflareConfig contains configuration for Cloudflare integration.
+type CloudflareConfig struct {
+	// Enabled toggles the Cloudflare snapshot handler
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// APIToken is the API token used for Cloudflare client initialization
+	APIToken string `json:"apitoken" koanf:"apitoken" default:"" sensitive:"true"`
+	// AccountID is the Cloudflare account ID to use for snapshot operations
+	AccountID string `json:"accountid" koanf:"accountid" default:"" sensitive:"true"`
 }
 
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user

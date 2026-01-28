@@ -773,6 +773,25 @@
       "type": "object",
       "description": "CampaignWebhookConfig contains webhook configuration for campaign-related email providers."
     },
+    "handlers.CloudflareConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled toggles the Cloudflare snapshot handler"
+        },
+        "apitoken": {
+          "type": "string",
+          "description": "APIToken is the API token used for Cloudflare client initialization"
+        },
+        "accountid": {
+          "type": "string",
+          "description": "AccountID is the Cloudflare account ID to use for snapshot operations"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "CloudflareConfig contains configuration for Cloudflare integration."
+    },
     "handlers.IntegrationOauthProviderConfig": {
       "properties": {
         "enabled": {
@@ -1822,6 +1841,10 @@
     "campaignwebhook": {
       "$ref": "#/$defs/handlers.CampaignWebhookConfig",
       "description": "CampaignWebhook contains webhook configuration for campaign-related email providers"
+    },
+    "cloudflare": {
+      "$ref": "#/$defs/handlers.CloudflareConfig",
+      "description": "Cloudflare contains configuration for Cloudflare integration"
     }
   },
   "additionalProperties": false,

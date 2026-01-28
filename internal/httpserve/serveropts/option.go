@@ -625,3 +625,10 @@ func WithCampaignWebhookConfig() ServerOption {
 		s.Config.Handler.CampaignWebhook = s.Config.Settings.CampaignWebhook
 	})
 }
+
+// WithCloudflareConfig sets up the Cloudflare configuration for the server
+func WithCloudflareConfig() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		s.Config.Handler.CloudflareConfig = s.Config.Settings.Cloudflare
+	})
+}

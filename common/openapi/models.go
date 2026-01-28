@@ -6,6 +6,7 @@ import (
 	"mime/multipart"
 	"net/mail"
 	"net/textproto"
+	"net/url"
 	"strings"
 	"time"
 
@@ -2531,4 +2532,57 @@ type DisconnectIntegrationRequest struct {
 // ExampleDisconnectIntegrationRequest provides an example disconnect request for OpenAPI documentation
 var ExampleDisconnectIntegrationRequest = DisconnectIntegrationRequest{
 	Provider: "github",
+}
+
+// =========
+// SNAPSHOT
+// =========
+
+// SnapshotRequest contains fields for a snapshot request to the `/snapshot` endpoint
+type SnapshotRequest struct {
+	URL string `json:"url" description:"The URL of the domain to take a snapshot of" example:"https://www.example.com"`
+}
+
+// SnapshotReply holds the fields that are sent on a response to the `/snapshot` endpoint
+type SnapshotReply struct {
+	rout.Reply
+	Message string `json:"message"`
+	Image   string `json:"image" description:"Base64-encoded image data of the snapshot"`
+}
+
+// ExampleResponse returns an example SnapshotReply for OpenAPI documentation
+func (r *SnapshotReply) ExampleResponse() any {
+	return ExampleSnapshotSuccessResponse
+}
+
+// Validate ensures the required fields are set on the SnapshotRequest request
+func (r *SnapshotRequest) Validate() error {
+	if r.URL == "" {
+		return rout.NewMissingRequiredFieldError("url")
+	}
+
+	u, err := url.Parse(r.URL)
+	if err != nil {
+		return rout.InvalidField("url must be a valid URL")
+	}
+
+	if u.Scheme != "http" && u.Scheme != "https" {
+		// set to https by default
+		u.Scheme = "https"
+		r.URL = u.String()
+	}
+
+	return nil
+}
+
+// ExampleSnapshotSuccessRequest is an example of a successful snapshot request for OpenAPI documentation
+var ExampleSnapshotSuccessRequest = SnapshotRequest{
+	URL: "https://www.example.com",
+}
+
+// ExampleSnapshotSuccessResponse is an example of a successful snapshot response for OpenAPI documentation
+var ExampleSnapshotSuccessResponse = SnapshotReply{
+	Reply:   rout.Reply{Success: true},
+	Message: "Snapshot taken successfully",
+	Image:   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO3Zf6kAAAAASUVORK5CYII=",
 }
