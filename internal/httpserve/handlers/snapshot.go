@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	snapshotCacheTTL = 86400 // 1 day in seconds
+	snapshotCacheTTL = 600 // 10 minutes in seconds
 )
 
 // Snapshot will take a snapshot of a provided domain
