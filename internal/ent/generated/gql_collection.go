@@ -67940,6 +67940,11 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, trustcenter.FieldPirschIdentificationCode)
 				fieldSeen[trustcenter.FieldPirschIdentificationCode] = struct{}{}
 			}
+		case "pirschAccessLink":
+			if _, ok := fieldSeen[trustcenter.FieldPirschAccessLink]; !ok {
+				selectedFields = append(selectedFields, trustcenter.FieldPirschAccessLink)
+				fieldSeen[trustcenter.FieldPirschAccessLink] = struct{}{}
+			}
 		case "previewStatus":
 			if _, ok := fieldSeen[trustcenter.FieldPreviewStatus]; !ok {
 				selectedFields = append(selectedFields, trustcenter.FieldPreviewStatus)

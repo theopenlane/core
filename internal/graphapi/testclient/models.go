@@ -7993,6 +7993,8 @@ type CreateTrustCenterInput struct {
 	PirschDomainID *string `json:"pirschDomainID,omitempty"`
 	// Pirsch ID code
 	PirschIdentificationCode *string `json:"pirschIdentificationCode,omitempty"`
+	// Pirsch access link
+	PirschAccessLink *string `json:"pirschAccessLink,omitempty"`
 	// preview status of the trust center
 	PreviewStatus *enums.TrustCenterPreviewStatus `json:"previewStatus,omitempty"`
 	// External URL for the trust center subprocessors
@@ -30688,6 +30690,8 @@ type TrustCenter struct {
 	PirschDomainID *string `json:"pirschDomainID,omitempty"`
 	// Pirsch ID code
 	PirschIdentificationCode *string `json:"pirschIdentificationCode,omitempty"`
+	// Pirsch access link
+	PirschAccessLink *string `json:"pirschAccessLink,omitempty"`
 	// preview status of the trust center
 	PreviewStatus *enums.TrustCenterPreviewStatus `json:"previewStatus,omitempty"`
 	// External URL for the trust center subprocessors
@@ -32975,6 +32979,22 @@ type TrustCenterWhereInput struct {
 	PirschIdentificationCodeNotNil       *bool    `json:"pirschIdentificationCodeNotNil,omitempty"`
 	PirschIdentificationCodeEqualFold    *string  `json:"pirschIdentificationCodeEqualFold,omitempty"`
 	PirschIdentificationCodeContainsFold *string  `json:"pirschIdentificationCodeContainsFold,omitempty"`
+	// pirsch_access_link field predicates
+	PirschAccessLink             *string  `json:"pirschAccessLink,omitempty"`
+	PirschAccessLinkNeq          *string  `json:"pirschAccessLinkNEQ,omitempty"`
+	PirschAccessLinkIn           []string `json:"pirschAccessLinkIn,omitempty"`
+	PirschAccessLinkNotIn        []string `json:"pirschAccessLinkNotIn,omitempty"`
+	PirschAccessLinkGt           *string  `json:"pirschAccessLinkGT,omitempty"`
+	PirschAccessLinkGte          *string  `json:"pirschAccessLinkGTE,omitempty"`
+	PirschAccessLinkLt           *string  `json:"pirschAccessLinkLT,omitempty"`
+	PirschAccessLinkLte          *string  `json:"pirschAccessLinkLTE,omitempty"`
+	PirschAccessLinkContains     *string  `json:"pirschAccessLinkContains,omitempty"`
+	PirschAccessLinkHasPrefix    *string  `json:"pirschAccessLinkHasPrefix,omitempty"`
+	PirschAccessLinkHasSuffix    *string  `json:"pirschAccessLinkHasSuffix,omitempty"`
+	PirschAccessLinkIsNil        *bool    `json:"pirschAccessLinkIsNil,omitempty"`
+	PirschAccessLinkNotNil       *bool    `json:"pirschAccessLinkNotNil,omitempty"`
+	PirschAccessLinkEqualFold    *string  `json:"pirschAccessLinkEqualFold,omitempty"`
+	PirschAccessLinkContainsFold *string  `json:"pirschAccessLinkContainsFold,omitempty"`
 	// preview_status field predicates
 	PreviewStatus       *enums.TrustCenterPreviewStatus  `json:"previewStatus,omitempty"`
 	PreviewStatusNeq    *enums.TrustCenterPreviewStatus  `json:"previewStatusNEQ,omitempty"`
@@ -37747,6 +37767,9 @@ type UpdateTrustCenterInput struct {
 	// Pirsch ID code
 	PirschIdentificationCode      *string `json:"pirschIdentificationCode,omitempty"`
 	ClearPirschIdentificationCode *bool   `json:"clearPirschIdentificationCode,omitempty"`
+	// Pirsch access link
+	PirschAccessLink      *string `json:"pirschAccessLink,omitempty"`
+	ClearPirschAccessLink *bool   `json:"clearPirschAccessLink,omitempty"`
 	// preview status of the trust center
 	PreviewStatus      *enums.TrustCenterPreviewStatus `json:"previewStatus,omitempty"`
 	ClearPreviewStatus *bool                           `json:"clearPreviewStatus,omitempty"`

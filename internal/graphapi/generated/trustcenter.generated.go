@@ -76,6 +76,8 @@ func (ec *executionContext) fieldContext_TrustCenterCreatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_pirschDomainID(ctx, field)
 			case "pirschIdentificationCode":
 				return ec.fieldContext_TrustCenter_pirschIdentificationCode(ctx, field)
+			case "pirschAccessLink":
+				return ec.fieldContext_TrustCenter_pirschAccessLink(ctx, field)
 			case "previewStatus":
 				return ec.fieldContext_TrustCenter_previewStatus(ctx, field)
 			case "subprocessorURL":
@@ -194,6 +196,8 @@ func (ec *executionContext) fieldContext_TrustCenterUpdatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_pirschDomainID(ctx, field)
 			case "pirschIdentificationCode":
 				return ec.fieldContext_TrustCenter_pirschIdentificationCode(ctx, field)
+			case "pirschAccessLink":
+				return ec.fieldContext_TrustCenter_pirschAccessLink(ctx, field)
 			case "previewStatus":
 				return ec.fieldContext_TrustCenter_previewStatus(ctx, field)
 			case "subprocessorURL":

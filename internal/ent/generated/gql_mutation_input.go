@@ -22368,6 +22368,7 @@ type CreateTrustCenterInput struct {
 	Tags                       []string
 	PirschDomainID             *string
 	PirschIdentificationCode   *string
+	PirschAccessLink           *string
 	PreviewStatus              *enums.TrustCenterPreviewStatus
 	SubprocessorURL            *string
 	OwnerID                    *string
@@ -22397,6 +22398,9 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.PirschIdentificationCode; v != nil {
 		m.SetPirschIdentificationCode(*v)
+	}
+	if v := i.PirschAccessLink; v != nil {
+		m.SetPirschAccessLink(*v)
 	}
 	if v := i.PreviewStatus; v != nil {
 		m.SetPreviewStatus(*v)
@@ -22466,6 +22470,8 @@ type UpdateTrustCenterInput struct {
 	PirschDomainID                   *string
 	ClearPirschIdentificationCode    bool
 	PirschIdentificationCode         *string
+	ClearPirschAccessLink            bool
+	PirschAccessLink                 *string
 	ClearPreviewStatus               bool
 	PreviewStatus                    *enums.TrustCenterPreviewStatus
 	ClearSubprocessorURL             bool
@@ -22533,6 +22539,12 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.PirschIdentificationCode; v != nil {
 		m.SetPirschIdentificationCode(*v)
+	}
+	if i.ClearPirschAccessLink {
+		m.ClearPirschAccessLink()
+	}
+	if v := i.PirschAccessLink; v != nil {
+		m.SetPirschAccessLink(*v)
 	}
 	if i.ClearPreviewStatus {
 		m.ClearPreviewStatus()

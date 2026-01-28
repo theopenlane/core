@@ -2785,6 +2785,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenter.FieldPreviewDomainID:          {Type: field.TypeString, Column: trustcenter.FieldPreviewDomainID},
 			trustcenter.FieldPirschDomainID:           {Type: field.TypeString, Column: trustcenter.FieldPirschDomainID},
 			trustcenter.FieldPirschIdentificationCode: {Type: field.TypeString, Column: trustcenter.FieldPirschIdentificationCode},
+			trustcenter.FieldPirschAccessLink:         {Type: field.TypeString, Column: trustcenter.FieldPirschAccessLink},
 			trustcenter.FieldPreviewStatus:            {Type: field.TypeEnum, Column: trustcenter.FieldPreviewStatus},
 			trustcenter.FieldSubprocessorURL:          {Type: field.TypeString, Column: trustcenter.FieldSubprocessorURL},
 		},
@@ -38467,6 +38468,11 @@ func (f *TrustCenterFilter) WherePirschDomainID(p entql.StringP) {
 // WherePirschIdentificationCode applies the entql string predicate on the pirsch_identification_code field.
 func (f *TrustCenterFilter) WherePirschIdentificationCode(p entql.StringP) {
 	f.Where(p.Field(trustcenter.FieldPirschIdentificationCode))
+}
+
+// WherePirschAccessLink applies the entql string predicate on the pirsch_access_link field.
+func (f *TrustCenterFilter) WherePirschAccessLink(p entql.StringP) {
+	f.Where(p.Field(trustcenter.FieldPirschAccessLink))
 }
 
 // WherePreviewStatus applies the entql string predicate on the preview_status field.

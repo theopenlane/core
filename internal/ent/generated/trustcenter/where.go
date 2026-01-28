@@ -128,6 +128,11 @@ func PirschIdentificationCode(v string) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldEQ(FieldPirschIdentificationCode, v))
 }
 
+// PirschAccessLink applies equality check predicate on the "pirsch_access_link" field. It's identical to PirschAccessLinkEQ.
+func PirschAccessLink(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldEQ(FieldPirschAccessLink, v))
+}
+
 // SubprocessorURL applies equality check predicate on the "subprocessor_url" field. It's identical to SubprocessorURLEQ.
 func SubprocessorURL(v string) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldEQ(FieldSubprocessorURL, v))
@@ -966,6 +971,81 @@ func PirschIdentificationCodeEqualFold(v string) predicate.TrustCenter {
 // PirschIdentificationCodeContainsFold applies the ContainsFold predicate on the "pirsch_identification_code" field.
 func PirschIdentificationCodeContainsFold(v string) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldContainsFold(FieldPirschIdentificationCode, v))
+}
+
+// PirschAccessLinkEQ applies the EQ predicate on the "pirsch_access_link" field.
+func PirschAccessLinkEQ(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldEQ(FieldPirschAccessLink, v))
+}
+
+// PirschAccessLinkNEQ applies the NEQ predicate on the "pirsch_access_link" field.
+func PirschAccessLinkNEQ(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNEQ(FieldPirschAccessLink, v))
+}
+
+// PirschAccessLinkIn applies the In predicate on the "pirsch_access_link" field.
+func PirschAccessLinkIn(vs ...string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldIn(FieldPirschAccessLink, vs...))
+}
+
+// PirschAccessLinkNotIn applies the NotIn predicate on the "pirsch_access_link" field.
+func PirschAccessLinkNotIn(vs ...string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNotIn(FieldPirschAccessLink, vs...))
+}
+
+// PirschAccessLinkGT applies the GT predicate on the "pirsch_access_link" field.
+func PirschAccessLinkGT(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldGT(FieldPirschAccessLink, v))
+}
+
+// PirschAccessLinkGTE applies the GTE predicate on the "pirsch_access_link" field.
+func PirschAccessLinkGTE(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldGTE(FieldPirschAccessLink, v))
+}
+
+// PirschAccessLinkLT applies the LT predicate on the "pirsch_access_link" field.
+func PirschAccessLinkLT(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldLT(FieldPirschAccessLink, v))
+}
+
+// PirschAccessLinkLTE applies the LTE predicate on the "pirsch_access_link" field.
+func PirschAccessLinkLTE(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldLTE(FieldPirschAccessLink, v))
+}
+
+// PirschAccessLinkContains applies the Contains predicate on the "pirsch_access_link" field.
+func PirschAccessLinkContains(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldContains(FieldPirschAccessLink, v))
+}
+
+// PirschAccessLinkHasPrefix applies the HasPrefix predicate on the "pirsch_access_link" field.
+func PirschAccessLinkHasPrefix(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldHasPrefix(FieldPirschAccessLink, v))
+}
+
+// PirschAccessLinkHasSuffix applies the HasSuffix predicate on the "pirsch_access_link" field.
+func PirschAccessLinkHasSuffix(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldHasSuffix(FieldPirschAccessLink, v))
+}
+
+// PirschAccessLinkIsNil applies the IsNil predicate on the "pirsch_access_link" field.
+func PirschAccessLinkIsNil() predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldIsNull(FieldPirschAccessLink))
+}
+
+// PirschAccessLinkNotNil applies the NotNil predicate on the "pirsch_access_link" field.
+func PirschAccessLinkNotNil() predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNotNull(FieldPirschAccessLink))
+}
+
+// PirschAccessLinkEqualFold applies the EqualFold predicate on the "pirsch_access_link" field.
+func PirschAccessLinkEqualFold(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldEqualFold(FieldPirschAccessLink, v))
+}
+
+// PirschAccessLinkContainsFold applies the ContainsFold predicate on the "pirsch_access_link" field.
+func PirschAccessLinkContainsFold(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldContainsFold(FieldPirschAccessLink, v))
 }
 
 // PreviewStatusEQ applies the EQ predicate on the "preview_status" field.

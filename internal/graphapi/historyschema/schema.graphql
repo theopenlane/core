@@ -30876,6 +30876,10 @@ type TrustCenterHistory implements Node {
 	"""
 	pirschIdentificationCode: String
 	"""
+	Pirsch access link
+	"""
+	pirschAccessLink: String
+	"""
 	preview status of the trust center
 	"""
 	previewStatus: TrustCenterHistoryTrustCenterPreviewStatus
@@ -31180,6 +31184,24 @@ input TrustCenterHistoryWhereInput {
 	pirschIdentificationCodeNotNil: Boolean
 	pirschIdentificationCodeEqualFold: String
 	pirschIdentificationCodeContainsFold: String
+	"""
+	pirsch_access_link field predicates
+	"""
+	pirschAccessLink: String
+	pirschAccessLinkNEQ: String
+	pirschAccessLinkIn: [String!]
+	pirschAccessLinkNotIn: [String!]
+	pirschAccessLinkGT: String
+	pirschAccessLinkGTE: String
+	pirschAccessLinkLT: String
+	pirschAccessLinkLTE: String
+	pirschAccessLinkContains: String
+	pirschAccessLinkHasPrefix: String
+	pirschAccessLinkHasSuffix: String
+	pirschAccessLinkIsNil: Boolean
+	pirschAccessLinkNotNil: Boolean
+	pirschAccessLinkEqualFold: String
+	pirschAccessLinkContainsFold: String
 	"""
 	preview_status field predicates
 	"""

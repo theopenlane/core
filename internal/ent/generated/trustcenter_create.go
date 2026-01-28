@@ -206,6 +206,20 @@ func (_c *TrustCenterCreate) SetNillablePirschIdentificationCode(v *string) *Tru
 	return _c
 }
 
+// SetPirschAccessLink sets the "pirsch_access_link" field.
+func (_c *TrustCenterCreate) SetPirschAccessLink(v string) *TrustCenterCreate {
+	_c.mutation.SetPirschAccessLink(v)
+	return _c
+}
+
+// SetNillablePirschAccessLink sets the "pirsch_access_link" field if the given value is not nil.
+func (_c *TrustCenterCreate) SetNillablePirschAccessLink(v *string) *TrustCenterCreate {
+	if v != nil {
+		_c.SetPirschAccessLink(*v)
+	}
+	return _c
+}
+
 // SetPreviewStatus sets the "preview_status" field.
 func (_c *TrustCenterCreate) SetPreviewStatus(v enums.TrustCenterPreviewStatus) *TrustCenterCreate {
 	_c.mutation.SetPreviewStatus(v)
@@ -531,6 +545,11 @@ func (_c *TrustCenterCreate) check() error {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.PirschAccessLink(); ok {
+		if err := trustcenter.PirschAccessLinkValidator(v); err != nil {
+			return &ValidationError{Name: "pirsch_access_link", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.pirsch_access_link": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.PreviewStatus(); ok {
 		if err := trustcenter.PreviewStatusValidator(v); err != nil {
 			return &ValidationError{Name: "preview_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.preview_status": %w`, err)}
@@ -616,6 +635,10 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.PirschIdentificationCode(); ok {
 		_spec.SetField(trustcenter.FieldPirschIdentificationCode, field.TypeString, value)
 		_node.PirschIdentificationCode = value
+	}
+	if value, ok := _c.mutation.PirschAccessLink(); ok {
+		_spec.SetField(trustcenter.FieldPirschAccessLink, field.TypeString, value)
+		_node.PirschAccessLink = value
 	}
 	if value, ok := _c.mutation.PreviewStatus(); ok {
 		_spec.SetField(trustcenter.FieldPreviewStatus, field.TypeEnum, value)

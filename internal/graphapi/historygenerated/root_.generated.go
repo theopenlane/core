@@ -2380,6 +2380,7 @@ type ComplexityRoot struct {
 		ID                       func(childComplexity int) int
 		Operation                func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
+		PirschAccessLink         func(childComplexity int) int
 		PirschDomainID           func(childComplexity int) int
 		PirschIdentificationCode func(childComplexity int) int
 		PreviewDomainID          func(childComplexity int) int
@@ -16028,6 +16029,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterHistory.OwnerID(childComplexity), true
+
+	case "TrustCenterHistory.pirschAccessLink":
+		if e.complexity.TrustCenterHistory.PirschAccessLink == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterHistory.PirschAccessLink(childComplexity), true
 
 	case "TrustCenterHistory.pirschDomainID":
 		if e.complexity.TrustCenterHistory.PirschDomainID == nil {
@@ -49846,6 +49854,10 @@ type TrustCenterHistory implements Node {
   """
   pirschIdentificationCode: String
   """
+  Pirsch access link
+  """
+  pirschAccessLink: String
+  """
   preview status of the trust center
   """
   previewStatus: TrustCenterHistoryTrustCenterPreviewStatus
@@ -50150,6 +50162,24 @@ input TrustCenterHistoryWhereInput {
   pirschIdentificationCodeNotNil: Boolean
   pirschIdentificationCodeEqualFold: String
   pirschIdentificationCodeContainsFold: String
+  """
+  pirsch_access_link field predicates
+  """
+  pirschAccessLink: String
+  pirschAccessLinkNEQ: String
+  pirschAccessLinkIn: [String!]
+  pirschAccessLinkNotIn: [String!]
+  pirschAccessLinkGT: String
+  pirschAccessLinkGTE: String
+  pirschAccessLinkLT: String
+  pirschAccessLinkLTE: String
+  pirschAccessLinkContains: String
+  pirschAccessLinkHasPrefix: String
+  pirschAccessLinkHasSuffix: String
+  pirschAccessLinkIsNil: Boolean
+  pirschAccessLinkNotNil: Boolean
+  pirschAccessLinkEqualFold: String
+  pirschAccessLinkContainsFold: String
   """
   preview_status field predicates
   """

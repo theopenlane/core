@@ -11896,6 +11896,11 @@ func (_q *TrustCenterHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, trustcenterhistory.FieldPirschIdentificationCode)
 				fieldSeen[trustcenterhistory.FieldPirschIdentificationCode] = struct{}{}
 			}
+		case "pirschAccessLink":
+			if _, ok := fieldSeen[trustcenterhistory.FieldPirschAccessLink]; !ok {
+				selectedFields = append(selectedFields, trustcenterhistory.FieldPirschAccessLink)
+				fieldSeen[trustcenterhistory.FieldPirschAccessLink] = struct{}{}
+			}
 		case "previewStatus":
 			if _, ok := fieldSeen[trustcenterhistory.FieldPreviewStatus]; !ok {
 				selectedFields = append(selectedFields, trustcenterhistory.FieldPreviewStatus)
