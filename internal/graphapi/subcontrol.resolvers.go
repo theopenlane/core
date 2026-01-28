@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -56,7 +57,7 @@ func (r *mutationResolver) CreateBulkSubcontrol(ctx context.Context, input []*ge
 
 // CreateBulkCSVSubcontrol is the resolver for the createBulkCSVSubcontrol field.
 func (r *mutationResolver) CreateBulkCSVSubcontrol(ctx context.Context, input graphql.Upload) (*model.SubcontrolBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateSubcontrolInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.SubcontrolCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -72,10 +73,23 @@ func (r *mutationResolver) CreateBulkCSVSubcontrol(ctx context.Context, input gr
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateSubcontrol(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "Subcontrol", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateSubcontrolInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateSubcontrol(ctx, inputs)
 }
 
 // UpdateSubcontrol is the resolver for the updateSubcontrol field.
@@ -127,6 +141,35 @@ func (r *mutationResolver) DeleteBulkSubcontrol(ctx context.Context, ids []strin
 	}
 
 	return r.bulkDeleteSubcontrol(ctx, ids)
+}
+
+// UpdateBulkSubcontrol is the resolver for the updateBulkSubcontrol field.
+func (r *mutationResolver) UpdateBulkSubcontrol(ctx context.Context, ids []string, input generated.UpdateSubcontrolInput) (*model.SubcontrolBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateSubcontrol(ctx, ids, input)
+}
+
+// UpdateBulkCSVSubcontrol is the resolver for the updateBulkCSVSubcontrol field.
+func (r *mutationResolver) UpdateBulkCSVSubcontrol(ctx context.Context, input graphql.Upload) (*model.SubcontrolBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.SubcontrolCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subcontrol"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Subcontrol", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVSubcontrol(ctx, data)
 }
 
 // Subcontrol is the resolver for the subcontrol field.

@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -40,7 +41,7 @@ func (r *mutationResolver) CreateBulkFindingControl(ctx context.Context, input [
 
 // CreateBulkCSVFindingControl is the resolver for the createBulkCSVFindingControl field.
 func (r *mutationResolver) CreateBulkCSVFindingControl(ctx context.Context, input graphql.Upload) (*model.FindingControlBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateFindingControlInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.FindingControlCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -51,7 +52,16 @@ func (r *mutationResolver) CreateBulkCSVFindingControl(ctx context.Context, inpu
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	return r.bulkCreateFindingControl(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "FindingControl", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateFindingControlInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateFindingControl(ctx, inputs)
 }
 
 // UpdateFindingControl is the resolver for the updateFindingControl field.

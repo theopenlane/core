@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): GroupBulkDeletePayload!
+    """
+    Update multiple existing groups
+    """
+    updateBulkGroup(
+        """
+        IDs of the groups to update
+        """
+        ids: [ID!]!
+        """
+        values to update the groups with
+        """
+        input: UpdateGroupInput!
+    ): GroupBulkUpdatePayload!
+    """
+    Update multiple existing groups via file upload
+    """
+    updateBulkCSVGroup(
+        """
+        csv file containing values of the group, must include ID column
+        """
+        input: Upload!
+    ): GroupBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type GroupBulkDeletePayload {
     Deleted group IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkGroup mutation
+"""
+type GroupBulkUpdatePayload {
+    """
+    Updated groups
+    """
+    groups: [Group!]
+    """
+    IDs of the updated groups
+    """
+    updatedIDs: [ID!]
 }

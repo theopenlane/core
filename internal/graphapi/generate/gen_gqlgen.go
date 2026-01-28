@@ -81,7 +81,7 @@ func gqlGenerate() {
 			resolvergen.WithArchivableSchemas([]string{schema.Program{}.Name()}),
 			resolvergen.WithGraphQLImport(graphqlImport),
 			resolvergen.WithCSVGeneratedPackage(csvGeneratedPackage),
-			resolvergen.WithForceRegenerateBulkResolvers(true),
+			resolvergen.WithForceRegenerateBulkResolvers(false),
 		)), // replace the resolvergen plugin
 		api.AddPlugin(bulkgen.NewWithOptions(
 			bulkgen.WithModelPackage(modelImport),

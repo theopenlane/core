@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ControlImplementationBulkDeletePayload!
+    """
+    Update multiple existing controlImplementations
+    """
+    updateBulkControlImplementation(
+        """
+        IDs of the controlImplementations to update
+        """
+        ids: [ID!]!
+        """
+        values to update the controlImplementations with
+        """
+        input: UpdateControlImplementationInput!
+    ): ControlImplementationBulkUpdatePayload!
+    """
+    Update multiple existing controlImplementations via file upload
+    """
+    updateBulkCSVControlImplementation(
+        """
+        csv file containing values of the controlImplementation, must include ID column
+        """
+        input: Upload!
+    ): ControlImplementationBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type ControlImplementationBulkDeletePayload {
     Deleted controlImplementation IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkControlImplementation mutation
+"""
+type ControlImplementationBulkUpdatePayload {
+    """
+    Updated controlImplementations
+    """
+    controlImplementations: [ControlImplementation!]
+    """
+    IDs of the updated controlImplementations
+    """
+    updatedIDs: [ID!]
 }

@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): NarrativeBulkDeletePayload!
+    """
+    Update multiple existing narratives
+    """
+    updateBulkNarrative(
+        """
+        IDs of the narratives to update
+        """
+        ids: [ID!]!
+        """
+        values to update the narratives with
+        """
+        input: UpdateNarrativeInput!
+    ): NarrativeBulkUpdatePayload!
+    """
+    Update multiple existing narratives via file upload
+    """
+    updateBulkCSVNarrative(
+        """
+        csv file containing values of the narrative, must include ID column
+        """
+        input: Upload!
+    ): NarrativeBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type NarrativeBulkDeletePayload {
     Deleted narrative IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkNarrative mutation
+"""
+type NarrativeBulkUpdatePayload {
+    """
+    Updated narratives
+    """
+    narratives: [Narrative!]
+    """
+    IDs of the updated narratives
+    """
+    updatedIDs: [ID!]
 }

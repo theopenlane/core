@@ -59,6 +59,14 @@ type APITokenBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkAPIToken mutation
+type APITokenBulkUpdatePayload struct {
+	// Updated apiTokens
+	APITokens []*APIToken `json:"apiTokens,omitempty"`
+	// IDs of the updated apiTokens
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type APITokenConnection struct {
 	// A list of edges.
@@ -1690,6 +1698,14 @@ type AssetBulkCreatePayload struct {
 type AssetBulkDeletePayload struct {
 	// Deleted asset IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkAsset mutation
+type AssetBulkUpdatePayload struct {
+	// Updated assets
+	Assets []*Asset `json:"assets,omitempty"`
+	// IDs of the updated assets
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -3993,6 +4009,14 @@ type ControlImplementationBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkControlImplementation mutation
+type ControlImplementationBulkUpdatePayload struct {
+	// Updated controlImplementations
+	ControlImplementations []*ControlImplementation `json:"controlImplementations,omitempty"`
+	// IDs of the updated controlImplementations
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type ControlImplementationConnection struct {
 	// A list of edges.
@@ -4297,6 +4321,14 @@ type ControlObjectiveBulkCreatePayload struct {
 type ControlObjectiveBulkDeletePayload struct {
 	// Deleted controlObjective IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkControlObjective mutation
+type ControlObjectiveBulkUpdatePayload struct {
+	// Updated controlObjectives
+	ControlObjectives []*ControlObjective `json:"controlObjectives,omitempty"`
+	// IDs of the updated controlObjectives
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -8463,6 +8495,14 @@ type CustomDomainBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkCustomDomain mutation
+type CustomDomainBulkUpdatePayload struct {
+	// Updated customDomains
+	CustomDomains []*CustomDomain `json:"customDomains,omitempty"`
+	// IDs of the updated customDomains
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type CustomDomainConnection struct {
 	// A list of edges.
@@ -9076,6 +9116,14 @@ type DNSVerificationBulkCreatePayload struct {
 type DNSVerificationBulkDeletePayload struct {
 	// Deleted dnsVerification IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkDNSVerification mutation
+type DNSVerificationBulkUpdatePayload struct {
+	// Updated dnsVerifications
+	DNSVerifications []*DNSVerification `json:"dnsVerifications,omitempty"`
+	// IDs of the updated dnsVerifications
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -11280,6 +11328,14 @@ type DocumentDataBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkDocumentData mutation
+type DocumentDataBulkUpdatePayload struct {
+	// Updated documentDatas
+	DocumentData []*DocumentData `json:"documentData,omitempty"`
+	// IDs of the updated documentDatas
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type DocumentDataConnection struct {
 	// A list of edges.
@@ -11669,6 +11725,14 @@ type EntityBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkEntity mutation
+type EntityBulkUpdatePayload struct {
+	// Updated entitys
+	Entities []*Entity `json:"entities,omitempty"`
+	// IDs of the updated entitys
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type EntityConnection struct {
 	// A list of edges.
@@ -11741,6 +11805,14 @@ type EntityTypeBulkCreatePayload struct {
 type EntityTypeBulkDeletePayload struct {
 	// Deleted entityType IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkEntityType mutation
+type EntityTypeBulkUpdatePayload struct {
+	// Updated entityTypes
+	EntityTypes []*EntityType `json:"entityTypes,omitempty"`
+	// IDs of the updated entityTypes
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -12745,6 +12817,14 @@ type EventBulkCreatePayload struct {
 type EventBulkDeletePayload struct {
 	// Deleted event IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkEvent mutation
+type EventBulkUpdatePayload struct {
+	// Updated events
+	Events []*Event `json:"events,omitempty"`
+	// IDs of the updated events
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -15385,6 +15465,14 @@ type GroupBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkGroup mutation
+type GroupBulkUpdatePayload struct {
+	// Updated groups
+	Groups []*Group `json:"groups,omitempty"`
+	// IDs of the updated groups
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type GroupConnection struct {
 	// A list of edges.
@@ -15448,6 +15536,14 @@ type GroupMembershipBulkCreatePayload struct {
 type GroupMembershipBulkDeletePayload struct {
 	// Deleted groupMembership IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkGroupMembership mutation
+type GroupMembershipBulkUpdatePayload struct {
+	// Updated groupMemberships
+	GroupMemberships []*GroupMembership `json:"groupMemberships,omitempty"`
+	// IDs of the updated groupMemberships
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -15710,6 +15806,14 @@ type GroupSettingBulkCreatePayload struct {
 type GroupSettingBulkDeletePayload struct {
 	// Deleted groupSetting IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkGroupSetting mutation
+type GroupSettingBulkUpdatePayload struct {
+	// Updated groupSettings
+	GroupSettings []*GroupSetting `json:"groupSettings,omitempty"`
+	// IDs of the updated groupSettings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -18196,6 +18300,14 @@ type InviteBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkInvite mutation
+type InviteBulkUpdatePayload struct {
+	// Updated invites
+	Invites []*Invite `json:"invites,omitempty"`
+	// IDs of the updated invites
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type InviteConnection struct {
 	// A list of edges.
@@ -19426,6 +19538,14 @@ type JobTemplateBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkJobTemplate mutation
+type JobTemplateBulkUpdatePayload struct {
+	// Updated jobTemplates
+	JobTemplates []*JobTemplate `json:"jobTemplates,omitempty"`
+	// IDs of the updated jobTemplates
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type JobTemplateConnection struct {
 	// A list of edges.
@@ -19690,6 +19810,14 @@ type MappableDomainBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkMappableDomain mutation
+type MappableDomainBulkUpdatePayload struct {
+	// Updated mappableDomains
+	MappableDomains []*MappableDomain `json:"mappableDomains,omitempty"`
+	// IDs of the updated mappableDomains
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type MappableDomainConnection struct {
 	// A list of edges.
@@ -19883,6 +20011,14 @@ type MappedControlBulkCreatePayload struct {
 type MappedControlBulkDeletePayload struct {
 	// Deleted mappedControl IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkMappedControl mutation
+type MappedControlBulkUpdatePayload struct {
+	// Updated mappedControls
+	MappedControls []*MappedControl `json:"mappedControls,omitempty"`
+	// IDs of the updated mappedControls
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -20164,6 +20300,14 @@ type NarrativeBulkCreatePayload struct {
 type NarrativeBulkDeletePayload struct {
 	// Deleted narrative IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkNarrative mutation
+type NarrativeBulkUpdatePayload struct {
+	// Updated narratives
+	Narratives []*Narrative `json:"narratives,omitempty"`
+	// IDs of the updated narratives
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -20858,6 +21002,14 @@ type OrgMembershipBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkOrgMembership mutation
+type OrgMembershipBulkUpdatePayload struct {
+	// Updated orgMemberships
+	OrgMemberships []*OrgMembership `json:"orgMemberships,omitempty"`
+	// IDs of the updated orgMemberships
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type OrgMembershipConnection struct {
 	// A list of edges.
@@ -21449,6 +21601,14 @@ type OrganizationSettingBulkCreatePayload struct {
 type OrganizationSettingBulkDeletePayload struct {
 	// Deleted organizationSetting IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkOrganizationSetting mutation
+type OrganizationSettingBulkUpdatePayload struct {
+	// Updated organizationSettings
+	OrganizationSettings []*OrganizationSetting `json:"organizationSettings,omitempty"`
+	// IDs of the updated organizationSettings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -24281,6 +24441,14 @@ type ProgramBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkProgram mutation
+type ProgramBulkUpdatePayload struct {
+	// Updated programs
+	Programs []*Program `json:"programs,omitempty"`
+	// IDs of the updated programs
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type ProgramConnection struct {
 	// A list of edges.
@@ -24336,6 +24504,14 @@ type ProgramMembershipBulkCreatePayload struct {
 type ProgramMembershipBulkDeletePayload struct {
 	// Deleted programMembership IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkProgramMembership mutation
+type ProgramMembershipBulkUpdatePayload struct {
+	// Updated programMemberships
+	ProgramMemberships []*ProgramMembership `json:"programMemberships,omitempty"`
+	// IDs of the updated programMemberships
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -27311,6 +27487,14 @@ type ScheduledJobBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkScheduledJob mutation
+type ScheduledJobBulkUpdatePayload struct {
+	// Updated scheduledJobs
+	ScheduledJobs []*ScheduledJob `json:"scheduledJobs,omitempty"`
+	// IDs of the updated scheduledJobs
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type ScheduledJobConnection struct {
 	// A list of edges.
@@ -28367,6 +28551,14 @@ type SubcontrolBulkCreatePayload struct {
 type SubcontrolBulkDeletePayload struct {
 	// Deleted subcontrol IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkSubcontrol mutation
+type SubcontrolBulkUpdatePayload struct {
+	// Updated subcontrols
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
+	// IDs of the updated subcontrols
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -30427,6 +30619,14 @@ type TemplateBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkTemplate mutation
+type TemplateBulkUpdatePayload struct {
+	// Updated templates
+	Templates []*Template `json:"templates,omitempty"`
+	// IDs of the updated templates
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type TemplateConnection struct {
 	// A list of edges.
@@ -30821,6 +31021,14 @@ type TrustCenterComplianceBulkCreatePayload struct {
 type TrustCenterComplianceBulkDeletePayload struct {
 	// Deleted trustCenterCompliance IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkTrustCenterCompliance mutation
+type TrustCenterComplianceBulkUpdatePayload struct {
+	// Updated trustCenterCompliances
+	TrustCenterCompliances []*TrustCenterCompliance `json:"trustCenterCompliances,omitempty"`
+	// IDs of the updated trustCenterCompliances
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -38669,6 +38877,14 @@ type UserSettingBulkCreatePayload struct {
 type UserSettingBulkDeletePayload struct {
 	// Deleted userSetting IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkUserSetting mutation
+type UserSettingBulkUpdatePayload struct {
+	// Updated userSettings
+	UserSettings []*UserSetting `json:"userSettings,omitempty"`
+	// IDs of the updated userSettings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.

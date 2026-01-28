@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): EventBulkDeletePayload!
+    """
+    Update multiple existing events
+    """
+    updateBulkEvent(
+        """
+        IDs of the events to update
+        """
+        ids: [ID!]!
+        """
+        values to update the events with
+        """
+        input: UpdateEventInput!
+    ): EventBulkUpdatePayload!
+    """
+    Update multiple existing events via file upload
+    """
+    updateBulkCSVEvent(
+        """
+        csv file containing values of the event, must include ID column
+        """
+        input: Upload!
+    ): EventBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type EventBulkDeletePayload {
     Deleted event IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkEvent mutation
+"""
+type EventBulkUpdatePayload {
+    """
+    Updated events
+    """
+    events: [Event!]
+    """
+    IDs of the updated events
+    """
+    updatedIDs: [ID!]
 }

@@ -224,6 +224,202 @@ func (ec *executionContext) fieldContext_AssetBulkDeletePayload_deletedIDs(_ con
 	return fc, nil
 }
 
+func (ec *executionContext) _AssetBulkUpdatePayload_assets(ctx context.Context, field graphql.CollectedField, obj *model.AssetBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AssetBulkUpdatePayload_assets,
+		func(ctx context.Context) (any, error) {
+			return obj.Assets, nil
+		},
+		nil,
+		ec.marshalOAsset2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssetᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_AssetBulkUpdatePayload_assets(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AssetBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Asset_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Asset_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Asset_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Asset_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Asset_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Asset_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Asset_ownerID(ctx, field)
+			case "internalOwner":
+				return ec.fieldContext_Asset_internalOwner(ctx, field)
+			case "internalOwnerUserID":
+				return ec.fieldContext_Asset_internalOwnerUserID(ctx, field)
+			case "internalOwnerGroupID":
+				return ec.fieldContext_Asset_internalOwnerGroupID(ctx, field)
+			case "assetSubtypeName":
+				return ec.fieldContext_Asset_assetSubtypeName(ctx, field)
+			case "assetSubtypeID":
+				return ec.fieldContext_Asset_assetSubtypeID(ctx, field)
+			case "assetDataClassificationName":
+				return ec.fieldContext_Asset_assetDataClassificationName(ctx, field)
+			case "assetDataClassificationID":
+				return ec.fieldContext_Asset_assetDataClassificationID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Asset_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Asset_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Asset_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Asset_scopeID(ctx, field)
+			case "accessModelName":
+				return ec.fieldContext_Asset_accessModelName(ctx, field)
+			case "accessModelID":
+				return ec.fieldContext_Asset_accessModelID(ctx, field)
+			case "encryptionStatusName":
+				return ec.fieldContext_Asset_encryptionStatusName(ctx, field)
+			case "encryptionStatusID":
+				return ec.fieldContext_Asset_encryptionStatusID(ctx, field)
+			case "securityTierName":
+				return ec.fieldContext_Asset_securityTierName(ctx, field)
+			case "securityTierID":
+				return ec.fieldContext_Asset_securityTierID(ctx, field)
+			case "criticalityName":
+				return ec.fieldContext_Asset_criticalityName(ctx, field)
+			case "criticalityID":
+				return ec.fieldContext_Asset_criticalityID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Asset_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Asset_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Asset_systemInternalID(ctx, field)
+			case "assetType":
+				return ec.fieldContext_Asset_assetType(ctx, field)
+			case "name":
+				return ec.fieldContext_Asset_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Asset_description(ctx, field)
+			case "identifier":
+				return ec.fieldContext_Asset_identifier(ctx, field)
+			case "website":
+				return ec.fieldContext_Asset_website(ctx, field)
+			case "physicalLocation":
+				return ec.fieldContext_Asset_physicalLocation(ctx, field)
+			case "region":
+				return ec.fieldContext_Asset_region(ctx, field)
+			case "containsPii":
+				return ec.fieldContext_Asset_containsPii(ctx, field)
+			case "sourceType":
+				return ec.fieldContext_Asset_sourceType(ctx, field)
+			case "sourcePlatformID":
+				return ec.fieldContext_Asset_sourcePlatformID(ctx, field)
+			case "sourceIdentifier":
+				return ec.fieldContext_Asset_sourceIdentifier(ctx, field)
+			case "costCenter":
+				return ec.fieldContext_Asset_costCenter(ctx, field)
+			case "estimatedMonthlyCost":
+				return ec.fieldContext_Asset_estimatedMonthlyCost(ctx, field)
+			case "purchaseDate":
+				return ec.fieldContext_Asset_purchaseDate(ctx, field)
+			case "cpe":
+				return ec.fieldContext_Asset_cpe(ctx, field)
+			case "categories":
+				return ec.fieldContext_Asset_categories(ctx, field)
+			case "owner":
+				return ec.fieldContext_Asset_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Asset_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Asset_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Asset_viewers(ctx, field)
+			case "internalOwnerUser":
+				return ec.fieldContext_Asset_internalOwnerUser(ctx, field)
+			case "internalOwnerGroup":
+				return ec.fieldContext_Asset_internalOwnerGroup(ctx, field)
+			case "assetSubtype":
+				return ec.fieldContext_Asset_assetSubtype(ctx, field)
+			case "assetDataClassification":
+				return ec.fieldContext_Asset_assetDataClassification(ctx, field)
+			case "environment":
+				return ec.fieldContext_Asset_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Asset_scope(ctx, field)
+			case "accessModel":
+				return ec.fieldContext_Asset_accessModel(ctx, field)
+			case "encryptionStatus":
+				return ec.fieldContext_Asset_encryptionStatus(ctx, field)
+			case "securityTier":
+				return ec.fieldContext_Asset_securityTier(ctx, field)
+			case "criticality":
+				return ec.fieldContext_Asset_criticality(ctx, field)
+			case "scans":
+				return ec.fieldContext_Asset_scans(ctx, field)
+			case "entities":
+				return ec.fieldContext_Asset_entities(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Asset_platforms(ctx, field)
+			case "outOfScopePlatforms":
+				return ec.fieldContext_Asset_outOfScopePlatforms(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Asset_identityHolders(ctx, field)
+			case "controls":
+				return ec.fieldContext_Asset_controls(ctx, field)
+			case "sourcePlatform":
+				return ec.fieldContext_Asset_sourcePlatform(ctx, field)
+			case "connectedAssets":
+				return ec.fieldContext_Asset_connectedAssets(ctx, field)
+			case "connectedFrom":
+				return ec.fieldContext_Asset_connectedFrom(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Asset", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AssetBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.AssetBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AssetBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_AssetBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AssetBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _AssetCreatePayload_asset(ctx context.Context, field graphql.CollectedField, obj *model.AssetCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -674,6 +870,44 @@ func (ec *executionContext) _AssetBulkDeletePayload(ctx context.Context, sel ast
 	return out
 }
 
+var assetBulkUpdatePayloadImplementors = []string{"AssetBulkUpdatePayload"}
+
+func (ec *executionContext) _AssetBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.AssetBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, assetBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AssetBulkUpdatePayload")
+		case "assets":
+			out.Values[i] = ec._AssetBulkUpdatePayload_assets(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._AssetBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var assetCreatePayloadImplementors = []string{"AssetCreatePayload"}
 
 func (ec *executionContext) _AssetCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.AssetCreatePayload) graphql.Marshaler {
@@ -821,6 +1055,20 @@ func (ec *executionContext) marshalNAssetBulkDeletePayload2ᚖgithubᚗcomᚋthe
 		return graphql.Null
 	}
 	return ec._AssetBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNAssetBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssetBulkUpdatePayload) graphql.Marshaler {
+	return ec._AssetBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNAssetBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssetBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._AssetBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNAssetCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssetCreatePayload) graphql.Marshaler {

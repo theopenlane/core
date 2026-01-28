@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -70,7 +71,7 @@ func (r *mutationResolver) CreateBulkTrustCenterCompliance(ctx context.Context, 
 
 // CreateBulkCSVTrustCenterCompliance is the resolver for the createBulkCSVTrustCenterCompliance field.
 func (r *mutationResolver) CreateBulkCSVTrustCenterCompliance(ctx context.Context, input graphql.Upload) (*model.TrustCenterComplianceBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateTrustCenterComplianceInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.TrustCenterComplianceCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -81,7 +82,16 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterCompliance(ctx context.Contex
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	return r.bulkCreateTrustCenterCompliance(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "TrustCenterCompliance", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateTrustCenterComplianceInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateTrustCenterCompliance(ctx, inputs)
 }
 
 // UpdateTrustCenterCompliance is the resolver for the updateTrustCenterCompliance field.
@@ -126,6 +136,35 @@ func (r *mutationResolver) DeleteBulkTrustCenterCompliance(ctx context.Context, 
 	}
 
 	return r.bulkDeleteTrustCenterCompliance(ctx, ids)
+}
+
+// UpdateBulkTrustCenterCompliance is the resolver for the updateBulkTrustCenterCompliance field.
+func (r *mutationResolver) UpdateBulkTrustCenterCompliance(ctx context.Context, ids []string, input generated.UpdateTrustCenterComplianceInput) (*model.TrustCenterComplianceBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateTrustCenterCompliance(ctx, ids, input)
+}
+
+// UpdateBulkCSVTrustCenterCompliance is the resolver for the updateBulkCSVTrustCenterCompliance field.
+func (r *mutationResolver) UpdateBulkCSVTrustCenterCompliance(ctx context.Context, input graphql.Upload) (*model.TrustCenterComplianceBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.TrustCenterComplianceCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentercompliance"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "TrustCenterCompliance", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVTrustCenterCompliance(ctx, data)
 }
 
 // TrustCenterCompliance is the resolver for the trustCenterCompliance field.

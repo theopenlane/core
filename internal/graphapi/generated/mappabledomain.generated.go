@@ -106,6 +106,84 @@ func (ec *executionContext) fieldContext_MappableDomainBulkDeletePayload_deleted
 	return fc, nil
 }
 
+func (ec *executionContext) _MappableDomainBulkUpdatePayload_mappableDomains(ctx context.Context, field graphql.CollectedField, obj *model.MappableDomainBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_MappableDomainBulkUpdatePayload_mappableDomains,
+		func(ctx context.Context) (any, error) {
+			return obj.MappableDomains, nil
+		},
+		nil,
+		ec.marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_MappableDomainBulkUpdatePayload_mappableDomains(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MappableDomainBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_MappableDomain_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_MappableDomain_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_MappableDomain_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_MappableDomain_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_MappableDomain_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_MappableDomain_tags(ctx, field)
+			case "name":
+				return ec.fieldContext_MappableDomain_name(ctx, field)
+			case "zoneID":
+				return ec.fieldContext_MappableDomain_zoneID(ctx, field)
+			case "customDomains":
+				return ec.fieldContext_MappableDomain_customDomains(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type MappableDomain", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MappableDomainBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.MappableDomainBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_MappableDomainBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_MappableDomainBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MappableDomainBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _MappableDomainCreatePayload_mappableDomain(ctx context.Context, field graphql.CollectedField, obj *model.MappableDomainCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -320,6 +398,44 @@ func (ec *executionContext) _MappableDomainBulkDeletePayload(ctx context.Context
 	return out
 }
 
+var mappableDomainBulkUpdatePayloadImplementors = []string{"MappableDomainBulkUpdatePayload"}
+
+func (ec *executionContext) _MappableDomainBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.MappableDomainBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, mappableDomainBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("MappableDomainBulkUpdatePayload")
+		case "mappableDomains":
+			out.Values[i] = ec._MappableDomainBulkUpdatePayload_mappableDomains(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._MappableDomainBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var mappableDomainCreatePayloadImplementors = []string{"MappableDomainCreatePayload"}
 
 func (ec *executionContext) _MappableDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.MappableDomainCreatePayload) graphql.Marshaler {
@@ -467,6 +583,20 @@ func (ec *executionContext) marshalNMappableDomainBulkDeletePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._MappableDomainBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNMappableDomainBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainBulkUpdatePayload) graphql.Marshaler {
+	return ec._MappableDomainBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNMappableDomainBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._MappableDomainBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNMappableDomainCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainCreatePayload) graphql.Marshaler {

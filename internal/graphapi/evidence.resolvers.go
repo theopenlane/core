@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -66,7 +67,7 @@ func (r *mutationResolver) CreateBulkEvidence(ctx context.Context, input []*gene
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -76,7 +77,7 @@ func (r *mutationResolver) CreateBulkEvidence(ctx context.Context, input []*gene
 
 // CreateBulkCSVEvidence is the resolver for the createBulkCSVEvidence field.
 func (r *mutationResolver) CreateBulkCSVEvidence(ctx context.Context, input graphql.Upload) (*model.EvidenceBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateEvidenceInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.EvidenceCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -92,10 +93,23 @@ func (r *mutationResolver) CreateBulkCSVEvidence(ctx context.Context, input grap
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateEvidence(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "Evidence", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateEvidenceInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateEvidence(ctx, inputs)
 }
 
 // UpdateBulkEvidence is the resolver for the updateBulkEvidence field.
@@ -156,6 +170,26 @@ func (r *mutationResolver) DeleteBulkEvidence(ctx context.Context, ids []string)
 	}
 
 	return r.bulkDeleteEvidence(ctx, ids)
+}
+
+// UpdateBulkCSVEvidence is the resolver for the updateBulkCSVEvidence field.
+func (r *mutationResolver) UpdateBulkCSVEvidence(ctx context.Context, input graphql.Upload) (*model.EvidenceBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.EvidenceCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "evidence"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Evidence", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVEvidence(ctx, data)
 }
 
 // Evidence is the resolver for the evidence field.
