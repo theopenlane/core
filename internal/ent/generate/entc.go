@@ -308,7 +308,7 @@ func schemaGenerate(extensions ...entc.Extension) {
 			genhooks.GenSchema(graphSchemaDir),
 			genhooks.GenQuery(graphQueryDir),
 			genhooks.GenWorkflowSchema(graphSchemaDir),
-			genhooks.GenBulkSchema(graphSchemaDir, genhooks.WithBulkSchemaInjectExisting(true)),
+			genhooks.GenBulkSchema(graphSchemaDir, genhooks.WithBulkSchemaInjectExisting(false)),
 			genhooks.GenSearchSchema(
 				genhooks.WithGraphQueryDir(graphQueryDir),
 				genhooks.WithGraphSchemaDir(graphSchemaDir),
