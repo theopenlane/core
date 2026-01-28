@@ -2540,14 +2540,16 @@ var ExampleDisconnectIntegrationRequest = DisconnectIntegrationRequest{
 
 // SnapshotRequest contains fields for a snapshot request to the `/snapshot` endpoint
 type SnapshotRequest struct {
-	URL string `json:"url" description:"The URL of the domain to take a snapshot of" example:"https://www.example.com"`
+	URL             string `json:"url" description:"The URL of the domain to take a snapshot of" example:"https://www.example.com"`
+	WaitForSelector string `json:"waitForSelector,omitempty" description:"optional CSS selector to wait for before taking the snapshot" example:"img#main-image"`
 }
 
 // SnapshotReply holds the fields that are sent on a response to the `/snapshot` endpoint
 type SnapshotReply struct {
 	rout.Reply
-	Message string `json:"message"`
-	Image   string `json:"image" description:"Base64-encoded image data of the snapshot"`
+	Message  string `json:"message"`
+	Image    string `json:"image" description:"Base64-encoded image data of the snapshot"`
+	MIMEType string `json:"mimeType" description:"MIME type of the snapshot image" example:"image/png"`
 }
 
 // ExampleResponse returns an example SnapshotReply for OpenAPI documentation
@@ -2577,12 +2579,14 @@ func (r *SnapshotRequest) Validate() error {
 
 // ExampleSnapshotSuccessRequest is an example of a successful snapshot request for OpenAPI documentation
 var ExampleSnapshotSuccessRequest = SnapshotRequest{
-	URL: "https://www.example.com",
+	URL:             "https://www.example.com",
+	WaitForSelector: "img#main-image",
 }
 
 // ExampleSnapshotSuccessResponse is an example of a successful snapshot response for OpenAPI documentation
 var ExampleSnapshotSuccessResponse = SnapshotReply{
-	Reply:   rout.Reply{Success: true},
-	Message: "Snapshot taken successfully",
-	Image:   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO3Zf6kAAAAASUVORK5CYII=",
+	Reply:    rout.Reply{Success: true},
+	Message:  "Snapshot taken successfully",
+	Image:    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO3Zf6kAAAAASUVORK5CYII=",
+	MIMEType: "image/png",
 }

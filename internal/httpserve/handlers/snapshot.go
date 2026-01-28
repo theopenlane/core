@@ -40,15 +40,7 @@ func (h *Handler) SnapshotHandler(ctx echo.Context, openapi *OpenAPIContext) err
 
 	client := cloudflare.NewClient(opts...)
 
-	params := browser_rendering.SnapshotNewParams{
-		AccountID: cloudflare.F(h.CloudflareConfig.AccountID),
-		Body: browser_rendering.SnapshotNewParamsBody{
-			URL: cloudflare.F(in.URL),
-		},
-		CacheTTL: cloudflare.Float(snapshotCacheTTL),
-	}
-
-	resp, err := client.BrowserRendering.Snapshot.New(reqCtx, params)
+	resp, err := client.BrowserRendering.Snapshot.New(reqCtx, h.getSnapshotParams(in))
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Str("url", in.URL).Err(err).Msg("failed to take snapshot")
 
@@ -58,4 +50,32 @@ func (h *Handler) SnapshotHandler(ctx echo.Context, openapi *OpenAPIContext) err
 	out.Image = resp.Screenshot
 
 	return h.Success(ctx, out, openapi)
+}
+
+// getSnapshotParams converts the input SnapshotRequest into Cloudflare SnapshotNewParams
+// for use with the Cloudflare API
+func (h *Handler) getSnapshotParams(in *models.SnapshotRequest) browser_rendering.SnapshotNewParams {
+	params := browser_rendering.SnapshotNewParams{}
+	params.AccountID = cloudflare.F(h.CloudflareConfig.AccountID)
+	params.CacheTTL = cloudflare.Float(snapshotCacheTTL)
+
+	body := browser_rendering.SnapshotNewParamsBody{}
+	body.URL = cloudflare.F(in.URL)
+	body.ScreenshotOptions = cloudflare.F[interface{}](
+		browser_rendering.SnapshotNewParamsBodyObjectScreenshotOptions{
+			Type: cloudflare.F(browser_rendering.SnapshotNewParamsBodyObjectScreenshotOptionsTypePNG),
+		},
+	)
+
+	if in.WaitForSelector != "" {
+		body.WaitForSelector = cloudflare.F[interface{}](
+			browser_rendering.SnapshotNewParamsBodyObjectWaitForSelector{
+				Selector: cloudflare.F(in.WaitForSelector),
+			},
+		)
+	}
+
+	params.Body = body
+
+	return params
 }
