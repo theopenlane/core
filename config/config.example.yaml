@@ -81,6 +81,10 @@ campaignwebhook:
     enabled: false
     resendapikey: ""
     resendsecret: ""
+cloudflare:
+    accountid: ""
+    apitoken: ""
+    enabled: false
 db:
     cachettl: 1000000000
     databasename: openlane

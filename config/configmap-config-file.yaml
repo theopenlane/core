@@ -1177,4 +1177,10 @@ data:
       enabled: {{ .Values.openlane.coreConfiguration.campaignwebhook.enabled }}
       {{- end }}
     {{- end }}
+    {{- if .Values.openlane.coreConfiguration.cloudflare }}
+    cloudflare:
+      {{- if .Values.openlane.coreConfiguration.cloudflare.enabled }}
+      enabled: {{ .Values.openlane.coreConfiguration.cloudflare.enabled }}
+      {{- end }}
+    {{- end }}
 {{- end }}

@@ -643,6 +643,11 @@ func RegisterRoutes(router *Router) error {
 		// it's own service/binary
 		registerJobRunnerRegistrationHandler,
 	}
+
+	if router.Handler.CloudflareConfig.Enabled {
+		routeHandlers = append(routeHandlers, registerCloudflareSnapshotHandler)
+	}
+
 	// Register the Stripe webhook endpoint only when the entitlements
 	// client has been configured. This ensures the server can run without
 	// requiring Stripe credentials or webhook support
