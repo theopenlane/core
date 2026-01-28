@@ -76,6 +76,10 @@ func (TrustCenter) Fields() []ent.Field {
 		field.String("pirsch_identification_code").
 			Comment("Pirsch ID code").
 			Optional(),
+		field.String("pirsch_access_link").
+			Comment("Pirsch access link").
+			Validate(validator.ValidateURL()).
+			Optional(),
 		field.Enum("preview_status").
 			GoType(enums.TrustCenterPreviewStatus("")).
 			Default(enums.TrustCenterPreviewStatusNone.String()).

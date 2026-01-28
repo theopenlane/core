@@ -52,6 +52,8 @@ const (
 	FieldPirschDomainID = "pirsch_domain_id"
 	// FieldPirschIdentificationCode holds the string denoting the pirsch_identification_code field in the database.
 	FieldPirschIdentificationCode = "pirsch_identification_code"
+	// FieldPirschAccessLink holds the string denoting the pirsch_access_link field in the database.
+	FieldPirschAccessLink = "pirsch_access_link"
 	// FieldPreviewStatus holds the string denoting the preview_status field in the database.
 	FieldPreviewStatus = "preview_status"
 	// FieldSubprocessorURL holds the string denoting the subprocessor_url field in the database.
@@ -79,6 +81,7 @@ var Columns = []string{
 	FieldPreviewDomainID,
 	FieldPirschDomainID,
 	FieldPirschIdentificationCode,
+	FieldPirschAccessLink,
 	FieldPreviewStatus,
 	FieldSubprocessorURL,
 }
@@ -219,6 +222,11 @@ func ByPirschDomainID(opts ...sql.OrderTermOption) OrderOption {
 // ByPirschIdentificationCode orders the results by the pirsch_identification_code field.
 func ByPirschIdentificationCode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPirschIdentificationCode, opts...).ToFunc()
+}
+
+// ByPirschAccessLink orders the results by the pirsch_access_link field.
+func ByPirschAccessLink(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPirschAccessLink, opts...).ToFunc()
 }
 
 // ByPreviewStatus orders the results by the preview_status field.

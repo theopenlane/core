@@ -69639,6 +69639,23 @@ type TrustCenterHistoryWhereInput struct {
 	PirschIdentificationCodeEqualFold    *string  `json:"pirschIdentificationCodeEqualFold,omitempty"`
 	PirschIdentificationCodeContainsFold *string  `json:"pirschIdentificationCodeContainsFold,omitempty"`
 
+	// "pirsch_access_link" field predicates.
+	PirschAccessLink             *string  `json:"pirschAccessLink,omitempty"`
+	PirschAccessLinkNEQ          *string  `json:"pirschAccessLinkNEQ,omitempty"`
+	PirschAccessLinkIn           []string `json:"pirschAccessLinkIn,omitempty"`
+	PirschAccessLinkNotIn        []string `json:"pirschAccessLinkNotIn,omitempty"`
+	PirschAccessLinkGT           *string  `json:"pirschAccessLinkGT,omitempty"`
+	PirschAccessLinkGTE          *string  `json:"pirschAccessLinkGTE,omitempty"`
+	PirschAccessLinkLT           *string  `json:"pirschAccessLinkLT,omitempty"`
+	PirschAccessLinkLTE          *string  `json:"pirschAccessLinkLTE,omitempty"`
+	PirschAccessLinkContains     *string  `json:"pirschAccessLinkContains,omitempty"`
+	PirschAccessLinkHasPrefix    *string  `json:"pirschAccessLinkHasPrefix,omitempty"`
+	PirschAccessLinkHasSuffix    *string  `json:"pirschAccessLinkHasSuffix,omitempty"`
+	PirschAccessLinkIsNil        bool     `json:"pirschAccessLinkIsNil,omitempty"`
+	PirschAccessLinkNotNil       bool     `json:"pirschAccessLinkNotNil,omitempty"`
+	PirschAccessLinkEqualFold    *string  `json:"pirschAccessLinkEqualFold,omitempty"`
+	PirschAccessLinkContainsFold *string  `json:"pirschAccessLinkContainsFold,omitempty"`
+
 	// "preview_status" field predicates.
 	PreviewStatus       *enums.TrustCenterPreviewStatus  `json:"previewStatus,omitempty"`
 	PreviewStatusNEQ    *enums.TrustCenterPreviewStatus  `json:"previewStatusNEQ,omitempty"`
@@ -70266,6 +70283,51 @@ func (i *TrustCenterHistoryWhereInput) P() (predicate.TrustCenterHistory, error)
 	}
 	if i.PirschIdentificationCodeContainsFold != nil {
 		predicates = append(predicates, trustcenterhistory.PirschIdentificationCodeContainsFold(*i.PirschIdentificationCodeContainsFold))
+	}
+	if i.PirschAccessLink != nil {
+		predicates = append(predicates, trustcenterhistory.PirschAccessLinkEQ(*i.PirschAccessLink))
+	}
+	if i.PirschAccessLinkNEQ != nil {
+		predicates = append(predicates, trustcenterhistory.PirschAccessLinkNEQ(*i.PirschAccessLinkNEQ))
+	}
+	if len(i.PirschAccessLinkIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.PirschAccessLinkIn(i.PirschAccessLinkIn...))
+	}
+	if len(i.PirschAccessLinkNotIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.PirschAccessLinkNotIn(i.PirschAccessLinkNotIn...))
+	}
+	if i.PirschAccessLinkGT != nil {
+		predicates = append(predicates, trustcenterhistory.PirschAccessLinkGT(*i.PirschAccessLinkGT))
+	}
+	if i.PirschAccessLinkGTE != nil {
+		predicates = append(predicates, trustcenterhistory.PirschAccessLinkGTE(*i.PirschAccessLinkGTE))
+	}
+	if i.PirschAccessLinkLT != nil {
+		predicates = append(predicates, trustcenterhistory.PirschAccessLinkLT(*i.PirschAccessLinkLT))
+	}
+	if i.PirschAccessLinkLTE != nil {
+		predicates = append(predicates, trustcenterhistory.PirschAccessLinkLTE(*i.PirschAccessLinkLTE))
+	}
+	if i.PirschAccessLinkContains != nil {
+		predicates = append(predicates, trustcenterhistory.PirschAccessLinkContains(*i.PirschAccessLinkContains))
+	}
+	if i.PirschAccessLinkHasPrefix != nil {
+		predicates = append(predicates, trustcenterhistory.PirschAccessLinkHasPrefix(*i.PirschAccessLinkHasPrefix))
+	}
+	if i.PirschAccessLinkHasSuffix != nil {
+		predicates = append(predicates, trustcenterhistory.PirschAccessLinkHasSuffix(*i.PirschAccessLinkHasSuffix))
+	}
+	if i.PirschAccessLinkIsNil {
+		predicates = append(predicates, trustcenterhistory.PirschAccessLinkIsNil())
+	}
+	if i.PirschAccessLinkNotNil {
+		predicates = append(predicates, trustcenterhistory.PirschAccessLinkNotNil())
+	}
+	if i.PirschAccessLinkEqualFold != nil {
+		predicates = append(predicates, trustcenterhistory.PirschAccessLinkEqualFold(*i.PirschAccessLinkEqualFold))
+	}
+	if i.PirschAccessLinkContainsFold != nil {
+		predicates = append(predicates, trustcenterhistory.PirschAccessLinkContainsFold(*i.PirschAccessLinkContainsFold))
 	}
 	if i.PreviewStatus != nil {
 		predicates = append(predicates, trustcenterhistory.PreviewStatusEQ(*i.PreviewStatus))

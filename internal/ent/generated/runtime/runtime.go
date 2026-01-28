@@ -6679,8 +6679,12 @@ func init() {
 	trustcenterDescSlug := trustcenterFields[0].Descriptor()
 	// trustcenter.SlugValidator is a validator for the "slug" field. It is called by the builders before save.
 	trustcenter.SlugValidator = trustcenterDescSlug.Validators[0].(func(string) error)
+	// trustcenterDescPirschAccessLink is the schema descriptor for pirsch_access_link field.
+	trustcenterDescPirschAccessLink := trustcenterFields[5].Descriptor()
+	// trustcenter.PirschAccessLinkValidator is a validator for the "pirsch_access_link" field. It is called by the builders before save.
+	trustcenter.PirschAccessLinkValidator = trustcenterDescPirschAccessLink.Validators[0].(func(string) error)
 	// trustcenterDescSubprocessorURL is the schema descriptor for subprocessor_url field.
-	trustcenterDescSubprocessorURL := trustcenterFields[6].Descriptor()
+	trustcenterDescSubprocessorURL := trustcenterFields[7].Descriptor()
 	// trustcenter.SubprocessorURLValidator is a validator for the "subprocessor_url" field. It is called by the builders before save.
 	trustcenter.SubprocessorURLValidator = trustcenterDescSubprocessorURL.Validators[0].(func(string) error)
 	// trustcenterDescID is the schema descriptor for id field.

@@ -54,6 +54,8 @@ type TrustCenterHistory struct {
 	PirschDomainID string `json:"pirsch_domain_id,omitempty"`
 	// Pirsch ID code
 	PirschIdentificationCode string `json:"pirsch_identification_code,omitempty"`
+	// Pirsch access link
+	PirschAccessLink string `json:"pirsch_access_link,omitempty"`
 	// preview status of the trust center
 	PreviewStatus enums.TrustCenterPreviewStatus `json:"preview_status,omitempty"`
 	// External URL for the trust center subprocessors
@@ -70,7 +72,7 @@ func (*TrustCenterHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case trustcenterhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcenterhistory.FieldID, trustcenterhistory.FieldRef, trustcenterhistory.FieldCreatedBy, trustcenterhistory.FieldUpdatedBy, trustcenterhistory.FieldDeletedBy, trustcenterhistory.FieldOwnerID, trustcenterhistory.FieldSlug, trustcenterhistory.FieldCustomDomainID, trustcenterhistory.FieldPreviewDomainID, trustcenterhistory.FieldPirschDomainID, trustcenterhistory.FieldPirschIdentificationCode, trustcenterhistory.FieldPreviewStatus, trustcenterhistory.FieldSubprocessorURL:
+		case trustcenterhistory.FieldID, trustcenterhistory.FieldRef, trustcenterhistory.FieldCreatedBy, trustcenterhistory.FieldUpdatedBy, trustcenterhistory.FieldDeletedBy, trustcenterhistory.FieldOwnerID, trustcenterhistory.FieldSlug, trustcenterhistory.FieldCustomDomainID, trustcenterhistory.FieldPreviewDomainID, trustcenterhistory.FieldPirschDomainID, trustcenterhistory.FieldPirschIdentificationCode, trustcenterhistory.FieldPirschAccessLink, trustcenterhistory.FieldPreviewStatus, trustcenterhistory.FieldSubprocessorURL:
 			values[i] = new(sql.NullString)
 		case trustcenterhistory.FieldHistoryTime, trustcenterhistory.FieldCreatedAt, trustcenterhistory.FieldUpdatedAt, trustcenterhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -194,6 +196,12 @@ func (_m *TrustCenterHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.PirschIdentificationCode = value.String
 			}
+		case trustcenterhistory.FieldPirschAccessLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field pirsch_access_link", values[i])
+			} else if value.Valid {
+				_m.PirschAccessLink = value.String
+			}
 		case trustcenterhistory.FieldPreviewStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field preview_status", values[i])
@@ -291,6 +299,9 @@ func (_m *TrustCenterHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("pirsch_identification_code=")
 	builder.WriteString(_m.PirschIdentificationCode)
+	builder.WriteString(", ")
+	builder.WriteString("pirsch_access_link=")
+	builder.WriteString(_m.PirschAccessLink)
 	builder.WriteString(", ")
 	builder.WriteString("preview_status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.PreviewStatus))

@@ -19232,6 +19232,10 @@ func (m *TrustCenterMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetPirschIdentificationCode(pirschIdentificationCode)
 	}
 
+	if pirschAccessLink, exists := m.PirschAccessLink(); exists {
+		create = create.SetPirschAccessLink(pirschAccessLink)
+	}
+
 	if previewStatus, exists := m.PreviewStatus(); exists {
 		create = create.SetPreviewStatus(previewStatus)
 	}
@@ -19349,6 +19353,12 @@ func (m *TrustCenterMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetPirschIdentificationCode(trustcenter.PirschIdentificationCode)
 		}
 
+		if pirschAccessLink, exists := m.PirschAccessLink(); exists {
+			create = create.SetPirschAccessLink(pirschAccessLink)
+		} else {
+			create = create.SetPirschAccessLink(trustcenter.PirschAccessLink)
+		}
+
 		if previewStatus, exists := m.PreviewStatus(); exists {
 			create = create.SetPreviewStatus(previewStatus)
 		} else {
@@ -19409,6 +19419,7 @@ func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetPreviewDomainID(trustcenter.PreviewDomainID).
 			SetPirschDomainID(trustcenter.PirschDomainID).
 			SetPirschIdentificationCode(trustcenter.PirschIdentificationCode).
+			SetPirschAccessLink(trustcenter.PirschAccessLink).
 			SetPreviewStatus(trustcenter.PreviewStatus).
 			SetSubprocessorURL(trustcenter.SubprocessorURL).
 			Save(ctx)

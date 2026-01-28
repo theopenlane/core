@@ -255,6 +255,26 @@ func (_u *TrustCenterUpdate) ClearPirschIdentificationCode() *TrustCenterUpdate 
 	return _u
 }
 
+// SetPirschAccessLink sets the "pirsch_access_link" field.
+func (_u *TrustCenterUpdate) SetPirschAccessLink(v string) *TrustCenterUpdate {
+	_u.mutation.SetPirschAccessLink(v)
+	return _u
+}
+
+// SetNillablePirschAccessLink sets the "pirsch_access_link" field if the given value is not nil.
+func (_u *TrustCenterUpdate) SetNillablePirschAccessLink(v *string) *TrustCenterUpdate {
+	if v != nil {
+		_u.SetPirschAccessLink(*v)
+	}
+	return _u
+}
+
+// ClearPirschAccessLink clears the value of the "pirsch_access_link" field.
+func (_u *TrustCenterUpdate) ClearPirschAccessLink() *TrustCenterUpdate {
+	_u.mutation.ClearPirschAccessLink()
+	return _u
+}
+
 // SetPreviewStatus sets the "preview_status" field.
 func (_u *TrustCenterUpdate) SetPreviewStatus(v enums.TrustCenterPreviewStatus) *TrustCenterUpdate {
 	_u.mutation.SetPreviewStatus(v)
@@ -781,6 +801,11 @@ func (_u *TrustCenterUpdate) check() error {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.PirschAccessLink(); ok {
+		if err := trustcenter.PirschAccessLinkValidator(v); err != nil {
+			return &ValidationError{Name: "pirsch_access_link", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.pirsch_access_link": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.PreviewStatus(); ok {
 		if err := trustcenter.PreviewStatusValidator(v); err != nil {
 			return &ValidationError{Name: "preview_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.preview_status": %w`, err)}
@@ -870,6 +895,12 @@ func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.PirschIdentificationCodeCleared() {
 		_spec.ClearField(trustcenter.FieldPirschIdentificationCode, field.TypeString)
+	}
+	if value, ok := _u.mutation.PirschAccessLink(); ok {
+		_spec.SetField(trustcenter.FieldPirschAccessLink, field.TypeString, value)
+	}
+	if _u.mutation.PirschAccessLinkCleared() {
+		_spec.ClearField(trustcenter.FieldPirschAccessLink, field.TypeString)
 	}
 	if value, ok := _u.mutation.PreviewStatus(); ok {
 		_spec.SetField(trustcenter.FieldPreviewStatus, field.TypeEnum, value)
@@ -1735,6 +1766,26 @@ func (_u *TrustCenterUpdateOne) ClearPirschIdentificationCode() *TrustCenterUpda
 	return _u
 }
 
+// SetPirschAccessLink sets the "pirsch_access_link" field.
+func (_u *TrustCenterUpdateOne) SetPirschAccessLink(v string) *TrustCenterUpdateOne {
+	_u.mutation.SetPirschAccessLink(v)
+	return _u
+}
+
+// SetNillablePirschAccessLink sets the "pirsch_access_link" field if the given value is not nil.
+func (_u *TrustCenterUpdateOne) SetNillablePirschAccessLink(v *string) *TrustCenterUpdateOne {
+	if v != nil {
+		_u.SetPirschAccessLink(*v)
+	}
+	return _u
+}
+
+// ClearPirschAccessLink clears the value of the "pirsch_access_link" field.
+func (_u *TrustCenterUpdateOne) ClearPirschAccessLink() *TrustCenterUpdateOne {
+	_u.mutation.ClearPirschAccessLink()
+	return _u
+}
+
 // SetPreviewStatus sets the "preview_status" field.
 func (_u *TrustCenterUpdateOne) SetPreviewStatus(v enums.TrustCenterPreviewStatus) *TrustCenterUpdateOne {
 	_u.mutation.SetPreviewStatus(v)
@@ -2274,6 +2325,11 @@ func (_u *TrustCenterUpdateOne) check() error {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.PirschAccessLink(); ok {
+		if err := trustcenter.PirschAccessLinkValidator(v); err != nil {
+			return &ValidationError{Name: "pirsch_access_link", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.pirsch_access_link": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.PreviewStatus(); ok {
 		if err := trustcenter.PreviewStatusValidator(v); err != nil {
 			return &ValidationError{Name: "preview_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.preview_status": %w`, err)}
@@ -2380,6 +2436,12 @@ func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter
 	}
 	if _u.mutation.PirschIdentificationCodeCleared() {
 		_spec.ClearField(trustcenter.FieldPirschIdentificationCode, field.TypeString)
+	}
+	if value, ok := _u.mutation.PirschAccessLink(); ok {
+		_spec.SetField(trustcenter.FieldPirschAccessLink, field.TypeString, value)
+	}
+	if _u.mutation.PirschAccessLinkCleared() {
+		_spec.ClearField(trustcenter.FieldPirschAccessLink, field.TypeString)
 	}
 	if value, ok := _u.mutation.PreviewStatus(); ok {
 		_spec.SetField(trustcenter.FieldPreviewStatus, field.TypeEnum, value)

@@ -5396,6 +5396,7 @@ type ComplexityRoot struct {
 		ID                       func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
+		PirschAccessLink         func(childComplexity int) int
 		PirschDomainID           func(childComplexity int) int
 		PirschIdentificationCode func(childComplexity int) int
 		Posts                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
@@ -38561,6 +38562,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenter.OwnerID(childComplexity), true
 
+	case "TrustCenter.pirschAccessLink":
+		if e.complexity.TrustCenter.PirschAccessLink == nil {
+			break
+		}
+
+		return e.complexity.TrustCenter.PirschAccessLink(childComplexity), true
+
 	case "TrustCenter.pirschDomainID":
 		if e.complexity.TrustCenter.PirschDomainID == nil {
 			break
@@ -60043,6 +60051,10 @@ input CreateTrustCenterInput {
   Pirsch ID code
   """
   pirschIdentificationCode: String
+  """
+  Pirsch access link
+  """
+  pirschAccessLink: String
   """
   preview status of the trust center
   """
@@ -104690,6 +104702,10 @@ type TrustCenter implements Node {
   """
   pirschIdentificationCode: String
   """
+  Pirsch access link
+  """
+  pirschAccessLink: String
+  """
   preview status of the trust center
   """
   previewStatus: TrustCenterTrustCenterPreviewStatus
@@ -108125,6 +108141,24 @@ input TrustCenterWhereInput {
   pirschIdentificationCodeNotNil: Boolean
   pirschIdentificationCodeEqualFold: String
   pirschIdentificationCodeContainsFold: String
+  """
+  pirsch_access_link field predicates
+  """
+  pirschAccessLink: String
+  pirschAccessLinkNEQ: String
+  pirschAccessLinkIn: [String!]
+  pirschAccessLinkNotIn: [String!]
+  pirschAccessLinkGT: String
+  pirschAccessLinkGTE: String
+  pirschAccessLinkLT: String
+  pirschAccessLinkLTE: String
+  pirschAccessLinkContains: String
+  pirschAccessLinkHasPrefix: String
+  pirschAccessLinkHasSuffix: String
+  pirschAccessLinkIsNil: Boolean
+  pirschAccessLinkNotNil: Boolean
+  pirschAccessLinkEqualFold: String
+  pirschAccessLinkContainsFold: String
   """
   preview_status field predicates
   """
@@ -114448,6 +114482,11 @@ input UpdateTrustCenterInput {
   """
   pirschIdentificationCode: String
   clearPirschIdentificationCode: Boolean
+  """
+  Pirsch access link
+  """
+  pirschAccessLink: String
+  clearPirschAccessLink: Boolean
   """
   preview status of the trust center
   """

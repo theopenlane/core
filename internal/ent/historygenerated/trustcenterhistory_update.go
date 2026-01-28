@@ -245,6 +245,26 @@ func (_u *TrustCenterHistoryUpdate) ClearPirschIdentificationCode() *TrustCenter
 	return _u
 }
 
+// SetPirschAccessLink sets the "pirsch_access_link" field.
+func (_u *TrustCenterHistoryUpdate) SetPirschAccessLink(v string) *TrustCenterHistoryUpdate {
+	_u.mutation.SetPirschAccessLink(v)
+	return _u
+}
+
+// SetNillablePirschAccessLink sets the "pirsch_access_link" field if the given value is not nil.
+func (_u *TrustCenterHistoryUpdate) SetNillablePirschAccessLink(v *string) *TrustCenterHistoryUpdate {
+	if v != nil {
+		_u.SetPirschAccessLink(*v)
+	}
+	return _u
+}
+
+// ClearPirschAccessLink clears the value of the "pirsch_access_link" field.
+func (_u *TrustCenterHistoryUpdate) ClearPirschAccessLink() *TrustCenterHistoryUpdate {
+	_u.mutation.ClearPirschAccessLink()
+	return _u
+}
+
 // SetPreviewStatus sets the "preview_status" field.
 func (_u *TrustCenterHistoryUpdate) SetPreviewStatus(v enums.TrustCenterPreviewStatus) *TrustCenterHistoryUpdate {
 	_u.mutation.SetPreviewStatus(v)
@@ -439,6 +459,12 @@ func (_u *TrustCenterHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.PirschIdentificationCodeCleared() {
 		_spec.ClearField(trustcenterhistory.FieldPirschIdentificationCode, field.TypeString)
+	}
+	if value, ok := _u.mutation.PirschAccessLink(); ok {
+		_spec.SetField(trustcenterhistory.FieldPirschAccessLink, field.TypeString, value)
+	}
+	if _u.mutation.PirschAccessLinkCleared() {
+		_spec.ClearField(trustcenterhistory.FieldPirschAccessLink, field.TypeString)
 	}
 	if value, ok := _u.mutation.PreviewStatus(); ok {
 		_spec.SetField(trustcenterhistory.FieldPreviewStatus, field.TypeEnum, value)
@@ -686,6 +712,26 @@ func (_u *TrustCenterHistoryUpdateOne) ClearPirschIdentificationCode() *TrustCen
 	return _u
 }
 
+// SetPirschAccessLink sets the "pirsch_access_link" field.
+func (_u *TrustCenterHistoryUpdateOne) SetPirschAccessLink(v string) *TrustCenterHistoryUpdateOne {
+	_u.mutation.SetPirschAccessLink(v)
+	return _u
+}
+
+// SetNillablePirschAccessLink sets the "pirsch_access_link" field if the given value is not nil.
+func (_u *TrustCenterHistoryUpdateOne) SetNillablePirschAccessLink(v *string) *TrustCenterHistoryUpdateOne {
+	if v != nil {
+		_u.SetPirschAccessLink(*v)
+	}
+	return _u
+}
+
+// ClearPirschAccessLink clears the value of the "pirsch_access_link" field.
+func (_u *TrustCenterHistoryUpdateOne) ClearPirschAccessLink() *TrustCenterHistoryUpdateOne {
+	_u.mutation.ClearPirschAccessLink()
+	return _u
+}
+
 // SetPreviewStatus sets the "preview_status" field.
 func (_u *TrustCenterHistoryUpdateOne) SetPreviewStatus(v enums.TrustCenterPreviewStatus) *TrustCenterHistoryUpdateOne {
 	_u.mutation.SetPreviewStatus(v)
@@ -910,6 +956,12 @@ func (_u *TrustCenterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.PirschIdentificationCodeCleared() {
 		_spec.ClearField(trustcenterhistory.FieldPirschIdentificationCode, field.TypeString)
+	}
+	if value, ok := _u.mutation.PirschAccessLink(); ok {
+		_spec.SetField(trustcenterhistory.FieldPirschAccessLink, field.TypeString, value)
+	}
+	if _u.mutation.PirschAccessLinkCleared() {
+		_spec.ClearField(trustcenterhistory.FieldPirschAccessLink, field.TypeString)
 	}
 	if value, ok := _u.mutation.PreviewStatus(); ok {
 		_spec.SetField(trustcenterhistory.FieldPreviewStatus, field.TypeEnum, value)

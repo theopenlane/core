@@ -2488,6 +2488,7 @@ var (
 		{Name: "preview_domain_id", Type: field.TypeString, Nullable: true},
 		{Name: "pirsch_domain_id", Type: field.TypeString, Nullable: true},
 		{Name: "pirsch_identification_code", Type: field.TypeString, Nullable: true},
+		{Name: "pirsch_access_link", Type: field.TypeString, Nullable: true},
 		{Name: "preview_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PROVISIONING", "READY", "FAILED", "DEPROVISIONING", "NONE"}, Default: "NONE"},
 		{Name: "subprocessor_url", Type: field.TypeString, Nullable: true},
 	}
