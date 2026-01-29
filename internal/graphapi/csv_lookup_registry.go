@@ -43,14 +43,14 @@ func wrapGeneratedCreate(fn csvgenerated.CSVCreateFn) csvCreateFn {
 	}
 }
 
-// BuildCSVReferenceRulesFromRegistry creates csvReferenceRule objects from the generated registry.
-func BuildCSVReferenceRulesFromRegistry(schemaName string) ([]csvReferenceRule, error) {
+// BuildCSVReferenceRulesFromRegistry creates CSVReferenceRule objects from the generated registry.
+func BuildCSVReferenceRulesFromRegistry(schemaName string) ([]CSVReferenceRule, error) {
 	registryRules := csvgenerated.GetCSVReferenceRules(schemaName)
 	if len(registryRules) == 0 {
 		return nil, nil
 	}
 
-	rules := make([]csvReferenceRule, 0, len(registryRules))
+	rules := make([]CSVReferenceRule, 0, len(registryRules))
 
 	for _, rr := range registryRules {
 		entry, ok := csvgenerated.GetCSVLookupEntry(rr.TargetEntity, rr.MatchField)
@@ -66,7 +66,7 @@ func BuildCSVReferenceRulesFromRegistry(schemaName string) ([]csvReferenceRule, 
 			)
 		}
 
-		rule := csvReferenceRule{
+		rule := CSVReferenceRule{
 			SourceField: rr.SourceColumn,
 			TargetField: rr.TargetField,
 			Lookup:      wrapGeneratedLookup(entry.Lookup),

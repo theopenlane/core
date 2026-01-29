@@ -45,6 +45,8 @@ const (
 	IntrospectionComplexity = 200
 	// csvInputWrapperFieldName is the wrapper field used for bulk CSV input structs.
 	csvInputWrapperFieldName = "Input"
+	// csvFieldSplitLimit is the maximum number of parts when splitting CSV field names.
+	csvFieldSplitLimit = 2
 )
 
 // injectFileUploader adds the file uploader as middleware to the graphql operation
@@ -611,22 +613,25 @@ func combineCSVPrefixes(prefixes []string, names []string) []string {
 
 // hasCSVInputPrefix reports whether a header already has the Input:: prefix.
 func hasCSVInputPrefix(value string) bool {
-	parts := strings.SplitN(value, gocsv.FieldsCombiner, 2)
-	if len(parts) < 2 {
+	parts := strings.SplitN(value, gocsv.FieldsCombiner, csvFieldSplitLimit)
+	if len(parts) < csvFieldSplitLimit {
 		return false
 	}
+
 	return strings.EqualFold(strings.TrimSpace(parts[0]), csvInputWrapperFieldName)
 }
 
 // stripCSVInputPrefix removes the Input:: prefix when present.
 func stripCSVInputPrefix(header string) string {
-	parts := strings.SplitN(header, gocsv.FieldsCombiner, 2)
-	if len(parts) < 2 {
+	parts := strings.SplitN(header, gocsv.FieldsCombiner, csvFieldSplitLimit)
+	if len(parts) < csvFieldSplitLimit {
 		return header
 	}
+
 	if strings.EqualFold(strings.TrimSpace(parts[0]), csvInputWrapperFieldName) {
 		return parts[1]
 	}
+
 	return header
 }
 
