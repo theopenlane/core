@@ -28,6 +28,7 @@ Config contains the configuration for the core server
 |[**integrationoauthprovider**](#integrationoauthprovider)|`object`|IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.<br/>||
 |[**workflows**](#workflows)|`object`|||
 |[**campaignwebhook**](#campaignwebhook)|`object`|CampaignWebhookConfig contains webhook configuration for campaign-related email providers.<br/>||
+|[**cloudflare**](#cloudflare)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -137,7 +138,8 @@ Config contains the configuration for the core server
     "workflows": {
         "cel": {}
     },
-    "campaignwebhook": {}
+    "campaignwebhook": {},
+    "cloudflare": {}
 }
 ```
 
@@ -1734,6 +1736,21 @@ CampaignWebhookConfig contains webhook configuration for campaign-related email 
 |**enabled**|`boolean`|Enabled toggles the campaign webhook handler<br/>||
 |**resendapikey**|`string`|ResendAPIKey is the API key used for Resend client initialization<br/>||
 |**resendsecret**|`string`|ResendSecret is the signing secret used to verify Resend webhook payloads<br/>||
+
+**Additional Properties:** not allowed  
+<a name="cloudflare"></a>
+## cloudflare: object
+
+CloudflareConfig contains configuration for Cloudflare integration.
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled toggles the Cloudflare snapshot handler<br/>||
+|**apitoken**|`string`|APIToken is the API token used for Cloudflare client initialization<br/>||
+|**accountid**|`string`|AccountID is the Cloudflare account ID to use for snapshot operations<br/>||
 
 **Additional Properties:** not allowed  
 

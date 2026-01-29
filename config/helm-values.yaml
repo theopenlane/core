@@ -576,6 +576,10 @@ coreConfiguration:
   campaignwebhook:
     # -- Enabled toggles the campaign webhook handler
     enabled: false  # @schema type:boolean; default:false
+  # -- Cloudflare contains configuration for Cloudflare integration
+  cloudflare:
+    # -- Enabled toggles the Cloudflare snapshot handler
+    enabled: false  # @schema type:boolean; default:false
 
 # -- External Secrets configuration
 externalSecrets:
@@ -903,3 +907,19 @@ externalSecrets:
       secretKey: "CORE_CAMPAIGNWEBHOOK_RESENDSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-campaignwebhook-resendsecret"  # @schema type:string
+    # -- core-cloudflare-apitoken secret configuration
+    core-cloudflare-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for cloudflare.apitoken
+      secretKey: "CORE_CLOUDFLARE_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-cloudflare-apitoken"  # @schema type:string
+    # -- core-cloudflare-accountid secret configuration
+    core-cloudflare-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for cloudflare.accountid
+      secretKey: "CORE_CLOUDFLARE_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-cloudflare-accountid"  # @schema type:string

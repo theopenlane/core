@@ -90,6 +90,8 @@ type Config struct {
 	Workflows workflows.Config `json:"workflows" koanf:"workflows"`
 	// CampaignWebhook contains webhook configuration for campaign-related email providers
 	CampaignWebhook handlers.CampaignWebhookConfig `json:"campaignwebhook" koanf:"campaignwebhook"`
+	// Cloudflare contains configuration for Cloudflare integration
+	Cloudflare handlers.CloudflareConfig `json:"cloudflare" koanf:"cloudflare"`
 }
 
 // Server settings for the echo server

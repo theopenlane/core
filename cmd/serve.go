@@ -200,6 +200,8 @@ func serve(ctx context.Context) error {
 		so.AddServerOptions(serveropts.WithCampaignWebhookConfig())
 	}
 
+	so.AddServerOptions(serveropts.WithCloudflareConfig())
+
 	go func() {
 		<-ctx.Done()
 
