@@ -11,7 +11,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -104,16 +103,7 @@ func TestQueryTrustCenterEntities(t *testing.T) {
 		TrustCenterID: trustCenter.ID,
 	}).MustNew(testUser1.UserCtx, t)
 
-	createLogoUpload := func() *graphql.Upload {
-		logoFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        logoFile.RawFile,
-			Filename:    logoFile.OriginalName,
-			Size:        logoFile.Size,
-			ContentType: logoFile.ContentType,
-		}
-	}
+	createLogoUpload := logoFileFunc(t)
 	logoFile := createLogoUpload()
 
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*logoFile})
@@ -194,17 +184,7 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-
-	createLogoUpload := func() *graphql.Upload {
-		logoFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        logoFile.RawFile,
-			Filename:    logoFile.OriginalName,
-			Size:        logoFile.Size,
-			ContentType: logoFile.ContentType,
-		}
-	}
+	createLogoUpload := logoFileFunc(t)
 
 	testCases := []struct {
 		name        string
@@ -325,16 +305,7 @@ func TestMutationUpdateTrustCenterEntity(t *testing.T) {
 		TrustCenterID: trustCenter.ID,
 	}).MustNew(testUser1.UserCtx, t)
 
-	createLogoUpload := func() *graphql.Upload {
-		logoFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        logoFile.RawFile,
-			Filename:    logoFile.OriginalName,
-			Size:        logoFile.Size,
-			ContentType: logoFile.ContentType,
-		}
-	}
+	createLogoUpload := logoFileFunc(t)
 
 	testCases := []struct {
 		name        string

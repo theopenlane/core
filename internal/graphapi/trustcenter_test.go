@@ -23,7 +23,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 func TestQueryTrustCenterByID(t *testing.T) {
@@ -678,16 +677,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	// create trust center entities for the trust center
-	createLogoUpload := func() *graphql.Upload {
-		logoFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        logoFile.RawFile,
-			Filename:    logoFile.OriginalName,
-			Size:        logoFile.Size,
-			ContentType: logoFile.ContentType,
-		}
-	}
+	createLogoUpload := logoFileFunc(t)
 	logoFile := createLogoUpload()
 
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*logoFile})
@@ -729,16 +719,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	}).MustNew(testUser.UserCtx, t)
 
 	// create trust center doc
-	createFileUpload := func() *graphql.Upload {
-		logoFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        logoFile.RawFile,
-			Filename:    logoFile.OriginalName,
-			Size:        logoFile.Size,
-			ContentType: logoFile.ContentType,
-		}
-	}
+	createFileUpload := uploadFileFunc(t, pdfFilePath)
 	fileUpload := createFileUpload()
 
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
@@ -955,7 +936,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 		{
 			name:        "happy path - update logo",
 			settingID:   trustCenter.Edges.Setting.ID,
-			logoPath:    "testdata/uploads/logo.png",
+			logoPath:    logoFilePath,
 			updateInput: testclient.UpdateTrustCenterSettingInput{},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -963,7 +944,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 		{
 			name:      "happy path - update logo with other fields",
 			settingID: trustCenter.Edges.Setting.ID,
-			logoPath:  "testdata/uploads/logo.png",
+			logoPath:  logoFilePath,
 			updateInput: testclient.UpdateTrustCenterSettingInput{
 				Title:        lo.ToPtr("Updated Title with Logo"),
 				PrimaryColor: lo.ToPtr("#FF5733"),
@@ -975,7 +956,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 		{
 			name:        "invalid file type - text file instead of image",
 			settingID:   trustCenter.Edges.Setting.ID,
-			logoPath:    "testdata/uploads/hello.txt",
+			logoPath:    txtFilePath,
 			invalidFile: true,
 			updateInput: testclient.UpdateTrustCenterSettingInput{},
 			client:      suite.client.api,
@@ -1094,15 +1075,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 
 			// Create file upload if logoPath is provided
 			if tc.logoPath != "" {
-				uploadFile, err := storage.NewUploadFile(tc.logoPath)
-				assert.NilError(t, err)
-
-				logoFile = &graphql.Upload{
-					File:        uploadFile.RawFile,
-					Filename:    uploadFile.OriginalName,
-					Size:        uploadFile.Size,
-					ContentType: uploadFile.ContentType,
-				}
+				logoFile = uploadFile(t, tc.logoPath)
 
 				// Set up mock expectations based on whether we expect an error
 				if tc.expectedErr == "" {
@@ -1521,16 +1494,7 @@ func TestTrustCenterDocStandards(t *testing.T) {
 		ObjectType: "trust_center_doc",
 	}).MustNew(testUser1.UserCtx, t)
 
-	createPDFUpload := func() *graphql.Upload {
-		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pdfFile.RawFile,
-			Filename:    pdfFile.OriginalName,
-			Size:        pdfFile.Size,
-			ContentType: pdfFile.ContentType,
-		}
-	}
+	createPDFUpload := uploadFileFunc(t, pdfFilePath)
 
 	t.Run("create trust center doc with standard and retrieve it", func(t *testing.T) {
 		fileUpload := createPDFUpload()

@@ -17,37 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/objects/storage"
 )
-
-// cleanupTrustCenterData removes all trust centers and watermark configs for the test user's organization.
-// This ensures the Only() query in hooks works correctly when tests expect a single watermark config.
-func cleanupTrustCenterData(t *testing.T) {
-	t.Helper()
-	ctx := privacy.DecisionContext(setContext(testUser1.UserCtx, suite.client.db), privacy.Allow)
-
-	wcs, err := suite.client.db.TrustCenterWatermarkConfig.Query().All(ctx)
-	assert.NilError(t, err)
-	for _, wc := range wcs {
-		_ = suite.client.db.TrustCenterWatermarkConfig.DeleteOneID(wc.ID).Exec(ctx)
-	}
-
-	tcs, err := suite.client.db.TrustCenter.Query().All(ctx)
-	assert.NilError(t, err)
-	for _, tc := range tcs {
-		_ = suite.client.db.TrustCenter.DeleteOneID(tc.ID).Exec(ctx)
-	}
-}
-
-func cleanupWatermarkConfigs(t *testing.T) {
-	t.Helper()
-	ctx := privacy.DecisionContext(setContext(testUser1.UserCtx, suite.client.db), privacy.Allow)
-
-	wcs, _ := suite.client.db.TrustCenterWatermarkConfig.Query().All(ctx)
-	for _, wc := range wcs {
-		_ = suite.client.db.TrustCenterWatermarkConfig.DeleteOneID(wc.ID).Exec(ctx)
-	}
-}
 
 func TestQueryTrustCenterDocByID(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -325,27 +295,8 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 	}).MustNew(testUser1.UserCtx, t)
 
 	// Helper function to create fresh file uploads for each test case
-	createPDFUpload := func() *graphql.Upload {
-		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pdfFile.RawFile,
-			Filename:    pdfFile.OriginalName,
-			Size:        pdfFile.Size,
-			ContentType: pdfFile.ContentType,
-		}
-	}
-
-	createTXTUpload := func() *graphql.Upload {
-		txtFile, err := storage.NewUploadFile("testdata/uploads/hello.txt")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        txtFile.RawFile,
-			Filename:    txtFile.OriginalName,
-			Size:        txtFile.Size,
-			ContentType: txtFile.ContentType,
-		}
-	}
+	createPDFUpload := uploadFileFunc(t, pdfFilePath)
+	createTXTUpload := uploadFileFunc(t, txtFilePath)
 
 	testCases := []struct {
 		name        string
@@ -882,16 +833,7 @@ func TestTrustCenterDocUpdateSysAdmin(t *testing.T) {
 	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
 
 	// Helper function to create fresh file uploads
-	createPDFUpload := func() *graphql.Upload {
-		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pdfFile.RawFile,
-			Filename:    pdfFile.OriginalName,
-			Size:        pdfFile.Size,
-			ContentType: pdfFile.ContentType,
-		}
-	}
+	createPDFUpload := uploadFileFunc(t, pdfFilePath)
 
 	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
 	signedNDAAnonUser, _ := auth.AnonymousTrustCenterUserFromContext(signedNdaAnonCtx)
@@ -948,16 +890,7 @@ func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
 	}).MustNew(testUser1.UserCtx, t)
 
 	// Helper function to create fresh file uploads
-	createPDFUpload := func() *graphql.Upload {
-		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pdfFile.RawFile,
-			Filename:    pdfFile.OriginalName,
-			Size:        pdfFile.Size,
-			ContentType: pdfFile.ContentType,
-		}
-	}
+	createPDFUpload := uploadFileFunc(t, pdfFilePath)
 
 	// Helper function to check if wildcard viewer tuples exist for a file
 	checkWildcardViewerTuples := func(ctx context.Context, objectID, objectType string, shouldExist bool) {
@@ -1528,15 +1461,7 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 
 		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-		assert.NilError(t, err)
-		upload := &graphql.Upload{
-			File:        pdfFile.RawFile,
-			Filename:    pdfFile.OriginalName,
-			Size:        pdfFile.Size,
-			ContentType: pdfFile.ContentType,
-		}
-
+		upload := uploadFile(t, pdfFilePath)
 		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*upload})
 
 		createInput := testclient.CreateTrustCenterDocInput{
@@ -1597,16 +1522,7 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Assert(t, watermarkConfig.IsEnabled)
 
-	createPDFUpload := func() *graphql.Upload {
-		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pdfFile.RawFile,
-			Filename:    pdfFile.OriginalName,
-			Size:        pdfFile.Size,
-			ContentType: pdfFile.ContentType,
-		}
-	}
+	createPDFUpload := uploadFileFunc(t, pdfFilePath)
 
 	testCases := []struct {
 		name                    string
@@ -1714,16 +1630,7 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 		Only(allowCtx)
 	assert.NilError(t, err)
 
-	createPDFUpload := func() *graphql.Upload {
-		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pdfFile.RawFile,
-			Filename:    pdfFile.OriginalName,
-			Size:        pdfFile.Size,
-			ContentType: pdfFile.ContentType,
-		}
-	}
+	createPDFUpload := uploadFileFunc(t, pdfFilePath)
 
 	t.Run("global config enabled=true, individual docs can override", func(t *testing.T) {
 		// set config to enabled
@@ -1862,16 +1769,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	createPDFUpload := func() *graphql.Upload {
-		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pdfFile.RawFile,
-			Filename:    pdfFile.OriginalName,
-			Size:        pdfFile.Size,
-			ContentType: pdfFile.ContentType,
-		}
-	}
+	createPDFUpload := uploadFileFunc(t, pdfFilePath)
 
 	file := createPDFUpload()
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*file})

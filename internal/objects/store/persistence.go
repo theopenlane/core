@@ -11,6 +11,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/internal/consts"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
@@ -18,10 +19,6 @@ import (
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
-)
-
-const (
-	systemAdminOrgID = "01101101011010010111010001100010"
 )
 
 // CreateFileRecord creates a file record in the database and returns the resulting ent.File entity.
@@ -183,8 +180,9 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 	}
 
 	// use system admin org if the user is a system admin and we got to here
+	// files must be created under an organization ID for consistent pathing
 	if au.IsSystemAdmin {
-		return systemAdminOrgID, nil
+		return consts.SystemAdminOrgID, nil
 	}
 
 	return "", ErrMissingOrganizationID

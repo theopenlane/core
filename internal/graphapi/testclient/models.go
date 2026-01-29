@@ -30954,7 +30954,7 @@ type TrustCenterDoc struct {
 	WatermarkStatus *enums.WatermarkStatus `json:"watermarkStatus,omitempty"`
 	// visibility of the document
 	Visibility *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
-	// ID of the standard
+	// ID of the standard the document relates to
 	StandardID         *string          `json:"standardID,omitempty"`
 	TrustCenterDocKind *CustomTypeEnum  `json:"trustCenterDocKind,omitempty"`
 	BlockedGroups      *GroupConnection `json:"blockedGroups"`

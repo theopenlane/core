@@ -92,6 +92,9 @@ var seedErr error
 func (suite *GraphTestSuite) setupTestData(ctx context.Context, t *testing.T) {
 	t.Helper()
 	seedOnce.Do(func() {
+		// create system org
+		(&OrganizationBuilder{client: suite.client, SystemOrg: true}).MustNew(ctx, t)
+
 		// create system admin user
 		systemAdminUser = suite.systemAdminBuilder(ctx, t)
 

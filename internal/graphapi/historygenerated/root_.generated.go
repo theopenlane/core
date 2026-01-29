@@ -49186,7 +49186,7 @@ type TrustCenterDocHistory implements Node {
   """
   visibility: TrustCenterDocHistoryTrustCenterDocumentVisibility
   """
-  ID of the standard
+  ID of the standard the document relates to
   """
   standardID: String
 }

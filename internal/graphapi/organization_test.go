@@ -23,7 +23,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 func TestQueryOrganization(t *testing.T) {
@@ -176,11 +175,8 @@ func TestMutationCreateOrganization(t *testing.T) {
 	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: orgToDelete.ID}).MustDelete(orgUser.UserCtx, t)
 
 	// avatar file setup
-	avatarFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-	assert.NilError(t, err)
-
-	invalidAvatarFile, err := storage.NewUploadFile("testdata/uploads/hello.txt")
-	assert.NilError(t, err)
+	avatarFile := uploadFile(t, logoFilePath)
+	invalidAvatarFile := uploadFile(t, txtFilePath)
 
 	testCases := []struct {
 		name                     string
@@ -210,12 +206,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			displayName:    gofakeit.LetterN(50),
 			orgDescription: gofakeit.HipsterSentence(),
-			avatarFile: &graphql.Upload{
-				File:        avatarFile.RawFile,
-				Filename:    avatarFile.OriginalName,
-				Size:        avatarFile.Size,
-				ContentType: avatarFile.ContentType,
-			},
+			avatarFile:     avatarFile,
 			settings: &testclient.CreateOrganizationSettingInput{
 				Domains:                      []string{"meow.theopenlane.io"},
 				AllowedEmailDomains:          []string{"theopenlane.io"},
@@ -385,17 +376,12 @@ func TestMutationCreateOrganization(t *testing.T) {
 			ctx:            orgUser.UserCtx,
 		},
 		{
-			name:    "invalid avatar file",
-			orgName: ulids.New().String(), // use ulid to ensure uniqueness
-			avatarFile: &graphql.Upload{
-				File:        invalidAvatarFile.RawFile,
-				Filename:    invalidAvatarFile.OriginalName,
-				Size:        invalidAvatarFile.Size,
-				ContentType: invalidAvatarFile.ContentType,
-			},
-			client:   suite.client.api,
-			ctx:      orgUser.UserCtx,
-			errorMsg: "unsupported mime type uploaded: text/plain",
+			name:       "invalid avatar file",
+			orgName:    ulids.New().String(), // use ulid to ensure uniqueness
+			avatarFile: invalidAvatarFile,
+			client:     suite.client.api,
+			ctx:        orgUser.UserCtx,
+			errorMsg:   "unsupported mime type uploaded: text/plain",
 		},
 		{
 			name:    "invalid allowed email domains ",
@@ -580,11 +566,8 @@ func TestMutationUpdateOrganization(t *testing.T) {
 	memberUserCtx := auth.NewTestContextWithOrgID(om.UserID, org.ID)
 
 	// avatar file setup
-	avatarFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-	assert.NilError(t, err)
-
-	invalidAvatarFile, err := storage.NewUploadFile("testdata/uploads/hello.txt")
-	assert.NilError(t, err)
+	avatarFile := uploadFile(t, logoFilePath)
+	invalidAvatarFile := uploadFile(t, txtFilePath)
 
 	testCases := []struct {
 		name        string
@@ -732,14 +715,9 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			updateInput: testclient.UpdateOrganizationInput{
 				Description: &descriptionUpdate,
 			},
-			avatarFile: &graphql.Upload{
-				File:        avatarFile.RawFile,
-				Filename:    avatarFile.OriginalName,
-				Size:        avatarFile.Size,
-				ContentType: avatarFile.ContentType,
-			},
-			client: suite.client.api,
-			ctx:    reqCtx,
+			avatarFile: avatarFile,
+			client:     suite.client.api,
+			ctx:        reqCtx,
 			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
 				Name:        nameUpdate, // this would have been updated on the prior test
@@ -781,17 +759,12 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			},
 		},
 		{
-			name:  "update avatar, invalid file",
-			orgID: org.ID,
-			avatarFile: &graphql.Upload{
-				File:        invalidAvatarFile.RawFile,
-				Filename:    invalidAvatarFile.OriginalName,
-				Size:        invalidAvatarFile.Size,
-				ContentType: invalidAvatarFile.ContentType,
-			},
-			client:   suite.client.api,
-			ctx:      reqCtx,
-			errorMsg: "unsupported mime type uploaded: text/plain",
+			name:       "update avatar, invalid file",
+			orgID:      org.ID,
+			avatarFile: invalidAvatarFile,
+			client:     suite.client.api,
+			ctx:        reqCtx,
+			errorMsg:   "unsupported mime type uploaded: text/plain",
 		},
 		{
 			name:  "update name, too long",

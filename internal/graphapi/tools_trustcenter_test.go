@@ -1,0 +1,37 @@
+package graphapi_test
+
+import (
+	"testing"
+
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"gotest.tools/v3/assert"
+)
+
+// cleanupTrustCenterData removes all trust centers and watermark configs for the test user's organization.
+// This ensures the Only() query in hooks works correctly when tests expect a single watermark config.
+func cleanupTrustCenterData(t *testing.T) {
+	t.Helper()
+	ctx := privacy.DecisionContext(setContext(testUser1.UserCtx, suite.client.db), privacy.Allow)
+
+	wcs, err := suite.client.db.TrustCenterWatermarkConfig.Query().All(ctx)
+	assert.NilError(t, err)
+	for _, wc := range wcs {
+		_ = suite.client.db.TrustCenterWatermarkConfig.DeleteOneID(wc.ID).Exec(ctx)
+	}
+
+	tcs, err := suite.client.db.TrustCenter.Query().All(ctx)
+	assert.NilError(t, err)
+	for _, tc := range tcs {
+		_ = suite.client.db.TrustCenter.DeleteOneID(tc.ID).Exec(ctx)
+	}
+}
+
+func cleanupWatermarkConfigs(t *testing.T) {
+	t.Helper()
+	ctx := privacy.DecisionContext(setContext(testUser1.UserCtx, suite.client.db), privacy.Allow)
+
+	wcs, _ := suite.client.db.TrustCenterWatermarkConfig.Query().All(ctx)
+	for _, wc := range wcs {
+		_ = suite.client.db.TrustCenterWatermarkConfig.DeleteOneID(wc.ID).Exec(ctx)
+	}
+}

@@ -105334,7 +105334,7 @@ type TrustCenterDoc implements Node {
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
   """
-  ID of the standard
+  ID of the standard the document relates to
   """
   standardID: ID
   trustCenterDocKind: CustomTypeEnum

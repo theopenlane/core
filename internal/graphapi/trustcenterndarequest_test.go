@@ -15,6 +15,8 @@ import (
 )
 
 func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenterNoApproval := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ndaTemplate1 := (&TemplateBuilder{
@@ -169,6 +171,8 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 }
 
 func TestQueryTrustCenterNDARequest(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ndaTemplate := (&TemplateBuilder{
@@ -240,6 +244,8 @@ func TestQueryTrustCenterNDARequest(t *testing.T) {
 }
 
 func TestQueryTrustCenterNDARequests(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ndaTemplate := (&TemplateBuilder{
@@ -306,6 +312,8 @@ func TestQueryTrustCenterNDARequests(t *testing.T) {
 }
 
 func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ndaTemplate := (&TemplateBuilder{
@@ -400,6 +408,8 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 }
 
 func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	otherTrustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
@@ -491,6 +501,8 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 }
 
 func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ndaTemplate := (&TemplateBuilder{
@@ -571,6 +583,8 @@ func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
 }
 
 func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ndaTemplate := (&TemplateBuilder{

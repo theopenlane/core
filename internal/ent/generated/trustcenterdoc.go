@@ -55,7 +55,7 @@ type TrustCenterDoc struct {
 	WatermarkStatus enums.WatermarkStatus `json:"watermark_status,omitempty"`
 	// visibility of the document
 	Visibility enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
-	// ID of the standard
+	// ID of the standard the document relates to
 	StandardID string `json:"standard_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterDocQuery when eager-loading is set.

@@ -21,6 +21,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/consts"
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
@@ -34,7 +35,6 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 type OrganizationBuilder struct {
@@ -42,6 +42,7 @@ type OrganizationBuilder struct {
 	Features []models.OrgModule
 
 	// Fields
+	SystemOrg      bool
 	Name           string
 	DisplayName    string
 	Description    *string
@@ -505,6 +506,13 @@ func setContext(ctx context.Context, db *ent.Client) context.Context {
 func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Organization {
 	// no auth, so allow policy
 	ctx = setContext(ctx, o.client.db)
+
+	if o.SystemOrg {
+		systemOrg, err := o.client.db.Organization.Create().SetID(consts.SystemAdminOrgID).SetName("System Admin Organization").SetDisplayName("System Admin Organization").SetPersonalOrg(true).SetDescription("Organization for system administrators").Save(ctx)
+		requireNoError(t, err)
+
+		return systemOrg
+	}
 
 	if o.Name == "" {
 		o.Name = randomName(t)
@@ -2328,15 +2336,7 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 	}).MustNew(userCtx, t)
 
 	// Create a test PDF file for upload
-	pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-	requireNoError(t, err)
-
-	fileUpload := graphql.Upload{
-		File:        pdfFile.RawFile,
-		Filename:    pdfFile.OriginalName,
-		Size:        pdfFile.Size,
-		ContentType: pdfFile.ContentType,
-	}
+	fileUpload := uploadFile(t, pdfFilePath)
 
 	// Prepare the GraphQL input
 	input := testclient.CreateTrustCenterDocInput{
@@ -2351,10 +2351,10 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 	}
 
 	// Expect the file upload in the object store
-	expectUpload(t, tcdb.client.mockProvider, []graphql.Upload{fileUpload})
+	expectUpload(t, tcdb.client.mockProvider, []graphql.Upload{*fileUpload})
 
 	// Create the trust center document using the GraphQL API
-	resp, err := tcdb.client.api.CreateTrustCenterDoc(ctx, input, fileUpload)
+	resp, err := tcdb.client.api.CreateTrustCenterDoc(ctx, input, *fileUpload)
 	requireNoError(t, err)
 
 	// Convert the GraphQL response to an ent entity

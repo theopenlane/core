@@ -147,7 +147,7 @@ func (f File) Mixin() []ent.Mixin {
 				withHookFuncs(), // use an empty hook, file processing is handled in middleware
 				withAllowAnonymousTrustCenterAccess(true),
 			),
-			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()), // files can be system owned, but we skip tuple creation as files are not directly accessed
 			newCustomEnumMixin(f, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(f, withEnumFieldName("scope"), withGlobalEnum()),
 		},

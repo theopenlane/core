@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/testutils"
-	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 func TestQueryControl(t *testing.T) {
@@ -1023,14 +1022,9 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 }
 
 func TestMutationCreateControlsByCloneCSV(t *testing.T) {
-	validFile, err := storage.NewUploadFile("testdata/uploads/clone.csv")
-	assert.NilError(t, err)
-
-	missingControlsFile, err := storage.NewUploadFile("testdata/uploads/all_missing_clone.csv")
-	assert.NilError(t, err)
-
-	updateControlsFile, err := storage.NewUploadFile("testdata/uploads/update.csv")
-	assert.NilError(t, err)
+	validFile := uploadFile(t, "testdata/uploads/clone.csv")
+	missingControlsFile := uploadFile(t, "testdata/uploads/all_missing_clone.csv")
+	updateControlsFile := uploadFile(t, "testdata/uploads/update.csv")
 
 	// create the standard and controls to be cloned
 	standard := (&StandardBuilder{client: suite.client, IsPublic: true, Name: "MITB 1987"}).MustNew(systemAdminUser.UserCtx, t)
@@ -1048,37 +1042,22 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 		expectedErr           string
 	}{
 		{
-			name: "happy path, clone controls from csv",
-			fileInput: graphql.Upload{
-				File:        validFile.RawFile,
-				Filename:    validFile.OriginalName,
-				Size:        validFile.Size,
-				ContentType: validFile.ContentType,
-			},
+			name:                  "happy path, clone controls from csv",
+			fileInput:             *validFile,
 			client:                suite.client.api,
 			ctx:                   testUser1.UserCtx,
 			expectedCountControls: 2,
 		},
 		{
-			name: "update existing controls, no new controls cloned",
-			fileInput: graphql.Upload{
-				File:        updateControlsFile.RawFile,
-				Filename:    updateControlsFile.OriginalName,
-				Size:        updateControlsFile.Size,
-				ContentType: updateControlsFile.ContentType,
-			},
+			name:                  "update existing controls, no new controls cloned",
+			fileInput:             *updateControlsFile,
 			client:                suite.client.api,
 			ctx:                   testUser1.UserCtx,
 			expectedCountControls: 2,
 		},
 		{
-			name: "controls missing from system, no controls cloned",
-			fileInput: graphql.Upload{
-				File:        missingControlsFile.RawFile,
-				Filename:    missingControlsFile.OriginalName,
-				Size:        missingControlsFile.Size,
-				ContentType: missingControlsFile.ContentType,
-			},
+			name:                  "controls missing from system, no controls cloned",
+			fileInput:             *missingControlsFile,
 			client:                suite.client.api,
 			ctx:                   testUser1.UserCtx,
 			expectedCountControls: 0,
@@ -1106,7 +1085,7 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 
 				switch control.RefCode {
 				case "AA-1":
-					if tc.fileInput.Filename == updateControlsFile.OriginalName {
+					if tc.fileInput.Filename == updateControlsFile.Filename {
 						assert.Check(t, is.Equal(enums.ControlStatusApproved, *control.Status))
 					} else {
 						assert.Check(t, is.Equal(enums.ControlStatusPreparing, *control.Status))
@@ -1121,9 +1100,9 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 				assert.Check(t, control.ImplementationGuidance != nil)
 
 				switch tc.fileInput.Filename {
-				case updateControlsFile.OriginalName:
+				case updateControlsFile.Filename:
 					assert.Check(t, len(control.ControlImplementations.Edges) == 2)
-				case validFile.OriginalName:
+				case validFile.Filename:
 					assert.Check(t, len(control.ControlImplementations.Edges) == 1)
 				}
 
