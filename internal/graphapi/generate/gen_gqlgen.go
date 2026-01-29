@@ -18,6 +18,8 @@ const (
 	graphapiGenDir = "internal/graphapi/generate/"
 	// csvDir is the directory where the CSV files will be stored for example bulk operations
 	csvDir = "internal/httpserve/handlers/csv"
+	// csvJsonFile is the file that contains the mapping of CSV fields to entity fields
+	csvJsonFile = "internal/ent/csvgenerated/csv_field_mappings.json"
 	// graphqlImport that includes the transaction wrappers and other common graphql helpers
 	graphqlImport = "github.com/theopenlane/core/internal/graphapi/common"
 
@@ -89,6 +91,7 @@ func gqlGenerate() {
 			bulkgen.WithCSVOutputPath(csvDir),
 			bulkgen.WithGraphQLImport(graphqlImport),
 			bulkgen.WithCSVGeneratedPackage(csvGeneratedPackage),
+			bulkgen.WithCSVFieldMappingsFile(csvJsonFile),
 		)), // add the bulkgen plugin
 		api.AddPlugin(searchgen.NewWithOptions(
 			searchgen.WithEntGeneratedPackage(entPackage),
