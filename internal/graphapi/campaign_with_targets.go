@@ -35,6 +35,10 @@ func (r *mutationResolver) createCampaignWithTargets(ctx context.Context, campai
 		}
 	}
 
+	if targetCount == 0 {
+		return nil, rout.NewMissingRequiredFieldError("targets")
+	}
+
 	if campaignInput.RecipientCount == nil {
 		campaignInput.RecipientCount = &targetCount
 	}

@@ -9,14 +9,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 )
 
-// csvLookupFn is the function signature for CSV reference lookups used internally.
-type csvLookupFn func(ctx context.Context, values []string) (map[string]string, error)
-
-// csvCreateFn is the function signature for CSV reference auto-creation used internally.
-type csvCreateFn func(ctx context.Context, values []string) (map[string]string, error)
-
-// wrapGeneratedLookup wraps a generated lookup function to get client and orgID from context.
-func wrapGeneratedLookup(fn csvgenerated.CSVLookupFn) csvLookupFn {
+// wrapGeneratedFn wraps a generated lookup or create function to get client and orgID from context.
+func wrapGeneratedFn[F csvgenerated.CSVLookupFn | csvgenerated.CSVCreateFn](fn F) func(ctx context.Context, values []string) (map[string]string, error) {
 	return func(ctx context.Context, values []string) (map[string]string, error) {
 		client := withTransactionalMutation(ctx)
 
@@ -25,21 +19,7 @@ func wrapGeneratedLookup(fn csvgenerated.CSVLookupFn) csvLookupFn {
 			return nil, common.NewValidationError("organization id not found in context")
 		}
 
-		return fn(ctx, client, orgID, values)
-	}
-}
-
-// wrapGeneratedCreate wraps a generated create function to get client and orgID from context.
-func wrapGeneratedCreate(fn csvgenerated.CSVCreateFn) csvCreateFn {
-	return func(ctx context.Context, values []string) (map[string]string, error) {
-		client := withTransactionalMutation(ctx)
-
-		orgID, err := auth.GetOrganizationIDFromContext(ctx)
-		if err != nil {
-			return nil, common.NewValidationError("organization id not found in context")
-		}
-
-		return fn(ctx, client, orgID, values)
+		return (csvgenerated.CSVLookupFn)(fn)(ctx, client, orgID, values)
 	}
 }
 
@@ -69,12 +49,12 @@ func BuildCSVReferenceRulesFromRegistry(schemaName string) ([]CSVReferenceRule, 
 		rule := CSVReferenceRule{
 			SourceField: rr.SourceColumn,
 			TargetField: rr.TargetField,
-			Lookup:      wrapGeneratedLookup(entry.Lookup),
+			Lookup:      wrapGeneratedFn(entry.Lookup),
 			Normalize:   normalizeCSVReferenceKey,
 		}
 
 		if rr.CreateIfMissing && entry.Create != nil {
-			rule.Create = wrapGeneratedCreate(entry.Create)
+			rule.Create = wrapGeneratedFn(entry.Create)
 		}
 
 		rules = append(rules, rule)

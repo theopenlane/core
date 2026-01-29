@@ -395,8 +395,11 @@ func csvListFieldKinds[T any]() map[string]reflect.Kind {
 	return fieldKinds
 }
 
-// collectCSVListFieldKinds walks struct fields to capture slice/map CSV columns.
-func collectCSVListFieldKinds(t reflect.Type, fieldKinds map[string]reflect.Kind, prefixes []string) {
+// csvFieldVisitor is called for each non-struct field found during CSV struct traversal.
+type csvFieldVisitor func(combined []string, kind reflect.Kind)
+
+// walkCSVStructFields traverses struct fields for CSV processing and calls the visitor for each leaf field.
+func walkCSVStructFields(t reflect.Type, prefixes []string, visitor csvFieldVisitor) {
 	if t.Kind() == reflect.Pointer {
 		t = t.Elem()
 	}
@@ -415,7 +418,7 @@ func collectCSVListFieldKinds(t reflect.Type, fieldKinds map[string]reflect.Kind
 
 		fieldType := field.Type
 		if field.Anonymous {
-			collectCSVListFieldKinds(fieldType, fieldKinds, prefixes)
+			walkCSVStructFields(fieldType, prefixes, visitor)
 			continue
 		}
 
@@ -432,18 +435,24 @@ func collectCSVListFieldKinds(t reflect.Type, fieldKinds map[string]reflect.Kind
 		}
 
 		if kind == reflect.Struct {
-			collectCSVListFieldKinds(fieldType, fieldKinds, combined)
+			walkCSVStructFields(fieldType, combined, visitor)
 			continue
 		}
 
+		visitor(combined, kind)
+	}
+}
+
+// collectCSVListFieldKinds walks struct fields to capture slice/map CSV columns.
+func collectCSVListFieldKinds(t reflect.Type, fieldKinds map[string]reflect.Kind, prefixes []string) {
+	walkCSVStructFields(t, prefixes, func(combined []string, kind reflect.Kind) {
 		if kind != reflect.Slice && kind != reflect.Map {
-			continue
+			return
 		}
-
 		for _, name := range combined {
 			fieldKinds[normalizeCSVHeader(name)] = kind
 		}
-	}
+	})
 }
 
 // prefixCSVInputHeaders adds Input:: prefixes when a csvInput wrapper is used.
@@ -522,72 +531,36 @@ func csvEmbeddedHeaderSet(t reflect.Type) map[string]struct{} {
 
 // collectCSVHeaderNames walks fields to gather CSV header names for embedded structs.
 func collectCSVHeaderNames(t reflect.Type, headers map[string]struct{}, prefixes []string) {
-	if t.Kind() == reflect.Pointer {
-		t = t.Elem()
-	}
-	if t.Kind() != reflect.Struct {
-		return
-	}
-	if len(prefixes) == 0 {
-		prefixes = []string{""}
-	}
-
-	for i := 0; i < t.NumField(); i++ {
-		field := t.Field(i)
-		if field.PkgPath != "" {
-			continue
-		}
-
-		fieldType := field.Type
-		if field.Anonymous {
-			collectCSVHeaderNames(fieldType, headers, prefixes)
-			continue
-		}
-
-		names := csvFieldNames(field)
-		if len(names) == 0 {
-			continue
-		}
-
-		combined := combineCSVPrefixes(prefixes, names)
-
-		kind := fieldType.Kind()
-		if kind == reflect.Pointer {
-			kind = fieldType.Elem().Kind()
-		}
-		if kind == reflect.Struct {
-			collectCSVHeaderNames(fieldType, headers, combined)
-			continue
-		}
-
+	walkCSVStructFields(t, prefixes, func(combined []string, _ reflect.Kind) {
 		for _, name := range combined {
 			headers[normalizeCSVHeader(name)] = struct{}{}
 		}
-	}
+	})
 }
 
 // csvFieldNames extracts CSV header names from struct tags or field names.
 func csvFieldNames(field reflect.StructField) []string {
 	tag := strings.TrimSpace(field.Tag.Get("csv"))
-	if tag != "" {
-		parts := strings.Split(tag, ",")
-		names := make([]string, 0, len(parts))
-		for _, part := range parts {
-			part = strings.TrimSpace(part)
-			if part == "" {
-				continue
-			}
-			if part == "omitempty" || part == "partial" || strings.HasPrefix(part, "default=") {
-				continue
-			}
-			names = append(names, part)
+	if tag == "" {
+		return []string{field.Name}
+	}
+
+	parts := strings.Split(tag, ",")
+	names := make([]string, 0, len(parts))
+	for _, part := range parts {
+		part = strings.TrimSpace(part)
+		if part == "" || part == "omitempty" {
+			continue
 		}
-		if len(names) == 1 && names[0] == "-" {
-			return nil
-		}
-		if len(names) > 0 {
-			return names
-		}
+		names = append(names, part)
+	}
+
+	if len(names) == 1 && names[0] == "-" {
+		return nil
+	}
+
+	if len(names) > 0 {
+		return names
 	}
 
 	return []string{field.Name}
