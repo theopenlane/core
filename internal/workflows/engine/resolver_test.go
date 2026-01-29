@@ -42,6 +42,8 @@ func (s *WorkflowEngineTestSuite) TestResolveTargetsRequiresEngine() {
 //   User targets enable explicit assignment to specific individuals. The resolver must
 //   validate that the user ID is provided and return it directly.
 func (s *WorkflowEngineTestSuite) TestResolveUserTarget() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -103,6 +105,8 @@ func (s *WorkflowEngineTestSuite) TestResolveUserTarget() {
 //   Group targets enable dynamic assignment to team members. As group membership changes,
 //   workflow assignments automatically reflect the current membership.
 func (s *WorkflowEngineTestSuite) TestResolveGroupTarget() {
+	s.ClearWorkflowDefinitions()
+
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
@@ -180,6 +184,8 @@ func (s *WorkflowEngineTestSuite) TestResolveGroupTarget() {
 //   Role targets enable automatic assignment to users based on their organizational role.
 //   This is useful for "assign to all org owners" or "assign to all admins" workflows.
 func (s *WorkflowEngineTestSuite) TestResolveRoleTarget() {
+	s.ClearWorkflowDefinitions()
+
 	wfEngine := s.Engine()
 
 	s.Run("role target requires ID", func() {
@@ -267,6 +273,8 @@ func (s *WorkflowEngineTestSuite) TestResolveRoleTarget() {
 //   "CONTROL_OWNER" automatically assigns to whoever owns the control being modified,
 //   without hardcoding specific user IDs in the workflow definition.
 func (s *WorkflowEngineTestSuite) TestResolveControlTarget() {
+	s.ClearWorkflowDefinitions()
+
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -322,6 +330,8 @@ func (s *WorkflowEngineTestSuite) TestResolveControlTarget() {
 //   The resolver must validate target configurations and fail fast with clear errors
 //   rather than silently returning empty results or causing downstream failures.
 func (s *WorkflowEngineTestSuite) TestResolveInvalidTarget() {
+	s.ClearWorkflowDefinitions()
+
 	wfEngine := s.Engine()
 
 	obj := &workflows.Object{

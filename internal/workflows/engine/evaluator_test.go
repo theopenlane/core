@@ -53,6 +53,8 @@ func (s *WorkflowEngineTestSuite) TestWorkflowEngineEvaluator() {
 //   Conditions are the second layer of workflow filtering (after triggers). They enable
 //   complex business rules using CEL expressions with access to object state and trigger context.
 func (s *WorkflowEngineTestSuite) TestEvaluateConditions() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -184,6 +186,8 @@ func (s *WorkflowEngineTestSuite) TestEvaluateConditions() {
 //   It must correctly filter by schema type, active status, operation, and fields to
 //   find only the relevant workflow definitions.
 func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -241,6 +245,8 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
 //   Selectors enable scoping workflows to specific subsets of objects. This is essential
 //   for multi-tenant environments where different teams have different approval requirements.
 func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsSelectors() {
+	s.ClearWorkflowDefinitions()
+
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
@@ -315,6 +321,8 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsSelectors() {
 //   Edge-based triggers enable workflows that respond to relationship changes, not just
 //   field value changes. The CEL expression support allows complex edge-based conditions.
 func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsEdgeTriggers() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
@@ -385,6 +393,8 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsEdgeTriggers() {
 //   Prefiltering avoids loading all workflow definitions and evaluating their CEL expressions
 //   for every mutation. The database can efficiently filter based on indexed columns.
 func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 

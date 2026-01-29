@@ -500,10 +500,43 @@ func (s *WorkflowEngineTestSuite) UpdateWorkflowDefinitionInactive(def *generate
 	return updated
 }
 
-// ClearWorkflowDefinitions removes all workflow definitions with privacy bypass for testing
+// ClearWorkflowDefinitions removes all workflow definitions and related entities with privacy bypass for testing.
+// This ensures complete test isolation by clearing:
+// - WorkflowEvent (depends on WorkflowInstance)
+// - WorkflowAssignmentTarget (depends on WorkflowAssignment)
+// - WorkflowAssignment (depends on WorkflowInstance)
+// - WorkflowObjectRef (depends on WorkflowProposal)
+// - WorkflowInstance (depends on WorkflowDefinition, WorkflowProposal)
+// - WorkflowProposal
+// - WorkflowDefinition
 func (s *WorkflowEngineTestSuite) ClearWorkflowDefinitions() {
 	internalCtx := generated.NewContext(rule.WithInternalContext(s.ctx), s.client)
-	_, err := s.client.WorkflowDefinition.Delete().Exec(internalCtx)
+
+	// Delete in order respecting foreign key constraints
+	_, err := s.client.WorkflowEvent.Delete().Exec(internalCtx)
+	s.Require().NoError(err)
+
+	_, err = s.client.WorkflowAssignmentTarget.Delete().Exec(internalCtx)
+	s.Require().NoError(err)
+
+	_, err = s.client.WorkflowAssignment.Delete().Exec(internalCtx)
+	s.Require().NoError(err)
+
+	// Clear the optional workflow_proposal_id FK to break the circular dependency:
+	// WorkflowInstance -> WorkflowProposal -> WorkflowObjectRef -> WorkflowInstance
+	err = s.client.WorkflowInstance.Update().ClearWorkflowProposal().Exec(internalCtx)
+	s.Require().NoError(err)
+
+	_, err = s.client.WorkflowProposal.Delete().Exec(internalCtx)
+	s.Require().NoError(err)
+
+	_, err = s.client.WorkflowObjectRef.Delete().Exec(internalCtx)
+	s.Require().NoError(err)
+
+	_, err = s.client.WorkflowInstance.Delete().Exec(internalCtx)
+	s.Require().NoError(err)
+
+	_, err = s.client.WorkflowDefinition.Delete().Exec(internalCtx)
 	s.Require().NoError(err)
 }
 
