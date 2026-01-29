@@ -50376,6 +50376,7 @@ enum TrustCenterNDARequestHistoryTrustCenterNDARequestStatus @goModel(model: "gi
   NEEDS_APPROVAL
   APPROVED
   SIGNED
+  DECLINED
 }
 """
 TrustCenterNDARequestHistoryWhereInput is used for filtering TrustCenterNDARequestHistory objects.
