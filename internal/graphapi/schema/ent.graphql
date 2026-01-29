@@ -13547,10 +13547,23 @@ input CreateTrustCenterNDARequestInput {
   access level requested
   """
   accessLevel: TrustCenterNDARequestTrustCenterNDARequestAccessLevel
+  """
+  timestamp when the request was approved
+  """
+  approvedAt: DateTime
+  """
+  ID of the user who approved the request
+  """
+  approvedByUserID: String
+  """
+  timestamp when the NDA was signed
+  """
+  signedAt: DateTime
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   trustCenterID: ID
   trustCenterDocIDs: [ID!]
+  documentID: ID
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -59559,6 +59572,22 @@ type TrustCenterNDARequest implements Node {
   status of the NDA request
   """
   status: TrustCenterNDARequestTrustCenterNDARequestStatus
+  """
+  timestamp when the request was approved
+  """
+  approvedAt: DateTime
+  """
+  ID of the user who approved the request
+  """
+  approvedByUserID: String
+  """
+  timestamp when the NDA was signed
+  """
+  signedAt: DateTime
+  """
+  ID of the signed NDA document data
+  """
+  documentDataID: ID
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -59653,6 +59682,10 @@ type TrustCenterNDARequest implements Node {
     """
     where: TrustCenterDocWhereInput
   ): TrustCenterDocConnection!
+  """
+  the signed NDA document data
+  """
+  document: DocumentData
 }
 """
 A connection to a list of items.
@@ -59924,6 +59957,68 @@ input TrustCenterNDARequestWhereInput {
   statusIsNil: Boolean
   statusNotNil: Boolean
   """
+  approved_at field predicates
+  """
+  approvedAt: DateTime
+  approvedAtNEQ: DateTime
+  approvedAtIn: [DateTime!]
+  approvedAtNotIn: [DateTime!]
+  approvedAtGT: DateTime
+  approvedAtGTE: DateTime
+  approvedAtLT: DateTime
+  approvedAtLTE: DateTime
+  approvedAtIsNil: Boolean
+  approvedAtNotNil: Boolean
+  """
+  approved_by_user_id field predicates
+  """
+  approvedByUserID: String
+  approvedByUserIDNEQ: String
+  approvedByUserIDIn: [String!]
+  approvedByUserIDNotIn: [String!]
+  approvedByUserIDGT: String
+  approvedByUserIDGTE: String
+  approvedByUserIDLT: String
+  approvedByUserIDLTE: String
+  approvedByUserIDContains: String
+  approvedByUserIDHasPrefix: String
+  approvedByUserIDHasSuffix: String
+  approvedByUserIDIsNil: Boolean
+  approvedByUserIDNotNil: Boolean
+  approvedByUserIDEqualFold: String
+  approvedByUserIDContainsFold: String
+  """
+  signed_at field predicates
+  """
+  signedAt: DateTime
+  signedAtNEQ: DateTime
+  signedAtIn: [DateTime!]
+  signedAtNotIn: [DateTime!]
+  signedAtGT: DateTime
+  signedAtGTE: DateTime
+  signedAtLT: DateTime
+  signedAtLTE: DateTime
+  signedAtIsNil: Boolean
+  signedAtNotNil: Boolean
+  """
+  document_data_id field predicates
+  """
+  documentDataID: ID
+  documentDataIDNEQ: ID
+  documentDataIDIn: [ID!]
+  documentDataIDNotIn: [ID!]
+  documentDataIDGT: ID
+  documentDataIDGTE: ID
+  documentDataIDLT: ID
+  documentDataIDLTE: ID
+  documentDataIDContains: ID
+  documentDataIDHasPrefix: ID
+  documentDataIDHasSuffix: ID
+  documentDataIDIsNil: Boolean
+  documentDataIDNotNil: Boolean
+  documentDataIDEqualFold: ID
+  documentDataIDContainsFold: ID
+  """
   blocked_groups edge predicates
   """
   hasBlockedGroups: Boolean
@@ -59943,6 +60038,11 @@ input TrustCenterNDARequestWhereInput {
   """
   hasTrustCenterDocs: Boolean
   hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
+  """
+  document edge predicates
+  """
+  hasDocument: Boolean
+  hasDocumentWith: [DocumentDataWhereInput!]
 }
 """
 Ordering options for TrustCenter connections
@@ -68015,6 +68115,21 @@ input UpdateTrustCenterNDARequestInput {
   """
   status: TrustCenterNDARequestTrustCenterNDARequestStatus
   clearStatus: Boolean
+  """
+  timestamp when the request was approved
+  """
+  approvedAt: DateTime
+  clearApprovedAt: Boolean
+  """
+  ID of the user who approved the request
+  """
+  approvedByUserID: String
+  clearApprovedByUserID: Boolean
+  """
+  timestamp when the NDA was signed
+  """
+  signedAt: DateTime
+  clearSignedAt: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -68024,6 +68139,8 @@ input UpdateTrustCenterNDARequestInput {
   addTrustCenterDocIDs: [ID!]
   removeTrustCenterDocIDs: [ID!]
   clearTrustCenterDocs: Boolean
+  documentID: ID
+  clearDocument: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.

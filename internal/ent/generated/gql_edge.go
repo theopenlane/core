@@ -14103,6 +14103,14 @@ func (_m *TrustCenterNDARequest) TrustCenterDocs(
 	return _m.QueryTrustCenterDocs().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *TrustCenterNDARequest) Document(ctx context.Context) (*DocumentData, error) {
+	result, err := _m.Edges.DocumentOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryDocument().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *TrustCenterSetting) BlockedGroups(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupOrder, where *GroupWhereInput,
 ) (*GroupConnection, error) {

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -232,6 +233,62 @@ func (_c *TrustCenterNDARequestHistoryCreate) SetStatus(v enums.TrustCenterNDARe
 func (_c *TrustCenterNDARequestHistoryCreate) SetNillableStatus(v *enums.TrustCenterNDARequestStatus) *TrustCenterNDARequestHistoryCreate {
 	if v != nil {
 		_c.SetStatus(*v)
+	}
+	return _c
+}
+
+// SetApprovedAt sets the "approved_at" field.
+func (_c *TrustCenterNDARequestHistoryCreate) SetApprovedAt(v models.DateTime) *TrustCenterNDARequestHistoryCreate {
+	_c.mutation.SetApprovedAt(v)
+	return _c
+}
+
+// SetNillableApprovedAt sets the "approved_at" field if the given value is not nil.
+func (_c *TrustCenterNDARequestHistoryCreate) SetNillableApprovedAt(v *models.DateTime) *TrustCenterNDARequestHistoryCreate {
+	if v != nil {
+		_c.SetApprovedAt(*v)
+	}
+	return _c
+}
+
+// SetApprovedByUserID sets the "approved_by_user_id" field.
+func (_c *TrustCenterNDARequestHistoryCreate) SetApprovedByUserID(v string) *TrustCenterNDARequestHistoryCreate {
+	_c.mutation.SetApprovedByUserID(v)
+	return _c
+}
+
+// SetNillableApprovedByUserID sets the "approved_by_user_id" field if the given value is not nil.
+func (_c *TrustCenterNDARequestHistoryCreate) SetNillableApprovedByUserID(v *string) *TrustCenterNDARequestHistoryCreate {
+	if v != nil {
+		_c.SetApprovedByUserID(*v)
+	}
+	return _c
+}
+
+// SetSignedAt sets the "signed_at" field.
+func (_c *TrustCenterNDARequestHistoryCreate) SetSignedAt(v models.DateTime) *TrustCenterNDARequestHistoryCreate {
+	_c.mutation.SetSignedAt(v)
+	return _c
+}
+
+// SetNillableSignedAt sets the "signed_at" field if the given value is not nil.
+func (_c *TrustCenterNDARequestHistoryCreate) SetNillableSignedAt(v *models.DateTime) *TrustCenterNDARequestHistoryCreate {
+	if v != nil {
+		_c.SetSignedAt(*v)
+	}
+	return _c
+}
+
+// SetDocumentDataID sets the "document_data_id" field.
+func (_c *TrustCenterNDARequestHistoryCreate) SetDocumentDataID(v string) *TrustCenterNDARequestHistoryCreate {
+	_c.mutation.SetDocumentDataID(v)
+	return _c
+}
+
+// SetNillableDocumentDataID sets the "document_data_id" field if the given value is not nil.
+func (_c *TrustCenterNDARequestHistoryCreate) SetNillableDocumentDataID(v *string) *TrustCenterNDARequestHistoryCreate {
+	if v != nil {
+		_c.SetDocumentDataID(*v)
 	}
 	return _c
 }
@@ -469,6 +526,22 @@ func (_c *TrustCenterNDARequestHistoryCreate) createSpec() (*TrustCenterNDAReque
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(trustcenterndarequesthistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ApprovedAt(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldApprovedAt, field.TypeTime, value)
+		_node.ApprovedAt = &value
+	}
+	if value, ok := _c.mutation.ApprovedByUserID(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldApprovedByUserID, field.TypeString, value)
+		_node.ApprovedByUserID = &value
+	}
+	if value, ok := _c.mutation.SignedAt(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldSignedAt, field.TypeTime, value)
+		_node.SignedAt = &value
+	}
+	if value, ok := _c.mutation.DocumentDataID(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldDocumentDataID, field.TypeString, value)
+		_node.DocumentDataID = &value
 	}
 	return _node, _spec
 }

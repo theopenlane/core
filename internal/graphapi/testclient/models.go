@@ -2414,6 +2414,12 @@ type AssetWhereInput struct {
 	HasConnectedFromWith []*AssetWhereInput `json:"hasConnectedFromWith,omitempty"`
 }
 
+// Return response for approveNDARequests or denyNDARequests mutation
+type BulkUpdateStatusPayload struct {
+	// Updated nda request IDs
+	TotalUpdated int64 `json:"totalUpdated"`
+}
+
 type Campaign struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -8038,11 +8044,18 @@ type CreateTrustCenterNDARequestInput struct {
 	// reason for the NDA request
 	Reason *string `json:"reason,omitempty"`
 	// access level requested
-	AccessLevel       *enums.TrustCenterNDARequestAccessLevel `json:"accessLevel,omitempty"`
-	BlockedGroupIDs   []string                                `json:"blockedGroupIDs,omitempty"`
-	EditorIDs         []string                                `json:"editorIDs,omitempty"`
-	TrustCenterID     *string                                 `json:"trustCenterID,omitempty"`
-	TrustCenterDocIDs []string                                `json:"trustCenterDocIDs,omitempty"`
+	AccessLevel *enums.TrustCenterNDARequestAccessLevel `json:"accessLevel,omitempty"`
+	// timestamp when the request was approved
+	ApprovedAt *models.DateTime `json:"approvedAt,omitempty"`
+	// ID of the user who approved the request
+	ApprovedByUserID *string `json:"approvedByUserID,omitempty"`
+	// timestamp when the NDA was signed
+	SignedAt          *models.DateTime `json:"signedAt,omitempty"`
+	BlockedGroupIDs   []string         `json:"blockedGroupIDs,omitempty"`
+	EditorIDs         []string         `json:"editorIDs,omitempty"`
+	TrustCenterID     *string          `json:"trustCenterID,omitempty"`
+	TrustCenterDocIDs []string         `json:"trustCenterDocIDs,omitempty"`
+	DocumentID        *string          `json:"documentID,omitempty"`
 }
 
 // Input for createTrustCenterPreviewSetting mutation
@@ -31521,11 +31534,21 @@ type TrustCenterNDARequest struct {
 	// access level requested
 	AccessLevel *enums.TrustCenterNDARequestAccessLevel `json:"accessLevel,omitempty"`
 	// status of the NDA request
-	Status          *enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
-	BlockedGroups   *GroupConnection                   `json:"blockedGroups"`
-	Editors         *GroupConnection                   `json:"editors"`
-	TrustCenter     *TrustCenter                       `json:"trustCenter,omitempty"`
-	TrustCenterDocs *TrustCenterDocConnection          `json:"trustCenterDocs"`
+	Status *enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
+	// timestamp when the request was approved
+	ApprovedAt *models.DateTime `json:"approvedAt,omitempty"`
+	// ID of the user who approved the request
+	ApprovedByUserID *string `json:"approvedByUserID,omitempty"`
+	// timestamp when the NDA was signed
+	SignedAt *models.DateTime `json:"signedAt,omitempty"`
+	// ID of the signed NDA document data
+	DocumentDataID  *string                   `json:"documentDataID,omitempty"`
+	BlockedGroups   *GroupConnection          `json:"blockedGroups"`
+	Editors         *GroupConnection          `json:"editors"`
+	TrustCenter     *TrustCenter              `json:"trustCenter,omitempty"`
+	TrustCenterDocs *TrustCenterDocConnection `json:"trustCenterDocs"`
+	// the signed NDA document data
+	Document *DocumentData `json:"document,omitempty"`
 }
 
 func (TrustCenterNDARequest) IsNode() {}
@@ -31755,6 +31778,60 @@ type TrustCenterNDARequestWhereInput struct {
 	StatusNotIn  []enums.TrustCenterNDARequestStatus `json:"statusNotIn,omitempty"`
 	StatusIsNil  *bool                               `json:"statusIsNil,omitempty"`
 	StatusNotNil *bool                               `json:"statusNotNil,omitempty"`
+	// approved_at field predicates
+	ApprovedAt       *models.DateTime   `json:"approvedAt,omitempty"`
+	ApprovedAtNeq    *models.DateTime   `json:"approvedAtNEQ,omitempty"`
+	ApprovedAtIn     []*models.DateTime `json:"approvedAtIn,omitempty"`
+	ApprovedAtNotIn  []*models.DateTime `json:"approvedAtNotIn,omitempty"`
+	ApprovedAtGt     *models.DateTime   `json:"approvedAtGT,omitempty"`
+	ApprovedAtGte    *models.DateTime   `json:"approvedAtGTE,omitempty"`
+	ApprovedAtLt     *models.DateTime   `json:"approvedAtLT,omitempty"`
+	ApprovedAtLte    *models.DateTime   `json:"approvedAtLTE,omitempty"`
+	ApprovedAtIsNil  *bool              `json:"approvedAtIsNil,omitempty"`
+	ApprovedAtNotNil *bool              `json:"approvedAtNotNil,omitempty"`
+	// approved_by_user_id field predicates
+	ApprovedByUserID             *string  `json:"approvedByUserID,omitempty"`
+	ApprovedByUserIdneq          *string  `json:"approvedByUserIDNEQ,omitempty"`
+	ApprovedByUserIDIn           []string `json:"approvedByUserIDIn,omitempty"`
+	ApprovedByUserIDNotIn        []string `json:"approvedByUserIDNotIn,omitempty"`
+	ApprovedByUserIdgt           *string  `json:"approvedByUserIDGT,omitempty"`
+	ApprovedByUserIdgte          *string  `json:"approvedByUserIDGTE,omitempty"`
+	ApprovedByUserIdlt           *string  `json:"approvedByUserIDLT,omitempty"`
+	ApprovedByUserIdlte          *string  `json:"approvedByUserIDLTE,omitempty"`
+	ApprovedByUserIDContains     *string  `json:"approvedByUserIDContains,omitempty"`
+	ApprovedByUserIDHasPrefix    *string  `json:"approvedByUserIDHasPrefix,omitempty"`
+	ApprovedByUserIDHasSuffix    *string  `json:"approvedByUserIDHasSuffix,omitempty"`
+	ApprovedByUserIDIsNil        *bool    `json:"approvedByUserIDIsNil,omitempty"`
+	ApprovedByUserIDNotNil       *bool    `json:"approvedByUserIDNotNil,omitempty"`
+	ApprovedByUserIDEqualFold    *string  `json:"approvedByUserIDEqualFold,omitempty"`
+	ApprovedByUserIDContainsFold *string  `json:"approvedByUserIDContainsFold,omitempty"`
+	// signed_at field predicates
+	SignedAt       *models.DateTime   `json:"signedAt,omitempty"`
+	SignedAtNeq    *models.DateTime   `json:"signedAtNEQ,omitempty"`
+	SignedAtIn     []*models.DateTime `json:"signedAtIn,omitempty"`
+	SignedAtNotIn  []*models.DateTime `json:"signedAtNotIn,omitempty"`
+	SignedAtGt     *models.DateTime   `json:"signedAtGT,omitempty"`
+	SignedAtGte    *models.DateTime   `json:"signedAtGTE,omitempty"`
+	SignedAtLt     *models.DateTime   `json:"signedAtLT,omitempty"`
+	SignedAtLte    *models.DateTime   `json:"signedAtLTE,omitempty"`
+	SignedAtIsNil  *bool              `json:"signedAtIsNil,omitempty"`
+	SignedAtNotNil *bool              `json:"signedAtNotNil,omitempty"`
+	// document_data_id field predicates
+	DocumentDataID             *string  `json:"documentDataID,omitempty"`
+	DocumentDataIdneq          *string  `json:"documentDataIDNEQ,omitempty"`
+	DocumentDataIDIn           []string `json:"documentDataIDIn,omitempty"`
+	DocumentDataIDNotIn        []string `json:"documentDataIDNotIn,omitempty"`
+	DocumentDataIdgt           *string  `json:"documentDataIDGT,omitempty"`
+	DocumentDataIdgte          *string  `json:"documentDataIDGTE,omitempty"`
+	DocumentDataIdlt           *string  `json:"documentDataIDLT,omitempty"`
+	DocumentDataIdlte          *string  `json:"documentDataIDLTE,omitempty"`
+	DocumentDataIDContains     *string  `json:"documentDataIDContains,omitempty"`
+	DocumentDataIDHasPrefix    *string  `json:"documentDataIDHasPrefix,omitempty"`
+	DocumentDataIDHasSuffix    *string  `json:"documentDataIDHasSuffix,omitempty"`
+	DocumentDataIDIsNil        *bool    `json:"documentDataIDIsNil,omitempty"`
+	DocumentDataIDNotNil       *bool    `json:"documentDataIDNotNil,omitempty"`
+	DocumentDataIDEqualFold    *string  `json:"documentDataIDEqualFold,omitempty"`
+	DocumentDataIDContainsFold *string  `json:"documentDataIDContainsFold,omitempty"`
 	// blocked_groups edge predicates
 	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
 	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
@@ -31767,6 +31844,9 @@ type TrustCenterNDARequestWhereInput struct {
 	// trust_center_docs edge predicates
 	HasTrustCenterDocs     *bool                       `json:"hasTrustCenterDocs,omitempty"`
 	HasTrustCenterDocsWith []*TrustCenterDocWhereInput `json:"hasTrustCenterDocsWith,omitempty"`
+	// document edge predicates
+	HasDocument     *bool                     `json:"hasDocument,omitempty"`
+	HasDocumentWith []*DocumentDataWhereInput `json:"hasDocumentWith,omitempty"`
 }
 
 type TrustCenterNDAUpdatePayload struct {
@@ -37845,17 +37925,28 @@ type UpdateTrustCenterNDARequestInput struct {
 	AccessLevel      *enums.TrustCenterNDARequestAccessLevel `json:"accessLevel,omitempty"`
 	ClearAccessLevel *bool                                   `json:"clearAccessLevel,omitempty"`
 	// status of the NDA request
-	Status                  *enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
-	ClearStatus             *bool                              `json:"clearStatus,omitempty"`
-	AddBlockedGroupIDs      []string                           `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs   []string                           `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups      *bool                              `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs            []string                           `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs         []string                           `json:"removeEditorIDs,omitempty"`
-	ClearEditors            *bool                              `json:"clearEditors,omitempty"`
-	AddTrustCenterDocIDs    []string                           `json:"addTrustCenterDocIDs,omitempty"`
-	RemoveTrustCenterDocIDs []string                           `json:"removeTrustCenterDocIDs,omitempty"`
-	ClearTrustCenterDocs    *bool                              `json:"clearTrustCenterDocs,omitempty"`
+	Status      *enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
+	ClearStatus *bool                              `json:"clearStatus,omitempty"`
+	// timestamp when the request was approved
+	ApprovedAt      *models.DateTime `json:"approvedAt,omitempty"`
+	ClearApprovedAt *bool            `json:"clearApprovedAt,omitempty"`
+	// ID of the user who approved the request
+	ApprovedByUserID      *string `json:"approvedByUserID,omitempty"`
+	ClearApprovedByUserID *bool   `json:"clearApprovedByUserID,omitempty"`
+	// timestamp when the NDA was signed
+	SignedAt                *models.DateTime `json:"signedAt,omitempty"`
+	ClearSignedAt           *bool            `json:"clearSignedAt,omitempty"`
+	AddBlockedGroupIDs      []string         `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string         `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool            `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string         `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string         `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool            `json:"clearEditors,omitempty"`
+	AddTrustCenterDocIDs    []string         `json:"addTrustCenterDocIDs,omitempty"`
+	RemoveTrustCenterDocIDs []string         `json:"removeTrustCenterDocIDs,omitempty"`
+	ClearTrustCenterDocs    *bool            `json:"clearTrustCenterDocs,omitempty"`
+	DocumentID              *string          `json:"documentID,omitempty"`
+	ClearDocument           *bool            `json:"clearDocument,omitempty"`
 }
 
 // UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.

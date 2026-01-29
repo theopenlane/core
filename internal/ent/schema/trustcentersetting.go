@@ -64,7 +64,6 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Optional(),
 		field.Text("overview").
 			Comment("overview of the trust center").
-			MaxLen(trustCenterDescriptionMaxLen).
 			Optional(),
 		field.String("logo_remote_url").
 			Comment("URL of the logo").

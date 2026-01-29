@@ -70624,6 +70624,64 @@ type TrustCenterNDARequestHistoryWhereInput struct {
 	StatusNotIn  []enums.TrustCenterNDARequestStatus `json:"statusNotIn,omitempty"`
 	StatusIsNil  bool                                `json:"statusIsNil,omitempty"`
 	StatusNotNil bool                                `json:"statusNotNil,omitempty"`
+
+	// "approved_at" field predicates.
+	ApprovedAt       *models.DateTime  `json:"approvedAt,omitempty"`
+	ApprovedAtNEQ    *models.DateTime  `json:"approvedAtNEQ,omitempty"`
+	ApprovedAtIn     []models.DateTime `json:"approvedAtIn,omitempty"`
+	ApprovedAtNotIn  []models.DateTime `json:"approvedAtNotIn,omitempty"`
+	ApprovedAtGT     *models.DateTime  `json:"approvedAtGT,omitempty"`
+	ApprovedAtGTE    *models.DateTime  `json:"approvedAtGTE,omitempty"`
+	ApprovedAtLT     *models.DateTime  `json:"approvedAtLT,omitempty"`
+	ApprovedAtLTE    *models.DateTime  `json:"approvedAtLTE,omitempty"`
+	ApprovedAtIsNil  bool              `json:"approvedAtIsNil,omitempty"`
+	ApprovedAtNotNil bool              `json:"approvedAtNotNil,omitempty"`
+
+	// "approved_by_user_id" field predicates.
+	ApprovedByUserID             *string  `json:"approvedByUserID,omitempty"`
+	ApprovedByUserIDNEQ          *string  `json:"approvedByUserIDNEQ,omitempty"`
+	ApprovedByUserIDIn           []string `json:"approvedByUserIDIn,omitempty"`
+	ApprovedByUserIDNotIn        []string `json:"approvedByUserIDNotIn,omitempty"`
+	ApprovedByUserIDGT           *string  `json:"approvedByUserIDGT,omitempty"`
+	ApprovedByUserIDGTE          *string  `json:"approvedByUserIDGTE,omitempty"`
+	ApprovedByUserIDLT           *string  `json:"approvedByUserIDLT,omitempty"`
+	ApprovedByUserIDLTE          *string  `json:"approvedByUserIDLTE,omitempty"`
+	ApprovedByUserIDContains     *string  `json:"approvedByUserIDContains,omitempty"`
+	ApprovedByUserIDHasPrefix    *string  `json:"approvedByUserIDHasPrefix,omitempty"`
+	ApprovedByUserIDHasSuffix    *string  `json:"approvedByUserIDHasSuffix,omitempty"`
+	ApprovedByUserIDIsNil        bool     `json:"approvedByUserIDIsNil,omitempty"`
+	ApprovedByUserIDNotNil       bool     `json:"approvedByUserIDNotNil,omitempty"`
+	ApprovedByUserIDEqualFold    *string  `json:"approvedByUserIDEqualFold,omitempty"`
+	ApprovedByUserIDContainsFold *string  `json:"approvedByUserIDContainsFold,omitempty"`
+
+	// "signed_at" field predicates.
+	SignedAt       *models.DateTime  `json:"signedAt,omitempty"`
+	SignedAtNEQ    *models.DateTime  `json:"signedAtNEQ,omitempty"`
+	SignedAtIn     []models.DateTime `json:"signedAtIn,omitempty"`
+	SignedAtNotIn  []models.DateTime `json:"signedAtNotIn,omitempty"`
+	SignedAtGT     *models.DateTime  `json:"signedAtGT,omitempty"`
+	SignedAtGTE    *models.DateTime  `json:"signedAtGTE,omitempty"`
+	SignedAtLT     *models.DateTime  `json:"signedAtLT,omitempty"`
+	SignedAtLTE    *models.DateTime  `json:"signedAtLTE,omitempty"`
+	SignedAtIsNil  bool              `json:"signedAtIsNil,omitempty"`
+	SignedAtNotNil bool              `json:"signedAtNotNil,omitempty"`
+
+	// "document_data_id" field predicates.
+	DocumentDataID             *string  `json:"documentDataID,omitempty"`
+	DocumentDataIDNEQ          *string  `json:"documentDataIDNEQ,omitempty"`
+	DocumentDataIDIn           []string `json:"documentDataIDIn,omitempty"`
+	DocumentDataIDNotIn        []string `json:"documentDataIDNotIn,omitempty"`
+	DocumentDataIDGT           *string  `json:"documentDataIDGT,omitempty"`
+	DocumentDataIDGTE          *string  `json:"documentDataIDGTE,omitempty"`
+	DocumentDataIDLT           *string  `json:"documentDataIDLT,omitempty"`
+	DocumentDataIDLTE          *string  `json:"documentDataIDLTE,omitempty"`
+	DocumentDataIDContains     *string  `json:"documentDataIDContains,omitempty"`
+	DocumentDataIDHasPrefix    *string  `json:"documentDataIDHasPrefix,omitempty"`
+	DocumentDataIDHasSuffix    *string  `json:"documentDataIDHasSuffix,omitempty"`
+	DocumentDataIDIsNil        bool     `json:"documentDataIDIsNil,omitempty"`
+	DocumentDataIDNotNil       bool     `json:"documentDataIDNotNil,omitempty"`
+	DocumentDataIDEqualFold    *string  `json:"documentDataIDEqualFold,omitempty"`
+	DocumentDataIDContainsFold *string  `json:"documentDataIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -71245,6 +71303,156 @@ func (i *TrustCenterNDARequestHistoryWhereInput) P() (predicate.TrustCenterNDARe
 	}
 	if i.StatusNotNil {
 		predicates = append(predicates, trustcenterndarequesthistory.StatusNotNil())
+	}
+	if i.ApprovedAt != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedAtEQ(*i.ApprovedAt))
+	}
+	if i.ApprovedAtNEQ != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedAtNEQ(*i.ApprovedAtNEQ))
+	}
+	if len(i.ApprovedAtIn) > 0 {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedAtIn(i.ApprovedAtIn...))
+	}
+	if len(i.ApprovedAtNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedAtNotIn(i.ApprovedAtNotIn...))
+	}
+	if i.ApprovedAtGT != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedAtGT(*i.ApprovedAtGT))
+	}
+	if i.ApprovedAtGTE != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedAtGTE(*i.ApprovedAtGTE))
+	}
+	if i.ApprovedAtLT != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedAtLT(*i.ApprovedAtLT))
+	}
+	if i.ApprovedAtLTE != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedAtLTE(*i.ApprovedAtLTE))
+	}
+	if i.ApprovedAtIsNil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedAtIsNil())
+	}
+	if i.ApprovedAtNotNil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedAtNotNil())
+	}
+	if i.ApprovedByUserID != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedByUserIDEQ(*i.ApprovedByUserID))
+	}
+	if i.ApprovedByUserIDNEQ != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedByUserIDNEQ(*i.ApprovedByUserIDNEQ))
+	}
+	if len(i.ApprovedByUserIDIn) > 0 {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedByUserIDIn(i.ApprovedByUserIDIn...))
+	}
+	if len(i.ApprovedByUserIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedByUserIDNotIn(i.ApprovedByUserIDNotIn...))
+	}
+	if i.ApprovedByUserIDGT != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedByUserIDGT(*i.ApprovedByUserIDGT))
+	}
+	if i.ApprovedByUserIDGTE != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedByUserIDGTE(*i.ApprovedByUserIDGTE))
+	}
+	if i.ApprovedByUserIDLT != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedByUserIDLT(*i.ApprovedByUserIDLT))
+	}
+	if i.ApprovedByUserIDLTE != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedByUserIDLTE(*i.ApprovedByUserIDLTE))
+	}
+	if i.ApprovedByUserIDContains != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedByUserIDContains(*i.ApprovedByUserIDContains))
+	}
+	if i.ApprovedByUserIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedByUserIDHasPrefix(*i.ApprovedByUserIDHasPrefix))
+	}
+	if i.ApprovedByUserIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedByUserIDHasSuffix(*i.ApprovedByUserIDHasSuffix))
+	}
+	if i.ApprovedByUserIDIsNil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedByUserIDIsNil())
+	}
+	if i.ApprovedByUserIDNotNil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedByUserIDNotNil())
+	}
+	if i.ApprovedByUserIDEqualFold != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedByUserIDEqualFold(*i.ApprovedByUserIDEqualFold))
+	}
+	if i.ApprovedByUserIDContainsFold != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.ApprovedByUserIDContainsFold(*i.ApprovedByUserIDContainsFold))
+	}
+	if i.SignedAt != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.SignedAtEQ(*i.SignedAt))
+	}
+	if i.SignedAtNEQ != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.SignedAtNEQ(*i.SignedAtNEQ))
+	}
+	if len(i.SignedAtIn) > 0 {
+		predicates = append(predicates, trustcenterndarequesthistory.SignedAtIn(i.SignedAtIn...))
+	}
+	if len(i.SignedAtNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequesthistory.SignedAtNotIn(i.SignedAtNotIn...))
+	}
+	if i.SignedAtGT != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.SignedAtGT(*i.SignedAtGT))
+	}
+	if i.SignedAtGTE != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.SignedAtGTE(*i.SignedAtGTE))
+	}
+	if i.SignedAtLT != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.SignedAtLT(*i.SignedAtLT))
+	}
+	if i.SignedAtLTE != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.SignedAtLTE(*i.SignedAtLTE))
+	}
+	if i.SignedAtIsNil {
+		predicates = append(predicates, trustcenterndarequesthistory.SignedAtIsNil())
+	}
+	if i.SignedAtNotNil {
+		predicates = append(predicates, trustcenterndarequesthistory.SignedAtNotNil())
+	}
+	if i.DocumentDataID != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDEQ(*i.DocumentDataID))
+	}
+	if i.DocumentDataIDNEQ != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDNEQ(*i.DocumentDataIDNEQ))
+	}
+	if len(i.DocumentDataIDIn) > 0 {
+		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDIn(i.DocumentDataIDIn...))
+	}
+	if len(i.DocumentDataIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDNotIn(i.DocumentDataIDNotIn...))
+	}
+	if i.DocumentDataIDGT != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDGT(*i.DocumentDataIDGT))
+	}
+	if i.DocumentDataIDGTE != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDGTE(*i.DocumentDataIDGTE))
+	}
+	if i.DocumentDataIDLT != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDLT(*i.DocumentDataIDLT))
+	}
+	if i.DocumentDataIDLTE != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDLTE(*i.DocumentDataIDLTE))
+	}
+	if i.DocumentDataIDContains != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDContains(*i.DocumentDataIDContains))
+	}
+	if i.DocumentDataIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDHasPrefix(*i.DocumentDataIDHasPrefix))
+	}
+	if i.DocumentDataIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDHasSuffix(*i.DocumentDataIDHasSuffix))
+	}
+	if i.DocumentDataIDIsNil {
+		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDIsNil())
+	}
+	if i.DocumentDataIDNotNil {
+		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDNotNil())
+	}
+	if i.DocumentDataIDEqualFold != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDEqualFold(*i.DocumentDataIDEqualFold))
+	}
+	if i.DocumentDataIDContainsFold != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDContainsFold(*i.DocumentDataIDContainsFold))
 	}
 
 	switch len(predicates) {

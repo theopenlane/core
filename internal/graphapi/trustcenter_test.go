@@ -93,6 +93,7 @@ func TestQueryTrustCenterByID(t *testing.T) {
 }
 
 func TestQueryTrustCenters(t *testing.T) {
+
 	cnameRecord := gofakeit.DomainName()
 	customDomain := (&CustomDomainBuilder{client: suite.client, CnameRecord: cnameRecord}).MustNew(testUser1.UserCtx, t)
 	trustCenter1 := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain.ID}).MustNew(testUser1.UserCtx, t)
@@ -216,6 +217,7 @@ func TestQueryTrustCenters(t *testing.T) {
 }
 
 func TestMutationCreateTrustCenter(t *testing.T) {
+
 	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 	customDomainAnotherOrg := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -436,6 +438,7 @@ func TestGetAllTrustCenters(t *testing.T) {
 }
 
 func TestMutationUpdateTrustCenter(t *testing.T) {
+
 	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -599,7 +602,6 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 }
 
 func TestMutationDeleteTrustCenter(t *testing.T) {
-	t.Parallel()
 	// Create new test users
 	testUser := suite.userBuilder(context.Background(), t)
 	testUserOther := suite.userBuilder(testUser.UserCtx, t)
@@ -667,6 +669,23 @@ func createAnonymousTrustCenterContext(trustCenterID, organizationID string) con
 
 	ctx := context.Background()
 	return auth.WithAnonymousTrustCenterUser(ctx, anonUser)
+}
+
+// createAnonymousTrustCenterContextWithEmail creates a context for an anonymous trust center user with subject email
+func createAnonymousTrustCenterContextWithEmail(trustCenterID, organizationID, email string) (context.Context, *auth.AnonymousTrustCenterUser) {
+	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
+
+	anonUser := &auth.AnonymousTrustCenterUser{
+		SubjectID:          anonUserID,
+		SubjectName:        "Anonymous User",
+		OrganizationID:     organizationID,
+		AuthenticationType: auth.JWTAuthentication,
+		TrustCenterID:      trustCenterID,
+		SubjectEmail:       email,
+	}
+
+	ctx := context.Background()
+	return auth.WithAnonymousTrustCenterUser(ctx, anonUser), anonUser
 }
 
 func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
@@ -878,8 +897,6 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 }
 
 func TestQueryTrustCentersAsAnonymousUser(t *testing.T) {
-	t.Parallel()
-
 	// create new test users
 	testUser := suite.userBuilder(context.Background(), t)
 	testUserOther := suite.userBuilder(context.Background(), t)
@@ -939,6 +956,7 @@ func TestQueryTrustCentersAsAnonymousUser(t *testing.T) {
 }
 
 func TestMutationUpdateTrustCenterSetting(t *testing.T) {
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
@@ -1235,6 +1253,7 @@ func TestTrustCenterCreateHookWithCustomDomain(t *testing.T) {
 
 // TestTrustCenterUpdateHookWithCustomDomain tests that CreatePirschDomain job is called when custom_domain_id changes from empty to non-empty
 func TestTrustCenterUpdateHookWithCustomDomain(t *testing.T) {
+
 	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -1310,6 +1329,7 @@ func TestTrustCenterUpdateHookWithCustomDomain(t *testing.T) {
 
 // TestTrustCenterUpdateHookWithPirschDomainUpdate tests that UpdatePirschDomain job is called when custom_domain_id changes from one domain to another
 func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
+
 	// Create two custom domains
 	customDomain1 := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	customDomain2 := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -1397,6 +1417,7 @@ func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
 
 // TestTrustCenterUpdateHookWithCustomDomainRemoval tests that DeletePirschDomain job is called when custom_domain_id is cleared
 func TestTrustCenterUpdateHookWithCustomDomainRemoval(t *testing.T) {
+
 	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenterWithDomain := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain.ID}).MustNew(testUser1.UserCtx, t)
 
@@ -1434,6 +1455,7 @@ func TestTrustCenterUpdateHookWithCustomDomainRemoval(t *testing.T) {
 
 // TestTrustCenterDeleteHookWithPirschDomain tests that DeletePirschDomain job is called when pirsch_domain_id exists during deletion
 func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
+
 	// Create trust center with custom domain for testUser1
 	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenterWithDomain := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain.ID}).MustNew(testUser1.UserCtx, t)
@@ -1511,6 +1533,7 @@ func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
 }
 
 func TestTrustCenterDocStandards(t *testing.T) {
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	standard1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	standard2 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)

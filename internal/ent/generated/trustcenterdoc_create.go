@@ -415,11 +415,6 @@ func (_c *TrustCenterDocCreate) check() error {
 			return &ValidationError{Name: "visibility", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.visibility": %w`, err)}
 		}
 	}
-	if v, ok := _c.mutation.StandardID(); ok {
-		if err := trustcenterdoc.StandardIDValidator(v); err != nil {
-			return &ValidationError{Name: "standard_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.standard_id": %w`, err)}
-		}
-	}
 	return nil
 }
 

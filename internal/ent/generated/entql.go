@@ -2877,21 +2877,25 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterNDARequest",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcenterndarequest.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcenterndarequest.FieldCreatedAt},
-			trustcenterndarequest.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcenterndarequest.FieldUpdatedAt},
-			trustcenterndarequest.FieldCreatedBy:     {Type: field.TypeString, Column: trustcenterndarequest.FieldCreatedBy},
-			trustcenterndarequest.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcenterndarequest.FieldUpdatedBy},
-			trustcenterndarequest.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcenterndarequest.FieldDeletedAt},
-			trustcenterndarequest.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterndarequest.FieldDeletedBy},
-			trustcenterndarequest.FieldTags:          {Type: field.TypeJSON, Column: trustcenterndarequest.FieldTags},
-			trustcenterndarequest.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterndarequest.FieldTrustCenterID},
-			trustcenterndarequest.FieldFirstName:     {Type: field.TypeString, Column: trustcenterndarequest.FieldFirstName},
-			trustcenterndarequest.FieldLastName:      {Type: field.TypeString, Column: trustcenterndarequest.FieldLastName},
-			trustcenterndarequest.FieldEmail:         {Type: field.TypeString, Column: trustcenterndarequest.FieldEmail},
-			trustcenterndarequest.FieldCompanyName:   {Type: field.TypeString, Column: trustcenterndarequest.FieldCompanyName},
-			trustcenterndarequest.FieldReason:        {Type: field.TypeString, Column: trustcenterndarequest.FieldReason},
-			trustcenterndarequest.FieldAccessLevel:   {Type: field.TypeEnum, Column: trustcenterndarequest.FieldAccessLevel},
-			trustcenterndarequest.FieldStatus:        {Type: field.TypeEnum, Column: trustcenterndarequest.FieldStatus},
+			trustcenterndarequest.FieldCreatedAt:        {Type: field.TypeTime, Column: trustcenterndarequest.FieldCreatedAt},
+			trustcenterndarequest.FieldUpdatedAt:        {Type: field.TypeTime, Column: trustcenterndarequest.FieldUpdatedAt},
+			trustcenterndarequest.FieldCreatedBy:        {Type: field.TypeString, Column: trustcenterndarequest.FieldCreatedBy},
+			trustcenterndarequest.FieldUpdatedBy:        {Type: field.TypeString, Column: trustcenterndarequest.FieldUpdatedBy},
+			trustcenterndarequest.FieldDeletedAt:        {Type: field.TypeTime, Column: trustcenterndarequest.FieldDeletedAt},
+			trustcenterndarequest.FieldDeletedBy:        {Type: field.TypeString, Column: trustcenterndarequest.FieldDeletedBy},
+			trustcenterndarequest.FieldTags:             {Type: field.TypeJSON, Column: trustcenterndarequest.FieldTags},
+			trustcenterndarequest.FieldTrustCenterID:    {Type: field.TypeString, Column: trustcenterndarequest.FieldTrustCenterID},
+			trustcenterndarequest.FieldFirstName:        {Type: field.TypeString, Column: trustcenterndarequest.FieldFirstName},
+			trustcenterndarequest.FieldLastName:         {Type: field.TypeString, Column: trustcenterndarequest.FieldLastName},
+			trustcenterndarequest.FieldEmail:            {Type: field.TypeString, Column: trustcenterndarequest.FieldEmail},
+			trustcenterndarequest.FieldCompanyName:      {Type: field.TypeString, Column: trustcenterndarequest.FieldCompanyName},
+			trustcenterndarequest.FieldReason:           {Type: field.TypeString, Column: trustcenterndarequest.FieldReason},
+			trustcenterndarequest.FieldAccessLevel:      {Type: field.TypeEnum, Column: trustcenterndarequest.FieldAccessLevel},
+			trustcenterndarequest.FieldStatus:           {Type: field.TypeEnum, Column: trustcenterndarequest.FieldStatus},
+			trustcenterndarequest.FieldApprovedAt:       {Type: field.TypeTime, Column: trustcenterndarequest.FieldApprovedAt},
+			trustcenterndarequest.FieldApprovedByUserID: {Type: field.TypeString, Column: trustcenterndarequest.FieldApprovedByUserID},
+			trustcenterndarequest.FieldSignedAt:         {Type: field.TypeTime, Column: trustcenterndarequest.FieldSignedAt},
+			trustcenterndarequest.FieldDocumentDataID:   {Type: field.TypeString, Column: trustcenterndarequest.FieldDocumentDataID},
 		},
 	}
 	graph.Nodes[82] = &sqlgraph.Node{
@@ -13873,6 +13877,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterNDARequest",
 		"TrustCenterDoc",
+	)
+	graph.MustAddE(
+		"document",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.DocumentTable,
+			Columns: []string{trustcenterndarequest.DocumentColumn},
+			Bidi:    false,
+		},
+		"TrustCenterNDARequest",
+		"DocumentData",
 	)
 	graph.MustAddE(
 		"blocked_groups",
@@ -39339,6 +39355,26 @@ func (f *TrustCenterNDARequestFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(trustcenterndarequest.FieldStatus))
 }
 
+// WhereApprovedAt applies the entql time.Time predicate on the approved_at field.
+func (f *TrustCenterNDARequestFilter) WhereApprovedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterndarequest.FieldApprovedAt))
+}
+
+// WhereApprovedByUserID applies the entql string predicate on the approved_by_user_id field.
+func (f *TrustCenterNDARequestFilter) WhereApprovedByUserID(p entql.StringP) {
+	f.Where(p.Field(trustcenterndarequest.FieldApprovedByUserID))
+}
+
+// WhereSignedAt applies the entql time.Time predicate on the signed_at field.
+func (f *TrustCenterNDARequestFilter) WhereSignedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterndarequest.FieldSignedAt))
+}
+
+// WhereDocumentDataID applies the entql string predicate on the document_data_id field.
+func (f *TrustCenterNDARequestFilter) WhereDocumentDataID(p entql.StringP) {
+	f.Where(p.Field(trustcenterndarequest.FieldDocumentDataID))
+}
+
 // WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
 func (f *TrustCenterNDARequestFilter) WhereHasBlockedGroups() {
 	f.Where(entql.HasEdge("blocked_groups"))
@@ -39389,6 +39425,20 @@ func (f *TrustCenterNDARequestFilter) WhereHasTrustCenterDocs() {
 // WhereHasTrustCenterDocsWith applies a predicate to check if query has an edge trust_center_docs with a given conditions (other predicates).
 func (f *TrustCenterNDARequestFilter) WhereHasTrustCenterDocsWith(preds ...predicate.TrustCenterDoc) {
 	f.Where(entql.HasEdgeWith("trust_center_docs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDocument applies a predicate to check if query has an edge document.
+func (f *TrustCenterNDARequestFilter) WhereHasDocument() {
+	f.Where(entql.HasEdge("document"))
+}
+
+// WhereHasDocumentWith applies a predicate to check if query has an edge document with a given conditions (other predicates).
+func (f *TrustCenterNDARequestFilter) WhereHasDocumentWith(preds ...predicate.DocumentData) {
+	f.Where(entql.HasEdgeWith("document", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

@@ -18,6 +18,8 @@ import (
 )
 
 func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
 
@@ -92,6 +94,8 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 }
 
 func TestCreateTrustCenterNDA(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	testCases := []struct {
 		name     string
@@ -179,6 +183,8 @@ func TestCreateTrustCenterNDA(t *testing.T) {
 }
 
 func TestAnonymousUserCanQueryTrustCenterNDA(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 	input := testclient.CreateTrustCenterNDAInput{
@@ -235,6 +241,8 @@ func TestAnonymousUserCanQueryTrustCenterNDA(t *testing.T) {
 }
 
 func TestSubmitTrustCenterNDAResponse(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 	uploadFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
@@ -430,6 +438,8 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 }
 
 func TestUpdateTrustCenterNDA(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	uploadFile1, err := storage.NewUploadFile("testdata/uploads/hello.pdf")

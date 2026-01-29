@@ -75,6 +75,10 @@ const (
 	invalidInputErrorMsg     = "invalid input"
 	seedStripeSubscriptionID = "sub_test_subscription"
 	webhookSecret            = "whsec_test_secret"
+
+	previewZoneTestID = "test-zone-id"
+	cnameTargetTest   = "cname-target.test.com"
+	defaultDomainTest = "test.default.domain"
 )
 
 // GraphTestSuite handles the setup and teardown between tests
@@ -258,6 +262,13 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	c.db = db
 	c.api, err = coreutils.TestClient(c.db, c.objectStore)
 	requireNoError(t, err)
+
+	// Set trust center config for hooks
+	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
+		PreviewZoneID:            previewZoneTestID,
+		CnameTarget:              cnameTargetTest,
+		DefaultTrustCenterDomain: defaultDomainTest,
+	})
 
 	suite.client = c
 }

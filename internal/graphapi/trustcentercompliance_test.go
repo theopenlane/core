@@ -16,6 +16,8 @@ import (
 )
 
 func TestMutationCreateTrustCenterCompliance(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	// Create test data - standards and trust centers
 	standard1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	standard2 := (&StandardBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
@@ -344,6 +346,8 @@ func TestUpdateTrustCenterComplianceUpdatesFgaTuples(t *testing.T) {
 }
 
 func TestQueryTrustCenterCompliances(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	// Create test data
 	standard1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	standard2 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)

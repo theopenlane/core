@@ -12075,6 +12075,26 @@ func (_q *TrustCenterNDARequestHistoryQuery) collectField(ctx context.Context, o
 				selectedFields = append(selectedFields, trustcenterndarequesthistory.FieldStatus)
 				fieldSeen[trustcenterndarequesthistory.FieldStatus] = struct{}{}
 			}
+		case "approvedAt":
+			if _, ok := fieldSeen[trustcenterndarequesthistory.FieldApprovedAt]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequesthistory.FieldApprovedAt)
+				fieldSeen[trustcenterndarequesthistory.FieldApprovedAt] = struct{}{}
+			}
+		case "approvedByUserID":
+			if _, ok := fieldSeen[trustcenterndarequesthistory.FieldApprovedByUserID]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequesthistory.FieldApprovedByUserID)
+				fieldSeen[trustcenterndarequesthistory.FieldApprovedByUserID] = struct{}{}
+			}
+		case "signedAt":
+			if _, ok := fieldSeen[trustcenterndarequesthistory.FieldSignedAt]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequesthistory.FieldSignedAt)
+				fieldSeen[trustcenterndarequesthistory.FieldSignedAt] = struct{}{}
+			}
+		case "documentDataID":
+			if _, ok := fieldSeen[trustcenterndarequesthistory.FieldDocumentDataID]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequesthistory.FieldDocumentDataID)
+				fieldSeen[trustcenterndarequesthistory.FieldDocumentDataID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

@@ -20187,6 +20187,22 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromCreate(ctx context.Cont
 		create = create.SetStatus(status)
 	}
 
+	if approvedAt, exists := m.ApprovedAt(); exists {
+		create = create.SetNillableApprovedAt(&approvedAt)
+	}
+
+	if approvedByUserID, exists := m.ApprovedByUserID(); exists {
+		create = create.SetNillableApprovedByUserID(&approvedByUserID)
+	}
+
+	if signedAt, exists := m.SignedAt(); exists {
+		create = create.SetNillableSignedAt(&signedAt)
+	}
+
+	if documentDataID, exists := m.DocumentDataID(); exists {
+		create = create.SetNillableDocumentDataID(&documentDataID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -20308,6 +20324,30 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromUpdate(ctx context.Cont
 			create = create.SetStatus(trustcenterndarequest.Status)
 		}
 
+		if approvedAt, exists := m.ApprovedAt(); exists {
+			create = create.SetNillableApprovedAt(&approvedAt)
+		} else {
+			create = create.SetNillableApprovedAt(trustcenterndarequest.ApprovedAt)
+		}
+
+		if approvedByUserID, exists := m.ApprovedByUserID(); exists {
+			create = create.SetNillableApprovedByUserID(&approvedByUserID)
+		} else {
+			create = create.SetNillableApprovedByUserID(trustcenterndarequest.ApprovedByUserID)
+		}
+
+		if signedAt, exists := m.SignedAt(); exists {
+			create = create.SetNillableSignedAt(&signedAt)
+		} else {
+			create = create.SetNillableSignedAt(trustcenterndarequest.SignedAt)
+		}
+
+		if documentDataID, exists := m.DocumentDataID(); exists {
+			create = create.SetNillableDocumentDataID(&documentDataID)
+		} else {
+			create = create.SetNillableDocumentDataID(trustcenterndarequest.DocumentDataID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -20358,6 +20398,10 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromDelete(ctx context.Cont
 			SetNillableReason(trustcenterndarequest.Reason).
 			SetAccessLevel(trustcenterndarequest.AccessLevel).
 			SetStatus(trustcenterndarequest.Status).
+			SetNillableApprovedAt(trustcenterndarequest.ApprovedAt).
+			SetNillableApprovedByUserID(trustcenterndarequest.ApprovedByUserID).
+			SetNillableSignedAt(trustcenterndarequest.SignedAt).
+			SetNillableDocumentDataID(trustcenterndarequest.DocumentDataID).
 			Save(ctx)
 		if err != nil {
 			return err

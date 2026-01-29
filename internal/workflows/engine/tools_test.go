@@ -75,7 +75,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	zerolog.SetGlobalLevel(zerolog.Disabled)
 
 	if testing.Verbose() {
-		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
 	}
 
 	s.ctx = context.Background()
