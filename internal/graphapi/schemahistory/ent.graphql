@@ -32141,6 +32141,14 @@ type TrustCenterSubprocessorHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the kind of the trust_center_subprocessor
+  """
+  trustCenterSubprocessorKindName: String
+  """
+  the kind of the trust_center_subprocessor
+  """
+  trustCenterSubprocessorKindID: String
+  """
   ID of the subprocessor
   """
   subprocessorID: String!
@@ -32152,10 +32160,6 @@ type TrustCenterSubprocessorHistory implements Node {
   country codes or country where the subprocessor is located
   """
   countries: [String!]
-  """
-  Category of the subprocessor, e.g. 'Data Warehouse' or 'Infrastructure Hosting'
-  """
-  category: String!
 }
 """
 A connection to a list of items.
@@ -32336,6 +32340,42 @@ input TrustCenterSubprocessorHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  trust_center_subprocessor_kind_name field predicates
+  """
+  trustCenterSubprocessorKindName: String
+  trustCenterSubprocessorKindNameNEQ: String
+  trustCenterSubprocessorKindNameIn: [String!]
+  trustCenterSubprocessorKindNameNotIn: [String!]
+  trustCenterSubprocessorKindNameGT: String
+  trustCenterSubprocessorKindNameGTE: String
+  trustCenterSubprocessorKindNameLT: String
+  trustCenterSubprocessorKindNameLTE: String
+  trustCenterSubprocessorKindNameContains: String
+  trustCenterSubprocessorKindNameHasPrefix: String
+  trustCenterSubprocessorKindNameHasSuffix: String
+  trustCenterSubprocessorKindNameIsNil: Boolean
+  trustCenterSubprocessorKindNameNotNil: Boolean
+  trustCenterSubprocessorKindNameEqualFold: String
+  trustCenterSubprocessorKindNameContainsFold: String
+  """
+  trust_center_subprocessor_kind_id field predicates
+  """
+  trustCenterSubprocessorKindID: String
+  trustCenterSubprocessorKindIDNEQ: String
+  trustCenterSubprocessorKindIDIn: [String!]
+  trustCenterSubprocessorKindIDNotIn: [String!]
+  trustCenterSubprocessorKindIDGT: String
+  trustCenterSubprocessorKindIDGTE: String
+  trustCenterSubprocessorKindIDLT: String
+  trustCenterSubprocessorKindIDLTE: String
+  trustCenterSubprocessorKindIDContains: String
+  trustCenterSubprocessorKindIDHasPrefix: String
+  trustCenterSubprocessorKindIDHasSuffix: String
+  trustCenterSubprocessorKindIDIsNil: Boolean
+  trustCenterSubprocessorKindIDNotNil: Boolean
+  trustCenterSubprocessorKindIDEqualFold: String
+  trustCenterSubprocessorKindIDContainsFold: String
+  """
   subprocessor_id field predicates
   """
   subprocessorID: String
@@ -32369,22 +32409,6 @@ input TrustCenterSubprocessorHistoryWhereInput {
   trustCenterIDNotNil: Boolean
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryEqualFold: String
-  categoryContainsFold: String
 }
 type TrustCenterWatermarkConfigHistory implements Node {
   id: ID!

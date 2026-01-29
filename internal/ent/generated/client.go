@@ -29234,6 +29234,25 @@ func (c *TrustCenterSubprocessorClient) GetX(ctx context.Context, id string) *Tr
 	return obj
 }
 
+// QueryTrustCenterSubprocessorKind queries the trust_center_subprocessor_kind edge of a TrustCenterSubprocessor.
+func (c *TrustCenterSubprocessorClient) QueryTrustCenterSubprocessorKind(_m *TrustCenterSubprocessor) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcentersubprocessor.TrustCenterSubprocessorKindTable, trustcentersubprocessor.TrustCenterSubprocessorKindColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryBlockedGroups queries the blocked_groups edge of a TrustCenterSubprocessor.
 func (c *TrustCenterSubprocessorClient) QueryBlockedGroups(_m *TrustCenterSubprocessor) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()

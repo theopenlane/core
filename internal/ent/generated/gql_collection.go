@@ -70020,6 +70020,21 @@ func (_q *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNod
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
+		case "trustCenterSubprocessorKind":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CustomTypeEnumClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, customtypeenumImplementors)...); err != nil {
+				return err
+			}
+			_q.withTrustCenterSubprocessorKind = query
+			if _, ok := fieldSeen[trustcentersubprocessor.FieldTrustCenterSubprocessorKindID]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessor.FieldTrustCenterSubprocessorKindID)
+				fieldSeen[trustcentersubprocessor.FieldTrustCenterSubprocessorKindID] = struct{}{}
+			}
+
 		case "blockedGroups":
 			var (
 				alias = field.Alias
@@ -70063,10 +70078,10 @@ func (_q *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNod
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[0] == nil {
-								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[0][alias] = n
+							nodes[i].Edges.totalCount[1][alias] = n
 						}
 						return nil
 					})
@@ -70074,10 +70089,10 @@ func (_q *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNod
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenterSubprocessor) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
-							if nodes[i].Edges.totalCount[0] == nil {
-								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[0][alias] = n
+							nodes[i].Edges.totalCount[1][alias] = n
 						}
 						return nil
 					})
@@ -70152,10 +70167,10 @@ func (_q *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNod
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[1] == nil {
-								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[1][alias] = n
+							nodes[i].Edges.totalCount[2][alias] = n
 						}
 						return nil
 					})
@@ -70163,10 +70178,10 @@ func (_q *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNod
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenterSubprocessor) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
-							if nodes[i].Edges.totalCount[1] == nil {
-								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[1][alias] = n
+							nodes[i].Edges.totalCount[2][alias] = n
 						}
 						return nil
 					})
@@ -70247,6 +70262,16 @@ func (_q *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNod
 				selectedFields = append(selectedFields, trustcentersubprocessor.FieldUpdatedBy)
 				fieldSeen[trustcentersubprocessor.FieldUpdatedBy] = struct{}{}
 			}
+		case "trustCenterSubprocessorKindName":
+			if _, ok := fieldSeen[trustcentersubprocessor.FieldTrustCenterSubprocessorKindName]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessor.FieldTrustCenterSubprocessorKindName)
+				fieldSeen[trustcentersubprocessor.FieldTrustCenterSubprocessorKindName] = struct{}{}
+			}
+		case "trustCenterSubprocessorKindID":
+			if _, ok := fieldSeen[trustcentersubprocessor.FieldTrustCenterSubprocessorKindID]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessor.FieldTrustCenterSubprocessorKindID)
+				fieldSeen[trustcentersubprocessor.FieldTrustCenterSubprocessorKindID] = struct{}{}
+			}
 		case "subprocessorID":
 			if _, ok := fieldSeen[trustcentersubprocessor.FieldSubprocessorID]; !ok {
 				selectedFields = append(selectedFields, trustcentersubprocessor.FieldSubprocessorID)
@@ -70261,11 +70286,6 @@ func (_q *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNod
 			if _, ok := fieldSeen[trustcentersubprocessor.FieldCountries]; !ok {
 				selectedFields = append(selectedFields, trustcentersubprocessor.FieldCountries)
 				fieldSeen[trustcentersubprocessor.FieldCountries] = struct{}{}
-			}
-		case "category":
-			if _, ok := fieldSeen[trustcentersubprocessor.FieldCategory]; !ok {
-				selectedFields = append(selectedFields, trustcentersubprocessor.FieldCategory)
-				fieldSeen[trustcentersubprocessor.FieldCategory] = struct{}{}
 			}
 		case "id":
 		case "__typename":

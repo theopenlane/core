@@ -32,7 +32,7 @@ mutation CreateTrustCenterSubprocessor($input: CreateTrustCenterSubprocessorInpu
       updatedBy
       trustCenterID
       countries
-      category
+      trustCenterSubprocessorKindName
       subprocessor {
         name
         description
@@ -69,7 +69,7 @@ query GetAllTrustCenterSubprocessors {
         updatedBy
         trustCenterID
         countries
-        category
+        trustCenterSubprocessorKindName
         subprocessor {
           name
           description
@@ -92,7 +92,7 @@ query GetTrustCenterSubprocessorByID($trustCenterSubprocessorId: ID!) {
     updatedBy
     trustCenterID
     countries
-    category
+    trustCenterSubprocessorKindName
     subprocessor {
       name
       description
@@ -122,7 +122,7 @@ query GetTrustCenterSubprocessors($first: Int, $last: Int, $where: TrustCenterSu
         updatedBy
         trustCenterID
         countries
-        category
+        trustCenterSubprocessorKindName
         subprocessor {
           name
           description
@@ -146,7 +146,7 @@ mutation UpdateBulkTrustCenterSubprocessor($ids: [ID!]!, $input: UpdateTrustCent
       updatedBy
       trustCenterID
       countries
-      category
+      trustCenterSubprocessorKindName
       subprocessor {
         name
         description
@@ -173,7 +173,7 @@ mutation UpdateTrustCenterSubprocessor($updateTrustCenterSubprocessorId: ID!, $i
       updatedBy
       trustCenterID
       countries
-      category
+      trustCenterSubprocessorKindName
       subprocessor {
         name
         description

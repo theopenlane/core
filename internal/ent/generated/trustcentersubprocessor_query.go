@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
@@ -26,18 +27,19 @@ import (
 // TrustCenterSubprocessorQuery is the builder for querying TrustCenterSubprocessor entities.
 type TrustCenterSubprocessorQuery struct {
 	config
-	ctx                    *QueryContext
-	order                  []trustcentersubprocessor.OrderOption
-	inters                 []Interceptor
-	predicates             []predicate.TrustCenterSubprocessor
-	withBlockedGroups      *GroupQuery
-	withEditors            *GroupQuery
-	withTrustCenter        *TrustCenterQuery
-	withSubprocessor       *SubprocessorQuery
-	loadTotal              []func(context.Context, []*TrustCenterSubprocessor) error
-	modifiers              []func(*sql.Selector)
-	withNamedBlockedGroups map[string]*GroupQuery
-	withNamedEditors       map[string]*GroupQuery
+	ctx                             *QueryContext
+	order                           []trustcentersubprocessor.OrderOption
+	inters                          []Interceptor
+	predicates                      []predicate.TrustCenterSubprocessor
+	withTrustCenterSubprocessorKind *CustomTypeEnumQuery
+	withBlockedGroups               *GroupQuery
+	withEditors                     *GroupQuery
+	withTrustCenter                 *TrustCenterQuery
+	withSubprocessor                *SubprocessorQuery
+	loadTotal                       []func(context.Context, []*TrustCenterSubprocessor) error
+	modifiers                       []func(*sql.Selector)
+	withNamedBlockedGroups          map[string]*GroupQuery
+	withNamedEditors                map[string]*GroupQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -72,6 +74,31 @@ func (_q *TrustCenterSubprocessorQuery) Unique(unique bool) *TrustCenterSubproce
 func (_q *TrustCenterSubprocessorQuery) Order(o ...trustcentersubprocessor.OrderOption) *TrustCenterSubprocessorQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryTrustCenterSubprocessorKind chains the current query on the "trust_center_subprocessor_kind" edge.
+func (_q *TrustCenterSubprocessorQuery) QueryTrustCenterSubprocessorKind() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcentersubprocessor.TrustCenterSubprocessorKindTable, trustcentersubprocessor.TrustCenterSubprocessorKindColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryBlockedGroups chains the current query on the "blocked_groups" edge.
@@ -361,20 +388,32 @@ func (_q *TrustCenterSubprocessorQuery) Clone() *TrustCenterSubprocessorQuery {
 		return nil
 	}
 	return &TrustCenterSubprocessorQuery{
-		config:            _q.config,
-		ctx:               _q.ctx.Clone(),
-		order:             append([]trustcentersubprocessor.OrderOption{}, _q.order...),
-		inters:            append([]Interceptor{}, _q.inters...),
-		predicates:        append([]predicate.TrustCenterSubprocessor{}, _q.predicates...),
-		withBlockedGroups: _q.withBlockedGroups.Clone(),
-		withEditors:       _q.withEditors.Clone(),
-		withTrustCenter:   _q.withTrustCenter.Clone(),
-		withSubprocessor:  _q.withSubprocessor.Clone(),
+		config:                          _q.config,
+		ctx:                             _q.ctx.Clone(),
+		order:                           append([]trustcentersubprocessor.OrderOption{}, _q.order...),
+		inters:                          append([]Interceptor{}, _q.inters...),
+		predicates:                      append([]predicate.TrustCenterSubprocessor{}, _q.predicates...),
+		withTrustCenterSubprocessorKind: _q.withTrustCenterSubprocessorKind.Clone(),
+		withBlockedGroups:               _q.withBlockedGroups.Clone(),
+		withEditors:                     _q.withEditors.Clone(),
+		withTrustCenter:                 _q.withTrustCenter.Clone(),
+		withSubprocessor:                _q.withSubprocessor.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithTrustCenterSubprocessorKind tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center_subprocessor_kind" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterSubprocessorQuery) WithTrustCenterSubprocessorKind(opts ...func(*CustomTypeEnumQuery)) *TrustCenterSubprocessorQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTrustCenterSubprocessorKind = query
+	return _q
 }
 
 // WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
@@ -505,7 +544,8 @@ func (_q *TrustCenterSubprocessorQuery) sqlAll(ctx context.Context, hooks ...que
 	var (
 		nodes       = []*TrustCenterSubprocessor{}
 		_spec       = _q.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
+			_q.withTrustCenterSubprocessorKind != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withTrustCenter != nil,
@@ -534,6 +574,12 @@ func (_q *TrustCenterSubprocessorQuery) sqlAll(ctx context.Context, hooks ...que
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := _q.withTrustCenterSubprocessorKind; query != nil {
+		if err := _q.loadTrustCenterSubprocessorKind(ctx, query, nodes, nil,
+			func(n *TrustCenterSubprocessor, e *CustomTypeEnum) { n.Edges.TrustCenterSubprocessorKind = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := _q.withBlockedGroups; query != nil {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
@@ -583,6 +629,35 @@ func (_q *TrustCenterSubprocessorQuery) sqlAll(ctx context.Context, hooks ...que
 	return nodes, nil
 }
 
+func (_q *TrustCenterSubprocessorQuery) loadTrustCenterSubprocessorKind(ctx context.Context, query *CustomTypeEnumQuery, nodes []*TrustCenterSubprocessor, init func(*TrustCenterSubprocessor), assign func(*TrustCenterSubprocessor, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenterSubprocessor)
+	for i := range nodes {
+		fk := nodes[i].TrustCenterSubprocessorKindID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "trust_center_subprocessor_kind_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *TrustCenterSubprocessorQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*TrustCenterSubprocessor, init func(*TrustCenterSubprocessor), assign func(*TrustCenterSubprocessor, *Group)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*TrustCenterSubprocessor)
@@ -733,6 +808,9 @@ func (_q *TrustCenterSubprocessorQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != trustcentersubprocessor.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if _q.withTrustCenterSubprocessorKind != nil {
+			_spec.Node.AddColumnOnce(trustcentersubprocessor.FieldTrustCenterSubprocessorKindID)
 		}
 		if _q.withTrustCenter != nil {
 			_spec.Node.AddColumnOnce(trustcentersubprocessor.FieldTrustCenterID)

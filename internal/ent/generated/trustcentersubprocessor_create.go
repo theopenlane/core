@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
@@ -107,6 +108,34 @@ func (_c *TrustCenterSubprocessorCreate) SetNillableDeletedBy(v *string) *TrustC
 	return _c
 }
 
+// SetTrustCenterSubprocessorKindName sets the "trust_center_subprocessor_kind_name" field.
+func (_c *TrustCenterSubprocessorCreate) SetTrustCenterSubprocessorKindName(v string) *TrustCenterSubprocessorCreate {
+	_c.mutation.SetTrustCenterSubprocessorKindName(v)
+	return _c
+}
+
+// SetNillableTrustCenterSubprocessorKindName sets the "trust_center_subprocessor_kind_name" field if the given value is not nil.
+func (_c *TrustCenterSubprocessorCreate) SetNillableTrustCenterSubprocessorKindName(v *string) *TrustCenterSubprocessorCreate {
+	if v != nil {
+		_c.SetTrustCenterSubprocessorKindName(*v)
+	}
+	return _c
+}
+
+// SetTrustCenterSubprocessorKindID sets the "trust_center_subprocessor_kind_id" field.
+func (_c *TrustCenterSubprocessorCreate) SetTrustCenterSubprocessorKindID(v string) *TrustCenterSubprocessorCreate {
+	_c.mutation.SetTrustCenterSubprocessorKindID(v)
+	return _c
+}
+
+// SetNillableTrustCenterSubprocessorKindID sets the "trust_center_subprocessor_kind_id" field if the given value is not nil.
+func (_c *TrustCenterSubprocessorCreate) SetNillableTrustCenterSubprocessorKindID(v *string) *TrustCenterSubprocessorCreate {
+	if v != nil {
+		_c.SetTrustCenterSubprocessorKindID(*v)
+	}
+	return _c
+}
+
 // SetSubprocessorID sets the "subprocessor_id" field.
 func (_c *TrustCenterSubprocessorCreate) SetSubprocessorID(v string) *TrustCenterSubprocessorCreate {
 	_c.mutation.SetSubprocessorID(v)
@@ -133,12 +162,6 @@ func (_c *TrustCenterSubprocessorCreate) SetCountries(v []string) *TrustCenterSu
 	return _c
 }
 
-// SetCategory sets the "category" field.
-func (_c *TrustCenterSubprocessorCreate) SetCategory(v string) *TrustCenterSubprocessorCreate {
-	_c.mutation.SetCategory(v)
-	return _c
-}
-
 // SetID sets the "id" field.
 func (_c *TrustCenterSubprocessorCreate) SetID(v string) *TrustCenterSubprocessorCreate {
 	_c.mutation.SetID(v)
@@ -151,6 +174,11 @@ func (_c *TrustCenterSubprocessorCreate) SetNillableID(v *string) *TrustCenterSu
 		_c.SetID(*v)
 	}
 	return _c
+}
+
+// SetTrustCenterSubprocessorKind sets the "trust_center_subprocessor_kind" edge to the CustomTypeEnum entity.
+func (_c *TrustCenterSubprocessorCreate) SetTrustCenterSubprocessorKind(v *CustomTypeEnum) *TrustCenterSubprocessorCreate {
+	return _c.SetTrustCenterSubprocessorKindID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
@@ -269,14 +297,6 @@ func (_c *TrustCenterSubprocessorCreate) check() error {
 			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSubprocessor.trust_center_id": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.Category(); !ok {
-		return &ValidationError{Name: "category", err: errors.New(`generated: missing required field "TrustCenterSubprocessor.category"`)}
-	}
-	if v, ok := _c.mutation.Category(); ok {
-		if err := trustcentersubprocessor.CategoryValidator(v); err != nil {
-			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSubprocessor.category": %w`, err)}
-		}
-	}
 	if len(_c.mutation.SubprocessorIDs()) == 0 {
 		return &ValidationError{Name: "subprocessor", err: errors.New(`generated: missing required edge "TrustCenterSubprocessor.subprocessor"`)}
 	}
@@ -340,13 +360,31 @@ func (_c *TrustCenterSubprocessorCreate) createSpec() (*TrustCenterSubprocessor,
 		_spec.SetField(trustcentersubprocessor.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
+	if value, ok := _c.mutation.TrustCenterSubprocessorKindName(); ok {
+		_spec.SetField(trustcentersubprocessor.FieldTrustCenterSubprocessorKindName, field.TypeString, value)
+		_node.TrustCenterSubprocessorKindName = value
+	}
 	if value, ok := _c.mutation.Countries(); ok {
 		_spec.SetField(trustcentersubprocessor.FieldCountries, field.TypeJSON, value)
 		_node.Countries = value
 	}
-	if value, ok := _c.mutation.Category(); ok {
-		_spec.SetField(trustcentersubprocessor.FieldCategory, field.TypeString, value)
-		_node.Category = value
+	if nodes := _c.mutation.TrustCenterSubprocessorKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersubprocessor.TrustCenterSubprocessorKindTable,
+			Columns: []string{trustcentersubprocessor.TrustCenterSubprocessorKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterSubprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.TrustCenterSubprocessorKindID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
@@ -32,14 +33,16 @@ type TrustCenterSubprocessor struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// the kind of the trust_center_subprocessor
+	TrustCenterSubprocessorKindName string `json:"trust_center_subprocessor_kind_name,omitempty"`
+	// the kind of the trust_center_subprocessor
+	TrustCenterSubprocessorKindID string `json:"trust_center_subprocessor_kind_id,omitempty"`
 	// ID of the subprocessor
 	SubprocessorID string `json:"subprocessor_id,omitempty"`
 	// ID of the trust center
 	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// country codes or country where the subprocessor is located
 	Countries []string `json:"countries,omitempty"`
-	// Category of the subprocessor, e.g. 'Data Warehouse' or 'Infrastructure Hosting'
-	Category string `json:"category,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterSubprocessorQuery when eager-loading is set.
 	Edges        TrustCenterSubprocessorEdges `json:"edges"`
@@ -48,6 +51,8 @@ type TrustCenterSubprocessor struct {
 
 // TrustCenterSubprocessorEdges holds the relations/edges for other nodes in the graph.
 type TrustCenterSubprocessorEdges struct {
+	// TrustCenterSubprocessorKind holds the value of the trust_center_subprocessor_kind edge.
+	TrustCenterSubprocessorKind *CustomTypeEnum `json:"trust_center_subprocessor_kind,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -58,18 +63,29 @@ type TrustCenterSubprocessorEdges struct {
 	Subprocessor *Subprocessor `json:"subprocessor,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [5]map[string]int
 
 	namedBlockedGroups map[string][]*Group
 	namedEditors       map[string][]*Group
 }
 
+// TrustCenterSubprocessorKindOrErr returns the TrustCenterSubprocessorKind value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterSubprocessorEdges) TrustCenterSubprocessorKindOrErr() (*CustomTypeEnum, error) {
+	if e.TrustCenterSubprocessorKind != nil {
+		return e.TrustCenterSubprocessorKind, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "trust_center_subprocessor_kind"}
+}
+
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterSubprocessorEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -78,7 +94,7 @@ func (e TrustCenterSubprocessorEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterSubprocessorEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -89,7 +105,7 @@ func (e TrustCenterSubprocessorEdges) EditorsOrErr() ([]*Group, error) {
 func (e TrustCenterSubprocessorEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -100,7 +116,7 @@ func (e TrustCenterSubprocessorEdges) TrustCenterOrErr() (*TrustCenter, error) {
 func (e TrustCenterSubprocessorEdges) SubprocessorOrErr() (*Subprocessor, error) {
 	if e.Subprocessor != nil {
 		return e.Subprocessor, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: subprocessor.Label}
 	}
 	return nil, &NotLoadedError{edge: "subprocessor"}
@@ -113,7 +129,7 @@ func (*TrustCenterSubprocessor) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcentersubprocessor.FieldCountries:
 			values[i] = new([]byte)
-		case trustcentersubprocessor.FieldID, trustcentersubprocessor.FieldCreatedBy, trustcentersubprocessor.FieldUpdatedBy, trustcentersubprocessor.FieldDeletedBy, trustcentersubprocessor.FieldSubprocessorID, trustcentersubprocessor.FieldTrustCenterID, trustcentersubprocessor.FieldCategory:
+		case trustcentersubprocessor.FieldID, trustcentersubprocessor.FieldCreatedBy, trustcentersubprocessor.FieldUpdatedBy, trustcentersubprocessor.FieldDeletedBy, trustcentersubprocessor.FieldTrustCenterSubprocessorKindName, trustcentersubprocessor.FieldTrustCenterSubprocessorKindID, trustcentersubprocessor.FieldSubprocessorID, trustcentersubprocessor.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case trustcentersubprocessor.FieldCreatedAt, trustcentersubprocessor.FieldUpdatedAt, trustcentersubprocessor.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -174,6 +190,18 @@ func (_m *TrustCenterSubprocessor) assignValues(columns []string, values []any) 
 			} else if value.Valid {
 				_m.DeletedBy = value.String
 			}
+		case trustcentersubprocessor.FieldTrustCenterSubprocessorKindName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_subprocessor_kind_name", values[i])
+			} else if value.Valid {
+				_m.TrustCenterSubprocessorKindName = value.String
+			}
+		case trustcentersubprocessor.FieldTrustCenterSubprocessorKindID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_subprocessor_kind_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterSubprocessorKindID = value.String
+			}
 		case trustcentersubprocessor.FieldSubprocessorID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subprocessor_id", values[i])
@@ -194,12 +222,6 @@ func (_m *TrustCenterSubprocessor) assignValues(columns []string, values []any) 
 					return fmt.Errorf("unmarshal field countries: %w", err)
 				}
 			}
-		case trustcentersubprocessor.FieldCategory:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field category", values[i])
-			} else if value.Valid {
-				_m.Category = value.String
-			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -211,6 +233,11 @@ func (_m *TrustCenterSubprocessor) assignValues(columns []string, values []any) 
 // This includes values selected through modifiers, order, etc.
 func (_m *TrustCenterSubprocessor) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryTrustCenterSubprocessorKind queries the "trust_center_subprocessor_kind" edge of the TrustCenterSubprocessor entity.
+func (_m *TrustCenterSubprocessor) QueryTrustCenterSubprocessorKind() *CustomTypeEnumQuery {
+	return NewTrustCenterSubprocessorClient(_m.config).QueryTrustCenterSubprocessorKind(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the TrustCenterSubprocessor entity.
@@ -274,6 +301,12 @@ func (_m *TrustCenterSubprocessor) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("trust_center_subprocessor_kind_name=")
+	builder.WriteString(_m.TrustCenterSubprocessorKindName)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_subprocessor_kind_id=")
+	builder.WriteString(_m.TrustCenterSubprocessorKindID)
+	builder.WriteString(", ")
 	builder.WriteString("subprocessor_id=")
 	builder.WriteString(_m.SubprocessorID)
 	builder.WriteString(", ")
@@ -282,9 +315,6 @@ func (_m *TrustCenterSubprocessor) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("countries=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Countries))
-	builder.WriteString(", ")
-	builder.WriteString("category=")
-	builder.WriteString(_m.Category)
 	builder.WriteByte(')')
 	return builder.String()
 }
