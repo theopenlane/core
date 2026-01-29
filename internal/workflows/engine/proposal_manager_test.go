@@ -40,7 +40,6 @@ import (
 //   verification should match that scoped set of changes. This prevents cross-contamination
 //   of approval hashes between unrelated workflows.
 func (s *WorkflowEngineTestSuite) TestProposalManagerComputeHashUsesDomainKey() {
-	s.ClearWorkflowDefinitions()
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)

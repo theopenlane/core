@@ -17,8 +17,9 @@ import (
 //  2. Verifies the engine is not nil (evaluator infrastructure ready)
 //
 // Why This Matters:
-//   Foundational test ensuring the CEL expression evaluator is available for condition
-//   and "when" clause evaluation.
+//
+//	Foundational test ensuring the CEL expression evaluator is available for condition
+//	and "when" clause evaluation.
 func (s *WorkflowEngineTestSuite) TestWorkflowEngineEvaluator() {
 	wfEngine := s.Engine()
 	s.Require().NotNil(wfEngine)
@@ -28,33 +29,33 @@ func (s *WorkflowEngineTestSuite) TestWorkflowEngineEvaluator() {
 // conditions, which determine whether a workflow should proceed after trigger matching.
 //
 // Test Cases:
-//   "no conditions always passes":
-//     - Empty conditions list -> Returns true (workflow proceeds)
 //
-//   "single condition passes":
-//     - Condition: "true" -> Returns true
+//	"no conditions always passes":
+//	  - Empty conditions list -> Returns true (workflow proceeds)
 //
-//   "single condition fails":
-//     - Condition: "false" -> Returns false (workflow blocked)
+//	"single condition passes":
+//	  - Condition: "true" -> Returns true
 //
-//   "all conditions pass" (AND semantics):
-//     - Conditions: ["true", "'status' in changed_fields"]
-//     - Both evaluate to true -> Returns true
+//	"single condition fails":
+//	  - Condition: "false" -> Returns false (workflow blocked)
 //
-//   "first condition fails":
-//     - Conditions: ["false", "true"]
-//     - First is false -> Returns false (short-circuit)
+//	"all conditions pass" (AND semantics):
+//	  - Conditions: ["true", "'status' in changed_fields"]
+//	  - Both evaluate to true -> Returns true
 //
-//   "invalid condition expression":
-//     - Condition: "invalid syntax"
-//     - Expected: Error returned (CEL parsing failure)
+//	"first condition fails":
+//	  - Conditions: ["false", "true"]
+//	  - First is false -> Returns false (short-circuit)
+//
+//	"invalid condition expression":
+//	  - Condition: "invalid syntax"
+//	  - Expected: Error returned (CEL parsing failure)
 //
 // Why This Matters:
-//   Conditions are the second layer of workflow filtering (after triggers). They enable
-//   complex business rules using CEL expressions with access to object state and trigger context.
+//
+//	Conditions are the second layer of workflow filtering (after triggers). They enable
+//	complex business rules using CEL expressions with access to object state and trigger context.
 func (s *WorkflowEngineTestSuite) TestEvaluateConditions() {
-	s.ClearWorkflowDefinitions()
-
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -167,27 +168,27 @@ func (s *WorkflowEngineTestSuite) TestEvaluateConditions() {
 // that match a given mutation based on schema type, operation, and field changes.
 //
 // Test Scenarios:
-//   "no matching definitions":
-//     - Queries for a non-existent schema type
-//     - Expected: Empty result
 //
-//   "finds matching definition":
-//     - Creates a definition for Control with UPDATE trigger on "status" field
-//     - Queries for Control UPDATE with changed_fields = ["status"]
-//     - Expected: The definition is returned
+//	"no matching definitions":
+//	  - Queries for a non-existent schema type
+//	  - Expected: Empty result
 //
-//   "filters out inactive definitions":
-//     - Creates a definition but sets active = false
-//     - Queries for matching criteria
-//     - Expected: Empty result (inactive definitions excluded)
+//	"finds matching definition":
+//	  - Creates a definition for Control with UPDATE trigger on "status" field
+//	  - Queries for Control UPDATE with changed_fields = ["status"]
+//	  - Expected: The definition is returned
+//
+//	"filters out inactive definitions":
+//	  - Creates a definition but sets active = false
+//	  - Queries for matching criteria
+//	  - Expected: Empty result (inactive definitions excluded)
 //
 // Why This Matters:
-//   FindMatchingDefinitions is the core lookup function called during mutation hooks.
-//   It must correctly filter by schema type, active status, operation, and fields to
-//   find only the relevant workflow definitions.
+//
+//	FindMatchingDefinitions is the core lookup function called during mutation hooks.
+//	It must correctly filter by schema type, active status, operation, and fields to
+//	find only the relevant workflow definitions.
 func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
-	s.ClearWorkflowDefinitions()
-
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -202,8 +203,9 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
 	})
 
 	s.Run("finds matching definition", func() {
-		s.ClearWorkflowDefinitions()
 		def := s.CreateTestWorkflowDefinition(userCtx, orgID)
+		defer s.ClearWorkflowDefinitionsForOrg(orgID)
+
 		def.DefinitionJSON.Triggers = []models.WorkflowTrigger{
 			{Operation: "UPDATE", Fields: []string{"status"}},
 		}
@@ -216,8 +218,9 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
 	})
 
 	s.Run("filters out inactive definitions", func() {
-		s.ClearWorkflowDefinitions()
 		def := s.CreateTestWorkflowDefinition(userCtx, orgID)
+		defer s.ClearWorkflowDefinitionsForOrg(orgID)
+
 		def.DefinitionJSON.Triggers = []models.WorkflowTrigger{
 			{Operation: "UPDATE", Fields: []string{"status"}},
 		}
@@ -242,11 +245,10 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
 //   - Object of different type (Procedure vs Control) -> Definition does NOT match
 //
 // Why This Matters:
-//   Selectors enable scoping workflows to specific subsets of objects. This is essential
-//   for multi-tenant environments where different teams have different approval requirements.
+//
+//	Selectors enable scoping workflows to specific subsets of objects. This is essential
+//	for multi-tenant environments where different teams have different approval requirements.
 func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsSelectors() {
-	s.ClearWorkflowDefinitions()
-
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
@@ -306,11 +308,13 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsSelectors() {
 // (relationship) changes with CEL expressions that evaluate added/removed edge IDs.
 //
 // Workflow Definition (Plain English):
-//   "Trigger on UPDATE when 'evidence' edge changes AND exactly 1 evidence was added"
-//   Trigger: edges = ["evidence"]
-//   Expression: 'evidence' in changed_edges && size(added_ids['evidence']) == 1
+//
+//	"Trigger on UPDATE when 'evidence' edge changes AND exactly 1 evidence was added"
+//	Trigger: edges = ["evidence"]
+//	Expression: 'evidence' in changed_edges && size(added_ids['evidence']) == 1
 //
 // Test Cases:
+//
 //   - changed_edges = ["evidence"], added_ids["evidence"] = ["evidence-1"]
 //     -> Definition matches (edge changed, exactly 1 added)
 //
@@ -318,11 +322,10 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsSelectors() {
 //     -> Definition does NOT match ('evidence' not in changed_edges)
 //
 // Why This Matters:
-//   Edge-based triggers enable workflows that respond to relationship changes, not just
-//   field value changes. The CEL expression support allows complex edge-based conditions.
+//
+//	Edge-based triggers enable workflows that respond to relationship changes, not just
+//	field value changes. The CEL expression support allows complex edge-based conditions.
 func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsEdgeTriggers() {
-	s.ClearWorkflowDefinitions()
-
 	_, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
@@ -360,49 +363,47 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsEdgeTriggers() {
 // The prefilter enables filtering definitions at the database level before evaluating CEL expressions.
 //
 // Test Scenarios:
-//   "prefilter by operation - UPDATE only":
-//     - Definition triggers on UPDATE
-//     - Query with UPDATE -> Matches
-//     - Query with CREATE -> Does NOT match
 //
-//   "prefilter by operation - multiple operations":
-//     - Definition triggers on UPDATE and CREATE
-//     - Query with UPDATE -> Matches
-//     - Query with CREATE -> Matches
-//     - Query with DELETE -> Does NOT match
+//	"prefilter by operation - UPDATE only":
+//	  - Definition triggers on UPDATE
+//	  - Query with UPDATE -> Matches
+//	  - Query with CREATE -> Does NOT match
 //
-//   "prefilter by fields - single field":
-//     - Definition triggers on "status" field changes
-//     - Query with changed_fields = ["status"] -> Matches
-//     - Query with changed_fields = ["name"] -> Does NOT match
+//	"prefilter by operation - multiple operations":
+//	  - Definition triggers on UPDATE and CREATE
+//	  - Query with UPDATE -> Matches
+//	  - Query with CREATE -> Matches
+//	  - Query with DELETE -> Does NOT match
 //
-//   "prefilter by fields - multiple fields OR semantics":
-//     - Definition triggers on "status" OR "priority" field changes
-//     - Query with ["status"] -> Matches
-//     - Query with ["priority"] -> Matches
-//     - Query with ["description"] -> Does NOT match
+//	"prefilter by fields - single field":
+//	  - Definition triggers on "status" field changes
+//	  - Query with changed_fields = ["status"] -> Matches
+//	  - Query with changed_fields = ["name"] -> Does NOT match
 //
-//   "prefilter with null trigger_fields matches any field":
-//     - Definition with no field restrictions (null trigger_fields)
-//     - Query with any changed_fields -> Matches
+//	"prefilter by fields - multiple fields OR semantics":
+//	  - Definition triggers on "status" OR "priority" field changes
+//	  - Query with ["status"] -> Matches
+//	  - Query with ["priority"] -> Matches
+//	  - Query with ["description"] -> Does NOT match
 //
-//   "prefilter correctly derives from definition JSON":
-//     - Verifies DeriveTriggerPrefilter extracts correct values from workflow definition document
+//	"prefilter with null trigger_fields matches any field":
+//	  - Definition with no field restrictions (null trigger_fields)
+//	  - Query with any changed_fields -> Matches
+//
+//	"prefilter correctly derives from definition JSON":
+//	  - Verifies DeriveTriggerPrefilter extracts correct values from workflow definition document
 //
 // Why This Matters:
-//   Prefiltering avoids loading all workflow definitions and evaluating their CEL expressions
-//   for every mutation. The database can efficiently filter based on indexed columns.
+//
+//	Prefiltering avoids loading all workflow definitions and evaluating their CEL expressions
+//	for every mutation. The database can efficiently filter based on indexed columns.
 func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
-	s.ClearWorkflowDefinitions()
-
 	_, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
 	obj := &workflows.Object{ID: "test123", Type: enums.WorkflowObjectTypeControl}
 
 	s.Run("prefilter by operation - UPDATE only", func() {
-		s.ClearWorkflowDefinitions()
-
 		def := s.CreateTestWorkflowDefinitionWithPrefilter(userCtx, orgID,
 			[]models.WorkflowTrigger{
 				{Operation: "UPDATE", ObjectType: enums.WorkflowObjectTypeControl, Fields: []string{"status"}},
@@ -410,6 +411,7 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 			[]string{"UPDATE"},
 			[]string{"status"},
 		)
+		defer s.ClearWorkflowDefinitionsForOrg(orgID)
 
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
@@ -422,8 +424,6 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 	})
 
 	s.Run("prefilter by operation - multiple operations", func() {
-		s.ClearWorkflowDefinitions()
-
 		def := s.CreateTestWorkflowDefinitionWithPrefilter(userCtx, orgID,
 			[]models.WorkflowTrigger{
 				{Operation: "UPDATE", ObjectType: enums.WorkflowObjectTypeControl, Fields: []string{"status"}},
@@ -432,6 +432,7 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 			[]string{"CREATE", "UPDATE"},
 			[]string{"name", "status"},
 		)
+		defer s.ClearWorkflowDefinitionsForOrg(orgID)
 
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
@@ -447,8 +448,6 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 	})
 
 	s.Run("prefilter by fields - single field", func() {
-		s.ClearWorkflowDefinitions()
-
 		def := s.CreateTestWorkflowDefinitionWithPrefilter(userCtx, orgID,
 			[]models.WorkflowTrigger{
 				{Operation: "UPDATE", ObjectType: enums.WorkflowObjectTypeControl, Fields: []string{"status"}},
@@ -456,6 +455,7 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 			[]string{"UPDATE"},
 			[]string{"status"},
 		)
+		defer s.ClearWorkflowDefinitionsForOrg(orgID)
 
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
@@ -467,8 +467,6 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 	})
 
 	s.Run("prefilter by fields - multiple fields OR semantics", func() {
-		s.ClearWorkflowDefinitions()
-
 		def := s.CreateTestWorkflowDefinitionWithPrefilter(userCtx, orgID,
 			[]models.WorkflowTrigger{
 				{Operation: "UPDATE", ObjectType: enums.WorkflowObjectTypeControl, Fields: []string{"status", "priority"}},
@@ -476,6 +474,7 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 			[]string{"UPDATE"},
 			[]string{"priority", "status"},
 		)
+		defer s.ClearWorkflowDefinitionsForOrg(orgID)
 
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
@@ -495,8 +494,6 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 	})
 
 	s.Run("prefilter with null trigger_fields matches any field", func() {
-		s.ClearWorkflowDefinitions()
-
 		def := s.CreateTestWorkflowDefinitionWithPrefilter(userCtx, orgID,
 			[]models.WorkflowTrigger{
 				{Operation: "UPDATE", ObjectType: enums.WorkflowObjectTypeControl},
@@ -504,6 +501,7 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 			[]string{"UPDATE"},
 			nil,
 		)
+		defer s.ClearWorkflowDefinitionsForOrg(orgID)
 
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
@@ -515,9 +513,9 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 	})
 
 	s.Run("prefilter correctly derives from definition JSON", func() {
-		s.ClearWorkflowDefinitions()
-
 		def := s.CreateTestWorkflowDefinition(userCtx, orgID)
+		defer s.ClearWorkflowDefinitionsForOrg(orgID)
+
 		def.DefinitionJSON.Triggers = []models.WorkflowTrigger{
 			{Operation: "CREATE", ObjectType: enums.WorkflowObjectTypeControl, Fields: []string{"name", "description"}},
 			{Operation: "UPDATE", ObjectType: enums.WorkflowObjectTypeControl, Fields: []string{"status"}},
