@@ -13,6 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
@@ -247,6 +249,86 @@ func (_u *TrustCenterNDARequestUpdate) ClearStatus() *TrustCenterNDARequestUpdat
 	return _u
 }
 
+// SetApprovedAt sets the "approved_at" field.
+func (_u *TrustCenterNDARequestUpdate) SetApprovedAt(v models.DateTime) *TrustCenterNDARequestUpdate {
+	_u.mutation.SetApprovedAt(v)
+	return _u
+}
+
+// SetNillableApprovedAt sets the "approved_at" field if the given value is not nil.
+func (_u *TrustCenterNDARequestUpdate) SetNillableApprovedAt(v *models.DateTime) *TrustCenterNDARequestUpdate {
+	if v != nil {
+		_u.SetApprovedAt(*v)
+	}
+	return _u
+}
+
+// ClearApprovedAt clears the value of the "approved_at" field.
+func (_u *TrustCenterNDARequestUpdate) ClearApprovedAt() *TrustCenterNDARequestUpdate {
+	_u.mutation.ClearApprovedAt()
+	return _u
+}
+
+// SetApprovedByUserID sets the "approved_by_user_id" field.
+func (_u *TrustCenterNDARequestUpdate) SetApprovedByUserID(v string) *TrustCenterNDARequestUpdate {
+	_u.mutation.SetApprovedByUserID(v)
+	return _u
+}
+
+// SetNillableApprovedByUserID sets the "approved_by_user_id" field if the given value is not nil.
+func (_u *TrustCenterNDARequestUpdate) SetNillableApprovedByUserID(v *string) *TrustCenterNDARequestUpdate {
+	if v != nil {
+		_u.SetApprovedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearApprovedByUserID clears the value of the "approved_by_user_id" field.
+func (_u *TrustCenterNDARequestUpdate) ClearApprovedByUserID() *TrustCenterNDARequestUpdate {
+	_u.mutation.ClearApprovedByUserID()
+	return _u
+}
+
+// SetSignedAt sets the "signed_at" field.
+func (_u *TrustCenterNDARequestUpdate) SetSignedAt(v models.DateTime) *TrustCenterNDARequestUpdate {
+	_u.mutation.SetSignedAt(v)
+	return _u
+}
+
+// SetNillableSignedAt sets the "signed_at" field if the given value is not nil.
+func (_u *TrustCenterNDARequestUpdate) SetNillableSignedAt(v *models.DateTime) *TrustCenterNDARequestUpdate {
+	if v != nil {
+		_u.SetSignedAt(*v)
+	}
+	return _u
+}
+
+// ClearSignedAt clears the value of the "signed_at" field.
+func (_u *TrustCenterNDARequestUpdate) ClearSignedAt() *TrustCenterNDARequestUpdate {
+	_u.mutation.ClearSignedAt()
+	return _u
+}
+
+// SetDocumentDataID sets the "document_data_id" field.
+func (_u *TrustCenterNDARequestUpdate) SetDocumentDataID(v string) *TrustCenterNDARequestUpdate {
+	_u.mutation.SetDocumentDataID(v)
+	return _u
+}
+
+// SetNillableDocumentDataID sets the "document_data_id" field if the given value is not nil.
+func (_u *TrustCenterNDARequestUpdate) SetNillableDocumentDataID(v *string) *TrustCenterNDARequestUpdate {
+	if v != nil {
+		_u.SetDocumentDataID(*v)
+	}
+	return _u
+}
+
+// ClearDocumentDataID clears the value of the "document_data_id" field.
+func (_u *TrustCenterNDARequestUpdate) ClearDocumentDataID() *TrustCenterNDARequestUpdate {
+	_u.mutation.ClearDocumentDataID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterNDARequestUpdate) AddBlockedGroupIDs(ids ...string) *TrustCenterNDARequestUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -290,6 +372,25 @@ func (_u *TrustCenterNDARequestUpdate) AddTrustCenterDocs(v ...*TrustCenterDoc) 
 		ids[i] = v[i].ID
 	}
 	return _u.AddTrustCenterDocIDs(ids...)
+}
+
+// SetDocumentID sets the "document" edge to the DocumentData entity by ID.
+func (_u *TrustCenterNDARequestUpdate) SetDocumentID(id string) *TrustCenterNDARequestUpdate {
+	_u.mutation.SetDocumentID(id)
+	return _u
+}
+
+// SetNillableDocumentID sets the "document" edge to the DocumentData entity by ID if the given value is not nil.
+func (_u *TrustCenterNDARequestUpdate) SetNillableDocumentID(id *string) *TrustCenterNDARequestUpdate {
+	if id != nil {
+		_u = _u.SetDocumentID(*id)
+	}
+	return _u
+}
+
+// SetDocument sets the "document" edge to the DocumentData entity.
+func (_u *TrustCenterNDARequestUpdate) SetDocument(v *DocumentData) *TrustCenterNDARequestUpdate {
+	return _u.SetDocumentID(v.ID)
 }
 
 // Mutation returns the TrustCenterNDARequestMutation object of the builder.
@@ -358,6 +459,12 @@ func (_u *TrustCenterNDARequestUpdate) RemoveTrustCenterDocs(v ...*TrustCenterDo
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterDocIDs(ids...)
+}
+
+// ClearDocument clears the "document" edge to the DocumentData entity.
+func (_u *TrustCenterNDARequestUpdate) ClearDocument() *TrustCenterNDARequestUpdate {
+	_u.mutation.ClearDocument()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -524,6 +631,24 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(trustcenterndarequest.FieldStatus, field.TypeEnum)
 	}
+	if value, ok := _u.mutation.ApprovedAt(); ok {
+		_spec.SetField(trustcenterndarequest.FieldApprovedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ApprovedAtCleared() {
+		_spec.ClearField(trustcenterndarequest.FieldApprovedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ApprovedByUserID(); ok {
+		_spec.SetField(trustcenterndarequest.FieldApprovedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ApprovedByUserIDCleared() {
+		_spec.ClearField(trustcenterndarequest.FieldApprovedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SignedAt(); ok {
+		_spec.SetField(trustcenterndarequest.FieldSignedAt, field.TypeTime, value)
+	}
+	if _u.mutation.SignedAtCleared() {
+		_spec.ClearField(trustcenterndarequest.FieldSignedAt, field.TypeTime)
+	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -663,6 +788,37 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DocumentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.DocumentTable,
+			Columns: []string{trustcenterndarequest.DocumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DocumentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.DocumentTable,
+			Columns: []string{trustcenterndarequest.DocumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -904,6 +1060,86 @@ func (_u *TrustCenterNDARequestUpdateOne) ClearStatus() *TrustCenterNDARequestUp
 	return _u
 }
 
+// SetApprovedAt sets the "approved_at" field.
+func (_u *TrustCenterNDARequestUpdateOne) SetApprovedAt(v models.DateTime) *TrustCenterNDARequestUpdateOne {
+	_u.mutation.SetApprovedAt(v)
+	return _u
+}
+
+// SetNillableApprovedAt sets the "approved_at" field if the given value is not nil.
+func (_u *TrustCenterNDARequestUpdateOne) SetNillableApprovedAt(v *models.DateTime) *TrustCenterNDARequestUpdateOne {
+	if v != nil {
+		_u.SetApprovedAt(*v)
+	}
+	return _u
+}
+
+// ClearApprovedAt clears the value of the "approved_at" field.
+func (_u *TrustCenterNDARequestUpdateOne) ClearApprovedAt() *TrustCenterNDARequestUpdateOne {
+	_u.mutation.ClearApprovedAt()
+	return _u
+}
+
+// SetApprovedByUserID sets the "approved_by_user_id" field.
+func (_u *TrustCenterNDARequestUpdateOne) SetApprovedByUserID(v string) *TrustCenterNDARequestUpdateOne {
+	_u.mutation.SetApprovedByUserID(v)
+	return _u
+}
+
+// SetNillableApprovedByUserID sets the "approved_by_user_id" field if the given value is not nil.
+func (_u *TrustCenterNDARequestUpdateOne) SetNillableApprovedByUserID(v *string) *TrustCenterNDARequestUpdateOne {
+	if v != nil {
+		_u.SetApprovedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearApprovedByUserID clears the value of the "approved_by_user_id" field.
+func (_u *TrustCenterNDARequestUpdateOne) ClearApprovedByUserID() *TrustCenterNDARequestUpdateOne {
+	_u.mutation.ClearApprovedByUserID()
+	return _u
+}
+
+// SetSignedAt sets the "signed_at" field.
+func (_u *TrustCenterNDARequestUpdateOne) SetSignedAt(v models.DateTime) *TrustCenterNDARequestUpdateOne {
+	_u.mutation.SetSignedAt(v)
+	return _u
+}
+
+// SetNillableSignedAt sets the "signed_at" field if the given value is not nil.
+func (_u *TrustCenterNDARequestUpdateOne) SetNillableSignedAt(v *models.DateTime) *TrustCenterNDARequestUpdateOne {
+	if v != nil {
+		_u.SetSignedAt(*v)
+	}
+	return _u
+}
+
+// ClearSignedAt clears the value of the "signed_at" field.
+func (_u *TrustCenterNDARequestUpdateOne) ClearSignedAt() *TrustCenterNDARequestUpdateOne {
+	_u.mutation.ClearSignedAt()
+	return _u
+}
+
+// SetDocumentDataID sets the "document_data_id" field.
+func (_u *TrustCenterNDARequestUpdateOne) SetDocumentDataID(v string) *TrustCenterNDARequestUpdateOne {
+	_u.mutation.SetDocumentDataID(v)
+	return _u
+}
+
+// SetNillableDocumentDataID sets the "document_data_id" field if the given value is not nil.
+func (_u *TrustCenterNDARequestUpdateOne) SetNillableDocumentDataID(v *string) *TrustCenterNDARequestUpdateOne {
+	if v != nil {
+		_u.SetDocumentDataID(*v)
+	}
+	return _u
+}
+
+// ClearDocumentDataID clears the value of the "document_data_id" field.
+func (_u *TrustCenterNDARequestUpdateOne) ClearDocumentDataID() *TrustCenterNDARequestUpdateOne {
+	_u.mutation.ClearDocumentDataID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterNDARequestUpdateOne) AddBlockedGroupIDs(ids ...string) *TrustCenterNDARequestUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -947,6 +1183,25 @@ func (_u *TrustCenterNDARequestUpdateOne) AddTrustCenterDocs(v ...*TrustCenterDo
 		ids[i] = v[i].ID
 	}
 	return _u.AddTrustCenterDocIDs(ids...)
+}
+
+// SetDocumentID sets the "document" edge to the DocumentData entity by ID.
+func (_u *TrustCenterNDARequestUpdateOne) SetDocumentID(id string) *TrustCenterNDARequestUpdateOne {
+	_u.mutation.SetDocumentID(id)
+	return _u
+}
+
+// SetNillableDocumentID sets the "document" edge to the DocumentData entity by ID if the given value is not nil.
+func (_u *TrustCenterNDARequestUpdateOne) SetNillableDocumentID(id *string) *TrustCenterNDARequestUpdateOne {
+	if id != nil {
+		_u = _u.SetDocumentID(*id)
+	}
+	return _u
+}
+
+// SetDocument sets the "document" edge to the DocumentData entity.
+func (_u *TrustCenterNDARequestUpdateOne) SetDocument(v *DocumentData) *TrustCenterNDARequestUpdateOne {
+	return _u.SetDocumentID(v.ID)
 }
 
 // Mutation returns the TrustCenterNDARequestMutation object of the builder.
@@ -1015,6 +1270,12 @@ func (_u *TrustCenterNDARequestUpdateOne) RemoveTrustCenterDocs(v ...*TrustCente
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterDocIDs(ids...)
+}
+
+// ClearDocument clears the "document" edge to the DocumentData entity.
+func (_u *TrustCenterNDARequestUpdateOne) ClearDocument() *TrustCenterNDARequestUpdateOne {
+	_u.mutation.ClearDocument()
+	return _u
 }
 
 // Where appends a list predicates to the TrustCenterNDARequestUpdate builder.
@@ -1211,6 +1472,24 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(trustcenterndarequest.FieldStatus, field.TypeEnum)
 	}
+	if value, ok := _u.mutation.ApprovedAt(); ok {
+		_spec.SetField(trustcenterndarequest.FieldApprovedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ApprovedAtCleared() {
+		_spec.ClearField(trustcenterndarequest.FieldApprovedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ApprovedByUserID(); ok {
+		_spec.SetField(trustcenterndarequest.FieldApprovedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ApprovedByUserIDCleared() {
+		_spec.ClearField(trustcenterndarequest.FieldApprovedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SignedAt(); ok {
+		_spec.SetField(trustcenterndarequest.FieldSignedAt, field.TypeTime, value)
+	}
+	if _u.mutation.SignedAtCleared() {
+		_spec.ClearField(trustcenterndarequest.FieldSignedAt, field.TypeTime)
+	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1350,6 +1629,37 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DocumentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.DocumentTable,
+			Columns: []string{trustcenterndarequest.DocumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DocumentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.DocumentTable,
+			Columns: []string{trustcenterndarequest.DocumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

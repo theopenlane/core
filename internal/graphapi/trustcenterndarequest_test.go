@@ -5,9 +5,13 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -15,6 +19,8 @@ import (
 )
 
 func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenterNoApproval := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ndaTemplate1 := (&TemplateBuilder{
@@ -169,6 +175,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 }
 
 func TestQueryTrustCenterNDARequest(t *testing.T) {
+	cleanupTrustCenterData(t)
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ndaTemplate := (&TemplateBuilder{
@@ -240,6 +247,7 @@ func TestQueryTrustCenterNDARequest(t *testing.T) {
 }
 
 func TestQueryTrustCenterNDARequests(t *testing.T) {
+	cleanupTrustCenterData(t)
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ndaTemplate := (&TemplateBuilder{
@@ -306,6 +314,7 @@ func TestQueryTrustCenterNDARequests(t *testing.T) {
 }
 
 func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
+	cleanupTrustCenterData(t)
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ndaTemplate := (&TemplateBuilder{
@@ -331,50 +340,59 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 	assert.Equal(t, enums.TrustCenterNDARequestStatusNeedsApproval, *ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
 
 	testCases := []struct {
-		name        string
-		input       testclient.UpdateTrustCenterNDARequestInput
-		client      *testclient.TestClient
-		ctx         context.Context
-		expectedErr string
+		name            string
+		input           testclient.UpdateTrustCenterNDARequestInput
+		client          *testclient.TestClient
+		ctx             context.Context
+		expectEmailSent bool
+		expectedErr     string
 	}{
 		{
 			name: "happy path - update first name",
 			input: testclient.UpdateTrustCenterNDARequestInput{
 				FirstName: lo.ToPtr("UpdatedFirstName"),
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectEmailSent: false,
 		},
 		{
 			name: "happy path - update status to approved",
 			input: testclient.UpdateTrustCenterNDARequestInput{
 				Status: lo.ToPtr(enums.TrustCenterNDARequestStatusApproved),
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectEmailSent: true,
 		},
 		{
 			name: "view only user cannot update",
 			input: testclient.UpdateTrustCenterNDARequestInput{
 				FirstName: lo.ToPtr("ShouldNotUpdate"),
 			},
-			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:          suite.client.api,
+			ctx:             viewOnlyUser.UserCtx,
+			expectedErr:     notAuthorizedErrorMsg,
+			expectEmailSent: false,
 		},
 		{
 			name: "different org cannot update",
 			input: testclient.UpdateTrustCenterNDARequestInput{
 				FirstName: lo.ToPtr("ShouldNotUpdate"),
 			},
-			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:          suite.client.api,
+			ctx:             testUser2.UserCtx,
+			expectedErr:     notAuthorizedErrorMsg,
+			expectEmailSent: false,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
+			// Clear any existing jobs
+			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
+			assert.NilError(t, err)
+
 			resp, err := tc.client.UpdateTrustCenterNDARequest(tc.ctx, ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, tc.input)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -390,6 +408,24 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 
 			if tc.input.Status != nil {
 				assert.Equal(t, *tc.input.Status, *resp.UpdateTrustCenterNDARequest.TrustCenterNDARequest.Status)
+
+				if *tc.input.Status == enums.TrustCenterNDARequestStatusApproved {
+					assert.Check(t, resp.UpdateTrustCenterNDARequest.TrustCenterNDARequest.ApprovedAt != nil, "approved_at should be set when status is approved")
+				}
+			}
+
+			// Verify the job was or was not created based on expectation
+			if tc.expectEmailSent {
+				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+					[]rivertest.ExpectedJob{
+						{
+							Args: jobs.EmailArgs{},
+						},
+					})
+				assert.Assert(t, jobs != nil)
+				assert.Assert(t, is.Len(jobs, 1))
+			} else {
+				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
 			}
 		})
 	}
@@ -400,6 +436,7 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 }
 
 func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
+	cleanupTrustCenterData(t)
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	otherTrustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
@@ -415,28 +452,33 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 		TrustCenterID: otherTrustCenter.ID,
 	}).MustNew(testUser2.UserCtx, t)
 
-	anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, trustCenter.OwnerID)
+	anonEmail := gofakeit.Email()
+	anonCtx, anonUser := createAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, anonEmail)
 	wrongTrustCenterAnonCtx := createAnonymousTrustCenterContext(otherTrustCenter.ID, otherTrustCenter.OwnerID)
 
 	testCases := []struct {
-		name           string
-		input          testclient.CreateTrustCenterNDARequestInput
-		client         *testclient.TestClient
-		ctx            context.Context
-		expectedErr    string
-		expectedStatus enums.TrustCenterNDARequestStatus
+		name            string
+		input           testclient.CreateTrustCenterNDARequestInput
+		client          *testclient.TestClient
+		ctx             context.Context
+		expectedErr     string
+		expectedStatus  enums.TrustCenterNDARequestStatus
+		expectEmailSent bool
+		testResponse    bool
 	}{
 		{
-			name: "happy path - anonymous user can create NDA request",
+			name: "happy path - anonymous user can create NDA request, email sent because approval not required, test signed response",
 			input: testclient.CreateTrustCenterNDARequestInput{
 				FirstName:     gofakeit.FirstName(),
 				LastName:      gofakeit.LastName(),
-				Email:         gofakeit.Email(),
+				Email:         anonEmail,
 				TrustCenterID: &trustCenter.ID,
 			},
-			client:         suite.client.api,
-			ctx:            anonCtx,
-			expectedStatus: enums.TrustCenterNDARequestStatusRequested,
+			client:          suite.client.api,
+			ctx:             anonCtx,
+			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
+			expectEmailSent: true,
+			testResponse:    true,
 		},
 		{
 			name: "anonymous user cannot create NDA request for different trust center",
@@ -446,9 +488,10 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 				Email:         gofakeit.Email(),
 				TrustCenterID: &otherTrustCenter.ID,
 			},
-			client:      suite.client.api,
-			ctx:         anonCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:          suite.client.api,
+			ctx:             anonCtx,
+			expectedErr:     notAuthorizedErrorMsg,
+			expectEmailSent: false,
 		},
 		{
 			name: "anonymous user with wrong trust center context cannot create",
@@ -458,14 +501,19 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 				Email:         gofakeit.Email(),
 				TrustCenterID: &trustCenter.ID,
 			},
-			client:      suite.client.api,
-			ctx:         wrongTrustCenterAnonCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:          suite.client.api,
+			ctx:             wrongTrustCenterAnonCtx,
+			expectedErr:     notAuthorizedErrorMsg,
+			expectEmailSent: false,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
+			// Clear any existing jobs
+			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
+			assert.NilError(t, err)
+
 			resp, err := tc.client.CreateTrustCenterNDARequest(tc.ctx, tc.input)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -480,6 +528,47 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 			assert.Equal(t, tc.input.Email, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Email)
 			assert.Equal(t, tc.expectedStatus, *resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
 
+			// Verify the job was or was not created based on expectation
+			if tc.expectEmailSent {
+				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+					[]rivertest.ExpectedJob{
+						{
+							Args: jobs.EmailArgs{},
+						},
+					})
+				assert.Assert(t, jobs != nil)
+				assert.Assert(t, is.Len(jobs, 1))
+			} else {
+				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+			}
+
+			if tc.testResponse {
+				// now sign the nda to ensure status is set correctly
+				_, err = suite.client.api.SubmitTrustCenterNDAResponse(anonCtx, testclient.SubmitTrustCenterNDAResponseInput{
+					TemplateID: ndaTemplate.ID,
+					Response: map[string]any{
+						"signatory_info": map[string]any{
+							"email": anonUser.SubjectEmail,
+						},
+						"acknowledgment": true,
+						"signature_metadata": map[string]any{
+							"ip_address": "192.168.1.100",
+							"timestamp":  "2025-09-22T19:37:59.988Z",
+							"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
+							"user_id":    anonUser.SubjectID,
+						},
+						"pdf_file_id":     "some-pdf-file-id",
+						"trust_center_id": trustCenter.ID,
+					},
+				})
+				assert.NilError(t, err)
+
+				// Fetch the updated request to verify status
+				updatedReq, err := suite.client.api.GetTrustCenterNDARequestByID(tc.ctx, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+				assert.NilError(t, err)
+				assert.Equal(t, enums.TrustCenterNDARequestStatusSigned, *updatedReq.TrustCenterNDARequest.Status)
+			}
+
 			(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser1.UserCtx, t)
 		})
 	}
@@ -491,6 +580,7 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 }
 
 func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
+	cleanupTrustCenterData(t)
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ndaTemplate := (&TemplateBuilder{
@@ -571,6 +661,7 @@ func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
 }
 
 func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
+	cleanupTrustCenterData(t)
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ndaTemplate := (&TemplateBuilder{

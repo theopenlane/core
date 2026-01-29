@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"time"
 
 	"entgo.io/ent"
 	"github.com/golang-jwt/jwt/v5"
@@ -14,6 +15,7 @@ import (
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -134,9 +136,23 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterNDARequestFunc(func(ctx context.Context, m *generated.TrustCenterNDARequestMutation) (generated.Value, error) {
 			status, ok := m.Status()
-			if !ok || status != enums.TrustCenterNDARequestStatusApproved {
+			if !ok || (status != enums.TrustCenterNDARequestStatusApproved && status != enums.TrustCenterNDARequestStatusSigned) {
 				return next.Mutate(ctx, m)
 			}
+
+			// if approved or signed, set the timestamp in the ISO8601 format
+			now, err := models.ToDateTime(time.Now().UTC().Format(time.RFC3339))
+			if err != nil {
+				return nil, err
+			}
+
+			if status == enums.TrustCenterNDARequestStatusSigned {
+				m.SetSignedAt(*now)
+
+				return next.Mutate(ctx, m)
+			}
+
+			m.SetApprovedAt(*now)
 
 			v, err := next.Mutate(ctx, m)
 			if err != nil {

@@ -99,6 +99,9 @@ query GetAllTrustCenterNDARequests($first: Int, $last: Int, $after: Cursor, $bef
         trustCenterID
         updatedAt
         updatedBy
+        approvedAt
+        signedAt
+        documentDataID
       }
     }
   }
@@ -119,6 +122,9 @@ query GetTrustCenterNDARequestByID($trustCenterNDARequestId: ID!) {
     trustCenterID
     updatedAt
     updatedBy
+    approvedAt
+    signedAt
+    documentDataID
   }
 }
 
@@ -154,6 +160,9 @@ query GetTrustCenterNDARequests($first: Int, $last: Int, $after: Cursor, $before
         trustCenterID
         updatedAt
         updatedBy
+        approvedAt
+        signedAt
+        documentDataID
       }
     }
   }
@@ -175,6 +184,9 @@ mutation UpdateTrustCenterNDARequest($updateTrustCenterNDARequestId: ID!, $input
       trustCenterID
       updatedAt
       updatedBy
+      approvedAt
+      signedAt
+      documentDataID
     }
   }
 }

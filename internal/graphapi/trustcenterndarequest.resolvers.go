@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
@@ -110,6 +111,34 @@ func (r *mutationResolver) DeleteTrustCenterNDARequest(ctx context.Context, id s
 
 	return &model.TrustCenterNDARequestDeletePayload{
 		DeletedID: id,
+	}, nil
+}
+
+// ApproveNDARequests is the resolver for the approveNDARequests field.
+func (r *mutationResolver) ApproveNDARequests(ctx context.Context, ids []string) (*model.BulkUpdateStatusPayload, error) {
+	count, err := withTransactionalMutation(ctx).TrustCenterNDARequest.Update().Where(
+		trustcenterndarequest.IDIn(ids...),
+	).SetStatus(enums.TrustCenterNDARequestStatusApproved).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterndarequest"})
+	}
+
+	return &model.BulkUpdateStatusPayload{
+		TotalUpdated: count,
+	}, nil
+}
+
+// DenyNDARequests is the resolver for the denyNDARequests field.
+func (r *mutationResolver) DenyNDARequests(ctx context.Context, ids []string) (*model.BulkUpdateStatusPayload, error) {
+	count, err := withTransactionalMutation(ctx).TrustCenterNDARequest.Update().Where(
+		trustcenterndarequest.IDIn(ids...),
+	).SetStatus(enums.TrustCenterNDARequestStatusDeclined).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterndarequest"})
+	}
+
+	return &model.BulkUpdateStatusPayload{
+		TotalUpdated: count,
 	}, nil
 }
 

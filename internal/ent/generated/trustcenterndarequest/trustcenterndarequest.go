@@ -48,6 +48,14 @@ const (
 	FieldAccessLevel = "access_level"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldApprovedAt holds the string denoting the approved_at field in the database.
+	FieldApprovedAt = "approved_at"
+	// FieldApprovedByUserID holds the string denoting the approved_by_user_id field in the database.
+	FieldApprovedByUserID = "approved_by_user_id"
+	// FieldSignedAt holds the string denoting the signed_at field in the database.
+	FieldSignedAt = "signed_at"
+	// FieldDocumentDataID holds the string denoting the document_data_id field in the database.
+	FieldDocumentDataID = "document_data_id"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
@@ -56,6 +64,8 @@ const (
 	EdgeTrustCenter = "trust_center"
 	// EdgeTrustCenterDocs holds the string denoting the trust_center_docs edge name in mutations.
 	EdgeTrustCenterDocs = "trust_center_docs"
+	// EdgeDocument holds the string denoting the document edge name in mutations.
+	EdgeDocument = "document"
 	// Table holds the table name of the trustcenterndarequest in the database.
 	Table = "trust_center_nda_requests"
 	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
@@ -86,6 +96,13 @@ const (
 	TrustCenterDocsInverseTable = "trust_center_docs"
 	// TrustCenterDocsColumn is the table column denoting the trust_center_docs relation/edge.
 	TrustCenterDocsColumn = "trust_center_nda_request_trust_center_docs"
+	// DocumentTable is the table that holds the document relation/edge.
+	DocumentTable = "trust_center_nda_requests"
+	// DocumentInverseTable is the table name for the DocumentData entity.
+	// It exists in this package in order to avoid circular dependency with the "documentdata" package.
+	DocumentInverseTable = "document_data"
+	// DocumentColumn is the table column denoting the document relation/edge.
+	DocumentColumn = "document_data_id"
 )
 
 // Columns holds all SQL columns for trustcenterndarequest fields.
@@ -106,6 +123,10 @@ var Columns = []string{
 	FieldReason,
 	FieldAccessLevel,
 	FieldStatus,
+	FieldApprovedAt,
+	FieldApprovedByUserID,
+	FieldSignedAt,
+	FieldDocumentDataID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -249,6 +270,26 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
+// ByApprovedAt orders the results by the approved_at field.
+func ByApprovedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldApprovedAt, opts...).ToFunc()
+}
+
+// ByApprovedByUserID orders the results by the approved_by_user_id field.
+func ByApprovedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldApprovedByUserID, opts...).ToFunc()
+}
+
+// BySignedAt orders the results by the signed_at field.
+func BySignedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSignedAt, opts...).ToFunc()
+}
+
+// ByDocumentDataID orders the results by the document_data_id field.
+func ByDocumentDataID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDocumentDataID, opts...).ToFunc()
+}
+
 // ByBlockedGroupsCount orders the results by blocked_groups count.
 func ByBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -297,6 +338,13 @@ func ByTrustCenterDocs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newTrustCenterDocsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByDocumentField orders the results by document field.
+func ByDocumentField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDocumentStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newBlockedGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -323,6 +371,13 @@ func newTrustCenterDocsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterDocsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterDocsTable, TrustCenterDocsColumn),
+	)
+}
+func newDocumentStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DocumentInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DocumentTable, DocumentColumn),
 	)
 }
 

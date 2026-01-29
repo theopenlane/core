@@ -7,13 +7,12 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/xeipuuv/gojsonschema"
@@ -65,21 +64,12 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				return nil, errMissingResponse
 			}
 
-			previousDocs, err := m.Client().DocumentData.Query().Where(
-				documentdata.And(
-					documentdata.TemplateIDEQ(docTemplate.ID),
-					func(s *sql.Selector) {
-						s.Where(
-							sqljson.ValueEQ(documentdata.FieldData, anon.SubjectEmail, sqljson.DotPath("signatory_info.email")),
-						)
-					},
-				),
-			).Count(ctx)
-			if err != nil {
-				return nil, err
-			}
-
-			if previousDocs > 0 {
+			signedID, err := m.Client().TrustCenterNDARequest.Query().Where(
+				trustcenterndarequest.EmailEqualFold(anon.SubjectEmail),
+				trustcenterndarequest.TrustCenterID(anon.TrustCenterID),
+				trustcenterndarequest.StatusEQ(enums.TrustCenterNDARequestStatusSigned),
+			).FirstID(ctx)
+			if err == nil && signedID != "" {
 				return nil, errUserHasAlreadySignedNDA
 			}
 
@@ -90,6 +80,31 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err
+			}
+
+			// get the id of the created document data
+			createdDocData, ok := v.(*generated.DocumentData)
+			if !ok {
+				logx.FromContext(ctx).Error().Msgf("unexpected type %T for created document data", v)
+
+				return nil, fmt.Errorf("unexpected type %T: %w", v, ErrInternalServerError)
+			}
+
+			// update nda requests that it has been signed
+			_, err = m.Client().TrustCenterNDARequest.Update().Where(
+				trustcenterndarequest.EmailEqualFold(anon.SubjectEmail),
+				trustcenterndarequest.TrustCenterID(anon.TrustCenterID),
+				trustcenterndarequest.StatusNEQ(enums.TrustCenterNDARequestStatusSigned),
+			).SetStatus(enums.TrustCenterNDARequestStatusSigned).SetDocumentDataID(createdDocData.ID).Save(ctx)
+			if err != nil {
+				if !generated.IsNotFound(err) {
+					logx.FromContext(ctx).Error().Err(err).Str("email", anon.SubjectEmail).Str("trust_center_id", anon.TrustCenterID).Msg("failed to mark nda request signed status")
+
+					return nil, err
+				}
+
+				// this shouldn't happen, unless it was already marked as signed
+				logx.FromContext(ctx).Error().Str("email", anon.SubjectEmail).Str("trust_center_id", anon.TrustCenterID).Msg("no existing nda request to mark signed status")
 			}
 
 			// add the nda_signed tuple to the anonymous user to allow file access

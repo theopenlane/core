@@ -453,6 +453,10 @@ type ComplexityRoot struct {
 		Asset func(childComplexity int) int
 	}
 
+	BulkUpdateStatusPayload struct {
+		TotalUpdated func(childComplexity int) int
+	}
+
 	Campaign struct {
 		ActiveWorkflowInstances func(childComplexity int) int
 		Assessment              func(childComplexity int) int
@@ -2899,6 +2903,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
+		ApproveNDARequests                   func(childComplexity int, ids []string) int
 		ApproveWorkflowAssignment            func(childComplexity int, id string) int
 		CloneBulkCSVControl                  func(childComplexity int, input graphql.Upload) int
 		CreateAPIToken                       func(childComplexity int, input generated.CreateAPITokenInput) int
@@ -3230,6 +3235,7 @@ type ComplexityRoot struct {
 		DeleteVulnerability                  func(childComplexity int, id string) int
 		DeleteWebauthn                       func(childComplexity int, id string) int
 		DeleteWorkflowDefinition             func(childComplexity int, id string) int
+		DenyNDARequests                      func(childComplexity int, ids []string) int
 		PublishTrustCenterSetting            func(childComplexity int) int
 		RejectWorkflowAssignment             func(childComplexity int, id string, reason *string) int
 		SubmitTrustCenterNDAResponse         func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
@@ -5600,24 +5606,29 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterNDARequest struct {
-		AccessLevel     func(childComplexity int) int
-		BlockedGroups   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		CompanyName     func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		Editors         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Email           func(childComplexity int) int
-		FirstName       func(childComplexity int) int
-		ID              func(childComplexity int) int
-		LastName        func(childComplexity int) int
-		Reason          func(childComplexity int) int
-		Status          func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		TrustCenter     func(childComplexity int) int
-		TrustCenterDocs func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
-		TrustCenterID   func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		AccessLevel      func(childComplexity int) int
+		ApprovedAt       func(childComplexity int) int
+		ApprovedByUserID func(childComplexity int) int
+		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		CompanyName      func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Document         func(childComplexity int) int
+		DocumentDataID   func(childComplexity int) int
+		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Email            func(childComplexity int) int
+		FirstName        func(childComplexity int) int
+		ID               func(childComplexity int) int
+		LastName         func(childComplexity int) int
+		Reason           func(childComplexity int) int
+		SignedAt         func(childComplexity int) int
+		Status           func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		TrustCenter      func(childComplexity int) int
+		TrustCenterDocs  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
+		TrustCenterID    func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	TrustCenterNDARequestBulkCreatePayload struct {
@@ -8345,6 +8356,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssetUpdatePayload.Asset(childComplexity), true
+
+	case "BulkUpdateStatusPayload.totalUpdated":
+		if e.complexity.BulkUpdateStatusPayload.TotalUpdated == nil {
+			break
+		}
+
+		return e.complexity.BulkUpdateStatusPayload.TotalUpdated(childComplexity), true
 
 	case "Campaign.activeWorkflowInstances":
 		if e.complexity.Campaign.ActiveWorkflowInstances == nil {
@@ -20629,6 +20647,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappedControlUpdatePayload.MappedControl(childComplexity), true
 
+	case "Mutation.approveNDARequests":
+		if e.complexity.Mutation.ApproveNDARequests == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_approveNDARequests_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ApproveNDARequests(childComplexity, args["ids"].([]string)), true
+
 	case "Mutation.approveWorkflowAssignment":
 		if e.complexity.Mutation.ApproveWorkflowAssignment == nil {
 			break
@@ -24600,6 +24630,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteWorkflowDefinition(childComplexity, args["id"].(string)), true
+
+	case "Mutation.denyNDARequests":
+		if e.complexity.Mutation.DenyNDARequests == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_denyNDARequests_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DenyNDARequests(childComplexity, args["ids"].([]string)), true
 
 	case "Mutation.publishTrustCenterSetting":
 		if e.complexity.Mutation.PublishTrustCenterSetting == nil {
@@ -39411,6 +39453,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterNDARequest.AccessLevel(childComplexity), true
 
+	case "TrustCenterNDARequest.approvedAt":
+		if e.complexity.TrustCenterNDARequest.ApprovedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.ApprovedAt(childComplexity), true
+
+	case "TrustCenterNDARequest.approvedByUserID":
+		if e.complexity.TrustCenterNDARequest.ApprovedByUserID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.ApprovedByUserID(childComplexity), true
+
 	case "TrustCenterNDARequest.blockedGroups":
 		if e.complexity.TrustCenterNDARequest.BlockedGroups == nil {
 			break
@@ -39443,6 +39499,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterNDARequest.CreatedBy(childComplexity), true
+
+	case "TrustCenterNDARequest.document":
+		if e.complexity.TrustCenterNDARequest.Document == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.Document(childComplexity), true
+
+	case "TrustCenterNDARequest.documentDataID":
+		if e.complexity.TrustCenterNDARequest.DocumentDataID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.DocumentDataID(childComplexity), true
 
 	case "TrustCenterNDARequest.editors":
 		if e.complexity.TrustCenterNDARequest.Editors == nil {
@@ -39490,6 +39560,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterNDARequest.Reason(childComplexity), true
+
+	case "TrustCenterNDARequest.signedAt":
+		if e.complexity.TrustCenterNDARequest.SignedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.SignedAt(childComplexity), true
 
 	case "TrustCenterNDARequest.status":
 		if e.complexity.TrustCenterNDARequest.Status == nil {
@@ -60112,10 +60189,23 @@ input CreateTrustCenterNDARequestInput {
   access level requested
   """
   accessLevel: TrustCenterNDARequestTrustCenterNDARequestAccessLevel
+  """
+  timestamp when the request was approved
+  """
+  approvedAt: DateTime
+  """
+  ID of the user who approved the request
+  """
+  approvedByUserID: String
+  """
+  timestamp when the NDA was signed
+  """
+  signedAt: DateTime
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   trustCenterID: ID
   trustCenterDocIDs: [ID!]
+  documentID: ID
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -106124,6 +106214,22 @@ type TrustCenterNDARequest implements Node {
   status of the NDA request
   """
   status: TrustCenterNDARequestTrustCenterNDARequestStatus
+  """
+  timestamp when the request was approved
+  """
+  approvedAt: DateTime
+  """
+  ID of the user who approved the request
+  """
+  approvedByUserID: String
+  """
+  timestamp when the NDA was signed
+  """
+  signedAt: DateTime
+  """
+  ID of the signed NDA document data
+  """
+  documentDataID: ID
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -106218,6 +106324,10 @@ type TrustCenterNDARequest implements Node {
     """
     where: TrustCenterDocWhereInput
   ): TrustCenterDocConnection!
+  """
+  the signed NDA document data
+  """
+  document: DocumentData
 }
 """
 A connection to a list of items.
@@ -106489,6 +106599,68 @@ input TrustCenterNDARequestWhereInput {
   statusIsNil: Boolean
   statusNotNil: Boolean
   """
+  approved_at field predicates
+  """
+  approvedAt: DateTime
+  approvedAtNEQ: DateTime
+  approvedAtIn: [DateTime!]
+  approvedAtNotIn: [DateTime!]
+  approvedAtGT: DateTime
+  approvedAtGTE: DateTime
+  approvedAtLT: DateTime
+  approvedAtLTE: DateTime
+  approvedAtIsNil: Boolean
+  approvedAtNotNil: Boolean
+  """
+  approved_by_user_id field predicates
+  """
+  approvedByUserID: String
+  approvedByUserIDNEQ: String
+  approvedByUserIDIn: [String!]
+  approvedByUserIDNotIn: [String!]
+  approvedByUserIDGT: String
+  approvedByUserIDGTE: String
+  approvedByUserIDLT: String
+  approvedByUserIDLTE: String
+  approvedByUserIDContains: String
+  approvedByUserIDHasPrefix: String
+  approvedByUserIDHasSuffix: String
+  approvedByUserIDIsNil: Boolean
+  approvedByUserIDNotNil: Boolean
+  approvedByUserIDEqualFold: String
+  approvedByUserIDContainsFold: String
+  """
+  signed_at field predicates
+  """
+  signedAt: DateTime
+  signedAtNEQ: DateTime
+  signedAtIn: [DateTime!]
+  signedAtNotIn: [DateTime!]
+  signedAtGT: DateTime
+  signedAtGTE: DateTime
+  signedAtLT: DateTime
+  signedAtLTE: DateTime
+  signedAtIsNil: Boolean
+  signedAtNotNil: Boolean
+  """
+  document_data_id field predicates
+  """
+  documentDataID: ID
+  documentDataIDNEQ: ID
+  documentDataIDIn: [ID!]
+  documentDataIDNotIn: [ID!]
+  documentDataIDGT: ID
+  documentDataIDGTE: ID
+  documentDataIDLT: ID
+  documentDataIDLTE: ID
+  documentDataIDContains: ID
+  documentDataIDHasPrefix: ID
+  documentDataIDHasSuffix: ID
+  documentDataIDIsNil: Boolean
+  documentDataIDNotNil: Boolean
+  documentDataIDEqualFold: ID
+  documentDataIDContainsFold: ID
+  """
   blocked_groups edge predicates
   """
   hasBlockedGroups: Boolean
@@ -106508,6 +106680,11 @@ input TrustCenterNDARequestWhereInput {
   """
   hasTrustCenterDocs: Boolean
   hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
+  """
+  document edge predicates
+  """
+  hasDocument: Boolean
+  hasDocumentWith: [DocumentDataWhereInput!]
 }
 """
 Ordering options for TrustCenter connections
@@ -114580,6 +114757,21 @@ input UpdateTrustCenterNDARequestInput {
   """
   status: TrustCenterNDARequestTrustCenterNDARequestStatus
   clearStatus: Boolean
+  """
+  timestamp when the request was approved
+  """
+  approvedAt: DateTime
+  clearApprovedAt: Boolean
+  """
+  ID of the user who approved the request
+  """
+  approvedByUserID: String
+  clearApprovedByUserID: Boolean
+  """
+  timestamp when the NDA was signed
+  """
+  signedAt: DateTime
+  clearSignedAt: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -114589,6 +114781,8 @@ input UpdateTrustCenterNDARequestInput {
   addTrustCenterDocIDs: [ID!]
   removeTrustCenterDocIDs: [ID!]
   clearTrustCenterDocs: Boolean
+  documentID: ID
+  clearDocument: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.
@@ -129078,6 +129272,24 @@ extend type Mutation{
         """
         id: ID!
     ): TrustCenterNDARequestDeletePayload!
+    """
+    Update multiple existing nda requests as approved
+    """
+    approveNDARequests(
+        """
+        IDs of the notifications to update
+        """
+        ids: [ID!]!
+    ): BulkUpdateStatusPayload!
+    """
+    Update multiple existing nda requests as approved
+    """
+    denyNDARequests(
+        """
+        IDs of the notifications to update
+        """
+        ids: [ID!]!
+    ): BulkUpdateStatusPayload!
 }
 
 """
@@ -129118,6 +129330,16 @@ type TrustCenterNDARequestBulkCreatePayload {
     Created trustCenterNDARequests
     """
     trustCenterNDARequests: [TrustCenterNDARequest!]
+}
+
+"""
+Return response for approveNDARequests or denyNDARequests mutation
+"""
+type BulkUpdateStatusPayload {
+    """
+    Updated nda request IDs
+    """
+    totalUpdated: Int!
 }`, BuiltIn: false},
 	{Name: "../schema/trustcenterpreviewsetting.graphql", Input: `extend type Mutation {
   """

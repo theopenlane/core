@@ -69436,6 +69436,21 @@ func (_q *TrustCenterNDARequestQuery) collectField(ctx context.Context, oneNode 
 			_q.WithNamedTrustCenterDocs(alias, func(wq *TrustCenterDocQuery) {
 				*wq = *query
 			})
+
+		case "document":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DocumentDataClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, documentdataImplementors)...); err != nil {
+				return err
+			}
+			_q.withDocument = query
+			if _, ok := fieldSeen[trustcenterndarequest.FieldDocumentDataID]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequest.FieldDocumentDataID)
+				fieldSeen[trustcenterndarequest.FieldDocumentDataID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[trustcenterndarequest.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, trustcenterndarequest.FieldCreatedAt)
@@ -69500,6 +69515,26 @@ func (_q *TrustCenterNDARequestQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[trustcenterndarequest.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, trustcenterndarequest.FieldStatus)
 				fieldSeen[trustcenterndarequest.FieldStatus] = struct{}{}
+			}
+		case "approvedAt":
+			if _, ok := fieldSeen[trustcenterndarequest.FieldApprovedAt]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequest.FieldApprovedAt)
+				fieldSeen[trustcenterndarequest.FieldApprovedAt] = struct{}{}
+			}
+		case "approvedByUserID":
+			if _, ok := fieldSeen[trustcenterndarequest.FieldApprovedByUserID]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequest.FieldApprovedByUserID)
+				fieldSeen[trustcenterndarequest.FieldApprovedByUserID] = struct{}{}
+			}
+		case "signedAt":
+			if _, ok := fieldSeen[trustcenterndarequest.FieldSignedAt]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequest.FieldSignedAt)
+				fieldSeen[trustcenterndarequest.FieldSignedAt] = struct{}{}
+			}
+		case "documentDataID":
+			if _, ok := fieldSeen[trustcenterndarequest.FieldDocumentDataID]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequest.FieldDocumentDataID)
+				fieldSeen[trustcenterndarequest.FieldDocumentDataID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

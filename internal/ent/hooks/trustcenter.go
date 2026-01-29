@@ -352,7 +352,7 @@ func HookTrustCenterUpdate() ent.Hook {
 					if cd, err := m.Client().CustomDomain.Get(ctx, *previousCustomDomainID); err == nil && cd.CnameRecord != "" {
 						if targetURL := buildTrustCenterURL(cd.CnameRecord, ""); targetURL != "" {
 							if err := triggerCacheRefresh(ctx, targetURL); err != nil {
-								return nil, err
+								logx.FromContext(ctx).Error().Err(err).Msg("failed to trigger cache refresh for old custom domain after deletion, continuing")
 							}
 						}
 					}
@@ -377,7 +377,7 @@ func HookTrustCenterUpdate() ent.Hook {
 				if cd, err := m.Client().CustomDomain.Get(ctx, *previousCustomDomainID); err == nil && cd.CnameRecord != "" {
 					if targetURL := buildTrustCenterURL(cd.CnameRecord, ""); targetURL != "" {
 						if err := triggerCacheRefresh(ctx, targetURL); err != nil {
-							return nil, err
+							logx.FromContext(ctx).Error().Err(err).Msg("failed to trigger cache refresh for old custom domain after update, continuing")
 						}
 					}
 				}

@@ -183,8 +183,6 @@ var (
 	TrustCenterIDValidator func(string) error
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
-	// StandardIDValidator is a validator for the "standard_id" field. It is called by the builders before save.
-	StandardIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )

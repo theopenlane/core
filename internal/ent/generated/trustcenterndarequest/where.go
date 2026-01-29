@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -126,6 +127,26 @@ func CompanyName(v string) predicate.TrustCenterNDARequest {
 // Reason applies equality check predicate on the "reason" field. It's identical to ReasonEQ.
 func Reason(v string) predicate.TrustCenterNDARequest {
 	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldReason, v))
+}
+
+// ApprovedAt applies equality check predicate on the "approved_at" field. It's identical to ApprovedAtEQ.
+func ApprovedAt(v models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldApprovedAt, v))
+}
+
+// ApprovedByUserID applies equality check predicate on the "approved_by_user_id" field. It's identical to ApprovedByUserIDEQ.
+func ApprovedByUserID(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldApprovedByUserID, v))
+}
+
+// SignedAt applies equality check predicate on the "signed_at" field. It's identical to SignedAtEQ.
+func SignedAt(v models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldSignedAt, v))
+}
+
+// DocumentDataID applies equality check predicate on the "document_data_id" field. It's identical to DocumentDataIDEQ.
+func DocumentDataID(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldDocumentDataID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -1013,6 +1034,256 @@ func StatusNotNil() predicate.TrustCenterNDARequest {
 	return predicate.TrustCenterNDARequest(sql.FieldNotNull(FieldStatus))
 }
 
+// ApprovedAtEQ applies the EQ predicate on the "approved_at" field.
+func ApprovedAtEQ(v models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldApprovedAt, v))
+}
+
+// ApprovedAtNEQ applies the NEQ predicate on the "approved_at" field.
+func ApprovedAtNEQ(v models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNEQ(FieldApprovedAt, v))
+}
+
+// ApprovedAtIn applies the In predicate on the "approved_at" field.
+func ApprovedAtIn(vs ...models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldIn(FieldApprovedAt, vs...))
+}
+
+// ApprovedAtNotIn applies the NotIn predicate on the "approved_at" field.
+func ApprovedAtNotIn(vs ...models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNotIn(FieldApprovedAt, vs...))
+}
+
+// ApprovedAtGT applies the GT predicate on the "approved_at" field.
+func ApprovedAtGT(v models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldGT(FieldApprovedAt, v))
+}
+
+// ApprovedAtGTE applies the GTE predicate on the "approved_at" field.
+func ApprovedAtGTE(v models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldGTE(FieldApprovedAt, v))
+}
+
+// ApprovedAtLT applies the LT predicate on the "approved_at" field.
+func ApprovedAtLT(v models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldLT(FieldApprovedAt, v))
+}
+
+// ApprovedAtLTE applies the LTE predicate on the "approved_at" field.
+func ApprovedAtLTE(v models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldLTE(FieldApprovedAt, v))
+}
+
+// ApprovedAtIsNil applies the IsNil predicate on the "approved_at" field.
+func ApprovedAtIsNil() predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldIsNull(FieldApprovedAt))
+}
+
+// ApprovedAtNotNil applies the NotNil predicate on the "approved_at" field.
+func ApprovedAtNotNil() predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNotNull(FieldApprovedAt))
+}
+
+// ApprovedByUserIDEQ applies the EQ predicate on the "approved_by_user_id" field.
+func ApprovedByUserIDEQ(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldApprovedByUserID, v))
+}
+
+// ApprovedByUserIDNEQ applies the NEQ predicate on the "approved_by_user_id" field.
+func ApprovedByUserIDNEQ(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNEQ(FieldApprovedByUserID, v))
+}
+
+// ApprovedByUserIDIn applies the In predicate on the "approved_by_user_id" field.
+func ApprovedByUserIDIn(vs ...string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldIn(FieldApprovedByUserID, vs...))
+}
+
+// ApprovedByUserIDNotIn applies the NotIn predicate on the "approved_by_user_id" field.
+func ApprovedByUserIDNotIn(vs ...string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNotIn(FieldApprovedByUserID, vs...))
+}
+
+// ApprovedByUserIDGT applies the GT predicate on the "approved_by_user_id" field.
+func ApprovedByUserIDGT(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldGT(FieldApprovedByUserID, v))
+}
+
+// ApprovedByUserIDGTE applies the GTE predicate on the "approved_by_user_id" field.
+func ApprovedByUserIDGTE(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldGTE(FieldApprovedByUserID, v))
+}
+
+// ApprovedByUserIDLT applies the LT predicate on the "approved_by_user_id" field.
+func ApprovedByUserIDLT(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldLT(FieldApprovedByUserID, v))
+}
+
+// ApprovedByUserIDLTE applies the LTE predicate on the "approved_by_user_id" field.
+func ApprovedByUserIDLTE(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldLTE(FieldApprovedByUserID, v))
+}
+
+// ApprovedByUserIDContains applies the Contains predicate on the "approved_by_user_id" field.
+func ApprovedByUserIDContains(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldContains(FieldApprovedByUserID, v))
+}
+
+// ApprovedByUserIDHasPrefix applies the HasPrefix predicate on the "approved_by_user_id" field.
+func ApprovedByUserIDHasPrefix(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldHasPrefix(FieldApprovedByUserID, v))
+}
+
+// ApprovedByUserIDHasSuffix applies the HasSuffix predicate on the "approved_by_user_id" field.
+func ApprovedByUserIDHasSuffix(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldHasSuffix(FieldApprovedByUserID, v))
+}
+
+// ApprovedByUserIDIsNil applies the IsNil predicate on the "approved_by_user_id" field.
+func ApprovedByUserIDIsNil() predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldIsNull(FieldApprovedByUserID))
+}
+
+// ApprovedByUserIDNotNil applies the NotNil predicate on the "approved_by_user_id" field.
+func ApprovedByUserIDNotNil() predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNotNull(FieldApprovedByUserID))
+}
+
+// ApprovedByUserIDEqualFold applies the EqualFold predicate on the "approved_by_user_id" field.
+func ApprovedByUserIDEqualFold(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldEqualFold(FieldApprovedByUserID, v))
+}
+
+// ApprovedByUserIDContainsFold applies the ContainsFold predicate on the "approved_by_user_id" field.
+func ApprovedByUserIDContainsFold(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldContainsFold(FieldApprovedByUserID, v))
+}
+
+// SignedAtEQ applies the EQ predicate on the "signed_at" field.
+func SignedAtEQ(v models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldSignedAt, v))
+}
+
+// SignedAtNEQ applies the NEQ predicate on the "signed_at" field.
+func SignedAtNEQ(v models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNEQ(FieldSignedAt, v))
+}
+
+// SignedAtIn applies the In predicate on the "signed_at" field.
+func SignedAtIn(vs ...models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldIn(FieldSignedAt, vs...))
+}
+
+// SignedAtNotIn applies the NotIn predicate on the "signed_at" field.
+func SignedAtNotIn(vs ...models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNotIn(FieldSignedAt, vs...))
+}
+
+// SignedAtGT applies the GT predicate on the "signed_at" field.
+func SignedAtGT(v models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldGT(FieldSignedAt, v))
+}
+
+// SignedAtGTE applies the GTE predicate on the "signed_at" field.
+func SignedAtGTE(v models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldGTE(FieldSignedAt, v))
+}
+
+// SignedAtLT applies the LT predicate on the "signed_at" field.
+func SignedAtLT(v models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldLT(FieldSignedAt, v))
+}
+
+// SignedAtLTE applies the LTE predicate on the "signed_at" field.
+func SignedAtLTE(v models.DateTime) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldLTE(FieldSignedAt, v))
+}
+
+// SignedAtIsNil applies the IsNil predicate on the "signed_at" field.
+func SignedAtIsNil() predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldIsNull(FieldSignedAt))
+}
+
+// SignedAtNotNil applies the NotNil predicate on the "signed_at" field.
+func SignedAtNotNil() predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNotNull(FieldSignedAt))
+}
+
+// DocumentDataIDEQ applies the EQ predicate on the "document_data_id" field.
+func DocumentDataIDEQ(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldDocumentDataID, v))
+}
+
+// DocumentDataIDNEQ applies the NEQ predicate on the "document_data_id" field.
+func DocumentDataIDNEQ(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNEQ(FieldDocumentDataID, v))
+}
+
+// DocumentDataIDIn applies the In predicate on the "document_data_id" field.
+func DocumentDataIDIn(vs ...string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldIn(FieldDocumentDataID, vs...))
+}
+
+// DocumentDataIDNotIn applies the NotIn predicate on the "document_data_id" field.
+func DocumentDataIDNotIn(vs ...string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNotIn(FieldDocumentDataID, vs...))
+}
+
+// DocumentDataIDGT applies the GT predicate on the "document_data_id" field.
+func DocumentDataIDGT(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldGT(FieldDocumentDataID, v))
+}
+
+// DocumentDataIDGTE applies the GTE predicate on the "document_data_id" field.
+func DocumentDataIDGTE(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldGTE(FieldDocumentDataID, v))
+}
+
+// DocumentDataIDLT applies the LT predicate on the "document_data_id" field.
+func DocumentDataIDLT(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldLT(FieldDocumentDataID, v))
+}
+
+// DocumentDataIDLTE applies the LTE predicate on the "document_data_id" field.
+func DocumentDataIDLTE(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldLTE(FieldDocumentDataID, v))
+}
+
+// DocumentDataIDContains applies the Contains predicate on the "document_data_id" field.
+func DocumentDataIDContains(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldContains(FieldDocumentDataID, v))
+}
+
+// DocumentDataIDHasPrefix applies the HasPrefix predicate on the "document_data_id" field.
+func DocumentDataIDHasPrefix(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldHasPrefix(FieldDocumentDataID, v))
+}
+
+// DocumentDataIDHasSuffix applies the HasSuffix predicate on the "document_data_id" field.
+func DocumentDataIDHasSuffix(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldHasSuffix(FieldDocumentDataID, v))
+}
+
+// DocumentDataIDIsNil applies the IsNil predicate on the "document_data_id" field.
+func DocumentDataIDIsNil() predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldIsNull(FieldDocumentDataID))
+}
+
+// DocumentDataIDNotNil applies the NotNil predicate on the "document_data_id" field.
+func DocumentDataIDNotNil() predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNotNull(FieldDocumentDataID))
+}
+
+// DocumentDataIDEqualFold applies the EqualFold predicate on the "document_data_id" field.
+func DocumentDataIDEqualFold(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldEqualFold(FieldDocumentDataID, v))
+}
+
+// DocumentDataIDContainsFold applies the ContainsFold predicate on the "document_data_id" field.
+func DocumentDataIDContainsFold(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldContainsFold(FieldDocumentDataID, v))
+}
+
 // HasBlockedGroups applies the HasEdge predicate on the "blocked_groups" edge.
 func HasBlockedGroups() predicate.TrustCenterNDARequest {
 	return predicate.TrustCenterNDARequest(func(s *sql.Selector) {
@@ -1121,6 +1392,35 @@ func HasTrustCenterDocsWith(preds ...predicate.TrustCenterDoc) predicate.TrustCe
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.TrustCenterDoc
 		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDocument applies the HasEdge predicate on the "document" edge.
+func HasDocument() predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, DocumentTable, DocumentColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DocumentData
+		step.Edge.Schema = schemaConfig.TrustCenterNDARequest
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDocumentWith applies the HasEdge predicate on the "document" edge with a given conditions (other predicates).
+func HasDocumentWith(preds ...predicate.DocumentData) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(func(s *sql.Selector) {
+		step := newDocumentStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DocumentData
+		step.Edge.Schema = schemaConfig.TrustCenterNDARequest
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

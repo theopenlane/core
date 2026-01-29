@@ -154,6 +154,12 @@ type AssetUpdatePayload struct {
 	Asset *generated.Asset `json:"asset"`
 }
 
+// Return response for approveNDARequests or denyNDARequests mutation
+type BulkUpdateStatusPayload struct {
+	// Updated nda request IDs
+	TotalUpdated int `json:"totalUpdated"`
+}
+
 // Return response for createBulkCampaign mutation
 type CampaignBulkCreatePayload struct {
 	// Created campaigns

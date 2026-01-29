@@ -717,11 +717,6 @@ func (_u *TrustCenterSettingUpdate) check() error {
 			return &ValidationError{Name: "company_description", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.company_description": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.Overview(); ok {
-		if err := trustcentersetting.OverviewValidator(v); err != nil {
-			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.LogoRemoteURL(); ok {
 		if err := trustcentersetting.LogoRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.logo_remote_url": %w`, err)}
@@ -1821,11 +1816,6 @@ func (_u *TrustCenterSettingUpdateOne) check() error {
 	if v, ok := _u.mutation.CompanyDescription(); ok {
 		if err := trustcentersetting.CompanyDescriptionValidator(v); err != nil {
 			return &ValidationError{Name: "company_description", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.company_description": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Overview(); ok {
-		if err := trustcentersetting.OverviewValidator(v); err != nil {
-			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.LogoRemoteURL(); ok {

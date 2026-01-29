@@ -87,6 +87,24 @@ func (TrustCenterNDARequest) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationCreateInput),
 			).
 			Comment("status of the NDA request"),
+		field.Time("approved_at").
+			Comment("timestamp when the request was approved").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable(),
+		field.String("approved_by_user_id").
+			Comment("ID of the user who approved the request").
+			Optional().
+			Nillable(),
+		field.Time("signed_at").
+			Comment("timestamp when the NDA was signed").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable(),
+		field.String("document_data_id").
+			Comment("ID of the signed NDA document data").
+			Optional().
+			Nillable(),
 	}
 }
 
@@ -119,6 +137,12 @@ func (t TrustCenterNDARequest) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(TrustCenterDoc{}.Name()),
 			},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: DocumentData{},
+			field:      "document_data_id",
+			comment:    "the signed NDA document data",
 		}),
 	}
 }

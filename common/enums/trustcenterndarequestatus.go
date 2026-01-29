@@ -18,6 +18,8 @@ var (
 	TrustCenterNDARequestStatusApproved TrustCenterNDARequestStatus = "APPROVED"
 	// TrustCenterNDARequestStatusSigned indicates the NDA has been signed
 	TrustCenterNDARequestStatusSigned TrustCenterNDARequestStatus = "SIGNED"
+	// TrustCenterNDARequestStatusDeclined indicates the NDA request has been declined
+	TrustCenterNDARequestStatusDeclined TrustCenterNDARequestStatus = "DECLINED"
 	// TrustCenterNDARequestStatusInvalid indicates the NDA request status is invalid
 	TrustCenterNDARequestStatusInvalid TrustCenterNDARequestStatus = "INVALID"
 )

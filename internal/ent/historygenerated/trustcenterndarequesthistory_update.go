@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
 
@@ -247,6 +248,86 @@ func (_u *TrustCenterNDARequestHistoryUpdate) ClearStatus() *TrustCenterNDAReque
 	return _u
 }
 
+// SetApprovedAt sets the "approved_at" field.
+func (_u *TrustCenterNDARequestHistoryUpdate) SetApprovedAt(v models.DateTime) *TrustCenterNDARequestHistoryUpdate {
+	_u.mutation.SetApprovedAt(v)
+	return _u
+}
+
+// SetNillableApprovedAt sets the "approved_at" field if the given value is not nil.
+func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableApprovedAt(v *models.DateTime) *TrustCenterNDARequestHistoryUpdate {
+	if v != nil {
+		_u.SetApprovedAt(*v)
+	}
+	return _u
+}
+
+// ClearApprovedAt clears the value of the "approved_at" field.
+func (_u *TrustCenterNDARequestHistoryUpdate) ClearApprovedAt() *TrustCenterNDARequestHistoryUpdate {
+	_u.mutation.ClearApprovedAt()
+	return _u
+}
+
+// SetApprovedByUserID sets the "approved_by_user_id" field.
+func (_u *TrustCenterNDARequestHistoryUpdate) SetApprovedByUserID(v string) *TrustCenterNDARequestHistoryUpdate {
+	_u.mutation.SetApprovedByUserID(v)
+	return _u
+}
+
+// SetNillableApprovedByUserID sets the "approved_by_user_id" field if the given value is not nil.
+func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableApprovedByUserID(v *string) *TrustCenterNDARequestHistoryUpdate {
+	if v != nil {
+		_u.SetApprovedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearApprovedByUserID clears the value of the "approved_by_user_id" field.
+func (_u *TrustCenterNDARequestHistoryUpdate) ClearApprovedByUserID() *TrustCenterNDARequestHistoryUpdate {
+	_u.mutation.ClearApprovedByUserID()
+	return _u
+}
+
+// SetSignedAt sets the "signed_at" field.
+func (_u *TrustCenterNDARequestHistoryUpdate) SetSignedAt(v models.DateTime) *TrustCenterNDARequestHistoryUpdate {
+	_u.mutation.SetSignedAt(v)
+	return _u
+}
+
+// SetNillableSignedAt sets the "signed_at" field if the given value is not nil.
+func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableSignedAt(v *models.DateTime) *TrustCenterNDARequestHistoryUpdate {
+	if v != nil {
+		_u.SetSignedAt(*v)
+	}
+	return _u
+}
+
+// ClearSignedAt clears the value of the "signed_at" field.
+func (_u *TrustCenterNDARequestHistoryUpdate) ClearSignedAt() *TrustCenterNDARequestHistoryUpdate {
+	_u.mutation.ClearSignedAt()
+	return _u
+}
+
+// SetDocumentDataID sets the "document_data_id" field.
+func (_u *TrustCenterNDARequestHistoryUpdate) SetDocumentDataID(v string) *TrustCenterNDARequestHistoryUpdate {
+	_u.mutation.SetDocumentDataID(v)
+	return _u
+}
+
+// SetNillableDocumentDataID sets the "document_data_id" field if the given value is not nil.
+func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableDocumentDataID(v *string) *TrustCenterNDARequestHistoryUpdate {
+	if v != nil {
+		_u.SetDocumentDataID(*v)
+	}
+	return _u
+}
+
+// ClearDocumentDataID clears the value of the "document_data_id" field.
+func (_u *TrustCenterNDARequestHistoryUpdate) ClearDocumentDataID() *TrustCenterNDARequestHistoryUpdate {
+	_u.mutation.ClearDocumentDataID()
+	return _u
+}
+
 // Mutation returns the TrustCenterNDARequestHistoryMutation object of the builder.
 func (_u *TrustCenterNDARequestHistoryUpdate) Mutation() *TrustCenterNDARequestHistoryMutation {
 	return _u.mutation
@@ -406,6 +487,30 @@ func (_u *TrustCenterNDARequestHistoryUpdate) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ApprovedAt(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldApprovedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ApprovedAtCleared() {
+		_spec.ClearField(trustcenterndarequesthistory.FieldApprovedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ApprovedByUserID(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldApprovedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ApprovedByUserIDCleared() {
+		_spec.ClearField(trustcenterndarequesthistory.FieldApprovedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SignedAt(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldSignedAt, field.TypeTime, value)
+	}
+	if _u.mutation.SignedAtCleared() {
+		_spec.ClearField(trustcenterndarequesthistory.FieldSignedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.DocumentDataID(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldDocumentDataID, field.TypeString, value)
+	}
+	if _u.mutation.DocumentDataIDCleared() {
+		_spec.ClearField(trustcenterndarequesthistory.FieldDocumentDataID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterNDARequestHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -643,6 +748,86 @@ func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearStatus() *TrustCenterNDARe
 	return _u
 }
 
+// SetApprovedAt sets the "approved_at" field.
+func (_u *TrustCenterNDARequestHistoryUpdateOne) SetApprovedAt(v models.DateTime) *TrustCenterNDARequestHistoryUpdateOne {
+	_u.mutation.SetApprovedAt(v)
+	return _u
+}
+
+// SetNillableApprovedAt sets the "approved_at" field if the given value is not nil.
+func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableApprovedAt(v *models.DateTime) *TrustCenterNDARequestHistoryUpdateOne {
+	if v != nil {
+		_u.SetApprovedAt(*v)
+	}
+	return _u
+}
+
+// ClearApprovedAt clears the value of the "approved_at" field.
+func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearApprovedAt() *TrustCenterNDARequestHistoryUpdateOne {
+	_u.mutation.ClearApprovedAt()
+	return _u
+}
+
+// SetApprovedByUserID sets the "approved_by_user_id" field.
+func (_u *TrustCenterNDARequestHistoryUpdateOne) SetApprovedByUserID(v string) *TrustCenterNDARequestHistoryUpdateOne {
+	_u.mutation.SetApprovedByUserID(v)
+	return _u
+}
+
+// SetNillableApprovedByUserID sets the "approved_by_user_id" field if the given value is not nil.
+func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableApprovedByUserID(v *string) *TrustCenterNDARequestHistoryUpdateOne {
+	if v != nil {
+		_u.SetApprovedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearApprovedByUserID clears the value of the "approved_by_user_id" field.
+func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearApprovedByUserID() *TrustCenterNDARequestHistoryUpdateOne {
+	_u.mutation.ClearApprovedByUserID()
+	return _u
+}
+
+// SetSignedAt sets the "signed_at" field.
+func (_u *TrustCenterNDARequestHistoryUpdateOne) SetSignedAt(v models.DateTime) *TrustCenterNDARequestHistoryUpdateOne {
+	_u.mutation.SetSignedAt(v)
+	return _u
+}
+
+// SetNillableSignedAt sets the "signed_at" field if the given value is not nil.
+func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableSignedAt(v *models.DateTime) *TrustCenterNDARequestHistoryUpdateOne {
+	if v != nil {
+		_u.SetSignedAt(*v)
+	}
+	return _u
+}
+
+// ClearSignedAt clears the value of the "signed_at" field.
+func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearSignedAt() *TrustCenterNDARequestHistoryUpdateOne {
+	_u.mutation.ClearSignedAt()
+	return _u
+}
+
+// SetDocumentDataID sets the "document_data_id" field.
+func (_u *TrustCenterNDARequestHistoryUpdateOne) SetDocumentDataID(v string) *TrustCenterNDARequestHistoryUpdateOne {
+	_u.mutation.SetDocumentDataID(v)
+	return _u
+}
+
+// SetNillableDocumentDataID sets the "document_data_id" field if the given value is not nil.
+func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableDocumentDataID(v *string) *TrustCenterNDARequestHistoryUpdateOne {
+	if v != nil {
+		_u.SetDocumentDataID(*v)
+	}
+	return _u
+}
+
+// ClearDocumentDataID clears the value of the "document_data_id" field.
+func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearDocumentDataID() *TrustCenterNDARequestHistoryUpdateOne {
+	_u.mutation.ClearDocumentDataID()
+	return _u
+}
+
 // Mutation returns the TrustCenterNDARequestHistoryMutation object of the builder.
 func (_u *TrustCenterNDARequestHistoryUpdateOne) Mutation() *TrustCenterNDARequestHistoryMutation {
 	return _u.mutation
@@ -832,6 +1017,30 @@ func (_u *TrustCenterNDARequestHistoryUpdateOne) sqlSave(ctx context.Context) (_
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ApprovedAt(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldApprovedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ApprovedAtCleared() {
+		_spec.ClearField(trustcenterndarequesthistory.FieldApprovedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ApprovedByUserID(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldApprovedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ApprovedByUserIDCleared() {
+		_spec.ClearField(trustcenterndarequesthistory.FieldApprovedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SignedAt(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldSignedAt, field.TypeTime, value)
+	}
+	if _u.mutation.SignedAtCleared() {
+		_spec.ClearField(trustcenterndarequesthistory.FieldSignedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.DocumentDataID(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldDocumentDataID, field.TypeString, value)
+	}
+	if _u.mutation.DocumentDataIDCleared() {
+		_spec.ClearField(trustcenterndarequesthistory.FieldDocumentDataID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterNDARequestHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
