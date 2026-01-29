@@ -53,6 +53,8 @@ func (s *WorkflowEngineTestSuite) TestWorkflowEngineExecute() {
 //   pending approval work. This test ensures the executor correctly translates action
 //   parameters into database entities.
 func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
+	s.ClearWorkflowDefinitions()
+
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -156,6 +158,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 //   The workflow engine must validate action types before execution. Unknown action types
 //   should fail fast with a clear error rather than silently passing or causing cryptic failures.
 func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -199,6 +203,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
 //   Notification actions should complete without blocking the workflow, even if the
 //   actual notification delivery is async or external.
 func (s *WorkflowEngineTestSuite) TestExecuteNotification() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -245,6 +251,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotification() {
 //   Webhook actions are the primary integration point for external systems. This test
 //   ensures correct HTTP behavior, error handling, and security features like HMAC signing.
 func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -355,6 +363,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 //   When applying these changes, the workflow system must coerce strings back to typed enums
 //   to match the entity schema. Without coercion, database updates would fail with type errors.
 func (s *WorkflowEngineTestSuite) TestApplyObjectFieldUpdates_CoercesEnums() {
+	s.ClearWorkflowDefinitions()
+
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
@@ -403,6 +413,8 @@ func (s *WorkflowEngineTestSuite) TestApplyObjectFieldUpdates_CoercesEnums() {
 //   of their execution. This is useful for automated status transitions after approval
 //   or other workflow-driven field changes.
 func (s *WorkflowEngineTestSuite) TestExecuteFieldUpdate() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()

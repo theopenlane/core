@@ -45,6 +45,8 @@ import (
 //   might only fire when an object reaches a certain state, preventing unnecessary
 //   workflow instances for irrelevant changes.
 func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -227,6 +229,8 @@ func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 //   immediately and complete, without pausing for human interaction. This is useful for
 //   automated notifications, audit logging, and integrations.
 func (s *WorkflowEngineTestSuite) TestNotificationWorkflowKind() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -333,6 +337,8 @@ func (s *WorkflowEngineTestSuite) TestNotificationWorkflowKind() {
 //   Using "when" clauses on actions allows a single workflow definition to route approvals
 //   based on what actually changed.
 func (s *WorkflowEngineTestSuite) TestMultiStepParallelApprovals() {
+	s.ClearWorkflowDefinitions()
+
 	userID, orgID, userCtx := s.SetupTestUser()
 	user2ID, _ := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
@@ -581,6 +587,8 @@ func (s *WorkflowEngineTestSuite) TestMultiStepParallelApprovals() {
 //   assignments.by_action["action_key"].approved/rejected/pending in "when" clauses
 //   enables reactive notifications based on approval state transitions.
 func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
+	s.ClearWorkflowDefinitions()
+
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
@@ -875,6 +883,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 //   confirms that actions execute in sequence and that post-approval webhooks receive
 //   appropriate context about the completed workflow.
 func (s *WorkflowEngineTestSuite) TestApprovalWithWebhook() {
+	s.ClearWorkflowDefinitions()
+
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -1001,6 +1011,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalWithWebhook() {
 //   Edge-based workflows enable triggering on relationship changes, not just field changes.
 //   The size() function allows distinguishing between "edge touched" and "items actually added".
 func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -1103,6 +1115,8 @@ func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
 //   Proposal submission uses TriggerExistingInstance to resume paused approval workflows.
 //   This test ensures the API correctly handles valid (PAUSED) and invalid (COMPLETED) states.
 func (s *WorkflowEngineTestSuite) TestTriggerExistingInstanceResumes() {
+	s.ClearWorkflowDefinitions()
+
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -1234,6 +1248,8 @@ func (s *WorkflowEngineTestSuite) TestTriggerExistingInstanceResumes() {
 //   same object change, leading to confusion and potential data inconsistencies. The guard
 //   ensures at most one active approval workflow per domain.
 func (s *WorkflowEngineTestSuite) TestTriggerWorkflowGuardsActiveDomainInstance() {
+	s.ClearWorkflowDefinitions()
+
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -1320,6 +1336,8 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowGuardsActiveDomainInstance(
 //   a burst of updates would generate a burst of notifications. The cooldown ensures
 //   workflows have a "quiet period" after execution.
 func (s *WorkflowEngineTestSuite) TestTriggerWorkflowCooldownGuard() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -1388,6 +1406,8 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowCooldownGuard() {
 //   a reconciliation process can later retry publishing the events, ensuring eventual
 //   consistency even during infrastructure issues.
 func (s *WorkflowEngineTestSuite) TestTriggerWorkflowRecordsEmitFailure() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 
 	// Create isolated engine without emitter to test failure recording
@@ -1460,6 +1480,8 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowRecordsEmitFailure() {
 //   for teams that want different approval workflows for different categories of controls
 //   (e.g., PCI-tagged controls require extra approval).
 func (s *WorkflowEngineTestSuite) TestSelectorWithTagMismatch() {
+	s.ClearWorkflowDefinitions()
+
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
@@ -1532,6 +1554,8 @@ func (s *WorkflowEngineTestSuite) TestSelectorWithTagMismatch() {
 //   Group selectors enable department-specific workflows. Different teams can have different
 //   approval requirements for controls they own, without affecting other teams' controls.
 func (s *WorkflowEngineTestSuite) TestSelectorWithGroupMismatch() {
+	s.ClearWorkflowDefinitions()
+
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
@@ -1605,6 +1629,8 @@ func (s *WorkflowEngineTestSuite) TestSelectorWithGroupMismatch() {
 //   condition is false, the approval is not needed and the workflow should proceed without
 //   creating unnecessary assignments.
 func (s *WorkflowEngineTestSuite) TestOptionalApprovalSkipped() {
+	s.ClearWorkflowDefinitions()
+
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -1697,6 +1723,8 @@ func (s *WorkflowEngineTestSuite) TestOptionalApprovalSkipped() {
 //   notify an upstream system before notifying downstream consumers. This test ensures
 //   the engine respects the defined action order.
 func (s *WorkflowEngineTestSuite) TestMultipleWebhooksInSequence() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -1805,6 +1833,8 @@ func (s *WorkflowEngineTestSuite) TestMultipleWebhooksInSequence() {
 //   Rejection of required approvals should fail the workflow, while approval should complete
 //   it and apply the proposed changes.
 func (s *WorkflowEngineTestSuite) TestResolveAssignmentStateTransitions() {
+	s.ClearWorkflowDefinitions()
+
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()

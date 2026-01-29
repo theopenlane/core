@@ -39,6 +39,8 @@ import (
 //   engine must ensure idempotent completion handling to prevent duplicate side effects
 //   (e.g., double-applying the proposal, sending duplicate notifications).
 func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce() {
+	s.ClearWorkflowDefinitions()
+
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
@@ -174,6 +176,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce
 //   Users may approve workflows that have already completed. The engine must handle these
 //   "late" approvals gracefully without re-applying changes or corrupting workflow state.
 func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
+	s.ClearWorkflowDefinitions()
+
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
@@ -309,6 +313,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 //   Complex workflows may require multiple independent sign-offs. The engine must gate
 //   completion until ALL required approval actions are resolved, not just the first one.
 func (s *WorkflowEngineTestSuite) TestConcurrentApprovalActionsGateUntilAllSatisfied() {
+	s.ClearWorkflowDefinitions()
+
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 

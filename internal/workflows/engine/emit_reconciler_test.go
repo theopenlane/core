@@ -63,6 +63,8 @@ func (s *WorkflowEngineTestSuite) clearEmitFailedEvents(ctx context.Context) {
 //   Emit failures should not be silently lost. Recording them enables monitoring, alerting,
 //   and automated recovery through the reconciliation process.
 func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 	s.clearEmitFailedEvents(userCtx)
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
@@ -129,6 +131,8 @@ func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
 //   The reconciliation process enables self-healing. When infrastructure recovers, the
 //   reconciler can retry failed emissions without losing workflow progress.
 func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 	s.clearEmitFailedEvents(userCtx)
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
@@ -200,6 +204,8 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 //   attempts, the system must give up gracefully, mark the failure as terminal, and
 //   fail the workflow instance for human investigation.
 func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureTerminalAfterMaxAttempts() {
+	s.ClearWorkflowDefinitions()
+
 	_, orgID, userCtx := s.SetupTestUser()
 	s.clearEmitFailedEvents(userCtx)
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
