@@ -64,7 +64,6 @@ func hasSkippedAction(events []*generated.WorkflowEvent) bool {
 //   Ensures the quorum mechanism prevents premature application of changes and only
 //   applies them when the required number of approvals is reached.
 func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
-	s.ClearWorkflowDefinitions()
 
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
@@ -200,7 +199,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 //   Demonstrates that "required=false" workflows provide a "first approval wins" behavior,
 //   useful for notification-style approvals where acknowledgment is sufficient.
 func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() {
-	s.ClearWorkflowDefinitions()
 
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, _ := s.CreateTestUserInOrg(orgID, enums.RoleMember)
@@ -325,7 +323,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() 
 //   Field clearing is a distinct operation from field setting. This ensures the workflow
 //   system correctly handles "clear" mutations and stages them as null values in proposals.
 func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
-	s.ClearWorkflowDefinitions()
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -442,7 +439,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 //   a workflow should fire. The proposed changes are captured separately in the proposal.
 //   This prevents circular logic where the proposed value would affect trigger evaluation.
 func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObjectState() {
-	s.ClearWorkflowDefinitions()
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -557,7 +553,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObject
 //   Empty target resolution should not block changes indefinitely. When no one CAN approve,
 //   the system auto-applies to prevent deadlock situations.
 func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
-	s.ClearWorkflowDefinitions()
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -675,7 +670,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
 //   fields alongside eligible ones, we cannot partially stage it. The entire mutation must
 //   be rejected to maintain data integrity and prevent unexpected partial updates.
 func (s *WorkflowEngineTestSuite) TestApprovalHookRejectsIneligibleFields() {
-	s.ClearWorkflowDefinitions()
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -742,7 +736,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookRejectsIneligibleFields() {
 //   Multiple teams or compliance requirements may have overlapping approval workflows.
 //   All matching workflows must execute to ensure complete policy enforcement.
 func (s *WorkflowEngineTestSuite) TestApprovalHookCreatesInstancesForAllMatchingDefinitions() {
-	s.ClearWorkflowDefinitions()
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -828,7 +821,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookCreatesInstancesForAllMatching
 //   Access to proposed_changes allows conditional logic based on the intended change, not just
 //   the current state.
 func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
-	s.ClearWorkflowDefinitions()
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -939,7 +931,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
 //   Demonstrates that "when" expressions can selectively skip approval requirements based on
 //   the actual proposed values, enabling value-based routing of changes.
 func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChangesDoNotMatch() {
-	s.ClearWorkflowDefinitions()
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -1050,7 +1041,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChanges
 //   Skipped approval actions should not block the workflow. The engine must recognize that
 //   a skipped action contributes zero pending work and advance to subsequent actions.
 func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
-	s.ClearWorkflowDefinitions()
 
 	userID, orgID, userCtx := s.SetupTestUser()
 
@@ -1129,6 +1119,8 @@ func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 	s.Require().NoError(err)
 	s.Require().NotNil(instance)
 
+	s.WaitForEvents()
+
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
@@ -1167,7 +1159,6 @@ func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 //   modified after approval, the previous approval is no longer valid for the new content.
 //   This maintains approval integrity and prevents bait-and-switch scenarios.
 func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidatesApprovals() {
-	s.ClearWorkflowDefinitions()
 
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -1305,7 +1296,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 //   entity types) can have their own approval workflows for sensitive field changes like
 //   policy content modifications.
 func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
-	s.ClearWorkflowDefinitions()
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -1368,6 +1358,9 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 		Save(seedCtx)
 	s.Require().NoError(err)
 
+	// Wait for async event processing to complete
+	s.WaitForEvents()
+
 	// Original content should be unchanged (mutation was intercepted)
 	s.Equal(initialContent, updated.Details)
 
@@ -1402,6 +1395,8 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 	})
 	s.Require().NoError(err)
 
+	s.WaitForEvents()
+
 	// Verify assignment was created
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
@@ -1413,6 +1408,8 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 	// Complete the approval
 	err = wfEngine.CompleteAssignment(seedCtx, assignments[0].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
 	s.Require().NoError(err)
+
+	s.WaitForEvents()
 
 	// Verify proposal is applied and content is updated
 	appliedProposal, err := s.client.WorkflowProposal.Get(seedCtx, proposal.ID)
@@ -1446,8 +1443,6 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 //   Actions can be conditionally executed based on trigger context. This enables workflows
 //   that only fire certain actions when specific edges change, providing fine-grained control.
 func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
-	s.ClearWorkflowDefinitions()
-
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -1473,19 +1468,20 @@ func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
 		Save(userCtx)
 	s.Require().NoError(err)
 
-	control, err := s.client.Control.Create().
-		SetRefCode("CTL-WHEN-" + ulid.Make().String()).
-		SetOwnerID(orgID).
-		SetReferenceID("REF-WHEN-" + ulid.Make().String()).
-		Save(userCtx)
-	s.Require().NoError(err)
-
-	obj := &workflows.Object{
-		ID:   control.ID,
-		Type: enums.WorkflowObjectTypeControl,
-	}
-
 	s.Run("when expression true executes", func() {
+		// Each subtest uses its own control to avoid duplicate instance guards
+		control, err := s.client.Control.Create().
+			SetRefCode("CTL-WHEN-TRUE-" + ulid.Make().String()).
+			SetOwnerID(orgID).
+			SetReferenceID("REF-WHEN-TRUE-" + ulid.Make().String()).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		obj := &workflows.Object{
+			ID:   control.ID,
+			Type: enums.WorkflowObjectTypeControl,
+		}
+
 		instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 			EventType:     "UPDATE",
 			ChangedFields: []string{"reference_id"},
@@ -1495,6 +1491,8 @@ func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
 		s.Require().NoError(err)
 		s.Require().NotNil(instance)
 
+		s.WaitForEvents()
+
 		events, err := s.client.WorkflowEvent.Query().
 			Where(workflowevent.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
@@ -1503,6 +1501,19 @@ func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
 	})
 
 	s.Run("when expression false skips", func() {
+		// Each subtest uses its own control to avoid duplicate instance guards
+		control, err := s.client.Control.Create().
+			SetRefCode("CTL-WHEN-FALSE-" + ulid.Make().String()).
+			SetOwnerID(orgID).
+			SetReferenceID("REF-WHEN-FALSE-" + ulid.Make().String()).
+			Save(userCtx)
+		s.Require().NoError(err)
+
+		obj := &workflows.Object{
+			ID:   control.ID,
+			Type: enums.WorkflowObjectTypeControl,
+		}
+
 		instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 			EventType:     "UPDATE",
 			ChangedFields: []string{"reference_id"},
@@ -1511,6 +1522,8 @@ func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
 		})
 		s.Require().NoError(err)
 		s.Require().NotNil(instance)
+
+		s.WaitForEvents()
 
 		events, err := s.client.WorkflowEvent.Query().
 			Where(workflowevent.WorkflowInstanceIDEQ(instance.ID)).
