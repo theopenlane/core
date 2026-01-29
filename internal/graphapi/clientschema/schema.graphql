@@ -70150,6 +70150,7 @@ enum TrustCenterNDARequestTrustCenterNDARequestStatus @goModel(model: "github.co
 	NEEDS_APPROVAL
 	APPROVED
 	SIGNED
+	DECLINED
 }
 """
 Return response for updateTrustCenterNDARequest mutation
