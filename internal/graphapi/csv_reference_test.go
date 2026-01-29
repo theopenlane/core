@@ -36,7 +36,7 @@ func TestResolveCSVReferenceRulesSuccess(t *testing.T) {
 		}, nil
 	}
 
-	rules := []csvReferenceRule{
+	rules := []CSVReferenceRule{
 		{SourceField: "UserEmail", TargetField: "UserID", Lookup: lookup},
 		{SourceField: "UserEmails", TargetField: "UserIDs", Lookup: lookup},
 	}
@@ -53,7 +53,7 @@ func TestResolveCSVReferenceRulesMissing(t *testing.T) {
 	t.Parallel()
 
 	rows := []*csvRefRow{{UserEmail: "missing@example.com"}}
-	rules := []csvReferenceRule{
+	rules := []CSVReferenceRule{
 		{
 			SourceField: "UserEmail",
 			TargetField: "UserID",
@@ -72,7 +72,7 @@ func TestResolveCSVReferenceRulesCreate(t *testing.T) {
 	t.Parallel()
 
 	rows := []*csvRefRow{{UserEmail: "created@example.com"}}
-	rule := csvReferenceRule{
+	rule := CSVReferenceRule{
 		SourceField: "UserEmail",
 		TargetField: "UserID",
 		Lookup: func(_ context.Context, _ []string) (map[string]string, error) {

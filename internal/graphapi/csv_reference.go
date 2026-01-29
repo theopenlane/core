@@ -24,8 +24,8 @@ var (
 	errCSVFieldNotString = errors.New("field is not a string")
 )
 
-// csvReferenceRule describes how a CSV field maps to target IDs.
-type csvReferenceRule struct {
+// CSVReferenceRule describes how a CSV field maps to target IDs.
+type CSVReferenceRule struct {
 	SourceField string
 	TargetField string
 	Lookup      func(ctx context.Context, values []string) (map[string]string, error)
@@ -99,7 +99,7 @@ func (c *csvRuleLookupCache) set(key csvLookupCacheKey, resolved map[string]stri
 }
 
 // resolveCSVReferenceRules resolves lookup rules and writes IDs into target fields on the inputs.
-func resolveCSVReferenceRules(ctx context.Context, inputs any, rules ...csvReferenceRule) error {
+func resolveCSVReferenceRules(ctx context.Context, inputs any, rules ...CSVReferenceRule) error {
 	if len(rules) == 0 {
 		return nil
 	}
@@ -131,7 +131,7 @@ func resolveCSVReferenceRules(ctx context.Context, inputs any, rules ...csvRefer
 }
 
 // resolveCSVReferenceRule processes a single rule: collects values, resolves them, and updates rows.
-func resolveCSVReferenceRule(ctx context.Context, elemType reflect.Type, rowStates []*csvRowState, rule csvReferenceRule, cache *csvRuleLookupCache) error {
+func resolveCSVReferenceRule(ctx context.Context, elemType reflect.Type, rowStates []*csvRowState, rule CSVReferenceRule, cache *csvRuleLookupCache) error {
 	meta, ok := csvRuleMetaForType(elemType, rule)
 	if !ok {
 		return nil
@@ -184,7 +184,7 @@ func collectCSVRuleValues(rowStates []*csvRowState, sourceKey string) []string {
 }
 
 // resolveCSVRuleValues performs lookup and optional create to resolve all values to IDs.
-func resolveCSVRuleValues(ctx context.Context, rule csvReferenceRule, unique map[string]string, resolved map[string]string) (map[string]string, error) {
+func resolveCSVRuleValues(ctx context.Context, rule CSVReferenceRule, unique map[string]string, resolved map[string]string) (map[string]string, error) {
 	missing := missingCSVValues(unique, resolved)
 	if len(missing) > 0 {
 		lookedUp, err := rule.Lookup(ctx, missing)
@@ -273,7 +273,7 @@ func csvRowStatesToStructs(rowStates []*csvRowState) error {
 }
 
 // csvRuleMetaForType maps rule field names to JSON keys and target kind for a given element type.
-func csvRuleMetaForType(elemType reflect.Type, rule csvReferenceRule) (csvRuleMeta, bool) {
+func csvRuleMetaForType(elemType reflect.Type, rule CSVReferenceRule) (csvRuleMeta, bool) {
 	if rule.SourceField == "" || rule.TargetField == "" || rule.Lookup == nil {
 		return csvRuleMeta{}, false
 	}
@@ -450,11 +450,13 @@ func csvRowStateFromValue(value reflect.Value) (*csvRowState, error) {
 	}
 
 	var ptr any
-	if value.Kind() == reflect.Pointer {
+
+	switch {
+	case value.Kind() == reflect.Pointer:
 		ptr = value.Interface()
-	} else if value.CanAddr() {
+	case value.CanAddr():
 		ptr = value.Addr().Interface()
-	} else {
+	default:
 		return nil, nil
 	}
 
