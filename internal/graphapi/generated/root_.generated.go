@@ -25174,6 +25174,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteWorkflowDefinition(childComplexity, args["id"].(string)), true
 
+	case "Mutation.denyNDARequests":
+		if e.complexity.Mutation.DenyNDARequests == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_denyNDARequests_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DenyNDARequests(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.launchCampaign":
+		if e.complexity.Mutation.LaunchCampaign == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_launchCampaign_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.LaunchCampaign(childComplexity, args["input"].(model.LaunchCampaignInput)), true
+
 	case "Mutation.publishTrustCenterSetting":
 		if e.complexity.Mutation.PublishTrustCenterSetting == nil {
 			break
