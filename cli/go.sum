@@ -163,6 +163,7 @@ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZN
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 h1:Jamvg5psRIccs7FGNTlIRMkT8wgtp5eCXdBlqhYGL6U=
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/redis/go-redis/v9 v9.17.3 h1:fN29NdNrE17KttK5Ndf20buqfDZwGNgoUr9qjl1DQx4=
+github.com/redis/go-redis/v9 v9.17.3/go.mod h1:u410H11HMLoB+TP67dz8rL9s6QW2j76l0//kSOd3370=
 github.com/robfig/cron/v3 v3.0.1 h1:WdRxkvbJztn8LMz/QEvLN5sBU+xKpSqwwUO1Pjr4qDs=
 github.com/robfig/cron/v3 v3.0.1/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
 github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0tI/otEQ=
@@ -192,8 +193,8 @@ github.com/stretchr/objx v0.5.3/go.mod h1:rDQraq+vQZU7Fde9LOZLr8Tax6zZvy4kuNKF+Q
 github.com/stretchr/testify v1.7.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-github.com/theopenlane/core v1.5.9 h1:dVRkyb46NjsDdiNUJlrXS9QzIaRisff3NmywO59+Ueg=
-github.com/theopenlane/core v1.5.9/go.mod h1:KYKTP+f2zuZ2jGQwqww9X3mSa2Y6u5tV3sxOtSzEU8c=
+github.com/theopenlane/core v1.5.11 h1:JeTtgTX01ZrIQwEta2clBKVzHl+vh20Vr5jgTvD8OEk=
+github.com/theopenlane/core v1.5.11/go.mod h1:sxydEaK4hGDH6xHVNnR4xlPuWt+oRpKgF92dlLJRD6w=
 github.com/theopenlane/core/common v1.0.4 h1:im5MWihsBODAwCmUe0SAs1sfSdralks/y6fLS3FR+XU=
 github.com/theopenlane/core/common v1.0.4/go.mod h1:yZ2mx9HD5Gou0q+TXQqs/d08jZaQ/AZZkpgNVe9niFs=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
