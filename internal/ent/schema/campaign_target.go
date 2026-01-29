@@ -58,10 +58,16 @@ func (CampaignTarget) Fields() []ent.Field {
 			Optional(),
 		field.String("user_id").
 			Comment("the user associated with the campaign target").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("CampaignTargetUserEmail").MatchOn("email"),
+			),
 		field.String("group_id").
 			Comment("the group associated with the campaign target").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("CampaignTargetGroupName").MatchOn("name"),
+			),
 		field.String("email").
 			Comment("the email address targeted by the campaign").
 			NotEmpty().

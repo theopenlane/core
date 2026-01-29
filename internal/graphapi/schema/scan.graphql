@@ -84,6 +84,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ScanBulkDeletePayload!
+    """
+    Update multiple existing scans via file upload
+    """
+    updateBulkCSVScan(
+        """
+        csv file containing values of the scan, must include ID column
+        """
+        input: Upload!
+    ): ScanBulkUpdatePayload!
 }
 
 """

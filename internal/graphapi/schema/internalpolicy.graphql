@@ -128,6 +128,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): InternalPolicyBulkDeletePayload!
+    """
+    Update multiple existing internalPolicys via file upload
+    """
+    updateBulkCSVInternalPolicy(
+        """
+        csv file containing values of the internalPolicy, must include ID column
+        """
+        input: Upload!
+    ): InternalPolicyBulkUpdatePayload!
 }
 
 """

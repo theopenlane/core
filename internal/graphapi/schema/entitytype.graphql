@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): EntityTypeBulkDeletePayload!
+    """
+    Update multiple existing entityTypes
+    """
+    updateBulkEntityType(
+        """
+        IDs of the entityTypes to update
+        """
+        ids: [ID!]!
+        """
+        values to update the entityTypes with
+        """
+        input: UpdateEntityTypeInput!
+    ): EntityTypeBulkUpdatePayload!
+    """
+    Update multiple existing entityTypes via file upload
+    """
+    updateBulkCSVEntityType(
+        """
+        csv file containing values of the entityType, must include ID column
+        """
+        input: Upload!
+    ): EntityTypeBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type EntityTypeBulkDeletePayload {
     Deleted entityType IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkEntityType mutation
+"""
+type EntityTypeBulkUpdatePayload {
+    """
+    Updated entityTypes
+    """
+    entityTypes: [EntityType!]
+    """
+    IDs of the updated entityTypes
+    """
+    updatedIDs: [ID!]
 }

@@ -148,6 +148,126 @@ func (ec *executionContext) fieldContext_TemplateBulkDeletePayload_deletedIDs(_ 
 	return fc, nil
 }
 
+func (ec *executionContext) _TemplateBulkUpdatePayload_templates(ctx context.Context, field graphql.CollectedField, obj *model.TemplateBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TemplateBulkUpdatePayload_templates,
+		func(ctx context.Context) (any, error) {
+			return obj.Templates, nil
+		},
+		nil,
+		ec.marshalOTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_TemplateBulkUpdatePayload_templates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TemplateBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Template_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Template_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Template_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Template_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Template_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Template_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Template_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Template_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Template_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Template_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Template_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Template_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Template_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Template_scopeID(ctx, field)
+			case "name":
+				return ec.fieldContext_Template_name(ctx, field)
+			case "templateType":
+				return ec.fieldContext_Template_templateType(ctx, field)
+			case "description":
+				return ec.fieldContext_Template_description(ctx, field)
+			case "kind":
+				return ec.fieldContext_Template_kind(ctx, field)
+			case "jsonconfig":
+				return ec.fieldContext_Template_jsonconfig(ctx, field)
+			case "uischema":
+				return ec.fieldContext_Template_uischema(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_Template_trustCenterID(ctx, field)
+			case "owner":
+				return ec.fieldContext_Template_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_Template_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Template_scope(ctx, field)
+			case "documents":
+				return ec.fieldContext_Template_documents(ctx, field)
+			case "files":
+				return ec.fieldContext_Template_files(ctx, field)
+			case "trustCenter":
+				return ec.fieldContext_Template_trustCenter(ctx, field)
+			case "assessments":
+				return ec.fieldContext_Template_assessments(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Template_campaigns(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Template_identityHolders(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TemplateBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.TemplateBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TemplateBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_TemplateBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TemplateBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _TemplateCreatePayload_template(ctx context.Context, field graphql.CollectedField, obj *model.TemplateCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -446,6 +566,44 @@ func (ec *executionContext) _TemplateBulkDeletePayload(ctx context.Context, sel 
 	return out
 }
 
+var templateBulkUpdatePayloadImplementors = []string{"TemplateBulkUpdatePayload"}
+
+func (ec *executionContext) _TemplateBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TemplateBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, templateBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TemplateBulkUpdatePayload")
+		case "templates":
+			out.Values[i] = ec._TemplateBulkUpdatePayload_templates(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._TemplateBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var templateCreatePayloadImplementors = []string{"TemplateCreatePayload"}
 
 func (ec *executionContext) _TemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TemplateCreatePayload) graphql.Marshaler {
@@ -593,6 +751,20 @@ func (ec *executionContext) marshalNTemplateBulkDeletePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._TemplateBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNTemplateBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TemplateBulkUpdatePayload) graphql.Marshaler {
+	return ec._TemplateBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNTemplateBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TemplateBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._TemplateBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNTemplateCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TemplateCreatePayload) graphql.Marshaler {

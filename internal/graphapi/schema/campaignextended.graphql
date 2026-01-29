@@ -1,0 +1,161 @@
+"""
+Input for createCampaignWithTargets mutation
+"""
+input CreateCampaignWithTargetsInput {
+    """
+    values of the campaign
+    """
+    campaign: CreateCampaignInput!
+    """
+    list of targets to create for the campaign
+    """
+    targets: [CreateCampaignTargetInput!]
+}
+
+"""
+Return response for createCampaignWithTargets mutation
+"""
+type CampaignCreateWithTargetsPayload {
+    """
+    Created campaign
+    """
+    campaign: Campaign!
+    """
+    Created campaign targets
+    """
+    campaignTargets: [CampaignTarget!]
+}
+
+"""
+Input for launchCampaign mutation
+"""
+input LaunchCampaignInput {
+    """
+    ID of the campaign
+    """
+    campaignID: ID!
+    """
+    Whether to resend emails to previously-sent targets
+    """
+    resend: Boolean
+    """
+    Optional time to schedule the campaign launch or resend
+    """
+    scheduledAt: DateTime
+}
+
+"""
+Input for resendCampaignIncompleteTargets mutation
+"""
+input ResendCampaignIncompleteInput {
+    """
+    ID of the campaign
+    """
+    campaignID: ID!
+    """
+    Optional time to schedule the resend for incomplete targets
+    """
+    scheduledAt: DateTime
+}
+
+"""
+Return response for launchCampaign mutation
+"""
+type CampaignLaunchPayload {
+    """
+    Updated campaign
+    """
+    campaign: Campaign!
+    """
+    Number of targets queued for send
+    """
+    queuedCount: Int!
+    """
+    Number of targets skipped
+    """
+    skippedCount: Int!
+}
+
+"""
+Input for sendCampaignTestEmail mutation
+"""
+input SendCampaignTestEmailInput {
+    """
+    ID of the campaign
+    """
+    campaignID: ID!
+    """
+    List of recipient emails to send the test to
+    """
+    emails: [String!]!
+}
+
+"""
+Return response for sendCampaignTestEmail mutation
+"""
+type CampaignTestEmailPayload {
+    """
+    Campaign used for the test send
+    """
+    campaign: Campaign!
+    """
+    Number of emails queued for send
+    """
+    queuedCount: Int!
+    """
+    Number of emails skipped
+    """
+    skippedCount: Int!
+}
+
+extend type Mutation {
+    """
+    Create a new campaign with associated targets
+    """
+    createCampaignWithTargets(
+        """
+        values of the campaign and targets
+        """
+        input: CreateCampaignWithTargetsInput!
+    ): CampaignCreateWithTargetsPayload!
+    """
+    Create a new campaign with associated targets via file upload
+    """
+    createCampaignWithTargetsCSV(
+        """
+        values of the campaign
+        """
+        campaign: CreateCampaignInput!
+        """
+        csv file containing target values
+        """
+        targets: Upload!
+    ): CampaignCreateWithTargetsPayload!
+    """
+    Launch a campaign and send emails to its targets
+    """
+    launchCampaign(
+        """
+        values for launching a campaign
+        """
+        input: LaunchCampaignInput!
+    ): CampaignLaunchPayload!
+    """
+    Resend a campaign to only incomplete targets
+    """
+    resendCampaignIncompleteTargets(
+        """
+        values for resending a campaign to incomplete targets
+        """
+        input: ResendCampaignIncompleteInput!
+    ): CampaignLaunchPayload!
+    """
+    Send a test email for a campaign without creating campaign targets
+    """
+    sendCampaignTestEmail(
+        """
+        values for sending a campaign test email
+        """
+        input: SendCampaignTestEmailInput!
+    ): CampaignTestEmailPayload!
+}

@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ScheduledJobBulkDeletePayload!
+    """
+    Update multiple existing scheduledJobs
+    """
+    updateBulkScheduledJob(
+        """
+        IDs of the scheduledJobs to update
+        """
+        ids: [ID!]!
+        """
+        values to update the scheduledJobs with
+        """
+        input: UpdateScheduledJobInput!
+    ): ScheduledJobBulkUpdatePayload!
+    """
+    Update multiple existing scheduledJobs via file upload
+    """
+    updateBulkCSVScheduledJob(
+        """
+        csv file containing values of the scheduledJob, must include ID column
+        """
+        input: Upload!
+    ): ScheduledJobBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type ScheduledJobBulkDeletePayload {
     Deleted scheduledJob IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkScheduledJob mutation
+"""
+type ScheduledJobBulkUpdatePayload {
+    """
+    Updated scheduledJobs
+    """
+    scheduledJobs: [ScheduledJob!]
+    """
+    IDs of the updated scheduledJobs
+    """
+    updatedIDs: [ID!]
 }

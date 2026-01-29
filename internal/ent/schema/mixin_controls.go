@@ -236,7 +236,10 @@ var controlFields = []ent.Field{
 		Optional().
 		Comment("external auditor id of the control, can be used to map to external audit partner mappings"),
 	field.String("responsible_party_id").
-		Annotations(entx.FieldWorkflowEligible()).
+		Annotations(
+			entx.FieldWorkflowEligible(),
+			entx.CSVRef().FromColumn("ResponsiblePartyEntityName").MatchOn("name"),
+		).
 		Optional().
 		Comment("the id of the party responsible for the control, usually used when the control is implemented by a third party"),
 	field.Enum("status").
@@ -345,10 +348,14 @@ var controlFields = []ent.Field{
 		Unique().
 		Annotations(
 			entx.FieldWorkflowEligible(),
+			entx.CSVRef().FromColumn("ControlOwnerGroupName").MatchOn("name"),
 		).
 		Comment("the id of the group that owns the control"),
 	field.String("delegate_id").
 		Optional().
 		Unique().
+		Annotations(
+			entx.CSVRef().FromColumn("ControlDelegateGroupName").MatchOn("name"),
+		).
 		Comment("the id of the group that is temporarily delegated to own the control"),
 }

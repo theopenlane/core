@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -55,7 +56,7 @@ func (r *mutationResolver) CreateBulkDNSVerification(ctx context.Context, input 
 
 // CreateBulkCSVDNSVerification is the resolver for the createBulkCSVDNSVerification field.
 func (r *mutationResolver) CreateBulkCSVDNSVerification(ctx context.Context, input graphql.Upload) (*model.DNSVerificationBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateDNSVerificationInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.DNSVerificationCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -71,10 +72,23 @@ func (r *mutationResolver) CreateBulkCSVDNSVerification(ctx context.Context, inp
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateDNSVerification(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "DNSVerification", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateDNSVerificationInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateDNSVerification(ctx, inputs)
 }
 
 // UpdateDNSVerification is the resolver for the updateDNSVerification field.
@@ -126,6 +140,35 @@ func (r *mutationResolver) DeleteBulkDNSVerification(ctx context.Context, ids []
 	}
 
 	return r.bulkDeleteDNSVerification(ctx, ids)
+}
+
+// UpdateBulkDNSVerification is the resolver for the updateBulkDNSVerification field.
+func (r *mutationResolver) UpdateBulkDNSVerification(ctx context.Context, ids []string, input generated.UpdateDNSVerificationInput) (*model.DNSVerificationBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateDNSVerification(ctx, ids, input)
+}
+
+// UpdateBulkCSVDNSVerification is the resolver for the updateBulkCSVDNSVerification field.
+func (r *mutationResolver) UpdateBulkCSVDNSVerification(ctx context.Context, input graphql.Upload) (*model.DNSVerificationBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.DNSVerificationCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "dnsverification"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "DNSVerification", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVDNSVerification(ctx, data)
 }
 
 // DNSVerification is the resolver for the dnsVerification field.

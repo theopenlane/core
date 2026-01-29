@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -80,7 +81,7 @@ func (r *mutationResolver) CreateBulkProcedure(ctx context.Context, input []*gen
 
 // CreateBulkCSVProcedure is the resolver for the createBulkCSVProcedure field.
 func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload) (*model.ProcedureBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateProcedureInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.ProcedureCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -96,10 +97,23 @@ func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input gra
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateProcedure(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "Procedure", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateProcedureInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateProcedure(ctx, inputs)
 }
 
 // UpdateBulkProcedure is the resolver for the updateBulkProcedure field.
@@ -160,6 +174,26 @@ func (r *mutationResolver) DeleteBulkProcedure(ctx context.Context, ids []string
 	}
 
 	return r.bulkDeleteProcedure(ctx, ids)
+}
+
+// UpdateBulkCSVProcedure is the resolver for the updateBulkCSVProcedure field.
+func (r *mutationResolver) UpdateBulkCSVProcedure(ctx context.Context, input graphql.Upload) (*model.ProcedureBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.ProcedureCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "procedure"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Procedure", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVProcedure(ctx, data)
 }
 
 // HasPendingWorkflow is the resolver for the hasPendingWorkflow field.

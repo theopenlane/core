@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -40,7 +41,7 @@ func (r *mutationResolver) CreateBulkProgramMembership(ctx context.Context, inpu
 
 // CreateBulkCSVProgramMembership is the resolver for the createBulkCSVProgramMembership field.
 func (r *mutationResolver) CreateBulkCSVProgramMembership(ctx context.Context, input graphql.Upload) (*model.ProgramMembershipBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateProgramMembershipInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.ProgramMembershipCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -51,7 +52,16 @@ func (r *mutationResolver) CreateBulkCSVProgramMembership(ctx context.Context, i
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	return r.bulkCreateProgramMembership(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "ProgramMembership", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateProgramMembershipInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateProgramMembership(ctx, inputs)
 }
 
 // UpdateProgramMembership is the resolver for the updateProgramMembership field.
@@ -96,6 +106,35 @@ func (r *mutationResolver) DeleteBulkProgramMembership(ctx context.Context, ids 
 	}
 
 	return r.bulkDeleteProgramMembership(ctx, ids)
+}
+
+// UpdateBulkProgramMembership is the resolver for the updateBulkProgramMembership field.
+func (r *mutationResolver) UpdateBulkProgramMembership(ctx context.Context, ids []string, input generated.UpdateProgramMembershipInput) (*model.ProgramMembershipBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateProgramMembership(ctx, ids, input)
+}
+
+// UpdateBulkCSVProgramMembership is the resolver for the updateBulkCSVProgramMembership field.
+func (r *mutationResolver) UpdateBulkCSVProgramMembership(ctx context.Context, input graphql.Upload) (*model.ProgramMembershipBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.ProgramMembershipCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "programmembership"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "ProgramMembership", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVProgramMembership(ctx, data)
 }
 
 // ProgramMembership is the resolver for the programMembership field.

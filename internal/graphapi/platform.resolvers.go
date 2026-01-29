@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -46,7 +47,7 @@ func (r *mutationResolver) CreateBulkPlatform(ctx context.Context, input []*gene
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -56,7 +57,7 @@ func (r *mutationResolver) CreateBulkPlatform(ctx context.Context, input []*gene
 
 // CreateBulkCSVPlatform is the resolver for the createBulkCSVPlatform field.
 func (r *mutationResolver) CreateBulkCSVPlatform(ctx context.Context, input graphql.Upload) (*model.PlatformBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreatePlatformInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.PlatformCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -72,10 +73,23 @@ func (r *mutationResolver) CreateBulkCSVPlatform(ctx context.Context, input grap
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreatePlatform(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "Platform", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreatePlatformInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreatePlatform(ctx, inputs)
 }
 
 // UpdatePlatform is the resolver for the updatePlatform field.

@@ -114,7 +114,10 @@ func (Program) Fields() []ent.Field {
 			Optional(),
 		field.String("program_owner_id").
 			Comment("the id of the user who is responsible for this program").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("ProgramOwnerEmail").MatchOn("email"),
+			),
 	}
 }
 

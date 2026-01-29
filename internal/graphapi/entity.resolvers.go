@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -55,7 +56,7 @@ func (r *mutationResolver) CreateBulkEntity(ctx context.Context, input []*genera
 
 // CreateBulkCSVEntity is the resolver for the createBulkCSVEntity field.
 func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphql.Upload) (*model.EntityBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateEntityInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.EntityCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -71,10 +72,23 @@ func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphq
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateEntity(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "Entity", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateEntityInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateEntity(ctx, inputs)
 }
 
 // UpdateEntity is the resolver for the updateEntity field.
@@ -126,6 +140,35 @@ func (r *mutationResolver) DeleteBulkEntity(ctx context.Context, ids []string) (
 	}
 
 	return r.bulkDeleteEntity(ctx, ids)
+}
+
+// UpdateBulkEntity is the resolver for the updateBulkEntity field.
+func (r *mutationResolver) UpdateBulkEntity(ctx context.Context, ids []string, input generated.UpdateEntityInput) (*model.EntityBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateEntity(ctx, ids, input)
+}
+
+// UpdateBulkCSVEntity is the resolver for the updateBulkCSVEntity field.
+func (r *mutationResolver) UpdateBulkCSVEntity(ctx context.Context, input graphql.Upload) (*model.EntityBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.EntityCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "entity"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Entity", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVEntity(ctx, data)
 }
 
 // Entity is the resolver for the entity field.

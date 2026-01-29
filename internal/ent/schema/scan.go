@@ -92,13 +92,22 @@ func (Scan) Fields() []ent.Field {
 			Optional(),
 		field.String("performed_by_user_id").
 			Comment("the user id that performed the scan").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("PerformedByUserEmail").MatchOn("email"),
+			),
 		field.String("performed_by_group_id").
 			Comment("the group id that performed the scan").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("PerformedByGroupName").MatchOn("name"),
+			),
 		field.String("generated_by_platform_id").
 			Comment("the platform that generated the scan").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("GeneratedByPlatformName").MatchOn("name").CreateIfMissing(),
+			),
 		field.Strings("vulnerability_ids").
 			Comment("identifiers of vulnerabilities discovered during the scan").
 			Default([]string{}).

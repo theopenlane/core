@@ -216,6 +216,194 @@ func (ec *executionContext) fieldContext_SubcontrolBulkDeletePayload_deletedIDs(
 	return fc, nil
 }
 
+func (ec *executionContext) _SubcontrolBulkUpdatePayload_subcontrols(ctx context.Context, field graphql.CollectedField, obj *model.SubcontrolBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SubcontrolBulkUpdatePayload_subcontrols,
+		func(ctx context.Context) (any, error) {
+			return obj.Subcontrols, nil
+		},
+		nil,
+		ec.marshalOSubcontrol2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrolᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SubcontrolBulkUpdatePayload_subcontrols(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SubcontrolBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Subcontrol_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Subcontrol_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Subcontrol_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Subcontrol_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Subcontrol_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Subcontrol_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_Subcontrol_tags(ctx, field)
+			case "title":
+				return ec.fieldContext_Subcontrol_title(ctx, field)
+			case "description":
+				return ec.fieldContext_Subcontrol_description(ctx, field)
+			case "descriptionJSON":
+				return ec.fieldContext_Subcontrol_descriptionJSON(ctx, field)
+			case "aliases":
+				return ec.fieldContext_Subcontrol_aliases(ctx, field)
+			case "referenceID":
+				return ec.fieldContext_Subcontrol_referenceID(ctx, field)
+			case "auditorReferenceID":
+				return ec.fieldContext_Subcontrol_auditorReferenceID(ctx, field)
+			case "responsiblePartyID":
+				return ec.fieldContext_Subcontrol_responsiblePartyID(ctx, field)
+			case "status":
+				return ec.fieldContext_Subcontrol_status(ctx, field)
+			case "source":
+				return ec.fieldContext_Subcontrol_source(ctx, field)
+			case "referenceFramework":
+				return ec.fieldContext_Subcontrol_referenceFramework(ctx, field)
+			case "referenceFrameworkRevision":
+				return ec.fieldContext_Subcontrol_referenceFrameworkRevision(ctx, field)
+			case "category":
+				return ec.fieldContext_Subcontrol_category(ctx, field)
+			case "categoryID":
+				return ec.fieldContext_Subcontrol_categoryID(ctx, field)
+			case "subcategory":
+				return ec.fieldContext_Subcontrol_subcategory(ctx, field)
+			case "mappedCategories":
+				return ec.fieldContext_Subcontrol_mappedCategories(ctx, field)
+			case "assessmentObjectives":
+				return ec.fieldContext_Subcontrol_assessmentObjectives(ctx, field)
+			case "assessmentMethods":
+				return ec.fieldContext_Subcontrol_assessmentMethods(ctx, field)
+			case "controlQuestions":
+				return ec.fieldContext_Subcontrol_controlQuestions(ctx, field)
+			case "implementationGuidance":
+				return ec.fieldContext_Subcontrol_implementationGuidance(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
+			case "references":
+				return ec.fieldContext_Subcontrol_references(ctx, field)
+			case "testingProcedures":
+				return ec.fieldContext_Subcontrol_testingProcedures(ctx, field)
+			case "evidenceRequests":
+				return ec.fieldContext_Subcontrol_evidenceRequests(ctx, field)
+			case "controlOwnerID":
+				return ec.fieldContext_Subcontrol_controlOwnerID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_Subcontrol_delegateID(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Subcontrol_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Subcontrol_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Subcontrol_systemInternalID(ctx, field)
+			case "subcontrolKindName":
+				return ec.fieldContext_Subcontrol_subcontrolKindName(ctx, field)
+			case "subcontrolKindID":
+				return ec.fieldContext_Subcontrol_subcontrolKindID(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Subcontrol_workflowEligibleMarker(ctx, field)
+			case "refCode":
+				return ec.fieldContext_Subcontrol_refCode(ctx, field)
+			case "controlID":
+				return ec.fieldContext_Subcontrol_controlID(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Subcontrol_evidence(ctx, field)
+			case "controlObjectives":
+				return ec.fieldContext_Subcontrol_controlObjectives(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Subcontrol_tasks(ctx, field)
+			case "narratives":
+				return ec.fieldContext_Subcontrol_narratives(ctx, field)
+			case "risks":
+				return ec.fieldContext_Subcontrol_risks(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Subcontrol_actionPlans(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Subcontrol_procedures(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Subcontrol_internalPolicies(ctx, field)
+			case "comments":
+				return ec.fieldContext_Subcontrol_comments(ctx, field)
+			case "discussions":
+				return ec.fieldContext_Subcontrol_discussions(ctx, field)
+			case "controlOwner":
+				return ec.fieldContext_Subcontrol_controlOwner(ctx, field)
+			case "delegate":
+				return ec.fieldContext_Subcontrol_delegate(ctx, field)
+			case "responsibleParty":
+				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
+			case "owner":
+				return ec.fieldContext_Subcontrol_owner(ctx, field)
+			case "subcontrolKind":
+				return ec.fieldContext_Subcontrol_subcontrolKind(ctx, field)
+			case "control":
+				return ec.fieldContext_Subcontrol_control(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Subcontrol_controlImplementations(ctx, field)
+			case "scheduledJobs":
+				return ec.fieldContext_Subcontrol_scheduledJobs(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Subcontrol_workflowObjectRefs(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_Subcontrol_hasPendingWorkflow(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_Subcontrol_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_Subcontrol_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_Subcontrol_workflowTimeline(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SubcontrolBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.SubcontrolBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SubcontrolBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SubcontrolBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SubcontrolBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SubcontrolCreatePayload_subcontrol(ctx context.Context, field graphql.CollectedField, obj *model.SubcontrolCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -650,6 +838,44 @@ func (ec *executionContext) _SubcontrolBulkDeletePayload(ctx context.Context, se
 	return out
 }
 
+var subcontrolBulkUpdatePayloadImplementors = []string{"SubcontrolBulkUpdatePayload"}
+
+func (ec *executionContext) _SubcontrolBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.SubcontrolBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, subcontrolBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SubcontrolBulkUpdatePayload")
+		case "subcontrols":
+			out.Values[i] = ec._SubcontrolBulkUpdatePayload_subcontrols(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._SubcontrolBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var subcontrolCreatePayloadImplementors = []string{"SubcontrolCreatePayload"}
 
 func (ec *executionContext) _SubcontrolCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.SubcontrolCreatePayload) graphql.Marshaler {
@@ -797,6 +1023,20 @@ func (ec *executionContext) marshalNSubcontrolBulkDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._SubcontrolBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNSubcontrolBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.SubcontrolBulkUpdatePayload) graphql.Marshaler {
+	return ec._SubcontrolBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNSubcontrolBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubcontrolBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._SubcontrolBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNSubcontrolCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.SubcontrolCreatePayload) graphql.Marshaler {

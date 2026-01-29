@@ -126,11 +126,17 @@ func getDocumentFields(documentType string) []ent.Field {
 		field.String("approver_id").
 			Optional().
 			Unique().
+			Annotations(
+				entx.CSVRef().FromColumn("ApproverGroupName").MatchOn("name"),
+			).
 			Comment(fmt.Sprintf("the id of the group responsible for approving the %s", documentType)).
 			StructTag(`json:"approver_id,omitempty"`),
 		field.String("delegate_id").
 			Optional().
 			Unique().
+			Annotations(
+				entx.CSVRef().FromColumn("DocumentDelegateGroupName").MatchOn("name"),
+			).
 			Comment(fmt.Sprintf("the id of the group responsible for approving the %s", documentType)),
 		field.String("summary").
 			Optional().

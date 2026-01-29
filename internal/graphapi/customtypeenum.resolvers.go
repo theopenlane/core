@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -55,7 +56,7 @@ func (r *mutationResolver) CreateBulkCustomTypeEnum(ctx context.Context, input [
 
 // CreateBulkCSVCustomTypeEnum is the resolver for the createBulkCSVCustomTypeEnum field.
 func (r *mutationResolver) CreateBulkCSVCustomTypeEnum(ctx context.Context, input graphql.Upload) (*model.CustomTypeEnumBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateCustomTypeEnumInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.CustomTypeEnumCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -71,10 +72,23 @@ func (r *mutationResolver) CreateBulkCSVCustomTypeEnum(ctx context.Context, inpu
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateCustomTypeEnum(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "CustomTypeEnum", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateCustomTypeEnumInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateCustomTypeEnum(ctx, inputs)
 }
 
 // UpdateCustomTypeEnum is the resolver for the updateCustomTypeEnum field.

@@ -119,10 +119,16 @@ func (Risk) Fields() []ent.Field {
 		field.String("stakeholder_id").
 			Optional().
 			Unique().
+			Annotations(
+				entx.CSVRef().FromColumn("StakeholderGroupName").MatchOn("name"),
+			).
 			Comment("the id of the group responsible for risk oversight"),
 		field.String("delegate_id").
 			Optional().
 			Unique().
+			Annotations(
+				entx.CSVRef().FromColumn("RiskDelegateGroupName").MatchOn("name"),
+			).
 			Comment("the id of the group responsible for risk oversight on behalf of the stakeholder"),
 	}
 }
