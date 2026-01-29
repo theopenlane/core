@@ -12423,6 +12423,16 @@ func (_q *TrustCenterSubprocessorHistoryQuery) collectField(ctx context.Context,
 				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldUpdatedBy)
 				fieldSeen[trustcentersubprocessorhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "trustCenterSubprocessorKindName":
+			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName)
+				fieldSeen[trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName] = struct{}{}
+			}
+		case "trustCenterSubprocessorKindID":
+			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID)
+				fieldSeen[trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID] = struct{}{}
+			}
 		case "subprocessorID":
 			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldSubprocessorID]; !ok {
 				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldSubprocessorID)
@@ -12437,11 +12447,6 @@ func (_q *TrustCenterSubprocessorHistoryQuery) collectField(ctx context.Context,
 			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldCountries]; !ok {
 				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldCountries)
 				fieldSeen[trustcentersubprocessorhistory.FieldCountries] = struct{}{}
-			}
-		case "category":
-			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldCategory]; !ok {
-				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldCategory)
-				fieldSeen[trustcentersubprocessorhistory.FieldCategory] = struct{}{}
 			}
 		case "id":
 		case "__typename":

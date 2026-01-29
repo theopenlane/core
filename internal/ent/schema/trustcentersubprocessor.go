@@ -19,10 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
-const (
-	trustCenterSubprocessorCategoryMaxLen = 255
-)
-
 // TrustCenterSubprocessor holds the schema definition for the TrustCenterSubprocessor entity
 type TrustCenterSubprocessor struct {
 	SchemaFuncs
@@ -61,10 +57,6 @@ func (TrustCenterSubprocessor) Fields() []ent.Field {
 		field.JSON("countries", []string{}).
 			Comment("country codes or country where the subprocessor is located").
 			Optional(),
-		field.String("category").
-			Comment("Category of the subprocessor, e.g. 'Data Warehouse' or 'Infrastructure Hosting'").
-			NotEmpty().
-			MaxLen(trustCenterSubprocessorCategoryMaxLen),
 	}
 }
 
@@ -77,6 +69,7 @@ func (t TrustCenterSubprocessor) Mixin() []ent.Mixin {
 				withParents(TrustCenter{}),
 				withAllowAnonymousTrustCenterAccess(true),
 			),
+			newCustomEnumMixin(t),
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
 	}.getMixins(t)
