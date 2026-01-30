@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -69,14 +70,39 @@ func (r *mutationResolver) CreateBulkInvite(ctx context.Context, input []*genera
 
 // CreateBulkCSVInvite is the resolver for the createBulkCSVInvite field.
 func (r *mutationResolver) CreateBulkCSVInvite(ctx context.Context, input graphql.Upload) (*model.InviteBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateInviteInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.InviteCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "invite"})
 	}
 
-	return r.CreateBulkInvite(ctx, data)
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Invite", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateInviteInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateInvite(ctx, inputs)
 }
 
 // UpdateInvite is the resolver for the updateInvite field.
@@ -128,6 +154,35 @@ func (r *mutationResolver) DeleteBulkInvite(ctx context.Context, ids []string) (
 	}
 
 	return r.bulkDeleteInvite(ctx, ids)
+}
+
+// UpdateBulkInvite is the resolver for the updateBulkInvite field.
+func (r *mutationResolver) UpdateBulkInvite(ctx context.Context, ids []string, input generated.UpdateInviteInput) (*model.InviteBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateInvite(ctx, ids, input)
+}
+
+// UpdateBulkCSVInvite is the resolver for the updateBulkCSVInvite field.
+func (r *mutationResolver) UpdateBulkCSVInvite(ctx context.Context, input graphql.Upload) (*model.InviteBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.InviteCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "invite"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Invite", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVInvite(ctx, data)
 }
 
 // Invite is the resolver for the invite field.

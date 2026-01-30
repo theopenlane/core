@@ -18,6 +18,8 @@ const (
 	graphapiGenDir = "internal/graphapi/generate/"
 	// csvDir is the directory where the CSV files will be stored for example bulk operations
 	csvDir = "internal/httpserve/handlers/csv"
+	// csvJsonFile is the file that contains the mapping of CSV fields to entity fields
+	csvJsonFile = "internal/ent/csvgenerated/csv_field_mappings.json"
 	// graphqlImport that includes the transaction wrappers and other common graphql helpers
 	graphqlImport = "github.com/theopenlane/core/internal/graphapi/common"
 
@@ -72,6 +74,7 @@ func gqlGenerate() {
 
 	modelImport := "github.com/theopenlane/core/internal/graphapi/model"
 	entPackage := "github.com/theopenlane/core/internal/ent/generated"
+	csvGeneratedPackage := "github.com/theopenlane/core/internal/ent/csvgenerated"
 	rulePackage := "github.com/theopenlane/core/internal/ent/privacy/rule"
 
 	if err := api.Generate(cfg,
@@ -79,12 +82,16 @@ func gqlGenerate() {
 			resolvergen.WithEntGeneratedPackage(entPackage),
 			resolvergen.WithArchivableSchemas([]string{schema.Program{}.Name()}),
 			resolvergen.WithGraphQLImport(graphqlImport),
+			resolvergen.WithCSVGeneratedPackage(csvGeneratedPackage),
+			resolvergen.WithForceRegenerateBulkResolvers(false),
 		)), // replace the resolvergen plugin
 		api.AddPlugin(bulkgen.NewWithOptions(
 			bulkgen.WithModelPackage(modelImport),
 			bulkgen.WithEntGeneratedPackage(entPackage),
 			bulkgen.WithCSVOutputPath(csvDir),
 			bulkgen.WithGraphQLImport(graphqlImport),
+			bulkgen.WithCSVGeneratedPackage(csvGeneratedPackage),
+			bulkgen.WithCSVFieldMappingsFile(csvJsonFile),
 		)), // add the bulkgen plugin
 		api.AddPlugin(searchgen.NewWithOptions(
 			searchgen.WithEntGeneratedPackage(entPackage),

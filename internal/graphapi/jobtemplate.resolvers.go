@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -55,7 +56,7 @@ func (r *mutationResolver) CreateBulkJobTemplate(ctx context.Context, input []*g
 
 // CreateBulkCSVJobTemplate is the resolver for the createBulkCSVJobTemplate field.
 func (r *mutationResolver) CreateBulkCSVJobTemplate(ctx context.Context, input graphql.Upload) (*model.JobTemplateBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateJobTemplateInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.JobTemplateCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -71,10 +72,23 @@ func (r *mutationResolver) CreateBulkCSVJobTemplate(ctx context.Context, input g
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateJobTemplate(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "JobTemplate", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateJobTemplateInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateJobTemplate(ctx, inputs)
 }
 
 // UpdateJobTemplate is the resolver for the updateJobTemplate field.
@@ -126,6 +140,35 @@ func (r *mutationResolver) DeleteBulkJobTemplate(ctx context.Context, ids []stri
 	}
 
 	return r.bulkDeleteJobTemplate(ctx, ids)
+}
+
+// UpdateBulkJobTemplate is the resolver for the updateBulkJobTemplate field.
+func (r *mutationResolver) UpdateBulkJobTemplate(ctx context.Context, ids []string, input generated.UpdateJobTemplateInput) (*model.JobTemplateBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateJobTemplate(ctx, ids, input)
+}
+
+// UpdateBulkCSVJobTemplate is the resolver for the updateBulkCSVJobTemplate field.
+func (r *mutationResolver) UpdateBulkCSVJobTemplate(ctx context.Context, input graphql.Upload) (*model.JobTemplateBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.JobTemplateCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "jobtemplate"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "JobTemplate", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVJobTemplate(ctx, data)
 }
 
 // JobTemplate is the resolver for the jobTemplate field.

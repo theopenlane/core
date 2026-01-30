@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -100,7 +101,7 @@ func (r *mutationResolver) CreateBulkInternalPolicy(ctx context.Context, input [
 
 // CreateBulkCSVInternalPolicy is the resolver for the createBulkCSVInternalPolicy field.
 func (r *mutationResolver) CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload) (*model.InternalPolicyBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateInternalPolicyInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.InternalPolicyCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -116,10 +117,23 @@ func (r *mutationResolver) CreateBulkCSVInternalPolicy(ctx context.Context, inpu
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateInternalPolicy(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "InternalPolicy", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateInternalPolicyInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateInternalPolicy(ctx, inputs)
 }
 
 // UpdateBulkInternalPolicy is the resolver for the updateBulkInternalPolicy field.
@@ -180,6 +194,26 @@ func (r *mutationResolver) DeleteBulkInternalPolicy(ctx context.Context, ids []s
 	}
 
 	return r.bulkDeleteInternalPolicy(ctx, ids)
+}
+
+// UpdateBulkCSVInternalPolicy is the resolver for the updateBulkCSVInternalPolicy field.
+func (r *mutationResolver) UpdateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload) (*model.InternalPolicyBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.InternalPolicyCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "internalpolicy"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "InternalPolicy", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVInternalPolicy(ctx, data)
 }
 
 // InternalPolicy is the resolver for the internalPolicy field.

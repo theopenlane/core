@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): OrganizationSettingBulkDeletePayload!
+    """
+    Update multiple existing organizationSettings
+    """
+    updateBulkOrganizationSetting(
+        """
+        IDs of the organizationSettings to update
+        """
+        ids: [ID!]!
+        """
+        values to update the organizationSettings with
+        """
+        input: UpdateOrganizationSettingInput!
+    ): OrganizationSettingBulkUpdatePayload!
+    """
+    Update multiple existing organizationSettings via file upload
+    """
+    updateBulkCSVOrganizationSetting(
+        """
+        csv file containing values of the organizationSetting, must include ID column
+        """
+        input: Upload!
+    ): OrganizationSettingBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type OrganizationSettingBulkDeletePayload {
     Deleted organizationSetting IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkOrganizationSetting mutation
+"""
+type OrganizationSettingBulkUpdatePayload {
+    """
+    Updated organizationSettings
+    """
+    organizationSettings: [OrganizationSetting!]
+    """
+    IDs of the updated organizationSettings
+    """
+    updatedIDs: [ID!]
 }

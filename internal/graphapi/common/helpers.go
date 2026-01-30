@@ -33,6 +33,7 @@ import (
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
+// CSV and GraphQL defaults used across helper functions.
 const (
 	// DefaultMaxMemoryMB is the default max memory for multipart forms (32MB)
 	DefaultMaxMemoryMB = 32
@@ -42,6 +43,10 @@ const (
 	DefaultComplexityLimit = 100
 	// IntrospectionComplexity is the complexity limit for introspection queries
 	IntrospectionComplexity = 200
+	// csvInputWrapperFieldName is the wrapper field used for bulk CSV input structs.
+	csvInputWrapperFieldName = "Input"
+	// csvFieldSplitLimit is the maximum number of parts when splitting CSV field names.
+	csvFieldSplitLimit = 2
 )
 
 // injectFileUploader adds the file uploader as middleware to the graphql operation
@@ -183,8 +188,9 @@ func UnmarshalBulkData[T any](input graphql.Upload) ([]*T, error) {
 		return r
 	})
 
-	if err := gocsv.UnmarshalBytes(stream, &data); err != nil {
-		return nil, wrapCSVUnmarshalError(err, stream)
+	processed := preprocessCSVListCells[T](stream)
+	if err := gocsv.UnmarshalBytes(processed, &data); err != nil {
+		return nil, wrapCSVUnmarshalError(err, processed)
 	}
 	normalizeCSVEnumInputs(data)
 
@@ -198,7 +204,7 @@ func wrapCSVUnmarshalError(err error, data []byte) error {
 		return err
 	}
 
-	headerName := csvHeaderForColumn(data, parseErr.Column)
+	headerName := stripCSVInputPrefix(csvHeaderForColumn(data, parseErr.Column))
 	message := fmt.Sprintf("csv parse error on line %d, column %d", parseErr.Line, parseErr.Column)
 	if headerName != "" {
 		message = fmt.Sprintf("%s (header %q)", message, headerName)
@@ -250,13 +256,18 @@ func jsonColumnHint(err error) string {
 
 	var syntaxErr *json.SyntaxError
 	var typeErr *json.UnmarshalTypeError
-	if !errors.As(err, &syntaxErr) && !errors.As(err, &typeErr) {
+
+	isJSONError := errors.As(err, &syntaxErr) || errors.As(err, &typeErr)
+	isTypeUnmarshalError := strings.Contains(err.Error(), "TypeUnmarshaller")
+
+	if !isJSONError && !isTypeUnmarshalError {
 		return ""
 	}
 
 	return "list or object values must be valid JSON and the cell should be quoted, e.g. \"[\\\"security\\\",\\\"compliance\\\"]\""
 }
 
+// enumInfo caches enum metadata for CSV normalization.
 type enumInfo struct {
 	defaultValue string
 	normalized   map[string]string
@@ -279,6 +290,441 @@ func normalizeCSVEnumInputs(data any) {
 		// Normalize each row independently while sharing enum metadata cache
 		normalizeCSVEnumValue(v.Index(i), cache)
 	}
+}
+
+// csvInputWrapper identifies wrapper types needing CSV header prefixing.
+type csvInputWrapper interface {
+	CSVInputWrapper()
+}
+
+// preprocessCSVListCells converts list-like CSV cell values into JSON arrays for slice fields.
+// Valid JSON arrays are preserved, and scalar JSON values are wrapped into arrays.
+func preprocessCSVListCells[T any](data []byte) []byte {
+	records, err := parseCSVRecords(data)
+	if err != nil || len(records) == 0 {
+		return data
+	}
+
+	headers := records[0]
+	changed := prefixCSVInputHeaders[T](headers)
+
+	fieldKinds := csvListFieldKinds[T]()
+	if len(fieldKinds) > 0 {
+		normalizedHeaders := normalizeHeaders(headers)
+		changed = processCSVDataRows(records, normalizedHeaders, fieldKinds) || changed
+	}
+
+	if !changed {
+		return data
+	}
+
+	return writeCSVRecords(records, data)
+}
+
+// parseCSVRecords reads CSV data into records.
+func parseCSVRecords(data []byte) ([][]string, error) {
+	reader := csv.NewReader(bytes.NewReader(data))
+	reader.LazyQuotes = true
+	reader.FieldsPerRecord = -1
+	reader.TrimLeadingSpace = true
+
+	return reader.ReadAll()
+}
+
+// normalizeHeaders creates normalized header keys for lookup.
+func normalizeHeaders(headers []string) []string {
+	normalized := make([]string, len(headers))
+	for i, header := range headers {
+		normalized[i] = normalizeCSVHeader(header)
+	}
+
+	return normalized
+}
+
+// processCSVDataRows processes all data rows and normalizes list cells.
+func processCSVDataRows(records [][]string, normalizedHeaders []string, fieldKinds map[string]reflect.Kind) bool {
+	changed := false
+
+	for rowIdx := 1; rowIdx < len(records); rowIdx++ {
+		if processCSVRow(records[rowIdx], normalizedHeaders, fieldKinds) {
+			changed = true
+		}
+	}
+
+	return changed
+}
+
+// processCSVRow processes a single row and normalizes list cells.
+func processCSVRow(row []string, normalizedHeaders []string, fieldKinds map[string]reflect.Kind) bool {
+	changed := false
+
+	for colIdx, headerKey := range normalizedHeaders {
+		if colIdx >= len(row) {
+			continue
+		}
+
+		kind, ok := fieldKinds[headerKey]
+		if !ok || kind != reflect.Slice {
+			continue
+		}
+
+		cell := strings.TrimSpace(row[colIdx])
+		if cell == "" {
+			continue
+		}
+
+		normalized, updated := normalizeCSVListCell(cell)
+		if updated {
+			row[colIdx] = normalized
+			changed = true
+		}
+	}
+
+	return changed
+}
+
+// writeCSVRecords writes records back to CSV bytes, returning original data on error.
+func writeCSVRecords(records [][]string, originalData []byte) []byte {
+	var buf bytes.Buffer
+
+	writer := csv.NewWriter(&buf)
+	if err := writer.WriteAll(records); err != nil {
+		return originalData
+	}
+
+	writer.Flush()
+
+	if err := writer.Error(); err != nil {
+		return originalData
+	}
+
+	return buf.Bytes()
+}
+
+// csvListFieldKinds collects CSV list-capable field kinds for a generic input type.
+func csvListFieldKinds[T any]() map[string]reflect.Kind {
+	var value T
+	t := reflect.TypeOf(value)
+	if t == nil {
+		t = reflect.TypeOf((*T)(nil)).Elem()
+	}
+	if t.Kind() == reflect.Pointer {
+		t = t.Elem()
+	}
+	if t.Kind() != reflect.Struct {
+		return nil
+	}
+
+	fieldKinds := map[string]reflect.Kind{}
+	collectCSVListFieldKinds(t, fieldKinds, []string{""})
+	if len(fieldKinds) == 0 {
+		return nil
+	}
+
+	return fieldKinds
+}
+
+// csvFieldVisitor is called for each non-struct field found during CSV struct traversal.
+type csvFieldVisitor func(combined []string, kind reflect.Kind)
+
+// walkCSVStructFields traverses struct fields for CSV processing and calls the visitor for each leaf field.
+func walkCSVStructFields(t reflect.Type, prefixes []string, visitor csvFieldVisitor) {
+	if t.Kind() == reflect.Pointer {
+		t = t.Elem()
+	}
+	if t.Kind() != reflect.Struct {
+		return
+	}
+	if len(prefixes) == 0 {
+		prefixes = []string{""}
+	}
+
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		if field.PkgPath != "" {
+			continue
+		}
+
+		fieldType := field.Type
+		if field.Anonymous {
+			walkCSVStructFields(fieldType, prefixes, visitor)
+			continue
+		}
+
+		names := csvFieldNames(field)
+		if len(names) == 0 {
+			continue
+		}
+
+		combined := combineCSVPrefixes(prefixes, names)
+
+		kind := fieldType.Kind()
+		if kind == reflect.Pointer {
+			kind = fieldType.Elem().Kind()
+		}
+
+		if kind == reflect.Struct {
+			walkCSVStructFields(fieldType, combined, visitor)
+			continue
+		}
+
+		visitor(combined, kind)
+	}
+}
+
+// collectCSVListFieldKinds walks struct fields to capture slice/map CSV columns.
+func collectCSVListFieldKinds(t reflect.Type, fieldKinds map[string]reflect.Kind, prefixes []string) {
+	walkCSVStructFields(t, prefixes, func(combined []string, kind reflect.Kind) {
+		if kind != reflect.Slice && kind != reflect.Map {
+			return
+		}
+		for _, name := range combined {
+			fieldKinds[normalizeCSVHeader(name)] = kind
+		}
+	})
+}
+
+// prefixCSVInputHeaders adds Input:: prefixes when a csvInput wrapper is used.
+func prefixCSVInputHeaders[T any](headers []string) bool {
+	if !isCSVInputWrapper[T]() {
+		return false
+	}
+
+	var value T
+	t := reflect.TypeOf(value)
+	if t == nil {
+		t = reflect.TypeOf((*T)(nil)).Elem()
+	}
+	if t.Kind() == reflect.Pointer {
+		t = t.Elem()
+	}
+	if t.Kind() != reflect.Struct {
+		return false
+	}
+	if _, ok := t.FieldByName(csvInputWrapperFieldName); !ok {
+		return false
+	}
+
+	embeddedHeaders := csvEmbeddedHeaderSet(t)
+	changed := false
+	for i, header := range headers {
+		trimmed := strings.TrimSpace(header)
+		if trimmed == "" {
+			continue
+		}
+		if hasCSVInputPrefix(trimmed) {
+			continue
+		}
+		if _, ok := embeddedHeaders[normalizeCSVHeader(trimmed)]; ok {
+			continue
+		}
+		headers[i] = csvInputWrapperFieldName + gocsv.FieldsCombiner + trimmed
+		changed = true
+	}
+
+	return changed
+}
+
+// isCSVInputWrapper reports whether the type implements csvInputWrapper.
+func isCSVInputWrapper[T any]() bool {
+	var value T
+	if _, ok := any(value).(csvInputWrapper); ok {
+		return true
+	}
+	if _, ok := any(&value).(csvInputWrapper); ok {
+		return true
+	}
+	return false
+}
+
+// csvEmbeddedHeaderSet returns header names for fields that should NOT be prefixed with Input::.
+// This includes anonymous embedded fields AND direct CSV-tagged fields on the wrapper struct itself.
+func csvEmbeddedHeaderSet(t reflect.Type) map[string]struct{} {
+	set := map[string]struct{}{}
+	if t.Kind() == reflect.Pointer {
+		t = t.Elem()
+	}
+	if t.Kind() != reflect.Struct {
+		return set
+	}
+
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		if field.Anonymous {
+			collectCSVHeaderNames(field.Type, set, []string{""})
+			continue
+		}
+		// Include direct CSV-tagged fields on the wrapper struct (e.g., AssigneeEmail)
+		// These should not be prefixed since they're not inside the Input struct
+		if field.Name == csvInputWrapperFieldName {
+			continue
+		}
+		names := csvFieldNames(field)
+		for _, name := range names {
+			set[normalizeCSVHeader(name)] = struct{}{}
+		}
+	}
+
+	return set
+}
+
+// collectCSVHeaderNames walks fields to gather CSV header names for embedded structs.
+func collectCSVHeaderNames(t reflect.Type, headers map[string]struct{}, prefixes []string) {
+	walkCSVStructFields(t, prefixes, func(combined []string, _ reflect.Kind) {
+		for _, name := range combined {
+			headers[normalizeCSVHeader(name)] = struct{}{}
+		}
+	})
+}
+
+// csvFieldNames extracts CSV header names from struct tags or field names.
+func csvFieldNames(field reflect.StructField) []string {
+	tag := strings.TrimSpace(field.Tag.Get("csv"))
+	if tag == "" {
+		return []string{field.Name}
+	}
+
+	parts := strings.Split(tag, ",")
+	names := make([]string, 0, len(parts))
+	for _, part := range parts {
+		part = strings.TrimSpace(part)
+		if part == "" || part == "omitempty" {
+			continue
+		}
+		names = append(names, part)
+	}
+
+	if len(names) == 1 && names[0] == "-" {
+		return nil
+	}
+
+	if len(names) > 0 {
+		return names
+	}
+
+	return []string{field.Name}
+}
+
+// combineCSVPrefixes prefixes field names for nested CSV headers.
+func combineCSVPrefixes(prefixes, names []string) []string {
+	if len(prefixes) == 0 {
+		prefixes = []string{""}
+	}
+	out := make([]string, 0, len(prefixes)*len(names))
+	for _, prefix := range prefixes {
+		for _, name := range names {
+			if prefix == "" {
+				out = append(out, name)
+			} else {
+				out = append(out, prefix+gocsv.FieldsCombiner+name)
+			}
+		}
+	}
+	return out
+}
+
+// hasCSVInputPrefix reports whether a header already has the Input:: prefix.
+func hasCSVInputPrefix(value string) bool {
+	parts := strings.SplitN(value, gocsv.FieldsCombiner, csvFieldSplitLimit)
+	if len(parts) < csvFieldSplitLimit {
+		return false
+	}
+
+	return strings.EqualFold(strings.TrimSpace(parts[0]), csvInputWrapperFieldName)
+}
+
+// stripCSVInputPrefix removes the Input:: prefix when present.
+func stripCSVInputPrefix(header string) string {
+	parts := strings.SplitN(header, gocsv.FieldsCombiner, csvFieldSplitLimit)
+	if len(parts) < csvFieldSplitLimit {
+		return header
+	}
+
+	if strings.EqualFold(strings.TrimSpace(parts[0]), csvInputWrapperFieldName) {
+		return parts[1]
+	}
+
+	return header
+}
+
+// normalizeCSVHeader lowercases and strips separators for header matching.
+func normalizeCSVHeader(value string) string {
+	value = strings.TrimSpace(value)
+	value = strings.ToLower(value)
+	replacer := strings.NewReplacer(" ", "", "_", "", "-", "", ".", "")
+	return replacer.Replace(value)
+}
+
+// normalizeCSVListCell ensures list-like values are encoded as JSON arrays.
+func normalizeCSVListCell(cell string) (string, bool) {
+	if json.Valid([]byte(cell)) {
+		var decoded any
+		if err := json.Unmarshal([]byte(cell), &decoded); err == nil {
+			switch decoded.(type) {
+			case []any:
+				return cell, false
+			case map[string]any:
+				return cell, false
+			case nil:
+				return cell, false
+			default:
+				items := []string{fmt.Sprint(decoded)}
+				payload, err := json.Marshal(items)
+				if err != nil {
+					return cell, false
+				}
+				return string(payload), true
+			}
+		}
+		return cell, false
+	}
+
+	items := splitCSVList(cell)
+	if len(items) == 0 {
+		return cell, false
+	}
+
+	payload, err := json.Marshal(items)
+	if err != nil {
+		return cell, false
+	}
+
+	return string(payload), true
+}
+
+// splitCSVList splits list-like CSV values on common delimiters.
+func splitCSVList(value string) []string {
+	var delimiter string
+	switch {
+	case strings.Contains(value, ";"):
+		delimiter = ";"
+	case strings.Contains(value, "|"):
+		delimiter = "|"
+	case strings.Contains(value, ","):
+		delimiter = ","
+	default:
+		item := strings.TrimSpace(value)
+		if item == "" {
+			return nil
+		}
+		return []string{item}
+	}
+
+	parts := strings.Split(value, delimiter)
+	items := make([]string, 0, len(parts))
+	for _, part := range parts {
+		item := strings.TrimSpace(part)
+		if item == "" {
+			continue
+		}
+		items = append(items, item)
+	}
+
+	if len(items) == 0 {
+		return nil
+	}
+
+	return items
 }
 
 // normalizeCSVEnumValue recursively normalizes enum fields on a struct value
@@ -557,7 +1003,25 @@ func GetOrgOwnerFromInput[T any](input *T) (*string, error) {
 		return nil, err
 	}
 
-	return ownerInput.OwnerID, nil
+	if ownerInput.OwnerID != nil {
+		return ownerInput.OwnerID, nil
+	}
+
+	var wrappedOwner struct {
+		Input inputWithOwnerID `json:"Input"`
+	}
+	if err := json.Unmarshal(inputBytes, &wrappedOwner); err == nil && wrappedOwner.Input.OwnerID != nil {
+		return wrappedOwner.Input.OwnerID, nil
+	}
+
+	var wrappedOwnerLower struct {
+		Input inputWithOwnerID `json:"input"`
+	}
+	if err := json.Unmarshal(inputBytes, &wrappedOwnerLower); err == nil && wrappedOwnerLower.Input.OwnerID != nil {
+		return wrappedOwnerLower.Input.OwnerID, nil
+	}
+
+	return nil, nil
 }
 
 // templateKindFromVariables extracts the TemplateKind from the input variables

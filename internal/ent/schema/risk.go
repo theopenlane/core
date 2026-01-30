@@ -119,10 +119,16 @@ func (Risk) Fields() []ent.Field {
 		field.String("stakeholder_id").
 			Optional().
 			Unique().
+			Annotations(
+				entx.CSVRef().FromColumn("StakeholderGroupName").MatchOn("name"),
+			).
 			Comment("the id of the group responsible for risk oversight"),
 		field.String("delegate_id").
 			Optional().
 			Unique().
+			Annotations(
+				entx.CSVRef().FromColumn("RiskDelegateGroupName").MatchOn("name"),
+			).
 			Comment("the id of the group responsible for risk oversight on behalf of the stakeholder"),
 	}
 }
@@ -130,7 +136,13 @@ func (Risk) Fields() []ent.Field {
 // Edges of the Risk
 func (r Risk) Edges() []ent.Edge {
 	return []ent.Edge{
-		defaultEdgeFromWithPagination(r, Control{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Control{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
+			},
+		}),
 		defaultEdgeFromWithPagination(r, Subcontrol{}),
 		defaultEdgeFromWithPagination(r, Procedure{}),
 		defaultEdgeFromWithPagination(r, InternalPolicy{}),

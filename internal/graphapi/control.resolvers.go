@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -76,7 +77,7 @@ func (r *mutationResolver) CreateBulkControl(ctx context.Context, input []*gener
 
 // CreateBulkCSVControl is the resolver for the createBulkCSVControl field.
 func (r *mutationResolver) CreateBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateControlInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.ControlCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -92,10 +93,23 @@ func (r *mutationResolver) CreateBulkCSVControl(ctx context.Context, input graph
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateControl(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "Control", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateControlInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateControl(ctx, inputs)
 }
 
 // UpdateBulkControl is the resolver for the updateBulkControl field.
@@ -109,22 +123,22 @@ func (r *mutationResolver) UpdateBulkControl(ctx context.Context, ids []string, 
 
 // UpdateBulkCSVControl is the resolver for the updateBulkCSVControl field.
 func (r *mutationResolver) UpdateBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkUpdatePayload, error) {
-	data, err := common.UnmarshalBulkData[UpdateBulkCSVControl](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.ControlCSVUpdateInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "control"})
 	}
 
 	if len(data) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	if len(data) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
+	if err := resolveCSVReferencesForSchema(ctx, "Control", data); err != nil {
+		return nil, err
 	}
 
-	return r.bulkUpdateControlCSV(ctx, data)
+	return r.bulkUpdateCSVControl(ctx, data)
 }
 
 // UpdateControl is the resolver for the updateControl field.

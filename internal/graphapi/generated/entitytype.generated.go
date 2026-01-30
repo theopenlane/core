@@ -114,6 +114,92 @@ func (ec *executionContext) fieldContext_EntityTypeBulkDeletePayload_deletedIDs(
 	return fc, nil
 }
 
+func (ec *executionContext) _EntityTypeBulkUpdatePayload_entityTypes(ctx context.Context, field graphql.CollectedField, obj *model.EntityTypeBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_EntityTypeBulkUpdatePayload_entityTypes,
+		func(ctx context.Context) (any, error) {
+			return obj.EntityTypes, nil
+		},
+		nil,
+		ec.marshalOEntityType2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityTypeᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_EntityTypeBulkUpdatePayload_entityTypes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EntityTypeBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_EntityType_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_EntityType_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_EntityType_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_EntityType_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_EntityType_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_EntityType_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_EntityType_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_EntityType_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_EntityType_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_EntityType_systemInternalID(ctx, field)
+			case "name":
+				return ec.fieldContext_EntityType_name(ctx, field)
+			case "owner":
+				return ec.fieldContext_EntityType_owner(ctx, field)
+			case "entities":
+				return ec.fieldContext_EntityType_entities(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EntityType", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EntityTypeBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.EntityTypeBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_EntityTypeBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_EntityTypeBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EntityTypeBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _EntityTypeCreatePayload_entityType(ctx context.Context, field graphql.CollectedField, obj *model.EntityTypeCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -344,6 +430,44 @@ func (ec *executionContext) _EntityTypeBulkDeletePayload(ctx context.Context, se
 	return out
 }
 
+var entityTypeBulkUpdatePayloadImplementors = []string{"EntityTypeBulkUpdatePayload"}
+
+func (ec *executionContext) _EntityTypeBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.EntityTypeBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, entityTypeBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EntityTypeBulkUpdatePayload")
+		case "entityTypes":
+			out.Values[i] = ec._EntityTypeBulkUpdatePayload_entityTypes(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._EntityTypeBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var entityTypeCreatePayloadImplementors = []string{"EntityTypeCreatePayload"}
 
 func (ec *executionContext) _EntityTypeCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.EntityTypeCreatePayload) graphql.Marshaler {
@@ -491,6 +615,20 @@ func (ec *executionContext) marshalNEntityTypeBulkDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._EntityTypeBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNEntityTypeBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityTypeBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EntityTypeBulkUpdatePayload) graphql.Marshaler {
+	return ec._EntityTypeBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNEntityTypeBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityTypeBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EntityTypeBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._EntityTypeBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNEntityTypeCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityTypeCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EntityTypeCreatePayload) graphql.Marshaler {

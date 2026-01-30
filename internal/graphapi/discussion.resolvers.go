@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -45,7 +46,7 @@ func (r *mutationResolver) CreateBulkDiscussion(ctx context.Context, input []*ge
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -55,7 +56,7 @@ func (r *mutationResolver) CreateBulkDiscussion(ctx context.Context, input []*ge
 
 // CreateBulkCSVDiscussion is the resolver for the createBulkCSVDiscussion field.
 func (r *mutationResolver) CreateBulkCSVDiscussion(ctx context.Context, input graphql.Upload) (*model.DiscussionBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateDiscussionInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.DiscussionCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -71,10 +72,23 @@ func (r *mutationResolver) CreateBulkCSVDiscussion(ctx context.Context, input gr
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateDiscussion(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "Discussion", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateDiscussionInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateDiscussion(ctx, inputs)
 }
 
 // UpdateDiscussion is the resolver for the updateDiscussion field.

@@ -318,11 +318,19 @@ var (
 				},
 			},
 			{
-				Name:    "assessmentresponse_assessment_id_email",
+				Name:    "assessmentresponse_assessment_id_email_is_test",
 				Unique:  true,
-				Columns: []*schema.Column{AssessmentResponsesColumns[22], AssessmentResponsesColumns[8]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[22], AssessmentResponsesColumns[8], AssessmentResponsesColumns[7]},
 				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
+					Where: "deleted_at is NULL AND campaign_id IS NULL",
+				},
+			},
+			{
+				Name:    "assessmentresponse_campaign_id_assessment_id_email_is_test",
+				Unique:  true,
+				Columns: []*schema.Column{AssessmentResponsesColumns[24], AssessmentResponsesColumns[22], AssessmentResponsesColumns[8], AssessmentResponsesColumns[7]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL AND campaign_id IS NOT NULL",
 				},
 			},
 			{

@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ProgramBulkDeletePayload!
+    """
+    Update multiple existing programs
+    """
+    updateBulkProgram(
+        """
+        IDs of the programs to update
+        """
+        ids: [ID!]!
+        """
+        values to update the programs with
+        """
+        input: UpdateProgramInput!
+    ): ProgramBulkUpdatePayload!
+    """
+    Update multiple existing programs via file upload
+    """
+    updateBulkCSVProgram(
+        """
+        csv file containing values of the program, must include ID column
+        """
+        input: Upload!
+    ): ProgramBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type ProgramBulkDeletePayload {
     Deleted program IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkProgram mutation
+"""
+type ProgramBulkUpdatePayload {
+    """
+    Updated programs
+    """
+    programs: [Program!]
+    """
+    IDs of the updated programs
+    """
+    updatedIDs: [ID!]
 }

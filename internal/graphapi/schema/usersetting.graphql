@@ -60,6 +60,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): UserSettingBulkDeletePayload!
+    """
+    Update multiple existing userSettings
+    """
+    updateBulkUserSetting(
+        """
+        IDs of the userSettings to update
+        """
+        ids: [ID!]!
+        """
+        values to update the userSettings with
+        """
+        input: UpdateUserSettingInput!
+    ): UserSettingBulkUpdatePayload!
+    """
+    Update multiple existing userSettings via file upload
+    """
+    updateBulkCSVUserSetting(
+        """
+        csv file containing values of the userSetting, must include ID column
+        """
+        input: Upload!
+    ): UserSettingBulkUpdatePayload!
 }
 
 """
@@ -100,4 +122,18 @@ type UserSettingBulkDeletePayload {
     Deleted userSetting IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkUserSetting mutation
+"""
+type UserSettingBulkUpdatePayload {
+    """
+    Updated userSettings
+    """
+    userSettings: [UserSetting!]
+    """
+    IDs of the updated userSettings
+    """
+    updatedIDs: [ID!]
 }

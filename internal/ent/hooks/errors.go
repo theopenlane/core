@@ -106,6 +106,8 @@ var (
 	ErrTrustCenterIDRequired = errors.New("trustcenter entity must include a trustcenter id")
 	// ErrUnableToCreateContact is returned when a contact could not be created
 	ErrUnableToCreateContact = errors.New("unable to create a contact")
+	// ErrUnableToCreateAssessmentResponse is returned when an assessment response could not be created
+	ErrUnableToCreateAssessmentResponse = errors.New("unable to create assessment response")
 	// ErrTooManyLogoFiles is returned when a user attempts to upload more than one logo file
 	ErrTooManyLogoFiles = errors.New("too many logo files uploaded, only one is allowed")
 	// ErrTooManyFaviconFiles is returned when a user attempts to upload more than one favicon file
