@@ -262,6 +262,7 @@ type MutationResolver interface {
 	UpdateEvidenceComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.EvidenceUpdatePayload, error)
 	DeleteNote(ctx context.Context, id string) (*model.NoteDeletePayload, error)
 	UpdateNotification(ctx context.Context, id string, input generated.UpdateNotificationInput) (*model.NotificationUpdatePayload, error)
+	MarkNotificationsAsRead(ctx context.Context, ids []string) (*model.ActionNotificationsReadPayload, error)
 	CreateOnboarding(ctx context.Context, input generated.CreateOnboardingInput) (*model.OnboardingCreatePayload, error)
 	CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationCreatePayload, error)
 	UpdateOrganization(ctx context.Context, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationUpdatePayload, error)
@@ -4233,6 +4234,17 @@ func (ec *executionContext) field_Mutation_deleteWorkflowDefinition_args(ctx con
 }
 
 func (ec *executionContext) field_Mutation_denyNDARequests_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_markNotificationsAsRead_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
@@ -17716,6 +17728,51 @@ func (ec *executionContext) fieldContext_Mutation_updateNotification(ctx context
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_markNotificationsAsRead(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_markNotificationsAsRead,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().MarkNotificationsAsRead(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNActionNotificationsReadPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionNotificationsReadPayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_markNotificationsAsRead(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "readIDs":
+				return ec.fieldContext_ActionNotificationsReadPayload_readIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ActionNotificationsReadPayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_markNotificationsAsRead_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createOnboarding(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -28335,6 +28392,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updateNotification":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateNotification(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "markNotificationsAsRead":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_markNotificationsAsRead(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

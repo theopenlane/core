@@ -7,8 +7,11 @@ package graphapi
 
 import (
 	"context"
+	"time"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
@@ -39,5 +42,36 @@ func (r *mutationResolver) UpdateNotification(ctx context.Context, id string, in
 
 	return &model.NotificationUpdatePayload{
 		Notification: res,
+	}, nil
+}
+
+// MarkNotificationsAsRead is the resolver for the markNotificationsAsRead field.
+func (r *mutationResolver) MarkNotificationsAsRead(ctx context.Context, ids []string) (*model.ActionNotificationsReadPayload, error) {
+	// Get current time and convert to models.DateTime
+	now := models.DateTime(time.Now())
+
+	// Bulk update all notifications with the given IDs to mark them as read
+	numUpdated, err := withTransactionalMutation(ctx).Notification.Update().
+		Where(notification.IDIn(ids...)).
+		SetReadAt(now).
+		Save(ctx)
+
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "notifications"})
+	}
+
+	logx.FromContext(ctx).Info().
+		Int("count", numUpdated).
+		Strs("ids", ids).
+		Msg("marked notifications as read")
+
+	// Convert []string to []*string for the response payload
+	readIDs := make([]*string, len(ids))
+	for i := range ids {
+		readIDs[i] = &ids[i]
+	}
+
+	return &model.ActionNotificationsReadPayload{
+		ReadIDs: readIDs,
 	}, nil
 }

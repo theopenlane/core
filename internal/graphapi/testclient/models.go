@@ -279,6 +279,12 @@ type APITokenWhereInput struct {
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 }
 
+// Return response for markNotificationsAsRead mutation
+type ActionNotificationsReadPayload struct {
+	// Updated notification IDs
+	ReadIDs []*string `json:"readIDs"`
+}
+
 type ActionPlan struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
