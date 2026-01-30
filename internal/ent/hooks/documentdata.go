@@ -28,6 +28,7 @@ var (
 	errValidationFailed                     = errors.New("validation failed")
 	errMustBeAnonymousUser                  = errors.New("must be an anonymous user")
 	errMissingResponse                      = errors.New("missing response")
+	errOnlyOneDocumentData                  = errors.New("you can only upload one document data file for an nda")
 )
 
 // HookDocumentDataTrustCenterNDA runs on document data create mutations to ensure trust center NDA document submissions are valid
@@ -157,7 +158,7 @@ func HookDocumentDataFile() ent.Hook {
 			}
 
 			if len(fileIDs) > 1 {
-				return nil, errors.New("you can only upload one document data file for an nda")
+				return nil, errOnlyOneDocumentData
 			}
 
 			if !auth.IsSystemAdminFromContext(ctx) {
