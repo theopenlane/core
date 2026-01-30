@@ -57,6 +57,17 @@ func HookTemplateFiles() ent.Hook {
 					return nil, err
 				}
 
+				if trustCenterID, ok := m.TrustCenterID(); ok && trustCenterID != "" {
+					clearCtx := context.WithValue(ctx, clearingNDAFilesKeyOp{}, true)
+					_, err = m.Client().Template.Update().
+						Where(template.TrustCenterIDEQ(trustCenterID)).
+						ClearFiles().
+						Save(clearCtx)
+					if err != nil {
+						return nil, err
+					}
+				}
+
 				m.AddFileIDs(fileIDs...)
 			}
 
