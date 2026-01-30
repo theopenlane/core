@@ -386,6 +386,8 @@ func init() {
 	assessment.Hooks[8] = assessmentHooks[0]
 
 	assessment.Hooks[9] = assessmentHooks[1]
+
+	assessment.Hooks[10] = assessmentHooks[2]
 	assessmentMixinInters1 := assessmentMixin[1].Interceptors()
 	assessmentMixinInters5 := assessmentMixin[5].Interceptors()
 	assessment.Interceptors[0] = assessmentMixinInters1[0]
