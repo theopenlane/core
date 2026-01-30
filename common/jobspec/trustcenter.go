@@ -5,7 +5,7 @@ import "github.com/riverqueue/river"
 // AttestNDARequestArgs for the worker to process the signed nda pdf
 type AttestNDARequestArgs struct {
 	// NDARequestID is the id of the request
-	NDARequestID string `json:"nda_request_id,omitempty"`
+	NDARequestID string `json:"nda_request_id"`
 }
 
 // Kind satisfies the river.Job interface
