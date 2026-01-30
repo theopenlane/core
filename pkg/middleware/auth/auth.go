@@ -12,6 +12,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/gorilla/websocket"
 	"github.com/rs/zerolog"
+	"github.com/stoewer/go-strcase"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -308,7 +309,7 @@ func createAuthenticatedUserFromClaims(ctx context.Context, dbClient *ent.Client
 		return nil, err
 	}
 
-	return &auth.AuthenticatedUser{
+	au := &auth.AuthenticatedUser{
 		SubjectID:          user.ID,
 		SubjectName:        getSubjectName(user),
 		SubjectEmail:       user.Email,
@@ -316,7 +317,14 @@ func createAuthenticatedUserFromClaims(ctx context.Context, dbClient *ent.Client
 		OrganizationIDs:    []string{claims.OrgID},
 		AuthenticationType: authType,
 		IsSystemAdmin:      systemAdmin,
-	}, nil
+	}
+
+	role := getOrgRoleFunc(ctx, dbClient, user.ID, claims.OrgID)
+	if role != nil {
+		au.OrganizationRole = *role
+	}
+
+	return au, nil
 }
 
 func createAnonymousQuestionnaireFromClaims(claims *tokens.Claims, authType auth.AuthenticationType) (*auth.AnonymousQuestionnaireUser, error) {
@@ -338,6 +346,7 @@ func createAnonymousTrustCenterUserFromClaims(claims *tokens.Claims, authType au
 		AuthenticationType: authType,
 		TrustCenterID:      claims.TrustCenterID,
 		SubjectEmail:       claims.Email,
+		OrganizationRole:   auth.AnonymousRole,
 	}, nil
 }
 
@@ -411,6 +420,11 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 		return nil, "", err
 	}
 
+	var role *auth.OrganizationRoleType
+	if len(orgIDs) == 1 {
+		role = getOrgRoleFunc(ctx, dbClient, pat.OwnerID, orgIDs[0])
+	}
+
 	authUser := &auth.AuthenticatedUser{
 		SubjectID:          pat.OwnerID,
 		SubjectName:        getSubjectName(pat.Edges.Owner),
@@ -418,6 +432,10 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 		OrganizationIDs:    orgIDs,
 		AuthenticationType: auth.PATAuthentication,
 		IsSystemAdmin:      systemAdmin,
+	}
+
+	if role != nil {
+		authUser.OrganizationRole = *role
 	}
 
 	if slices.Contains(orgIDs, orgFromHeader) {
@@ -626,6 +644,40 @@ func isPATSSOAuthorized(ctx context.Context, db *ent.Client, tokenID, orgID stri
 	return ok, nil
 }
 
+// getOrganizationRole retrieves the organization role for the user in the given organization ID and returns it; if the
+// role cannot be determined, nil is returned
+func getOrganizationRole(ctx context.Context, db *ent.Client, userID, orgID string) *auth.OrganizationRoleType {
+	if orgID == "" || userID == "" {
+		logx.FromContext(ctx).Debug().Msg("organization ID or user ID is empty, cannot determine organization role")
+
+		return nil
+	}
+
+	role, err := getRole(ctx, db, userID, orgID)
+	if err != nil {
+		logx.FromContext(ctx).Debug().Err(err).Msg("failed to get organization role, proceeding with other auth checks")
+		return nil
+	}
+
+	orgRole, ok := auth.ToOrganizationRoleType(strcase.SnakeCase(role.String()))
+	if !ok {
+		logx.FromContext(ctx).Debug().Str("role", role.String()).Msg("invalid organization role, proceeding with other auth checks")
+	}
+
+	return &orgRole
+}
+
+func getRole(ctx context.Context, db *ent.Client, userID, orgID string) (enums.Role, error) {
+	member, err := db.OrgMembership.Query().
+		Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
+		Only(privacy.DecisionContext(ctx, privacy.Allow))
+	if err != nil {
+		return "", err
+	}
+
+	return member.Role, nil
+}
+
 // function variables allow tests to override SSO checks without a database
 var (
 	isSSOEnforcedFunc = isSSOEnforced
@@ -656,4 +708,6 @@ var (
 	updateLastUsedFunc = updateLastUsed
 
 	isSystemAdminFunc = isSystemAdmin
+
+	getOrgRoleFunc = getOrganizationRole
 )
