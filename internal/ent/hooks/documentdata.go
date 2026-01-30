@@ -7,15 +7,16 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/xeipuuv/gojsonschema"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
-	"github.com/xeipuuv/gojsonschema"
 )
 
 var (
@@ -131,10 +132,20 @@ func validateTrustCenterNDAJSON(schema interface{}, document map[string]interfac
 		return err
 	}
 
+	signatoryInfo := document["signatory_info"].(map[string]any)
+
 	if document["trust_center_id"] != anon.TrustCenterID ||
-		document["signatory_info"].(map[string]any)["email"] != anon.SubjectEmail ||
+		signatoryInfo["email"] != anon.SubjectEmail ||
 		document["signature_metadata"].(map[string]any)["user_id"] != anon.SubjectID {
 		return errDocInfoDoesNotMatchAuthenticatedUser
+	}
+
+	firstName, _ := signatoryInfo["first_name"].(string)
+	lastName, _ := signatoryInfo["last_name"].(string)
+	companyName, _ := signatoryInfo["company_name"].(string)
+
+	if firstName == "" || lastName == "" || companyName == "" {
+		return fmt.Errorf("%w: first_name, last_name, and company_name are all required", errValidationFailed)
 	}
 
 	return nil
