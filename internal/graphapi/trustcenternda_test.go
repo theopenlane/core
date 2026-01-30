@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -51,6 +52,16 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 		TrustCenterID:      trustCenter.ID,
 		SubjectEmail:       "test@example.com",
 	}
+
+	anonCtxForRequest := auth.WithAnonymousTrustCenterUser(context.Background(), anonUser)
+	_, err = suite.client.api.CreateTrustCenterNDARequest(anonCtxForRequest, testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     "Test",
+		LastName:      "User",
+		CompanyName:   lo.ToPtr("Test Company"),
+		Email:         "test@example.com",
+		TrustCenterID: &trustCenter.ID,
+	})
+	assert.NilError(t, err)
 
 	input := testclient.SubmitTrustCenterNDAResponseInput{
 		TemplateID: trustCenterNDA.CreateTrustCenterNda.Template.ID,
@@ -285,6 +296,15 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 	ctx := context.Background()
 	anonCtx := auth.WithAnonymousTrustCenterUser(ctx, anonUser)
 	anonCtx2 := auth.WithAnonymousTrustCenterUser(ctx, anonUser2)
+
+	_, err = suite.client.api.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     "Test",
+		LastName:      "User",
+		CompanyName:   lo.ToPtr("Test Company"),
+		Email:         "test@example.com",
+		TrustCenterID: &trustCenter.ID,
+	})
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name     string
