@@ -93,12 +93,11 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 			}
 
 			// update nda requests that it has been signed
-			_, err = m.Client().TrustCenterNDARequest.Update().Where(
+			if err := m.Client().TrustCenterNDARequest.Update().Where(
 				trustcenterndarequest.EmailEqualFold(anon.SubjectEmail),
 				trustcenterndarequest.TrustCenterID(anon.TrustCenterID),
 				trustcenterndarequest.StatusNEQ(enums.TrustCenterNDARequestStatusSigned),
-			).SetStatus(enums.TrustCenterNDARequestStatusSigned).SetDocumentDataID(createdDocData.ID).Save(ctx)
-			if err != nil {
+			).SetStatus(enums.TrustCenterNDARequestStatusSigned).SetDocumentDataID(createdDocData.ID).Exec(ctx); err != nil {
 				if !generated.IsNotFound(err) {
 					logx.FromContext(ctx).Error().Err(err).Str("email", anon.SubjectEmail).Str("trust_center_id", anon.TrustCenterID).Msg("failed to mark nda request signed status")
 

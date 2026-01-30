@@ -2413,7 +2413,6 @@ type ComplexityRoot struct {
 		CreatedBy        func(childComplexity int) int
 		DocumentDataID   func(childComplexity int) int
 		Email            func(childComplexity int) int
-		FileID           func(childComplexity int) int
 		FirstName        func(childComplexity int) int
 		HistoryTime      func(childComplexity int) int
 		ID               func(childComplexity int) int
@@ -16202,13 +16201,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterNDARequestHistory.Email(childComplexity), true
-
-	case "TrustCenterNDARequestHistory.fileID":
-		if e.complexity.TrustCenterNDARequestHistory.FileID == nil {
-			break
-		}
-
-		return e.complexity.TrustCenterNDARequestHistory.FileID(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.firstName":
 		if e.complexity.TrustCenterNDARequestHistory.FirstName == nil {
@@ -50309,10 +50301,6 @@ type TrustCenterNDARequestHistory implements Node {
   ID of the signed NDA document data
   """
   documentDataID: String
-  """
-  ID of the template file at the time the NDA was signed
-  """
-  fileID: String
 }
 """
 A connection to a list of items.
@@ -50388,6 +50376,7 @@ enum TrustCenterNDARequestHistoryTrustCenterNDARequestStatus @goModel(model: "gi
   NEEDS_APPROVAL
   APPROVED
   SIGNED
+  DECLINED
 }
 """
 TrustCenterNDARequestHistoryWhereInput is used for filtering TrustCenterNDARequestHistory objects.
@@ -50690,24 +50679,6 @@ input TrustCenterNDARequestHistoryWhereInput {
   documentDataIDNotNil: Boolean
   documentDataIDEqualFold: String
   documentDataIDContainsFold: String
-  """
-  file_id field predicates
-  """
-  fileID: String
-  fileIDNEQ: String
-  fileIDIn: [String!]
-  fileIDNotIn: [String!]
-  fileIDGT: String
-  fileIDGTE: String
-  fileIDLT: String
-  fileIDLTE: String
-  fileIDContains: String
-  fileIDHasPrefix: String
-  fileIDHasSuffix: String
-  fileIDIsNil: Boolean
-  fileIDNotNil: Boolean
-  fileIDEqualFold: String
-  fileIDContainsFold: String
 }
 type TrustCenterSettingHistory implements Node {
   id: ID!

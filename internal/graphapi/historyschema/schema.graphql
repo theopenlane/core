@@ -31291,10 +31291,14 @@ type TrustCenterNDARequestHistory implements Node {
 	ID of the signed NDA document data
 	"""
 	documentDataID: String
+<<<<<<< HEAD
 	"""
 	ID of the template file at the time the NDA was signed
 	"""
 	fileID: String
+||||||| 35a9af31b
+=======
+>>>>>>> origin/main
 }
 """
 A connection to a list of items.
@@ -31370,6 +31374,7 @@ enum TrustCenterNDARequestHistoryTrustCenterNDARequestStatus @goModel(model: "gi
 	NEEDS_APPROVAL
 	APPROVED
 	SIGNED
+	DECLINED
 }
 """
 TrustCenterNDARequestHistoryWhereInput is used for filtering TrustCenterNDARequestHistory objects.
@@ -31672,6 +31677,7 @@ input TrustCenterNDARequestHistoryWhereInput {
 	documentDataIDNotNil: Boolean
 	documentDataIDEqualFold: String
 	documentDataIDContainsFold: String
+<<<<<<< HEAD
 	"""
 	file_id field predicates
 	"""
@@ -31690,6 +31696,9 @@ input TrustCenterNDARequestHistoryWhereInput {
 	fileIDNotNil: Boolean
 	fileIDEqualFold: String
 	fileIDContainsFold: String
+||||||| 35a9af31b
+=======
+>>>>>>> origin/main
 }
 type TrustCenterSettingHistory implements Node {
 	id: ID!

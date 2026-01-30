@@ -26,6 +26,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
@@ -500,43 +507,33 @@ func (s *WorkflowEngineTestSuite) UpdateWorkflowDefinitionInactive(def *generate
 	return updated
 }
 
-// ClearWorkflowDefinitions removes all workflow definitions and related entities with privacy bypass for testing.
-// This ensures complete test isolation by clearing:
-// - WorkflowEvent (depends on WorkflowInstance)
-// - WorkflowAssignmentTarget (depends on WorkflowAssignment)
-// - WorkflowAssignment (depends on WorkflowInstance)
-// - WorkflowObjectRef (depends on WorkflowProposal)
-// - WorkflowInstance (depends on WorkflowDefinition, WorkflowProposal)
-// - WorkflowProposal
-// - WorkflowDefinition
-func (s *WorkflowEngineTestSuite) ClearWorkflowDefinitions() {
+// ClearWorkflowDefinitionsForOrg removes all workflow definitions and related entities for a specific organization.
+// Use this when subtests share an org and need isolation between test cases.
+func (s *WorkflowEngineTestSuite) ClearWorkflowDefinitionsForOrg(orgID string) {
 	internalCtx := generated.NewContext(rule.WithInternalContext(s.ctx), s.client)
 
-	// Delete in order respecting foreign key constraints
-	_, err := s.client.WorkflowEvent.Delete().Exec(internalCtx)
+	_, err := s.client.WorkflowEvent.Delete().Where(workflowevent.OwnerIDEQ(orgID)).Exec(internalCtx)
 	s.Require().NoError(err)
 
-	_, err = s.client.WorkflowAssignmentTarget.Delete().Exec(internalCtx)
+	_, err = s.client.WorkflowAssignmentTarget.Delete().Where(workflowassignmenttarget.OwnerIDEQ(orgID)).Exec(internalCtx)
 	s.Require().NoError(err)
 
-	_, err = s.client.WorkflowAssignment.Delete().Exec(internalCtx)
+	_, err = s.client.WorkflowAssignment.Delete().Where(workflowassignment.OwnerIDEQ(orgID)).Exec(internalCtx)
 	s.Require().NoError(err)
 
-	// Clear the optional workflow_proposal_id FK to break the circular dependency:
-	// WorkflowInstance -> WorkflowProposal -> WorkflowObjectRef -> WorkflowInstance
-	err = s.client.WorkflowInstance.Update().ClearWorkflowProposal().Exec(internalCtx)
+	err = s.client.WorkflowInstance.Update().Where(workflowinstance.OwnerIDEQ(orgID)).ClearWorkflowProposal().Exec(internalCtx)
 	s.Require().NoError(err)
 
-	_, err = s.client.WorkflowProposal.Delete().Exec(internalCtx)
+	_, err = s.client.WorkflowProposal.Delete().Where(workflowproposal.OwnerIDEQ(orgID)).Exec(internalCtx)
 	s.Require().NoError(err)
 
-	_, err = s.client.WorkflowObjectRef.Delete().Exec(internalCtx)
+	_, err = s.client.WorkflowObjectRef.Delete().Where(workflowobjectref.OwnerIDEQ(orgID)).Exec(internalCtx)
 	s.Require().NoError(err)
 
-	_, err = s.client.WorkflowInstance.Delete().Exec(internalCtx)
+	_, err = s.client.WorkflowInstance.Delete().Where(workflowinstance.OwnerIDEQ(orgID)).Exec(internalCtx)
 	s.Require().NoError(err)
 
-	_, err = s.client.WorkflowDefinition.Delete().Exec(internalCtx)
+	_, err = s.client.WorkflowDefinition.Delete().Where(workflowdefinition.OwnerIDEQ(orgID)).Exec(internalCtx)
 	s.Require().NoError(err)
 }
 

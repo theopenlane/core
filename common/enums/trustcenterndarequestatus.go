@@ -31,6 +31,7 @@ func (TrustCenterNDARequestStatus) Values() (kinds []string) {
 		TrustCenterNDARequestStatusNeedsApproval,
 		TrustCenterNDARequestStatusApproved,
 		TrustCenterNDARequestStatusSigned,
+		TrustCenterNDARequestStatusDeclined,
 	} {
 		kinds = append(kinds, string(s))
 	}
@@ -54,6 +55,8 @@ func ToTrustCenterNDARequestStatus(r string) *TrustCenterNDARequestStatus {
 		return &TrustCenterNDARequestStatusApproved
 	case TrustCenterNDARequestStatusSigned.String():
 		return &TrustCenterNDARequestStatusSigned
+	case TrustCenterNDARequestStatusDeclined.String():
+		return &TrustCenterNDARequestStatusDeclined
 	default:
 		return nil
 	}

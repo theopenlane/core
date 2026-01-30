@@ -106419,6 +106419,7 @@ enum TrustCenterNDARequestTrustCenterNDARequestStatus @goModel(model: "github.co
   NEEDS_APPROVAL
   APPROVED
   SIGNED
+  DECLINED
 }
 """
 TrustCenterNDARequestWhereInput is used for filtering TrustCenterNDARequest objects.
