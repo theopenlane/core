@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	gentemplate "github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
@@ -186,7 +187,25 @@ func submitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCe
 		OrgID: anon.OrganizationID,
 	})
 
-	res, err := withTransactionalMutation(allowCtx).DocumentData.Create().SetInput(
+	txnCtx := withTransactionalMutation(allowCtx)
+
+	ndaRequest, err := txnCtx.TrustCenterNDARequest.Query().
+		Where(
+			trustcenterndarequest.EmailEqualFold(anon.SubjectEmail),
+			trustcenterndarequest.TrustCenterID(anon.TrustCenterID),
+		).First(allowCtx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
+	}
+
+	// we need to update the signatory info from the NDA request we collected previously
+	if signatoryInfo, ok := input.Response["signatory_info"].(map[string]any); ok {
+		signatoryInfo["first_name"] = ndaRequest.FirstName
+		signatoryInfo["last_name"] = ndaRequest.LastName
+		signatoryInfo["company_name"] = lo.FromPtr(ndaRequest.CompanyName)
+	}
+
+	res, err := txnCtx.DocumentData.Create().SetInput(
 		generated.CreateDocumentDataInput{
 			TemplateID: lo.ToPtr(input.TemplateID),
 			Data:       input.Response,

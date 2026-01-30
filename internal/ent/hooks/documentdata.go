@@ -12,6 +12,7 @@ import (
 	"github.com/xeipuuv/gojsonschema"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -118,6 +119,15 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 			})
 
 			if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
+				return nil, err
+			}
+
+			if err := enqueueJob(ctx, m.Job, jobspec.AttestNDARequestArgs{
+				NDARequestID: signedID,
+			}, nil); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("nda_request_id", signedID).
+					Msg("failed to enqueue attest nda request job")
+
 				return nil, err
 			}
 
