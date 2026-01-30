@@ -44,37 +44,75 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
+	noApprovalRequiredRequest := testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         gofakeit.Email(),
+		TrustCenterID: &trustCenterNoApproval.ID,
+	}
+
+	emailApprovedRequest := testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         gofakeit.Email(),
+		TrustCenterID: &trustCenterWithApproval.ID,
+	}
+
+	emailDeclinedRequest := testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         gofakeit.Email(),
+		TrustCenterID: &trustCenterWithApproval.ID,
+	}
+
 	testCases := []struct {
-		name           string
-		input          testclient.CreateTrustCenterNDARequestInput
-		client         *testclient.TestClient
-		ctx            context.Context
-		expectedErr    string
-		expectedStatus enums.TrustCenterNDARequestStatus
+		name                   string
+		input                  testclient.CreateTrustCenterNDARequestInput
+		client                 *testclient.TestClient
+		ctx                    context.Context
+		expectedErr            string
+		expectedStatus         enums.TrustCenterNDARequestStatus
+		expectEmailSent        bool
+		setStatus              *enums.TrustCenterNDARequestStatus
+		expectedSecondaryEmail bool
 	}{
 		{
-			name: "happy path - no approval required, status should be REQUESTED",
-			input: testclient.CreateTrustCenterNDARequestInput{
-				FirstName:     gofakeit.FirstName(),
-				LastName:      gofakeit.LastName(),
-				Email:         gofakeit.Email(),
-				TrustCenterID: &trustCenterNoApproval.ID,
-			},
-			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
-			expectedStatus: enums.TrustCenterNDARequestStatusRequested,
+			name:            "happy path - no approval required, status should be REQUESTED",
+			input:           noApprovalRequiredRequest,
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
+			expectEmailSent: true,
 		},
 		{
-			name: "happy path - approval required, status should be NEEDS_APPROVAL",
-			input: testclient.CreateTrustCenterNDARequestInput{
-				FirstName:     gofakeit.FirstName(),
-				LastName:      gofakeit.LastName(),
-				Email:         gofakeit.Email(),
-				TrustCenterID: &trustCenterWithApproval.ID,
-			},
-			client:         suite.client.api,
-			ctx:            testUser2.UserCtx,
-			expectedStatus: enums.TrustCenterNDARequestStatusNeedsApproval,
+			name:                   "happy path - resend request with no approval required, status should be REQUESTED",
+			input:                  noApprovalRequiredRequest,
+			client:                 suite.client.api,
+			ctx:                    testUser1.UserCtx,
+			expectedStatus:         enums.TrustCenterNDARequestStatusRequested,
+			expectEmailSent:        true, // should get initial email
+			setStatus:              &enums.TrustCenterNDARequestStatusSigned,
+			expectedSecondaryEmail: true, //should get auth email
+		},
+		{
+			name:                   "happy path - approval required, status should be NEEDS_APPROVAL, set to approved",
+			input:                  emailApprovedRequest,
+			client:                 suite.client.api,
+			ctx:                    testUser2.UserCtx,
+			expectedStatus:         enums.TrustCenterNDARequestStatusNeedsApproval,
+			expectEmailSent:        false, // no email because not approved yet
+			setStatus:              &enums.TrustCenterNDARequestStatusApproved,
+			expectedSecondaryEmail: true, // should get approved email
+		},
+		{
+			name:                   "happy path - approval required, status should be NEEDS_APPROVAL, set to declined for next test",
+			input:                  emailDeclinedRequest,
+			client:                 suite.client.api,
+			ctx:                    testUser2.UserCtx,
+			expectedStatus:         enums.TrustCenterNDARequestStatusNeedsApproval,
+			expectEmailSent:        false, // no email because not approved yet
+			setStatus:              &enums.TrustCenterNDARequestStatusDeclined,
+			expectedSecondaryEmail: false,
 		},
 		{
 			name: "happy path - with company name and reason",
@@ -86,9 +124,10 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 				Reason:        lo.ToPtr("Need access to security documentation"),
 				TrustCenterID: &trustCenterNoApproval.ID,
 			},
-			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
-			expectedStatus: enums.TrustCenterNDARequestStatusRequested,
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
+			expectEmailSent: true,
 		},
 		{
 			name: "view only user cannot create",
@@ -142,6 +181,10 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
+			// Clear any existing jobs
+			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
+			assert.NilError(t, err)
+
 			resp, err := tc.client.CreateTrustCenterNDARequest(tc.ctx, tc.input)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -162,6 +205,47 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 
 			if tc.input.Reason != nil {
 				assert.Equal(t, *tc.input.Reason, *resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Reason)
+			}
+
+			// Verify the job was or was not created based on expectation
+			if tc.expectEmailSent {
+				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+					[]rivertest.ExpectedJob{
+						{
+							Args: jobs.EmailArgs{},
+						},
+					})
+				assert.Assert(t, jobs != nil)
+				assert.Assert(t, is.Len(jobs, 1))
+			} else {
+				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+			}
+
+			if tc.setStatus != nil {
+				// Clear any existing jobs
+				err = suite.client.db.Job.TruncateRiverTables(tc.ctx)
+				assert.NilError(t, err)
+
+				resp, err := suite.client.api.UpdateTrustCenterNDARequest(tc.ctx, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
+					Status: tc.setStatus,
+				})
+				assert.NilError(t, err)
+				assert.Assert(t, resp != nil)
+
+				assert.Equal(t, *tc.setStatus, *resp.UpdateTrustCenterNDARequest.TrustCenterNDARequest.Status)
+
+				if tc.expectedSecondaryEmail {
+					jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+						[]rivertest.ExpectedJob{
+							{
+								Args: jobs.EmailArgs{},
+							},
+						})
+					assert.Assert(t, jobs != nil)
+					assert.Assert(t, is.Len(jobs, 1))
+				} else {
+					rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+				}
 			}
 
 			(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(tc.ctx, t)
