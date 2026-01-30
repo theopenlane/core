@@ -170,13 +170,17 @@ func HookDocumentDataFile() ent.Hook {
 				return nil, errMissingTemplate
 			}
 
-			_, err = m.Client().Template.Query().
+			exists, err := m.Client().Template.Query().
 				Select(template.FieldKind).
 				Where(template.KindEQ(enums.TemplateKindTrustCenterNda)).
 				Where(template.ID(id)).
-				Only(ctx)
+				Exist(ctx)
 			if err != nil {
 				return nil, err
+			}
+
+			if !exists {
+				return nil, generated.ErrPermissionDenied
 			}
 
 			adapter := objects.NewGenericMutationAdapter(m,
