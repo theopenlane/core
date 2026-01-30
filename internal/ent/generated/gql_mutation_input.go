@@ -23086,6 +23086,7 @@ type CreateTrustCenterNDARequestInput struct {
 	TrustCenterID     *string
 	TrustCenterDocIDs []string
 	DocumentID        *string
+	FileID            *string
 }
 
 // Mutate applies the CreateTrustCenterNDARequestInput on the TrustCenterNDARequestMutation builder.
@@ -23129,6 +23130,9 @@ func (i *CreateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	if v := i.DocumentID; v != nil {
 		m.SetDocumentID(*v)
 	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateTrustCenterNDARequestInput on the TrustCenterNDARequestCreate builder.
@@ -23170,6 +23174,8 @@ type UpdateTrustCenterNDARequestInput struct {
 	RemoveTrustCenterDocIDs []string
 	ClearDocument           bool
 	DocumentID              *string
+	ClearFile               bool
+	FileID                  *string
 }
 
 // Mutate applies the UpdateTrustCenterNDARequestInput on the TrustCenterNDARequestMutation builder.
@@ -23266,6 +23272,12 @@ func (i *UpdateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	}
 	if v := i.DocumentID; v != nil {
 		m.SetDocumentID(*v)
+	}
+	if i.ClearFile {
+		m.ClearFile()
+	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
 	}
 }
 

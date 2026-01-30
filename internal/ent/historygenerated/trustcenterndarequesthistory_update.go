@@ -328,6 +328,26 @@ func (_u *TrustCenterNDARequestHistoryUpdate) ClearDocumentDataID() *TrustCenter
 	return _u
 }
 
+// SetFileID sets the "file_id" field.
+func (_u *TrustCenterNDARequestHistoryUpdate) SetFileID(v string) *TrustCenterNDARequestHistoryUpdate {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableFileID(v *string) *TrustCenterNDARequestHistoryUpdate {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *TrustCenterNDARequestHistoryUpdate) ClearFileID() *TrustCenterNDARequestHistoryUpdate {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
 // Mutation returns the TrustCenterNDARequestHistoryMutation object of the builder.
 func (_u *TrustCenterNDARequestHistoryUpdate) Mutation() *TrustCenterNDARequestHistoryMutation {
 	return _u.mutation
@@ -511,6 +531,12 @@ func (_u *TrustCenterNDARequestHistoryUpdate) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.DocumentDataIDCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldDocumentDataID, field.TypeString)
+	}
+	if value, ok := _u.mutation.FileID(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldFileID, field.TypeString, value)
+	}
+	if _u.mutation.FileIDCleared() {
+		_spec.ClearField(trustcenterndarequesthistory.FieldFileID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterNDARequestHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -828,6 +854,26 @@ func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearDocumentDataID() *TrustCen
 	return _u
 }
 
+// SetFileID sets the "file_id" field.
+func (_u *TrustCenterNDARequestHistoryUpdateOne) SetFileID(v string) *TrustCenterNDARequestHistoryUpdateOne {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableFileID(v *string) *TrustCenterNDARequestHistoryUpdateOne {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearFileID() *TrustCenterNDARequestHistoryUpdateOne {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
 // Mutation returns the TrustCenterNDARequestHistoryMutation object of the builder.
 func (_u *TrustCenterNDARequestHistoryUpdateOne) Mutation() *TrustCenterNDARequestHistoryMutation {
 	return _u.mutation
@@ -1041,6 +1087,12 @@ func (_u *TrustCenterNDARequestHistoryUpdateOne) sqlSave(ctx context.Context) (_
 	}
 	if _u.mutation.DocumentDataIDCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldDocumentDataID, field.TypeString)
+	}
+	if value, ok := _u.mutation.FileID(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldFileID, field.TypeString, value)
+	}
+	if _u.mutation.FileIDCleared() {
+		_spec.ClearField(trustcenterndarequesthistory.FieldFileID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterNDARequestHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

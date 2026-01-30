@@ -293,6 +293,20 @@ func (_c *TrustCenterNDARequestHistoryCreate) SetNillableDocumentDataID(v *strin
 	return _c
 }
 
+// SetFileID sets the "file_id" field.
+func (_c *TrustCenterNDARequestHistoryCreate) SetFileID(v string) *TrustCenterNDARequestHistoryCreate {
+	_c.mutation.SetFileID(v)
+	return _c
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_c *TrustCenterNDARequestHistoryCreate) SetNillableFileID(v *string) *TrustCenterNDARequestHistoryCreate {
+	if v != nil {
+		_c.SetFileID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterNDARequestHistoryCreate) SetID(v string) *TrustCenterNDARequestHistoryCreate {
 	_c.mutation.SetID(v)
@@ -542,6 +556,10 @@ func (_c *TrustCenterNDARequestHistoryCreate) createSpec() (*TrustCenterNDAReque
 	if value, ok := _c.mutation.DocumentDataID(); ok {
 		_spec.SetField(trustcenterndarequesthistory.FieldDocumentDataID, field.TypeString, value)
 		_node.DocumentDataID = &value
+	}
+	if value, ok := _c.mutation.FileID(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldFileID, field.TypeString, value)
+		_node.FileID = &value
 	}
 	return _node, _spec
 }

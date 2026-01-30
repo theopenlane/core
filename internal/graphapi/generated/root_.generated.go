@@ -5617,6 +5617,8 @@ type ComplexityRoot struct {
 		DocumentDataID   func(childComplexity int) int
 		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Email            func(childComplexity int) int
+		File             func(childComplexity int) int
+		FileID           func(childComplexity int) int
 		FirstName        func(childComplexity int) int
 		ID               func(childComplexity int) int
 		LastName         func(childComplexity int) int
@@ -39533,6 +39535,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterNDARequest.Email(childComplexity), true
 
+	case "TrustCenterNDARequest.file":
+		if e.complexity.TrustCenterNDARequest.File == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.File(childComplexity), true
+
+	case "TrustCenterNDARequest.fileID":
+		if e.complexity.TrustCenterNDARequest.FileID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.FileID(childComplexity), true
+
 	case "TrustCenterNDARequest.firstName":
 		if e.complexity.TrustCenterNDARequest.FirstName == nil {
 			break
@@ -60206,6 +60222,7 @@ input CreateTrustCenterNDARequestInput {
   trustCenterID: ID
   trustCenterDocIDs: [ID!]
   documentID: ID
+  fileID: ID
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -106230,6 +106247,10 @@ type TrustCenterNDARequest implements Node {
   ID of the signed NDA document data
   """
   documentDataID: ID
+  """
+  ID of the template file at the time the NDA was signed
+  """
+  fileID: ID
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -106328,6 +106349,10 @@ type TrustCenterNDARequest implements Node {
   the signed NDA document data
   """
   document: DocumentData
+  """
+  the template file at the time the NDA was signed
+  """
+  file: File
 }
 """
 A connection to a list of items.
@@ -106662,6 +106687,24 @@ input TrustCenterNDARequestWhereInput {
   documentDataIDEqualFold: ID
   documentDataIDContainsFold: ID
   """
+  file_id field predicates
+  """
+  fileID: ID
+  fileIDNEQ: ID
+  fileIDIn: [ID!]
+  fileIDNotIn: [ID!]
+  fileIDGT: ID
+  fileIDGTE: ID
+  fileIDLT: ID
+  fileIDLTE: ID
+  fileIDContains: ID
+  fileIDHasPrefix: ID
+  fileIDHasSuffix: ID
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: ID
+  fileIDContainsFold: ID
+  """
   blocked_groups edge predicates
   """
   hasBlockedGroups: Boolean
@@ -106686,6 +106729,11 @@ input TrustCenterNDARequestWhereInput {
   """
   hasDocument: Boolean
   hasDocumentWith: [DocumentDataWhereInput!]
+  """
+  file edge predicates
+  """
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
 }
 """
 Ordering options for TrustCenter connections
@@ -114784,6 +114832,8 @@ input UpdateTrustCenterNDARequestInput {
   clearTrustCenterDocs: Boolean
   documentID: ID
   clearDocument: Boolean
+  fileID: ID
+  clearFile: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.

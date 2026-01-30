@@ -56,6 +56,8 @@ const (
 	FieldSignedAt = "signed_at"
 	// FieldDocumentDataID holds the string denoting the document_data_id field in the database.
 	FieldDocumentDataID = "document_data_id"
+	// FieldFileID holds the string denoting the file_id field in the database.
+	FieldFileID = "file_id"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
@@ -66,6 +68,8 @@ const (
 	EdgeTrustCenterDocs = "trust_center_docs"
 	// EdgeDocument holds the string denoting the document edge name in mutations.
 	EdgeDocument = "document"
+	// EdgeFile holds the string denoting the file edge name in mutations.
+	EdgeFile = "file"
 	// Table holds the table name of the trustcenterndarequest in the database.
 	Table = "trust_center_nda_requests"
 	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
@@ -103,6 +107,13 @@ const (
 	DocumentInverseTable = "document_data"
 	// DocumentColumn is the table column denoting the document relation/edge.
 	DocumentColumn = "document_data_id"
+	// FileTable is the table that holds the file relation/edge.
+	FileTable = "trust_center_nda_requests"
+	// FileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FileInverseTable = "files"
+	// FileColumn is the table column denoting the file relation/edge.
+	FileColumn = "file_id"
 )
 
 // Columns holds all SQL columns for trustcenterndarequest fields.
@@ -127,6 +138,7 @@ var Columns = []string{
 	FieldApprovedByUserID,
 	FieldSignedAt,
 	FieldDocumentDataID,
+	FieldFileID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -290,6 +302,11 @@ func ByDocumentDataID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDocumentDataID, opts...).ToFunc()
 }
 
+// ByFileID orders the results by the file_id field.
+func ByFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFileID, opts...).ToFunc()
+}
+
 // ByBlockedGroupsCount orders the results by blocked_groups count.
 func ByBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -345,6 +362,13 @@ func ByDocumentField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newDocumentStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByFileField orders the results by file field.
+func ByFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFileStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newBlockedGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -378,6 +402,13 @@ func newDocumentStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DocumentInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, DocumentTable, DocumentColumn),
+	)
+}
+func newFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
 	)
 }
 

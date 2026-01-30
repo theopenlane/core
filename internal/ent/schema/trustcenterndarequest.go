@@ -105,6 +105,10 @@ func (TrustCenterNDARequest) Fields() []ent.Field {
 			Comment("ID of the signed NDA document data").
 			Optional().
 			Nillable(),
+		field.String("file_id").
+			Comment("ID of the template file at the time the NDA was signed").
+			Optional().
+			Nillable(),
 	}
 }
 
@@ -143,6 +147,12 @@ func (t TrustCenterNDARequest) Edges() []ent.Edge {
 			edgeSchema: DocumentData{},
 			field:      "document_data_id",
 			comment:    "the signed NDA document data",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: File{},
+			field:      "file_id",
+			comment:    "the template file at the time the NDA was signed",
 		}),
 	}
 }

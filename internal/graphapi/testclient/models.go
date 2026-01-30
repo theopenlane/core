@@ -8056,6 +8056,7 @@ type CreateTrustCenterNDARequestInput struct {
 	TrustCenterID     *string          `json:"trustCenterID,omitempty"`
 	TrustCenterDocIDs []string         `json:"trustCenterDocIDs,omitempty"`
 	DocumentID        *string          `json:"documentID,omitempty"`
+	FileID            *string          `json:"fileID,omitempty"`
 }
 
 // Input for createTrustCenterPreviewSetting mutation
@@ -31542,13 +31543,17 @@ type TrustCenterNDARequest struct {
 	// timestamp when the NDA was signed
 	SignedAt *models.DateTime `json:"signedAt,omitempty"`
 	// ID of the signed NDA document data
-	DocumentDataID  *string                   `json:"documentDataID,omitempty"`
+	DocumentDataID *string `json:"documentDataID,omitempty"`
+	// ID of the template file at the time the NDA was signed
+	FileID          *string                   `json:"fileID,omitempty"`
 	BlockedGroups   *GroupConnection          `json:"blockedGroups"`
 	Editors         *GroupConnection          `json:"editors"`
 	TrustCenter     *TrustCenter              `json:"trustCenter,omitempty"`
 	TrustCenterDocs *TrustCenterDocConnection `json:"trustCenterDocs"`
 	// the signed NDA document data
 	Document *DocumentData `json:"document,omitempty"`
+	// the template file at the time the NDA was signed
+	File *File `json:"file,omitempty"`
 }
 
 func (TrustCenterNDARequest) IsNode() {}
@@ -31832,6 +31837,22 @@ type TrustCenterNDARequestWhereInput struct {
 	DocumentDataIDNotNil       *bool    `json:"documentDataIDNotNil,omitempty"`
 	DocumentDataIDEqualFold    *string  `json:"documentDataIDEqualFold,omitempty"`
 	DocumentDataIDContainsFold *string  `json:"documentDataIDContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
 	// blocked_groups edge predicates
 	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
 	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
@@ -31847,6 +31868,9 @@ type TrustCenterNDARequestWhereInput struct {
 	// document edge predicates
 	HasDocument     *bool                     `json:"hasDocument,omitempty"`
 	HasDocumentWith []*DocumentDataWhereInput `json:"hasDocumentWith,omitempty"`
+	// file edge predicates
+	HasFile     *bool             `json:"hasFile,omitempty"`
+	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
 }
 
 type TrustCenterNDAUpdatePayload struct {
@@ -37947,6 +37971,8 @@ type UpdateTrustCenterNDARequestInput struct {
 	ClearTrustCenterDocs    *bool            `json:"clearTrustCenterDocs,omitempty"`
 	DocumentID              *string          `json:"documentID,omitempty"`
 	ClearDocument           *bool            `json:"clearDocument,omitempty"`
+	FileID                  *string          `json:"fileID,omitempty"`
+	ClearFile               *bool            `json:"clearFile,omitempty"`
 }
 
 // UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.

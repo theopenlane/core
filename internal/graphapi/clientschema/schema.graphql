@@ -14414,6 +14414,7 @@ input CreateTrustCenterNDARequestInput {
 	trustCenterID: ID
 	trustCenterDocIDs: [ID!]
 	documentID: ID
+	fileID: ID
 }
 """
 Input for createTrustCenterPreviewSetting mutation
@@ -69959,6 +69960,10 @@ type TrustCenterNDARequest implements Node {
 	ID of the signed NDA document data
 	"""
 	documentDataID: ID
+	"""
+	ID of the template file at the time the NDA was signed
+	"""
+	fileID: ID
 	blockedGroups(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -70057,6 +70062,10 @@ type TrustCenterNDARequest implements Node {
 	the signed NDA document data
 	"""
 	document: DocumentData
+	"""
+	the template file at the time the NDA was signed
+	"""
+	file: File
 }
 """
 Return response for createBulkTrustCenterNDARequest mutation
@@ -70427,6 +70436,24 @@ input TrustCenterNDARequestWhereInput {
 	documentDataIDEqualFold: ID
 	documentDataIDContainsFold: ID
 	"""
+	file_id field predicates
+	"""
+	fileID: ID
+	fileIDNEQ: ID
+	fileIDIn: [ID!]
+	fileIDNotIn: [ID!]
+	fileIDGT: ID
+	fileIDGTE: ID
+	fileIDLT: ID
+	fileIDLTE: ID
+	fileIDContains: ID
+	fileIDHasPrefix: ID
+	fileIDHasSuffix: ID
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: ID
+	fileIDContainsFold: ID
+	"""
 	blocked_groups edge predicates
 	"""
 	hasBlockedGroups: Boolean
@@ -70451,6 +70478,11 @@ input TrustCenterNDARequestWhereInput {
 	"""
 	hasDocument: Boolean
 	hasDocumentWith: [DocumentDataWhereInput!]
+	"""
+	file edge predicates
+	"""
+	hasFile: Boolean
+	hasFileWith: [FileWhereInput!]
 }
 type TrustCenterNDAUpdatePayload {
 	template: Template!
@@ -78773,6 +78805,8 @@ input UpdateTrustCenterNDARequestInput {
 	clearTrustCenterDocs: Boolean
 	documentID: ID
 	clearDocument: Boolean
+	fileID: ID
+	clearFile: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.

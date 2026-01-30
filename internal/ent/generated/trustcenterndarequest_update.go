@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
@@ -329,6 +330,26 @@ func (_u *TrustCenterNDARequestUpdate) ClearDocumentDataID() *TrustCenterNDARequ
 	return _u
 }
 
+// SetFileID sets the "file_id" field.
+func (_u *TrustCenterNDARequestUpdate) SetFileID(v string) *TrustCenterNDARequestUpdate {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *TrustCenterNDARequestUpdate) SetNillableFileID(v *string) *TrustCenterNDARequestUpdate {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *TrustCenterNDARequestUpdate) ClearFileID() *TrustCenterNDARequestUpdate {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterNDARequestUpdate) AddBlockedGroupIDs(ids ...string) *TrustCenterNDARequestUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -391,6 +412,11 @@ func (_u *TrustCenterNDARequestUpdate) SetNillableDocumentID(id *string) *TrustC
 // SetDocument sets the "document" edge to the DocumentData entity.
 func (_u *TrustCenterNDARequestUpdate) SetDocument(v *DocumentData) *TrustCenterNDARequestUpdate {
 	return _u.SetDocumentID(v.ID)
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (_u *TrustCenterNDARequestUpdate) SetFile(v *File) *TrustCenterNDARequestUpdate {
+	return _u.SetFileID(v.ID)
 }
 
 // Mutation returns the TrustCenterNDARequestMutation object of the builder.
@@ -464,6 +490,12 @@ func (_u *TrustCenterNDARequestUpdate) RemoveTrustCenterDocs(v ...*TrustCenterDo
 // ClearDocument clears the "document" edge to the DocumentData entity.
 func (_u *TrustCenterNDARequestUpdate) ClearDocument() *TrustCenterNDARequestUpdate {
 	_u.mutation.ClearDocument()
+	return _u
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (_u *TrustCenterNDARequestUpdate) ClearFile() *TrustCenterNDARequestUpdate {
+	_u.mutation.ClearFile()
 	return _u
 }
 
@@ -824,6 +856,37 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.FileTable,
+			Columns: []string{trustcenterndarequest.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.FileTable,
+			Columns: []string{trustcenterndarequest.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterNDARequest
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -1140,6 +1203,26 @@ func (_u *TrustCenterNDARequestUpdateOne) ClearDocumentDataID() *TrustCenterNDAR
 	return _u
 }
 
+// SetFileID sets the "file_id" field.
+func (_u *TrustCenterNDARequestUpdateOne) SetFileID(v string) *TrustCenterNDARequestUpdateOne {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *TrustCenterNDARequestUpdateOne) SetNillableFileID(v *string) *TrustCenterNDARequestUpdateOne {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *TrustCenterNDARequestUpdateOne) ClearFileID() *TrustCenterNDARequestUpdateOne {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterNDARequestUpdateOne) AddBlockedGroupIDs(ids ...string) *TrustCenterNDARequestUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1202,6 +1285,11 @@ func (_u *TrustCenterNDARequestUpdateOne) SetNillableDocumentID(id *string) *Tru
 // SetDocument sets the "document" edge to the DocumentData entity.
 func (_u *TrustCenterNDARequestUpdateOne) SetDocument(v *DocumentData) *TrustCenterNDARequestUpdateOne {
 	return _u.SetDocumentID(v.ID)
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (_u *TrustCenterNDARequestUpdateOne) SetFile(v *File) *TrustCenterNDARequestUpdateOne {
+	return _u.SetFileID(v.ID)
 }
 
 // Mutation returns the TrustCenterNDARequestMutation object of the builder.
@@ -1275,6 +1363,12 @@ func (_u *TrustCenterNDARequestUpdateOne) RemoveTrustCenterDocs(v ...*TrustCente
 // ClearDocument clears the "document" edge to the DocumentData entity.
 func (_u *TrustCenterNDARequestUpdateOne) ClearDocument() *TrustCenterNDARequestUpdateOne {
 	_u.mutation.ClearDocument()
+	return _u
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (_u *TrustCenterNDARequestUpdateOne) ClearFile() *TrustCenterNDARequestUpdateOne {
+	_u.mutation.ClearFile()
 	return _u
 }
 
@@ -1657,6 +1751,37 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.FileTable,
+			Columns: []string{trustcenterndarequest.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.FileTable,
+			Columns: []string{trustcenterndarequest.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterNDARequest

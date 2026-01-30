@@ -28907,6 +28907,25 @@ func (c *TrustCenterNDARequestClient) QueryDocument(_m *TrustCenterNDARequest) *
 	return query
 }
 
+// QueryFile queries the file edge of a TrustCenterNDARequest.
+func (c *TrustCenterNDARequestClient) QueryFile(_m *TrustCenterNDARequest) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterndarequest.Table, trustcenterndarequest.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterndarequest.FileTable, trustcenterndarequest.FileColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterNDARequest
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TrustCenterNDARequestClient) Hooks() []Hook {
 	hooks := c.hooks.TrustCenterNDARequest

@@ -12095,6 +12095,11 @@ func (_q *TrustCenterNDARequestHistoryQuery) collectField(ctx context.Context, o
 				selectedFields = append(selectedFields, trustcenterndarequesthistory.FieldDocumentDataID)
 				fieldSeen[trustcenterndarequesthistory.FieldDocumentDataID] = struct{}{}
 			}
+		case "fileID":
+			if _, ok := fieldSeen[trustcenterndarequesthistory.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequesthistory.FieldFileID)
+				fieldSeen[trustcenterndarequesthistory.FieldFileID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

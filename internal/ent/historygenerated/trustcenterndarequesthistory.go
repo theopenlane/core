@@ -67,7 +67,9 @@ type TrustCenterNDARequestHistory struct {
 	SignedAt *models.DateTime `json:"signed_at,omitempty"`
 	// ID of the signed NDA document data
 	DocumentDataID *string `json:"document_data_id,omitempty"`
-	selectValues   sql.SelectValues
+	// ID of the template file at the time the NDA was signed
+	FileID       *string `json:"file_id,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -81,7 +83,7 @@ func (*TrustCenterNDARequestHistory) scanValues(columns []string) ([]any, error)
 			values[i] = new([]byte)
 		case trustcenterndarequesthistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcenterndarequesthistory.FieldID, trustcenterndarequesthistory.FieldRef, trustcenterndarequesthistory.FieldCreatedBy, trustcenterndarequesthistory.FieldUpdatedBy, trustcenterndarequesthistory.FieldDeletedBy, trustcenterndarequesthistory.FieldTrustCenterID, trustcenterndarequesthistory.FieldFirstName, trustcenterndarequesthistory.FieldLastName, trustcenterndarequesthistory.FieldEmail, trustcenterndarequesthistory.FieldCompanyName, trustcenterndarequesthistory.FieldReason, trustcenterndarequesthistory.FieldAccessLevel, trustcenterndarequesthistory.FieldStatus, trustcenterndarequesthistory.FieldApprovedByUserID, trustcenterndarequesthistory.FieldDocumentDataID:
+		case trustcenterndarequesthistory.FieldID, trustcenterndarequesthistory.FieldRef, trustcenterndarequesthistory.FieldCreatedBy, trustcenterndarequesthistory.FieldUpdatedBy, trustcenterndarequesthistory.FieldDeletedBy, trustcenterndarequesthistory.FieldTrustCenterID, trustcenterndarequesthistory.FieldFirstName, trustcenterndarequesthistory.FieldLastName, trustcenterndarequesthistory.FieldEmail, trustcenterndarequesthistory.FieldCompanyName, trustcenterndarequesthistory.FieldReason, trustcenterndarequesthistory.FieldAccessLevel, trustcenterndarequesthistory.FieldStatus, trustcenterndarequesthistory.FieldApprovedByUserID, trustcenterndarequesthistory.FieldDocumentDataID, trustcenterndarequesthistory.FieldFileID:
 			values[i] = new(sql.NullString)
 		case trustcenterndarequesthistory.FieldHistoryTime, trustcenterndarequesthistory.FieldCreatedAt, trustcenterndarequesthistory.FieldUpdatedAt, trustcenterndarequesthistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -246,6 +248,13 @@ func (_m *TrustCenterNDARequestHistory) assignValues(columns []string, values []
 				_m.DocumentDataID = new(string)
 				*_m.DocumentDataID = value.String
 			}
+		case trustcenterndarequesthistory.FieldFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_id", values[i])
+			} else if value.Valid {
+				_m.FileID = new(string)
+				*_m.FileID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -357,6 +366,11 @@ func (_m *TrustCenterNDARequestHistory) String() string {
 	builder.WriteString(", ")
 	if v := _m.DocumentDataID; v != nil {
 		builder.WriteString("document_data_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.FileID; v != nil {
+		builder.WriteString("file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteByte(')')

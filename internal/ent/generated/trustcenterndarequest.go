@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 )
@@ -60,6 +61,8 @@ type TrustCenterNDARequest struct {
 	SignedAt *models.DateTime `json:"signed_at,omitempty"`
 	// ID of the signed NDA document data
 	DocumentDataID *string `json:"document_data_id,omitempty"`
+	// ID of the template file at the time the NDA was signed
+	FileID *string `json:"file_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterNDARequestQuery when eager-loading is set.
 	Edges        TrustCenterNDARequestEdges `json:"edges"`
@@ -78,11 +81,13 @@ type TrustCenterNDARequestEdges struct {
 	TrustCenterDocs []*TrustCenterDoc `json:"trust_center_docs,omitempty"`
 	// the signed NDA document data
 	Document *DocumentData `json:"document,omitempty"`
+	// the template file at the time the NDA was signed
+	File *File `json:"file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
 	namedBlockedGroups   map[string][]*Group
 	namedEditors         map[string][]*Group
@@ -138,6 +143,17 @@ func (e TrustCenterNDARequestEdges) DocumentOrErr() (*DocumentData, error) {
 	return nil, &NotLoadedError{edge: "document"}
 }
 
+// FileOrErr returns the File value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterNDARequestEdges) FileOrErr() (*File, error) {
+	if e.File != nil {
+		return e.File, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "file"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*TrustCenterNDARequest) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -147,7 +163,7 @@ func (*TrustCenterNDARequest) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case trustcenterndarequest.FieldTags:
 			values[i] = new([]byte)
-		case trustcenterndarequest.FieldID, trustcenterndarequest.FieldCreatedBy, trustcenterndarequest.FieldUpdatedBy, trustcenterndarequest.FieldDeletedBy, trustcenterndarequest.FieldTrustCenterID, trustcenterndarequest.FieldFirstName, trustcenterndarequest.FieldLastName, trustcenterndarequest.FieldEmail, trustcenterndarequest.FieldCompanyName, trustcenterndarequest.FieldReason, trustcenterndarequest.FieldAccessLevel, trustcenterndarequest.FieldStatus, trustcenterndarequest.FieldApprovedByUserID, trustcenterndarequest.FieldDocumentDataID:
+		case trustcenterndarequest.FieldID, trustcenterndarequest.FieldCreatedBy, trustcenterndarequest.FieldUpdatedBy, trustcenterndarequest.FieldDeletedBy, trustcenterndarequest.FieldTrustCenterID, trustcenterndarequest.FieldFirstName, trustcenterndarequest.FieldLastName, trustcenterndarequest.FieldEmail, trustcenterndarequest.FieldCompanyName, trustcenterndarequest.FieldReason, trustcenterndarequest.FieldAccessLevel, trustcenterndarequest.FieldStatus, trustcenterndarequest.FieldApprovedByUserID, trustcenterndarequest.FieldDocumentDataID, trustcenterndarequest.FieldFileID:
 			values[i] = new(sql.NullString)
 		case trustcenterndarequest.FieldCreatedAt, trustcenterndarequest.FieldUpdatedAt, trustcenterndarequest.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -294,6 +310,13 @@ func (_m *TrustCenterNDARequest) assignValues(columns []string, values []any) er
 				_m.DocumentDataID = new(string)
 				*_m.DocumentDataID = value.String
 			}
+		case trustcenterndarequest.FieldFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_id", values[i])
+			} else if value.Valid {
+				_m.FileID = new(string)
+				*_m.FileID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -330,6 +353,11 @@ func (_m *TrustCenterNDARequest) QueryTrustCenterDocs() *TrustCenterDocQuery {
 // QueryDocument queries the "document" edge of the TrustCenterNDARequest entity.
 func (_m *TrustCenterNDARequest) QueryDocument() *DocumentDataQuery {
 	return NewTrustCenterNDARequestClient(_m.config).QueryDocument(_m)
+}
+
+// QueryFile queries the "file" edge of the TrustCenterNDARequest entity.
+func (_m *TrustCenterNDARequest) QueryFile() *FileQuery {
+	return NewTrustCenterNDARequestClient(_m.config).QueryFile(_m)
 }
 
 // Update returns a builder for updating this TrustCenterNDARequest.
@@ -421,6 +449,11 @@ func (_m *TrustCenterNDARequest) String() string {
 	builder.WriteString(", ")
 	if v := _m.DocumentDataID; v != nil {
 		builder.WriteString("document_data_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.FileID; v != nil {
+		builder.WriteString("file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteByte(')')

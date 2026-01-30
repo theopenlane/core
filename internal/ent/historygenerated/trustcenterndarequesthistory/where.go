@@ -159,6 +159,11 @@ func DocumentDataID(v string) predicate.TrustCenterNDARequestHistory {
 	return predicate.TrustCenterNDARequestHistory(sql.FieldEQ(FieldDocumentDataID, v))
 }
 
+// FileID applies equality check predicate on the "file_id" field. It's identical to FileIDEQ.
+func FileID(v string) predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldEQ(FieldFileID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.TrustCenterNDARequestHistory {
 	return predicate.TrustCenterNDARequestHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1427,6 +1432,81 @@ func DocumentDataIDEqualFold(v string) predicate.TrustCenterNDARequestHistory {
 // DocumentDataIDContainsFold applies the ContainsFold predicate on the "document_data_id" field.
 func DocumentDataIDContainsFold(v string) predicate.TrustCenterNDARequestHistory {
 	return predicate.TrustCenterNDARequestHistory(sql.FieldContainsFold(FieldDocumentDataID, v))
+}
+
+// FileIDEQ applies the EQ predicate on the "file_id" field.
+func FileIDEQ(v string) predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldEQ(FieldFileID, v))
+}
+
+// FileIDNEQ applies the NEQ predicate on the "file_id" field.
+func FileIDNEQ(v string) predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldNEQ(FieldFileID, v))
+}
+
+// FileIDIn applies the In predicate on the "file_id" field.
+func FileIDIn(vs ...string) predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldIn(FieldFileID, vs...))
+}
+
+// FileIDNotIn applies the NotIn predicate on the "file_id" field.
+func FileIDNotIn(vs ...string) predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldNotIn(FieldFileID, vs...))
+}
+
+// FileIDGT applies the GT predicate on the "file_id" field.
+func FileIDGT(v string) predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldGT(FieldFileID, v))
+}
+
+// FileIDGTE applies the GTE predicate on the "file_id" field.
+func FileIDGTE(v string) predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldGTE(FieldFileID, v))
+}
+
+// FileIDLT applies the LT predicate on the "file_id" field.
+func FileIDLT(v string) predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldLT(FieldFileID, v))
+}
+
+// FileIDLTE applies the LTE predicate on the "file_id" field.
+func FileIDLTE(v string) predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldLTE(FieldFileID, v))
+}
+
+// FileIDContains applies the Contains predicate on the "file_id" field.
+func FileIDContains(v string) predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldContains(FieldFileID, v))
+}
+
+// FileIDHasPrefix applies the HasPrefix predicate on the "file_id" field.
+func FileIDHasPrefix(v string) predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldHasPrefix(FieldFileID, v))
+}
+
+// FileIDHasSuffix applies the HasSuffix predicate on the "file_id" field.
+func FileIDHasSuffix(v string) predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldHasSuffix(FieldFileID, v))
+}
+
+// FileIDIsNil applies the IsNil predicate on the "file_id" field.
+func FileIDIsNil() predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldIsNull(FieldFileID))
+}
+
+// FileIDNotNil applies the NotNil predicate on the "file_id" field.
+func FileIDNotNil() predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldNotNull(FieldFileID))
+}
+
+// FileIDEqualFold applies the EqualFold predicate on the "file_id" field.
+func FileIDEqualFold(v string) predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldEqualFold(FieldFileID, v))
+}
+
+// FileIDContainsFold applies the ContainsFold predicate on the "file_id" field.
+func FileIDContainsFold(v string) predicate.TrustCenterNDARequestHistory {
+	return predicate.TrustCenterNDARequestHistory(sql.FieldContainsFold(FieldFileID, v))
 }
 
 // And groups predicates with the AND operator between them.

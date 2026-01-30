@@ -69451,6 +69451,21 @@ func (_q *TrustCenterNDARequestQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, trustcenterndarequest.FieldDocumentDataID)
 				fieldSeen[trustcenterndarequest.FieldDocumentDataID] = struct{}{}
 			}
+
+		case "file":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			_q.withFile = query
+			if _, ok := fieldSeen[trustcenterndarequest.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequest.FieldFileID)
+				fieldSeen[trustcenterndarequest.FieldFileID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[trustcenterndarequest.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, trustcenterndarequest.FieldCreatedAt)
@@ -69535,6 +69550,11 @@ func (_q *TrustCenterNDARequestQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[trustcenterndarequest.FieldDocumentDataID]; !ok {
 				selectedFields = append(selectedFields, trustcenterndarequest.FieldDocumentDataID)
 				fieldSeen[trustcenterndarequest.FieldDocumentDataID] = struct{}{}
+			}
+		case "fileID":
+			if _, ok := fieldSeen[trustcenterndarequest.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequest.FieldFileID)
+				fieldSeen[trustcenterndarequest.FieldFileID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
