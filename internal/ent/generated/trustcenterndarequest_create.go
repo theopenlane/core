@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
@@ -260,6 +261,20 @@ func (_c *TrustCenterNDARequestCreate) SetNillableDocumentDataID(v *string) *Tru
 	return _c
 }
 
+// SetFileID sets the "file_id" field.
+func (_c *TrustCenterNDARequestCreate) SetFileID(v string) *TrustCenterNDARequestCreate {
+	_c.mutation.SetFileID(v)
+	return _c
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_c *TrustCenterNDARequestCreate) SetNillableFileID(v *string) *TrustCenterNDARequestCreate {
+	if v != nil {
+		_c.SetFileID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterNDARequestCreate) SetID(v string) *TrustCenterNDARequestCreate {
 	_c.mutation.SetID(v)
@@ -341,6 +356,11 @@ func (_c *TrustCenterNDARequestCreate) SetNillableDocumentID(id *string) *TrustC
 // SetDocument sets the "document" edge to the DocumentData entity.
 func (_c *TrustCenterNDARequestCreate) SetDocument(v *DocumentData) *TrustCenterNDARequestCreate {
 	return _c.SetDocumentID(v.ID)
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (_c *TrustCenterNDARequestCreate) SetFile(v *File) *TrustCenterNDARequestCreate {
+	return _c.SetFileID(v.ID)
 }
 
 // Mutation returns the TrustCenterNDARequestMutation object of the builder.
@@ -646,6 +666,24 @@ func (_c *TrustCenterNDARequestCreate) createSpec() (*TrustCenterNDARequest, *sq
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.DocumentDataID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.FileTable,
+			Columns: []string{trustcenterndarequest.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterNDARequest
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.FileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

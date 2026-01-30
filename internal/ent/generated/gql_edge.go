@@ -14111,6 +14111,14 @@ func (_m *TrustCenterNDARequest) Document(ctx context.Context) (*DocumentData, e
 	return result, MaskNotFound(err)
 }
 
+func (_m *TrustCenterNDARequest) File(ctx context.Context) (*File, error) {
+	result, err := _m.Edges.FileOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *TrustCenterSetting) BlockedGroups(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupOrder, where *GroupWhereInput,
 ) (*GroupConnection, error) {

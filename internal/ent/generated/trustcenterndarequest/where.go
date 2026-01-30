@@ -149,6 +149,11 @@ func DocumentDataID(v string) predicate.TrustCenterNDARequest {
 	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldDocumentDataID, v))
 }
 
+// FileID applies equality check predicate on the "file_id" field. It's identical to FileIDEQ.
+func FileID(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldFileID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.TrustCenterNDARequest {
 	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldCreatedAt, v))
@@ -1284,6 +1289,81 @@ func DocumentDataIDContainsFold(v string) predicate.TrustCenterNDARequest {
 	return predicate.TrustCenterNDARequest(sql.FieldContainsFold(FieldDocumentDataID, v))
 }
 
+// FileIDEQ applies the EQ predicate on the "file_id" field.
+func FileIDEQ(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldFileID, v))
+}
+
+// FileIDNEQ applies the NEQ predicate on the "file_id" field.
+func FileIDNEQ(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNEQ(FieldFileID, v))
+}
+
+// FileIDIn applies the In predicate on the "file_id" field.
+func FileIDIn(vs ...string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldIn(FieldFileID, vs...))
+}
+
+// FileIDNotIn applies the NotIn predicate on the "file_id" field.
+func FileIDNotIn(vs ...string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNotIn(FieldFileID, vs...))
+}
+
+// FileIDGT applies the GT predicate on the "file_id" field.
+func FileIDGT(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldGT(FieldFileID, v))
+}
+
+// FileIDGTE applies the GTE predicate on the "file_id" field.
+func FileIDGTE(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldGTE(FieldFileID, v))
+}
+
+// FileIDLT applies the LT predicate on the "file_id" field.
+func FileIDLT(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldLT(FieldFileID, v))
+}
+
+// FileIDLTE applies the LTE predicate on the "file_id" field.
+func FileIDLTE(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldLTE(FieldFileID, v))
+}
+
+// FileIDContains applies the Contains predicate on the "file_id" field.
+func FileIDContains(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldContains(FieldFileID, v))
+}
+
+// FileIDHasPrefix applies the HasPrefix predicate on the "file_id" field.
+func FileIDHasPrefix(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldHasPrefix(FieldFileID, v))
+}
+
+// FileIDHasSuffix applies the HasSuffix predicate on the "file_id" field.
+func FileIDHasSuffix(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldHasSuffix(FieldFileID, v))
+}
+
+// FileIDIsNil applies the IsNil predicate on the "file_id" field.
+func FileIDIsNil() predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldIsNull(FieldFileID))
+}
+
+// FileIDNotNil applies the NotNil predicate on the "file_id" field.
+func FileIDNotNil() predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNotNull(FieldFileID))
+}
+
+// FileIDEqualFold applies the EqualFold predicate on the "file_id" field.
+func FileIDEqualFold(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldEqualFold(FieldFileID, v))
+}
+
+// FileIDContainsFold applies the ContainsFold predicate on the "file_id" field.
+func FileIDContainsFold(v string) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldContainsFold(FieldFileID, v))
+}
+
 // HasBlockedGroups applies the HasEdge predicate on the "blocked_groups" edge.
 func HasBlockedGroups() predicate.TrustCenterNDARequest {
 	return predicate.TrustCenterNDARequest(func(s *sql.Selector) {
@@ -1420,6 +1500,35 @@ func HasDocumentWith(preds ...predicate.DocumentData) predicate.TrustCenterNDARe
 		step := newDocumentStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.DocumentData
+		step.Edge.Schema = schemaConfig.TrustCenterNDARequest
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFile applies the HasEdge predicate on the "file" edge.
+func HasFile() predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterNDARequest
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFileWith applies the HasEdge predicate on the "file" edge with a given conditions (other predicates).
+func HasFileWith(preds ...predicate.File) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(func(s *sql.Selector) {
+		step := newFileStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.TrustCenterNDARequest
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

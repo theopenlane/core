@@ -2384,6 +2384,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterndarequesthistory.FieldApprovedByUserID: {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldApprovedByUserID},
 			trustcenterndarequesthistory.FieldSignedAt:         {Type: field.TypeTime, Column: trustcenterndarequesthistory.FieldSignedAt},
 			trustcenterndarequesthistory.FieldDocumentDataID:   {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldDocumentDataID},
+			trustcenterndarequesthistory.FieldFileID:           {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldFileID},
 		},
 	}
 	graph.Nodes[58] = &sqlgraph.Node{
@@ -12907,6 +12908,11 @@ func (f *TrustCenterNDARequestHistoryFilter) WhereSignedAt(p entql.TimeP) {
 // WhereDocumentDataID applies the entql string predicate on the document_data_id field.
 func (f *TrustCenterNDARequestHistoryFilter) WhereDocumentDataID(p entql.StringP) {
 	f.Where(p.Field(trustcenterndarequesthistory.FieldDocumentDataID))
+}
+
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *TrustCenterNDARequestHistoryFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(trustcenterndarequesthistory.FieldFileID))
 }
 
 // addPredicate implements the predicateAdder interface.

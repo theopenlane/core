@@ -117,6 +117,8 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestBulkCreatePayload_
 				return ec.fieldContext_TrustCenterNDARequest_signedAt(ctx, field)
 			case "documentDataID":
 				return ec.fieldContext_TrustCenterNDARequest_documentDataID(ctx, field)
+			case "fileID":
+				return ec.fieldContext_TrustCenterNDARequest_fileID(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterNDARequest_blockedGroups(ctx, field)
 			case "editors":
@@ -127,6 +129,8 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestBulkCreatePayload_
 				return ec.fieldContext_TrustCenterNDARequest_trustCenterDocs(ctx, field)
 			case "document":
 				return ec.fieldContext_TrustCenterNDARequest_document(ctx, field)
+			case "file":
+				return ec.fieldContext_TrustCenterNDARequest_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDARequest", field.Name)
 		},
@@ -194,6 +198,8 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestCreatePayload_trus
 				return ec.fieldContext_TrustCenterNDARequest_signedAt(ctx, field)
 			case "documentDataID":
 				return ec.fieldContext_TrustCenterNDARequest_documentDataID(ctx, field)
+			case "fileID":
+				return ec.fieldContext_TrustCenterNDARequest_fileID(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterNDARequest_blockedGroups(ctx, field)
 			case "editors":
@@ -204,6 +210,8 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestCreatePayload_trus
 				return ec.fieldContext_TrustCenterNDARequest_trustCenterDocs(ctx, field)
 			case "document":
 				return ec.fieldContext_TrustCenterNDARequest_document(ctx, field)
+			case "file":
+				return ec.fieldContext_TrustCenterNDARequest_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDARequest", field.Name)
 		},
@@ -300,6 +308,8 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestUpdatePayload_trus
 				return ec.fieldContext_TrustCenterNDARequest_signedAt(ctx, field)
 			case "documentDataID":
 				return ec.fieldContext_TrustCenterNDARequest_documentDataID(ctx, field)
+			case "fileID":
+				return ec.fieldContext_TrustCenterNDARequest_fileID(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterNDARequest_blockedGroups(ctx, field)
 			case "editors":
@@ -310,6 +320,8 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestUpdatePayload_trus
 				return ec.fieldContext_TrustCenterNDARequest_trustCenterDocs(ctx, field)
 			case "document":
 				return ec.fieldContext_TrustCenterNDARequest_document(ctx, field)
+			case "file":
+				return ec.fieldContext_TrustCenterNDARequest_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDARequest", field.Name)
 		},

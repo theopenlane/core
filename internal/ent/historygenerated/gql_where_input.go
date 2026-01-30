@@ -70682,6 +70682,23 @@ type TrustCenterNDARequestHistoryWhereInput struct {
 	DocumentDataIDNotNil       bool     `json:"documentDataIDNotNil,omitempty"`
 	DocumentDataIDEqualFold    *string  `json:"documentDataIDEqualFold,omitempty"`
 	DocumentDataIDContainsFold *string  `json:"documentDataIDContainsFold,omitempty"`
+
+	// "file_id" field predicates.
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIDNEQ          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIDGT           *string  `json:"fileIDGT,omitempty"`
+	FileIDGTE          *string  `json:"fileIDGTE,omitempty"`
+	FileIDLT           *string  `json:"fileIDLT,omitempty"`
+	FileIDLTE          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        bool     `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       bool     `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -71453,6 +71470,51 @@ func (i *TrustCenterNDARequestHistoryWhereInput) P() (predicate.TrustCenterNDARe
 	}
 	if i.DocumentDataIDContainsFold != nil {
 		predicates = append(predicates, trustcenterndarequesthistory.DocumentDataIDContainsFold(*i.DocumentDataIDContainsFold))
+	}
+	if i.FileID != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.FileIDEQ(*i.FileID))
+	}
+	if i.FileIDNEQ != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.FileIDNEQ(*i.FileIDNEQ))
+	}
+	if len(i.FileIDIn) > 0 {
+		predicates = append(predicates, trustcenterndarequesthistory.FileIDIn(i.FileIDIn...))
+	}
+	if len(i.FileIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequesthistory.FileIDNotIn(i.FileIDNotIn...))
+	}
+	if i.FileIDGT != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.FileIDGT(*i.FileIDGT))
+	}
+	if i.FileIDGTE != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.FileIDGTE(*i.FileIDGTE))
+	}
+	if i.FileIDLT != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.FileIDLT(*i.FileIDLT))
+	}
+	if i.FileIDLTE != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.FileIDLTE(*i.FileIDLTE))
+	}
+	if i.FileIDContains != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.FileIDContains(*i.FileIDContains))
+	}
+	if i.FileIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.FileIDHasPrefix(*i.FileIDHasPrefix))
+	}
+	if i.FileIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.FileIDHasSuffix(*i.FileIDHasSuffix))
+	}
+	if i.FileIDIsNil {
+		predicates = append(predicates, trustcenterndarequesthistory.FileIDIsNil())
+	}
+	if i.FileIDNotNil {
+		predicates = append(predicates, trustcenterndarequesthistory.FileIDNotNil())
+	}
+	if i.FileIDEqualFold != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.FileIDEqualFold(*i.FileIDEqualFold))
+	}
+	if i.FileIDContainsFold != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.FileIDContainsFold(*i.FileIDContainsFold))
 	}
 
 	switch len(predicates) {

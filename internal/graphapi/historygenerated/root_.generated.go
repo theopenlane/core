@@ -2405,23 +2405,28 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterNDARequestHistory struct {
-		AccessLevel   func(childComplexity int) int
-		CompanyName   func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Email         func(childComplexity int) int
-		FirstName     func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		LastName      func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		Reason        func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		Status        func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		TrustCenterID func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		AccessLevel      func(childComplexity int) int
+		ApprovedAt       func(childComplexity int) int
+		ApprovedByUserID func(childComplexity int) int
+		CompanyName      func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DocumentDataID   func(childComplexity int) int
+		Email            func(childComplexity int) int
+		FileID           func(childComplexity int) int
+		FirstName        func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		LastName         func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		Reason           func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		SignedAt         func(childComplexity int) int
+		Status           func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		TrustCenterID    func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	TrustCenterNDARequestHistoryConnection struct {
@@ -16149,6 +16154,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterNDARequestHistory.AccessLevel(childComplexity), true
 
+	case "TrustCenterNDARequestHistory.approvedAt":
+		if e.complexity.TrustCenterNDARequestHistory.ApprovedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.ApprovedAt(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.approvedByUserID":
+		if e.complexity.TrustCenterNDARequestHistory.ApprovedByUserID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.ApprovedByUserID(childComplexity), true
+
 	case "TrustCenterNDARequestHistory.companyName":
 		if e.complexity.TrustCenterNDARequestHistory.CompanyName == nil {
 			break
@@ -16170,12 +16189,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterNDARequestHistory.CreatedBy(childComplexity), true
 
+	case "TrustCenterNDARequestHistory.documentDataID":
+		if e.complexity.TrustCenterNDARequestHistory.DocumentDataID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.DocumentDataID(childComplexity), true
+
 	case "TrustCenterNDARequestHistory.email":
 		if e.complexity.TrustCenterNDARequestHistory.Email == nil {
 			break
 		}
 
 		return e.complexity.TrustCenterNDARequestHistory.Email(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.fileID":
+		if e.complexity.TrustCenterNDARequestHistory.FileID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.FileID(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.firstName":
 		if e.complexity.TrustCenterNDARequestHistory.FirstName == nil {
@@ -16225,6 +16258,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterNDARequestHistory.Ref(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.signedAt":
+		if e.complexity.TrustCenterNDARequestHistory.SignedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.SignedAt(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.status":
 		if e.complexity.TrustCenterNDARequestHistory.Status == nil {
@@ -50253,6 +50293,26 @@ type TrustCenterNDARequestHistory implements Node {
   status of the NDA request
   """
   status: TrustCenterNDARequestHistoryTrustCenterNDARequestStatus
+  """
+  timestamp when the request was approved
+  """
+  approvedAt: DateTime
+  """
+  ID of the user who approved the request
+  """
+  approvedByUserID: String
+  """
+  timestamp when the NDA was signed
+  """
+  signedAt: DateTime
+  """
+  ID of the signed NDA document data
+  """
+  documentDataID: String
+  """
+  ID of the template file at the time the NDA was signed
+  """
+  fileID: String
 }
 """
 A connection to a list of items.
@@ -50568,6 +50628,86 @@ input TrustCenterNDARequestHistoryWhereInput {
   statusNotIn: [TrustCenterNDARequestHistoryTrustCenterNDARequestStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  approved_at field predicates
+  """
+  approvedAt: DateTime
+  approvedAtNEQ: DateTime
+  approvedAtIn: [DateTime!]
+  approvedAtNotIn: [DateTime!]
+  approvedAtGT: DateTime
+  approvedAtGTE: DateTime
+  approvedAtLT: DateTime
+  approvedAtLTE: DateTime
+  approvedAtIsNil: Boolean
+  approvedAtNotNil: Boolean
+  """
+  approved_by_user_id field predicates
+  """
+  approvedByUserID: String
+  approvedByUserIDNEQ: String
+  approvedByUserIDIn: [String!]
+  approvedByUserIDNotIn: [String!]
+  approvedByUserIDGT: String
+  approvedByUserIDGTE: String
+  approvedByUserIDLT: String
+  approvedByUserIDLTE: String
+  approvedByUserIDContains: String
+  approvedByUserIDHasPrefix: String
+  approvedByUserIDHasSuffix: String
+  approvedByUserIDIsNil: Boolean
+  approvedByUserIDNotNil: Boolean
+  approvedByUserIDEqualFold: String
+  approvedByUserIDContainsFold: String
+  """
+  signed_at field predicates
+  """
+  signedAt: DateTime
+  signedAtNEQ: DateTime
+  signedAtIn: [DateTime!]
+  signedAtNotIn: [DateTime!]
+  signedAtGT: DateTime
+  signedAtGTE: DateTime
+  signedAtLT: DateTime
+  signedAtLTE: DateTime
+  signedAtIsNil: Boolean
+  signedAtNotNil: Boolean
+  """
+  document_data_id field predicates
+  """
+  documentDataID: String
+  documentDataIDNEQ: String
+  documentDataIDIn: [String!]
+  documentDataIDNotIn: [String!]
+  documentDataIDGT: String
+  documentDataIDGTE: String
+  documentDataIDLT: String
+  documentDataIDLTE: String
+  documentDataIDContains: String
+  documentDataIDHasPrefix: String
+  documentDataIDHasSuffix: String
+  documentDataIDIsNil: Boolean
+  documentDataIDNotNil: Boolean
+  documentDataIDEqualFold: String
+  documentDataIDContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: String
+  fileIDNEQ: String
+  fileIDIn: [String!]
+  fileIDNotIn: [String!]
+  fileIDGT: String
+  fileIDGTE: String
+  fileIDLT: String
+  fileIDLTE: String
+  fileIDContains: String
+  fileIDHasPrefix: String
+  fileIDHasSuffix: String
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: String
+  fileIDContainsFold: String
 }
 type TrustCenterSettingHistory implements Node {
   id: ID!

@@ -2896,6 +2896,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterndarequest.FieldApprovedByUserID: {Type: field.TypeString, Column: trustcenterndarequest.FieldApprovedByUserID},
 			trustcenterndarequest.FieldSignedAt:         {Type: field.TypeTime, Column: trustcenterndarequest.FieldSignedAt},
 			trustcenterndarequest.FieldDocumentDataID:   {Type: field.TypeString, Column: trustcenterndarequest.FieldDocumentDataID},
+			trustcenterndarequest.FieldFileID:           {Type: field.TypeString, Column: trustcenterndarequest.FieldFileID},
 		},
 	}
 	graph.Nodes[82] = &sqlgraph.Node{
@@ -13889,6 +13890,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterNDARequest",
 		"DocumentData",
+	)
+	graph.MustAddE(
+		"file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.FileTable,
+			Columns: []string{trustcenterndarequest.FileColumn},
+			Bidi:    false,
+		},
+		"TrustCenterNDARequest",
+		"File",
 	)
 	graph.MustAddE(
 		"blocked_groups",
@@ -39375,6 +39388,11 @@ func (f *TrustCenterNDARequestFilter) WhereDocumentDataID(p entql.StringP) {
 	f.Where(p.Field(trustcenterndarequest.FieldDocumentDataID))
 }
 
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *TrustCenterNDARequestFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(trustcenterndarequest.FieldFileID))
+}
+
 // WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
 func (f *TrustCenterNDARequestFilter) WhereHasBlockedGroups() {
 	f.Where(entql.HasEdge("blocked_groups"))
@@ -39439,6 +39457,20 @@ func (f *TrustCenterNDARequestFilter) WhereHasDocument() {
 // WhereHasDocumentWith applies a predicate to check if query has an edge document with a given conditions (other predicates).
 func (f *TrustCenterNDARequestFilter) WhereHasDocumentWith(preds ...predicate.DocumentData) {
 	f.Where(entql.HasEdgeWith("document", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFile applies a predicate to check if query has an edge file.
+func (f *TrustCenterNDARequestFilter) WhereHasFile() {
+	f.Where(entql.HasEdge("file"))
+}
+
+// WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
+func (f *TrustCenterNDARequestFilter) WhereHasFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

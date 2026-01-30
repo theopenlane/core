@@ -2530,6 +2530,7 @@ var (
 		{Name: "approved_by_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "signed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterNdaRequestHistoryTable holds the schema information for the "trust_center_nda_request_history" table.
 	TrustCenterNdaRequestHistoryTable = &schema.Table{

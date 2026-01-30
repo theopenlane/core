@@ -20203,6 +20203,10 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromCreate(ctx context.Cont
 		create = create.SetNillableDocumentDataID(&documentDataID)
 	}
 
+	if fileID, exists := m.FileID(); exists {
+		create = create.SetNillableFileID(&fileID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -20348,6 +20352,12 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromUpdate(ctx context.Cont
 			create = create.SetNillableDocumentDataID(trustcenterndarequest.DocumentDataID)
 		}
 
+		if fileID, exists := m.FileID(); exists {
+			create = create.SetNillableFileID(&fileID)
+		} else {
+			create = create.SetNillableFileID(trustcenterndarequest.FileID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -20402,6 +20412,7 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromDelete(ctx context.Cont
 			SetNillableApprovedByUserID(trustcenterndarequest.ApprovedByUserID).
 			SetNillableSignedAt(trustcenterndarequest.SignedAt).
 			SetNillableDocumentDataID(trustcenterndarequest.DocumentDataID).
+			SetNillableFileID(trustcenterndarequest.FileID).
 			Save(ctx)
 		if err != nil {
 			return err

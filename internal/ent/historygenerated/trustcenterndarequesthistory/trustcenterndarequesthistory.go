@@ -64,6 +64,8 @@ const (
 	FieldSignedAt = "signed_at"
 	// FieldDocumentDataID holds the string denoting the document_data_id field in the database.
 	FieldDocumentDataID = "document_data_id"
+	// FieldFileID holds the string denoting the file_id field in the database.
+	FieldFileID = "file_id"
 	// Table holds the table name of the trustcenterndarequesthistory in the database.
 	Table = "trust_center_nda_request_history"
 )
@@ -93,6 +95,7 @@ var Columns = []string{
 	FieldApprovedByUserID,
 	FieldSignedAt,
 	FieldDocumentDataID,
+	FieldFileID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -273,6 +276,11 @@ func BySignedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDocumentDataID orders the results by the document_data_id field.
 func ByDocumentDataID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDocumentDataID, opts...).ToFunc()
+}
+
+// ByFileID orders the results by the file_id field.
+func ByFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFileID, opts...).ToFunc()
 }
 
 var (
