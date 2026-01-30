@@ -104,5 +104,6 @@ func (d DocumentData) Policy() ent.Policy {
 func (d DocumentData) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookDocumentDataTrustCenterNDA(),
+		hooks.HookDocumentDataFile(),
 	}
 }

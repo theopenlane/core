@@ -1900,6 +1900,8 @@ func init() {
 	documentdata.Hooks[7] = documentdataMixinHooks7[0]
 
 	documentdata.Hooks[8] = documentdataHooks[0]
+
+	documentdata.Hooks[9] = documentdataHooks[1]
 	documentdataMixinInters1 := documentdataMixin[1].Interceptors()
 	documentdataMixinInters5 := documentdataMixin[5].Interceptors()
 	documentdata.Interceptors[0] = documentdataMixinInters1[0]

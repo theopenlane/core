@@ -128,7 +128,7 @@ type MutationResolver interface {
 	CreateDocumentData(ctx context.Context, input generated.CreateDocumentDataInput) (*model.DocumentDataCreatePayload, error)
 	CreateBulkDocumentData(ctx context.Context, input []*generated.CreateDocumentDataInput) (*model.DocumentDataBulkCreatePayload, error)
 	CreateBulkCSVDocumentData(ctx context.Context, input graphql.Upload) (*model.DocumentDataBulkCreatePayload, error)
-	UpdateDocumentData(ctx context.Context, id string, input generated.UpdateDocumentDataInput) (*model.DocumentDataUpdatePayload, error)
+	UpdateDocumentData(ctx context.Context, id string, input generated.UpdateDocumentDataInput, documentDataFile *graphql.Upload) (*model.DocumentDataUpdatePayload, error)
 	DeleteDocumentData(ctx context.Context, id string) (*model.DocumentDataDeletePayload, error)
 	DeleteBulkDocumentData(ctx context.Context, ids []string) (*model.DocumentDataBulkDeletePayload, error)
 	CreateEntity(ctx context.Context, input generated.CreateEntityInput) (*model.EntityCreatePayload, error)
@@ -4822,6 +4822,11 @@ func (ec *executionContext) field_Mutation_updateDocumentData_args(ctx context.C
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "documentDataFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["documentDataFile"] = arg2
 	return args, nil
 }
 
@@ -11688,7 +11693,7 @@ func (ec *executionContext) _Mutation_updateDocumentData(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateDocumentData,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateDocumentData(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDocumentDataInput))
+			return ec.resolvers.Mutation().UpdateDocumentData(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDocumentDataInput), fc.Args["documentDataFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNDocumentDataUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataUpdatePayload,

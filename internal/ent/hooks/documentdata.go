@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/objects"
 )
 
 var (
@@ -27,6 +28,7 @@ var (
 	errValidationFailed                     = errors.New("validation failed")
 	errMustBeAnonymousUser                  = errors.New("must be an anonymous user")
 	errMissingResponse                      = errors.New("missing response")
+	errOnlyOneDocumentData                  = errors.New("you can only upload one document data file for an nda")
 )
 
 // HookDocumentDataTrustCenterNDA runs on document data create mutations to ensure trust center NDA document submissions are valid
@@ -142,6 +144,60 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 			return v, err
 		})
 	}, ent.OpCreate)
+}
+
+// HookDocumentDataFile handles file uploads and attaches them to document data.
+// restricted to system admins updating NDA documents only for now in riverqueue.
+// the old/regular case of adding FileIDs to mutations will still be accepted for non admins.
+func HookDocumentDataFile() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.DocumentDataFunc(func(ctx context.Context, m *generated.DocumentDataMutation) (generated.Value, error) {
+			fileIDs := objects.GetFileIDsFromContext(ctx)
+			if len(fileIDs) == 0 {
+				return next.Mutate(ctx, m)
+			}
+
+			if len(fileIDs) > 1 {
+				return nil, errOnlyOneDocumentData
+			}
+
+			if !auth.IsSystemAdminFromContext(ctx) {
+				return nil, generated.ErrPermissionDenied
+			}
+
+			id, err := m.OldTemplateID(ctx)
+			if err != nil || id == "" {
+				return nil, errMissingTemplate
+			}
+
+			exists, err := m.Client().Template.Query().
+				Select(template.FieldKind).
+				Where(template.KindEQ(enums.TemplateKindTrustCenterNda)).
+				Where(template.ID(id)).
+				Exist(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			if !exists {
+				return nil, generated.ErrPermissionDenied
+			}
+
+			adapter := objects.NewGenericMutationAdapter(m,
+				func(mut *generated.DocumentDataMutation) (string, bool) { return mut.ID() },
+				func(mut *generated.DocumentDataMutation) string { return mut.Type() },
+			)
+
+			ctx, err = objects.ProcessFilesForMutation(ctx, adapter, "documentDataFile")
+			if err != nil {
+				return nil, err
+			}
+
+			m.AddFileIDs(fileIDs...)
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpUpdateOne)
 }
 
 // validateTrustCenterNDAJSON validates the JSON against the schema and checks the trust center id, email, and user id match the authenticated user
