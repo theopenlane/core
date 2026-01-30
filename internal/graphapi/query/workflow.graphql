@@ -1,0 +1,729 @@
+query GetActionPlanWorkflowStatus($actionPlanId: ID!) {
+  actionPlan(id: $actionPlanId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      id
+      identityHolderID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      state
+      subcontrolID
+      tags
+      updatedAt
+      updatedBy
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetActionPlanWorkflowTimeline($actionPlanId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  actionPlan(id: $actionPlanId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetCampaignTargetWorkflowStatus($campaignTargetId: ID!) {
+  campaignTarget(id: $campaignTargetId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      id
+      identityHolderID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      state
+      subcontrolID
+      tags
+      updatedAt
+      updatedBy
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetCampaignTargetWorkflowTimeline($campaignTargetId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  campaignTarget(id: $campaignTargetId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetCampaignWorkflowStatus($campaignId: ID!) {
+  campaign(id: $campaignId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      id
+      identityHolderID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      state
+      subcontrolID
+      tags
+      updatedAt
+      updatedBy
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetCampaignWorkflowTimeline($campaignId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  campaign(id: $campaignId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetControlWorkflowStatus($controlId: ID!) {
+  control(id: $controlId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      id
+      identityHolderID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      state
+      subcontrolID
+      tags
+      updatedAt
+      updatedBy
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetControlWorkflowTimeline($controlId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  control(id: $controlId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetEvidenceWorkflowStatus($evidenceId: ID!) {
+  evidence(id: $evidenceId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      id
+      identityHolderID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      state
+      subcontrolID
+      tags
+      updatedAt
+      updatedBy
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetEvidenceWorkflowTimeline($evidenceId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  evidence(id: $evidenceId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetIdentityHolderWorkflowStatus($identityHolderId: ID!) {
+  identityHolder(id: $identityHolderId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      id
+      identityHolderID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      state
+      subcontrolID
+      tags
+      updatedAt
+      updatedBy
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetIdentityHolderWorkflowTimeline($identityHolderId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  identityHolder(id: $identityHolderId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetInternalPolicyWorkflowStatus($internalPolicyId: ID!) {
+  internalPolicy(id: $internalPolicyId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      id
+      identityHolderID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      state
+      subcontrolID
+      tags
+      updatedAt
+      updatedBy
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetInternalPolicyWorkflowTimeline($internalPolicyId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  internalPolicy(id: $internalPolicyId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetPlatformWorkflowStatus($platformId: ID!) {
+  platform(id: $platformId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      id
+      identityHolderID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      state
+      subcontrolID
+      tags
+      updatedAt
+      updatedBy
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetPlatformWorkflowTimeline($platformId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  platform(id: $platformId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetProcedureWorkflowStatus($procedureId: ID!) {
+  procedure(id: $procedureId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      id
+      identityHolderID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      state
+      subcontrolID
+      tags
+      updatedAt
+      updatedBy
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetProcedureWorkflowTimeline($procedureId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  procedure(id: $procedureId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetSubcontrolWorkflowStatus($subcontrolId: ID!) {
+  subcontrol(id: $subcontrolId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      id
+      identityHolderID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      state
+      subcontrolID
+      tags
+      updatedAt
+      updatedBy
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetSubcontrolWorkflowTimeline($subcontrolId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  subcontrol(id: $subcontrolId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}

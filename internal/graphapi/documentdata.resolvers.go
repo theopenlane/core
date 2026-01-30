@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -55,7 +56,7 @@ func (r *mutationResolver) CreateBulkDocumentData(ctx context.Context, input []*
 
 // CreateBulkCSVDocumentData is the resolver for the createBulkCSVDocumentData field.
 func (r *mutationResolver) CreateBulkCSVDocumentData(ctx context.Context, input graphql.Upload) (*model.DocumentDataBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateDocumentDataInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.DocumentDataCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -71,10 +72,23 @@ func (r *mutationResolver) CreateBulkCSVDocumentData(ctx context.Context, input 
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateDocumentData(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "DocumentData", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateDocumentDataInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateDocumentData(ctx, inputs)
 }
 
 // UpdateDocumentData is the resolver for the updateDocumentData field.
@@ -126,6 +140,35 @@ func (r *mutationResolver) DeleteBulkDocumentData(ctx context.Context, ids []str
 	}
 
 	return r.bulkDeleteDocumentData(ctx, ids)
+}
+
+// UpdateBulkDocumentData is the resolver for the updateBulkDocumentData field.
+func (r *mutationResolver) UpdateBulkDocumentData(ctx context.Context, ids []string, input generated.UpdateDocumentDataInput) (*model.DocumentDataBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateDocumentData(ctx, ids, input)
+}
+
+// UpdateBulkCSVDocumentData is the resolver for the updateBulkCSVDocumentData field.
+func (r *mutationResolver) UpdateBulkCSVDocumentData(ctx context.Context, input graphql.Upload) (*model.DocumentDataBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.DocumentDataCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "documentdata"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "DocumentData", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVDocumentData(ctx, data)
 }
 
 // DocumentData is the resolver for the documentData field.

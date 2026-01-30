@@ -10,6 +10,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
@@ -65,7 +66,7 @@ func (r *mutationResolver) CreateBulkTrustCenterNDARequest(ctx context.Context, 
 
 // CreateBulkCSVTrustCenterNDARequest is the resolver for the createBulkCSVTrustCenterNDARequest field.
 func (r *mutationResolver) CreateBulkCSVTrustCenterNDARequest(ctx context.Context, input graphql.Upload) (*model.TrustCenterNDARequestBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateTrustCenterNDARequestInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.TrustCenterNDARequestCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -76,7 +77,16 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterNDARequest(ctx context.Contex
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	return r.bulkCreateTrustCenterNDARequest(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "TrustCenterNDARequest", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateTrustCenterNDARequestInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateTrustCenterNDARequest(ctx, inputs)
 }
 
 // UpdateTrustCenterNDARequest is the resolver for the updateTrustCenterNDARequest field.

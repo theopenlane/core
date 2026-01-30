@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): OrgMembershipBulkDeletePayload!
+    """
+    Update multiple existing orgMemberships
+    """
+    updateBulkOrgMembership(
+        """
+        IDs of the orgMemberships to update
+        """
+        ids: [ID!]!
+        """
+        values to update the orgMemberships with
+        """
+        input: UpdateOrgMembershipInput!
+    ): OrgMembershipBulkUpdatePayload!
+    """
+    Update multiple existing orgMemberships via file upload
+    """
+    updateBulkCSVOrgMembership(
+        """
+        csv file containing values of the orgMembership, must include ID column
+        """
+        input: Upload!
+    ): OrgMembershipBulkUpdatePayload!
 }
 
 """
@@ -123,4 +145,18 @@ type OrgMembershipBulkDeletePayload {
 
 extend input OrgMembershipWhereInput {
   hasUserWith: [UserWhereInput!]
+}
+
+"""
+Return response for updateBulkOrgMembership mutation
+"""
+type OrgMembershipBulkUpdatePayload {
+    """
+    Updated orgMemberships
+    """
+    orgMemberships: [OrgMembership!]
+    """
+    IDs of the updated orgMemberships
+    """
+    updatedIDs: [ID!]
 }

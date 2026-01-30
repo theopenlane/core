@@ -222,6 +222,200 @@ func (ec *executionContext) fieldContext_GroupBulkDeletePayload_deletedIDs(_ con
 	return fc, nil
 }
 
+func (ec *executionContext) _GroupBulkUpdatePayload_groups(ctx context.Context, field graphql.CollectedField, obj *model.GroupBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupBulkUpdatePayload_groups,
+		func(ctx context.Context) (any, error) {
+			return obj.Groups, nil
+		},
+		nil,
+		ec.marshalOGroup2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_GroupBulkUpdatePayload_groups(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GroupBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Group_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Group_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Group_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Group_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Group_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Group_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_Group_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Group_ownerID(ctx, field)
+			case "name":
+				return ec.fieldContext_Group_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Group_description(ctx, field)
+			case "isManaged":
+				return ec.fieldContext_Group_isManaged(ctx, field)
+			case "gravatarLogoURL":
+				return ec.fieldContext_Group_gravatarLogoURL(ctx, field)
+			case "logoURL":
+				return ec.fieldContext_Group_logoURL(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Group_displayName(ctx, field)
+			case "scimExternalID":
+				return ec.fieldContext_Group_scimExternalID(ctx, field)
+			case "scimDisplayName":
+				return ec.fieldContext_Group_scimDisplayName(ctx, field)
+			case "scimActive":
+				return ec.fieldContext_Group_scimActive(ctx, field)
+			case "scimGroupMailing":
+				return ec.fieldContext_Group_scimGroupMailing(ctx, field)
+			case "owner":
+				return ec.fieldContext_Group_owner(ctx, field)
+			case "programEditors":
+				return ec.fieldContext_Group_programEditors(ctx, field)
+			case "programBlockedGroups":
+				return ec.fieldContext_Group_programBlockedGroups(ctx, field)
+			case "programViewers":
+				return ec.fieldContext_Group_programViewers(ctx, field)
+			case "riskEditors":
+				return ec.fieldContext_Group_riskEditors(ctx, field)
+			case "riskBlockedGroups":
+				return ec.fieldContext_Group_riskBlockedGroups(ctx, field)
+			case "riskViewers":
+				return ec.fieldContext_Group_riskViewers(ctx, field)
+			case "controlObjectiveEditors":
+				return ec.fieldContext_Group_controlObjectiveEditors(ctx, field)
+			case "controlObjectiveBlockedGroups":
+				return ec.fieldContext_Group_controlObjectiveBlockedGroups(ctx, field)
+			case "controlObjectiveViewers":
+				return ec.fieldContext_Group_controlObjectiveViewers(ctx, field)
+			case "narrativeEditors":
+				return ec.fieldContext_Group_narrativeEditors(ctx, field)
+			case "narrativeBlockedGroups":
+				return ec.fieldContext_Group_narrativeBlockedGroups(ctx, field)
+			case "narrativeViewers":
+				return ec.fieldContext_Group_narrativeViewers(ctx, field)
+			case "controlImplementationEditors":
+				return ec.fieldContext_Group_controlImplementationEditors(ctx, field)
+			case "controlImplementationBlockedGroups":
+				return ec.fieldContext_Group_controlImplementationBlockedGroups(ctx, field)
+			case "controlImplementationViewers":
+				return ec.fieldContext_Group_controlImplementationViewers(ctx, field)
+			case "scanEditors":
+				return ec.fieldContext_Group_scanEditors(ctx, field)
+			case "scanBlockedGroups":
+				return ec.fieldContext_Group_scanBlockedGroups(ctx, field)
+			case "scanViewers":
+				return ec.fieldContext_Group_scanViewers(ctx, field)
+			case "entityEditors":
+				return ec.fieldContext_Group_entityEditors(ctx, field)
+			case "entityBlockedGroups":
+				return ec.fieldContext_Group_entityBlockedGroups(ctx, field)
+			case "entityViewers":
+				return ec.fieldContext_Group_entityViewers(ctx, field)
+			case "actionPlanEditors":
+				return ec.fieldContext_Group_actionPlanEditors(ctx, field)
+			case "actionPlanBlockedGroups":
+				return ec.fieldContext_Group_actionPlanBlockedGroups(ctx, field)
+			case "actionPlanViewers":
+				return ec.fieldContext_Group_actionPlanViewers(ctx, field)
+			case "platformEditors":
+				return ec.fieldContext_Group_platformEditors(ctx, field)
+			case "platformBlockedGroups":
+				return ec.fieldContext_Group_platformBlockedGroups(ctx, field)
+			case "platformViewers":
+				return ec.fieldContext_Group_platformViewers(ctx, field)
+			case "campaignEditors":
+				return ec.fieldContext_Group_campaignEditors(ctx, field)
+			case "campaignBlockedGroups":
+				return ec.fieldContext_Group_campaignBlockedGroups(ctx, field)
+			case "campaignViewers":
+				return ec.fieldContext_Group_campaignViewers(ctx, field)
+			case "procedureEditors":
+				return ec.fieldContext_Group_procedureEditors(ctx, field)
+			case "procedureBlockedGroups":
+				return ec.fieldContext_Group_procedureBlockedGroups(ctx, field)
+			case "internalPolicyEditors":
+				return ec.fieldContext_Group_internalPolicyEditors(ctx, field)
+			case "internalPolicyBlockedGroups":
+				return ec.fieldContext_Group_internalPolicyBlockedGroups(ctx, field)
+			case "controlEditors":
+				return ec.fieldContext_Group_controlEditors(ctx, field)
+			case "controlBlockedGroups":
+				return ec.fieldContext_Group_controlBlockedGroups(ctx, field)
+			case "mappedControlEditors":
+				return ec.fieldContext_Group_mappedControlEditors(ctx, field)
+			case "mappedControlBlockedGroups":
+				return ec.fieldContext_Group_mappedControlBlockedGroups(ctx, field)
+			case "setting":
+				return ec.fieldContext_Group_setting(ctx, field)
+			case "users":
+				return ec.fieldContext_Group_users(ctx, field)
+			case "events":
+				return ec.fieldContext_Group_events(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Group_integrations(ctx, field)
+			case "files":
+				return ec.fieldContext_Group_files(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Group_tasks(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Group_campaigns(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_Group_campaignTargets(ctx, field)
+			case "members":
+				return ec.fieldContext_Group_members(ctx, field)
+			case "permissions":
+				return ec.fieldContext_Group_permissions(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Group", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _GroupBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.GroupBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_GroupBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GroupBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _GroupCreatePayload_group(ctx context.Context, field graphql.CollectedField, obj *model.GroupCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -668,6 +862,44 @@ func (ec *executionContext) _GroupBulkDeletePayload(ctx context.Context, sel ast
 	return out
 }
 
+var groupBulkUpdatePayloadImplementors = []string{"GroupBulkUpdatePayload"}
+
+func (ec *executionContext) _GroupBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.GroupBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, groupBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("GroupBulkUpdatePayload")
+		case "groups":
+			out.Values[i] = ec._GroupBulkUpdatePayload_groups(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._GroupBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var groupCreatePayloadImplementors = []string{"GroupCreatePayload"}
 
 func (ec *executionContext) _GroupCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.GroupCreatePayload) graphql.Marshaler {
@@ -815,6 +1047,20 @@ func (ec *executionContext) marshalNGroupBulkDeletePayload2ᚖgithubᚗcomᚋthe
 		return graphql.Null
 	}
 	return ec._GroupBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNGroupBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupBulkUpdatePayload) graphql.Marshaler {
+	return ec._GroupBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNGroupBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._GroupBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNGroupCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupCreatePayload) graphql.Marshaler {

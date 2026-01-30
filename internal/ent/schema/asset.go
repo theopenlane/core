@@ -92,7 +92,10 @@ func (Asset) Fields() []ent.Field {
 			),
 		field.String("source_platform_id").
 			Comment("the platform that sourced the asset record").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("SourcePlatformName").MatchOn("name").CreateIfMissing(),
+			),
 		field.String("source_identifier").
 			Comment("the identifier used by the source platform for the asset").
 			Optional().

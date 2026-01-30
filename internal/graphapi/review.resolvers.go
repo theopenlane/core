@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -35,12 +36,20 @@ func (r *mutationResolver) CreateBulkReview(ctx context.Context, input []*genera
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	return r.bulkCreateReview(ctx, input)
 }
 
 // CreateBulkCSVReview is the resolver for the createBulkCSVReview field.
 func (r *mutationResolver) CreateBulkCSVReview(ctx context.Context, input graphql.Upload) (*model.ReviewBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateReviewInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.ReviewCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -51,7 +60,28 @@ func (r *mutationResolver) CreateBulkCSVReview(ctx context.Context, input graphq
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	return r.bulkCreateReview(ctx, data)
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Review", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateReviewInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateReview(ctx, inputs)
 }
 
 // UpdateReview is the resolver for the updateReview field.

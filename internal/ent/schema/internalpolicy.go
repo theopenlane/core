@@ -54,7 +54,13 @@ func (i InternalPolicy) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeToWithPagination(i, ControlObjective{}),
 		defaultEdgeToWithPagination(i, ControlImplementation{}),
-		defaultEdgeToWithPagination(i, Control{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: i,
+			edgeSchema: Control{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
+			},
+		}),
 		defaultEdgeToWithPagination(i, Subcontrol{}),
 		defaultEdgeToWithPagination(i, Procedure{}),
 		defaultEdgeToWithPagination(i, Narrative{}),

@@ -1,0 +1,361 @@
+{
+  "ActionPlan": [
+    {
+      "csvColumn": "ApproverGroupName",
+      "targetField": "ApproverID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    },
+    {
+      "csvColumn": "DocumentDelegateGroupName",
+      "targetField": "DelegateID",
+      "isSlice": false
+    }
+  ],
+  "Assessment": [
+    {
+      "csvColumn": "AssessmentTemplateRef",
+      "targetField": "TemplateID",
+      "isSlice": false
+    }
+  ],
+  "AssessmentResponse": [
+    {
+      "csvColumn": "AssessmentIdentityHolderEmail",
+      "targetField": "IdentityHolderID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "AssessmentResponseEntityName",
+      "targetField": "EntityID",
+      "isSlice": false
+    }
+  ],
+  "Asset": [
+    {
+      "csvColumn": "InternalOwnerGroupName",
+      "targetField": "InternalOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerUserEmail",
+      "targetField": "InternalOwnerUserID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "SourcePlatformName",
+      "targetField": "SourcePlatformID",
+      "isSlice": false
+    }
+  ],
+  "Campaign": [
+    {
+      "csvColumn": "CampaignEntityName",
+      "targetField": "EntityID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "CampaignTemplateRef",
+      "targetField": "TemplateID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerGroupName",
+      "targetField": "InternalOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerUserEmail",
+      "targetField": "InternalOwnerUserID",
+      "isSlice": false
+    }
+  ],
+  "CampaignTarget": [
+    {
+      "csvColumn": "CampaignTargetGroupName",
+      "targetField": "GroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "CampaignTargetUserEmail",
+      "targetField": "UserID",
+      "isSlice": false
+    }
+  ],
+  "Control": [
+    {
+      "csvColumn": "ControlDelegateGroupName",
+      "targetField": "DelegateID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ControlOwnerGroupName",
+      "targetField": "ControlOwnerID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ResponsiblePartyEntityName",
+      "targetField": "ResponsiblePartyID",
+      "isSlice": false
+    }
+  ],
+  "Entity": [
+    {
+      "csvColumn": "InternalOwnerGroupName",
+      "targetField": "InternalOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerUserEmail",
+      "targetField": "InternalOwnerUserID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ReviewedByGroupName",
+      "targetField": "ReviewedByGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ReviewedByUserEmail",
+      "targetField": "ReviewedByUserID",
+      "isSlice": false
+    }
+  ],
+  "Evidence": [
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    }
+  ],
+  "IdentityHolder": [
+    {
+      "csvColumn": "EmployerEntityName",
+      "targetField": "EmployerEntityID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "IdentityHolderUserEmail",
+      "targetField": "UserID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerGroupName",
+      "targetField": "InternalOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerUserEmail",
+      "targetField": "InternalOwnerUserID",
+      "isSlice": false
+    }
+  ],
+  "InternalPolicy": [
+    {
+      "csvColumn": "ApproverGroupName",
+      "targetField": "ApproverID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    },
+    {
+      "csvColumn": "DocumentDelegateGroupName",
+      "targetField": "DelegateID",
+      "isSlice": false
+    }
+  ],
+  "Platform": [
+    {
+      "csvColumn": "BusinessOwnerGroupName",
+      "targetField": "BusinessOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "BusinessOwnerUserEmail",
+      "targetField": "BusinessOwnerUserID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerGroupName",
+      "targetField": "InternalOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerUserEmail",
+      "targetField": "InternalOwnerUserID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "PlatformOwnerEmail",
+      "targetField": "PlatformOwnerID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "SecurityOwnerGroupName",
+      "targetField": "SecurityOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "SecurityOwnerUserEmail",
+      "targetField": "SecurityOwnerUserID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "TechnicalOwnerGroupName",
+      "targetField": "TechnicalOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "TechnicalOwnerUserEmail",
+      "targetField": "TechnicalOwnerUserID",
+      "isSlice": false
+    }
+  ],
+  "Procedure": [
+    {
+      "csvColumn": "ApproverGroupName",
+      "targetField": "ApproverID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "DocumentDelegateGroupName",
+      "targetField": "DelegateID",
+      "isSlice": false
+    }
+  ],
+  "Program": [
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    },
+    {
+      "csvColumn": "ProgramOwnerEmail",
+      "targetField": "ProgramOwnerID",
+      "isSlice": false
+    }
+  ],
+  "Remediation": [
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    }
+  ],
+  "Review": [
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    }
+  ],
+  "Risk": [
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    },
+    {
+      "csvColumn": "RiskDelegateGroupName",
+      "targetField": "DelegateID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "StakeholderGroupName",
+      "targetField": "StakeholderID",
+      "isSlice": false
+    }
+  ],
+  "Scan": [
+    {
+      "csvColumn": "AssignedToGroupName",
+      "targetField": "AssignedToGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "AssignedToUserEmail",
+      "targetField": "AssignedToUserID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "GeneratedByPlatformName",
+      "targetField": "GeneratedByPlatformID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "PerformedByGroupName",
+      "targetField": "PerformedByGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "PerformedByUserEmail",
+      "targetField": "PerformedByUserID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ReviewedByGroupName",
+      "targetField": "ReviewedByGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ReviewedByUserEmail",
+      "targetField": "ReviewedByUserID",
+      "isSlice": false
+    }
+  ],
+  "ScheduledJob": [
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    }
+  ],
+  "Subcontrol": [
+    {
+      "csvColumn": "ControlDelegateGroupName",
+      "targetField": "DelegateID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ControlOwnerGroupName",
+      "targetField": "ControlOwnerID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ResponsiblePartyEntityName",
+      "targetField": "ResponsiblePartyID",
+      "isSlice": false
+    }
+  ],
+  "Task": [
+    {
+      "csvColumn": "AssigneeEmail",
+      "targetField": "AssigneeID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "AssignerEmail",
+      "targetField": "AssignerID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    }
+  ],
+  "Vulnerability": [
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    }
+  ]
+}

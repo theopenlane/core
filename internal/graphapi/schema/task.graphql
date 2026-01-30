@@ -84,6 +84,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): TaskBulkDeletePayload!
+    """
+    Update multiple existing tasks via file upload
+    """
+    updateBulkCSVTask(
+        """
+        csv file containing values of the task, must include ID column
+        """
+        input: Upload!
+    ): TaskBulkUpdatePayload!
 }
 
 """

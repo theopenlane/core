@@ -28,14 +28,21 @@ type AssessmentResponse struct {
 	ent.Schema
 }
 
+// SchemaAssessmentResponse is the stable schema name for assessment responses.
 const SchemaAssessmentResponse = "assessment_response"
 
+// Name returns the schema name for AssessmentResponse.
 func (AssessmentResponse) Name() string { return SchemaAssessmentResponse }
+
+// GetType returns the schema's Type reference.
 func (AssessmentResponse) GetType() any { return AssessmentResponse.Type }
+
+// PluralName returns the plural schema name for AssessmentResponse.
 func (AssessmentResponse) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaAssessmentResponse)
 }
 
+// Fields defines the AssessmentResponse fields.
 func (AssessmentResponse) Fields() []ent.Field {
 	return []ent.Field{
 
@@ -56,10 +63,16 @@ func (AssessmentResponse) Fields() []ent.Field {
 			Optional(),
 		field.String("identity_holder_id").
 			Comment("the identity holder record for the recipient").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("AssessmentIdentityHolderEmail").MatchOn("email"),
+			),
 		field.String("entity_id").
 			Comment("the entity associated with this assessment response").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("AssessmentResponseEntityName").MatchOn("name"),
+			),
 
 		field.String("email").
 			Comment("the email address of the recipient").
@@ -169,6 +182,7 @@ func (AssessmentResponse) Fields() []ent.Field {
 	}
 }
 
+// Mixin configures shared mixins for AssessmentResponse.
 func (ar AssessmentResponse) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
@@ -181,6 +195,7 @@ func (ar AssessmentResponse) Mixin() []ent.Mixin {
 	}.getMixins(ar)
 }
 
+// Edges defines the AssessmentResponse relationships.
 func (ar AssessmentResponse) Edges() []ent.Edge {
 	return []ent.Edge{
 		uniqueEdgeFrom(&edgeDefinition{
@@ -229,6 +244,7 @@ func (ar AssessmentResponse) Edges() []ent.Edge {
 	}
 }
 
+// Policy configures authorization for AssessmentResponse operations.
 func (AssessmentResponse) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
@@ -259,10 +275,15 @@ func (AssessmentResponse) Interceptors() []ent.Interceptor {
 // Indexes of the AssessmentResponse
 func (AssessmentResponse) Indexes() []ent.Index {
 	return []ent.Index{
-		// one response per user per assessment
-		index.Fields("assessment_id", "email").
+		// one response per user per assessment when not tied to a campaign
+		index.Fields("assessment_id", "email", "is_test").
 			Unique().
-			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+			Annotations(entsql.IndexWhere("deleted_at is NULL AND campaign_id IS NULL")),
+
+		// one response per campaign + assessment + recipient + test flag
+		index.Fields("campaign_id", "assessment_id", "email", "is_test").
+			Unique().
+			Annotations(entsql.IndexWhere("deleted_at is NULL AND campaign_id IS NOT NULL")),
 
 		index.Fields("campaign_id"),
 		index.Fields("identity_holder_id"),
@@ -274,12 +295,14 @@ func (AssessmentResponse) Indexes() []ent.Index {
 	}
 }
 
+// Modules declares the modules required for AssessmentResponse.
 func (AssessmentResponse) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
 	}
 }
 
+// Hooks configures the AssessmentResponse hooks.
 func (AssessmentResponse) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookCreateAssessmentResponse(),

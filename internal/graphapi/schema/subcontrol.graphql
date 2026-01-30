@@ -96,6 +96,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): SubcontrolBulkDeletePayload!
+    """
+    Update multiple existing subcontrols
+    """
+    updateBulkSubcontrol(
+        """
+        IDs of the subcontrols to update
+        """
+        ids: [ID!]!
+        """
+        values to update the subcontrols with
+        """
+        input: UpdateSubcontrolInput!
+    ): SubcontrolBulkUpdatePayload!
+    """
+    Update multiple existing subcontrols via file upload
+    """
+    updateBulkCSVSubcontrol(
+        """
+        csv file containing values of the subcontrol, must include ID column
+        """
+        input: Upload!
+    ): SubcontrolBulkUpdatePayload!
 }
 
 """
@@ -146,4 +168,18 @@ type SubcontrolBulkDeletePayload {
     Deleted subcontrol IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkSubcontrol mutation
+"""
+type SubcontrolBulkUpdatePayload {
+    """
+    Updated subcontrols
+    """
+    subcontrols: [Subcontrol!]
+    """
+    IDs of the updated subcontrols
+    """
+    updatedIDs: [ID!]
 }

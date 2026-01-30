@@ -583,19 +583,21 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 	bulkFile, err := storage.NewUploadFile("testdata/uploads/evidence.csv")
 	assert.NilError(t, err)
 
-	invalidBulkFile, err := storage.NewUploadFile("testdata/uploads/evidence_invalid.csv")
+	plainTagFile, err := storage.NewUploadFile("testdata/uploads/evidence_invalid.csv")
 	assert.NilError(t, err)
 
 	evidences := []string{}
 	testCases := []struct {
-		name        string
-		client      *testclient.TestClient
-		fileInput   graphql.Upload
-		ctx         context.Context
-		expectedErr string
+		name         string
+		client       *testclient.TestClient
+		fileInput    graphql.Upload
+		ctx          context.Context
+		expectedErr  string
+		expectedLen  int
+		expectedTags int
 	}{
 		{
-			name:   "happy path, valid file",
+			name:   "happy path, valid file with json array tags",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 			fileInput: graphql.Upload{
@@ -604,18 +606,21 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 				Size:        bulkFile.Size,
 				ContentType: bulkFile.ContentType,
 			},
+			expectedLen:  2,
+			expectedTags: 3,
 		},
 		{
-			name:   "happy path, invalid tag column",
+			name:   "happy path, plain string tag converted to array",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 			fileInput: graphql.Upload{
-				File:        invalidBulkFile.RawFile,
-				Filename:    invalidBulkFile.OriginalName,
-				Size:        invalidBulkFile.Size,
-				ContentType: invalidBulkFile.ContentType,
+				File:        plainTagFile.RawFile,
+				Filename:    plainTagFile.OriginalName,
+				Size:        plainTagFile.Size,
+				ContentType: plainTagFile.ContentType,
 			},
-			expectedErr: "invalid input provided for Tags",
+			expectedLen:  1,
+			expectedTags: 1,
 		},
 	}
 
@@ -631,18 +636,15 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
-			// we expect 2 evidences to be created from the valid csv file
-			assert.Check(t, is.Len(resp.CreateBulkCSVEvidence.Evidences, 2))
+			assert.Check(t, is.Len(resp.CreateBulkCSVEvidence.Evidences, tc.expectedLen))
 
 			for _, evidence := range resp.CreateBulkCSVEvidence.Evidences {
-				assert.Check(t, is.Len(evidence.Tags, 3)) // each evidence should have 3 tags
+				assert.Check(t, is.Len(evidence.Tags, tc.expectedTags))
 				assert.Check(t, evidence.Name != "")
 				assert.Check(t, evidence.Description != nil)
 				assert.Check(t, evidence.CollectionProcedure != nil)
 			}
 
-			// delete created evidence
-			evidences := []string{}
 			for _, evidence := range resp.CreateBulkCSVEvidence.Evidences {
 				evidences = append(evidences, evidence.ID)
 			}

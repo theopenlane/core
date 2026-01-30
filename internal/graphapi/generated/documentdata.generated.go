@@ -126,6 +126,104 @@ func (ec *executionContext) fieldContext_DocumentDataBulkDeletePayload_deletedID
 	return fc, nil
 }
 
+func (ec *executionContext) _DocumentDataBulkUpdatePayload_documentData(ctx context.Context, field graphql.CollectedField, obj *model.DocumentDataBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DocumentDataBulkUpdatePayload_documentData,
+		func(ctx context.Context) (any, error) {
+			return obj.DocumentData, nil
+		},
+		nil,
+		ec.marshalODocumentData2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentDataᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_DocumentDataBulkUpdatePayload_documentData(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DocumentDataBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_DocumentData_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_DocumentData_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_DocumentData_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_DocumentData_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_DocumentData_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_DocumentData_ownerID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_DocumentData_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_DocumentData_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_DocumentData_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_DocumentData_scopeID(ctx, field)
+			case "templateID":
+				return ec.fieldContext_DocumentData_templateID(ctx, field)
+			case "data":
+				return ec.fieldContext_DocumentData_data(ctx, field)
+			case "owner":
+				return ec.fieldContext_DocumentData_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_DocumentData_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_DocumentData_scope(ctx, field)
+			case "template":
+				return ec.fieldContext_DocumentData_template(ctx, field)
+			case "entities":
+				return ec.fieldContext_DocumentData_entities(ctx, field)
+			case "files":
+				return ec.fieldContext_DocumentData_files(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DocumentData", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DocumentDataBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.DocumentDataBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DocumentDataBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_DocumentDataBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DocumentDataBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _DocumentDataCreatePayload_documentData(ctx context.Context, field graphql.CollectedField, obj *model.DocumentDataCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -380,6 +478,44 @@ func (ec *executionContext) _DocumentDataBulkDeletePayload(ctx context.Context, 
 	return out
 }
 
+var documentDataBulkUpdatePayloadImplementors = []string{"DocumentDataBulkUpdatePayload"}
+
+func (ec *executionContext) _DocumentDataBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.DocumentDataBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, documentDataBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DocumentDataBulkUpdatePayload")
+		case "documentData":
+			out.Values[i] = ec._DocumentDataBulkUpdatePayload_documentData(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._DocumentDataBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var documentDataCreatePayloadImplementors = []string{"DocumentDataCreatePayload"}
 
 func (ec *executionContext) _DocumentDataCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.DocumentDataCreatePayload) graphql.Marshaler {
@@ -527,6 +663,20 @@ func (ec *executionContext) marshalNDocumentDataBulkDeletePayload2ᚖgithubᚗco
 		return graphql.Null
 	}
 	return ec._DocumentDataBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNDocumentDataBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataBulkUpdatePayload) graphql.Marshaler {
+	return ec._DocumentDataBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNDocumentDataBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._DocumentDataBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNDocumentDataCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataCreatePayload) graphql.Marshaler {

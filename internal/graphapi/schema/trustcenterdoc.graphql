@@ -85,6 +85,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): TrustCenterDocBulkDeletePayload!
+    """
+    Update multiple existing trustCenterDocs via file upload
+    """
+    updateBulkCSVTrustCenterDoc(
+        """
+        csv file containing values of the trustCenterDoc, must include ID column
+        """
+        input: Upload!
+    ): TrustCenterDocBulkUpdatePayload!
 }
 
 """

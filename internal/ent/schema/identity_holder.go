@@ -105,7 +105,10 @@ func (IdentityHolder) Fields() []ent.Field {
 			),
 		field.String("user_id").
 			Comment("the user id associated with the identity holder record").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("IdentityHolderUserEmail").MatchOn("email"),
+			),
 		field.Enum("identity_holder_type").
 			Comment("the classification of identity holders, such as employee or contractor").
 			GoType(enums.IdentityHolderType("")).
@@ -172,7 +175,10 @@ func (IdentityHolder) Fields() []ent.Field {
 			),
 		field.String("employer_entity_id").
 			Comment("the external entity this identity holder is affiliated with").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("EmployerEntityName").MatchOn("name"),
+			),
 		field.String("external_user_id").
 			Comment("external user identifier for the identity holder").
 			Optional().
