@@ -44,6 +44,12 @@ type APITokenUpdatePayload struct {
 	APIToken *generated.APIToken `json:"apiToken"`
 }
 
+// Return response for markNotificationsAsRead mutation
+type ActionNotificationsReadPayload struct {
+	// Updated notification IDs
+	ReadIDs []*string `json:"readIDs"`
+}
+
 // Return response for createBulkActionPlan mutation
 type ActionPlanBulkCreatePayload struct {
 	// Created actionPlans

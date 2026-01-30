@@ -80,3 +80,8 @@ junit*.xml
 # build files
 dist/
 .objects-examples.yaml
+
+
+#scripts
+Local-dev-setup.sh
+stop-services.sh
