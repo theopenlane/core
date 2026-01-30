@@ -119,6 +119,12 @@ type organization
     define action_plan_creator: [group#member]
     define can_create_action_plan: can_edit or action_plan_creator
 
+    define campaign_creator: [group#member]
+    define can_create_campaign: can_edit or campaign_creator
+
+    define campaign_target_creator: [group#member]
+    define can_create_campaign_target: can_edit or campaign_target_creator
+
     define group_manager: [service]
     define can_manage_groups: owner or group_manager
 

@@ -146,7 +146,6 @@ func (Assessment) Hooks() []ent.Hook {
 			}, "owner"),
 			ent.OpCreate|ent.OpUpdateOne,
 		),
-		hooks.OrgOwnedTuplesHook(),
 	}
 }
 

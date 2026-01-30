@@ -3,7 +3,6 @@
 package graphapi_test
 
 import (
-	"context"
 	"fmt"
 	"testing"
 
@@ -19,24 +18,24 @@ import (
 
 // TestCreateCampaignWithTargets tests the createCampaignWithTargets mutation through the API.
 func TestCreateCampaignWithTargets(t *testing.T) {
-	// Create assessment via API to ensure proper FGA tuple setup
+	// Create template via builder (no FGA edge checks on template from campaign)
 	template := (&TemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	jsonConfig := map[string]any{
-		"title":       "Campaign Test Assessment",
-		"description": "Assessment for campaign testing",
-		"questions": []map[string]any{
-			{"id": "q1", "question": "Test question?", "type": "text"},
-		},
-	}
-
+	// Create assessment via API with same user so EdgeViewCheck passes
 	uid := ulids.New().String()
-	assessmentResp, err := suite.client.apiWithPAT.CreateAssessment(context.Background(), testclient.CreateAssessmentInput{
+	assessmentResp, err := suite.client.api.CreateAssessment(testUser1.UserCtx, testclient.CreateAssessmentInput{
 		Name:       fmt.Sprintf("assessment-%s", uid),
 		TemplateID: lo.ToPtr(template.ID),
-		Jsonconfig: jsonConfig,
+		Jsonconfig: map[string]any{
+			"title":       "Campaign Test Assessment",
+			"description": "Assessment for campaign testing",
+			"questions": []map[string]any{
+				{"id": "q1", "question": "Test question?", "type": "text"},
+			},
+		},
 	})
 	assert.NilError(t, err)
+
 	assessmentID := assessmentResp.CreateAssessment.Assessment.ID
 
 	t.Run("successful creation with targets", func(t *testing.T) {
@@ -54,12 +53,12 @@ func TestCreateCampaignWithTargets(t *testing.T) {
 			},
 		}
 
-		resp, err := suite.client.apiWithPAT.CreateCampaignWithTargets(context.Background(), input)
+		resp, err := suite.client.api.CreateCampaignWithTargets(testUser1.UserCtx, input)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Assert(t, resp.CreateCampaignWithTargets.Campaign.ID != "")
 		assert.Check(t, is.Equal(len(input.Targets), len(resp.CreateCampaignWithTargets.CampaignTargets)))
-		assert.Check(t, is.Equal(len(input.Targets), resp.CreateCampaignWithTargets.Campaign.RecipientCount))
+		assert.Check(t, is.Equal(len(input.Targets), int(lo.FromPtr(resp.CreateCampaignWithTargets.Campaign.RecipientCount))))
 
 		// cleanup
 		cleanupCampaignWithTargets(t, resp.CreateCampaignWithTargets.Campaign.ID, resp.CreateCampaignWithTargets.CampaignTargets)
@@ -80,10 +79,10 @@ func TestCreateCampaignWithTargets(t *testing.T) {
 			},
 		}
 
-		resp, err := suite.client.apiWithPAT.CreateCampaignWithTargets(context.Background(), input)
+		resp, err := suite.client.api.CreateCampaignWithTargets(testUser1.UserCtx, input)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
-		assert.Check(t, is.Equal(int(explicitCount), resp.CreateCampaignWithTargets.Campaign.RecipientCount))
+		assert.Check(t, is.Equal(int(explicitCount), int(lo.FromPtr(resp.CreateCampaignWithTargets.Campaign.RecipientCount))))
 
 		// cleanup
 		cleanupCampaignWithTargets(t, resp.CreateCampaignWithTargets.Campaign.ID, resp.CreateCampaignWithTargets.CampaignTargets)
@@ -100,7 +99,7 @@ func TestCreateCampaignWithTargets(t *testing.T) {
 			Targets: []*testclient.CreateCampaignTargetInput{},
 		}
 
-		_, err := suite.client.apiWithPAT.CreateCampaignWithTargets(context.Background(), input)
+		_, err := suite.client.api.CreateCampaignWithTargets(testUser1.UserCtx, input)
 		assert.Assert(t, err != nil)
 	})
 
@@ -113,17 +112,11 @@ func TestCreateCampaignWithTargets(t *testing.T) {
 func cleanupCampaignWithTargets(t *testing.T, campaignID string, targets []*testclient.CreateCampaignWithTargets_CreateCampaignWithTargets_CampaignTargets) {
 	t.Helper()
 
-	ctx := context.Background()
-
+	targetIDs := make([]string, 0, len(targets))
 	for _, target := range targets {
-		err := suite.client.db.CampaignTarget.DeleteOneID(target.ID).Exec(ctx)
-		if err != nil {
-			t.Logf("failed to delete campaign target %s: %v", target.ID, err)
-		}
+		targetIDs = append(targetIDs, target.ID)
 	}
 
-	err := suite.client.db.Campaign.DeleteOneID(campaignID).Exec(ctx)
-	if err != nil {
-		t.Logf("failed to delete campaign %s: %v", campaignID, err)
-	}
+	(&Cleanup[*generated.CampaignTargetDeleteOne]{client: suite.client.db.CampaignTarget, IDs: targetIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.CampaignDeleteOne]{client: suite.client.db.Campaign, ID: campaignID}).MustDelete(testUser1.UserCtx, t)
 }
