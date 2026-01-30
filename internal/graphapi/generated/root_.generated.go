@@ -3273,7 +3273,7 @@ type ComplexityRoot struct {
 		UpdateDirectoryMembership            func(childComplexity int, id string, input generated.UpdateDirectoryMembershipInput) int
 		UpdateDirectorySyncRun               func(childComplexity int, id string, input generated.UpdateDirectorySyncRunInput) int
 		UpdateDiscussion                     func(childComplexity int, id string, input generated.UpdateDiscussionInput) int
-		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput) int
+		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput, documentDataFile *graphql.Upload) int
 		UpdateEntity                         func(childComplexity int, id string, input generated.UpdateEntityInput) int
 		UpdateEntityType                     func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
 		UpdateEvent                          func(childComplexity int, id string, input generated.UpdateEventInput) int
@@ -25094,7 +25094,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateDocumentData(childComplexity, args["id"].(string), args["input"].(generated.UpdateDocumentDataInput)), true
+		return e.complexity.Mutation.UpdateDocumentData(childComplexity, args["id"].(string), args["input"].(generated.UpdateDocumentDataInput), args["documentDataFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateEntity":
 		if e.complexity.Mutation.UpdateEntity == nil {
@@ -46586,6 +46586,10 @@ extend type Mutation{
         New values for the documentData
         """
         input: UpdateDocumentDataInput!
+        """
+        File to upload for the documentData
+        """
+        documentDataFile: Upload
     ): DocumentDataUpdatePayload!
     """
     Delete an existing documentData

@@ -37932,6 +37932,11 @@ type Mutation {
 		New values for the documentData
 		"""
 		input: UpdateDocumentDataInput!
+
+		"""
+		File to upload for the documentData
+		"""
+		documentDataFile: Upload
 	): DocumentDataUpdatePayload!
 	"""
 	Delete an existing documentData
