@@ -136,7 +136,13 @@ func (Risk) Fields() []ent.Field {
 // Edges of the Risk
 func (r Risk) Edges() []ent.Edge {
 	return []ent.Edge{
-		defaultEdgeFromWithPagination(r, Control{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Control{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
+			},
+		}),
 		defaultEdgeFromWithPagination(r, Subcontrol{}),
 		defaultEdgeFromWithPagination(r, Procedure{}),
 		defaultEdgeFromWithPagination(r, InternalPolicy{}),

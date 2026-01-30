@@ -97,7 +97,8 @@ func TestResolveCSVReferenceRulesCreate(t *testing.T) {
 func TestResolveCSVReferencesForSchemaWithoutRules(t *testing.T) {
 	t.Parallel()
 
-	rows := []struct{ Name string }{{Name: "test"}}
+	type testRow struct{ Name string }
+	rows := []*testRow{{Name: "test"}}
 	err := resolveCSVReferencesForSchema(context.Background(), "User", rows)
 	assert.NilError(t, err)
 }
@@ -106,7 +107,8 @@ func TestResolveCSVReferencesForSchemaWithoutRules(t *testing.T) {
 func TestResolveCSVReferencesForSchemaNonexistent(t *testing.T) {
 	t.Parallel()
 
-	rows := []struct{ Name string }{{Name: "test"}}
+	type testRow struct{ Name string }
+	rows := []*testRow{{Name: "test"}}
 	err := resolveCSVReferencesForSchema(context.Background(), "NonexistentSchema", rows)
 	assert.NilError(t, err)
 }

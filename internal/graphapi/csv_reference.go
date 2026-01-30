@@ -54,7 +54,7 @@ type csvRuleMeta struct {
 const csvInputFieldName = "Input"
 
 // resolveCSVReferencesForSchema resolves CSV references using the generated registry for a schema.
-func resolveCSVReferencesForSchema(ctx context.Context, schemaName string, inputs any) error {
+func resolveCSVReferencesForSchema[T any](ctx context.Context, schemaName string, inputs []*T) error {
 	rules, err := BuildCSVReferenceRulesFromRegistry(schemaName)
 	if err != nil {
 		return err
@@ -99,22 +99,17 @@ func (c *csvRuleLookupCache) set(key csvLookupCacheKey, resolved map[string]stri
 }
 
 // resolveCSVReferenceRules resolves lookup rules and writes IDs into target fields on the inputs.
-func resolveCSVReferenceRules(ctx context.Context, inputs any, rules ...CSVReferenceRule) error {
+func resolveCSVReferenceRules[T any](ctx context.Context, inputs []*T, rules ...CSVReferenceRule) error {
 	if len(rules) == 0 {
 		return nil
 	}
 
-	slice := reflect.ValueOf(inputs)
-	if slice.Kind() != reflect.Slice {
-		return common.NewValidationError("csv inputs must be a slice")
-	}
-
-	elemType := slice.Type().Elem()
+	elemType := reflect.TypeOf((*T)(nil)).Elem()
 	for elemType.Kind() == reflect.Pointer {
 		elemType = elemType.Elem()
 	}
 
-	rowStates, err := csvRowStatesFromSlice(slice)
+	rowStates, err := csvRowStatesFromSlice(reflect.ValueOf(inputs))
 	if err != nil {
 		return err
 	}
@@ -652,44 +647,70 @@ func csvReferenceTargetAllowed(elemType reflect.Type, target string) bool {
 
 // csvReferenceInputTypeName determines the canonical input type name for exclusion matching.
 func csvReferenceInputTypeName(t reflect.Type) string {
-	if t.Kind() == reflect.Pointer {
-		t = t.Elem()
-	}
+	t = derefType(t)
 	if t.Kind() != reflect.Struct {
 		return ""
 	}
 
-	if inputField, ok := t.FieldByName(csvInputFieldName); ok {
-		ft := inputField.Type
-		for ft.Kind() == reflect.Pointer {
-			ft = ft.Elem()
-		}
-		if ft.Kind() == reflect.Struct {
-			name := ft.Name()
-			if strings.HasPrefix(name, "Create") && strings.HasSuffix(name, "Input") {
-				return name
-			}
-		}
+	if name := getInputFieldTypeName(t); name != "" {
+		return name
 	}
 
+	if name := getAnonymousInputTypeName(t); name != "" {
+		return name
+	}
+
+	return t.Name()
+}
+
+// getInputFieldTypeName extracts the type name from the Input field if it matches the Create*Input pattern.
+func getInputFieldTypeName(t reflect.Type) string {
+	inputField, ok := t.FieldByName(csvInputFieldName)
+	if !ok {
+		return ""
+	}
+
+	ft := derefType(inputField.Type)
+	if ft.Kind() != reflect.Struct {
+		return ""
+	}
+
+	return matchCreateInputName(ft.Name())
+}
+
+// getAnonymousInputTypeName finds an anonymous embedded field matching the Create*Input pattern.
+func getAnonymousInputTypeName(t reflect.Type) string {
 	for i := 0; i < t.NumField(); i++ {
 		field := t.Field(i)
 		if !field.Anonymous {
 			continue
 		}
 
-		ft := field.Type
-		for ft.Kind() == reflect.Pointer {
-			ft = ft.Elem()
-		}
-
-		name := ft.Name()
-		if strings.HasPrefix(name, "Create") && strings.HasSuffix(name, "Input") {
+		ft := derefType(field.Type)
+		if name := matchCreateInputName(ft.Name()); name != "" {
 			return name
 		}
 	}
 
-	return t.Name()
+	return ""
+}
+
+// matchCreateInputName returns the name if it matches Create*Input pattern, empty string otherwise.
+func matchCreateInputName(name string) string {
+	if strings.HasPrefix(name, "Create") && strings.HasSuffix(name, "Input") {
+		return name
+	}
+
+	return ""
+}
+
+// derefType dereferences pointer types to their element type.
+func derefType(t reflect.Type) reflect.Type {
+	for t.Kind() == reflect.Pointer {
+		t = t.Elem()
+	}
+
+	return t
 }
 
 // lowerCamelField converts a field name to lower camel case for validation errors.

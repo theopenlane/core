@@ -200,6 +200,7 @@ func (t Task) Edges() []ent.Edge {
 			edgeSchema: Control{},
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Control{}.Name()),
+				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
 			},
 		}),
 		edgeFromWithPagination(&edgeDefinition{

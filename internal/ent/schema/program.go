@@ -139,7 +139,13 @@ func (p Program) Mixin() []ent.Mixin {
 func (p Program) Edges() []ent.Edge {
 	return []ent.Edge{
 		// programs can have 1:many controls
-		defaultEdgeToWithPagination(p, Control{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Control{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
+			},
+		}),
 		// programs can have 1:many subcontrols
 		defaultEdgeToWithPagination(p, Subcontrol{}),
 		// programs can have 1:many control objectives

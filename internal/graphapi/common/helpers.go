@@ -300,12 +300,7 @@ type csvInputWrapper interface {
 // preprocessCSVListCells converts list-like CSV cell values into JSON arrays for slice fields.
 // Valid JSON arrays are preserved, and scalar JSON values are wrapped into arrays.
 func preprocessCSVListCells[T any](data []byte) []byte {
-	reader := csv.NewReader(bytes.NewReader(data))
-	reader.LazyQuotes = true
-	reader.FieldsPerRecord = -1
-	reader.TrimLeadingSpace = true
-
-	records, err := reader.ReadAll()
+	records, err := parseCSVRecords(data)
 	if err != nil || len(records) == 0 {
 		return data
 	}
@@ -314,59 +309,93 @@ func preprocessCSVListCells[T any](data []byte) []byte {
 	changed := prefixCSVInputHeaders[T](headers)
 
 	fieldKinds := csvListFieldKinds[T]()
-	normalizedHeaders := make([]string, len(headers))
-	for i, header := range headers {
-		normalizedHeaders[i] = normalizeCSVHeader(header)
-	}
-
 	if len(fieldKinds) > 0 {
-		for rowIdx := 1; rowIdx < len(records); rowIdx++ {
-			row := records[rowIdx]
-			for colIdx, headerKey := range normalizedHeaders {
-				if colIdx >= len(row) {
-					continue
-				}
-				kind, ok := fieldKinds[headerKey]
-				if !ok {
-					continue
-				}
-
-				cell := strings.TrimSpace(row[colIdx])
-				if cell == "" {
-					continue
-				}
-
-				if kind == reflect.Map {
-					if json.Valid([]byte(cell)) {
-						continue
-					}
-					continue
-				}
-
-				if kind == reflect.Slice {
-					normalized, updated := normalizeCSVListCell(cell)
-					if updated {
-						row[colIdx] = normalized
-						changed = true
-					}
-				}
-			}
-			records[rowIdx] = row
-		}
+		normalizedHeaders := normalizeHeaders(headers)
+		changed = processCSVDataRows(records, normalizedHeaders, fieldKinds) || changed
 	}
 
 	if !changed {
 		return data
 	}
 
+	return writeCSVRecords(records, data)
+}
+
+// parseCSVRecords reads CSV data into records.
+func parseCSVRecords(data []byte) ([][]string, error) {
+	reader := csv.NewReader(bytes.NewReader(data))
+	reader.LazyQuotes = true
+	reader.FieldsPerRecord = -1
+	reader.TrimLeadingSpace = true
+
+	return reader.ReadAll()
+}
+
+// normalizeHeaders creates normalized header keys for lookup.
+func normalizeHeaders(headers []string) []string {
+	normalized := make([]string, len(headers))
+	for i, header := range headers {
+		normalized[i] = normalizeCSVHeader(header)
+	}
+
+	return normalized
+}
+
+// processCSVDataRows processes all data rows and normalizes list cells.
+func processCSVDataRows(records [][]string, normalizedHeaders []string, fieldKinds map[string]reflect.Kind) bool {
+	changed := false
+
+	for rowIdx := 1; rowIdx < len(records); rowIdx++ {
+		if processCSVRow(records[rowIdx], normalizedHeaders, fieldKinds) {
+			changed = true
+		}
+	}
+
+	return changed
+}
+
+// processCSVRow processes a single row and normalizes list cells.
+func processCSVRow(row []string, normalizedHeaders []string, fieldKinds map[string]reflect.Kind) bool {
+	changed := false
+
+	for colIdx, headerKey := range normalizedHeaders {
+		if colIdx >= len(row) {
+			continue
+		}
+
+		kind, ok := fieldKinds[headerKey]
+		if !ok || kind != reflect.Slice {
+			continue
+		}
+
+		cell := strings.TrimSpace(row[colIdx])
+		if cell == "" {
+			continue
+		}
+
+		normalized, updated := normalizeCSVListCell(cell)
+		if updated {
+			row[colIdx] = normalized
+			changed = true
+		}
+	}
+
+	return changed
+}
+
+// writeCSVRecords writes records back to CSV bytes, returning original data on error.
+func writeCSVRecords(records [][]string, originalData []byte) []byte {
 	var buf bytes.Buffer
+
 	writer := csv.NewWriter(&buf)
 	if err := writer.WriteAll(records); err != nil {
-		return data
+		return originalData
 	}
+
 	writer.Flush()
+
 	if err := writer.Error(); err != nil {
-		return data
+		return originalData
 	}
 
 	return buf.Bytes()
@@ -508,7 +537,8 @@ func isCSVInputWrapper[T any]() bool {
 	return false
 }
 
-// csvEmbeddedHeaderSet returns header names for embedded fields to avoid double prefixing.
+// csvEmbeddedHeaderSet returns header names for fields that should NOT be prefixed with Input::.
+// This includes anonymous embedded fields AND direct CSV-tagged fields on the wrapper struct itself.
 func csvEmbeddedHeaderSet(t reflect.Type) map[string]struct{} {
 	set := map[string]struct{}{}
 	if t.Kind() == reflect.Pointer {
@@ -520,10 +550,19 @@ func csvEmbeddedHeaderSet(t reflect.Type) map[string]struct{} {
 
 	for i := 0; i < t.NumField(); i++ {
 		field := t.Field(i)
-		if !field.Anonymous {
+		if field.Anonymous {
+			collectCSVHeaderNames(field.Type, set, []string{""})
 			continue
 		}
-		collectCSVHeaderNames(field.Type, set, []string{""})
+		// Include direct CSV-tagged fields on the wrapper struct (e.g., AssigneeEmail)
+		// These should not be prefixed since they're not inside the Input struct
+		if field.Name == csvInputWrapperFieldName {
+			continue
+		}
+		names := csvFieldNames(field)
+		for _, name := range names {
+			set[normalizeCSVHeader(name)] = struct{}{}
+		}
 	}
 
 	return set
@@ -567,7 +606,7 @@ func csvFieldNames(field reflect.StructField) []string {
 }
 
 // combineCSVPrefixes prefixes field names for nested CSV headers.
-func combineCSVPrefixes(prefixes []string, names []string) []string {
+func combineCSVPrefixes(prefixes, names []string) []string {
 	if len(prefixes) == 0 {
 		prefixes = []string{""}
 	}

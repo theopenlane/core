@@ -3,10 +3,12 @@ package csvgenerated
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
@@ -29,6 +31,9 @@ type CSVLookupEntry struct {
 
 // CSVLookupRegistry maps (TargetEntity:MatchField) to lookup/create functions.
 var CSVLookupRegistry = map[string]CSVLookupEntry{
+	"Control:ref_code": {
+		Lookup: LookupControlByRefCode,
+	},
 	"Entity:name": {
 		Lookup: LookupEntityByName,
 	},
@@ -60,6 +65,51 @@ func GetCSVLookupEntry(targetEntity, matchField string) (CSVLookupEntry, bool) {
 // normalizeCSVKey normalizes input values for lookup comparisons.
 func normalizeCSVKey(value string) string {
 	return strings.ToLower(strings.TrimSpace(value))
+}
+
+// LookupControlByRefCode resolves Control ref_code values to IDs.
+func LookupControlByRefCode(ctx context.Context, client *generated.Client, orgID string, values []string) (map[string]string, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+
+	unique := make(map[string]string)
+	for _, v := range values {
+		v = strings.TrimSpace(v)
+		if v == "" {
+			continue
+		}
+		key := normalizeCSVKey(v)
+		if _, exists := unique[key]; !exists {
+			unique[key] = v
+		}
+	}
+
+	if len(unique) == 0 {
+		return nil, nil
+	}
+
+	predicates := make([]predicate.Control, 0, len(unique))
+	for _, v := range unique {
+		predicates = append(predicates, control.RefCodeEqualFold(v))
+	}
+	records, err := client.Control.Query().
+		Where(control.OwnerID(orgID), control.Or(predicates...)).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	resolved := make(map[string]string, len(records))
+	for _, r := range records {
+		key := normalizeCSVKey(r.RefCode)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("ref_code '%s' matched multiple Control records; use ControlID directly or add additional columns to scope the lookup", r.RefCode)
+		}
+		resolved[key] = r.ID
+	}
+
+	return resolved, nil
 }
 
 // LookupEntityByName resolves Entity name values to IDs.
@@ -98,6 +148,9 @@ func LookupEntityByName(ctx context.Context, client *generated.Client, orgID str
 	resolved := make(map[string]string, len(records))
 	for _, r := range records {
 		key := normalizeCSVKey(r.Name)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("name '%s' matched multiple Entity records; use EntityID directly or add additional columns to scope the lookup", r.Name)
+		}
 		resolved[key] = r.ID
 	}
 
@@ -140,6 +193,9 @@ func LookupGroupByName(ctx context.Context, client *generated.Client, orgID stri
 	resolved := make(map[string]string, len(records))
 	for _, r := range records {
 		key := normalizeCSVKey(r.Name)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("name '%s' matched multiple Group records; use GroupID directly or add additional columns to scope the lookup", r.Name)
+		}
 		resolved[key] = r.ID
 	}
 
@@ -182,6 +238,9 @@ func LookupIdentityHolderByEmail(ctx context.Context, client *generated.Client, 
 	resolved := make(map[string]string, len(records))
 	for _, r := range records {
 		key := normalizeCSVKey(r.Email)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("email '%s' matched multiple IdentityHolder records; use IdentityHolderID directly or add additional columns to scope the lookup", r.Email)
+		}
 		resolved[key] = r.ID
 	}
 
@@ -224,6 +283,9 @@ func LookupPlatformByName(ctx context.Context, client *generated.Client, orgID s
 	resolved := make(map[string]string, len(records))
 	for _, r := range records {
 		key := normalizeCSVKey(r.Name)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("name '%s' matched multiple Platform records; use PlatformID directly or add additional columns to scope the lookup", r.Name)
+		}
 		resolved[key] = r.ID
 	}
 
@@ -309,6 +371,9 @@ func LookupTemplateByName(ctx context.Context, client *generated.Client, orgID s
 	resolved := make(map[string]string, len(records))
 	for _, r := range records {
 		key := normalizeCSVKey(r.Name)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("name '%s' matched multiple Template records; use TemplateID directly or add additional columns to scope the lookup", r.Name)
+		}
 		resolved[key] = r.ID
 	}
 
@@ -351,6 +416,9 @@ func LookupUserByEmail(ctx context.Context, client *generated.Client, orgID stri
 	resolved := make(map[string]string, len(records))
 	for _, r := range records {
 		key := normalizeCSVKey(r.Email)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("email '%s' matched multiple User records; use UserID directly or add additional columns to scope the lookup", r.Email)
+		}
 		resolved[key] = r.ID
 	}
 
@@ -397,6 +465,14 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				TargetEntity:    "Group",
 				MatchField:      "name",
 				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "ControlRefCodes",
+				TargetField:     "ControlIDs",
+				TargetEntity:    "Control",
+				MatchField:      "ref_code",
+				IsSlice:         true,
 				CreateIfMissing: false,
 			},
 			{
@@ -669,6 +745,14 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 	"Evidence": {
 		SchemaName: "Evidence",
 		Rules: []CSVReferenceRule{
+			{
+				SourceColumn:    "ControlRefCodes",
+				TargetField:     "ControlIDs",
+				TargetEntity:    "Control",
+				MatchField:      "ref_code",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
 		},
 	},
 	"Export": {
@@ -757,6 +841,14 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				TargetEntity:    "Group",
 				MatchField:      "name",
 				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "ControlRefCodes",
+				TargetField:     "ControlIDs",
+				TargetEntity:    "Control",
+				MatchField:      "ref_code",
+				IsSlice:         true,
 				CreateIfMissing: false,
 			},
 			{
@@ -946,6 +1038,14 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		SchemaName: "Program",
 		Rules: []CSVReferenceRule{
 			{
+				SourceColumn:    "ControlRefCodes",
+				TargetField:     "ControlIDs",
+				TargetEntity:    "Control",
+				MatchField:      "ref_code",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
 				SourceColumn:    "ProgramOwnerEmail",
 				TargetField:     "ProgramOwnerID",
 				TargetEntity:    "User",
@@ -963,16 +1063,40 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 	"Remediation": {
 		SchemaName: "Remediation",
 		Rules: []CSVReferenceRule{
+			{
+				SourceColumn:    "ControlRefCodes",
+				TargetField:     "ControlIDs",
+				TargetEntity:    "Control",
+				MatchField:      "ref_code",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
 		},
 	},
 	"Review": {
 		SchemaName: "Review",
 		Rules: []CSVReferenceRule{
+			{
+				SourceColumn:    "ControlRefCodes",
+				TargetField:     "ControlIDs",
+				TargetEntity:    "Control",
+				MatchField:      "ref_code",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
 		},
 	},
 	"Risk": {
 		SchemaName: "Risk",
 		Rules: []CSVReferenceRule{
+			{
+				SourceColumn:    "ControlRefCodes",
+				TargetField:     "ControlIDs",
+				TargetEntity:    "Control",
+				MatchField:      "ref_code",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
 			{
 				SourceColumn:    "RiskDelegateGroupName",
 				TargetField:     "DelegateID",
@@ -1055,6 +1179,14 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 	"ScheduledJob": {
 		SchemaName: "ScheduledJob",
 		Rules: []CSVReferenceRule{
+			{
+				SourceColumn:    "ControlRefCodes",
+				TargetField:     "ControlIDs",
+				TargetEntity:    "Control",
+				MatchField:      "ref_code",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
 		},
 	},
 	"ScheduledJobRun": {
@@ -1135,6 +1267,14 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				IsSlice:         false,
 				CreateIfMissing: false,
 			},
+			{
+				SourceColumn:    "ControlRefCodes",
+				TargetField:     "ControlIDs",
+				TargetEntity:    "Control",
+				MatchField:      "ref_code",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
 		},
 	},
 	"Template": {
@@ -1195,6 +1335,14 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 	"Vulnerability": {
 		SchemaName: "Vulnerability",
 		Rules: []CSVReferenceRule{
+			{
+				SourceColumn:    "ControlRefCodes",
+				TargetField:     "ControlIDs",
+				TargetEntity:    "Control",
+				MatchField:      "ref_code",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
 		},
 	},
 	"WorkflowDefinition": {
@@ -1242,6 +1390,7 @@ func (APITokenCSVUpdateInput) CSVInputWrapper() {}
 type ActionPlanCSVInput struct {
 	Input generated.CreateActionPlanInput
 	ApproverGroupName string `csv:"ApproverGroupName"`
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 	DocumentDelegateGroupName string `csv:"DocumentDelegateGroupName"`
 }
 
@@ -1254,6 +1403,7 @@ type ActionPlanCSVUpdateInput struct {
 	ID string `csv:"ID"`
 	Input generated.UpdateActionPlanInput
 	ApproverGroupName string `csv:"ApproverGroupName"`
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 	DocumentDelegateGroupName string `csv:"DocumentDelegateGroupName"`
 }
 
@@ -1667,6 +1817,7 @@ func (EventCSVUpdateInput) CSVInputWrapper() {}
 // EvidenceCSVInput wraps CreateEvidenceInput with CSV reference columns.
 type EvidenceCSVInput struct {
 	Input generated.CreateEvidenceInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 }
 
 // CSVInputWrapper marks EvidenceCSVInput for CSV header preprocessing.
@@ -1677,6 +1828,7 @@ type EvidenceCSVUpdateInput struct {
 	// ID is the entity ID to update
 	ID string `csv:"ID"`
 	Input generated.UpdateEvidenceInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 }
 
 // CSVInputWrapper marks EvidenceCSVUpdateInput for CSV header preprocessing.
@@ -1856,6 +2008,7 @@ func (IdentityHolderCSVUpdateInput) CSVInputWrapper() {}
 type InternalPolicyCSVInput struct {
 	Input generated.CreateInternalPolicyInput
 	ApproverGroupName string `csv:"ApproverGroupName"`
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 	DocumentDelegateGroupName string `csv:"DocumentDelegateGroupName"`
 }
 
@@ -1868,6 +2021,7 @@ type InternalPolicyCSVUpdateInput struct {
 	ID string `csv:"ID"`
 	Input generated.UpdateInternalPolicyInput
 	ApproverGroupName string `csv:"ApproverGroupName"`
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 	DocumentDelegateGroupName string `csv:"DocumentDelegateGroupName"`
 }
 
@@ -2195,6 +2349,7 @@ func (ProcedureCSVUpdateInput) CSVInputWrapper() {}
 // ProgramCSVInput wraps CreateProgramInput with CSV reference columns.
 type ProgramCSVInput struct {
 	Input generated.CreateProgramInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 	ProgramOwnerEmail string `csv:"ProgramOwnerEmail"`
 }
 
@@ -2206,6 +2361,7 @@ type ProgramCSVUpdateInput struct {
 	// ID is the entity ID to update
 	ID string `csv:"ID"`
 	Input generated.UpdateProgramInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 	ProgramOwnerEmail string `csv:"ProgramOwnerEmail"`
 }
 
@@ -2233,6 +2389,7 @@ func (ProgramMembershipCSVUpdateInput) CSVInputWrapper() {}
 // RemediationCSVInput wraps CreateRemediationInput with CSV reference columns.
 type RemediationCSVInput struct {
 	Input generated.CreateRemediationInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 }
 
 // CSVInputWrapper marks RemediationCSVInput for CSV header preprocessing.
@@ -2243,6 +2400,7 @@ type RemediationCSVUpdateInput struct {
 	// ID is the entity ID to update
 	ID string `csv:"ID"`
 	Input generated.UpdateRemediationInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 }
 
 // CSVInputWrapper marks RemediationCSVUpdateInput for CSV header preprocessing.
@@ -2251,6 +2409,7 @@ func (RemediationCSVUpdateInput) CSVInputWrapper() {}
 // ReviewCSVInput wraps CreateReviewInput with CSV reference columns.
 type ReviewCSVInput struct {
 	Input generated.CreateReviewInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 }
 
 // CSVInputWrapper marks ReviewCSVInput for CSV header preprocessing.
@@ -2261,6 +2420,7 @@ type ReviewCSVUpdateInput struct {
 	// ID is the entity ID to update
 	ID string `csv:"ID"`
 	Input generated.UpdateReviewInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 }
 
 // CSVInputWrapper marks ReviewCSVUpdateInput for CSV header preprocessing.
@@ -2269,6 +2429,7 @@ func (ReviewCSVUpdateInput) CSVInputWrapper() {}
 // RiskCSVInput wraps CreateRiskInput with CSV reference columns.
 type RiskCSVInput struct {
 	Input generated.CreateRiskInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 	RiskDelegateGroupName string `csv:"RiskDelegateGroupName"`
 	StakeholderGroupName string `csv:"StakeholderGroupName"`
 }
@@ -2281,6 +2442,7 @@ type RiskCSVUpdateInput struct {
 	// ID is the entity ID to update
 	ID string `csv:"ID"`
 	Input generated.UpdateRiskInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 	RiskDelegateGroupName string `csv:"RiskDelegateGroupName"`
 	StakeholderGroupName string `csv:"StakeholderGroupName"`
 }
@@ -2323,6 +2485,7 @@ func (ScanCSVUpdateInput) CSVInputWrapper() {}
 // ScheduledJobCSVInput wraps CreateScheduledJobInput with CSV reference columns.
 type ScheduledJobCSVInput struct {
 	Input generated.CreateScheduledJobInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 }
 
 // CSVInputWrapper marks ScheduledJobCSVInput for CSV header preprocessing.
@@ -2333,6 +2496,7 @@ type ScheduledJobCSVUpdateInput struct {
 	// ID is the entity ID to update
 	ID string `csv:"ID"`
 	Input generated.UpdateScheduledJobInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 }
 
 // CSVInputWrapper marks ScheduledJobCSVUpdateInput for CSV header preprocessing.
@@ -2475,6 +2639,7 @@ type TaskCSVInput struct {
 	Input generated.CreateTaskInput
 	AssigneeEmail string `csv:"AssigneeEmail"`
 	AssignerEmail string `csv:"AssignerEmail"`
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 }
 
 // CSVInputWrapper marks TaskCSVInput for CSV header preprocessing.
@@ -2487,6 +2652,7 @@ type TaskCSVUpdateInput struct {
 	Input generated.UpdateTaskInput
 	AssigneeEmail string `csv:"AssigneeEmail"`
 	AssignerEmail string `csv:"AssignerEmail"`
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 }
 
 // CSVInputWrapper marks TaskCSVUpdateInput for CSV header preprocessing.
@@ -2693,6 +2859,7 @@ func (UserSettingCSVUpdateInput) CSVInputWrapper() {}
 // VulnerabilityCSVInput wraps CreateVulnerabilityInput with CSV reference columns.
 type VulnerabilityCSVInput struct {
 	Input generated.CreateVulnerabilityInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 }
 
 // CSVInputWrapper marks VulnerabilityCSVInput for CSV header preprocessing.
@@ -2703,6 +2870,7 @@ type VulnerabilityCSVUpdateInput struct {
 	// ID is the entity ID to update
 	ID string `csv:"ID"`
 	Input generated.UpdateVulnerabilityInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
 }
 
 // CSVInputWrapper marks VulnerabilityCSVUpdateInput for CSV header preprocessing.

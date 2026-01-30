@@ -6,6 +6,11 @@
       "isSlice": false
     },
     {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    },
+    {
       "csvColumn": "DocumentDelegateGroupName",
       "targetField": "DelegateID",
       "isSlice": false
@@ -120,6 +125,13 @@
       "isSlice": false
     }
   ],
+  "Evidence": [
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    }
+  ],
   "IdentityHolder": [
     {
       "csvColumn": "EmployerEntityName",
@@ -147,6 +159,11 @@
       "csvColumn": "ApproverGroupName",
       "targetField": "ApproverID",
       "isSlice": false
+    },
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
     },
     {
       "csvColumn": "DocumentDelegateGroupName",
@@ -215,12 +232,36 @@
   ],
   "Program": [
     {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    },
+    {
       "csvColumn": "ProgramOwnerEmail",
       "targetField": "ProgramOwnerID",
       "isSlice": false
     }
   ],
+  "Remediation": [
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    }
+  ],
+  "Review": [
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    }
+  ],
   "Risk": [
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    },
     {
       "csvColumn": "RiskDelegateGroupName",
       "targetField": "DelegateID",
@@ -269,6 +310,13 @@
       "isSlice": false
     }
   ],
+  "ScheduledJob": [
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    }
+  ],
   "Subcontrol": [
     {
       "csvColumn": "ControlDelegateGroupName",
@@ -296,6 +344,18 @@
       "csvColumn": "AssignerEmail",
       "targetField": "AssignerID",
       "isSlice": false
+    },
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    }
+  ],
+  "Vulnerability": [
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
     }
   ]
 }
