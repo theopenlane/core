@@ -31184,6 +31184,10 @@ type TrustCenterNDARequestHistory implements Node {
   ID of the signed NDA document data
   """
   documentDataID: String
+  """
+  ID of the template file at the time the NDA was signed
+  """
+  fileID: String
 }
 """
 A connection to a list of items.
@@ -31562,6 +31566,24 @@ input TrustCenterNDARequestHistoryWhereInput {
   documentDataIDNotNil: Boolean
   documentDataIDEqualFold: String
   documentDataIDContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: String
+  fileIDNEQ: String
+  fileIDIn: [String!]
+  fileIDNotIn: [String!]
+  fileIDGT: String
+  fileIDGTE: String
+  fileIDLT: String
+  fileIDLTE: String
+  fileIDContains: String
+  fileIDHasPrefix: String
+  fileIDHasSuffix: String
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: String
+  fileIDContainsFold: String
 }
 type TrustCenterSettingHistory implements Node {
   id: ID!
