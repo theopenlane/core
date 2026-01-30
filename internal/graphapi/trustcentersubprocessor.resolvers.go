@@ -86,6 +86,20 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterSubprocessor(ctx context.Cont
 
 // UpdateTrustCenterSubprocessor is the resolver for the updateTrustCenterSubprocessor field.
 func (r *mutationResolver) UpdateTrustCenterSubprocessor(ctx context.Context, id string, input generated.UpdateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorUpdatePayload, error) {
+	if input.TrustCenterID == nil {
+		var err error
+		input.TrustCenterID, err = getTrustCenterID(ctx, input.TrustCenterID, "trustcentersubprocessor")
+		if err != nil {
+			return nil, err
+		}
+
+		// set the input in the graphql context
+		// this isn't a required field, but its required by the access checks
+		// so we need to set it early
+		gCtx := graphql.GetFieldContext(ctx)
+		gCtx.Args["input"] = input
+	}
+
 	res, err := withTransactionalMutation(ctx).TrustCenterSubprocessor.UpdateOneID(id).SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersubprocessor"})

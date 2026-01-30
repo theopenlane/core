@@ -207,13 +207,13 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 		expectJob   bool
 	}{
 		{
-			name:      "happy path - update title",
+			name:      "happy path - update title by admin user",
 			settingID: trustCenter.Edges.Setting.ID,
 			input: testclient.UpdateTrustCenterSettingInput{
 				Title: lo.ToPtr("Updated Title"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name:      "happy path - update title of preview setting",

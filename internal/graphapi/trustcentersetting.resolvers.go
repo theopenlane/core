@@ -32,6 +32,20 @@ func (r *mutationResolver) CreateTrustCenterSetting(ctx context.Context, input g
 
 // UpdateTrustCenterSetting is the resolver for the updateTrustCenterSetting field.
 func (r *mutationResolver) UpdateTrustCenterSetting(ctx context.Context, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error) {
+	if input.TrustCenterID == nil {
+		var err error
+		input.TrustCenterID, err = getTrustCenterID(ctx, input.TrustCenterID, "trustcentersetting")
+		if err != nil {
+			return nil, err
+		}
+
+		// set the input in the graphql context
+		// this isn't a required field, but its required by the access checks
+		// so we need to set it early
+		gCtx := graphql.GetFieldContext(ctx)
+		gCtx.Args["input"] = input
+	}
+
 	res, err := withTransactionalMutation(ctx).TrustCenterSetting.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
