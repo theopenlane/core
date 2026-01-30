@@ -12,6 +12,16 @@ extend type Mutation{
         """
         input: UpdateNotificationInput!
     ): NotificationUpdatePayload!
+
+    """
+    Update multiple existing notifications
+    """
+    markNotificationsAsRead(
+        """
+        IDs of the notifications to update
+        """
+        ids: [ID!]!
+    ): ActionNotificationsReadPayload!
 }
 
 """
@@ -22,4 +32,14 @@ type NotificationUpdatePayload {
     Updated notification
     """
     notification: Notification!
+}
+
+"""
+Return response for markNotificationsAsRead mutation
+"""
+type ActionNotificationsReadPayload {
+    """
+    Updated notification IDs
+    """
+    readIDs: [ID]!
 }

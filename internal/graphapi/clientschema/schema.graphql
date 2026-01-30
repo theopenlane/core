@@ -394,6 +394,15 @@ input APITokenWhereInput {
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
 }
+"""
+Return response for markNotificationsAsRead mutation
+"""
+type ActionNotificationsReadPayload {
+	"""
+	Updated notification IDs
+	"""
+	readIDs: [ID]!
+}
 type ActionPlan implements Node {
 	id: ID!
 	createdAt: Time
@@ -40194,6 +40203,15 @@ type Mutation {
 		"""
 		input: UpdateNotificationInput!
 	): NotificationUpdatePayload!
+	"""
+	Update multiple existing notifications
+	"""
+	markNotificationsAsRead(
+		"""
+		IDs of the notifications to update
+		"""
+		ids: [ID!]!
+	): ActionNotificationsReadPayload!
 	"""
 	Create a new onboarding
 	"""
