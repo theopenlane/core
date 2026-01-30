@@ -26,6 +26,12 @@ func cleanupTrustCenterData(t *testing.T) {
 	t.Helper()
 	ctx := privacy.DecisionContext(setContext(testUser1.UserCtx, suite.client.db), privacy.Allow)
 
+	ndaReqs, err := suite.client.db.TrustCenterNDARequest.Query().All(ctx)
+	assert.NilError(t, err)
+	for _, req := range ndaReqs {
+		_ = suite.client.db.TrustCenterNDARequest.DeleteOneID(req.ID).Exec(ctx)
+	}
+
 	wcs, err := suite.client.db.TrustCenterWatermarkConfig.Query().All(ctx)
 	assert.NilError(t, err)
 	for _, wc := range wcs {

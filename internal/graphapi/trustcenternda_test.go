@@ -313,27 +313,6 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 		errorMsg string
 	}{
 		{
-			name: "happy path",
-			ctx:  anonCtx,
-			input: testclient.SubmitTrustCenterNDAResponseInput{
-				TemplateID: trustCenterNDA.CreateTrustCenterNda.Template.ID,
-				Response: map[string]any{
-					"signatory_info": map[string]any{
-						"email": "test@example.com",
-					},
-					"acknowledgment": true,
-					"signature_metadata": map[string]any{
-						"ip_address": "192.168.1.100",
-						"timestamp":  "2025-09-22T19:37:59.988Z",
-						"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
-						"user_id":    anonUserID,
-					},
-					"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
-					"trust_center_id": trustCenter.ID,
-				},
-			},
-		},
-		{
 			name: "Does not conform to format",
 			ctx:  anonCtx,
 			input: testclient.SubmitTrustCenterNDAResponseInput{
@@ -366,7 +345,7 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"trust_center_id": trustCenter.ID,
 				},
 			},
-			errorMsg: "NDA submission does not match authenticated user",
+			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name: "wrong trust center ID",
@@ -433,6 +412,27 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 				},
 			},
 			errorMsg: "NDA submission does not match authenticated user",
+		},
+		{
+			name: "happy path",
+			ctx:  anonCtx,
+			input: testclient.SubmitTrustCenterNDAResponseInput{
+				TemplateID: trustCenterNDA.CreateTrustCenterNda.Template.ID,
+				Response: map[string]any{
+					"signatory_info": map[string]any{
+						"email": "test@example.com",
+					},
+					"acknowledgment": true,
+					"signature_metadata": map[string]any{
+						"ip_address": "192.168.1.100",
+						"timestamp":  "2025-09-22T19:37:59.988Z",
+						"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
+						"user_id":    anonUserID,
+					},
+					"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
+					"trust_center_id": trustCenter.ID,
+				},
+			},
 		},
 	}
 

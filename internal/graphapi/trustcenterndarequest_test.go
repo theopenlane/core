@@ -471,6 +471,7 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 			input: testclient.CreateTrustCenterNDARequestInput{
 				FirstName:     gofakeit.FirstName(),
 				LastName:      gofakeit.LastName(),
+				CompanyName:   lo.ToPtr(gofakeit.Company()),
 				Email:         anonEmail,
 				TrustCenterID: &trustCenter.ID,
 			},
