@@ -26,8 +26,8 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.41.1
 	github.com/aws/aws-sdk-go-v2/config v1.32.7
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.7
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.21.0
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.95.1
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.21.1
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.96.0
 	github.com/brianvoe/gofakeit/v7 v7.14.0
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v6 v6.6.0
@@ -45,7 +45,7 @@ require (
 	github.com/go-webauthn/webauthn v0.15.0
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
 	github.com/goccy/go-yaml v1.19.2
-	github.com/golang-jwt/jwt/v5 v5.3.0
+	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/gomarkdown/markdown v0.0.0-20250810172220-2e2c11897d1a
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
@@ -77,8 +77,8 @@ require (
 	github.com/prometheus/client_golang v1.23.2
 	github.com/ravilushqa/otelgqlgen v0.19.0
 	github.com/redis/go-redis/v9 v9.17.3
-	github.com/riverqueue/river v0.30.1
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.30.1
+	github.com/riverqueue/river v0.30.2
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.30.2
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.2
@@ -86,17 +86,17 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v84 v84.1.0
 	github.com/theopenlane/beacon v0.3.0
-	github.com/theopenlane/core/common v1.0.4
+	github.com/theopenlane/core/common v1.0.6
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/emailtemplates v0.3.1
+	github.com/theopenlane/emailtemplates v0.3.2
 	github.com/theopenlane/entx v0.22.2
-	github.com/theopenlane/go-client v0.6.2
+	github.com/theopenlane/go-client v0.7.1
 	github.com/theopenlane/gqlgen-plugins v0.14.1
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.23.5
+	github.com/theopenlane/iam v0.23.6
 	github.com/theopenlane/newman v0.2.1
-	github.com/theopenlane/riverboat v0.8.6
+	github.com/theopenlane/riverboat v0.8.7
 	github.com/theopenlane/utils v0.6.2
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.6.2
@@ -120,12 +120,12 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/signin v1.0.5 // indirect
 	github.com/clipperhouse/displaywidth v0.6.2 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
-	github.com/clipperhouse/uax29/v2 v2.3.1 // indirect
+	github.com/clipperhouse/uax29/v2 v2.4.0 // indirect
 	github.com/di-wu/parser v0.3.0 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
 	github.com/fumiama/imgsz v0.0.4 // indirect
 	github.com/google/go-github/v80 v80.0.0 // indirect
-	github.com/riverqueue/river/rivertype v0.30.1 // indirect
+	github.com/riverqueue/river/rivertype v0.30.2 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
@@ -305,9 +305,9 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/opencontainers/runc v1.3.3 // indirect
-	github.com/openfga/api/proto v0.0.0-20251105142303-feed3db3d69d // indirect
+	github.com/openfga/api/proto v0.0.0-20260122164422-25e22cb1875b // indirect
 	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20251027165255-0f8f255e5f6c // indirect
-	github.com/openfga/openfga v1.11.2 // indirect
+	github.com/openfga/openfga v1.11.3 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
@@ -315,8 +315,8 @@ require (
 	github.com/prometheus/common v0.67.5 // indirect
 	github.com/prometheus/procfs v0.19.2 // indirect
 	github.com/resend/resend-go/v2 v2.28.0
-	github.com/riverqueue/river/riverdriver v0.30.1 // indirect
-	github.com/riverqueue/river/rivershared v0.30.1 // indirect
+	github.com/riverqueue/river/riverdriver v0.30.2 // indirect
+	github.com/riverqueue/river/rivershared v0.30.2 // indirect
 	github.com/riverqueue/rivercontrib/otelriver v0.7.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.12.0 // indirect
