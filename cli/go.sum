@@ -27,6 +27,7 @@ github.com/clipperhouse/displaywidth v0.6.2/go.mod h1:R+kHuzaYWFkTm7xoMmK1lFydbc
 github.com/clipperhouse/stringish v0.1.1 h1:+NSqMOr3GR6k1FdRhhnXrLfztGzuG+VuFDfatpWHKCs=
 github.com/clipperhouse/stringish v0.1.1/go.mod h1:v/WhFtE1q0ovMta2+m+UbpZ+2/HEXNWYXQgCt4hdOzA=
 github.com/clipperhouse/uax29/v2 v2.4.0 h1:RXqE/l5EiAbA4u97giimKNlmpvkmz+GrBVTelsoXy9g=
+github.com/clipperhouse/uax29/v2 v2.4.0/go.mod h1:Wn1g7MK6OoeDT0vL+Q0SQLDz/KpfsVRgg6W7ihQeh4g=
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=
 github.com/cpuguy83/go-md2man/v2 v2.0.6/go.mod h1:oOW0eioCTA6cOiMLiUPZOpcVxMig6NIQQ7OS05n1F4g=
 github.com/danieljoos/wincred v1.2.3 h1:v7dZC2x32Ut3nEfRH+vhoZGvN72+dQ/snVXo/vMFLdQ=
@@ -199,13 +200,14 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-github.com/theopenlane/core v1.5.15 h1:rRhoRMRjXRzjyndNtR9/LgIGw8jjBmimxa8ZhxVVZLo=
-github.com/theopenlane/core v1.5.15/go.mod h1:Mr73WAX637FknpZbb9/5OxmDCLd+H8RGjbLim/je/rQ=
+github.com/theopenlane/core v1.5.17 h1:cvy+Xsu/wD7Ev2uC4xvxu8rCEBojKyEVvCD1Y60iRNk=
+github.com/theopenlane/core v1.5.17/go.mod h1:ucA2LI8aNf1jmqbXn9+Ur8714Z2QS7w9yTAd2DwTeYY=
 github.com/theopenlane/core/common v1.0.6 h1:H+FtyTwpnbr/jSPtONyzcFxsd/BVD9xtWPi6qp662eA=
 github.com/theopenlane/core/common v1.0.6/go.mod h1:EZ1ndAi+8VcbgHSqmW+7ervFG4JzEwUXvMj5hIe8YmI=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
-github.com/theopenlane/go-client v0.7.1 h1:uKtGX4Lv5fmndU1fJm3BaxOmKJNhbKQJr3ODd0QECbo=
+github.com/theopenlane/go-client v0.7.6 h1:2p3opm5HyRCpSk8wjmQQiT6QfnlGqKZjfeMxg8aExek=
+github.com/theopenlane/go-client v0.7.6/go.mod h1:fBJRqP0N54kkCpZEiecIoyDvE2VHe7Kp8ZtLD/ZC7W0=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
 github.com/theopenlane/iam v0.23.6 h1:9G/Ko2l3aN/0/BdXOpo0OQ7dynu9rqDHCzvP1CLOia4=
