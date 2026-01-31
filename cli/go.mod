@@ -17,11 +17,11 @@ require (
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.2
-	github.com/theopenlane/core v1.5.9
-	github.com/theopenlane/core/common v1.0.4
+	github.com/theopenlane/core v1.5.15
+	github.com/theopenlane/core/common v1.0.6
 	github.com/theopenlane/go-client v0.6.2
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.23.5
+	github.com/theopenlane/iam v0.23.6
 	github.com/theopenlane/utils v0.6.2
 	golang.org/x/oauth2 v0.34.0
 	golang.org/x/term v0.39.0
@@ -50,7 +50,7 @@ require (
 	github.com/go-webauthn/x v0.1.27 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
-	github.com/golang-jwt/jwt/v5 v5.3.0 // indirect
+	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/google/go-querystring v1.2.0 // indirect
 	github.com/google/go-tpm v0.9.8 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -84,6 +84,7 @@ require (
 	github.com/segmentio/asm v1.2.1 // indirect
 	github.com/sosodev/duration v1.3.1 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
+	github.com/stoewer/go-strcase v1.3.1 // indirect
 	github.com/theopenlane/echox v0.3.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
