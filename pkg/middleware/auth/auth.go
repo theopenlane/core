@@ -12,7 +12,6 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/gorilla/websocket"
 	"github.com/rs/zerolog"
-	"github.com/stoewer/go-strcase"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -659,7 +658,7 @@ func getOrganizationRole(ctx context.Context, db *ent.Client, userID, orgID stri
 		return nil
 	}
 
-	orgRole, ok := auth.ToOrganizationRoleType(strcase.SnakeCase(role.String()))
+	orgRole, ok := auth.ToOrganizationRoleType(role.String())
 	if !ok {
 		logx.FromContext(ctx).Debug().Str("role", role.String()).Msg("invalid organization role, proceeding with other auth checks")
 	}
@@ -670,6 +669,7 @@ func getOrganizationRole(ctx context.Context, db *ent.Client, userID, orgID stri
 func getRole(ctx context.Context, db *ent.Client, userID, orgID string) (enums.Role, error) {
 	member, err := db.OrgMembership.Query().
 		Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
+		Select(orgmembership.FieldRole).
 		Only(privacy.DecisionContext(ctx, privacy.Allow))
 	if err != nil {
 		return "", err
