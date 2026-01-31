@@ -1,6 +1,6 @@
 module github.com/theopenlane/core/cli
 
-go 1.25.5
+go 1.25.6
 
 require (
 	github.com/99designs/gqlgen v0.17.86
