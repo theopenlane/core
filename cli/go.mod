@@ -19,7 +19,7 @@ require (
 	github.com/spf13/cobra v1.10.2
 	github.com/theopenlane/core v1.5.15
 	github.com/theopenlane/core/common v1.0.6
-	github.com/theopenlane/go-client v0.6.2
+	github.com/theopenlane/go-client v0.7.1
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.23.6
 	github.com/theopenlane/utils v0.6.2
@@ -35,7 +35,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/clipperhouse/displaywidth v0.6.2 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
-	github.com/clipperhouse/uax29/v2 v2.3.1 // indirect
+	github.com/clipperhouse/uax29/v2 v2.4.0 // indirect
 	github.com/danieljoos/wincred v1.2.3 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
