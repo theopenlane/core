@@ -48,7 +48,8 @@ func hasSkippedAction(events []*generated.WorkflowEvent) bool {
 // proposed changes only after all required approvals are obtained.
 //
 // Workflow Definition (Plain English):
-//   "Require exactly 2 approvers before allowing Control.reference_id to be changed"
+//
+//	"Require exactly 2 approvers before allowing Control.reference_id to be changed"
 //
 // Test Flow:
 //  1. Creates a Control with an initial reference_id
@@ -61,8 +62,9 @@ func hasSkippedAction(events []*generated.WorkflowEvent) bool {
 //  8. Confirms the workflow instance completed successfully
 //
 // Why This Matters:
-//   Ensures the quorum mechanism prevents premature application of changes and only
-//   applies them when the required number of approvals is reached.
+//
+//	Ensures the quorum mechanism prevents premature application of changes and only
+//	applies them when the required number of approvals is reached.
 func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 
 	approver1ID, orgID, userCtx := s.SetupTestUser()
@@ -184,7 +186,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 // workflows apply changes as soon as any single approval is received, without waiting for all assignees.
 //
 // Workflow Definition (Plain English):
-//   "Allow Control.reference_id changes after any single approval (2 approvers assigned, but not required)"
+//
+//	"Allow Control.reference_id changes after any single approval (2 approvers assigned, but not required)"
 //
 // Test Flow:
 //  1. Creates a Control with an initial reference_id
@@ -196,8 +199,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 //  7. Confirms the workflow instance completed successfully
 //
 // Why This Matters:
-//   Demonstrates that "required=false" workflows provide a "first approval wins" behavior,
-//   useful for notification-style approvals where acknowledgment is sufficient.
+//
+//	Demonstrates that "required=false" workflows provide a "first approval wins" behavior,
+//	useful for notification-style approvals where acknowledgment is sufficient.
 func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() {
 
 	approver1ID, orgID, userCtx := s.SetupTestUser()
@@ -310,7 +314,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() 
 // is correctly captured in the workflow proposal, not just setting a new value.
 //
 // Workflow Definition (Plain English):
-//   "Require approval before clearing Control.reference_id (setting it to null/empty)"
+//
+//	"Require approval before clearing Control.reference_id (setting it to null/empty)"
 //
 // Test Flow:
 //  1. Creates a Control with reference_id = "REF-123"
@@ -320,8 +325,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() 
 //  5. Confirms the proposal is in DRAFT state awaiting submission
 //
 // Why This Matters:
-//   Field clearing is a distinct operation from field setting. This ensures the workflow
-//   system correctly handles "clear" mutations and stages them as null values in proposals.
+//
+//	Field clearing is a distinct operation from field setting. This ensures the workflow
+//	system correctly handles "clear" mutations and stages them as null values in proposals.
 func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 
 	userID, orgID, _ := s.SetupTestUser()
@@ -424,8 +430,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 // for conditional workflows that should only fire when the object is in a specific state.
 //
 // Workflow Definition (Plain English):
-//   "Require approval for reference_id changes, but ONLY when the current reference_id equals 'REF-EXPR-OLD-xxx'"
-//   Trigger expression: object.reference_id == "REF-EXPR-OLD-xxx"
+//
+//	"Require approval for reference_id changes, but ONLY when the current reference_id equals 'REF-EXPR-OLD-xxx'"
+//	Trigger expression: object.reference_id == "REF-EXPR-OLD-xxx"
 //
 // Test Flow:
 //  1. Creates a Control with reference_id = "REF-EXPR-OLD-xxx"
@@ -435,9 +442,10 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 //  5. Confirms an approval assignment was created (workflow triggered correctly)
 //
 // Why This Matters:
-//   Trigger expressions must evaluate against the current object state to determine IF
-//   a workflow should fire. The proposed changes are captured separately in the proposal.
-//   This prevents circular logic where the proposed value would affect trigger evaluation.
+//
+//	Trigger expressions must evaluate against the current object state to determine IF
+//	a workflow should fire. The proposed changes are captured separately in the proposal.
+//	This prevents circular logic where the proposed value would affect trigger evaluation.
 func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObjectState() {
 
 	userID, orgID, _ := s.SetupTestUser()
@@ -537,8 +545,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObject
 // assignees (e.g., an empty group), the proposal is automatically applied without blocking.
 //
 // Workflow Definition (Plain English):
-//   "Require approval from members of 'Empty Approval Group' before changing Control.reference_id"
-//   (Group has zero members, so no one can approve)
+//
+//	"Require approval from members of 'Empty Approval Group' before changing Control.reference_id"
+//	(Group has zero members, so no one can approve)
 //
 // Test Flow:
 //  1. Creates an empty Group (no members)
@@ -550,8 +559,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObject
 //  7. Confirms the Control.reference_id reflects the proposed value
 //
 // Why This Matters:
-//   Empty target resolution should not block changes indefinitely. When no one CAN approve,
-//   the system auto-applies to prevent deadlock situations.
+//
+//	Empty target resolution should not block changes indefinitely. When no one CAN approve,
+//	the system auto-applies to prevent deadlock situations.
 func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
 
 	userID, orgID, _ := s.SetupTestUser()
@@ -655,8 +665,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
 // fields AND non-eligible fields are rejected outright. This prevents partial staging.
 //
 // Workflow Definition (Plain English):
-//   "Require approval for Control.reference_id changes"
-//   (Only reference_id is eligible for workflow staging)
+//
+//	"Require approval for Control.reference_id changes"
+//	(Only reference_id is eligible for workflow staging)
 //
 // Test Flow:
 //  1. Creates an approval workflow for reference_id changes
@@ -666,9 +677,10 @@ func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
 //  5. Confirms the Control remains unchanged (neither field was modified)
 //
 // Why This Matters:
-//   Workflow staging can only capture specific fields. If a mutation includes non-eligible
-//   fields alongside eligible ones, we cannot partially stage it. The entire mutation must
-//   be rejected to maintain data integrity and prevent unexpected partial updates.
+//
+//	Workflow staging can only capture specific fields. If a mutation includes non-eligible
+//	fields alongside eligible ones, we cannot partially stage it. The entire mutation must
+//	be rejected to maintain data integrity and prevent unexpected partial updates.
 func (s *WorkflowEngineTestSuite) TestApprovalHookRejectsIneligibleFields() {
 
 	userID, orgID, _ := s.SetupTestUser()
@@ -722,9 +734,10 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookRejectsIneligibleFields() {
 // definitions match a single mutation, ALL of them create instances (not just the first match).
 //
 // Workflow Definition (Plain English):
-//   Definition 1: "Require approval for Control.reference_id changes (approval key: one)"
-//   Definition 2: "Require approval for Control.reference_id changes (approval key: two)"
-//   Both definitions trigger on the same field change.
+//
+//	Definition 1: "Require approval for Control.reference_id changes (approval key: one)"
+//	Definition 2: "Require approval for Control.reference_id changes (approval key: two)"
+//	Both definitions trigger on the same field change.
 //
 // Test Flow:
 //  1. Creates two separate approval workflow definitions for reference_id changes
@@ -733,8 +746,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookRejectsIneligibleFields() {
 //  4. Confirms both definitions matched the same trigger criteria
 //
 // Why This Matters:
-//   Multiple teams or compliance requirements may have overlapping approval workflows.
-//   All matching workflows must execute to ensure complete policy enforcement.
+//
+//	Multiple teams or compliance requirements may have overlapping approval workflows.
+//	All matching workflows must execute to ensure complete policy enforcement.
 func (s *WorkflowEngineTestSuite) TestApprovalHookCreatesInstancesForAllMatchingDefinitions() {
 
 	userID, orgID, _ := s.SetupTestUser()
@@ -804,10 +818,11 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookCreatesInstancesForAllMatching
 // access both the current object state AND the proposed changes for conditional action execution.
 //
 // Workflow Definition (Plain English):
-//   "Require approval for reference_id changes, but ONLY when:
-//    - Current reference_id equals 'REF-PROPOSED-OLD-xxx' AND
-//    - Proposed new reference_id equals 'REF-PROPOSED-NEW-xxx'"
-//   When expression: object.reference_id == "OLD" && proposed_changes['reference_id'] == "NEW"
+//
+//	"Require approval for reference_id changes, but ONLY when:
+//	 - Current reference_id equals 'REF-PROPOSED-OLD-xxx' AND
+//	 - Proposed new reference_id equals 'REF-PROPOSED-NEW-xxx'"
+//	When expression: object.reference_id == "OLD" && proposed_changes['reference_id'] == "NEW"
 //
 // Test Flow:
 //  1. Creates a workflow with an action-level "when" clause checking both current and proposed values
@@ -817,9 +832,10 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookCreatesInstancesForAllMatching
 //  5. Confirms an approval assignment was created (action was not skipped)
 //
 // Why This Matters:
-//   Action-level "when" clauses provide fine-grained control over when specific actions execute.
-//   Access to proposed_changes allows conditional logic based on the intended change, not just
-//   the current state.
+//
+//	Action-level "when" clauses provide fine-grained control over when specific actions execute.
+//	Access to proposed_changes allows conditional logic based on the intended change, not just
+//	the current state.
 func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
 
 	userID, orgID, _ := s.SetupTestUser()
@@ -915,8 +931,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
 // when their "when" expression evaluates to false based on proposed_changes mismatch.
 //
 // Workflow Definition (Plain English):
-//   "Require approval for reference_id changes, but ONLY when proposed value equals 'REF-SKIP-ARCHIVE-xxx'"
-//   When expression: proposed_changes['reference_id'] == "REF-SKIP-ARCHIVE-xxx"
+//
+//	"Require approval for reference_id changes, but ONLY when proposed value equals 'REF-SKIP-ARCHIVE-xxx'"
+//	When expression: proposed_changes['reference_id'] == "REF-SKIP-ARCHIVE-xxx"
 //
 // Test Flow:
 //  1. Creates a workflow with a "when" clause checking for a specific proposed value
@@ -928,8 +945,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
 //  7. Confirms zero assignments were created
 //
 // Why This Matters:
-//   Demonstrates that "when" expressions can selectively skip approval requirements based on
-//   the actual proposed values, enabling value-based routing of changes.
+//
+//	Demonstrates that "when" expressions can selectively skip approval requirements based on
+//	the actual proposed values, enabling value-based routing of changes.
 func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChangesDoNotMatch() {
 
 	userID, orgID, _ := s.SetupTestUser()
@@ -1025,9 +1043,10 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChanges
 // (via when="false"), subsequent actions still execute and the workflow completes normally.
 //
 // Workflow Definition (Plain English):
-//   Actions:
-//     1. Approval action with when="false" (always skipped)
-//     2. Notification action (should still execute)
+//
+//	Actions:
+//	  1. Approval action with when="false" (always skipped)
+//	  2. Notification action (should still execute)
 //
 // Test Flow:
 //  1. Creates a workflow with an approval action that is always skipped (when="false")
@@ -1038,8 +1057,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChanges
 //  6. Verifies that a "skipped" action event was recorded
 //
 // Why This Matters:
-//   Skipped approval actions should not block the workflow. The engine must recognize that
-//   a skipped action contributes zero pending work and advance to subsequent actions.
+//
+//	Skipped approval actions should not block the workflow. The engine must recognize that
+//	a skipped action contributes zero pending work and advance to subsequent actions.
 func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 
 	userID, orgID, userCtx := s.SetupTestUser()
@@ -1143,7 +1163,8 @@ func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 // This prevents approved changes from being silently modified after approval.
 //
 // Workflow Definition (Plain English):
-//   "Require 2 approvals for Control.reference_id changes"
+//
+//	"Require 2 approvals for Control.reference_id changes"
 //
 // Test Flow:
 //  1. Creates a 2-approver workflow for reference_id changes
@@ -1155,9 +1176,10 @@ func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 //  7. Verifies invalidation metadata records the reason: "proposal changes edited after approval"
 //
 // Why This Matters:
-//   Approvers approve a specific set of changes (identified by hash). If those changes are
-//   modified after approval, the previous approval is no longer valid for the new content.
-//   This maintains approval integrity and prevents bait-and-switch scenarios.
+//
+//	Approvers approve a specific set of changes (identified by hash). If those changes are
+//	modified after approval, the previous approval is no longer valid for the new content.
+//	This maintains approval integrity and prevents bait-and-switch scenarios.
 func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidatesApprovals() {
 
 	userID, orgID, userCtx := s.SetupTestUser()
@@ -1278,7 +1300,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 // entity types (not just Controls).
 //
 // Workflow Definition (Plain English):
-//   "Require approval before changing InternalPolicy.details (policy content)"
+//
+//	"Require approval before changing InternalPolicy.details (policy content)"
 //
 // Test Flow:
 //  1. Creates an approval workflow for InternalPolicy.details changes
@@ -1292,9 +1315,10 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 //  9. Confirms the proposal was applied and the InternalPolicy.details now shows updated content
 //
 // Why This Matters:
-//   Demonstrates that the workflow system is not Control-specific. InternalPolicy (and other
-//   entity types) can have their own approval workflows for sensitive field changes like
-//   policy content modifications.
+//
+//	Demonstrates that the workflow system is not Control-specific. InternalPolicy (and other
+//	entity types) can have their own approval workflows for sensitive field changes like
+//	policy content modifications.
 func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 
 	userID, orgID, _ := s.SetupTestUser()
@@ -1426,22 +1450,25 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 // based on which edges were modified.
 //
 // Workflow Definition (Plain English):
-//   "Send notification, but ONLY when the 'evidence' edge was modified"
-//   When expression: 'evidence' in changed_edges
+//
+//	"Send notification, but ONLY when the 'evidence' edge was modified"
+//	When expression: 'evidence' in changed_edges
 //
 // Test Flow:
-//   Subtest "when expression true executes":
-//     1. Triggers workflow with changed_edges = ["evidence"]
-//     2. Verifies the notification action executed (not skipped)
 //
-//   Subtest "when expression false skips":
-//     1. Triggers workflow with changed_edges = ["other_edge"]
-//     2. Verifies the notification action was skipped
-//     3. Confirms a "skipped" action event was recorded
+//	Subtest "when expression true executes":
+//	  1. Triggers workflow with changed_edges = ["evidence"]
+//	  2. Verifies the notification action executed (not skipped)
+//
+//	Subtest "when expression false skips":
+//	  1. Triggers workflow with changed_edges = ["other_edge"]
+//	  2. Verifies the notification action was skipped
+//	  3. Confirms a "skipped" action event was recorded
 //
 // Why This Matters:
-//   Actions can be conditionally executed based on trigger context. This enables workflows
-//   that only fire certain actions when specific edges change, providing fine-grained control.
+//
+//	Actions can be conditionally executed based on trigger context. This enables workflows
+//	that only fire certain actions when specific edges change, providing fine-grained control.
 func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
 	_, orgID, userCtx := s.SetupTestUser()
 

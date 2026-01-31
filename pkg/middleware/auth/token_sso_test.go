@@ -8,7 +8,9 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/common/models"
+	ent "github.com/theopenlane/core/internal/ent/generated"
 	generated "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/iam/auth"
 )
 
 func TestAPITokenSSOAuthorization(t *testing.T) {
@@ -58,16 +60,20 @@ func TestPATTokenSSOAuthorization(t *testing.T) {
 	origPAT := fetchPATFunc
 	origSSO := isSSOEnforcedFunc
 	origAuth := isPATSSOAuthorizedFunc
+	origGetOrgRole := getOrgRoleFunc
 	defer func() {
 		fetchPATFunc = origPAT
 		isSSOEnforcedFunc = origSSO
 		isPATSSOAuthorizedFunc = origAuth
+		getOrgRoleFunc = origGetOrgRole
 	}()
 
 	fetchPATFunc = func(context.Context, *generated.Client, string) (*generated.PersonalAccessToken, error) {
 		return pat, nil
 	}
+
 	isSSOEnforcedFunc = func(context.Context, *generated.Client, string) (bool, error) { return true, nil }
+
 	isPATSSOAuthorizedFunc = func(context.Context, *generated.Client, string, string) (bool, error) {
 		if pat.SSOAuthorizations == nil {
 			return false, nil
@@ -77,6 +83,11 @@ func TestPATTokenSSOAuthorization(t *testing.T) {
 	}
 	isSystemAdminFunc = func(context.Context, *generated.Client, string, string) (bool, error) {
 		return false, nil
+	}
+
+	getOrgRoleFunc = func(ctx context.Context, db *ent.Client, userID, orgID string) *auth.OrganizationRoleType {
+		// return nil, sso doesn't depend on role
+		return nil
 	}
 
 	_, _, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")
