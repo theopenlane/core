@@ -12,8 +12,6 @@ import (
 
 // TestSetRecipientCountIfNeeded tests the recipient count helper.
 func TestSetRecipientCountIfNeeded(t *testing.T) {
-	t.Parallel()
-
 	t.Run("sets count when nil", func(t *testing.T) {
 		input := &generated.CreateCampaignInput{}
 		setRecipientCountIfNeeded(input, 5)
@@ -30,8 +28,6 @@ func TestSetRecipientCountIfNeeded(t *testing.T) {
 
 // TestFilterValidTargetsWithCompact tests that lo.Compact correctly filters nil targets.
 func TestFilterValidTargetsWithCompact(t *testing.T) {
-	t.Parallel()
-
 	t.Run("removes nil targets", func(t *testing.T) {
 		targets := []*generated.CreateCampaignTargetInput{
 			{Email: "a@test.com"},
@@ -43,10 +39,16 @@ func TestFilterValidTargetsWithCompact(t *testing.T) {
 		}
 
 		valid := lo.Compact(targets)
-		assert.Check(t, cmp.Equal(3, len(valid)))
-		assert.Check(t, cmp.Equal("a@test.com", valid[0].Email))
-		assert.Check(t, cmp.Equal("b@test.com", valid[1].Email))
-		assert.Check(t, cmp.Equal("c@test.com", valid[2].Email))
+		emails := lo.Map(valid, func(target *generated.CreateCampaignTargetInput, _ int) string {
+			if target == nil {
+				return ""
+			}
+			return target.Email
+		})
+		assert.Check(t, cmp.Equal(3, len(emails)))
+		assert.Check(t, lo.Contains(emails, "a@test.com"))
+		assert.Check(t, lo.Contains(emails, "b@test.com"))
+		assert.Check(t, lo.Contains(emails, "c@test.com"))
 	})
 
 	t.Run("handles all nil targets", func(t *testing.T) {

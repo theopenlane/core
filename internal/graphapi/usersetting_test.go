@@ -119,13 +119,17 @@ func TestQueryUserSettings(t *testing.T) {
 }
 
 func TestMutationUpdateUserSetting(t *testing.T) {
-	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	owner := suite.userBuilder(context.Background(), t)
+	viewOnly := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(owner.UserCtx, t, &viewOnly, enums.RoleMember, owner.OrganizationID)
 
-	om := (&OrgMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+	patClient := suite.setupPatClient(owner, t)
 
-	// create another user to make sure we don't get their settings back
-	(&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	org := (&OrganizationBuilder{client: suite.client}).MustNew(owner.UserCtx, t)
+	om := (&OrgMemberBuilder{client: suite.client, UserID: viewOnly.ID}).MustNew(owner.UserCtx, t)
+
+	otherUser := suite.userBuilder(context.Background(), t)
+	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(otherUser.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -138,13 +142,13 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 	}{
 		{
 			name:          "update default org and tags",
-			userSettingID: testUser1.UserInfo.Edges.Setting.ID,
+			userSettingID: owner.UserInfo.Edges.Setting.ID,
 			updateInput: testclient.UpdateUserSettingInput{
 				DefaultOrgID: &org.ID,
 				Tags:         []string{"mitb", "funk"},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    owner.UserCtx,
 			expectedRes: testclient.UpdateUserSetting_UpdateUserSetting_UserSetting{
 				Status: enums.UserStatusActive,
 				Tags:   []string{"mitb", "funk"},
@@ -155,13 +159,13 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 		},
 		{
 			name:          "update default org and tags for view only user",
-			userSettingID: viewOnlyUser.UserInfo.Edges.Setting.ID,
+			userSettingID: viewOnly.UserInfo.Edges.Setting.ID,
 			updateInput: testclient.UpdateUserSettingInput{
 				DefaultOrgID: &om.OrganizationID,
 				Tags:         []string{"mitb", "funk"},
 			},
 			client: suite.client.api,
-			ctx:    viewOnlyUser.UserCtx,
+			ctx:    viewOnly.UserCtx,
 			expectedRes: testclient.UpdateUserSetting_UpdateUserSetting_UserSetting{
 				Status: enums.UserStatusActive,
 				Tags:   []string{"mitb", "funk"},
@@ -172,31 +176,31 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 		},
 		{
 			name:          "update default org to org without access",
-			userSettingID: testUser1.UserInfo.Edges.Setting.ID,
+			userSettingID: owner.UserInfo.Edges.Setting.ID,
 			updateInput: testclient.UpdateUserSettingInput{
 				DefaultOrgID: &org2.ID,
 			},
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      owner.UserCtx,
 			errorMsg: "Organization with the specified ID was not found",
 		},
 		{
 			name:          "update status to invalid",
-			userSettingID: testUser1.UserInfo.Edges.Setting.ID,
+			userSettingID: owner.UserInfo.Edges.Setting.ID,
 			updateInput: testclient.UpdateUserSettingInput{
 				Status: &enums.UserStatusInvalid,
 			},
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      owner.UserCtx,
 			errorMsg: "INVALID is not a valid UserSettingUserStatus",
 		},
 		{
 			name:          "update status to suspended using personal access token",
-			userSettingID: testUser1.UserInfo.Edges.Setting.ID,
+			userSettingID: owner.UserInfo.Edges.Setting.ID,
 			updateInput: testclient.UpdateUserSettingInput{
 				Status: &enums.UserStatusSuspended,
 			},
-			client: suite.client.apiWithPAT,
+			client: patClient,
 			ctx:    context.Background(),
 			expectedRes: testclient.UpdateUserSetting_UpdateUserSetting_UserSetting{
 				Status: enums.UserStatusSuspended,
@@ -230,6 +234,6 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 	}
 
 	// cleanup created organizations
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org2.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org.ID}).MustDelete(owner.UserCtx, t)
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org2.ID}).MustDelete(otherUser.UserCtx, t)
 }
