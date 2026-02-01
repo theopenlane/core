@@ -1,4 +1,4 @@
-h1:AhUBplJBc7EUuegTXgHUalQKqB8pH1xYxHxt8mr0zWU=
+h1:bDh1ARr8M48LVC9Ksl/ZuTS5511ta61cbYWaoxkbgoA=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -34,3 +34,5 @@ h1:AhUBplJBc7EUuegTXgHUalQKqB8pH1xYxHxt8mr0zWU=
 20260130132753_signed_nda_original_file.sql h1:/IWmd2NwIYv6lpi+yvRfHGK+awCS9npckgHg3R3zitg=
 20260130132802_signed_nda_original_file_history.sql h1:zACoybcNpANxOoQxXmVNh4i2YofMuxFkvThfH0OYThA=
 20260130195904_campaignsassessements.sql h1:m6R1jmT9HuDQZ7UxN0uh9aYEwvObq2L0k+hUyJU4naQ=
+20260201013134_trustcenter_subprocessor_category.sql h1:isTdzknJ31W71+FmZJYrTXFtUR1+MfkveGBtkln6Pk8=
+20260201013144_trustcenter_subprocessor_category_history.sql h1:pHe1CfXocpw2jBB6EvHCavYJUM3MkI7OCniDvT1g/9g=
