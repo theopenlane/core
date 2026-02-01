@@ -89,6 +89,10 @@ func (WorkflowAssignment) Fields() []ent.Field {
 		field.Text("notes").
 			Comment("Optional notes about the assignment").
 			Optional(),
+		field.Time("due_at").
+			Comment("Timestamp when the assignment is due for delegation or escalation checks").
+			Optional().
+			Nillable(),
 	}
 }
 

@@ -74,6 +74,11 @@ func (Notification) Fields() []ent.Field {
 			Optional().
 			Immutable().
 			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
+		field.String("template_id").
+			Comment("optional template used for external channel rendering").
+			Optional().
+			Immutable().
+			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.Time("read_at").
 			Comment("the time the notification was read").
 			GoType(models.DateTime{}).

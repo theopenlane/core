@@ -308,11 +308,13 @@ func (r *WorkflowTargetType) UnmarshalGQL(v interface{}) error {
 type WorkflowActionType string
 
 var (
-	WorkflowActionTypeApproval     WorkflowActionType = "REQUEST_APPROVAL"
-	WorkflowActionTypeNotification WorkflowActionType = "NOTIFY"
-	WorkflowActionTypeWebhook      WorkflowActionType = "WEBHOOK"
-	WorkflowActionTypeFieldUpdate  WorkflowActionType = "UPDATE_FIELD"
-	WorkflowActionTypeIntegration  WorkflowActionType = "INTEGRATION"
+	WorkflowActionTypeApproval         WorkflowActionType = "REQUEST_APPROVAL"
+	WorkflowActionTypeNotification     WorkflowActionType = "NOTIFY"
+	WorkflowActionTypeWebhook          WorkflowActionType = "WEBHOOK"
+	WorkflowActionTypeFieldUpdate      WorkflowActionType = "UPDATE_FIELD"
+	WorkflowActionTypeIntegration      WorkflowActionType = "INTEGRATION"
+	WorkflowActionTypeReassignApproval WorkflowActionType = "REASSIGN_APPROVAL"
+	WorkflowActionTypeSendEmail        WorkflowActionType = "SEND_EMAIL"
 )
 
 var WorkflowActionTypes = []string{
@@ -321,6 +323,8 @@ var WorkflowActionTypes = []string{
 	string(WorkflowActionTypeWebhook),
 	string(WorkflowActionTypeFieldUpdate),
 	string(WorkflowActionTypeIntegration),
+	string(WorkflowActionTypeReassignApproval),
+	string(WorkflowActionTypeSendEmail),
 }
 
 func (WorkflowActionType) Values() (vals []string) {
@@ -341,6 +345,10 @@ func ToWorkflowActionType(v string) *WorkflowActionType {
 		return &WorkflowActionTypeFieldUpdate
 	case WorkflowActionTypeIntegration.String():
 		return &WorkflowActionTypeIntegration
+	case WorkflowActionTypeReassignApproval.String():
+		return &WorkflowActionTypeReassignApproval
+	case WorkflowActionTypeSendEmail.String():
+		return &WorkflowActionTypeSendEmail
 	default:
 		return nil
 	}

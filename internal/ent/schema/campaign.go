@@ -275,6 +275,14 @@ func (c Campaign) Edges() []ent.Edge {
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: c,
+			edgeSchema: EmailBranding{},
+			field:      "email_branding_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(EmailBranding{}.Name()),
+			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: c,
 			edgeSchema: Entity{},
 			field:      "entity_id",
 			annotations: []schema.Annotation{
