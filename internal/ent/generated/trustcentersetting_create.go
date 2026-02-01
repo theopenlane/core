@@ -414,6 +414,20 @@ func (_c *TrustCenterSettingCreate) SetNillableNdaApprovalRequired(v *bool) *Tru
 	return _c
 }
 
+// SetStatusPageURL sets the "status_page_url" field.
+func (_c *TrustCenterSettingCreate) SetStatusPageURL(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetStatusPageURL(v)
+	return _c
+}
+
+// SetNillableStatusPageURL sets the "status_page_url" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableStatusPageURL(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetStatusPageURL(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterSettingCreate) SetID(v string) *TrustCenterSettingCreate {
 	_c.mutation.SetID(v)
@@ -655,6 +669,11 @@ func (_c *TrustCenterSettingCreate) check() error {
 			return &ValidationError{Name: "security_contact", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.security_contact": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.StatusPageURL(); ok {
+		if err := trustcentersetting.StatusPageURLValidator(v); err != nil {
+			return &ValidationError{Name: "status_page_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.status_page_url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -794,6 +813,10 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 	if value, ok := _c.mutation.NdaApprovalRequired(); ok {
 		_spec.SetField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool, value)
 		_node.NdaApprovalRequired = value
+	}
+	if value, ok := _c.mutation.StatusPageURL(); ok {
+		_spec.SetField(trustcentersetting.FieldStatusPageURL, field.TypeString, value)
+		_node.StatusPageURL = &value
 	}
 	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

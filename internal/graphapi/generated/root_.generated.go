@@ -5913,6 +5913,7 @@ type ComplexityRoot struct {
 		SecondaryBackgroundColor func(childComplexity int) int
 		SecondaryForegroundColor func(childComplexity int) int
 		SecurityContact          func(childComplexity int) int
+		StatusPageURL            func(childComplexity int) int
 		ThemeMode                func(childComplexity int) int
 		Title                    func(childComplexity int) int
 		TrustCenterID            func(childComplexity int) int
@@ -41404,6 +41405,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSetting.SecurityContact(childComplexity), true
 
+	case "TrustCenterSetting.statusPageURL":
+		if e.complexity.TrustCenterSetting.StatusPageURL == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.StatusPageURL(childComplexity), true
+
 	case "TrustCenterSetting.themeMode":
 		if e.complexity.TrustCenterSetting.ThemeMode == nil {
 			break
@@ -62275,6 +62283,10 @@ input CreateTrustCenterSettingInput {
   whether NDA requests require approval before being processed
   """
   ndaApprovalRequired: Boolean
+  """
+  URL to the company's status page
+  """
+  statusPageURL: String
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   logoFileID: ID
@@ -108820,6 +108832,10 @@ type TrustCenterSetting implements Node {
   whether NDA requests require approval before being processed
   """
   ndaApprovalRequired: Boolean
+  """
+  URL to the company's status page
+  """
+  statusPageURL: String
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -109388,6 +109404,24 @@ input TrustCenterSettingWhereInput {
   ndaApprovalRequiredNEQ: Boolean
   ndaApprovalRequiredIsNil: Boolean
   ndaApprovalRequiredNotNil: Boolean
+  """
+  status_page_url field predicates
+  """
+  statusPageURL: String
+  statusPageURLNEQ: String
+  statusPageURLIn: [String!]
+  statusPageURLNotIn: [String!]
+  statusPageURLGT: String
+  statusPageURLGTE: String
+  statusPageURLLT: String
+  statusPageURLLTE: String
+  statusPageURLContains: String
+  statusPageURLHasPrefix: String
+  statusPageURLHasSuffix: String
+  statusPageURLIsNil: Boolean
+  statusPageURLNotNil: Boolean
+  statusPageURLEqualFold: String
+  statusPageURLContainsFold: String
   """
   blocked_groups edge predicates
   """
@@ -116931,6 +116965,11 @@ input UpdateTrustCenterSettingInput {
   """
   ndaApprovalRequired: Boolean
   clearNdaApprovalRequired: Boolean
+  """
+  URL to the company's status page
+  """
+  statusPageURL: String
+  clearStatusPageURL: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -116966,9 +117005,6 @@ input UpdateTrustCenterSubprocessorInput {
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
-  trustCenterID: ID
-  clearTrustCenter: Boolean
-  subprocessorID: ID
 }
 """
 UpdateTrustCenterWatermarkConfigInput is used for update TrustCenterWatermarkConfig object.

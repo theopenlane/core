@@ -2429,6 +2429,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldCompanyDomain:            {Type: field.TypeString, Column: trustcentersettinghistory.FieldCompanyDomain},
 			trustcentersettinghistory.FieldSecurityContact:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldSecurityContact},
 			trustcentersettinghistory.FieldNdaApprovalRequired:      {Type: field.TypeBool, Column: trustcentersettinghistory.FieldNdaApprovalRequired},
+			trustcentersettinghistory.FieldStatusPageURL:            {Type: field.TypeString, Column: trustcentersettinghistory.FieldStatusPageURL},
 		},
 	}
 	graph.Nodes[59] = &sqlgraph.Node{
@@ -13109,6 +13110,11 @@ func (f *TrustCenterSettingHistoryFilter) WhereSecurityContact(p entql.StringP) 
 // WhereNdaApprovalRequired applies the entql bool predicate on the nda_approval_required field.
 func (f *TrustCenterSettingHistoryFilter) WhereNdaApprovalRequired(p entql.BoolP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldNdaApprovalRequired))
+}
+
+// WhereStatusPageURL applies the entql string predicate on the status_page_url field.
+func (f *TrustCenterSettingHistoryFilter) WhereStatusPageURL(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldStatusPageURL))
 }
 
 // addPredicate implements the predicateAdder interface.

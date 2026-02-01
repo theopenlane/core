@@ -526,6 +526,26 @@ func (_u *TrustCenterSettingUpdate) ClearNdaApprovalRequired() *TrustCenterSetti
 	return _u
 }
 
+// SetStatusPageURL sets the "status_page_url" field.
+func (_u *TrustCenterSettingUpdate) SetStatusPageURL(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetStatusPageURL(v)
+	return _u
+}
+
+// SetNillableStatusPageURL sets the "status_page_url" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableStatusPageURL(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetStatusPageURL(*v)
+	}
+	return _u
+}
+
+// ClearStatusPageURL clears the value of the "status_page_url" field.
+func (_u *TrustCenterSettingUpdate) ClearStatusPageURL() *TrustCenterSettingUpdate {
+	_u.mutation.ClearStatusPageURL()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterSettingUpdate) AddBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -772,6 +792,11 @@ func (_u *TrustCenterSettingUpdate) check() error {
 			return &ValidationError{Name: "security_contact", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.security_contact": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.StatusPageURL(); ok {
+		if err := trustcentersetting.StatusPageURLValidator(v); err != nil {
+			return &ValidationError{Name: "status_page_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.status_page_url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -939,6 +964,12 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.NdaApprovalRequiredCleared() {
 		_spec.ClearField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool)
+	}
+	if value, ok := _u.mutation.StatusPageURL(); ok {
+		_spec.SetField(trustcentersetting.FieldStatusPageURL, field.TypeString, value)
+	}
+	if _u.mutation.StatusPageURLCleared() {
+		_spec.ClearField(trustcentersetting.FieldStatusPageURL, field.TypeString)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1614,6 +1645,26 @@ func (_u *TrustCenterSettingUpdateOne) ClearNdaApprovalRequired() *TrustCenterSe
 	return _u
 }
 
+// SetStatusPageURL sets the "status_page_url" field.
+func (_u *TrustCenterSettingUpdateOne) SetStatusPageURL(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetStatusPageURL(v)
+	return _u
+}
+
+// SetNillableStatusPageURL sets the "status_page_url" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableStatusPageURL(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetStatusPageURL(*v)
+	}
+	return _u
+}
+
+// ClearStatusPageURL clears the value of the "status_page_url" field.
+func (_u *TrustCenterSettingUpdateOne) ClearStatusPageURL() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearStatusPageURL()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterSettingUpdateOne) AddBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1873,6 +1924,11 @@ func (_u *TrustCenterSettingUpdateOne) check() error {
 			return &ValidationError{Name: "security_contact", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.security_contact": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.StatusPageURL(); ok {
+		if err := trustcentersetting.StatusPageURLValidator(v); err != nil {
+			return &ValidationError{Name: "status_page_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.status_page_url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -2057,6 +2113,12 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.NdaApprovalRequiredCleared() {
 		_spec.ClearField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool)
+	}
+	if value, ok := _u.mutation.StatusPageURL(); ok {
+		_spec.SetField(trustcentersetting.FieldStatusPageURL, field.TypeString, value)
+	}
+	if _u.mutation.StatusPageURLCleared() {
+		_spec.ClearField(trustcentersetting.FieldStatusPageURL, field.TypeString)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

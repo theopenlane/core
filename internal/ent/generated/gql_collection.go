@@ -69984,6 +69984,11 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, trustcentersetting.FieldNdaApprovalRequired)
 				fieldSeen[trustcentersetting.FieldNdaApprovalRequired] = struct{}{}
 			}
+		case "statusPageURL":
+			if _, ok := fieldSeen[trustcentersetting.FieldStatusPageURL]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldStatusPageURL)
+				fieldSeen[trustcentersetting.FieldStatusPageURL] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

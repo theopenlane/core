@@ -271,6 +271,9 @@ func (_u *TrustCenterSubprocessorHistoryUpdate) sqlSave(ctx context.Context) (_n
 	if _u.mutation.TrustCenterSubprocessorKindIDCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID, field.TypeString)
 	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Countries(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldCountries, field.TypeJSON, value)
 	}

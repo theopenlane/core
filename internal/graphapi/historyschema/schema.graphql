@@ -31789,6 +31789,10 @@ type TrustCenterSettingHistory implements Node {
 	whether NDA requests require approval before being processed
 	"""
 	ndaApprovalRequired: Boolean
+	"""
+	URL to the company's status page
+	"""
+	statusPageURL: String
 }
 """
 A connection to a list of items.
@@ -32338,6 +32342,24 @@ input TrustCenterSettingHistoryWhereInput {
 	ndaApprovalRequiredNEQ: Boolean
 	ndaApprovalRequiredIsNil: Boolean
 	ndaApprovalRequiredNotNil: Boolean
+	"""
+	status_page_url field predicates
+	"""
+	statusPageURL: String
+	statusPageURLNEQ: String
+	statusPageURLIn: [String!]
+	statusPageURLNotIn: [String!]
+	statusPageURLGT: String
+	statusPageURLGTE: String
+	statusPageURLLT: String
+	statusPageURLLTE: String
+	statusPageURLContains: String
+	statusPageURLHasPrefix: String
+	statusPageURLHasSuffix: String
+	statusPageURLIsNil: Boolean
+	statusPageURLNotNil: Boolean
+	statusPageURLEqualFold: String
+	statusPageURLContainsFold: String
 }
 type TrustCenterSubprocessorHistory implements Node {
 	id: ID!

@@ -252,7 +252,7 @@ func TestQueryTrustCenterSubprocessorByID(t *testing.T) {
 			name:    "happy path - view only user can get trust center subprocessor",
 			queryID: tcSubprocessor.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUserCtx,
+			ctx:     viewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path - anon user",
