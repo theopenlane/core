@@ -12,14 +12,10 @@ import (
 	"github.com/theopenlane/iam/fgax"
 )
 
+// systemOwnedMutation is an interface for mutations that have a SystemOwned field
 type systemOwnedMutation interface {
 	SystemOwned() (bool, bool)
 	OldSystemOwned(context.Context) (bool, error)
-}
-
-type trustCenterChildMutation interface {
-	TrustCenterID() (string, bool)
-	OldTrustCenterID(context.Context) (string, error)
 }
 
 // HookCreatePublicAccess adds public access (wildcard tuples) to the created object for
@@ -32,13 +28,6 @@ func HookPublicAccess() ent.Hook {
 			if err != nil {
 				return nil, err
 			}
-
-			// // if it is a trust center child, create public access based on trust center
-			// if _, ok := m.(trustCenterChildMutation); ok {
-			// 	if err := createTrustCenterPublicAccess(ctx, m); err != nil {
-			// 		return nil, err
-			// 	}
-			// }
 
 			// all other mutations, only create public access for system admins
 			if !auth.IsSystemAdminFromContext(ctx) {
@@ -73,24 +62,6 @@ func createSystemOwnedPublicAccess(ctx context.Context, m ent.Mutation) error {
 		logx.FromContext(ctx).Debug().Msg("object is not system owned, skipping public access hook")
 
 		return nil
-	}
-
-	return createWildcardTuple(ctx, m)
-}
-
-// createTrustCenterPublicAccess creates wildcard viewer tuples for trust center child objects
-func createTrustCenterPublicAccess(ctx context.Context, m ent.Mutation) (err error) {
-	mut, _ := m.(trustCenterChildMutation)
-	trustCenterID, ok := mut.TrustCenterID()
-
-	if !ok || trustCenterID == "" {
-		// check old trust center id for updates
-		trustCenterID, err = mut.OldTrustCenterID(ctx)
-		if err != nil || trustCenterID == "" {
-			logx.FromContext(ctx).Debug().Msg("object does not have a trust center ID, skipping public access hook")
-
-			return nil
-		}
 	}
 
 	return createWildcardTuple(ctx, m)

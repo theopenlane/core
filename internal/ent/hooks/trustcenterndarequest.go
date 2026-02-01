@@ -294,6 +294,14 @@ func sendTrustCenterNDARequestEmail(ctx context.Context, m *generated.TrustCente
 func buildNDATrustCenterURL(tc *generated.TrustCenter) string {
 	const ndaPath = "/access/sign-nda"
 
+	trustCenterURL := getTrustCenterURL(tc)
+	trustCenterURL.Path = "/" + tc.Slug + ndaPath
+
+	return trustCenterURL.String()
+}
+
+// getTrustCenterURL builds the base URL for a trust center
+func getTrustCenterURL(tc *generated.TrustCenter) url.URL {
 	trustCenterURL := url.URL{Scheme: "https"}
 
 	if tc.Edges.CustomDomain != nil {
@@ -302,8 +310,7 @@ func buildNDATrustCenterURL(tc *generated.TrustCenter) string {
 			customHost = normalized
 		}
 		trustCenterURL.Host = customHost
-		trustCenterURL.Path = ndaPath
-		return trustCenterURL.String()
+		return trustCenterURL
 	}
 
 	defaultHost := trustCenterConfig.DefaultTrustCenterDomain
@@ -311,9 +318,8 @@ func buildNDATrustCenterURL(tc *generated.TrustCenter) string {
 		defaultHost = normalized
 	}
 	trustCenterURL.Host = defaultHost
-	trustCenterURL.Path = "/" + tc.Slug + ndaPath
 
-	return trustCenterURL.String()
+	return trustCenterURL
 }
 
 func sendTrustCenterAuthEmail(ctx context.Context, m *generated.TrustCenterNDARequestMutation, ndaRequest *generated.TrustCenterNDARequest) {
@@ -347,13 +353,13 @@ func sendTrustCenterAuthEmail(ctx context.Context, m *generated.TrustCenterNDARe
 		return
 	}
 
-	trustCenterURL := buildNDATrustCenterURL(tc)
+	trustCenterURL := getTrustCenterURL(tc)
 
 	emailMsg, err := m.Emailer.NewTrustCenterAuthEmail(emailtemplates.Recipient{
 		Email: ndaRequest.Email,
 	}, accessToken, emailtemplates.TrustCenterAuthData{
 		OrganizationName: tc.Edges.Setting.CompanyName,
-		TrustCenterURL:   trustCenterURL,
+		TrustCenterURL:   trustCenterURL.String(),
 	})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create auth email")

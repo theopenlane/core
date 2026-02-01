@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/iam/fgax"
 )
 
-// HookTrustCenterSubprocessor process files for trust center subprocessors
+// HookTrustCenterSubprocessor adds parent relationship tuples on create of trust center subprocessors for the subprocessor, allowing trust center access
 func HookTrustCenterSubprocessor() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterSubprocessorFunc(func(ctx context.Context, m *generated.TrustCenterSubprocessorMutation) (generated.Value, error) {
@@ -27,6 +27,8 @@ func HookTrustCenterSubprocessor() ent.Hook {
 			// get the ids of the subprocessor and tc subprocessor
 			tcSubprocessor, ok := retVal.(*generated.TrustCenterSubprocessor)
 			if !ok {
+				logx.FromContext(ctx).Error().Msg("unexpected type for trust center subprocessor mutation return value")
+
 				return retVal, nil
 			}
 
@@ -34,10 +36,11 @@ func HookTrustCenterSubprocessor() ent.Hook {
 
 			subprocessorID, ok := m.SubprocessorID()
 			if !ok {
+				logx.FromContext(ctx).Error().Msg("missing subprocessor id in trust center subprocessor mutation")
 				return retVal, nil
 			}
 
-			/// add parent trust center subprocessor relation
+			// add parent trust center subprocessor relation
 			req := fgax.TupleRequest{
 				SubjectID:   tcSpID,
 				SubjectType: strcase.SnakeCase(m.Type()),
@@ -46,9 +49,8 @@ func HookTrustCenterSubprocessor() ent.Hook {
 				Relation:    fgax.ParentRelation,
 			}
 
-			w := fgax.GetTupleKey(req)
-			if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{w}, nil); err != nil {
-				log.Error().Err(err).Interface("writes", w).Msg("failed to create relationship tuples for trust center subprocessor parent")
+			if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
+				log.Error().Err(err).Interface("writes", req).Msg("failed to create relationship tuples for trust center subprocessor parent")
 
 				return nil, err
 			}
