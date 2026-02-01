@@ -4,13 +4,16 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -83,6 +86,15 @@ func (NotificationTemplate) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("TOPIC_PATTERN"),
 			),
+		field.String("integration_id").
+			Comment("integration associated with this template").
+			Optional(),
+		field.String("workflow_definition_id").
+			Comment("workflow definition associated with this template").
+			Optional(),
+		field.String("email_template_id").
+			Comment("optional email template used for branded email delivery").
+			Optional(),
 		field.String("title_template").
 			Comment("title template for external channel messages").
 			Optional(),
@@ -94,16 +106,28 @@ func (NotificationTemplate) Fields() []ent.Field {
 			Optional(),
 		field.JSON("blocks", map[string]any{}).
 			Comment("structured blocks for channels like Slack or Teams").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 		field.JSON("jsonconfig", map[string]any{}).
 			Comment("jsonschema for template data requirements").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 		field.JSON("uischema", map[string]any{}).
 			Comment("uischema for a template builder").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional template metadata").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 		field.Bool("active").
 			Comment("whether the template is active").
 			Default(true).
@@ -112,7 +136,10 @@ func (NotificationTemplate) Fields() []ent.Field {
 			),
 		field.Int("version").
 			Comment("template version").
-			Default(1),
+			Default(1).
+			Annotations(
+				entgql.OrderField("VERSION"),
+			),
 	}
 }
 
@@ -125,12 +152,39 @@ func (NotificationTemplate) Indexes() []ent.Index {
 		index.Fields(ownerFieldName, "key").
 			Unique().
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("key").
+			Unique().
+			Annotations(entsql.IndexWhere("deleted_at is NULL and system_owned = true")),
 	}
 }
 
 // Edges of the NotificationTemplate.
 func (n NotificationTemplate) Edges() []ent.Edge {
 	return []ent.Edge{
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: n,
+			edgeSchema: Integration{},
+			field:      "integration_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Integration{}.Name()),
+			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: n,
+			edgeSchema: WorkflowDefinition{},
+			field:      "workflow_definition_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(WorkflowDefinition{}.Name()),
+			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: n,
+			edgeSchema: EmailTemplate{},
+			field:      "email_template_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(EmailTemplate{}.Name()),
+			},
+		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: Notification{},
@@ -143,7 +197,11 @@ func (n NotificationTemplate) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(n),
+			newObjectOwnedMixin[NotificationTemplate](n,
+				withParents(Integration{}, WorkflowDefinition{}),
+				withOrganizationOwner(true),
+			),
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(n)
 }

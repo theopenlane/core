@@ -130,6 +130,8 @@ func (WorkflowDefinition) Edges() []ent.Edge {
 			edgeSchema: Group{},
 			comment:    "Groups this workflow targets for scoping",
 		}),
+		defaultEdgeToWithPagination(WorkflowDefinition{}, NotificationTemplate{}),
+		defaultEdgeToWithPagination(WorkflowDefinition{}, EmailTemplate{}),
 	}
 }
 

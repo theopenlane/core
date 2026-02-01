@@ -94,9 +94,6 @@ func (EmailBranding) Fields() []ent.Field {
 			Comment("whether this is the default email branding for the organization").
 			Default(false).
 			Optional(),
-		field.String("email_branding_id").
-			Comment("the email branding associated with the campaign").
-			Optional(),
 	}
 }
 
@@ -117,6 +114,7 @@ func (e EmailBranding) Mixin() []ent.Mixin {
 func (e EmailBranding) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeToWithPagination(e, Campaign{}),
+		defaultEdgeToWithPagination(e, EmailTemplate{}),
 	}
 }
 
