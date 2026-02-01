@@ -74,6 +74,8 @@ const (
 	FieldSecurityContact = "security_contact"
 	// FieldNdaApprovalRequired holds the string denoting the nda_approval_required field in the database.
 	FieldNdaApprovalRequired = "nda_approval_required"
+	// FieldStatusPageURL holds the string denoting the status_page_url field in the database.
+	FieldStatusPageURL = "status_page_url"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
@@ -145,6 +147,7 @@ var Columns = []string{
 	FieldCompanyDomain,
 	FieldSecurityContact,
 	FieldNdaApprovalRequired,
+	FieldStatusPageURL,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -204,6 +207,8 @@ var (
 	SecurityContactValidator func(string) error
 	// DefaultNdaApprovalRequired holds the default value on creation for the "nda_approval_required" field.
 	DefaultNdaApprovalRequired bool
+	// StatusPageURLValidator is a validator for the "status_page_url" field. It is called by the builders before save.
+	StatusPageURLValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -378,6 +383,11 @@ func BySecurityContact(opts ...sql.OrderTermOption) OrderOption {
 // ByNdaApprovalRequired orders the results by the nda_approval_required field.
 func ByNdaApprovalRequired(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNdaApprovalRequired, opts...).ToFunc()
+}
+
+// ByStatusPageURL orders the results by the status_page_url field.
+func ByStatusPageURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatusPageURL, opts...).ToFunc()
 }
 
 // ByBlockedGroupsCount orders the results by blocked_groups count.

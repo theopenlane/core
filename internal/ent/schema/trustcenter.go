@@ -229,6 +229,7 @@ func (t TrustCenter) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
+			rule.AllowIfTrustCenterEditor(),
 		),
 	)
 }

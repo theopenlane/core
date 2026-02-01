@@ -7166,6 +7166,24 @@ func init() {
 	trustcentersettingDescNdaApprovalRequired := trustcentersettingFields[21].Descriptor()
 	// trustcentersetting.DefaultNdaApprovalRequired holds the default value on creation for the nda_approval_required field.
 	trustcentersetting.DefaultNdaApprovalRequired = trustcentersettingDescNdaApprovalRequired.Default.(bool)
+	// trustcentersettingDescStatusPageURL is the schema descriptor for status_page_url field.
+	trustcentersettingDescStatusPageURL := trustcentersettingFields[22].Descriptor()
+	// trustcentersetting.StatusPageURLValidator is a validator for the "status_page_url" field. It is called by the builders before save.
+	trustcentersetting.StatusPageURLValidator = func() func(string) error {
+		validators := trustcentersettingDescStatusPageURL.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(status_page_url string) error {
+			for _, fn := range fns {
+				if err := fn(status_page_url); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// trustcentersettingDescID is the schema descriptor for id field.
 	trustcentersettingDescID := trustcentersettingMixinFields2[0].Descriptor()
 	// trustcentersetting.DefaultID holds the default value on creation for the id field.
@@ -7185,6 +7203,7 @@ func init() {
 	trustcentersubprocessorMixinHooks4 := trustcentersubprocessorMixin[4].Hooks()
 	trustcentersubprocessorMixinHooks5 := trustcentersubprocessorMixin[5].Hooks()
 	trustcentersubprocessorMixinHooks6 := trustcentersubprocessorMixin[6].Hooks()
+	trustcentersubprocessorHooks := schema.TrustCenterSubprocessor{}.Hooks()
 
 	trustcentersubprocessor.Hooks[1] = trustcentersubprocessorMixinHooks0[0]
 
@@ -7197,6 +7216,8 @@ func init() {
 	trustcentersubprocessor.Hooks[5] = trustcentersubprocessorMixinHooks6[0]
 
 	trustcentersubprocessor.Hooks[6] = trustcentersubprocessorMixinHooks6[1]
+
+	trustcentersubprocessor.Hooks[7] = trustcentersubprocessorHooks[0]
 	trustcentersubprocessorMixinInters1 := trustcentersubprocessorMixin[1].Interceptors()
 	trustcentersubprocessorMixinInters4 := trustcentersubprocessorMixin[4].Interceptors()
 	trustcentersubprocessorInters := schema.TrustCenterSubprocessor{}.Interceptors()

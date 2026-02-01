@@ -2938,6 +2938,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldCompanyDomain:            {Type: field.TypeString, Column: trustcentersetting.FieldCompanyDomain},
 			trustcentersetting.FieldSecurityContact:          {Type: field.TypeString, Column: trustcentersetting.FieldSecurityContact},
 			trustcentersetting.FieldNdaApprovalRequired:      {Type: field.TypeBool, Column: trustcentersetting.FieldNdaApprovalRequired},
+			trustcentersetting.FieldStatusPageURL:            {Type: field.TypeString, Column: trustcentersetting.FieldStatusPageURL},
 		},
 	}
 	graph.Nodes[83] = &sqlgraph.Node{
@@ -39668,6 +39669,11 @@ func (f *TrustCenterSettingFilter) WhereSecurityContact(p entql.StringP) {
 // WhereNdaApprovalRequired applies the entql bool predicate on the nda_approval_required field.
 func (f *TrustCenterSettingFilter) WhereNdaApprovalRequired(p entql.BoolP) {
 	f.Where(p.Field(trustcentersetting.FieldNdaApprovalRequired))
+}
+
+// WhereStatusPageURL applies the entql string predicate on the status_page_url field.
+func (f *TrustCenterSettingFilter) WhereStatusPageURL(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldStatusPageURL))
 }
 
 // WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.

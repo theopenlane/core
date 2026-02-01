@@ -106,6 +106,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingBulkCreatePayload_tru
 				return ec.fieldContext_TrustCenterSetting_securityContact(ctx, field)
 			case "ndaApprovalRequired":
 				return ec.fieldContext_TrustCenterSetting_ndaApprovalRequired(ctx, field)
+			case "statusPageURL":
+				return ec.fieldContext_TrustCenterSetting_statusPageURL(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 			case "editors":
@@ -199,6 +201,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_securityContact(ctx, field)
 			case "ndaApprovalRequired":
 				return ec.fieldContext_TrustCenterSetting_ndaApprovalRequired(ctx, field)
+			case "statusPageURL":
+				return ec.fieldContext_TrustCenterSetting_statusPageURL(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 			case "editors":
@@ -321,6 +325,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_securityContact(ctx, field)
 			case "ndaApprovalRequired":
 				return ec.fieldContext_TrustCenterSetting_ndaApprovalRequired(ctx, field)
+			case "statusPageURL":
+				return ec.fieldContext_TrustCenterSetting_statusPageURL(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 			case "editors":

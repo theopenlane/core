@@ -159,6 +159,12 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Comment("whether NDA requests require approval before being processed").
 			Default(false).
 			Optional(),
+		field.String("status_page_url").
+			Comment("URL to the company's status page").
+			MaxLen(urlMaxLen).
+			Validate(validator.ValidateURL()).
+			Optional().
+			Nillable(),
 	}
 }
 

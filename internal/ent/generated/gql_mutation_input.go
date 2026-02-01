@@ -23314,6 +23314,7 @@ type CreateTrustCenterSettingInput struct {
 	CompanyDomain            *string
 	SecurityContact          *string
 	NdaApprovalRequired      *bool
+	StatusPageURL            *string
 	BlockedGroupIDs          []string
 	EditorIDs                []string
 	LogoFileID               *string
@@ -23379,6 +23380,9 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.NdaApprovalRequired; v != nil {
 		m.SetNdaApprovalRequired(*v)
 	}
+	if v := i.StatusPageURL; v != nil {
+		m.SetStatusPageURL(*v)
+	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
 	}
@@ -23437,6 +23441,8 @@ type UpdateTrustCenterSettingInput struct {
 	SecurityContact               *string
 	ClearNdaApprovalRequired      bool
 	NdaApprovalRequired           *bool
+	ClearStatusPageURL            bool
+	StatusPageURL                 *string
 	ClearBlockedGroups            bool
 	AddBlockedGroupIDs            []string
 	RemoveBlockedGroupIDs         []string
@@ -23559,6 +23565,12 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.NdaApprovalRequired; v != nil {
 		m.SetNdaApprovalRequired(*v)
 	}
+	if i.ClearStatusPageURL {
+		m.ClearStatusPageURL()
+	}
+	if v := i.StatusPageURL; v != nil {
+		m.SetStatusPageURL(*v)
+	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
 	}
@@ -23658,9 +23670,6 @@ type UpdateTrustCenterSubprocessorInput struct {
 	ClearEditors                         bool
 	AddEditorIDs                         []string
 	RemoveEditorIDs                      []string
-	ClearTrustCenter                     bool
-	TrustCenterID                        *string
-	SubprocessorID                       *string
 }
 
 // Mutate applies the UpdateTrustCenterSubprocessorInput on the TrustCenterSubprocessorMutation builder.
@@ -23703,15 +23712,6 @@ func (i *UpdateTrustCenterSubprocessorInput) Mutate(m *TrustCenterSubprocessorMu
 	}
 	if v := i.RemoveEditorIDs; len(v) > 0 {
 		m.RemoveEditorIDs(v...)
-	}
-	if i.ClearTrustCenter {
-		m.ClearTrustCenter()
-	}
-	if v := i.TrustCenterID; v != nil {
-		m.SetTrustCenterID(*v)
-	}
-	if v := i.SubprocessorID; v != nil {
-		m.SetSubprocessorID(*v)
 	}
 }
 

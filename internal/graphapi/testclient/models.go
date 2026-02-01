@@ -8197,11 +8197,13 @@ type CreateTrustCenterSettingInput struct {
 	// email address for security contact
 	SecurityContact *string `json:"securityContact,omitempty"`
 	// whether NDA requests require approval before being processed
-	NdaApprovalRequired *bool    `json:"ndaApprovalRequired,omitempty"`
-	BlockedGroupIDs     []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs           []string `json:"editorIDs,omitempty"`
-	LogoFileID          *string  `json:"logoFileID,omitempty"`
-	FaviconFileID       *string  `json:"faviconFileID,omitempty"`
+	NdaApprovalRequired *bool `json:"ndaApprovalRequired,omitempty"`
+	// URL to the company's status page
+	StatusPageURL   *string  `json:"statusPageURL,omitempty"`
+	BlockedGroupIDs []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs       []string `json:"editorIDs,omitempty"`
+	LogoFileID      *string  `json:"logoFileID,omitempty"`
+	FaviconFileID   *string  `json:"faviconFileID,omitempty"`
 }
 
 // CreateTrustCenterSubprocessorInput is used for create TrustCenterSubprocessor object.
@@ -32211,11 +32213,13 @@ type TrustCenterSetting struct {
 	// email address for security contact
 	SecurityContact *string `json:"securityContact,omitempty"`
 	// whether NDA requests require approval before being processed
-	NdaApprovalRequired *bool            `json:"ndaApprovalRequired,omitempty"`
-	BlockedGroups       *GroupConnection `json:"blockedGroups"`
-	Editors             *GroupConnection `json:"editors"`
-	LogoFile            *File            `json:"logoFile,omitempty"`
-	FaviconFile         *File            `json:"faviconFile,omitempty"`
+	NdaApprovalRequired *bool `json:"ndaApprovalRequired,omitempty"`
+	// URL to the company's status page
+	StatusPageURL *string          `json:"statusPageURL,omitempty"`
+	BlockedGroups *GroupConnection `json:"blockedGroups"`
+	Editors       *GroupConnection `json:"editors"`
+	LogoFile      *File            `json:"logoFile,omitempty"`
+	FaviconFile   *File            `json:"faviconFile,omitempty"`
 }
 
 func (TrustCenterSetting) IsNode() {}
@@ -32653,6 +32657,22 @@ type TrustCenterSettingWhereInput struct {
 	NdaApprovalRequiredNeq    *bool `json:"ndaApprovalRequiredNEQ,omitempty"`
 	NdaApprovalRequiredIsNil  *bool `json:"ndaApprovalRequiredIsNil,omitempty"`
 	NdaApprovalRequiredNotNil *bool `json:"ndaApprovalRequiredNotNil,omitempty"`
+	// status_page_url field predicates
+	StatusPageURL             *string  `json:"statusPageURL,omitempty"`
+	StatusPageURLNeq          *string  `json:"statusPageURLNEQ,omitempty"`
+	StatusPageURLIn           []string `json:"statusPageURLIn,omitempty"`
+	StatusPageURLNotIn        []string `json:"statusPageURLNotIn,omitempty"`
+	StatusPageURLGt           *string  `json:"statusPageURLGT,omitempty"`
+	StatusPageURLGte          *string  `json:"statusPageURLGTE,omitempty"`
+	StatusPageURLLt           *string  `json:"statusPageURLLT,omitempty"`
+	StatusPageURLLte          *string  `json:"statusPageURLLTE,omitempty"`
+	StatusPageURLContains     *string  `json:"statusPageURLContains,omitempty"`
+	StatusPageURLHasPrefix    *string  `json:"statusPageURLHasPrefix,omitempty"`
+	StatusPageURLHasSuffix    *string  `json:"statusPageURLHasSuffix,omitempty"`
+	StatusPageURLIsNil        *bool    `json:"statusPageURLIsNil,omitempty"`
+	StatusPageURLNotNil       *bool    `json:"statusPageURLNotNil,omitempty"`
+	StatusPageURLEqualFold    *string  `json:"statusPageURLEqualFold,omitempty"`
+	StatusPageURLContainsFold *string  `json:"statusPageURLContainsFold,omitempty"`
 	// blocked_groups edge predicates
 	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
 	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
@@ -38325,18 +38345,21 @@ type UpdateTrustCenterSettingInput struct {
 	SecurityContact      *string `json:"securityContact,omitempty"`
 	ClearSecurityContact *bool   `json:"clearSecurityContact,omitempty"`
 	// whether NDA requests require approval before being processed
-	NdaApprovalRequired      *bool    `json:"ndaApprovalRequired,omitempty"`
-	ClearNdaApprovalRequired *bool    `json:"clearNdaApprovalRequired,omitempty"`
-	AddBlockedGroupIDs       []string `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs    []string `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups       *bool    `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs             []string `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs          []string `json:"removeEditorIDs,omitempty"`
-	ClearEditors             *bool    `json:"clearEditors,omitempty"`
-	LogoFileID               *string  `json:"logoFileID,omitempty"`
-	ClearLogoFile            *bool    `json:"clearLogoFile,omitempty"`
-	FaviconFileID            *string  `json:"faviconFileID,omitempty"`
-	ClearFaviconFile         *bool    `json:"clearFaviconFile,omitempty"`
+	NdaApprovalRequired      *bool `json:"ndaApprovalRequired,omitempty"`
+	ClearNdaApprovalRequired *bool `json:"clearNdaApprovalRequired,omitempty"`
+	// URL to the company's status page
+	StatusPageURL         *string  `json:"statusPageURL,omitempty"`
+	ClearStatusPageURL    *bool    `json:"clearStatusPageURL,omitempty"`
+	AddBlockedGroupIDs    []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups    *bool    `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs          []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs       []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors          *bool    `json:"clearEditors,omitempty"`
+	LogoFileID            *string  `json:"logoFileID,omitempty"`
+	ClearLogoFile         *bool    `json:"clearLogoFile,omitempty"`
+	FaviconFileID         *string  `json:"faviconFileID,omitempty"`
+	ClearFaviconFile      *bool    `json:"clearFaviconFile,omitempty"`
 }
 
 // UpdateTrustCenterSubprocessorInput is used for update TrustCenterSubprocessor object.
@@ -38357,9 +38380,6 @@ type UpdateTrustCenterSubprocessorInput struct {
 	AddEditorIDs                     []string `json:"addEditorIDs,omitempty"`
 	RemoveEditorIDs                  []string `json:"removeEditorIDs,omitempty"`
 	ClearEditors                     *bool    `json:"clearEditors,omitempty"`
-	TrustCenterID                    *string  `json:"trustCenterID,omitempty"`
-	ClearTrustCenter                 *bool    `json:"clearTrustCenter,omitempty"`
-	SubprocessorID                   *string  `json:"subprocessorID,omitempty"`
 }
 
 // UpdateTrustCenterWatermarkConfigInput is used for update TrustCenterWatermarkConfig object.

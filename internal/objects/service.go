@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/storagetypes"
+	"github.com/theopenlane/core/internal/consts"
 	"github.com/theopenlane/core/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
@@ -163,7 +164,11 @@ func (s *Service) resolveUploadProvider(ctx context.Context, opts *storage.Uploa
 	// Get organization ID from auth context
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil || orgID == "" {
-		return nil, ErrNoOrganizationID
+		if auth.IsSystemAdminFromContext(ctx) {
+			orgID = consts.SystemAdminOrgID
+		} else {
+			return nil, ErrNoOrganizationID
+		}
 	}
 
 	cacheKey := ProviderCacheKey{

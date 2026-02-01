@@ -8,6 +8,7 @@ import (
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -20,7 +21,6 @@ import (
 
 func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 	cleanupTrustCenterData(t)
-
 	trustCenterNoApproval := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ndaTemplate1 := (&TemplateBuilder{
@@ -259,16 +259,20 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 }
 
 func TestQueryTrustCenterNDARequest(t *testing.T) {
-	cleanupTrustCenterData(t)
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	testUser := suite.userBuilder(context.Background(), t)
+
+	viewOnlyUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser.OrganizationID)
+
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	ndaTemplate := (&TemplateBuilder{
 		client:        suite.client,
 		Kind:          enums.TemplateKindTrustCenterNda,
 		TrustCenterID: trustCenter.ID,
-	}).MustNew(testUser1.UserCtx, t)
+	}).MustNew(testUser.UserCtx, t)
 
-	ndaRequest, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+	ndaRequest, err := suite.client.api.CreateTrustCenterNDARequest(testUser.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         gofakeit.Email(),
@@ -287,7 +291,7 @@ func TestQueryTrustCenterNDARequest(t *testing.T) {
 			name:    "happy path",
 			queryID: ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     testUser.UserCtx,
 		},
 		{
 			name:    "happy path, view only user",
@@ -306,7 +310,7 @@ func TestQueryTrustCenterNDARequest(t *testing.T) {
 			name:     "not found, invalid id",
 			queryID:  ulids.New().String(),
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      testUser.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -325,22 +329,28 @@ func TestQueryTrustCenterNDARequest(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
+
 }
 
 func TestQueryTrustCenterNDARequests(t *testing.T) {
 	cleanupTrustCenterData(t)
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	testUser := suite.userBuilder(context.Background(), t)
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+
+	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
+
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	ndaTemplate := (&TemplateBuilder{
 		client:        suite.client,
 		Kind:          enums.TemplateKindTrustCenterNda,
 		TrustCenterID: trustCenter.ID,
-	}).MustNew(testUser1.UserCtx, t)
+	}).MustNew(testUser.UserCtx, t)
 
-	ndaRequest1, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+	ndaRequest1, err := suite.client.api.CreateTrustCenterNDARequest(testUser.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         gofakeit.Email(),
@@ -348,7 +358,7 @@ func TestQueryTrustCenterNDARequests(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
-	ndaRequest2, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+	ndaRequest2, err := suite.client.api.CreateTrustCenterNDARequest(testUser.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         gofakeit.Email(),
@@ -365,13 +375,13 @@ func TestQueryTrustCenterNDARequests(t *testing.T) {
 		{
 			name:        "happy path",
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testUser.UserCtx,
 			expectCount: 2,
 		},
 		{
 			name:        "happy path, view only user",
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         viewOnlyUserCtx,
 			expectCount: 2,
 		},
 		{
@@ -391,10 +401,10 @@ func TestQueryTrustCenterNDARequests(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: ndaRequest1.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: ndaRequest2.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: ndaRequest1.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: ndaRequest2.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
 }
 
 func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
@@ -446,7 +456,7 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 				Status: lo.ToPtr(enums.TrustCenterNDARequestStatusApproved),
 			},
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             adminUser.UserCtx,
 			expectEmailSent: true,
 		},
 		{
@@ -540,6 +550,8 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 	anonCtx, anonUser := createAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, anonEmail)
 	wrongTrustCenterAnonCtx := createAnonymousTrustCenterContext(otherTrustCenter.ID, otherTrustCenter.OwnerID)
 
+	companyName := gofakeit.Company()
+
 	testCases := []struct {
 		name            string
 		input           testclient.CreateTrustCenterNDARequestInput
@@ -555,7 +567,7 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 			input: testclient.CreateTrustCenterNDARequestInput{
 				FirstName:     gofakeit.FirstName(),
 				LastName:      gofakeit.LastName(),
-				CompanyName:   lo.ToPtr(gofakeit.Company()),
+				CompanyName:   &companyName,
 				Email:         anonEmail,
 				TrustCenterID: &trustCenter.ID,
 			},
@@ -570,6 +582,7 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 			input: testclient.CreateTrustCenterNDARequestInput{
 				FirstName:     gofakeit.FirstName(),
 				LastName:      gofakeit.LastName(),
+				CompanyName:   &companyName,
 				Email:         gofakeit.Email(),
 				TrustCenterID: &otherTrustCenter.ID,
 			},
@@ -584,6 +597,7 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 				FirstName:     gofakeit.FirstName(),
 				LastName:      gofakeit.LastName(),
 				Email:         gofakeit.Email(),
+				CompanyName:   &companyName,
 				TrustCenterID: &trustCenter.ID,
 			},
 			client:          suite.client.api,
@@ -796,7 +810,7 @@ func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
 			name:       "happy path - delete nda request",
 			idToDelete: ndaRequest1.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        adminUser.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",

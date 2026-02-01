@@ -453,7 +453,7 @@ func TestMutationDeleteOrgMembers(t *testing.T) {
 		// organization owner cannot be deleted
 		if edge.Node.UserID == testUser.ID {
 			_, err = suite.client.api.RemoveUserFromOrg(adminUserCtx, edge.Node.ID)
-			assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+			assert.ErrorContains(t, err, "organization owner cannot be deleted")
 			break
 		}
 	}

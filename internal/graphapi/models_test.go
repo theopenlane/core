@@ -21,6 +21,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/consts"
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
@@ -42,6 +43,7 @@ type OrganizationBuilder struct {
 	Features []models.OrgModule
 
 	// Fields
+	SystemOrg      bool
 	Name           string
 	DisplayName    string
 	Description    *string
@@ -506,6 +508,13 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 	// no auth, so allow policy
 	ctx = setContext(ctx, o.client.db)
 
+	if o.SystemOrg {
+		systemOrg, err := o.client.db.Organization.Create().SetID(consts.SystemAdminOrgID).SetName("System Admin Organization").SetDisplayName("System Admin Organization").SetPersonalOrg(true).SetDescription("Organization for system administrators").Save(ctx)
+		requireNoError(t, err)
+
+		return systemOrg
+	}
+
 	if o.Name == "" {
 		o.Name = randomName(t)
 	}
@@ -641,13 +650,30 @@ func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TFA
 func (w *JobRunnerBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobRunner {
 	ctx = setContext(ctx, w.client.db)
 
+	ip := getValidIPAddress(t)
 	wn, err := w.client.db.JobRunner.Create().
 		SetName(randomName(t)).
-		SetIPAddress(gofakeit.IPv4Address()).
+		SetIPAddress(ip).
 		Save(ctx)
 	requireNoError(t, err)
 
 	return wn
+}
+
+func getValidIPAddress(t *testing.T) string {
+	maxAttempts := 10
+	attempts := 0
+	for {
+		ip := gofakeit.IPv4Address()
+		if err := models.ValidateIP(ip); err == nil {
+			return ip
+		}
+		attempts++
+
+		if attempts >= maxAttempts {
+			t.Fail()
+		}
+	}
 }
 
 // MustNew webauthn settings builder is used to create passkeys without the browser setup process

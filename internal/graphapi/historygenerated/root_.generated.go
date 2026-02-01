@@ -2466,6 +2466,7 @@ type ComplexityRoot struct {
 		SecondaryBackgroundColor func(childComplexity int) int
 		SecondaryForegroundColor func(childComplexity int) int
 		SecurityContact          func(childComplexity int) int
+		StatusPageURL            func(childComplexity int) int
 		ThemeMode                func(childComplexity int) int
 		Title                    func(childComplexity int) int
 		TrustCenterID            func(childComplexity int) int
@@ -16511,6 +16512,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSettingHistory.SecurityContact(childComplexity), true
+
+	case "TrustCenterSettingHistory.statusPageURL":
+		if e.complexity.TrustCenterSettingHistory.StatusPageURL == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.StatusPageURL(childComplexity), true
 
 	case "TrustCenterSettingHistory.themeMode":
 		if e.complexity.TrustCenterSettingHistory.ThemeMode == nil {
@@ -50815,6 +50823,10 @@ type TrustCenterSettingHistory implements Node {
   whether NDA requests require approval before being processed
   """
   ndaApprovalRequired: Boolean
+  """
+  URL to the company's status page
+  """
+  statusPageURL: String
 }
 """
 A connection to a list of items.
@@ -51364,6 +51376,24 @@ input TrustCenterSettingHistoryWhereInput {
   ndaApprovalRequiredNEQ: Boolean
   ndaApprovalRequiredIsNil: Boolean
   ndaApprovalRequiredNotNil: Boolean
+  """
+  status_page_url field predicates
+  """
+  statusPageURL: String
+  statusPageURLNEQ: String
+  statusPageURLIn: [String!]
+  statusPageURLNotIn: [String!]
+  statusPageURLGT: String
+  statusPageURLGTE: String
+  statusPageURLLT: String
+  statusPageURLLTE: String
+  statusPageURLContains: String
+  statusPageURLHasPrefix: String
+  statusPageURLHasSuffix: String
+  statusPageURLIsNil: Boolean
+  statusPageURLNotNil: Boolean
+  statusPageURLEqualFold: String
+  statusPageURLContainsFold: String
 }
 type TrustCenterSubprocessorHistory implements Node {
   id: ID!

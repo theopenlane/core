@@ -134,24 +134,28 @@ type organization
     define subprocessor_creator: [group#member]
     define can_create_subprocessor: can_edit or subprocessor_creator
 
+    define trust_center_admin: [user] 
+    define can_manage_trust_center: trust_center_admin or owner
+
     define trust_center_doc_creator: [group#member]
-    define can_create_trust_center_doc: can_edit or trust_center_doc_creator
+    define can_create_trust_center_doc: can_edit or trust_center_doc_creator or can_manage_trust_center
 
     define trust_center_subprocessor_creator: [group#member]
-    define can_create_trust_center_subprocessor: can_edit or trust_center_subprocessor_creator
+    define can_create_trust_center_subprocessor: can_edit or trust_center_subprocessor_creator or can_manage_trust_center
 
     define trust_center_entity_creator: [group#member]
-    define can_create_trust_center_entity: can_edit or trust_center_entity_creator
+    define can_create_trust_center_entity: can_edit or trust_center_entity_creator or can_manage_trust_center
 
     define trust_center_nda_request_creator: [group#member]
-    define can_create_trust_center_nda_request: can_edit or trust_center_nda_request_creator
+    define can_create_trust_center_nda_request: can_edit or trust_center_nda_request_creator or can_manage_trust_center
 
     define trust_center_compliance_creator: [group#member]
-    define can_create_trust_center_compliance: can_edit or trust_center_compliance_creator
+    define can_create_trust_center_compliance: can_edit or trust_center_compliance_creator or can_manage_trust_center
 
     define trust_center_post_creator: [group#member]
-    define can_create_trust_center_post: can_edit or trust_center_post_creator
+    define can_create_trust_center_post: can_edit or trust_center_post_creator or can_manage_trust_center
 
+    # workflows
     define workflow_definition_creator: [group#member]
     define can_create_workflow_definition: can_edit or workflow_definition_creator
 
@@ -164,7 +168,7 @@ type organization
     define can_create_workflow_proposal: [service]
 
     define entity_creator: [group#member]
-    define can_create_entity: can_edit or entity_creator
+    define can_create_entity: can_edit or entity_creator or can_manage_trust_center
 
     define asset_creator: [group#member]
     define can_create_asset: can_edit or asset_creator
@@ -617,8 +621,8 @@ type trust_center
     define can_view: [user:*, service:*] or parent_viewer or viewer
     define can_edit: [user, service] or parent_editor or editor or system_admin from system
     define can_delete: [user, service] or parent_deleter
-    define parent_viewer: can_delete or can_edit or can_view from parent
-    define parent_editor: can_delete or can_edit from parent
+    define parent_viewer: can_edit from parent or can_view from parent
+    define parent_editor: can_edit from parent or can_manage_trust_center from parent
     define parent_deleter:  can_delete from parent
     define parent: [organization]
     define nda_signed: [user]
@@ -747,7 +751,8 @@ type subprocessor
     define can_delete: editor or parent_editor or system_admin from system
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define admin: [user,service] or can_delete from parent
-    define parent_viewer: member from parent
+    # can_view from parent allows anon trust centers users to see subprocessors associated with the trust center
+    define parent_viewer: member from parent or can_view from parent
     define parent_editor: admin from parent or owner from parent
     define viewer: [user, service] or editor or parent_viewer
     define editor: [user, service, organization#owner] or admin or parent_editor

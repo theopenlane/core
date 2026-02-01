@@ -21,7 +21,7 @@ require (
 	github.com/theopenlane/core/common v1.0.6
 	github.com/theopenlane/go-client v0.7.6
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.23.6
+	github.com/theopenlane/iam v0.23.7
 	github.com/theopenlane/utils v0.6.2
 	golang.org/x/oauth2 v0.34.0
 	golang.org/x/term v0.39.0

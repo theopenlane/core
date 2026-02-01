@@ -10,31 +10,22 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
 )
 
 func TestQueryFile(t *testing.T) {
 	// create an Evidence to be queried using testUser1
-	uf, err := storage.NewUploadFile("testdata/uploads/orgs.csv")
-	assert.NilError(t, err)
-
-	uploadFile := &graphql.Upload{
-		File:        uf.RawFile,
-		Filename:    uf.OriginalName,
-		Size:        uf.Size,
-		ContentType: uf.ContentType,
-	}
+	fileUpload := uploadFile(t, "testdata/uploads/orgs.csv")
 
 	// create control to be used in the Evidence
 	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*uploadFile})
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
 
 	evidence, err := suite.client.api.CreateEvidence(testUser1.UserCtx, testclient.CreateEvidenceInput{
 		Name:       "Test Evidence",
 		ControlIDs: []string{control.ID},
-	}, []*graphql.Upload{uploadFile})
+	}, []*graphql.Upload{fileUpload})
 	assert.NilError(t, err)
 
 	getEvidence, err := suite.client.api.GetEvidenceByID(testUser1.UserCtx, evidence.CreateEvidence.Evidence.ID)
@@ -43,19 +34,11 @@ func TestQueryFile(t *testing.T) {
 
 	evidenceFile := getEvidence.Evidence.Files.Edges[0].Node
 
-	avatarFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-	assert.NilError(t, err)
+	fileUpload = uploadFile(t, logoFilePath)
 
-	uploadFile = &graphql.Upload{
-		File:        avatarFile.RawFile,
-		Filename:    avatarFile.OriginalName,
-		Size:        avatarFile.Size,
-		ContentType: avatarFile.ContentType,
-	}
-
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*uploadFile})
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
 	// update user avatar to the file
-	userResp, err := suite.client.api.UpdateUser(testUser1.UserCtx, testUser1.ID, testclient.UpdateUserInput{}, uploadFile)
+	userResp, err := suite.client.api.UpdateUser(testUser1.UserCtx, testUser1.ID, testclient.UpdateUserInput{}, fileUpload)
 	assert.NilError(t, err)
 	assert.Check(t, userResp.UpdateUser.User.AvatarFile != nil)
 
@@ -174,26 +157,18 @@ func TestQueryFiles(t *testing.T) {
 	orgMember := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	orgMemberCtx := auth.NewTestContextWithOrgID(orgMember.UserID, orgMember.OrganizationID)
 
-	// create an Evidence to be queried using testUser
-	uf, err := storage.NewUploadFile("testdata/uploads/orgs.csv")
-	assert.NilError(t, err)
-
-	uploadFile := &graphql.Upload{
-		File:        uf.RawFile,
-		Filename:    uf.OriginalName,
-		Size:        uf.Size,
-		ContentType: uf.ContentType,
-	}
+	// create an evidence to be queried using testUser
+	fileUpload := uploadFile(t, "testdata/uploads/orgs.csv")
 
 	// create control to be used in the Evidence
 	control := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*uploadFile})
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
 
 	evidence, err := suite.client.api.CreateEvidence(testUser.UserCtx, testclient.CreateEvidenceInput{
 		Name:       "Test Evidence",
 		ControlIDs: []string{control.ID},
-	}, []*graphql.Upload{uploadFile})
+	}, []*graphql.Upload{fileUpload})
 	assert.NilError(t, err)
 
 	getEvidence, err := suite.client.api.GetEvidenceByID(testUser.UserCtx, evidence.CreateEvidence.Evidence.ID)
@@ -202,19 +177,11 @@ func TestQueryFiles(t *testing.T) {
 
 	evidenceFile := getEvidence.Evidence.Files.Edges[0].Node
 
-	avatarFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-	assert.NilError(t, err)
+	fileUpload = uploadFile(t, logoFilePath)
 
-	uploadFile = &graphql.Upload{
-		File:        avatarFile.RawFile,
-		Filename:    avatarFile.OriginalName,
-		Size:        avatarFile.Size,
-		ContentType: avatarFile.ContentType,
-	}
-
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*uploadFile})
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
 	// update user avatar to the file
-	userResp, err := suite.client.api.UpdateUser(testUser.UserCtx, testUser.ID, testclient.UpdateUserInput{}, uploadFile)
+	userResp, err := suite.client.api.UpdateUser(testUser.UserCtx, testUser.ID, testclient.UpdateUserInput{}, fileUpload)
 	assert.NilError(t, err)
 	assert.Check(t, userResp.UpdateUser.User.AvatarFile != nil)
 

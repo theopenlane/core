@@ -71970,6 +71970,23 @@ type TrustCenterSettingHistoryWhereInput struct {
 	NdaApprovalRequiredNEQ    *bool `json:"ndaApprovalRequiredNEQ,omitempty"`
 	NdaApprovalRequiredIsNil  bool  `json:"ndaApprovalRequiredIsNil,omitempty"`
 	NdaApprovalRequiredNotNil bool  `json:"ndaApprovalRequiredNotNil,omitempty"`
+
+	// "status_page_url" field predicates.
+	StatusPageURL             *string  `json:"statusPageURL,omitempty"`
+	StatusPageURLNEQ          *string  `json:"statusPageURLNEQ,omitempty"`
+	StatusPageURLIn           []string `json:"statusPageURLIn,omitempty"`
+	StatusPageURLNotIn        []string `json:"statusPageURLNotIn,omitempty"`
+	StatusPageURLGT           *string  `json:"statusPageURLGT,omitempty"`
+	StatusPageURLGTE          *string  `json:"statusPageURLGTE,omitempty"`
+	StatusPageURLLT           *string  `json:"statusPageURLLT,omitempty"`
+	StatusPageURLLTE          *string  `json:"statusPageURLLTE,omitempty"`
+	StatusPageURLContains     *string  `json:"statusPageURLContains,omitempty"`
+	StatusPageURLHasPrefix    *string  `json:"statusPageURLHasPrefix,omitempty"`
+	StatusPageURLHasSuffix    *string  `json:"statusPageURLHasSuffix,omitempty"`
+	StatusPageURLIsNil        bool     `json:"statusPageURLIsNil,omitempty"`
+	StatusPageURLNotNil       bool     `json:"statusPageURLNotNil,omitempty"`
+	StatusPageURLEqualFold    *string  `json:"statusPageURLEqualFold,omitempty"`
+	StatusPageURLContainsFold *string  `json:"statusPageURLContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -73173,6 +73190,51 @@ func (i *TrustCenterSettingHistoryWhereInput) P() (predicate.TrustCenterSettingH
 	}
 	if i.NdaApprovalRequiredNotNil {
 		predicates = append(predicates, trustcentersettinghistory.NdaApprovalRequiredNotNil())
+	}
+	if i.StatusPageURL != nil {
+		predicates = append(predicates, trustcentersettinghistory.StatusPageURLEQ(*i.StatusPageURL))
+	}
+	if i.StatusPageURLNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.StatusPageURLNEQ(*i.StatusPageURLNEQ))
+	}
+	if len(i.StatusPageURLIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.StatusPageURLIn(i.StatusPageURLIn...))
+	}
+	if len(i.StatusPageURLNotIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.StatusPageURLNotIn(i.StatusPageURLNotIn...))
+	}
+	if i.StatusPageURLGT != nil {
+		predicates = append(predicates, trustcentersettinghistory.StatusPageURLGT(*i.StatusPageURLGT))
+	}
+	if i.StatusPageURLGTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.StatusPageURLGTE(*i.StatusPageURLGTE))
+	}
+	if i.StatusPageURLLT != nil {
+		predicates = append(predicates, trustcentersettinghistory.StatusPageURLLT(*i.StatusPageURLLT))
+	}
+	if i.StatusPageURLLTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.StatusPageURLLTE(*i.StatusPageURLLTE))
+	}
+	if i.StatusPageURLContains != nil {
+		predicates = append(predicates, trustcentersettinghistory.StatusPageURLContains(*i.StatusPageURLContains))
+	}
+	if i.StatusPageURLHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.StatusPageURLHasPrefix(*i.StatusPageURLHasPrefix))
+	}
+	if i.StatusPageURLHasSuffix != nil {
+		predicates = append(predicates, trustcentersettinghistory.StatusPageURLHasSuffix(*i.StatusPageURLHasSuffix))
+	}
+	if i.StatusPageURLIsNil {
+		predicates = append(predicates, trustcentersettinghistory.StatusPageURLIsNil())
+	}
+	if i.StatusPageURLNotNil {
+		predicates = append(predicates, trustcentersettinghistory.StatusPageURLNotNil())
+	}
+	if i.StatusPageURLEqualFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.StatusPageURLEqualFold(*i.StatusPageURLEqualFold))
+	}
+	if i.StatusPageURLContainsFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.StatusPageURLContainsFold(*i.StatusPageURLContainsFold))
 	}
 
 	switch len(predicates) {

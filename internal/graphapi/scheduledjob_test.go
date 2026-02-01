@@ -314,7 +314,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "user not authorized, job runner not in organization",

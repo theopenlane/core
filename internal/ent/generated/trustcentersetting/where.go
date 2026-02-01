@@ -198,6 +198,11 @@ func NdaApprovalRequired(v bool) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldNdaApprovalRequired, v))
 }
 
+// StatusPageURL applies equality check predicate on the "status_page_url" field. It's identical to StatusPageURLEQ.
+func StatusPageURL(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldStatusPageURL, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldCreatedAt, v))
@@ -2041,6 +2046,81 @@ func NdaApprovalRequiredIsNil() predicate.TrustCenterSetting {
 // NdaApprovalRequiredNotNil applies the NotNil predicate on the "nda_approval_required" field.
 func NdaApprovalRequiredNotNil() predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldNdaApprovalRequired))
+}
+
+// StatusPageURLEQ applies the EQ predicate on the "status_page_url" field.
+func StatusPageURLEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldStatusPageURL, v))
+}
+
+// StatusPageURLNEQ applies the NEQ predicate on the "status_page_url" field.
+func StatusPageURLNEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldStatusPageURL, v))
+}
+
+// StatusPageURLIn applies the In predicate on the "status_page_url" field.
+func StatusPageURLIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIn(FieldStatusPageURL, vs...))
+}
+
+// StatusPageURLNotIn applies the NotIn predicate on the "status_page_url" field.
+func StatusPageURLNotIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotIn(FieldStatusPageURL, vs...))
+}
+
+// StatusPageURLGT applies the GT predicate on the "status_page_url" field.
+func StatusPageURLGT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGT(FieldStatusPageURL, v))
+}
+
+// StatusPageURLGTE applies the GTE predicate on the "status_page_url" field.
+func StatusPageURLGTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGTE(FieldStatusPageURL, v))
+}
+
+// StatusPageURLLT applies the LT predicate on the "status_page_url" field.
+func StatusPageURLLT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLT(FieldStatusPageURL, v))
+}
+
+// StatusPageURLLTE applies the LTE predicate on the "status_page_url" field.
+func StatusPageURLLTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLTE(FieldStatusPageURL, v))
+}
+
+// StatusPageURLContains applies the Contains predicate on the "status_page_url" field.
+func StatusPageURLContains(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContains(FieldStatusPageURL, v))
+}
+
+// StatusPageURLHasPrefix applies the HasPrefix predicate on the "status_page_url" field.
+func StatusPageURLHasPrefix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasPrefix(FieldStatusPageURL, v))
+}
+
+// StatusPageURLHasSuffix applies the HasSuffix predicate on the "status_page_url" field.
+func StatusPageURLHasSuffix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasSuffix(FieldStatusPageURL, v))
+}
+
+// StatusPageURLIsNil applies the IsNil predicate on the "status_page_url" field.
+func StatusPageURLIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldStatusPageURL))
+}
+
+// StatusPageURLNotNil applies the NotNil predicate on the "status_page_url" field.
+func StatusPageURLNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldStatusPageURL))
+}
+
+// StatusPageURLEqualFold applies the EqualFold predicate on the "status_page_url" field.
+func StatusPageURLEqualFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEqualFold(FieldStatusPageURL, v))
+}
+
+// StatusPageURLContainsFold applies the ContainsFold predicate on the "status_page_url" field.
+func StatusPageURLContainsFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldStatusPageURL, v))
 }
 
 // HasBlockedGroups applies the HasEdge predicate on the "blocked_groups" edge.

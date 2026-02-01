@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 func TestQueryEvidence(t *testing.T) {
@@ -203,17 +202,10 @@ func TestMutationCreateEvidence(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	pngFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-	assert.NilError(t, err)
-
-	csvFile, err := storage.NewUploadFile("testdata/uploads/orgs.csv")
-	assert.NilError(t, err)
-
-	pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-	assert.NilError(t, err)
-
-	txtFile, err := storage.NewUploadFile("testdata/uploads/hello.txt")
-	assert.NilError(t, err)
+	pngFile := uploadFile(t, logoFilePath)
+	csvFile := uploadFile(t, "testdata/uploads/orgs.csv")
+	pdfFile := uploadFile(t, pdfFilePath)
+	txtFile := uploadFile(t, txtFilePath)
 
 	// create edges to be used in the test cases
 	control1 := (&ControlBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
@@ -283,18 +275,8 @@ func TestMutationCreateEvidence(t *testing.T) {
 				SubcontrolIDs:       []string{subcontrol1.ID, subcontrol2.ID},
 			},
 			files: []*graphql.Upload{
-				{
-					File:        pngFile.RawFile,
-					Filename:    pngFile.OriginalName,
-					Size:        pngFile.Size,
-					ContentType: pngFile.ContentType,
-				},
-				{
-					File:        csvFile.RawFile,
-					Filename:    csvFile.OriginalName,
-					Size:        csvFile.Size,
-					ContentType: csvFile.ContentType,
-				},
+				pngFile,
+				csvFile,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -358,12 +340,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 				OwnerID: &testUser1.OrganizationID,
 			},
 			files: []*graphql.Upload{
-				{
-					File:        pdfFile.RawFile,
-					Filename:    pdfFile.OriginalName,
-					Size:        pdfFile.Size,
-					ContentType: pdfFile.ContentType,
-				},
+				pdfFile,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -374,12 +351,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 				Name: "Test Evidence - TSK-123",
 			},
 			files: []*graphql.Upload{
-				{
-					File:        txtFile.RawFile,
-					Filename:    txtFile.OriginalName,
-					Size:        txtFile.Size,
-					ContentType: txtFile.ContentType,
-				},
+				txtFile,
 			},
 			client: suite.client.apiWithToken,
 			ctx:    context.Background(),
@@ -580,11 +552,8 @@ func TestMutationCreateEvidence(t *testing.T) {
 }
 
 func TestMutationCreateBulkCSVEvidence(t *testing.T) {
-	bulkFile, err := storage.NewUploadFile("testdata/uploads/evidence.csv")
-	assert.NilError(t, err)
-
-	plainTagFile, err := storage.NewUploadFile("testdata/uploads/evidence_invalid.csv")
-	assert.NilError(t, err)
+	bulkFile := uploadFile(t, "testdata/uploads/evidence.csv")
+	plainTagFile := uploadFile(t, "testdata/uploads/evidence_invalid.csv")
 
 	evidences := []string{}
 	testCases := []struct {
@@ -597,28 +566,18 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 		expectedTags int
 	}{
 		{
-			name:   "happy path, valid file with json array tags",
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-			fileInput: graphql.Upload{
-				File:        bulkFile.RawFile,
-				Filename:    bulkFile.OriginalName,
-				Size:        bulkFile.Size,
-				ContentType: bulkFile.ContentType,
-			},
+			name:         "happy path, valid file with json array tags",
+			client:       suite.client.api,
+			ctx:          testUser1.UserCtx,
+			fileInput:    *bulkFile,
 			expectedLen:  2,
 			expectedTags: 3,
 		},
 		{
-			name:   "happy path, plain string tag converted to array",
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-			fileInput: graphql.Upload{
-				File:        plainTagFile.RawFile,
-				Filename:    plainTagFile.OriginalName,
-				Size:        plainTagFile.Size,
-				ContentType: plainTagFile.ContentType,
-			},
+			name:         "happy path, plain string tag converted to array",
+			client:       suite.client.api,
+			ctx:          testUser1.UserCtx,
+			fileInput:    *plainTagFile,
 			expectedLen:  1,
 			expectedTags: 1,
 		},
@@ -657,8 +616,7 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 func TestMutationUpdateEvidence(t *testing.T) {
 	evidence := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
-	pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-	assert.NilError(t, err)
+	pdfFile := uploadFile(t, pdfFilePath)
 
 	testCases := []struct {
 		name        string
@@ -685,12 +643,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 				Source:              lo.ToPtr("meows"),
 			},
 			files: []*graphql.Upload{
-				{
-					File:        pdfFile.RawFile,
-					Filename:    pdfFile.OriginalName,
-					Size:        pdfFile.Size,
-					ContentType: pdfFile.ContentType,
-				},
+				pdfFile,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -832,8 +785,7 @@ func TestMutationDeleteEvidence(t *testing.T) {
 }
 
 func TestEvidenceMissingArtifactStatus(t *testing.T) {
-	pngFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-	assert.NilError(t, err)
+	pngFile := uploadFile(t, logoFilePath)
 
 	testCases := []struct {
 		name           string
@@ -857,12 +809,7 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 				Name: "Evidence with files",
 			},
 			createFiles: []*graphql.Upload{
-				{
-					File:        pngFile.RawFile,
-					Filename:    pngFile.OriginalName,
-					Size:        pngFile.Size,
-					ContentType: pngFile.ContentType,
-				},
+				pngFile,
 			},
 			expectedStatus: enums.EvidenceStatusSubmitted,
 			description:    "Evidence created with files should not have MISSING_ARTIFACT status",
@@ -883,12 +830,7 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 				URL:  lo.ToPtr("https://example.com/evidence.pdf"),
 			},
 			createFiles: []*graphql.Upload{
-				{
-					File:        pngFile.RawFile,
-					Filename:    pngFile.OriginalName,
-					Size:        pngFile.Size,
-					ContentType: pngFile.ContentType,
-				},
+				pngFile,
 			},
 			expectedStatus: enums.EvidenceStatusSubmitted,
 			description:    "Evidence created with both files and URL should not have MISSING_ARTIFACT status",
@@ -932,12 +874,7 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 				Status: lo.ToPtr(enums.EvidenceStatusMissingArtifact),
 			},
 			createFiles: []*graphql.Upload{
-				{
-					File:        pngFile.RawFile,
-					Filename:    pngFile.OriginalName,
-					Size:        pngFile.Size,
-					ContentType: pngFile.ContentType,
-				},
+				pngFile,
 			},
 			expectedStatus: enums.EvidenceStatusMissingArtifact,
 			description:    "Explicit status should always be respected, even when evidence has files",

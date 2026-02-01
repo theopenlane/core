@@ -52,10 +52,12 @@ func InterceptorFile() ent.Interceptor {
 
 		// filter on the organization id or empty organization id
 		// which would happen on something like a user file
+		// also include system owned files in the results
 		q.WhereP(
 			file.Or(
 				file.HasOrganizationWith(organization.IDIn(orgs...)),
 				file.Not(file.HasOrganization()),
+				file.SystemOwned(true),
 			),
 		)
 

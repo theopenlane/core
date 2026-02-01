@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -107,27 +106,8 @@ func TestQueryTemplate(t *testing.T) {
 
 func TestMutationCreateTemplate(t *testing.T) {
 	// Helper function to create fresh file uploads for each test case
-	createPDFUpload := func() *graphql.Upload {
-		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pdfFile.RawFile,
-			Filename:    pdfFile.OriginalName,
-			Size:        pdfFile.Size,
-			ContentType: pdfFile.ContentType,
-		}
-	}
-
-	createPNGUpload := func() *graphql.Upload {
-		pngFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pngFile.RawFile,
-			Filename:    pngFile.OriginalName,
-			Size:        pngFile.Size,
-			ContentType: pngFile.ContentType,
-		}
-	}
+	createPDFUpload := uploadFileFunc(t, pdfFilePath)
+	createPNGUpload := logoFileFunc(t)
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -406,27 +386,8 @@ func TestMutationCreateTemplate(t *testing.T) {
 
 func TestMutationUpdateTemplate(t *testing.T) {
 	// Helper function to create fresh file uploads for each test case
-	createPDFUpload := func() *graphql.Upload {
-		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pdfFile.RawFile,
-			Filename:    pdfFile.OriginalName,
-			Size:        pdfFile.Size,
-			ContentType: pdfFile.ContentType,
-		}
-	}
-
-	createPNGUpload := func() *graphql.Upload {
-		pngFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pngFile.RawFile,
-			Filename:    pngFile.OriginalName,
-			Size:        pngFile.Size,
-			ContentType: pngFile.ContentType,
-		}
-	}
+	createPDFUpload := uploadFileFunc(t, pdfFilePath)
+	createPNGUpload := logoFileFunc(t)
 
 	// Create a template to be updated
 	template := (&TemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
