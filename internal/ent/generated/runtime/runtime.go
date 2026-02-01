@@ -1900,6 +1900,8 @@ func init() {
 	documentdata.Hooks[7] = documentdataMixinHooks7[0]
 
 	documentdata.Hooks[8] = documentdataHooks[0]
+
+	documentdata.Hooks[9] = documentdataHooks[1]
 	documentdataMixinInters1 := documentdataMixin[1].Interceptors()
 	documentdataMixinInters5 := documentdataMixin[5].Interceptors()
 	documentdata.Interceptors[0] = documentdataMixinInters1[0]
@@ -6832,10 +6834,6 @@ func init() {
 	trustcenterdocDescTitle := trustcenterdocFields[1].Descriptor()
 	// trustcenterdoc.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	trustcenterdoc.TitleValidator = trustcenterdocDescTitle.Validators[0].(func(string) error)
-	// trustcenterdocDescStandardID is the schema descriptor for standard_id field.
-	trustcenterdocDescStandardID := trustcenterdocFields[7].Descriptor()
-	// trustcenterdoc.StandardIDValidator is a validator for the "standard_id" field. It is called by the builders before save.
-	trustcenterdoc.StandardIDValidator = trustcenterdocDescStandardID.Validators[0].(func(string) error)
 	// trustcenterdocDescID is the schema descriptor for id field.
 	trustcenterdocDescID := trustcenterdocMixinFields2[0].Descriptor()
 	// trustcenterdoc.DefaultID holds the default value on creation for the id field.
@@ -7078,10 +7076,6 @@ func init() {
 	trustcentersettingDescCompanyDescription := trustcentersettingFields[3].Descriptor()
 	// trustcentersetting.CompanyDescriptionValidator is a validator for the "company_description" field. It is called by the builders before save.
 	trustcentersetting.CompanyDescriptionValidator = trustcentersettingDescCompanyDescription.Validators[0].(func(string) error)
-	// trustcentersettingDescOverview is the schema descriptor for overview field.
-	trustcentersettingDescOverview := trustcentersettingFields[4].Descriptor()
-	// trustcentersetting.OverviewValidator is a validator for the "overview" field. It is called by the builders before save.
-	trustcentersetting.OverviewValidator = trustcentersettingDescOverview.Validators[0].(func(string) error)
 	// trustcentersettingDescLogoRemoteURL is the schema descriptor for logo_remote_url field.
 	trustcentersettingDescLogoRemoteURL := trustcentersettingFields[5].Descriptor()
 	// trustcentersetting.LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.

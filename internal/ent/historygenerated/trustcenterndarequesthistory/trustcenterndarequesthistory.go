@@ -56,6 +56,16 @@ const (
 	FieldAccessLevel = "access_level"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldApprovedAt holds the string denoting the approved_at field in the database.
+	FieldApprovedAt = "approved_at"
+	// FieldApprovedByUserID holds the string denoting the approved_by_user_id field in the database.
+	FieldApprovedByUserID = "approved_by_user_id"
+	// FieldSignedAt holds the string denoting the signed_at field in the database.
+	FieldSignedAt = "signed_at"
+	// FieldDocumentDataID holds the string denoting the document_data_id field in the database.
+	FieldDocumentDataID = "document_data_id"
+	// FieldFileID holds the string denoting the file_id field in the database.
+	FieldFileID = "file_id"
 	// Table holds the table name of the trustcenterndarequesthistory in the database.
 	Table = "trust_center_nda_request_history"
 )
@@ -81,6 +91,11 @@ var Columns = []string{
 	FieldReason,
 	FieldAccessLevel,
 	FieldStatus,
+	FieldApprovedAt,
+	FieldApprovedByUserID,
+	FieldSignedAt,
+	FieldDocumentDataID,
+	FieldFileID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -143,7 +158,7 @@ const DefaultStatus enums.TrustCenterNDARequestStatus = "REQUESTED"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.TrustCenterNDARequestStatus) error {
 	switch s.String() {
-	case "REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED":
+	case "REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED", "DECLINED":
 		return nil
 	default:
 		return fmt.Errorf("trustcenterndarequesthistory: invalid enum value for status field: %q", s)
@@ -241,6 +256,31 @@ func ByAccessLevel(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByApprovedAt orders the results by the approved_at field.
+func ByApprovedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldApprovedAt, opts...).ToFunc()
+}
+
+// ByApprovedByUserID orders the results by the approved_by_user_id field.
+func ByApprovedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldApprovedByUserID, opts...).ToFunc()
+}
+
+// BySignedAt orders the results by the signed_at field.
+func BySignedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSignedAt, opts...).ToFunc()
+}
+
+// ByDocumentDataID orders the results by the document_data_id field.
+func ByDocumentDataID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDocumentDataID, opts...).ToFunc()
+}
+
+// ByFileID orders the results by the file_id field.
+func ByFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFileID, opts...).ToFunc()
 }
 
 var (

@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // DocumentData holds the schema definition for the DocumentData entity
@@ -93,6 +94,12 @@ func (d DocumentData) Annotations() []schema.Annotation {
 // Policy of the DocumentData
 func (d DocumentData) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.AllowQueryIfSystemAdmin(),
+		),
+		policy.WithOnMutationRules(ent.OpUpdate|ent.OpUpdateOne,
+			rule.AllowMutationIfSystemAdmin(),
+		),
 		policy.WithMutationRules(
 			// TODO: this should ensure the correct access for creation
 			// it currently only checks edit access
@@ -104,5 +111,6 @@ func (d DocumentData) Policy() ent.Policy {
 func (d DocumentData) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookDocumentDataTrustCenterNDA(),
+		hooks.HookDocumentDataFile(),
 	}
 }

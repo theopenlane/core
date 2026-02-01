@@ -219,10 +219,16 @@ func (Campaign) Fields() []ent.Field {
 			),
 		field.String("template_id").
 			Comment("the template associated with the campaign").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("CampaignTemplateRef").MatchOn("name"),
+			),
 		field.String("entity_id").
 			Comment("the entity associated with the campaign").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("CampaignEntityName").MatchOn("name"),
+			),
 		field.String("assessment_id").
 			Comment("the assessment associated with the campaign").
 			Optional(),
@@ -256,7 +262,7 @@ func (c Campaign) Edges() []ent.Edge {
 			edgeSchema: Assessment{},
 			field:      "assessment_id",
 			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(Assessment{}.Name()),
+				accessmap.EdgeNoAuthCheck(),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{

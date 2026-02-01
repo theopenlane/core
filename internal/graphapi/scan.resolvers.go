@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -55,7 +56,7 @@ func (r *mutationResolver) CreateBulkScan(ctx context.Context, input []*generate
 
 // CreateBulkCSVScan is the resolver for the createBulkCSVScan field.
 func (r *mutationResolver) CreateBulkCSVScan(ctx context.Context, input graphql.Upload) (*model.ScanBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateScanInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.ScanCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -71,10 +72,23 @@ func (r *mutationResolver) CreateBulkCSVScan(ctx context.Context, input graphql.
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateScan(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "Scan", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateScanInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateScan(ctx, inputs)
 }
 
 // UpdateBulkScan is the resolver for the updateBulkScan field.
@@ -135,6 +149,26 @@ func (r *mutationResolver) DeleteBulkScan(ctx context.Context, ids []string) (*m
 	}
 
 	return r.bulkDeleteScan(ctx, ids)
+}
+
+// UpdateBulkCSVScan is the resolver for the updateBulkCSVScan field.
+func (r *mutationResolver) UpdateBulkCSVScan(ctx context.Context, input graphql.Upload) (*model.ScanBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.ScanCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "scan"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Scan", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVScan(ctx, data)
 }
 
 // Scan is the resolver for the scan field.

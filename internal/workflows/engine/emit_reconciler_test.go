@@ -60,8 +60,9 @@ func (s *WorkflowEngineTestSuite) clearEmitFailedEvents(ctx context.Context) {
 //     - LastError: The error message from the failed emit
 //
 // Why This Matters:
-//   Emit failures should not be silently lost. Recording them enables monitoring, alerting,
-//   and automated recovery through the reconciliation process.
+//
+//	Emit failures should not be silently lost. Recording them enables monitoring, alerting,
+//	and automated recovery through the reconciliation process.
 func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
 	_, orgID, userCtx := s.SetupTestUser()
 	s.clearEmitFailedEvents(userCtx)
@@ -126,8 +127,9 @@ func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
 //  7. Verifies the workflow instance eventually completed (event processed)
 //
 // Why This Matters:
-//   The reconciliation process enables self-healing. When infrastructure recovers, the
-//   reconciler can retry failed emissions without losing workflow progress.
+//
+//	The reconciliation process enables self-healing. When infrastructure recovers, the
+//	reconciler can retry failed emissions without losing workflow progress.
 func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 	_, orgID, userCtx := s.SetupTestUser()
 	s.clearEmitFailedEvents(userCtx)
@@ -196,9 +198,10 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 //     - Workflow instance marked as FAILED
 //
 // Why This Matters:
-//   Infinite retries could waste resources on permanently broken workflows. After max
-//   attempts, the system must give up gracefully, mark the failure as terminal, and
-//   fail the workflow instance for human investigation.
+//
+//	Infinite retries could waste resources on permanently broken workflows. After max
+//	attempts, the system must give up gracefully, mark the failure as terminal, and
+//	fail the workflow instance for human investigation.
 func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureTerminalAfterMaxAttempts() {
 	_, orgID, userCtx := s.SetupTestUser()
 	s.clearEmitFailedEvents(userCtx)

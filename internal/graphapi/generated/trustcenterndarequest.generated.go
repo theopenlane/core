@@ -28,6 +28,35 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
+func (ec *executionContext) _BulkUpdateStatusPayload_totalUpdated(ctx context.Context, field graphql.CollectedField, obj *model.BulkUpdateStatusPayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BulkUpdateStatusPayload_totalUpdated,
+		func(ctx context.Context) (any, error) {
+			return obj.TotalUpdated, nil
+		},
+		nil,
+		ec.marshalNInt2int,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BulkUpdateStatusPayload_totalUpdated(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BulkUpdateStatusPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _TrustCenterNDARequestBulkCreatePayload_trustCenterNDARequests(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterNDARequestBulkCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -80,6 +109,16 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestBulkCreatePayload_
 				return ec.fieldContext_TrustCenterNDARequest_accessLevel(ctx, field)
 			case "status":
 				return ec.fieldContext_TrustCenterNDARequest_status(ctx, field)
+			case "approvedAt":
+				return ec.fieldContext_TrustCenterNDARequest_approvedAt(ctx, field)
+			case "approvedByUserID":
+				return ec.fieldContext_TrustCenterNDARequest_approvedByUserID(ctx, field)
+			case "signedAt":
+				return ec.fieldContext_TrustCenterNDARequest_signedAt(ctx, field)
+			case "documentDataID":
+				return ec.fieldContext_TrustCenterNDARequest_documentDataID(ctx, field)
+			case "fileID":
+				return ec.fieldContext_TrustCenterNDARequest_fileID(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterNDARequest_blockedGroups(ctx, field)
 			case "editors":
@@ -88,6 +127,10 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestBulkCreatePayload_
 				return ec.fieldContext_TrustCenterNDARequest_trustCenter(ctx, field)
 			case "trustCenterDocs":
 				return ec.fieldContext_TrustCenterNDARequest_trustCenterDocs(ctx, field)
+			case "document":
+				return ec.fieldContext_TrustCenterNDARequest_document(ctx, field)
+			case "file":
+				return ec.fieldContext_TrustCenterNDARequest_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDARequest", field.Name)
 		},
@@ -147,6 +190,16 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestCreatePayload_trus
 				return ec.fieldContext_TrustCenterNDARequest_accessLevel(ctx, field)
 			case "status":
 				return ec.fieldContext_TrustCenterNDARequest_status(ctx, field)
+			case "approvedAt":
+				return ec.fieldContext_TrustCenterNDARequest_approvedAt(ctx, field)
+			case "approvedByUserID":
+				return ec.fieldContext_TrustCenterNDARequest_approvedByUserID(ctx, field)
+			case "signedAt":
+				return ec.fieldContext_TrustCenterNDARequest_signedAt(ctx, field)
+			case "documentDataID":
+				return ec.fieldContext_TrustCenterNDARequest_documentDataID(ctx, field)
+			case "fileID":
+				return ec.fieldContext_TrustCenterNDARequest_fileID(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterNDARequest_blockedGroups(ctx, field)
 			case "editors":
@@ -155,6 +208,10 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestCreatePayload_trus
 				return ec.fieldContext_TrustCenterNDARequest_trustCenter(ctx, field)
 			case "trustCenterDocs":
 				return ec.fieldContext_TrustCenterNDARequest_trustCenterDocs(ctx, field)
+			case "document":
+				return ec.fieldContext_TrustCenterNDARequest_document(ctx, field)
+			case "file":
+				return ec.fieldContext_TrustCenterNDARequest_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDARequest", field.Name)
 		},
@@ -243,6 +300,16 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestUpdatePayload_trus
 				return ec.fieldContext_TrustCenterNDARequest_accessLevel(ctx, field)
 			case "status":
 				return ec.fieldContext_TrustCenterNDARequest_status(ctx, field)
+			case "approvedAt":
+				return ec.fieldContext_TrustCenterNDARequest_approvedAt(ctx, field)
+			case "approvedByUserID":
+				return ec.fieldContext_TrustCenterNDARequest_approvedByUserID(ctx, field)
+			case "signedAt":
+				return ec.fieldContext_TrustCenterNDARequest_signedAt(ctx, field)
+			case "documentDataID":
+				return ec.fieldContext_TrustCenterNDARequest_documentDataID(ctx, field)
+			case "fileID":
+				return ec.fieldContext_TrustCenterNDARequest_fileID(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterNDARequest_blockedGroups(ctx, field)
 			case "editors":
@@ -251,6 +318,10 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestUpdatePayload_trus
 				return ec.fieldContext_TrustCenterNDARequest_trustCenter(ctx, field)
 			case "trustCenterDocs":
 				return ec.fieldContext_TrustCenterNDARequest_trustCenterDocs(ctx, field)
+			case "document":
+				return ec.fieldContext_TrustCenterNDARequest_document(ctx, field)
+			case "file":
+				return ec.fieldContext_TrustCenterNDARequest_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDARequest", field.Name)
 		},
@@ -269,6 +340,45 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestUpdatePayload_trus
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
+
+var bulkUpdateStatusPayloadImplementors = []string{"BulkUpdateStatusPayload"}
+
+func (ec *executionContext) _BulkUpdateStatusPayload(ctx context.Context, sel ast.SelectionSet, obj *model.BulkUpdateStatusPayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, bulkUpdateStatusPayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("BulkUpdateStatusPayload")
+		case "totalUpdated":
+			out.Values[i] = ec._BulkUpdateStatusPayload_totalUpdated(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
 
 var trustCenterNDARequestBulkCreatePayloadImplementors = []string{"TrustCenterNDARequestBulkCreatePayload"}
 
@@ -426,6 +536,20 @@ func (ec *executionContext) _TrustCenterNDARequestUpdatePayload(ctx context.Cont
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
+
+func (ec *executionContext) marshalNBulkUpdateStatusPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateStatusPayload(ctx context.Context, sel ast.SelectionSet, v model.BulkUpdateStatusPayload) graphql.Marshaler {
+	return ec._BulkUpdateStatusPayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNBulkUpdateStatusPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateStatusPayload(ctx context.Context, sel ast.SelectionSet, v *model.BulkUpdateStatusPayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._BulkUpdateStatusPayload(ctx, sel, v)
+}
 
 func (ec *executionContext) marshalNTrustCenterNDARequestBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDARequestBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterNDARequestBulkCreatePayload) graphql.Marshaler {
 	return ec._TrustCenterNDARequestBulkCreatePayload(ctx, sel, &v)

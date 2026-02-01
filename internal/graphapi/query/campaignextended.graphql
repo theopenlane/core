@@ -1,0 +1,258 @@
+mutation CreateCampaignWithTargets($input: CreateCampaignWithTargetsInput!) {
+  createCampaignWithTargets(input: $input) {
+    campaign {
+      assessmentID
+      campaignType
+      completedAt
+      createdAt
+      createdBy
+      description
+      displayID
+      dueDate
+      entityID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      isActive
+      isRecurring
+      lastResentAt
+      lastRunAt
+      launchedAt
+      metadata
+      name
+      nextRunAt
+      ownerID
+      recipientCount
+      recurrenceCron
+      recurrenceEndAt
+      recurrenceFrequency
+      recurrenceInterval
+      recurrenceTimezone
+      resendCount
+      scheduledAt
+      status
+      tags
+      templateID
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+    }
+    campaignTargets {
+      campaignID
+      completedAt
+      contactID
+      createdAt
+      createdBy
+      email
+      fullName
+      groupID
+      id
+      metadata
+      ownerID
+      sentAt
+      status
+      updatedAt
+      updatedBy
+      userID
+      workflowEligibleMarker
+    }
+  }
+}
+
+mutation CreateCampaignWithTargetsCSV($campaign: CreateCampaignInput!, $targets: Upload!) {
+  createCampaignWithTargetsCSV(campaign: $campaign, targets: $targets) {
+    campaign {
+      assessmentID
+      campaignType
+      completedAt
+      createdAt
+      createdBy
+      description
+      displayID
+      dueDate
+      entityID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      isActive
+      isRecurring
+      lastResentAt
+      lastRunAt
+      launchedAt
+      metadata
+      name
+      nextRunAt
+      ownerID
+      recipientCount
+      recurrenceCron
+      recurrenceEndAt
+      recurrenceFrequency
+      recurrenceInterval
+      recurrenceTimezone
+      resendCount
+      scheduledAt
+      status
+      tags
+      templateID
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+    }
+    campaignTargets {
+      campaignID
+      completedAt
+      contactID
+      createdAt
+      createdBy
+      email
+      fullName
+      groupID
+      id
+      metadata
+      ownerID
+      sentAt
+      status
+      updatedAt
+      updatedBy
+      userID
+      workflowEligibleMarker
+    }
+  }
+}
+
+mutation LaunchCampaign($input: LaunchCampaignInput!) {
+  launchCampaign(input: $input) {
+    campaign {
+      assessmentID
+      campaignType
+      completedAt
+      createdAt
+      createdBy
+      description
+      displayID
+      dueDate
+      entityID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      isActive
+      isRecurring
+      lastResentAt
+      lastRunAt
+      launchedAt
+      metadata
+      name
+      nextRunAt
+      ownerID
+      recipientCount
+      recurrenceCron
+      recurrenceEndAt
+      recurrenceFrequency
+      recurrenceInterval
+      recurrenceTimezone
+      resendCount
+      scheduledAt
+      status
+      tags
+      templateID
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+    }
+    queuedCount
+    skippedCount
+  }
+}
+
+mutation ResendCampaignIncompleteTargets($input: ResendCampaignIncompleteInput!) {
+  resendCampaignIncompleteTargets(input: $input) {
+    campaign {
+      assessmentID
+      campaignType
+      completedAt
+      createdAt
+      createdBy
+      description
+      displayID
+      dueDate
+      entityID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      isActive
+      isRecurring
+      lastResentAt
+      lastRunAt
+      launchedAt
+      metadata
+      name
+      nextRunAt
+      ownerID
+      recipientCount
+      recurrenceCron
+      recurrenceEndAt
+      recurrenceFrequency
+      recurrenceInterval
+      recurrenceTimezone
+      resendCount
+      scheduledAt
+      status
+      tags
+      templateID
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+    }
+    queuedCount
+    skippedCount
+  }
+}
+
+mutation SendCampaignTestEmail($input: SendCampaignTestEmailInput!) {
+  sendCampaignTestEmail(input: $input) {
+    campaign {
+      assessmentID
+      campaignType
+      completedAt
+      createdAt
+      createdBy
+      description
+      displayID
+      dueDate
+      entityID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      isActive
+      isRecurring
+      lastResentAt
+      lastRunAt
+      launchedAt
+      metadata
+      name
+      nextRunAt
+      ownerID
+      recipientCount
+      recurrenceCron
+      recurrenceEndAt
+      recurrenceFrequency
+      recurrenceInterval
+      recurrenceTimezone
+      resendCount
+      scheduledAt
+      status
+      tags
+      templateID
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+    }
+    queuedCount
+    skippedCount
+  }
+}

@@ -26,6 +26,12 @@ func cleanupTrustCenterData(t *testing.T) {
 	t.Helper()
 	ctx := privacy.DecisionContext(setContext(testUser1.UserCtx, suite.client.db), privacy.Allow)
 
+	ndaReqs, err := suite.client.db.TrustCenterNDARequest.Query().All(ctx)
+	assert.NilError(t, err)
+	for _, req := range ndaReqs {
+		_ = suite.client.db.TrustCenterNDARequest.DeleteOneID(req.ID).Exec(ctx)
+	}
+
 	wcs, err := suite.client.db.TrustCenterWatermarkConfig.Query().All(ctx)
 	assert.NilError(t, err)
 	for _, wc := range wcs {
@@ -50,6 +56,7 @@ func cleanupWatermarkConfigs(t *testing.T) {
 }
 
 func TestQueryTrustCenterDocByID(t *testing.T) {
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
 	trustCenterDocPublic := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityPubliclyVisible}).MustNew(testUser1.UserCtx, t)
@@ -189,6 +196,7 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 }
 
 func TestQueryTrustCenterDocByIDWithStandardForAnonymousUsers(t *testing.T) {
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -573,7 +581,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			if tc.input.WatermarkingEnabled != nil && *tc.input.WatermarkingEnabled {
 				assert.Check(t, trustCenterDoc.File == nil)
 			} else {
-				assert.Check(t, trustCenterDoc.File != nil)
+				assert.Assert(t, trustCenterDoc.File != nil)
 				assert.Check(t, trustCenterDoc.File.ID != "")
 				assert.Check(t, trustCenterDoc.FileID != nil)
 				assert.Check(t, is.Equal(*trustCenterDoc.FileID, trustCenterDoc.File.ID))
@@ -589,6 +597,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 }
 
 func TestQueryTrustCenterDocs(t *testing.T) {
+
 	trustCenter1 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
@@ -739,6 +748,7 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 }
 
 func TestMutationUpdateTrustCenterDoc(t *testing.T) {
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenterDoc := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID}).MustNew(testUser1.UserCtx, t)
 
@@ -878,6 +888,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 }
 
 func TestTrustCenterDocUpdateSysAdmin(t *testing.T) {
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
 
@@ -938,7 +949,6 @@ func TestTrustCenterDocUpdateSysAdmin(t *testing.T) {
 }
 
 func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
-	cleanupTrustCenterData(t)
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -1092,6 +1102,7 @@ func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
 }
 
 func TestMutationUpdateTrustCenterDocWithFGATuples(t *testing.T) {
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
@@ -1249,7 +1260,6 @@ func TestMutationUpdateTrustCenterDocWithFGATuples(t *testing.T) {
 }
 
 func TestMutationDeleteTrustCenterDoc(t *testing.T) {
-	t.Parallel()
 	// Create new test users
 	testUser := suite.userBuilder(context.Background(), t)
 	testUserOther := suite.userBuilder(testUser.UserCtx, t)
@@ -1574,7 +1584,6 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 }
 
 func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
-	cleanupTrustCenterData(t)
 
 	docKind := (&CustomTypeEnumBuilder{
 		client:     suite.client,
@@ -1697,7 +1706,6 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 }
 
 func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
-	cleanupTrustCenterData(t)
 
 	docKind := (&CustomTypeEnumBuilder{
 		client:     suite.client,
@@ -1853,7 +1861,6 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 }
 
 func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
-	cleanupTrustCenterData(t)
 
 	docKind := (&CustomTypeEnumBuilder{
 		client:     suite.client,

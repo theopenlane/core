@@ -318,11 +318,19 @@ var (
 				},
 			},
 			{
-				Name:    "assessmentresponse_assessment_id_email",
+				Name:    "assessmentresponse_assessment_id_email_is_test",
 				Unique:  true,
-				Columns: []*schema.Column{AssessmentResponsesColumns[22], AssessmentResponsesColumns[8]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[22], AssessmentResponsesColumns[8], AssessmentResponsesColumns[7]},
 				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
+					Where: "deleted_at is NULL AND campaign_id IS NULL",
+				},
+			},
+			{
+				Name:    "assessmentresponse_campaign_id_assessment_id_email_is_test",
+				Unique:  true,
+				Columns: []*schema.Column{AssessmentResponsesColumns[24], AssessmentResponsesColumns[22], AssessmentResponsesColumns[8], AssessmentResponsesColumns[7]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL AND campaign_id IS NOT NULL",
 				},
 			},
 			{
@@ -6669,8 +6677,13 @@ var (
 		{Name: "company_name", Type: field.TypeString, Nullable: true},
 		{Name: "reason", Type: field.TypeString, Nullable: true},
 		{Name: "access_level", Type: field.TypeEnum, Nullable: true, Enums: []string{"FULL", "LIMITED"}, Default: "FULL"},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED"}, Default: "REQUESTED"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED", "DECLINED"}, Default: "REQUESTED"},
+		{Name: "approved_at", Type: field.TypeTime, Nullable: true},
+		{Name: "approved_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "signed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterNdaRequestsTable holds the schema information for the "trust_center_nda_requests" table.
 	TrustCenterNdaRequestsTable = &schema.Table{
@@ -6680,8 +6693,20 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_nda_requests_trust_centers_trust_center_nda_requests",
-				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[15]},
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[18]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_nda_requests_document_data_document",
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[19]},
+				RefColumns: []*schema.Column{DocumentDataColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_nda_requests_files_file",
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[20]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -6699,7 +6724,7 @@ var (
 		{Name: "title", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "company_name", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "company_description", Type: field.TypeString, Nullable: true, Size: 1024},
-		{Name: "overview", Type: field.TypeString, Nullable: true, Size: 1024},
+		{Name: "overview", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "favicon_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "theme_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"EASY", "ADVANCED"}, Default: "EASY"},
@@ -12523,6 +12548,8 @@ func init() {
 	TrustCenterEntitiesTable.ForeignKeys[2].RefTable = FilesTable
 	TrustCenterEntitiesTable.ForeignKeys[3].RefTable = EntityTypesTable
 	TrustCenterNdaRequestsTable.ForeignKeys[0].RefTable = TrustCentersTable
+	TrustCenterNdaRequestsTable.ForeignKeys[1].RefTable = DocumentDataTable
+	TrustCenterNdaRequestsTable.ForeignKeys[2].RefTable = FilesTable
 	TrustCenterSettingsTable.ForeignKeys[0].RefTable = FilesTable
 	TrustCenterSettingsTable.ForeignKeys[1].RefTable = FilesTable
 	TrustCenterSubprocessorsTable.ForeignKeys[0].RefTable = SubprocessorsTable

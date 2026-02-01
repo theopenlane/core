@@ -1,4 +1,4 @@
-h1:o1wRFrO+LZ4HVxX87OXdsVZCiZI+wkI/qIUA0H5RGvo=
+h1:Ws0yVvaSGCz5gUprnPC2lWcPGGyagbUxoROFntHAyHM=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -29,5 +29,8 @@ h1:o1wRFrO+LZ4HVxX87OXdsVZCiZI+wkI/qIUA0H5RGvo=
 20260126161422_trustcenter_company_description_history.sql h1:fo2Ub5OBmekpBBtFng5fLq4Bv4wK5IQQaovCAbRQEKw=
 20260128203941_trustcenter_pirsch_access_link.sql h1:lqo03Nx9JQwQvVFl/BfVP8DF2XG/Yqhhn3yofaDi9m8=
 20260128203952_trustcenter_pirsch_access_link_history.sql h1:fW8cH5B61zFt3qJam3HWYMo3kAeFX4/+TwWvzuQWRfA=
-20260129095638_trustcenter_subprocessor_category.sql h1:i4YhYORTTjvW0o8MftgwDqx9SlJo/NrKaj8ty5kYImA=
-20260129095647_trustcenter_subprocessor_category_history.sql h1:OpYs/5KILjAWb40Tj/G2KfxVVFaTawNFVyy/5QPkq8A=
+20260129194238_nda_requests.sql h1:+Ch7QUZkwVDchUctEm0YLaXm/FI9hVxrk6O/mykDeGU=
+20260129194241_nda_requests_history.sql h1:VfXEV+f/zsLvB8zcWKl9ldJG/I0ytQjSA/JnMsGy8CM=
+20260130132732_signed_nda_original_file.sql h1:+rXVtP+ce1yoi6UZlHnZvptPeLtObcIFe5qQSZCJ9G0=
+20260130132742_signed_nda_original_file_history.sql h1:vAyZFE7s9lxiccz3h0/abcoFThUBCvJLDbXXmAf4v6Q=
+20260130195856_campaignsassessements.sql h1:I7n4ge5lMqZEXhKq7a7DKpLzAnwdGueM81hcai8+Zoc=

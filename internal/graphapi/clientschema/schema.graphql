@@ -96,6 +96,19 @@ type APITokenBulkDeletePayload {
 	deletedIDs: [ID!]!
 }
 """
+Return response for updateBulkAPIToken mutation
+"""
+type APITokenBulkUpdatePayload {
+	"""
+	Updated apiTokens
+	"""
+	apiTokens: [APIToken!]
+	"""
+	IDs of the updated apiTokens
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type APITokenConnection {
@@ -3379,6 +3392,19 @@ type AssetBulkDeletePayload {
 	deletedIDs: [ID!]!
 }
 """
+Return response for updateBulkAsset mutation
+"""
+type AssetBulkUpdatePayload {
+	"""
+	Updated assets
+	"""
+	assets: [Asset!]
+	"""
+	IDs of the updated assets
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type AssetConnection {
@@ -4284,6 +4310,15 @@ input AssetWhereInput {
 	hasConnectedFrom: Boolean
 	hasConnectedFromWith: [AssetWhereInput!]
 }
+"""
+Return response for approveNDARequests or denyNDARequests mutation
+"""
+type BulkUpdateStatusPayload {
+	"""
+	Updated nda request IDs
+	"""
+	totalUpdated: Int!
+}
 type Campaign implements Node {
 	id: ID!
 	createdAt: Time
@@ -4803,6 +4838,19 @@ type CampaignCreatePayload {
 	campaign: Campaign!
 }
 """
+Return response for createCampaignWithTargets mutation
+"""
+type CampaignCreateWithTargetsPayload {
+	"""
+	Created campaign
+	"""
+	campaign: Campaign!
+	"""
+	Created campaign targets
+	"""
+	campaignTargets: [CampaignTarget!]
+}
+"""
 Return response for deleteCampaign mutation
 """
 type CampaignDeletePayload {
@@ -4832,6 +4880,23 @@ enum CampaignFrequency @goModel(model: "github.com/theopenlane/core/common/enums
 	QUARTERLY
 	BIANNUALLY
 	MONTHLY
+}
+"""
+Return response for launchCampaign mutation
+"""
+type CampaignLaunchPayload {
+	"""
+	Updated campaign
+	"""
+	campaign: Campaign!
+	"""
+	Number of targets queued for send
+	"""
+	queuedCount: Int!
+	"""
+	Number of targets skipped
+	"""
+	skippedCount: Int!
 }
 """
 Ordering options for Campaign connections
@@ -5354,6 +5419,23 @@ input CampaignTargetWhereInput {
 	"""
 	hasWorkflowObjectRefs: Boolean
 	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+}
+"""
+Return response for sendCampaignTestEmail mutation
+"""
+type CampaignTestEmailPayload {
+	"""
+	Campaign used for the test send
+	"""
+	campaign: Campaign!
+	"""
+	Number of emails queued for send
+	"""
+	queuedCount: Int!
+	"""
+	Number of emails skipped
+	"""
+	skippedCount: Int!
 }
 """
 Return response for updateCampaign mutation
@@ -7840,6 +7922,19 @@ type ControlImplementationBulkDeletePayload {
 	deletedIDs: [ID!]!
 }
 """
+Return response for updateBulkControlImplementation mutation
+"""
+type ControlImplementationBulkUpdatePayload {
+	"""
+	Updated controlImplementations
+	"""
+	controlImplementations: [ControlImplementation!]
+	"""
+	IDs of the updated controlImplementations
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type ControlImplementationConnection {
@@ -8627,6 +8722,19 @@ type ControlObjectiveBulkDeletePayload {
 	Deleted controlObjective IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkControlObjective mutation
+"""
+type ControlObjectiveBulkUpdatePayload {
+	"""
+	Updated controlObjectives
+	"""
+	controlObjectives: [ControlObjective!]
+	"""
+	IDs of the updated controlObjectives
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -10377,6 +10485,19 @@ input CreateCampaignTargetInput {
 	userID: ID
 	groupID: ID
 	workflowObjectRefIDs: [ID!]
+}
+"""
+Input for createCampaignWithTargets mutation
+"""
+input CreateCampaignWithTargetsInput {
+	"""
+	values of the campaign
+	"""
+	campaign: CreateCampaignInput!
+	"""
+	list of targets to create for the campaign
+	"""
+	targets: [CreateCampaignTargetInput!]
 }
 """
 CreateContactInput is used for create Contact object.
@@ -14388,10 +14509,24 @@ input CreateTrustCenterNDARequestInput {
 	access level requested
 	"""
 	accessLevel: TrustCenterNDARequestTrustCenterNDARequestAccessLevel
+	"""
+	timestamp when the request was approved
+	"""
+	approvedAt: DateTime
+	"""
+	ID of the user who approved the request
+	"""
+	approvedByUserID: String
+	"""
+	timestamp when the NDA was signed
+	"""
+	signedAt: DateTime
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	trustCenterID: ID
 	trustCenterDocIDs: [ID!]
+	documentID: ID
+	fileID: ID
 }
 """
 Input for createTrustCenterPreviewSetting mutation
@@ -15023,6 +15158,19 @@ type CustomDomainBulkDeletePayload {
 	Deleted customDomain IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkCustomDomain mutation
+"""
+type CustomDomainBulkUpdatePayload {
+	"""
+	Updated customDomains
+	"""
+	customDomains: [CustomDomain!]
+	"""
+	IDs of the updated customDomains
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -16170,6 +16318,19 @@ type DNSVerificationBulkDeletePayload {
 	Deleted dnsVerification IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkDNSVerification mutation
+"""
+type DNSVerificationBulkUpdatePayload {
+	"""
+	Updated dnsVerifications
+	"""
+	dnsVerifications: [DNSVerification!]
+	"""
+	IDs of the updated dnsVerifications
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -19606,6 +19767,19 @@ type DocumentDataBulkDeletePayload {
 	deletedIDs: [ID!]!
 }
 """
+Return response for updateBulkDocumentData mutation
+"""
+type DocumentDataBulkUpdatePayload {
+	"""
+	Updated documentDatas
+	"""
+	documentData: [DocumentData!]
+	"""
+	IDs of the updated documentDatas
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type DocumentDataConnection {
@@ -20742,6 +20916,19 @@ type EntityBulkDeletePayload {
 	deletedIDs: [ID!]!
 }
 """
+Return response for updateBulkEntity mutation
+"""
+type EntityBulkUpdatePayload {
+	"""
+	Updated entitys
+	"""
+	entities: [Entity!]
+	"""
+	IDs of the updated entitys
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type EntityConnection {
@@ -20925,6 +21112,19 @@ type EntityTypeBulkDeletePayload {
 	Deleted entityType IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkEntityType mutation
+"""
+type EntityTypeBulkUpdatePayload {
+	"""
+	Updated entityTypes
+	"""
+	entityTypes: [EntityType!]
+	"""
+	IDs of the updated entityTypes
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -22519,6 +22719,19 @@ type EventBulkDeletePayload {
 	Deleted event IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkEvent mutation
+"""
+type EventBulkUpdatePayload {
+	"""
+	Updated events
+	"""
+	events: [Event!]
+	"""
+	IDs of the updated events
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -28606,6 +28819,19 @@ type GroupBulkDeletePayload {
 	deletedIDs: [ID!]!
 }
 """
+Return response for updateBulkGroup mutation
+"""
+type GroupBulkUpdatePayload {
+	"""
+	Updated groups
+	"""
+	groups: [Group!]
+	"""
+	IDs of the updated groups
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type GroupConnection {
@@ -28721,6 +28947,19 @@ type GroupMembershipBulkDeletePayload {
 	Deleted groupMembership IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkGroupMembership mutation
+"""
+type GroupMembershipBulkUpdatePayload {
+	"""
+	Updated groupMemberships
+	"""
+	groupMemberships: [GroupMembership!]
+	"""
+	IDs of the updated groupMemberships
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -29105,6 +29344,19 @@ type GroupSettingBulkDeletePayload {
 	Deleted groupSetting IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkGroupSetting mutation
+"""
+type GroupSettingBulkUpdatePayload {
+	"""
+	Updated groupSettings
+	"""
+	groupSettings: [GroupSetting!]
+	"""
+	IDs of the updated groupSettings
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -33897,6 +34149,19 @@ type InviteBulkDeletePayload {
 	deletedIDs: [ID!]!
 }
 """
+Return response for updateBulkInvite mutation
+"""
+type InviteBulkUpdatePayload {
+	"""
+	Updated invites
+	"""
+	invites: [Invite!]
+	"""
+	IDs of the updated invites
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type InviteConnection {
@@ -35666,6 +35931,19 @@ type JobTemplateBulkDeletePayload {
 	deletedIDs: [ID!]!
 }
 """
+Return response for updateBulkJobTemplate mutation
+"""
+type JobTemplateBulkUpdatePayload {
+	"""
+	Updated jobTemplates
+	"""
+	jobTemplates: [JobTemplate!]
+	"""
+	IDs of the updated jobTemplates
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type JobTemplateConnection {
@@ -35964,6 +36242,23 @@ input JobTemplateWhereInput {
 	hasScheduledJobsWith: [ScheduledJobWhereInput!]
 }
 """
+Input for launchCampaign mutation
+"""
+input LaunchCampaignInput {
+	"""
+	ID of the campaign
+	"""
+	campaignID: ID!
+	"""
+	Whether to resend emails to previously-sent targets
+	"""
+	resend: Boolean
+	"""
+	Optional time to schedule the campaign launch or resend
+	"""
+	scheduledAt: DateTime
+}
+"""
 The builtin Map type
 """
 scalar Map
@@ -36034,6 +36329,19 @@ type MappableDomainBulkDeletePayload {
 	Deleted mappableDomain IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkMappableDomain mutation
+"""
+type MappableDomainBulkUpdatePayload {
+	"""
+	Updated mappableDomains
+	"""
+	mappableDomains: [MappableDomain!]
+	"""
+	IDs of the updated mappableDomains
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -36483,6 +36791,19 @@ type MappedControlBulkDeletePayload {
 	deletedIDs: [ID!]!
 }
 """
+Return response for updateBulkMappedControl mutation
+"""
+type MappedControlBulkUpdatePayload {
+	"""
+	Updated mappedControls
+	"""
+	mappedControls: [MappedControl!]
+	"""
+	IDs of the updated mappedControls
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type MappedControlConnection {
@@ -36881,6 +37202,15 @@ type Mutation {
 		ids: [ID!]!
 	): ActionPlanBulkDeletePayload!
 	"""
+	Update multiple existing actionPlans via file upload
+	"""
+	updateBulkCSVActionPlan(
+		"""
+		csv file containing values of the actionPlan, must include ID column
+		"""
+		input: Upload!
+	): ActionPlanBulkUpdatePayload!
+	"""
 	Create a new apiToken
 	"""
 	createAPIToken(
@@ -36939,6 +37269,29 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): APITokenBulkDeletePayload!
+	"""
+	Update multiple existing apiTokens
+	"""
+	updateBulkAPIToken(
+		"""
+		IDs of the apiTokens to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the apiTokens with
+		"""
+		input: UpdateAPITokenInput!
+	): APITokenBulkUpdatePayload!
+	"""
+	Update multiple existing apiTokens via file upload
+	"""
+	updateBulkCSVAPIToken(
+		"""
+		csv file containing values of the apiToken, must include ID column
+		"""
+		input: Upload!
+	): APITokenBulkUpdatePayload!
 	"""
 	Create a new assessment
 	"""
@@ -37058,6 +37411,29 @@ type Mutation {
 		ids: [ID!]!
 	): AssetBulkDeletePayload!
 	"""
+	Update multiple existing assets
+	"""
+	updateBulkAsset(
+		"""
+		IDs of the assets to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the assets with
+		"""
+		input: UpdateAssetInput!
+	): AssetBulkUpdatePayload!
+	"""
+	Update multiple existing assets via file upload
+	"""
+	updateBulkCSVAsset(
+		"""
+		csv file containing values of the asset, must include ID column
+		"""
+		input: Upload!
+	): AssetBulkUpdatePayload!
+	"""
 	Create a new campaign
 	"""
 	createCampaign(
@@ -37107,6 +37483,56 @@ type Mutation {
 		"""
 		id: ID!
 	): CampaignDeletePayload!
+	"""
+	Create a new campaign with associated targets
+	"""
+	createCampaignWithTargets(
+		"""
+		values of the campaign and targets
+		"""
+		input: CreateCampaignWithTargetsInput!
+	): CampaignCreateWithTargetsPayload!
+	"""
+	Create a new campaign with associated targets via file upload
+	"""
+	createCampaignWithTargetsCSV(
+		"""
+		values of the campaign
+		"""
+		campaign: CreateCampaignInput!
+
+		"""
+		csv file containing target values
+		"""
+		targets: Upload!
+	): CampaignCreateWithTargetsPayload!
+	"""
+	Launch a campaign and send emails to its targets
+	"""
+	launchCampaign(
+		"""
+		values for launching a campaign
+		"""
+		input: LaunchCampaignInput!
+	): CampaignLaunchPayload!
+	"""
+	Resend a campaign to only incomplete targets
+	"""
+	resendCampaignIncompleteTargets(
+		"""
+		values for resending a campaign to incomplete targets
+		"""
+		input: ResendCampaignIncompleteInput!
+	): CampaignLaunchPayload!
+	"""
+	Send a test email for a campaign without creating campaign targets
+	"""
+	sendCampaignTestEmail(
+		"""
+		values for sending a campaign test email
+		"""
+		input: SendCampaignTestEmailInput!
+	): CampaignTestEmailPayload!
 	"""
 	Create a new campaignTarget
 	"""
@@ -37230,6 +37656,15 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): ContactBulkDeletePayload!
+	"""
+	Update multiple existing contacts via file upload
+	"""
+	updateBulkCSVContact(
+		"""
+		csv file containing values of the contact, must include ID column
+		"""
+		input: Upload!
+	): ContactBulkUpdatePayload!
 	"""
 	Create a new control
 	"""
@@ -37385,6 +37820,29 @@ type Mutation {
 		ids: [ID!]!
 	): ControlImplementationBulkDeletePayload!
 	"""
+	Update multiple existing controlImplementations
+	"""
+	updateBulkControlImplementation(
+		"""
+		IDs of the controlImplementations to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the controlImplementations with
+		"""
+		input: UpdateControlImplementationInput!
+	): ControlImplementationBulkUpdatePayload!
+	"""
+	Update multiple existing controlImplementations via file upload
+	"""
+	updateBulkCSVControlImplementation(
+		"""
+		csv file containing values of the controlImplementation, must include ID column
+		"""
+		input: Upload!
+	): ControlImplementationBulkUpdatePayload!
+	"""
 	Create a new controlObjective
 	"""
 	createControlObjective(
@@ -37443,6 +37901,29 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): ControlObjectiveBulkDeletePayload!
+	"""
+	Update multiple existing controlObjectives
+	"""
+	updateBulkControlObjective(
+		"""
+		IDs of the controlObjectives to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the controlObjectives with
+		"""
+		input: UpdateControlObjectiveInput!
+	): ControlObjectiveBulkUpdatePayload!
+	"""
+	Update multiple existing controlObjectives via file upload
+	"""
+	updateBulkCSVControlObjective(
+		"""
+		csv file containing values of the controlObjective, must include ID column
+		"""
+		input: Upload!
+	): ControlObjectiveBulkUpdatePayload!
 	"""
 	Create a new customDomain
 	"""
@@ -37511,6 +37992,29 @@ type Mutation {
 		"""
 		id: ID!
 	): CustomDomainValidatePayload!
+	"""
+	Update multiple existing customDomains
+	"""
+	updateBulkCustomDomain(
+		"""
+		IDs of the customDomains to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the customDomains with
+		"""
+		input: UpdateCustomDomainInput!
+	): CustomDomainBulkUpdatePayload!
+	"""
+	Update multiple existing customDomains via file upload
+	"""
+	updateBulkCSVCustomDomain(
+		"""
+		csv file containing values of the customDomain, must include ID column
+		"""
+		input: Upload!
+	): CustomDomainBulkUpdatePayload!
 	"""
 	Create a new customTypeEnum
 	"""
@@ -37871,6 +38375,29 @@ type Mutation {
 		ids: [ID!]!
 	): DNSVerificationBulkDeletePayload!
 	"""
+	Update multiple existing dnsVerifications
+	"""
+	updateBulkDNSVerification(
+		"""
+		IDs of the dnsVerifications to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the dnsVerifications with
+		"""
+		input: UpdateDNSVerificationInput!
+	): DNSVerificationBulkUpdatePayload!
+	"""
+	Update multiple existing dnsVerifications via file upload
+	"""
+	updateBulkCSVDNSVerification(
+		"""
+		csv file containing values of the dnsVerification, must include ID column
+		"""
+		input: Upload!
+	): DNSVerificationBulkUpdatePayload!
+	"""
 	Create a new documentData
 	"""
 	createDocumentData(
@@ -37910,6 +38437,11 @@ type Mutation {
 		New values for the documentData
 		"""
 		input: UpdateDocumentDataInput!
+
+		"""
+		File to upload for the documentData
+		"""
+		documentDataFile: Upload
 	): DocumentDataUpdatePayload!
 	"""
 	Delete an existing documentData
@@ -37929,6 +38461,29 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): DocumentDataBulkDeletePayload!
+	"""
+	Update multiple existing documentDatas
+	"""
+	updateBulkDocumentData(
+		"""
+		IDs of the documentDatas to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the documentDatas with
+		"""
+		input: UpdateDocumentDataInput!
+	): DocumentDataBulkUpdatePayload!
+	"""
+	Update multiple existing documentDatas via file upload
+	"""
+	updateBulkCSVDocumentData(
+		"""
+		csv file containing values of the documentData, must include ID column
+		"""
+		input: Upload!
+	): DocumentDataBulkUpdatePayload!
 	"""
 	Create a new entity
 	"""
@@ -37989,6 +38544,29 @@ type Mutation {
 		ids: [ID!]!
 	): EntityBulkDeletePayload!
 	"""
+	Update multiple existing entitys
+	"""
+	updateBulkEntity(
+		"""
+		IDs of the entitys to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the entitys with
+		"""
+		input: UpdateEntityInput!
+	): EntityBulkUpdatePayload!
+	"""
+	Update multiple existing entitys via file upload
+	"""
+	updateBulkCSVEntity(
+		"""
+		csv file containing values of the entity, must include ID column
+		"""
+		input: Upload!
+	): EntityBulkUpdatePayload!
+	"""
 	Create a new entityType
 	"""
 	createEntityType(
@@ -38048,6 +38626,29 @@ type Mutation {
 		ids: [ID!]!
 	): EntityTypeBulkDeletePayload!
 	"""
+	Update multiple existing entityTypes
+	"""
+	updateBulkEntityType(
+		"""
+		IDs of the entityTypes to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the entityTypes with
+		"""
+		input: UpdateEntityTypeInput!
+	): EntityTypeBulkUpdatePayload!
+	"""
+	Update multiple existing entityTypes via file upload
+	"""
+	updateBulkCSVEntityType(
+		"""
+		csv file containing values of the entityType, must include ID column
+		"""
+		input: Upload!
+	): EntityTypeBulkUpdatePayload!
+	"""
 	Create a new event
 	"""
 	createEvent(
@@ -38106,6 +38707,29 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): EventBulkDeletePayload!
+	"""
+	Update multiple existing events
+	"""
+	updateBulkEvent(
+		"""
+		IDs of the events to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the events with
+		"""
+		input: UpdateEventInput!
+	): EventBulkUpdatePayload!
+	"""
+	Update multiple existing events via file upload
+	"""
+	updateBulkCSVEvent(
+		"""
+		csv file containing values of the event, must include ID column
+		"""
+		input: Upload!
+	): EventBulkUpdatePayload!
 	"""
 	Create a new evidence
 	"""
@@ -38179,6 +38803,15 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): EvidenceBulkDeletePayload!
+	"""
+	Update multiple existing evidences via file upload
+	"""
+	updateBulkCSVEvidence(
+		"""
+		csv file containing values of the evidence, must include ID column
+		"""
+		input: Upload!
+	): EvidenceBulkUpdatePayload!
 	"""
 	Create a new export
 	"""
@@ -38394,6 +39027,29 @@ type Mutation {
 		ids: [ID!]!
 	): GroupBulkDeletePayload!
 	"""
+	Update multiple existing groups
+	"""
+	updateBulkGroup(
+		"""
+		IDs of the groups to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the groups with
+		"""
+		input: UpdateGroupInput!
+	): GroupBulkUpdatePayload!
+	"""
+	Update multiple existing groups via file upload
+	"""
+	updateBulkCSVGroup(
+		"""
+		csv file containing values of the group, must include ID column
+		"""
+		input: Upload!
+	): GroupBulkUpdatePayload!
+	"""
 	Create a new group with members
 	"""
 	createGroupWithMembers(
@@ -38493,6 +39149,29 @@ type Mutation {
 		ids: [ID!]!
 	): GroupMembershipBulkDeletePayload!
 	"""
+	Update multiple existing groupMemberships
+	"""
+	updateBulkGroupMembership(
+		"""
+		IDs of the groupMemberships to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the groupMemberships with
+		"""
+		input: UpdateGroupMembershipInput!
+	): GroupMembershipBulkUpdatePayload!
+	"""
+	Update multiple existing groupMemberships via file upload
+	"""
+	updateBulkCSVGroupMembership(
+		"""
+		csv file containing values of the groupMembership, must include ID column
+		"""
+		input: Upload!
+	): GroupMembershipBulkUpdatePayload!
+	"""
 	Create a new groupSetting
 	"""
 	createGroupSetting(
@@ -38551,6 +39230,29 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): GroupSettingBulkDeletePayload!
+	"""
+	Update multiple existing groupSettings
+	"""
+	updateBulkGroupSetting(
+		"""
+		IDs of the groupSettings to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the groupSettings with
+		"""
+		input: UpdateGroupSettingInput!
+	): GroupSettingBulkUpdatePayload!
+	"""
+	Update multiple existing groupSettings via file upload
+	"""
+	updateBulkCSVGroupSetting(
+		"""
+		csv file containing values of the groupSetting, must include ID column
+		"""
+		input: Upload!
+	): GroupSettingBulkUpdatePayload!
 	"""
 	Create a new hush
 	"""
@@ -38624,6 +39326,15 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): HushBulkDeletePayload!
+	"""
+	Update multiple existing hushs via file upload
+	"""
+	updateBulkCSVHush(
+		"""
+		csv file containing values of the hush, must include ID column
+		"""
+		input: Upload!
+	): HushBulkUpdatePayload!
 	"""
 	Create a new identityHolder
 	"""
@@ -38776,6 +39487,15 @@ type Mutation {
 		ids: [ID!]!
 	): InternalPolicyBulkDeletePayload!
 	"""
+	Update multiple existing internalPolicys via file upload
+	"""
+	updateBulkCSVInternalPolicy(
+		"""
+		csv file containing values of the internalPolicy, must include ID column
+		"""
+		input: Upload!
+	): InternalPolicyBulkUpdatePayload!
+	"""
 	Create a new invite
 	"""
 	createInvite(
@@ -38834,6 +39554,29 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): InviteBulkDeletePayload!
+	"""
+	Update multiple existing invites
+	"""
+	updateBulkInvite(
+		"""
+		IDs of the invites to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the invites with
+		"""
+		input: UpdateInviteInput!
+	): InviteBulkUpdatePayload!
+	"""
+	Update multiple existing invites via file upload
+	"""
+	updateBulkCSVInvite(
+		"""
+		csv file containing values of the invite, must include ID column
+		"""
+		input: Upload!
+	): InviteBulkUpdatePayload!
 	"""
 	Create a new jobResult
 	"""
@@ -39004,6 +39747,29 @@ type Mutation {
 		ids: [ID!]!
 	): JobTemplateBulkDeletePayload!
 	"""
+	Update multiple existing jobTemplates
+	"""
+	updateBulkJobTemplate(
+		"""
+		IDs of the jobTemplates to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the jobTemplates with
+		"""
+		input: UpdateJobTemplateInput!
+	): JobTemplateBulkUpdatePayload!
+	"""
+	Update multiple existing jobTemplates via file upload
+	"""
+	updateBulkCSVJobTemplate(
+		"""
+		csv file containing values of the jobTemplate, must include ID column
+		"""
+		input: Upload!
+	): JobTemplateBulkUpdatePayload!
+	"""
 	Create a new mappableDomain
 	"""
 	createMappableDomain(
@@ -39062,6 +39828,29 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): MappableDomainBulkDeletePayload!
+	"""
+	Update multiple existing mappableDomains
+	"""
+	updateBulkMappableDomain(
+		"""
+		IDs of the mappableDomains to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the mappableDomains with
+		"""
+		input: UpdateMappableDomainInput!
+	): MappableDomainBulkUpdatePayload!
+	"""
+	Update multiple existing mappableDomains via file upload
+	"""
+	updateBulkCSVMappableDomain(
+		"""
+		csv file containing values of the mappableDomain, must include ID column
+		"""
+		input: Upload!
+	): MappableDomainBulkUpdatePayload!
 	"""
 	Create a new mappedControl
 	"""
@@ -39122,6 +39911,29 @@ type Mutation {
 		ids: [ID!]!
 	): MappedControlBulkDeletePayload!
 	"""
+	Update multiple existing mappedControls
+	"""
+	updateBulkMappedControl(
+		"""
+		IDs of the mappedControls to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the mappedControls with
+		"""
+		input: UpdateMappedControlInput!
+	): MappedControlBulkUpdatePayload!
+	"""
+	Update multiple existing mappedControls via file upload
+	"""
+	updateBulkCSVMappedControl(
+		"""
+		csv file containing values of the mappedControl, must include ID column
+		"""
+		input: Upload!
+	): MappedControlBulkUpdatePayload!
+	"""
 	Create a new narrative
 	"""
 	createNarrative(
@@ -39180,6 +39992,29 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): NarrativeBulkDeletePayload!
+	"""
+	Update multiple existing narratives
+	"""
+	updateBulkNarrative(
+		"""
+		IDs of the narratives to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the narratives with
+		"""
+		input: UpdateNarrativeInput!
+	): NarrativeBulkUpdatePayload!
+	"""
+	Update multiple existing narratives via file upload
+	"""
+	updateBulkCSVNarrative(
+		"""
+		csv file containing values of the narrative, must include ID column
+		"""
+		input: Upload!
+	): NarrativeBulkUpdatePayload!
 	"""
 	Update an existing task comment
 	"""
@@ -39456,6 +40291,29 @@ type Mutation {
 		ids: [ID!]!
 	): OrganizationSettingBulkDeletePayload!
 	"""
+	Update multiple existing organizationSettings
+	"""
+	updateBulkOrganizationSetting(
+		"""
+		IDs of the organizationSettings to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the organizationSettings with
+		"""
+		input: UpdateOrganizationSettingInput!
+	): OrganizationSettingBulkUpdatePayload!
+	"""
+	Update multiple existing organizationSettings via file upload
+	"""
+	updateBulkCSVOrganizationSetting(
+		"""
+		csv file containing values of the organizationSetting, must include ID column
+		"""
+		input: Upload!
+	): OrganizationSettingBulkUpdatePayload!
+	"""
 	Create a new organization with members
 	"""
 	createOrganizationWithMembers(
@@ -39542,6 +40400,29 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): OrgMembershipBulkDeletePayload!
+	"""
+	Update multiple existing orgMemberships
+	"""
+	updateBulkOrgMembership(
+		"""
+		IDs of the orgMemberships to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the orgMemberships with
+		"""
+		input: UpdateOrgMembershipInput!
+	): OrgMembershipBulkUpdatePayload!
+	"""
+	Update multiple existing orgMemberships via file upload
+	"""
+	updateBulkCSVOrgMembership(
+		"""
+		csv file containing values of the orgMembership, must include ID column
+		"""
+		input: Upload!
+	): OrgMembershipBulkUpdatePayload!
 	"""
 	Create a new personalAccessToken
 	"""
@@ -39717,6 +40598,15 @@ type Mutation {
 		ids: [ID!]!
 	): ProcedureBulkDeletePayload!
 	"""
+	Update multiple existing procedures via file upload
+	"""
+	updateBulkCSVProcedure(
+		"""
+		csv file containing values of the procedure, must include ID column
+		"""
+		input: Upload!
+	): ProcedureBulkUpdatePayload!
+	"""
 	Create a new program
 	"""
 	createProgram(
@@ -39775,6 +40665,29 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): ProgramBulkDeletePayload!
+	"""
+	Update multiple existing programs
+	"""
+	updateBulkProgram(
+		"""
+		IDs of the programs to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the programs with
+		"""
+		input: UpdateProgramInput!
+	): ProgramBulkUpdatePayload!
+	"""
+	Update multiple existing programs via file upload
+	"""
+	updateBulkCSVProgram(
+		"""
+		csv file containing values of the program, must include ID column
+		"""
+		input: Upload!
+	): ProgramBulkUpdatePayload!
 	"""
 	Create a new program with members
 	"""
@@ -39861,6 +40774,29 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): ProgramMembershipBulkDeletePayload!
+	"""
+	Update multiple existing programMemberships
+	"""
+	updateBulkProgramMembership(
+		"""
+		IDs of the programMemberships to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the programMemberships with
+		"""
+		input: UpdateProgramMembershipInput!
+	): ProgramMembershipBulkUpdatePayload!
+	"""
+	Update multiple existing programMemberships via file upload
+	"""
+	updateBulkCSVProgramMembership(
+		"""
+		csv file containing values of the programMembership, must include ID column
+		"""
+		input: Upload!
+	): ProgramMembershipBulkUpdatePayload!
 	"""
 	Create a new remediation
 	"""
@@ -40035,6 +40971,15 @@ type Mutation {
 		ids: [ID!]!
 	): RiskBulkDeletePayload!
 	"""
+	Update multiple existing risks via file upload
+	"""
+	updateBulkCSVRisk(
+		"""
+		csv file containing values of the risk, must include ID column
+		"""
+		input: Upload!
+	): RiskBulkUpdatePayload!
+	"""
 	Create a new scan
 	"""
 	createScan(
@@ -40108,6 +41053,15 @@ type Mutation {
 		ids: [ID!]!
 	): ScanBulkDeletePayload!
 	"""
+	Update multiple existing scans via file upload
+	"""
+	updateBulkCSVScan(
+		"""
+		csv file containing values of the scan, must include ID column
+		"""
+		input: Upload!
+	): ScanBulkUpdatePayload!
+	"""
 	Create a new scheduledJob
 	"""
 	createScheduledJob(
@@ -40166,6 +41120,29 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): ScheduledJobBulkDeletePayload!
+	"""
+	Update multiple existing scheduledJobs
+	"""
+	updateBulkScheduledJob(
+		"""
+		IDs of the scheduledJobs to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the scheduledJobs with
+		"""
+		input: UpdateScheduledJobInput!
+	): ScheduledJobBulkUpdatePayload!
+	"""
+	Update multiple existing scheduledJobs via file upload
+	"""
+	updateBulkCSVScheduledJob(
+		"""
+		csv file containing values of the scheduledJob, must include ID column
+		"""
+		input: Upload!
+	): ScheduledJobBulkUpdatePayload!
 	"""
 	Create a new scheduledJobRun
 	"""
@@ -40300,6 +41277,29 @@ type Mutation {
 		ids: [ID!]!
 	): SubcontrolBulkDeletePayload!
 	"""
+	Update multiple existing subcontrols
+	"""
+	updateBulkSubcontrol(
+		"""
+		IDs of the subcontrols to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the subcontrols with
+		"""
+		input: UpdateSubcontrolInput!
+	): SubcontrolBulkUpdatePayload!
+	"""
+	Update multiple existing subcontrols via file upload
+	"""
+	updateBulkCSVSubcontrol(
+		"""
+		csv file containing values of the subcontrol, must include ID column
+		"""
+		input: Upload!
+	): SubcontrolBulkUpdatePayload!
+	"""
 	Create a new subprocessor
 	"""
 	createSubprocessor(
@@ -40382,6 +41382,15 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): SubprocessorBulkDeletePayload!
+	"""
+	Update multiple existing subprocessors via file upload
+	"""
+	updateBulkCSVSubprocessor(
+		"""
+		csv file containing values of the subprocessor, must include ID column
+		"""
+		input: Upload!
+	): SubprocessorBulkUpdatePayload!
 	"""
 	Create a new subscriber
 	"""
@@ -40561,6 +41570,15 @@ type Mutation {
 		ids: [ID!]!
 	): TaskBulkDeletePayload!
 	"""
+	Update multiple existing tasks via file upload
+	"""
+	updateBulkCSVTask(
+		"""
+		csv file containing values of the task, must include ID column
+		"""
+		input: Upload!
+	): TaskBulkUpdatePayload!
+	"""
 	Create a new template
 	"""
 	createTemplate(
@@ -40619,6 +41637,29 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): TemplateBulkDeletePayload!
+	"""
+	Update multiple existing templates
+	"""
+	updateBulkTemplate(
+		"""
+		IDs of the templates to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the templates with
+		"""
+		input: UpdateTemplateInput!
+	): TemplateBulkUpdatePayload!
+	"""
+	Update multiple existing templates via file upload
+	"""
+	updateBulkCSVTemplate(
+		"""
+		csv file containing values of the template, must include ID column
+		"""
+		input: Upload!
+	): TemplateBulkUpdatePayload!
 	"""
 	Create a new tfaSetting
 	"""
@@ -40729,6 +41770,29 @@ type Mutation {
 		ids: [ID!]!
 	): TrustCenterComplianceBulkDeletePayload!
 	"""
+	Update multiple existing trustCenterCompliances
+	"""
+	updateBulkTrustCenterCompliance(
+		"""
+		IDs of the trustCenterCompliances to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the trustCenterCompliances with
+		"""
+		input: UpdateTrustCenterComplianceInput!
+	): TrustCenterComplianceBulkUpdatePayload!
+	"""
+	Update multiple existing trustCenterCompliances via file upload
+	"""
+	updateBulkCSVTrustCenterCompliance(
+		"""
+		csv file containing values of the trustCenterCompliance, must include ID column
+		"""
+		input: Upload!
+	): TrustCenterComplianceBulkUpdatePayload!
+	"""
 	Create a new trustCenterDoc
 	"""
 	createTrustCenterDoc(
@@ -40801,6 +41865,15 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): TrustCenterDocBulkDeletePayload!
+	"""
+	Update multiple existing trustCenterDocs via file upload
+	"""
+	updateBulkCSVTrustCenterDoc(
+		"""
+		csv file containing values of the trustCenterDoc, must include ID column
+		"""
+		input: Upload!
+	): TrustCenterDocBulkUpdatePayload!
 	"""
 	Create a new trustCenterSetting
 	"""
@@ -40955,6 +42028,24 @@ type Mutation {
 		id: ID!
 	): TrustCenterNDARequestDeletePayload!
 	"""
+	Update multiple existing nda requests as approved
+	"""
+	approveNDARequests(
+		"""
+		IDs of the notifications to update
+		"""
+		ids: [ID!]!
+	): BulkUpdateStatusPayload!
+	"""
+	Update multiple existing nda requests as approved
+	"""
+	denyNDARequests(
+		"""
+		IDs of the notifications to update
+		"""
+		ids: [ID!]!
+	): BulkUpdateStatusPayload!
+	"""
 	Create or replace preview environment trust center settings
 	"""
 	createTrustCenterPreviewSetting(
@@ -41082,6 +42173,15 @@ type Mutation {
 		ids: [ID!]!
 	): TrustCenterSubprocessorBulkDeletePayload!
 	"""
+	Update multiple existing trustCenterSubprocessors via file upload
+	"""
+	updateBulkCSVTrustCenterSubprocessor(
+		"""
+		csv file containing values of the trustCenterSubprocessor, must include ID column
+		"""
+		input: Upload!
+	): TrustCenterSubprocessorBulkUpdatePayload!
+	"""
 	Create a new trustCenterWatermarkConfig
 	"""
 	createTrustCenterWatermarkConfig(
@@ -41195,6 +42295,29 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): UserSettingBulkDeletePayload!
+	"""
+	Update multiple existing userSettings
+	"""
+	updateBulkUserSetting(
+		"""
+		IDs of the userSettings to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the userSettings with
+		"""
+		input: UpdateUserSettingInput!
+	): UserSettingBulkUpdatePayload!
+	"""
+	Update multiple existing userSettings via file upload
+	"""
+	updateBulkCSVUserSetting(
+		"""
+		csv file containing values of the userSetting, must include ID column
+		"""
+		input: Upload!
+	): UserSettingBulkUpdatePayload!
 	"""
 	Create a new vulnerability
 	"""
@@ -41606,6 +42729,19 @@ type NarrativeBulkDeletePayload {
 	Deleted narrative IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkNarrative mutation
+"""
+type NarrativeBulkUpdatePayload {
+	"""
+	Updated narratives
+	"""
+	narratives: [Narrative!]
+	"""
+	IDs of the updated narratives
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -42610,6 +43746,19 @@ type OrgMembershipBulkDeletePayload {
 	Deleted orgMembership IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkOrgMembership mutation
+"""
+type OrgMembershipBulkUpdatePayload {
+	"""
+	Updated orgMemberships
+	"""
+	orgMemberships: [OrgMembership!]
+	"""
+	IDs of the updated orgMemberships
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -46226,6 +47375,19 @@ type OrganizationSettingBulkDeletePayload {
 	Deleted organizationSetting IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkOrganizationSetting mutation
+"""
+type OrganizationSettingBulkUpdatePayload {
+	"""
+	Updated organizationSettings
+	"""
+	organizationSettings: [OrganizationSetting!]
+	"""
+	IDs of the updated organizationSettings
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -51652,6 +52814,19 @@ type ProgramBulkDeletePayload {
 	deletedIDs: [ID!]!
 }
 """
+Return response for updateBulkProgram mutation
+"""
+type ProgramBulkUpdatePayload {
+	"""
+	Updated programs
+	"""
+	programs: [Program!]
+	"""
+	IDs of the updated programs
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type ProgramConnection {
@@ -51728,6 +52903,19 @@ type ProgramMembershipBulkDeletePayload {
 	Deleted programMembership IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkProgramMembership mutation
+"""
+type ProgramMembershipBulkUpdatePayload {
+	"""
+	Updated programMemberships
+	"""
+	programMemberships: [ProgramMembership!]
+	"""
+	IDs of the updated programMemberships
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -58517,6 +59705,19 @@ input RemediationWhereInput {
 	hasFiles: Boolean
 	hasFilesWith: [FileWhereInput!]
 }
+"""
+Input for resendCampaignIncompleteTargets mutation
+"""
+input ResendCampaignIncompleteInput {
+	"""
+	ID of the campaign
+	"""
+	campaignID: ID!
+	"""
+	Optional time to schedule the resend for incomplete targets
+	"""
+	scheduledAt: DateTime
+}
 type Review implements Node {
 	id: ID!
 	createdAt: Time
@@ -62413,6 +63614,19 @@ type ScheduledJobBulkDeletePayload {
 	deletedIDs: [ID!]!
 }
 """
+Return response for updateBulkScheduledJob mutation
+"""
+type ScheduledJobBulkUpdatePayload {
+	"""
+	Updated scheduledJobs
+	"""
+	scheduledJobs: [ScheduledJob!]
+	"""
+	IDs of the updated scheduledJobs
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type ScheduledJobConnection {
@@ -63055,6 +64269,19 @@ type SearchSnippet {
 	The matched text with surrounding context (with highlighting markers if applicable)
 	"""
 	text: String!
+}
+"""
+Input for sendCampaignTestEmail mutation
+"""
+input SendCampaignTestEmailInput {
+	"""
+	ID of the campaign
+	"""
+	campaignID: ID!
+	"""
+	List of recipient emails to send the test to
+	"""
+	emails: [String!]!
 }
 type Standard implements Node {
 	id: ID!
@@ -64366,6 +65593,19 @@ type SubcontrolBulkDeletePayload {
 	Deleted subcontrol IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkSubcontrol mutation
+"""
+type SubcontrolBulkUpdatePayload {
+	"""
+	Updated subcontrols
+	"""
+	subcontrols: [Subcontrol!]
+	"""
+	IDs of the updated subcontrols
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -67850,6 +69090,19 @@ type TemplateBulkDeletePayload {
 	deletedIDs: [ID!]!
 }
 """
+Return response for updateBulkTemplate mutation
+"""
+type TemplateBulkUpdatePayload {
+	"""
+	Updated templates
+	"""
+	templates: [Template!]
+	"""
+	IDs of the updated templates
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type TemplateConnection {
@@ -68713,6 +69966,19 @@ type TrustCenterComplianceBulkDeletePayload {
 	Deleted trustCenterCompliance IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkTrustCenterCompliance mutation
+"""
+type TrustCenterComplianceBulkUpdatePayload {
+	"""
+	Updated trustCenterCompliances
+	"""
+	trustCenterCompliances: [TrustCenterCompliance!]
+	"""
+	IDs of the updated trustCenterCompliances
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -69904,6 +71170,26 @@ type TrustCenterNDARequest implements Node {
 	status of the NDA request
 	"""
 	status: TrustCenterNDARequestTrustCenterNDARequestStatus
+	"""
+	timestamp when the request was approved
+	"""
+	approvedAt: DateTime
+	"""
+	ID of the user who approved the request
+	"""
+	approvedByUserID: String
+	"""
+	timestamp when the NDA was signed
+	"""
+	signedAt: DateTime
+	"""
+	ID of the signed NDA document data
+	"""
+	documentDataID: ID
+	"""
+	ID of the template file at the time the NDA was signed
+	"""
+	fileID: ID
 	blockedGroups(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -69998,6 +71284,14 @@ type TrustCenterNDARequest implements Node {
 		"""
 		where: TrustCenterDocWhereInput
 	): TrustCenterDocConnection!
+	"""
+	the signed NDA document data
+	"""
+	document: DocumentData
+	"""
+	the template file at the time the NDA was signed
+	"""
+	file: File
 }
 """
 Return response for createBulkTrustCenterNDARequest mutation
@@ -70091,6 +71385,7 @@ enum TrustCenterNDARequestTrustCenterNDARequestStatus @goModel(model: "github.co
 	NEEDS_APPROVAL
 	APPROVED
 	SIGNED
+	DECLINED
 }
 """
 Return response for updateTrustCenterNDARequest mutation
@@ -70305,6 +71600,86 @@ input TrustCenterNDARequestWhereInput {
 	statusIsNil: Boolean
 	statusNotNil: Boolean
 	"""
+	approved_at field predicates
+	"""
+	approvedAt: DateTime
+	approvedAtNEQ: DateTime
+	approvedAtIn: [DateTime!]
+	approvedAtNotIn: [DateTime!]
+	approvedAtGT: DateTime
+	approvedAtGTE: DateTime
+	approvedAtLT: DateTime
+	approvedAtLTE: DateTime
+	approvedAtIsNil: Boolean
+	approvedAtNotNil: Boolean
+	"""
+	approved_by_user_id field predicates
+	"""
+	approvedByUserID: String
+	approvedByUserIDNEQ: String
+	approvedByUserIDIn: [String!]
+	approvedByUserIDNotIn: [String!]
+	approvedByUserIDGT: String
+	approvedByUserIDGTE: String
+	approvedByUserIDLT: String
+	approvedByUserIDLTE: String
+	approvedByUserIDContains: String
+	approvedByUserIDHasPrefix: String
+	approvedByUserIDHasSuffix: String
+	approvedByUserIDIsNil: Boolean
+	approvedByUserIDNotNil: Boolean
+	approvedByUserIDEqualFold: String
+	approvedByUserIDContainsFold: String
+	"""
+	signed_at field predicates
+	"""
+	signedAt: DateTime
+	signedAtNEQ: DateTime
+	signedAtIn: [DateTime!]
+	signedAtNotIn: [DateTime!]
+	signedAtGT: DateTime
+	signedAtGTE: DateTime
+	signedAtLT: DateTime
+	signedAtLTE: DateTime
+	signedAtIsNil: Boolean
+	signedAtNotNil: Boolean
+	"""
+	document_data_id field predicates
+	"""
+	documentDataID: ID
+	documentDataIDNEQ: ID
+	documentDataIDIn: [ID!]
+	documentDataIDNotIn: [ID!]
+	documentDataIDGT: ID
+	documentDataIDGTE: ID
+	documentDataIDLT: ID
+	documentDataIDLTE: ID
+	documentDataIDContains: ID
+	documentDataIDHasPrefix: ID
+	documentDataIDHasSuffix: ID
+	documentDataIDIsNil: Boolean
+	documentDataIDNotNil: Boolean
+	documentDataIDEqualFold: ID
+	documentDataIDContainsFold: ID
+	"""
+	file_id field predicates
+	"""
+	fileID: ID
+	fileIDNEQ: ID
+	fileIDIn: [ID!]
+	fileIDNotIn: [ID!]
+	fileIDGT: ID
+	fileIDGTE: ID
+	fileIDLT: ID
+	fileIDLTE: ID
+	fileIDContains: ID
+	fileIDHasPrefix: ID
+	fileIDHasSuffix: ID
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: ID
+	fileIDContainsFold: ID
+	"""
 	blocked_groups edge predicates
 	"""
 	hasBlockedGroups: Boolean
@@ -70324,6 +71699,16 @@ input TrustCenterNDARequestWhereInput {
 	"""
 	hasTrustCenterDocs: Boolean
 	hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
+	"""
+	document edge predicates
+	"""
+	hasDocument: Boolean
+	hasDocumentWith: [DocumentDataWhereInput!]
+	"""
+	file edge predicates
+	"""
+	hasFile: Boolean
+	hasFileWith: [FileWhereInput!]
 }
 type TrustCenterNDAUpdatePayload {
 	template: Template!
@@ -78650,6 +80035,21 @@ input UpdateTrustCenterNDARequestInput {
 	"""
 	status: TrustCenterNDARequestTrustCenterNDARequestStatus
 	clearStatus: Boolean
+	"""
+	timestamp when the request was approved
+	"""
+	approvedAt: DateTime
+	clearApprovedAt: Boolean
+	"""
+	ID of the user who approved the request
+	"""
+	approvedByUserID: String
+	clearApprovedByUserID: Boolean
+	"""
+	timestamp when the NDA was signed
+	"""
+	signedAt: DateTime
+	clearSignedAt: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -78659,6 +80059,10 @@ input UpdateTrustCenterNDARequestInput {
 	addTrustCenterDocIDs: [ID!]
 	removeTrustCenterDocIDs: [ID!]
 	clearTrustCenterDocs: Boolean
+	documentID: ID
+	clearDocument: Boolean
+	fileID: ID
+	clearFile: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.
@@ -80178,6 +81582,19 @@ type UserSettingBulkDeletePayload {
 	Deleted userSetting IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkUserSetting mutation
+"""
+type UserSettingBulkUpdatePayload {
+	"""
+	Updated userSettings
+	"""
+	userSettings: [UserSetting!]
+	"""
+	IDs of the updated userSettings
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.

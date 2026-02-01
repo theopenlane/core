@@ -84,6 +84,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ContactBulkDeletePayload!
+    """
+    Update multiple existing contacts via file upload
+    """
+    updateBulkCSVContact(
+        """
+        csv file containing values of the contact, must include ID column
+        """
+        input: Upload!
+    ): ContactBulkUpdatePayload!
 }
 
 """

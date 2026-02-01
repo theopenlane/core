@@ -71,6 +71,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): TemplateBulkDeletePayload!
+    """
+    Update multiple existing templates
+    """
+    updateBulkTemplate(
+        """
+        IDs of the templates to update
+        """
+        ids: [ID!]!
+        """
+        values to update the templates with
+        """
+        input: UpdateTemplateInput!
+    ): TemplateBulkUpdatePayload!
+    """
+    Update multiple existing templates via file upload
+    """
+    updateBulkCSVTemplate(
+        """
+        csv file containing values of the template, must include ID column
+        """
+        input: Upload!
+    ): TemplateBulkUpdatePayload!
 }
 
 """
@@ -121,4 +143,18 @@ type TemplateBulkDeletePayload {
     Deleted template IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkTemplate mutation
+"""
+type TemplateBulkUpdatePayload {
+    """
+    Updated templates
+    """
+    templates: [Template!]
+    """
+    IDs of the updated templates
+    """
+    updatedIDs: [ID!]
 }

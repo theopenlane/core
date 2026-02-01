@@ -2525,7 +2525,12 @@ var (
 		{Name: "company_name", Type: field.TypeString, Nullable: true},
 		{Name: "reason", Type: field.TypeString, Nullable: true},
 		{Name: "access_level", Type: field.TypeEnum, Nullable: true, Enums: []string{"FULL", "LIMITED"}, Default: "FULL"},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED"}, Default: "REQUESTED"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED", "DECLINED"}, Default: "REQUESTED"},
+		{Name: "approved_at", Type: field.TypeTime, Nullable: true},
+		{Name: "approved_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "signed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterNdaRequestHistoryTable holds the schema information for the "trust_center_nda_request_history" table.
 	TrustCenterNdaRequestHistoryTable = &schema.Table{
@@ -2556,7 +2561,7 @@ var (
 		{Name: "title", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "company_name", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "company_description", Type: field.TypeString, Nullable: true, Size: 1024},
-		{Name: "overview", Type: field.TypeString, Nullable: true, Size: 1024},
+		{Name: "overview", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "favicon_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},

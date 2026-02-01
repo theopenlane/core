@@ -18,6 +18,8 @@ var (
 	TrustCenterNDARequestStatusApproved TrustCenterNDARequestStatus = "APPROVED"
 	// TrustCenterNDARequestStatusSigned indicates the NDA has been signed
 	TrustCenterNDARequestStatusSigned TrustCenterNDARequestStatus = "SIGNED"
+	// TrustCenterNDARequestStatusDeclined indicates the NDA request has been declined
+	TrustCenterNDARequestStatusDeclined TrustCenterNDARequestStatus = "DECLINED"
 	// TrustCenterNDARequestStatusInvalid indicates the NDA request status is invalid
 	TrustCenterNDARequestStatusInvalid TrustCenterNDARequestStatus = "INVALID"
 )
@@ -29,6 +31,7 @@ func (TrustCenterNDARequestStatus) Values() (kinds []string) {
 		TrustCenterNDARequestStatusNeedsApproval,
 		TrustCenterNDARequestStatusApproved,
 		TrustCenterNDARequestStatusSigned,
+		TrustCenterNDARequestStatusDeclined,
 	} {
 		kinds = append(kinds, string(s))
 	}
@@ -52,6 +55,8 @@ func ToTrustCenterNDARequestStatus(r string) *TrustCenterNDARequestStatus {
 		return &TrustCenterNDARequestStatusApproved
 	case TrustCenterNDARequestStatusSigned.String():
 		return &TrustCenterNDARequestStatusSigned
+	case TrustCenterNDARequestStatusDeclined.String():
+		return &TrustCenterNDARequestStatusDeclined
 	default:
 		return nil
 	}

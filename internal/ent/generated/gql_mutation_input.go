@@ -23078,10 +23078,15 @@ type CreateTrustCenterNDARequestInput struct {
 	CompanyName       *string
 	Reason            *string
 	AccessLevel       *enums.TrustCenterNDARequestAccessLevel
+	ApprovedAt        *models.DateTime
+	ApprovedByUserID  *string
+	SignedAt          *models.DateTime
 	BlockedGroupIDs   []string
 	EditorIDs         []string
 	TrustCenterID     *string
 	TrustCenterDocIDs []string
+	DocumentID        *string
+	FileID            *string
 }
 
 // Mutate applies the CreateTrustCenterNDARequestInput on the TrustCenterNDARequestMutation builder.
@@ -23101,6 +23106,15 @@ func (i *CreateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	if v := i.AccessLevel; v != nil {
 		m.SetAccessLevel(*v)
 	}
+	if v := i.ApprovedAt; v != nil {
+		m.SetApprovedAt(*v)
+	}
+	if v := i.ApprovedByUserID; v != nil {
+		m.SetApprovedByUserID(*v)
+	}
+	if v := i.SignedAt; v != nil {
+		m.SetSignedAt(*v)
+	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
 	}
@@ -23112,6 +23126,12 @@ func (i *CreateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	}
 	if v := i.TrustCenterDocIDs; len(v) > 0 {
 		m.AddTrustCenterDocIDs(v...)
+	}
+	if v := i.DocumentID; v != nil {
+		m.SetDocumentID(*v)
+	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
 	}
 }
 
@@ -23137,6 +23157,12 @@ type UpdateTrustCenterNDARequestInput struct {
 	AccessLevel             *enums.TrustCenterNDARequestAccessLevel
 	ClearStatus             bool
 	Status                  *enums.TrustCenterNDARequestStatus
+	ClearApprovedAt         bool
+	ApprovedAt              *models.DateTime
+	ClearApprovedByUserID   bool
+	ApprovedByUserID        *string
+	ClearSignedAt           bool
+	SignedAt                *models.DateTime
 	ClearBlockedGroups      bool
 	AddBlockedGroupIDs      []string
 	RemoveBlockedGroupIDs   []string
@@ -23146,6 +23172,10 @@ type UpdateTrustCenterNDARequestInput struct {
 	ClearTrustCenterDocs    bool
 	AddTrustCenterDocIDs    []string
 	RemoveTrustCenterDocIDs []string
+	ClearDocument           bool
+	DocumentID              *string
+	ClearFile               bool
+	FileID                  *string
 }
 
 // Mutate applies the UpdateTrustCenterNDARequestInput on the TrustCenterNDARequestMutation builder.
@@ -23192,6 +23222,24 @@ func (i *UpdateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
+	if i.ClearApprovedAt {
+		m.ClearApprovedAt()
+	}
+	if v := i.ApprovedAt; v != nil {
+		m.SetApprovedAt(*v)
+	}
+	if i.ClearApprovedByUserID {
+		m.ClearApprovedByUserID()
+	}
+	if v := i.ApprovedByUserID; v != nil {
+		m.SetApprovedByUserID(*v)
+	}
+	if i.ClearSignedAt {
+		m.ClearSignedAt()
+	}
+	if v := i.SignedAt; v != nil {
+		m.SetSignedAt(*v)
+	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
 	}
@@ -23218,6 +23266,18 @@ func (i *UpdateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	}
 	if v := i.RemoveTrustCenterDocIDs; len(v) > 0 {
 		m.RemoveTrustCenterDocIDs(v...)
+	}
+	if i.ClearDocument {
+		m.ClearDocument()
+	}
+	if v := i.DocumentID; v != nil {
+		m.SetDocumentID(*v)
+	}
+	if i.ClearFile {
+		m.ClearFile()
+	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
 	}
 }
 

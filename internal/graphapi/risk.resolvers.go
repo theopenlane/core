@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -55,7 +56,7 @@ func (r *mutationResolver) CreateBulkRisk(ctx context.Context, input []*generate
 
 // CreateBulkCSVRisk is the resolver for the createBulkCSVRisk field.
 func (r *mutationResolver) CreateBulkCSVRisk(ctx context.Context, input graphql.Upload) (*model.RiskBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateRiskInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.RiskCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -71,10 +72,23 @@ func (r *mutationResolver) CreateBulkCSVRisk(ctx context.Context, input graphql.
 	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateRisk(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "Risk", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateRiskInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateRisk(ctx, inputs)
 }
 
 // UpdateBulkRisk is the resolver for the updateBulkRisk field.
@@ -135,6 +149,26 @@ func (r *mutationResolver) DeleteBulkRisk(ctx context.Context, ids []string) (*m
 	}
 
 	return r.bulkDeleteRisk(ctx, ids)
+}
+
+// UpdateBulkCSVRisk is the resolver for the updateBulkCSVRisk field.
+func (r *mutationResolver) UpdateBulkCSVRisk(ctx context.Context, input graphql.Upload) (*model.RiskBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.RiskCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "risk"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Risk", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVRisk(ctx, data)
 }
 
 // Risk is the resolver for the risk field.

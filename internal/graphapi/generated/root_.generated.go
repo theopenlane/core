@@ -117,6 +117,11 @@ type ComplexityRoot struct {
 		DeletedIDs func(childComplexity int) int
 	}
 
+	APITokenBulkUpdatePayload struct {
+		APITokens  func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
+	}
+
 	APITokenConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -430,6 +435,11 @@ type ComplexityRoot struct {
 		DeletedIDs func(childComplexity int) int
 	}
 
+	AssetBulkUpdatePayload struct {
+		Assets     func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
+	}
+
 	AssetConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -451,6 +461,10 @@ type ComplexityRoot struct {
 
 	AssetUpdatePayload struct {
 		Asset func(childComplexity int) int
+	}
+
+	BulkUpdateStatusPayload struct {
+		TotalUpdated func(childComplexity int) int
 	}
 
 	Campaign struct {
@@ -526,6 +540,11 @@ type ComplexityRoot struct {
 		Campaign func(childComplexity int) int
 	}
 
+	CampaignCreateWithTargetsPayload struct {
+		Campaign        func(childComplexity int) int
+		CampaignTargets func(childComplexity int) int
+	}
+
 	CampaignDeletePayload struct {
 		DeletedID func(childComplexity int) int
 	}
@@ -533,6 +552,12 @@ type ComplexityRoot struct {
 	CampaignEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	CampaignLaunchPayload struct {
+		Campaign     func(childComplexity int) int
+		QueuedCount  func(childComplexity int) int
+		SkippedCount func(childComplexity int) int
 	}
 
 	CampaignTarget struct {
@@ -590,6 +615,12 @@ type ComplexityRoot struct {
 
 	CampaignTargetUpdatePayload struct {
 		CampaignTarget func(childComplexity int) int
+	}
+
+	CampaignTestEmailPayload struct {
+		Campaign     func(childComplexity int) int
+		QueuedCount  func(childComplexity int) int
+		SkippedCount func(childComplexity int) int
 	}
 
 	CampaignUpdatePayload struct {
@@ -831,6 +862,11 @@ type ComplexityRoot struct {
 		DeletedIDs func(childComplexity int) int
 	}
 
+	ControlImplementationBulkUpdatePayload struct {
+		ControlImplementations func(childComplexity int) int
+		UpdatedIDs             func(childComplexity int) int
+	}
+
 	ControlImplementationConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -898,6 +934,11 @@ type ComplexityRoot struct {
 		DeletedIDs func(childComplexity int) int
 	}
 
+	ControlObjectiveBulkUpdatePayload struct {
+		ControlObjectives func(childComplexity int) int
+		UpdatedIDs        func(childComplexity int) int
+	}
+
 	ControlObjectiveConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -950,6 +991,11 @@ type ComplexityRoot struct {
 
 	CustomDomainBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	CustomDomainBulkUpdatePayload struct {
+		CustomDomains func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	CustomDomainConnection struct {
@@ -1062,6 +1108,11 @@ type ComplexityRoot struct {
 
 	DNSVerificationBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	DNSVerificationBulkUpdatePayload struct {
+		DNSVerifications func(childComplexity int) int
+		UpdatedIDs       func(childComplexity int) int
 	}
 
 	DNSVerificationConnection struct {
@@ -1417,6 +1468,11 @@ type ComplexityRoot struct {
 		DeletedIDs func(childComplexity int) int
 	}
 
+	DocumentDataBulkUpdatePayload struct {
+		DocumentData func(childComplexity int) int
+		UpdatedIDs   func(childComplexity int) int
+	}
+
 	DocumentDataConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -1539,6 +1595,11 @@ type ComplexityRoot struct {
 		DeletedIDs func(childComplexity int) int
 	}
 
+	EntityBulkUpdatePayload struct {
+		Entities   func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
+	}
+
 	EntityConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -1580,6 +1641,11 @@ type ComplexityRoot struct {
 
 	EntityTypeBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	EntityTypeBulkUpdatePayload struct {
+		EntityTypes func(childComplexity int) int
+		UpdatedIDs  func(childComplexity int) int
 	}
 
 	EntityTypeConnection struct {
@@ -1640,6 +1706,11 @@ type ComplexityRoot struct {
 
 	EventBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	EventBulkUpdatePayload struct {
+		Events     func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
 	}
 
 	EventConnection struct {
@@ -2093,6 +2164,11 @@ type ComplexityRoot struct {
 		DeletedIDs func(childComplexity int) int
 	}
 
+	GroupBulkUpdatePayload struct {
+		Groups     func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
+	}
+
 	GroupConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -2132,6 +2208,11 @@ type ComplexityRoot struct {
 
 	GroupMembershipBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	GroupMembershipBulkUpdatePayload struct {
+		GroupMemberships func(childComplexity int) int
+		UpdatedIDs       func(childComplexity int) int
 	}
 
 	GroupMembershipConnection struct {
@@ -2196,6 +2277,11 @@ type ComplexityRoot struct {
 
 	GroupSettingBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	GroupSettingBulkUpdatePayload struct {
+		GroupSettings func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	GroupSettingConnection struct {
@@ -2556,6 +2642,11 @@ type ComplexityRoot struct {
 		DeletedIDs func(childComplexity int) int
 	}
 
+	InviteBulkUpdatePayload struct {
+		Invites    func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
+	}
+
 	InviteConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -2777,6 +2868,11 @@ type ComplexityRoot struct {
 		DeletedIDs func(childComplexity int) int
 	}
 
+	JobTemplateBulkUpdatePayload struct {
+		JobTemplates func(childComplexity int) int
+		UpdatedIDs   func(childComplexity int) int
+	}
+
 	JobTemplateConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -2818,6 +2914,11 @@ type ComplexityRoot struct {
 
 	MappableDomainBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	MappableDomainBulkUpdatePayload struct {
+		MappableDomains func(childComplexity int) int
+		UpdatedIDs      func(childComplexity int) int
 	}
 
 	MappableDomainConnection struct {
@@ -2875,6 +2976,11 @@ type ComplexityRoot struct {
 		DeletedIDs func(childComplexity int) int
 	}
 
+	MappedControlBulkUpdatePayload struct {
+		MappedControls func(childComplexity int) int
+		UpdatedIDs     func(childComplexity int) int
+	}
+
 	MappedControlConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -2899,6 +3005,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
+		ApproveNDARequests                   func(childComplexity int, ids []string) int
 		ApproveWorkflowAssignment            func(childComplexity int, id string) int
 		CloneBulkCSVControl                  func(childComplexity int, input graphql.Upload) int
 		CreateAPIToken                       func(childComplexity int, input generated.CreateAPITokenInput) int
@@ -3028,6 +3135,8 @@ type ComplexityRoot struct {
 		CreateBulkWorkflowDefinition         func(childComplexity int, input []*generated.CreateWorkflowDefinitionInput) int
 		CreateCampaign                       func(childComplexity int, input generated.CreateCampaignInput) int
 		CreateCampaignTarget                 func(childComplexity int, input generated.CreateCampaignTargetInput) int
+		CreateCampaignWithTargets            func(childComplexity int, input model.CreateCampaignWithTargetsInput) int
+		CreateCampaignWithTargetsCSV         func(childComplexity int, campaign generated.CreateCampaignInput, targets graphql.Upload) int
 		CreateContact                        func(childComplexity int, input generated.CreateContactInput) int
 		CreateControl                        func(childComplexity int, input generated.CreateControlInput) int
 		CreateControlImplementation          func(childComplexity int, input generated.CreateControlImplementationInput) int
@@ -3230,28 +3339,98 @@ type ComplexityRoot struct {
 		DeleteVulnerability                  func(childComplexity int, id string) int
 		DeleteWebauthn                       func(childComplexity int, id string) int
 		DeleteWorkflowDefinition             func(childComplexity int, id string) int
+		DenyNDARequests                      func(childComplexity int, ids []string) int
+		LaunchCampaign                       func(childComplexity int, input model.LaunchCampaignInput) int
 		PublishTrustCenterSetting            func(childComplexity int) int
 		RejectWorkflowAssignment             func(childComplexity int, id string, reason *string) int
+		ResendCampaignIncompleteTargets      func(childComplexity int, input model.ResendCampaignIncompleteInput) int
+		SendCampaignTestEmail                func(childComplexity int, input model.SendCampaignTestEmailInput) int
 		SubmitTrustCenterNDAResponse         func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
 		TransferOrganizationOwnership        func(childComplexity int, newOwnerEmail string) int
 		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
 		UpdateAssessment                     func(childComplexity int, id string, input generated.UpdateAssessmentInput) int
 		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
+		UpdateBulkAPIToken                   func(childComplexity int, ids []string, input generated.UpdateAPITokenInput) int
 		UpdateBulkActionPlan                 func(childComplexity int, ids []string, input generated.UpdateActionPlanInput) int
+		UpdateBulkAsset                      func(childComplexity int, ids []string, input generated.UpdateAssetInput) int
+		UpdateBulkCSVAPIToken                func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVActionPlan              func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVAsset                   func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVContact                 func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVControl                 func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVControlImplementation   func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVControlObjective        func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVCustomDomain            func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVDNSVerification         func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVDocumentData            func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVEntity                  func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVEntityType              func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVEvent                   func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVEvidence                func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVGroup                   func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVGroupMembership         func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVGroupSetting            func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVHush                    func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVInternalPolicy          func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVInvite                  func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVJobTemplate             func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVMappableDomain          func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVMappedControl           func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVNarrative               func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVOrgMembership           func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVOrganizationSetting     func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVProcedure               func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVProgram                 func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVProgramMembership       func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVRisk                    func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVScan                    func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVScheduledJob            func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVSubcontrol              func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVSubprocessor            func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVTask                    func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVTemplate                func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVTrustCenterCompliance   func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVTrustCenterDoc          func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVTrustCenterSubprocessor func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVUserSetting             func(childComplexity int, input graphql.Upload) int
 		UpdateBulkContact                    func(childComplexity int, ids []string, input generated.UpdateContactInput) int
 		UpdateBulkControl                    func(childComplexity int, ids []string, input generated.UpdateControlInput) int
+		UpdateBulkControlImplementation      func(childComplexity int, ids []string, input generated.UpdateControlImplementationInput) int
+		UpdateBulkControlObjective           func(childComplexity int, ids []string, input generated.UpdateControlObjectiveInput) int
+		UpdateBulkCustomDomain               func(childComplexity int, ids []string, input generated.UpdateCustomDomainInput) int
+		UpdateBulkDNSVerification            func(childComplexity int, ids []string, input generated.UpdateDNSVerificationInput) int
+		UpdateBulkDocumentData               func(childComplexity int, ids []string, input generated.UpdateDocumentDataInput) int
+		UpdateBulkEntity                     func(childComplexity int, ids []string, input generated.UpdateEntityInput) int
+		UpdateBulkEntityType                 func(childComplexity int, ids []string, input generated.UpdateEntityTypeInput) int
+		UpdateBulkEvent                      func(childComplexity int, ids []string, input generated.UpdateEventInput) int
 		UpdateBulkEvidence                   func(childComplexity int, ids []string, input generated.UpdateEvidenceInput) int
+		UpdateBulkGroup                      func(childComplexity int, ids []string, input generated.UpdateGroupInput) int
+		UpdateBulkGroupMembership            func(childComplexity int, ids []string, input generated.UpdateGroupMembershipInput) int
+		UpdateBulkGroupSetting               func(childComplexity int, ids []string, input generated.UpdateGroupSettingInput) int
 		UpdateBulkHush                       func(childComplexity int, ids []string, input generated.UpdateHushInput) int
 		UpdateBulkInternalPolicy             func(childComplexity int, ids []string, input generated.UpdateInternalPolicyInput) int
+		UpdateBulkInvite                     func(childComplexity int, ids []string, input generated.UpdateInviteInput) int
+		UpdateBulkJobTemplate                func(childComplexity int, ids []string, input generated.UpdateJobTemplateInput) int
+		UpdateBulkMappableDomain             func(childComplexity int, ids []string, input generated.UpdateMappableDomainInput) int
+		UpdateBulkMappedControl              func(childComplexity int, ids []string, input generated.UpdateMappedControlInput) int
+		UpdateBulkNarrative                  func(childComplexity int, ids []string, input generated.UpdateNarrativeInput) int
+		UpdateBulkOrgMembership              func(childComplexity int, ids []string, input generated.UpdateOrgMembershipInput) int
+		UpdateBulkOrganizationSetting        func(childComplexity int, ids []string, input generated.UpdateOrganizationSettingInput) int
 		UpdateBulkProcedure                  func(childComplexity int, ids []string, input generated.UpdateProcedureInput) int
+		UpdateBulkProgram                    func(childComplexity int, ids []string, input generated.UpdateProgramInput) int
+		UpdateBulkProgramMembership          func(childComplexity int, ids []string, input generated.UpdateProgramMembershipInput) int
 		UpdateBulkRisk                       func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
 		UpdateBulkScan                       func(childComplexity int, ids []string, input generated.UpdateScanInput) int
+		UpdateBulkScheduledJob               func(childComplexity int, ids []string, input generated.UpdateScheduledJobInput) int
+		UpdateBulkSubcontrol                 func(childComplexity int, ids []string, input generated.UpdateSubcontrolInput) int
 		UpdateBulkSubprocessor               func(childComplexity int, ids []string, input generated.UpdateSubprocessorInput) int
 		UpdateBulkTask                       func(childComplexity int, ids []string, input generated.UpdateTaskInput) int
+		UpdateBulkTemplate                   func(childComplexity int, ids []string, input generated.UpdateTemplateInput) int
+		UpdateBulkTrustCenterCompliance      func(childComplexity int, ids []string, input generated.UpdateTrustCenterComplianceInput) int
 		UpdateBulkTrustCenterDoc             func(childComplexity int, ids []string, input generated.UpdateTrustCenterDocInput) int
 		UpdateBulkTrustCenterSubprocessor    func(childComplexity int, ids []string, input generated.UpdateTrustCenterSubprocessorInput) int
+		UpdateBulkUserSetting                func(childComplexity int, ids []string, input generated.UpdateUserSettingInput) int
 		UpdateCampaign                       func(childComplexity int, id string, input generated.UpdateCampaignInput) int
 		UpdateCampaignTarget                 func(childComplexity int, id string, input generated.UpdateCampaignTargetInput) int
 		UpdateContact                        func(childComplexity int, id string, input generated.UpdateContactInput) int
@@ -3267,7 +3446,7 @@ type ComplexityRoot struct {
 		UpdateDirectoryMembership            func(childComplexity int, id string, input generated.UpdateDirectoryMembershipInput) int
 		UpdateDirectorySyncRun               func(childComplexity int, id string, input generated.UpdateDirectorySyncRunInput) int
 		UpdateDiscussion                     func(childComplexity int, id string, input generated.UpdateDiscussionInput) int
-		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput) int
+		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput, documentDataFile *graphql.Upload) int
 		UpdateEntity                         func(childComplexity int, id string, input generated.UpdateEntityInput) int
 		UpdateEntityType                     func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
 		UpdateEvent                          func(childComplexity int, id string, input generated.UpdateEventInput) int
@@ -3366,6 +3545,11 @@ type ComplexityRoot struct {
 
 	NarrativeBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	NarrativeBulkUpdatePayload struct {
+		Narratives func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
 	}
 
 	NarrativeConnection struct {
@@ -3493,6 +3677,11 @@ type ComplexityRoot struct {
 
 	OrgMembershipBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	OrgMembershipBulkUpdatePayload struct {
+		OrgMemberships func(childComplexity int) int
+		UpdatedIDs     func(childComplexity int) int
 	}
 
 	OrgMembershipConnection struct {
@@ -3726,6 +3915,11 @@ type ComplexityRoot struct {
 
 	OrganizationSettingBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	OrganizationSettingBulkUpdatePayload struct {
+		OrganizationSettings func(childComplexity int) int
+		UpdatedIDs           func(childComplexity int) int
 	}
 
 	OrganizationSettingConnection struct {
@@ -4097,6 +4291,11 @@ type ComplexityRoot struct {
 		DeletedIDs func(childComplexity int) int
 	}
 
+	ProgramBulkUpdatePayload struct {
+		Programs   func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
+	}
+
 	ProgramConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -4135,6 +4334,11 @@ type ComplexityRoot struct {
 
 	ProgramMembershipBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	ProgramMembershipBulkUpdatePayload struct {
+		ProgramMemberships func(childComplexity int) int
+		UpdatedIDs         func(childComplexity int) int
 	}
 
 	ProgramMembershipConnection struct {
@@ -4765,6 +4969,11 @@ type ComplexityRoot struct {
 		DeletedIDs func(childComplexity int) int
 	}
 
+	ScheduledJobBulkUpdatePayload struct {
+		ScheduledJobs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
+	}
+
 	ScheduledJobConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -5017,6 +5226,11 @@ type ComplexityRoot struct {
 
 	SubcontrolBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	SubcontrolBulkUpdatePayload struct {
+		Subcontrols func(childComplexity int) int
+		UpdatedIDs  func(childComplexity int) int
 	}
 
 	SubcontrolConnection struct {
@@ -5363,6 +5577,11 @@ type ComplexityRoot struct {
 		DeletedIDs func(childComplexity int) int
 	}
 
+	TemplateBulkUpdatePayload struct {
+		Templates  func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
+	}
+
 	TemplateConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -5440,6 +5659,11 @@ type ComplexityRoot struct {
 
 	TrustCenterComplianceBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	TrustCenterComplianceBulkUpdatePayload struct {
+		TrustCenterCompliances func(childComplexity int) int
+		UpdatedIDs             func(childComplexity int) int
 	}
 
 	TrustCenterComplianceConnection struct {
@@ -5600,24 +5824,31 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterNDARequest struct {
-		AccessLevel     func(childComplexity int) int
-		BlockedGroups   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		CompanyName     func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		Editors         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Email           func(childComplexity int) int
-		FirstName       func(childComplexity int) int
-		ID              func(childComplexity int) int
-		LastName        func(childComplexity int) int
-		Reason          func(childComplexity int) int
-		Status          func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		TrustCenter     func(childComplexity int) int
-		TrustCenterDocs func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
-		TrustCenterID   func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		AccessLevel      func(childComplexity int) int
+		ApprovedAt       func(childComplexity int) int
+		ApprovedByUserID func(childComplexity int) int
+		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		CompanyName      func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Document         func(childComplexity int) int
+		DocumentDataID   func(childComplexity int) int
+		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Email            func(childComplexity int) int
+		File             func(childComplexity int) int
+		FileID           func(childComplexity int) int
+		FirstName        func(childComplexity int) int
+		ID               func(childComplexity int) int
+		LastName         func(childComplexity int) int
+		Reason           func(childComplexity int) int
+		SignedAt         func(childComplexity int) int
+		Status           func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		TrustCenter      func(childComplexity int) int
+		TrustCenterDocs  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
+		TrustCenterID    func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	TrustCenterNDARequestBulkCreatePayload struct {
@@ -5920,6 +6151,11 @@ type ComplexityRoot struct {
 
 	UserSettingBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	UserSettingBulkUpdatePayload struct {
+		UpdatedIDs   func(childComplexity int) int
+		UserSettings func(childComplexity int) int
 	}
 
 	UserSettingConnection struct {
@@ -6544,6 +6780,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.APITokenBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "APITokenBulkUpdatePayload.apiTokens":
+		if e.complexity.APITokenBulkUpdatePayload.APITokens == nil {
+			break
+		}
+
+		return e.complexity.APITokenBulkUpdatePayload.APITokens(childComplexity), true
+
+	case "APITokenBulkUpdatePayload.updatedIDs":
+		if e.complexity.APITokenBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.APITokenBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "APITokenConnection.edges":
 		if e.complexity.APITokenConnection.Edges == nil {
@@ -8292,6 +8542,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssetBulkDeletePayload.DeletedIDs(childComplexity), true
 
+	case "AssetBulkUpdatePayload.assets":
+		if e.complexity.AssetBulkUpdatePayload.Assets == nil {
+			break
+		}
+
+		return e.complexity.AssetBulkUpdatePayload.Assets(childComplexity), true
+
+	case "AssetBulkUpdatePayload.updatedIDs":
+		if e.complexity.AssetBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.AssetBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "AssetConnection.edges":
 		if e.complexity.AssetConnection.Edges == nil {
 			break
@@ -8347,6 +8611,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssetUpdatePayload.Asset(childComplexity), true
+
+	case "BulkUpdateStatusPayload.totalUpdated":
+		if e.complexity.BulkUpdateStatusPayload.TotalUpdated == nil {
+			break
+		}
+
+		return e.complexity.BulkUpdateStatusPayload.TotalUpdated(childComplexity), true
 
 	case "Campaign.activeWorkflowInstances":
 		if e.complexity.Campaign.ActiveWorkflowInstances == nil {
@@ -8830,6 +9101,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.CampaignCreatePayload.Campaign(childComplexity), true
 
+	case "CampaignCreateWithTargetsPayload.campaign":
+		if e.complexity.CampaignCreateWithTargetsPayload.Campaign == nil {
+			break
+		}
+
+		return e.complexity.CampaignCreateWithTargetsPayload.Campaign(childComplexity), true
+
+	case "CampaignCreateWithTargetsPayload.campaignTargets":
+		if e.complexity.CampaignCreateWithTargetsPayload.CampaignTargets == nil {
+			break
+		}
+
+		return e.complexity.CampaignCreateWithTargetsPayload.CampaignTargets(childComplexity), true
+
 	case "CampaignDeletePayload.deletedID":
 		if e.complexity.CampaignDeletePayload.DeletedID == nil {
 			break
@@ -8850,6 +9135,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CampaignEdge.Node(childComplexity), true
+
+	case "CampaignLaunchPayload.campaign":
+		if e.complexity.CampaignLaunchPayload.Campaign == nil {
+			break
+		}
+
+		return e.complexity.CampaignLaunchPayload.Campaign(childComplexity), true
+
+	case "CampaignLaunchPayload.queuedCount":
+		if e.complexity.CampaignLaunchPayload.QueuedCount == nil {
+			break
+		}
+
+		return e.complexity.CampaignLaunchPayload.QueuedCount(childComplexity), true
+
+	case "CampaignLaunchPayload.skippedCount":
+		if e.complexity.CampaignLaunchPayload.SkippedCount == nil {
+			break
+		}
+
+		return e.complexity.CampaignLaunchPayload.SkippedCount(childComplexity), true
 
 	case "CampaignTarget.activeWorkflowInstances":
 		if e.complexity.CampaignTarget.ActiveWorkflowInstances == nil {
@@ -9112,6 +9418,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CampaignTargetUpdatePayload.CampaignTarget(childComplexity), true
+
+	case "CampaignTestEmailPayload.campaign":
+		if e.complexity.CampaignTestEmailPayload.Campaign == nil {
+			break
+		}
+
+		return e.complexity.CampaignTestEmailPayload.Campaign(childComplexity), true
+
+	case "CampaignTestEmailPayload.queuedCount":
+		if e.complexity.CampaignTestEmailPayload.QueuedCount == nil {
+			break
+		}
+
+		return e.complexity.CampaignTestEmailPayload.QueuedCount(childComplexity), true
+
+	case "CampaignTestEmailPayload.skippedCount":
+		if e.complexity.CampaignTestEmailPayload.SkippedCount == nil {
+			break
+		}
+
+		return e.complexity.CampaignTestEmailPayload.SkippedCount(childComplexity), true
 
 	case "CampaignUpdatePayload.campaign":
 		if e.complexity.CampaignUpdatePayload.Campaign == nil {
@@ -10384,6 +10711,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlImplementationBulkDeletePayload.DeletedIDs(childComplexity), true
 
+	case "ControlImplementationBulkUpdatePayload.controlImplementations":
+		if e.complexity.ControlImplementationBulkUpdatePayload.ControlImplementations == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationBulkUpdatePayload.ControlImplementations(childComplexity), true
+
+	case "ControlImplementationBulkUpdatePayload.updatedIDs":
+		if e.complexity.ControlImplementationBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "ControlImplementationConnection.edges":
 		if e.complexity.ControlImplementationConnection.Edges == nil {
 			break
@@ -10745,6 +11086,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlObjectiveBulkDeletePayload.DeletedIDs(childComplexity), true
 
+	case "ControlObjectiveBulkUpdatePayload.controlObjectives":
+		if e.complexity.ControlObjectiveBulkUpdatePayload.ControlObjectives == nil {
+			break
+		}
+
+		return e.complexity.ControlObjectiveBulkUpdatePayload.ControlObjectives(childComplexity), true
+
+	case "ControlObjectiveBulkUpdatePayload.updatedIDs":
+		if e.complexity.ControlObjectiveBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.ControlObjectiveBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "ControlObjectiveConnection.edges":
 		if e.complexity.ControlObjectiveConnection.Edges == nil {
 			break
@@ -10933,6 +11288,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CustomDomainBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "CustomDomainBulkUpdatePayload.customDomains":
+		if e.complexity.CustomDomainBulkUpdatePayload.CustomDomains == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainBulkUpdatePayload.CustomDomains(childComplexity), true
+
+	case "CustomDomainBulkUpdatePayload.updatedIDs":
+		if e.complexity.CustomDomainBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "CustomDomainConnection.edges":
 		if e.complexity.CustomDomainConnection.Edges == nil {
@@ -11436,6 +11805,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DNSVerificationBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "DNSVerificationBulkUpdatePayload.dnsVerifications":
+		if e.complexity.DNSVerificationBulkUpdatePayload.DNSVerifications == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationBulkUpdatePayload.DNSVerifications(childComplexity), true
+
+	case "DNSVerificationBulkUpdatePayload.updatedIDs":
+		if e.complexity.DNSVerificationBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "DNSVerificationConnection.edges":
 		if e.complexity.DNSVerificationConnection.Edges == nil {
@@ -13075,6 +13458,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DocumentDataBulkDeletePayload.DeletedIDs(childComplexity), true
 
+	case "DocumentDataBulkUpdatePayload.documentData":
+		if e.complexity.DocumentDataBulkUpdatePayload.DocumentData == nil {
+			break
+		}
+
+		return e.complexity.DocumentDataBulkUpdatePayload.DocumentData(childComplexity), true
+
+	case "DocumentDataBulkUpdatePayload.updatedIDs":
+		if e.complexity.DocumentDataBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.DocumentDataBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "DocumentDataConnection.edges":
 		if e.complexity.DocumentDataConnection.Edges == nil {
 			break
@@ -13856,6 +14253,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EntityBulkDeletePayload.DeletedIDs(childComplexity), true
 
+	case "EntityBulkUpdatePayload.entities":
+		if e.complexity.EntityBulkUpdatePayload.Entities == nil {
+			break
+		}
+
+		return e.complexity.EntityBulkUpdatePayload.Entities(childComplexity), true
+
+	case "EntityBulkUpdatePayload.updatedIDs":
+		if e.complexity.EntityBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.EntityBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "EntityConnection.edges":
 		if e.complexity.EntityConnection.Edges == nil {
 			break
@@ -14014,6 +14425,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.EntityTypeBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "EntityTypeBulkUpdatePayload.entityTypes":
+		if e.complexity.EntityTypeBulkUpdatePayload.EntityTypes == nil {
+			break
+		}
+
+		return e.complexity.EntityTypeBulkUpdatePayload.EntityTypes(childComplexity), true
+
+	case "EntityTypeBulkUpdatePayload.updatedIDs":
+		if e.complexity.EntityTypeBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.EntityTypeBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "EntityTypeConnection.edges":
 		if e.complexity.EntityTypeConnection.Edges == nil {
@@ -14305,6 +14730,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.EventBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "EventBulkUpdatePayload.events":
+		if e.complexity.EventBulkUpdatePayload.Events == nil {
+			break
+		}
+
+		return e.complexity.EventBulkUpdatePayload.Events(childComplexity), true
+
+	case "EventBulkUpdatePayload.updatedIDs":
+		if e.complexity.EventBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.EventBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "EventConnection.edges":
 		if e.complexity.EventConnection.Edges == nil {
@@ -16990,6 +17429,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.GroupBulkDeletePayload.DeletedIDs(childComplexity), true
 
+	case "GroupBulkUpdatePayload.groups":
+		if e.complexity.GroupBulkUpdatePayload.Groups == nil {
+			break
+		}
+
+		return e.complexity.GroupBulkUpdatePayload.Groups(childComplexity), true
+
+	case "GroupBulkUpdatePayload.updatedIDs":
+		if e.complexity.GroupBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.GroupBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "GroupConnection.edges":
 		if e.complexity.GroupConnection.Edges == nil {
 			break
@@ -17134,6 +17587,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.GroupMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "GroupMembershipBulkUpdatePayload.groupMemberships":
+		if e.complexity.GroupMembershipBulkUpdatePayload.GroupMemberships == nil {
+			break
+		}
+
+		return e.complexity.GroupMembershipBulkUpdatePayload.GroupMemberships(childComplexity), true
+
+	case "GroupMembershipBulkUpdatePayload.updatedIDs":
+		if e.complexity.GroupMembershipBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.GroupMembershipBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "GroupMembershipConnection.edges":
 		if e.complexity.GroupMembershipConnection.Edges == nil {
@@ -17351,6 +17818,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.GroupSettingBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "GroupSettingBulkUpdatePayload.groupSettings":
+		if e.complexity.GroupSettingBulkUpdatePayload.GroupSettings == nil {
+			break
+		}
+
+		return e.complexity.GroupSettingBulkUpdatePayload.GroupSettings(childComplexity), true
+
+	case "GroupSettingBulkUpdatePayload.updatedIDs":
+		if e.complexity.GroupSettingBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.GroupSettingBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "GroupSettingConnection.edges":
 		if e.complexity.GroupSettingConnection.Edges == nil {
@@ -19300,6 +19781,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InviteBulkDeletePayload.DeletedIDs(childComplexity), true
 
+	case "InviteBulkUpdatePayload.invites":
+		if e.complexity.InviteBulkUpdatePayload.Invites == nil {
+			break
+		}
+
+		return e.complexity.InviteBulkUpdatePayload.Invites(childComplexity), true
+
+	case "InviteBulkUpdatePayload.updatedIDs":
+		if e.complexity.InviteBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.InviteBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "InviteConnection.edges":
 		if e.complexity.InviteConnection.Edges == nil {
 			break
@@ -20190,6 +20685,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobTemplateBulkDeletePayload.DeletedIDs(childComplexity), true
 
+	case "JobTemplateBulkUpdatePayload.jobTemplates":
+		if e.complexity.JobTemplateBulkUpdatePayload.JobTemplates == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateBulkUpdatePayload.JobTemplates(childComplexity), true
+
+	case "JobTemplateBulkUpdatePayload.updatedIDs":
+		if e.complexity.JobTemplateBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "JobTemplateConnection.edges":
 		if e.complexity.JobTemplateConnection.Edges == nil {
 			break
@@ -20327,6 +20836,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappableDomainBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "MappableDomainBulkUpdatePayload.mappableDomains":
+		if e.complexity.MappableDomainBulkUpdatePayload.MappableDomains == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainBulkUpdatePayload.MappableDomains(childComplexity), true
+
+	case "MappableDomainBulkUpdatePayload.updatedIDs":
+		if e.complexity.MappableDomainBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "MappableDomainConnection.edges":
 		if e.complexity.MappableDomainConnection.Edges == nil {
@@ -20575,6 +21098,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappedControlBulkDeletePayload.DeletedIDs(childComplexity), true
 
+	case "MappedControlBulkUpdatePayload.mappedControls":
+		if e.complexity.MappedControlBulkUpdatePayload.MappedControls == nil {
+			break
+		}
+
+		return e.complexity.MappedControlBulkUpdatePayload.MappedControls(childComplexity), true
+
+	case "MappedControlBulkUpdatePayload.updatedIDs":
+		if e.complexity.MappedControlBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.MappedControlBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "MappedControlConnection.edges":
 		if e.complexity.MappedControlConnection.Edges == nil {
 			break
@@ -20630,6 +21167,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappedControlUpdatePayload.MappedControl(childComplexity), true
+
+	case "Mutation.approveNDARequests":
+		if e.complexity.Mutation.ApproveNDARequests == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_approveNDARequests_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ApproveNDARequests(childComplexity, args["ids"].([]string)), true
 
 	case "Mutation.approveWorkflowAssignment":
 		if e.complexity.Mutation.ApproveWorkflowAssignment == nil {
@@ -22178,6 +22727,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateCampaignTarget(childComplexity, args["input"].(generated.CreateCampaignTargetInput)), true
+
+	case "Mutation.createCampaignWithTargets":
+		if e.complexity.Mutation.CreateCampaignWithTargets == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createCampaignWithTargets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateCampaignWithTargets(childComplexity, args["input"].(model.CreateCampaignWithTargetsInput)), true
+
+	case "Mutation.createCampaignWithTargetsCSV":
+		if e.complexity.Mutation.CreateCampaignWithTargetsCSV == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createCampaignWithTargetsCSV_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateCampaignWithTargetsCSV(childComplexity, args["campaign"].(generated.CreateCampaignInput), args["targets"].(graphql.Upload)), true
 
 	case "Mutation.createContact":
 		if e.complexity.Mutation.CreateContact == nil {
@@ -24603,6 +25176,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteWorkflowDefinition(childComplexity, args["id"].(string)), true
 
+	case "Mutation.denyNDARequests":
+		if e.complexity.Mutation.DenyNDARequests == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_denyNDARequests_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DenyNDARequests(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.launchCampaign":
+		if e.complexity.Mutation.LaunchCampaign == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_launchCampaign_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.LaunchCampaign(childComplexity, args["input"].(model.LaunchCampaignInput)), true
+
 	case "Mutation.publishTrustCenterSetting":
 		if e.complexity.Mutation.PublishTrustCenterSetting == nil {
 			break
@@ -24621,6 +25218,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.RejectWorkflowAssignment(childComplexity, args["id"].(string), args["reason"].(*string)), true
+
+	case "Mutation.resendCampaignIncompleteTargets":
+		if e.complexity.Mutation.ResendCampaignIncompleteTargets == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_resendCampaignIncompleteTargets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ResendCampaignIncompleteTargets(childComplexity, args["input"].(model.ResendCampaignIncompleteInput)), true
+
+	case "Mutation.sendCampaignTestEmail":
+		if e.complexity.Mutation.SendCampaignTestEmail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_sendCampaignTestEmail_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.SendCampaignTestEmail(childComplexity, args["input"].(model.SendCampaignTestEmailInput)), true
 
 	case "Mutation.submitTrustCenterNDAResponse":
 		if e.complexity.Mutation.SubmitTrustCenterNDAResponse == nil {
@@ -24694,6 +25315,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateAsset(childComplexity, args["id"].(string), args["input"].(generated.UpdateAssetInput)), true
 
+	case "Mutation.updateBulkAPIToken":
+		if e.complexity.Mutation.UpdateBulkAPIToken == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkAPIToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkAPIToken(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateAPITokenInput)), true
+
 	case "Mutation.updateBulkActionPlan":
 		if e.complexity.Mutation.UpdateBulkActionPlan == nil {
 			break
@@ -24706,6 +25339,66 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateBulkActionPlan(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateActionPlanInput)), true
 
+	case "Mutation.updateBulkAsset":
+		if e.complexity.Mutation.UpdateBulkAsset == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkAsset_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkAsset(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateAssetInput)), true
+
+	case "Mutation.updateBulkCSVAPIToken":
+		if e.complexity.Mutation.UpdateBulkCSVAPIToken == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVAPIToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVAPIToken(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVActionPlan":
+		if e.complexity.Mutation.UpdateBulkCSVActionPlan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVActionPlan_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVActionPlan(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVAsset":
+		if e.complexity.Mutation.UpdateBulkCSVAsset == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVAsset_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVAsset(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVContact":
+		if e.complexity.Mutation.UpdateBulkCSVContact == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVContact_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVContact(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.updateBulkCSVControl":
 		if e.complexity.Mutation.UpdateBulkCSVControl == nil {
 			break
@@ -24717,6 +25410,426 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateBulkCSVControl(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVControlImplementation":
+		if e.complexity.Mutation.UpdateBulkCSVControlImplementation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVControlImplementation_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVControlImplementation(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVControlObjective":
+		if e.complexity.Mutation.UpdateBulkCSVControlObjective == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVControlObjective_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVControlObjective(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVCustomDomain":
+		if e.complexity.Mutation.UpdateBulkCSVCustomDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVCustomDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVCustomDomain(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVDNSVerification":
+		if e.complexity.Mutation.UpdateBulkCSVDNSVerification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVDNSVerification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVDNSVerification(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVDocumentData":
+		if e.complexity.Mutation.UpdateBulkCSVDocumentData == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVDocumentData_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVDocumentData(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVEntity":
+		if e.complexity.Mutation.UpdateBulkCSVEntity == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVEntity_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVEntity(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVEntityType":
+		if e.complexity.Mutation.UpdateBulkCSVEntityType == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVEntityType_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVEntityType(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVEvent":
+		if e.complexity.Mutation.UpdateBulkCSVEvent == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVEvent_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVEvent(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVEvidence":
+		if e.complexity.Mutation.UpdateBulkCSVEvidence == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVEvidence_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVEvidence(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVGroup":
+		if e.complexity.Mutation.UpdateBulkCSVGroup == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVGroup_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVGroup(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVGroupMembership":
+		if e.complexity.Mutation.UpdateBulkCSVGroupMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVGroupMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVGroupMembership(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVGroupSetting":
+		if e.complexity.Mutation.UpdateBulkCSVGroupSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVGroupSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVGroupSetting(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVHush":
+		if e.complexity.Mutation.UpdateBulkCSVHush == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVHush_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVHush(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVInternalPolicy":
+		if e.complexity.Mutation.UpdateBulkCSVInternalPolicy == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVInternalPolicy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVInternalPolicy(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVInvite":
+		if e.complexity.Mutation.UpdateBulkCSVInvite == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVInvite_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVInvite(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVJobTemplate":
+		if e.complexity.Mutation.UpdateBulkCSVJobTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVJobTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVJobTemplate(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVMappableDomain":
+		if e.complexity.Mutation.UpdateBulkCSVMappableDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVMappableDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVMappableDomain(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVMappedControl":
+		if e.complexity.Mutation.UpdateBulkCSVMappedControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVMappedControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVMappedControl(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVNarrative":
+		if e.complexity.Mutation.UpdateBulkCSVNarrative == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVNarrative_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVNarrative(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVOrgMembership":
+		if e.complexity.Mutation.UpdateBulkCSVOrgMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVOrgMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVOrgMembership(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVOrganizationSetting":
+		if e.complexity.Mutation.UpdateBulkCSVOrganizationSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVOrganizationSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVOrganizationSetting(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVProcedure":
+		if e.complexity.Mutation.UpdateBulkCSVProcedure == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVProcedure_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVProcedure(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVProgram":
+		if e.complexity.Mutation.UpdateBulkCSVProgram == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVProgram_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVProgram(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVProgramMembership":
+		if e.complexity.Mutation.UpdateBulkCSVProgramMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVProgramMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVProgramMembership(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVRisk":
+		if e.complexity.Mutation.UpdateBulkCSVRisk == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVRisk_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVRisk(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVScan":
+		if e.complexity.Mutation.UpdateBulkCSVScan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVScan_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVScan(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVScheduledJob":
+		if e.complexity.Mutation.UpdateBulkCSVScheduledJob == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVScheduledJob_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVScheduledJob(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVSubcontrol":
+		if e.complexity.Mutation.UpdateBulkCSVSubcontrol == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVSubcontrol_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVSubcontrol(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVSubprocessor":
+		if e.complexity.Mutation.UpdateBulkCSVSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVSubprocessor(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVTask":
+		if e.complexity.Mutation.UpdateBulkCSVTask == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVTask_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVTask(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVTemplate":
+		if e.complexity.Mutation.UpdateBulkCSVTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVTemplate(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVTrustCenterCompliance":
+		if e.complexity.Mutation.UpdateBulkCSVTrustCenterCompliance == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVTrustCenterCompliance_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVTrustCenterCompliance(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVTrustCenterDoc":
+		if e.complexity.Mutation.UpdateBulkCSVTrustCenterDoc == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVTrustCenterDoc_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVTrustCenterDoc(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVTrustCenterSubprocessor":
+		if e.complexity.Mutation.UpdateBulkCSVTrustCenterSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVTrustCenterSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVTrustCenterSubprocessor(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVUserSetting":
+		if e.complexity.Mutation.UpdateBulkCSVUserSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVUserSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVUserSetting(childComplexity, args["input"].(graphql.Upload)), true
 
 	case "Mutation.updateBulkContact":
 		if e.complexity.Mutation.UpdateBulkContact == nil {
@@ -24742,6 +25855,102 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateBulkControl(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateControlInput)), true
 
+	case "Mutation.updateBulkControlImplementation":
+		if e.complexity.Mutation.UpdateBulkControlImplementation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkControlImplementation_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkControlImplementation(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateControlImplementationInput)), true
+
+	case "Mutation.updateBulkControlObjective":
+		if e.complexity.Mutation.UpdateBulkControlObjective == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkControlObjective_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkControlObjective(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateControlObjectiveInput)), true
+
+	case "Mutation.updateBulkCustomDomain":
+		if e.complexity.Mutation.UpdateBulkCustomDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCustomDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCustomDomain(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateCustomDomainInput)), true
+
+	case "Mutation.updateBulkDNSVerification":
+		if e.complexity.Mutation.UpdateBulkDNSVerification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkDNSVerification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkDNSVerification(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateDNSVerificationInput)), true
+
+	case "Mutation.updateBulkDocumentData":
+		if e.complexity.Mutation.UpdateBulkDocumentData == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkDocumentData_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkDocumentData(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateDocumentDataInput)), true
+
+	case "Mutation.updateBulkEntity":
+		if e.complexity.Mutation.UpdateBulkEntity == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkEntity_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkEntity(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateEntityInput)), true
+
+	case "Mutation.updateBulkEntityType":
+		if e.complexity.Mutation.UpdateBulkEntityType == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkEntityType_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkEntityType(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateEntityTypeInput)), true
+
+	case "Mutation.updateBulkEvent":
+		if e.complexity.Mutation.UpdateBulkEvent == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkEvent_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkEvent(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateEventInput)), true
+
 	case "Mutation.updateBulkEvidence":
 		if e.complexity.Mutation.UpdateBulkEvidence == nil {
 			break
@@ -24753,6 +25962,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateBulkEvidence(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateEvidenceInput)), true
+
+	case "Mutation.updateBulkGroup":
+		if e.complexity.Mutation.UpdateBulkGroup == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkGroup_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkGroup(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateGroupInput)), true
+
+	case "Mutation.updateBulkGroupMembership":
+		if e.complexity.Mutation.UpdateBulkGroupMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkGroupMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkGroupMembership(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateGroupMembershipInput)), true
+
+	case "Mutation.updateBulkGroupSetting":
+		if e.complexity.Mutation.UpdateBulkGroupSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkGroupSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkGroupSetting(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateGroupSettingInput)), true
 
 	case "Mutation.updateBulkHush":
 		if e.complexity.Mutation.UpdateBulkHush == nil {
@@ -24778,6 +26023,90 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateBulkInternalPolicy(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateInternalPolicyInput)), true
 
+	case "Mutation.updateBulkInvite":
+		if e.complexity.Mutation.UpdateBulkInvite == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkInvite_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkInvite(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateInviteInput)), true
+
+	case "Mutation.updateBulkJobTemplate":
+		if e.complexity.Mutation.UpdateBulkJobTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkJobTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkJobTemplate(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateJobTemplateInput)), true
+
+	case "Mutation.updateBulkMappableDomain":
+		if e.complexity.Mutation.UpdateBulkMappableDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkMappableDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkMappableDomain(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateMappableDomainInput)), true
+
+	case "Mutation.updateBulkMappedControl":
+		if e.complexity.Mutation.UpdateBulkMappedControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkMappedControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkMappedControl(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateMappedControlInput)), true
+
+	case "Mutation.updateBulkNarrative":
+		if e.complexity.Mutation.UpdateBulkNarrative == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkNarrative_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkNarrative(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateNarrativeInput)), true
+
+	case "Mutation.updateBulkOrgMembership":
+		if e.complexity.Mutation.UpdateBulkOrgMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkOrgMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkOrgMembership(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateOrgMembershipInput)), true
+
+	case "Mutation.updateBulkOrganizationSetting":
+		if e.complexity.Mutation.UpdateBulkOrganizationSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkOrganizationSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkOrganizationSetting(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateOrganizationSettingInput)), true
+
 	case "Mutation.updateBulkProcedure":
 		if e.complexity.Mutation.UpdateBulkProcedure == nil {
 			break
@@ -24789,6 +26118,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateBulkProcedure(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateProcedureInput)), true
+
+	case "Mutation.updateBulkProgram":
+		if e.complexity.Mutation.UpdateBulkProgram == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkProgram_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkProgram(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateProgramInput)), true
+
+	case "Mutation.updateBulkProgramMembership":
+		if e.complexity.Mutation.UpdateBulkProgramMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkProgramMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkProgramMembership(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateProgramMembershipInput)), true
 
 	case "Mutation.updateBulkRisk":
 		if e.complexity.Mutation.UpdateBulkRisk == nil {
@@ -24814,6 +26167,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateBulkScan(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateScanInput)), true
 
+	case "Mutation.updateBulkScheduledJob":
+		if e.complexity.Mutation.UpdateBulkScheduledJob == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkScheduledJob_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkScheduledJob(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateScheduledJobInput)), true
+
+	case "Mutation.updateBulkSubcontrol":
+		if e.complexity.Mutation.UpdateBulkSubcontrol == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkSubcontrol_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkSubcontrol(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateSubcontrolInput)), true
+
 	case "Mutation.updateBulkSubprocessor":
 		if e.complexity.Mutation.UpdateBulkSubprocessor == nil {
 			break
@@ -24838,6 +26215,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateBulkTask(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateTaskInput)), true
 
+	case "Mutation.updateBulkTemplate":
+		if e.complexity.Mutation.UpdateBulkTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkTemplate(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateTemplateInput)), true
+
+	case "Mutation.updateBulkTrustCenterCompliance":
+		if e.complexity.Mutation.UpdateBulkTrustCenterCompliance == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkTrustCenterCompliance_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkTrustCenterCompliance(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateTrustCenterComplianceInput)), true
+
 	case "Mutation.updateBulkTrustCenterDoc":
 		if e.complexity.Mutation.UpdateBulkTrustCenterDoc == nil {
 			break
@@ -24861,6 +26262,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateBulkTrustCenterSubprocessor(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateTrustCenterSubprocessorInput)), true
+
+	case "Mutation.updateBulkUserSetting":
+		if e.complexity.Mutation.UpdateBulkUserSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkUserSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkUserSetting(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateUserSettingInput)), true
 
 	case "Mutation.updateCampaign":
 		if e.complexity.Mutation.UpdateCampaign == nil {
@@ -25052,7 +26465,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateDocumentData(childComplexity, args["id"].(string), args["input"].(generated.UpdateDocumentDataInput)), true
+		return e.complexity.Mutation.UpdateDocumentData(childComplexity, args["id"].(string), args["input"].(generated.UpdateDocumentDataInput), args["documentDataFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateEntity":
 		if e.complexity.Mutation.UpdateEntity == nil {
@@ -26037,6 +27450,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.NarrativeBulkDeletePayload.DeletedIDs(childComplexity), true
 
+	case "NarrativeBulkUpdatePayload.narratives":
+		if e.complexity.NarrativeBulkUpdatePayload.Narratives == nil {
+			break
+		}
+
+		return e.complexity.NarrativeBulkUpdatePayload.Narratives(childComplexity), true
+
+	case "NarrativeBulkUpdatePayload.updatedIDs":
+		if e.complexity.NarrativeBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.NarrativeBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "NarrativeConnection.edges":
 		if e.complexity.NarrativeConnection.Edges == nil {
 			break
@@ -26599,6 +28026,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrgMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "OrgMembershipBulkUpdatePayload.orgMemberships":
+		if e.complexity.OrgMembershipBulkUpdatePayload.OrgMemberships == nil {
+			break
+		}
+
+		return e.complexity.OrgMembershipBulkUpdatePayload.OrgMemberships(childComplexity), true
+
+	case "OrgMembershipBulkUpdatePayload.updatedIDs":
+		if e.complexity.OrgMembershipBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.OrgMembershipBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "OrgMembershipConnection.edges":
 		if e.complexity.OrgMembershipConnection.Edges == nil {
@@ -28338,6 +29779,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSettingBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "OrganizationSettingBulkUpdatePayload.organizationSettings":
+		if e.complexity.OrganizationSettingBulkUpdatePayload.OrganizationSettings == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingBulkUpdatePayload.OrganizationSettings(childComplexity), true
+
+	case "OrganizationSettingBulkUpdatePayload.updatedIDs":
+		if e.complexity.OrganizationSettingBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "OrganizationSettingConnection.edges":
 		if e.complexity.OrganizationSettingConnection.Edges == nil {
@@ -30473,6 +31928,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProgramBulkDeletePayload.DeletedIDs(childComplexity), true
 
+	case "ProgramBulkUpdatePayload.programs":
+		if e.complexity.ProgramBulkUpdatePayload.Programs == nil {
+			break
+		}
+
+		return e.complexity.ProgramBulkUpdatePayload.Programs(childComplexity), true
+
+	case "ProgramBulkUpdatePayload.updatedIDs":
+		if e.complexity.ProgramBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.ProgramBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "ProgramConnection.edges":
 		if e.complexity.ProgramConnection.Edges == nil {
 			break
@@ -30605,6 +32074,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProgramMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "ProgramMembershipBulkUpdatePayload.programMemberships":
+		if e.complexity.ProgramMembershipBulkUpdatePayload.ProgramMemberships == nil {
+			break
+		}
+
+		return e.complexity.ProgramMembershipBulkUpdatePayload.ProgramMemberships(childComplexity), true
+
+	case "ProgramMembershipBulkUpdatePayload.updatedIDs":
+		if e.complexity.ProgramMembershipBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.ProgramMembershipBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "ProgramMembershipConnection.edges":
 		if e.complexity.ProgramMembershipConnection.Edges == nil {
@@ -35530,6 +37013,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJobBulkDeletePayload.DeletedIDs(childComplexity), true
 
+	case "ScheduledJobBulkUpdatePayload.scheduledJobs":
+		if e.complexity.ScheduledJobBulkUpdatePayload.ScheduledJobs == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobBulkUpdatePayload.ScheduledJobs(childComplexity), true
+
+	case "ScheduledJobBulkUpdatePayload.updatedIDs":
+		if e.complexity.ScheduledJobBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "ScheduledJobConnection.edges":
 		if e.complexity.ScheduledJobConnection.Edges == nil {
 			break
@@ -36893,6 +38390,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SubcontrolBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "SubcontrolBulkUpdatePayload.subcontrols":
+		if e.complexity.SubcontrolBulkUpdatePayload.Subcontrols == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolBulkUpdatePayload.Subcontrols(childComplexity), true
+
+	case "SubcontrolBulkUpdatePayload.updatedIDs":
+		if e.complexity.SubcontrolBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "SubcontrolConnection.edges":
 		if e.complexity.SubcontrolConnection.Edges == nil {
@@ -38435,6 +39946,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TemplateBulkDeletePayload.DeletedIDs(childComplexity), true
 
+	case "TemplateBulkUpdatePayload.templates":
+		if e.complexity.TemplateBulkUpdatePayload.Templates == nil {
+			break
+		}
+
+		return e.complexity.TemplateBulkUpdatePayload.Templates(childComplexity), true
+
+	case "TemplateBulkUpdatePayload.updatedIDs":
+		if e.complexity.TemplateBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.TemplateBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "TemplateConnection.edges":
 		if e.complexity.TemplateConnection.Edges == nil {
 			break
@@ -38853,6 +40378,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterComplianceBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "TrustCenterComplianceBulkUpdatePayload.trustCenterCompliances":
+		if e.complexity.TrustCenterComplianceBulkUpdatePayload.TrustCenterCompliances == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterComplianceBulkUpdatePayload.TrustCenterCompliances(childComplexity), true
+
+	case "TrustCenterComplianceBulkUpdatePayload.updatedIDs":
+		if e.complexity.TrustCenterComplianceBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterComplianceBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "TrustCenterComplianceConnection.edges":
 		if e.complexity.TrustCenterComplianceConnection.Edges == nil {
@@ -39413,6 +40952,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterNDARequest.AccessLevel(childComplexity), true
 
+	case "TrustCenterNDARequest.approvedAt":
+		if e.complexity.TrustCenterNDARequest.ApprovedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.ApprovedAt(childComplexity), true
+
+	case "TrustCenterNDARequest.approvedByUserID":
+		if e.complexity.TrustCenterNDARequest.ApprovedByUserID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.ApprovedByUserID(childComplexity), true
+
 	case "TrustCenterNDARequest.blockedGroups":
 		if e.complexity.TrustCenterNDARequest.BlockedGroups == nil {
 			break
@@ -39446,6 +40999,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterNDARequest.CreatedBy(childComplexity), true
 
+	case "TrustCenterNDARequest.document":
+		if e.complexity.TrustCenterNDARequest.Document == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.Document(childComplexity), true
+
+	case "TrustCenterNDARequest.documentDataID":
+		if e.complexity.TrustCenterNDARequest.DocumentDataID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.DocumentDataID(childComplexity), true
+
 	case "TrustCenterNDARequest.editors":
 		if e.complexity.TrustCenterNDARequest.Editors == nil {
 			break
@@ -39464,6 +41031,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterNDARequest.Email(childComplexity), true
+
+	case "TrustCenterNDARequest.file":
+		if e.complexity.TrustCenterNDARequest.File == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.File(childComplexity), true
+
+	case "TrustCenterNDARequest.fileID":
+		if e.complexity.TrustCenterNDARequest.FileID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.FileID(childComplexity), true
 
 	case "TrustCenterNDARequest.firstName":
 		if e.complexity.TrustCenterNDARequest.FirstName == nil {
@@ -39492,6 +41073,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterNDARequest.Reason(childComplexity), true
+
+	case "TrustCenterNDARequest.signedAt":
+		if e.complexity.TrustCenterNDARequest.SignedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.SignedAt(childComplexity), true
 
 	case "TrustCenterNDARequest.status":
 		if e.complexity.TrustCenterNDARequest.Status == nil {
@@ -40924,6 +42512,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.UserSettingBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "UserSettingBulkUpdatePayload.updatedIDs":
+		if e.complexity.UserSettingBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.UserSettingBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "UserSettingBulkUpdatePayload.userSettings":
+		if e.complexity.UserSettingBulkUpdatePayload.UserSettings == nil {
+			break
+		}
+
+		return e.complexity.UserSettingBulkUpdatePayload.UserSettings(childComplexity), true
 
 	case "UserSettingConnection.edges":
 		if e.complexity.UserSettingConnection.Edges == nil {
@@ -43333,6 +44935,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateAssetInput,
 		ec.unmarshalInputCreateCampaignInput,
 		ec.unmarshalInputCreateCampaignTargetInput,
+		ec.unmarshalInputCreateCampaignWithTargetsInput,
 		ec.unmarshalInputCreateContactInput,
 		ec.unmarshalInputCreateControlImplementationInput,
 		ec.unmarshalInputCreateControlInput,
@@ -43476,6 +45079,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputJobRunnerWhereInput,
 		ec.unmarshalInputJobTemplateOrder,
 		ec.unmarshalInputJobTemplateWhereInput,
+		ec.unmarshalInputLaunchCampaignInput,
 		ec.unmarshalInputMappableDomainOrder,
 		ec.unmarshalInputMappableDomainWhereInput,
 		ec.unmarshalInputMappedControlOrder,
@@ -43506,6 +45110,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputProgramWhereInput,
 		ec.unmarshalInputRemediationOrder,
 		ec.unmarshalInputRemediationWhereInput,
+		ec.unmarshalInputResendCampaignIncompleteInput,
 		ec.unmarshalInputReviewOrder,
 		ec.unmarshalInputReviewWhereInput,
 		ec.unmarshalInputRiskOrder,
@@ -43516,6 +45121,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputScheduledJobRunOrder,
 		ec.unmarshalInputScheduledJobRunWhereInput,
 		ec.unmarshalInputScheduledJobWhereInput,
+		ec.unmarshalInputSendCampaignTestEmailInput,
 		ec.unmarshalInputStandardOrder,
 		ec.unmarshalInputStandardWhereInput,
 		ec.unmarshalInputSubcontrolOrder,
@@ -44008,6 +45614,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ActionPlanBulkDeletePayload!
+    """
+    Update multiple existing actionPlans via file upload
+    """
+    updateBulkCSVActionPlan(
+        """
+        csv file containing values of the actionPlan, must include ID column
+        """
+        input: Upload!
+    ): ActionPlanBulkUpdatePayload!
 }
 
 """
@@ -44146,6 +45761,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): APITokenBulkDeletePayload!
+    """
+    Update multiple existing apiTokens
+    """
+    updateBulkAPIToken(
+        """
+        IDs of the apiTokens to update
+        """
+        ids: [ID!]!
+        """
+        values to update the apiTokens with
+        """
+        input: UpdateAPITokenInput!
+    ): APITokenBulkUpdatePayload!
+    """
+    Update multiple existing apiTokens via file upload
+    """
+    updateBulkCSVAPIToken(
+        """
+        csv file containing values of the apiToken, must include ID column
+        """
+        input: Upload!
+    ): APITokenBulkUpdatePayload!
 }
 
 """
@@ -44198,6 +45835,19 @@ type APITokenBulkDeletePayload {
     deletedIDs: [ID!]!
 }
 
+"""
+Return response for updateBulkAPIToken mutation
+"""
+type APITokenBulkUpdatePayload {
+    """
+    Updated apiTokens
+    """
+    apiTokens: [APIToken!]
+    """
+    IDs of the updated apiTokens
+    """
+    updatedIDs: [ID!]
+}
 `, BuiltIn: false},
 	{Name: "../schema/assessment.graphql", Input: `extend type Query {
     """
@@ -44420,6 +46070,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): AssetBulkDeletePayload!
+    """
+    Update multiple existing assets
+    """
+    updateBulkAsset(
+        """
+        IDs of the assets to update
+        """
+        ids: [ID!]!
+        """
+        values to update the assets with
+        """
+        input: UpdateAssetInput!
+    ): AssetBulkUpdatePayload!
+    """
+    Update multiple existing assets via file upload
+    """
+    updateBulkCSVAsset(
+        """
+        csv file containing values of the asset, must include ID column
+        """
+        input: Upload!
+    ): AssetBulkUpdatePayload!
 }
 
 """
@@ -44470,7 +46142,22 @@ type AssetBulkDeletePayload {
     Deleted asset IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkAsset mutation
+"""
+type AssetBulkUpdatePayload {
+    """
+    Updated assets
+    """
+    assets: [Asset!]
+    """
+    IDs of the updated assets
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/campaign.graphql", Input: `extend type Campaign {
     """
     Indicates if this campaign has pending changes awaiting workflow approval
@@ -44600,6 +46287,168 @@ type CampaignBulkCreatePayload {
     Created campaigns
     """
     campaigns: [Campaign!]
+}
+`, BuiltIn: false},
+	{Name: "../schema/campaignextended.graphql", Input: `"""
+Input for createCampaignWithTargets mutation
+"""
+input CreateCampaignWithTargetsInput {
+    """
+    values of the campaign
+    """
+    campaign: CreateCampaignInput!
+    """
+    list of targets to create for the campaign
+    """
+    targets: [CreateCampaignTargetInput!]
+}
+
+"""
+Return response for createCampaignWithTargets mutation
+"""
+type CampaignCreateWithTargetsPayload {
+    """
+    Created campaign
+    """
+    campaign: Campaign!
+    """
+    Created campaign targets
+    """
+    campaignTargets: [CampaignTarget!]
+}
+
+"""
+Input for launchCampaign mutation
+"""
+input LaunchCampaignInput {
+    """
+    ID of the campaign
+    """
+    campaignID: ID!
+    """
+    Whether to resend emails to previously-sent targets
+    """
+    resend: Boolean
+    """
+    Optional time to schedule the campaign launch or resend
+    """
+    scheduledAt: DateTime
+}
+
+"""
+Input for resendCampaignIncompleteTargets mutation
+"""
+input ResendCampaignIncompleteInput {
+    """
+    ID of the campaign
+    """
+    campaignID: ID!
+    """
+    Optional time to schedule the resend for incomplete targets
+    """
+    scheduledAt: DateTime
+}
+
+"""
+Return response for launchCampaign mutation
+"""
+type CampaignLaunchPayload {
+    """
+    Updated campaign
+    """
+    campaign: Campaign!
+    """
+    Number of targets queued for send
+    """
+    queuedCount: Int!
+    """
+    Number of targets skipped
+    """
+    skippedCount: Int!
+}
+
+"""
+Input for sendCampaignTestEmail mutation
+"""
+input SendCampaignTestEmailInput {
+    """
+    ID of the campaign
+    """
+    campaignID: ID!
+    """
+    List of recipient emails to send the test to
+    """
+    emails: [String!]!
+}
+
+"""
+Return response for sendCampaignTestEmail mutation
+"""
+type CampaignTestEmailPayload {
+    """
+    Campaign used for the test send
+    """
+    campaign: Campaign!
+    """
+    Number of emails queued for send
+    """
+    queuedCount: Int!
+    """
+    Number of emails skipped
+    """
+    skippedCount: Int!
+}
+
+extend type Mutation {
+    """
+    Create a new campaign with associated targets
+    """
+    createCampaignWithTargets(
+        """
+        values of the campaign and targets
+        """
+        input: CreateCampaignWithTargetsInput!
+    ): CampaignCreateWithTargetsPayload!
+    """
+    Create a new campaign with associated targets via file upload
+    """
+    createCampaignWithTargetsCSV(
+        """
+        values of the campaign
+        """
+        campaign: CreateCampaignInput!
+        """
+        csv file containing target values
+        """
+        targets: Upload!
+    ): CampaignCreateWithTargetsPayload!
+    """
+    Launch a campaign and send emails to its targets
+    """
+    launchCampaign(
+        """
+        values for launching a campaign
+        """
+        input: LaunchCampaignInput!
+    ): CampaignLaunchPayload!
+    """
+    Resend a campaign to only incomplete targets
+    """
+    resendCampaignIncompleteTargets(
+        """
+        values for resending a campaign to incomplete targets
+        """
+        input: ResendCampaignIncompleteInput!
+    ): CampaignLaunchPayload!
+    """
+    Send a test email for a campaign without creating campaign targets
+    """
+    sendCampaignTestEmail(
+        """
+        values for sending a campaign test email
+        """
+        input: SendCampaignTestEmailInput!
+    ): CampaignTestEmailPayload!
 }
 `, BuiltIn: false},
 	{Name: "../schema/campaigntarget.graphql", Input: `extend type CampaignTarget {
@@ -44818,6 +46667,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ContactBulkDeletePayload!
+    """
+    Update multiple existing contacts via file upload
+    """
+    updateBulkCSVContact(
+        """
+        csv file containing values of the contact, must include ID column
+        """
+        input: Upload!
+    ): ContactBulkUpdatePayload!
 }
 
 """
@@ -45394,6 +47252,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ControlImplementationBulkDeletePayload!
+    """
+    Update multiple existing controlImplementations
+    """
+    updateBulkControlImplementation(
+        """
+        IDs of the controlImplementations to update
+        """
+        ids: [ID!]!
+        """
+        values to update the controlImplementations with
+        """
+        input: UpdateControlImplementationInput!
+    ): ControlImplementationBulkUpdatePayload!
+    """
+    Update multiple existing controlImplementations via file upload
+    """
+    updateBulkCSVControlImplementation(
+        """
+        csv file containing values of the controlImplementation, must include ID column
+        """
+        input: Upload!
+    ): ControlImplementationBulkUpdatePayload!
 }
 
 """
@@ -45444,7 +47324,22 @@ type ControlImplementationBulkDeletePayload {
     Deleted controlImplementation IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkControlImplementation mutation
+"""
+type ControlImplementationBulkUpdatePayload {
+    """
+    Updated controlImplementations
+    """
+    controlImplementations: [ControlImplementation!]
+    """
+    IDs of the updated controlImplementations
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/controlobjective.graphql", Input: `extend type Query {
     """
     Look up controlObjective by ID
@@ -45516,6 +47411,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ControlObjectiveBulkDeletePayload!
+    """
+    Update multiple existing controlObjectives
+    """
+    updateBulkControlObjective(
+        """
+        IDs of the controlObjectives to update
+        """
+        ids: [ID!]!
+        """
+        values to update the controlObjectives with
+        """
+        input: UpdateControlObjectiveInput!
+    ): ControlObjectiveBulkUpdatePayload!
+    """
+    Update multiple existing controlObjectives via file upload
+    """
+    updateBulkCSVControlObjective(
+        """
+        csv file containing values of the controlObjective, must include ID column
+        """
+        input: Upload!
+    ): ControlObjectiveBulkUpdatePayload!
 }
 
 """
@@ -45566,7 +47483,22 @@ type ControlObjectiveBulkDeletePayload {
     Deleted controlObjective IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkControlObjective mutation
+"""
+type ControlObjectiveBulkUpdatePayload {
+    """
+    Updated controlObjectives
+    """
+    controlObjectives: [ControlObjective!]
+    """
+    IDs of the updated controlObjectives
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/customdomain.graphql", Input: `extend type Query {
     """
     Look up customDomain by ID
@@ -45647,6 +47579,28 @@ extend type Mutation{
         """
         id: ID!
     ): CustomDomainValidatePayload!
+    """
+    Update multiple existing customDomains
+    """
+    updateBulkCustomDomain(
+        """
+        IDs of the customDomains to update
+        """
+        ids: [ID!]!
+        """
+        values to update the customDomains with
+        """
+        input: UpdateCustomDomainInput!
+    ): CustomDomainBulkUpdatePayload!
+    """
+    Update multiple existing customDomains via file upload
+    """
+    updateBulkCSVCustomDomain(
+        """
+        csv file containing values of the customDomain, must include ID column
+        """
+        input: Upload!
+    ): CustomDomainBulkUpdatePayload!
 }
 
 """
@@ -45707,7 +47661,22 @@ type CustomDomainValidatePayload {
     CustomDomain that validation was triggered for
     """
     customDomain: CustomDomain!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkCustomDomain mutation
+"""
+type CustomDomainBulkUpdatePayload {
+    """
+    Updated customDomains
+    """
+    customDomains: [CustomDomain!]
+    """
+    IDs of the updated customDomains
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/customtypeenum.graphql", Input: `extend type Query {
     """
     Look up customTypeEnum by ID
@@ -46406,6 +48375,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): DNSVerificationBulkDeletePayload!
+    """
+    Update multiple existing dnsVerifications
+    """
+    updateBulkDNSVerification(
+        """
+        IDs of the dnsVerifications to update
+        """
+        ids: [ID!]!
+        """
+        values to update the dnsVerifications with
+        """
+        input: UpdateDNSVerificationInput!
+    ): DNSVerificationBulkUpdatePayload!
+    """
+    Update multiple existing dnsVerifications via file upload
+    """
+    updateBulkCSVDNSVerification(
+        """
+        csv file containing values of the dnsVerification, must include ID column
+        """
+        input: Upload!
+    ): DNSVerificationBulkUpdatePayload!
 }
 
 """
@@ -46456,7 +48447,22 @@ type DNSVerificationBulkDeletePayload {
     Deleted dnsVerification IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkDNSVerification mutation
+"""
+type DNSVerificationBulkUpdatePayload {
+    """
+    Updated dnsVerifications
+    """
+    dnsVerifications: [DNSVerification!]
+    """
+    IDs of the updated dnsVerifications
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/documentdata.graphql", Input: `extend type Query {
     """
     Look up documentData by ID
@@ -46509,6 +48515,10 @@ extend type Mutation{
         New values for the documentData
         """
         input: UpdateDocumentDataInput!
+        """
+        File to upload for the documentData
+        """
+        documentDataFile: Upload
     ): DocumentDataUpdatePayload!
     """
     Delete an existing documentData
@@ -46528,6 +48538,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): DocumentDataBulkDeletePayload!
+    """
+    Update multiple existing documentDatas
+    """
+    updateBulkDocumentData(
+        """
+        IDs of the documentDatas to update
+        """
+        ids: [ID!]!
+        """
+        values to update the documentDatas with
+        """
+        input: UpdateDocumentDataInput!
+    ): DocumentDataBulkUpdatePayload!
+    """
+    Update multiple existing documentDatas via file upload
+    """
+    updateBulkCSVDocumentData(
+        """
+        csv file containing values of the documentData, must include ID column
+        """
+        input: Upload!
+    ): DocumentDataBulkUpdatePayload!
 }
 
 """
@@ -46578,7 +48610,22 @@ type DocumentDataBulkDeletePayload {
     Deleted documentData IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkDocumentData mutation
+"""
+type DocumentDataBulkUpdatePayload {
+    """
+    Updated documentDatas
+    """
+    documentData: [DocumentData!]
+    """
+    IDs of the updated documentDatas
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
 type APIToken implements Node {
@@ -60128,10 +62175,24 @@ input CreateTrustCenterNDARequestInput {
   access level requested
   """
   accessLevel: TrustCenterNDARequestTrustCenterNDARequestAccessLevel
+  """
+  timestamp when the request was approved
+  """
+  approvedAt: DateTime
+  """
+  ID of the user who approved the request
+  """
+  approvedByUserID: String
+  """
+  timestamp when the NDA was signed
+  """
+  signedAt: DateTime
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   trustCenterID: ID
   trustCenterDocIDs: [ID!]
+  documentID: ID
+  fileID: ID
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -106141,6 +108202,26 @@ type TrustCenterNDARequest implements Node {
   status of the NDA request
   """
   status: TrustCenterNDARequestTrustCenterNDARequestStatus
+  """
+  timestamp when the request was approved
+  """
+  approvedAt: DateTime
+  """
+  ID of the user who approved the request
+  """
+  approvedByUserID: String
+  """
+  timestamp when the NDA was signed
+  """
+  signedAt: DateTime
+  """
+  ID of the signed NDA document data
+  """
+  documentDataID: ID
+  """
+  ID of the template file at the time the NDA was signed
+  """
+  fileID: ID
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -106235,6 +108316,14 @@ type TrustCenterNDARequest implements Node {
     """
     where: TrustCenterDocWhereInput
   ): TrustCenterDocConnection!
+  """
+  the signed NDA document data
+  """
+  document: DocumentData
+  """
+  the template file at the time the NDA was signed
+  """
+  file: File
 }
 """
 A connection to a list of items.
@@ -106301,6 +108390,7 @@ enum TrustCenterNDARequestTrustCenterNDARequestStatus @goModel(model: "github.co
   NEEDS_APPROVAL
   APPROVED
   SIGNED
+  DECLINED
 }
 """
 TrustCenterNDARequestWhereInput is used for filtering TrustCenterNDARequest objects.
@@ -106506,6 +108596,86 @@ input TrustCenterNDARequestWhereInput {
   statusIsNil: Boolean
   statusNotNil: Boolean
   """
+  approved_at field predicates
+  """
+  approvedAt: DateTime
+  approvedAtNEQ: DateTime
+  approvedAtIn: [DateTime!]
+  approvedAtNotIn: [DateTime!]
+  approvedAtGT: DateTime
+  approvedAtGTE: DateTime
+  approvedAtLT: DateTime
+  approvedAtLTE: DateTime
+  approvedAtIsNil: Boolean
+  approvedAtNotNil: Boolean
+  """
+  approved_by_user_id field predicates
+  """
+  approvedByUserID: String
+  approvedByUserIDNEQ: String
+  approvedByUserIDIn: [String!]
+  approvedByUserIDNotIn: [String!]
+  approvedByUserIDGT: String
+  approvedByUserIDGTE: String
+  approvedByUserIDLT: String
+  approvedByUserIDLTE: String
+  approvedByUserIDContains: String
+  approvedByUserIDHasPrefix: String
+  approvedByUserIDHasSuffix: String
+  approvedByUserIDIsNil: Boolean
+  approvedByUserIDNotNil: Boolean
+  approvedByUserIDEqualFold: String
+  approvedByUserIDContainsFold: String
+  """
+  signed_at field predicates
+  """
+  signedAt: DateTime
+  signedAtNEQ: DateTime
+  signedAtIn: [DateTime!]
+  signedAtNotIn: [DateTime!]
+  signedAtGT: DateTime
+  signedAtGTE: DateTime
+  signedAtLT: DateTime
+  signedAtLTE: DateTime
+  signedAtIsNil: Boolean
+  signedAtNotNil: Boolean
+  """
+  document_data_id field predicates
+  """
+  documentDataID: ID
+  documentDataIDNEQ: ID
+  documentDataIDIn: [ID!]
+  documentDataIDNotIn: [ID!]
+  documentDataIDGT: ID
+  documentDataIDGTE: ID
+  documentDataIDLT: ID
+  documentDataIDLTE: ID
+  documentDataIDContains: ID
+  documentDataIDHasPrefix: ID
+  documentDataIDHasSuffix: ID
+  documentDataIDIsNil: Boolean
+  documentDataIDNotNil: Boolean
+  documentDataIDEqualFold: ID
+  documentDataIDContainsFold: ID
+  """
+  file_id field predicates
+  """
+  fileID: ID
+  fileIDNEQ: ID
+  fileIDIn: [ID!]
+  fileIDNotIn: [ID!]
+  fileIDGT: ID
+  fileIDGTE: ID
+  fileIDLT: ID
+  fileIDLTE: ID
+  fileIDContains: ID
+  fileIDHasPrefix: ID
+  fileIDHasSuffix: ID
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: ID
+  fileIDContainsFold: ID
+  """
   blocked_groups edge predicates
   """
   hasBlockedGroups: Boolean
@@ -106525,6 +108695,16 @@ input TrustCenterNDARequestWhereInput {
   """
   hasTrustCenterDocs: Boolean
   hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
+  """
+  document edge predicates
+  """
+  hasDocument: Boolean
+  hasDocumentWith: [DocumentDataWhereInput!]
+  """
+  file edge predicates
+  """
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
 }
 """
 Ordering options for TrustCenter connections
@@ -114627,6 +116807,21 @@ input UpdateTrustCenterNDARequestInput {
   """
   status: TrustCenterNDARequestTrustCenterNDARequestStatus
   clearStatus: Boolean
+  """
+  timestamp when the request was approved
+  """
+  approvedAt: DateTime
+  clearApprovedAt: Boolean
+  """
+  ID of the user who approved the request
+  """
+  approvedByUserID: String
+  clearApprovedByUserID: Boolean
+  """
+  timestamp when the NDA was signed
+  """
+  signedAt: DateTime
+  clearSignedAt: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -114636,6 +116831,10 @@ input UpdateTrustCenterNDARequestInput {
   addTrustCenterDocIDs: [ID!]
   removeTrustCenterDocIDs: [ID!]
   clearTrustCenterDocs: Boolean
+  documentID: ID
+  clearDocument: Boolean
+  fileID: ID
+  clearFile: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.
@@ -121431,6 +123630,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): EntityBulkDeletePayload!
+    """
+    Update multiple existing entitys
+    """
+    updateBulkEntity(
+        """
+        IDs of the entitys to update
+        """
+        ids: [ID!]!
+        """
+        values to update the entitys with
+        """
+        input: UpdateEntityInput!
+    ): EntityBulkUpdatePayload!
+    """
+    Update multiple existing entitys via file upload
+    """
+    updateBulkCSVEntity(
+        """
+        csv file containing values of the entity, must include ID column
+        """
+        input: Upload!
+    ): EntityBulkUpdatePayload!
 }
 
 """
@@ -121481,7 +123702,22 @@ type EntityBulkDeletePayload {
     Deleted entity IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkEntity mutation
+"""
+type EntityBulkUpdatePayload {
+    """
+    Updated entitys
+    """
+    entities: [Entity!]
+    """
+    IDs of the updated entitys
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/entityextended.graphql", Input: `extend input CreateEntityInput {
   note: CreateNoteInput
 }
@@ -121561,6 +123797,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): EntityTypeBulkDeletePayload!
+    """
+    Update multiple existing entityTypes
+    """
+    updateBulkEntityType(
+        """
+        IDs of the entityTypes to update
+        """
+        ids: [ID!]!
+        """
+        values to update the entityTypes with
+        """
+        input: UpdateEntityTypeInput!
+    ): EntityTypeBulkUpdatePayload!
+    """
+    Update multiple existing entityTypes via file upload
+    """
+    updateBulkCSVEntityType(
+        """
+        csv file containing values of the entityType, must include ID column
+        """
+        input: Upload!
+    ): EntityTypeBulkUpdatePayload!
 }
 
 """
@@ -121611,7 +123869,22 @@ type EntityTypeBulkDeletePayload {
     Deleted entityType IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkEntityType mutation
+"""
+type EntityTypeBulkUpdatePayload {
+    """
+    Updated entityTypes
+    """
+    entityTypes: [EntityType!]
+    """
+    IDs of the updated entityTypes
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/event.graphql", Input: `extend type Query {
     """
     Look up event by ID
@@ -121683,6 +123956,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): EventBulkDeletePayload!
+    """
+    Update multiple existing events
+    """
+    updateBulkEvent(
+        """
+        IDs of the events to update
+        """
+        ids: [ID!]!
+        """
+        values to update the events with
+        """
+        input: UpdateEventInput!
+    ): EventBulkUpdatePayload!
+    """
+    Update multiple existing events via file upload
+    """
+    updateBulkCSVEvent(
+        """
+        csv file containing values of the event, must include ID column
+        """
+        input: Upload!
+    ): EventBulkUpdatePayload!
 }
 
 """
@@ -121733,7 +124028,22 @@ type EventBulkDeletePayload {
     Deleted event IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkEvent mutation
+"""
+type EventBulkUpdatePayload {
+    """
+    Updated events
+    """
+    events: [Event!]
+    """
+    IDs of the updated events
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/evidence.graphql", Input: `extend type Evidence {
     """
     Indicates if this evidence has pending changes awaiting workflow approval
@@ -121847,6 +124157,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): EvidenceBulkDeletePayload!
+    """
+    Update multiple existing evidences via file upload
+    """
+    updateBulkCSVEvidence(
+        """
+        csv file containing values of the evidence, must include ID column
+        """
+        input: Upload!
+    ): EvidenceBulkUpdatePayload!
 }
 
 """
@@ -122339,6 +124658,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): GroupBulkDeletePayload!
+    """
+    Update multiple existing groups
+    """
+    updateBulkGroup(
+        """
+        IDs of the groups to update
+        """
+        ids: [ID!]!
+        """
+        values to update the groups with
+        """
+        input: UpdateGroupInput!
+    ): GroupBulkUpdatePayload!
+    """
+    Update multiple existing groups via file upload
+    """
+    updateBulkCSVGroup(
+        """
+        csv file containing values of the group, must include ID column
+        """
+        input: Upload!
+    ): GroupBulkUpdatePayload!
 }
 
 """
@@ -122389,7 +124730,22 @@ type GroupBulkDeletePayload {
     Deleted group IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkGroup mutation
+"""
+type GroupBulkUpdatePayload {
+    """
+    Updated groups
+    """
+    groups: [Group!]
+    """
+    IDs of the updated groups
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/groupextended.graphql", Input: `extend input CreateGroupInput {
   createGroupSettings: CreateGroupSettingInput
 }
@@ -122712,6 +125068,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): GroupMembershipBulkDeletePayload!
+    """
+    Update multiple existing groupMemberships
+    """
+    updateBulkGroupMembership(
+        """
+        IDs of the groupMemberships to update
+        """
+        ids: [ID!]!
+        """
+        values to update the groupMemberships with
+        """
+        input: UpdateGroupMembershipInput!
+    ): GroupMembershipBulkUpdatePayload!
+    """
+    Update multiple existing groupMemberships via file upload
+    """
+    updateBulkCSVGroupMembership(
+        """
+        csv file containing values of the groupMembership, must include ID column
+        """
+        input: Upload!
+    ): GroupMembershipBulkUpdatePayload!
 }
 
 """
@@ -122762,7 +125140,22 @@ type GroupMembershipBulkDeletePayload {
     Deleted groupMembership IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkGroupMembership mutation
+"""
+type GroupMembershipBulkUpdatePayload {
+    """
+    Updated groupMemberships
+    """
+    groupMemberships: [GroupMembership!]
+    """
+    IDs of the updated groupMemberships
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/groupsetting.graphql", Input: `extend type Query {
     """
     Look up groupSetting by ID
@@ -122834,6 +125227,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): GroupSettingBulkDeletePayload!
+    """
+    Update multiple existing groupSettings
+    """
+    updateBulkGroupSetting(
+        """
+        IDs of the groupSettings to update
+        """
+        ids: [ID!]!
+        """
+        values to update the groupSettings with
+        """
+        input: UpdateGroupSettingInput!
+    ): GroupSettingBulkUpdatePayload!
+    """
+    Update multiple existing groupSettings via file upload
+    """
+    updateBulkCSVGroupSetting(
+        """
+        csv file containing values of the groupSetting, must include ID column
+        """
+        input: Upload!
+    ): GroupSettingBulkUpdatePayload!
 }
 
 """
@@ -122884,7 +125299,22 @@ type GroupSettingBulkDeletePayload {
     Deleted groupSetting IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkGroupSetting mutation
+"""
+type GroupSettingBulkUpdatePayload {
+    """
+    Updated groupSettings
+    """
+    groupSettings: [GroupSetting!]
+    """
+    IDs of the updated groupSettings
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/hush.graphql", Input: `extend type Query {
     """
     Look up hush by ID
@@ -122971,6 +125401,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): HushBulkDeletePayload!
+    """
+    Update multiple existing hushs via file upload
+    """
+    updateBulkCSVHush(
+        """
+        csv file containing values of the hush, must include ID column
+        """
+        input: Upload!
+    ): HushBulkUpdatePayload!
 }
 
 """
@@ -123329,6 +125768,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): InternalPolicyBulkDeletePayload!
+    """
+    Update multiple existing internalPolicys via file upload
+    """
+    updateBulkCSVInternalPolicy(
+        """
+        csv file containing values of the internalPolicy, must include ID column
+        """
+        input: Upload!
+    ): InternalPolicyBulkUpdatePayload!
 }
 
 """
@@ -123466,6 +125914,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): InviteBulkDeletePayload!
+    """
+    Update multiple existing invites
+    """
+    updateBulkInvite(
+        """
+        IDs of the invites to update
+        """
+        ids: [ID!]!
+        """
+        values to update the invites with
+        """
+        input: UpdateInviteInput!
+    ): InviteBulkUpdatePayload!
+    """
+    Update multiple existing invites via file upload
+    """
+    updateBulkCSVInvite(
+        """
+        csv file containing values of the invite, must include ID column
+        """
+        input: Upload!
+    ): InviteBulkUpdatePayload!
 }
 
 """
@@ -123516,7 +125986,22 @@ type InviteBulkDeletePayload {
     Deleted invite IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkInvite mutation
+"""
+type InviteBulkUpdatePayload {
+    """
+    Updated invites
+    """
+    invites: [Invite!]
+    """
+    IDs of the updated invites
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/jobresult.graphql", Input: `extend type Query {
     """
     Look up jobResult by ID
@@ -123876,6 +126361,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): JobTemplateBulkDeletePayload!
+    """
+    Update multiple existing jobTemplates
+    """
+    updateBulkJobTemplate(
+        """
+        IDs of the jobTemplates to update
+        """
+        ids: [ID!]!
+        """
+        values to update the jobTemplates with
+        """
+        input: UpdateJobTemplateInput!
+    ): JobTemplateBulkUpdatePayload!
+    """
+    Update multiple existing jobTemplates via file upload
+    """
+    updateBulkCSVJobTemplate(
+        """
+        csv file containing values of the jobTemplate, must include ID column
+        """
+        input: Upload!
+    ): JobTemplateBulkUpdatePayload!
 }
 
 """
@@ -123926,7 +126433,22 @@ type JobTemplateBulkDeletePayload {
     Deleted jobTemplate IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkJobTemplate mutation
+"""
+type JobTemplateBulkUpdatePayload {
+    """
+    Updated jobTemplates
+    """
+    jobTemplates: [JobTemplate!]
+    """
+    IDs of the updated jobTemplates
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/mappabledomain.graphql", Input: `extend type Query {
     """
     Look up mappableDomain by ID
@@ -123998,6 +126520,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): MappableDomainBulkDeletePayload!
+    """
+    Update multiple existing mappableDomains
+    """
+    updateBulkMappableDomain(
+        """
+        IDs of the mappableDomains to update
+        """
+        ids: [ID!]!
+        """
+        values to update the mappableDomains with
+        """
+        input: UpdateMappableDomainInput!
+    ): MappableDomainBulkUpdatePayload!
+    """
+    Update multiple existing mappableDomains via file upload
+    """
+    updateBulkCSVMappableDomain(
+        """
+        csv file containing values of the mappableDomain, must include ID column
+        """
+        input: Upload!
+    ): MappableDomainBulkUpdatePayload!
 }
 
 """
@@ -124048,7 +126592,22 @@ type MappableDomainBulkDeletePayload {
     Deleted mappableDomain IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkMappableDomain mutation
+"""
+type MappableDomainBulkUpdatePayload {
+    """
+    Updated mappableDomains
+    """
+    mappableDomains: [MappableDomain!]
+    """
+    IDs of the updated mappableDomains
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/mappedcontrol.graphql", Input: `extend type Query {
     """
     Look up mappedControl by ID
@@ -124120,6 +126679,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): MappedControlBulkDeletePayload!
+    """
+    Update multiple existing mappedControls
+    """
+    updateBulkMappedControl(
+        """
+        IDs of the mappedControls to update
+        """
+        ids: [ID!]!
+        """
+        values to update the mappedControls with
+        """
+        input: UpdateMappedControlInput!
+    ): MappedControlBulkUpdatePayload!
+    """
+    Update multiple existing mappedControls via file upload
+    """
+    updateBulkCSVMappedControl(
+        """
+        csv file containing values of the mappedControl, must include ID column
+        """
+        input: Upload!
+    ): MappedControlBulkUpdatePayload!
 }
 
 """
@@ -124170,7 +126751,22 @@ type MappedControlBulkDeletePayload {
     Deleted mappedControl IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkMappedControl mutation
+"""
+type MappedControlBulkUpdatePayload {
+    """
+    Updated mappedControls
+    """
+    mappedControls: [MappedControl!]
+    """
+    IDs of the updated mappedControls
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/mappedcontrolextended.graphql", Input: `extend input CreateMappedControlInput {
     """
     the ref code(s) of the control(s) prefixed with the standard for the from side of the mapping, e.g. SOC2::CC1.1
@@ -124260,6 +126856,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): NarrativeBulkDeletePayload!
+    """
+    Update multiple existing narratives
+    """
+    updateBulkNarrative(
+        """
+        IDs of the narratives to update
+        """
+        ids: [ID!]!
+        """
+        values to update the narratives with
+        """
+        input: UpdateNarrativeInput!
+    ): NarrativeBulkUpdatePayload!
+    """
+    Update multiple existing narratives via file upload
+    """
+    updateBulkCSVNarrative(
+        """
+        csv file containing values of the narrative, must include ID column
+        """
+        input: Upload!
+    ): NarrativeBulkUpdatePayload!
 }
 
 """
@@ -124310,7 +126928,22 @@ type NarrativeBulkDeletePayload {
     Deleted narrative IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkNarrative mutation
+"""
+type NarrativeBulkUpdatePayload {
+    """
+    Updated narratives
+    """
+    narratives: [Narrative!]
+    """
+    IDs of the updated narratives
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/note.graphql", Input: `extend type Query {
     """
     Look up note by ID
@@ -124757,6 +127390,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): OrganizationSettingBulkDeletePayload!
+    """
+    Update multiple existing organizationSettings
+    """
+    updateBulkOrganizationSetting(
+        """
+        IDs of the organizationSettings to update
+        """
+        ids: [ID!]!
+        """
+        values to update the organizationSettings with
+        """
+        input: UpdateOrganizationSettingInput!
+    ): OrganizationSettingBulkUpdatePayload!
+    """
+    Update multiple existing organizationSettings via file upload
+    """
+    updateBulkCSVOrganizationSetting(
+        """
+        csv file containing values of the organizationSetting, must include ID column
+        """
+        input: Upload!
+    ): OrganizationSettingBulkUpdatePayload!
 }
 
 """
@@ -124807,7 +127462,22 @@ type OrganizationSettingBulkDeletePayload {
     Deleted organizationSetting IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkOrganizationSetting mutation
+"""
+type OrganizationSettingBulkUpdatePayload {
+    """
+    Updated organizationSettings
+    """
+    organizationSettings: [OrganizationSetting!]
+    """
+    IDs of the updated organizationSettings
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/orgextended.graphql", Input: `extend input CreateOrganizationInput {
   createOrgSettings: CreateOrganizationSettingInput
 }
@@ -124945,6 +127615,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): OrgMembershipBulkDeletePayload!
+    """
+    Update multiple existing orgMemberships
+    """
+    updateBulkOrgMembership(
+        """
+        IDs of the orgMemberships to update
+        """
+        ids: [ID!]!
+        """
+        values to update the orgMemberships with
+        """
+        input: UpdateOrgMembershipInput!
+    ): OrgMembershipBulkUpdatePayload!
+    """
+    Update multiple existing orgMemberships via file upload
+    """
+    updateBulkCSVOrgMembership(
+        """
+        csv file containing values of the orgMembership, must include ID column
+        """
+        input: Upload!
+    ): OrgMembershipBulkUpdatePayload!
 }
 
 """
@@ -124999,7 +127691,22 @@ type OrgMembershipBulkDeletePayload {
 
 extend input OrgMembershipWhereInput {
   hasUserWith: [UserWhereInput!]
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkOrgMembership mutation
+"""
+type OrgMembershipBulkUpdatePayload {
+    """
+    Updated orgMemberships
+    """
+    orgMemberships: [OrgMembership!]
+    """
+    IDs of the updated orgMemberships
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/orgsubscription.graphql", Input: `extend type Query {
     """
     Look up orgSubscription by ID
@@ -125360,6 +128067,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ProcedureBulkDeletePayload!
+    """
+    Update multiple existing procedures via file upload
+    """
+    updateBulkCSVProcedure(
+        """
+        csv file containing values of the procedure, must include ID column
+        """
+        input: Upload!
+    ): ProcedureBulkUpdatePayload!
 }
 
 """
@@ -125497,6 +128213,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ProgramBulkDeletePayload!
+    """
+    Update multiple existing programs
+    """
+    updateBulkProgram(
+        """
+        IDs of the programs to update
+        """
+        ids: [ID!]!
+        """
+        values to update the programs with
+        """
+        input: UpdateProgramInput!
+    ): ProgramBulkUpdatePayload!
+    """
+    Update multiple existing programs via file upload
+    """
+    updateBulkCSVProgram(
+        """
+        csv file containing values of the program, must include ID column
+        """
+        input: Upload!
+    ): ProgramBulkUpdatePayload!
 }
 
 """
@@ -125547,7 +128285,22 @@ type ProgramBulkDeletePayload {
     Deleted program IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkProgram mutation
+"""
+type ProgramBulkUpdatePayload {
+    """
+    Updated programs
+    """
+    programs: [Program!]
+    """
+    IDs of the updated programs
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/programextended.graphql", Input: `extend input UpdateProgramInput {
   addProgramMembers: [AddProgramMembershipInput!]
   removeProgramMembers: [ID!]
@@ -125714,6 +128467,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ProgramMembershipBulkDeletePayload!
+    """
+    Update multiple existing programMemberships
+    """
+    updateBulkProgramMembership(
+        """
+        IDs of the programMemberships to update
+        """
+        ids: [ID!]!
+        """
+        values to update the programMemberships with
+        """
+        input: UpdateProgramMembershipInput!
+    ): ProgramMembershipBulkUpdatePayload!
+    """
+    Update multiple existing programMemberships via file upload
+    """
+    updateBulkCSVProgramMembership(
+        """
+        csv file containing values of the programMembership, must include ID column
+        """
+        input: Upload!
+    ): ProgramMembershipBulkUpdatePayload!
 }
 
 """
@@ -125764,7 +128539,22 @@ type ProgramMembershipBulkDeletePayload {
     Deleted programMembership IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkProgramMembership mutation
+"""
+type ProgramMembershipBulkUpdatePayload {
+    """
+    Updated programMemberships
+    """
+    programMemberships: [ProgramMembership!]
+    """
+    IDs of the updated programMemberships
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/remediation.graphql", Input: `extend type Query {
     """
     Look up remediation by ID
@@ -126077,6 +128867,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): RiskBulkDeletePayload!
+    """
+    Update multiple existing risks via file upload
+    """
+    updateBulkCSVRisk(
+        """
+        csv file containing values of the risk, must include ID column
+        """
+        input: Upload!
+    ): RiskBulkUpdatePayload!
 }
 
 """
@@ -126228,6 +129027,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ScanBulkDeletePayload!
+    """
+    Update multiple existing scans via file upload
+    """
+    updateBulkCSVScan(
+        """
+        csv file containing values of the scan, must include ID column
+        """
+        input: Upload!
+    ): ScanBulkUpdatePayload!
 }
 
 """
@@ -126364,6 +129172,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ScheduledJobBulkDeletePayload!
+    """
+    Update multiple existing scheduledJobs
+    """
+    updateBulkScheduledJob(
+        """
+        IDs of the scheduledJobs to update
+        """
+        ids: [ID!]!
+        """
+        values to update the scheduledJobs with
+        """
+        input: UpdateScheduledJobInput!
+    ): ScheduledJobBulkUpdatePayload!
+    """
+    Update multiple existing scheduledJobs via file upload
+    """
+    updateBulkCSVScheduledJob(
+        """
+        csv file containing values of the scheduledJob, must include ID column
+        """
+        input: Upload!
+    ): ScheduledJobBulkUpdatePayload!
 }
 
 """
@@ -126414,7 +129244,22 @@ type ScheduledJobBulkDeletePayload {
     Deleted scheduledJob IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkScheduledJob mutation
+"""
+type ScheduledJobBulkUpdatePayload {
+    """
+    Updated scheduledJobs
+    """
+    scheduledJobs: [ScheduledJob!]
+    """
+    IDs of the updated scheduledJobs
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/scheduledjobrun.graphql", Input: `extend type Query {
     """
     Look up scheduledJobRun by ID
@@ -127725,6 +130570,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): SubcontrolBulkDeletePayload!
+    """
+    Update multiple existing subcontrols
+    """
+    updateBulkSubcontrol(
+        """
+        IDs of the subcontrols to update
+        """
+        ids: [ID!]!
+        """
+        values to update the subcontrols with
+        """
+        input: UpdateSubcontrolInput!
+    ): SubcontrolBulkUpdatePayload!
+    """
+    Update multiple existing subcontrols via file upload
+    """
+    updateBulkCSVSubcontrol(
+        """
+        csv file containing values of the subcontrol, must include ID column
+        """
+        input: Upload!
+    ): SubcontrolBulkUpdatePayload!
 }
 
 """
@@ -127775,7 +130642,22 @@ type SubcontrolBulkDeletePayload {
     Deleted subcontrol IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkSubcontrol mutation
+"""
+type SubcontrolBulkUpdatePayload {
+    """
+    Updated subcontrols
+    """
+    subcontrols: [Subcontrol!]
+    """
+    IDs of the updated subcontrols
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/subprocessor.graphql", Input: `extend type Query {
     """
     Look up subprocessor by ID
@@ -127868,6 +130750,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): SubprocessorBulkDeletePayload!
+    """
+    Update multiple existing subprocessors via file upload
+    """
+    updateBulkCSVSubprocessor(
+        """
+        csv file containing values of the subprocessor, must include ID column
+        """
+        input: Upload!
+    ): SubprocessorBulkUpdatePayload!
 }
 
 """
@@ -128238,6 +131129,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): TaskBulkDeletePayload!
+    """
+    Update multiple existing tasks via file upload
+    """
+    updateBulkCSVTask(
+        """
+        csv file containing values of the task, must include ID column
+        """
+        input: Upload!
+    ): TaskBulkUpdatePayload!
 }
 
 """
@@ -128377,6 +131277,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): TemplateBulkDeletePayload!
+    """
+    Update multiple existing templates
+    """
+    updateBulkTemplate(
+        """
+        IDs of the templates to update
+        """
+        ids: [ID!]!
+        """
+        values to update the templates with
+        """
+        input: UpdateTemplateInput!
+    ): TemplateBulkUpdatePayload!
+    """
+    Update multiple existing templates via file upload
+    """
+    updateBulkCSVTemplate(
+        """
+        csv file containing values of the template, must include ID column
+        """
+        input: Upload!
+    ): TemplateBulkUpdatePayload!
 }
 
 """
@@ -128427,7 +131349,22 @@ type TemplateBulkDeletePayload {
     Deleted template IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkTemplate mutation
+"""
+type TemplateBulkUpdatePayload {
+    """
+    Updated templates
+    """
+    templates: [Template!]
+    """
+    IDs of the updated templates
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/tfaextended.graphql", Input: `extend type TFASettingUpdatePayload {
     tfaSecret: String
     qrCode: String
@@ -128645,6 +131582,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): TrustCenterComplianceBulkDeletePayload!
+    """
+    Update multiple existing trustCenterCompliances
+    """
+    updateBulkTrustCenterCompliance(
+        """
+        IDs of the trustCenterCompliances to update
+        """
+        ids: [ID!]!
+        """
+        values to update the trustCenterCompliances with
+        """
+        input: UpdateTrustCenterComplianceInput!
+    ): TrustCenterComplianceBulkUpdatePayload!
+    """
+    Update multiple existing trustCenterCompliances via file upload
+    """
+    updateBulkCSVTrustCenterCompliance(
+        """
+        csv file containing values of the trustCenterCompliance, must include ID column
+        """
+        input: Upload!
+    ): TrustCenterComplianceBulkUpdatePayload!
 }
 
 """
@@ -128695,7 +131654,22 @@ type TrustCenterComplianceBulkDeletePayload {
     Deleted trustCenterCompliance IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkTrustCenterCompliance mutation
+"""
+type TrustCenterComplianceBulkUpdatePayload {
+    """
+    Updated trustCenterCompliances
+    """
+    trustCenterCompliances: [TrustCenterCompliance!]
+    """
+    IDs of the updated trustCenterCompliances
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/trustcenterdoc.graphql", Input: `extend type Query {
     """
     Look up trustCenterDoc by ID
@@ -128783,6 +131757,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): TrustCenterDocBulkDeletePayload!
+    """
+    Update multiple existing trustCenterDocs via file upload
+    """
+    updateBulkCSVTrustCenterDoc(
+        """
+        csv file containing values of the trustCenterDoc, must include ID column
+        """
+        input: Upload!
+    ): TrustCenterDocBulkUpdatePayload!
 }
 
 """
@@ -129128,6 +132111,24 @@ extend type Mutation{
         """
         id: ID!
     ): TrustCenterNDARequestDeletePayload!
+    """
+    Update multiple existing nda requests as approved
+    """
+    approveNDARequests(
+        """
+        IDs of the notifications to update
+        """
+        ids: [ID!]!
+    ): BulkUpdateStatusPayload!
+    """
+    Update multiple existing nda requests as approved
+    """
+    denyNDARequests(
+        """
+        IDs of the notifications to update
+        """
+        ids: [ID!]!
+    ): BulkUpdateStatusPayload!
 }
 
 """
@@ -129168,6 +132169,16 @@ type TrustCenterNDARequestBulkCreatePayload {
     Created trustCenterNDARequests
     """
     trustCenterNDARequests: [TrustCenterNDARequest!]
+}
+
+"""
+Return response for approveNDARequests or denyNDARequests mutation
+"""
+type BulkUpdateStatusPayload {
+    """
+    Updated nda request IDs
+    """
+    totalUpdated: Int!
 }`, BuiltIn: false},
 	{Name: "../schema/trustcenterpreviewsetting.graphql", Input: `extend type Mutation {
   """
@@ -129439,6 +132450,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): TrustCenterSubprocessorBulkDeletePayload!
+    """
+    Update multiple existing trustCenterSubprocessors via file upload
+    """
+    updateBulkCSVTrustCenterSubprocessor(
+        """
+        csv file containing values of the trustCenterSubprocessor, must include ID column
+        """
+        input: Upload!
+    ): TrustCenterSubprocessorBulkUpdatePayload!
 }
 
 """
@@ -129748,6 +132768,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): UserSettingBulkDeletePayload!
+    """
+    Update multiple existing userSettings
+    """
+    updateBulkUserSetting(
+        """
+        IDs of the userSettings to update
+        """
+        ids: [ID!]!
+        """
+        values to update the userSettings with
+        """
+        input: UpdateUserSettingInput!
+    ): UserSettingBulkUpdatePayload!
+    """
+    Update multiple existing userSettings via file upload
+    """
+    updateBulkCSVUserSetting(
+        """
+        csv file containing values of the userSetting, must include ID column
+        """
+        input: Upload!
+    ): UserSettingBulkUpdatePayload!
 }
 
 """
@@ -129788,7 +132830,22 @@ type UserSettingBulkDeletePayload {
     Deleted userSetting IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
+}
+
+"""
+Return response for updateBulkUserSetting mutation
+"""
+type UserSettingBulkUpdatePayload {
+    """
+    Updated userSettings
+    """
+    userSettings: [UserSetting!]
+    """
+    IDs of the updated userSettings
+    """
+    updatedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/vulnerability.graphql", Input: `extend type Query {
     """
     Look up vulnerability by ID

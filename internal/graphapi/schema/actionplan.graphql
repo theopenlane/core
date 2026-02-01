@@ -109,6 +109,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ActionPlanBulkDeletePayload!
+    """
+    Update multiple existing actionPlans via file upload
+    """
+    updateBulkCSVActionPlan(
+        """
+        csv file containing values of the actionPlan, must include ID column
+        """
+        input: Upload!
+    ): ActionPlanBulkUpdatePayload!
 }
 
 """

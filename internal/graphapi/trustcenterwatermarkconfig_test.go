@@ -18,6 +18,8 @@ import (
 )
 
 func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// delete the auto created watermark config for the trust center
@@ -165,6 +167,8 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 }
 
 func TestQueryTrustCenterWatermarkConfig(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
@@ -231,6 +235,8 @@ func TestQueryTrustCenterWatermarkConfig(t *testing.T) {
 }
 
 func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)

@@ -180,8 +180,6 @@ var (
 	CompanyNameValidator func(string) error
 	// CompanyDescriptionValidator is a validator for the "company_description" field. It is called by the builders before save.
 	CompanyDescriptionValidator func(string) error
-	// OverviewValidator is a validator for the "overview" field. It is called by the builders before save.
-	OverviewValidator func(string) error
 	// LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
 	LogoRemoteURLValidator func(string) error
 	// FaviconRemoteURLValidator is a validator for the "favicon_remote_url" field. It is called by the builders before save.

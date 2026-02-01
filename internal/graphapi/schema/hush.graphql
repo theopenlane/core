@@ -84,6 +84,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): HushBulkDeletePayload!
+    """
+    Update multiple existing hushs via file upload
+    """
+    updateBulkCSVHush(
+        """
+        csv file containing values of the hush, must include ID column
+        """
+        input: Upload!
+    ): HushBulkUpdatePayload!
 }
 
 """

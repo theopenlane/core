@@ -60,6 +60,24 @@ extend type Mutation{
         """
         id: ID!
     ): TrustCenterNDARequestDeletePayload!
+    """
+    Update multiple existing nda requests as approved
+    """
+    approveNDARequests(
+        """
+        IDs of the notifications to update
+        """
+        ids: [ID!]!
+    ): BulkUpdateStatusPayload!
+    """
+    Update multiple existing nda requests as approved
+    """
+    denyNDARequests(
+        """
+        IDs of the notifications to update
+        """
+        ids: [ID!]!
+    ): BulkUpdateStatusPayload!
 }
 
 """
@@ -100,4 +118,14 @@ type TrustCenterNDARequestBulkCreatePayload {
     Created trustCenterNDARequests
     """
     trustCenterNDARequests: [TrustCenterNDARequest!]
+}
+
+"""
+Return response for approveNDARequests or denyNDARequests mutation
+"""
+type BulkUpdateStatusPayload {
+    """
+    Updated nda request IDs
+    """
+    totalUpdated: Int!
 }

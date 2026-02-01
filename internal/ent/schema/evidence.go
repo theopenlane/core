@@ -123,6 +123,7 @@ func (e Evidence) Edges() []ent.Edge {
 			edgeSchema: Control{},
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Control{}.Name()),
+				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
 			},
 		}),
 		// users with only view access should be able to link

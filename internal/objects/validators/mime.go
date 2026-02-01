@@ -40,6 +40,7 @@ var validMimeTypes = map[string][]string{
 	"internalPolicyFile": importSchemaMimeTypes,
 	"actionPlanFile":     importSchemaMimeTypes,
 	"trustCenterDocFile": {"application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
+	"documentDataFile":   {"application/pdf"},
 	"templateFiles":      sharedMimeTypes,
 	"watermarkFile":      {"image/jpeg", "image/png"},
 }

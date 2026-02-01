@@ -39,17 +39,15 @@ const (
 	dirPermission           = 0755
 )
 
-// includedPackages is a list of packages to include in the schema generation
-// that contain Go comments to be added to the schema
-// any external packages must use the jsonschema description tags to add comments
-var includedPackages = []string{
+// commentPackages is a minimal list of packages to parse for Go comments.
+// Keep this scoped to config-related types to avoid walking large generated trees.
+var commentPackages = []string{
 	"./config",
-	"./internal/ent",
-	"./internal/entdb",
+	"./internal/ent/entconfig",
+	"./internal/ent/validator",
 	"./internal/httpserve/handlers",
 	"./pkg/middleware",
 	"./pkg/objects",
-	"./internal/ent/entconfig",
 	"./pkg/entitlements",
 	"./pkg/summarizer",
 }
@@ -115,31 +113,55 @@ func newSchemaConfig(opts ...schemaOption) schemaConfig {
 	return c
 }
 
+// buildCommentMap parses Go comments once and reuses the map across reflectors.
+func buildCommentMap(packages []string) (map[string]string, error) {
+	r := &jsonschema.Reflector{}
+	for _, pkg := range packages {
+		if err := r.AddGoComments("github.com/theopenlane/core/", pkg); err != nil {
+			return nil, fmt.Errorf("failed to add go comments for package %s: %w", pkg, err)
+		}
+	}
+
+	if r.CommentMap == nil {
+		return map[string]string{}, nil
+	}
+
+	return r.CommentMap, nil
+}
+
 // main is the entry point for the schema generator. It creates a new schemaConfig and generates all configuration files.
 func main() {
 	c := newSchemaConfig()
+	defaultConfig := buildDefaultConfig()
+
+	commentMap, err := buildCommentMap(commentPackages)
+	if err != nil {
+		panic(err)
+	}
+
+	collectionIndex := buildCollectionIndex(defaultConfig)
 
 	// Generate all schema/config files from the config structure
-	if err := generateSchema(c, &config.Config{}); err != nil {
+	if err := generateSchema(c, defaultConfig, commentMap, collectionIndex); err != nil {
 		panic(err)
 	}
 }
 
 // generateSchema generates all configuration files (JSON schema, YAML config, env file, config map, secrets, Helm values)
 // from the provided structure and schemaConfig paths.
-func generateSchema(c schemaConfig, structure interface{}) error {
+func generateSchema(c schemaConfig, cfg *config.Config, commentMap map[string]string, collectionIndex collectionIndex) error {
 	// Generate JSON schema file
-	if err := generateJSONSchema(c.jsonSchemaPath, structure); err != nil {
+	if err := generateJSONSchema(c.jsonSchemaPath, cfg, commentMap); err != nil {
 		return err
 	}
 
 	// Generate YAML config file with defaults
-	if err := generateYAMLConfig(c.yamlConfigPath); err != nil {
+	if err := generateYAMLConfig(c.yamlConfigPath, cfg); err != nil {
 		return err
 	}
 
 	// Process environment variables and sensitive fields
-	envVars, sensitiveFields, err := processEnvironmentVariables()
+	envVars, sensitiveFields, err := processEnvironmentVariables(cfg, collectionIndex)
 	if err != nil {
 		return err
 	}
@@ -150,7 +172,7 @@ func generateSchema(c schemaConfig, structure interface{}) error {
 	}
 
 	// Generate ConfigMap containing the rendered config.yaml content
-	if err := generateConfigFileConfigMap(c.configFileConfigMapPath); err != nil {
+	if err := generateConfigFileConfigMap(c.configFileConfigMapPath, cfg); err != nil {
 		return err
 	}
 
@@ -162,7 +184,7 @@ func generateSchema(c schemaConfig, structure interface{}) error {
 	}
 
 	// Generate Helm values.yaml file
-	if err := generateAndWriteHelmValues(c.helmValuesPath, structure); err != nil {
+	if err := generateAndWriteHelmValues(c.helmValuesPath, cfg, commentMap); err != nil {
 		return err
 	}
 
@@ -170,19 +192,13 @@ func generateSchema(c schemaConfig, structure interface{}) error {
 }
 
 // generateJSONSchema creates the JSON schema file from the config structure using the invopop/jsonschema package.
-// It also attaches Go comments from included packages for documentation.
-func generateJSONSchema(jsonSchemaPath string, structure interface{}) error {
+// It reuses a prebuilt Go comment map for documentation.
+func generateJSONSchema(jsonSchemaPath string, structure interface{}, commentMap map[string]string) error {
 	r := jsonschema.Reflector{Namer: namePkg}
 	r.ExpandedStruct = true
 	r.RequiredFromJSONSchemaTags = true
 	r.FieldNameTag = tagName
-
-	// Attach Go comments from included packages for schema documentation
-	for _, pkg := range includedPackages {
-		if err := r.AddGoComments("github.com/theopenlane/core/", pkg); err != nil {
-			return fmt.Errorf("failed to add go comments for package %s: %w", pkg, err)
-		}
-	}
+	r.CommentMap = commentMap
 
 	// Reflect the structure to generate the schema
 	s := r.Reflect(structure)
@@ -203,8 +219,10 @@ func generateJSONSchema(jsonSchemaPath string, structure interface{}) error {
 
 // generateYAMLConfig creates the YAML configuration file with default values populated.
 // It also ensures example map entries and initializes special config sections.
-func generateYAMLConfig(yamlConfigPath string) error {
-	yamlConfig := buildDefaultConfig()
+func generateYAMLConfig(yamlConfigPath string, yamlConfig *config.Config) error {
+	if yamlConfig == nil {
+		yamlConfig = buildDefaultConfig()
+	}
 
 	// Marshal the config struct to YAML
 	yamlSchema, err := yaml.Marshal(yamlConfig)
@@ -279,6 +297,119 @@ func initializeRateLimitOptions(cfg *config.Config) {
 type mapEntry struct {
 	Key   string
 	Value reflect.Value
+}
+
+// collectionIndex caches map and slice lookups by full config path.
+type collectionIndex struct {
+	mapEntries   map[string][]mapEntry
+	sliceEntries map[string][]reflect.Value
+}
+
+// buildCollectionIndex walks the config once and records map/slice entries by path.
+func buildCollectionIndex(cfg *config.Config) collectionIndex {
+	index := collectionIndex{
+		mapEntries:   make(map[string][]mapEntry),
+		sliceEntries: make(map[string][]reflect.Value),
+	}
+
+	if cfg == nil {
+		return index
+	}
+
+	root := reflect.ValueOf(cfg)
+	for root.Kind() == reflect.Ptr {
+		if root.IsNil() {
+			return index
+		}
+		root = root.Elem()
+	}
+
+	indexCollections(root, "core", &index)
+	return index
+}
+
+func indexCollections(val reflect.Value, prefix string, index *collectionIndex) {
+	val = reflect.Indirect(val)
+	if !val.IsValid() || val.Kind() != reflect.Struct {
+		return
+	}
+
+	t := val.Type()
+	for i := 0; i < val.NumField(); i++ {
+		field := t.Field(i)
+		if !field.IsExported() {
+			continue
+		}
+
+		tag := field.Tag.Get(tagName)
+		if tag == "" || tag == skipper {
+			continue
+		}
+
+		fieldValue := val.Field(i)
+		for fieldValue.Kind() == reflect.Ptr {
+			if fieldValue.IsNil() {
+				fieldValue = reflect.Value{}
+				break
+			}
+			fieldValue = fieldValue.Elem()
+		}
+		if !fieldValue.IsValid() {
+			continue
+		}
+
+		fullPath := prefix + "." + tag
+		switch fieldValue.Kind() {
+		case reflect.Struct:
+			indexCollections(fieldValue, fullPath, index)
+		case reflect.Map:
+			entries := indexMapEntries(fieldValue)
+			index.mapEntries[fullPath] = entries
+		case reflect.Slice:
+			if fieldValue.Type().Elem().Kind() == reflect.Struct {
+				values := indexSliceEntries(fieldValue)
+				index.sliceEntries[fullPath] = values
+			}
+		}
+	}
+}
+
+func indexMapEntries(value reflect.Value) []mapEntry {
+	if !value.IsValid() || value.Kind() != reflect.Map || value.IsNil() {
+		return nil
+	}
+
+	iter := value.MapRange()
+	entries := make([]mapEntry, 0, value.Len())
+	for iter.Next() {
+		keyVal := iter.Key()
+		valVal := iter.Value()
+		if keyVal.Kind() != reflect.String {
+			continue
+		}
+		entries = append(entries, mapEntry{
+			Key:   keyVal.String(),
+			Value: valVal,
+		})
+	}
+
+	sort.Slice(entries, func(i, j int) bool {
+		return entries[i].Key < entries[j].Key
+	})
+
+	return entries
+}
+
+func indexSliceEntries(value reflect.Value) []reflect.Value {
+	if !value.IsValid() || value.Kind() != reflect.Slice {
+		return nil
+	}
+
+	values := make([]reflect.Value, 0, value.Len())
+	for i := 0; i < value.Len(); i++ {
+		values = append(values, value.Index(i))
+	}
+	return values
 }
 
 // getMapEntriesForPath returns sorted key/value pairs for the map identified by the provided config path
@@ -425,10 +556,14 @@ func sanitizeMapKeyForEnv(mapKey string) string {
 }
 
 // appendMapFieldEnvVars processes a map field and appends its entries to the environment variables
-func appendMapFieldEnvVars(envVars *strings.Builder, cfg *config.Config, field envparse.VarInfo, isSecret bool, sensitiveFields *[]SensitiveField) error {
-	mapEntries, err := getMapEntriesForPath(cfg, field.FullPath)
-	if err != nil {
-		return fmt.Errorf("failed to derive map entries for %s: %w", field.FullPath, err)
+func appendMapFieldEnvVars(envVars *strings.Builder, index collectionIndex, cfg *config.Config, field envparse.VarInfo, isSecret bool, sensitiveFields *[]SensitiveField) error {
+	mapEntries := index.mapEntries[field.FullPath]
+	if mapEntries == nil {
+		var err error
+		mapEntries, err = getMapEntriesForPath(cfg, field.FullPath)
+		if err != nil {
+			return fmt.Errorf("failed to derive map entries for %s: %w", field.FullPath, err)
+		}
 	}
 
 	for _, entry := range mapEntries {
@@ -445,10 +580,14 @@ func appendMapFieldEnvVars(envVars *strings.Builder, cfg *config.Config, field e
 }
 
 // appendSliceStructFieldEnvVars processes a slice of structs field and appends its entries to the environment variables
-func appendSliceStructFieldEnvVars(envVars *strings.Builder, cfg *config.Config, field envparse.VarInfo, isSecret bool, sensitiveFields *[]SensitiveField) error {
-	values, err := getSliceValuesForPath(cfg, field.FullPath)
-	if err != nil {
-		return fmt.Errorf("failed to derive slice entries for %s: %w", field.FullPath, err)
+func appendSliceStructFieldEnvVars(envVars *strings.Builder, index collectionIndex, cfg *config.Config, field envparse.VarInfo, isSecret bool, sensitiveFields *[]SensitiveField) error {
+	values := index.sliceEntries[field.FullPath]
+	if values == nil {
+		var err error
+		values, err = getSliceValuesForPath(cfg, field.FullPath)
+		if err != nil {
+			return fmt.Errorf("failed to derive slice entries for %s: %w", field.FullPath, err)
+		}
 	}
 
 	for idx, val := range values {
@@ -641,8 +780,10 @@ func convertValueForYAML(val reflect.Value) any {
 }
 
 // processEnvironmentVariables extracts and processes all environment variables from the config
-func processEnvironmentVariables() (string, []SensitiveField, error) {
-	defaultConfig := buildDefaultConfig()
+func processEnvironmentVariables(defaultConfig *config.Config, collectionIndex collectionIndex) (string, []SensitiveField, error) {
+	if defaultConfig == nil {
+		defaultConfig = buildDefaultConfig()
+	}
 
 	cp := envparse.Config{
 		FieldTagName: tagName,
@@ -681,13 +822,13 @@ func processEnvironmentVariables() (string, []SensitiveField, error) {
 		}
 
 		if field.Type.Kind() == reflect.Map {
-			if err := appendMapFieldEnvVars(&envVars, defaultConfig, field, isSecret, &sensitiveFields); err != nil {
+			if err := appendMapFieldEnvVars(&envVars, collectionIndex, defaultConfig, field, isSecret, &sensitiveFields); err != nil {
 				return "", nil, err
 			}
 		}
 
 		if field.Type.Kind() == reflect.Slice && field.Type.Elem().Kind() == reflect.Struct {
-			if err := appendSliceStructFieldEnvVars(&envVars, defaultConfig, field, isSecret, &sensitiveFields); err != nil {
+			if err := appendSliceStructFieldEnvVars(&envVars, collectionIndex, defaultConfig, field, isSecret, &sensitiveFields); err != nil {
 				return "", nil, err
 			}
 		}
@@ -706,13 +847,15 @@ func generateEnvironmentFile(envConfigPath, envVars string) error {
 }
 
 // generateConfigFileConfigMap creates a ConfigMap that embeds the rendered config.yaml file.
-func generateConfigFileConfigMap(configMapPath string) error {
+func generateConfigFileConfigMap(configMapPath string, cfg *config.Config) error {
 	header, err := os.ReadFile("./jsonschema/templates/configmap-configfile.tmpl")
 	if err != nil {
 		return fmt.Errorf("failed to read config file ConfigMap template: %w", err)
 	}
 
-	cfg := buildDefaultConfig()
+	if cfg == nil {
+		cfg = buildDefaultConfig()
+	}
 
 	var body strings.Builder
 	body.WriteString("\n")
@@ -1032,8 +1175,8 @@ func renderStaticYAMLValue(value any, indent int, emptyLiteral string) string {
 }
 
 // generateAndWriteHelmValues generates Helm values and writes them to a file
-func generateAndWriteHelmValues(helmValuesPath string, structure interface{}) error {
-	helmValues, err := generateHelmValues(structure)
+func generateAndWriteHelmValues(helmValuesPath string, structure interface{}, commentMap map[string]string) error {
+	helmValues, err := generateHelmValues(structure, commentMap)
 	if err != nil {
 		return fmt.Errorf("failed to generate Helm values: %w", err)
 	}
@@ -1049,30 +1192,8 @@ func namePkg(r reflect.Type) string {
 	return r.String()
 }
 
-// generateHelmValues creates a Helm-compatible values.yaml from the config structure
-func generateHelmValues(structure interface{}) (string, error) {
-	// Create a reflector to extract comments and schema information
-	r := new(jsonschema.Reflector)
-	r.DoNotReference = true
-	r.RequiredFromJSONSchemaTags = true
-
-	// Add go comments to the reflector
-	for _, pkg := range includedPackages {
-		if err := r.AddGoComments("github.com/theopenlane/core/", pkg); err != nil {
-			return "", err
-		}
-	}
-
-	// Get the defaults for the structure
-	defaults.SetDefaults(structure)
-	if cfg, ok := structure.(*config.Config); ok {
-		initializeStripeWebhookSecrets(cfg)
-		initializeRateLimitOptions(cfg)
-	}
-
-	// Generate schema to extract field information
-	schema := r.Reflect(structure)
-
+// generateHelmValues creates a Helm-compatible values.yaml from a pre-defaulted config structure
+func generateHelmValues(structure interface{}, commentMap map[string]string) (string, error) {
 	// Generate values with comments
 	var regularResult strings.Builder
 
@@ -1092,7 +1213,7 @@ func generateHelmValues(structure interface{}) (string, error) {
 	// Generate YAML with comments recursively, excluding sensitive values
 	// Nest under coreConfiguration key to be merged into openlane.coreConfiguration
 	regularResult.WriteString("coreConfiguration:\n")
-	err := generateYAMLWithComments(&regularResult, "", reflect.ValueOf(structure).Elem(), schema, 1)
+	err := generateYAMLWithComments(&regularResult, "", reflect.ValueOf(structure).Elem(), commentMap, 1)
 	if err != nil {
 		return "", err
 	}
@@ -1197,7 +1318,7 @@ func handlePrimitiveField(result *strings.Builder, fieldName, description, inden
 }
 
 // generateYAMLWithComments recursively generates YAML with comments from struct fields (legacy function for compatibility)
-func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.Value, schema *jsonschema.Schema, indent int) error {
+func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.Value, commentMap map[string]string, indent int) error {
 	if !v.IsValid() {
 		return nil
 	}
@@ -1237,13 +1358,8 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 			continue
 		}
 
-		// Get field description from schema
-		var description string
-		if schema != nil && schema.Properties != nil {
-			if propSchema, exists := schema.Properties.Get(fieldName); exists {
-				description = propSchema.Description
-			}
-		}
+		// Get field description from tags and comment map
+		description := fieldDescription(field, t, commentMap)
 
 		// Get default value from struct tag
 		defaultTag := field.Tag.Get("default")
@@ -1257,16 +1373,8 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 			// Write field name for struct
 			fmt.Fprintf(result, "%s%s:\n", indentStr, fieldName)
 
-			// Get nested schema
-			var nestedSchema *jsonschema.Schema
-			if schema != nil && schema.Properties != nil {
-				if propSchema, exists := schema.Properties.Get(fieldName); exists {
-					nestedSchema = propSchema
-				}
-			}
-
 			// Recurse into struct
-			err := generateYAMLWithComments(result, fullPath+".", fieldValue, nestedSchema, indent+1)
+			err := generateYAMLWithComments(result, fullPath+".", fieldValue, commentMap, indent+1)
 			if err != nil {
 				return err
 			}
@@ -1283,6 +1391,68 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 	}
 
 	return nil
+}
+
+func fieldDescription(field reflect.StructField, parentType reflect.Type, commentMap map[string]string) string {
+	if desc := field.Tag.Get("jsonschema_description"); desc != "" {
+		return desc
+	}
+
+	if tag := field.Tag.Get("jsonschema"); tag != "" {
+		for _, part := range splitOnUnescapedCommas(tag) {
+			nameValue := strings.SplitN(part, "=", 2)
+			if len(nameValue) == 2 && nameValue[0] == "description" {
+				return nameValue[1]
+			}
+		}
+	}
+
+	if comment := lookupComment(commentMap, parentType, field.Name); comment != "" {
+		return comment
+	}
+
+	return ""
+}
+
+func lookupComment(commentMap map[string]string, parentType reflect.Type, fieldName string) string {
+	if commentMap == nil {
+		return ""
+	}
+
+	t := parentType
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+	}
+
+	if t.Name() == "" || t.PkgPath() == "" {
+		return ""
+	}
+
+	key := fullyQualifiedTypeName(t)
+	if fieldName != "" {
+		key += "." + fieldName
+	}
+
+	return commentMap[key]
+}
+
+func fullyQualifiedTypeName(t reflect.Type) string {
+	return t.PkgPath() + "." + t.Name()
+}
+
+// splitOnUnescapedCommas splits a string by commas that are not escaped by a backslash.
+func splitOnUnescapedCommas(tag string) []string {
+	parts := strings.Split(tag, ",")
+	ret := make([]string, 0, len(parts))
+	for i := 0; i < len(parts); {
+		ret = append(ret, parts[i])
+		i++
+		for i < len(parts) && strings.HasSuffix(ret[len(ret)-1], "\\") {
+			ret[len(ret)-1] = ret[len(ret)-1][:len(ret[len(ret)-1])-1] + "," + parts[i]
+			i++
+		}
+	}
+	return ret
 }
 
 // getTypeSchemaInfo generates schema annotation for field types

@@ -334,11 +334,9 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 		return true
 	}
 
-	if o.AllowEmptyForSystemAdmin {
-		allow, err := rule.CheckIsSystemAdminWithContext(ctx)
-		if err == nil && allow {
-			return true
-		}
+	allow, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err == nil && allow {
+		return true
 	}
 
 	if entx.CheckSkipSoftDelete(ctx) {

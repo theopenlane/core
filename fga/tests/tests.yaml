@@ -37,6 +37,8 @@ tests:
           can_create_evidence: true
           can_create_trust_center_doc: true
           can_create_trust_center_subprocessor: true
+          can_create_campaign: true
+          can_create_campaign_target: true
           can_create_workflow_object_ref: false # system-driven, only services can create
           can_create_workflow_assignment_target: false # system-driven, only services can create
           can_create_workflow_event: false # system-driven, only services can create
@@ -72,6 +74,8 @@ tests:
           can_create_evidence: true # group tuple set to allow
           can_create_trust_center_doc: true # group tuple set to allow
           can_create_trust_center_subprocessor: false
+          can_create_campaign: false
+          can_create_campaign_target: false
           can_create_workflow_object_ref: false
           can_create_workflow_assignment_target: false
           can_create_workflow_event: false
@@ -105,6 +109,8 @@ tests:
           can_create_evidence: true
           can_create_trust_center_doc: true
           can_create_trust_center_subprocessor: true
+          can_create_campaign: true
+          can_create_campaign_target: true
           can_create_workflow_object_ref: true
           can_create_workflow_assignment_target: true
           can_create_workflow_event: true
@@ -138,6 +144,8 @@ tests:
           can_create_evidence: false
           can_create_trust_center_doc: false
           can_create_trust_center_subprocessor: false
+          can_create_campaign: false
+          can_create_campaign_target: false
           can_create_workflow_object_ref: false
           can_create_workflow_assignment_target: false
           can_create_workflow_event: false
@@ -172,6 +180,8 @@ tests:
           can_create_group: true
           can_create_trust_center_doc: true
           can_create_trust_center_subprocessor: true
+          can_create_campaign: true
+          can_create_campaign_target: true
           can_create_workflow_object_ref: false # system-driven, only services can create
           can_create_workflow_assignment_target: false # system-driven, only services can create
           can_create_workflow_event: false # system-driven, only services can create
@@ -219,6 +229,8 @@ tests:
           can_create_evidence: true
           can_create_trust_center_doc: true
           can_create_trust_center_subprocessor: true
+          can_create_campaign: true
+          can_create_campaign_target: true
           can_create_workflow_object_ref: false # system-driven, only services can create
           can_create_workflow_assignment_target: false # system-driven, only services can create
           can_create_workflow_event: false # system-driven, only services can create

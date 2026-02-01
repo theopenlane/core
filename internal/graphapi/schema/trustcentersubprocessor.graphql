@@ -82,6 +82,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): TrustCenterSubprocessorBulkDeletePayload!
+    """
+    Update multiple existing trustCenterSubprocessors via file upload
+    """
+    updateBulkCSVTrustCenterSubprocessor(
+        """
+        csv file containing values of the trustCenterSubprocessor, must include ID column
+        """
+        input: Upload!
+    ): TrustCenterSubprocessorBulkUpdatePayload!
 }
 
 """

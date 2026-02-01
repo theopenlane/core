@@ -59,6 +59,14 @@ type APITokenBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkAPIToken mutation
+type APITokenBulkUpdatePayload struct {
+	// Updated apiTokens
+	APITokens []*APIToken `json:"apiTokens,omitempty"`
+	// IDs of the updated apiTokens
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type APITokenConnection struct {
 	// A list of edges.
@@ -1692,6 +1700,14 @@ type AssetBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkAsset mutation
+type AssetBulkUpdatePayload struct {
+	// Updated assets
+	Assets []*Asset `json:"assets,omitempty"`
+	// IDs of the updated assets
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type AssetConnection struct {
 	// A list of edges.
@@ -2414,6 +2430,12 @@ type AssetWhereInput struct {
 	HasConnectedFromWith []*AssetWhereInput `json:"hasConnectedFromWith,omitempty"`
 }
 
+// Return response for approveNDARequests or denyNDARequests mutation
+type BulkUpdateStatusPayload struct {
+	// Updated nda request IDs
+	TotalUpdated int64 `json:"totalUpdated"`
+}
+
 type Campaign struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -2532,6 +2554,14 @@ type CampaignCreatePayload struct {
 	Campaign *Campaign `json:"campaign"`
 }
 
+// Return response for createCampaignWithTargets mutation
+type CampaignCreateWithTargetsPayload struct {
+	// Created campaign
+	Campaign *Campaign `json:"campaign"`
+	// Created campaign targets
+	CampaignTargets []*CampaignTarget `json:"campaignTargets,omitempty"`
+}
+
 // Return response for deleteCampaign mutation
 type CampaignDeletePayload struct {
 	// Deleted campaign ID
@@ -2544,6 +2574,16 @@ type CampaignEdge struct {
 	Node *Campaign `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Return response for launchCampaign mutation
+type CampaignLaunchPayload struct {
+	// Updated campaign
+	Campaign *Campaign `json:"campaign"`
+	// Number of targets queued for send
+	QueuedCount int64 `json:"queuedCount"`
+	// Number of targets skipped
+	SkippedCount int64 `json:"skippedCount"`
 }
 
 // Ordering options for Campaign connections
@@ -2881,6 +2921,16 @@ type CampaignTargetWhereInput struct {
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
+}
+
+// Return response for sendCampaignTestEmail mutation
+type CampaignTestEmailPayload struct {
+	// Campaign used for the test send
+	Campaign *Campaign `json:"campaign"`
+	// Number of emails queued for send
+	QueuedCount int64 `json:"queuedCount"`
+	// Number of emails skipped
+	SkippedCount int64 `json:"skippedCount"`
 }
 
 // Return response for updateCampaign mutation
@@ -3959,6 +4009,14 @@ type ControlImplementationBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkControlImplementation mutation
+type ControlImplementationBulkUpdatePayload struct {
+	// Updated controlImplementations
+	ControlImplementations []*ControlImplementation `json:"controlImplementations,omitempty"`
+	// IDs of the updated controlImplementations
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type ControlImplementationConnection struct {
 	// A list of edges.
@@ -4263,6 +4321,14 @@ type ControlObjectiveBulkCreatePayload struct {
 type ControlObjectiveBulkDeletePayload struct {
 	// Deleted controlObjective IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkControlObjective mutation
+type ControlObjectiveBulkUpdatePayload struct {
+	// Updated controlObjectives
+	ControlObjectives []*ControlObjective `json:"controlObjectives,omitempty"`
+	// IDs of the updated controlObjectives
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -5514,6 +5580,14 @@ type CreateCampaignTargetInput struct {
 	UserID               *string        `json:"userID,omitempty"`
 	GroupID              *string        `json:"groupID,omitempty"`
 	WorkflowObjectRefIDs []string       `json:"workflowObjectRefIDs,omitempty"`
+}
+
+// Input for createCampaignWithTargets mutation
+type CreateCampaignWithTargetsInput struct {
+	// values of the campaign
+	Campaign *CreateCampaignInput `json:"campaign"`
+	// list of targets to create for the campaign
+	Targets []*CreateCampaignTargetInput `json:"targets,omitempty"`
 }
 
 // CreateContactInput is used for create Contact object.
@@ -8038,11 +8112,19 @@ type CreateTrustCenterNDARequestInput struct {
 	// reason for the NDA request
 	Reason *string `json:"reason,omitempty"`
 	// access level requested
-	AccessLevel       *enums.TrustCenterNDARequestAccessLevel `json:"accessLevel,omitempty"`
-	BlockedGroupIDs   []string                                `json:"blockedGroupIDs,omitempty"`
-	EditorIDs         []string                                `json:"editorIDs,omitempty"`
-	TrustCenterID     *string                                 `json:"trustCenterID,omitempty"`
-	TrustCenterDocIDs []string                                `json:"trustCenterDocIDs,omitempty"`
+	AccessLevel *enums.TrustCenterNDARequestAccessLevel `json:"accessLevel,omitempty"`
+	// timestamp when the request was approved
+	ApprovedAt *models.DateTime `json:"approvedAt,omitempty"`
+	// ID of the user who approved the request
+	ApprovedByUserID *string `json:"approvedByUserID,omitempty"`
+	// timestamp when the NDA was signed
+	SignedAt          *models.DateTime `json:"signedAt,omitempty"`
+	BlockedGroupIDs   []string         `json:"blockedGroupIDs,omitempty"`
+	EditorIDs         []string         `json:"editorIDs,omitempty"`
+	TrustCenterID     *string          `json:"trustCenterID,omitempty"`
+	TrustCenterDocIDs []string         `json:"trustCenterDocIDs,omitempty"`
+	DocumentID        *string          `json:"documentID,omitempty"`
+	FileID            *string          `json:"fileID,omitempty"`
 }
 
 // Input for createTrustCenterPreviewSetting mutation
@@ -8412,6 +8494,14 @@ type CustomDomainBulkCreatePayload struct {
 type CustomDomainBulkDeletePayload struct {
 	// Deleted customDomain IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkCustomDomain mutation
+type CustomDomainBulkUpdatePayload struct {
+	// Updated customDomains
+	CustomDomains []*CustomDomain `json:"customDomains,omitempty"`
+	// IDs of the updated customDomains
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -9027,6 +9117,14 @@ type DNSVerificationBulkCreatePayload struct {
 type DNSVerificationBulkDeletePayload struct {
 	// Deleted dnsVerification IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkDNSVerification mutation
+type DNSVerificationBulkUpdatePayload struct {
+	// Updated dnsVerifications
+	DNSVerifications []*DNSVerification `json:"dnsVerifications,omitempty"`
+	// IDs of the updated dnsVerifications
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -11231,6 +11329,14 @@ type DocumentDataBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkDocumentData mutation
+type DocumentDataBulkUpdatePayload struct {
+	// Updated documentDatas
+	DocumentData []*DocumentData `json:"documentData,omitempty"`
+	// IDs of the updated documentDatas
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type DocumentDataConnection struct {
 	// A list of edges.
@@ -11620,6 +11726,14 @@ type EntityBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkEntity mutation
+type EntityBulkUpdatePayload struct {
+	// Updated entitys
+	Entities []*Entity `json:"entities,omitempty"`
+	// IDs of the updated entitys
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type EntityConnection struct {
 	// A list of edges.
@@ -11692,6 +11806,14 @@ type EntityTypeBulkCreatePayload struct {
 type EntityTypeBulkDeletePayload struct {
 	// Deleted entityType IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkEntityType mutation
+type EntityTypeBulkUpdatePayload struct {
+	// Updated entityTypes
+	EntityTypes []*EntityType `json:"entityTypes,omitempty"`
+	// IDs of the updated entityTypes
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -12696,6 +12818,14 @@ type EventBulkCreatePayload struct {
 type EventBulkDeletePayload struct {
 	// Deleted event IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkEvent mutation
+type EventBulkUpdatePayload struct {
+	// Updated events
+	Events []*Event `json:"events,omitempty"`
+	// IDs of the updated events
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -15336,6 +15466,14 @@ type GroupBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkGroup mutation
+type GroupBulkUpdatePayload struct {
+	// Updated groups
+	Groups []*Group `json:"groups,omitempty"`
+	// IDs of the updated groups
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type GroupConnection struct {
 	// A list of edges.
@@ -15399,6 +15537,14 @@ type GroupMembershipBulkCreatePayload struct {
 type GroupMembershipBulkDeletePayload struct {
 	// Deleted groupMembership IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkGroupMembership mutation
+type GroupMembershipBulkUpdatePayload struct {
+	// Updated groupMemberships
+	GroupMemberships []*GroupMembership `json:"groupMemberships,omitempty"`
+	// IDs of the updated groupMemberships
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -15661,6 +15807,14 @@ type GroupSettingBulkCreatePayload struct {
 type GroupSettingBulkDeletePayload struct {
 	// Deleted groupSetting IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkGroupSetting mutation
+type GroupSettingBulkUpdatePayload struct {
+	// Updated groupSettings
+	GroupSettings []*GroupSetting `json:"groupSettings,omitempty"`
+	// IDs of the updated groupSettings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -18147,6 +18301,14 @@ type InviteBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkInvite mutation
+type InviteBulkUpdatePayload struct {
+	// Updated invites
+	Invites []*Invite `json:"invites,omitempty"`
+	// IDs of the updated invites
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type InviteConnection struct {
 	// A list of edges.
@@ -19377,6 +19539,14 @@ type JobTemplateBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkJobTemplate mutation
+type JobTemplateBulkUpdatePayload struct {
+	// Updated jobTemplates
+	JobTemplates []*JobTemplate `json:"jobTemplates,omitempty"`
+	// IDs of the updated jobTemplates
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type JobTemplateConnection struct {
 	// A list of edges.
@@ -19602,6 +19772,16 @@ type JobTemplateWhereInput struct {
 	HasScheduledJobsWith []*ScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
 }
 
+// Input for launchCampaign mutation
+type LaunchCampaignInput struct {
+	// ID of the campaign
+	CampaignID string `json:"campaignID"`
+	// Whether to resend emails to previously-sent targets
+	Resend *bool `json:"resend,omitempty"`
+	// Optional time to schedule the campaign launch or resend
+	ScheduledAt *models.DateTime `json:"scheduledAt,omitempty"`
+}
+
 type MappableDomain struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -19629,6 +19809,14 @@ type MappableDomainBulkCreatePayload struct {
 type MappableDomainBulkDeletePayload struct {
 	// Deleted mappableDomain IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkMappableDomain mutation
+type MappableDomainBulkUpdatePayload struct {
+	// Updated mappableDomains
+	MappableDomains []*MappableDomain `json:"mappableDomains,omitempty"`
+	// IDs of the updated mappableDomains
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -19824,6 +20012,14 @@ type MappedControlBulkCreatePayload struct {
 type MappedControlBulkDeletePayload struct {
 	// Deleted mappedControl IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkMappedControl mutation
+type MappedControlBulkUpdatePayload struct {
+	// Updated mappedControls
+	MappedControls []*MappedControl `json:"mappedControls,omitempty"`
+	// IDs of the updated mappedControls
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -20105,6 +20301,14 @@ type NarrativeBulkCreatePayload struct {
 type NarrativeBulkDeletePayload struct {
 	// Deleted narrative IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkNarrative mutation
+type NarrativeBulkUpdatePayload struct {
+	// Updated narratives
+	Narratives []*Narrative `json:"narratives,omitempty"`
+	// IDs of the updated narratives
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -20799,6 +21003,14 @@ type OrgMembershipBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkOrgMembership mutation
+type OrgMembershipBulkUpdatePayload struct {
+	// Updated orgMemberships
+	OrgMemberships []*OrgMembership `json:"orgMemberships,omitempty"`
+	// IDs of the updated orgMemberships
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type OrgMembershipConnection struct {
 	// A list of edges.
@@ -21390,6 +21602,14 @@ type OrganizationSettingBulkCreatePayload struct {
 type OrganizationSettingBulkDeletePayload struct {
 	// Deleted organizationSetting IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkOrganizationSetting mutation
+type OrganizationSettingBulkUpdatePayload struct {
+	// Updated organizationSettings
+	OrganizationSettings []*OrganizationSetting `json:"organizationSettings,omitempty"`
+	// IDs of the updated organizationSettings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -24222,6 +24442,14 @@ type ProgramBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkProgram mutation
+type ProgramBulkUpdatePayload struct {
+	// Updated programs
+	Programs []*Program `json:"programs,omitempty"`
+	// IDs of the updated programs
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type ProgramConnection struct {
 	// A list of edges.
@@ -24277,6 +24505,14 @@ type ProgramMembershipBulkCreatePayload struct {
 type ProgramMembershipBulkDeletePayload struct {
 	// Deleted programMembership IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkProgramMembership mutation
+type ProgramMembershipBulkUpdatePayload struct {
+	// Updated programMemberships
+	ProgramMemberships []*ProgramMembership `json:"programMemberships,omitempty"`
+	// IDs of the updated programMemberships
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -25438,6 +25674,14 @@ type RemediationWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+}
+
+// Input for resendCampaignIncompleteTargets mutation
+type ResendCampaignIncompleteInput struct {
+	// ID of the campaign
+	CampaignID string `json:"campaignID"`
+	// Optional time to schedule the resend for incomplete targets
+	ScheduledAt *models.DateTime `json:"scheduledAt,omitempty"`
 }
 
 type Review struct {
@@ -27244,6 +27488,14 @@ type ScheduledJobBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkScheduledJob mutation
+type ScheduledJobBulkUpdatePayload struct {
+	// Updated scheduledJobs
+	ScheduledJobs []*ScheduledJob `json:"scheduledJobs,omitempty"`
+	// IDs of the updated scheduledJobs
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type ScheduledJobConnection struct {
 	// A list of edges.
@@ -27727,6 +27979,14 @@ type SearchSnippet struct {
 	Field string `json:"field"`
 	// The matched text with surrounding context (with highlighting markers if applicable)
 	Text string `json:"text"`
+}
+
+// Input for sendCampaignTestEmail mutation
+type SendCampaignTestEmailInput struct {
+	// ID of the campaign
+	CampaignID string `json:"campaignID"`
+	// List of recipient emails to send the test to
+	Emails []string `json:"emails"`
 }
 
 type Standard struct {
@@ -28292,6 +28552,14 @@ type SubcontrolBulkCreatePayload struct {
 type SubcontrolBulkDeletePayload struct {
 	// Deleted subcontrol IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkSubcontrol mutation
+type SubcontrolBulkUpdatePayload struct {
+	// Updated subcontrols
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
+	// IDs of the updated subcontrols
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -30352,6 +30620,14 @@ type TemplateBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkTemplate mutation
+type TemplateBulkUpdatePayload struct {
+	// Updated templates
+	Templates []*Template `json:"templates,omitempty"`
+	// IDs of the updated templates
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type TemplateConnection struct {
 	// A list of edges.
@@ -30746,6 +31022,14 @@ type TrustCenterComplianceBulkCreatePayload struct {
 type TrustCenterComplianceBulkDeletePayload struct {
 	// Deleted trustCenterCompliance IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkTrustCenterCompliance mutation
+type TrustCenterComplianceBulkUpdatePayload struct {
+	// Updated trustCenterCompliances
+	TrustCenterCompliances []*TrustCenterCompliance `json:"trustCenterCompliances,omitempty"`
+	// IDs of the updated trustCenterCompliances
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -31522,11 +31806,25 @@ type TrustCenterNDARequest struct {
 	// access level requested
 	AccessLevel *enums.TrustCenterNDARequestAccessLevel `json:"accessLevel,omitempty"`
 	// status of the NDA request
-	Status          *enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
-	BlockedGroups   *GroupConnection                   `json:"blockedGroups"`
-	Editors         *GroupConnection                   `json:"editors"`
-	TrustCenter     *TrustCenter                       `json:"trustCenter,omitempty"`
-	TrustCenterDocs *TrustCenterDocConnection          `json:"trustCenterDocs"`
+	Status *enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
+	// timestamp when the request was approved
+	ApprovedAt *models.DateTime `json:"approvedAt,omitempty"`
+	// ID of the user who approved the request
+	ApprovedByUserID *string `json:"approvedByUserID,omitempty"`
+	// timestamp when the NDA was signed
+	SignedAt *models.DateTime `json:"signedAt,omitempty"`
+	// ID of the signed NDA document data
+	DocumentDataID *string `json:"documentDataID,omitempty"`
+	// ID of the template file at the time the NDA was signed
+	FileID          *string                   `json:"fileID,omitempty"`
+	BlockedGroups   *GroupConnection          `json:"blockedGroups"`
+	Editors         *GroupConnection          `json:"editors"`
+	TrustCenter     *TrustCenter              `json:"trustCenter,omitempty"`
+	TrustCenterDocs *TrustCenterDocConnection `json:"trustCenterDocs"`
+	// the signed NDA document data
+	Document *DocumentData `json:"document,omitempty"`
+	// the template file at the time the NDA was signed
+	File *File `json:"file,omitempty"`
 }
 
 func (TrustCenterNDARequest) IsNode() {}
@@ -31756,6 +32054,76 @@ type TrustCenterNDARequestWhereInput struct {
 	StatusNotIn  []enums.TrustCenterNDARequestStatus `json:"statusNotIn,omitempty"`
 	StatusIsNil  *bool                               `json:"statusIsNil,omitempty"`
 	StatusNotNil *bool                               `json:"statusNotNil,omitempty"`
+	// approved_at field predicates
+	ApprovedAt       *models.DateTime   `json:"approvedAt,omitempty"`
+	ApprovedAtNeq    *models.DateTime   `json:"approvedAtNEQ,omitempty"`
+	ApprovedAtIn     []*models.DateTime `json:"approvedAtIn,omitempty"`
+	ApprovedAtNotIn  []*models.DateTime `json:"approvedAtNotIn,omitempty"`
+	ApprovedAtGt     *models.DateTime   `json:"approvedAtGT,omitempty"`
+	ApprovedAtGte    *models.DateTime   `json:"approvedAtGTE,omitempty"`
+	ApprovedAtLt     *models.DateTime   `json:"approvedAtLT,omitempty"`
+	ApprovedAtLte    *models.DateTime   `json:"approvedAtLTE,omitempty"`
+	ApprovedAtIsNil  *bool              `json:"approvedAtIsNil,omitempty"`
+	ApprovedAtNotNil *bool              `json:"approvedAtNotNil,omitempty"`
+	// approved_by_user_id field predicates
+	ApprovedByUserID             *string  `json:"approvedByUserID,omitempty"`
+	ApprovedByUserIdneq          *string  `json:"approvedByUserIDNEQ,omitempty"`
+	ApprovedByUserIDIn           []string `json:"approvedByUserIDIn,omitempty"`
+	ApprovedByUserIDNotIn        []string `json:"approvedByUserIDNotIn,omitempty"`
+	ApprovedByUserIdgt           *string  `json:"approvedByUserIDGT,omitempty"`
+	ApprovedByUserIdgte          *string  `json:"approvedByUserIDGTE,omitempty"`
+	ApprovedByUserIdlt           *string  `json:"approvedByUserIDLT,omitempty"`
+	ApprovedByUserIdlte          *string  `json:"approvedByUserIDLTE,omitempty"`
+	ApprovedByUserIDContains     *string  `json:"approvedByUserIDContains,omitempty"`
+	ApprovedByUserIDHasPrefix    *string  `json:"approvedByUserIDHasPrefix,omitempty"`
+	ApprovedByUserIDHasSuffix    *string  `json:"approvedByUserIDHasSuffix,omitempty"`
+	ApprovedByUserIDIsNil        *bool    `json:"approvedByUserIDIsNil,omitempty"`
+	ApprovedByUserIDNotNil       *bool    `json:"approvedByUserIDNotNil,omitempty"`
+	ApprovedByUserIDEqualFold    *string  `json:"approvedByUserIDEqualFold,omitempty"`
+	ApprovedByUserIDContainsFold *string  `json:"approvedByUserIDContainsFold,omitempty"`
+	// signed_at field predicates
+	SignedAt       *models.DateTime   `json:"signedAt,omitempty"`
+	SignedAtNeq    *models.DateTime   `json:"signedAtNEQ,omitempty"`
+	SignedAtIn     []*models.DateTime `json:"signedAtIn,omitempty"`
+	SignedAtNotIn  []*models.DateTime `json:"signedAtNotIn,omitempty"`
+	SignedAtGt     *models.DateTime   `json:"signedAtGT,omitempty"`
+	SignedAtGte    *models.DateTime   `json:"signedAtGTE,omitempty"`
+	SignedAtLt     *models.DateTime   `json:"signedAtLT,omitempty"`
+	SignedAtLte    *models.DateTime   `json:"signedAtLTE,omitempty"`
+	SignedAtIsNil  *bool              `json:"signedAtIsNil,omitempty"`
+	SignedAtNotNil *bool              `json:"signedAtNotNil,omitempty"`
+	// document_data_id field predicates
+	DocumentDataID             *string  `json:"documentDataID,omitempty"`
+	DocumentDataIdneq          *string  `json:"documentDataIDNEQ,omitempty"`
+	DocumentDataIDIn           []string `json:"documentDataIDIn,omitempty"`
+	DocumentDataIDNotIn        []string `json:"documentDataIDNotIn,omitempty"`
+	DocumentDataIdgt           *string  `json:"documentDataIDGT,omitempty"`
+	DocumentDataIdgte          *string  `json:"documentDataIDGTE,omitempty"`
+	DocumentDataIdlt           *string  `json:"documentDataIDLT,omitempty"`
+	DocumentDataIdlte          *string  `json:"documentDataIDLTE,omitempty"`
+	DocumentDataIDContains     *string  `json:"documentDataIDContains,omitempty"`
+	DocumentDataIDHasPrefix    *string  `json:"documentDataIDHasPrefix,omitempty"`
+	DocumentDataIDHasSuffix    *string  `json:"documentDataIDHasSuffix,omitempty"`
+	DocumentDataIDIsNil        *bool    `json:"documentDataIDIsNil,omitempty"`
+	DocumentDataIDNotNil       *bool    `json:"documentDataIDNotNil,omitempty"`
+	DocumentDataIDEqualFold    *string  `json:"documentDataIDEqualFold,omitempty"`
+	DocumentDataIDContainsFold *string  `json:"documentDataIDContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
 	// blocked_groups edge predicates
 	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
 	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
@@ -31768,6 +32136,12 @@ type TrustCenterNDARequestWhereInput struct {
 	// trust_center_docs edge predicates
 	HasTrustCenterDocs     *bool                       `json:"hasTrustCenterDocs,omitempty"`
 	HasTrustCenterDocsWith []*TrustCenterDocWhereInput `json:"hasTrustCenterDocsWith,omitempty"`
+	// document edge predicates
+	HasDocument     *bool                     `json:"hasDocument,omitempty"`
+	HasDocumentWith []*DocumentDataWhereInput `json:"hasDocumentWith,omitempty"`
+	// file edge predicates
+	HasFile     *bool             `json:"hasFile,omitempty"`
+	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
 }
 
 type TrustCenterNDAUpdatePayload struct {
@@ -37870,17 +38244,30 @@ type UpdateTrustCenterNDARequestInput struct {
 	AccessLevel      *enums.TrustCenterNDARequestAccessLevel `json:"accessLevel,omitempty"`
 	ClearAccessLevel *bool                                   `json:"clearAccessLevel,omitempty"`
 	// status of the NDA request
-	Status                  *enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
-	ClearStatus             *bool                              `json:"clearStatus,omitempty"`
-	AddBlockedGroupIDs      []string                           `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs   []string                           `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups      *bool                              `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs            []string                           `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs         []string                           `json:"removeEditorIDs,omitempty"`
-	ClearEditors            *bool                              `json:"clearEditors,omitempty"`
-	AddTrustCenterDocIDs    []string                           `json:"addTrustCenterDocIDs,omitempty"`
-	RemoveTrustCenterDocIDs []string                           `json:"removeTrustCenterDocIDs,omitempty"`
-	ClearTrustCenterDocs    *bool                              `json:"clearTrustCenterDocs,omitempty"`
+	Status      *enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
+	ClearStatus *bool                              `json:"clearStatus,omitempty"`
+	// timestamp when the request was approved
+	ApprovedAt      *models.DateTime `json:"approvedAt,omitempty"`
+	ClearApprovedAt *bool            `json:"clearApprovedAt,omitempty"`
+	// ID of the user who approved the request
+	ApprovedByUserID      *string `json:"approvedByUserID,omitempty"`
+	ClearApprovedByUserID *bool   `json:"clearApprovedByUserID,omitempty"`
+	// timestamp when the NDA was signed
+	SignedAt                *models.DateTime `json:"signedAt,omitempty"`
+	ClearSignedAt           *bool            `json:"clearSignedAt,omitempty"`
+	AddBlockedGroupIDs      []string         `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string         `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool            `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string         `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string         `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool            `json:"clearEditors,omitempty"`
+	AddTrustCenterDocIDs    []string         `json:"addTrustCenterDocIDs,omitempty"`
+	RemoveTrustCenterDocIDs []string         `json:"removeTrustCenterDocIDs,omitempty"`
+	ClearTrustCenterDocs    *bool            `json:"clearTrustCenterDocs,omitempty"`
+	DocumentID              *string          `json:"documentID,omitempty"`
+	ClearDocument           *bool            `json:"clearDocument,omitempty"`
+	FileID                  *string          `json:"fileID,omitempty"`
+	ClearFile               *bool            `json:"clearFile,omitempty"`
 }
 
 // UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.
@@ -38518,6 +38905,14 @@ type UserSettingBulkCreatePayload struct {
 type UserSettingBulkDeletePayload struct {
 	// Deleted userSetting IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkUserSetting mutation
+type UserSettingBulkUpdatePayload struct {
+	// Updated userSettings
+	UserSettings []*UserSetting `json:"userSettings,omitempty"`
+	// IDs of the updated userSettings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.

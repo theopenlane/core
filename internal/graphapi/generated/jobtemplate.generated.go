@@ -126,6 +126,104 @@ func (ec *executionContext) fieldContext_JobTemplateBulkDeletePayload_deletedIDs
 	return fc, nil
 }
 
+func (ec *executionContext) _JobTemplateBulkUpdatePayload_jobTemplates(ctx context.Context, field graphql.CollectedField, obj *model.JobTemplateBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_JobTemplateBulkUpdatePayload_jobTemplates,
+		func(ctx context.Context) (any, error) {
+			return obj.JobTemplates, nil
+		},
+		nil,
+		ec.marshalOJobTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobTemplateᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_JobTemplateBulkUpdatePayload_jobTemplates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "JobTemplateBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_JobTemplate_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_JobTemplate_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_JobTemplate_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_JobTemplate_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_JobTemplate_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_JobTemplate_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_JobTemplate_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_JobTemplate_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_JobTemplate_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_JobTemplate_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_JobTemplate_systemInternalID(ctx, field)
+			case "title":
+				return ec.fieldContext_JobTemplate_title(ctx, field)
+			case "description":
+				return ec.fieldContext_JobTemplate_description(ctx, field)
+			case "platform":
+				return ec.fieldContext_JobTemplate_platform(ctx, field)
+			case "downloadURL":
+				return ec.fieldContext_JobTemplate_downloadURL(ctx, field)
+			case "configuration":
+				return ec.fieldContext_JobTemplate_configuration(ctx, field)
+			case "cron":
+				return ec.fieldContext_JobTemplate_cron(ctx, field)
+			case "owner":
+				return ec.fieldContext_JobTemplate_owner(ctx, field)
+			case "scheduledJobs":
+				return ec.fieldContext_JobTemplate_scheduledJobs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type JobTemplate", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _JobTemplateBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.JobTemplateBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_JobTemplateBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_JobTemplateBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "JobTemplateBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _JobTemplateCreatePayload_jobTemplate(ctx context.Context, field graphql.CollectedField, obj *model.JobTemplateCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -380,6 +478,44 @@ func (ec *executionContext) _JobTemplateBulkDeletePayload(ctx context.Context, s
 	return out
 }
 
+var jobTemplateBulkUpdatePayloadImplementors = []string{"JobTemplateBulkUpdatePayload"}
+
+func (ec *executionContext) _JobTemplateBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.JobTemplateBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, jobTemplateBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("JobTemplateBulkUpdatePayload")
+		case "jobTemplates":
+			out.Values[i] = ec._JobTemplateBulkUpdatePayload_jobTemplates(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._JobTemplateBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var jobTemplateCreatePayloadImplementors = []string{"JobTemplateCreatePayload"}
 
 func (ec *executionContext) _JobTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.JobTemplateCreatePayload) graphql.Marshaler {
@@ -527,6 +663,20 @@ func (ec *executionContext) marshalNJobTemplateBulkDeletePayload2ᚖgithubᚗcom
 		return graphql.Null
 	}
 	return ec._JobTemplateBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNJobTemplateBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobTemplateBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.JobTemplateBulkUpdatePayload) graphql.Marshaler {
+	return ec._JobTemplateBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNJobTemplateBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobTemplateBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.JobTemplateBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._JobTemplateBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNJobTemplateCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.JobTemplateCreatePayload) graphql.Marshaler {

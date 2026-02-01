@@ -52,11 +52,23 @@ func HookMembershipSelf(table string) ent.Hook {
 			}
 
 			// if the user is an org owner, skip the check
-			if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.OwnerRelation); errors.Is(err, privacy.Allow) {
+			if au.OrganizationRole == auth.OwnerRole {
 				// ensure this is not an org membership mutation, owners cannot update their own membership
 				// in the organization, it must be done via a transfer
 				if m.Type() != generated.TypeOrgMembership {
 					return next.Mutate(ctx, m)
+				}
+			}
+
+			// fallback to fgax check for owner relation access if org role is not available
+			// in the context
+			if au.OrganizationRole == "" {
+				if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.OwnerRelation); errors.Is(err, privacy.Allow) {
+					// ensure this is not an org membership mutation, owners cannot update their own membership
+					// in the organization, it must be done via a transfer
+					if m.Type() != generated.TypeOrgMembership {
+						return next.Mutate(ctx, m)
+					}
 				}
 			}
 

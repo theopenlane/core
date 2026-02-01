@@ -23,7 +23,8 @@ import (
 // not multiple times.
 //
 // Workflow Definition (Plain English):
-//   "Require 2 approvals before changing Control.status"
+//
+//	"Require 2 approvals before changing Control.status"
 //
 // Test Flow:
 //  1. Triggers an approval workflow requiring 2 approvers
@@ -35,9 +36,10 @@ import (
 //  7. Counts INSTANCE_COMPLETED events - must be exactly 1 (not 2)
 //
 // Why This Matters:
-//   In a distributed system, concurrent approvals could race to resume the workflow. The
-//   engine must ensure idempotent completion handling to prevent duplicate side effects
-//   (e.g., double-applying the proposal, sending duplicate notifications).
+//
+//	In a distributed system, concurrent approvals could race to resume the workflow. The
+//	engine must ensure idempotent completion handling to prevent duplicate side effects
+//	(e.g., double-applying the proposal, sending duplicate notifications).
 func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce() {
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
@@ -126,6 +128,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce
 		s.Require().NoError(err)
 	}
 
+	// Wait for async event processing to complete before checking state
+	s.WaitForEvents()
+
 	proposal, err := s.client.WorkflowProposal.Get(userCtx, instance.WorkflowProposalID)
 	s.Require().NoError(err)
 	s.Equal(enums.WorkflowProposalStateApplied, proposal.State)
@@ -159,8 +164,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce
 // generate duplicate completion events.
 //
 // Workflow Definition (Plain English):
-//   "Require 1 approval (out of 2 possible approvers) before changing Control.status"
-//   RequiredCount = 1, but 2 approvers are assigned
+//
+//	"Require 1 approval (out of 2 possible approvers) before changing Control.status"
+//	RequiredCount = 1, but 2 approvers are assigned
 //
 // Test Flow:
 //  1. Triggers an approval workflow with 2 approvers but only 1 required
@@ -171,8 +177,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce
 //  6. Verifies the Control.status is still the correctly applied value
 //
 // Why This Matters:
-//   Users may approve workflows that have already completed. The engine must handle these
-//   "late" approvals gracefully without re-applying changes or corrupting workflow state.
+//
+//	Users may approve workflows that have already completed. The engine must handle these
+//	"late" approvals gracefully without re-applying changes or corrupting workflow state.
 func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
@@ -224,6 +231,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 	s.Require().NoError(err)
 	s.Require().NotNil(instance)
 
+	s.WaitForEvents()
+
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
@@ -245,6 +254,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 	err = wfEngine.CompleteAssignment(userCtx, assignmentsByUser[approver1ID].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
 	s.Require().NoError(err)
 
+	s.WaitForEvents()
+
 	eventsBefore, err := s.client.WorkflowEvent.Query().
 		Where(workflowevent.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
@@ -260,6 +271,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 
 	err = wfEngine.CompleteAssignment(approver2Ctx, assignmentsByUser[approver2ID].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
 	s.Require().NoError(err)
+
+	s.WaitForEvents()
 
 	eventsAfter, err := s.client.WorkflowEvent.Query().
 		Where(workflowevent.WorkflowInstanceIDEQ(instance.ID)).
@@ -290,10 +303,11 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 // workflow completes. Completing one action does not resume execution until all are done.
 //
 // Workflow Definition (Plain English):
-//   Actions:
-//     1. "Approval A" - requires User1 to approve "status" field changes
-//     2. "Approval B" - requires User2 to approve "reference_id" field changes
-//   Both actions have when="true" (always execute)
+//
+//	Actions:
+//	  1. "Approval A" - requires User1 to approve "status" field changes
+//	  2. "Approval B" - requires User2 to approve "reference_id" field changes
+//	Both actions have when="true" (always execute)
 //
 // Test Flow:
 //  1. Triggers a workflow with two independent approval actions
@@ -306,8 +320,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 //  8. Verifies the proposal was APPLIED
 //
 // Why This Matters:
-//   Complex workflows may require multiple independent sign-offs. The engine must gate
-//   completion until ALL required approval actions are resolved, not just the first one.
+//
+//	Complex workflows may require multiple independent sign-offs. The engine must gate
+//	completion until ALL required approval actions are resolved, not just the first one.
 func (s *WorkflowEngineTestSuite) TestConcurrentApprovalActionsGateUntilAllSatisfied() {
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
@@ -390,6 +405,8 @@ func (s *WorkflowEngineTestSuite) TestConcurrentApprovalActionsGateUntilAllSatis
 	s.Require().NoError(err)
 	s.Require().NotNil(instance)
 
+	s.WaitForEvents()
+
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
@@ -412,6 +429,8 @@ func (s *WorkflowEngineTestSuite) TestConcurrentApprovalActionsGateUntilAllSatis
 	err = wfEngine.CompleteAssignment(approver2Ctx, assignmentB.ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
 	s.Require().NoError(err)
 
+	s.WaitForEvents()
+
 	updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
 	s.Require().NoError(err)
 	s.Equal(enums.WorkflowInstanceStatePaused, updatedInstance.State)
@@ -428,6 +447,8 @@ func (s *WorkflowEngineTestSuite) TestConcurrentApprovalActionsGateUntilAllSatis
 
 	err = wfEngine.CompleteAssignment(userCtx, assignmentA.ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
 	s.Require().NoError(err)
+
+	s.WaitForEvents()
 
 	updatedInstance, err = s.client.WorkflowInstance.Get(userCtx, instance.ID)
 	s.Require().NoError(err)

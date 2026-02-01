@@ -22,8 +22,9 @@ import (
 // proposal hash for their specific domain (field set), not a combined hash.
 //
 // Workflow Definitions (Plain English):
-//   Definition 1: "Require approval for Control.reference_id changes"
-//   Definition 2: "Require approval for Control.title changes"
+//
+//	Definition 1: "Require approval for Control.reference_id changes"
+//	Definition 2: "Require approval for Control.title changes"
 //
 // Test Flow:
 //  1. Creates two approval workflow definitions targeting different fields
@@ -35,11 +36,13 @@ import (
 //  7. Verifies the resulting assignments have a ProposedHash matching the reference_id proposal's changes
 //
 // Why This Matters:
-//   Different approval workflows may cover different field sets. Each workflow's proposal
-//   should only contain the changes relevant to its domain, and the hash used for approval
-//   verification should match that scoped set of changes. This prevents cross-contamination
-//   of approval hashes between unrelated workflows.
+//
+//	Different approval workflows may cover different field sets. Each workflow's proposal
+//	should only contain the changes relevant to its domain, and the hash used for approval
+//	verification should match that scoped set of changes. This prevents cross-contamination
+//	of approval hashes between unrelated workflows.
 func (s *WorkflowEngineTestSuite) TestProposalManagerComputeHashUsesDomainKey() {
+
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 

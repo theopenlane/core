@@ -2362,24 +2362,29 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterNDARequestHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcenterndarequesthistory.FieldHistoryTime:   {Type: field.TypeTime, Column: trustcenterndarequesthistory.FieldHistoryTime},
-			trustcenterndarequesthistory.FieldRef:           {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldRef},
-			trustcenterndarequesthistory.FieldOperation:     {Type: field.TypeEnum, Column: trustcenterndarequesthistory.FieldOperation},
-			trustcenterndarequesthistory.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcenterndarequesthistory.FieldCreatedAt},
-			trustcenterndarequesthistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcenterndarequesthistory.FieldUpdatedAt},
-			trustcenterndarequesthistory.FieldCreatedBy:     {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldCreatedBy},
-			trustcenterndarequesthistory.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldUpdatedBy},
-			trustcenterndarequesthistory.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcenterndarequesthistory.FieldDeletedAt},
-			trustcenterndarequesthistory.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldDeletedBy},
-			trustcenterndarequesthistory.FieldTags:          {Type: field.TypeJSON, Column: trustcenterndarequesthistory.FieldTags},
-			trustcenterndarequesthistory.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldTrustCenterID},
-			trustcenterndarequesthistory.FieldFirstName:     {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldFirstName},
-			trustcenterndarequesthistory.FieldLastName:      {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldLastName},
-			trustcenterndarequesthistory.FieldEmail:         {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldEmail},
-			trustcenterndarequesthistory.FieldCompanyName:   {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldCompanyName},
-			trustcenterndarequesthistory.FieldReason:        {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldReason},
-			trustcenterndarequesthistory.FieldAccessLevel:   {Type: field.TypeEnum, Column: trustcenterndarequesthistory.FieldAccessLevel},
-			trustcenterndarequesthistory.FieldStatus:        {Type: field.TypeEnum, Column: trustcenterndarequesthistory.FieldStatus},
+			trustcenterndarequesthistory.FieldHistoryTime:      {Type: field.TypeTime, Column: trustcenterndarequesthistory.FieldHistoryTime},
+			trustcenterndarequesthistory.FieldRef:              {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldRef},
+			trustcenterndarequesthistory.FieldOperation:        {Type: field.TypeEnum, Column: trustcenterndarequesthistory.FieldOperation},
+			trustcenterndarequesthistory.FieldCreatedAt:        {Type: field.TypeTime, Column: trustcenterndarequesthistory.FieldCreatedAt},
+			trustcenterndarequesthistory.FieldUpdatedAt:        {Type: field.TypeTime, Column: trustcenterndarequesthistory.FieldUpdatedAt},
+			trustcenterndarequesthistory.FieldCreatedBy:        {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldCreatedBy},
+			trustcenterndarequesthistory.FieldUpdatedBy:        {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldUpdatedBy},
+			trustcenterndarequesthistory.FieldDeletedAt:        {Type: field.TypeTime, Column: trustcenterndarequesthistory.FieldDeletedAt},
+			trustcenterndarequesthistory.FieldDeletedBy:        {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldDeletedBy},
+			trustcenterndarequesthistory.FieldTags:             {Type: field.TypeJSON, Column: trustcenterndarequesthistory.FieldTags},
+			trustcenterndarequesthistory.FieldTrustCenterID:    {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldTrustCenterID},
+			trustcenterndarequesthistory.FieldFirstName:        {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldFirstName},
+			trustcenterndarequesthistory.FieldLastName:         {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldLastName},
+			trustcenterndarequesthistory.FieldEmail:            {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldEmail},
+			trustcenterndarequesthistory.FieldCompanyName:      {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldCompanyName},
+			trustcenterndarequesthistory.FieldReason:           {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldReason},
+			trustcenterndarequesthistory.FieldAccessLevel:      {Type: field.TypeEnum, Column: trustcenterndarequesthistory.FieldAccessLevel},
+			trustcenterndarequesthistory.FieldStatus:           {Type: field.TypeEnum, Column: trustcenterndarequesthistory.FieldStatus},
+			trustcenterndarequesthistory.FieldApprovedAt:       {Type: field.TypeTime, Column: trustcenterndarequesthistory.FieldApprovedAt},
+			trustcenterndarequesthistory.FieldApprovedByUserID: {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldApprovedByUserID},
+			trustcenterndarequesthistory.FieldSignedAt:         {Type: field.TypeTime, Column: trustcenterndarequesthistory.FieldSignedAt},
+			trustcenterndarequesthistory.FieldDocumentDataID:   {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldDocumentDataID},
+			trustcenterndarequesthistory.FieldFileID:           {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldFileID},
 		},
 	}
 	graph.Nodes[58] = &sqlgraph.Node{
@@ -12884,6 +12889,31 @@ func (f *TrustCenterNDARequestHistoryFilter) WhereAccessLevel(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *TrustCenterNDARequestHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(trustcenterndarequesthistory.FieldStatus))
+}
+
+// WhereApprovedAt applies the entql time.Time predicate on the approved_at field.
+func (f *TrustCenterNDARequestHistoryFilter) WhereApprovedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterndarequesthistory.FieldApprovedAt))
+}
+
+// WhereApprovedByUserID applies the entql string predicate on the approved_by_user_id field.
+func (f *TrustCenterNDARequestHistoryFilter) WhereApprovedByUserID(p entql.StringP) {
+	f.Where(p.Field(trustcenterndarequesthistory.FieldApprovedByUserID))
+}
+
+// WhereSignedAt applies the entql time.Time predicate on the signed_at field.
+func (f *TrustCenterNDARequestHistoryFilter) WhereSignedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterndarequesthistory.FieldSignedAt))
+}
+
+// WhereDocumentDataID applies the entql string predicate on the document_data_id field.
+func (f *TrustCenterNDARequestHistoryFilter) WhereDocumentDataID(p entql.StringP) {
+	f.Where(p.Field(trustcenterndarequesthistory.FieldDocumentDataID))
+}
+
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *TrustCenterNDARequestHistoryFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(trustcenterndarequesthistory.FieldFileID))
 }
 
 // addPredicate implements the predicateAdder interface.

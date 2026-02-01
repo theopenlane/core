@@ -118,10 +118,16 @@ func (r ResponsibilityMixin) Fields() []ent.Field {
 				),
 			field.String("internal_owner_user_id").
 				Comment(fmt.Sprintf("the internal owner user id for the %s", label)).
-				Optional(),
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("InternalOwnerUserEmail").MatchOn("email"),
+				),
 			field.String("internal_owner_group_id").
 				Comment(fmt.Sprintf("the internal owner group id for the %s", label)).
-				Optional(),
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("InternalOwnerGroupName").MatchOn("name"),
+				),
 		)
 	}
 
@@ -135,10 +141,16 @@ func (r ResponsibilityMixin) Fields() []ent.Field {
 				),
 			field.String("business_owner_user_id").
 				Comment(fmt.Sprintf("the business owner user id for the %s", label)).
-				Optional(),
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("BusinessOwnerUserEmail").MatchOn("email"),
+				),
 			field.String("business_owner_group_id").
 				Comment(fmt.Sprintf("the business owner group id for the %s", label)).
-				Optional(),
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("BusinessOwnerGroupName").MatchOn("name"),
+				),
 		)
 	}
 
@@ -152,10 +164,16 @@ func (r ResponsibilityMixin) Fields() []ent.Field {
 				),
 			field.String("technical_owner_user_id").
 				Comment(fmt.Sprintf("the technical owner user id for the %s", label)).
-				Optional(),
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("TechnicalOwnerUserEmail").MatchOn("email"),
+				),
 			field.String("technical_owner_group_id").
 				Comment(fmt.Sprintf("the technical owner group id for the %s", label)).
-				Optional(),
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("TechnicalOwnerGroupName").MatchOn("name"),
+				),
 		)
 	}
 
@@ -169,10 +187,16 @@ func (r ResponsibilityMixin) Fields() []ent.Field {
 				),
 			field.String("security_owner_user_id").
 				Comment(fmt.Sprintf("the security owner user id for the %s", label)).
-				Optional(),
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("SecurityOwnerUserEmail").MatchOn("email"),
+				),
 			field.String("security_owner_group_id").
 				Comment(fmt.Sprintf("the security owner group id for the %s", label)).
-				Optional(),
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("SecurityOwnerGroupName").MatchOn("name"),
+				),
 		)
 	}
 
@@ -188,10 +212,16 @@ func (r ResponsibilityMixin) Fields() []ent.Field {
 			reviewedByField,
 			field.String("reviewed_by_user_id").
 				Comment(fmt.Sprintf("the user id that reviewed the %s", label)).
-				Optional(),
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("ReviewedByUserEmail").MatchOn("email"),
+				),
 			field.String("reviewed_by_group_id").
 				Comment(fmt.Sprintf("the group id that reviewed the %s", label)).
-				Optional(),
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("ReviewedByGroupName").MatchOn("name"),
+				),
 		)
 	}
 
@@ -207,10 +237,16 @@ func (r ResponsibilityMixin) Fields() []ent.Field {
 			assignedToField,
 			field.String("assigned_to_user_id").
 				Comment(fmt.Sprintf("the user id assigned to the %s", label)).
-				Optional(),
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("AssignedToUserEmail").MatchOn("email"),
+				),
 			field.String("assigned_to_group_id").
 				Comment(fmt.Sprintf("the group id assigned to the %s", label)).
-				Optional(),
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("AssignedToGroupName").MatchOn("name"),
+				),
 		)
 	}
 

@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -18,6 +19,8 @@ import (
 )
 
 func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
 
@@ -49,6 +52,16 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 		TrustCenterID:      trustCenter.ID,
 		SubjectEmail:       "test@example.com",
 	}
+
+	anonCtxForRequest := auth.WithAnonymousTrustCenterUser(context.Background(), anonUser)
+	_, err = suite.client.api.CreateTrustCenterNDARequest(anonCtxForRequest, testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     "Test",
+		LastName:      "User",
+		CompanyName:   lo.ToPtr("Test Company"),
+		Email:         "test@example.com",
+		TrustCenterID: &trustCenter.ID,
+	})
+	assert.NilError(t, err)
 
 	input := testclient.SubmitTrustCenterNDAResponseInput{
 		TemplateID: trustCenterNDA.CreateTrustCenterNda.Template.ID,
@@ -92,6 +105,8 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 }
 
 func TestCreateTrustCenterNDA(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	testCases := []struct {
 		name     string
@@ -179,6 +194,8 @@ func TestCreateTrustCenterNDA(t *testing.T) {
 }
 
 func TestAnonymousUserCanQueryTrustCenterNDA(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 	input := testclient.CreateTrustCenterNDAInput{
@@ -235,6 +252,8 @@ func TestAnonymousUserCanQueryTrustCenterNDA(t *testing.T) {
 }
 
 func TestSubmitTrustCenterNDAResponse(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 	uploadFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
@@ -278,33 +297,21 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 	anonCtx := auth.WithAnonymousTrustCenterUser(ctx, anonUser)
 	anonCtx2 := auth.WithAnonymousTrustCenterUser(ctx, anonUser2)
 
+	_, err = suite.client.api.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     "Test",
+		LastName:      "User",
+		CompanyName:   lo.ToPtr("Test Company"),
+		Email:         "test@example.com",
+		TrustCenterID: &trustCenter.ID,
+	})
+	assert.NilError(t, err)
+
 	testCases := []struct {
 		name     string
 		ctx      context.Context
 		input    testclient.SubmitTrustCenterNDAResponseInput
 		errorMsg string
 	}{
-		{
-			name: "happy path",
-			ctx:  anonCtx,
-			input: testclient.SubmitTrustCenterNDAResponseInput{
-				TemplateID: trustCenterNDA.CreateTrustCenterNda.Template.ID,
-				Response: map[string]any{
-					"signatory_info": map[string]any{
-						"email": "test@example.com",
-					},
-					"acknowledgment": true,
-					"signature_metadata": map[string]any{
-						"ip_address": "192.168.1.100",
-						"timestamp":  "2025-09-22T19:37:59.988Z",
-						"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
-						"user_id":    anonUserID,
-					},
-					"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
-					"trust_center_id": trustCenter.ID,
-				},
-			},
-		},
 		{
 			name: "Does not conform to format",
 			ctx:  anonCtx,
@@ -338,7 +345,7 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"trust_center_id": trustCenter.ID,
 				},
 			},
-			errorMsg: "NDA submission does not match authenticated user",
+			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name: "wrong trust center ID",
@@ -406,6 +413,27 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 			},
 			errorMsg: "NDA submission does not match authenticated user",
 		},
+		{
+			name: "happy path",
+			ctx:  anonCtx,
+			input: testclient.SubmitTrustCenterNDAResponseInput{
+				TemplateID: trustCenterNDA.CreateTrustCenterNda.Template.ID,
+				Response: map[string]any{
+					"signatory_info": map[string]any{
+						"email": "test@example.com",
+					},
+					"acknowledgment": true,
+					"signature_metadata": map[string]any{
+						"ip_address": "192.168.1.100",
+						"timestamp":  "2025-09-22T19:37:59.988Z",
+						"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
+						"user_id":    anonUserID,
+					},
+					"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
+					"trust_center_id": trustCenter.ID,
+				},
+			},
+		},
 	}
 
 	for _, tc := range testCases {
@@ -430,6 +458,8 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 }
 
 func TestUpdateTrustCenterNDA(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	uploadFile1, err := storage.NewUploadFile("testdata/uploads/hello.pdf")

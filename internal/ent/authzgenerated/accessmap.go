@@ -275,7 +275,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 }, "assessment": {
 	ObjectType:      "assessment",
 	SkipEditCheck:   true,
-	CheckViewAccess: true,
+	CheckViewAccess: false,
 }, "template": {
 	ObjectType:      "template",
 	SkipEditCheck:   true,
@@ -3592,6 +3592,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "trust_center_doc",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "document": {
+	ObjectType:      "document",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "file": {
+	ObjectType:      "file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "trust_center_setting": {"blocked_groups": {
 	ObjectType:      "group",

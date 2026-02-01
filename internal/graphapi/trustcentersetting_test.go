@@ -22,6 +22,8 @@ import (
 func TestCreateTrustCenterSetting(t *testing.T) {
 	// Test 1: happy path - recreate a deleted live setting
 	t.Run("Create happy path - recreate deleted live setting", func(t *testing.T) {
+		cleanupTrustCenterData(t)
+
 		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 		settingID := trustCenter.Edges.Setting.ID
 
@@ -55,6 +57,8 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 
 	// Test 2: happy path - recreate with all color fields
 	t.Run("Create happy path - recreate with all color fields", func(t *testing.T) {
+		cleanupTrustCenterData(t)
+
 		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 		settingID := trustCenter.Edges.Setting.ID
 
@@ -90,6 +94,8 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 
 	// Test 3: happy path - recreate with theme mode
 	t.Run("Create happy path - recreate with theme mode", func(t *testing.T) {
+		cleanupTrustCenterData(t)
+
 		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 		settingID := trustCenter.Edges.Setting.ID
 
@@ -120,6 +126,8 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 
 	// Test 4: not authorized - view only user cannot create
 	t.Run("Create not authorized - view only user", func(t *testing.T) {
+		cleanupTrustCenterData(t)
+
 		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 		settingID := trustCenter.Edges.Setting.ID
 
@@ -143,6 +151,7 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 
 // TestQueryTrustCenterSetting tests the trustCenterSetting query
 func TestQueryTrustCenterSetting(t *testing.T) {
+	cleanupTrustCenterData(t)
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
@@ -194,6 +203,8 @@ func TestQueryTrustCenterSetting(t *testing.T) {
 
 // TestUpdateTrustCenterSetting tests the updateTrustCenterSetting mutation
 func TestUpdateTrustCenterSetting(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
@@ -312,8 +323,8 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 						{
 							Args: jobspec.CreatePreviewDomainArgs{
 								TrustCenterID:            *resp.UpdateTrustCenterSetting.TrustCenterSetting.TrustCenterID,
-								TrustCenterPreviewZoneID: "", // not set in configs for tests
-								TrustCenterCnameTarget:   "", // not set in configs for tests
+								TrustCenterPreviewZoneID: previewZoneTestID,
+								TrustCenterCnameTarget:   cnameTargetTest,
 							},
 						},
 					})
@@ -334,6 +345,8 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 func TestDeleteTrustCenterSetting(t *testing.T) {
 	// Test 1: happy path - delete trust center setting
 	t.Run("Delete happy path - delete trust center setting", func(t *testing.T) {
+		cleanupTrustCenterData(t)
+
 		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 		settingID := trustCenter.Edges.Setting.ID
 
@@ -352,6 +365,8 @@ func TestDeleteTrustCenterSetting(t *testing.T) {
 
 	// Test 2: not authorized - view only user
 	t.Run("Delete not authorized - view only user", func(t *testing.T) {
+		cleanupTrustCenterData(t)
+
 		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 		settingID := trustCenter.Edges.Setting.ID
 
@@ -364,6 +379,8 @@ func TestDeleteTrustCenterSetting(t *testing.T) {
 
 	// Test 3: not authorized - different org user
 	t.Run("Delete not authorized - different org user", func(t *testing.T) {
+		cleanupTrustCenterData(t)
+
 		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 		settingID := trustCenter.Edges.Setting.ID
 

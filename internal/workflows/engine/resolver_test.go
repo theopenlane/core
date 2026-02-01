@@ -20,7 +20,8 @@ import (
 //  2. Verifies the engine is not nil (resolver infrastructure ready)
 //
 // Why This Matters:
-//   Foundational test ensuring the target resolution subsystem is available.
+//
+//	Foundational test ensuring the target resolution subsystem is available.
 func (s *WorkflowEngineTestSuite) TestResolveTargetsRequiresEngine() {
 	wfEngine := s.Engine()
 	s.Require().NotNil(wfEngine)
@@ -30,17 +31,19 @@ func (s *WorkflowEngineTestSuite) TestResolveTargetsRequiresEngine() {
 // User targets are the simplest target type - a direct reference to a specific user.
 //
 // Test Scenarios:
-//   "resolve user with ID":
-//     - Target: { type: USER, id: "user-123" }
-//     - Expected: Returns ["user-123"]
 //
-//   "user target without ID returns error":
-//     - Target: { type: USER, id: "" }
-//     - Expected: ErrMissingRequiredField error
+//	"resolve user with ID":
+//	  - Target: { type: USER, id: "user-123" }
+//	  - Expected: Returns ["user-123"]
+//
+//	"user target without ID returns error":
+//	  - Target: { type: USER, id: "" }
+//	  - Expected: ErrMissingRequiredField error
 //
 // Why This Matters:
-//   User targets enable explicit assignment to specific individuals. The resolver must
-//   validate that the user ID is provided and return it directly.
+//
+//	User targets enable explicit assignment to specific individuals. The resolver must
+//	validate that the user ID is provided and return it directly.
 func (s *WorkflowEngineTestSuite) TestResolveUserTarget() {
 	_, orgID, userCtx := s.SetupTestUser()
 
@@ -91,17 +94,19 @@ func (s *WorkflowEngineTestSuite) TestResolveUserTarget() {
 //  1. Creates a Group with two user members
 //
 // Test Scenarios:
-//   "resolve group members":
-//     - Target: { type: GROUP, id: "group-123" }
-//     - Expected: Returns user IDs of all group members
 //
-//   "group target without ID returns error":
-//     - Target: { type: GROUP, id: "" }
-//     - Expected: ErrMissingRequiredField error
+//	"resolve group members":
+//	  - Target: { type: GROUP, id: "group-123" }
+//	  - Expected: Returns user IDs of all group members
+//
+//	"group target without ID returns error":
+//	  - Target: { type: GROUP, id: "" }
+//	  - Expected: ErrMissingRequiredField error
 //
 // Why This Matters:
-//   Group targets enable dynamic assignment to team members. As group membership changes,
-//   workflow assignments automatically reflect the current membership.
+//
+//	Group targets enable dynamic assignment to team members. As group membership changes,
+//	workflow assignments automatically reflect the current membership.
 func (s *WorkflowEngineTestSuite) TestResolveGroupTarget() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -164,21 +169,23 @@ func (s *WorkflowEngineTestSuite) TestResolveGroupTarget() {
 // the specified role within the object's owning organization.
 //
 // Test Scenarios:
-//   "role target requires ID":
-//     - Target: { type: ROLE, id: "" }
-//     - Expected: ErrMissingRequiredField error
 //
-//   "role resolution returns org members by role":
-//     - Target: { type: ROLE, id: "OWNER" }
-//     - Expected: Returns user IDs of org members with OWNER role
+//	"role target requires ID":
+//	  - Target: { type: ROLE, id: "" }
+//	  - Expected: ErrMissingRequiredField error
 //
-//   "invalid role returns error":
-//     - Target: { type: ROLE, id: "NOT_A_ROLE" }
-//     - Expected: Error (unrecognized role)
+//	"role resolution returns org members by role":
+//	  - Target: { type: ROLE, id: "OWNER" }
+//	  - Expected: Returns user IDs of org members with OWNER role
+//
+//	"invalid role returns error":
+//	  - Target: { type: ROLE, id: "NOT_A_ROLE" }
+//	  - Expected: Error (unrecognized role)
 //
 // Why This Matters:
-//   Role targets enable automatic assignment to users based on their organizational role.
-//   This is useful for "assign to all org owners" or "assign to all admins" workflows.
+//
+//	Role targets enable automatic assignment to users based on their organizational role.
+//	This is useful for "assign to all org owners" or "assign to all admins" workflows.
 func (s *WorkflowEngineTestSuite) TestResolveRoleTarget() {
 	wfEngine := s.Engine()
 
@@ -254,18 +261,20 @@ func (s *WorkflowEngineTestSuite) TestResolveRoleTarget() {
 // to dynamically determine target users based on object relationships.
 //
 // Test Scenarios:
-//   "resolve CONTROL_OWNER":
-//     - Target: { type: RESOLVER, resolverKey: "CONTROL_OWNER" }
-//     - Expected: Returns user IDs of the Control's owning organization's owners
 //
-//   "resolve OBJECT_CREATOR":
-//     - Target: { type: RESOLVER, resolverKey: "OBJECT_CREATOR" }
-//     - Expected: Returns user ID(s) who created the object (if tracked)
+//	"resolve CONTROL_OWNER":
+//	  - Target: { type: RESOLVER, resolverKey: "CONTROL_OWNER" }
+//	  - Expected: Returns user IDs of the Control's owning organization's owners
+//
+//	"resolve OBJECT_CREATOR":
+//	  - Target: { type: RESOLVER, resolverKey: "OBJECT_CREATOR" }
+//	  - Expected: Returns user ID(s) who created the object (if tracked)
 //
 // Why This Matters:
-//   Resolver targets enable dynamic assignment based on object context. For example,
-//   "CONTROL_OWNER" automatically assigns to whoever owns the control being modified,
-//   without hardcoding specific user IDs in the workflow definition.
+//
+//	Resolver targets enable dynamic assignment based on object context. For example,
+//	"CONTROL_OWNER" automatically assigns to whoever owns the control being modified,
+//	without hardcoding specific user IDs in the workflow definition.
 func (s *WorkflowEngineTestSuite) TestResolveControlTarget() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
@@ -310,17 +319,19 @@ func (s *WorkflowEngineTestSuite) TestResolveControlTarget() {
 // TestResolveInvalidTarget verifies error handling for malformed or invalid target configurations.
 //
 // Test Scenarios:
-//   "invalid target type":
-//     - Target: { type: "INVALID" }
-//     - Expected: ErrInvalidTargetType error
 //
-//   "resolver without resolver key":
-//     - Target: { type: RESOLVER, resolverKey: "" }
-//     - Expected: ErrMissingRequiredField error
+//	"invalid target type":
+//	  - Target: { type: "INVALID" }
+//	  - Expected: ErrInvalidTargetType error
+//
+//	"resolver without resolver key":
+//	  - Target: { type: RESOLVER, resolverKey: "" }
+//	  - Expected: ErrMissingRequiredField error
 //
 // Why This Matters:
-//   The resolver must validate target configurations and fail fast with clear errors
-//   rather than silently returning empty results or causing downstream failures.
+//
+//	The resolver must validate target configurations and fail fast with clear errors
+//	rather than silently returning empty results or causing downstream failures.
 func (s *WorkflowEngineTestSuite) TestResolveInvalidTarget() {
 	wfEngine := s.Engine()
 
