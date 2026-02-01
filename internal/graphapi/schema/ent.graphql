@@ -68338,9 +68338,6 @@ input UpdateTrustCenterSubprocessorInput {
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
-  trustCenterID: ID
-  clearTrustCenter: Boolean
-  subprocessorID: ID
 }
 """
 UpdateTrustCenterWatermarkConfigInput is used for update TrustCenterWatermarkConfig object.

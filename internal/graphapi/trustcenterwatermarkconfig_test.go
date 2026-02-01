@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
@@ -32,16 +31,7 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 	assert.NilError(t, err)
 	(&Cleanup[*generated.TrustCenterWatermarkConfigDeleteOne]{client: suite.client.db.TrustCenterWatermarkConfig, ID: trustCenterWatermarkConfig.ID}).MustDelete(testUser1.UserCtx, t)
 
-	createPNGUpload := func() *graphql.Upload {
-		pngFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pngFile.RawFile,
-			Filename:    pngFile.OriginalName,
-			Size:        pngFile.Size,
-			ContentType: pngFile.ContentType,
-		}
-	}
+	createImageUpload := logoFileFunc(t)
 	testCases := []struct {
 		name          string
 		input         testclient.CreateTrustCenterWatermarkConfigInput
@@ -63,12 +53,12 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 			input: testclient.CreateTrustCenterWatermarkConfigInput{
 				TrustCenterID: &trustCenter.ID,
 			},
-			watermarkFile: createPNGUpload(),
+			watermarkFile: createImageUpload(),
 			client:        suite.client.api,
 			ctx:           testUser1.UserCtx,
 		},
 		{
-			name: "happy path, all fields",
+			name: "happy path, all fields as admin",
 			input: testclient.CreateTrustCenterWatermarkConfigInput{
 				TrustCenterID: &trustCenter.ID,
 				Text:          lo.ToPtr("Test Text"),
@@ -79,7 +69,7 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 				Font:          &enums.FontHelvetica,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "not authorized",
@@ -246,16 +236,7 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 
 	assert.NilError(t, err)
 
-	createPNGUpload := func() *graphql.Upload {
-		pngFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pngFile.RawFile,
-			Filename:    pngFile.OriginalName,
-			Size:        pngFile.Size,
-			ContentType: pngFile.ContentType,
-		}
-	}
+	createImageUpload := logoFileFunc(t)
 	testCases := []struct {
 		name          string
 		input         testclient.UpdateTrustCenterWatermarkConfigInput
@@ -265,24 +246,24 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 		expectedErr   string
 	}{
 		{
-			name: "happy path, update text",
+			name: "happy path, update text as admin",
 			input: testclient.UpdateTrustCenterWatermarkConfigInput{
 				Text: lo.ToPtr("Updated Text"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "happy path, update logo",
 			input: testclient.UpdateTrustCenterWatermarkConfigInput{
 				Text: lo.ToPtr("Updated Text"),
 			},
-			watermarkFile: createPNGUpload(),
+			watermarkFile: createImageUpload(),
 			client:        suite.client.api,
 			ctx:           testUser1.UserCtx,
 		},
 		{
-			name: "happy path, update all fields",
+			name: "happy path, update all fields as admin",
 			input: testclient.UpdateTrustCenterWatermarkConfigInput{
 				Text:     lo.ToPtr("Updated Text"),
 				FontSize: lo.ToPtr(48.0),
@@ -292,7 +273,7 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 				Font:     &enums.FontHelvetica,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "not authorized",

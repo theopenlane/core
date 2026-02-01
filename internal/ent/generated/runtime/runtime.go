@@ -7184,7 +7184,10 @@ func init() {
 	trustcentersubprocessorMixinHooks1 := trustcentersubprocessorMixin[1].Hooks()
 	trustcentersubprocessorMixinHooks4 := trustcentersubprocessorMixin[4].Hooks()
 	trustcentersubprocessorMixinHooks5 := trustcentersubprocessorMixin[5].Hooks()
+
 	trustcentersubprocessorMixinHooks6 := trustcentersubprocessorMixin[6].Hooks()
+
+	trustcentersubprocessorHooks := schema.TrustCenterSubprocessor{}.Hooks()
 
 	trustcentersubprocessor.Hooks[1] = trustcentersubprocessorMixinHooks0[0]
 
@@ -7194,9 +7197,10 @@ func init() {
 
 	trustcentersubprocessor.Hooks[4] = trustcentersubprocessorMixinHooks5[0]
 
-	trustcentersubprocessor.Hooks[5] = trustcentersubprocessorMixinHooks6[0]
+	trustcentersubprocessor.Hooks[5] = trustcentersubprocessorMixinHooks5[1]
 
-	trustcentersubprocessor.Hooks[6] = trustcentersubprocessorMixinHooks6[1]
+	trustcentersubprocessor.Hooks[6] = trustcentersubprocessorHooks[0]
+
 	trustcentersubprocessorMixinInters1 := trustcentersubprocessorMixin[1].Interceptors()
 	trustcentersubprocessorMixinInters4 := trustcentersubprocessorMixin[4].Interceptors()
 	trustcentersubprocessorInters := schema.TrustCenterSubprocessor{}.Interceptors()

@@ -9,6 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v84"
 
+	"github.com/theopenlane/core/internal/consts"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -426,7 +427,7 @@ func (r *Reconciler) AnalyzeStripeSystemMismatches(ctx context.Context, action s
 		Where(
 			organization.And(
 				organization.DeletedAtIsNil(),
-				organization.Not(organization.ID("01101101011010010111010001100010")),
+				organization.Not(organization.ID(consts.SystemAdminOrgID)),
 				organization.PersonalOrg(false),
 			),
 		).
@@ -549,7 +550,7 @@ func (r *Reconciler) CleanupOrphanedStripeCustomers(ctx context.Context) (*Clean
 		Where(
 			organization.And(
 				organization.DeletedAtIsNil(),
-				organization.Not(organization.ID("01101101011010010111010001100010")),
+				organization.Not(organization.ID(consts.SystemAdminOrgID)),
 			),
 		).
 		All(internalCtx)

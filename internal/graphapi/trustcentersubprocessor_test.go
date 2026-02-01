@@ -7,10 +7,9 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -18,8 +17,12 @@ import (
 func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 	// Create test data
 	testUser := suite.userBuilder(context.Background(), t)
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
+
+	viewOnlyUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser.OrganizationID)
+
+	adminUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser.UserCtx, t, &adminUser, enums.RoleAdmin, testUser.OrganizationID)
 
 	// Create test data
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
@@ -44,32 +47,32 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 		{
 			name: "happy path - org owner can create trust center subprocessor",
 			request: testclient.CreateTrustCenterSubprocessorInput{
-				SubprocessorID:                      subprocessor1.ID,
-				TrustCenterSubprocessorKindName:     &kind.Name,
-				Countries:                           []string{"US", "CA"},
+				SubprocessorID:                  subprocessor1.ID,
+				TrustCenterSubprocessorKindName: &kind.Name,
+				Countries:                       []string{"US", "CA"},
 			},
 			client: suite.client.api,
-			ctx:    testUser.UserCtx,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "not authorized - view only user cannot create trust center subprocessor",
 			request: testclient.CreateTrustCenterSubprocessorInput{
-				SubprocessorID:                      subprocessor1.ID,
-				TrustCenterID:                       &trustCenter.ID,
-				TrustCenterSubprocessorKindName:     &kind.Name,
-				Countries:                           []string{"US"},
+				SubprocessorID:                  subprocessor1.ID,
+				TrustCenterID:                   &trustCenter.ID,
+				TrustCenterSubprocessorKindName: &kind.Name,
+				Countries:                       []string{"US"},
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUserCtx,
+			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "not authorized - different org user cannot create trust center subprocessor",
 			request: testclient.CreateTrustCenterSubprocessorInput{
-				SubprocessorID:                      subprocessor2.ID,
-				TrustCenterID:                       &trustCenter.ID,
-				TrustCenterSubprocessorKindName:     &kind.Name,
-				Countries:                           []string{"US"},
+				SubprocessorID:                  subprocessor2.ID,
+				TrustCenterID:                   &trustCenter.ID,
+				TrustCenterSubprocessorKindName: &kind.Name,
+				Countries:                       []string{"US"},
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
@@ -78,10 +81,10 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 		{
 			name: "trust center not found",
 			request: testclient.CreateTrustCenterSubprocessorInput{
-				SubprocessorID:                      subprocessor1.ID,
-				TrustCenterID:                       lo.ToPtr("non-existent-trust-center-id"),
-				TrustCenterSubprocessorKindName:     &kind.Name,
-				Countries:                           []string{"US"},
+				SubprocessorID:                  subprocessor1.ID,
+				TrustCenterID:                   lo.ToPtr("non-existent-trust-center-id"),
+				TrustCenterSubprocessorKindName: &kind.Name,
+				Countries:                       []string{"US"},
 			},
 			client:      suite.client.api,
 			ctx:         testUser.UserCtx,
@@ -90,10 +93,10 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 		{
 			name: "subprocessor not found",
 			request: testclient.CreateTrustCenterSubprocessorInput{
-				SubprocessorID:                      "non-existent-subprocessor-id",
-				TrustCenterID:                       &trustCenter.ID,
-				TrustCenterSubprocessorKindName:     &kind.Name,
-				Countries:                           []string{"US"},
+				SubprocessorID:                  "non-existent-subprocessor-id",
+				TrustCenterID:                   &trustCenter.ID,
+				TrustCenterSubprocessorKindName: &kind.Name,
+				Countries:                       []string{"US"},
 			},
 			client:      suite.client.api,
 			ctx:         testUser.UserCtx,
@@ -193,8 +196,8 @@ func TestMutationCreateTrustCenterSubprocessorAsAnonymousUser(t *testing.T) {
 func TestQueryTrustCenterSubprocessorByID(t *testing.T) {
 	// Create test data
 	testUser := suite.userBuilder(context.Background(), t)
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
+	viewOnlyUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser.OrganizationID)
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	subprocessor := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
@@ -309,8 +312,12 @@ func TestQueryTrustCenterSubprocessorByID(t *testing.T) {
 func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 	// Create test data
 	testUser := suite.userBuilder(context.Background(), t)
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
+
+	viewOnlyUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser.OrganizationID)
+
+	adminUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser.UserCtx, t, &adminUser, enums.RoleAdmin, testUser.OrganizationID)
 
 	// Create test data
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
@@ -374,7 +381,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				Countries:                       newCountries,
 			},
 			client: suite.client.api,
-			ctx:    testUser.UserCtx,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "happy path - update subprocessor",
@@ -446,7 +453,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				TrustCenterSubprocessorKindName: &newKind.Name,
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUserCtx,
+			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -548,8 +555,12 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 func TestMutationDeleteTrustCenterSubprocessor(t *testing.T) {
 	// Create test data
 	testUser := suite.userBuilder(context.Background(), t)
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
+
+	viewOnlyUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser.OrganizationID)
+
+	adminUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser.UserCtx, t, &adminUser, enums.RoleAdmin, testUser.OrganizationID)
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	subprocessor1 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
@@ -609,13 +620,13 @@ func TestMutationDeleteTrustCenterSubprocessor(t *testing.T) {
 			name:   "happy path - delete trust center subprocessor",
 			id:     tcSubprocessor1.ID,
 			client: suite.client.api,
-			ctx:    testUser.UserCtx,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name:        "not authorized - view only user cannot delete",
 			id:          tcSubprocessor2.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUserCtx,
+			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -664,8 +675,9 @@ func TestMutationDeleteTrustCenterSubprocessor(t *testing.T) {
 func TestQueryTrustCenterSubprocessors(t *testing.T) {
 	// Create test data
 	testUser := suite.userBuilder(context.Background(), t)
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
+
+	viewOnlyUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser.OrganizationID)
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	subprocessor1 := (&SubprocessorBuilder{client: suite.client, Description: gofakeit.Sentence()}).MustNew(testUser.UserCtx, t)
@@ -675,16 +687,7 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 		ObjectType: "trust_center_subprocessor",
 	}).MustNew(testUser.UserCtx, t)
 
-	createLogoUpload := func() *graphql.Upload {
-		logoFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        logoFile.RawFile,
-			Filename:    logoFile.OriginalName,
-			Size:        logoFile.Size,
-			ContentType: logoFile.ContentType,
-		}
-	}
+	createLogoUpload := logoFileFunc(t)
 	logoFile := createLogoUpload()
 
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*logoFile})
@@ -758,7 +761,7 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 		{
 			name:            "view only user can see trust center subprocessors",
 			client:          suite.client.api,
-			ctx:             viewOnlyUserCtx,
+			ctx:             viewOnlyUser.UserCtx,
 			expectedResults: 2,
 		},
 		{

@@ -130,7 +130,6 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 		SubjectID:   au.SubjectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		Relation:    relation,
-		ObjectType:  generated.TypeOrganization,
 		ObjectID:    organizationID,
 		Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
 	}

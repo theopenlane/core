@@ -33,7 +33,9 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 		return hook.TrustCenterNDARequestFunc(func(ctx context.Context, m *generated.TrustCenterNDARequestMutation) (generated.Value, error) {
 			trustCenterID, ok := m.TrustCenterID()
 			if !ok || trustCenterID == "" {
-				return next.Mutate(ctx, m)
+				logx.FromContext(ctx).Error().Msg("trust center ID is required for NDA request")
+
+				return nil, ErrTrustCenterIDRequired
 			}
 
 			n, err := m.Client().Template.Query().

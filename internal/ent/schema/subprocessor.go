@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 )
 
@@ -84,7 +85,7 @@ func (t Subprocessor) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Subprocessor](
 				t,
-				withParents(Organization{}, TrustCenterSubprocessor{}),
+				withParents(TrustCenterSubprocessor{}),
 				withOrganizationOwner(true),
 				withAllowAnonymousTrustCenterAccess(true),
 				withSkipForSystemAdmin(true),
@@ -126,8 +127,13 @@ func (Subprocessor) Hooks() []ent.Hook {
 // Policy of the Subprocessor
 func (t Subprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithMutationRules(
+		policy.WithOnMutationRules(ent.OpCreate,
 			policy.CheckCreateAccess(),
+			// allow trust center editors to create subprocessors
+			rule.AllowIfTrustCenterEditor(),
+			policy.CheckOrgWriteAccess(),
+		),
+		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 			entfga.CheckEditAccess[*generated.SubprocessorMutation](),
 		),

@@ -21,6 +21,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/consts"
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
@@ -42,6 +43,7 @@ type OrganizationBuilder struct {
 	Features []models.OrgModule
 
 	// Fields
+	SystemOrg      bool
 	Name           string
 	DisplayName    string
 	Description    *string
@@ -505,6 +507,13 @@ func setContext(ctx context.Context, db *ent.Client) context.Context {
 func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Organization {
 	// no auth, so allow policy
 	ctx = setContext(ctx, o.client.db)
+
+	if o.SystemOrg {
+		systemOrg, err := o.client.db.Organization.Create().SetID(consts.SystemAdminOrgID).SetName("System Admin Organization").SetDisplayName("System Admin Organization").SetPersonalOrg(true).SetDescription("Organization for system administrators").Save(ctx)
+		requireNoError(t, err)
+
+		return systemOrg
+	}
 
 	if o.Name == "" {
 		o.Name = randomName(t)

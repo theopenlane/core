@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -49,10 +50,12 @@ func (TrustCenterSubprocessor) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("subprocessor_id").
 			Comment("ID of the subprocessor").
+			Immutable().
 			NotEmpty(),
 		field.String("trust_center_id").
 			Comment("ID of the trust center").
 			NotEmpty().
+			Immutable().
 			Optional(),
 		field.JSON("countries", []string{}).
 			Comment("country codes or country where the subprocessor is located").
@@ -82,10 +85,12 @@ func (t TrustCenterSubprocessor) Edges() []ent.Edge {
 			fromSchema: t,
 			edgeSchema: TrustCenter{},
 			field:      "trust_center_id",
+			immutable:  true,
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: t,
 			edgeSchema: Subprocessor{},
+			immutable:  true,
 			field:      "subprocessor_id",
 			required:   true,
 			annotations: []schema.Annotation{
@@ -97,7 +102,9 @@ func (t TrustCenterSubprocessor) Edges() []ent.Edge {
 
 // Hooks of the TrustCenterSubprocessor
 func (TrustCenterSubprocessor) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookTrustCenterSubprocessor(),
+	}
 }
 
 // Policy of the TrustCenterSubprocessor

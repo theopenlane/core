@@ -100,7 +100,7 @@ func newObjectOwnedMixin[V any](schema any, opts ...objectOwnedOption) ObjectOwn
 	}
 
 	if (!o.IncludeOrganizationOwner) && o.AllowEmptyForSystemAdmin {
-		log.Fatal().Msg("ObjectOwnedMixin: AllowEmptyForSystemAdmin cannot be set to true if WithOrganizationOwner is false")
+		log.Fatal().Msg("ObjectOwnedMixin: AllowEmptyForSystemAdmin cannot be set to true if withOrganizationOwner is false")
 	}
 
 	// setup the correct interceptor

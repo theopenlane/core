@@ -24,19 +24,12 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
 
-	uploadFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-	assert.NilError(t, err)
-	up := graphql.Upload{
-		File:        uploadFile.RawFile,
-		Filename:    uploadFile.OriginalName,
-		Size:        uploadFile.Size,
-		ContentType: uploadFile.ContentType,
-	}
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{up})
+	up := uploadFile(t, pdfFilePath)
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*up})
 
 	trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
 		TrustCenterID: trustCenter.ID,
-	}, []*graphql.Upload{&up})
+	}, []*graphql.Upload{up})
 
 	assert.NilError(t, err)
 	assert.Assert(t, trustCenterNDA != nil)
@@ -117,11 +110,11 @@ func TestCreateTrustCenterNDA(t *testing.T) {
 	}{
 		{
 			name: "happy path",
-			ctx:  testUser1.UserCtx,
+			ctx:  adminUser.UserCtx,
 			input: testclient.CreateTrustCenterNDAInput{
 				TrustCenterID: trustCenter.ID,
 			},
-			uploads: []string{"testdata/uploads/hello.pdf"},
+			uploads: []string{pdfFilePath},
 		},
 		{
 			name: "missing upload",
@@ -132,21 +125,12 @@ func TestCreateTrustCenterNDA(t *testing.T) {
 			errorMsg: "one NDA file is required",
 		},
 		{
-			name: "missing trust center",
-			ctx:  testUser1.UserCtx,
-			input: testclient.CreateTrustCenterNDAInput{
-				TrustCenterID: "",
-			},
-			uploads:  []string{"testdata/uploads/hello.pdf"},
-			errorMsg: notFoundErrorMsg,
-		},
-		{
 			name: "Other user cannot create NDA",
 			ctx:  testUser2.UserCtx,
 			input: testclient.CreateTrustCenterNDAInput{
 				TrustCenterID: trustCenter.ID,
 			},
-			uploads:  []string{"testdata/uploads/hello.pdf"},
+			uploads:  []string{pdfFilePath},
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -201,25 +185,19 @@ func TestAnonymousUserCanQueryTrustCenterNDA(t *testing.T) {
 	input := testclient.CreateTrustCenterNDAInput{
 		TrustCenterID: trustCenter.ID,
 	}
-	uploadFiles := []string{"testdata/uploads/hello.pdf"}
+	uploadFiles := []string{pdfFilePath}
 	uploads := []*graphql.Upload{}
 	expectUploads := []graphql.Upload{}
 	for _, file := range uploadFiles {
-		uploadFile, err := storage.NewUploadFile(file)
-		assert.NilError(t, err)
-		up := graphql.Upload{
-			File:        uploadFile.RawFile,
-			Filename:    uploadFile.OriginalName,
-			Size:        uploadFile.Size,
-			ContentType: uploadFile.ContentType,
-		}
-
-		expectUploads = append(expectUploads, up)
-		uploads = append(uploads, &up)
+		up := uploadFile(t, file)
+		expectUploads = append(expectUploads, *up)
+		uploads = append(uploads, up)
 	}
+
 	if len(uploads) > 0 {
 		expectUpload(t, suite.client.mockProvider, expectUploads)
 	}
+
 	resp, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, input, uploads)
 
 	assert.NilError(t, err)
@@ -256,19 +234,12 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-	uploadFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-	assert.NilError(t, err)
-	up := graphql.Upload{
-		File:        uploadFile.RawFile,
-		Filename:    uploadFile.OriginalName,
-		Size:        uploadFile.Size,
-		ContentType: uploadFile.ContentType,
-	}
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{up})
+	up := uploadFile(t, pdfFilePath)
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*up})
 
 	trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
 		TrustCenterID: trustCenter.ID,
-	}, []*graphql.Upload{&up})
+	}, []*graphql.Upload{up})
 
 	assert.NilError(t, err)
 	assert.Assert(t, trustCenterNDA != nil)
@@ -462,19 +433,12 @@ func TestUpdateTrustCenterNDA(t *testing.T) {
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	uploadFile1, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-	assert.NilError(t, err)
-	up1 := graphql.Upload{
-		File:        uploadFile1.RawFile,
-		Filename:    uploadFile1.OriginalName,
-		Size:        uploadFile1.Size,
-		ContentType: uploadFile1.ContentType,
-	}
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{up1})
+	up1 := uploadFile(t, pdfFilePath)
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*up1})
 
 	createResp, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
 		TrustCenterID: trustCenter.ID,
-	}, []*graphql.Upload{&up1})
+	}, []*graphql.Upload{up1})
 
 	assert.NilError(t, err)
 	assert.Assert(t, createResp != nil)
@@ -482,18 +446,10 @@ func TestUpdateTrustCenterNDA(t *testing.T) {
 
 	fileID := createResp.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID
 
-	uploadFile2, err := storage.NewUploadFile("testdata/uploads/logo.png")
-	assert.NilError(t, err)
+	secondUpload := uploadFile(t, logoFilePath)
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*secondUpload})
 
-	secondUpload := graphql.Upload{
-		File:        uploadFile2.RawFile,
-		Filename:    uploadFile2.OriginalName,
-		Size:        uploadFile2.Size,
-		ContentType: uploadFile2.ContentType,
-	}
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{secondUpload})
-
-	updateResp, err := suite.client.api.UpdateTrustCenterNda(testUser1.UserCtx, trustCenter.ID, []*graphql.Upload{&secondUpload})
+	updateResp, err := suite.client.api.UpdateTrustCenterNda(testUser1.UserCtx, trustCenter.ID, []*graphql.Upload{secondUpload})
 
 	assert.NilError(t, err)
 	assert.Assert(t, updateResp != nil)

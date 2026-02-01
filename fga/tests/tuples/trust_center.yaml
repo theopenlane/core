@@ -1,0 +1,34 @@
+- user: organization:tc-org-2#member
+  relation: access
+  object: organization:tc-org-2
+  condition:
+    name: email_domains_allowed
+    context:
+      allowed_domains: []
+- user: organization:tc-org-2
+  relation: parent
+  object: trust_center:tc-2
+- user: user:tc-owner-tc-2
+  relation: _self
+  object: user:tc-owner-tc-2
+- user: user:tc-owner-tc-2
+  relation: owner
+  object: organization:tc-org-2
+- user: user:tc-org-admin-tc-2
+  relation: _self
+  object: user:tc-org-admin-tc-2
+- user: user:tc-org-admin-tc-2
+  relation: admin
+  object: organization:tc-org-2
+- user: user:tc-viewer-tc-2
+  relation: member
+  object: organization:tc-org-2
+- user: user:tc-viewer-tc-2
+  relation: _self
+  object: user:tc-viewer-tc-2
+- user: user:tc-manager-tc-2
+  relation: member
+  object: organization:tc-org-2
+- user: user:tc-manager-tc-2
+  relation: trust_center_admin
+  object: organization:tc-org-2 

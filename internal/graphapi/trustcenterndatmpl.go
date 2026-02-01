@@ -32,9 +32,22 @@ var errOneNDAOnly = errors.New("one NDA file is required")
 func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAInput) (*model.TrustCenterNDACreatePayload, error) {
 	txnCtx := withTransactionalMutation(ctx)
 
-	trustCenter, err := txnCtx.TrustCenter.Get(ctx, input.TrustCenterID)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
+	var (
+		trustCenter *generated.TrustCenter
+		err         error
+	)
+
+	if input.TrustCenterID == "" {
+		// get the trust center
+		trustCenter, err = txnCtx.TrustCenter.Query().Only(ctx)
+		if err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
+		}
+	} else {
+		trustCenter, err = txnCtx.TrustCenter.Get(ctx, input.TrustCenterID)
+		if err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
+		}
 	}
 
 	// set the organization in the auth context if its not done for us

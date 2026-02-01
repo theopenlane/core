@@ -12,6 +12,7 @@ import (
 	"github.com/stripe/stripe-go/v84"
 
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/consts"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -108,7 +109,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, orgIDs []string) (*Reconcile
 	where := []predicate.Organization{
 		organization.And(
 			organization.DeletedAtIsNil(),
-			organization.IDNEQ("01101101011010010111010001100010"),
+			organization.IDNEQ(consts.SystemAdminOrgID),
 			organization.PersonalOrg(false),
 		),
 	}

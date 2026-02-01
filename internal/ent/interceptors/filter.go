@@ -400,12 +400,14 @@ func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs
 	logObjectIDs(ctx, objectType, objectIDs, "filtering authorized object ids")
 
 	var (
-		context   *map[string]any
-		subjectID string
+		context     *map[string]any
+		subjectID   string
+		subjectType string
 	)
 
 	if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
 		subjectID = anon.SubjectID
+		subjectType = auth.UserSubjectType
 	} else {
 		user, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {
@@ -413,6 +415,7 @@ func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs
 		}
 
 		subjectID = user.SubjectID
+		subjectType = auth.GetAuthzSubjectType(ctx)
 		context = utils.NewOrganizationContextKey(user.SubjectEmail)
 	}
 
@@ -421,7 +424,7 @@ func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs
 	for _, id := range objectIDs {
 		ac := fgax.AccessCheck{
 			SubjectID:   subjectID,
-			SubjectType: auth.GetAuthzSubjectType(ctx),
+			SubjectType: subjectType,
 			ObjectID:    id,
 			ObjectType:  fgax.Kind(strcase.SnakeCase(objectType)), // convert to snake case e.g. InternalPolicy -> internal_policy
 			Relation:    fgax.CanView,

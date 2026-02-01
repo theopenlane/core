@@ -12,12 +12,24 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func TestQuerySubprocessorByID(t *testing.T) {
 	subprocessor := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	systemOwnedSubprocessor := (&SubprocessorBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+
+	// create a file to be used as logo and ensure file is returned properly
+	logoFile := uploadFile(t, logoFilePath)
+	input := testclient.CreateSubprocessorInput{
+		Name: "test subprocessor" + ulids.New().String(),
+	}
+
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*logoFile})
+
+	systemOwnedSubprocessor, err := suite.client.api.CreateSubprocessor(systemAdminUser.UserCtx, input, logoFile)
+	assert.NilError(t, err)
+
+	systemSubprocessr := systemOwnedSubprocessor.CreateSubprocessor.Subprocessor
 
 	testCases := []struct {
 		name         string
@@ -58,17 +70,17 @@ func TestQuerySubprocessorByID(t *testing.T) {
 		},
 		{
 			name:         "happy path, system owned",
-			queryID:      systemOwnedSubprocessor.ID,
+			queryID:      systemSubprocessr.ID,
 			client:       suite.client.api,
 			ctx:          systemAdminUser.UserCtx,
-			expectedName: systemOwnedSubprocessor.Name,
+			expectedName: systemSubprocessr.Name,
 		},
 		{
 			name:         "happy path, system owned, regular only user",
-			queryID:      systemOwnedSubprocessor.ID,
+			queryID:      systemSubprocessr.ID,
 			client:       suite.client.api,
 			ctx:          testUser1.UserCtx,
-			expectedName: systemOwnedSubprocessor.Name,
+			expectedName: systemSubprocessr.Name,
 		},
 	}
 
@@ -86,11 +98,18 @@ func TestQuerySubprocessorByID(t *testing.T) {
 
 			assert.Check(t, is.Equal(tc.queryID, resp.Subprocessor.ID))
 			assert.Check(t, is.Equal(tc.expectedName, resp.Subprocessor.Name))
+
+			if tc.queryID == systemSubprocessr.ID {
+				// make sure the file info is present
+				assert.Check(t, resp.Subprocessor.LogoFile != nil)
+				assert.Check(t, resp.Subprocessor.LogoFile.ID != "")
+				assert.Check(t, *resp.Subprocessor.LogoFileID != "")
+			}
 		})
 	}
 
 	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: systemOwnedSubprocessor.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: systemSubprocessr.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
 func TestQuerySubprocessors(t *testing.T) {
@@ -170,16 +189,7 @@ func TestQuerySubprocessors(t *testing.T) {
 }
 
 func TestMutationCreateSubprocessor(t *testing.T) {
-	createImageUpload := func() *graphql.Upload {
-		pdfFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pdfFile.RawFile,
-			Filename:    pdfFile.OriginalName,
-			Size:        pdfFile.Size,
-			ContentType: pdfFile.ContentType,
-		}
-	}
+	createImageUpload := logoFileFunc(t)
 
 	testCases := []struct {
 		name            string

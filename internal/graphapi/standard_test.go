@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/testutils"
-	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 func TestQueryStandard(t *testing.T) {
@@ -340,16 +339,7 @@ func TestMutationCreateStandard(t *testing.T) {
 		adminControlIDs = append(adminControlIDs, control.ID)
 	}
 
-	createImageUpload := func() *graphql.Upload {
-		pdfFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pdfFile.RawFile,
-			Filename:    pdfFile.OriginalName,
-			Size:        pdfFile.Size,
-			ContentType: pdfFile.ContentType,
-		}
-	}
+	createImageUpload := logoFileFunc(t)
 
 	testCases := []struct {
 		name        string
@@ -631,16 +621,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 	_, err := suite.client.api.GetStandardByID(testUser1.UserCtx, standardSystemOwned.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
-	createImageUpload := func() *graphql.Upload {
-		pdfFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pdfFile.RawFile,
-			Filename:    pdfFile.OriginalName,
-			Size:        pdfFile.Size,
-			ContentType: pdfFile.ContentType,
-		}
-	}
+	createImageUpload := logoFileFunc(t)
 
 	testCases := []struct {
 		name        string

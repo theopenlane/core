@@ -1712,7 +1712,40 @@ tests:
           can_view: [] # blocked
           can_edit: [] # blocked + system-driven
           can_delete: [] # blocked + system-driven
-
+  - name: "trust_center"
+    description: "test trust center roles"
+    tuple_file: tuples/trust_center.yaml
+    check:
+      - user: user:tc-owner-tc-2
+        object: trust_center:tc-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:tc-org-admin-tc-2
+        object: trust_center:tc-2
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+      - user: user:tc-viewer-tc-2
+        object: trust_center:tc-2
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:tc-manager-tc-2  
+        object: trust_center:tc-2
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
   - name: "trust_center_docs"
     description: "test trust center documents and their relationships"
     tuple_file: tuples/trust_center_doc.yaml
@@ -1784,4 +1817,44 @@ tests:
         assertions:
           can_view: false
           can_edit: false
+          can_delete: false
+  - name: "trust_center_subprocessors"
+    description: "test trust center subprocessors and their relationships"
+    tuple_file: tuples/trust_center_subprocessor.yaml
+    check:
+      - user: user:tc-owner-1
+        object: trust_center_subprocessor:tcsubproc-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:tc-owner-1
+        object: subprocessor:sp-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:tc-owner-1
+        object: file:logo-file-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:anon_unsigned-nda
+        object: trust_center_subprocessor:tcsubproc-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:anon_unsigned-nda
+        object: subprocessor:sp-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:anon_unsigned-nda
+        object: file:logo-file-1
+        assertions:
+          can_view: true
+          can_edit: false 
           can_delete: false

@@ -12,6 +12,7 @@ mutation CreateBulkCSVSubprocessor($input: Upload!) {
       logoRemoteURL
       logoFileID
       logoFile {
+        id
         presignedURL
       }
       owner {
@@ -36,6 +37,7 @@ mutation CreateBulkSubprocessor($input: [CreateSubprocessorInput!]) {
       logoRemoteURL
       logoFileID
       logoFile {
+        id
         presignedURL
       }
       owner {
@@ -123,6 +125,7 @@ query GetSubprocessorByID($subprocessorId: ID!) {
     logoRemoteURL
     logoFileID
     logoFile {
+      id
       presignedURL
     }
     owner {

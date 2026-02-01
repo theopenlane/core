@@ -139,8 +139,6 @@ type SystemOwnedMutation interface {
 	InternalNotes() (string, bool)
 	ClearInternalNotes()
 	SetInternalNotes(string)
-	OwnerID() (string, bool)
-	SetOwnerID(string)
 }
 
 // OrgOwnedMutation is an interface for interacting with the owner_id field in mutations
@@ -194,7 +192,7 @@ func HookSystemOwnedCreate() ent.Hook {
 					return nil, generated.ErrPermissionDenied
 				}
 
-				mut.SetOwnerID(orgID)
+				orgMut.SetOwnerID(orgID)
 			}
 
 			return next.Mutate(ctx, m)
