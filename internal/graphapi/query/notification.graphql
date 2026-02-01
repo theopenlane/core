@@ -1,3 +1,9 @@
+mutation MarkNotificationsAsRead($ids: [ID!]!) {
+  markNotificationsAsRead(ids: $ids) {
+    readIDs
+  }
+}
+
 mutation UpdateNotification($updateNotificationId: ID!, $input: UpdateNotificationInput!) {
   updateNotification(id: $updateNotificationId, input: $input) {
     notification {
