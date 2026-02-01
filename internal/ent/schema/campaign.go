@@ -235,6 +235,9 @@ func (Campaign) Fields() []ent.Field {
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional metadata about the campaign").
 			Optional(),
+		field.String("email_branding_id").
+			Comment("the email branding associated with the campaign").
+			Optional(),
 	}
 }
 
