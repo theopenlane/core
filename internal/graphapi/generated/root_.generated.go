@@ -124816,7 +124816,7 @@ type ActionNotificationsReadPayload {
     Updated notification IDs
     """
     readIDs: [ID]!
-}  `, BuiltIn: false},
+}`, BuiltIn: false},
 	{Name: "../schema/onboarding.graphql", Input: `extend type Mutation{
     """
     Create a new onboarding
