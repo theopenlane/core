@@ -161,6 +161,8 @@ func HookDocumentDataFile() ent.Hook {
 				return nil, errOnlyOneDocumentData
 			}
 
+			// first checks the authenicated user context,
+			// second checks specifically for the SystemAdminContextKey key in the context
 			if !auth.IsSystemAdminFromContext(ctx) {
 				if user, ok := auth.SystemAdminFromContext(ctx); ok && !user.IsSystemAdmin {
 					return nil, generated.ErrPermissionDenied
