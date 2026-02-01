@@ -315,7 +315,7 @@ query GetTrustCenterFrontendQuery {
             node {
               id
               countries
-              category
+              trustCenterSubprocessorKindName
               subprocessor {
                 name
                 logoFile {

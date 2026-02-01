@@ -3618,7 +3618,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 },
-}, "trust_center_subprocessor": {"blocked_groups": {
+}, "trust_center_subprocessor": {"trust_center_subprocessor_kind": {
+	ObjectType:      "trust_center_subprocessor_kind",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "blocked_groups": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,

@@ -37,14 +37,16 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldTrustCenterSubprocessorKindName holds the string denoting the trust_center_subprocessor_kind_name field in the database.
+	FieldTrustCenterSubprocessorKindName = "trust_center_subprocessor_kind_name"
+	// FieldTrustCenterSubprocessorKindID holds the string denoting the trust_center_subprocessor_kind_id field in the database.
+	FieldTrustCenterSubprocessorKindID = "trust_center_subprocessor_kind_id"
 	// FieldSubprocessorID holds the string denoting the subprocessor_id field in the database.
 	FieldSubprocessorID = "subprocessor_id"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
 	FieldTrustCenterID = "trust_center_id"
 	// FieldCountries holds the string denoting the countries field in the database.
 	FieldCountries = "countries"
-	// FieldCategory holds the string denoting the category field in the database.
-	FieldCategory = "category"
 	// Table holds the table name of the trustcentersubprocessorhistory in the database.
 	Table = "trust_center_subprocessor_history"
 )
@@ -61,10 +63,11 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
+	FieldTrustCenterSubprocessorKindName,
+	FieldTrustCenterSubprocessorKindID,
 	FieldSubprocessorID,
 	FieldTrustCenterID,
 	FieldCountries,
-	FieldCategory,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -161,6 +164,16 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByTrustCenterSubprocessorKindName orders the results by the trust_center_subprocessor_kind_name field.
+func ByTrustCenterSubprocessorKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterSubprocessorKindName, opts...).ToFunc()
+}
+
+// ByTrustCenterSubprocessorKindID orders the results by the trust_center_subprocessor_kind_id field.
+func ByTrustCenterSubprocessorKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterSubprocessorKindID, opts...).ToFunc()
+}
+
 // BySubprocessorID orders the results by the subprocessor_id field.
 func BySubprocessorID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSubprocessorID, opts...).ToFunc()
@@ -169,11 +182,6 @@ func BySubprocessorID(opts ...sql.OrderTermOption) OrderOption {
 // ByTrustCenterID orders the results by the trust_center_id field.
 func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
-}
-
-// ByCategory orders the results by the category field.
-func ByCategory(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCategory, opts...).ToFunc()
 }
 
 var (

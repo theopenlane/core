@@ -27,14 +27,18 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldTrustCenterSubprocessorKindName holds the string denoting the trust_center_subprocessor_kind_name field in the database.
+	FieldTrustCenterSubprocessorKindName = "trust_center_subprocessor_kind_name"
+	// FieldTrustCenterSubprocessorKindID holds the string denoting the trust_center_subprocessor_kind_id field in the database.
+	FieldTrustCenterSubprocessorKindID = "trust_center_subprocessor_kind_id"
 	// FieldSubprocessorID holds the string denoting the subprocessor_id field in the database.
 	FieldSubprocessorID = "subprocessor_id"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
 	FieldTrustCenterID = "trust_center_id"
 	// FieldCountries holds the string denoting the countries field in the database.
 	FieldCountries = "countries"
-	// FieldCategory holds the string denoting the category field in the database.
-	FieldCategory = "category"
+	// EdgeTrustCenterSubprocessorKind holds the string denoting the trust_center_subprocessor_kind edge name in mutations.
+	EdgeTrustCenterSubprocessorKind = "trust_center_subprocessor_kind"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
@@ -45,6 +49,13 @@ const (
 	EdgeSubprocessor = "subprocessor"
 	// Table holds the table name of the trustcentersubprocessor in the database.
 	Table = "trust_center_subprocessors"
+	// TrustCenterSubprocessorKindTable is the table that holds the trust_center_subprocessor_kind relation/edge.
+	TrustCenterSubprocessorKindTable = "trust_center_subprocessors"
+	// TrustCenterSubprocessorKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	TrustCenterSubprocessorKindInverseTable = "custom_type_enums"
+	// TrustCenterSubprocessorKindColumn is the table column denoting the trust_center_subprocessor_kind relation/edge.
+	TrustCenterSubprocessorKindColumn = "trust_center_subprocessor_kind_id"
 	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
 	BlockedGroupsTable = "groups"
 	// BlockedGroupsInverseTable is the table name for the Group entity.
@@ -84,10 +95,11 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
+	FieldTrustCenterSubprocessorKindName,
+	FieldTrustCenterSubprocessorKindID,
 	FieldSubprocessorID,
 	FieldTrustCenterID,
 	FieldCountries,
-	FieldCategory,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -106,7 +118,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [6]ent.Hook
+	Hooks        [7]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -119,8 +131,6 @@ var (
 	SubprocessorIDValidator func(string) error
 	// TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
 	TrustCenterIDValidator func(string) error
-	// CategoryValidator is a validator for the "category" field. It is called by the builders before save.
-	CategoryValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -163,6 +173,16 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByTrustCenterSubprocessorKindName orders the results by the trust_center_subprocessor_kind_name field.
+func ByTrustCenterSubprocessorKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterSubprocessorKindName, opts...).ToFunc()
+}
+
+// ByTrustCenterSubprocessorKindID orders the results by the trust_center_subprocessor_kind_id field.
+func ByTrustCenterSubprocessorKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterSubprocessorKindID, opts...).ToFunc()
+}
+
 // BySubprocessorID orders the results by the subprocessor_id field.
 func BySubprocessorID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSubprocessorID, opts...).ToFunc()
@@ -173,9 +193,11 @@ func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
 }
 
-// ByCategory orders the results by the category field.
-func ByCategory(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCategory, opts...).ToFunc()
+// ByTrustCenterSubprocessorKindField orders the results by trust_center_subprocessor_kind field.
+func ByTrustCenterSubprocessorKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterSubprocessorKindStep(), sql.OrderByField(field, opts...))
+	}
 }
 
 // ByBlockedGroupsCount orders the results by blocked_groups count.
@@ -218,6 +240,13 @@ func BySubprocessorField(field string, opts ...sql.OrderTermOption) OrderOption 
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newSubprocessorStep(), sql.OrderByField(field, opts...))
 	}
+}
+func newTrustCenterSubprocessorKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterSubprocessorKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, TrustCenterSubprocessorKindTable, TrustCenterSubprocessorKindColumn),
+	)
 }
 func newBlockedGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

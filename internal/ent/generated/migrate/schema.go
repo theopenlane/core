@@ -6782,10 +6782,11 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_subprocessor_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "countries", Type: field.TypeJSON, Nullable: true},
-		{Name: "category", Type: field.TypeString, Size: 255},
 		{Name: "subprocessor_id", Type: field.TypeString},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_subprocessor_kind_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterSubprocessorsTable holds the schema information for the "trust_center_subprocessors" table.
 	TrustCenterSubprocessorsTable = &schema.Table{
@@ -6803,6 +6804,12 @@ var (
 				Symbol:     "trust_center_subprocessors_trust_centers_trust_center_subprocessors",
 				Columns:    []*schema.Column{TrustCenterSubprocessorsColumns[10]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_subprocessors_custom_type_enums_trust_center_subprocessor_kind",
+				Columns:    []*schema.Column{TrustCenterSubprocessorsColumns[11]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -12547,6 +12554,7 @@ func init() {
 	TrustCenterSettingsTable.ForeignKeys[1].RefTable = FilesTable
 	TrustCenterSubprocessorsTable.ForeignKeys[0].RefTable = SubprocessorsTable
 	TrustCenterSubprocessorsTable.ForeignKeys[1].RefTable = TrustCentersTable
+	TrustCenterSubprocessorsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
 	TrustCenterWatermarkConfigsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TrustCenterWatermarkConfigsTable.ForeignKeys[1].RefTable = FilesTable
 	TrustCenterWatermarkConfigsTable.Annotation = &entsql.Annotation{}

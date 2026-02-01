@@ -2605,10 +2605,11 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_subprocessor_kind_name", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_subprocessor_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "subprocessor_id", Type: field.TypeString},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "countries", Type: field.TypeJSON, Nullable: true},
-		{Name: "category", Type: field.TypeString, Size: 255},
 	}
 	// TrustCenterSubprocessorHistoryTable holds the schema information for the "trust_center_subprocessor_history" table.
 	TrustCenterSubprocessorHistoryTable = &schema.Table{

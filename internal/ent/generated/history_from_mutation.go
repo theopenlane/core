@@ -20861,6 +20861,14 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromCreate(ctx context.Co
 		create = create.SetDeletedBy(deletedBy)
 	}
 
+	if trustCenterSubprocessorKindName, exists := m.TrustCenterSubprocessorKindName(); exists {
+		create = create.SetTrustCenterSubprocessorKindName(trustCenterSubprocessorKindName)
+	}
+
+	if trustCenterSubprocessorKindID, exists := m.TrustCenterSubprocessorKindID(); exists {
+		create = create.SetTrustCenterSubprocessorKindID(trustCenterSubprocessorKindID)
+	}
+
 	if subprocessorID, exists := m.SubprocessorID(); exists {
 		create = create.SetSubprocessorID(subprocessorID)
 	}
@@ -20871,10 +20879,6 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromCreate(ctx context.Co
 
 	if countries, exists := m.Countries(); exists {
 		create = create.SetCountries(countries)
-	}
-
-	if category, exists := m.Category(); exists {
-		create = create.SetCategory(category)
 	}
 
 	_, err := create.Save(ctx)
@@ -20944,6 +20948,18 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromUpdate(ctx context.Co
 			create = create.SetDeletedBy(trustcentersubprocessor.DeletedBy)
 		}
 
+		if trustCenterSubprocessorKindName, exists := m.TrustCenterSubprocessorKindName(); exists {
+			create = create.SetTrustCenterSubprocessorKindName(trustCenterSubprocessorKindName)
+		} else {
+			create = create.SetTrustCenterSubprocessorKindName(trustcentersubprocessor.TrustCenterSubprocessorKindName)
+		}
+
+		if trustCenterSubprocessorKindID, exists := m.TrustCenterSubprocessorKindID(); exists {
+			create = create.SetTrustCenterSubprocessorKindID(trustCenterSubprocessorKindID)
+		} else {
+			create = create.SetTrustCenterSubprocessorKindID(trustcentersubprocessor.TrustCenterSubprocessorKindID)
+		}
+
 		if subprocessorID, exists := m.SubprocessorID(); exists {
 			create = create.SetSubprocessorID(subprocessorID)
 		} else {
@@ -20960,12 +20976,6 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromUpdate(ctx context.Co
 			create = create.SetCountries(countries)
 		} else {
 			create = create.SetCountries(trustcentersubprocessor.Countries)
-		}
-
-		if category, exists := m.Category(); exists {
-			create = create.SetCategory(category)
-		} else {
-			create = create.SetCategory(trustcentersubprocessor.Category)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -21009,10 +21019,11 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromDelete(ctx context.Co
 			SetUpdatedBy(trustcentersubprocessor.UpdatedBy).
 			SetDeletedAt(trustcentersubprocessor.DeletedAt).
 			SetDeletedBy(trustcentersubprocessor.DeletedBy).
+			SetTrustCenterSubprocessorKindName(trustcentersubprocessor.TrustCenterSubprocessorKindName).
+			SetTrustCenterSubprocessorKindID(trustcentersubprocessor.TrustCenterSubprocessorKindID).
 			SetSubprocessorID(trustcentersubprocessor.SubprocessorID).
 			SetTrustCenterID(trustcentersubprocessor.TrustCenterID).
 			SetCountries(trustcentersubprocessor.Countries).
-			SetCategory(trustcentersubprocessor.Category).
 			Save(ctx)
 		if err != nil {
 			return err

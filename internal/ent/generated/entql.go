@@ -2951,16 +2951,17 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterSubprocessor",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcentersubprocessor.FieldCreatedAt:      {Type: field.TypeTime, Column: trustcentersubprocessor.FieldCreatedAt},
-			trustcentersubprocessor.FieldUpdatedAt:      {Type: field.TypeTime, Column: trustcentersubprocessor.FieldUpdatedAt},
-			trustcentersubprocessor.FieldCreatedBy:      {Type: field.TypeString, Column: trustcentersubprocessor.FieldCreatedBy},
-			trustcentersubprocessor.FieldUpdatedBy:      {Type: field.TypeString, Column: trustcentersubprocessor.FieldUpdatedBy},
-			trustcentersubprocessor.FieldDeletedAt:      {Type: field.TypeTime, Column: trustcentersubprocessor.FieldDeletedAt},
-			trustcentersubprocessor.FieldDeletedBy:      {Type: field.TypeString, Column: trustcentersubprocessor.FieldDeletedBy},
-			trustcentersubprocessor.FieldSubprocessorID: {Type: field.TypeString, Column: trustcentersubprocessor.FieldSubprocessorID},
-			trustcentersubprocessor.FieldTrustCenterID:  {Type: field.TypeString, Column: trustcentersubprocessor.FieldTrustCenterID},
-			trustcentersubprocessor.FieldCountries:      {Type: field.TypeJSON, Column: trustcentersubprocessor.FieldCountries},
-			trustcentersubprocessor.FieldCategory:       {Type: field.TypeString, Column: trustcentersubprocessor.FieldCategory},
+			trustcentersubprocessor.FieldCreatedAt:                       {Type: field.TypeTime, Column: trustcentersubprocessor.FieldCreatedAt},
+			trustcentersubprocessor.FieldUpdatedAt:                       {Type: field.TypeTime, Column: trustcentersubprocessor.FieldUpdatedAt},
+			trustcentersubprocessor.FieldCreatedBy:                       {Type: field.TypeString, Column: trustcentersubprocessor.FieldCreatedBy},
+			trustcentersubprocessor.FieldUpdatedBy:                       {Type: field.TypeString, Column: trustcentersubprocessor.FieldUpdatedBy},
+			trustcentersubprocessor.FieldDeletedAt:                       {Type: field.TypeTime, Column: trustcentersubprocessor.FieldDeletedAt},
+			trustcentersubprocessor.FieldDeletedBy:                       {Type: field.TypeString, Column: trustcentersubprocessor.FieldDeletedBy},
+			trustcentersubprocessor.FieldTrustCenterSubprocessorKindName: {Type: field.TypeString, Column: trustcentersubprocessor.FieldTrustCenterSubprocessorKindName},
+			trustcentersubprocessor.FieldTrustCenterSubprocessorKindID:   {Type: field.TypeString, Column: trustcentersubprocessor.FieldTrustCenterSubprocessorKindID},
+			trustcentersubprocessor.FieldSubprocessorID:                  {Type: field.TypeString, Column: trustcentersubprocessor.FieldSubprocessorID},
+			trustcentersubprocessor.FieldTrustCenterID:                   {Type: field.TypeString, Column: trustcentersubprocessor.FieldTrustCenterID},
+			trustcentersubprocessor.FieldCountries:                       {Type: field.TypeJSON, Column: trustcentersubprocessor.FieldCountries},
 		},
 	}
 	graph.Nodes[84] = &sqlgraph.Node{
@@ -13950,6 +13951,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterSetting",
 		"File",
+	)
+	graph.MustAddE(
+		"trust_center_subprocessor_kind",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersubprocessor.TrustCenterSubprocessorKindTable,
+			Columns: []string{trustcentersubprocessor.TrustCenterSubprocessorKindColumn},
+			Bidi:    false,
+		},
+		"TrustCenterSubprocessor",
+		"CustomTypeEnum",
 	)
 	graph.MustAddE(
 		"blocked_groups",
@@ -39783,6 +39796,16 @@ func (f *TrustCenterSubprocessorFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(trustcentersubprocessor.FieldDeletedBy))
 }
 
+// WhereTrustCenterSubprocessorKindName applies the entql string predicate on the trust_center_subprocessor_kind_name field.
+func (f *TrustCenterSubprocessorFilter) WhereTrustCenterSubprocessorKindName(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldTrustCenterSubprocessorKindName))
+}
+
+// WhereTrustCenterSubprocessorKindID applies the entql string predicate on the trust_center_subprocessor_kind_id field.
+func (f *TrustCenterSubprocessorFilter) WhereTrustCenterSubprocessorKindID(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldTrustCenterSubprocessorKindID))
+}
+
 // WhereSubprocessorID applies the entql string predicate on the subprocessor_id field.
 func (f *TrustCenterSubprocessorFilter) WhereSubprocessorID(p entql.StringP) {
 	f.Where(p.Field(trustcentersubprocessor.FieldSubprocessorID))
@@ -39798,9 +39821,18 @@ func (f *TrustCenterSubprocessorFilter) WhereCountries(p entql.BytesP) {
 	f.Where(p.Field(trustcentersubprocessor.FieldCountries))
 }
 
-// WhereCategory applies the entql string predicate on the category field.
-func (f *TrustCenterSubprocessorFilter) WhereCategory(p entql.StringP) {
-	f.Where(p.Field(trustcentersubprocessor.FieldCategory))
+// WhereHasTrustCenterSubprocessorKind applies a predicate to check if query has an edge trust_center_subprocessor_kind.
+func (f *TrustCenterSubprocessorFilter) WhereHasTrustCenterSubprocessorKind() {
+	f.Where(entql.HasEdge("trust_center_subprocessor_kind"))
+}
+
+// WhereHasTrustCenterSubprocessorKindWith applies a predicate to check if query has an edge trust_center_subprocessor_kind with a given conditions (other predicates).
+func (f *TrustCenterSubprocessorFilter) WhereHasTrustCenterSubprocessorKindWith(preds ...predicate.CustomTypeEnum) {
+	f.Where(entql.HasEdgeWith("trust_center_subprocessor_kind", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.

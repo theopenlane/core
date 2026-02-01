@@ -2442,19 +2442,20 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterSubprocessorHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcentersubprocessorhistory.FieldHistoryTime:    {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldHistoryTime},
-			trustcentersubprocessorhistory.FieldRef:            {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldRef},
-			trustcentersubprocessorhistory.FieldOperation:      {Type: field.TypeEnum, Column: trustcentersubprocessorhistory.FieldOperation},
-			trustcentersubprocessorhistory.FieldCreatedAt:      {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldCreatedAt},
-			trustcentersubprocessorhistory.FieldUpdatedAt:      {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldUpdatedAt},
-			trustcentersubprocessorhistory.FieldCreatedBy:      {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldCreatedBy},
-			trustcentersubprocessorhistory.FieldUpdatedBy:      {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldUpdatedBy},
-			trustcentersubprocessorhistory.FieldDeletedAt:      {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldDeletedAt},
-			trustcentersubprocessorhistory.FieldDeletedBy:      {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldDeletedBy},
-			trustcentersubprocessorhistory.FieldSubprocessorID: {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldSubprocessorID},
-			trustcentersubprocessorhistory.FieldTrustCenterID:  {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldTrustCenterID},
-			trustcentersubprocessorhistory.FieldCountries:      {Type: field.TypeJSON, Column: trustcentersubprocessorhistory.FieldCountries},
-			trustcentersubprocessorhistory.FieldCategory:       {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldCategory},
+			trustcentersubprocessorhistory.FieldHistoryTime:                     {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldHistoryTime},
+			trustcentersubprocessorhistory.FieldRef:                             {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldRef},
+			trustcentersubprocessorhistory.FieldOperation:                       {Type: field.TypeEnum, Column: trustcentersubprocessorhistory.FieldOperation},
+			trustcentersubprocessorhistory.FieldCreatedAt:                       {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldCreatedAt},
+			trustcentersubprocessorhistory.FieldUpdatedAt:                       {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldUpdatedAt},
+			trustcentersubprocessorhistory.FieldCreatedBy:                       {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldCreatedBy},
+			trustcentersubprocessorhistory.FieldUpdatedBy:                       {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldUpdatedBy},
+			trustcentersubprocessorhistory.FieldDeletedAt:                       {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldDeletedAt},
+			trustcentersubprocessorhistory.FieldDeletedBy:                       {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldDeletedBy},
+			trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName: {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName},
+			trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID:   {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID},
+			trustcentersubprocessorhistory.FieldSubprocessorID:                  {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldSubprocessorID},
+			trustcentersubprocessorhistory.FieldTrustCenterID:                   {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldTrustCenterID},
+			trustcentersubprocessorhistory.FieldCountries:                       {Type: field.TypeJSON, Column: trustcentersubprocessorhistory.FieldCountries},
 		},
 	}
 	graph.Nodes[60] = &sqlgraph.Node{
@@ -13195,6 +13196,16 @@ func (f *TrustCenterSubprocessorHistoryFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(trustcentersubprocessorhistory.FieldDeletedBy))
 }
 
+// WhereTrustCenterSubprocessorKindName applies the entql string predicate on the trust_center_subprocessor_kind_name field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereTrustCenterSubprocessorKindName(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName))
+}
+
+// WhereTrustCenterSubprocessorKindID applies the entql string predicate on the trust_center_subprocessor_kind_id field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereTrustCenterSubprocessorKindID(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID))
+}
+
 // WhereSubprocessorID applies the entql string predicate on the subprocessor_id field.
 func (f *TrustCenterSubprocessorHistoryFilter) WhereSubprocessorID(p entql.StringP) {
 	f.Where(p.Field(trustcentersubprocessorhistory.FieldSubprocessorID))
@@ -13208,11 +13219,6 @@ func (f *TrustCenterSubprocessorHistoryFilter) WhereTrustCenterID(p entql.String
 // WhereCountries applies the entql json.RawMessage predicate on the countries field.
 func (f *TrustCenterSubprocessorHistoryFilter) WhereCountries(p entql.BytesP) {
 	f.Where(p.Field(trustcentersubprocessorhistory.FieldCountries))
-}
-
-// WhereCategory applies the entql string predicate on the category field.
-func (f *TrustCenterSubprocessorHistoryFilter) WhereCategory(p entql.StringP) {
-	f.Where(p.Field(trustcentersubprocessorhistory.FieldCategory))
 }
 
 // addPredicate implements the predicateAdder interface.

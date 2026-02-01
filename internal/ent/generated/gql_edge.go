@@ -14177,6 +14177,14 @@ func (_m *TrustCenterSetting) FaviconFile(ctx context.Context) (*File, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *TrustCenterSubprocessor) TrustCenterSubprocessorKind(ctx context.Context) (*CustomTypeEnum, error) {
+	result, err := _m.Edges.TrustCenterSubprocessorKindOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryTrustCenterSubprocessorKind().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *TrustCenterSubprocessor) BlockedGroups(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupOrder, where *GroupWhereInput,
 ) (*GroupConnection, error) {
@@ -14185,7 +14193,7 @@ func (_m *TrustCenterSubprocessor) BlockedGroups(
 		WithGroupFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[0][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[1][alias]
 	if nodes, err := _m.NamedBlockedGroups(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {
@@ -14206,7 +14214,7 @@ func (_m *TrustCenterSubprocessor) Editors(
 		WithGroupFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[1][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
 	if nodes, err := _m.NamedEditors(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {

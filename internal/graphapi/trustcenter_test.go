@@ -734,10 +734,14 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 
 	// create subprocessor
 	sbpr := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	sbprKind := (&CustomTypeEnumBuilder{
+		client:     suite.client,
+		ObjectType: "trust_center_subprocessor",
+	}).MustNew(testUser.UserCtx, t)
 	tcs, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
-		SubprocessorID: sbpr.ID,
-		Category:       "test",
-		Countries:      []string{"United States"},
+		SubprocessorID:                  sbpr.ID,
+		TrustCenterSubprocessorKindName: &sbprKind.Name,
+		Countries:                       []string{"United States"},
 	})
 	assert.NilError(t, err)
 

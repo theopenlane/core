@@ -2485,18 +2485,19 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterSubprocessorHistory struct {
-		Category       func(childComplexity int) int
-		Countries      func(childComplexity int) int
-		CreatedAt      func(childComplexity int) int
-		CreatedBy      func(childComplexity int) int
-		HistoryTime    func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Operation      func(childComplexity int) int
-		Ref            func(childComplexity int) int
-		SubprocessorID func(childComplexity int) int
-		TrustCenterID  func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
+		Countries                       func(childComplexity int) int
+		CreatedAt                       func(childComplexity int) int
+		CreatedBy                       func(childComplexity int) int
+		HistoryTime                     func(childComplexity int) int
+		ID                              func(childComplexity int) int
+		Operation                       func(childComplexity int) int
+		Ref                             func(childComplexity int) int
+		SubprocessorID                  func(childComplexity int) int
+		TrustCenterID                   func(childComplexity int) int
+		TrustCenterSubprocessorKindID   func(childComplexity int) int
+		TrustCenterSubprocessorKindName func(childComplexity int) int
+		UpdatedAt                       func(childComplexity int) int
+		UpdatedBy                       func(childComplexity int) int
 	}
 
 	TrustCenterSubprocessorHistoryConnection struct {
@@ -16581,13 +16582,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSettingHistoryEdge.Node(childComplexity), true
 
-	case "TrustCenterSubprocessorHistory.category":
-		if e.complexity.TrustCenterSubprocessorHistory.Category == nil {
-			break
-		}
-
-		return e.complexity.TrustCenterSubprocessorHistory.Category(childComplexity), true
-
 	case "TrustCenterSubprocessorHistory.countries":
 		if e.complexity.TrustCenterSubprocessorHistory.Countries == nil {
 			break
@@ -16650,6 +16644,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSubprocessorHistory.TrustCenterID(childComplexity), true
+
+	case "TrustCenterSubprocessorHistory.trustCenterSubprocessorKindID":
+		if e.complexity.TrustCenterSubprocessorHistory.TrustCenterSubprocessorKindID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistory.TrustCenterSubprocessorKindID(childComplexity), true
+
+	case "TrustCenterSubprocessorHistory.trustCenterSubprocessorKindName":
+		if e.complexity.TrustCenterSubprocessorHistory.TrustCenterSubprocessorKindName == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistory.TrustCenterSubprocessorKindName(childComplexity), true
 
 	case "TrustCenterSubprocessorHistory.updatedAt":
 		if e.complexity.TrustCenterSubprocessorHistory.UpdatedAt == nil {
@@ -51367,6 +51375,14 @@ type TrustCenterSubprocessorHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the kind of the trust_center_subprocessor
+  """
+  trustCenterSubprocessorKindName: String
+  """
+  the kind of the trust_center_subprocessor
+  """
+  trustCenterSubprocessorKindID: String
+  """
   ID of the subprocessor
   """
   subprocessorID: String!
@@ -51378,10 +51394,6 @@ type TrustCenterSubprocessorHistory implements Node {
   country codes or country where the subprocessor is located
   """
   countries: [String!]
-  """
-  Category of the subprocessor, e.g. 'Data Warehouse' or 'Infrastructure Hosting'
-  """
-  category: String!
 }
 """
 A connection to a list of items.
@@ -51562,6 +51574,42 @@ input TrustCenterSubprocessorHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  trust_center_subprocessor_kind_name field predicates
+  """
+  trustCenterSubprocessorKindName: String
+  trustCenterSubprocessorKindNameNEQ: String
+  trustCenterSubprocessorKindNameIn: [String!]
+  trustCenterSubprocessorKindNameNotIn: [String!]
+  trustCenterSubprocessorKindNameGT: String
+  trustCenterSubprocessorKindNameGTE: String
+  trustCenterSubprocessorKindNameLT: String
+  trustCenterSubprocessorKindNameLTE: String
+  trustCenterSubprocessorKindNameContains: String
+  trustCenterSubprocessorKindNameHasPrefix: String
+  trustCenterSubprocessorKindNameHasSuffix: String
+  trustCenterSubprocessorKindNameIsNil: Boolean
+  trustCenterSubprocessorKindNameNotNil: Boolean
+  trustCenterSubprocessorKindNameEqualFold: String
+  trustCenterSubprocessorKindNameContainsFold: String
+  """
+  trust_center_subprocessor_kind_id field predicates
+  """
+  trustCenterSubprocessorKindID: String
+  trustCenterSubprocessorKindIDNEQ: String
+  trustCenterSubprocessorKindIDIn: [String!]
+  trustCenterSubprocessorKindIDNotIn: [String!]
+  trustCenterSubprocessorKindIDGT: String
+  trustCenterSubprocessorKindIDGTE: String
+  trustCenterSubprocessorKindIDLT: String
+  trustCenterSubprocessorKindIDLTE: String
+  trustCenterSubprocessorKindIDContains: String
+  trustCenterSubprocessorKindIDHasPrefix: String
+  trustCenterSubprocessorKindIDHasSuffix: String
+  trustCenterSubprocessorKindIDIsNil: Boolean
+  trustCenterSubprocessorKindIDNotNil: Boolean
+  trustCenterSubprocessorKindIDEqualFold: String
+  trustCenterSubprocessorKindIDContainsFold: String
+  """
   subprocessor_id field predicates
   """
   subprocessorID: String
@@ -51595,22 +51643,6 @@ input TrustCenterSubprocessorHistoryWhereInput {
   trustCenterIDNotNil: Boolean
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryEqualFold: String
-  categoryContainsFold: String
 }
 type TrustCenterWatermarkConfigHistory implements Node {
   id: ID!

@@ -7184,6 +7184,7 @@ func init() {
 	trustcentersubprocessorMixinHooks1 := trustcentersubprocessorMixin[1].Hooks()
 	trustcentersubprocessorMixinHooks4 := trustcentersubprocessorMixin[4].Hooks()
 	trustcentersubprocessorMixinHooks5 := trustcentersubprocessorMixin[5].Hooks()
+	trustcentersubprocessorMixinHooks6 := trustcentersubprocessorMixin[6].Hooks()
 
 	trustcentersubprocessor.Hooks[1] = trustcentersubprocessorMixinHooks0[0]
 
@@ -7193,7 +7194,9 @@ func init() {
 
 	trustcentersubprocessor.Hooks[4] = trustcentersubprocessorMixinHooks5[0]
 
-	trustcentersubprocessor.Hooks[5] = trustcentersubprocessorMixinHooks5[1]
+	trustcentersubprocessor.Hooks[5] = trustcentersubprocessorMixinHooks6[0]
+
+	trustcentersubprocessor.Hooks[6] = trustcentersubprocessorMixinHooks6[1]
 	trustcentersubprocessorMixinInters1 := trustcentersubprocessorMixin[1].Interceptors()
 	trustcentersubprocessorMixinInters4 := trustcentersubprocessorMixin[4].Interceptors()
 	trustcentersubprocessorInters := schema.TrustCenterSubprocessor{}.Interceptors()
@@ -7224,24 +7227,6 @@ func init() {
 	trustcentersubprocessorDescTrustCenterID := trustcentersubprocessorFields[1].Descriptor()
 	// trustcentersubprocessor.TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
 	trustcentersubprocessor.TrustCenterIDValidator = trustcentersubprocessorDescTrustCenterID.Validators[0].(func(string) error)
-	// trustcentersubprocessorDescCategory is the schema descriptor for category field.
-	trustcentersubprocessorDescCategory := trustcentersubprocessorFields[3].Descriptor()
-	// trustcentersubprocessor.CategoryValidator is a validator for the "category" field. It is called by the builders before save.
-	trustcentersubprocessor.CategoryValidator = func() func(string) error {
-		validators := trustcentersubprocessorDescCategory.Validators
-		fns := [...]func(string) error{
-			validators[0].(func(string) error),
-			validators[1].(func(string) error),
-		}
-		return func(category string) error {
-			for _, fn := range fns {
-				if err := fn(category); err != nil {
-					return err
-				}
-			}
-			return nil
-		}
-	}()
 	// trustcentersubprocessorDescID is the schema descriptor for id field.
 	trustcentersubprocessorDescID := trustcentersubprocessorMixinFields2[0].Descriptor()
 	// trustcentersubprocessor.DefaultID holds the default value on creation for the id field.

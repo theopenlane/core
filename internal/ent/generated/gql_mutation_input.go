@@ -23605,20 +23605,26 @@ func (c *TrustCenterSettingUpdateOne) SetInput(i UpdateTrustCenterSettingInput) 
 
 // CreateTrustCenterSubprocessorInput represents a mutation input for creating trustcentersubprocessors.
 type CreateTrustCenterSubprocessorInput struct {
-	Countries       []string
-	Category        string
-	BlockedGroupIDs []string
-	EditorIDs       []string
-	TrustCenterID   *string
-	SubprocessorID  string
+	TrustCenterSubprocessorKindName *string
+	Countries                       []string
+	TrustCenterSubprocessorKindID   *string
+	BlockedGroupIDs                 []string
+	EditorIDs                       []string
+	TrustCenterID                   *string
+	SubprocessorID                  string
 }
 
 // Mutate applies the CreateTrustCenterSubprocessorInput on the TrustCenterSubprocessorMutation builder.
 func (i *CreateTrustCenterSubprocessorInput) Mutate(m *TrustCenterSubprocessorMutation) {
+	if v := i.TrustCenterSubprocessorKindName; v != nil {
+		m.SetTrustCenterSubprocessorKindName(*v)
+	}
 	if v := i.Countries; v != nil {
 		m.SetCountries(v)
 	}
-	m.SetCategory(i.Category)
+	if v := i.TrustCenterSubprocessorKindID; v != nil {
+		m.SetTrustCenterSubprocessorKindID(*v)
+	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
 	}
@@ -23639,23 +23645,32 @@ func (c *TrustCenterSubprocessorCreate) SetInput(i CreateTrustCenterSubprocessor
 
 // UpdateTrustCenterSubprocessorInput represents a mutation input for updating trustcentersubprocessors.
 type UpdateTrustCenterSubprocessorInput struct {
-	ClearCountries        bool
-	Countries             []string
-	AppendCountries       []string
-	Category              *string
-	ClearBlockedGroups    bool
-	AddBlockedGroupIDs    []string
-	RemoveBlockedGroupIDs []string
-	ClearEditors          bool
-	AddEditorIDs          []string
-	RemoveEditorIDs       []string
-	ClearTrustCenter      bool
-	TrustCenterID         *string
-	SubprocessorID        *string
+	ClearTrustCenterSubprocessorKindName bool
+	TrustCenterSubprocessorKindName      *string
+	ClearCountries                       bool
+	Countries                            []string
+	AppendCountries                      []string
+	ClearTrustCenterSubprocessorKind     bool
+	TrustCenterSubprocessorKindID        *string
+	ClearBlockedGroups                   bool
+	AddBlockedGroupIDs                   []string
+	RemoveBlockedGroupIDs                []string
+	ClearEditors                         bool
+	AddEditorIDs                         []string
+	RemoveEditorIDs                      []string
+	ClearTrustCenter                     bool
+	TrustCenterID                        *string
+	SubprocessorID                       *string
 }
 
 // Mutate applies the UpdateTrustCenterSubprocessorInput on the TrustCenterSubprocessorMutation builder.
 func (i *UpdateTrustCenterSubprocessorInput) Mutate(m *TrustCenterSubprocessorMutation) {
+	if i.ClearTrustCenterSubprocessorKindName {
+		m.ClearTrustCenterSubprocessorKindName()
+	}
+	if v := i.TrustCenterSubprocessorKindName; v != nil {
+		m.SetTrustCenterSubprocessorKindName(*v)
+	}
 	if i.ClearCountries {
 		m.ClearCountries()
 	}
@@ -23665,8 +23680,11 @@ func (i *UpdateTrustCenterSubprocessorInput) Mutate(m *TrustCenterSubprocessorMu
 	if i.AppendCountries != nil {
 		m.AppendCountries(i.Countries)
 	}
-	if v := i.Category; v != nil {
-		m.SetCategory(*v)
+	if i.ClearTrustCenterSubprocessorKind {
+		m.ClearTrustCenterSubprocessorKind()
+	}
+	if v := i.TrustCenterSubprocessorKindID; v != nil {
+		m.SetTrustCenterSubprocessorKindID(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
