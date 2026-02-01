@@ -29,7 +29,7 @@ func HookPublicAccess() ent.Hook {
 				return nil, err
 			}
 
-			// all other mutations, only create public access for system admins
+			// only create public access for system admins
 			if !auth.IsSystemAdminFromContext(ctx) {
 				return retVal, nil
 			}
