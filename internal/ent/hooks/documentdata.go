@@ -161,8 +161,12 @@ func HookDocumentDataFile() ent.Hook {
 				return nil, errOnlyOneDocumentData
 			}
 
+			// first checks the authenicated user context,
+			// second checks specifically for the SystemAdminContextKey key in the context
 			if !auth.IsSystemAdminFromContext(ctx) {
-				return nil, generated.ErrPermissionDenied
+				if user, ok := auth.SystemAdminFromContext(ctx); ok && !user.IsSystemAdmin {
+					return nil, generated.ErrPermissionDenied
+				}
 			}
 
 			id, err := m.OldTemplateID(ctx)
@@ -171,7 +175,6 @@ func HookDocumentDataFile() ent.Hook {
 			}
 
 			exists, err := m.Client().Template.Query().
-				Select(template.FieldKind).
 				Where(template.KindEQ(enums.TemplateKindTrustCenterNda)).
 				Where(template.ID(id)).
 				Exist(ctx)
