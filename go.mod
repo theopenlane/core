@@ -37,7 +37,7 @@ require (
 	github.com/fatih/color v1.18.0
 	github.com/fsnotify/fsnotify v1.9.0
 	github.com/fumiama/go-docx v0.0.0-20250506085032-0c30fd09304b
-	github.com/gabriel-vasile/mimetype v1.4.12
+	github.com/gabriel-vasile/mimetype v1.4.13
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/getkin/kin-openapi v0.133.0
 	github.com/go-jose/go-jose/v4 v4.1.3
@@ -96,7 +96,7 @@ require (
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.23.7
 	github.com/theopenlane/newman v0.2.1
-	github.com/theopenlane/riverboat v0.8.7
+	github.com/theopenlane/riverboat v0.8.8
 	github.com/theopenlane/utils v0.6.2
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.6.2
@@ -261,7 +261,7 @@ require (
 	github.com/go-openapi/jsonpointer v0.22.4 // indirect
 	github.com/go-openapi/swag/jsonname v0.25.4 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
-	github.com/go-webauthn/x v0.1.27 // indirect
+	github.com/go-webauthn/x v0.1.28 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/google/cel-go v0.26.1
