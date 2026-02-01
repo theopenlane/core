@@ -650,13 +650,30 @@ func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TFA
 func (w *JobRunnerBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobRunner {
 	ctx = setContext(ctx, w.client.db)
 
+	ip := getValidIPAddress(t)
 	wn, err := w.client.db.JobRunner.Create().
 		SetName(randomName(t)).
-		SetIPAddress(gofakeit.IPv4Address()).
+		SetIPAddress(ip).
 		Save(ctx)
 	requireNoError(t, err)
 
 	return wn
+}
+
+func getValidIPAddress(t *testing.T) string {
+	maxAttempts := 10
+	attempts := 0
+	for {
+		ip := gofakeit.IPv4Address()
+		if err := models.ValidateIP(ip); err == nil {
+			return ip
+		}
+		attempts++
+
+		if attempts >= maxAttempts {
+			t.Fail()
+		}
+	}
 }
 
 // MustNew webauthn settings builder is used to create passkeys without the browser setup process

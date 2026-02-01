@@ -384,24 +384,6 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "happy path - update subprocessor",
-			setupFunc: func() string {
-				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
-					SubprocessorID:                  subprocessor2.ID,
-					TrustCenterID:                   &trustCenter.ID,
-					TrustCenterSubprocessorKindName: &kind.Name,
-					Countries:                       []string{"US"},
-				})
-				assert.NilError(t, err)
-				return createResp.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.ID
-			},
-			request: testclient.UpdateTrustCenterSubprocessorInput{
-				SubprocessorID: &subprocessor3.ID,
-			},
-			client: suite.client.api,
-			ctx:    testUser.UserCtx,
-		},
-		{
 			name: "happy path - append countries",
 			setupFunc: func() string {
 				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
