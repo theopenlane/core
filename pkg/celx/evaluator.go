@@ -10,7 +10,6 @@ import (
 )
 
 // Evaluator compiles and evaluates CEL expressions with caching
-
 type Evaluator struct {
 	env          *cel.Env
 	config       EvalConfig
@@ -18,7 +17,6 @@ type Evaluator struct {
 }
 
 // NewEvaluator creates a new CEL evaluator with the provided environment and configuration
-
 func NewEvaluator(env *cel.Env, config EvalConfig) *Evaluator {
 	return &Evaluator{
 		env:    env,
@@ -27,19 +25,16 @@ func NewEvaluator(env *cel.Env, config EvalConfig) *Evaluator {
 }
 
 // Compile parses and type-checks a CEL expression using the evaluator environment
-
 func (e *Evaluator) Compile(expression string) (*cel.Ast, *cel.Issues) {
 	return e.env.Compile(expression)
 }
 
 // Program builds a CEL program from an AST without evaluation options
-
 func (e *Evaluator) Program(ast *cel.Ast) (cel.Program, error) {
 	return e.env.Program(ast)
 }
 
 // Evaluate runs a CEL expression against the provided variables
-
 func (e *Evaluator) Evaluate(ctx context.Context, expression string, vars map[string]any) (ref.Val, *cel.EvalDetails, error) {
 	prg, err := e.getOrCompileProgram(expression)
 	if err != nil {
@@ -66,7 +61,6 @@ func (e *Evaluator) Evaluate(ctx context.Context, expression string, vars map[st
 }
 
 // EvaluateJSONMap evaluates a CEL expression and converts the result to a JSON object map
-
 func (e *Evaluator) EvaluateJSONMap(ctx context.Context, expression string, vars map[string]any) (map[string]any, error) {
 	out, _, err := e.Evaluate(ctx, expression, vars)
 	if err != nil {
@@ -77,7 +71,6 @@ func (e *Evaluator) EvaluateJSONMap(ctx context.Context, expression string, vars
 }
 
 // getOrCompileProgram returns a cached program or compiles a new one with evaluator options
-
 func (e *Evaluator) getOrCompileProgram(expression string) (cel.Program, error) {
 	if cached, ok := e.programCache.Load(expression); ok {
 		return cached.(cel.Program), nil
@@ -111,7 +104,6 @@ func (e *Evaluator) getOrCompileProgram(expression string) (cel.Program, error) 
 }
 
 // buildEvalOptions assembles program options from evaluation configuration
-
 func (e *Evaluator) buildEvalOptions() []cel.ProgramOption {
 	var evalOpts []cel.EvalOption
 

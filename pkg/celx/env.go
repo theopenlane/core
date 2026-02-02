@@ -3,7 +3,6 @@ package celx
 import "github.com/google/cel-go/cel"
 
 // NewEnv builds a CEL environment from the provided config and variable declarations
-
 func NewEnv(cfg EnvConfig, vars ...cel.EnvOption) (*cel.Env, error) {
 	envOpts := make([]cel.EnvOption, 0, len(vars)+8)
 	envOpts = append(envOpts, vars...)
