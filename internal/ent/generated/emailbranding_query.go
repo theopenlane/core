@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -15,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
@@ -30,10 +32,16 @@ type EmailBrandingQuery struct {
 	inters                  []Interceptor
 	predicates              []predicate.EmailBranding
 	withOwner               *OrganizationQuery
+	withBlockedGroups       *GroupQuery
+	withEditors             *GroupQuery
+	withViewers             *GroupQuery
 	withCampaigns           *CampaignQuery
 	withEmailTemplates      *EmailTemplateQuery
 	loadTotal               []func(context.Context, []*EmailBranding) error
 	modifiers               []func(*sql.Selector)
+	withNamedBlockedGroups  map[string]*GroupQuery
+	withNamedEditors        map[string]*GroupQuery
+	withNamedViewers        map[string]*GroupQuery
 	withNamedCampaigns      map[string]*CampaignQuery
 	withNamedEmailTemplates map[string]*EmailTemplateQuery
 	// intermediate query (i.e. traversal path).
@@ -91,6 +99,81 @@ func (_q *EmailBrandingQuery) QueryOwner() *OrganizationQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.EmailBranding
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups chains the current query on the "blocked_groups" edge.
+func (_q *EmailBrandingQuery) QueryBlockedGroups() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, emailbranding.BlockedGroupsTable, emailbranding.BlockedGroupsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEditors chains the current query on the "editors" edge.
+func (_q *EmailBrandingQuery) QueryEditors() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, emailbranding.EditorsTable, emailbranding.EditorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryViewers chains the current query on the "viewers" edge.
+func (_q *EmailBrandingQuery) QueryViewers() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, emailbranding.ViewersTable, emailbranding.ViewersColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -340,6 +423,9 @@ func (_q *EmailBrandingQuery) Clone() *EmailBrandingQuery {
 		inters:             append([]Interceptor{}, _q.inters...),
 		predicates:         append([]predicate.EmailBranding{}, _q.predicates...),
 		withOwner:          _q.withOwner.Clone(),
+		withBlockedGroups:  _q.withBlockedGroups.Clone(),
+		withEditors:        _q.withEditors.Clone(),
+		withViewers:        _q.withViewers.Clone(),
 		withCampaigns:      _q.withCampaigns.Clone(),
 		withEmailTemplates: _q.withEmailTemplates.Clone(),
 		// clone intermediate query.
@@ -357,6 +443,39 @@ func (_q *EmailBrandingQuery) WithOwner(opts ...func(*OrganizationQuery)) *Email
 		opt(query)
 	}
 	_q.withOwner = query
+	return _q
+}
+
+// WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EmailBrandingQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *EmailBrandingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withBlockedGroups = query
+	return _q
+}
+
+// WithEditors tells the query-builder to eager-load the nodes that are connected to
+// the "editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EmailBrandingQuery) WithEditors(opts ...func(*GroupQuery)) *EmailBrandingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEditors = query
+	return _q
+}
+
+// WithViewers tells the query-builder to eager-load the nodes that are connected to
+// the "viewers" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EmailBrandingQuery) WithViewers(opts ...func(*GroupQuery)) *EmailBrandingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withViewers = query
 	return _q
 }
 
@@ -453,6 +572,12 @@ func (_q *EmailBrandingQuery) prepareQuery(ctx context.Context) error {
 		}
 		_q.sql = prev
 	}
+	if emailbranding.Policy == nil {
+		return errors.New("generated: uninitialized emailbranding.Policy (forgotten import generated/runtime?)")
+	}
+	if err := emailbranding.Policy.EvalQuery(ctx, _q); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -460,8 +585,11 @@ func (_q *EmailBrandingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	var (
 		nodes       = []*EmailBranding{}
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [6]bool{
 			_q.withOwner != nil,
+			_q.withBlockedGroups != nil,
+			_q.withEditors != nil,
+			_q.withViewers != nil,
 			_q.withCampaigns != nil,
 			_q.withEmailTemplates != nil,
 		}
@@ -495,6 +623,27 @@ func (_q *EmailBrandingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 			return nil, err
 		}
 	}
+	if query := _q.withBlockedGroups; query != nil {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
+			func(n *EmailBranding) { n.Edges.BlockedGroups = []*Group{} },
+			func(n *EmailBranding, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEditors; query != nil {
+		if err := _q.loadEditors(ctx, query, nodes,
+			func(n *EmailBranding) { n.Edges.Editors = []*Group{} },
+			func(n *EmailBranding, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withViewers; query != nil {
+		if err := _q.loadViewers(ctx, query, nodes,
+			func(n *EmailBranding) { n.Edges.Viewers = []*Group{} },
+			func(n *EmailBranding, e *Group) { n.Edges.Viewers = append(n.Edges.Viewers, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withCampaigns; query != nil {
 		if err := _q.loadCampaigns(ctx, query, nodes,
 			func(n *EmailBranding) { n.Edges.Campaigns = []*Campaign{} },
@@ -506,6 +655,27 @@ func (_q *EmailBrandingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 		if err := _q.loadEmailTemplates(ctx, query, nodes,
 			func(n *EmailBranding) { n.Edges.EmailTemplates = []*EmailTemplate{} },
 			func(n *EmailBranding, e *EmailTemplate) { n.Edges.EmailTemplates = append(n.Edges.EmailTemplates, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedBlockedGroups {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
+			func(n *EmailBranding) { n.appendNamedBlockedGroups(name) },
+			func(n *EmailBranding, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEditors {
+		if err := _q.loadEditors(ctx, query, nodes,
+			func(n *EmailBranding) { n.appendNamedEditors(name) },
+			func(n *EmailBranding, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedViewers {
+		if err := _q.loadViewers(ctx, query, nodes,
+			func(n *EmailBranding) { n.appendNamedViewers(name) },
+			func(n *EmailBranding, e *Group) { n.appendNamedViewers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -557,6 +727,99 @@ func (_q *EmailBrandingQuery) loadOwner(ctx context.Context, query *Organization
 		for i := range nodes {
 			assign(nodes[i], n)
 		}
+	}
+	return nil
+}
+func (_q *EmailBrandingQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*EmailBranding, init func(*EmailBranding), assign func(*EmailBranding, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*EmailBranding)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(emailbranding.BlockedGroupsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.email_branding_blocked_groups
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "email_branding_blocked_groups" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "email_branding_blocked_groups" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *EmailBrandingQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*EmailBranding, init func(*EmailBranding), assign func(*EmailBranding, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*EmailBranding)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(emailbranding.EditorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.email_branding_editors
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "email_branding_editors" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "email_branding_editors" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *EmailBrandingQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*EmailBranding, init func(*EmailBranding), assign func(*EmailBranding, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*EmailBranding)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(emailbranding.ViewersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.email_branding_viewers
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "email_branding_viewers" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "email_branding_viewers" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -720,6 +983,48 @@ func (_q *EmailBrandingQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *EmailBrandingQuery) Modify(modifiers ...func(s *sql.Selector)) *EmailBrandingSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EmailBrandingQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *EmailBrandingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedBlockedGroups == nil {
+		_q.withNamedBlockedGroups = make(map[string]*GroupQuery)
+	}
+	_q.withNamedBlockedGroups[name] = query
+	return _q
+}
+
+// WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EmailBrandingQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *EmailBrandingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEditors == nil {
+		_q.withNamedEditors = make(map[string]*GroupQuery)
+	}
+	_q.withNamedEditors[name] = query
+	return _q
+}
+
+// WithNamedViewers tells the query-builder to eager-load the nodes that are connected to the "viewers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EmailBrandingQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *EmailBrandingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedViewers == nil {
+		_q.withNamedViewers = make(map[string]*GroupQuery)
+	}
+	_q.withNamedViewers[name] = query
+	return _q
 }
 
 // WithNamedCampaigns tells the query-builder to eager-load the nodes that are connected to the "campaigns"

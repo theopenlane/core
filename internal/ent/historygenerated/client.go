@@ -3336,12 +3336,14 @@ func (c *EmailBrandingHistoryClient) GetX(ctx context.Context, id string) *Email
 
 // Hooks returns the client hooks.
 func (c *EmailBrandingHistoryClient) Hooks() []Hook {
-	return c.hooks.EmailBrandingHistory
+	hooks := c.hooks.EmailBrandingHistory
+	return append(hooks[:len(hooks):len(hooks)], emailbrandinghistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
 func (c *EmailBrandingHistoryClient) Interceptors() []Interceptor {
-	return c.inters.EmailBrandingHistory
+	inters := c.inters.EmailBrandingHistory
+	return append(inters[:len(inters):len(inters)], emailbrandinghistory.Interceptors[:]...)
 }
 
 func (c *EmailBrandingHistoryClient) mutate(ctx context.Context, m *EmailBrandingHistoryMutation) (Value, error) {

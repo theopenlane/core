@@ -6081,6 +6081,9 @@ type CreateEmailBrandingInput struct {
 	FontFamily       *string
 	IsDefault        *bool
 	OwnerID          *string
+	BlockedGroupIDs  []string
+	EditorIDs        []string
+	ViewerIDs        []string
 	CampaignIDs      []string
 	EmailTemplateIDs []string
 }
@@ -6127,6 +6130,15 @@ func (i *CreateEmailBrandingInput) Mutate(m *EmailBrandingMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
 	if v := i.CampaignIDs; len(v) > 0 {
 		m.AddCampaignIDs(v...)
 	}
@@ -6169,6 +6181,15 @@ type UpdateEmailBrandingInput struct {
 	FontFamily             *string
 	ClearIsDefault         bool
 	IsDefault              *bool
+	ClearBlockedGroups     bool
+	AddBlockedGroupIDs     []string
+	RemoveBlockedGroupIDs  []string
+	ClearEditors           bool
+	AddEditorIDs           []string
+	RemoveEditorIDs        []string
+	ClearViewers           bool
+	AddViewerIDs           []string
+	RemoveViewerIDs        []string
 	ClearCampaigns         bool
 	AddCampaignIDs         []string
 	RemoveCampaignIDs      []string
@@ -6256,6 +6277,33 @@ func (i *UpdateEmailBrandingInput) Mutate(m *EmailBrandingMutation) {
 	}
 	if v := i.IsDefault; v != nil {
 		m.SetIsDefault(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearCampaigns {
 		m.ClearCampaigns()

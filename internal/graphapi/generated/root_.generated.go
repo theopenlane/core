@@ -1503,12 +1503,14 @@ type ComplexityRoot struct {
 
 	EmailBranding struct {
 		BackgroundColor func(childComplexity int) int
+		BlockedGroups   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		BrandName       func(childComplexity int) int
 		ButtonColor     func(childComplexity int) int
 		ButtonTextColor func(childComplexity int) int
 		Campaigns       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		CreatedAt       func(childComplexity int) int
 		CreatedBy       func(childComplexity int) int
+		Editors         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		EmailTemplates  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
 		FontFamily      func(childComplexity int) int
 		ID              func(childComplexity int) int
@@ -1524,6 +1526,7 @@ type ComplexityRoot struct {
 		TextColor       func(childComplexity int) int
 		UpdatedAt       func(childComplexity int) int
 		UpdatedBy       func(childComplexity int) int
+		Viewers         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	EmailBrandingBulkCreatePayload struct {
@@ -13987,6 +13990,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EmailBranding.BackgroundColor(childComplexity), true
 
+	case "EmailBranding.blockedGroups":
+		if e.complexity.EmailBranding.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_EmailBranding_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.EmailBranding.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "EmailBranding.brandName":
 		if e.complexity.EmailBranding.BrandName == nil {
 			break
@@ -14033,6 +14048,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.EmailBranding.CreatedBy(childComplexity), true
+
+	case "EmailBranding.editors":
+		if e.complexity.EmailBranding.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_EmailBranding_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.EmailBranding.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "EmailBranding.emailTemplates":
 		if e.complexity.EmailBranding.EmailTemplates == nil {
@@ -14143,6 +14170,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.EmailBranding.UpdatedBy(childComplexity), true
+
+	case "EmailBranding.viewers":
+		if e.complexity.EmailBranding.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_EmailBranding_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.EmailBranding.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "EmailBrandingBulkCreatePayload.emailBrandings":
 		if e.complexity.EmailBrandingBulkCreatePayload.EmailBrandings == nil {
@@ -62197,6 +62236,9 @@ input CreateEmailBrandingInput {
   """
   isDefault: Boolean
   ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
   campaignIDs: [ID!]
   emailTemplateIDs: [ID!]
 }
@@ -70809,6 +70851,99 @@ type EmailBranding implements Node {
   """
   isDefault: Boolean
   owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   campaigns(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -71232,6 +71367,21 @@ input EmailBrandingWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
   """
   campaigns edge predicates
   """
@@ -118423,6 +118573,15 @@ input UpdateEmailBrandingInput {
   """
   isDefault: Boolean
   clearIsDefault: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
   addCampaignIDs: [ID!]
   removeCampaignIDs: [ID!]
   clearCampaigns: Boolean

@@ -1946,15 +1946,36 @@ func init() {
 	// documentdata.DefaultID holds the default value on creation for the id field.
 	documentdata.DefaultID = documentdataDescID.Default.(func() string)
 	emailbrandingMixin := schema.EmailBranding{}.Mixin()
+	emailbranding.Policy = privacy.NewPolicies(schema.EmailBranding{})
+	emailbranding.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := emailbranding.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	emailbrandingMixinHooks0 := emailbrandingMixin[0].Hooks()
 	emailbrandingMixinHooks1 := emailbrandingMixin[1].Hooks()
 	emailbrandingMixinHooks3 := emailbrandingMixin[3].Hooks()
 	emailbrandingMixinHooks5 := emailbrandingMixin[5].Hooks()
-	emailbranding.Hooks[0] = emailbrandingMixinHooks0[0]
-	emailbranding.Hooks[1] = emailbrandingMixinHooks1[0]
-	emailbranding.Hooks[2] = emailbrandingMixinHooks3[0]
-	emailbranding.Hooks[3] = emailbrandingMixinHooks5[0]
-	emailbranding.Hooks[4] = emailbrandingMixinHooks5[1]
+	emailbrandingMixinHooks6 := emailbrandingMixin[6].Hooks()
+
+	emailbranding.Hooks[1] = emailbrandingMixinHooks0[0]
+
+	emailbranding.Hooks[2] = emailbrandingMixinHooks1[0]
+
+	emailbranding.Hooks[3] = emailbrandingMixinHooks3[0]
+
+	emailbranding.Hooks[4] = emailbrandingMixinHooks5[0]
+
+	emailbranding.Hooks[5] = emailbrandingMixinHooks5[1]
+
+	emailbranding.Hooks[6] = emailbrandingMixinHooks6[0]
+
+	emailbranding.Hooks[7] = emailbrandingMixinHooks6[1]
+
+	emailbranding.Hooks[8] = emailbrandingMixinHooks6[2]
 	emailbrandingMixinInters1 := emailbrandingMixin[1].Interceptors()
 	emailbrandingMixinInters5 := emailbrandingMixin[5].Interceptors()
 	emailbranding.Interceptors[0] = emailbrandingMixinInters1[0]
@@ -3455,13 +3476,26 @@ func init() {
 	// integration.DefaultID holds the default value on creation for the id field.
 	integration.DefaultID = integrationDescID.Default.(func() string)
 	integrationrunMixin := schema.IntegrationRun{}.Mixin()
+	integrationrun.Policy = privacy.NewPolicies(schema.IntegrationRun{})
+	integrationrun.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := integrationrun.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	integrationrunMixinHooks0 := integrationrunMixin[0].Hooks()
 	integrationrunMixinHooks1 := integrationrunMixin[1].Hooks()
 	integrationrunMixinHooks3 := integrationrunMixin[3].Hooks()
-	integrationrun.Hooks[0] = integrationrunMixinHooks0[0]
-	integrationrun.Hooks[1] = integrationrunMixinHooks1[0]
-	integrationrun.Hooks[2] = integrationrunMixinHooks3[0]
-	integrationrun.Hooks[3] = integrationrunMixinHooks3[1]
+
+	integrationrun.Hooks[1] = integrationrunMixinHooks0[0]
+
+	integrationrun.Hooks[2] = integrationrunMixinHooks1[0]
+
+	integrationrun.Hooks[3] = integrationrunMixinHooks3[0]
+
+	integrationrun.Hooks[4] = integrationrunMixinHooks3[1]
 	integrationrunMixinInters1 := integrationrunMixin[1].Interceptors()
 	integrationrunMixinInters3 := integrationrunMixin[3].Interceptors()
 	integrationrun.Interceptors[0] = integrationrunMixinInters1[0]
@@ -3498,13 +3532,26 @@ func init() {
 	// integrationrun.DefaultID holds the default value on creation for the id field.
 	integrationrun.DefaultID = integrationrunDescID.Default.(func() string)
 	integrationwebhookMixin := schema.IntegrationWebhook{}.Mixin()
+	integrationwebhook.Policy = privacy.NewPolicies(schema.IntegrationWebhook{})
+	integrationwebhook.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := integrationwebhook.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	integrationwebhookMixinHooks0 := integrationwebhookMixin[0].Hooks()
 	integrationwebhookMixinHooks1 := integrationwebhookMixin[1].Hooks()
 	integrationwebhookMixinHooks3 := integrationwebhookMixin[3].Hooks()
-	integrationwebhook.Hooks[0] = integrationwebhookMixinHooks0[0]
-	integrationwebhook.Hooks[1] = integrationwebhookMixinHooks1[0]
-	integrationwebhook.Hooks[2] = integrationwebhookMixinHooks3[0]
-	integrationwebhook.Hooks[3] = integrationwebhookMixinHooks3[1]
+
+	integrationwebhook.Hooks[1] = integrationwebhookMixinHooks0[0]
+
+	integrationwebhook.Hooks[2] = integrationwebhookMixinHooks1[0]
+
+	integrationwebhook.Hooks[3] = integrationwebhookMixinHooks3[0]
+
+	integrationwebhook.Hooks[4] = integrationwebhookMixinHooks3[1]
 	integrationwebhookMixinInters1 := integrationwebhookMixin[1].Interceptors()
 	integrationwebhookMixinInters3 := integrationwebhookMixin[3].Interceptors()
 	integrationwebhook.Interceptors[0] = integrationwebhookMixinInters1[0]

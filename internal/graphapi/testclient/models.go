@@ -6133,6 +6133,9 @@ type CreateEmailBrandingInput struct {
 	// whether this is the default email branding for the organization
 	IsDefault        *bool    `json:"isDefault,omitempty"`
 	OwnerID          *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs  []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs        []string `json:"editorIDs,omitempty"`
+	ViewerIDs        []string `json:"viewerIDs,omitempty"`
 	CampaignIDs      []string `json:"campaignIDs,omitempty"`
 	EmailTemplateIDs []string `json:"emailTemplateIDs,omitempty"`
 }
@@ -11836,6 +11839,9 @@ type EmailBranding struct {
 	// whether this is the default email branding for the organization
 	IsDefault      *bool                    `json:"isDefault,omitempty"`
 	Owner          *Organization            `json:"owner,omitempty"`
+	BlockedGroups  *GroupConnection         `json:"blockedGroups"`
+	Editors        *GroupConnection         `json:"editors"`
+	Viewers        *GroupConnection         `json:"viewers"`
 	Campaigns      *CampaignConnection      `json:"campaigns"`
 	EmailTemplates *EmailTemplateConnection `json:"emailTemplates"`
 }
@@ -12175,6 +12181,15 @@ type EmailBrandingWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// campaigns edge predicates
 	HasCampaigns     *bool                 `json:"hasCampaigns,omitempty"`
 	HasCampaignsWith []*CampaignWhereInput `json:"hasCampaignsWith,omitempty"`
@@ -36814,6 +36829,15 @@ type UpdateEmailBrandingInput struct {
 	// whether this is the default email branding for the organization
 	IsDefault              *bool    `json:"isDefault,omitempty"`
 	ClearIsDefault         *bool    `json:"clearIsDefault,omitempty"`
+	AddBlockedGroupIDs     []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs  []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups     *bool    `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs           []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs        []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors           *bool    `json:"clearEditors,omitempty"`
+	AddViewerIDs           []string `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs        []string `json:"removeViewerIDs,omitempty"`
+	ClearViewers           *bool    `json:"clearViewers,omitempty"`
 	AddCampaignIDs         []string `json:"addCampaignIDs,omitempty"`
 	RemoveCampaignIDs      []string `json:"removeCampaignIDs,omitempty"`
 	ClearCampaigns         *bool    `json:"clearCampaigns,omitempty"`

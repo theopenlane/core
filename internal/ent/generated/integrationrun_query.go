@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -526,6 +527,12 @@ func (_q *IntegrationRunQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		_q.sql = prev
+	}
+	if integrationrun.Policy == nil {
+		return errors.New("generated: uninitialized integrationrun.Policy (forgotten import generated/runtime?)")
+	}
+	if err := integrationrun.Policy.EvalQuery(ctx, _q); err != nil {
+		return err
 	}
 	return nil
 }

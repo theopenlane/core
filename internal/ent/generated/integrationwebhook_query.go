@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -410,6 +411,12 @@ func (_q *IntegrationWebhookQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		_q.sql = prev
+	}
+	if integrationwebhook.Policy == nil {
+		return errors.New("generated: uninitialized integrationwebhook.Policy (forgotten import generated/runtime?)")
+	}
+	if err := integrationwebhook.Policy.EvalQuery(ctx, _q); err != nil {
+		return err
 	}
 	return nil
 }

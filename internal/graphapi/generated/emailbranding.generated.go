@@ -92,6 +92,12 @@ func (ec *executionContext) fieldContext_EmailBrandingBulkCreatePayload_emailBra
 				return ec.fieldContext_EmailBranding_isDefault(ctx, field)
 			case "owner":
 				return ec.fieldContext_EmailBranding_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_EmailBranding_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_EmailBranding_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_EmailBranding_viewers(ctx, field)
 			case "campaigns":
 				return ec.fieldContext_EmailBranding_campaigns(ctx, field)
 			case "emailTemplates":
@@ -196,6 +202,12 @@ func (ec *executionContext) fieldContext_EmailBrandingBulkUpdatePayload_emailBra
 				return ec.fieldContext_EmailBranding_isDefault(ctx, field)
 			case "owner":
 				return ec.fieldContext_EmailBranding_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_EmailBranding_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_EmailBranding_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_EmailBranding_viewers(ctx, field)
 			case "campaigns":
 				return ec.fieldContext_EmailBranding_campaigns(ctx, field)
 			case "emailTemplates":
@@ -300,6 +312,12 @@ func (ec *executionContext) fieldContext_EmailBrandingCreatePayload_emailBrandin
 				return ec.fieldContext_EmailBranding_isDefault(ctx, field)
 			case "owner":
 				return ec.fieldContext_EmailBranding_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_EmailBranding_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_EmailBranding_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_EmailBranding_viewers(ctx, field)
 			case "campaigns":
 				return ec.fieldContext_EmailBranding_campaigns(ctx, field)
 			case "emailTemplates":
@@ -404,6 +422,12 @@ func (ec *executionContext) fieldContext_EmailBrandingUpdatePayload_emailBrandin
 				return ec.fieldContext_EmailBranding_isDefault(ctx, field)
 			case "owner":
 				return ec.fieldContext_EmailBranding_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_EmailBranding_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_EmailBranding_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_EmailBranding_viewers(ctx, field)
 			case "campaigns":
 				return ec.fieldContext_EmailBranding_campaigns(ctx, field)
 			case "emailTemplates":

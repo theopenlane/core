@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"

@@ -3,11 +3,9 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -124,13 +122,6 @@ func (e EmailBranding) Edges() []ent.Edge {
 func (EmailBranding) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
-	}
-}
-
-// Annotations of the EmailBranding.
-func (EmailBranding) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entfga.SettingsChecks("organization"),
 	}
 }
 

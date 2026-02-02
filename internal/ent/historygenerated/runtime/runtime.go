@@ -835,6 +835,17 @@ func init() {
 	documentdatahistoryDescID := documentdatahistoryFields[9].Descriptor()
 	// documentdatahistory.DefaultID holds the default value on creation for the id field.
 	documentdatahistory.DefaultID = documentdatahistoryDescID.Default.(func() string)
+	emailbrandinghistory.Policy = privacy.NewPolicies(historyschema.EmailBrandingHistory{})
+	emailbrandinghistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := emailbrandinghistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	emailbrandinghistoryInters := historyschema.EmailBrandingHistory{}.Interceptors()
+	emailbrandinghistory.Interceptors[0] = emailbrandinghistoryInters[0]
 	emailbrandinghistoryFields := historyschema.EmailBrandingHistory{}.Fields()
 	_ = emailbrandinghistoryFields
 	// emailbrandinghistoryDescHistoryTime is the schema descriptor for history_time field.

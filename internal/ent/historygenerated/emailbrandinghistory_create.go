@@ -342,7 +342,9 @@ func (_c *EmailBrandingHistoryCreate) Mutation() *EmailBrandingHistoryMutation {
 
 // Save creates the EmailBrandingHistory in the database.
 func (_c *EmailBrandingHistoryCreate) Save(ctx context.Context) (*EmailBrandingHistory, error) {
-	_c.defaults()
+	if err := _c.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -369,16 +371,25 @@ func (_c *EmailBrandingHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_c *EmailBrandingHistoryCreate) defaults() {
+func (_c *EmailBrandingHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.HistoryTime(); !ok {
+		if emailbrandinghistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("historygenerated: uninitialized emailbrandinghistory.DefaultHistoryTime (forgotten import historygenerated/runtime?)")
+		}
 		v := emailbrandinghistory.DefaultHistoryTime()
 		_c.mutation.SetHistoryTime(v)
 	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
+		if emailbrandinghistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized emailbrandinghistory.DefaultCreatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := emailbrandinghistory.DefaultCreatedAt()
 		_c.mutation.SetCreatedAt(v)
 	}
 	if _, ok := _c.mutation.UpdatedAt(); !ok {
+		if emailbrandinghistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized emailbrandinghistory.DefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := emailbrandinghistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
@@ -391,9 +402,13 @@ func (_c *EmailBrandingHistoryCreate) defaults() {
 		_c.mutation.SetIsDefault(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
+		if emailbrandinghistory.DefaultID == nil {
+			return fmt.Errorf("historygenerated: uninitialized emailbrandinghistory.DefaultID (forgotten import historygenerated/runtime?)")
+		}
 		v := emailbrandinghistory.DefaultID()
 		_c.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

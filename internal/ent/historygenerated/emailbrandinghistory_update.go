@@ -365,7 +365,9 @@ func (_u *EmailBrandingHistoryUpdate) Mutation() *EmailBrandingHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *EmailBrandingHistoryUpdate) Save(ctx context.Context) (int, error) {
-	_u.defaults()
+	if err := _u.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -392,11 +394,15 @@ func (_u *EmailBrandingHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_u *EmailBrandingHistoryUpdate) defaults() {
+func (_u *EmailBrandingHistoryUpdate) defaults() error {
 	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
+		if emailbrandinghistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized emailbrandinghistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := emailbrandinghistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -898,7 +904,9 @@ func (_u *EmailBrandingHistoryUpdateOne) Select(field string, fields ...string) 
 
 // Save executes the query and returns the updated EmailBrandingHistory entity.
 func (_u *EmailBrandingHistoryUpdateOne) Save(ctx context.Context) (*EmailBrandingHistory, error) {
-	_u.defaults()
+	if err := _u.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -925,11 +933,15 @@ func (_u *EmailBrandingHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_u *EmailBrandingHistoryUpdateOne) defaults() {
+func (_u *EmailBrandingHistoryUpdateOne) defaults() error {
 	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
+		if emailbrandinghistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized emailbrandinghistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := emailbrandinghistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
