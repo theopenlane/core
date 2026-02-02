@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"strings"
@@ -82,7 +81,7 @@ func Create(ctx context.Context, clientID, clientSecret, url, slug string) (stri
 	}
 
 	if resp == nil {
-		return "", errors.New("shortlinks: empty response")
+		return "", ErrEmptyResponse
 	}
 
 	body, err := io.ReadAll(resp.Body)
@@ -101,7 +100,7 @@ func Create(ctx context.Context, clientID, clientSecret, url, slug string) (stri
 
 	body = bytes.TrimSpace(body)
 	if len(body) == 0 {
-		return "", errors.New("shortlinks: empty response body")
+		return "", ErrEmptyResponseBody
 	}
 
 	var response struct {
@@ -115,7 +114,7 @@ func Create(ctx context.Context, clientID, clientSecret, url, slug string) (stri
 
 	shortURL := strings.TrimSpace(response.ShortURL)
 	if shortURL == "" {
-		return "", errors.New("shortlinks: missing short URL in response")
+		return "", ErrMissingShortURL
 	}
 
 	return shortURL, nil
