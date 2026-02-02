@@ -243,9 +243,10 @@ func FindProposalForObjectRefs(ctx context.Context, client *generated.Client, ob
 	return nil, nil
 }
 
-// ValidateCELExpression ensures the expression compiles against the standard workflow CEL environment.
-func ValidateCELExpression(expression string) error {
-	env, err := NewCELEnvWithConfig(NewDefaultConfig())
+// ValidateCELExpression ensures the expression compiles against a CEL environment
+// configured with the provided workflow config and scope.
+func ValidateCELExpression(cfg *Config, scope CELExpressionScope, expression string) error {
+	env, err := NewCELEnv(cfg, scope)
 	if err != nil {
 		return err
 	}

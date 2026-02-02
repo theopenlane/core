@@ -223,9 +223,8 @@
           "type": "object",
           "description": "Additional HTTP headers to include in the request"
         },
-        "payload": {
-          "type": "object",
-          "description": "Additional data to merge into the webhook payload"
+        "payload_expr": {
+          "type": "string"
         },
         "timeout_ms": {
           "type": "integer",

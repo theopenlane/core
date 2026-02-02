@@ -24,22 +24,28 @@ var allowedTriggerOperations = map[string]struct{}{
 }
 
 // validateWorkflowDefinitionInput validates the workflow definition document against schema constraints
-func validateWorkflowDefinitionInput(schemaType string, doc *models.WorkflowDefinitionDocument) error {
+func validateWorkflowDefinitionInput(schemaType string, doc *models.WorkflowDefinitionDocument, celCfg *workflows.Config) error {
 	if doc == nil {
 		return ErrDefinitionRequired
 	}
+
+	celCfg = resolveCELConfig(celCfg)
 
 	if err := validateSchemaTypeMatch(schemaType, doc); err != nil {
 		return err
 	}
 
-	if err := validateTriggers(schemaType, doc.Triggers); err != nil {
+	if err := validateTriggers(schemaType, doc.Triggers, celCfg); err != nil {
+		return err
+	}
+
+	if err := validateConditions(doc.Conditions, celCfg); err != nil {
 		return err
 	}
 
 	eligibleFields := resolveEligibleFields(schemaType, doc.Triggers)
 
-	if err := validateActions(doc.Actions, eligibleFields); err != nil {
+	if err := validateActions(doc.Actions, eligibleFields, celCfg); err != nil {
 		return err
 	}
 
@@ -64,13 +70,13 @@ func validateSchemaTypeMatch(schemaType string, doc *models.WorkflowDefinitionDo
 }
 
 // validateTriggers validates all triggers in the workflow definition
-func validateTriggers(schemaType string, triggers []models.WorkflowTrigger) error {
+func validateTriggers(schemaType string, triggers []models.WorkflowTrigger, celCfg *workflows.Config) error {
 	if len(triggers) == 0 {
 		return ErrNoTriggers
 	}
 
 	for i, trig := range triggers {
-		if err := validateTrigger(schemaType, trig, i); err != nil {
+		if err := validateTrigger(schemaType, trig, i, celCfg); err != nil {
 			return err
 		}
 	}
@@ -79,7 +85,7 @@ func validateTriggers(schemaType string, triggers []models.WorkflowTrigger) erro
 }
 
 // validateTrigger validates a single workflow trigger
-func validateTrigger(schemaType string, trig models.WorkflowTrigger, index int) error {
+func validateTrigger(schemaType string, trig models.WorkflowTrigger, index int, celCfg *workflows.Config) error {
 	op := strings.ToUpper(strings.TrimSpace(trig.Operation))
 	if op == "" {
 		return fmt.Errorf("%w: trigger %d", ErrTriggerMissingOperation, index)
@@ -106,7 +112,7 @@ func validateTrigger(schemaType string, trig models.WorkflowTrigger, index int) 
 	}
 
 	if trig.Expression != "" {
-		if err := workflows.ValidateCELExpression(trig.Expression); err != nil {
+		if err := workflows.ValidateCELExpression(celCfg, workflows.CELScopeBase, trig.Expression); err != nil {
 			return err
 		}
 	}
@@ -152,7 +158,7 @@ func resolveEligibleFields(schemaType string, triggers []models.WorkflowTrigger)
 }
 
 // validateActions validates all actions in the workflow definition
-func validateActions(actions []models.WorkflowAction, eligibleFields map[string]struct{}) error {
+func validateActions(actions []models.WorkflowAction, eligibleFields map[string]struct{}, celCfg *workflows.Config) error {
 	if len(actions) == 0 {
 		return ErrNoActions
 	}
@@ -160,7 +166,7 @@ func validateActions(actions []models.WorkflowAction, eligibleFields map[string]
 	seenKeys := make(map[string]struct{}, len(actions))
 
 	for i, action := range actions {
-		if err := validateAction(action, i, seenKeys, eligibleFields); err != nil {
+		if err := validateAction(action, i, seenKeys, eligibleFields, celCfg); err != nil {
 			return err
 		}
 	}
@@ -169,7 +175,7 @@ func validateActions(actions []models.WorkflowAction, eligibleFields map[string]
 }
 
 // validateAction validates a single workflow action
-func validateAction(action models.WorkflowAction, index int, seenKeys map[string]struct{}, eligibleFields map[string]struct{}) error {
+func validateAction(action models.WorkflowAction, index int, seenKeys map[string]struct{}, eligibleFields map[string]struct{}, celCfg *workflows.Config) error {
 	if err := validateActionKey(action.Key, index, seenKeys); err != nil {
 		return err
 	}
@@ -179,17 +185,43 @@ func validateAction(action models.WorkflowAction, index int, seenKeys map[string
 		return err
 	}
 
-	if err := validateActionParams(actionType, action.Params, eligibleFields, action.Key, index); err != nil {
+	if err := validateActionParams(actionType, action.Params, eligibleFields, action.Key, index, celCfg); err != nil {
 		return err
 	}
 
 	if action.When != "" {
-		if err := workflows.ValidateCELExpression(action.When); err != nil {
+		if err := workflows.ValidateCELExpression(celCfg, workflows.CELScopeAction, action.When); err != nil {
 			return err
 		}
 	}
 
 	return nil
+}
+
+func validateConditions(conditions []models.WorkflowCondition, celCfg *workflows.Config) error {
+	if len(conditions) == 0 {
+		return nil
+	}
+
+	for _, cond := range conditions {
+		if cond.Expression == "" {
+			continue
+		}
+
+		if err := workflows.ValidateCELExpression(celCfg, workflows.CELScopeBase, cond.Expression); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func resolveCELConfig(celCfg *workflows.Config) *workflows.Config {
+	if celCfg == nil {
+		return workflows.NewDefaultConfig()
+	}
+
+	return celCfg
 }
 
 // validateActionKey validates the action key is present and unique
@@ -222,14 +254,14 @@ func validateActionType(actionType string, index int) (enums.WorkflowActionType,
 }
 
 // validateActionParams validates action parameters based on action type
-func validateActionParams(actionType enums.WorkflowActionType, params json.RawMessage, eligibleFields map[string]struct{}, actionKey string, index int) error {
+func validateActionParams(actionType enums.WorkflowActionType, params json.RawMessage, eligibleFields map[string]struct{}, actionKey string, index int, celCfg *workflows.Config) error {
 	var err error
 
 	switch actionType {
 	case enums.WorkflowActionTypeApproval:
 		err = validateApprovalActionParams(params, eligibleFields)
 	case enums.WorkflowActionTypeWebhook:
-		err = validateWebhookActionParams(params)
+		err = validateWebhookActionParams(params, celCfg)
 	case enums.WorkflowActionTypeFieldUpdate:
 		err = validateFieldUpdateActionParams(params)
 	case enums.WorkflowActionTypeNotification:
@@ -601,14 +633,23 @@ func validateTarget(t workflows.TargetConfig) error {
 }
 
 // validateWebhookActionParams validates webhook action parameters
-func validateWebhookActionParams(raw json.RawMessage) error {
+func validateWebhookActionParams(raw json.RawMessage, celCfg *workflows.Config) error {
 	if len(raw) == 0 {
 		return ErrWebhookParamsRequired
 	}
 
+	var payloadCheck map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &payloadCheck); err != nil {
+		return err
+	}
+	if _, exists := payloadCheck["payload"]; exists {
+		return ErrWebhookPayloadUnsupported
+	}
+
 	var params struct {
-		URL    string `json:"url"`
-		Method string `json:"method"`
+		URL         string `json:"url"`
+		Method      string `json:"method"`
+		PayloadExpr string `json:"payload_expr"`
 	}
 
 	if err := json.Unmarshal(raw, &params); err != nil {
@@ -622,6 +663,12 @@ func validateWebhookActionParams(raw json.RawMessage) error {
 	parsed, err := url.Parse(params.URL)
 	if err != nil || parsed.Scheme == "" || parsed.Host == "" {
 		return ErrWebhookURLInvalid
+	}
+
+	if strings.TrimSpace(params.PayloadExpr) != "" {
+		if err := workflows.ValidateCELExpression(celCfg, workflows.CELScopeAction, params.PayloadExpr); err != nil {
+			return err
+		}
 	}
 
 	return nil

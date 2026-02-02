@@ -7,6 +7,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/theopenlane/core/internal/graphapi/common"
+	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	mwauth "github.com/theopenlane/core/pkg/middleware/auth"
 )
@@ -68,6 +69,13 @@ func (r Resolver) WithComplexityLimitConfig(limit int) *Resolver {
 // WithMaxResultLimit sets the max result limit in the config for the resolvers
 func (r Resolver) WithMaxResultLimit(limit int) *Resolver {
 	r.maxResultLimit = &limit
+
+	return &r
+}
+
+// WithWorkflowsConfig sets the workflows config for CEL validation in resolvers.
+func (r Resolver) WithWorkflowsConfig(cfg workflows.Config) *Resolver {
+	r.workflowsConfig = cfg
 
 	return &r
 }

@@ -79,7 +79,7 @@ func TestValidateWorkflowDefinitionInput(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := validateWorkflowDefinitionInput(tt.schemaType, tt.doc)
+			err := validateWorkflowDefinitionInput(tt.schemaType, tt.doc, nil)
 
 			if tt.wantErr != nil {
 				require.Error(t, err)
@@ -144,7 +144,7 @@ func TestValidateTrigger(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := validateTrigger(tt.schemaType, tt.trigger, 0)
+			err := validateTrigger(tt.schemaType, tt.trigger, 0, nil)
 
 			if tt.wantErr != nil {
 				require.Error(t, err)
@@ -230,9 +230,10 @@ func TestValidateApprovalActionParams(t *testing.T) {
 
 func TestValidateWebhookActionParams(t *testing.T) {
 	tests := []struct {
-		name    string
-		params  json.RawMessage
-		wantErr error
+		name            string
+		params          json.RawMessage
+		wantErr         error
+		wantErrContains string
 	}{
 		{
 			name:    "empty params",
@@ -254,15 +255,33 @@ func TestValidateWebhookActionParams(t *testing.T) {
 			params:  json.RawMessage(`{"url": "https://example.com/webhook", "method": "POST"}`),
 			wantErr: nil,
 		},
+		{
+			name:    "legacy payload rejected",
+			params:  json.RawMessage(`{"url": "https://example.com/webhook", "payload": {"text": "nope"}}`),
+			wantErr: ErrWebhookPayloadUnsupported,
+		},
+		{
+			name:            "invalid payload expression",
+			params:          json.RawMessage(`{"url": "https://example.com/webhook", "payload_expr": "1 +"}`),
+			wantErrContains: "CEL compilation failed",
+		},
+		{
+			name:    "valid payload expression",
+			params:  json.RawMessage(`{"url": "https://example.com/webhook", "payload_expr": "{\"value\": \"ok\"}"}`),
+			wantErr: nil,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := validateWebhookActionParams(tt.params)
+			err := validateWebhookActionParams(tt.params, nil)
 
 			if tt.wantErr != nil {
 				require.Error(t, err)
 				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+			} else if tt.wantErrContains != "" {
+				require.Error(t, err)
+				assert.Contains(t, err.Error(), tt.wantErrContains)
 			} else {
 				assert.NoError(t, err)
 			}

@@ -287,7 +287,7 @@ func TestWorkflowEventTypeFromEntOperation(t *testing.T) {
 
 func TestCELEvaluatorValidateAndEvaluate(t *testing.T) {
 	cfg := workflows.NewDefaultConfig()
-	env, err := workflows.NewCELEnvWithConfig(cfg)
+	env, err := workflows.NewCELEnv(cfg, workflows.CELScopeAction)
 	assert.NoError(t, err)
 
 	eval := NewCELEvaluator(env, cfg)

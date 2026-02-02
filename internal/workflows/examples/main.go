@@ -1,12 +1,5 @@
-// Package main provides a workflow demonstration seed script
-//
-// This script creates a complete workflow automation example showcasing:
-// - Organization and user creation via API
-// - Workflow definition with dual approval
-// - Control that triggers the workflow
-// - Workflow instances and assignments
-//
-// Run with: go run main.go
+//go:build examples
+
 package main
 
 import (
@@ -719,10 +712,8 @@ func runWebhookDemo(ctx context.Context, config openlane.Config, apiClient *open
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},
-		Payload: map[string]any{
-			"event": "control_description_updated",
-		},
-		TimeoutMS: 5000,
+		PayloadExpr: `{"event": "control_description_updated"}`,
+		TimeoutMS:   5000,
 	}
 	webhookBytes, err := marshalParams("webhook params (control description)", webhookParams)
 	if err != nil {
@@ -860,69 +851,65 @@ func runSlackWebhookDemo(ctx context.Context, config openlane.Config, apiClient 
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},
-		Payload: map[string]any{
-			"attachments": []any{
-				map[string]any{
-					"color": "#36a64f", // green bar on the left
-					"blocks": []any{
-						map[string]any{
-							"type": "header",
-							"text": map[string]any{
-								"type":  "plain_text",
-								"text":  "✅ Control Approved",
-								"emoji": true,
-							},
-						},
-						map[string]any{
-							"type": "section",
-							"text": map[string]any{
-								"type": "mrkdwn",
-								"text": "*Control:* <https://console.theopenlane.io/controls/{{object_id}}|{{ref_code}} - {{title}}>\n*Status:* :white_check_mark: {{status}}",
-							},
-						},
-						map[string]any{
-							"type": "section",
-							"fields": []any{
-								map[string]any{
-									"type": "mrkdwn",
-									"text": "*Control*\n{{ref_code}}",
-								},
-								map[string]any{
-									"type": "mrkdwn",
-									"text": "*Title*\n{{title}}",
-								},
-								map[string]any{
-									"type": "mrkdwn",
-									"text": "*Triggered By*\n{{initiator}}",
-								},
-								map[string]any{
-									"type": "mrkdwn",
-									"text": "*Timestamp*\n{{timestamp}}",
-								},
-							},
-						},
-						map[string]any{
-							"type": "divider",
-						},
-						map[string]any{
-							"type": "actions",
-							"elements": []any{
-								map[string]any{
-									"type": "button",
-									"text": map[string]any{
-										"type":  "plain_text",
-										"text":  "View Control",
-										"emoji": true,
-									},
-									"style": "primary",
-									"url":   "https://console.theopenlane.io/controls/{{object_id}}",
-								},
-							},
-						},
-					},
-				},
-			},
-		},
+		PayloadExpr: `{
+  "attachments": [
+    {
+      "color": "#36a64f",
+      "blocks": [
+        {
+          "type": "header",
+          "text": {
+            "type": "plain_text",
+            "text": "✅ Control Approved",
+            "emoji": true
+          }
+        },
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "*Control:* <https://console.theopenlane.io/controls/" + object.id + "|" + object.ref_code + " - " + object.title + ">\n*Status:* :white_check_mark: " + object.status
+          }
+        },
+        {
+          "type": "section",
+          "fields": [
+            {
+              "type": "mrkdwn",
+              "text": "*Control*\n" + object.ref_code
+            },
+            {
+              "type": "mrkdwn",
+              "text": "*Title*\n" + object.title
+            },
+            {
+              "type": "mrkdwn",
+              "text": "*Triggered By*\n" + initiator
+            }
+          ]
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "actions",
+          "elements": [
+            {
+              "type": "button",
+              "text": {
+                "type": "plain_text",
+                "text": "View Control",
+                "emoji": true
+              },
+              "style": "primary",
+              "url": "https://console.theopenlane.io/controls/" + object.id
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}`,
 		TimeoutMS: 5000,
 	}
 	webhookBytes, err := marshalParams("webhook params (Slack)", webhookParams)
@@ -1194,10 +1181,8 @@ func runEvidenceReviewDemo(ctx context.Context, config openlane.Config, apiClien
 			Headers: map[string]string{
 				"Content-Type": "application/json",
 			},
-			Payload: map[string]any{
-				"text": "Evidence review required for {{object_id}} (instance {{instance_id}}).",
-			},
-			TimeoutMS: 5000,
+			PayloadExpr: `{"text": "Evidence review required for " + object.id + " (instance " + instance.id + ")."}`,
+			TimeoutMS:   5000,
 		}
 		reviewWebhookBytes, err := marshalParams("webhook params (review required)", reviewWebhook)
 		if err != nil {
@@ -1225,10 +1210,8 @@ func runEvidenceReviewDemo(ctx context.Context, config openlane.Config, apiClien
 			Headers: map[string]string{
 				"Content-Type": "application/json",
 			},
-			Payload: map[string]any{
-				"text": "Evidence review approved for {{object_id}}.",
-			},
-			TimeoutMS: 5000,
+			PayloadExpr: `{"text": "Evidence review approved for " + object.id + "."}`,
+			TimeoutMS:   5000,
 		}
 		completionWebhookBytes, err := marshalParams("webhook params (review complete)", completionWebhook)
 		if err != nil {
