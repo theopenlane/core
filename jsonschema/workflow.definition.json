@@ -224,8 +224,7 @@
           "description": "Additional HTTP headers to include in the request"
         },
         "payload_expr": {
-          "type": "string",
-          "description": "CEL expression that evaluates to a JSON object merged into the webhook payload"
+          "type": "string"
         },
         "timeout_ms": {
           "type": "integer",
