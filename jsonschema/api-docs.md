@@ -1751,6 +1751,8 @@ CloudflareConfig contains configuration for Cloudflare integration.
 |**enabled**|`boolean`|Enabled toggles the Cloudflare snapshot handler<br/>||
 |**apitoken**|`string`|APIToken is the API token used for Cloudflare client initialization<br/>||
 |**accountid**|`string`|AccountID is the Cloudflare account ID to use for snapshot operations<br/>||
+|**clientid**|`string`|ClientID is the Cloudflare Access client ID for shortlink API requests<br/>||
+|**clientsecret**|`string`|ClientSecret is the Cloudflare Access client secret for shortlink API requests<br/>||
 
 **Additional Properties:** not allowed  
 
