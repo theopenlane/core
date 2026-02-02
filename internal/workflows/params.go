@@ -52,8 +52,9 @@ type WebhookActionParams struct {
 	Method string `json:"method"`
 	// Headers are additional HTTP headers for the webhook request
 	Headers map[string]string `json:"headers"`
-	// Payload is merged into the base webhook payload
-	Payload map[string]any `json:"payload"`
+	// PayloadExpr is a CEL expression that evaluates to a JSON object merged into the base payload.
+	// When empty, only the base payload is sent.
+	PayloadExpr string `json:"payload_expr"`
 	// TimeoutMS overrides the webhook timeout in milliseconds
 	TimeoutMS int `json:"timeout_ms"`
 	// Secret signs the webhook payload if provided
@@ -75,7 +76,6 @@ type IntegrationActionParams struct {
 	Operation string `json:"operation"`
 	// Config holds the integration-specific configuration payload
 	Config map[string]any `json:"config"`
-
 	// TimeoutMS overrides the operation timeout in milliseconds
 	TimeoutMS int `json:"timeout_ms"`
 	// Retries overrides the retry count when non-zero

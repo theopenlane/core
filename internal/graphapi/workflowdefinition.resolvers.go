@@ -23,7 +23,7 @@ import (
 
 // CreateWorkflowDefinition is the resolver for the createWorkflowDefinition field.
 func (r *mutationResolver) CreateWorkflowDefinition(ctx context.Context, input generated.CreateWorkflowDefinitionInput) (*model.WorkflowDefinitionCreatePayload, error) {
-	if err := validateWorkflowDefinitionInput(input.SchemaType, input.DefinitionJSON); err != nil {
+	if err := validateWorkflowDefinitionInput(input.SchemaType, input.DefinitionJSON, &r.workflowsConfig); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowdefinition"})
 	}
 
@@ -145,7 +145,7 @@ func (r *mutationResolver) UpdateWorkflowDefinition(ctx context.Context, id stri
 		doc = input.DefinitionJSON
 	}
 
-	if err := validateWorkflowDefinitionInput(res.SchemaType, doc); err != nil {
+	if err := validateWorkflowDefinitionInput(res.SchemaType, doc, &r.workflowsConfig); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowdefinition"})
 	}
 

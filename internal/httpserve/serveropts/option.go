@@ -279,6 +279,7 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithDevelopment(s.Config.Settings.Server.Dev).
 			WithComplexityLimitConfig(s.Config.Settings.Server.ComplexityLimit).
 			WithMaxResultLimit(s.Config.Settings.Server.MaxResultLimit).
+			WithWorkflowsConfig(s.Config.Settings.Workflows).
 			WithTrustCenterCnameTarget(s.Config.Settings.Server.TrustCenterCnameTarget).
 			WithTrustCenterDefaultDomain(s.Config.Settings.Server.DefaultTrustCenterDomain).
 			WithSubscriptions(s.Config.Settings.Server.EnableGraphSubscriptions).

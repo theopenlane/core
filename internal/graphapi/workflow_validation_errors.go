@@ -71,6 +71,8 @@ var (
 	ErrWebhookURLRequired = errors.New("webhook action requires url")
 	// ErrWebhookURLInvalid is returned when webhook URL is invalid
 	ErrWebhookURLInvalid = errors.New("invalid webhook url")
+	// ErrWebhookPayloadUnsupported is returned when legacy webhook payloads are provided
+	ErrWebhookPayloadUnsupported = errors.New("webhook payload is not supported; use payload_expr")
 	// ErrFieldUpdateParamsRequired is returned when field update params are required but not provided
 	ErrFieldUpdateParamsRequired = errors.New("field update params required")
 	// ErrFieldUpdateUpdatesRequired is returned when field update updates are required

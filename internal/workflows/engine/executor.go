@@ -5,8 +5,10 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"maps"
+	"strings"
 	"time"
 
 	"github.com/cenkalti/backoff/v5"
@@ -23,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/workflowgenerated"
 	wfworkflows "github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
+	"github.com/theopenlane/core/pkg/celx"
 )
 
 const (
@@ -358,6 +361,14 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 	var params wfworkflows.WebhookActionParams
 
 	if action.Params != nil {
+		var payloadCheck map[string]json.RawMessage
+		if err := json.Unmarshal(action.Params, &payloadCheck); err != nil {
+			return fmt.Errorf("%w: %w", ErrUnmarshalParams, err)
+		}
+		if _, exists := payloadCheck["payload"]; exists {
+			return ErrWebhookPayloadUnsupported
+		}
+
 		if err := json.Unmarshal(action.Params, &params); err != nil {
 			return fmt.Errorf("%w: %w", ErrUnmarshalParams, err)
 		}
@@ -372,7 +383,7 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 		method = "POST"
 	}
 
-	replacements, basePayload := wfworkflows.BuildWorkflowActionContext(instance, obj, action.Key)
+	_, basePayload := wfworkflows.BuildWorkflowActionContext(instance, obj, action.Key)
 
 	// Resolve user IDs to display names for human-readable webhook payloads
 	allowCtx := wfworkflows.AllowContext(ctx)
@@ -388,37 +399,29 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 	basePayload["initiator"] = initiatorName
 	basePayload["object_type"] = obj.Type.String()
 
-	replacements["initiator"] = initiatorName
-	replacements["approved_by"] = approverName
-	now := time.Now().UTC()
-	replacements["approved_at"] = now.Format(time.RFC3339)
-	replacements["timestamp"] = now.Format("01/02/2006")
-
 	// Enrich with object-specific details when possible using generated helper.
 	// This adds fields like ref_code, title, name, status based on schema annotations.
 	if err := e.client.EnrichWebhookPayload(allowCtx, obj.Type, obj.ID, basePayload); err != nil {
 		return fmt.Errorf("%w: %w", ErrFailedToEnrichWebhookPayload, err)
 	}
 
-	// Copy enriched fields to replacements for template substitution
-	for key, value := range basePayload {
-		if _, exists := replacements[key]; exists {
-			continue
+	if strings.TrimSpace(params.PayloadExpr) != "" {
+		vars, err := e.buildActionCELVars(ctx, instance, obj)
+		if err != nil {
+			return err
 		}
-		switch v := value.(type) {
-		case string:
-			replacements[key] = v
-		case fmt.Stringer:
-			replacements[key] = v.String()
-		default:
-			replacements[key] = fmt.Sprintf("%v", value)
+
+		exprPayload, err := e.celEvaluator.EvaluateJSONMap(ctx, params.PayloadExpr, vars)
+		if err != nil {
+			if errors.Is(err, celx.ErrJSONMapExpected) {
+				return fmt.Errorf("%w: %w", ErrWebhookPayloadExpressionInvalid, err)
+			}
+
+			return fmt.Errorf("%w: %w", ErrWebhookPayloadExpressionFailed, err)
 		}
+
+		maps.Copy(basePayload, exprPayload)
 	}
-
-	templatedPayload := applyStringTemplates(params.Payload, replacements)
-
-	// Merge caller-provided payload onto base payload after templating.
-	maps.Copy(basePayload, templatedPayload)
 
 	payloadBytes, err := json.Marshal(basePayload)
 	if err != nil {

@@ -57,7 +57,7 @@ func NewWorkflowEngineWithConfig(client *generated.Client, emitter soiree.Emitte
 		config = workflows.NewDefaultConfig()
 	}
 
-	env, err := workflows.NewCELEnvWithConfig(config)
+	env, err := workflows.NewCELEnv(config, workflows.CELScopeAction)
 	if err != nil {
 		return nil, err
 	}

@@ -43,6 +43,12 @@ var (
 	ErrCELNilOutput = errors.New("CEL evaluation returned nil output")
 	// ErrWebhookFailed is returned when a webhook request fails
 	ErrWebhookFailed = errors.New("webhook request failed")
+	// ErrWebhookPayloadUnsupported is returned when legacy webhook payloads are provided
+	ErrWebhookPayloadUnsupported = errors.New("webhook payload is not supported; use payload_expr")
+	// ErrWebhookPayloadExpressionFailed is returned when webhook payload CEL evaluation fails
+	ErrWebhookPayloadExpressionFailed = errors.New("webhook payload expression failed")
+	// ErrWebhookPayloadExpressionInvalid is returned when webhook payload CEL does not produce a JSON object
+	ErrWebhookPayloadExpressionInvalid = errors.New("webhook payload expression invalid")
 	// ErrIntegrationFailed is returned when an integration operation fails
 	ErrIntegrationFailed = errors.New("integration operation failed")
 	// ErrExecutorNotAvailable is returned when the executor is not available
