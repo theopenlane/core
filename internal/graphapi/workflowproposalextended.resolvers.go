@@ -106,7 +106,6 @@ func (r *mutationResolver) WithdrawWorkflowProposal(ctx context.Context, id stri
 		return nil, ErrWorkflowsDisabled
 	}
 
-	_ = reason
 	if id == "" {
 		return nil, rout.NewMissingRequiredFieldError("id")
 	}
@@ -117,19 +116,14 @@ func (r *mutationResolver) WithdrawWorkflowProposal(ctx context.Context, id stri
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowproposal"})
 	}
 
-	if proposal.State == enums.WorkflowProposalStateSuperseded {
-		return &model.WorkflowProposalWithdrawPayload{
-			WorkflowProposal: proposal,
-		}, nil
-	}
-
-	if proposal.State == enums.WorkflowProposalStateApplied {
+	switch proposal.State {
+	case enums.WorkflowProposalStateSuperseded:
+		return &model.WorkflowProposalWithdrawPayload{WorkflowProposal: proposal}, nil
+	case enums.WorkflowProposalStateApplied:
 		return nil, rout.ErrPermissionDenied
 	}
 
-	update := proposal.Update().SetState(enums.WorkflowProposalStateSuperseded)
-
-	res, err := update.Save(ctx)
+	res, err := proposal.Update().SetState(enums.WorkflowProposalStateSuperseded).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowproposal"})
 	}

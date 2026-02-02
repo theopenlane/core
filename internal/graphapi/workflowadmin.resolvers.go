@@ -9,6 +9,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -37,12 +39,7 @@ func (r *mutationResolver) ForceCompleteWorkflowInstance(ctx context.Context, id
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowinstance"})
 	}
 
-	applyChanges := true
-	if applyProposal != nil {
-		applyChanges = *applyProposal
-	}
-
-	if applyChanges && instance.WorkflowProposalID != "" {
+	if lo.FromPtrOr(applyProposal, true) && instance.WorkflowProposalID != "" {
 		objectType, objectID, err := workflowInstanceObjectContext(ctx, client, instance)
 		if err != nil {
 			return nil, err
@@ -118,11 +115,7 @@ func (r *mutationResolver) CancelWorkflowInstance(ctx context.Context, id string
 
 	if len(pendingAssignments) > 0 {
 		decidedAt := time.Now().UTC()
-		rejectionReason := "workflow instance cancelled"
-		if reason != nil && *reason != "" {
-			rejectionReason = *reason
-		}
-
+		rejectionReason := lo.CoalesceOrEmpty(lo.FromPtrOr(reason, ""), "workflow instance cancelled")
 		userID, _ := auth.GetSubjectIDFromContext(ctx)
 
 		for _, assignment := range pendingAssignments {
@@ -254,7 +247,7 @@ func (r *mutationResolver) AdminReassignWorkflowAssignment(ctx context.Context, 
 		}
 	}
 
-	created := 0
+	createdAny := false
 	for _, target := range input.Targets {
 		if target == nil {
 			continue
@@ -288,11 +281,11 @@ func (r *mutationResolver) AdminReassignWorkflowAssignment(ctx context.Context, 
 				return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowassignmenttarget"})
 			}
 
-			created++
+			createdAny = true
 		}
 	}
 
-	if created == 0 {
+	if !createdAny {
 		return nil, rout.ErrBadRequest
 	}
 
