@@ -102,8 +102,12 @@ type CampaignHistory struct {
 	// the assessment associated with the campaign
 	AssessmentID string `json:"assessment_id,omitempty"`
 	// additional metadata about the campaign
-	Metadata     map[string]interface{} `json:"metadata,omitempty"`
-	selectValues sql.SelectValues
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the email branding associated with the campaign
+	EmailBrandingID string `json:"email_branding_id,omitempty"`
+	// the email template associated with the campaign
+	EmailTemplateID string `json:"email_template_id,omitempty"`
+	selectValues    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -123,7 +127,7 @@ func (*CampaignHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case campaignhistory.FieldRecurrenceInterval, campaignhistory.FieldRecipientCount, campaignhistory.FieldResendCount:
 			values[i] = new(sql.NullInt64)
-		case campaignhistory.FieldID, campaignhistory.FieldRef, campaignhistory.FieldCreatedBy, campaignhistory.FieldUpdatedBy, campaignhistory.FieldDeletedBy, campaignhistory.FieldDisplayID, campaignhistory.FieldOwnerID, campaignhistory.FieldInternalOwner, campaignhistory.FieldInternalOwnerUserID, campaignhistory.FieldInternalOwnerGroupID, campaignhistory.FieldName, campaignhistory.FieldDescription, campaignhistory.FieldCampaignType, campaignhistory.FieldStatus, campaignhistory.FieldRecurrenceFrequency, campaignhistory.FieldRecurrenceTimezone, campaignhistory.FieldTemplateID, campaignhistory.FieldEntityID, campaignhistory.FieldAssessmentID:
+		case campaignhistory.FieldID, campaignhistory.FieldRef, campaignhistory.FieldCreatedBy, campaignhistory.FieldUpdatedBy, campaignhistory.FieldDeletedBy, campaignhistory.FieldDisplayID, campaignhistory.FieldOwnerID, campaignhistory.FieldInternalOwner, campaignhistory.FieldInternalOwnerUserID, campaignhistory.FieldInternalOwnerGroupID, campaignhistory.FieldName, campaignhistory.FieldDescription, campaignhistory.FieldCampaignType, campaignhistory.FieldStatus, campaignhistory.FieldRecurrenceFrequency, campaignhistory.FieldRecurrenceTimezone, campaignhistory.FieldTemplateID, campaignhistory.FieldEntityID, campaignhistory.FieldAssessmentID, campaignhistory.FieldEmailBrandingID, campaignhistory.FieldEmailTemplateID:
 			values[i] = new(sql.NullString)
 		case campaignhistory.FieldHistoryTime, campaignhistory.FieldCreatedAt, campaignhistory.FieldUpdatedAt, campaignhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -401,6 +405,18 @@ func (_m *CampaignHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
+		case campaignhistory.FieldEmailBrandingID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field email_branding_id", values[i])
+			} else if value.Valid {
+				_m.EmailBrandingID = value.String
+			}
+		case campaignhistory.FieldEmailTemplateID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field email_template_id", values[i])
+			} else if value.Valid {
+				_m.EmailTemplateID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -574,6 +590,12 @@ func (_m *CampaignHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	builder.WriteString("email_branding_id=")
+	builder.WriteString(_m.EmailBrandingID)
+	builder.WriteString(", ")
+	builder.WriteString("email_template_id=")
+	builder.WriteString(_m.EmailTemplateID)
 	builder.WriteByte(')')
 	return builder.String()
 }

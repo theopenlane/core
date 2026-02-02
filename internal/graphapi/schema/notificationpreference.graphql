@@ -1,0 +1,158 @@
+extend type Query {
+    """
+    Look up notificationPreference by ID
+    """
+     notificationPreference(
+        """
+        ID of the notificationPreference
+        """
+        id: ID!
+    ):  NotificationPreference!
+}
+
+extend type Mutation{
+    """
+    Create a new notificationPreference
+    """
+    createNotificationPreference(
+        """
+        values of the notificationPreference
+        """
+        input: CreateNotificationPreferenceInput!
+    ): NotificationPreferenceCreatePayload!
+    """
+    Create multiple new notificationPreferences
+    """
+    createBulkNotificationPreference(
+        """
+        values of the notificationPreference
+        """
+        input: [CreateNotificationPreferenceInput!]
+    ): NotificationPreferenceBulkCreatePayload!
+    """
+    Create multiple new notificationPreferences via file upload
+    """
+    createBulkCSVNotificationPreference(
+        """
+        csv file containing values of the notificationPreference
+        """
+        input: Upload!
+    ): NotificationPreferenceBulkCreatePayload!
+    """
+    Update multiple existing notificationPreferences
+    """
+    updateBulkNotificationPreference(
+        """
+        IDs of the notificationPreferences to update
+        """
+        ids: [ID!]!
+        """
+        values to update the notificationPreferences with
+        """
+        input: UpdateNotificationPreferenceInput!
+    ): NotificationPreferenceBulkUpdatePayload!
+    """
+    Update multiple existing notificationPreferences via file upload
+    """
+    updateBulkCSVNotificationPreference(
+        """
+        csv file containing values of the notificationPreference, must include ID column
+        """
+        input: Upload!
+    ): NotificationPreferenceBulkUpdatePayload!
+    """
+    Update an existing notificationPreference
+    """
+    updateNotificationPreference(
+        """
+        ID of the notificationPreference
+        """
+        id: ID!
+        """
+        New values for the notificationPreference
+        """
+        input: UpdateNotificationPreferenceInput!
+    ): NotificationPreferenceUpdatePayload!
+    """
+    Delete an existing notificationPreference
+    """
+    deleteNotificationPreference(
+        """
+        ID of the notificationPreference
+        """
+        id: ID!
+    ): NotificationPreferenceDeletePayload!
+    """
+    Delete multiple notificationPreferences
+    """
+    deleteBulkNotificationPreference(
+        """
+        IDs of the notificationPreferences to delete
+        """
+        ids: [ID!]!
+    ): NotificationPreferenceBulkDeletePayload!
+}
+
+"""
+Return response for createNotificationPreference mutation
+"""
+type NotificationPreferenceCreatePayload {
+    """
+    Created notificationPreference
+    """
+    notificationPreference: NotificationPreference!
+}
+
+"""
+Return response for updateNotificationPreference mutation
+"""
+type NotificationPreferenceUpdatePayload {
+    """
+    Updated notificationPreference
+    """
+    notificationPreference: NotificationPreference!
+}
+
+"""
+Return response for deleteNotificationPreference mutation
+"""
+type NotificationPreferenceDeletePayload {
+    """
+    Deleted notificationPreference ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkNotificationPreference mutation
+"""
+type NotificationPreferenceBulkCreatePayload {
+    """
+    Created notificationPreferences
+    """
+    notificationPreferences: [NotificationPreference!]
+}
+
+"""
+Return response for updateBulkNotificationPreference mutation
+"""
+type NotificationPreferenceBulkUpdatePayload {
+    """
+    Updated notificationPreferences
+    """
+    notificationPreferences: [NotificationPreference!]
+    """
+    IDs of the updated notificationPreferences
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkNotificationPreference mutation
+"""
+type NotificationPreferenceBulkDeletePayload {
+    """
+    Deleted notificationPreference IDs
+    """
+    deletedIDs: [ID!]!
+}

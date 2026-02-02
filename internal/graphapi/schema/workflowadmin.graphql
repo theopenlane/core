@@ -42,7 +42,7 @@ extend type Mutation {
     """
     Reassign a workflow assignment to new targets
     """
-    reassignWorkflowAssignment(
+    adminReassignWorkflowAssignment(
         input: ReassignWorkflowAssignmentInput!
     ): WorkflowAssignmentReassignPayload!
 }
@@ -66,7 +66,7 @@ input WorkflowAssignmentTargetInput {
 }
 
 """
-Input for reassignWorkflowAssignment mutation
+Input for adminReassignWorkflowAssignment mutation
 """
 input ReassignWorkflowAssignmentInput {
     """
@@ -80,7 +80,7 @@ input ReassignWorkflowAssignmentInput {
 }
 
 """
-Return response for reassignWorkflowAssignment mutation
+Return response for adminReassignWorkflowAssignment mutation
 """
 type WorkflowAssignmentReassignPayload {
     """

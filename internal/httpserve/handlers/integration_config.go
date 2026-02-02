@@ -98,6 +98,14 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		}
 	}
 
+	if record, err := h.IntegrationStore.EnsureIntegration(requestCtx, orgID, providerType); err == nil {
+		if err := h.updateIntegrationProviderMetadata(requestCtx, record.ID, providerType); err != nil {
+			logx.FromContext(requestCtx).Warn().Err(err).Str("provider", string(providerType)).Msg("failed to update integration provider metadata")
+		}
+	} else {
+		logx.FromContext(requestCtx).Warn().Err(err).Str("provider", string(providerType)).Msg("failed to ensure integration record for metadata update")
+	}
+
 	out := openapi.IntegrationConfigResponse{
 		Reply:    rout.Reply{Success: true},
 		Provider: string(providerType),

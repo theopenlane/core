@@ -175,6 +175,38 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    emailBrandings {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          name
+          tags
+        }
+      }
+    }
+    emailTemplates {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          key
+          name
+        }
+      }
+    }
     entities {
       totalCount
       pageInfo {
@@ -267,6 +299,23 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    integrations {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          kind
+          name
+          tags
+        }
+      }
+    }
     internalPolicies {
       totalCount
       pageInfo {
@@ -350,6 +399,22 @@ query GlobalSearch($query: String!) {
           id
           name
           tags
+        }
+      }
+    }
+    notificationTemplates {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          key
+          name
         }
       }
     }

@@ -15,6 +15,10 @@ import (
 
 // WorkflowInstance is the resolver for the workflowInstance field.
 func (r *queryResolver) WorkflowInstance(ctx context.Context, id string) (*generated.WorkflowInstance, error) {
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
 	query, err := withTransactionalMutation(ctx).WorkflowInstance.Query().Where(workflowinstance.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowinstance"})

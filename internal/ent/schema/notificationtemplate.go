@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/common/enums"
@@ -50,12 +51,14 @@ func (NotificationTemplate) Fields() []ent.Field {
 			Comment("stable identifier for the template").
 			NotEmpty().
 			Annotations(
+				entx.FieldSearchable(),
 				entgql.OrderField("KEY"),
 			),
 		field.String("name").
 			Comment("display name for the template").
 			NotEmpty().
 			Annotations(
+				entx.FieldSearchable(),
 				entgql.OrderField("NAME"),
 			),
 		field.String("description").
@@ -198,7 +201,6 @@ func (n NotificationTemplate) Mixin() []ent.Mixin {
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[NotificationTemplate](n,
-				withParents(Integration{}, WorkflowDefinition{}),
 				withOrganizationOwner(true),
 			),
 			mixin.NewSystemOwnedMixin(),

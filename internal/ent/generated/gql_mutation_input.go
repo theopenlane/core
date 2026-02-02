@@ -1871,6 +1871,8 @@ type CreateCampaignInput struct {
 	InternalOwnerGroupID   *string
 	AssessmentID           *string
 	TemplateID             *string
+	EmailBrandingID        *string
+	EmailTemplateID        *string
 	EntityID               *string
 	CampaignTargetIDs      []string
 	AssessmentResponseIDs  []string
@@ -1977,6 +1979,12 @@ func (i *CreateCampaignInput) Mutate(m *CampaignMutation) {
 	if v := i.TemplateID; v != nil {
 		m.SetTemplateID(*v)
 	}
+	if v := i.EmailBrandingID; v != nil {
+		m.SetEmailBrandingID(*v)
+	}
+	if v := i.EmailTemplateID; v != nil {
+		m.SetEmailTemplateID(*v)
+	}
 	if v := i.EntityID; v != nil {
 		m.SetEntityID(*v)
 	}
@@ -2072,6 +2080,10 @@ type UpdateCampaignInput struct {
 	AssessmentID                *string
 	ClearTemplate               bool
 	TemplateID                  *string
+	ClearEmailBranding          bool
+	EmailBrandingID             *string
+	ClearEmailTemplate          bool
+	EmailTemplateID             *string
 	ClearEntity                 bool
 	EntityID                    *string
 	ClearCampaignTargets        bool
@@ -2281,6 +2293,18 @@ func (i *UpdateCampaignInput) Mutate(m *CampaignMutation) {
 	}
 	if v := i.TemplateID; v != nil {
 		m.SetTemplateID(*v)
+	}
+	if i.ClearEmailBranding {
+		m.ClearEmailBranding()
+	}
+	if v := i.EmailBrandingID; v != nil {
+		m.SetEmailBrandingID(*v)
+	}
+	if i.ClearEmailTemplate {
+		m.ClearEmailTemplate()
+	}
+	if v := i.EmailTemplateID; v != nil {
+		m.SetEmailTemplateID(*v)
 	}
 	if i.ClearEntity {
 		m.ClearEntity()
@@ -6037,6 +6061,512 @@ func (c *DocumentDataUpdate) SetInput(i UpdateDocumentDataInput) *DocumentDataUp
 
 // SetInput applies the change-set in the UpdateDocumentDataInput on the DocumentDataUpdateOne builder.
 func (c *DocumentDataUpdateOne) SetInput(i UpdateDocumentDataInput) *DocumentDataUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateEmailBrandingInput represents a mutation input for creating emailbrandings.
+type CreateEmailBrandingInput struct {
+	Tags             []string
+	Name             string
+	BrandName        *string
+	LogoRemoteURL    *string
+	PrimaryColor     *string
+	SecondaryColor   *string
+	BackgroundColor  *string
+	TextColor        *string
+	ButtonColor      *string
+	ButtonTextColor  *string
+	LinkColor        *string
+	FontFamily       *string
+	IsDefault        *bool
+	OwnerID          *string
+	CampaignIDs      []string
+	EmailTemplateIDs []string
+}
+
+// Mutate applies the CreateEmailBrandingInput on the EmailBrandingMutation builder.
+func (i *CreateEmailBrandingInput) Mutate(m *EmailBrandingMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.BrandName; v != nil {
+		m.SetBrandName(*v)
+	}
+	if v := i.LogoRemoteURL; v != nil {
+		m.SetLogoRemoteURL(*v)
+	}
+	if v := i.PrimaryColor; v != nil {
+		m.SetPrimaryColor(*v)
+	}
+	if v := i.SecondaryColor; v != nil {
+		m.SetSecondaryColor(*v)
+	}
+	if v := i.BackgroundColor; v != nil {
+		m.SetBackgroundColor(*v)
+	}
+	if v := i.TextColor; v != nil {
+		m.SetTextColor(*v)
+	}
+	if v := i.ButtonColor; v != nil {
+		m.SetButtonColor(*v)
+	}
+	if v := i.ButtonTextColor; v != nil {
+		m.SetButtonTextColor(*v)
+	}
+	if v := i.LinkColor; v != nil {
+		m.SetLinkColor(*v)
+	}
+	if v := i.FontFamily; v != nil {
+		m.SetFontFamily(*v)
+	}
+	if v := i.IsDefault; v != nil {
+		m.SetIsDefault(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.CampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.EmailTemplateIDs; len(v) > 0 {
+		m.AddEmailTemplateIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateEmailBrandingInput on the EmailBrandingCreate builder.
+func (c *EmailBrandingCreate) SetInput(i CreateEmailBrandingInput) *EmailBrandingCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateEmailBrandingInput represents a mutation input for updating emailbrandings.
+type UpdateEmailBrandingInput struct {
+	ClearTags              bool
+	Tags                   []string
+	AppendTags             []string
+	Name                   *string
+	ClearBrandName         bool
+	BrandName              *string
+	ClearLogoRemoteURL     bool
+	LogoRemoteURL          *string
+	ClearPrimaryColor      bool
+	PrimaryColor           *string
+	ClearSecondaryColor    bool
+	SecondaryColor         *string
+	ClearBackgroundColor   bool
+	BackgroundColor        *string
+	ClearTextColor         bool
+	TextColor              *string
+	ClearButtonColor       bool
+	ButtonColor            *string
+	ClearButtonTextColor   bool
+	ButtonTextColor        *string
+	ClearLinkColor         bool
+	LinkColor              *string
+	ClearFontFamily        bool
+	FontFamily             *string
+	ClearIsDefault         bool
+	IsDefault              *bool
+	ClearCampaigns         bool
+	AddCampaignIDs         []string
+	RemoveCampaignIDs      []string
+	ClearEmailTemplates    bool
+	AddEmailTemplateIDs    []string
+	RemoveEmailTemplateIDs []string
+}
+
+// Mutate applies the UpdateEmailBrandingInput on the EmailBrandingMutation builder.
+func (i *UpdateEmailBrandingInput) Mutate(m *EmailBrandingMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearBrandName {
+		m.ClearBrandName()
+	}
+	if v := i.BrandName; v != nil {
+		m.SetBrandName(*v)
+	}
+	if i.ClearLogoRemoteURL {
+		m.ClearLogoRemoteURL()
+	}
+	if v := i.LogoRemoteURL; v != nil {
+		m.SetLogoRemoteURL(*v)
+	}
+	if i.ClearPrimaryColor {
+		m.ClearPrimaryColor()
+	}
+	if v := i.PrimaryColor; v != nil {
+		m.SetPrimaryColor(*v)
+	}
+	if i.ClearSecondaryColor {
+		m.ClearSecondaryColor()
+	}
+	if v := i.SecondaryColor; v != nil {
+		m.SetSecondaryColor(*v)
+	}
+	if i.ClearBackgroundColor {
+		m.ClearBackgroundColor()
+	}
+	if v := i.BackgroundColor; v != nil {
+		m.SetBackgroundColor(*v)
+	}
+	if i.ClearTextColor {
+		m.ClearTextColor()
+	}
+	if v := i.TextColor; v != nil {
+		m.SetTextColor(*v)
+	}
+	if i.ClearButtonColor {
+		m.ClearButtonColor()
+	}
+	if v := i.ButtonColor; v != nil {
+		m.SetButtonColor(*v)
+	}
+	if i.ClearButtonTextColor {
+		m.ClearButtonTextColor()
+	}
+	if v := i.ButtonTextColor; v != nil {
+		m.SetButtonTextColor(*v)
+	}
+	if i.ClearLinkColor {
+		m.ClearLinkColor()
+	}
+	if v := i.LinkColor; v != nil {
+		m.SetLinkColor(*v)
+	}
+	if i.ClearFontFamily {
+		m.ClearFontFamily()
+	}
+	if v := i.FontFamily; v != nil {
+		m.SetFontFamily(*v)
+	}
+	if i.ClearIsDefault {
+		m.ClearIsDefault()
+	}
+	if v := i.IsDefault; v != nil {
+		m.SetIsDefault(*v)
+	}
+	if i.ClearCampaigns {
+		m.ClearCampaigns()
+	}
+	if v := i.AddCampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.RemoveCampaignIDs; len(v) > 0 {
+		m.RemoveCampaignIDs(v...)
+	}
+	if i.ClearEmailTemplates {
+		m.ClearEmailTemplates()
+	}
+	if v := i.AddEmailTemplateIDs; len(v) > 0 {
+		m.AddEmailTemplateIDs(v...)
+	}
+	if v := i.RemoveEmailTemplateIDs; len(v) > 0 {
+		m.RemoveEmailTemplateIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateEmailBrandingInput on the EmailBrandingUpdate builder.
+func (c *EmailBrandingUpdate) SetInput(i UpdateEmailBrandingInput) *EmailBrandingUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateEmailBrandingInput on the EmailBrandingUpdateOne builder.
+func (c *EmailBrandingUpdateOne) SetInput(i UpdateEmailBrandingInput) *EmailBrandingUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateEmailTemplateInput represents a mutation input for creating emailtemplates.
+type CreateEmailTemplateInput struct {
+	InternalNotes           *string
+	SystemInternalID        *string
+	Key                     string
+	Name                    string
+	Description             *string
+	Format                  *enums.NotificationTemplateFormat
+	Locale                  *string
+	SubjectTemplate         *string
+	PreheaderTemplate       *string
+	BodyTemplate            *string
+	TextTemplate            *string
+	Jsonconfig              map[string]interface{}
+	Uischema                map[string]interface{}
+	Metadata                map[string]interface{}
+	Active                  *bool
+	Version                 *int
+	OwnerID                 *string
+	EmailBrandingID         *string
+	IntegrationID           *string
+	WorkflowDefinitionID    *string
+	WorkflowInstanceID      *string
+	CampaignIDs             []string
+	NotificationTemplateIDs []string
+}
+
+// Mutate applies the CreateEmailTemplateInput on the EmailTemplateMutation builder.
+func (i *CreateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
+	m.SetKey(i.Key)
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Format; v != nil {
+		m.SetFormat(*v)
+	}
+	if v := i.Locale; v != nil {
+		m.SetLocale(*v)
+	}
+	if v := i.SubjectTemplate; v != nil {
+		m.SetSubjectTemplate(*v)
+	}
+	if v := i.PreheaderTemplate; v != nil {
+		m.SetPreheaderTemplate(*v)
+	}
+	if v := i.BodyTemplate; v != nil {
+		m.SetBodyTemplate(*v)
+	}
+	if v := i.TextTemplate; v != nil {
+		m.SetTextTemplate(*v)
+	}
+	if v := i.Jsonconfig; v != nil {
+		m.SetJsonconfig(v)
+	}
+	if v := i.Uischema; v != nil {
+		m.SetUischema(v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.Active; v != nil {
+		m.SetActive(*v)
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.EmailBrandingID; v != nil {
+		m.SetEmailBrandingID(*v)
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
+	if v := i.WorkflowDefinitionID; v != nil {
+		m.SetWorkflowDefinitionID(*v)
+	}
+	if v := i.WorkflowInstanceID; v != nil {
+		m.SetWorkflowInstanceID(*v)
+	}
+	if v := i.CampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.NotificationTemplateIDs; len(v) > 0 {
+		m.AddNotificationTemplateIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateEmailTemplateInput on the EmailTemplateCreate builder.
+func (c *EmailTemplateCreate) SetInput(i CreateEmailTemplateInput) *EmailTemplateCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateEmailTemplateInput represents a mutation input for updating emailtemplates.
+type UpdateEmailTemplateInput struct {
+	ClearInternalNotes            bool
+	InternalNotes                 *string
+	ClearSystemInternalID         bool
+	SystemInternalID              *string
+	Key                           *string
+	Name                          *string
+	ClearDescription              bool
+	Description                   *string
+	Format                        *enums.NotificationTemplateFormat
+	Locale                        *string
+	ClearSubjectTemplate          bool
+	SubjectTemplate               *string
+	ClearPreheaderTemplate        bool
+	PreheaderTemplate             *string
+	ClearBodyTemplate             bool
+	BodyTemplate                  *string
+	ClearTextTemplate             bool
+	TextTemplate                  *string
+	ClearJsonconfig               bool
+	Jsonconfig                    map[string]interface{}
+	ClearUischema                 bool
+	Uischema                      map[string]interface{}
+	ClearMetadata                 bool
+	Metadata                      map[string]interface{}
+	Active                        *bool
+	Version                       *int
+	ClearEmailBranding            bool
+	EmailBrandingID               *string
+	ClearIntegration              bool
+	IntegrationID                 *string
+	ClearWorkflowDefinition       bool
+	WorkflowDefinitionID          *string
+	ClearWorkflowInstance         bool
+	WorkflowInstanceID            *string
+	ClearCampaigns                bool
+	AddCampaignIDs                []string
+	RemoveCampaignIDs             []string
+	ClearNotificationTemplates    bool
+	AddNotificationTemplateIDs    []string
+	RemoveNotificationTemplateIDs []string
+}
+
+// Mutate applies the UpdateEmailTemplateInput on the EmailTemplateMutation builder.
+func (i *UpdateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
+	if v := i.Key; v != nil {
+		m.SetKey(*v)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Format; v != nil {
+		m.SetFormat(*v)
+	}
+	if v := i.Locale; v != nil {
+		m.SetLocale(*v)
+	}
+	if i.ClearSubjectTemplate {
+		m.ClearSubjectTemplate()
+	}
+	if v := i.SubjectTemplate; v != nil {
+		m.SetSubjectTemplate(*v)
+	}
+	if i.ClearPreheaderTemplate {
+		m.ClearPreheaderTemplate()
+	}
+	if v := i.PreheaderTemplate; v != nil {
+		m.SetPreheaderTemplate(*v)
+	}
+	if i.ClearBodyTemplate {
+		m.ClearBodyTemplate()
+	}
+	if v := i.BodyTemplate; v != nil {
+		m.SetBodyTemplate(*v)
+	}
+	if i.ClearTextTemplate {
+		m.ClearTextTemplate()
+	}
+	if v := i.TextTemplate; v != nil {
+		m.SetTextTemplate(*v)
+	}
+	if i.ClearJsonconfig {
+		m.ClearJsonconfig()
+	}
+	if v := i.Jsonconfig; v != nil {
+		m.SetJsonconfig(v)
+	}
+	if i.ClearUischema {
+		m.ClearUischema()
+	}
+	if v := i.Uischema; v != nil {
+		m.SetUischema(v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.Active; v != nil {
+		m.SetActive(*v)
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if i.ClearEmailBranding {
+		m.ClearEmailBranding()
+	}
+	if v := i.EmailBrandingID; v != nil {
+		m.SetEmailBrandingID(*v)
+	}
+	if i.ClearIntegration {
+		m.ClearIntegration()
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
+	if i.ClearWorkflowDefinition {
+		m.ClearWorkflowDefinition()
+	}
+	if v := i.WorkflowDefinitionID; v != nil {
+		m.SetWorkflowDefinitionID(*v)
+	}
+	if i.ClearWorkflowInstance {
+		m.ClearWorkflowInstance()
+	}
+	if v := i.WorkflowInstanceID; v != nil {
+		m.SetWorkflowInstanceID(*v)
+	}
+	if i.ClearCampaigns {
+		m.ClearCampaigns()
+	}
+	if v := i.AddCampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.RemoveCampaignIDs; len(v) > 0 {
+		m.RemoveCampaignIDs(v...)
+	}
+	if i.ClearNotificationTemplates {
+		m.ClearNotificationTemplates()
+	}
+	if v := i.AddNotificationTemplateIDs; len(v) > 0 {
+		m.AddNotificationTemplateIDs(v...)
+	}
+	if v := i.RemoveNotificationTemplateIDs; len(v) > 0 {
+		m.RemoveNotificationTemplateIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateEmailTemplateInput on the EmailTemplateUpdate builder.
+func (c *EmailTemplateUpdate) SetInput(i UpdateEmailTemplateInput) *EmailTemplateUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateEmailTemplateInput on the EmailTemplateUpdateOne builder.
+func (c *EmailTemplateUpdateOne) SetInput(i UpdateEmailTemplateInput) *EmailTemplateUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -13351,6 +13881,7 @@ type CreateNotificationInput struct {
 	Title            string
 	Body             string
 	Data             map[string]interface{}
+	TemplateID       *string
 	Channels         []enums.Channel
 	Topic            *enums.NotificationTopic
 	OwnerID          *string
@@ -13367,6 +13898,9 @@ func (i *CreateNotificationInput) Mutate(m *NotificationMutation) {
 	m.SetBody(i.Body)
 	if v := i.Data; v != nil {
 		m.SetData(v)
+	}
+	if v := i.TemplateID; v != nil {
+		m.SetTemplateID(*v)
 	}
 	if v := i.Channels; v != nil {
 		m.SetChannels(v)
@@ -13429,6 +13963,542 @@ func (c *NotificationUpdate) SetInput(i UpdateNotificationInput) *NotificationUp
 
 // SetInput applies the change-set in the UpdateNotificationInput on the NotificationUpdateOne builder.
 func (c *NotificationUpdateOne) SetInput(i UpdateNotificationInput) *NotificationUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateNotificationPreferenceInput represents a mutation input for creating notificationpreferences.
+type CreateNotificationPreferenceInput struct {
+	Channel                enums.Channel
+	Status                 *enums.NotificationChannelStatus
+	Provider               *string
+	Destination            *string
+	Config                 map[string]interface{}
+	Enabled                *bool
+	Cadence                *enums.NotificationCadence
+	Priority               *enums.Priority
+	TopicPatterns          []string
+	TopicOverrides         map[string]interface{}
+	MuteUntil              *time.Time
+	QuietHoursStart        *string
+	QuietHoursEnd          *string
+	Timezone               *string
+	IsDefault              *bool
+	VerifiedAt             *time.Time
+	LastUsedAt             *time.Time
+	LastError              *string
+	Metadata               map[string]interface{}
+	OwnerID                *string
+	UserID                 string
+	NotificationTemplateID *string
+}
+
+// Mutate applies the CreateNotificationPreferenceInput on the NotificationPreferenceMutation builder.
+func (i *CreateNotificationPreferenceInput) Mutate(m *NotificationPreferenceMutation) {
+	m.SetChannel(i.Channel)
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.Provider; v != nil {
+		m.SetProvider(*v)
+	}
+	if v := i.Destination; v != nil {
+		m.SetDestination(*v)
+	}
+	if v := i.Config; v != nil {
+		m.SetConfig(v)
+	}
+	if v := i.Enabled; v != nil {
+		m.SetEnabled(*v)
+	}
+	if v := i.Cadence; v != nil {
+		m.SetCadence(*v)
+	}
+	if v := i.Priority; v != nil {
+		m.SetPriority(*v)
+	}
+	if v := i.TopicPatterns; v != nil {
+		m.SetTopicPatterns(v)
+	}
+	if v := i.TopicOverrides; v != nil {
+		m.SetTopicOverrides(v)
+	}
+	if v := i.MuteUntil; v != nil {
+		m.SetMuteUntil(*v)
+	}
+	if v := i.QuietHoursStart; v != nil {
+		m.SetQuietHoursStart(*v)
+	}
+	if v := i.QuietHoursEnd; v != nil {
+		m.SetQuietHoursEnd(*v)
+	}
+	if v := i.Timezone; v != nil {
+		m.SetTimezone(*v)
+	}
+	if v := i.IsDefault; v != nil {
+		m.SetIsDefault(*v)
+	}
+	if v := i.VerifiedAt; v != nil {
+		m.SetVerifiedAt(*v)
+	}
+	if v := i.LastUsedAt; v != nil {
+		m.SetLastUsedAt(*v)
+	}
+	if v := i.LastError; v != nil {
+		m.SetLastError(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetUserID(i.UserID)
+	if v := i.NotificationTemplateID; v != nil {
+		m.SetNotificationTemplateID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateNotificationPreferenceInput on the NotificationPreferenceCreate builder.
+func (c *NotificationPreferenceCreate) SetInput(i CreateNotificationPreferenceInput) *NotificationPreferenceCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateNotificationPreferenceInput represents a mutation input for updating notificationpreferences.
+type UpdateNotificationPreferenceInput struct {
+	Channel                   *enums.Channel
+	Status                    *enums.NotificationChannelStatus
+	ClearProvider             bool
+	Provider                  *string
+	ClearDestination          bool
+	Destination               *string
+	ClearConfig               bool
+	Config                    map[string]interface{}
+	Enabled                   *bool
+	Cadence                   *enums.NotificationCadence
+	ClearPriority             bool
+	Priority                  *enums.Priority
+	ClearTopicPatterns        bool
+	TopicPatterns             []string
+	AppendTopicPatterns       []string
+	ClearTopicOverrides       bool
+	TopicOverrides            map[string]interface{}
+	ClearMuteUntil            bool
+	MuteUntil                 *time.Time
+	ClearQuietHoursStart      bool
+	QuietHoursStart           *string
+	ClearQuietHoursEnd        bool
+	QuietHoursEnd             *string
+	ClearTimezone             bool
+	Timezone                  *string
+	IsDefault                 *bool
+	ClearVerifiedAt           bool
+	VerifiedAt                *time.Time
+	ClearLastUsedAt           bool
+	LastUsedAt                *time.Time
+	ClearLastError            bool
+	LastError                 *string
+	ClearMetadata             bool
+	Metadata                  map[string]interface{}
+	ClearOwner                bool
+	OwnerID                   *string
+	ClearNotificationTemplate bool
+	NotificationTemplateID    *string
+}
+
+// Mutate applies the UpdateNotificationPreferenceInput on the NotificationPreferenceMutation builder.
+func (i *UpdateNotificationPreferenceInput) Mutate(m *NotificationPreferenceMutation) {
+	if v := i.Channel; v != nil {
+		m.SetChannel(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearProvider {
+		m.ClearProvider()
+	}
+	if v := i.Provider; v != nil {
+		m.SetProvider(*v)
+	}
+	if i.ClearDestination {
+		m.ClearDestination()
+	}
+	if v := i.Destination; v != nil {
+		m.SetDestination(*v)
+	}
+	if i.ClearConfig {
+		m.ClearConfig()
+	}
+	if v := i.Config; v != nil {
+		m.SetConfig(v)
+	}
+	if v := i.Enabled; v != nil {
+		m.SetEnabled(*v)
+	}
+	if v := i.Cadence; v != nil {
+		m.SetCadence(*v)
+	}
+	if i.ClearPriority {
+		m.ClearPriority()
+	}
+	if v := i.Priority; v != nil {
+		m.SetPriority(*v)
+	}
+	if i.ClearTopicPatterns {
+		m.ClearTopicPatterns()
+	}
+	if v := i.TopicPatterns; v != nil {
+		m.SetTopicPatterns(v)
+	}
+	if i.AppendTopicPatterns != nil {
+		m.AppendTopicPatterns(i.TopicPatterns)
+	}
+	if i.ClearTopicOverrides {
+		m.ClearTopicOverrides()
+	}
+	if v := i.TopicOverrides; v != nil {
+		m.SetTopicOverrides(v)
+	}
+	if i.ClearMuteUntil {
+		m.ClearMuteUntil()
+	}
+	if v := i.MuteUntil; v != nil {
+		m.SetMuteUntil(*v)
+	}
+	if i.ClearQuietHoursStart {
+		m.ClearQuietHoursStart()
+	}
+	if v := i.QuietHoursStart; v != nil {
+		m.SetQuietHoursStart(*v)
+	}
+	if i.ClearQuietHoursEnd {
+		m.ClearQuietHoursEnd()
+	}
+	if v := i.QuietHoursEnd; v != nil {
+		m.SetQuietHoursEnd(*v)
+	}
+	if i.ClearTimezone {
+		m.ClearTimezone()
+	}
+	if v := i.Timezone; v != nil {
+		m.SetTimezone(*v)
+	}
+	if v := i.IsDefault; v != nil {
+		m.SetIsDefault(*v)
+	}
+	if i.ClearVerifiedAt {
+		m.ClearVerifiedAt()
+	}
+	if v := i.VerifiedAt; v != nil {
+		m.SetVerifiedAt(*v)
+	}
+	if i.ClearLastUsedAt {
+		m.ClearLastUsedAt()
+	}
+	if v := i.LastUsedAt; v != nil {
+		m.SetLastUsedAt(*v)
+	}
+	if i.ClearLastError {
+		m.ClearLastError()
+	}
+	if v := i.LastError; v != nil {
+		m.SetLastError(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearNotificationTemplate {
+		m.ClearNotificationTemplate()
+	}
+	if v := i.NotificationTemplateID; v != nil {
+		m.SetNotificationTemplateID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateNotificationPreferenceInput on the NotificationPreferenceUpdate builder.
+func (c *NotificationPreferenceUpdate) SetInput(i UpdateNotificationPreferenceInput) *NotificationPreferenceUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateNotificationPreferenceInput on the NotificationPreferenceUpdateOne builder.
+func (c *NotificationPreferenceUpdateOne) SetInput(i UpdateNotificationPreferenceInput) *NotificationPreferenceUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateNotificationTemplateInput represents a mutation input for creating notificationtemplates.
+type CreateNotificationTemplateInput struct {
+	InternalNotes        *string
+	SystemInternalID     *string
+	Key                  string
+	Name                 string
+	Description          *string
+	Channel              enums.Channel
+	Format               *enums.NotificationTemplateFormat
+	Locale               *string
+	TopicPattern         string
+	TitleTemplate        *string
+	SubjectTemplate      *string
+	BodyTemplate         *string
+	Blocks               map[string]interface{}
+	Jsonconfig           map[string]interface{}
+	Uischema             map[string]interface{}
+	Metadata             map[string]interface{}
+	Active               *bool
+	Version              *int
+	OwnerID              *string
+	IntegrationID        *string
+	WorkflowDefinitionID *string
+	EmailTemplateID      *string
+	NotificationIDs      []string
+}
+
+// Mutate applies the CreateNotificationTemplateInput on the NotificationTemplateMutation builder.
+func (i *CreateNotificationTemplateInput) Mutate(m *NotificationTemplateMutation) {
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
+	m.SetKey(i.Key)
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	m.SetChannel(i.Channel)
+	if v := i.Format; v != nil {
+		m.SetFormat(*v)
+	}
+	if v := i.Locale; v != nil {
+		m.SetLocale(*v)
+	}
+	m.SetTopicPattern(i.TopicPattern)
+	if v := i.TitleTemplate; v != nil {
+		m.SetTitleTemplate(*v)
+	}
+	if v := i.SubjectTemplate; v != nil {
+		m.SetSubjectTemplate(*v)
+	}
+	if v := i.BodyTemplate; v != nil {
+		m.SetBodyTemplate(*v)
+	}
+	if v := i.Blocks; v != nil {
+		m.SetBlocks(v)
+	}
+	if v := i.Jsonconfig; v != nil {
+		m.SetJsonconfig(v)
+	}
+	if v := i.Uischema; v != nil {
+		m.SetUischema(v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.Active; v != nil {
+		m.SetActive(*v)
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
+	if v := i.WorkflowDefinitionID; v != nil {
+		m.SetWorkflowDefinitionID(*v)
+	}
+	if v := i.EmailTemplateID; v != nil {
+		m.SetEmailTemplateID(*v)
+	}
+	if v := i.NotificationIDs; len(v) > 0 {
+		m.AddNotificationIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateNotificationTemplateInput on the NotificationTemplateCreate builder.
+func (c *NotificationTemplateCreate) SetInput(i CreateNotificationTemplateInput) *NotificationTemplateCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateNotificationTemplateInput represents a mutation input for updating notificationtemplates.
+type UpdateNotificationTemplateInput struct {
+	ClearInternalNotes      bool
+	InternalNotes           *string
+	ClearSystemInternalID   bool
+	SystemInternalID        *string
+	Key                     *string
+	Name                    *string
+	ClearDescription        bool
+	Description             *string
+	Channel                 *enums.Channel
+	Format                  *enums.NotificationTemplateFormat
+	Locale                  *string
+	TopicPattern            *string
+	ClearTitleTemplate      bool
+	TitleTemplate           *string
+	ClearSubjectTemplate    bool
+	SubjectTemplate         *string
+	ClearBodyTemplate       bool
+	BodyTemplate            *string
+	ClearBlocks             bool
+	Blocks                  map[string]interface{}
+	ClearJsonconfig         bool
+	Jsonconfig              map[string]interface{}
+	ClearUischema           bool
+	Uischema                map[string]interface{}
+	ClearMetadata           bool
+	Metadata                map[string]interface{}
+	Active                  *bool
+	Version                 *int
+	ClearIntegration        bool
+	IntegrationID           *string
+	ClearWorkflowDefinition bool
+	WorkflowDefinitionID    *string
+	ClearEmailTemplate      bool
+	EmailTemplateID         *string
+	ClearNotifications      bool
+	AddNotificationIDs      []string
+	RemoveNotificationIDs   []string
+}
+
+// Mutate applies the UpdateNotificationTemplateInput on the NotificationTemplateMutation builder.
+func (i *UpdateNotificationTemplateInput) Mutate(m *NotificationTemplateMutation) {
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
+	if v := i.Key; v != nil {
+		m.SetKey(*v)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Channel; v != nil {
+		m.SetChannel(*v)
+	}
+	if v := i.Format; v != nil {
+		m.SetFormat(*v)
+	}
+	if v := i.Locale; v != nil {
+		m.SetLocale(*v)
+	}
+	if v := i.TopicPattern; v != nil {
+		m.SetTopicPattern(*v)
+	}
+	if i.ClearTitleTemplate {
+		m.ClearTitleTemplate()
+	}
+	if v := i.TitleTemplate; v != nil {
+		m.SetTitleTemplate(*v)
+	}
+	if i.ClearSubjectTemplate {
+		m.ClearSubjectTemplate()
+	}
+	if v := i.SubjectTemplate; v != nil {
+		m.SetSubjectTemplate(*v)
+	}
+	if i.ClearBodyTemplate {
+		m.ClearBodyTemplate()
+	}
+	if v := i.BodyTemplate; v != nil {
+		m.SetBodyTemplate(*v)
+	}
+	if i.ClearBlocks {
+		m.ClearBlocks()
+	}
+	if v := i.Blocks; v != nil {
+		m.SetBlocks(v)
+	}
+	if i.ClearJsonconfig {
+		m.ClearJsonconfig()
+	}
+	if v := i.Jsonconfig; v != nil {
+		m.SetJsonconfig(v)
+	}
+	if i.ClearUischema {
+		m.ClearUischema()
+	}
+	if v := i.Uischema; v != nil {
+		m.SetUischema(v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.Active; v != nil {
+		m.SetActive(*v)
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if i.ClearIntegration {
+		m.ClearIntegration()
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
+	if i.ClearWorkflowDefinition {
+		m.ClearWorkflowDefinition()
+	}
+	if v := i.WorkflowDefinitionID; v != nil {
+		m.SetWorkflowDefinitionID(*v)
+	}
+	if i.ClearEmailTemplate {
+		m.ClearEmailTemplate()
+	}
+	if v := i.EmailTemplateID; v != nil {
+		m.SetEmailTemplateID(*v)
+	}
+	if i.ClearNotifications {
+		m.ClearNotifications()
+	}
+	if v := i.AddNotificationIDs; len(v) > 0 {
+		m.AddNotificationIDs(v...)
+	}
+	if v := i.RemoveNotificationIDs; len(v) > 0 {
+		m.RemoveNotificationIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateNotificationTemplateInput on the NotificationTemplateUpdate builder.
+func (c *NotificationTemplateUpdate) SetInput(i UpdateNotificationTemplateInput) *NotificationTemplateUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateNotificationTemplateInput on the NotificationTemplateUpdateOne builder.
+func (c *NotificationTemplateUpdateOne) SetInput(i UpdateNotificationTemplateInput) *NotificationTemplateUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -13566,6 +14636,10 @@ type CreateOrganizationInput struct {
 	SettingID                         *string
 	PersonalAccessTokenIDs            []string
 	APITokenIDs                       []string
+	EmailBrandingIDs                  []string
+	EmailTemplateIDs                  []string
+	NotificationPreferenceIDs         []string
+	NotificationTemplateIDs           []string
 	FileIDs                           []string
 	EventIDs                          []string
 	SecretIDs                         []string
@@ -13733,6 +14807,18 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.APITokenIDs; len(v) > 0 {
 		m.AddAPITokenIDs(v...)
+	}
+	if v := i.EmailBrandingIDs; len(v) > 0 {
+		m.AddEmailBrandingIDs(v...)
+	}
+	if v := i.EmailTemplateIDs; len(v) > 0 {
+		m.AddEmailTemplateIDs(v...)
+	}
+	if v := i.NotificationPreferenceIDs; len(v) > 0 {
+		m.AddNotificationPreferenceIDs(v...)
+	}
+	if v := i.NotificationTemplateIDs; len(v) > 0 {
+		m.AddNotificationTemplateIDs(v...)
 	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
@@ -14027,6 +15113,18 @@ type UpdateOrganizationInput struct {
 	ClearAPITokens                          bool
 	AddAPITokenIDs                          []string
 	RemoveAPITokenIDs                       []string
+	ClearEmailBrandings                     bool
+	AddEmailBrandingIDs                     []string
+	RemoveEmailBrandingIDs                  []string
+	ClearEmailTemplates                     bool
+	AddEmailTemplateIDs                     []string
+	RemoveEmailTemplateIDs                  []string
+	ClearNotificationPreferences            bool
+	AddNotificationPreferenceIDs            []string
+	RemoveNotificationPreferenceIDs         []string
+	ClearNotificationTemplates              bool
+	AddNotificationTemplateIDs              []string
+	RemoveNotificationTemplateIDs           []string
 	ClearFiles                              bool
 	AddFileIDs                              []string
 	RemoveFileIDs                           []string
@@ -14476,6 +15574,42 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveAPITokenIDs; len(v) > 0 {
 		m.RemoveAPITokenIDs(v...)
+	}
+	if i.ClearEmailBrandings {
+		m.ClearEmailBrandings()
+	}
+	if v := i.AddEmailBrandingIDs; len(v) > 0 {
+		m.AddEmailBrandingIDs(v...)
+	}
+	if v := i.RemoveEmailBrandingIDs; len(v) > 0 {
+		m.RemoveEmailBrandingIDs(v...)
+	}
+	if i.ClearEmailTemplates {
+		m.ClearEmailTemplates()
+	}
+	if v := i.AddEmailTemplateIDs; len(v) > 0 {
+		m.AddEmailTemplateIDs(v...)
+	}
+	if v := i.RemoveEmailTemplateIDs; len(v) > 0 {
+		m.RemoveEmailTemplateIDs(v...)
+	}
+	if i.ClearNotificationPreferences {
+		m.ClearNotificationPreferences()
+	}
+	if v := i.AddNotificationPreferenceIDs; len(v) > 0 {
+		m.AddNotificationPreferenceIDs(v...)
+	}
+	if v := i.RemoveNotificationPreferenceIDs; len(v) > 0 {
+		m.RemoveNotificationPreferenceIDs(v...)
+	}
+	if i.ClearNotificationTemplates {
+		m.ClearNotificationTemplates()
+	}
+	if v := i.AddNotificationTemplateIDs; len(v) > 0 {
+		m.AddNotificationTemplateIDs(v...)
+	}
+	if v := i.RemoveNotificationTemplateIDs; len(v) > 0 {
+		m.RemoveNotificationTemplateIDs(v...)
 	}
 	if i.ClearFiles {
 		m.ClearFiles()
@@ -24459,21 +25593,33 @@ func (c *UserUpdateOne) SetInput(i UpdateUserInput) *UserUpdateOne {
 
 // CreateUserSettingInput represents a mutation input for creating usersettings.
 type CreateUserSettingInput struct {
-	Tags           []string
-	Locked         *bool
-	SilencedAt     *time.Time
-	SuspendedAt    *time.Time
-	Status         *enums.UserStatus
-	EmailConfirmed *bool
-	IsTfaEnabled   *bool
-	UserID         *string
-	DefaultOrgID   *string
+	Tags            []string
+	DelegateUserID  *string
+	DelegateStartAt *time.Time
+	DelegateEndAt   *time.Time
+	Locked          *bool
+	SilencedAt      *time.Time
+	SuspendedAt     *time.Time
+	Status          *enums.UserStatus
+	EmailConfirmed  *bool
+	IsTfaEnabled    *bool
+	UserID          *string
+	DefaultOrgID    *string
 }
 
 // Mutate applies the CreateUserSettingInput on the UserSettingMutation builder.
 func (i *CreateUserSettingInput) Mutate(m *UserSettingMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.DelegateUserID; v != nil {
+		m.SetDelegateUserID(*v)
+	}
+	if v := i.DelegateStartAt; v != nil {
+		m.SetDelegateStartAt(*v)
+	}
+	if v := i.DelegateEndAt; v != nil {
+		m.SetDelegateEndAt(*v)
 	}
 	if v := i.Locked; v != nil {
 		m.SetLocked(*v)
@@ -24509,22 +25655,28 @@ func (c *UserSettingCreate) SetInput(i CreateUserSettingInput) *UserSettingCreat
 
 // UpdateUserSettingInput represents a mutation input for updating usersettings.
 type UpdateUserSettingInput struct {
-	ClearTags         bool
-	Tags              []string
-	AppendTags        []string
-	Locked            *bool
-	ClearSilencedAt   bool
-	SilencedAt        *time.Time
-	ClearSuspendedAt  bool
-	SuspendedAt       *time.Time
-	Status            *enums.UserStatus
-	EmailConfirmed    *bool
-	ClearIsTfaEnabled bool
-	IsTfaEnabled      *bool
-	ClearUser         bool
-	UserID            *string
-	ClearDefaultOrg   bool
-	DefaultOrgID      *string
+	ClearTags            bool
+	Tags                 []string
+	AppendTags           []string
+	ClearDelegateUserID  bool
+	DelegateUserID       *string
+	ClearDelegateStartAt bool
+	DelegateStartAt      *time.Time
+	ClearDelegateEndAt   bool
+	DelegateEndAt        *time.Time
+	Locked               *bool
+	ClearSilencedAt      bool
+	SilencedAt           *time.Time
+	ClearSuspendedAt     bool
+	SuspendedAt          *time.Time
+	Status               *enums.UserStatus
+	EmailConfirmed       *bool
+	ClearIsTfaEnabled    bool
+	IsTfaEnabled         *bool
+	ClearUser            bool
+	UserID               *string
+	ClearDefaultOrg      bool
+	DefaultOrgID         *string
 }
 
 // Mutate applies the UpdateUserSettingInput on the UserSettingMutation builder.
@@ -24537,6 +25689,24 @@ func (i *UpdateUserSettingInput) Mutate(m *UserSettingMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearDelegateUserID {
+		m.ClearDelegateUserID()
+	}
+	if v := i.DelegateUserID; v != nil {
+		m.SetDelegateUserID(*v)
+	}
+	if i.ClearDelegateStartAt {
+		m.ClearDelegateStartAt()
+	}
+	if v := i.DelegateStartAt; v != nil {
+		m.SetDelegateStartAt(*v)
+	}
+	if i.ClearDelegateEndAt {
+		m.ClearDelegateEndAt()
+	}
+	if v := i.DelegateEndAt; v != nil {
+		m.SetDelegateEndAt(*v)
 	}
 	if v := i.Locked; v != nil {
 		m.SetLocked(*v)
@@ -25357,24 +26527,26 @@ func (c *VulnerabilityUpdateOne) SetInput(i UpdateVulnerabilityInput) *Vulnerabi
 
 // CreateWorkflowDefinitionInput represents a mutation input for creating workflowdefinitions.
 type CreateWorkflowDefinitionInput struct {
-	Tags             []string
-	InternalNotes    *string
-	SystemInternalID *string
-	Name             string
-	Description      *string
-	WorkflowKind     enums.WorkflowKind
-	SchemaType       string
-	Revision         *int
-	Draft            *bool
-	PublishedAt      *time.Time
-	CooldownSeconds  *int
-	IsDefault        *bool
-	Active           *bool
-	DefinitionJSON   *models.WorkflowDefinitionDocument
-	TrackedFields    []string
-	OwnerID          *string
-	TagDefinitionIDs []string
-	GroupIDs         []string
+	Tags                    []string
+	InternalNotes           *string
+	SystemInternalID        *string
+	Name                    string
+	Description             *string
+	WorkflowKind            enums.WorkflowKind
+	SchemaType              string
+	Revision                *int
+	Draft                   *bool
+	PublishedAt             *time.Time
+	CooldownSeconds         *int
+	IsDefault               *bool
+	Active                  *bool
+	DefinitionJSON          *models.WorkflowDefinitionDocument
+	TrackedFields           []string
+	OwnerID                 *string
+	TagDefinitionIDs        []string
+	GroupIDs                []string
+	NotificationTemplateIDs []string
+	EmailTemplateIDs        []string
 }
 
 // Mutate applies the CreateWorkflowDefinitionInput on the WorkflowDefinitionMutation builder.
@@ -25427,6 +26599,12 @@ func (i *CreateWorkflowDefinitionInput) Mutate(m *WorkflowDefinitionMutation) {
 	if v := i.GroupIDs; len(v) > 0 {
 		m.AddGroupIDs(v...)
 	}
+	if v := i.NotificationTemplateIDs; len(v) > 0 {
+		m.AddNotificationTemplateIDs(v...)
+	}
+	if v := i.EmailTemplateIDs; len(v) > 0 {
+		m.AddEmailTemplateIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateWorkflowDefinitionInput on the WorkflowDefinitionCreate builder.
@@ -25437,36 +26615,42 @@ func (c *WorkflowDefinitionCreate) SetInput(i CreateWorkflowDefinitionInput) *Wo
 
 // UpdateWorkflowDefinitionInput represents a mutation input for updating workflowdefinitions.
 type UpdateWorkflowDefinitionInput struct {
-	ClearTags              bool
-	Tags                   []string
-	AppendTags             []string
-	ClearInternalNotes     bool
-	InternalNotes          *string
-	ClearSystemInternalID  bool
-	SystemInternalID       *string
-	Name                   *string
-	ClearDescription       bool
-	Description            *string
-	WorkflowKind           *enums.WorkflowKind
-	SchemaType             *string
-	Revision               *int
-	Draft                  *bool
-	ClearPublishedAt       bool
-	PublishedAt            *time.Time
-	CooldownSeconds        *int
-	IsDefault              *bool
-	Active                 *bool
-	ClearDefinitionJSON    bool
-	DefinitionJSON         *models.WorkflowDefinitionDocument
-	ClearTrackedFields     bool
-	TrackedFields          []string
-	AppendTrackedFields    []string
-	ClearTagDefinitions    bool
-	AddTagDefinitionIDs    []string
-	RemoveTagDefinitionIDs []string
-	ClearGroups            bool
-	AddGroupIDs            []string
-	RemoveGroupIDs         []string
+	ClearTags                     bool
+	Tags                          []string
+	AppendTags                    []string
+	ClearInternalNotes            bool
+	InternalNotes                 *string
+	ClearSystemInternalID         bool
+	SystemInternalID              *string
+	Name                          *string
+	ClearDescription              bool
+	Description                   *string
+	WorkflowKind                  *enums.WorkflowKind
+	SchemaType                    *string
+	Revision                      *int
+	Draft                         *bool
+	ClearPublishedAt              bool
+	PublishedAt                   *time.Time
+	CooldownSeconds               *int
+	IsDefault                     *bool
+	Active                        *bool
+	ClearDefinitionJSON           bool
+	DefinitionJSON                *models.WorkflowDefinitionDocument
+	ClearTrackedFields            bool
+	TrackedFields                 []string
+	AppendTrackedFields           []string
+	ClearTagDefinitions           bool
+	AddTagDefinitionIDs           []string
+	RemoveTagDefinitionIDs        []string
+	ClearGroups                   bool
+	AddGroupIDs                   []string
+	RemoveGroupIDs                []string
+	ClearNotificationTemplates    bool
+	AddNotificationTemplateIDs    []string
+	RemoveNotificationTemplateIDs []string
+	ClearEmailTemplates           bool
+	AddEmailTemplateIDs           []string
+	RemoveEmailTemplateIDs        []string
 }
 
 // Mutate applies the UpdateWorkflowDefinitionInput on the WorkflowDefinitionMutation builder.
@@ -25560,6 +26744,24 @@ func (i *UpdateWorkflowDefinitionInput) Mutate(m *WorkflowDefinitionMutation) {
 	}
 	if v := i.RemoveGroupIDs; len(v) > 0 {
 		m.RemoveGroupIDs(v...)
+	}
+	if i.ClearNotificationTemplates {
+		m.ClearNotificationTemplates()
+	}
+	if v := i.AddNotificationTemplateIDs; len(v) > 0 {
+		m.AddNotificationTemplateIDs(v...)
+	}
+	if v := i.RemoveNotificationTemplateIDs; len(v) > 0 {
+		m.RemoveNotificationTemplateIDs(v...)
+	}
+	if i.ClearEmailTemplates {
+		m.ClearEmailTemplates()
+	}
+	if v := i.AddEmailTemplateIDs; len(v) > 0 {
+		m.AddEmailTemplateIDs(v...)
+	}
+	if v := i.RemoveEmailTemplateIDs; len(v) > 0 {
+		m.RemoveEmailTemplateIDs(v...)
 	}
 }
 

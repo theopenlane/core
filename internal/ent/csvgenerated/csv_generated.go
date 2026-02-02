@@ -682,6 +682,16 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		SchemaName: "DocumentData",
 		Rules:      []CSVReferenceRule{},
 	},
+	"EmailBranding": {
+		SchemaName: "EmailBranding",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"EmailTemplate": {
+		SchemaName: "EmailTemplate",
+		Rules: []CSVReferenceRule{
+		},
+	},
 	"Entity": {
 		SchemaName: "Entity",
 		Rules: []CSVReferenceRule{
@@ -877,6 +887,16 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 	"Notification": {
 		SchemaName: "Notification",
 		Rules:      []CSVReferenceRule{},
+	},
+	"NotificationPreference": {
+		SchemaName: "NotificationPreference",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"NotificationTemplate": {
+		SchemaName: "NotificationTemplate",
+		Rules: []CSVReferenceRule{
+		},
 	},
 	"Onboarding": {
 		SchemaName: "Onboarding",
@@ -1695,6 +1715,42 @@ type DocumentDataCSVUpdateInput struct {
 // CSVInputWrapper marks DocumentDataCSVUpdateInput for CSV header preprocessing.
 func (DocumentDataCSVUpdateInput) CSVInputWrapper() {}
 
+// EmailBrandingCSVInput wraps CreateEmailBrandingInput with CSV reference columns.
+type EmailBrandingCSVInput struct {
+	Input generated.CreateEmailBrandingInput
+}
+
+// CSVInputWrapper marks EmailBrandingCSVInput for CSV header preprocessing.
+func (EmailBrandingCSVInput) CSVInputWrapper() {}
+
+// EmailBrandingCSVUpdateInput wraps UpdateEmailBrandingInput with CSV reference columns for bulk updates.
+type EmailBrandingCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateEmailBrandingInput
+}
+
+// CSVInputWrapper marks EmailBrandingCSVUpdateInput for CSV header preprocessing.
+func (EmailBrandingCSVUpdateInput) CSVInputWrapper() {}
+
+// EmailTemplateCSVInput wraps CreateEmailTemplateInput with CSV reference columns.
+type EmailTemplateCSVInput struct {
+	Input generated.CreateEmailTemplateInput
+}
+
+// CSVInputWrapper marks EmailTemplateCSVInput for CSV header preprocessing.
+func (EmailTemplateCSVInput) CSVInputWrapper() {}
+
+// EmailTemplateCSVUpdateInput wraps UpdateEmailTemplateInput with CSV reference columns for bulk updates.
+type EmailTemplateCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateEmailTemplateInput
+}
+
+// CSVInputWrapper marks EmailTemplateCSVUpdateInput for CSV header preprocessing.
+func (EmailTemplateCSVUpdateInput) CSVInputWrapper() {}
+
 // EntityCSVInput wraps CreateEntityInput with CSV reference columns.
 type EntityCSVInput struct {
 	Input                  generated.CreateEntityInput
@@ -2150,6 +2206,42 @@ type NotificationCSVUpdateInput struct {
 
 // CSVInputWrapper marks NotificationCSVUpdateInput for CSV header preprocessing.
 func (NotificationCSVUpdateInput) CSVInputWrapper() {}
+
+// NotificationPreferenceCSVInput wraps CreateNotificationPreferenceInput with CSV reference columns.
+type NotificationPreferenceCSVInput struct {
+	Input generated.CreateNotificationPreferenceInput
+}
+
+// CSVInputWrapper marks NotificationPreferenceCSVInput for CSV header preprocessing.
+func (NotificationPreferenceCSVInput) CSVInputWrapper() {}
+
+// NotificationPreferenceCSVUpdateInput wraps UpdateNotificationPreferenceInput with CSV reference columns for bulk updates.
+type NotificationPreferenceCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateNotificationPreferenceInput
+}
+
+// CSVInputWrapper marks NotificationPreferenceCSVUpdateInput for CSV header preprocessing.
+func (NotificationPreferenceCSVUpdateInput) CSVInputWrapper() {}
+
+// NotificationTemplateCSVInput wraps CreateNotificationTemplateInput with CSV reference columns.
+type NotificationTemplateCSVInput struct {
+	Input generated.CreateNotificationTemplateInput
+}
+
+// CSVInputWrapper marks NotificationTemplateCSVInput for CSV header preprocessing.
+func (NotificationTemplateCSVInput) CSVInputWrapper() {}
+
+// NotificationTemplateCSVUpdateInput wraps UpdateNotificationTemplateInput with CSV reference columns for bulk updates.
+type NotificationTemplateCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateNotificationTemplateInput
+}
+
+// CSVInputWrapper marks NotificationTemplateCSVUpdateInput for CSV header preprocessing.
+func (NotificationTemplateCSVUpdateInput) CSVInputWrapper() {}
 
 // OnboardingCSVInput wraps CreateOnboardingInput with CSV reference columns.
 type OnboardingCSVInput struct {

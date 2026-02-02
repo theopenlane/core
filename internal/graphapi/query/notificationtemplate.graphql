@@ -1,0 +1,357 @@
+mutation CreateBulkCSVNotificationTemplate($input: Upload!) {
+  createBulkCSVNotificationTemplate(input: $input) {
+    notificationTemplates {
+      active
+      blocks
+      bodyTemplate
+      channel
+      createdAt
+      createdBy
+      description
+      emailTemplateID
+      format
+      id
+      integrationID
+      internalNotes
+      jsonconfig
+      key
+      locale
+      metadata
+      name
+      ownerID
+      subjectTemplate
+      systemInternalID
+      systemOwned
+      titleTemplate
+      topicPattern
+      uischema
+      updatedAt
+      updatedBy
+      version
+      workflowDefinitionID
+    }
+  }
+}
+
+mutation CreateBulkNotificationTemplate($input: [CreateNotificationTemplateInput!]) {
+  createBulkNotificationTemplate(input: $input) {
+    notificationTemplates {
+      active
+      blocks
+      bodyTemplate
+      channel
+      createdAt
+      createdBy
+      description
+      emailTemplateID
+      format
+      id
+      integrationID
+      internalNotes
+      jsonconfig
+      key
+      locale
+      metadata
+      name
+      ownerID
+      subjectTemplate
+      systemInternalID
+      systemOwned
+      titleTemplate
+      topicPattern
+      uischema
+      updatedAt
+      updatedBy
+      version
+      workflowDefinitionID
+    }
+  }
+}
+
+mutation CreateNotificationTemplate($input: CreateNotificationTemplateInput!) {
+  createNotificationTemplate(input: $input) {
+    notificationTemplate {
+      active
+      blocks
+      bodyTemplate
+      channel
+      createdAt
+      createdBy
+      description
+      emailTemplateID
+      format
+      id
+      integrationID
+      internalNotes
+      jsonconfig
+      key
+      locale
+      metadata
+      name
+      ownerID
+      subjectTemplate
+      systemInternalID
+      systemOwned
+      titleTemplate
+      topicPattern
+      uischema
+      updatedAt
+      updatedBy
+      version
+      workflowDefinitionID
+    }
+  }
+}
+
+mutation DeleteBulkNotificationTemplate($ids: [ID!]!) {
+  deleteBulkNotificationTemplate(ids: $ids) {
+    deletedIDs
+  }
+}
+
+mutation DeleteNotificationTemplate($deleteNotificationTemplateId: ID!) {
+  deleteNotificationTemplate(id: $deleteNotificationTemplateId) {
+    deletedID
+  }
+}
+
+query GetAllNotificationTemplates($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [NotificationTemplateOrder!]) {
+  notificationTemplates(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        blocks
+        bodyTemplate
+        channel
+        createdAt
+        createdBy
+        description
+        emailTemplateID
+        format
+        id
+        integrationID
+        internalNotes
+        jsonconfig
+        key
+        locale
+        metadata
+        name
+        ownerID
+        subjectTemplate
+        systemInternalID
+        systemOwned
+        titleTemplate
+        topicPattern
+        uischema
+        updatedAt
+        updatedBy
+        version
+        workflowDefinitionID
+      }
+    }
+  }
+}
+
+query GetNotificationTemplateByID($notificationTemplateId: ID!) {
+  notificationTemplate(id: $notificationTemplateId) {
+    active
+    blocks
+    bodyTemplate
+    channel
+    createdAt
+    createdBy
+    description
+    emailTemplateID
+    format
+    id
+    integrationID
+    internalNotes
+    jsonconfig
+    key
+    locale
+    metadata
+    name
+    ownerID
+    subjectTemplate
+    systemInternalID
+    systemOwned
+    titleTemplate
+    topicPattern
+    uischema
+    updatedAt
+    updatedBy
+    version
+    workflowDefinitionID
+  }
+}
+
+query GetNotificationTemplates($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [NotificationTemplateOrder!], $where: NotificationTemplateWhereInput) {
+  notificationTemplates(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+    where: $where
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        blocks
+        bodyTemplate
+        channel
+        createdAt
+        createdBy
+        description
+        emailTemplateID
+        format
+        id
+        integrationID
+        internalNotes
+        jsonconfig
+        key
+        locale
+        metadata
+        name
+        ownerID
+        subjectTemplate
+        systemInternalID
+        systemOwned
+        titleTemplate
+        topicPattern
+        uischema
+        updatedAt
+        updatedBy
+        version
+        workflowDefinitionID
+      }
+    }
+  }
+}
+
+mutation UpdateBulkCSVNotificationTemplate($input: Upload!) {
+  updateBulkCSVNotificationTemplate(input: $input) {
+    notificationTemplates {
+      active
+      blocks
+      bodyTemplate
+      channel
+      createdAt
+      createdBy
+      description
+      emailTemplateID
+      format
+      id
+      integrationID
+      internalNotes
+      jsonconfig
+      key
+      locale
+      metadata
+      name
+      ownerID
+      subjectTemplate
+      systemInternalID
+      systemOwned
+      titleTemplate
+      topicPattern
+      uischema
+      updatedAt
+      updatedBy
+      version
+      workflowDefinitionID
+    }
+    updatedIDs
+  }
+}
+
+mutation UpdateBulkNotificationTemplate($ids: [ID!]!, $input: UpdateNotificationTemplateInput!) {
+  updateBulkNotificationTemplate(ids: $ids, input: $input) {
+    notificationTemplates {
+      active
+      blocks
+      bodyTemplate
+      channel
+      createdAt
+      createdBy
+      description
+      emailTemplateID
+      format
+      id
+      integrationID
+      internalNotes
+      jsonconfig
+      key
+      locale
+      metadata
+      name
+      ownerID
+      subjectTemplate
+      systemInternalID
+      systemOwned
+      titleTemplate
+      topicPattern
+      uischema
+      updatedAt
+      updatedBy
+      version
+      workflowDefinitionID
+    }
+    updatedIDs
+  }
+}
+
+mutation UpdateNotificationTemplate($updateNotificationTemplateId: ID!, $input: UpdateNotificationTemplateInput!) {
+  updateNotificationTemplate(id: $updateNotificationTemplateId, input: $input) {
+    notificationTemplate {
+      active
+      blocks
+      bodyTemplate
+      channel
+      createdAt
+      createdBy
+      description
+      emailTemplateID
+      format
+      id
+      integrationID
+      internalNotes
+      jsonconfig
+      key
+      locale
+      metadata
+      name
+      ownerID
+      subjectTemplate
+      systemInternalID
+      systemOwned
+      titleTemplate
+      topicPattern
+      uischema
+      updatedAt
+      updatedBy
+      version
+      workflowDefinitionID
+    }
+  }
+}

@@ -34,6 +34,12 @@ const (
 	FieldTags = "tags"
 	// FieldUserID holds the string denoting the user_id field in the database.
 	FieldUserID = "user_id"
+	// FieldDelegateUserID holds the string denoting the delegate_user_id field in the database.
+	FieldDelegateUserID = "delegate_user_id"
+	// FieldDelegateStartAt holds the string denoting the delegate_start_at field in the database.
+	FieldDelegateStartAt = "delegate_start_at"
+	// FieldDelegateEndAt holds the string denoting the delegate_end_at field in the database.
+	FieldDelegateEndAt = "delegate_end_at"
 	// FieldLocked holds the string denoting the locked field in the database.
 	FieldLocked = "locked"
 	// FieldSilencedAt holds the string denoting the silenced_at field in the database.
@@ -83,6 +89,9 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldUserID,
+	FieldDelegateUserID,
+	FieldDelegateStartAt,
+	FieldDelegateEndAt,
 	FieldLocked,
 	FieldSilencedAt,
 	FieldSuspendedAt,
@@ -196,6 +205,21 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByUserID orders the results by the user_id field.
 func ByUserID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUserID, opts...).ToFunc()
+}
+
+// ByDelegateUserID orders the results by the delegate_user_id field.
+func ByDelegateUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateUserID, opts...).ToFunc()
+}
+
+// ByDelegateStartAt orders the results by the delegate_start_at field.
+func ByDelegateStartAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateStartAt, opts...).ToFunc()
+}
+
+// ByDelegateEndAt orders the results by the delegate_end_at field.
+func ByDelegateEndAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateEndAt, opts...).ToFunc()
 }
 
 // ByLocked orders the results by the locked field.

@@ -123,16 +123,19 @@ type WorkflowInstanceEdges struct {
 	WorkflowAssignments []*WorkflowAssignment `json:"workflow_assignments,omitempty"`
 	// Events recorded for this instance
 	WorkflowEvents []*WorkflowEvent `json:"workflow_events,omitempty"`
+	// EmailTemplates holds the value of the email_templates edge.
+	EmailTemplates []*EmailTemplate `json:"email_templates,omitempty"`
 	// Object references for this workflow instance
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [16]bool
+	loadedTypes [17]bool
 	// totalCount holds the count of the edges above.
-	totalCount [15]map[string]int
+	totalCount [16]map[string]int
 
 	namedWorkflowAssignments map[string][]*WorkflowAssignment
 	namedWorkflowEvents      map[string][]*WorkflowEvent
+	namedEmailTemplates      map[string][]*EmailTemplate
 	namedWorkflowObjectRefs  map[string][]*WorkflowObjectRef
 }
 
@@ -297,10 +300,19 @@ func (e WorkflowInstanceEdges) WorkflowEventsOrErr() ([]*WorkflowEvent, error) {
 	return nil, &NotLoadedError{edge: "workflow_events"}
 }
 
+// EmailTemplatesOrErr returns the EmailTemplates value or an error if the edge
+// was not loaded in eager-loading.
+func (e WorkflowInstanceEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
+	if e.loadedTypes[15] {
+		return e.EmailTemplates, nil
+	}
+	return nil, &NotLoadedError{edge: "email_templates"}
+}
+
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e WorkflowInstanceEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -591,6 +603,11 @@ func (_m *WorkflowInstance) QueryWorkflowEvents() *WorkflowEventQuery {
 	return NewWorkflowInstanceClient(_m.config).QueryWorkflowEvents(_m)
 }
 
+// QueryEmailTemplates queries the "email_templates" edge of the WorkflowInstance entity.
+func (_m *WorkflowInstance) QueryEmailTemplates() *EmailTemplateQuery {
+	return NewWorkflowInstanceClient(_m.config).QueryEmailTemplates(_m)
+}
+
 // QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the WorkflowInstance entity.
 func (_m *WorkflowInstance) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	return NewWorkflowInstanceClient(_m.config).QueryWorkflowObjectRefs(_m)
@@ -747,6 +764,30 @@ func (_m *WorkflowInstance) appendNamedWorkflowEvents(name string, edges ...*Wor
 		_m.Edges.namedWorkflowEvents[name] = []*WorkflowEvent{}
 	} else {
 		_m.Edges.namedWorkflowEvents[name] = append(_m.Edges.namedWorkflowEvents[name], edges...)
+	}
+}
+
+// NamedEmailTemplates returns the EmailTemplates named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *WorkflowInstance) NamedEmailTemplates(name string) ([]*EmailTemplate, error) {
+	if _m.Edges.namedEmailTemplates == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEmailTemplates[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *WorkflowInstance) appendNamedEmailTemplates(name string, edges ...*EmailTemplate) {
+	if _m.Edges.namedEmailTemplates == nil {
+		_m.Edges.namedEmailTemplates = make(map[string][]*EmailTemplate)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEmailTemplates[name] = []*EmailTemplate{}
+	} else {
+		_m.Edges.namedEmailTemplates[name] = append(_m.Edges.namedEmailTemplates[name], edges...)
 	}
 }
 

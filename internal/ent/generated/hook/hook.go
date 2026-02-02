@@ -249,6 +249,30 @@ func (f DocumentDataFunc) Mutate(ctx context.Context, m generated.Mutation) (gen
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DocumentDataMutation", m)
 }
 
+// The EmailBrandingFunc type is an adapter to allow the use of ordinary
+// function as EmailBranding mutator.
+type EmailBrandingFunc func(context.Context, *generated.EmailBrandingMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f EmailBrandingFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.EmailBrandingMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.EmailBrandingMutation", m)
+}
+
+// The EmailTemplateFunc type is an adapter to allow the use of ordinary
+// function as EmailTemplate mutator.
+type EmailTemplateFunc func(context.Context, *generated.EmailTemplateMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f EmailTemplateFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.EmailTemplateMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.EmailTemplateMutation", m)
+}
+
 // The EmailVerificationTokenFunc type is an adapter to allow the use of ordinary
 // function as EmailVerificationToken mutator.
 type EmailVerificationTokenFunc func(context.Context, *generated.EmailVerificationTokenMutation) (generated.Value, error)
@@ -453,6 +477,30 @@ func (f IntegrationFunc) Mutate(ctx context.Context, m generated.Mutation) (gene
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.IntegrationMutation", m)
 }
 
+// The IntegrationRunFunc type is an adapter to allow the use of ordinary
+// function as IntegrationRun mutator.
+type IntegrationRunFunc func(context.Context, *generated.IntegrationRunMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f IntegrationRunFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.IntegrationRunMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.IntegrationRunMutation", m)
+}
+
+// The IntegrationWebhookFunc type is an adapter to allow the use of ordinary
+// function as IntegrationWebhook mutator.
+type IntegrationWebhookFunc func(context.Context, *generated.IntegrationWebhookMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f IntegrationWebhookFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.IntegrationWebhookMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.IntegrationWebhookMutation", m)
+}
+
 // The InternalPolicyFunc type is an adapter to allow the use of ordinary
 // function as InternalPolicy mutator.
 type InternalPolicyFunc func(context.Context, *generated.InternalPolicyMutation) (generated.Value, error)
@@ -595,6 +643,30 @@ func (f NotificationFunc) Mutate(ctx context.Context, m generated.Mutation) (gen
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.NotificationMutation", m)
+}
+
+// The NotificationPreferenceFunc type is an adapter to allow the use of ordinary
+// function as NotificationPreference mutator.
+type NotificationPreferenceFunc func(context.Context, *generated.NotificationPreferenceMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f NotificationPreferenceFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.NotificationPreferenceMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.NotificationPreferenceMutation", m)
+}
+
+// The NotificationTemplateFunc type is an adapter to allow the use of ordinary
+// function as NotificationTemplate mutator.
+type NotificationTemplateFunc func(context.Context, *generated.NotificationTemplateMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f NotificationTemplateFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.NotificationTemplateMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.NotificationTemplateMutation", m)
 }
 
 // The OnboardingFunc type is an adapter to allow the use of ordinary

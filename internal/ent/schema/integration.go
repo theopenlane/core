@@ -9,8 +9,10 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/common/models"
+	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -47,6 +49,7 @@ func (Integration) Fields() []ent.Field {
 			Comment("the name of the integration").
 			NotEmpty().
 			Annotations(
+				entx.FieldSearchable(),
 				entgql.OrderField("name"),
 			),
 		field.String("description").
@@ -59,6 +62,7 @@ func (Integration) Fields() []ent.Field {
 			Comment("the kind of integration, such as github, slack, s3 etc.").
 			Optional().
 			Annotations(
+				entx.FieldSearchable(),
 				entgql.OrderField("kind"),
 			),
 		field.String("integration_type").
@@ -67,135 +71,25 @@ func (Integration) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("integration_type"),
 			),
-		field.String("integration_definition_id").
-			Comment("integration definition backing this connection").
-			Optional(),
-		field.String("connection_name").
-			Comment("optional connection label to allow multiple connections per provider").
+		field.JSON("provider_metadata", openapi.IntegrationProviderMetadata{}).
+			Comment("cached provider metadata for UI and registry access").
 			Optional().
 			Annotations(
-				entgql.OrderField("CONNECTION_NAME"),
-			),
-		field.Bool("is_primary").
-			Comment("whether this is the primary connection for the provider").
-			Default(false),
-		field.String("installation_id").
-			Comment("external installation identifier for webhook lookups").
-			Optional(),
-		field.String("app_id").
-			Comment("external application identifier for webhook lookups").
-			Optional(),
-		field.String("tenant_id").
-			Comment("external tenant identifier for webhook lookups").
-			Optional(),
-		field.String("account_id").
-			Comment("external account identifier for webhook lookups").
-			Optional(),
-		field.String("project_id").
-			Comment("external project identifier for webhook lookups").
-			Optional(),
-		field.String("region").
-			Comment("external region identifier for webhook lookups").
-			Optional(),
-		field.String("status").
-			Comment("connection status for the integration").
-			Optional().
-			Annotations(
-				entgql.OrderField("status"),
-			),
-		field.Time("last_health_check_at").
-			Comment("last time a health check was performed").
-			GoType(models.DateTime{}).
-			Optional().
-			Nillable().
-			Annotations(
-				entgql.OrderField("last_health_check_at"),
-			),
-		field.String("last_health_check_status").
-			Comment("status of the last health check").
-			Optional().
-			Annotations(
-				entgql.OrderField("last_health_check_status"),
-			),
-		field.Text("last_health_check_error").
-			Comment("error details from the last health check").
-			Optional(),
-		field.String("auth_type").
-			Comment("authentication type for the integration (oauth2, apikey, workload_identity, etc.)").
-			Optional().
-			Annotations(
-				entgql.OrderField("auth_type"),
-			),
-		field.Strings("scopes").
-			Comment("scopes granted for the integration").
-			Optional(),
-		field.Time("last_run_at").
-			Comment("last time an integration action ran").
-			GoType(models.DateTime{}).
-			Optional().
-			Nillable().
-			Annotations(
-				entgql.OrderField("last_run_at"),
-			),
-		field.String("last_run_status").
-			Comment("status of the last integration run").
-			Optional().
-			Annotations(
-				entgql.OrderField("last_run_status"),
-			),
-		field.Text("last_run_summary").
-			Comment("summary of the last integration run").
-			Optional(),
-		field.JSON("last_run_details", map[string]any{}).
-			Comment("structured details for the last integration run").
-			Optional().
-			Annotations(
-				entgql.Skip(entgql.SkipWhereInput),
-			),
-		field.JSON("available_actions", []map[string]any{}).
-			Comment("available actions/operations published by the provider").
-			Optional().
-			Annotations(
-				entgql.Skip(entgql.SkipWhereInput),
-			),
-		field.JSON("provider_config", map[string]any{}).
-			Comment("provider configuration payload for this integration").
-			Optional().
-			Annotations(
-				entgql.Skip(entgql.SkipWhereInput),
-			),
-		field.JSON("credential_schema", map[string]any{}).
-			Comment("credential schema for provider configuration").
-			Optional().
-			Annotations(
-				entgql.Skip(entgql.SkipWhereInput),
-			),
-		field.JSON("operation_schemas", map[string]any{}).
-			Comment("operation config/output schemas for available actions").
-			Optional().
-			Annotations(
-				entgql.Skip(entgql.SkipWhereInput),
-			),
-		field.JSON("instructions", map[string]any{}).
-			Comment("setup or usage instructions for this integration").
-			Optional().
-			Annotations(
+				entgql.Skip(entgql.SkipType),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional metadata about the integration").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 	}
 }
 
 // Edges of the Integration
 func (i Integration) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: i,
-			edgeSchema: IntegrationDefinition{},
-			field:      "integration_definition_id",
-		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: i,
 			edgeSchema: Hush{},
@@ -219,8 +113,20 @@ func (i Integration) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, DirectorySyncRun{}),
 		defaultEdgeToWithPagination(i, NotificationTemplate{}),
 		defaultEdgeToWithPagination(i, EmailTemplate{}),
-		defaultEdgeToWithPagination(i, IntegrationWebhook{}),
-		defaultEdgeToWithPagination(i, IntegrationRun{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: i,
+			edgeSchema: IntegrationWebhook{},
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: i,
+			edgeSchema: IntegrationRun{},
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
+		}),
 		defaultEdgeFromWithPagination(i, Entity{}),
 	}
 }
@@ -230,22 +136,7 @@ func (Integration) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields(ownerFieldName, "kind").
 			Unique().
-			Annotations(entsql.IndexWhere("deleted_at is NULL and is_primary = true")),
-		index.Fields(ownerFieldName, "kind", "connection_name").
-			Unique().
-			Annotations(entsql.IndexWhere("deleted_at is NULL and connection_name is not NULL")),
-		index.Fields("kind", "installation_id").
-			Annotations(entsql.IndexWhere("deleted_at is NULL and installation_id is not NULL")),
-		index.Fields("kind", "app_id").
-			Annotations(entsql.IndexWhere("deleted_at is NULL and app_id is not NULL")),
-		index.Fields("kind", "tenant_id").
-			Annotations(entsql.IndexWhere("deleted_at is NULL and tenant_id is not NULL")),
-		index.Fields("kind", "account_id").
-			Annotations(entsql.IndexWhere("deleted_at is NULL and account_id is not NULL")),
-		index.Fields("kind", "project_id").
-			Annotations(entsql.IndexWhere("deleted_at is NULL and project_id is not NULL")),
-		index.Fields("kind", "region").
-			Annotations(entsql.IndexWhere("deleted_at is NULL and region is not NULL")),
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 

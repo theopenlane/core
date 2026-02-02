@@ -80,6 +80,8 @@ func (ec *executionContext) fieldContext_Subscription_notificationCreated(_ cont
 				return ec.fieldContext_Notification_body(ctx, field)
 			case "data":
 				return ec.fieldContext_Notification_data(ctx, field)
+			case "templateID":
+				return ec.fieldContext_Notification_templateID(ctx, field)
 			case "readAt":
 				return ec.fieldContext_Notification_readAt(ctx, field)
 			case "channels":

@@ -3,9 +3,7 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/field"
-	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 
@@ -115,16 +113,6 @@ func (e EmailBranding) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeToWithPagination(e, Campaign{}),
 		defaultEdgeToWithPagination(e, EmailTemplate{}),
-	}
-}
-
-// Indexes of the EmailBranding.
-func (EmailBranding) Indexes() []ent.Index {
-	return []ent.Index{
-		index.Fields("name", ownerFieldName).
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
-		index.Fields(ownerFieldName).
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL and is_default = true")),
 	}
 }
 

@@ -134,6 +134,14 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_personalAccessTokens(ctx, field)
 			case "apiTokens":
 				return ec.fieldContext_Organization_apiTokens(ctx, field)
+			case "emailBrandings":
+				return ec.fieldContext_Organization_emailBrandings(ctx, field)
+			case "emailTemplates":
+				return ec.fieldContext_Organization_emailTemplates(ctx, field)
+			case "notificationPreferences":
+				return ec.fieldContext_Organization_notificationPreferences(ctx, field)
+			case "notificationTemplates":
+				return ec.fieldContext_Organization_notificationTemplates(ctx, field)
 			case "users":
 				return ec.fieldContext_Organization_users(ctx, field)
 			case "files":

@@ -19,12 +19,16 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
@@ -39,44 +43,52 @@ import (
 // IntegrationQuery is the builder for querying Integration entities.
 type IntegrationQuery struct {
 	config
-	ctx                           *QueryContext
-	order                         []integration.OrderOption
-	inters                        []Interceptor
-	predicates                    []predicate.Integration
-	withOwner                     *OrganizationQuery
-	withEnvironment               *CustomTypeEnumQuery
-	withScope                     *CustomTypeEnumQuery
-	withSecrets                   *HushQuery
-	withFiles                     *FileQuery
-	withEvents                    *EventQuery
-	withFindings                  *FindingQuery
-	withVulnerabilities           *VulnerabilityQuery
-	withReviews                   *ReviewQuery
-	withRemediations              *RemediationQuery
-	withTasks                     *TaskQuery
-	withActionPlans               *ActionPlanQuery
-	withDirectoryAccounts         *DirectoryAccountQuery
-	withDirectoryGroups           *DirectoryGroupQuery
-	withDirectoryMemberships      *DirectoryMembershipQuery
-	withDirectorySyncRuns         *DirectorySyncRunQuery
-	withEntities                  *EntityQuery
-	withFKs                       bool
-	loadTotal                     []func(context.Context, []*Integration) error
-	modifiers                     []func(*sql.Selector)
-	withNamedSecrets              map[string]*HushQuery
-	withNamedFiles                map[string]*FileQuery
-	withNamedEvents               map[string]*EventQuery
-	withNamedFindings             map[string]*FindingQuery
-	withNamedVulnerabilities      map[string]*VulnerabilityQuery
-	withNamedReviews              map[string]*ReviewQuery
-	withNamedRemediations         map[string]*RemediationQuery
-	withNamedTasks                map[string]*TaskQuery
-	withNamedActionPlans          map[string]*ActionPlanQuery
-	withNamedDirectoryAccounts    map[string]*DirectoryAccountQuery
-	withNamedDirectoryGroups      map[string]*DirectoryGroupQuery
-	withNamedDirectoryMemberships map[string]*DirectoryMembershipQuery
-	withNamedDirectorySyncRuns    map[string]*DirectorySyncRunQuery
-	withNamedEntities             map[string]*EntityQuery
+	ctx                            *QueryContext
+	order                          []integration.OrderOption
+	inters                         []Interceptor
+	predicates                     []predicate.Integration
+	withOwner                      *OrganizationQuery
+	withEnvironment                *CustomTypeEnumQuery
+	withScope                      *CustomTypeEnumQuery
+	withSecrets                    *HushQuery
+	withFiles                      *FileQuery
+	withEvents                     *EventQuery
+	withFindings                   *FindingQuery
+	withVulnerabilities            *VulnerabilityQuery
+	withReviews                    *ReviewQuery
+	withRemediations               *RemediationQuery
+	withTasks                      *TaskQuery
+	withActionPlans                *ActionPlanQuery
+	withDirectoryAccounts          *DirectoryAccountQuery
+	withDirectoryGroups            *DirectoryGroupQuery
+	withDirectoryMemberships       *DirectoryMembershipQuery
+	withDirectorySyncRuns          *DirectorySyncRunQuery
+	withNotificationTemplates      *NotificationTemplateQuery
+	withEmailTemplates             *EmailTemplateQuery
+	withIntegrationWebhooks        *IntegrationWebhookQuery
+	withIntegrationRuns            *IntegrationRunQuery
+	withEntities                   *EntityQuery
+	withFKs                        bool
+	loadTotal                      []func(context.Context, []*Integration) error
+	modifiers                      []func(*sql.Selector)
+	withNamedSecrets               map[string]*HushQuery
+	withNamedFiles                 map[string]*FileQuery
+	withNamedEvents                map[string]*EventQuery
+	withNamedFindings              map[string]*FindingQuery
+	withNamedVulnerabilities       map[string]*VulnerabilityQuery
+	withNamedReviews               map[string]*ReviewQuery
+	withNamedRemediations          map[string]*RemediationQuery
+	withNamedTasks                 map[string]*TaskQuery
+	withNamedActionPlans           map[string]*ActionPlanQuery
+	withNamedDirectoryAccounts     map[string]*DirectoryAccountQuery
+	withNamedDirectoryGroups       map[string]*DirectoryGroupQuery
+	withNamedDirectoryMemberships  map[string]*DirectoryMembershipQuery
+	withNamedDirectorySyncRuns     map[string]*DirectorySyncRunQuery
+	withNamedNotificationTemplates map[string]*NotificationTemplateQuery
+	withNamedEmailTemplates        map[string]*EmailTemplateQuery
+	withNamedIntegrationWebhooks   map[string]*IntegrationWebhookQuery
+	withNamedIntegrationRuns       map[string]*IntegrationRunQuery
+	withNamedEntities              map[string]*EntityQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -513,6 +525,106 @@ func (_q *IntegrationQuery) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
 	return query
 }
 
+// QueryNotificationTemplates chains the current query on the "notification_templates" edge.
+func (_q *IntegrationQuery) QueryNotificationTemplates() *NotificationTemplateQuery {
+	query := (&NotificationTemplateClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, selector),
+			sqlgraph.To(notificationtemplate.Table, notificationtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.NotificationTemplatesTable, integration.NotificationTemplatesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.NotificationTemplate
+		step.Edge.Schema = schemaConfig.NotificationTemplate
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEmailTemplates chains the current query on the "email_templates" edge.
+func (_q *IntegrationQuery) QueryEmailTemplates() *EmailTemplateQuery {
+	query := (&EmailTemplateClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, selector),
+			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.EmailTemplatesTable, integration.EmailTemplatesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIntegrationWebhooks chains the current query on the "integration_webhooks" edge.
+func (_q *IntegrationQuery) QueryIntegrationWebhooks() *IntegrationWebhookQuery {
+	query := (&IntegrationWebhookClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, selector),
+			sqlgraph.To(integrationwebhook.Table, integrationwebhook.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.IntegrationWebhooksTable, integration.IntegrationWebhooksColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IntegrationWebhook
+		step.Edge.Schema = schemaConfig.IntegrationWebhook
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *IntegrationQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.IntegrationRunsTable, integration.IntegrationRunsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IntegrationRun
+		step.Edge.Schema = schemaConfig.IntegrationRun
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryEntities chains the current query on the "entities" edge.
 func (_q *IntegrationQuery) QueryEntities() *EntityQuery {
 	query := (&EntityClient{config: _q.config}).Query()
@@ -725,28 +837,32 @@ func (_q *IntegrationQuery) Clone() *IntegrationQuery {
 		return nil
 	}
 	return &IntegrationQuery{
-		config:                   _q.config,
-		ctx:                      _q.ctx.Clone(),
-		order:                    append([]integration.OrderOption{}, _q.order...),
-		inters:                   append([]Interceptor{}, _q.inters...),
-		predicates:               append([]predicate.Integration{}, _q.predicates...),
-		withOwner:                _q.withOwner.Clone(),
-		withEnvironment:          _q.withEnvironment.Clone(),
-		withScope:                _q.withScope.Clone(),
-		withSecrets:              _q.withSecrets.Clone(),
-		withFiles:                _q.withFiles.Clone(),
-		withEvents:               _q.withEvents.Clone(),
-		withFindings:             _q.withFindings.Clone(),
-		withVulnerabilities:      _q.withVulnerabilities.Clone(),
-		withReviews:              _q.withReviews.Clone(),
-		withRemediations:         _q.withRemediations.Clone(),
-		withTasks:                _q.withTasks.Clone(),
-		withActionPlans:          _q.withActionPlans.Clone(),
-		withDirectoryAccounts:    _q.withDirectoryAccounts.Clone(),
-		withDirectoryGroups:      _q.withDirectoryGroups.Clone(),
-		withDirectoryMemberships: _q.withDirectoryMemberships.Clone(),
-		withDirectorySyncRuns:    _q.withDirectorySyncRuns.Clone(),
-		withEntities:             _q.withEntities.Clone(),
+		config:                    _q.config,
+		ctx:                       _q.ctx.Clone(),
+		order:                     append([]integration.OrderOption{}, _q.order...),
+		inters:                    append([]Interceptor{}, _q.inters...),
+		predicates:                append([]predicate.Integration{}, _q.predicates...),
+		withOwner:                 _q.withOwner.Clone(),
+		withEnvironment:           _q.withEnvironment.Clone(),
+		withScope:                 _q.withScope.Clone(),
+		withSecrets:               _q.withSecrets.Clone(),
+		withFiles:                 _q.withFiles.Clone(),
+		withEvents:                _q.withEvents.Clone(),
+		withFindings:              _q.withFindings.Clone(),
+		withVulnerabilities:       _q.withVulnerabilities.Clone(),
+		withReviews:               _q.withReviews.Clone(),
+		withRemediations:          _q.withRemediations.Clone(),
+		withTasks:                 _q.withTasks.Clone(),
+		withActionPlans:           _q.withActionPlans.Clone(),
+		withDirectoryAccounts:     _q.withDirectoryAccounts.Clone(),
+		withDirectoryGroups:       _q.withDirectoryGroups.Clone(),
+		withDirectoryMemberships:  _q.withDirectoryMemberships.Clone(),
+		withDirectorySyncRuns:     _q.withDirectorySyncRuns.Clone(),
+		withNotificationTemplates: _q.withNotificationTemplates.Clone(),
+		withEmailTemplates:        _q.withEmailTemplates.Clone(),
+		withIntegrationWebhooks:   _q.withIntegrationWebhooks.Clone(),
+		withIntegrationRuns:       _q.withIntegrationRuns.Clone(),
+		withEntities:              _q.withEntities.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -930,6 +1046,50 @@ func (_q *IntegrationQuery) WithDirectorySyncRuns(opts ...func(*DirectorySyncRun
 	return _q
 }
 
+// WithNotificationTemplates tells the query-builder to eager-load the nodes that are connected to
+// the "notification_templates" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithNotificationTemplates(opts ...func(*NotificationTemplateQuery)) *IntegrationQuery {
+	query := (&NotificationTemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withNotificationTemplates = query
+	return _q
+}
+
+// WithEmailTemplates tells the query-builder to eager-load the nodes that are connected to
+// the "email_templates" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithEmailTemplates(opts ...func(*EmailTemplateQuery)) *IntegrationQuery {
+	query := (&EmailTemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEmailTemplates = query
+	return _q
+}
+
+// WithIntegrationWebhooks tells the query-builder to eager-load the nodes that are connected to
+// the "integration_webhooks" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithIntegrationWebhooks(opts ...func(*IntegrationWebhookQuery)) *IntegrationQuery {
+	query := (&IntegrationWebhookClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationWebhooks = query
+	return _q
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *IntegrationQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
+	return _q
+}
+
 // WithEntities tells the query-builder to eager-load the nodes that are connected to
 // the "entities" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *IntegrationQuery) WithEntities(opts ...func(*EntityQuery)) *IntegrationQuery {
@@ -1026,7 +1186,7 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*Integration{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [17]bool{
+		loadedTypes = [21]bool{
 			_q.withOwner != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
@@ -1043,6 +1203,10 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withDirectoryGroups != nil,
 			_q.withDirectoryMemberships != nil,
 			_q.withDirectorySyncRuns != nil,
+			_q.withNotificationTemplates != nil,
+			_q.withEmailTemplates != nil,
+			_q.withIntegrationWebhooks != nil,
+			_q.withIntegrationRuns != nil,
 			_q.withEntities != nil,
 		}
 	)
@@ -1187,6 +1351,38 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	if query := _q.withNotificationTemplates; query != nil {
+		if err := _q.loadNotificationTemplates(ctx, query, nodes,
+			func(n *Integration) { n.Edges.NotificationTemplates = []*NotificationTemplate{} },
+			func(n *Integration, e *NotificationTemplate) {
+				n.Edges.NotificationTemplates = append(n.Edges.NotificationTemplates, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEmailTemplates; query != nil {
+		if err := _q.loadEmailTemplates(ctx, query, nodes,
+			func(n *Integration) { n.Edges.EmailTemplates = []*EmailTemplate{} },
+			func(n *Integration, e *EmailTemplate) { n.Edges.EmailTemplates = append(n.Edges.EmailTemplates, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIntegrationWebhooks; query != nil {
+		if err := _q.loadIntegrationWebhooks(ctx, query, nodes,
+			func(n *Integration) { n.Edges.IntegrationWebhooks = []*IntegrationWebhook{} },
+			func(n *Integration, e *IntegrationWebhook) {
+				n.Edges.IntegrationWebhooks = append(n.Edges.IntegrationWebhooks, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Integration) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *Integration, e *IntegrationRun) { n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withEntities; query != nil {
 		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Integration) { n.Edges.Entities = []*Entity{} },
@@ -1282,6 +1478,34 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := _q.loadDirectorySyncRuns(ctx, query, nodes,
 			func(n *Integration) { n.appendNamedDirectorySyncRuns(name) },
 			func(n *Integration, e *DirectorySyncRun) { n.appendNamedDirectorySyncRuns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedNotificationTemplates {
+		if err := _q.loadNotificationTemplates(ctx, query, nodes,
+			func(n *Integration) { n.appendNamedNotificationTemplates(name) },
+			func(n *Integration, e *NotificationTemplate) { n.appendNamedNotificationTemplates(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEmailTemplates {
+		if err := _q.loadEmailTemplates(ctx, query, nodes,
+			func(n *Integration) { n.appendNamedEmailTemplates(name) },
+			func(n *Integration, e *EmailTemplate) { n.appendNamedEmailTemplates(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrationWebhooks {
+		if err := _q.loadIntegrationWebhooks(ctx, query, nodes,
+			func(n *Integration) { n.appendNamedIntegrationWebhooks(name) },
+			func(n *Integration, e *IntegrationWebhook) { n.appendNamedIntegrationWebhooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Integration) { n.appendNamedIntegrationRuns(name) },
+			func(n *Integration, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2007,6 +2231,126 @@ func (_q *IntegrationQuery) loadDirectorySyncRuns(ctx context.Context, query *Di
 	}
 	return nil
 }
+func (_q *IntegrationQuery) loadNotificationTemplates(ctx context.Context, query *NotificationTemplateQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *NotificationTemplate)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Integration)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(notificationtemplate.FieldIntegrationID)
+	}
+	query.Where(predicate.NotificationTemplate(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(integration.NotificationTemplatesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.IntegrationID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "integration_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *IntegrationQuery) loadEmailTemplates(ctx context.Context, query *EmailTemplateQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *EmailTemplate)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Integration)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(emailtemplate.FieldIntegrationID)
+	}
+	query.Where(predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(integration.EmailTemplatesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.IntegrationID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "integration_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *IntegrationQuery) loadIntegrationWebhooks(ctx context.Context, query *IntegrationWebhookQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *IntegrationWebhook)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Integration)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(integrationwebhook.FieldIntegrationID)
+	}
+	query.Where(predicate.IntegrationWebhook(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(integration.IntegrationWebhooksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.IntegrationID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "integration_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *IntegrationQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *IntegrationRun)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Integration)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(integrationrun.FieldIntegrationID)
+	}
+	query.Where(predicate.IntegrationRun(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(integration.IntegrationRunsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.IntegrationID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "integration_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *IntegrationQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *Entity)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Integration)
@@ -2356,6 +2700,62 @@ func (_q *IntegrationQuery) WithNamedDirectorySyncRuns(name string, opts ...func
 		_q.withNamedDirectorySyncRuns = make(map[string]*DirectorySyncRunQuery)
 	}
 	_q.withNamedDirectorySyncRuns[name] = query
+	return _q
+}
+
+// WithNamedNotificationTemplates tells the query-builder to eager-load the nodes that are connected to the "notification_templates"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithNamedNotificationTemplates(name string, opts ...func(*NotificationTemplateQuery)) *IntegrationQuery {
+	query := (&NotificationTemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedNotificationTemplates == nil {
+		_q.withNamedNotificationTemplates = make(map[string]*NotificationTemplateQuery)
+	}
+	_q.withNamedNotificationTemplates[name] = query
+	return _q
+}
+
+// WithNamedEmailTemplates tells the query-builder to eager-load the nodes that are connected to the "email_templates"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithNamedEmailTemplates(name string, opts ...func(*EmailTemplateQuery)) *IntegrationQuery {
+	query := (&EmailTemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEmailTemplates == nil {
+		_q.withNamedEmailTemplates = make(map[string]*EmailTemplateQuery)
+	}
+	_q.withNamedEmailTemplates[name] = query
+	return _q
+}
+
+// WithNamedIntegrationWebhooks tells the query-builder to eager-load the nodes that are connected to the "integration_webhooks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithNamedIntegrationWebhooks(name string, opts ...func(*IntegrationWebhookQuery)) *IntegrationQuery {
+	query := (&IntegrationWebhookClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationWebhooks == nil {
+		_q.withNamedIntegrationWebhooks = make(map[string]*IntegrationWebhookQuery)
+	}
+	_q.withNamedIntegrationWebhooks[name] = query
+	return _q
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *IntegrationQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
 	return _q
 }
 

@@ -1,9 +1,13 @@
 package handlers
 
 import (
+	"context"
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"reflect"
+
+	"github.com/theopenlane/core/common/integrations/types"
 )
 
 var (
@@ -59,4 +63,29 @@ func wrapIntegrationError(operation string, err error) error {
 
 func wrapTokenError(operation, provider string, err error) error {
 	return fmt.Errorf("failed to %s token for %s: %w", operation, provider, err)
+}
+
+func (h *Handler) updateIntegrationProviderMetadata(ctx context.Context, integrationID string, provider types.ProviderType) error {
+	if h == nil || h.DBClient == nil || h.IntegrationRegistry == nil {
+		return nil
+	}
+
+	spec, ok := h.IntegrationRegistry.Config(provider)
+	if !ok || !spec.Active {
+		return nil
+	}
+
+	meta, ok := h.IntegrationRegistry.ProviderMetadataCatalog()[provider]
+	if !ok {
+		meta = spec.ToProviderConfig()
+	}
+
+	entry := buildIntegrationProviderMetadata(provider, spec, meta, h.IntegrationRegistry)
+	update := h.DBClient.Integration.UpdateOneID(integrationID)
+	if setMethod := reflect.ValueOf(update).MethodByName("SetProviderMetadata"); setMethod.IsValid() {
+		setMethod.Call([]reflect.Value{reflect.ValueOf(entry)})
+		return update.Exec(ctx)
+	}
+
+	return nil
 }

@@ -26,6 +26,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -40,6 +42,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
@@ -51,6 +55,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -250,6 +256,18 @@ func DocumentDataEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func EmailBrandingEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup emailbranding edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func EmailTemplateEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup emailtemplate edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
 func EmailVerificationTokenEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup emailverificationtoken edge")), entfga.DeleteTuplesFirstKey{})
 
@@ -366,6 +384,18 @@ func IntegrationEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func IntegrationRunEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integrationrun edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func IntegrationWebhookEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integrationwebhook edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
 func InternalPolicyEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup internalpolicy edge")), entfga.DeleteTuplesFirstKey{})
 
@@ -445,6 +475,18 @@ func NotificationEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func NotificationPreferenceEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup notificationpreference edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func NotificationTemplateEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup notificationtemplate edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
 func OnboardingEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup onboarding edge")), entfga.DeleteTuplesFirstKey{})
 
@@ -515,6 +557,48 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).APIToken.Query().Where((apitoken.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if apitokenCount, err := FromContext(ctx).APIToken.Delete().Where(apitoken.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", apitokenCount).Msg("error deleting apitoken")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).EmailBranding.Query().Where((emailbranding.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if emailbrandingCount, err := FromContext(ctx).EmailBranding.Delete().Where(emailbranding.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", emailbrandingCount).Msg("error deleting emailbranding")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).EmailTemplate.Query().Where((emailtemplate.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if emailtemplateCount, err := FromContext(ctx).EmailTemplate.Delete().Where(emailtemplate.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", emailtemplateCount).Msg("error deleting emailtemplate")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).IntegrationWebhook.Query().Where((integrationwebhook.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if integrationwebhookCount, err := FromContext(ctx).IntegrationWebhook.Delete().Where(integrationwebhook.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", integrationwebhookCount).Msg("error deleting integrationwebhook")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).IntegrationRun.Query().Where((integrationrun.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if integrationrunCount, err := FromContext(ctx).IntegrationRun.Delete().Where(integrationrun.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", integrationrunCount).Msg("error deleting integrationrun")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).NotificationPreference.Query().Where((notificationpreference.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if notificationpreferenceCount, err := FromContext(ctx).NotificationPreference.Delete().Where(notificationpreference.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", notificationpreferenceCount).Msg("error deleting notificationpreference")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).NotificationTemplate.Query().Where((notificationtemplate.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if notificationtemplateCount, err := FromContext(ctx).NotificationTemplate.Delete().Where(notificationtemplate.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", notificationtemplateCount).Msg("error deleting notificationtemplate")
 			return err
 		}
 	}

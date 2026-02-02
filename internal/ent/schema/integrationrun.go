@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 
@@ -47,9 +48,6 @@ func (IntegrationRun) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("integration_id").
 			Comment("integration connection this run belongs to").
-			NotEmpty(),
-		field.String("operation_definition_id").
-			Comment("operation definition executed for this run").
 			Optional(),
 		field.String("operation_name").
 			Comment("operation identifier executed for this run").
@@ -137,25 +135,17 @@ func (r IntegrationRun) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Integration{}.Name()),
 			},
 		}),
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: r,
-			edgeSchema: IntegrationOperationDefinition{},
-			field:      "operation_definition_id",
-			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(IntegrationOperationDefinition{}.Name()),
-			},
-		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: r,
-			edgeSchema: File{},
 			field:      "request_file_id",
 			name:       "request_file",
+			t:          File.Type,
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: r,
-			edgeSchema: File{},
 			field:      "response_file_id",
 			name:       "response_file",
+			t:          File.Type,
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: r,
@@ -169,9 +159,9 @@ func (r IntegrationRun) Edges() []ent.Edge {
 func (r IntegrationRun) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
+		excludeAnnotations: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[IntegrationRun](r,
-				withParents(Integration{}),
 				withOrganizationOwnerServiceOnly(true),
 			),
 		},
@@ -188,13 +178,12 @@ func (IntegrationRun) Modules() []models.OrgModule {
 // Annotations of the IntegrationRun.
 func (r IntegrationRun) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entgql.Skip(entgql.SkipAll),
+		entx.SchemaGenSkip(true),
+		entx.QueryGenSkip(true),
 		history.Annotations{
 			Exclude: true,
 		},
-		entgql.Skip(
-			entgql.SkipMutationCreateInput,
-			entgql.SkipMutationUpdateInput,
-		),
 	}
 }
 

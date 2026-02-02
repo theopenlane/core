@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 
@@ -45,7 +46,7 @@ func (IntegrationWebhook) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("integration_id").
 			Comment("integration connection this webhook belongs to").
-			NotEmpty(),
+			Optional(),
 		field.String("name").
 			Comment("display name for the webhook endpoint").
 			Optional().
@@ -133,9 +134,9 @@ func (w IntegrationWebhook) Edges() []ent.Edge {
 func (w IntegrationWebhook) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
+		excludeAnnotations: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[IntegrationWebhook](w,
-				withParents(Integration{}),
 				withOrganizationOwner(true),
 			),
 		},
@@ -162,9 +163,12 @@ func (IntegrationWebhook) Modules() []models.OrgModule {
 //	)
 //}
 
-// Annotations of the IntegrationRun.
+// Annotations of the IntegrationWebhook.
 func (r IntegrationWebhook) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entgql.Skip(entgql.SkipAll),
+		entx.SchemaGenSkip(true),
+		entx.QueryGenSkip(true),
 		history.Annotations{
 			Exclude: true,
 		},

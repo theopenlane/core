@@ -162,8 +162,9 @@ func (Notification) Annotations() []schema.Annotation {
 		history.Annotations{
 			Exclude: true,
 		},
+		entgql.RelayConnection(),
 		// skip schema gen, this is used for subscriptions only
-		entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
+		entgql.Skip(entgql.SkipWhereInput),
 		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()), // generate input types, but we'll skip the create resolver
 	}
 }

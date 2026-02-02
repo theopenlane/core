@@ -52,6 +52,10 @@ type Tx struct {
 	Discussion *DiscussionClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
+	// EmailBranding is the client for interacting with the EmailBranding builders.
+	EmailBranding *EmailBrandingClient
+	// EmailTemplate is the client for interacting with the EmailTemplate builders.
+	EmailTemplate *EmailTemplateClient
 	// EmailVerificationToken is the client for interacting with the EmailVerificationToken builders.
 	EmailVerificationToken *EmailVerificationTokenClient
 	// Entity is the client for interacting with the Entity builders.
@@ -86,6 +90,10 @@ type Tx struct {
 	ImpersonationEvent *ImpersonationEventClient
 	// Integration is the client for interacting with the Integration builders.
 	Integration *IntegrationClient
+	// IntegrationRun is the client for interacting with the IntegrationRun builders.
+	IntegrationRun *IntegrationRunClient
+	// IntegrationWebhook is the client for interacting with the IntegrationWebhook builders.
+	IntegrationWebhook *IntegrationWebhookClient
 	// InternalPolicy is the client for interacting with the InternalPolicy builders.
 	InternalPolicy *InternalPolicyClient
 	// Invite is the client for interacting with the Invite builders.
@@ -110,6 +118,10 @@ type Tx struct {
 	Note *NoteClient
 	// Notification is the client for interacting with the Notification builders.
 	Notification *NotificationClient
+	// NotificationPreference is the client for interacting with the NotificationPreference builders.
+	NotificationPreference *NotificationPreferenceClient
+	// NotificationTemplate is the client for interacting with the NotificationTemplate builders.
+	NotificationTemplate *NotificationTemplateClient
 	// Onboarding is the client for interacting with the Onboarding builders.
 	Onboarding *OnboardingClient
 	// OrgMembership is the client for interacting with the OrgMembership builders.
@@ -355,6 +367,8 @@ func (tx *Tx) init() {
 	tx.DirectorySyncRun = NewDirectorySyncRunClient(tx.config)
 	tx.Discussion = NewDiscussionClient(tx.config)
 	tx.DocumentData = NewDocumentDataClient(tx.config)
+	tx.EmailBranding = NewEmailBrandingClient(tx.config)
+	tx.EmailTemplate = NewEmailTemplateClient(tx.config)
 	tx.EmailVerificationToken = NewEmailVerificationTokenClient(tx.config)
 	tx.Entity = NewEntityClient(tx.config)
 	tx.EntityType = NewEntityTypeClient(tx.config)
@@ -372,6 +386,8 @@ func (tx *Tx) init() {
 	tx.IdentityHolder = NewIdentityHolderClient(tx.config)
 	tx.ImpersonationEvent = NewImpersonationEventClient(tx.config)
 	tx.Integration = NewIntegrationClient(tx.config)
+	tx.IntegrationRun = NewIntegrationRunClient(tx.config)
+	tx.IntegrationWebhook = NewIntegrationWebhookClient(tx.config)
 	tx.InternalPolicy = NewInternalPolicyClient(tx.config)
 	tx.Invite = NewInviteClient(tx.config)
 	tx.JobResult = NewJobResultClient(tx.config)
@@ -384,6 +400,8 @@ func (tx *Tx) init() {
 	tx.Narrative = NewNarrativeClient(tx.config)
 	tx.Note = NewNoteClient(tx.config)
 	tx.Notification = NewNotificationClient(tx.config)
+	tx.NotificationPreference = NewNotificationPreferenceClient(tx.config)
+	tx.NotificationTemplate = NewNotificationTemplateClient(tx.config)
 	tx.Onboarding = NewOnboardingClient(tx.config)
 	tx.OrgMembership = NewOrgMembershipClient(tx.config)
 	tx.OrgModule = NewOrgModuleClient(tx.config)

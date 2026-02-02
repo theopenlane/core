@@ -2728,6 +2728,7 @@ func (_q *UserQuery) loadNotifications(ctx context.Context, query *NotificationQ
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(notification.FieldUserID)
 	}

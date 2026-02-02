@@ -82,6 +82,10 @@ const (
 	EdgeTagDefinitions = "tag_definitions"
 	// EdgeGroups holds the string denoting the groups edge name in mutations.
 	EdgeGroups = "groups"
+	// EdgeNotificationTemplates holds the string denoting the notification_templates edge name in mutations.
+	EdgeNotificationTemplates = "notification_templates"
+	// EdgeEmailTemplates holds the string denoting the email_templates edge name in mutations.
+	EdgeEmailTemplates = "email_templates"
 	// Table holds the table name of the workflowdefinition in the database.
 	Table = "workflow_definitions"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -105,6 +109,20 @@ const (
 	GroupsInverseTable = "groups"
 	// GroupsColumn is the table column denoting the groups relation/edge.
 	GroupsColumn = "workflow_definition_groups"
+	// NotificationTemplatesTable is the table that holds the notification_templates relation/edge.
+	NotificationTemplatesTable = "notification_templates"
+	// NotificationTemplatesInverseTable is the table name for the NotificationTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "notificationtemplate" package.
+	NotificationTemplatesInverseTable = "notification_templates"
+	// NotificationTemplatesColumn is the table column denoting the notification_templates relation/edge.
+	NotificationTemplatesColumn = "workflow_definition_id"
+	// EmailTemplatesTable is the table that holds the email_templates relation/edge.
+	EmailTemplatesTable = "email_templates"
+	// EmailTemplatesInverseTable is the table name for the EmailTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "emailtemplate" package.
+	EmailTemplatesInverseTable = "email_templates"
+	// EmailTemplatesColumn is the table column denoting the email_templates relation/edge.
+	EmailTemplatesColumn = "workflow_definition_id"
 )
 
 // Columns holds all SQL columns for workflowdefinition fields.
@@ -374,6 +392,34 @@ func ByGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByNotificationTemplatesCount orders the results by notification_templates count.
+func ByNotificationTemplatesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newNotificationTemplatesStep(), opts...)
+	}
+}
+
+// ByNotificationTemplates orders the results by notification_templates terms.
+func ByNotificationTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNotificationTemplatesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEmailTemplatesCount orders the results by email_templates count.
+func ByEmailTemplatesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEmailTemplatesStep(), opts...)
+	}
+}
+
+// ByEmailTemplates orders the results by email_templates terms.
+func ByEmailTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEmailTemplatesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -393,6 +439,20 @@ func newGroupsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(GroupsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, GroupsTable, GroupsColumn),
+	)
+}
+func newNotificationTemplatesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NotificationTemplatesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, NotificationTemplatesTable, NotificationTemplatesColumn),
+	)
+}
+func newEmailTemplatesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EmailTemplatesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EmailTemplatesTable, EmailTemplatesColumn),
 	)
 }
 

@@ -15,6 +15,10 @@ import (
 
 // WorkflowAssignment is the resolver for the workflowAssignment field.
 func (r *queryResolver) WorkflowAssignment(ctx context.Context, id string) (*generated.WorkflowAssignment, error) {
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
 	query, err := withTransactionalMutation(ctx).WorkflowAssignment.Query().Where(workflowassignment.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignment"})

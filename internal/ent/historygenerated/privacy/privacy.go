@@ -521,6 +521,54 @@ func (f DocumentDataHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m
 	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.DocumentDataHistoryMutation", m)
 }
 
+// The EmailBrandingHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type EmailBrandingHistoryQueryRuleFunc func(context.Context, *historygenerated.EmailBrandingHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f EmailBrandingHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.EmailBrandingHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.EmailBrandingHistoryQuery", q)
+}
+
+// The EmailBrandingHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type EmailBrandingHistoryMutationRuleFunc func(context.Context, *historygenerated.EmailBrandingHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f EmailBrandingHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.EmailBrandingHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.EmailBrandingHistoryMutation", m)
+}
+
+// The EmailTemplateHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type EmailTemplateHistoryQueryRuleFunc func(context.Context, *historygenerated.EmailTemplateHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f EmailTemplateHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.EmailTemplateHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.EmailTemplateHistoryQuery", q)
+}
+
+// The EmailTemplateHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type EmailTemplateHistoryMutationRuleFunc func(context.Context, *historygenerated.EmailTemplateHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f EmailTemplateHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.EmailTemplateHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.EmailTemplateHistoryMutation", m)
+}
+
 // The EntityHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type EntityHistoryQueryRuleFunc func(context.Context, *historygenerated.EntityHistoryQuery) error
@@ -951,6 +999,54 @@ func (f NoteHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m history
 		return f(ctx, m)
 	}
 	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.NoteHistoryMutation", m)
+}
+
+// The NotificationPreferenceHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type NotificationPreferenceHistoryQueryRuleFunc func(context.Context, *historygenerated.NotificationPreferenceHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f NotificationPreferenceHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.NotificationPreferenceHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.NotificationPreferenceHistoryQuery", q)
+}
+
+// The NotificationPreferenceHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type NotificationPreferenceHistoryMutationRuleFunc func(context.Context, *historygenerated.NotificationPreferenceHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f NotificationPreferenceHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.NotificationPreferenceHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.NotificationPreferenceHistoryMutation", m)
+}
+
+// The NotificationTemplateHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type NotificationTemplateHistoryQueryRuleFunc func(context.Context, *historygenerated.NotificationTemplateHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f NotificationTemplateHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.NotificationTemplateHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.NotificationTemplateHistoryQuery", q)
+}
+
+// The NotificationTemplateHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type NotificationTemplateHistoryMutationRuleFunc func(context.Context, *historygenerated.NotificationTemplateHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f NotificationTemplateHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.NotificationTemplateHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.NotificationTemplateHistoryMutation", m)
 }
 
 // The OrgMembershipHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
@@ -1862,6 +1958,10 @@ func queryFilter(q historygenerated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *historygenerated.DocumentDataHistoryQuery:
 		return q.Filter(), nil
+	case *historygenerated.EmailBrandingHistoryQuery:
+		return q.Filter(), nil
+	case *historygenerated.EmailTemplateHistoryQuery:
+		return q.Filter(), nil
 	case *historygenerated.EntityHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.EntityTypeHistoryQuery:
@@ -1897,6 +1997,10 @@ func queryFilter(q historygenerated.Query) (Filter, error) {
 	case *historygenerated.NarrativeHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.NoteHistoryQuery:
+		return q.Filter(), nil
+	case *historygenerated.NotificationPreferenceHistoryQuery:
+		return q.Filter(), nil
+	case *historygenerated.NotificationTemplateHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.OrgMembershipHistoryQuery:
 		return q.Filter(), nil
@@ -2009,6 +2113,10 @@ func mutationFilter(m historygenerated.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *historygenerated.DocumentDataHistoryMutation:
 		return m.Filter(), nil
+	case *historygenerated.EmailBrandingHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.EmailTemplateHistoryMutation:
+		return m.Filter(), nil
 	case *historygenerated.EntityHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.EntityTypeHistoryMutation:
@@ -2044,6 +2152,10 @@ func mutationFilter(m historygenerated.Mutation) (Filter, error) {
 	case *historygenerated.NarrativeHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.NoteHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.NotificationPreferenceHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.NotificationTemplateHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.OrgMembershipHistoryMutation:
 		return m.Filter(), nil

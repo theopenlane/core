@@ -89,7 +89,7 @@ type WorkflowProposal @goModel(model: "github.com/theopenlane/core/internal/ent/
     """
     Timestamp when this proposal was submitted for approval
     """
-    submittedAt: DateTime
+    submittedAt: Time
     """
     User who submitted this proposal for approval
     """
@@ -101,11 +101,11 @@ type WorkflowProposal @goModel(model: "github.com/theopenlane/core/internal/ent/
     """
     Creation timestamp
     """
-    createdAt: DateTime!
+    createdAt: Time!
     """
     Last update timestamp
     """
-    updatedAt: DateTime!
+    updatedAt: Time!
     """
     Precomputed proposal preview (diff + values) for approval workflows.
     Only available to editors/owners of the target object.

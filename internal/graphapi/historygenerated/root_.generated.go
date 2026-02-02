@@ -250,6 +250,8 @@ type ComplexityRoot struct {
 		Description            func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		DueDate                func(childComplexity int) int
+		EmailBrandingID        func(childComplexity int) int
+		EmailTemplateID        func(childComplexity int) int
 		EntityID               func(childComplexity int) int
 		HistoryTime            func(childComplexity int) int
 		ID                     func(childComplexity int) int
@@ -738,6 +740,86 @@ type ComplexityRoot struct {
 	}
 
 	DocumentDataHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	EmailBrandingHistory struct {
+		BackgroundColor func(childComplexity int) int
+		BrandName       func(childComplexity int) int
+		ButtonColor     func(childComplexity int) int
+		ButtonTextColor func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		FontFamily      func(childComplexity int) int
+		HistoryTime     func(childComplexity int) int
+		ID              func(childComplexity int) int
+		IsDefault       func(childComplexity int) int
+		LinkColor       func(childComplexity int) int
+		LogoRemoteURL   func(childComplexity int) int
+		Name            func(childComplexity int) int
+		Operation       func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		PrimaryColor    func(childComplexity int) int
+		Ref             func(childComplexity int) int
+		SecondaryColor  func(childComplexity int) int
+		Tags            func(childComplexity int) int
+		TextColor       func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
+	}
+
+	EmailBrandingHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	EmailBrandingHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	EmailTemplateHistory struct {
+		Active               func(childComplexity int) int
+		BodyTemplate         func(childComplexity int) int
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		Description          func(childComplexity int) int
+		EmailBrandingID      func(childComplexity int) int
+		Format               func(childComplexity int) int
+		HistoryTime          func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		IntegrationID        func(childComplexity int) int
+		InternalNotes        func(childComplexity int) int
+		Jsonconfig           func(childComplexity int) int
+		Key                  func(childComplexity int) int
+		Locale               func(childComplexity int) int
+		Metadata             func(childComplexity int) int
+		Name                 func(childComplexity int) int
+		Operation            func(childComplexity int) int
+		OwnerID              func(childComplexity int) int
+		PreheaderTemplate    func(childComplexity int) int
+		Ref                  func(childComplexity int) int
+		SubjectTemplate      func(childComplexity int) int
+		SystemInternalID     func(childComplexity int) int
+		SystemOwned          func(childComplexity int) int
+		TextTemplate         func(childComplexity int) int
+		Uischema             func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
+		Version              func(childComplexity int) int
+		WorkflowDefinitionID func(childComplexity int) int
+		WorkflowInstanceID   func(childComplexity int) int
+	}
+
+	EmailTemplateHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	EmailTemplateHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
 	}
@@ -1446,6 +1528,95 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	NotificationPreferenceHistory struct {
+		Cadence         func(childComplexity int) int
+		Channel         func(childComplexity int) int
+		Config          func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Destination     func(childComplexity int) int
+		Enabled         func(childComplexity int) int
+		HistoryTime     func(childComplexity int) int
+		ID              func(childComplexity int) int
+		IsDefault       func(childComplexity int) int
+		LastError       func(childComplexity int) int
+		LastUsedAt      func(childComplexity int) int
+		Metadata        func(childComplexity int) int
+		MuteUntil       func(childComplexity int) int
+		Operation       func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		Priority        func(childComplexity int) int
+		Provider        func(childComplexity int) int
+		QuietHoursEnd   func(childComplexity int) int
+		QuietHoursStart func(childComplexity int) int
+		Ref             func(childComplexity int) int
+		Status          func(childComplexity int) int
+		TemplateID      func(childComplexity int) int
+		Timezone        func(childComplexity int) int
+		TopicOverrides  func(childComplexity int) int
+		TopicPatterns   func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
+		UserID          func(childComplexity int) int
+		VerifiedAt      func(childComplexity int) int
+	}
+
+	NotificationPreferenceHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	NotificationPreferenceHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	NotificationTemplateHistory struct {
+		Active               func(childComplexity int) int
+		Blocks               func(childComplexity int) int
+		BodyTemplate         func(childComplexity int) int
+		Channel              func(childComplexity int) int
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		Description          func(childComplexity int) int
+		EmailTemplateID      func(childComplexity int) int
+		Format               func(childComplexity int) int
+		HistoryTime          func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		IntegrationID        func(childComplexity int) int
+		InternalNotes        func(childComplexity int) int
+		Jsonconfig           func(childComplexity int) int
+		Key                  func(childComplexity int) int
+		Locale               func(childComplexity int) int
+		Metadata             func(childComplexity int) int
+		Name                 func(childComplexity int) int
+		Operation            func(childComplexity int) int
+		OwnerID              func(childComplexity int) int
+		Ref                  func(childComplexity int) int
+		SubjectTemplate      func(childComplexity int) int
+		SystemInternalID     func(childComplexity int) int
+		SystemOwned          func(childComplexity int) int
+		TitleTemplate        func(childComplexity int) int
+		TopicPattern         func(childComplexity int) int
+		Uischema             func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
+		Version              func(childComplexity int) int
+		WorkflowDefinitionID func(childComplexity int) int
+	}
+
+	NotificationTemplateHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	NotificationTemplateHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	OrgMembershipHistory struct {
 		CreatedAt      func(childComplexity int) int
 		CreatedBy      func(childComplexity int) int
@@ -1797,6 +1968,8 @@ type ComplexityRoot struct {
 		DirectoryMembershipHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.DirectoryMembershipHistoryOrder, where *historygenerated.DirectoryMembershipHistoryWhereInput) int
 		DiscussionHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.DiscussionHistoryOrder, where *historygenerated.DiscussionHistoryWhereInput) int
 		DocumentDataHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.DocumentDataHistoryOrder, where *historygenerated.DocumentDataHistoryWhereInput) int
+		EmailBrandingHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EmailBrandingHistoryOrder, where *historygenerated.EmailBrandingHistoryWhereInput) int
+		EmailTemplateHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EmailTemplateHistoryOrder, where *historygenerated.EmailTemplateHistoryWhereInput) int
 		EntityHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EntityHistoryOrder, where *historygenerated.EntityHistoryWhereInput) int
 		EntityTypeHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EntityTypeHistoryOrder, where *historygenerated.EntityTypeHistoryWhereInput) int
 		EvidenceHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EvidenceHistoryOrder, where *historygenerated.EvidenceHistoryWhereInput) int
@@ -1817,6 +1990,8 @@ type ComplexityRoot struct {
 		Node                                func(childComplexity int, id string) int
 		Nodes                               func(childComplexity int, ids []string) int
 		NoteHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.NoteHistoryOrder, where *historygenerated.NoteHistoryWhereInput) int
+		NotificationPreferenceHistories     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.NotificationPreferenceHistoryOrder, where *historygenerated.NotificationPreferenceHistoryWhereInput) int
+		NotificationTemplateHistories       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.NotificationTemplateHistoryOrder, where *historygenerated.NotificationTemplateHistoryWhereInput) int
 		OrgMembershipHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrgMembershipHistoryOrder, where *historygenerated.OrgMembershipHistoryWhereInput) int
 		OrgSubscriptionHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrgSubscriptionHistoryOrder, where *historygenerated.OrgSubscriptionHistoryWhereInput) int
 		OrganizationHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrganizationHistoryOrder, where *historygenerated.OrganizationHistoryWhereInput) int
@@ -2588,6 +2763,9 @@ type ComplexityRoot struct {
 	UserSettingHistory struct {
 		CreatedAt         func(childComplexity int) int
 		CreatedBy         func(childComplexity int) int
+		DelegateEndAt     func(childComplexity int) int
+		DelegateStartAt   func(childComplexity int) int
+		DelegateUserID    func(childComplexity int) int
 		EmailConfirmed    func(childComplexity int) int
 		HistoryTime       func(childComplexity int) int
 		ID                func(childComplexity int) int
@@ -2686,6 +2864,7 @@ type ComplexityRoot struct {
 		CreatedBy            func(childComplexity int) int
 		DecidedAt            func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
+		DueAt                func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
 		InvalidationMetadata func(childComplexity int) int
@@ -4084,6 +4263,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CampaignHistory.DueDate(childComplexity), true
+
+	case "CampaignHistory.emailBrandingID":
+		if e.complexity.CampaignHistory.EmailBrandingID == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.EmailBrandingID(childComplexity), true
+
+	case "CampaignHistory.emailTemplateID":
+		if e.complexity.CampaignHistory.EmailTemplateID == nil {
+			break
+		}
+
+		return e.complexity.CampaignHistory.EmailTemplateID(childComplexity), true
 
 	case "CampaignHistory.entityID":
 		if e.complexity.CampaignHistory.EntityID == nil {
@@ -6716,6 +6909,440 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DocumentDataHistoryEdge.Node(childComplexity), true
+
+	case "EmailBrandingHistory.backgroundColor":
+		if e.complexity.EmailBrandingHistory.BackgroundColor == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.BackgroundColor(childComplexity), true
+
+	case "EmailBrandingHistory.brandName":
+		if e.complexity.EmailBrandingHistory.BrandName == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.BrandName(childComplexity), true
+
+	case "EmailBrandingHistory.buttonColor":
+		if e.complexity.EmailBrandingHistory.ButtonColor == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.ButtonColor(childComplexity), true
+
+	case "EmailBrandingHistory.buttonTextColor":
+		if e.complexity.EmailBrandingHistory.ButtonTextColor == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.ButtonTextColor(childComplexity), true
+
+	case "EmailBrandingHistory.createdAt":
+		if e.complexity.EmailBrandingHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.CreatedAt(childComplexity), true
+
+	case "EmailBrandingHistory.createdBy":
+		if e.complexity.EmailBrandingHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.CreatedBy(childComplexity), true
+
+	case "EmailBrandingHistory.fontFamily":
+		if e.complexity.EmailBrandingHistory.FontFamily == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.FontFamily(childComplexity), true
+
+	case "EmailBrandingHistory.historyTime":
+		if e.complexity.EmailBrandingHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.HistoryTime(childComplexity), true
+
+	case "EmailBrandingHistory.id":
+		if e.complexity.EmailBrandingHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.ID(childComplexity), true
+
+	case "EmailBrandingHistory.isDefault":
+		if e.complexity.EmailBrandingHistory.IsDefault == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.IsDefault(childComplexity), true
+
+	case "EmailBrandingHistory.linkColor":
+		if e.complexity.EmailBrandingHistory.LinkColor == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.LinkColor(childComplexity), true
+
+	case "EmailBrandingHistory.logoRemoteURL":
+		if e.complexity.EmailBrandingHistory.LogoRemoteURL == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.LogoRemoteURL(childComplexity), true
+
+	case "EmailBrandingHistory.name":
+		if e.complexity.EmailBrandingHistory.Name == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.Name(childComplexity), true
+
+	case "EmailBrandingHistory.operation":
+		if e.complexity.EmailBrandingHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.Operation(childComplexity), true
+
+	case "EmailBrandingHistory.ownerID":
+		if e.complexity.EmailBrandingHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.OwnerID(childComplexity), true
+
+	case "EmailBrandingHistory.primaryColor":
+		if e.complexity.EmailBrandingHistory.PrimaryColor == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.PrimaryColor(childComplexity), true
+
+	case "EmailBrandingHistory.ref":
+		if e.complexity.EmailBrandingHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.Ref(childComplexity), true
+
+	case "EmailBrandingHistory.secondaryColor":
+		if e.complexity.EmailBrandingHistory.SecondaryColor == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.SecondaryColor(childComplexity), true
+
+	case "EmailBrandingHistory.tags":
+		if e.complexity.EmailBrandingHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.Tags(childComplexity), true
+
+	case "EmailBrandingHistory.textColor":
+		if e.complexity.EmailBrandingHistory.TextColor == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.TextColor(childComplexity), true
+
+	case "EmailBrandingHistory.updatedAt":
+		if e.complexity.EmailBrandingHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.UpdatedAt(childComplexity), true
+
+	case "EmailBrandingHistory.updatedBy":
+		if e.complexity.EmailBrandingHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistory.UpdatedBy(childComplexity), true
+
+	case "EmailBrandingHistoryConnection.edges":
+		if e.complexity.EmailBrandingHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistoryConnection.Edges(childComplexity), true
+
+	case "EmailBrandingHistoryConnection.pageInfo":
+		if e.complexity.EmailBrandingHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistoryConnection.PageInfo(childComplexity), true
+
+	case "EmailBrandingHistoryConnection.totalCount":
+		if e.complexity.EmailBrandingHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistoryConnection.TotalCount(childComplexity), true
+
+	case "EmailBrandingHistoryEdge.cursor":
+		if e.complexity.EmailBrandingHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistoryEdge.Cursor(childComplexity), true
+
+	case "EmailBrandingHistoryEdge.node":
+		if e.complexity.EmailBrandingHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingHistoryEdge.Node(childComplexity), true
+
+	case "EmailTemplateHistory.active":
+		if e.complexity.EmailTemplateHistory.Active == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.Active(childComplexity), true
+
+	case "EmailTemplateHistory.bodyTemplate":
+		if e.complexity.EmailTemplateHistory.BodyTemplate == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.BodyTemplate(childComplexity), true
+
+	case "EmailTemplateHistory.createdAt":
+		if e.complexity.EmailTemplateHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.CreatedAt(childComplexity), true
+
+	case "EmailTemplateHistory.createdBy":
+		if e.complexity.EmailTemplateHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.CreatedBy(childComplexity), true
+
+	case "EmailTemplateHistory.description":
+		if e.complexity.EmailTemplateHistory.Description == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.Description(childComplexity), true
+
+	case "EmailTemplateHistory.emailBrandingID":
+		if e.complexity.EmailTemplateHistory.EmailBrandingID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.EmailBrandingID(childComplexity), true
+
+	case "EmailTemplateHistory.format":
+		if e.complexity.EmailTemplateHistory.Format == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.Format(childComplexity), true
+
+	case "EmailTemplateHistory.historyTime":
+		if e.complexity.EmailTemplateHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.HistoryTime(childComplexity), true
+
+	case "EmailTemplateHistory.id":
+		if e.complexity.EmailTemplateHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.ID(childComplexity), true
+
+	case "EmailTemplateHistory.integrationID":
+		if e.complexity.EmailTemplateHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.IntegrationID(childComplexity), true
+
+	case "EmailTemplateHistory.internalNotes":
+		if e.complexity.EmailTemplateHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.InternalNotes(childComplexity), true
+
+	case "EmailTemplateHistory.jsonconfig":
+		if e.complexity.EmailTemplateHistory.Jsonconfig == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.Jsonconfig(childComplexity), true
+
+	case "EmailTemplateHistory.key":
+		if e.complexity.EmailTemplateHistory.Key == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.Key(childComplexity), true
+
+	case "EmailTemplateHistory.locale":
+		if e.complexity.EmailTemplateHistory.Locale == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.Locale(childComplexity), true
+
+	case "EmailTemplateHistory.metadata":
+		if e.complexity.EmailTemplateHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.Metadata(childComplexity), true
+
+	case "EmailTemplateHistory.name":
+		if e.complexity.EmailTemplateHistory.Name == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.Name(childComplexity), true
+
+	case "EmailTemplateHistory.operation":
+		if e.complexity.EmailTemplateHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.Operation(childComplexity), true
+
+	case "EmailTemplateHistory.ownerID":
+		if e.complexity.EmailTemplateHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.OwnerID(childComplexity), true
+
+	case "EmailTemplateHistory.preheaderTemplate":
+		if e.complexity.EmailTemplateHistory.PreheaderTemplate == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.PreheaderTemplate(childComplexity), true
+
+	case "EmailTemplateHistory.ref":
+		if e.complexity.EmailTemplateHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.Ref(childComplexity), true
+
+	case "EmailTemplateHistory.subjectTemplate":
+		if e.complexity.EmailTemplateHistory.SubjectTemplate == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.SubjectTemplate(childComplexity), true
+
+	case "EmailTemplateHistory.systemInternalID":
+		if e.complexity.EmailTemplateHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.SystemInternalID(childComplexity), true
+
+	case "EmailTemplateHistory.systemOwned":
+		if e.complexity.EmailTemplateHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.SystemOwned(childComplexity), true
+
+	case "EmailTemplateHistory.textTemplate":
+		if e.complexity.EmailTemplateHistory.TextTemplate == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.TextTemplate(childComplexity), true
+
+	case "EmailTemplateHistory.uischema":
+		if e.complexity.EmailTemplateHistory.Uischema == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.Uischema(childComplexity), true
+
+	case "EmailTemplateHistory.updatedAt":
+		if e.complexity.EmailTemplateHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.UpdatedAt(childComplexity), true
+
+	case "EmailTemplateHistory.updatedBy":
+		if e.complexity.EmailTemplateHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.UpdatedBy(childComplexity), true
+
+	case "EmailTemplateHistory.version":
+		if e.complexity.EmailTemplateHistory.Version == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.Version(childComplexity), true
+
+	case "EmailTemplateHistory.workflowDefinitionID":
+		if e.complexity.EmailTemplateHistory.WorkflowDefinitionID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.WorkflowDefinitionID(childComplexity), true
+
+	case "EmailTemplateHistory.workflowInstanceID":
+		if e.complexity.EmailTemplateHistory.WorkflowInstanceID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistory.WorkflowInstanceID(childComplexity), true
+
+	case "EmailTemplateHistoryConnection.edges":
+		if e.complexity.EmailTemplateHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistoryConnection.Edges(childComplexity), true
+
+	case "EmailTemplateHistoryConnection.pageInfo":
+		if e.complexity.EmailTemplateHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistoryConnection.PageInfo(childComplexity), true
+
+	case "EmailTemplateHistoryConnection.totalCount":
+		if e.complexity.EmailTemplateHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistoryConnection.TotalCount(childComplexity), true
+
+	case "EmailTemplateHistoryEdge.cursor":
+		if e.complexity.EmailTemplateHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistoryEdge.Cursor(childComplexity), true
+
+	case "EmailTemplateHistoryEdge.node":
+		if e.complexity.EmailTemplateHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateHistoryEdge.Node(childComplexity), true
 
 	case "EntityHistory.annualSpend":
 		if e.complexity.EntityHistory.AnnualSpend == nil {
@@ -10511,6 +11138,503 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.NoteHistoryEdge.Node(childComplexity), true
 
+	case "NotificationPreferenceHistory.cadence":
+		if e.complexity.NotificationPreferenceHistory.Cadence == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.Cadence(childComplexity), true
+
+	case "NotificationPreferenceHistory.channel":
+		if e.complexity.NotificationPreferenceHistory.Channel == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.Channel(childComplexity), true
+
+	case "NotificationPreferenceHistory.config":
+		if e.complexity.NotificationPreferenceHistory.Config == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.Config(childComplexity), true
+
+	case "NotificationPreferenceHistory.createdAt":
+		if e.complexity.NotificationPreferenceHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.CreatedAt(childComplexity), true
+
+	case "NotificationPreferenceHistory.createdBy":
+		if e.complexity.NotificationPreferenceHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.CreatedBy(childComplexity), true
+
+	case "NotificationPreferenceHistory.destination":
+		if e.complexity.NotificationPreferenceHistory.Destination == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.Destination(childComplexity), true
+
+	case "NotificationPreferenceHistory.enabled":
+		if e.complexity.NotificationPreferenceHistory.Enabled == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.Enabled(childComplexity), true
+
+	case "NotificationPreferenceHistory.historyTime":
+		if e.complexity.NotificationPreferenceHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.HistoryTime(childComplexity), true
+
+	case "NotificationPreferenceHistory.id":
+		if e.complexity.NotificationPreferenceHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.ID(childComplexity), true
+
+	case "NotificationPreferenceHistory.isDefault":
+		if e.complexity.NotificationPreferenceHistory.IsDefault == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.IsDefault(childComplexity), true
+
+	case "NotificationPreferenceHistory.lastError":
+		if e.complexity.NotificationPreferenceHistory.LastError == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.LastError(childComplexity), true
+
+	case "NotificationPreferenceHistory.lastUsedAt":
+		if e.complexity.NotificationPreferenceHistory.LastUsedAt == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.LastUsedAt(childComplexity), true
+
+	case "NotificationPreferenceHistory.metadata":
+		if e.complexity.NotificationPreferenceHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.Metadata(childComplexity), true
+
+	case "NotificationPreferenceHistory.muteUntil":
+		if e.complexity.NotificationPreferenceHistory.MuteUntil == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.MuteUntil(childComplexity), true
+
+	case "NotificationPreferenceHistory.operation":
+		if e.complexity.NotificationPreferenceHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.Operation(childComplexity), true
+
+	case "NotificationPreferenceHistory.ownerID":
+		if e.complexity.NotificationPreferenceHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.OwnerID(childComplexity), true
+
+	case "NotificationPreferenceHistory.priority":
+		if e.complexity.NotificationPreferenceHistory.Priority == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.Priority(childComplexity), true
+
+	case "NotificationPreferenceHistory.provider":
+		if e.complexity.NotificationPreferenceHistory.Provider == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.Provider(childComplexity), true
+
+	case "NotificationPreferenceHistory.quietHoursEnd":
+		if e.complexity.NotificationPreferenceHistory.QuietHoursEnd == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.QuietHoursEnd(childComplexity), true
+
+	case "NotificationPreferenceHistory.quietHoursStart":
+		if e.complexity.NotificationPreferenceHistory.QuietHoursStart == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.QuietHoursStart(childComplexity), true
+
+	case "NotificationPreferenceHistory.ref":
+		if e.complexity.NotificationPreferenceHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.Ref(childComplexity), true
+
+	case "NotificationPreferenceHistory.status":
+		if e.complexity.NotificationPreferenceHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.Status(childComplexity), true
+
+	case "NotificationPreferenceHistory.templateID":
+		if e.complexity.NotificationPreferenceHistory.TemplateID == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.TemplateID(childComplexity), true
+
+	case "NotificationPreferenceHistory.timezone":
+		if e.complexity.NotificationPreferenceHistory.Timezone == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.Timezone(childComplexity), true
+
+	case "NotificationPreferenceHistory.topicOverrides":
+		if e.complexity.NotificationPreferenceHistory.TopicOverrides == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.TopicOverrides(childComplexity), true
+
+	case "NotificationPreferenceHistory.topicPatterns":
+		if e.complexity.NotificationPreferenceHistory.TopicPatterns == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.TopicPatterns(childComplexity), true
+
+	case "NotificationPreferenceHistory.updatedAt":
+		if e.complexity.NotificationPreferenceHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.UpdatedAt(childComplexity), true
+
+	case "NotificationPreferenceHistory.updatedBy":
+		if e.complexity.NotificationPreferenceHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.UpdatedBy(childComplexity), true
+
+	case "NotificationPreferenceHistory.userID":
+		if e.complexity.NotificationPreferenceHistory.UserID == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.UserID(childComplexity), true
+
+	case "NotificationPreferenceHistory.verifiedAt":
+		if e.complexity.NotificationPreferenceHistory.VerifiedAt == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistory.VerifiedAt(childComplexity), true
+
+	case "NotificationPreferenceHistoryConnection.edges":
+		if e.complexity.NotificationPreferenceHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistoryConnection.Edges(childComplexity), true
+
+	case "NotificationPreferenceHistoryConnection.pageInfo":
+		if e.complexity.NotificationPreferenceHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistoryConnection.PageInfo(childComplexity), true
+
+	case "NotificationPreferenceHistoryConnection.totalCount":
+		if e.complexity.NotificationPreferenceHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistoryConnection.TotalCount(childComplexity), true
+
+	case "NotificationPreferenceHistoryEdge.cursor":
+		if e.complexity.NotificationPreferenceHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistoryEdge.Cursor(childComplexity), true
+
+	case "NotificationPreferenceHistoryEdge.node":
+		if e.complexity.NotificationPreferenceHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceHistoryEdge.Node(childComplexity), true
+
+	case "NotificationTemplateHistory.active":
+		if e.complexity.NotificationTemplateHistory.Active == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.Active(childComplexity), true
+
+	case "NotificationTemplateHistory.blocks":
+		if e.complexity.NotificationTemplateHistory.Blocks == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.Blocks(childComplexity), true
+
+	case "NotificationTemplateHistory.bodyTemplate":
+		if e.complexity.NotificationTemplateHistory.BodyTemplate == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.BodyTemplate(childComplexity), true
+
+	case "NotificationTemplateHistory.channel":
+		if e.complexity.NotificationTemplateHistory.Channel == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.Channel(childComplexity), true
+
+	case "NotificationTemplateHistory.createdAt":
+		if e.complexity.NotificationTemplateHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.CreatedAt(childComplexity), true
+
+	case "NotificationTemplateHistory.createdBy":
+		if e.complexity.NotificationTemplateHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.CreatedBy(childComplexity), true
+
+	case "NotificationTemplateHistory.description":
+		if e.complexity.NotificationTemplateHistory.Description == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.Description(childComplexity), true
+
+	case "NotificationTemplateHistory.emailTemplateID":
+		if e.complexity.NotificationTemplateHistory.EmailTemplateID == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.EmailTemplateID(childComplexity), true
+
+	case "NotificationTemplateHistory.format":
+		if e.complexity.NotificationTemplateHistory.Format == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.Format(childComplexity), true
+
+	case "NotificationTemplateHistory.historyTime":
+		if e.complexity.NotificationTemplateHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.HistoryTime(childComplexity), true
+
+	case "NotificationTemplateHistory.id":
+		if e.complexity.NotificationTemplateHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.ID(childComplexity), true
+
+	case "NotificationTemplateHistory.integrationID":
+		if e.complexity.NotificationTemplateHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.IntegrationID(childComplexity), true
+
+	case "NotificationTemplateHistory.internalNotes":
+		if e.complexity.NotificationTemplateHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.InternalNotes(childComplexity), true
+
+	case "NotificationTemplateHistory.jsonconfig":
+		if e.complexity.NotificationTemplateHistory.Jsonconfig == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.Jsonconfig(childComplexity), true
+
+	case "NotificationTemplateHistory.key":
+		if e.complexity.NotificationTemplateHistory.Key == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.Key(childComplexity), true
+
+	case "NotificationTemplateHistory.locale":
+		if e.complexity.NotificationTemplateHistory.Locale == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.Locale(childComplexity), true
+
+	case "NotificationTemplateHistory.metadata":
+		if e.complexity.NotificationTemplateHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.Metadata(childComplexity), true
+
+	case "NotificationTemplateHistory.name":
+		if e.complexity.NotificationTemplateHistory.Name == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.Name(childComplexity), true
+
+	case "NotificationTemplateHistory.operation":
+		if e.complexity.NotificationTemplateHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.Operation(childComplexity), true
+
+	case "NotificationTemplateHistory.ownerID":
+		if e.complexity.NotificationTemplateHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.OwnerID(childComplexity), true
+
+	case "NotificationTemplateHistory.ref":
+		if e.complexity.NotificationTemplateHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.Ref(childComplexity), true
+
+	case "NotificationTemplateHistory.subjectTemplate":
+		if e.complexity.NotificationTemplateHistory.SubjectTemplate == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.SubjectTemplate(childComplexity), true
+
+	case "NotificationTemplateHistory.systemInternalID":
+		if e.complexity.NotificationTemplateHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.SystemInternalID(childComplexity), true
+
+	case "NotificationTemplateHistory.systemOwned":
+		if e.complexity.NotificationTemplateHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.SystemOwned(childComplexity), true
+
+	case "NotificationTemplateHistory.titleTemplate":
+		if e.complexity.NotificationTemplateHistory.TitleTemplate == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.TitleTemplate(childComplexity), true
+
+	case "NotificationTemplateHistory.topicPattern":
+		if e.complexity.NotificationTemplateHistory.TopicPattern == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.TopicPattern(childComplexity), true
+
+	case "NotificationTemplateHistory.uischema":
+		if e.complexity.NotificationTemplateHistory.Uischema == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.Uischema(childComplexity), true
+
+	case "NotificationTemplateHistory.updatedAt":
+		if e.complexity.NotificationTemplateHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.UpdatedAt(childComplexity), true
+
+	case "NotificationTemplateHistory.updatedBy":
+		if e.complexity.NotificationTemplateHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.UpdatedBy(childComplexity), true
+
+	case "NotificationTemplateHistory.version":
+		if e.complexity.NotificationTemplateHistory.Version == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.Version(childComplexity), true
+
+	case "NotificationTemplateHistory.workflowDefinitionID":
+		if e.complexity.NotificationTemplateHistory.WorkflowDefinitionID == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistory.WorkflowDefinitionID(childComplexity), true
+
+	case "NotificationTemplateHistoryConnection.edges":
+		if e.complexity.NotificationTemplateHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistoryConnection.Edges(childComplexity), true
+
+	case "NotificationTemplateHistoryConnection.pageInfo":
+		if e.complexity.NotificationTemplateHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistoryConnection.PageInfo(childComplexity), true
+
+	case "NotificationTemplateHistoryConnection.totalCount":
+		if e.complexity.NotificationTemplateHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistoryConnection.TotalCount(childComplexity), true
+
+	case "NotificationTemplateHistoryEdge.cursor":
+		if e.complexity.NotificationTemplateHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistoryEdge.Cursor(childComplexity), true
+
+	case "NotificationTemplateHistoryEdge.node":
+		if e.complexity.NotificationTemplateHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateHistoryEdge.Node(childComplexity), true
+
 	case "OrgMembershipHistory.createdAt":
 		if e.complexity.OrgMembershipHistory.CreatedAt == nil {
 			break
@@ -12521,6 +13645,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.DocumentDataHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.DocumentDataHistoryOrder), args["where"].(*historygenerated.DocumentDataHistoryWhereInput)), true
 
+	case "Query.emailBrandingHistories":
+		if e.complexity.Query.EmailBrandingHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_emailBrandingHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.EmailBrandingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.EmailBrandingHistoryOrder), args["where"].(*historygenerated.EmailBrandingHistoryWhereInput)), true
+
+	case "Query.emailTemplateHistories":
+		if e.complexity.Query.EmailTemplateHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_emailTemplateHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.EmailTemplateHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.EmailTemplateHistoryOrder), args["where"].(*historygenerated.EmailTemplateHistoryWhereInput)), true
+
 	case "Query.entityHistories":
 		if e.complexity.Query.EntityHistories == nil {
 			break
@@ -12760,6 +13908,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.NoteHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.NoteHistoryOrder), args["where"].(*historygenerated.NoteHistoryWhereInput)), true
+
+	case "Query.notificationPreferenceHistories":
+		if e.complexity.Query.NotificationPreferenceHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_notificationPreferenceHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.NotificationPreferenceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.NotificationPreferenceHistoryOrder), args["where"].(*historygenerated.NotificationPreferenceHistoryWhereInput)), true
+
+	case "Query.notificationTemplateHistories":
+		if e.complexity.Query.NotificationTemplateHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_notificationTemplateHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.NotificationTemplateHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.NotificationTemplateHistoryOrder), args["where"].(*historygenerated.NotificationTemplateHistoryWhereInput)), true
 
 	case "Query.orgMembershipHistories":
 		if e.complexity.Query.OrgMembershipHistories == nil {
@@ -17115,6 +18287,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.UserSettingHistory.CreatedBy(childComplexity), true
 
+	case "UserSettingHistory.delegateEndAt":
+		if e.complexity.UserSettingHistory.DelegateEndAt == nil {
+			break
+		}
+
+		return e.complexity.UserSettingHistory.DelegateEndAt(childComplexity), true
+
+	case "UserSettingHistory.delegateStartAt":
+		if e.complexity.UserSettingHistory.DelegateStartAt == nil {
+			break
+		}
+
+		return e.complexity.UserSettingHistory.DelegateStartAt(childComplexity), true
+
+	case "UserSettingHistory.delegateUserID":
+		if e.complexity.UserSettingHistory.DelegateUserID == nil {
+			break
+		}
+
+		return e.complexity.UserSettingHistory.DelegateUserID(childComplexity), true
+
 	case "UserSettingHistory.emailConfirmed":
 		if e.complexity.UserSettingHistory.EmailConfirmed == nil {
 			break
@@ -17674,6 +18867,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowAssignmentHistory.DisplayID(childComplexity), true
+
+	case "WorkflowAssignmentHistory.dueAt":
+		if e.complexity.WorkflowAssignmentHistory.DueAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.DueAt(childComplexity), true
 
 	case "WorkflowAssignmentHistory.historyTime":
 		if e.complexity.WorkflowAssignmentHistory.HistoryTime == nil {
@@ -18816,6 +20016,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputDiscussionHistoryWhereInput,
 		ec.unmarshalInputDocumentDataHistoryOrder,
 		ec.unmarshalInputDocumentDataHistoryWhereInput,
+		ec.unmarshalInputEmailBrandingHistoryOrder,
+		ec.unmarshalInputEmailBrandingHistoryWhereInput,
+		ec.unmarshalInputEmailTemplateHistoryOrder,
+		ec.unmarshalInputEmailTemplateHistoryWhereInput,
 		ec.unmarshalInputEntityHistoryOrder,
 		ec.unmarshalInputEntityHistoryWhereInput,
 		ec.unmarshalInputEntityTypeHistoryOrder,
@@ -18852,6 +20056,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputNarrativeHistoryWhereInput,
 		ec.unmarshalInputNoteHistoryOrder,
 		ec.unmarshalInputNoteHistoryWhereInput,
+		ec.unmarshalInputNotificationPreferenceHistoryOrder,
+		ec.unmarshalInputNotificationPreferenceHistoryWhereInput,
+		ec.unmarshalInputNotificationTemplateHistoryOrder,
+		ec.unmarshalInputNotificationTemplateHistoryWhereInput,
 		ec.unmarshalInputOrgMembershipHistoryOrder,
 		ec.unmarshalInputOrgMembershipHistoryWhereInput,
 		ec.unmarshalInputOrgSubscriptionHistoryOrder,
@@ -21863,6 +23071,14 @@ type CampaignHistory implements Node {
   additional metadata about the campaign
   """
   metadata: Map
+  """
+  the email branding associated with the campaign
+  """
+  emailBrandingID: String
+  """
+  the email template associated with the campaign
+  """
+  emailTemplateID: String
 }
 """
 CampaignHistoryCampaignStatus is enum for the field status
@@ -22467,6 +23683,42 @@ input CampaignHistoryWhereInput {
   assessmentIDNotNil: Boolean
   assessmentIDEqualFold: String
   assessmentIDContainsFold: String
+  """
+  email_branding_id field predicates
+  """
+  emailBrandingID: String
+  emailBrandingIDNEQ: String
+  emailBrandingIDIn: [String!]
+  emailBrandingIDNotIn: [String!]
+  emailBrandingIDGT: String
+  emailBrandingIDGTE: String
+  emailBrandingIDLT: String
+  emailBrandingIDLTE: String
+  emailBrandingIDContains: String
+  emailBrandingIDHasPrefix: String
+  emailBrandingIDHasSuffix: String
+  emailBrandingIDIsNil: Boolean
+  emailBrandingIDNotNil: Boolean
+  emailBrandingIDEqualFold: String
+  emailBrandingIDContainsFold: String
+  """
+  email_template_id field predicates
+  """
+  emailTemplateID: String
+  emailTemplateIDNEQ: String
+  emailTemplateIDIn: [String!]
+  emailTemplateIDNotIn: [String!]
+  emailTemplateIDGT: String
+  emailTemplateIDGTE: String
+  emailTemplateIDLT: String
+  emailTemplateIDLTE: String
+  emailTemplateIDContains: String
+  emailTemplateIDHasPrefix: String
+  emailTemplateIDHasSuffix: String
+  emailTemplateIDIsNil: Boolean
+  emailTemplateIDNotNil: Boolean
+  emailTemplateIDEqualFold: String
+  emailTemplateIDContainsFold: String
 }
 type CampaignTargetHistory implements Node {
   id: ID!
@@ -28084,6 +29336,1059 @@ input DocumentDataHistoryWhereInput {
   templateIDNotNil: Boolean
   templateIDEqualFold: String
   templateIDContainsFold: String
+}
+type EmailBrandingHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: EmailBrandingHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  friendly name for this email branding configuration
+  """
+  name: String!
+  """
+  brand name displayed in templates
+  """
+  brandName: String
+  """
+  URL of the brand logo for emails
+  """
+  logoRemoteURL: String
+  """
+  primary brand color for emails
+  """
+  primaryColor: String
+  """
+  secondary brand color for emails
+  """
+  secondaryColor: String
+  """
+  background color for emails
+  """
+  backgroundColor: String
+  """
+  text color for emails
+  """
+  textColor: String
+  """
+  button background color for emails
+  """
+  buttonColor: String
+  """
+  button text color for emails
+  """
+  buttonTextColor: String
+  """
+  link color for emails
+  """
+  linkColor: String
+  """
+  font family for emails
+  """
+  fontFamily: String
+  """
+  whether this is the default email branding for the organization
+  """
+  isDefault: Boolean
+}
+"""
+A connection to a list of items.
+"""
+type EmailBrandingHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [EmailBrandingHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type EmailBrandingHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: EmailBrandingHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+EmailBrandingHistoryOpType is enum for the field operation
+"""
+enum EmailBrandingHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for EmailBrandingHistory connections
+"""
+input EmailBrandingHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order EmailBrandingHistories.
+  """
+  field: EmailBrandingHistoryOrderField!
+}
+"""
+Properties by which EmailBrandingHistory connections can be ordered.
+"""
+enum EmailBrandingHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  name
+}
+"""
+EmailBrandingHistoryWhereInput is used for filtering EmailBrandingHistory objects.
+Input was generated by ent.
+"""
+input EmailBrandingHistoryWhereInput {
+  not: EmailBrandingHistoryWhereInput
+  and: [EmailBrandingHistoryWhereInput!]
+  or: [EmailBrandingHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: EmailBrandingHistoryOpType
+  operationNEQ: EmailBrandingHistoryOpType
+  operationIn: [EmailBrandingHistoryOpType!]
+  operationNotIn: [EmailBrandingHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  brand_name field predicates
+  """
+  brandName: String
+  brandNameNEQ: String
+  brandNameIn: [String!]
+  brandNameNotIn: [String!]
+  brandNameGT: String
+  brandNameGTE: String
+  brandNameLT: String
+  brandNameLTE: String
+  brandNameContains: String
+  brandNameHasPrefix: String
+  brandNameHasSuffix: String
+  brandNameIsNil: Boolean
+  brandNameNotNil: Boolean
+  brandNameEqualFold: String
+  brandNameContainsFold: String
+  """
+  logo_remote_url field predicates
+  """
+  logoRemoteURL: String
+  logoRemoteURLNEQ: String
+  logoRemoteURLIn: [String!]
+  logoRemoteURLNotIn: [String!]
+  logoRemoteURLGT: String
+  logoRemoteURLGTE: String
+  logoRemoteURLLT: String
+  logoRemoteURLLTE: String
+  logoRemoteURLContains: String
+  logoRemoteURLHasPrefix: String
+  logoRemoteURLHasSuffix: String
+  logoRemoteURLIsNil: Boolean
+  logoRemoteURLNotNil: Boolean
+  logoRemoteURLEqualFold: String
+  logoRemoteURLContainsFold: String
+  """
+  primary_color field predicates
+  """
+  primaryColor: String
+  primaryColorNEQ: String
+  primaryColorIn: [String!]
+  primaryColorNotIn: [String!]
+  primaryColorGT: String
+  primaryColorGTE: String
+  primaryColorLT: String
+  primaryColorLTE: String
+  primaryColorContains: String
+  primaryColorHasPrefix: String
+  primaryColorHasSuffix: String
+  primaryColorIsNil: Boolean
+  primaryColorNotNil: Boolean
+  primaryColorEqualFold: String
+  primaryColorContainsFold: String
+  """
+  secondary_color field predicates
+  """
+  secondaryColor: String
+  secondaryColorNEQ: String
+  secondaryColorIn: [String!]
+  secondaryColorNotIn: [String!]
+  secondaryColorGT: String
+  secondaryColorGTE: String
+  secondaryColorLT: String
+  secondaryColorLTE: String
+  secondaryColorContains: String
+  secondaryColorHasPrefix: String
+  secondaryColorHasSuffix: String
+  secondaryColorIsNil: Boolean
+  secondaryColorNotNil: Boolean
+  secondaryColorEqualFold: String
+  secondaryColorContainsFold: String
+  """
+  background_color field predicates
+  """
+  backgroundColor: String
+  backgroundColorNEQ: String
+  backgroundColorIn: [String!]
+  backgroundColorNotIn: [String!]
+  backgroundColorGT: String
+  backgroundColorGTE: String
+  backgroundColorLT: String
+  backgroundColorLTE: String
+  backgroundColorContains: String
+  backgroundColorHasPrefix: String
+  backgroundColorHasSuffix: String
+  backgroundColorIsNil: Boolean
+  backgroundColorNotNil: Boolean
+  backgroundColorEqualFold: String
+  backgroundColorContainsFold: String
+  """
+  text_color field predicates
+  """
+  textColor: String
+  textColorNEQ: String
+  textColorIn: [String!]
+  textColorNotIn: [String!]
+  textColorGT: String
+  textColorGTE: String
+  textColorLT: String
+  textColorLTE: String
+  textColorContains: String
+  textColorHasPrefix: String
+  textColorHasSuffix: String
+  textColorIsNil: Boolean
+  textColorNotNil: Boolean
+  textColorEqualFold: String
+  textColorContainsFold: String
+  """
+  button_color field predicates
+  """
+  buttonColor: String
+  buttonColorNEQ: String
+  buttonColorIn: [String!]
+  buttonColorNotIn: [String!]
+  buttonColorGT: String
+  buttonColorGTE: String
+  buttonColorLT: String
+  buttonColorLTE: String
+  buttonColorContains: String
+  buttonColorHasPrefix: String
+  buttonColorHasSuffix: String
+  buttonColorIsNil: Boolean
+  buttonColorNotNil: Boolean
+  buttonColorEqualFold: String
+  buttonColorContainsFold: String
+  """
+  button_text_color field predicates
+  """
+  buttonTextColor: String
+  buttonTextColorNEQ: String
+  buttonTextColorIn: [String!]
+  buttonTextColorNotIn: [String!]
+  buttonTextColorGT: String
+  buttonTextColorGTE: String
+  buttonTextColorLT: String
+  buttonTextColorLTE: String
+  buttonTextColorContains: String
+  buttonTextColorHasPrefix: String
+  buttonTextColorHasSuffix: String
+  buttonTextColorIsNil: Boolean
+  buttonTextColorNotNil: Boolean
+  buttonTextColorEqualFold: String
+  buttonTextColorContainsFold: String
+  """
+  link_color field predicates
+  """
+  linkColor: String
+  linkColorNEQ: String
+  linkColorIn: [String!]
+  linkColorNotIn: [String!]
+  linkColorGT: String
+  linkColorGTE: String
+  linkColorLT: String
+  linkColorLTE: String
+  linkColorContains: String
+  linkColorHasPrefix: String
+  linkColorHasSuffix: String
+  linkColorIsNil: Boolean
+  linkColorNotNil: Boolean
+  linkColorEqualFold: String
+  linkColorContainsFold: String
+  """
+  font_family field predicates
+  """
+  fontFamily: String
+  fontFamilyNEQ: String
+  fontFamilyIn: [String!]
+  fontFamilyNotIn: [String!]
+  fontFamilyGT: String
+  fontFamilyGTE: String
+  fontFamilyLT: String
+  fontFamilyLTE: String
+  fontFamilyContains: String
+  fontFamilyHasPrefix: String
+  fontFamilyHasSuffix: String
+  fontFamilyIsNil: Boolean
+  fontFamilyNotNil: Boolean
+  fontFamilyEqualFold: String
+  fontFamilyContainsFold: String
+  """
+  is_default field predicates
+  """
+  isDefault: Boolean
+  isDefaultNEQ: Boolean
+  isDefaultIsNil: Boolean
+  isDefaultNotNil: Boolean
+}
+type EmailTemplateHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: EmailTemplateHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  stable identifier for the template
+  """
+  key: String!
+  """
+  display name for the template
+  """
+  name: String!
+  """
+  description of the template
+  """
+  description: String
+  """
+  template format for rendering
+  """
+  format: EmailTemplateHistoryNotificationTemplateFormat!
+  """
+  locale for the template, e.g. en-US
+  """
+  locale: String!
+  """
+  subject template for email notifications
+  """
+  subjectTemplate: String
+  """
+  preheader/preview text template for email notifications
+  """
+  preheaderTemplate: String
+  """
+  body template for the email
+  """
+  bodyTemplate: String
+  """
+  plain text fallback template for the email
+  """
+  textTemplate: String
+  """
+  jsonschema for template data requirements
+  """
+  jsonconfig: Map
+  """
+  uischema for a template builder
+  """
+  uischema: Map
+  """
+  additional template metadata
+  """
+  metadata: Map
+  """
+  whether the template is active
+  """
+  active: Boolean!
+  """
+  template version
+  """
+  version: Int!
+  """
+  email branding configuration to apply for this template
+  """
+  emailBrandingID: String
+  """
+  integration used to deliver emails for this template
+  """
+  integrationID: String
+  """
+  workflow definition associated with this template
+  """
+  workflowDefinitionID: String
+  """
+  workflow instance associated with this template
+  """
+  workflowInstanceID: String
+}
+"""
+A connection to a list of items.
+"""
+type EmailTemplateHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [EmailTemplateHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type EmailTemplateHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: EmailTemplateHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+EmailTemplateHistoryNotificationTemplateFormat is enum for the field format
+"""
+enum EmailTemplateHistoryNotificationTemplateFormat @goModel(model: "github.com/theopenlane/core/common/enums.NotificationTemplateFormat") {
+  TEXT
+  MARKDOWN
+  HTML
+  JSON
+}
+"""
+EmailTemplateHistoryOpType is enum for the field operation
+"""
+enum EmailTemplateHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for EmailTemplateHistory connections
+"""
+input EmailTemplateHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order EmailTemplateHistories.
+  """
+  field: EmailTemplateHistoryOrderField!
+}
+"""
+Properties by which EmailTemplateHistory connections can be ordered.
+"""
+enum EmailTemplateHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  KEY
+  NAME
+  FORMAT
+  LOCALE
+  ACTIVE
+  VERSION
+}
+"""
+EmailTemplateHistoryWhereInput is used for filtering EmailTemplateHistory objects.
+Input was generated by ent.
+"""
+input EmailTemplateHistoryWhereInput {
+  not: EmailTemplateHistoryWhereInput
+  and: [EmailTemplateHistoryWhereInput!]
+  or: [EmailTemplateHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: EmailTemplateHistoryOpType
+  operationNEQ: EmailTemplateHistoryOpType
+  operationIn: [EmailTemplateHistoryOpType!]
+  operationNotIn: [EmailTemplateHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  key field predicates
+  """
+  key: String
+  keyNEQ: String
+  keyIn: [String!]
+  keyNotIn: [String!]
+  keyGT: String
+  keyGTE: String
+  keyLT: String
+  keyLTE: String
+  keyContains: String
+  keyHasPrefix: String
+  keyHasSuffix: String
+  keyEqualFold: String
+  keyContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  format field predicates
+  """
+  format: EmailTemplateHistoryNotificationTemplateFormat
+  formatNEQ: EmailTemplateHistoryNotificationTemplateFormat
+  formatIn: [EmailTemplateHistoryNotificationTemplateFormat!]
+  formatNotIn: [EmailTemplateHistoryNotificationTemplateFormat!]
+  """
+  locale field predicates
+  """
+  locale: String
+  localeNEQ: String
+  localeIn: [String!]
+  localeNotIn: [String!]
+  localeGT: String
+  localeGTE: String
+  localeLT: String
+  localeLTE: String
+  localeContains: String
+  localeHasPrefix: String
+  localeHasSuffix: String
+  localeEqualFold: String
+  localeContainsFold: String
+  """
+  subject_template field predicates
+  """
+  subjectTemplate: String
+  subjectTemplateNEQ: String
+  subjectTemplateIn: [String!]
+  subjectTemplateNotIn: [String!]
+  subjectTemplateGT: String
+  subjectTemplateGTE: String
+  subjectTemplateLT: String
+  subjectTemplateLTE: String
+  subjectTemplateContains: String
+  subjectTemplateHasPrefix: String
+  subjectTemplateHasSuffix: String
+  subjectTemplateIsNil: Boolean
+  subjectTemplateNotNil: Boolean
+  subjectTemplateEqualFold: String
+  subjectTemplateContainsFold: String
+  """
+  preheader_template field predicates
+  """
+  preheaderTemplate: String
+  preheaderTemplateNEQ: String
+  preheaderTemplateIn: [String!]
+  preheaderTemplateNotIn: [String!]
+  preheaderTemplateGT: String
+  preheaderTemplateGTE: String
+  preheaderTemplateLT: String
+  preheaderTemplateLTE: String
+  preheaderTemplateContains: String
+  preheaderTemplateHasPrefix: String
+  preheaderTemplateHasSuffix: String
+  preheaderTemplateIsNil: Boolean
+  preheaderTemplateNotNil: Boolean
+  preheaderTemplateEqualFold: String
+  preheaderTemplateContainsFold: String
+  """
+  body_template field predicates
+  """
+  bodyTemplate: String
+  bodyTemplateNEQ: String
+  bodyTemplateIn: [String!]
+  bodyTemplateNotIn: [String!]
+  bodyTemplateGT: String
+  bodyTemplateGTE: String
+  bodyTemplateLT: String
+  bodyTemplateLTE: String
+  bodyTemplateContains: String
+  bodyTemplateHasPrefix: String
+  bodyTemplateHasSuffix: String
+  bodyTemplateIsNil: Boolean
+  bodyTemplateNotNil: Boolean
+  bodyTemplateEqualFold: String
+  bodyTemplateContainsFold: String
+  """
+  text_template field predicates
+  """
+  textTemplate: String
+  textTemplateNEQ: String
+  textTemplateIn: [String!]
+  textTemplateNotIn: [String!]
+  textTemplateGT: String
+  textTemplateGTE: String
+  textTemplateLT: String
+  textTemplateLTE: String
+  textTemplateContains: String
+  textTemplateHasPrefix: String
+  textTemplateHasSuffix: String
+  textTemplateIsNil: Boolean
+  textTemplateNotNil: Boolean
+  textTemplateEqualFold: String
+  textTemplateContainsFold: String
+  """
+  active field predicates
+  """
+  active: Boolean
+  activeNEQ: Boolean
+  """
+  version field predicates
+  """
+  version: Int
+  versionNEQ: Int
+  versionIn: [Int!]
+  versionNotIn: [Int!]
+  versionGT: Int
+  versionGTE: Int
+  versionLT: Int
+  versionLTE: Int
+  """
+  email_branding_id field predicates
+  """
+  emailBrandingID: String
+  emailBrandingIDNEQ: String
+  emailBrandingIDIn: [String!]
+  emailBrandingIDNotIn: [String!]
+  emailBrandingIDGT: String
+  emailBrandingIDGTE: String
+  emailBrandingIDLT: String
+  emailBrandingIDLTE: String
+  emailBrandingIDContains: String
+  emailBrandingIDHasPrefix: String
+  emailBrandingIDHasSuffix: String
+  emailBrandingIDIsNil: Boolean
+  emailBrandingIDNotNil: Boolean
+  emailBrandingIDEqualFold: String
+  emailBrandingIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  workflow_definition_id field predicates
+  """
+  workflowDefinitionID: String
+  workflowDefinitionIDNEQ: String
+  workflowDefinitionIDIn: [String!]
+  workflowDefinitionIDNotIn: [String!]
+  workflowDefinitionIDGT: String
+  workflowDefinitionIDGTE: String
+  workflowDefinitionIDLT: String
+  workflowDefinitionIDLTE: String
+  workflowDefinitionIDContains: String
+  workflowDefinitionIDHasPrefix: String
+  workflowDefinitionIDHasSuffix: String
+  workflowDefinitionIDIsNil: Boolean
+  workflowDefinitionIDNotNil: Boolean
+  workflowDefinitionIDEqualFold: String
+  workflowDefinitionIDContainsFold: String
+  """
+  workflow_instance_id field predicates
+  """
+  workflowInstanceID: String
+  workflowInstanceIDNEQ: String
+  workflowInstanceIDIn: [String!]
+  workflowInstanceIDNotIn: [String!]
+  workflowInstanceIDGT: String
+  workflowInstanceIDGTE: String
+  workflowInstanceIDLT: String
+  workflowInstanceIDLTE: String
+  workflowInstanceIDContains: String
+  workflowInstanceIDHasPrefix: String
+  workflowInstanceIDHasSuffix: String
+  workflowInstanceIDIsNil: Boolean
+  workflowInstanceIDNotNil: Boolean
+  workflowInstanceIDEqualFold: String
+  workflowInstanceIDContainsFold: String
 }
 type EntityHistory implements Node {
   id: ID!
@@ -36859,6 +39164,1151 @@ input NoteHistoryWhereInput {
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
 }
+type NotificationPreferenceHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: NotificationPreferenceHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  the user this preference applies to
+  """
+  userID: String!
+  """
+  the channel this preference applies to
+  """
+  channel: NotificationPreferenceHistoryChannel!
+  """
+  status of the channel configuration
+  """
+  status: NotificationPreferenceHistoryNotificationChannelStatus!
+  """
+  provider for the channel, e.g. slack, email, teams
+  """
+  provider: String
+  """
+  destination address or endpoint for the channel
+  """
+  destination: String
+  """
+  channel configuration payload
+  """
+  config: Map
+  """
+  whether this preference is enabled
+  """
+  enabled: Boolean!
+  """
+  delivery cadence for this preference
+  """
+  cadence: NotificationPreferenceHistoryNotificationCadence!
+  """
+  optional priority override for this preference
+  """
+  priority: NotificationPreferenceHistoryPriority
+  """
+  soiree topic names or wildcard patterns this preference applies to; empty means all
+  """
+  topicPatterns: [String!]
+  """
+  optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+  """
+  topicOverrides: Map
+  """
+  optional template to use by default for this preference (external channels only)
+  """
+  templateID: String
+  """
+  mute notifications until this time
+  """
+  muteUntil: Time
+  """
+  start of quiet hours in HH:MM
+  """
+  quietHoursStart: String
+  """
+  end of quiet hours in HH:MM
+  """
+  quietHoursEnd: String
+  """
+  timezone for quiet hours and digests
+  """
+  timezone: String
+  """
+  whether this is the default config for the channel
+  """
+  isDefault: Boolean!
+  """
+  when the channel config was verified
+  """
+  verifiedAt: Time
+  """
+  last time the channel config was used
+  """
+  lastUsedAt: Time
+  """
+  last error encountered while using the channel
+  """
+  lastError: String
+  """
+  additional preference metadata
+  """
+  metadata: Map
+}
+"""
+NotificationPreferenceHistoryChannel is enum for the field channel
+"""
+enum NotificationPreferenceHistoryChannel @goModel(model: "github.com/theopenlane/core/common/enums.Channel") {
+  IN_APP
+  SLACK
+  TEAMS
+  EMAIL
+}
+"""
+A connection to a list of items.
+"""
+type NotificationPreferenceHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [NotificationPreferenceHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type NotificationPreferenceHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: NotificationPreferenceHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+NotificationPreferenceHistoryNotificationCadence is enum for the field cadence
+"""
+enum NotificationPreferenceHistoryNotificationCadence @goModel(model: "github.com/theopenlane/core/common/enums.NotificationCadence") {
+  IMMEDIATE
+  DAILY_DIGEST
+  WEEKLY_DIGEST
+  MONTHLY_DIGEST
+  MUTE
+}
+"""
+NotificationPreferenceHistoryNotificationChannelStatus is enum for the field status
+"""
+enum NotificationPreferenceHistoryNotificationChannelStatus @goModel(model: "github.com/theopenlane/core/common/enums.NotificationChannelStatus") {
+  ENABLED
+  DISABLED
+  PENDING
+  VERIFIED
+  ERROR
+}
+"""
+NotificationPreferenceHistoryOpType is enum for the field operation
+"""
+enum NotificationPreferenceHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for NotificationPreferenceHistory connections
+"""
+input NotificationPreferenceHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order NotificationPreferenceHistories.
+  """
+  field: NotificationPreferenceHistoryOrderField!
+}
+"""
+Properties by which NotificationPreferenceHistory connections can be ordered.
+"""
+enum NotificationPreferenceHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  CHANNEL
+  STATUS
+  ENABLED
+}
+"""
+NotificationPreferenceHistoryPriority is enum for the field priority
+"""
+enum NotificationPreferenceHistoryPriority @goModel(model: "github.com/theopenlane/core/common/enums.Priority") {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+"""
+NotificationPreferenceHistoryWhereInput is used for filtering NotificationPreferenceHistory objects.
+Input was generated by ent.
+"""
+input NotificationPreferenceHistoryWhereInput {
+  not: NotificationPreferenceHistoryWhereInput
+  and: [NotificationPreferenceHistoryWhereInput!]
+  or: [NotificationPreferenceHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: NotificationPreferenceHistoryOpType
+  operationNEQ: NotificationPreferenceHistoryOpType
+  operationIn: [NotificationPreferenceHistoryOpType!]
+  operationNotIn: [NotificationPreferenceHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  user_id field predicates
+  """
+  userID: String
+  userIDNEQ: String
+  userIDIn: [String!]
+  userIDNotIn: [String!]
+  userIDGT: String
+  userIDGTE: String
+  userIDLT: String
+  userIDLTE: String
+  userIDContains: String
+  userIDHasPrefix: String
+  userIDHasSuffix: String
+  userIDEqualFold: String
+  userIDContainsFold: String
+  """
+  channel field predicates
+  """
+  channel: NotificationPreferenceHistoryChannel
+  channelNEQ: NotificationPreferenceHistoryChannel
+  channelIn: [NotificationPreferenceHistoryChannel!]
+  channelNotIn: [NotificationPreferenceHistoryChannel!]
+  """
+  status field predicates
+  """
+  status: NotificationPreferenceHistoryNotificationChannelStatus
+  statusNEQ: NotificationPreferenceHistoryNotificationChannelStatus
+  statusIn: [NotificationPreferenceHistoryNotificationChannelStatus!]
+  statusNotIn: [NotificationPreferenceHistoryNotificationChannelStatus!]
+  """
+  provider field predicates
+  """
+  provider: String
+  providerNEQ: String
+  providerIn: [String!]
+  providerNotIn: [String!]
+  providerGT: String
+  providerGTE: String
+  providerLT: String
+  providerLTE: String
+  providerContains: String
+  providerHasPrefix: String
+  providerHasSuffix: String
+  providerIsNil: Boolean
+  providerNotNil: Boolean
+  providerEqualFold: String
+  providerContainsFold: String
+  """
+  destination field predicates
+  """
+  destination: String
+  destinationNEQ: String
+  destinationIn: [String!]
+  destinationNotIn: [String!]
+  destinationGT: String
+  destinationGTE: String
+  destinationLT: String
+  destinationLTE: String
+  destinationContains: String
+  destinationHasPrefix: String
+  destinationHasSuffix: String
+  destinationIsNil: Boolean
+  destinationNotNil: Boolean
+  destinationEqualFold: String
+  destinationContainsFold: String
+  """
+  enabled field predicates
+  """
+  enabled: Boolean
+  enabledNEQ: Boolean
+  """
+  cadence field predicates
+  """
+  cadence: NotificationPreferenceHistoryNotificationCadence
+  cadenceNEQ: NotificationPreferenceHistoryNotificationCadence
+  cadenceIn: [NotificationPreferenceHistoryNotificationCadence!]
+  cadenceNotIn: [NotificationPreferenceHistoryNotificationCadence!]
+  """
+  priority field predicates
+  """
+  priority: NotificationPreferenceHistoryPriority
+  priorityNEQ: NotificationPreferenceHistoryPriority
+  priorityIn: [NotificationPreferenceHistoryPriority!]
+  priorityNotIn: [NotificationPreferenceHistoryPriority!]
+  priorityIsNil: Boolean
+  priorityNotNil: Boolean
+  """
+  template_id field predicates
+  """
+  templateID: String
+  templateIDNEQ: String
+  templateIDIn: [String!]
+  templateIDNotIn: [String!]
+  templateIDGT: String
+  templateIDGTE: String
+  templateIDLT: String
+  templateIDLTE: String
+  templateIDContains: String
+  templateIDHasPrefix: String
+  templateIDHasSuffix: String
+  templateIDIsNil: Boolean
+  templateIDNotNil: Boolean
+  templateIDEqualFold: String
+  templateIDContainsFold: String
+  """
+  mute_until field predicates
+  """
+  muteUntil: Time
+  muteUntilNEQ: Time
+  muteUntilIn: [Time!]
+  muteUntilNotIn: [Time!]
+  muteUntilGT: Time
+  muteUntilGTE: Time
+  muteUntilLT: Time
+  muteUntilLTE: Time
+  muteUntilIsNil: Boolean
+  muteUntilNotNil: Boolean
+  """
+  quiet_hours_start field predicates
+  """
+  quietHoursStart: String
+  quietHoursStartNEQ: String
+  quietHoursStartIn: [String!]
+  quietHoursStartNotIn: [String!]
+  quietHoursStartGT: String
+  quietHoursStartGTE: String
+  quietHoursStartLT: String
+  quietHoursStartLTE: String
+  quietHoursStartContains: String
+  quietHoursStartHasPrefix: String
+  quietHoursStartHasSuffix: String
+  quietHoursStartIsNil: Boolean
+  quietHoursStartNotNil: Boolean
+  quietHoursStartEqualFold: String
+  quietHoursStartContainsFold: String
+  """
+  quiet_hours_end field predicates
+  """
+  quietHoursEnd: String
+  quietHoursEndNEQ: String
+  quietHoursEndIn: [String!]
+  quietHoursEndNotIn: [String!]
+  quietHoursEndGT: String
+  quietHoursEndGTE: String
+  quietHoursEndLT: String
+  quietHoursEndLTE: String
+  quietHoursEndContains: String
+  quietHoursEndHasPrefix: String
+  quietHoursEndHasSuffix: String
+  quietHoursEndIsNil: Boolean
+  quietHoursEndNotNil: Boolean
+  quietHoursEndEqualFold: String
+  quietHoursEndContainsFold: String
+  """
+  timezone field predicates
+  """
+  timezone: String
+  timezoneNEQ: String
+  timezoneIn: [String!]
+  timezoneNotIn: [String!]
+  timezoneGT: String
+  timezoneGTE: String
+  timezoneLT: String
+  timezoneLTE: String
+  timezoneContains: String
+  timezoneHasPrefix: String
+  timezoneHasSuffix: String
+  timezoneIsNil: Boolean
+  timezoneNotNil: Boolean
+  timezoneEqualFold: String
+  timezoneContainsFold: String
+  """
+  is_default field predicates
+  """
+  isDefault: Boolean
+  isDefaultNEQ: Boolean
+  """
+  verified_at field predicates
+  """
+  verifiedAt: Time
+  verifiedAtNEQ: Time
+  verifiedAtIn: [Time!]
+  verifiedAtNotIn: [Time!]
+  verifiedAtGT: Time
+  verifiedAtGTE: Time
+  verifiedAtLT: Time
+  verifiedAtLTE: Time
+  verifiedAtIsNil: Boolean
+  verifiedAtNotNil: Boolean
+  """
+  last_used_at field predicates
+  """
+  lastUsedAt: Time
+  lastUsedAtNEQ: Time
+  lastUsedAtIn: [Time!]
+  lastUsedAtNotIn: [Time!]
+  lastUsedAtGT: Time
+  lastUsedAtGTE: Time
+  lastUsedAtLT: Time
+  lastUsedAtLTE: Time
+  lastUsedAtIsNil: Boolean
+  lastUsedAtNotNil: Boolean
+  """
+  last_error field predicates
+  """
+  lastError: String
+  lastErrorNEQ: String
+  lastErrorIn: [String!]
+  lastErrorNotIn: [String!]
+  lastErrorGT: String
+  lastErrorGTE: String
+  lastErrorLT: String
+  lastErrorLTE: String
+  lastErrorContains: String
+  lastErrorHasPrefix: String
+  lastErrorHasSuffix: String
+  lastErrorIsNil: Boolean
+  lastErrorNotNil: Boolean
+  lastErrorEqualFold: String
+  lastErrorContainsFold: String
+}
+type NotificationTemplateHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: NotificationTemplateHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  stable identifier for the template
+  """
+  key: String!
+  """
+  display name for the template
+  """
+  name: String!
+  """
+  description of the template
+  """
+  description: String
+  """
+  channel this template is intended for
+  """
+  channel: NotificationTemplateHistoryChannel!
+  """
+  template format for rendering
+  """
+  format: NotificationTemplateHistoryNotificationTemplateFormat!
+  """
+  locale for the template, e.g. en-US
+  """
+  locale: String!
+  """
+  soiree topic name or wildcard pattern this template targets
+  """
+  topicPattern: String!
+  """
+  integration associated with this template
+  """
+  integrationID: String
+  """
+  workflow definition associated with this template
+  """
+  workflowDefinitionID: String
+  """
+  optional email template used for branded email delivery
+  """
+  emailTemplateID: String
+  """
+  title template for external channel messages
+  """
+  titleTemplate: String
+  """
+  subject template for email notifications
+  """
+  subjectTemplate: String
+  """
+  body template for the notification
+  """
+  bodyTemplate: String
+  """
+  structured blocks for channels like Slack or Teams
+  """
+  blocks: Map
+  """
+  jsonschema for template data requirements
+  """
+  jsonconfig: Map
+  """
+  uischema for a template builder
+  """
+  uischema: Map
+  """
+  additional template metadata
+  """
+  metadata: Map
+  """
+  whether the template is active
+  """
+  active: Boolean!
+  """
+  template version
+  """
+  version: Int!
+}
+"""
+NotificationTemplateHistoryChannel is enum for the field channel
+"""
+enum NotificationTemplateHistoryChannel @goModel(model: "github.com/theopenlane/core/common/enums.Channel") {
+  IN_APP
+  SLACK
+  TEAMS
+  EMAIL
+}
+"""
+A connection to a list of items.
+"""
+type NotificationTemplateHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [NotificationTemplateHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type NotificationTemplateHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: NotificationTemplateHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+NotificationTemplateHistoryNotificationTemplateFormat is enum for the field format
+"""
+enum NotificationTemplateHistoryNotificationTemplateFormat @goModel(model: "github.com/theopenlane/core/common/enums.NotificationTemplateFormat") {
+  TEXT
+  MARKDOWN
+  HTML
+  JSON
+}
+"""
+NotificationTemplateHistoryOpType is enum for the field operation
+"""
+enum NotificationTemplateHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for NotificationTemplateHistory connections
+"""
+input NotificationTemplateHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order NotificationTemplateHistories.
+  """
+  field: NotificationTemplateHistoryOrderField!
+}
+"""
+Properties by which NotificationTemplateHistory connections can be ordered.
+"""
+enum NotificationTemplateHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  KEY
+  NAME
+  CHANNEL
+  FORMAT
+  LOCALE
+  TOPIC_PATTERN
+  ACTIVE
+  VERSION
+}
+"""
+NotificationTemplateHistoryWhereInput is used for filtering NotificationTemplateHistory objects.
+Input was generated by ent.
+"""
+input NotificationTemplateHistoryWhereInput {
+  not: NotificationTemplateHistoryWhereInput
+  and: [NotificationTemplateHistoryWhereInput!]
+  or: [NotificationTemplateHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: NotificationTemplateHistoryOpType
+  operationNEQ: NotificationTemplateHistoryOpType
+  operationIn: [NotificationTemplateHistoryOpType!]
+  operationNotIn: [NotificationTemplateHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  key field predicates
+  """
+  key: String
+  keyNEQ: String
+  keyIn: [String!]
+  keyNotIn: [String!]
+  keyGT: String
+  keyGTE: String
+  keyLT: String
+  keyLTE: String
+  keyContains: String
+  keyHasPrefix: String
+  keyHasSuffix: String
+  keyEqualFold: String
+  keyContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  channel field predicates
+  """
+  channel: NotificationTemplateHistoryChannel
+  channelNEQ: NotificationTemplateHistoryChannel
+  channelIn: [NotificationTemplateHistoryChannel!]
+  channelNotIn: [NotificationTemplateHistoryChannel!]
+  """
+  format field predicates
+  """
+  format: NotificationTemplateHistoryNotificationTemplateFormat
+  formatNEQ: NotificationTemplateHistoryNotificationTemplateFormat
+  formatIn: [NotificationTemplateHistoryNotificationTemplateFormat!]
+  formatNotIn: [NotificationTemplateHistoryNotificationTemplateFormat!]
+  """
+  locale field predicates
+  """
+  locale: String
+  localeNEQ: String
+  localeIn: [String!]
+  localeNotIn: [String!]
+  localeGT: String
+  localeGTE: String
+  localeLT: String
+  localeLTE: String
+  localeContains: String
+  localeHasPrefix: String
+  localeHasSuffix: String
+  localeEqualFold: String
+  localeContainsFold: String
+  """
+  topic_pattern field predicates
+  """
+  topicPattern: String
+  topicPatternNEQ: String
+  topicPatternIn: [String!]
+  topicPatternNotIn: [String!]
+  topicPatternGT: String
+  topicPatternGTE: String
+  topicPatternLT: String
+  topicPatternLTE: String
+  topicPatternContains: String
+  topicPatternHasPrefix: String
+  topicPatternHasSuffix: String
+  topicPatternEqualFold: String
+  topicPatternContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  workflow_definition_id field predicates
+  """
+  workflowDefinitionID: String
+  workflowDefinitionIDNEQ: String
+  workflowDefinitionIDIn: [String!]
+  workflowDefinitionIDNotIn: [String!]
+  workflowDefinitionIDGT: String
+  workflowDefinitionIDGTE: String
+  workflowDefinitionIDLT: String
+  workflowDefinitionIDLTE: String
+  workflowDefinitionIDContains: String
+  workflowDefinitionIDHasPrefix: String
+  workflowDefinitionIDHasSuffix: String
+  workflowDefinitionIDIsNil: Boolean
+  workflowDefinitionIDNotNil: Boolean
+  workflowDefinitionIDEqualFold: String
+  workflowDefinitionIDContainsFold: String
+  """
+  email_template_id field predicates
+  """
+  emailTemplateID: String
+  emailTemplateIDNEQ: String
+  emailTemplateIDIn: [String!]
+  emailTemplateIDNotIn: [String!]
+  emailTemplateIDGT: String
+  emailTemplateIDGTE: String
+  emailTemplateIDLT: String
+  emailTemplateIDLTE: String
+  emailTemplateIDContains: String
+  emailTemplateIDHasPrefix: String
+  emailTemplateIDHasSuffix: String
+  emailTemplateIDIsNil: Boolean
+  emailTemplateIDNotNil: Boolean
+  emailTemplateIDEqualFold: String
+  emailTemplateIDContainsFold: String
+  """
+  title_template field predicates
+  """
+  titleTemplate: String
+  titleTemplateNEQ: String
+  titleTemplateIn: [String!]
+  titleTemplateNotIn: [String!]
+  titleTemplateGT: String
+  titleTemplateGTE: String
+  titleTemplateLT: String
+  titleTemplateLTE: String
+  titleTemplateContains: String
+  titleTemplateHasPrefix: String
+  titleTemplateHasSuffix: String
+  titleTemplateIsNil: Boolean
+  titleTemplateNotNil: Boolean
+  titleTemplateEqualFold: String
+  titleTemplateContainsFold: String
+  """
+  subject_template field predicates
+  """
+  subjectTemplate: String
+  subjectTemplateNEQ: String
+  subjectTemplateIn: [String!]
+  subjectTemplateNotIn: [String!]
+  subjectTemplateGT: String
+  subjectTemplateGTE: String
+  subjectTemplateLT: String
+  subjectTemplateLTE: String
+  subjectTemplateContains: String
+  subjectTemplateHasPrefix: String
+  subjectTemplateHasSuffix: String
+  subjectTemplateIsNil: Boolean
+  subjectTemplateNotNil: Boolean
+  subjectTemplateEqualFold: String
+  subjectTemplateContainsFold: String
+  """
+  body_template field predicates
+  """
+  bodyTemplate: String
+  bodyTemplateNEQ: String
+  bodyTemplateIn: [String!]
+  bodyTemplateNotIn: [String!]
+  bodyTemplateGT: String
+  bodyTemplateGTE: String
+  bodyTemplateLT: String
+  bodyTemplateLTE: String
+  bodyTemplateContains: String
+  bodyTemplateHasPrefix: String
+  bodyTemplateHasSuffix: String
+  bodyTemplateIsNil: Boolean
+  bodyTemplateNotNil: Boolean
+  bodyTemplateEqualFold: String
+  bodyTemplateContainsFold: String
+  """
+  active field predicates
+  """
+  active: Boolean
+  activeNEQ: Boolean
+  """
+  version field predicates
+  """
+  version: Int
+  versionNEQ: Int
+  versionIn: [Int!]
+  versionNotIn: [Int!]
+  versionGT: Int
+  versionGTE: Int
+  versionLT: Int
+  versionLTE: Int
+}
 """
 Possible directions in which to order a list of items when provided an ` + "`" + `orderBy` + "`" + ` argument.
 """
@@ -41567,6 +45017,68 @@ type Query {
     """
     where: DocumentDataHistoryWhereInput
   ): DocumentDataHistoryConnection!
+  emailBrandingHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailBrandingHistories returned from the connection.
+    """
+    orderBy: EmailBrandingHistoryOrder
+
+    """
+    Filtering options for EmailBrandingHistories returned from the connection.
+    """
+    where: EmailBrandingHistoryWhereInput
+  ): EmailBrandingHistoryConnection!
+  emailTemplateHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailTemplateHistories returned from the connection.
+    """
+    orderBy: EmailTemplateHistoryOrder
+
+    """
+    Filtering options for EmailTemplateHistories returned from the connection.
+    """
+    where: EmailTemplateHistoryWhereInput
+  ): EmailTemplateHistoryConnection!
   entityHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -42125,6 +45637,68 @@ type Query {
     """
     where: NoteHistoryWhereInput
   ): NoteHistoryConnection!
+  notificationPreferenceHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationPreferenceHistories returned from the connection.
+    """
+    orderBy: NotificationPreferenceHistoryOrder
+
+    """
+    Filtering options for NotificationPreferenceHistories returned from the connection.
+    """
+    where: NotificationPreferenceHistoryWhereInput
+  ): NotificationPreferenceHistoryConnection!
+  notificationTemplateHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationTemplateHistories returned from the connection.
+    """
+    orderBy: NotificationTemplateHistoryOrder
+
+    """
+    Filtering options for NotificationTemplateHistories returned from the connection.
+    """
+    where: NotificationTemplateHistoryWhereInput
+  ): NotificationTemplateHistoryConnection!
   orgMembershipHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -52626,6 +56200,18 @@ type UserSettingHistory implements Node {
   tags: [String!]
   userID: String
   """
+  user id to delegate workflow approvals to
+  """
+  delegateUserID: String
+  """
+  when delegation becomes active
+  """
+  delegateStartAt: Time
+  """
+  when delegation ends
+  """
+  delegateEndAt: Time
+  """
   user account is locked if unconfirmed or explicitly locked
   """
   locked: Boolean!
@@ -52860,6 +56446,50 @@ input UserSettingHistoryWhereInput {
   userIDNotNil: Boolean
   userIDEqualFold: String
   userIDContainsFold: String
+  """
+  delegate_user_id field predicates
+  """
+  delegateUserID: String
+  delegateUserIDNEQ: String
+  delegateUserIDIn: [String!]
+  delegateUserIDNotIn: [String!]
+  delegateUserIDGT: String
+  delegateUserIDGTE: String
+  delegateUserIDLT: String
+  delegateUserIDLTE: String
+  delegateUserIDContains: String
+  delegateUserIDHasPrefix: String
+  delegateUserIDHasSuffix: String
+  delegateUserIDIsNil: Boolean
+  delegateUserIDNotNil: Boolean
+  delegateUserIDEqualFold: String
+  delegateUserIDContainsFold: String
+  """
+  delegate_start_at field predicates
+  """
+  delegateStartAt: Time
+  delegateStartAtNEQ: Time
+  delegateStartAtIn: [Time!]
+  delegateStartAtNotIn: [Time!]
+  delegateStartAtGT: Time
+  delegateStartAtGTE: Time
+  delegateStartAtLT: Time
+  delegateStartAtLTE: Time
+  delegateStartAtIsNil: Boolean
+  delegateStartAtNotNil: Boolean
+  """
+  delegate_end_at field predicates
+  """
+  delegateEndAt: Time
+  delegateEndAtNEQ: Time
+  delegateEndAtIn: [Time!]
+  delegateEndAtNotIn: [Time!]
+  delegateEndAtGT: Time
+  delegateEndAtGTE: Time
+  delegateEndAtLT: Time
+  delegateEndAtLTE: Time
+  delegateEndAtIsNil: Boolean
+  delegateEndAtNotNil: Boolean
   """
   locked field predicates
   """
@@ -53845,6 +57475,10 @@ type WorkflowAssignmentHistory implements Node {
   Optional notes about the assignment
   """
   notes: String
+  """
+  Timestamp when the assignment is due for delegation or escalation checks
+  """
+  dueAt: Time
 }
 """
 A connection to a list of items.
@@ -54203,6 +57837,19 @@ input WorkflowAssignmentHistoryWhereInput {
   notesNotNil: Boolean
   notesEqualFold: String
   notesContainsFold: String
+  """
+  due_at field predicates
+  """
+  dueAt: Time
+  dueAtNEQ: Time
+  dueAtIn: [Time!]
+  dueAtNotIn: [Time!]
+  dueAtGT: Time
+  dueAtGTE: Time
+  dueAtLT: Time
+  dueAtLTE: Time
+  dueAtIsNil: Boolean
+  dueAtNotNil: Boolean
 }
 """
 WorkflowAssignmentHistoryWorkflowAssignmentStatus is enum for the field status
@@ -54211,6 +57858,7 @@ enum WorkflowAssignmentHistoryWorkflowAssignmentStatus @goModel(model: "github.c
   PENDING
   APPROVED
   REJECTED
+  CHANGES_REQUESTED
 }
 type WorkflowAssignmentTargetHistory implements Node {
   id: ID!

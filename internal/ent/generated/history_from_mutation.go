@@ -1999,6 +1999,14 @@ func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetMetadata(metadata)
 	}
 
+	if emailBrandingID, exists := m.EmailBrandingID(); exists {
+		create = create.SetEmailBrandingID(emailBrandingID)
+	}
+
+	if emailTemplateID, exists := m.EmailTemplateID(); exists {
+		create = create.SetEmailTemplateID(emailTemplateID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -2252,6 +2260,18 @@ func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetMetadata(campaign.Metadata)
 		}
 
+		if emailBrandingID, exists := m.EmailBrandingID(); exists {
+			create = create.SetEmailBrandingID(emailBrandingID)
+		} else {
+			create = create.SetEmailBrandingID(campaign.EmailBrandingID)
+		}
+
+		if emailTemplateID, exists := m.EmailTemplateID(); exists {
+			create = create.SetEmailTemplateID(emailTemplateID)
+		} else {
+			create = create.SetEmailTemplateID(campaign.EmailTemplateID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -2324,6 +2344,8 @@ func (m *CampaignMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEntityID(campaign.EntityID).
 			SetAssessmentID(campaign.AssessmentID).
 			SetMetadata(campaign.Metadata).
+			SetEmailBrandingID(campaign.EmailBrandingID).
+			SetEmailTemplateID(campaign.EmailTemplateID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -6166,6 +6188,716 @@ func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetScopeID(documentdata.ScopeID).
 			SetTemplateID(documentdata.TemplateID).
 			SetData(documentdata.Data).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *EmailBrandingMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.EmailBrandingHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if brandName, exists := m.BrandName(); exists {
+		create = create.SetBrandName(brandName)
+	}
+
+	if logoRemoteURL, exists := m.LogoRemoteURL(); exists {
+		create = create.SetNillableLogoRemoteURL(&logoRemoteURL)
+	}
+
+	if primaryColor, exists := m.PrimaryColor(); exists {
+		create = create.SetPrimaryColor(primaryColor)
+	}
+
+	if secondaryColor, exists := m.SecondaryColor(); exists {
+		create = create.SetSecondaryColor(secondaryColor)
+	}
+
+	if backgroundColor, exists := m.BackgroundColor(); exists {
+		create = create.SetBackgroundColor(backgroundColor)
+	}
+
+	if textColor, exists := m.TextColor(); exists {
+		create = create.SetTextColor(textColor)
+	}
+
+	if buttonColor, exists := m.ButtonColor(); exists {
+		create = create.SetButtonColor(buttonColor)
+	}
+
+	if buttonTextColor, exists := m.ButtonTextColor(); exists {
+		create = create.SetButtonTextColor(buttonTextColor)
+	}
+
+	if linkColor, exists := m.LinkColor(); exists {
+		create = create.SetLinkColor(linkColor)
+	}
+
+	if fontFamily, exists := m.FontFamily(); exists {
+		create = create.SetFontFamily(fontFamily)
+	}
+
+	if isDefault, exists := m.IsDefault(); exists {
+		create = create.SetIsDefault(isDefault)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *EmailBrandingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		emailbranding, err := client.EmailBranding.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.EmailBrandingHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(emailbranding.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(emailbranding.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(emailbranding.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(emailbranding.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(emailbranding.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(emailbranding.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(emailbranding.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(emailbranding.OwnerID)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(emailbranding.Name)
+		}
+
+		if brandName, exists := m.BrandName(); exists {
+			create = create.SetBrandName(brandName)
+		} else {
+			create = create.SetBrandName(emailbranding.BrandName)
+		}
+
+		if logoRemoteURL, exists := m.LogoRemoteURL(); exists {
+			create = create.SetNillableLogoRemoteURL(&logoRemoteURL)
+		} else {
+			create = create.SetNillableLogoRemoteURL(emailbranding.LogoRemoteURL)
+		}
+
+		if primaryColor, exists := m.PrimaryColor(); exists {
+			create = create.SetPrimaryColor(primaryColor)
+		} else {
+			create = create.SetPrimaryColor(emailbranding.PrimaryColor)
+		}
+
+		if secondaryColor, exists := m.SecondaryColor(); exists {
+			create = create.SetSecondaryColor(secondaryColor)
+		} else {
+			create = create.SetSecondaryColor(emailbranding.SecondaryColor)
+		}
+
+		if backgroundColor, exists := m.BackgroundColor(); exists {
+			create = create.SetBackgroundColor(backgroundColor)
+		} else {
+			create = create.SetBackgroundColor(emailbranding.BackgroundColor)
+		}
+
+		if textColor, exists := m.TextColor(); exists {
+			create = create.SetTextColor(textColor)
+		} else {
+			create = create.SetTextColor(emailbranding.TextColor)
+		}
+
+		if buttonColor, exists := m.ButtonColor(); exists {
+			create = create.SetButtonColor(buttonColor)
+		} else {
+			create = create.SetButtonColor(emailbranding.ButtonColor)
+		}
+
+		if buttonTextColor, exists := m.ButtonTextColor(); exists {
+			create = create.SetButtonTextColor(buttonTextColor)
+		} else {
+			create = create.SetButtonTextColor(emailbranding.ButtonTextColor)
+		}
+
+		if linkColor, exists := m.LinkColor(); exists {
+			create = create.SetLinkColor(linkColor)
+		} else {
+			create = create.SetLinkColor(emailbranding.LinkColor)
+		}
+
+		if fontFamily, exists := m.FontFamily(); exists {
+			create = create.SetFontFamily(fontFamily)
+		} else {
+			create = create.SetFontFamily(emailbranding.FontFamily)
+		}
+
+		if isDefault, exists := m.IsDefault(); exists {
+			create = create.SetIsDefault(isDefault)
+		} else {
+			create = create.SetIsDefault(emailbranding.IsDefault)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *EmailBrandingMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		emailbranding, err := client.EmailBranding.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.EmailBrandingHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(emailbranding.CreatedAt).
+			SetUpdatedAt(emailbranding.UpdatedAt).
+			SetCreatedBy(emailbranding.CreatedBy).
+			SetUpdatedBy(emailbranding.UpdatedBy).
+			SetDeletedAt(emailbranding.DeletedAt).
+			SetDeletedBy(emailbranding.DeletedBy).
+			SetTags(emailbranding.Tags).
+			SetOwnerID(emailbranding.OwnerID).
+			SetName(emailbranding.Name).
+			SetBrandName(emailbranding.BrandName).
+			SetNillableLogoRemoteURL(emailbranding.LogoRemoteURL).
+			SetPrimaryColor(emailbranding.PrimaryColor).
+			SetSecondaryColor(emailbranding.SecondaryColor).
+			SetBackgroundColor(emailbranding.BackgroundColor).
+			SetTextColor(emailbranding.TextColor).
+			SetButtonColor(emailbranding.ButtonColor).
+			SetButtonTextColor(emailbranding.ButtonTextColor).
+			SetLinkColor(emailbranding.LinkColor).
+			SetFontFamily(emailbranding.FontFamily).
+			SetIsDefault(emailbranding.IsDefault).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *EmailTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.EmailTemplateHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
+	if key, exists := m.Key(); exists {
+		create = create.SetKey(key)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if format, exists := m.Format(); exists {
+		create = create.SetFormat(format)
+	}
+
+	if locale, exists := m.Locale(); exists {
+		create = create.SetLocale(locale)
+	}
+
+	if subjectTemplate, exists := m.SubjectTemplate(); exists {
+		create = create.SetSubjectTemplate(subjectTemplate)
+	}
+
+	if preheaderTemplate, exists := m.PreheaderTemplate(); exists {
+		create = create.SetPreheaderTemplate(preheaderTemplate)
+	}
+
+	if bodyTemplate, exists := m.BodyTemplate(); exists {
+		create = create.SetBodyTemplate(bodyTemplate)
+	}
+
+	if textTemplate, exists := m.TextTemplate(); exists {
+		create = create.SetTextTemplate(textTemplate)
+	}
+
+	if jsonconfig, exists := m.Jsonconfig(); exists {
+		create = create.SetJsonconfig(jsonconfig)
+	}
+
+	if uischema, exists := m.Uischema(); exists {
+		create = create.SetUischema(uischema)
+	}
+
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
+	}
+
+	if active, exists := m.Active(); exists {
+		create = create.SetActive(active)
+	}
+
+	if version, exists := m.Version(); exists {
+		create = create.SetVersion(version)
+	}
+
+	if emailBrandingID, exists := m.EmailBrandingID(); exists {
+		create = create.SetEmailBrandingID(emailBrandingID)
+	}
+
+	if integrationID, exists := m.IntegrationID(); exists {
+		create = create.SetIntegrationID(integrationID)
+	}
+
+	if workflowDefinitionID, exists := m.WorkflowDefinitionID(); exists {
+		create = create.SetWorkflowDefinitionID(workflowDefinitionID)
+	}
+
+	if workflowInstanceID, exists := m.WorkflowInstanceID(); exists {
+		create = create.SetWorkflowInstanceID(workflowInstanceID)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *EmailTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		emailtemplate, err := client.EmailTemplate.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.EmailTemplateHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(emailtemplate.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(emailtemplate.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(emailtemplate.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(emailtemplate.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(emailtemplate.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(emailtemplate.DeletedBy)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(emailtemplate.OwnerID)
+		}
+
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(emailtemplate.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(emailtemplate.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(emailtemplate.SystemInternalID)
+		}
+
+		if key, exists := m.Key(); exists {
+			create = create.SetKey(key)
+		} else {
+			create = create.SetKey(emailtemplate.Key)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(emailtemplate.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(emailtemplate.Description)
+		}
+
+		if format, exists := m.Format(); exists {
+			create = create.SetFormat(format)
+		} else {
+			create = create.SetFormat(emailtemplate.Format)
+		}
+
+		if locale, exists := m.Locale(); exists {
+			create = create.SetLocale(locale)
+		} else {
+			create = create.SetLocale(emailtemplate.Locale)
+		}
+
+		if subjectTemplate, exists := m.SubjectTemplate(); exists {
+			create = create.SetSubjectTemplate(subjectTemplate)
+		} else {
+			create = create.SetSubjectTemplate(emailtemplate.SubjectTemplate)
+		}
+
+		if preheaderTemplate, exists := m.PreheaderTemplate(); exists {
+			create = create.SetPreheaderTemplate(preheaderTemplate)
+		} else {
+			create = create.SetPreheaderTemplate(emailtemplate.PreheaderTemplate)
+		}
+
+		if bodyTemplate, exists := m.BodyTemplate(); exists {
+			create = create.SetBodyTemplate(bodyTemplate)
+		} else {
+			create = create.SetBodyTemplate(emailtemplate.BodyTemplate)
+		}
+
+		if textTemplate, exists := m.TextTemplate(); exists {
+			create = create.SetTextTemplate(textTemplate)
+		} else {
+			create = create.SetTextTemplate(emailtemplate.TextTemplate)
+		}
+
+		if jsonconfig, exists := m.Jsonconfig(); exists {
+			create = create.SetJsonconfig(jsonconfig)
+		} else {
+			create = create.SetJsonconfig(emailtemplate.Jsonconfig)
+		}
+
+		if uischema, exists := m.Uischema(); exists {
+			create = create.SetUischema(uischema)
+		} else {
+			create = create.SetUischema(emailtemplate.Uischema)
+		}
+
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(emailtemplate.Metadata)
+		}
+
+		if active, exists := m.Active(); exists {
+			create = create.SetActive(active)
+		} else {
+			create = create.SetActive(emailtemplate.Active)
+		}
+
+		if version, exists := m.Version(); exists {
+			create = create.SetVersion(version)
+		} else {
+			create = create.SetVersion(emailtemplate.Version)
+		}
+
+		if emailBrandingID, exists := m.EmailBrandingID(); exists {
+			create = create.SetEmailBrandingID(emailBrandingID)
+		} else {
+			create = create.SetEmailBrandingID(emailtemplate.EmailBrandingID)
+		}
+
+		if integrationID, exists := m.IntegrationID(); exists {
+			create = create.SetIntegrationID(integrationID)
+		} else {
+			create = create.SetIntegrationID(emailtemplate.IntegrationID)
+		}
+
+		if workflowDefinitionID, exists := m.WorkflowDefinitionID(); exists {
+			create = create.SetWorkflowDefinitionID(workflowDefinitionID)
+		} else {
+			create = create.SetWorkflowDefinitionID(emailtemplate.WorkflowDefinitionID)
+		}
+
+		if workflowInstanceID, exists := m.WorkflowInstanceID(); exists {
+			create = create.SetWorkflowInstanceID(workflowInstanceID)
+		} else {
+			create = create.SetWorkflowInstanceID(emailtemplate.WorkflowInstanceID)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *EmailTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		emailtemplate, err := client.EmailTemplate.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.EmailTemplateHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(emailtemplate.CreatedAt).
+			SetUpdatedAt(emailtemplate.UpdatedAt).
+			SetCreatedBy(emailtemplate.CreatedBy).
+			SetUpdatedBy(emailtemplate.UpdatedBy).
+			SetDeletedAt(emailtemplate.DeletedAt).
+			SetDeletedBy(emailtemplate.DeletedBy).
+			SetOwnerID(emailtemplate.OwnerID).
+			SetSystemOwned(emailtemplate.SystemOwned).
+			SetNillableInternalNotes(emailtemplate.InternalNotes).
+			SetNillableSystemInternalID(emailtemplate.SystemInternalID).
+			SetKey(emailtemplate.Key).
+			SetName(emailtemplate.Name).
+			SetDescription(emailtemplate.Description).
+			SetFormat(emailtemplate.Format).
+			SetLocale(emailtemplate.Locale).
+			SetSubjectTemplate(emailtemplate.SubjectTemplate).
+			SetPreheaderTemplate(emailtemplate.PreheaderTemplate).
+			SetBodyTemplate(emailtemplate.BodyTemplate).
+			SetTextTemplate(emailtemplate.TextTemplate).
+			SetJsonconfig(emailtemplate.Jsonconfig).
+			SetUischema(emailtemplate.Uischema).
+			SetMetadata(emailtemplate.Metadata).
+			SetActive(emailtemplate.Active).
+			SetVersion(emailtemplate.Version).
+			SetEmailBrandingID(emailtemplate.EmailBrandingID).
+			SetIntegrationID(emailtemplate.IntegrationID).
+			SetWorkflowDefinitionID(emailtemplate.WorkflowDefinitionID).
+			SetWorkflowInstanceID(emailtemplate.WorkflowInstanceID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -10392,6 +11124,10 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetIntegrationType(integrationType)
 	}
 
+	if providerMetadata, exists := m.ProviderMetadata(); exists {
+		create = create.SetProviderMetadata(providerMetadata)
+	}
+
 	if metadata, exists := m.Metadata(); exists {
 		create = create.SetMetadata(metadata)
 	}
@@ -10541,6 +11277,12 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetIntegrationType(integration.IntegrationType)
 		}
 
+		if providerMetadata, exists := m.ProviderMetadata(); exists {
+			create = create.SetProviderMetadata(providerMetadata)
+		} else {
+			create = create.SetProviderMetadata(integration.ProviderMetadata)
+		}
+
 		if metadata, exists := m.Metadata(); exists {
 			create = create.SetMetadata(metadata)
 		} else {
@@ -10601,6 +11343,7 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetDescription(integration.Description).
 			SetKind(integration.Kind).
 			SetIntegrationType(integration.IntegrationType).
+			SetProviderMetadata(integration.ProviderMetadata).
 			SetMetadata(integration.Metadata).
 			Save(ctx)
 		if err != nil {
@@ -12369,6 +13112,815 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDiscussionID(note.DiscussionID).
 			SetIsEdited(note.IsEdited).
 			SetTrustCenterID(note.TrustCenterID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *NotificationPreferenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.NotificationPreferenceHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if userID, exists := m.UserID(); exists {
+		create = create.SetUserID(userID)
+	}
+
+	if channel, exists := m.Channel(); exists {
+		create = create.SetChannel(channel)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if provider, exists := m.Provider(); exists {
+		create = create.SetProvider(provider)
+	}
+
+	if destination, exists := m.Destination(); exists {
+		create = create.SetDestination(destination)
+	}
+
+	if config, exists := m.Config(); exists {
+		create = create.SetConfig(config)
+	}
+
+	if enabled, exists := m.Enabled(); exists {
+		create = create.SetEnabled(enabled)
+	}
+
+	if cadence, exists := m.Cadence(); exists {
+		create = create.SetCadence(cadence)
+	}
+
+	if priority, exists := m.Priority(); exists {
+		create = create.SetPriority(priority)
+	}
+
+	if topicPatterns, exists := m.TopicPatterns(); exists {
+		create = create.SetTopicPatterns(topicPatterns)
+	}
+
+	if topicOverrides, exists := m.TopicOverrides(); exists {
+		create = create.SetTopicOverrides(topicOverrides)
+	}
+
+	if templateID, exists := m.TemplateID(); exists {
+		create = create.SetTemplateID(templateID)
+	}
+
+	if muteUntil, exists := m.MuteUntil(); exists {
+		create = create.SetNillableMuteUntil(&muteUntil)
+	}
+
+	if quietHoursStart, exists := m.QuietHoursStart(); exists {
+		create = create.SetQuietHoursStart(quietHoursStart)
+	}
+
+	if quietHoursEnd, exists := m.QuietHoursEnd(); exists {
+		create = create.SetQuietHoursEnd(quietHoursEnd)
+	}
+
+	if timezone, exists := m.Timezone(); exists {
+		create = create.SetTimezone(timezone)
+	}
+
+	if isDefault, exists := m.IsDefault(); exists {
+		create = create.SetIsDefault(isDefault)
+	}
+
+	if verifiedAt, exists := m.VerifiedAt(); exists {
+		create = create.SetNillableVerifiedAt(&verifiedAt)
+	}
+
+	if lastUsedAt, exists := m.LastUsedAt(); exists {
+		create = create.SetNillableLastUsedAt(&lastUsedAt)
+	}
+
+	if lastError, exists := m.LastError(); exists {
+		create = create.SetLastError(lastError)
+	}
+
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *NotificationPreferenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		notificationpreference, err := client.NotificationPreference.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.NotificationPreferenceHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(notificationpreference.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(notificationpreference.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(notificationpreference.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(notificationpreference.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(notificationpreference.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(notificationpreference.DeletedBy)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(notificationpreference.OwnerID)
+		}
+
+		if userID, exists := m.UserID(); exists {
+			create = create.SetUserID(userID)
+		} else {
+			create = create.SetUserID(notificationpreference.UserID)
+		}
+
+		if channel, exists := m.Channel(); exists {
+			create = create.SetChannel(channel)
+		} else {
+			create = create.SetChannel(notificationpreference.Channel)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(notificationpreference.Status)
+		}
+
+		if provider, exists := m.Provider(); exists {
+			create = create.SetProvider(provider)
+		} else {
+			create = create.SetProvider(notificationpreference.Provider)
+		}
+
+		if destination, exists := m.Destination(); exists {
+			create = create.SetDestination(destination)
+		} else {
+			create = create.SetDestination(notificationpreference.Destination)
+		}
+
+		if config, exists := m.Config(); exists {
+			create = create.SetConfig(config)
+		} else {
+			create = create.SetConfig(notificationpreference.Config)
+		}
+
+		if enabled, exists := m.Enabled(); exists {
+			create = create.SetEnabled(enabled)
+		} else {
+			create = create.SetEnabled(notificationpreference.Enabled)
+		}
+
+		if cadence, exists := m.Cadence(); exists {
+			create = create.SetCadence(cadence)
+		} else {
+			create = create.SetCadence(notificationpreference.Cadence)
+		}
+
+		if priority, exists := m.Priority(); exists {
+			create = create.SetPriority(priority)
+		} else {
+			create = create.SetPriority(notificationpreference.Priority)
+		}
+
+		if topicPatterns, exists := m.TopicPatterns(); exists {
+			create = create.SetTopicPatterns(topicPatterns)
+		} else {
+			create = create.SetTopicPatterns(notificationpreference.TopicPatterns)
+		}
+
+		if topicOverrides, exists := m.TopicOverrides(); exists {
+			create = create.SetTopicOverrides(topicOverrides)
+		} else {
+			create = create.SetTopicOverrides(notificationpreference.TopicOverrides)
+		}
+
+		if templateID, exists := m.TemplateID(); exists {
+			create = create.SetTemplateID(templateID)
+		} else {
+			create = create.SetTemplateID(notificationpreference.TemplateID)
+		}
+
+		if muteUntil, exists := m.MuteUntil(); exists {
+			create = create.SetNillableMuteUntil(&muteUntil)
+		} else {
+			create = create.SetNillableMuteUntil(notificationpreference.MuteUntil)
+		}
+
+		if quietHoursStart, exists := m.QuietHoursStart(); exists {
+			create = create.SetQuietHoursStart(quietHoursStart)
+		} else {
+			create = create.SetQuietHoursStart(notificationpreference.QuietHoursStart)
+		}
+
+		if quietHoursEnd, exists := m.QuietHoursEnd(); exists {
+			create = create.SetQuietHoursEnd(quietHoursEnd)
+		} else {
+			create = create.SetQuietHoursEnd(notificationpreference.QuietHoursEnd)
+		}
+
+		if timezone, exists := m.Timezone(); exists {
+			create = create.SetTimezone(timezone)
+		} else {
+			create = create.SetTimezone(notificationpreference.Timezone)
+		}
+
+		if isDefault, exists := m.IsDefault(); exists {
+			create = create.SetIsDefault(isDefault)
+		} else {
+			create = create.SetIsDefault(notificationpreference.IsDefault)
+		}
+
+		if verifiedAt, exists := m.VerifiedAt(); exists {
+			create = create.SetNillableVerifiedAt(&verifiedAt)
+		} else {
+			create = create.SetNillableVerifiedAt(notificationpreference.VerifiedAt)
+		}
+
+		if lastUsedAt, exists := m.LastUsedAt(); exists {
+			create = create.SetNillableLastUsedAt(&lastUsedAt)
+		} else {
+			create = create.SetNillableLastUsedAt(notificationpreference.LastUsedAt)
+		}
+
+		if lastError, exists := m.LastError(); exists {
+			create = create.SetLastError(lastError)
+		} else {
+			create = create.SetLastError(notificationpreference.LastError)
+		}
+
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(notificationpreference.Metadata)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *NotificationPreferenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		notificationpreference, err := client.NotificationPreference.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.NotificationPreferenceHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(notificationpreference.CreatedAt).
+			SetUpdatedAt(notificationpreference.UpdatedAt).
+			SetCreatedBy(notificationpreference.CreatedBy).
+			SetUpdatedBy(notificationpreference.UpdatedBy).
+			SetDeletedAt(notificationpreference.DeletedAt).
+			SetDeletedBy(notificationpreference.DeletedBy).
+			SetOwnerID(notificationpreference.OwnerID).
+			SetUserID(notificationpreference.UserID).
+			SetChannel(notificationpreference.Channel).
+			SetStatus(notificationpreference.Status).
+			SetProvider(notificationpreference.Provider).
+			SetDestination(notificationpreference.Destination).
+			SetConfig(notificationpreference.Config).
+			SetEnabled(notificationpreference.Enabled).
+			SetCadence(notificationpreference.Cadence).
+			SetPriority(notificationpreference.Priority).
+			SetTopicPatterns(notificationpreference.TopicPatterns).
+			SetTopicOverrides(notificationpreference.TopicOverrides).
+			SetTemplateID(notificationpreference.TemplateID).
+			SetNillableMuteUntil(notificationpreference.MuteUntil).
+			SetQuietHoursStart(notificationpreference.QuietHoursStart).
+			SetQuietHoursEnd(notificationpreference.QuietHoursEnd).
+			SetTimezone(notificationpreference.Timezone).
+			SetIsDefault(notificationpreference.IsDefault).
+			SetNillableVerifiedAt(notificationpreference.VerifiedAt).
+			SetNillableLastUsedAt(notificationpreference.LastUsedAt).
+			SetLastError(notificationpreference.LastError).
+			SetMetadata(notificationpreference.Metadata).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *NotificationTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.NotificationTemplateHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
+	if key, exists := m.Key(); exists {
+		create = create.SetKey(key)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if channel, exists := m.Channel(); exists {
+		create = create.SetChannel(channel)
+	}
+
+	if format, exists := m.Format(); exists {
+		create = create.SetFormat(format)
+	}
+
+	if locale, exists := m.Locale(); exists {
+		create = create.SetLocale(locale)
+	}
+
+	if topicPattern, exists := m.TopicPattern(); exists {
+		create = create.SetTopicPattern(topicPattern)
+	}
+
+	if integrationID, exists := m.IntegrationID(); exists {
+		create = create.SetIntegrationID(integrationID)
+	}
+
+	if workflowDefinitionID, exists := m.WorkflowDefinitionID(); exists {
+		create = create.SetWorkflowDefinitionID(workflowDefinitionID)
+	}
+
+	if emailTemplateID, exists := m.EmailTemplateID(); exists {
+		create = create.SetEmailTemplateID(emailTemplateID)
+	}
+
+	if titleTemplate, exists := m.TitleTemplate(); exists {
+		create = create.SetTitleTemplate(titleTemplate)
+	}
+
+	if subjectTemplate, exists := m.SubjectTemplate(); exists {
+		create = create.SetSubjectTemplate(subjectTemplate)
+	}
+
+	if bodyTemplate, exists := m.BodyTemplate(); exists {
+		create = create.SetBodyTemplate(bodyTemplate)
+	}
+
+	if blocks, exists := m.Blocks(); exists {
+		create = create.SetBlocks(blocks)
+	}
+
+	if jsonconfig, exists := m.Jsonconfig(); exists {
+		create = create.SetJsonconfig(jsonconfig)
+	}
+
+	if uischema, exists := m.Uischema(); exists {
+		create = create.SetUischema(uischema)
+	}
+
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
+	}
+
+	if active, exists := m.Active(); exists {
+		create = create.SetActive(active)
+	}
+
+	if version, exists := m.Version(); exists {
+		create = create.SetVersion(version)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *NotificationTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		notificationtemplate, err := client.NotificationTemplate.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.NotificationTemplateHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(notificationtemplate.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(notificationtemplate.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(notificationtemplate.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(notificationtemplate.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(notificationtemplate.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(notificationtemplate.DeletedBy)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(notificationtemplate.OwnerID)
+		}
+
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(notificationtemplate.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(notificationtemplate.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(notificationtemplate.SystemInternalID)
+		}
+
+		if key, exists := m.Key(); exists {
+			create = create.SetKey(key)
+		} else {
+			create = create.SetKey(notificationtemplate.Key)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(notificationtemplate.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(notificationtemplate.Description)
+		}
+
+		if channel, exists := m.Channel(); exists {
+			create = create.SetChannel(channel)
+		} else {
+			create = create.SetChannel(notificationtemplate.Channel)
+		}
+
+		if format, exists := m.Format(); exists {
+			create = create.SetFormat(format)
+		} else {
+			create = create.SetFormat(notificationtemplate.Format)
+		}
+
+		if locale, exists := m.Locale(); exists {
+			create = create.SetLocale(locale)
+		} else {
+			create = create.SetLocale(notificationtemplate.Locale)
+		}
+
+		if topicPattern, exists := m.TopicPattern(); exists {
+			create = create.SetTopicPattern(topicPattern)
+		} else {
+			create = create.SetTopicPattern(notificationtemplate.TopicPattern)
+		}
+
+		if integrationID, exists := m.IntegrationID(); exists {
+			create = create.SetIntegrationID(integrationID)
+		} else {
+			create = create.SetIntegrationID(notificationtemplate.IntegrationID)
+		}
+
+		if workflowDefinitionID, exists := m.WorkflowDefinitionID(); exists {
+			create = create.SetWorkflowDefinitionID(workflowDefinitionID)
+		} else {
+			create = create.SetWorkflowDefinitionID(notificationtemplate.WorkflowDefinitionID)
+		}
+
+		if emailTemplateID, exists := m.EmailTemplateID(); exists {
+			create = create.SetEmailTemplateID(emailTemplateID)
+		} else {
+			create = create.SetEmailTemplateID(notificationtemplate.EmailTemplateID)
+		}
+
+		if titleTemplate, exists := m.TitleTemplate(); exists {
+			create = create.SetTitleTemplate(titleTemplate)
+		} else {
+			create = create.SetTitleTemplate(notificationtemplate.TitleTemplate)
+		}
+
+		if subjectTemplate, exists := m.SubjectTemplate(); exists {
+			create = create.SetSubjectTemplate(subjectTemplate)
+		} else {
+			create = create.SetSubjectTemplate(notificationtemplate.SubjectTemplate)
+		}
+
+		if bodyTemplate, exists := m.BodyTemplate(); exists {
+			create = create.SetBodyTemplate(bodyTemplate)
+		} else {
+			create = create.SetBodyTemplate(notificationtemplate.BodyTemplate)
+		}
+
+		if blocks, exists := m.Blocks(); exists {
+			create = create.SetBlocks(blocks)
+		} else {
+			create = create.SetBlocks(notificationtemplate.Blocks)
+		}
+
+		if jsonconfig, exists := m.Jsonconfig(); exists {
+			create = create.SetJsonconfig(jsonconfig)
+		} else {
+			create = create.SetJsonconfig(notificationtemplate.Jsonconfig)
+		}
+
+		if uischema, exists := m.Uischema(); exists {
+			create = create.SetUischema(uischema)
+		} else {
+			create = create.SetUischema(notificationtemplate.Uischema)
+		}
+
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(notificationtemplate.Metadata)
+		}
+
+		if active, exists := m.Active(); exists {
+			create = create.SetActive(active)
+		} else {
+			create = create.SetActive(notificationtemplate.Active)
+		}
+
+		if version, exists := m.Version(); exists {
+			create = create.SetVersion(version)
+		} else {
+			create = create.SetVersion(notificationtemplate.Version)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *NotificationTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		notificationtemplate, err := client.NotificationTemplate.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.NotificationTemplateHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(notificationtemplate.CreatedAt).
+			SetUpdatedAt(notificationtemplate.UpdatedAt).
+			SetCreatedBy(notificationtemplate.CreatedBy).
+			SetUpdatedBy(notificationtemplate.UpdatedBy).
+			SetDeletedAt(notificationtemplate.DeletedAt).
+			SetDeletedBy(notificationtemplate.DeletedBy).
+			SetOwnerID(notificationtemplate.OwnerID).
+			SetSystemOwned(notificationtemplate.SystemOwned).
+			SetNillableInternalNotes(notificationtemplate.InternalNotes).
+			SetNillableSystemInternalID(notificationtemplate.SystemInternalID).
+			SetKey(notificationtemplate.Key).
+			SetName(notificationtemplate.Name).
+			SetDescription(notificationtemplate.Description).
+			SetChannel(notificationtemplate.Channel).
+			SetFormat(notificationtemplate.Format).
+			SetLocale(notificationtemplate.Locale).
+			SetTopicPattern(notificationtemplate.TopicPattern).
+			SetIntegrationID(notificationtemplate.IntegrationID).
+			SetWorkflowDefinitionID(notificationtemplate.WorkflowDefinitionID).
+			SetEmailTemplateID(notificationtemplate.EmailTemplateID).
+			SetTitleTemplate(notificationtemplate.TitleTemplate).
+			SetSubjectTemplate(notificationtemplate.SubjectTemplate).
+			SetBodyTemplate(notificationtemplate.BodyTemplate).
+			SetBlocks(notificationtemplate.Blocks).
+			SetJsonconfig(notificationtemplate.Jsonconfig).
+			SetUischema(notificationtemplate.Uischema).
+			SetMetadata(notificationtemplate.Metadata).
+			SetActive(notificationtemplate.Active).
+			SetVersion(notificationtemplate.Version).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -21736,6 +23288,18 @@ func (m *UserSettingMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetUserID(userID)
 	}
 
+	if delegateUserID, exists := m.DelegateUserID(); exists {
+		create = create.SetNillableDelegateUserID(&delegateUserID)
+	}
+
+	if delegateStartAt, exists := m.DelegateStartAt(); exists {
+		create = create.SetNillableDelegateStartAt(&delegateStartAt)
+	}
+
+	if delegateEndAt, exists := m.DelegateEndAt(); exists {
+		create = create.SetNillableDelegateEndAt(&delegateEndAt)
+	}
+
 	if locked, exists := m.Locked(); exists {
 		create = create.SetLocked(locked)
 	}
@@ -21847,6 +23411,24 @@ func (m *UserSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetUserID(usersetting.UserID)
 		}
 
+		if delegateUserID, exists := m.DelegateUserID(); exists {
+			create = create.SetNillableDelegateUserID(&delegateUserID)
+		} else {
+			create = create.SetNillableDelegateUserID(usersetting.DelegateUserID)
+		}
+
+		if delegateStartAt, exists := m.DelegateStartAt(); exists {
+			create = create.SetNillableDelegateStartAt(&delegateStartAt)
+		} else {
+			create = create.SetNillableDelegateStartAt(usersetting.DelegateStartAt)
+		}
+
+		if delegateEndAt, exists := m.DelegateEndAt(); exists {
+			create = create.SetNillableDelegateEndAt(&delegateEndAt)
+		} else {
+			create = create.SetNillableDelegateEndAt(usersetting.DelegateEndAt)
+		}
+
 		if locked, exists := m.Locked(); exists {
 			create = create.SetLocked(locked)
 		} else {
@@ -21938,6 +23520,9 @@ func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetDeletedBy(usersetting.DeletedBy).
 			SetTags(usersetting.Tags).
 			SetUserID(usersetting.UserID).
+			SetNillableDelegateUserID(usersetting.DelegateUserID).
+			SetNillableDelegateStartAt(usersetting.DelegateStartAt).
+			SetNillableDelegateEndAt(usersetting.DelegateEndAt).
 			SetLocked(usersetting.Locked).
 			SetNillableSilencedAt(usersetting.SilencedAt).
 			SetNillableSuspendedAt(usersetting.SuspendedAt).
@@ -22649,6 +24234,10 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetNotes(notes)
 	}
 
+	if dueAt, exists := m.DueAt(); exists {
+		create = create.SetNillableDueAt(&dueAt)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -22818,6 +24407,12 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNotes(workflowassignment.Notes)
 		}
 
+		if dueAt, exists := m.DueAt(); exists {
+			create = create.SetNillableDueAt(&dueAt)
+		} else {
+			create = create.SetNillableDueAt(workflowassignment.DueAt)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -22876,6 +24471,7 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromDelete(ctx context.Context
 			SetActorUserID(workflowassignment.ActorUserID).
 			SetActorGroupID(workflowassignment.ActorGroupID).
 			SetNotes(workflowassignment.Notes).
+			SetNillableDueAt(workflowassignment.DueAt).
 			Save(ctx)
 		if err != nil {
 			return err

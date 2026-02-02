@@ -496,32 +496,6 @@ type notification_template
     define viewer: [group#member] or editor or can_view from parent
     define blocked: [user, group#member]
 
-# integration definitions are global catalog entries (system or org-owned)
-type integration_definition
-  relations
-    define can_view: [user, service, user:*, service:*, organization#member] or parent_viewer
-    define can_edit: [user, service] or parent_editor or system_admin from system
-    define can_delete: [user, service] or parent_deleter or system_admin from system
-    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent_viewer: can_delete or can_edit or can_view from parent
-    define parent_editor: can_delete or can_edit from parent
-    define parent_deleter: can_delete from parent
-    define parent: [organization]
-    define system: [system]
-
-# integration operation definitions describe provider actions
-type integration_operation_definition
-  relations
-    define can_view: [user, service, user:*, service:*] or parent_viewer
-    define can_edit: [user, service] or parent_editor or system_admin from system
-    define can_delete: [user, service] or parent_deleter or system_admin from system
-    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent_viewer: can_delete or can_edit or can_view from parent
-    define parent_editor: can_delete or can_edit from parent
-    define parent_deleter: can_delete from parent
-    define parent: [integration_definition]
-    define system: [system]
-
 # integrations represent configured org connections to providers
 type integration
   relations
@@ -604,6 +578,18 @@ type vulnerability
     define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
     define parent: [user, service, organization, program, control, subcontrol, risk, asset, entity]
+# reviews can be associated with programs, controls, subcontrols, risks, action_plans, findings, vulnerabilities, assets, entities, or tasks
+# permissions are inherited from the parent object or organization
+type review
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization, program, control, subcontrol, risk, action_plan, finding, vulnerability, asset, entity, task]
 # contacts are always assigned to an organization and permissions are inherited from the organization
 # individual users or groups can also be given permission to a contact but they must be a member of the organization
 type contact

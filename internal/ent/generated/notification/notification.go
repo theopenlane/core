@@ -42,6 +42,8 @@ const (
 	FieldBody = "body"
 	// FieldData holds the string denoting the data field in the database.
 	FieldData = "data"
+	// FieldTemplateID holds the string denoting the template_id field in the database.
+	FieldTemplateID = "template_id"
 	// FieldReadAt holds the string denoting the read_at field in the database.
 	FieldReadAt = "read_at"
 	// FieldChannels holds the string denoting the channels field in the database.
@@ -85,15 +87,27 @@ var Columns = []string{
 	FieldTitle,
 	FieldBody,
 	FieldData,
+	FieldTemplateID,
 	FieldReadAt,
 	FieldChannels,
 	FieldTopic,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "notifications"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"notification_template_notifications",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -205,6 +219,11 @@ func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 // ByBody orders the results by the body field.
 func ByBody(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBody, opts...).ToFunc()
+}
+
+// ByTemplateID orders the results by the template_id field.
+func ByTemplateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTemplateID, opts...).ToFunc()
 }
 
 // ByReadAt orders the results by the read_at field.

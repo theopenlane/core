@@ -37,6 +37,12 @@ type UserSetting struct {
 	Tags []string `json:"tags,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID string `json:"user_id,omitempty"`
+	// user id to delegate workflow approvals to
+	DelegateUserID *string `json:"delegate_user_id,omitempty"`
+	// when delegation becomes active
+	DelegateStartAt *time.Time `json:"delegate_start_at,omitempty"`
+	// when delegation ends
+	DelegateEndAt *time.Time `json:"delegate_end_at,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
 	Locked bool `json:"locked,omitempty"`
 	// The time notifications regarding the user were silenced
@@ -104,9 +110,9 @@ func (*UserSetting) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case usersetting.FieldLocked, usersetting.FieldEmailConfirmed, usersetting.FieldIsWebauthnAllowed, usersetting.FieldIsTfaEnabled:
 			values[i] = new(sql.NullBool)
-		case usersetting.FieldID, usersetting.FieldCreatedBy, usersetting.FieldUpdatedBy, usersetting.FieldDeletedBy, usersetting.FieldUserID, usersetting.FieldStatus, usersetting.FieldPhoneNumber:
+		case usersetting.FieldID, usersetting.FieldCreatedBy, usersetting.FieldUpdatedBy, usersetting.FieldDeletedBy, usersetting.FieldUserID, usersetting.FieldDelegateUserID, usersetting.FieldStatus, usersetting.FieldPhoneNumber:
 			values[i] = new(sql.NullString)
-		case usersetting.FieldCreatedAt, usersetting.FieldUpdatedAt, usersetting.FieldDeletedAt, usersetting.FieldSilencedAt, usersetting.FieldSuspendedAt:
+		case usersetting.FieldCreatedAt, usersetting.FieldUpdatedAt, usersetting.FieldDeletedAt, usersetting.FieldDelegateStartAt, usersetting.FieldDelegateEndAt, usersetting.FieldSilencedAt, usersetting.FieldSuspendedAt:
 			values[i] = new(sql.NullTime)
 		case usersetting.ForeignKeys[0]: // user_setting_default_org
 			values[i] = new(sql.NullString)
@@ -180,6 +186,27 @@ func (_m *UserSetting) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
 				_m.UserID = value.String
+			}
+		case usersetting.FieldDelegateUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_user_id", values[i])
+			} else if value.Valid {
+				_m.DelegateUserID = new(string)
+				*_m.DelegateUserID = value.String
+			}
+		case usersetting.FieldDelegateStartAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_start_at", values[i])
+			} else if value.Valid {
+				_m.DelegateStartAt = new(time.Time)
+				*_m.DelegateStartAt = value.Time
+			}
+		case usersetting.FieldDelegateEndAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_end_at", values[i])
+			} else if value.Valid {
+				_m.DelegateEndAt = new(time.Time)
+				*_m.DelegateEndAt = value.Time
 			}
 		case usersetting.FieldLocked:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -308,6 +335,21 @@ func (_m *UserSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
 	builder.WriteString(_m.UserID)
+	builder.WriteString(", ")
+	if v := _m.DelegateUserID; v != nil {
+		builder.WriteString("delegate_user_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.DelegateStartAt; v != nil {
+		builder.WriteString("delegate_start_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.DelegateEndAt; v != nil {
+		builder.WriteString("delegate_end_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("locked=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Locked))

@@ -182,6 +182,22 @@ func (o Organization) Edges() []ent.Edge {
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:         o,
+			edgeSchema:         IntegrationWebhook{},
+			cascadeDeleteOwner: true,
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         IntegrationRun{},
+			cascadeDeleteOwner: true,
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
 			edgeSchema:         NotificationPreference{},
 			cascadeDeleteOwner: true,
 		}),

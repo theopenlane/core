@@ -144,6 +144,20 @@ func (_c *NotificationCreate) SetData(v map[string]interface{}) *NotificationCre
 	return _c
 }
 
+// SetTemplateID sets the "template_id" field.
+func (_c *NotificationCreate) SetTemplateID(v string) *NotificationCreate {
+	_c.mutation.SetTemplateID(v)
+	return _c
+}
+
+// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
+func (_c *NotificationCreate) SetNillableTemplateID(v *string) *NotificationCreate {
+	if v != nil {
+		_c.SetTemplateID(*v)
+	}
+	return _c
+}
+
 // SetReadAt sets the "read_at" field.
 func (_c *NotificationCreate) SetReadAt(v models.DateTime) *NotificationCreate {
 	_c.mutation.SetReadAt(v)
@@ -386,6 +400,10 @@ func (_c *NotificationCreate) createSpec() (*Notification, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.Data(); ok {
 		_spec.SetField(notification.FieldData, field.TypeJSON, value)
 		_node.Data = value
+	}
+	if value, ok := _c.mutation.TemplateID(); ok {
+		_spec.SetField(notification.FieldTemplateID, field.TypeString, value)
+		_node.TemplateID = value
 	}
 	if value, ok := _c.mutation.ReadAt(); ok {
 		_spec.SetField(notification.FieldReadAt, field.TypeTime, value)

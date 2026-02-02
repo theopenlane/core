@@ -30,6 +30,7 @@ type NotificationQuery struct {
 	predicates []predicate.Notification
 	withOwner  *OrganizationQuery
 	withUser   *UserQuery
+	withFKs    bool
 	loadTotal  []func(context.Context, []*Notification) error
 	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
@@ -424,12 +425,16 @@ func (_q *NotificationQuery) prepareQuery(ctx context.Context) error {
 func (_q *NotificationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Notification, error) {
 	var (
 		nodes       = []*Notification{}
+		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
 		loadedTypes = [2]bool{
 			_q.withOwner != nil,
 			_q.withUser != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, notification.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Notification).scanValues(nil, columns)
 	}

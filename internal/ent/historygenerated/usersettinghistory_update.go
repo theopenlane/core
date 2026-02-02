@@ -145,6 +145,66 @@ func (_u *UserSettingHistoryUpdate) ClearUserID() *UserSettingHistoryUpdate {
 	return _u
 }
 
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (_u *UserSettingHistoryUpdate) SetDelegateUserID(v string) *UserSettingHistoryUpdate {
+	_u.mutation.SetDelegateUserID(v)
+	return _u
+}
+
+// SetNillableDelegateUserID sets the "delegate_user_id" field if the given value is not nil.
+func (_u *UserSettingHistoryUpdate) SetNillableDelegateUserID(v *string) *UserSettingHistoryUpdate {
+	if v != nil {
+		_u.SetDelegateUserID(*v)
+	}
+	return _u
+}
+
+// ClearDelegateUserID clears the value of the "delegate_user_id" field.
+func (_u *UserSettingHistoryUpdate) ClearDelegateUserID() *UserSettingHistoryUpdate {
+	_u.mutation.ClearDelegateUserID()
+	return _u
+}
+
+// SetDelegateStartAt sets the "delegate_start_at" field.
+func (_u *UserSettingHistoryUpdate) SetDelegateStartAt(v time.Time) *UserSettingHistoryUpdate {
+	_u.mutation.SetDelegateStartAt(v)
+	return _u
+}
+
+// SetNillableDelegateStartAt sets the "delegate_start_at" field if the given value is not nil.
+func (_u *UserSettingHistoryUpdate) SetNillableDelegateStartAt(v *time.Time) *UserSettingHistoryUpdate {
+	if v != nil {
+		_u.SetDelegateStartAt(*v)
+	}
+	return _u
+}
+
+// ClearDelegateStartAt clears the value of the "delegate_start_at" field.
+func (_u *UserSettingHistoryUpdate) ClearDelegateStartAt() *UserSettingHistoryUpdate {
+	_u.mutation.ClearDelegateStartAt()
+	return _u
+}
+
+// SetDelegateEndAt sets the "delegate_end_at" field.
+func (_u *UserSettingHistoryUpdate) SetDelegateEndAt(v time.Time) *UserSettingHistoryUpdate {
+	_u.mutation.SetDelegateEndAt(v)
+	return _u
+}
+
+// SetNillableDelegateEndAt sets the "delegate_end_at" field if the given value is not nil.
+func (_u *UserSettingHistoryUpdate) SetNillableDelegateEndAt(v *time.Time) *UserSettingHistoryUpdate {
+	if v != nil {
+		_u.SetDelegateEndAt(*v)
+	}
+	return _u
+}
+
+// ClearDelegateEndAt clears the value of the "delegate_end_at" field.
+func (_u *UserSettingHistoryUpdate) ClearDelegateEndAt() *UserSettingHistoryUpdate {
+	_u.mutation.ClearDelegateEndAt()
+	return _u
+}
+
 // SetLocked sets the "locked" field.
 func (_u *UserSettingHistoryUpdate) SetLocked(v bool) *UserSettingHistoryUpdate {
 	_u.mutation.SetLocked(v)
@@ -412,6 +472,24 @@ func (_u *UserSettingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.UserIDCleared() {
 		_spec.ClearField(usersettinghistory.FieldUserID, field.TypeString)
 	}
+	if value, ok := _u.mutation.DelegateUserID(); ok {
+		_spec.SetField(usersettinghistory.FieldDelegateUserID, field.TypeString, value)
+	}
+	if _u.mutation.DelegateUserIDCleared() {
+		_spec.ClearField(usersettinghistory.FieldDelegateUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.DelegateStartAt(); ok {
+		_spec.SetField(usersettinghistory.FieldDelegateStartAt, field.TypeTime, value)
+	}
+	if _u.mutation.DelegateStartAtCleared() {
+		_spec.ClearField(usersettinghistory.FieldDelegateStartAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.DelegateEndAt(); ok {
+		_spec.SetField(usersettinghistory.FieldDelegateEndAt, field.TypeTime, value)
+	}
+	if _u.mutation.DelegateEndAtCleared() {
+		_spec.ClearField(usersettinghistory.FieldDelegateEndAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.Locked(); ok {
 		_spec.SetField(usersettinghistory.FieldLocked, field.TypeBool, value)
 	}
@@ -582,6 +660,66 @@ func (_u *UserSettingHistoryUpdateOne) SetNillableUserID(v *string) *UserSetting
 // ClearUserID clears the value of the "user_id" field.
 func (_u *UserSettingHistoryUpdateOne) ClearUserID() *UserSettingHistoryUpdateOne {
 	_u.mutation.ClearUserID()
+	return _u
+}
+
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (_u *UserSettingHistoryUpdateOne) SetDelegateUserID(v string) *UserSettingHistoryUpdateOne {
+	_u.mutation.SetDelegateUserID(v)
+	return _u
+}
+
+// SetNillableDelegateUserID sets the "delegate_user_id" field if the given value is not nil.
+func (_u *UserSettingHistoryUpdateOne) SetNillableDelegateUserID(v *string) *UserSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetDelegateUserID(*v)
+	}
+	return _u
+}
+
+// ClearDelegateUserID clears the value of the "delegate_user_id" field.
+func (_u *UserSettingHistoryUpdateOne) ClearDelegateUserID() *UserSettingHistoryUpdateOne {
+	_u.mutation.ClearDelegateUserID()
+	return _u
+}
+
+// SetDelegateStartAt sets the "delegate_start_at" field.
+func (_u *UserSettingHistoryUpdateOne) SetDelegateStartAt(v time.Time) *UserSettingHistoryUpdateOne {
+	_u.mutation.SetDelegateStartAt(v)
+	return _u
+}
+
+// SetNillableDelegateStartAt sets the "delegate_start_at" field if the given value is not nil.
+func (_u *UserSettingHistoryUpdateOne) SetNillableDelegateStartAt(v *time.Time) *UserSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetDelegateStartAt(*v)
+	}
+	return _u
+}
+
+// ClearDelegateStartAt clears the value of the "delegate_start_at" field.
+func (_u *UserSettingHistoryUpdateOne) ClearDelegateStartAt() *UserSettingHistoryUpdateOne {
+	_u.mutation.ClearDelegateStartAt()
+	return _u
+}
+
+// SetDelegateEndAt sets the "delegate_end_at" field.
+func (_u *UserSettingHistoryUpdateOne) SetDelegateEndAt(v time.Time) *UserSettingHistoryUpdateOne {
+	_u.mutation.SetDelegateEndAt(v)
+	return _u
+}
+
+// SetNillableDelegateEndAt sets the "delegate_end_at" field if the given value is not nil.
+func (_u *UserSettingHistoryUpdateOne) SetNillableDelegateEndAt(v *time.Time) *UserSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetDelegateEndAt(*v)
+	}
+	return _u
+}
+
+// ClearDelegateEndAt clears the value of the "delegate_end_at" field.
+func (_u *UserSettingHistoryUpdateOne) ClearDelegateEndAt() *UserSettingHistoryUpdateOne {
+	_u.mutation.ClearDelegateEndAt()
 	return _u
 }
 
@@ -881,6 +1019,24 @@ func (_u *UserSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *User
 	}
 	if _u.mutation.UserIDCleared() {
 		_spec.ClearField(usersettinghistory.FieldUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.DelegateUserID(); ok {
+		_spec.SetField(usersettinghistory.FieldDelegateUserID, field.TypeString, value)
+	}
+	if _u.mutation.DelegateUserIDCleared() {
+		_spec.ClearField(usersettinghistory.FieldDelegateUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.DelegateStartAt(); ok {
+		_spec.SetField(usersettinghistory.FieldDelegateStartAt, field.TypeTime, value)
+	}
+	if _u.mutation.DelegateStartAtCleared() {
+		_spec.ClearField(usersettinghistory.FieldDelegateStartAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.DelegateEndAt(); ok {
+		_spec.SetField(usersettinghistory.FieldDelegateEndAt, field.TypeTime, value)
+	}
+	if _u.mutation.DelegateEndAtCleared() {
+		_spec.ClearField(usersettinghistory.FieldDelegateEndAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.Locked(); ok {
 		_spec.SetField(usersettinghistory.FieldLocked, field.TypeBool, value)

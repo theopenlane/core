@@ -32,6 +32,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/event"
@@ -44,6 +46,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
@@ -55,6 +59,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -710,6 +716,96 @@ func (_u *OrganizationUpdate) AddAPITokens(v ...*APIToken) *OrganizationUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddAPITokenIDs(ids...)
+}
+
+// AddEmailBrandingIDs adds the "email_brandings" edge to the EmailBranding entity by IDs.
+func (_u *OrganizationUpdate) AddEmailBrandingIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddEmailBrandingIDs(ids...)
+	return _u
+}
+
+// AddEmailBrandings adds the "email_brandings" edges to the EmailBranding entity.
+func (_u *OrganizationUpdate) AddEmailBrandings(v ...*EmailBranding) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEmailBrandingIDs(ids...)
+}
+
+// AddEmailTemplateIDs adds the "email_templates" edge to the EmailTemplate entity by IDs.
+func (_u *OrganizationUpdate) AddEmailTemplateIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddEmailTemplateIDs(ids...)
+	return _u
+}
+
+// AddEmailTemplates adds the "email_templates" edges to the EmailTemplate entity.
+func (_u *OrganizationUpdate) AddEmailTemplates(v ...*EmailTemplate) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEmailTemplateIDs(ids...)
+}
+
+// AddIntegrationWebhookIDs adds the "integration_webhooks" edge to the IntegrationWebhook entity by IDs.
+func (_u *OrganizationUpdate) AddIntegrationWebhookIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddIntegrationWebhookIDs(ids...)
+	return _u
+}
+
+// AddIntegrationWebhooks adds the "integration_webhooks" edges to the IntegrationWebhook entity.
+func (_u *OrganizationUpdate) AddIntegrationWebhooks(v ...*IntegrationWebhook) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationWebhookIDs(ids...)
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *OrganizationUpdate) AddIntegrationRunIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *OrganizationUpdate) AddIntegrationRuns(v ...*IntegrationRun) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
+// AddNotificationPreferenceIDs adds the "notification_preferences" edge to the NotificationPreference entity by IDs.
+func (_u *OrganizationUpdate) AddNotificationPreferenceIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddNotificationPreferenceIDs(ids...)
+	return _u
+}
+
+// AddNotificationPreferences adds the "notification_preferences" edges to the NotificationPreference entity.
+func (_u *OrganizationUpdate) AddNotificationPreferences(v ...*NotificationPreference) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddNotificationPreferenceIDs(ids...)
+}
+
+// AddNotificationTemplateIDs adds the "notification_templates" edge to the NotificationTemplate entity by IDs.
+func (_u *OrganizationUpdate) AddNotificationTemplateIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddNotificationTemplateIDs(ids...)
+	return _u
+}
+
+// AddNotificationTemplates adds the "notification_templates" edges to the NotificationTemplate entity.
+func (_u *OrganizationUpdate) AddNotificationTemplates(v ...*NotificationTemplate) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddNotificationTemplateIDs(ids...)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
@@ -2354,6 +2450,132 @@ func (_u *OrganizationUpdate) RemoveAPITokens(v ...*APIToken) *OrganizationUpdat
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAPITokenIDs(ids...)
+}
+
+// ClearEmailBrandings clears all "email_brandings" edges to the EmailBranding entity.
+func (_u *OrganizationUpdate) ClearEmailBrandings() *OrganizationUpdate {
+	_u.mutation.ClearEmailBrandings()
+	return _u
+}
+
+// RemoveEmailBrandingIDs removes the "email_brandings" edge to EmailBranding entities by IDs.
+func (_u *OrganizationUpdate) RemoveEmailBrandingIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveEmailBrandingIDs(ids...)
+	return _u
+}
+
+// RemoveEmailBrandings removes "email_brandings" edges to EmailBranding entities.
+func (_u *OrganizationUpdate) RemoveEmailBrandings(v ...*EmailBranding) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEmailBrandingIDs(ids...)
+}
+
+// ClearEmailTemplates clears all "email_templates" edges to the EmailTemplate entity.
+func (_u *OrganizationUpdate) ClearEmailTemplates() *OrganizationUpdate {
+	_u.mutation.ClearEmailTemplates()
+	return _u
+}
+
+// RemoveEmailTemplateIDs removes the "email_templates" edge to EmailTemplate entities by IDs.
+func (_u *OrganizationUpdate) RemoveEmailTemplateIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveEmailTemplateIDs(ids...)
+	return _u
+}
+
+// RemoveEmailTemplates removes "email_templates" edges to EmailTemplate entities.
+func (_u *OrganizationUpdate) RemoveEmailTemplates(v ...*EmailTemplate) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEmailTemplateIDs(ids...)
+}
+
+// ClearIntegrationWebhooks clears all "integration_webhooks" edges to the IntegrationWebhook entity.
+func (_u *OrganizationUpdate) ClearIntegrationWebhooks() *OrganizationUpdate {
+	_u.mutation.ClearIntegrationWebhooks()
+	return _u
+}
+
+// RemoveIntegrationWebhookIDs removes the "integration_webhooks" edge to IntegrationWebhook entities by IDs.
+func (_u *OrganizationUpdate) RemoveIntegrationWebhookIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveIntegrationWebhookIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationWebhooks removes "integration_webhooks" edges to IntegrationWebhook entities.
+func (_u *OrganizationUpdate) RemoveIntegrationWebhooks(v ...*IntegrationWebhook) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationWebhookIDs(ids...)
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *OrganizationUpdate) ClearIntegrationRuns() *OrganizationUpdate {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *OrganizationUpdate) RemoveIntegrationRunIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *OrganizationUpdate) RemoveIntegrationRuns(v ...*IntegrationRun) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
+}
+
+// ClearNotificationPreferences clears all "notification_preferences" edges to the NotificationPreference entity.
+func (_u *OrganizationUpdate) ClearNotificationPreferences() *OrganizationUpdate {
+	_u.mutation.ClearNotificationPreferences()
+	return _u
+}
+
+// RemoveNotificationPreferenceIDs removes the "notification_preferences" edge to NotificationPreference entities by IDs.
+func (_u *OrganizationUpdate) RemoveNotificationPreferenceIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveNotificationPreferenceIDs(ids...)
+	return _u
+}
+
+// RemoveNotificationPreferences removes "notification_preferences" edges to NotificationPreference entities.
+func (_u *OrganizationUpdate) RemoveNotificationPreferences(v ...*NotificationPreference) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveNotificationPreferenceIDs(ids...)
+}
+
+// ClearNotificationTemplates clears all "notification_templates" edges to the NotificationTemplate entity.
+func (_u *OrganizationUpdate) ClearNotificationTemplates() *OrganizationUpdate {
+	_u.mutation.ClearNotificationTemplates()
+	return _u
+}
+
+// RemoveNotificationTemplateIDs removes the "notification_templates" edge to NotificationTemplate entities by IDs.
+func (_u *OrganizationUpdate) RemoveNotificationTemplateIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveNotificationTemplateIDs(ids...)
+	return _u
+}
+
+// RemoveNotificationTemplates removes "notification_templates" edges to NotificationTemplate entities.
+func (_u *OrganizationUpdate) RemoveNotificationTemplates(v ...*NotificationTemplate) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveNotificationTemplateIDs(ids...)
 }
 
 // ClearUsers clears all "users" edges to the User entity.
@@ -5258,6 +5480,294 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 			},
 		}
 		edge.Schema = _u.schemaConfig.APIToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EmailBrandingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EmailBrandingsTable,
+			Columns: []string{organization.EmailBrandingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailBranding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEmailBrandingsIDs(); len(nodes) > 0 && !_u.mutation.EmailBrandingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EmailBrandingsTable,
+			Columns: []string{organization.EmailBrandingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailBranding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EmailBrandingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EmailBrandingsTable,
+			Columns: []string{organization.EmailBrandingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailBranding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EmailTemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EmailTemplatesTable,
+			Columns: []string{organization.EmailTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEmailTemplatesIDs(); len(nodes) > 0 && !_u.mutation.EmailTemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EmailTemplatesTable,
+			Columns: []string{organization.EmailTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EmailTemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EmailTemplatesTable,
+			Columns: []string{organization.EmailTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationWebhooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationWebhooksTable,
+			Columns: []string{organization.IntegrationWebhooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationwebhook.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationWebhook
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationWebhooksIDs(); len(nodes) > 0 && !_u.mutation.IntegrationWebhooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationWebhooksTable,
+			Columns: []string{organization.IntegrationWebhooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationwebhook.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationWebhook
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationWebhooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationWebhooksTable,
+			Columns: []string{organization.IntegrationWebhooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationwebhook.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationWebhook
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationRunsTable,
+			Columns: []string{organization.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRun
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationRunsTable,
+			Columns: []string{organization.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationRunsTable,
+			Columns: []string{organization.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.NotificationPreferencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NotificationPreferencesTable,
+			Columns: []string{organization.NotificationPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notificationpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.NotificationPreference
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedNotificationPreferencesIDs(); len(nodes) > 0 && !_u.mutation.NotificationPreferencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NotificationPreferencesTable,
+			Columns: []string{organization.NotificationPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notificationpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.NotificationPreference
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.NotificationPreferencesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NotificationPreferencesTable,
+			Columns: []string{organization.NotificationPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notificationpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.NotificationPreference
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.NotificationTemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NotificationTemplatesTable,
+			Columns: []string{organization.NotificationTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.NotificationTemplate
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedNotificationTemplatesIDs(); len(nodes) > 0 && !_u.mutation.NotificationTemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NotificationTemplatesTable,
+			Columns: []string{organization.NotificationTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.NotificationTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.NotificationTemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NotificationTemplatesTable,
+			Columns: []string{organization.NotificationTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9494,6 +10004,96 @@ func (_u *OrganizationUpdateOne) AddAPITokens(v ...*APIToken) *OrganizationUpdat
 	return _u.AddAPITokenIDs(ids...)
 }
 
+// AddEmailBrandingIDs adds the "email_brandings" edge to the EmailBranding entity by IDs.
+func (_u *OrganizationUpdateOne) AddEmailBrandingIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddEmailBrandingIDs(ids...)
+	return _u
+}
+
+// AddEmailBrandings adds the "email_brandings" edges to the EmailBranding entity.
+func (_u *OrganizationUpdateOne) AddEmailBrandings(v ...*EmailBranding) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEmailBrandingIDs(ids...)
+}
+
+// AddEmailTemplateIDs adds the "email_templates" edge to the EmailTemplate entity by IDs.
+func (_u *OrganizationUpdateOne) AddEmailTemplateIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddEmailTemplateIDs(ids...)
+	return _u
+}
+
+// AddEmailTemplates adds the "email_templates" edges to the EmailTemplate entity.
+func (_u *OrganizationUpdateOne) AddEmailTemplates(v ...*EmailTemplate) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEmailTemplateIDs(ids...)
+}
+
+// AddIntegrationWebhookIDs adds the "integration_webhooks" edge to the IntegrationWebhook entity by IDs.
+func (_u *OrganizationUpdateOne) AddIntegrationWebhookIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddIntegrationWebhookIDs(ids...)
+	return _u
+}
+
+// AddIntegrationWebhooks adds the "integration_webhooks" edges to the IntegrationWebhook entity.
+func (_u *OrganizationUpdateOne) AddIntegrationWebhooks(v ...*IntegrationWebhook) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationWebhookIDs(ids...)
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *OrganizationUpdateOne) AddIntegrationRunIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *OrganizationUpdateOne) AddIntegrationRuns(v ...*IntegrationRun) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
+// AddNotificationPreferenceIDs adds the "notification_preferences" edge to the NotificationPreference entity by IDs.
+func (_u *OrganizationUpdateOne) AddNotificationPreferenceIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddNotificationPreferenceIDs(ids...)
+	return _u
+}
+
+// AddNotificationPreferences adds the "notification_preferences" edges to the NotificationPreference entity.
+func (_u *OrganizationUpdateOne) AddNotificationPreferences(v ...*NotificationPreference) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddNotificationPreferenceIDs(ids...)
+}
+
+// AddNotificationTemplateIDs adds the "notification_templates" edge to the NotificationTemplate entity by IDs.
+func (_u *OrganizationUpdateOne) AddNotificationTemplateIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddNotificationTemplateIDs(ids...)
+	return _u
+}
+
+// AddNotificationTemplates adds the "notification_templates" edges to the NotificationTemplate entity.
+func (_u *OrganizationUpdateOne) AddNotificationTemplates(v ...*NotificationTemplate) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddNotificationTemplateIDs(ids...)
+}
+
 // AddUserIDs adds the "users" edge to the User entity by IDs.
 func (_u *OrganizationUpdateOne) AddUserIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddUserIDs(ids...)
@@ -11136,6 +11736,132 @@ func (_u *OrganizationUpdateOne) RemoveAPITokens(v ...*APIToken) *OrganizationUp
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAPITokenIDs(ids...)
+}
+
+// ClearEmailBrandings clears all "email_brandings" edges to the EmailBranding entity.
+func (_u *OrganizationUpdateOne) ClearEmailBrandings() *OrganizationUpdateOne {
+	_u.mutation.ClearEmailBrandings()
+	return _u
+}
+
+// RemoveEmailBrandingIDs removes the "email_brandings" edge to EmailBranding entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveEmailBrandingIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveEmailBrandingIDs(ids...)
+	return _u
+}
+
+// RemoveEmailBrandings removes "email_brandings" edges to EmailBranding entities.
+func (_u *OrganizationUpdateOne) RemoveEmailBrandings(v ...*EmailBranding) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEmailBrandingIDs(ids...)
+}
+
+// ClearEmailTemplates clears all "email_templates" edges to the EmailTemplate entity.
+func (_u *OrganizationUpdateOne) ClearEmailTemplates() *OrganizationUpdateOne {
+	_u.mutation.ClearEmailTemplates()
+	return _u
+}
+
+// RemoveEmailTemplateIDs removes the "email_templates" edge to EmailTemplate entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveEmailTemplateIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveEmailTemplateIDs(ids...)
+	return _u
+}
+
+// RemoveEmailTemplates removes "email_templates" edges to EmailTemplate entities.
+func (_u *OrganizationUpdateOne) RemoveEmailTemplates(v ...*EmailTemplate) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEmailTemplateIDs(ids...)
+}
+
+// ClearIntegrationWebhooks clears all "integration_webhooks" edges to the IntegrationWebhook entity.
+func (_u *OrganizationUpdateOne) ClearIntegrationWebhooks() *OrganizationUpdateOne {
+	_u.mutation.ClearIntegrationWebhooks()
+	return _u
+}
+
+// RemoveIntegrationWebhookIDs removes the "integration_webhooks" edge to IntegrationWebhook entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveIntegrationWebhookIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveIntegrationWebhookIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationWebhooks removes "integration_webhooks" edges to IntegrationWebhook entities.
+func (_u *OrganizationUpdateOne) RemoveIntegrationWebhooks(v ...*IntegrationWebhook) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationWebhookIDs(ids...)
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *OrganizationUpdateOne) ClearIntegrationRuns() *OrganizationUpdateOne {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveIntegrationRunIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *OrganizationUpdateOne) RemoveIntegrationRuns(v ...*IntegrationRun) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
+}
+
+// ClearNotificationPreferences clears all "notification_preferences" edges to the NotificationPreference entity.
+func (_u *OrganizationUpdateOne) ClearNotificationPreferences() *OrganizationUpdateOne {
+	_u.mutation.ClearNotificationPreferences()
+	return _u
+}
+
+// RemoveNotificationPreferenceIDs removes the "notification_preferences" edge to NotificationPreference entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveNotificationPreferenceIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveNotificationPreferenceIDs(ids...)
+	return _u
+}
+
+// RemoveNotificationPreferences removes "notification_preferences" edges to NotificationPreference entities.
+func (_u *OrganizationUpdateOne) RemoveNotificationPreferences(v ...*NotificationPreference) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveNotificationPreferenceIDs(ids...)
+}
+
+// ClearNotificationTemplates clears all "notification_templates" edges to the NotificationTemplate entity.
+func (_u *OrganizationUpdateOne) ClearNotificationTemplates() *OrganizationUpdateOne {
+	_u.mutation.ClearNotificationTemplates()
+	return _u
+}
+
+// RemoveNotificationTemplateIDs removes the "notification_templates" edge to NotificationTemplate entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveNotificationTemplateIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveNotificationTemplateIDs(ids...)
+	return _u
+}
+
+// RemoveNotificationTemplates removes "notification_templates" edges to NotificationTemplate entities.
+func (_u *OrganizationUpdateOne) RemoveNotificationTemplates(v ...*NotificationTemplate) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveNotificationTemplateIDs(ids...)
 }
 
 // ClearUsers clears all "users" edges to the User entity.
@@ -14070,6 +14796,294 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			},
 		}
 		edge.Schema = _u.schemaConfig.APIToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EmailBrandingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EmailBrandingsTable,
+			Columns: []string{organization.EmailBrandingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailBranding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEmailBrandingsIDs(); len(nodes) > 0 && !_u.mutation.EmailBrandingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EmailBrandingsTable,
+			Columns: []string{organization.EmailBrandingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailBranding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EmailBrandingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EmailBrandingsTable,
+			Columns: []string{organization.EmailBrandingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailBranding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EmailTemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EmailTemplatesTable,
+			Columns: []string{organization.EmailTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEmailTemplatesIDs(); len(nodes) > 0 && !_u.mutation.EmailTemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EmailTemplatesTable,
+			Columns: []string{organization.EmailTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EmailTemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EmailTemplatesTable,
+			Columns: []string{organization.EmailTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationWebhooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationWebhooksTable,
+			Columns: []string{organization.IntegrationWebhooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationwebhook.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationWebhook
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationWebhooksIDs(); len(nodes) > 0 && !_u.mutation.IntegrationWebhooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationWebhooksTable,
+			Columns: []string{organization.IntegrationWebhooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationwebhook.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationWebhook
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationWebhooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationWebhooksTable,
+			Columns: []string{organization.IntegrationWebhooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationwebhook.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationWebhook
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationRunsTable,
+			Columns: []string{organization.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRun
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationRunsTable,
+			Columns: []string{organization.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationRunsTable,
+			Columns: []string{organization.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.NotificationPreferencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NotificationPreferencesTable,
+			Columns: []string{organization.NotificationPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notificationpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.NotificationPreference
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedNotificationPreferencesIDs(); len(nodes) > 0 && !_u.mutation.NotificationPreferencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NotificationPreferencesTable,
+			Columns: []string{organization.NotificationPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notificationpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.NotificationPreference
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.NotificationPreferencesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NotificationPreferencesTable,
+			Columns: []string{organization.NotificationPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notificationpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.NotificationPreference
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.NotificationTemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NotificationTemplatesTable,
+			Columns: []string{organization.NotificationTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.NotificationTemplate
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedNotificationTemplatesIDs(); len(nodes) > 0 && !_u.mutation.NotificationTemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NotificationTemplatesTable,
+			Columns: []string{organization.NotificationTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.NotificationTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.NotificationTemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NotificationTemplatesTable,
+			Columns: []string{organization.NotificationTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

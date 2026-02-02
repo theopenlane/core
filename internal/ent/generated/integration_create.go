@@ -10,18 +10,23 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/review"
@@ -286,6 +291,20 @@ func (_c *IntegrationCreate) SetNillableIntegrationType(v *string) *IntegrationC
 	return _c
 }
 
+// SetProviderMetadata sets the "provider_metadata" field.
+func (_c *IntegrationCreate) SetProviderMetadata(v openapi.IntegrationProviderMetadata) *IntegrationCreate {
+	_c.mutation.SetProviderMetadata(v)
+	return _c
+}
+
+// SetNillableProviderMetadata sets the "provider_metadata" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableProviderMetadata(v *openapi.IntegrationProviderMetadata) *IntegrationCreate {
+	if v != nil {
+		_c.SetProviderMetadata(*v)
+	}
+	return _c
+}
+
 // SetMetadata sets the "metadata" field.
 func (_c *IntegrationCreate) SetMetadata(v map[string]interface{}) *IntegrationCreate {
 	_c.mutation.SetMetadata(v)
@@ -516,6 +535,66 @@ func (_c *IntegrationCreate) AddDirectorySyncRuns(v ...*DirectorySyncRun) *Integ
 	return _c.AddDirectorySyncRunIDs(ids...)
 }
 
+// AddNotificationTemplateIDs adds the "notification_templates" edge to the NotificationTemplate entity by IDs.
+func (_c *IntegrationCreate) AddNotificationTemplateIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddNotificationTemplateIDs(ids...)
+	return _c
+}
+
+// AddNotificationTemplates adds the "notification_templates" edges to the NotificationTemplate entity.
+func (_c *IntegrationCreate) AddNotificationTemplates(v ...*NotificationTemplate) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddNotificationTemplateIDs(ids...)
+}
+
+// AddEmailTemplateIDs adds the "email_templates" edge to the EmailTemplate entity by IDs.
+func (_c *IntegrationCreate) AddEmailTemplateIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddEmailTemplateIDs(ids...)
+	return _c
+}
+
+// AddEmailTemplates adds the "email_templates" edges to the EmailTemplate entity.
+func (_c *IntegrationCreate) AddEmailTemplates(v ...*EmailTemplate) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEmailTemplateIDs(ids...)
+}
+
+// AddIntegrationWebhookIDs adds the "integration_webhooks" edge to the IntegrationWebhook entity by IDs.
+func (_c *IntegrationCreate) AddIntegrationWebhookIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddIntegrationWebhookIDs(ids...)
+	return _c
+}
+
+// AddIntegrationWebhooks adds the "integration_webhooks" edges to the IntegrationWebhook entity.
+func (_c *IntegrationCreate) AddIntegrationWebhooks(v ...*IntegrationWebhook) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationWebhookIDs(ids...)
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_c *IntegrationCreate) AddIntegrationRunIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddIntegrationRunIDs(ids...)
+	return _c
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_c *IntegrationCreate) AddIntegrationRuns(v ...*IntegrationRun) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationRunIDs(ids...)
+}
+
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
 func (_c *IntegrationCreate) AddEntityIDs(ids ...string) *IntegrationCreate {
 	_c.mutation.AddEntityIDs(ids...)
@@ -709,6 +788,10 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.IntegrationType(); ok {
 		_spec.SetField(integration.FieldIntegrationType, field.TypeString, value)
 		_node.IntegrationType = value
+	}
+	if value, ok := _c.mutation.ProviderMetadata(); ok {
+		_spec.SetField(integration.FieldProviderMetadata, field.TypeJSON, value)
+		_node.ProviderMetadata = value
 	}
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(integration.FieldMetadata, field.TypeJSON, value)
@@ -984,6 +1067,74 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.NotificationTemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.NotificationTemplatesTable,
+			Columns: []string{integration.NotificationTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.NotificationTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EmailTemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.EmailTemplatesTable,
+			Columns: []string{integration.EmailTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IntegrationWebhooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.IntegrationWebhooksTable,
+			Columns: []string{integration.IntegrationWebhooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationwebhook.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IntegrationWebhook
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.IntegrationRunsTable,
+			Columns: []string{integration.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

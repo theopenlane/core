@@ -1,0 +1,347 @@
+
+mutation CreateBulkCSVEmailTemplate($input: Upload!) {
+  createBulkCSVEmailTemplate(input: $input) {
+    emailTemplates {
+      active
+      bodyTemplate
+      createdAt
+      createdBy
+      description
+      emailBrandingID
+      format
+      id
+      integrationID
+      internalNotes
+      jsonconfig
+      key
+      locale
+      metadata
+      name
+      ownerID
+      preheaderTemplate
+      subjectTemplate
+      systemInternalID
+      systemOwned
+      textTemplate
+      uischema
+      updatedAt
+      updatedBy
+      version
+      workflowDefinitionID
+      workflowInstanceID
+    }
+  }
+}
+
+mutation CreateBulkEmailTemplate($input: [CreateEmailTemplateInput!]) {
+  createBulkEmailTemplate(input: $input) {
+    emailTemplates {
+      active
+      bodyTemplate
+      createdAt
+      createdBy
+      description
+      emailBrandingID
+      format
+      id
+      integrationID
+      internalNotes
+      jsonconfig
+      key
+      locale
+      metadata
+      name
+      ownerID
+      preheaderTemplate
+      subjectTemplate
+      systemInternalID
+      systemOwned
+      textTemplate
+      uischema
+      updatedAt
+      updatedBy
+      version
+      workflowDefinitionID
+      workflowInstanceID
+    }
+  }
+}
+
+mutation CreateEmailTemplate($input: CreateEmailTemplateInput!) {
+  createEmailTemplate(input: $input) {
+    emailTemplate {
+      active
+      bodyTemplate
+      createdAt
+      createdBy
+      description
+      emailBrandingID
+      format
+      id
+      integrationID
+      internalNotes
+      jsonconfig
+      key
+      locale
+      metadata
+      name
+      ownerID
+      preheaderTemplate
+      subjectTemplate
+      systemInternalID
+      systemOwned
+      textTemplate
+      uischema
+      updatedAt
+      updatedBy
+      version
+      workflowDefinitionID
+      workflowInstanceID
+    }
+  }
+}
+
+mutation DeleteEmailTemplate($deleteEmailTemplateId: ID!) {
+  deleteEmailTemplate(id: $deleteEmailTemplateId) {
+    deletedID
+  }
+}
+
+mutation UpdateBulkEmailTemplate($ids: [ID!]!, $input: UpdateEmailTemplateInput!) {
+  updateBulkEmailTemplate(ids: $ids, input: $input) {
+    emailTemplates {
+      active
+      bodyTemplate
+      createdAt
+      createdBy
+      description
+      emailBrandingID
+      format
+      id
+      integrationID
+      internalNotes
+      jsonconfig
+      key
+      locale
+      metadata
+      name
+      ownerID
+      preheaderTemplate
+      subjectTemplate
+      systemInternalID
+      systemOwned
+      textTemplate
+      uischema
+      updatedAt
+      updatedBy
+      version
+      workflowDefinitionID
+      workflowInstanceID
+    }
+    updatedIDs
+  }
+}
+
+mutation UpdateBulkCSVEmailTemplate($input: Upload!) {
+  updateBulkCSVEmailTemplate(input: $input) {
+    emailTemplates {
+      active
+      bodyTemplate
+      createdAt
+      createdBy
+      description
+      emailBrandingID
+      format
+      id
+      integrationID
+      internalNotes
+      jsonconfig
+      key
+      locale
+      metadata
+      name
+      ownerID
+      preheaderTemplate
+      subjectTemplate
+      systemInternalID
+      systemOwned
+      textTemplate
+      uischema
+      updatedAt
+      updatedBy
+      version
+      workflowDefinitionID
+      workflowInstanceID
+    }
+    updatedIDs
+  }
+}
+
+mutation DeleteBulkEmailTemplate($ids: [ID!]!) {
+  deleteBulkEmailTemplate(ids: $ids) {
+    deletedIDs
+  }
+}
+
+query GetAllEmailTemplates($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [EmailTemplateOrder!]){
+  emailTemplates(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        bodyTemplate
+        createdAt
+        createdBy
+        description
+        emailBrandingID
+        format
+        id
+        integrationID
+        internalNotes
+        jsonconfig
+        key
+        locale
+        metadata
+        name
+        ownerID
+        preheaderTemplate
+        subjectTemplate
+        systemInternalID
+        systemOwned
+        textTemplate
+        uischema
+        updatedAt
+        updatedBy
+        version
+        workflowDefinitionID
+        workflowInstanceID
+      }
+    }
+  }
+}
+query GetEmailTemplateByID($emailTemplateId: ID!) {
+  emailTemplate(id: $emailTemplateId) {
+    active
+    bodyTemplate
+    createdAt
+    createdBy
+    description
+    emailBrandingID
+    format
+    id
+    integrationID
+    internalNotes
+    jsonconfig
+    key
+    locale
+    metadata
+    name
+    ownerID
+    preheaderTemplate
+    subjectTemplate
+    systemInternalID
+    systemOwned
+    textTemplate
+    uischema
+    updatedAt
+    updatedBy
+    version
+    workflowDefinitionID
+    workflowInstanceID
+  }
+}
+
+query GetEmailTemplates($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [EmailTemplateOrder!], $where: EmailTemplateWhereInput) {
+  emailTemplates(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+    ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        bodyTemplate
+        createdAt
+        createdBy
+        description
+        emailBrandingID
+        format
+        id
+        integrationID
+        internalNotes
+        jsonconfig
+        key
+        locale
+        metadata
+        name
+        ownerID
+        preheaderTemplate
+        subjectTemplate
+        systemInternalID
+        systemOwned
+        textTemplate
+        uischema
+        updatedAt
+        updatedBy
+        version
+        workflowDefinitionID
+        workflowInstanceID
+      }
+    }
+  }
+}
+mutation UpdateEmailTemplate($updateEmailTemplateId: ID!, $input: UpdateEmailTemplateInput!) {
+  updateEmailTemplate(id: $updateEmailTemplateId, input: $input) {
+    emailTemplate {
+      active
+      bodyTemplate
+      createdAt
+      createdBy
+      description
+      emailBrandingID
+      format
+      id
+      integrationID
+      internalNotes
+      jsonconfig
+      key
+      locale
+      metadata
+      name
+      ownerID
+      preheaderTemplate
+      subjectTemplate
+      systemInternalID
+      systemOwned
+      textTemplate
+      uischema
+      updatedAt
+      updatedBy
+      version
+      workflowDefinitionID
+      workflowInstanceID
+    }
+  }
+}

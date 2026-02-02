@@ -46,6 +46,8 @@ type Notification struct {
 	Body string `json:"body,omitempty"`
 	// structured payload containing IDs, links, and other notification data
 	Data map[string]interface{} `json:"data,omitempty"`
+	// optional template used for external channel rendering
+	TemplateID string `json:"template_id,omitempty"`
 	// the time the notification was read
 	ReadAt *models.DateTime `json:"read_at,omitempty"`
 	// the channels this notification should be sent to (IN_APP, SLACK, EMAIL)
@@ -54,8 +56,9 @@ type Notification struct {
 	Topic enums.NotificationTopic `json:"topic,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NotificationQuery when eager-loading is set.
-	Edges        NotificationEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                               NotificationEdges `json:"edges"`
+	notification_template_notifications *string
+	selectValues                        sql.SelectValues
 }
 
 // NotificationEdges holds the relations/edges for other nodes in the graph.
@@ -102,10 +105,12 @@ func (*Notification) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case notification.FieldTags, notification.FieldData, notification.FieldChannels:
 			values[i] = new([]byte)
-		case notification.FieldID, notification.FieldCreatedBy, notification.FieldUpdatedBy, notification.FieldOwnerID, notification.FieldUserID, notification.FieldNotificationType, notification.FieldObjectType, notification.FieldTitle, notification.FieldBody, notification.FieldTopic:
+		case notification.FieldID, notification.FieldCreatedBy, notification.FieldUpdatedBy, notification.FieldOwnerID, notification.FieldUserID, notification.FieldNotificationType, notification.FieldObjectType, notification.FieldTitle, notification.FieldBody, notification.FieldTemplateID, notification.FieldTopic:
 			values[i] = new(sql.NullString)
 		case notification.FieldCreatedAt, notification.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
+		case notification.ForeignKeys[0]: // notification_template_notifications
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -203,6 +208,12 @@ func (_m *Notification) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field data: %w", err)
 				}
 			}
+		case notification.FieldTemplateID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field template_id", values[i])
+			} else if value.Valid {
+				_m.TemplateID = value.String
+			}
 		case notification.FieldReadAt:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field read_at", values[i])
@@ -223,6 +234,13 @@ func (_m *Notification) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field topic", values[i])
 			} else if value.Valid {
 				_m.Topic = enums.NotificationTopic(value.String)
+			}
+		case notification.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field notification_template_notifications", values[i])
+			} else if value.Valid {
+				_m.notification_template_notifications = new(string)
+				*_m.notification_template_notifications = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -305,6 +323,9 @@ func (_m *Notification) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("data=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Data))
+	builder.WriteString(", ")
+	builder.WriteString("template_id=")
+	builder.WriteString(_m.TemplateID)
 	builder.WriteString(", ")
 	if v := _m.ReadAt; v != nil {
 		builder.WriteString("read_at=")

@@ -114,6 +114,11 @@ func Body(v string) predicate.Notification {
 	return predicate.Notification(sql.FieldEQ(FieldBody, v))
 }
 
+// TemplateID applies equality check predicate on the "template_id" field. It's identical to TemplateIDEQ.
+func TemplateID(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldEQ(FieldTemplateID, v))
+}
+
 // ReadAt applies equality check predicate on the "read_at" field. It's identical to ReadAtEQ.
 func ReadAt(v models.DateTime) predicate.Notification {
 	return predicate.Notification(sql.FieldEQ(FieldReadAt, v))
@@ -762,6 +767,81 @@ func DataIsNil() predicate.Notification {
 // DataNotNil applies the NotNil predicate on the "data" field.
 func DataNotNil() predicate.Notification {
 	return predicate.Notification(sql.FieldNotNull(FieldData))
+}
+
+// TemplateIDEQ applies the EQ predicate on the "template_id" field.
+func TemplateIDEQ(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldEQ(FieldTemplateID, v))
+}
+
+// TemplateIDNEQ applies the NEQ predicate on the "template_id" field.
+func TemplateIDNEQ(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldNEQ(FieldTemplateID, v))
+}
+
+// TemplateIDIn applies the In predicate on the "template_id" field.
+func TemplateIDIn(vs ...string) predicate.Notification {
+	return predicate.Notification(sql.FieldIn(FieldTemplateID, vs...))
+}
+
+// TemplateIDNotIn applies the NotIn predicate on the "template_id" field.
+func TemplateIDNotIn(vs ...string) predicate.Notification {
+	return predicate.Notification(sql.FieldNotIn(FieldTemplateID, vs...))
+}
+
+// TemplateIDGT applies the GT predicate on the "template_id" field.
+func TemplateIDGT(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldGT(FieldTemplateID, v))
+}
+
+// TemplateIDGTE applies the GTE predicate on the "template_id" field.
+func TemplateIDGTE(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldGTE(FieldTemplateID, v))
+}
+
+// TemplateIDLT applies the LT predicate on the "template_id" field.
+func TemplateIDLT(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldLT(FieldTemplateID, v))
+}
+
+// TemplateIDLTE applies the LTE predicate on the "template_id" field.
+func TemplateIDLTE(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldLTE(FieldTemplateID, v))
+}
+
+// TemplateIDContains applies the Contains predicate on the "template_id" field.
+func TemplateIDContains(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldContains(FieldTemplateID, v))
+}
+
+// TemplateIDHasPrefix applies the HasPrefix predicate on the "template_id" field.
+func TemplateIDHasPrefix(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldHasPrefix(FieldTemplateID, v))
+}
+
+// TemplateIDHasSuffix applies the HasSuffix predicate on the "template_id" field.
+func TemplateIDHasSuffix(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldHasSuffix(FieldTemplateID, v))
+}
+
+// TemplateIDIsNil applies the IsNil predicate on the "template_id" field.
+func TemplateIDIsNil() predicate.Notification {
+	return predicate.Notification(sql.FieldIsNull(FieldTemplateID))
+}
+
+// TemplateIDNotNil applies the NotNil predicate on the "template_id" field.
+func TemplateIDNotNil() predicate.Notification {
+	return predicate.Notification(sql.FieldNotNull(FieldTemplateID))
+}
+
+// TemplateIDEqualFold applies the EqualFold predicate on the "template_id" field.
+func TemplateIDEqualFold(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldEqualFold(FieldTemplateID, v))
+}
+
+// TemplateIDContainsFold applies the ContainsFold predicate on the "template_id" field.
+func TemplateIDContainsFold(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldContainsFold(FieldTemplateID, v))
 }
 
 // ReadAtEQ applies the EQ predicate on the "read_at" field.

@@ -92,7 +92,10 @@ func (NotificationPreference) Fields() []ent.Field {
 			Optional(),
 		field.JSON("topic_overrides", map[string]any{}).
 			Comment("optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 		field.String("template_id").
 			Comment("optional template to use by default for this preference (external channels only)").
 			Optional(),
@@ -125,7 +128,10 @@ func (NotificationPreference) Fields() []ent.Field {
 			Optional(),
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional preference metadata").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 	}
 }
 

@@ -70,6 +70,8 @@ type WorkflowAssignment struct {
 	ActorGroupID string `json:"actor_group_id,omitempty"`
 	// Optional notes about the assignment
 	Notes string `json:"notes,omitempty"`
+	// Timestamp when the assignment is due for delegation or escalation checks
+	DueAt *time.Time `json:"due_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the WorkflowAssignmentQuery when eager-loading is set.
 	Edges                                  WorkflowAssignmentEdges `json:"edges"`
@@ -162,7 +164,7 @@ func (*WorkflowAssignment) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case workflowassignment.FieldID, workflowassignment.FieldCreatedBy, workflowassignment.FieldUpdatedBy, workflowassignment.FieldDeletedBy, workflowassignment.FieldDisplayID, workflowassignment.FieldOwnerID, workflowassignment.FieldWorkflowInstanceID, workflowassignment.FieldAssignmentKey, workflowassignment.FieldRole, workflowassignment.FieldLabel, workflowassignment.FieldStatus, workflowassignment.FieldActorUserID, workflowassignment.FieldActorGroupID, workflowassignment.FieldNotes:
 			values[i] = new(sql.NullString)
-		case workflowassignment.FieldCreatedAt, workflowassignment.FieldUpdatedAt, workflowassignment.FieldDeletedAt, workflowassignment.FieldDecidedAt:
+		case workflowassignment.FieldCreatedAt, workflowassignment.FieldUpdatedAt, workflowassignment.FieldDeletedAt, workflowassignment.FieldDecidedAt, workflowassignment.FieldDueAt:
 			values[i] = new(sql.NullTime)
 		case workflowassignment.ForeignKeys[0]: // workflow_instance_workflow_assignments
 			values[i] = new(sql.NullString)
@@ -336,6 +338,13 @@ func (_m *WorkflowAssignment) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.Notes = value.String
 			}
+		case workflowassignment.FieldDueAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field due_at", values[i])
+			} else if value.Valid {
+				_m.DueAt = new(time.Time)
+				*_m.DueAt = value.Time
+			}
 		case workflowassignment.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_instance_workflow_assignments", values[i])
@@ -474,6 +483,11 @@ func (_m *WorkflowAssignment) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("notes=")
 	builder.WriteString(_m.Notes)
+	builder.WriteString(", ")
+	if v := _m.DueAt; v != nil {
+		builder.WriteString("due_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }
