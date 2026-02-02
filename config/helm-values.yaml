@@ -923,3 +923,19 @@ externalSecrets:
       secretKey: "CORE_CLOUDFLARE_ACCOUNTID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-cloudflare-accountid"  # @schema type:string
+    # -- core-cloudflare-clientid secret configuration
+    core-cloudflare-clientid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for cloudflare.clientid
+      secretKey: "CORE_CLOUDFLARE_CLIENTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-cloudflare-clientid"  # @schema type:string
+    # -- core-cloudflare-clientsecret secret configuration
+    core-cloudflare-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for cloudflare.clientsecret
+      secretKey: "CORE_CLOUDFLARE_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-cloudflare-clientsecret"  # @schema type:string

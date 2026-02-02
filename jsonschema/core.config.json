@@ -786,6 +786,14 @@
         "accountid": {
           "type": "string",
           "description": "AccountID is the Cloudflare account ID to use for snapshot operations"
+        },
+        "clientid": {
+          "type": "string",
+          "description": "ClientID is the Cloudflare Access client ID for shortlink API requests"
+        },
+        "clientsecret": {
+          "type": "string",
+          "description": "ClientSecret is the Cloudflare Access client secret for shortlink API requests"
         }
       },
       "additionalProperties": false,

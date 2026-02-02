@@ -84,6 +84,8 @@ campaignwebhook:
 cloudflare:
     accountid: ""
     apitoken: ""
+    clientid: ""
+    clientsecret: ""
     enabled: false
 db:
     cachettl: 1000000000
