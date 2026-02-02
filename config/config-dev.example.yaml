@@ -183,4 +183,6 @@ integrationoauthprovider:
 cloudflare:
     apitoken: ""
     accountid: ""
+    clientid: ""
+    clientsecret: ""
     enabled: false

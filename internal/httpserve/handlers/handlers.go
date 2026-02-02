@@ -159,6 +159,10 @@ type CloudflareConfig struct {
 	APIToken string `json:"apitoken" koanf:"apitoken" default:"" sensitive:"true"`
 	// AccountID is the Cloudflare account ID to use for snapshot operations
 	AccountID string `json:"accountid" koanf:"accountid" default:"" sensitive:"true"`
+	// ClientID is the Cloudflare Access client ID for shortlink API requests
+	ClientID string `json:"clientid" koanf:"clientid" default:"" sensitive:"true"`
+	// ClientSecret is the Cloudflare Access client secret for shortlink API requests
+	ClientSecret string `json:"clientsecret" koanf:"clientsecret" default:"" sensitive:"true"`
 }
 
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user
