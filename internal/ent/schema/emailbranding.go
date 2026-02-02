@@ -3,11 +3,15 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 )
 
@@ -99,11 +103,11 @@ func (EmailBranding) Fields() []ent.Field {
 func (e EmailBranding) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin[EmailBranding](e,
+			newObjectOwnedMixin[generated.EmailBranding](e,
 				withParents(Organization{}),
 				withOrganizationOwner(true),
 			),
-			//			newGroupPermissionsMixin(),
+			newGroupPermissionsMixin(),
 		},
 	}.getMixins(e)
 }
@@ -124,18 +128,18 @@ func (EmailBranding) Modules() []models.OrgModule {
 }
 
 // Annotations of the EmailBranding.
-//func (EmailBranding) Annotations() []schema.Annotation {
-//	return []schema.Annotation{
-//		entfga.SettingsChecks("organization"),
-//	}
-//}
-//
-//// Policy of the EmailBranding.
-//func (EmailBranding) Policy() ent.Policy {
-//	return policy.NewPolicy(
-//		policy.WithMutationRules(
-//			policy.CheckCreateAccess(),
-//			policy.CheckOrgWriteAccess(),
-//		),
-//	)
-//}
+func (EmailBranding) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SettingsChecks("organization"),
+	}
+}
+
+// Policy of the EmailBranding.
+func (EmailBranding) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			policy.CheckCreateAccess(),
+			policy.CheckOrgWriteAccess(),
+		),
+	)
+}

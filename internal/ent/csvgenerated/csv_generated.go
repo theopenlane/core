@@ -684,13 +684,11 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 	},
 	"EmailBranding": {
 		SchemaName: "EmailBranding",
-		Rules: []CSVReferenceRule{
-		},
+		Rules:      []CSVReferenceRule{},
 	},
 	"EmailTemplate": {
 		SchemaName: "EmailTemplate",
-		Rules: []CSVReferenceRule{
-		},
+		Rules:      []CSVReferenceRule{},
 	},
 	"Entity": {
 		SchemaName: "Entity",
@@ -890,13 +888,11 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 	},
 	"NotificationPreference": {
 		SchemaName: "NotificationPreference",
-		Rules: []CSVReferenceRule{
-		},
+		Rules:      []CSVReferenceRule{},
 	},
 	"NotificationTemplate": {
 		SchemaName: "NotificationTemplate",
-		Rules: []CSVReferenceRule{
-		},
+		Rules:      []CSVReferenceRule{},
 	},
 	"Onboarding": {
 		SchemaName: "Onboarding",
@@ -1726,7 +1722,7 @@ func (EmailBrandingCSVInput) CSVInputWrapper() {}
 // EmailBrandingCSVUpdateInput wraps UpdateEmailBrandingInput with CSV reference columns for bulk updates.
 type EmailBrandingCSVUpdateInput struct {
 	// ID is the entity ID to update
-	ID string `csv:"ID"`
+	ID    string `csv:"ID"`
 	Input generated.UpdateEmailBrandingInput
 }
 
@@ -1744,7 +1740,7 @@ func (EmailTemplateCSVInput) CSVInputWrapper() {}
 // EmailTemplateCSVUpdateInput wraps UpdateEmailTemplateInput with CSV reference columns for bulk updates.
 type EmailTemplateCSVUpdateInput struct {
 	// ID is the entity ID to update
-	ID string `csv:"ID"`
+	ID    string `csv:"ID"`
 	Input generated.UpdateEmailTemplateInput
 }
 
@@ -2218,7 +2214,7 @@ func (NotificationPreferenceCSVInput) CSVInputWrapper() {}
 // NotificationPreferenceCSVUpdateInput wraps UpdateNotificationPreferenceInput with CSV reference columns for bulk updates.
 type NotificationPreferenceCSVUpdateInput struct {
 	// ID is the entity ID to update
-	ID string `csv:"ID"`
+	ID    string `csv:"ID"`
 	Input generated.UpdateNotificationPreferenceInput
 }
 
@@ -2236,7 +2232,7 @@ func (NotificationTemplateCSVInput) CSVInputWrapper() {}
 // NotificationTemplateCSVUpdateInput wraps UpdateNotificationTemplateInput with CSV reference columns for bulk updates.
 type NotificationTemplateCSVUpdateInput struct {
 	// ID is the entity ID to update
-	ID string `csv:"ID"`
+	ID    string `csv:"ID"`
 	Input generated.UpdateNotificationTemplateInput
 }
 

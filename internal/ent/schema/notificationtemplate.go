@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -200,7 +201,7 @@ func (n NotificationTemplate) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin[NotificationTemplate](n,
+			newObjectOwnedMixin[generated.NotificationTemplate](n,
 				withOrganizationOwner(true),
 			),
 			mixin.NewSystemOwnedMixin(),

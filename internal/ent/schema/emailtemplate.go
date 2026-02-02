@@ -14,7 +14,10 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // EmailTemplate holds the schema definition for email templates.
@@ -189,7 +192,7 @@ func (e EmailTemplate) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin[EmailTemplate](e,
+			newObjectOwnedMixin[generated.EmailTemplate](e,
 				withOrganizationOwner(true),
 			),
 			mixin.NewSystemOwnedMixin(),
@@ -205,14 +208,14 @@ func (EmailTemplate) Modules() []models.OrgModule {
 }
 
 // Policy of the EmailTemplate.
-//func (EmailTemplate) Policy() ent.Policy {
-//	return policy.NewPolicy(
-//		policy.WithQueryRules(
-//			policy.CheckOrgReadAccess(),
-//		),
-//		policy.WithMutationRules(
-//			rule.AllowMutationIfSystemAdmin(),
-//			policy.CheckOrgWriteAccess(),
-//		),
-//	)
-//}
+func (EmailTemplate) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckOrgReadAccess(),
+		),
+		policy.WithMutationRules(
+			rule.AllowMutationIfSystemAdmin(),
+			policy.CheckOrgWriteAccess(),
+		),
+	)
+}

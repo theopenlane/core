@@ -12,6 +12,9 @@ import (
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/utils/keygen"
 )
@@ -133,10 +136,10 @@ func (w IntegrationWebhook) Edges() []ent.Edge {
 // Mixin of the IntegrationWebhook.
 func (w IntegrationWebhook) Mixin() []ent.Mixin {
 	return mixinConfig{
-		excludeTags: true,
+		excludeTags:        true,
 		excludeAnnotations: true,
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin[IntegrationWebhook](w,
+			newObjectOwnedMixin[generated.IntegrationWebhook](w,
 				withOrganizationOwner(true),
 			),
 		},
@@ -151,20 +154,20 @@ func (IntegrationWebhook) Modules() []models.OrgModule {
 }
 
 // Policy of the IntegrationWebhook.
-//func (IntegrationWebhook) Policy() ent.Policy {
-//	return policy.NewPolicy(
-//		policy.WithQueryRules(
-//			policy.CheckOrgReadAccess(),
-//		),
-//		policy.WithMutationRules(
-//			rule.AllowMutationIfSystemAdmin(),
-//			policy.CheckOrgWriteAccess(),
-//		),
-//	)
-//}
+func (IntegrationWebhook) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckOrgReadAccess(),
+		),
+		policy.WithMutationRules(
+			rule.AllowMutationIfSystemAdmin(),
+			policy.CheckOrgWriteAccess(),
+		),
+	)
+}
 
 // Annotations of the IntegrationWebhook.
-func (r IntegrationWebhook) Annotations() []schema.Annotation {
+func (w IntegrationWebhook) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.Skip(entgql.SkipAll),
 		entx.SchemaGenSkip(true),

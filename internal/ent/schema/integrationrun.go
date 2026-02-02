@@ -16,6 +16,9 @@ import (
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // IntegrationRun holds the schema definition for integration execution history.
@@ -158,10 +161,10 @@ func (r IntegrationRun) Edges() []ent.Edge {
 // Mixin of the IntegrationRun.
 func (r IntegrationRun) Mixin() []ent.Mixin {
 	return mixinConfig{
-		excludeTags: true,
+		excludeTags:        true,
 		excludeAnnotations: true,
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin[IntegrationRun](r,
+			newObjectOwnedMixin[generated.IntegrationRun](r,
 				withOrganizationOwnerServiceOnly(true),
 			),
 		},
@@ -188,10 +191,10 @@ func (r IntegrationRun) Annotations() []schema.Annotation {
 }
 
 // Policy of the IntegrationRun.
-//func (IntegrationRun) Policy() ent.Policy {
-//	return policy.NewPolicy(
-//		policy.WithMutationRules(
-//			rule.AllowMutationIfSystemAdmin(),
-//		),
-//	)
-//}
+func (IntegrationRun) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			rule.AllowMutationIfSystemAdmin(),
+		),
+	)
+}
