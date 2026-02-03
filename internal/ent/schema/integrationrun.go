@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -58,21 +59,24 @@ func (IntegrationRun) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("OPERATION_NAME"),
 			),
-		field.String("operation_kind").
+		field.Enum("operation_kind").
 			Comment("operation category executed for this run").
+			GoType(enums.IntegrationOperationKind("")).
 			Optional().
 			Annotations(
 				entgql.OrderField("OPERATION_KIND"),
 			),
-		field.String("run_type").
-			Comment("run type such as RUN or SYNC").
+		field.Enum("run_type").
+			Comment("run type such as MANUAL, SCHEDULED, WEBHOOK, or EVENT").
+			GoType(enums.IntegrationRunType("")).
 			Optional().
 			Annotations(
 				entgql.OrderField("RUN_TYPE"),
 			),
-		field.String("status").
+		field.Enum("status").
 			Comment("status of the run").
-			Optional().
+			GoType(enums.IntegrationRunStatus("")).
+			Default(enums.IntegrationRunStatusPending.String()).
 			Annotations(
 				entgql.OrderField("STATUS"),
 			),

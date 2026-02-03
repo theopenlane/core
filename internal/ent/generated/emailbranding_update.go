@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
@@ -320,13 +321,13 @@ func (_u *EmailBrandingUpdate) ClearLinkColor() *EmailBrandingUpdate {
 }
 
 // SetFontFamily sets the "font_family" field.
-func (_u *EmailBrandingUpdate) SetFontFamily(v string) *EmailBrandingUpdate {
+func (_u *EmailBrandingUpdate) SetFontFamily(v enums.Font) *EmailBrandingUpdate {
 	_u.mutation.SetFontFamily(v)
 	return _u
 }
 
 // SetNillableFontFamily sets the "font_family" field if the given value is not nil.
-func (_u *EmailBrandingUpdate) SetNillableFontFamily(v *string) *EmailBrandingUpdate {
+func (_u *EmailBrandingUpdate) SetNillableFontFamily(v *enums.Font) *EmailBrandingUpdate {
 	if v != nil {
 		_u.SetFontFamily(*v)
 	}
@@ -638,6 +639,11 @@ func (_u *EmailBrandingUpdate) check() error {
 			return &ValidationError{Name: "link_color", err: fmt.Errorf(`generated: validator failed for field "EmailBranding.link_color": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.FontFamily(); ok {
+		if err := emailbranding.FontFamilyValidator(v); err != nil {
+			return &ValidationError{Name: "font_family", err: fmt.Errorf(`generated: validator failed for field "EmailBranding.font_family": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -758,10 +764,10 @@ func (_u *EmailBrandingUpdate) sqlSave(ctx context.Context) (_node int, err erro
 		_spec.ClearField(emailbranding.FieldLinkColor, field.TypeString)
 	}
 	if value, ok := _u.mutation.FontFamily(); ok {
-		_spec.SetField(emailbranding.FieldFontFamily, field.TypeString, value)
+		_spec.SetField(emailbranding.FieldFontFamily, field.TypeEnum, value)
 	}
 	if _u.mutation.FontFamilyCleared() {
-		_spec.ClearField(emailbranding.FieldFontFamily, field.TypeString)
+		_spec.ClearField(emailbranding.FieldFontFamily, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.IsDefault(); ok {
 		_spec.SetField(emailbranding.FieldIsDefault, field.TypeBool, value)
@@ -1318,13 +1324,13 @@ func (_u *EmailBrandingUpdateOne) ClearLinkColor() *EmailBrandingUpdateOne {
 }
 
 // SetFontFamily sets the "font_family" field.
-func (_u *EmailBrandingUpdateOne) SetFontFamily(v string) *EmailBrandingUpdateOne {
+func (_u *EmailBrandingUpdateOne) SetFontFamily(v enums.Font) *EmailBrandingUpdateOne {
 	_u.mutation.SetFontFamily(v)
 	return _u
 }
 
 // SetNillableFontFamily sets the "font_family" field if the given value is not nil.
-func (_u *EmailBrandingUpdateOne) SetNillableFontFamily(v *string) *EmailBrandingUpdateOne {
+func (_u *EmailBrandingUpdateOne) SetNillableFontFamily(v *enums.Font) *EmailBrandingUpdateOne {
 	if v != nil {
 		_u.SetFontFamily(*v)
 	}
@@ -1649,6 +1655,11 @@ func (_u *EmailBrandingUpdateOne) check() error {
 			return &ValidationError{Name: "link_color", err: fmt.Errorf(`generated: validator failed for field "EmailBranding.link_color": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.FontFamily(); ok {
+		if err := emailbranding.FontFamilyValidator(v); err != nil {
+			return &ValidationError{Name: "font_family", err: fmt.Errorf(`generated: validator failed for field "EmailBranding.font_family": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1786,10 +1797,10 @@ func (_u *EmailBrandingUpdateOne) sqlSave(ctx context.Context) (_node *EmailBran
 		_spec.ClearField(emailbranding.FieldLinkColor, field.TypeString)
 	}
 	if value, ok := _u.mutation.FontFamily(); ok {
-		_spec.SetField(emailbranding.FieldFontFamily, field.TypeString, value)
+		_spec.SetField(emailbranding.FieldFontFamily, field.TypeEnum, value)
 	}
 	if _u.mutation.FontFamilyCleared() {
-		_spec.ClearField(emailbranding.FieldFontFamily, field.TypeString)
+		_spec.ClearField(emailbranding.FieldFontFamily, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.IsDefault(); ok {
 		_spec.SetField(emailbranding.FieldIsDefault, field.TypeBool, value)

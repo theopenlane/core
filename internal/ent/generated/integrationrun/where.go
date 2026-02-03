@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -110,21 +111,6 @@ func IntegrationID(v string) predicate.IntegrationRun {
 // OperationName applies equality check predicate on the "operation_name" field. It's identical to OperationNameEQ.
 func OperationName(v string) predicate.IntegrationRun {
 	return predicate.IntegrationRun(sql.FieldEQ(FieldOperationName, v))
-}
-
-// OperationKind applies equality check predicate on the "operation_kind" field. It's identical to OperationKindEQ.
-func OperationKind(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldOperationKind, v))
-}
-
-// RunType applies equality check predicate on the "run_type" field. It's identical to RunTypeEQ.
-func RunType(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldRunType, v))
-}
-
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldStatus, v))
 }
 
 // StartedAt applies equality check predicate on the "started_at" field. It's identical to StartedAtEQ.
@@ -768,58 +754,33 @@ func OperationNameContainsFold(v string) predicate.IntegrationRun {
 }
 
 // OperationKindEQ applies the EQ predicate on the "operation_kind" field.
-func OperationKindEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldOperationKind, v))
+func OperationKindEQ(v enums.IntegrationOperationKind) predicate.IntegrationRun {
+	vc := v
+	return predicate.IntegrationRun(sql.FieldEQ(FieldOperationKind, vc))
 }
 
 // OperationKindNEQ applies the NEQ predicate on the "operation_kind" field.
-func OperationKindNEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNEQ(FieldOperationKind, v))
+func OperationKindNEQ(v enums.IntegrationOperationKind) predicate.IntegrationRun {
+	vc := v
+	return predicate.IntegrationRun(sql.FieldNEQ(FieldOperationKind, vc))
 }
 
 // OperationKindIn applies the In predicate on the "operation_kind" field.
-func OperationKindIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldIn(FieldOperationKind, vs...))
+func OperationKindIn(vs ...enums.IntegrationOperationKind) predicate.IntegrationRun {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.IntegrationRun(sql.FieldIn(FieldOperationKind, v...))
 }
 
 // OperationKindNotIn applies the NotIn predicate on the "operation_kind" field.
-func OperationKindNotIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNotIn(FieldOperationKind, vs...))
-}
-
-// OperationKindGT applies the GT predicate on the "operation_kind" field.
-func OperationKindGT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGT(FieldOperationKind, v))
-}
-
-// OperationKindGTE applies the GTE predicate on the "operation_kind" field.
-func OperationKindGTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGTE(FieldOperationKind, v))
-}
-
-// OperationKindLT applies the LT predicate on the "operation_kind" field.
-func OperationKindLT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLT(FieldOperationKind, v))
-}
-
-// OperationKindLTE applies the LTE predicate on the "operation_kind" field.
-func OperationKindLTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLTE(FieldOperationKind, v))
-}
-
-// OperationKindContains applies the Contains predicate on the "operation_kind" field.
-func OperationKindContains(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContains(FieldOperationKind, v))
-}
-
-// OperationKindHasPrefix applies the HasPrefix predicate on the "operation_kind" field.
-func OperationKindHasPrefix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasPrefix(FieldOperationKind, v))
-}
-
-// OperationKindHasSuffix applies the HasSuffix predicate on the "operation_kind" field.
-func OperationKindHasSuffix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasSuffix(FieldOperationKind, v))
+func OperationKindNotIn(vs ...enums.IntegrationOperationKind) predicate.IntegrationRun {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.IntegrationRun(sql.FieldNotIn(FieldOperationKind, v...))
 }
 
 // OperationKindIsNil applies the IsNil predicate on the "operation_kind" field.
@@ -832,69 +793,34 @@ func OperationKindNotNil() predicate.IntegrationRun {
 	return predicate.IntegrationRun(sql.FieldNotNull(FieldOperationKind))
 }
 
-// OperationKindEqualFold applies the EqualFold predicate on the "operation_kind" field.
-func OperationKindEqualFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEqualFold(FieldOperationKind, v))
-}
-
-// OperationKindContainsFold applies the ContainsFold predicate on the "operation_kind" field.
-func OperationKindContainsFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContainsFold(FieldOperationKind, v))
-}
-
 // RunTypeEQ applies the EQ predicate on the "run_type" field.
-func RunTypeEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldRunType, v))
+func RunTypeEQ(v enums.IntegrationRunType) predicate.IntegrationRun {
+	vc := v
+	return predicate.IntegrationRun(sql.FieldEQ(FieldRunType, vc))
 }
 
 // RunTypeNEQ applies the NEQ predicate on the "run_type" field.
-func RunTypeNEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNEQ(FieldRunType, v))
+func RunTypeNEQ(v enums.IntegrationRunType) predicate.IntegrationRun {
+	vc := v
+	return predicate.IntegrationRun(sql.FieldNEQ(FieldRunType, vc))
 }
 
 // RunTypeIn applies the In predicate on the "run_type" field.
-func RunTypeIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldIn(FieldRunType, vs...))
+func RunTypeIn(vs ...enums.IntegrationRunType) predicate.IntegrationRun {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.IntegrationRun(sql.FieldIn(FieldRunType, v...))
 }
 
 // RunTypeNotIn applies the NotIn predicate on the "run_type" field.
-func RunTypeNotIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNotIn(FieldRunType, vs...))
-}
-
-// RunTypeGT applies the GT predicate on the "run_type" field.
-func RunTypeGT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGT(FieldRunType, v))
-}
-
-// RunTypeGTE applies the GTE predicate on the "run_type" field.
-func RunTypeGTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGTE(FieldRunType, v))
-}
-
-// RunTypeLT applies the LT predicate on the "run_type" field.
-func RunTypeLT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLT(FieldRunType, v))
-}
-
-// RunTypeLTE applies the LTE predicate on the "run_type" field.
-func RunTypeLTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLTE(FieldRunType, v))
-}
-
-// RunTypeContains applies the Contains predicate on the "run_type" field.
-func RunTypeContains(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContains(FieldRunType, v))
-}
-
-// RunTypeHasPrefix applies the HasPrefix predicate on the "run_type" field.
-func RunTypeHasPrefix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasPrefix(FieldRunType, v))
-}
-
-// RunTypeHasSuffix applies the HasSuffix predicate on the "run_type" field.
-func RunTypeHasSuffix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasSuffix(FieldRunType, v))
+func RunTypeNotIn(vs ...enums.IntegrationRunType) predicate.IntegrationRun {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.IntegrationRun(sql.FieldNotIn(FieldRunType, v...))
 }
 
 // RunTypeIsNil applies the IsNil predicate on the "run_type" field.
@@ -907,89 +833,34 @@ func RunTypeNotNil() predicate.IntegrationRun {
 	return predicate.IntegrationRun(sql.FieldNotNull(FieldRunType))
 }
 
-// RunTypeEqualFold applies the EqualFold predicate on the "run_type" field.
-func RunTypeEqualFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEqualFold(FieldRunType, v))
-}
-
-// RunTypeContainsFold applies the ContainsFold predicate on the "run_type" field.
-func RunTypeContainsFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContainsFold(FieldRunType, v))
-}
-
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldStatus, v))
+func StatusEQ(v enums.IntegrationRunStatus) predicate.IntegrationRun {
+	vc := v
+	return predicate.IntegrationRun(sql.FieldEQ(FieldStatus, vc))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNEQ(FieldStatus, v))
+func StatusNEQ(v enums.IntegrationRunStatus) predicate.IntegrationRun {
+	vc := v
+	return predicate.IntegrationRun(sql.FieldNEQ(FieldStatus, vc))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldIn(FieldStatus, vs...))
+func StatusIn(vs ...enums.IntegrationRunStatus) predicate.IntegrationRun {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.IntegrationRun(sql.FieldIn(FieldStatus, v...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGT(FieldStatus, v))
-}
-
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGTE(FieldStatus, v))
-}
-
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLT(FieldStatus, v))
-}
-
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLTE(FieldStatus, v))
-}
-
-// StatusContains applies the Contains predicate on the "status" field.
-func StatusContains(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContains(FieldStatus, v))
-}
-
-// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
-func StatusHasPrefix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasPrefix(FieldStatus, v))
-}
-
-// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
-func StatusHasSuffix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasSuffix(FieldStatus, v))
-}
-
-// StatusIsNil applies the IsNil predicate on the "status" field.
-func StatusIsNil() predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldIsNull(FieldStatus))
-}
-
-// StatusNotNil applies the NotNil predicate on the "status" field.
-func StatusNotNil() predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNotNull(FieldStatus))
-}
-
-// StatusEqualFold applies the EqualFold predicate on the "status" field.
-func StatusEqualFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEqualFold(FieldStatus, v))
-}
-
-// StatusContainsFold applies the ContainsFold predicate on the "status" field.
-func StatusContainsFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContainsFold(FieldStatus, v))
+func StatusNotIn(vs ...enums.IntegrationRunStatus) predicate.IntegrationRun {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.IntegrationRun(sql.FieldNotIn(FieldStatus, v...))
 }
 
 // StartedAtEQ applies the EQ predicate on the "started_at" field.

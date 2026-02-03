@@ -29397,7 +29397,7 @@ type EmailBrandingHistory implements Node {
   """
   font family for emails
   """
-  fontFamily: String
+  fontFamily: EmailBrandingHistoryFont
   """
   whether this is the default email branding for the organization
   """
@@ -29432,6 +29432,24 @@ type EmailBrandingHistoryEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+EmailBrandingHistoryFont is enum for the field font_family
+"""
+enum EmailBrandingHistoryFont @goModel(model: "github.com/theopenlane/core/common/enums.Font") {
+  COURIER
+  COURIER_BOLD
+  COURIER_BOLDOBLIQUE
+  COURIER_OBLIQUE
+  HELVETICA
+  HELVETICA_BOLD
+  HELVETICA_BOLDOBLIQUE
+  HELVETICA_OBLIQUE
+  SYMBOL
+  TIMES_BOLD
+  TIMES_BOLDITALIC
+  TIMES_ITALIC
+  TIMES_ROMAN
 }
 """
 EmailBrandingHistoryOpType is enum for the field operation
@@ -29781,21 +29799,12 @@ input EmailBrandingHistoryWhereInput {
   """
   font_family field predicates
   """
-  fontFamily: String
-  fontFamilyNEQ: String
-  fontFamilyIn: [String!]
-  fontFamilyNotIn: [String!]
-  fontFamilyGT: String
-  fontFamilyGTE: String
-  fontFamilyLT: String
-  fontFamilyLTE: String
-  fontFamilyContains: String
-  fontFamilyHasPrefix: String
-  fontFamilyHasSuffix: String
+  fontFamily: EmailBrandingHistoryFont
+  fontFamilyNEQ: EmailBrandingHistoryFont
+  fontFamilyIn: [EmailBrandingHistoryFont!]
+  fontFamilyNotIn: [EmailBrandingHistoryFont!]
   fontFamilyIsNil: Boolean
   fontFamilyNotNil: Boolean
-  fontFamilyEqualFold: String
-  fontFamilyContainsFold: String
   """
   is_default field predicates
   """
@@ -39190,7 +39199,7 @@ type NotificationPreferenceHistory implements Node {
   """
   status: NotificationPreferenceHistoryNotificationChannelStatus!
   """
-  provider for the channel, e.g. slack, email, teams
+  provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
   """
   provider: String
   """

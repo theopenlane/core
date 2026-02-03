@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
@@ -70,12 +71,63 @@ func (r *Resolver) workflowInstanceProposalPreview(ctx context.Context, instance
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
 	}
 
+	return buildWorkflowProposalPreview(ctx, r.db, proposal, objectType, objectID)
+}
+
+// workflowProposalPreview is a resolver helper for creating previews of the proposal information
+func (r *Resolver) workflowProposalPreview(ctx context.Context, proposal *generated.WorkflowProposal) (*model.WorkflowProposalPreview, error) {
+	if proposal == nil || proposal.ID == "" {
+		return nil, nil
+	}
+
+	objectType, objectID, err := workflowProposalObjectContext(ctx, r.db, proposal)
+	if err != nil {
+		return nil, err
+	}
+	if objectID == "" {
+		return nil, nil
+	}
+
+	userID, err := auth.GetSubjectIDFromContext(ctx)
+	if err != nil || userID == "" {
+		return nil, rout.ErrPermissionDenied
+	}
+
+	allow, err := r.db.Authz.CheckAccess(ctx, fgax.AccessCheck{
+		ObjectType:  fgax.Kind(strcase.SnakeCase(objectType.String())),
+		ObjectID:    objectID,
+		Relation:    fgax.CanEdit,
+		SubjectID:   userID,
+		SubjectType: auth.GetAuthzSubjectType(ctx),
+	})
+	if err != nil {
+		return nil, err
+	}
+	if !allow {
+		isApprover, err := workflowProposalHasApprover(ctx, r.db, proposal.ID, userID)
+		if err != nil {
+			return nil, err
+		}
+		if !isApprover {
+			return nil, rout.ErrPermissionDenied
+		}
+	}
+
+	return buildWorkflowProposalPreview(ctx, r.db, proposal, objectType, objectID)
+}
+
+func buildWorkflowProposalPreview(ctx context.Context, client *generated.Client, proposal *generated.WorkflowProposal, objectType enums.WorkflowObjectType, objectID string) (*model.WorkflowProposalPreview, error) {
+	if proposal == nil {
+		return nil, nil
+	}
+
 	fields := workflows.FieldsFromChanges(proposal.Changes)
 	fieldMeta := workflowProposalFieldMetadata(objectType)
 
 	currentValues := map[string]any{}
 	if len(fields) > 0 {
-		entity, err := workflows.LoadWorkflowObject(allowCtx, r.db, objectType.String(), objectID)
+		allowCtx := workflows.AllowContext(ctx)
+		entity, err := workflows.LoadWorkflowObject(allowCtx, client, objectType.String(), objectID)
 		if err != nil {
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobject"})
 		}
@@ -171,6 +223,39 @@ func workflowInstanceObjectContext(ctx context.Context, client *generated.Client
 	return "", "", nil
 }
 
+func workflowProposalObjectContext(ctx context.Context, client *generated.Client, proposal *generated.WorkflowProposal) (enums.WorkflowObjectType, string, error) {
+	if proposal == nil {
+		return "", "", nil
+	}
+
+	if proposal.Edges.WorkflowObjectRef != nil {
+		obj, err := workflows.ObjectFromRef(proposal.Edges.WorkflowObjectRef)
+		if err == nil && obj != nil {
+			return obj.Type, obj.ID, nil
+		}
+	}
+
+	if proposal.WorkflowObjectRefID == "" || client == nil {
+		return "", "", nil
+	}
+
+	allowCtx := workflows.AllowContext(ctx)
+	ref, err := client.WorkflowObjectRef.Get(allowCtx, proposal.WorkflowObjectRefID)
+	if err != nil {
+		if generated.IsNotFound(err) {
+			return "", "", nil
+		}
+		return "", "", parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobjectref"})
+	}
+
+	obj, err := workflows.ObjectFromRef(ref)
+	if err == nil && obj != nil {
+		return obj.Type, obj.ID, nil
+	}
+
+	return "", "", nil
+}
+
 func workflowObjectFromRefs(refs []*generated.WorkflowObjectRef) (*workflows.Object, bool) {
 	for _, ref := range refs {
 		if ref == nil {
@@ -223,6 +308,58 @@ func workflowInstanceHasApprover(ctx context.Context, client *generated.Client, 
 			workflowassignmenttarget.TargetGroupIDIn(groupIDs...),
 			workflowassignmenttarget.HasWorkflowAssignmentWith(
 				workflowassignment.WorkflowInstanceIDEQ(instanceID),
+			),
+		).
+		Exist(allowCtx)
+	if err != nil {
+		return false, err
+	}
+
+	return groupTarget, nil
+}
+
+func workflowProposalHasApprover(ctx context.Context, client *generated.Client, proposalID string, userID string) (bool, error) {
+	if client == nil || proposalID == "" || userID == "" {
+		return false, nil
+	}
+
+	allowCtx := workflows.AllowContext(ctx)
+
+	direct, err := client.WorkflowAssignmentTarget.Query().
+		Where(
+			workflowassignmenttarget.TargetUserIDEQ(userID),
+			workflowassignmenttarget.HasWorkflowAssignmentWith(
+				workflowassignment.HasWorkflowInstanceWith(
+					workflowinstance.WorkflowProposalIDEQ(proposalID),
+				),
+			),
+		).
+		Exist(allowCtx)
+	if err != nil {
+		return false, err
+	}
+	if direct {
+		return true, nil
+	}
+
+	groupIDs, err := client.GroupMembership.Query().
+		Where(groupmembership.UserIDEQ(userID)).
+		Select(groupmembership.FieldGroupID).
+		Strings(allowCtx)
+	if err != nil {
+		return false, err
+	}
+	if len(groupIDs) == 0 {
+		return false, nil
+	}
+
+	groupTarget, err := client.WorkflowAssignmentTarget.Query().
+		Where(
+			workflowassignmenttarget.TargetGroupIDIn(groupIDs...),
+			workflowassignmenttarget.HasWorkflowAssignmentWith(
+				workflowassignment.HasWorkflowInstanceWith(
+					workflowinstance.WorkflowProposalIDEQ(proposalID),
+				),
 			),
 		).
 		Exist(allowCtx)

@@ -1002,6 +1002,35 @@ func HasUserWith(preds ...predicate.User) predicate.Notification {
 	})
 }
 
+// HasNotificationTemplate applies the HasEdge predicate on the "notification_template" edge.
+func HasNotificationTemplate() predicate.Notification {
+	return predicate.Notification(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, NotificationTemplateTable, NotificationTemplateColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.NotificationTemplate
+		step.Edge.Schema = schemaConfig.Notification
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasNotificationTemplateWith applies the HasEdge predicate on the "notification_template" edge with a given conditions (other predicates).
+func HasNotificationTemplateWith(preds ...predicate.NotificationTemplate) predicate.Notification {
+	return predicate.Notification(func(s *sql.Selector) {
+		step := newNotificationTemplateStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.NotificationTemplate
+		step.Edge.Schema = schemaConfig.Notification
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Notification) predicate.Notification {
 	return predicate.Notification(sql.AndPredicates(predicates...))

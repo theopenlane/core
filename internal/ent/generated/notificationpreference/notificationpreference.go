@@ -167,6 +167,8 @@ var (
 	OwnerIDValidator func(string) error
 	// DefaultEnabled holds the default value on creation for the "enabled" field.
 	DefaultEnabled bool
+	// TimezoneValidator is a validator for the "timezone" field. It is called by the builders before save.
+	TimezoneValidator func(string) error
 	// DefaultIsDefault holds the default value on creation for the "is_default" field.
 	DefaultIsDefault bool
 	// DefaultID holds the default value on creation for the "id" field.

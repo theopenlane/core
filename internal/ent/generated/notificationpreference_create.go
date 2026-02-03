@@ -530,6 +530,11 @@ func (_c *NotificationPreferenceCreate) check() error {
 			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "NotificationPreference.priority": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.Timezone(); ok {
+		if err := notificationpreference.TimezoneValidator(v); err != nil {
+			return &ValidationError{Name: "timezone", err: fmt.Errorf(`generated: validator failed for field "NotificationPreference.timezone": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.IsDefault(); !ok {
 		return &ValidationError{Name: "is_default", err: errors.New(`generated: missing required field "NotificationPreference.is_default"`)}
 	}

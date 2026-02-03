@@ -3806,24 +3806,25 @@ type ComplexityRoot struct {
 	}
 
 	Notification struct {
-		Body             func(childComplexity int) int
-		Channels         func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Data             func(childComplexity int) int
-		ID               func(childComplexity int) int
-		NotificationType func(childComplexity int) int
-		ObjectType       func(childComplexity int) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		ReadAt           func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		TemplateID       func(childComplexity int) int
-		Title            func(childComplexity int) int
-		Topic            func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		UserID           func(childComplexity int) int
+		Body                 func(childComplexity int) int
+		Channels             func(childComplexity int) int
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		Data                 func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		NotificationTemplate func(childComplexity int) int
+		NotificationType     func(childComplexity int) int
+		ObjectType           func(childComplexity int) int
+		Owner                func(childComplexity int) int
+		OwnerID              func(childComplexity int) int
+		ReadAt               func(childComplexity int) int
+		Tags                 func(childComplexity int) int
+		TemplateID           func(childComplexity int) int
+		Title                func(childComplexity int) int
+		Topic                func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
+		UserID               func(childComplexity int) int
 	}
 
 	NotificationConnection struct {
@@ -29394,6 +29395,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Notification.ID(childComplexity), true
+
+	case "Notification.notificationTemplate":
+		if e.complexity.Notification.NotificationTemplate == nil {
+			break
+		}
+
+		return e.complexity.Notification.NotificationTemplate(childComplexity), true
 
 	case "Notification.notificationType":
 		if e.complexity.Notification.NotificationType == nil {
@@ -62230,7 +62238,7 @@ input CreateEmailBrandingInput {
   """
   font family for emails
   """
-  fontFamily: String
+  fontFamily: EmailBrandingFont
   """
   whether this is the default email branding for the organization
   """
@@ -63754,10 +63762,6 @@ input CreateNotificationInput {
   """
   data: Map
   """
-  optional template used for external channel rendering
-  """
-  templateID: String
-  """
   the channels this notification should be sent to (IN_APP, SLACK, EMAIL)
   """
   channels: [Channel!]
@@ -63766,6 +63770,7 @@ input CreateNotificationInput {
   """
   topic: NotificationNotificationTopic
   ownerID: ID
+  notificationTemplateID: ID
 }
 """
 CreateNotificationPreferenceInput is used for create NotificationPreference object.
@@ -63781,7 +63786,7 @@ input CreateNotificationPreferenceInput {
   """
   status: NotificationPreferenceNotificationChannelStatus
   """
-  provider for the channel, e.g. slack, email, teams
+  provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
   """
   provider: String
   """
@@ -70845,7 +70850,7 @@ type EmailBranding implements Node {
   """
   font family for emails
   """
-  fontFamily: String
+  fontFamily: EmailBrandingFont
   """
   whether this is the default email branding for the organization
   """
@@ -71036,6 +71041,24 @@ type EmailBrandingEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+EmailBrandingFont is enum for the field font_family
+"""
+enum EmailBrandingFont @goModel(model: "github.com/theopenlane/core/common/enums.Font") {
+  COURIER
+  COURIER_BOLD
+  COURIER_BOLDOBLIQUE
+  COURIER_OBLIQUE
+  HELVETICA
+  HELVETICA_BOLD
+  HELVETICA_BOLDOBLIQUE
+  HELVETICA_OBLIQUE
+  SYMBOL
+  TIMES_BOLD
+  TIMES_BOLDITALIC
+  TIMES_ITALIC
+  TIMES_ROMAN
 }
 """
 Ordering options for EmailBranding connections
@@ -71340,21 +71363,12 @@ input EmailBrandingWhereInput {
   """
   font_family field predicates
   """
-  fontFamily: String
-  fontFamilyNEQ: String
-  fontFamilyIn: [String!]
-  fontFamilyNotIn: [String!]
-  fontFamilyGT: String
-  fontFamilyGTE: String
-  fontFamilyLT: String
-  fontFamilyLTE: String
-  fontFamilyContains: String
-  fontFamilyHasPrefix: String
-  fontFamilyHasSuffix: String
+  fontFamily: EmailBrandingFont
+  fontFamilyNEQ: EmailBrandingFont
+  fontFamilyIn: [EmailBrandingFont!]
+  fontFamilyNotIn: [EmailBrandingFont!]
   fontFamilyIsNil: Boolean
   fontFamilyNotNil: Boolean
-  fontFamilyEqualFold: String
-  fontFamilyContainsFold: String
   """
   is_default field predicates
   """
@@ -88878,7 +88892,7 @@ type Notification implements Node {
   """
   optional template used for external channel rendering
   """
-  templateID: String
+  templateID: ID
   """
   the time the notification was read
   """
@@ -88892,6 +88906,7 @@ type Notification implements Node {
   """
   topic: NotificationNotificationTopic
   owner: Organization
+  notificationTemplate: NotificationTemplate
 }
 """
 A connection to a list of items.
@@ -88982,7 +88997,7 @@ type NotificationPreference implements Node {
   """
   status: NotificationPreferenceNotificationChannelStatus!
   """
-  provider for the channel, e.g. slack, email, teams
+  provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
   """
   provider: String
   """
@@ -118566,7 +118581,7 @@ input UpdateEmailBrandingInput {
   """
   font family for emails
   """
-  fontFamily: String
+  fontFamily: EmailBrandingFont
   clearFontFamily: Boolean
   """
   whether this is the default email branding for the organization
@@ -120717,7 +120732,7 @@ input UpdateNotificationPreferenceInput {
   """
   status: NotificationPreferenceNotificationChannelStatus
   """
-  provider for the channel, e.g. slack, email, teams
+  provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
   """
   provider: String
   clearProvider: Boolean

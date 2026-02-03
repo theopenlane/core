@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/emailbrandinghistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -294,13 +295,13 @@ func (_c *EmailBrandingHistoryCreate) SetNillableLinkColor(v *string) *EmailBran
 }
 
 // SetFontFamily sets the "font_family" field.
-func (_c *EmailBrandingHistoryCreate) SetFontFamily(v string) *EmailBrandingHistoryCreate {
+func (_c *EmailBrandingHistoryCreate) SetFontFamily(v enums.Font) *EmailBrandingHistoryCreate {
 	_c.mutation.SetFontFamily(v)
 	return _c
 }
 
 // SetNillableFontFamily sets the "font_family" field if the given value is not nil.
-func (_c *EmailBrandingHistoryCreate) SetNillableFontFamily(v *string) *EmailBrandingHistoryCreate {
+func (_c *EmailBrandingHistoryCreate) SetNillableFontFamily(v *enums.Font) *EmailBrandingHistoryCreate {
 	if v != nil {
 		_c.SetFontFamily(*v)
 	}
@@ -397,6 +398,10 @@ func (_c *EmailBrandingHistoryCreate) defaults() error {
 		v := emailbrandinghistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.FontFamily(); !ok {
+		v := emailbrandinghistory.DefaultFontFamily
+		_c.mutation.SetFontFamily(v)
+	}
 	if _, ok := _c.mutation.IsDefault(); !ok {
 		v := emailbrandinghistory.DefaultIsDefault
 		_c.mutation.SetIsDefault(v)
@@ -426,6 +431,11 @@ func (_c *EmailBrandingHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`historygenerated: missing required field "EmailBrandingHistory.name"`)}
+	}
+	if v, ok := _c.mutation.FontFamily(); ok {
+		if err := emailbrandinghistory.FontFamilyValidator(v); err != nil {
+			return &ValidationError{Name: "font_family", err: fmt.Errorf(`historygenerated: validator failed for field "EmailBrandingHistory.font_family": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -548,7 +558,7 @@ func (_c *EmailBrandingHistoryCreate) createSpec() (*EmailBrandingHistory, *sqlg
 		_node.LinkColor = value
 	}
 	if value, ok := _c.mutation.FontFamily(); ok {
-		_spec.SetField(emailbrandinghistory.FieldFontFamily, field.TypeString, value)
+		_spec.SetField(emailbrandinghistory.FieldFontFamily, field.TypeEnum, value)
 		_node.FontFamily = value
 	}
 	if value, ok := _c.mutation.IsDefault(); ok {

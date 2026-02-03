@@ -7,18 +7,15 @@ package graphapi
 
 import (
 	"context"
-	"time"
+	"fmt"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
@@ -28,58 +25,19 @@ func (r *mutationResolver) ForceCompleteWorkflowInstance(ctx context.Context, id
 	if !workflowsEnabled(r.db) {
 		return nil, ErrWorkflowsDisabled
 	}
-	if id == "" {
-		return nil, rout.NewMissingRequiredFieldError("id")
+
+	apply := true
+	if applyProposal != nil {
+		apply = *applyProposal
 	}
 
-	client := withTransactionalMutation(ctx)
-	instance, err := client.WorkflowInstance.Get(ctx, id)
+	instance, err := r.forceCompleteWorkflowInstance(ctx, id, apply)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowinstance"})
-	}
-
-	if lo.FromPtrOr(applyProposal, true) && instance.WorkflowProposalID != "" {
-		objectType, objectID, err := workflowInstanceObjectContext(ctx, client, instance)
-		if err != nil {
-			return nil, err
-		}
-
-		if objectID != "" {
-			allowCtx := workflows.AllowContext(ctx)
-			proposal, err := client.WorkflowProposal.Get(allowCtx, instance.WorkflowProposalID)
-			if err != nil {
-				return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
-			}
-
-			bypassCtx := workflows.AllowBypassContext(ctx)
-			if err := workflows.ApplyObjectFieldUpdates(bypassCtx, client, objectType, objectID, proposal.Changes); err != nil {
-				return nil, err
-			}
-
-			if err := client.WorkflowProposal.UpdateOneID(proposal.ID).
-				SetState(enums.WorkflowProposalStateApplied).
-				SetApprovedHash(proposal.ProposedHash).
-				Exec(allowCtx); err != nil {
-				return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowproposal"})
-			}
-		}
-	}
-
-	allowCtx := workflows.AllowContext(ctx)
-	if _, err := client.WorkflowInstance.Update().
-		Where(workflowinstance.IDEQ(id)).
-		SetState(enums.WorkflowInstanceStateCompleted).
-		Save(allowCtx); err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowinstance"})
-	}
-
-	updated, err := client.WorkflowInstance.Get(allowCtx, id)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowinstance"})
+		return nil, err
 	}
 
 	return &model.WorkflowInstanceAdminPayload{
-		WorkflowInstance: updated,
+		WorkflowInstance: instance,
 	}, nil
 }
 
@@ -88,66 +46,14 @@ func (r *mutationResolver) CancelWorkflowInstance(ctx context.Context, id string
 	if !workflowsEnabled(r.db) {
 		return nil, ErrWorkflowsDisabled
 	}
-	if id == "" {
-		return nil, rout.NewMissingRequiredFieldError("id")
-	}
 
-	client := withTransactionalMutation(ctx)
-	allowCtx := workflows.AllowContext(ctx)
-
-	if _, err := client.WorkflowInstance.Update().
-		Where(workflowinstance.IDEQ(id)).
-		SetState(enums.WorkflowInstanceStateFailed).
-		Save(allowCtx); err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowinstance"})
-	}
-
-	pendingAssignments, err := client.WorkflowAssignment.Query().
-		Where(
-			workflowassignment.WorkflowInstanceIDEQ(id),
-			workflowassignment.StatusEQ(enums.WorkflowAssignmentStatusPending),
-		).
-		All(allowCtx)
+	instance, err := r.cancelWorkflowInstance(ctx, id, reason)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignment"})
-	}
-
-	if len(pendingAssignments) > 0 {
-		decidedAt := time.Now().UTC()
-		rejectionReason := lo.CoalesceOrEmpty(lo.FromPtrOr(reason, ""), "workflow instance cancelled")
-		userID, _ := auth.GetSubjectIDFromContext(ctx)
-
-		for _, assignment := range pendingAssignments {
-			rejectionMeta := models.WorkflowAssignmentRejection{
-				ActionKey:        assignment.ApprovalMetadata.ActionKey,
-				RejectionReason:  rejectionReason,
-				RejectedAt:       decidedAt.Format(time.RFC3339),
-				RejectedByUserID: userID,
-				RejectedHash:     "",
-			}
-
-			update := client.WorkflowAssignment.UpdateOneID(assignment.ID).
-				SetStatus(enums.WorkflowAssignmentStatusRejected).
-				SetRejectionMetadata(rejectionMeta).
-				SetDecidedAt(decidedAt)
-
-			if userID != "" {
-				update = update.SetActorUserID(userID)
-			}
-
-			if err := update.Exec(allowCtx); err != nil {
-				return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowassignment"})
-			}
-		}
-	}
-
-	updated, err := client.WorkflowInstance.Get(allowCtx, id)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowinstance"})
+		return nil, err
 	}
 
 	return &model.WorkflowInstanceAdminPayload{
-		WorkflowInstance: updated,
+		WorkflowInstance: instance,
 	}, nil
 }
 
@@ -156,19 +62,19 @@ func (r *mutationResolver) BulkForceCompleteWorkflowInstances(ctx context.Contex
 	if !workflowsEnabled(r.db) {
 		return nil, ErrWorkflowsDisabled
 	}
-	if len(ids) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("ids")
+
+	apply := true
+	if applyProposal != nil {
+		apply = *applyProposal
 	}
 
 	updatedIDs := make([]string, 0, len(ids))
 	for _, id := range ids {
-		res, err := r.ForceCompleteWorkflowInstance(ctx, id, applyProposal)
+		instance, err := r.forceCompleteWorkflowInstance(ctx, id, apply)
 		if err != nil {
 			return nil, err
 		}
-		if res != nil && res.WorkflowInstance != nil {
-			updatedIDs = append(updatedIDs, res.WorkflowInstance.ID)
-		}
+		updatedIDs = append(updatedIDs, instance.ID)
 	}
 
 	return &model.WorkflowInstanceBulkAdminPayload{
@@ -181,19 +87,14 @@ func (r *mutationResolver) BulkCancelWorkflowInstances(ctx context.Context, ids 
 	if !workflowsEnabled(r.db) {
 		return nil, ErrWorkflowsDisabled
 	}
-	if len(ids) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("ids")
-	}
 
 	updatedIDs := make([]string, 0, len(ids))
 	for _, id := range ids {
-		res, err := r.CancelWorkflowInstance(ctx, id, reason)
+		instance, err := r.cancelWorkflowInstance(ctx, id, reason)
 		if err != nil {
 			return nil, err
 		}
-		if res != nil && res.WorkflowInstance != nil {
-			updatedIDs = append(updatedIDs, res.WorkflowInstance.ID)
-		}
+		updatedIDs = append(updatedIDs, instance.ID)
 	}
 
 	return &model.WorkflowInstanceBulkAdminPayload{
@@ -207,97 +108,117 @@ func (r *mutationResolver) AdminReassignWorkflowAssignment(ctx context.Context, 
 		return nil, ErrWorkflowsDisabled
 	}
 
-	if input.ID == "" {
-		return nil, rout.NewMissingRequiredFieldError("id")
-	}
 	if len(input.Targets) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("targets")
-	}
-
-	client := withTransactionalMutation(ctx)
-	assignment, err := client.WorkflowAssignment.Get(ctx, input.ID)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowassignment"})
+		return nil, fmt.Errorf("%w: assignment requires at least one target", rout.ErrBadRequest)
 	}
 
 	allowCtx := workflows.AllowContext(ctx)
-
-	if _, err := client.WorkflowAssignmentTarget.Delete().
-		Where(workflowassignmenttarget.WorkflowAssignmentIDEQ(assignment.ID)).
-		Exec(allowCtx); err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "workflowassignmenttarget"})
+	assignment, err := r.db.WorkflowAssignment.Get(allowCtx, input.ID)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignment"})
 	}
 
-	instance, err := client.WorkflowInstance.Get(allowCtx, assignment.WorkflowInstanceID)
+	if err := r.requireWorkflowAdmin(ctx, assignment.OwnerID); err != nil {
+		return nil, err
+	}
+
+	if assignment.Status != enums.WorkflowAssignmentStatusPending {
+		return nil, fmt.Errorf("%w: only pending assignments can be reassigned", rout.ErrBadRequest)
+	}
+
+	if assignment.OwnerID != "" {
+		if err := auth.SetOrganizationIDInAuthContext(allowCtx, assignment.OwnerID); err != nil {
+			return nil, err
+		}
+	}
+
+	instance, err := r.db.WorkflowInstance.Get(allowCtx, assignment.WorkflowInstanceID)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowinstance"})
 	}
 
-	objectType, objectID, err := workflowInstanceObjectContext(ctx, client, instance)
+	objectType, objectID, err := workflowInstanceObjectContext(ctx, r.db, instance)
 	if err != nil {
 		return nil, err
 	}
-
-	var obj *workflows.Object
-	if objectType != "" && objectID != "" {
-		obj = &workflows.Object{ID: objectID, Type: objectType}
-		if node, err := workflows.LoadWorkflowObject(allowCtx, client, objectType.String(), objectID); err == nil {
-			obj.Node = node
-		}
+	if objectID == "" || objectType == "" {
+		return nil, fmt.Errorf("%w: assignment missing workflow object context", rout.ErrBadRequest)
 	}
 
-	createdAny := false
-	for _, target := range input.Targets {
-		if target == nil {
-			continue
-		}
+	obj := &workflows.Object{ID: objectID, Type: objectType}
+	entity, err := workflows.LoadWorkflowObject(allowCtx, r.db, objectType.String(), objectID)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobject"})
+	}
+	obj.Node = entity
 
-		userIDs, resolverKey, groupID, err := resolveWorkflowAssignmentTargetUsers(allowCtx, client, obj, target)
+	targets := make([]workflows.TargetConfig, 0, len(input.Targets))
+	for _, target := range input.Targets {
+		targets = append(targets, workflows.TargetConfig{
+			Type:        target.Type,
+			ID:          derefString(target.ID),
+			ResolverKey: derefString(target.ResolverKey),
+		})
+	}
+
+	if err := validateTargets(targets); err != nil {
+		return nil, err
+	}
+
+	wfEngine, ok := r.db.WorkflowEngine.(*engine.WorkflowEngine)
+	if !ok || wfEngine == nil {
+		return nil, ErrWorkflowsDisabled
+	}
+
+	skipCtx := workflows.WithSkipEventEmission(allowCtx)
+	workflows.MarkSkipEventEmission(skipCtx)
+
+	if _, err := r.db.WorkflowAssignmentTarget.Delete().
+		Where(workflowassignmenttarget.WorkflowAssignmentIDEQ(assignment.ID)).
+		Exec(skipCtx); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "workflowassignmenttarget"})
+	}
+
+	resolvedCount := 0
+	for _, target := range targets {
+		userIDs, err := wfEngine.ResolveTargets(allowCtx, target, obj)
 		if err != nil {
 			return nil, err
 		}
-
 		for _, userID := range userIDs {
-			create := client.WorkflowAssignmentTarget.Create().
+			resolvedCount++
+			targetCreate := r.db.WorkflowAssignmentTarget.Create().
 				SetWorkflowAssignmentID(assignment.ID).
 				SetTargetType(target.Type).
-				SetTargetUserID(userID)
+				SetTargetUserID(userID).
+				SetOwnerID(assignment.OwnerID)
 
-			if groupID != "" {
-				create.SetTargetGroupID(groupID)
-			}
-			if resolverKey != "" {
-				create.SetResolverKey(resolverKey)
-			}
-			if assignment.OwnerID != "" {
-				create.SetOwnerID(assignment.OwnerID)
-			}
-
-			if err := create.Exec(allowCtx); err != nil {
-				if generated.IsConstraintError(err) {
-					continue
+			switch target.Type {
+			case enums.WorkflowTargetTypeGroup:
+				if target.ID != "" {
+					targetCreate.SetTargetGroupID(target.ID)
 				}
-				return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowassignmenttarget"})
+			case enums.WorkflowTargetTypeResolver:
+				if target.ResolverKey != "" {
+					targetCreate.SetResolverKey(target.ResolverKey)
+				}
 			}
 
-			createdAny = true
+			if err := targetCreate.Exec(skipCtx); err != nil {
+				if !generated.IsConstraintError(err) {
+					return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowassignmenttarget"})
+				}
+			}
 		}
 	}
 
-	if !createdAny {
-		return nil, rout.ErrBadRequest
+	if resolvedCount == 0 {
+		return nil, fmt.Errorf("%w: no assignment targets resolved", rout.ErrBadRequest)
 	}
 
-	updated, err := assignment.Update().
-		SetStatus(enums.WorkflowAssignmentStatusPending).
-		ClearDecidedAt().
-		ClearActorUserID().
-		ClearActorGroupID().
-		ClearRejectionMetadata().
-		ClearInvalidationMetadata().
-		Save(allowCtx)
+	updated, err := r.db.WorkflowAssignment.Get(allowCtx, assignment.ID)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowassignment"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignment"})
 	}
 
 	return &model.WorkflowAssignmentReassignPayload{

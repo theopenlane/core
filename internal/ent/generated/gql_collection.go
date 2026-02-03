@@ -39295,6 +39295,21 @@ func (_q *NotificationQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, notification.FieldOwnerID)
 				fieldSeen[notification.FieldOwnerID] = struct{}{}
 			}
+
+		case "notificationTemplate":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&NotificationTemplateClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, notificationtemplateImplementors)...); err != nil {
+				return err
+			}
+			_q.withNotificationTemplate = query
+			if _, ok := fieldSeen[notification.FieldTemplateID]; !ok {
+				selectedFields = append(selectedFields, notification.FieldTemplateID)
+				fieldSeen[notification.FieldTemplateID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[notification.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, notification.FieldCreatedAt)
@@ -39810,7 +39825,7 @@ func (_q *NotificationTemplateQuery) collectField(ctx context.Context, oneNode b
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"notification_template_notifications"`
+							NodeID string `sql:"template_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {

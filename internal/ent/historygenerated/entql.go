@@ -813,7 +813,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			emailbrandinghistory.FieldButtonColor:     {Type: field.TypeString, Column: emailbrandinghistory.FieldButtonColor},
 			emailbrandinghistory.FieldButtonTextColor: {Type: field.TypeString, Column: emailbrandinghistory.FieldButtonTextColor},
 			emailbrandinghistory.FieldLinkColor:       {Type: field.TypeString, Column: emailbrandinghistory.FieldLinkColor},
-			emailbrandinghistory.FieldFontFamily:      {Type: field.TypeString, Column: emailbrandinghistory.FieldFontFamily},
+			emailbrandinghistory.FieldFontFamily:      {Type: field.TypeEnum, Column: emailbrandinghistory.FieldFontFamily},
 			emailbrandinghistory.FieldIsDefault:       {Type: field.TypeBool, Column: emailbrandinghistory.FieldIsDefault},
 		},
 	}

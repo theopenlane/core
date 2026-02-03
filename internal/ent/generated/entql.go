@@ -880,7 +880,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			emailbranding.FieldButtonColor:     {Type: field.TypeString, Column: emailbranding.FieldButtonColor},
 			emailbranding.FieldButtonTextColor: {Type: field.TypeString, Column: emailbranding.FieldButtonTextColor},
 			emailbranding.FieldLinkColor:       {Type: field.TypeString, Column: emailbranding.FieldLinkColor},
-			emailbranding.FieldFontFamily:      {Type: field.TypeString, Column: emailbranding.FieldFontFamily},
+			emailbranding.FieldFontFamily:      {Type: field.TypeEnum, Column: emailbranding.FieldFontFamily},
 			emailbranding.FieldIsDefault:       {Type: field.TypeBool, Column: emailbranding.FieldIsDefault},
 		},
 	}
@@ -1534,9 +1534,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integrationrun.FieldOwnerID:        {Type: field.TypeString, Column: integrationrun.FieldOwnerID},
 			integrationrun.FieldIntegrationID:  {Type: field.TypeString, Column: integrationrun.FieldIntegrationID},
 			integrationrun.FieldOperationName:  {Type: field.TypeString, Column: integrationrun.FieldOperationName},
-			integrationrun.FieldOperationKind:  {Type: field.TypeString, Column: integrationrun.FieldOperationKind},
-			integrationrun.FieldRunType:        {Type: field.TypeString, Column: integrationrun.FieldRunType},
-			integrationrun.FieldStatus:         {Type: field.TypeString, Column: integrationrun.FieldStatus},
+			integrationrun.FieldOperationKind:  {Type: field.TypeEnum, Column: integrationrun.FieldOperationKind},
+			integrationrun.FieldRunType:        {Type: field.TypeEnum, Column: integrationrun.FieldRunType},
+			integrationrun.FieldStatus:         {Type: field.TypeEnum, Column: integrationrun.FieldStatus},
 			integrationrun.FieldStartedAt:      {Type: field.TypeTime, Column: integrationrun.FieldStartedAt},
 			integrationrun.FieldFinishedAt:     {Type: field.TypeTime, Column: integrationrun.FieldFinishedAt},
 			integrationrun.FieldDurationMs:     {Type: field.TypeInt, Column: integrationrun.FieldDurationMs},
@@ -1568,7 +1568,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integrationwebhook.FieldOwnerID:            {Type: field.TypeString, Column: integrationwebhook.FieldOwnerID},
 			integrationwebhook.FieldIntegrationID:      {Type: field.TypeString, Column: integrationwebhook.FieldIntegrationID},
 			integrationwebhook.FieldName:               {Type: field.TypeString, Column: integrationwebhook.FieldName},
-			integrationwebhook.FieldStatus:             {Type: field.TypeString, Column: integrationwebhook.FieldStatus},
+			integrationwebhook.FieldStatus:             {Type: field.TypeEnum, Column: integrationwebhook.FieldStatus},
 			integrationwebhook.FieldEndpointURL:        {Type: field.TypeString, Column: integrationwebhook.FieldEndpointURL},
 			integrationwebhook.FieldSecretToken:        {Type: field.TypeString, Column: integrationwebhook.FieldSecretToken},
 			integrationwebhook.FieldAllowedEvents:      {Type: field.TypeJSON, Column: integrationwebhook.FieldAllowedEvents},
@@ -9544,6 +9544,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Notification",
 		"User",
+	)
+	graph.MustAddE(
+		"notification_template",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   notification.NotificationTemplateTable,
+			Columns: []string{notification.NotificationTemplateColumn},
+			Bidi:    false,
+		},
+		"Notification",
+		"NotificationTemplate",
 	)
 	graph.MustAddE(
 		"owner",
@@ -30760,6 +30772,20 @@ func (f *NotificationFilter) WhereHasUser() {
 // WhereHasUserWith applies a predicate to check if query has an edge user with a given conditions (other predicates).
 func (f *NotificationFilter) WhereHasUserWith(preds ...predicate.User) {
 	f.Where(entql.HasEdgeWith("user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasNotificationTemplate applies a predicate to check if query has an edge notification_template.
+func (f *NotificationFilter) WhereHasNotificationTemplate() {
+	f.Where(entql.HasEdge("notification_template"))
+}
+
+// WhereHasNotificationTemplateWith applies a predicate to check if query has an edge notification_template with a given conditions (other predicates).
+func (f *NotificationFilter) WhereHasNotificationTemplateWith(preds ...predicate.NotificationTemplate) {
+	f.Where(entql.HasEdgeWith("notification_template", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

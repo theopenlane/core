@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/internal/workflows"
@@ -59,6 +60,39 @@ func (r *mutationResolver) validateAssignmentDecision(ctx context.Context, id st
 		Instance:   instance,
 		UserID:     userID,
 	}, nil
+}
+
+// assertOwnerOrSystemAdmin checks that the user in the context is either a system admin or the owner of the organization.
+// This is used for admin operations on workflow instances. It returns early if the user is a system admin without
+// requiring any database queries.
+func (r *mutationResolver) assertOwnerOrSystemAdmin(ctx context.Context) error {
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err == nil && isAdmin {
+		return nil
+	}
+
+	userID, err := auth.GetSubjectIDFromContext(ctx)
+	if err != nil || userID == "" {
+		return rout.ErrPermissionDenied
+	}
+
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil || orgID == "" {
+		return rout.ErrPermissionDenied
+	}
+
+	membership, err := withTransactionalMutation(ctx).OrgMembership.Query().
+		Where(
+			orgmembership.UserIDEQ(userID),
+			orgmembership.OrganizationIDEQ(orgID),
+			orgmembership.RoleEQ(enums.RoleOwner),
+		).
+		Exist(ctx)
+	if err != nil || !membership {
+		return rout.ErrPermissionDenied
+	}
+
+	return nil
 }
 
 // assertAssignmentActor checks that the user in the context is a valid actor for the given assignment

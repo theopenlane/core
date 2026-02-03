@@ -2039,6 +2039,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "user",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "notification_template": {
+	ObjectType:      "notification_template",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "notification_preference": {"owner": {
 	ObjectType:      "owner",

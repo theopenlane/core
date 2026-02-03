@@ -4661,6 +4661,10 @@ func init() {
 	notificationpreferenceDescEnabled := notificationpreferenceFields[6].Descriptor()
 	// notificationpreference.DefaultEnabled holds the default value on creation for the enabled field.
 	notificationpreference.DefaultEnabled = notificationpreferenceDescEnabled.Default.(bool)
+	// notificationpreferenceDescTimezone is the schema descriptor for timezone field.
+	notificationpreferenceDescTimezone := notificationpreferenceFields[15].Descriptor()
+	// notificationpreference.TimezoneValidator is a validator for the "timezone" field. It is called by the builders before save.
+	notificationpreference.TimezoneValidator = notificationpreferenceDescTimezone.Validators[0].(func(string) error)
 	// notificationpreferenceDescIsDefault is the schema descriptor for is_default field.
 	notificationpreferenceDescIsDefault := notificationpreferenceFields[16].Descriptor()
 	// notificationpreference.DefaultIsDefault holds the default value on creation for the is_default field.

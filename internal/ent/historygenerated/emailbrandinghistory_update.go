@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/emailbrandinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 
@@ -319,13 +320,13 @@ func (_u *EmailBrandingHistoryUpdate) ClearLinkColor() *EmailBrandingHistoryUpda
 }
 
 // SetFontFamily sets the "font_family" field.
-func (_u *EmailBrandingHistoryUpdate) SetFontFamily(v string) *EmailBrandingHistoryUpdate {
+func (_u *EmailBrandingHistoryUpdate) SetFontFamily(v enums.Font) *EmailBrandingHistoryUpdate {
 	_u.mutation.SetFontFamily(v)
 	return _u
 }
 
 // SetNillableFontFamily sets the "font_family" field if the given value is not nil.
-func (_u *EmailBrandingHistoryUpdate) SetNillableFontFamily(v *string) *EmailBrandingHistoryUpdate {
+func (_u *EmailBrandingHistoryUpdate) SetNillableFontFamily(v *enums.Font) *EmailBrandingHistoryUpdate {
 	if v != nil {
 		_u.SetFontFamily(*v)
 	}
@@ -405,6 +406,16 @@ func (_u *EmailBrandingHistoryUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *EmailBrandingHistoryUpdate) check() error {
+	if v, ok := _u.mutation.FontFamily(); ok {
+		if err := emailbrandinghistory.FontFamilyValidator(v); err != nil {
+			return &ValidationError{Name: "font_family", err: fmt.Errorf(`historygenerated: validator failed for field "EmailBrandingHistory.font_family": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *EmailBrandingHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EmailBrandingHistoryUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -412,6 +423,9 @@ func (_u *EmailBrandingHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuil
 }
 
 func (_u *EmailBrandingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(emailbrandinghistory.Table, emailbrandinghistory.Columns, sqlgraph.NewFieldSpec(emailbrandinghistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -525,10 +539,10 @@ func (_u *EmailBrandingHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 		_spec.ClearField(emailbrandinghistory.FieldLinkColor, field.TypeString)
 	}
 	if value, ok := _u.mutation.FontFamily(); ok {
-		_spec.SetField(emailbrandinghistory.FieldFontFamily, field.TypeString, value)
+		_spec.SetField(emailbrandinghistory.FieldFontFamily, field.TypeEnum, value)
 	}
 	if _u.mutation.FontFamilyCleared() {
-		_spec.ClearField(emailbrandinghistory.FieldFontFamily, field.TypeString)
+		_spec.ClearField(emailbrandinghistory.FieldFontFamily, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.IsDefault(); ok {
 		_spec.SetField(emailbrandinghistory.FieldIsDefault, field.TypeBool, value)
@@ -845,13 +859,13 @@ func (_u *EmailBrandingHistoryUpdateOne) ClearLinkColor() *EmailBrandingHistoryU
 }
 
 // SetFontFamily sets the "font_family" field.
-func (_u *EmailBrandingHistoryUpdateOne) SetFontFamily(v string) *EmailBrandingHistoryUpdateOne {
+func (_u *EmailBrandingHistoryUpdateOne) SetFontFamily(v enums.Font) *EmailBrandingHistoryUpdateOne {
 	_u.mutation.SetFontFamily(v)
 	return _u
 }
 
 // SetNillableFontFamily sets the "font_family" field if the given value is not nil.
-func (_u *EmailBrandingHistoryUpdateOne) SetNillableFontFamily(v *string) *EmailBrandingHistoryUpdateOne {
+func (_u *EmailBrandingHistoryUpdateOne) SetNillableFontFamily(v *enums.Font) *EmailBrandingHistoryUpdateOne {
 	if v != nil {
 		_u.SetFontFamily(*v)
 	}
@@ -944,6 +958,16 @@ func (_u *EmailBrandingHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *EmailBrandingHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.FontFamily(); ok {
+		if err := emailbrandinghistory.FontFamilyValidator(v); err != nil {
+			return &ValidationError{Name: "font_family", err: fmt.Errorf(`historygenerated: validator failed for field "EmailBrandingHistory.font_family": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *EmailBrandingHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EmailBrandingHistoryUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -951,6 +975,9 @@ func (_u *EmailBrandingHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateB
 }
 
 func (_u *EmailBrandingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EmailBrandingHistory, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(emailbrandinghistory.Table, emailbrandinghistory.Columns, sqlgraph.NewFieldSpec(emailbrandinghistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1081,10 +1108,10 @@ func (_u *EmailBrandingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Em
 		_spec.ClearField(emailbrandinghistory.FieldLinkColor, field.TypeString)
 	}
 	if value, ok := _u.mutation.FontFamily(); ok {
-		_spec.SetField(emailbrandinghistory.FieldFontFamily, field.TypeString, value)
+		_spec.SetField(emailbrandinghistory.FieldFontFamily, field.TypeEnum, value)
 	}
 	if _u.mutation.FontFamilyCleared() {
-		_spec.ClearField(emailbrandinghistory.FieldFontFamily, field.TypeString)
+		_spec.ClearField(emailbrandinghistory.FieldFontFamily, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.IsDefault(); ok {
 		_spec.SetField(emailbrandinghistory.FieldIsDefault, field.TypeBool, value)

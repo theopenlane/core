@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"time"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -62,7 +64,7 @@ func (NotificationPreference) Fields() []ent.Field {
 				entgql.OrderField("STATUS"),
 			),
 		field.String("provider").
-			Comment("provider for the channel, e.g. slack, email, teams").
+			Comment("provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack").
 			Optional(),
 		field.String("destination").
 			Comment("destination address or endpoint for the channel").
@@ -111,7 +113,16 @@ func (NotificationPreference) Fields() []ent.Field {
 			Optional(),
 		field.String("timezone").
 			Comment("timezone for quiet hours and digests").
-			Optional(),
+			Optional().
+			Validate(func(s string) error {
+				if s == "" {
+					return nil
+				}
+
+				_, err := time.LoadLocation(s)
+
+				return err
+			}),
 		field.Bool("is_default").
 			Comment("whether this is the default config for the channel").
 			Default(false),

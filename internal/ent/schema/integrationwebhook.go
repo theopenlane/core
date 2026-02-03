@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -56,9 +57,10 @@ func (IntegrationWebhook) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("NAME"),
 			),
-		field.String("status").
+		field.Enum("status").
 			Comment("status of the webhook endpoint").
-			Optional().
+			GoType(enums.IntegrationWebhookStatus("")).
+			Default(enums.IntegrationWebhookStatusPending.String()).
 			Annotations(
 				entgql.OrderField("STATUS"),
 			),

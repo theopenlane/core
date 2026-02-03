@@ -137,6 +137,15 @@ func (n Notification) Edges() []ent.Edge {
 				entgql.Skip(entgql.SkipAll),
 			},
 		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: n,
+			edgeSchema: NotificationTemplate{},
+			field:      "template_id",
+			immutable:  true,
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipMutationUpdateInput),
+			},
+		}),
 	}
 }
 

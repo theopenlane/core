@@ -6078,7 +6078,7 @@ type CreateEmailBrandingInput struct {
 	ButtonColor      *string
 	ButtonTextColor  *string
 	LinkColor        *string
-	FontFamily       *string
+	FontFamily       *enums.Font
 	IsDefault        *bool
 	OwnerID          *string
 	BlockedGroupIDs  []string
@@ -6178,7 +6178,7 @@ type UpdateEmailBrandingInput struct {
 	ClearLinkColor         bool
 	LinkColor              *string
 	ClearFontFamily        bool
-	FontFamily             *string
+	FontFamily             *enums.Font
 	ClearIsDefault         bool
 	IsDefault              *bool
 	ClearBlockedGroups     bool
@@ -13923,16 +13923,16 @@ func (c *NoteUpdateOne) SetInput(i UpdateNoteInput) *NoteUpdateOne {
 
 // CreateNotificationInput represents a mutation input for creating notifications.
 type CreateNotificationInput struct {
-	Tags             []string
-	NotificationType enums.NotificationType
-	ObjectType       string
-	Title            string
-	Body             string
-	Data             map[string]interface{}
-	TemplateID       *string
-	Channels         []enums.Channel
-	Topic            *enums.NotificationTopic
-	OwnerID          *string
+	Tags                   []string
+	NotificationType       enums.NotificationType
+	ObjectType             string
+	Title                  string
+	Body                   string
+	Data                   map[string]interface{}
+	Channels               []enums.Channel
+	Topic                  *enums.NotificationTopic
+	OwnerID                *string
+	NotificationTemplateID *string
 }
 
 // Mutate applies the CreateNotificationInput on the NotificationMutation builder.
@@ -13947,9 +13947,6 @@ func (i *CreateNotificationInput) Mutate(m *NotificationMutation) {
 	if v := i.Data; v != nil {
 		m.SetData(v)
 	}
-	if v := i.TemplateID; v != nil {
-		m.SetTemplateID(*v)
-	}
 	if v := i.Channels; v != nil {
 		m.SetChannels(v)
 	}
@@ -13958,6 +13955,9 @@ func (i *CreateNotificationInput) Mutate(m *NotificationMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if v := i.NotificationTemplateID; v != nil {
+		m.SetNotificationTemplateID(*v)
 	}
 }
 

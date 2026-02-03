@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
@@ -147,13 +148,13 @@ func (_u *IntegrationRunUpdate) ClearOperationName() *IntegrationRunUpdate {
 }
 
 // SetOperationKind sets the "operation_kind" field.
-func (_u *IntegrationRunUpdate) SetOperationKind(v string) *IntegrationRunUpdate {
+func (_u *IntegrationRunUpdate) SetOperationKind(v enums.IntegrationOperationKind) *IntegrationRunUpdate {
 	_u.mutation.SetOperationKind(v)
 	return _u
 }
 
 // SetNillableOperationKind sets the "operation_kind" field if the given value is not nil.
-func (_u *IntegrationRunUpdate) SetNillableOperationKind(v *string) *IntegrationRunUpdate {
+func (_u *IntegrationRunUpdate) SetNillableOperationKind(v *enums.IntegrationOperationKind) *IntegrationRunUpdate {
 	if v != nil {
 		_u.SetOperationKind(*v)
 	}
@@ -167,13 +168,13 @@ func (_u *IntegrationRunUpdate) ClearOperationKind() *IntegrationRunUpdate {
 }
 
 // SetRunType sets the "run_type" field.
-func (_u *IntegrationRunUpdate) SetRunType(v string) *IntegrationRunUpdate {
+func (_u *IntegrationRunUpdate) SetRunType(v enums.IntegrationRunType) *IntegrationRunUpdate {
 	_u.mutation.SetRunType(v)
 	return _u
 }
 
 // SetNillableRunType sets the "run_type" field if the given value is not nil.
-func (_u *IntegrationRunUpdate) SetNillableRunType(v *string) *IntegrationRunUpdate {
+func (_u *IntegrationRunUpdate) SetNillableRunType(v *enums.IntegrationRunType) *IntegrationRunUpdate {
 	if v != nil {
 		_u.SetRunType(*v)
 	}
@@ -187,22 +188,16 @@ func (_u *IntegrationRunUpdate) ClearRunType() *IntegrationRunUpdate {
 }
 
 // SetStatus sets the "status" field.
-func (_u *IntegrationRunUpdate) SetStatus(v string) *IntegrationRunUpdate {
+func (_u *IntegrationRunUpdate) SetStatus(v enums.IntegrationRunStatus) *IntegrationRunUpdate {
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *IntegrationRunUpdate) SetNillableStatus(v *string) *IntegrationRunUpdate {
+func (_u *IntegrationRunUpdate) SetNillableStatus(v *enums.IntegrationRunStatus) *IntegrationRunUpdate {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *IntegrationRunUpdate) ClearStatus() *IntegrationRunUpdate {
-	_u.mutation.ClearStatus()
 	return _u
 }
 
@@ -470,6 +465,26 @@ func (_u *IntegrationRunUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *IntegrationRunUpdate) check() error {
+	if v, ok := _u.mutation.OperationKind(); ok {
+		if err := integrationrun.OperationKindValidator(v); err != nil {
+			return &ValidationError{Name: "operation_kind", err: fmt.Errorf(`generated: validator failed for field "IntegrationRun.operation_kind": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.RunType(); ok {
+		if err := integrationrun.RunTypeValidator(v); err != nil {
+			return &ValidationError{Name: "run_type", err: fmt.Errorf(`generated: validator failed for field "IntegrationRun.run_type": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Status(); ok {
+		if err := integrationrun.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "IntegrationRun.status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *IntegrationRunUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *IntegrationRunUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -477,6 +492,9 @@ func (_u *IntegrationRunUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) 
 }
 
 func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(integrationrun.Table, integrationrun.Columns, sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -522,22 +540,19 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 		_spec.ClearField(integrationrun.FieldOperationName, field.TypeString)
 	}
 	if value, ok := _u.mutation.OperationKind(); ok {
-		_spec.SetField(integrationrun.FieldOperationKind, field.TypeString, value)
+		_spec.SetField(integrationrun.FieldOperationKind, field.TypeEnum, value)
 	}
 	if _u.mutation.OperationKindCleared() {
-		_spec.ClearField(integrationrun.FieldOperationKind, field.TypeString)
+		_spec.ClearField(integrationrun.FieldOperationKind, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.RunType(); ok {
-		_spec.SetField(integrationrun.FieldRunType, field.TypeString, value)
+		_spec.SetField(integrationrun.FieldRunType, field.TypeEnum, value)
 	}
 	if _u.mutation.RunTypeCleared() {
-		_spec.ClearField(integrationrun.FieldRunType, field.TypeString)
+		_spec.ClearField(integrationrun.FieldRunType, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(integrationrun.FieldStatus, field.TypeString, value)
-	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(integrationrun.FieldStatus, field.TypeString)
+		_spec.SetField(integrationrun.FieldStatus, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.StartedAt(); ok {
 		_spec.SetField(integrationrun.FieldStartedAt, field.TypeTime, value)
@@ -836,13 +851,13 @@ func (_u *IntegrationRunUpdateOne) ClearOperationName() *IntegrationRunUpdateOne
 }
 
 // SetOperationKind sets the "operation_kind" field.
-func (_u *IntegrationRunUpdateOne) SetOperationKind(v string) *IntegrationRunUpdateOne {
+func (_u *IntegrationRunUpdateOne) SetOperationKind(v enums.IntegrationOperationKind) *IntegrationRunUpdateOne {
 	_u.mutation.SetOperationKind(v)
 	return _u
 }
 
 // SetNillableOperationKind sets the "operation_kind" field if the given value is not nil.
-func (_u *IntegrationRunUpdateOne) SetNillableOperationKind(v *string) *IntegrationRunUpdateOne {
+func (_u *IntegrationRunUpdateOne) SetNillableOperationKind(v *enums.IntegrationOperationKind) *IntegrationRunUpdateOne {
 	if v != nil {
 		_u.SetOperationKind(*v)
 	}
@@ -856,13 +871,13 @@ func (_u *IntegrationRunUpdateOne) ClearOperationKind() *IntegrationRunUpdateOne
 }
 
 // SetRunType sets the "run_type" field.
-func (_u *IntegrationRunUpdateOne) SetRunType(v string) *IntegrationRunUpdateOne {
+func (_u *IntegrationRunUpdateOne) SetRunType(v enums.IntegrationRunType) *IntegrationRunUpdateOne {
 	_u.mutation.SetRunType(v)
 	return _u
 }
 
 // SetNillableRunType sets the "run_type" field if the given value is not nil.
-func (_u *IntegrationRunUpdateOne) SetNillableRunType(v *string) *IntegrationRunUpdateOne {
+func (_u *IntegrationRunUpdateOne) SetNillableRunType(v *enums.IntegrationRunType) *IntegrationRunUpdateOne {
 	if v != nil {
 		_u.SetRunType(*v)
 	}
@@ -876,22 +891,16 @@ func (_u *IntegrationRunUpdateOne) ClearRunType() *IntegrationRunUpdateOne {
 }
 
 // SetStatus sets the "status" field.
-func (_u *IntegrationRunUpdateOne) SetStatus(v string) *IntegrationRunUpdateOne {
+func (_u *IntegrationRunUpdateOne) SetStatus(v enums.IntegrationRunStatus) *IntegrationRunUpdateOne {
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *IntegrationRunUpdateOne) SetNillableStatus(v *string) *IntegrationRunUpdateOne {
+func (_u *IntegrationRunUpdateOne) SetNillableStatus(v *enums.IntegrationRunStatus) *IntegrationRunUpdateOne {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *IntegrationRunUpdateOne) ClearStatus() *IntegrationRunUpdateOne {
-	_u.mutation.ClearStatus()
 	return _u
 }
 
@@ -1172,6 +1181,26 @@ func (_u *IntegrationRunUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *IntegrationRunUpdateOne) check() error {
+	if v, ok := _u.mutation.OperationKind(); ok {
+		if err := integrationrun.OperationKindValidator(v); err != nil {
+			return &ValidationError{Name: "operation_kind", err: fmt.Errorf(`generated: validator failed for field "IntegrationRun.operation_kind": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.RunType(); ok {
+		if err := integrationrun.RunTypeValidator(v); err != nil {
+			return &ValidationError{Name: "run_type", err: fmt.Errorf(`generated: validator failed for field "IntegrationRun.run_type": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Status(); ok {
+		if err := integrationrun.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "IntegrationRun.status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *IntegrationRunUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *IntegrationRunUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -1179,6 +1208,9 @@ func (_u *IntegrationRunUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder
 }
 
 func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *IntegrationRun, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(integrationrun.Table, integrationrun.Columns, sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1241,22 +1273,19 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 		_spec.ClearField(integrationrun.FieldOperationName, field.TypeString)
 	}
 	if value, ok := _u.mutation.OperationKind(); ok {
-		_spec.SetField(integrationrun.FieldOperationKind, field.TypeString, value)
+		_spec.SetField(integrationrun.FieldOperationKind, field.TypeEnum, value)
 	}
 	if _u.mutation.OperationKindCleared() {
-		_spec.ClearField(integrationrun.FieldOperationKind, field.TypeString)
+		_spec.ClearField(integrationrun.FieldOperationKind, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.RunType(); ok {
-		_spec.SetField(integrationrun.FieldRunType, field.TypeString, value)
+		_spec.SetField(integrationrun.FieldRunType, field.TypeEnum, value)
 	}
 	if _u.mutation.RunTypeCleared() {
-		_spec.ClearField(integrationrun.FieldRunType, field.TypeString)
+		_spec.ClearField(integrationrun.FieldRunType, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(integrationrun.FieldStatus, field.TypeString, value)
-	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(integrationrun.FieldStatus, field.TypeString)
+		_spec.SetField(integrationrun.FieldStatus, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.StartedAt(); ok {
 		_spec.SetField(integrationrun.FieldStartedAt, field.TypeTime, value)

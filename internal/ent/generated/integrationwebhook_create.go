@@ -4,11 +4,13 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -148,13 +150,13 @@ func (_c *IntegrationWebhookCreate) SetNillableName(v *string) *IntegrationWebho
 }
 
 // SetStatus sets the "status" field.
-func (_c *IntegrationWebhookCreate) SetStatus(v string) *IntegrationWebhookCreate {
+func (_c *IntegrationWebhookCreate) SetStatus(v enums.IntegrationWebhookStatus) *IntegrationWebhookCreate {
 	_c.mutation.SetStatus(v)
 	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *IntegrationWebhookCreate) SetNillableStatus(v *string) *IntegrationWebhookCreate {
+func (_c *IntegrationWebhookCreate) SetNillableStatus(v *enums.IntegrationWebhookStatus) *IntegrationWebhookCreate {
 	if v != nil {
 		_c.SetStatus(*v)
 	}
@@ -332,6 +334,10 @@ func (_c *IntegrationWebhookCreate) defaults() error {
 		v := integrationwebhook.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.Status(); !ok {
+		v := integrationwebhook.DefaultStatus
+		_c.mutation.SetStatus(v)
+	}
 	if _, ok := _c.mutation.SecretToken(); !ok {
 		if integrationwebhook.DefaultSecretToken == nil {
 			return fmt.Errorf("generated: uninitialized integrationwebhook.DefaultSecretToken (forgotten import generated/runtime?)")
@@ -354,6 +360,14 @@ func (_c *IntegrationWebhookCreate) check() error {
 	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := integrationwebhook.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.owner_id": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.Status(); !ok {
+		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "IntegrationWebhook.status"`)}
+	}
+	if v, ok := _c.mutation.Status(); ok {
+		if err := integrationwebhook.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.status": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.EndpointURL(); ok {
@@ -426,7 +440,7 @@ func (_c *IntegrationWebhookCreate) createSpec() (*IntegrationWebhook, *sqlgraph
 		_node.Name = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(integrationwebhook.FieldStatus, field.TypeString, value)
+		_spec.SetField(integrationwebhook.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := _c.mutation.EndpointURL(); ok {

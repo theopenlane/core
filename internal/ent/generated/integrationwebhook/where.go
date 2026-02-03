@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -110,11 +111,6 @@ func IntegrationID(v string) predicate.IntegrationWebhook {
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.IntegrationWebhook {
 	return predicate.IntegrationWebhook(sql.FieldEQ(FieldName, v))
-}
-
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v string) predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldEQ(FieldStatus, v))
 }
 
 // EndpointURL applies equality check predicate on the "endpoint_url" field. It's identical to EndpointURLEQ.
@@ -748,78 +744,33 @@ func NameContainsFold(v string) predicate.IntegrationWebhook {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v string) predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldEQ(FieldStatus, v))
+func StatusEQ(v enums.IntegrationWebhookStatus) predicate.IntegrationWebhook {
+	vc := v
+	return predicate.IntegrationWebhook(sql.FieldEQ(FieldStatus, vc))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v string) predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldNEQ(FieldStatus, v))
+func StatusNEQ(v enums.IntegrationWebhookStatus) predicate.IntegrationWebhook {
+	vc := v
+	return predicate.IntegrationWebhook(sql.FieldNEQ(FieldStatus, vc))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...string) predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldIn(FieldStatus, vs...))
+func StatusIn(vs ...enums.IntegrationWebhookStatus) predicate.IntegrationWebhook {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.IntegrationWebhook(sql.FieldIn(FieldStatus, v...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...string) predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v string) predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldGT(FieldStatus, v))
-}
-
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v string) predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldGTE(FieldStatus, v))
-}
-
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v string) predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldLT(FieldStatus, v))
-}
-
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v string) predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldLTE(FieldStatus, v))
-}
-
-// StatusContains applies the Contains predicate on the "status" field.
-func StatusContains(v string) predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldContains(FieldStatus, v))
-}
-
-// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
-func StatusHasPrefix(v string) predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldHasPrefix(FieldStatus, v))
-}
-
-// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
-func StatusHasSuffix(v string) predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldHasSuffix(FieldStatus, v))
-}
-
-// StatusIsNil applies the IsNil predicate on the "status" field.
-func StatusIsNil() predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldIsNull(FieldStatus))
-}
-
-// StatusNotNil applies the NotNil predicate on the "status" field.
-func StatusNotNil() predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldNotNull(FieldStatus))
-}
-
-// StatusEqualFold applies the EqualFold predicate on the "status" field.
-func StatusEqualFold(v string) predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldEqualFold(FieldStatus, v))
-}
-
-// StatusContainsFold applies the ContainsFold predicate on the "status" field.
-func StatusContainsFold(v string) predicate.IntegrationWebhook {
-	return predicate.IntegrationWebhook(sql.FieldContainsFold(FieldStatus, v))
+func StatusNotIn(vs ...enums.IntegrationWebhookStatus) predicate.IntegrationWebhook {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.IntegrationWebhook(sql.FieldNotIn(FieldStatus, v...))
 }
 
 // EndpointURLEQ applies the EQ predicate on the "endpoint_url" field.

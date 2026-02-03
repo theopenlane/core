@@ -6129,7 +6129,7 @@ type CreateEmailBrandingInput struct {
 	// link color for emails
 	LinkColor *string `json:"linkColor,omitempty"`
 	// font family for emails
-	FontFamily *string `json:"fontFamily,omitempty"`
+	FontFamily *enums.Font `json:"fontFamily,omitempty"`
 	// whether this is the default email branding for the organization
 	IsDefault        *bool    `json:"isDefault,omitempty"`
 	OwnerID          *string  `json:"ownerID,omitempty"`
@@ -7099,13 +7099,12 @@ type CreateNotificationInput struct {
 	Body string `json:"body"`
 	// structured payload containing IDs, links, and other notification data
 	Data map[string]any `json:"data,omitempty"`
-	// optional template used for external channel rendering
-	TemplateID *string `json:"templateID,omitempty"`
 	// the channels this notification should be sent to (IN_APP, SLACK, EMAIL)
 	Channels []string `json:"channels,omitempty"`
 	// the topic of the notification (TASK_ASSIGNMENT, APPROVAL, MENTION, EXPORT)
-	Topic   *enums.NotificationTopic `json:"topic,omitempty"`
-	OwnerID *string                  `json:"ownerID,omitempty"`
+	Topic                  *enums.NotificationTopic `json:"topic,omitempty"`
+	OwnerID                *string                  `json:"ownerID,omitempty"`
+	NotificationTemplateID *string                  `json:"notificationTemplateID,omitempty"`
 }
 
 // CreateNotificationPreferenceInput is used for create NotificationPreference object.
@@ -7115,7 +7114,7 @@ type CreateNotificationPreferenceInput struct {
 	Channel enums.Channel `json:"channel"`
 	// status of the channel configuration
 	Status *enums.NotificationChannelStatus `json:"status,omitempty"`
-	// provider for the channel, e.g. slack, email, teams
+	// provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
 	Provider *string `json:"provider,omitempty"`
 	// destination address or endpoint for the channel
 	Destination *string `json:"destination,omitempty"`
@@ -11835,7 +11834,7 @@ type EmailBranding struct {
 	// link color for emails
 	LinkColor *string `json:"linkColor,omitempty"`
 	// font family for emails
-	FontFamily *string `json:"fontFamily,omitempty"`
+	FontFamily *enums.Font `json:"fontFamily,omitempty"`
 	// whether this is the default email branding for the organization
 	IsDefault      *bool                    `json:"isDefault,omitempty"`
 	Owner          *Organization            `json:"owner,omitempty"`
@@ -12158,21 +12157,12 @@ type EmailBrandingWhereInput struct {
 	LinkColorEqualFold    *string  `json:"linkColorEqualFold,omitempty"`
 	LinkColorContainsFold *string  `json:"linkColorContainsFold,omitempty"`
 	// font_family field predicates
-	FontFamily             *string  `json:"fontFamily,omitempty"`
-	FontFamilyNeq          *string  `json:"fontFamilyNEQ,omitempty"`
-	FontFamilyIn           []string `json:"fontFamilyIn,omitempty"`
-	FontFamilyNotIn        []string `json:"fontFamilyNotIn,omitempty"`
-	FontFamilyGt           *string  `json:"fontFamilyGT,omitempty"`
-	FontFamilyGte          *string  `json:"fontFamilyGTE,omitempty"`
-	FontFamilyLt           *string  `json:"fontFamilyLT,omitempty"`
-	FontFamilyLte          *string  `json:"fontFamilyLTE,omitempty"`
-	FontFamilyContains     *string  `json:"fontFamilyContains,omitempty"`
-	FontFamilyHasPrefix    *string  `json:"fontFamilyHasPrefix,omitempty"`
-	FontFamilyHasSuffix    *string  `json:"fontFamilyHasSuffix,omitempty"`
-	FontFamilyIsNil        *bool    `json:"fontFamilyIsNil,omitempty"`
-	FontFamilyNotNil       *bool    `json:"fontFamilyNotNil,omitempty"`
-	FontFamilyEqualFold    *string  `json:"fontFamilyEqualFold,omitempty"`
-	FontFamilyContainsFold *string  `json:"fontFamilyContainsFold,omitempty"`
+	FontFamily       *enums.Font  `json:"fontFamily,omitempty"`
+	FontFamilyNeq    *enums.Font  `json:"fontFamilyNEQ,omitempty"`
+	FontFamilyIn     []enums.Font `json:"fontFamilyIn,omitempty"`
+	FontFamilyNotIn  []enums.Font `json:"fontFamilyNotIn,omitempty"`
+	FontFamilyIsNil  *bool        `json:"fontFamilyIsNil,omitempty"`
+	FontFamilyNotNil *bool        `json:"fontFamilyNotNil,omitempty"`
 	// is_default field predicates
 	IsDefault       *bool `json:"isDefault,omitempty"`
 	IsDefaultNeq    *bool `json:"isDefaultNEQ,omitempty"`
@@ -21995,8 +21985,9 @@ type Notification struct {
 	// the channels this notification should be sent to (IN_APP, SLACK, EMAIL)
 	Channels []string `json:"channels,omitempty"`
 	// the topic of the notification (TASK_ASSIGNMENT, APPROVAL, MENTION, EXPORT)
-	Topic *enums.NotificationTopic `json:"topic,omitempty"`
-	Owner *Organization            `json:"owner,omitempty"`
+	Topic                *enums.NotificationTopic `json:"topic,omitempty"`
+	Owner                *Organization            `json:"owner,omitempty"`
+	NotificationTemplate *NotificationTemplate    `json:"notificationTemplate,omitempty"`
 }
 
 func (Notification) IsNode() {}
@@ -22041,7 +22032,7 @@ type NotificationPreference struct {
 	Channel enums.Channel `json:"channel"`
 	// status of the channel configuration
 	Status enums.NotificationChannelStatus `json:"status"`
-	// provider for the channel, e.g. slack, email, teams
+	// provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
 	Provider *string `json:"provider,omitempty"`
 	// destination address or endpoint for the channel
 	Destination *string `json:"destination,omitempty"`
@@ -36824,8 +36815,8 @@ type UpdateEmailBrandingInput struct {
 	LinkColor      *string `json:"linkColor,omitempty"`
 	ClearLinkColor *bool   `json:"clearLinkColor,omitempty"`
 	// font family for emails
-	FontFamily      *string `json:"fontFamily,omitempty"`
-	ClearFontFamily *bool   `json:"clearFontFamily,omitempty"`
+	FontFamily      *enums.Font `json:"fontFamily,omitempty"`
+	ClearFontFamily *bool       `json:"clearFontFamily,omitempty"`
 	// whether this is the default email branding for the organization
 	IsDefault              *bool    `json:"isDefault,omitempty"`
 	ClearIsDefault         *bool    `json:"clearIsDefault,omitempty"`
@@ -38438,7 +38429,7 @@ type UpdateNotificationPreferenceInput struct {
 	Channel *enums.Channel `json:"channel,omitempty"`
 	// status of the channel configuration
 	Status *enums.NotificationChannelStatus `json:"status,omitempty"`
-	// provider for the channel, e.g. slack, email, teams
+	// provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
 	Provider      *string `json:"provider,omitempty"`
 	ClearProvider *bool   `json:"clearProvider,omitempty"`
 	// destination address or endpoint for the channel

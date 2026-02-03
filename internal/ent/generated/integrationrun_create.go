@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
@@ -151,13 +152,13 @@ func (_c *IntegrationRunCreate) SetNillableOperationName(v *string) *Integration
 }
 
 // SetOperationKind sets the "operation_kind" field.
-func (_c *IntegrationRunCreate) SetOperationKind(v string) *IntegrationRunCreate {
+func (_c *IntegrationRunCreate) SetOperationKind(v enums.IntegrationOperationKind) *IntegrationRunCreate {
 	_c.mutation.SetOperationKind(v)
 	return _c
 }
 
 // SetNillableOperationKind sets the "operation_kind" field if the given value is not nil.
-func (_c *IntegrationRunCreate) SetNillableOperationKind(v *string) *IntegrationRunCreate {
+func (_c *IntegrationRunCreate) SetNillableOperationKind(v *enums.IntegrationOperationKind) *IntegrationRunCreate {
 	if v != nil {
 		_c.SetOperationKind(*v)
 	}
@@ -165,13 +166,13 @@ func (_c *IntegrationRunCreate) SetNillableOperationKind(v *string) *Integration
 }
 
 // SetRunType sets the "run_type" field.
-func (_c *IntegrationRunCreate) SetRunType(v string) *IntegrationRunCreate {
+func (_c *IntegrationRunCreate) SetRunType(v enums.IntegrationRunType) *IntegrationRunCreate {
 	_c.mutation.SetRunType(v)
 	return _c
 }
 
 // SetNillableRunType sets the "run_type" field if the given value is not nil.
-func (_c *IntegrationRunCreate) SetNillableRunType(v *string) *IntegrationRunCreate {
+func (_c *IntegrationRunCreate) SetNillableRunType(v *enums.IntegrationRunType) *IntegrationRunCreate {
 	if v != nil {
 		_c.SetRunType(*v)
 	}
@@ -179,13 +180,13 @@ func (_c *IntegrationRunCreate) SetNillableRunType(v *string) *IntegrationRunCre
 }
 
 // SetStatus sets the "status" field.
-func (_c *IntegrationRunCreate) SetStatus(v string) *IntegrationRunCreate {
+func (_c *IntegrationRunCreate) SetStatus(v enums.IntegrationRunStatus) *IntegrationRunCreate {
 	_c.mutation.SetStatus(v)
 	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *IntegrationRunCreate) SetNillableStatus(v *string) *IntegrationRunCreate {
+func (_c *IntegrationRunCreate) SetNillableStatus(v *enums.IntegrationRunStatus) *IntegrationRunCreate {
 	if v != nil {
 		_c.SetStatus(*v)
 	}
@@ -400,6 +401,10 @@ func (_c *IntegrationRunCreate) defaults() error {
 		v := integrationrun.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.Status(); !ok {
+		v := integrationrun.DefaultStatus
+		_c.mutation.SetStatus(v)
+	}
 	if _, ok := _c.mutation.StartedAt(); !ok {
 		if integrationrun.DefaultStartedAt == nil {
 			return fmt.Errorf("generated: uninitialized integrationrun.DefaultStartedAt (forgotten import generated/runtime?)")
@@ -422,6 +427,24 @@ func (_c *IntegrationRunCreate) check() error {
 	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := integrationrun.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "IntegrationRun.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.OperationKind(); ok {
+		if err := integrationrun.OperationKindValidator(v); err != nil {
+			return &ValidationError{Name: "operation_kind", err: fmt.Errorf(`generated: validator failed for field "IntegrationRun.operation_kind": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.RunType(); ok {
+		if err := integrationrun.RunTypeValidator(v); err != nil {
+			return &ValidationError{Name: "run_type", err: fmt.Errorf(`generated: validator failed for field "IntegrationRun.run_type": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.Status(); !ok {
+		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "IntegrationRun.status"`)}
+	}
+	if v, ok := _c.mutation.Status(); ok {
+		if err := integrationrun.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "IntegrationRun.status": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.StartedAt(); !ok {
@@ -492,15 +515,15 @@ func (_c *IntegrationRunCreate) createSpec() (*IntegrationRun, *sqlgraph.CreateS
 		_node.OperationName = value
 	}
 	if value, ok := _c.mutation.OperationKind(); ok {
-		_spec.SetField(integrationrun.FieldOperationKind, field.TypeString, value)
+		_spec.SetField(integrationrun.FieldOperationKind, field.TypeEnum, value)
 		_node.OperationKind = value
 	}
 	if value, ok := _c.mutation.RunType(); ok {
-		_spec.SetField(integrationrun.FieldRunType, field.TypeString, value)
+		_spec.SetField(integrationrun.FieldRunType, field.TypeEnum, value)
 		_node.RunType = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(integrationrun.FieldStatus, field.TypeString, value)
+		_spec.SetField(integrationrun.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := _c.mutation.StartedAt(); ok {

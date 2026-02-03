@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
@@ -261,13 +262,13 @@ func (_c *EmailBrandingCreate) SetNillableLinkColor(v *string) *EmailBrandingCre
 }
 
 // SetFontFamily sets the "font_family" field.
-func (_c *EmailBrandingCreate) SetFontFamily(v string) *EmailBrandingCreate {
+func (_c *EmailBrandingCreate) SetFontFamily(v enums.Font) *EmailBrandingCreate {
 	_c.mutation.SetFontFamily(v)
 	return _c
 }
 
 // SetNillableFontFamily sets the "font_family" field if the given value is not nil.
-func (_c *EmailBrandingCreate) SetNillableFontFamily(v *string) *EmailBrandingCreate {
+func (_c *EmailBrandingCreate) SetNillableFontFamily(v *enums.Font) *EmailBrandingCreate {
 	if v != nil {
 		_c.SetFontFamily(*v)
 	}
@@ -437,6 +438,10 @@ func (_c *EmailBrandingCreate) defaults() error {
 		v := emailbranding.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.FontFamily(); !ok {
+		v := emailbranding.DefaultFontFamily
+		_c.mutation.SetFontFamily(v)
+	}
 	if _, ok := _c.mutation.IsDefault(); !ok {
 		v := emailbranding.DefaultIsDefault
 		_c.mutation.SetIsDefault(v)
@@ -509,6 +514,11 @@ func (_c *EmailBrandingCreate) check() error {
 	if v, ok := _c.mutation.LinkColor(); ok {
 		if err := emailbranding.LinkColorValidator(v); err != nil {
 			return &ValidationError{Name: "link_color", err: fmt.Errorf(`generated: validator failed for field "EmailBranding.link_color": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.FontFamily(); ok {
+		if err := emailbranding.FontFamilyValidator(v); err != nil {
+			return &ValidationError{Name: "font_family", err: fmt.Errorf(`generated: validator failed for field "EmailBranding.font_family": %w`, err)}
 		}
 	}
 	return nil
@@ -616,7 +626,7 @@ func (_c *EmailBrandingCreate) createSpec() (*EmailBranding, *sqlgraph.CreateSpe
 		_node.LinkColor = value
 	}
 	if value, ok := _c.mutation.FontFamily(); ok {
-		_spec.SetField(emailbranding.FieldFontFamily, field.TypeString, value)
+		_spec.SetField(emailbranding.FieldFontFamily, field.TypeEnum, value)
 		_node.FontFamily = value
 	}
 	if value, ok := _c.mutation.IsDefault(); ok {

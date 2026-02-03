@@ -17786,6 +17786,25 @@ func (c *NotificationClient) QueryUser(_m *Notification) *UserQuery {
 	return query
 }
 
+// QueryNotificationTemplate queries the notification_template edge of a Notification.
+func (c *NotificationClient) QueryNotificationTemplate(_m *Notification) *NotificationTemplateQuery {
+	query := (&NotificationTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notification.Table, notification.FieldID, id),
+			sqlgraph.To(notificationtemplate.Table, notificationtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, notification.NotificationTemplateTable, notification.NotificationTemplateColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.NotificationTemplate
+		step.Edge.Schema = schemaConfig.Notification
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *NotificationClient) Hooks() []Hook {
 	hooks := c.hooks.Notification

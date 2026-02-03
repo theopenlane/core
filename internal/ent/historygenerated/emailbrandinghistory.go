@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/emailbrandinghistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -64,7 +65,7 @@ type EmailBrandingHistory struct {
 	// link color for emails
 	LinkColor string `json:"link_color,omitempty"`
 	// font family for emails
-	FontFamily string `json:"font_family,omitempty"`
+	FontFamily enums.Font `json:"font_family,omitempty"`
 	// whether this is the default email branding for the organization
 	IsDefault    bool `json:"is_default,omitempty"`
 	selectValues sql.SelectValues
@@ -239,7 +240,7 @@ func (_m *EmailBrandingHistory) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field font_family", values[i])
 			} else if value.Valid {
-				_m.FontFamily = value.String
+				_m.FontFamily = enums.Font(value.String)
 			}
 		case emailbrandinghistory.FieldIsDefault:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -349,7 +350,7 @@ func (_m *EmailBrandingHistory) String() string {
 	builder.WriteString(_m.LinkColor)
 	builder.WriteString(", ")
 	builder.WriteString("font_family=")
-	builder.WriteString(_m.FontFamily)
+	builder.WriteString(fmt.Sprintf("%v", _m.FontFamily))
 	builder.WriteString(", ")
 	builder.WriteString("is_default=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IsDefault))

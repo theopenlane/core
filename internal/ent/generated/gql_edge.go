@@ -7782,6 +7782,14 @@ func (_m *Notification) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *Notification) NotificationTemplate(ctx context.Context) (*NotificationTemplate, error) {
+	result, err := _m.Edges.NotificationTemplateOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryNotificationTemplate().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *NotificationPreference) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {

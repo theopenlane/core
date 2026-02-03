@@ -42,7 +42,7 @@ type NotificationPreference struct {
 	Channel enums.Channel `json:"channel,omitempty"`
 	// status of the channel configuration
 	Status enums.NotificationChannelStatus `json:"status,omitempty"`
-	// provider for the channel, e.g. slack, email, teams
+	// provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
 	Provider string `json:"provider,omitempty"`
 	// destination address or endpoint for the channel
 	Destination string `json:"destination,omitempty"`

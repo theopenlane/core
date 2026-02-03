@@ -669,7 +669,6 @@ func adminSearchEmailBrandings(ctx context.Context, query string, after *entgql.
 				emailbranding.ButtonColorContainsFold(query),     // search by ButtonColor
 				emailbranding.ButtonTextColorContainsFold(query), // search by ButtonTextColor
 				emailbranding.LinkColorContainsFold(query),       // search by LinkColor
-				emailbranding.FontFamilyContainsFold(query),      // search by FontFamily
 			),
 		)
 

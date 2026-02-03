@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -142,6 +143,18 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
+const DefaultFontFamily enums.Font = "HELVETICA"
+
+// FontFamilyValidator is a validator for the "font_family" field enum values. It is called by the builders before save.
+func FontFamilyValidator(ff enums.Font) error {
+	switch ff.String() {
+	case "COURIER", "COURIER_BOLD", "COURIER_BOLDOBLIQUE", "COURIER_OBLIQUE", "HELVETICA", "HELVETICA_BOLD", "HELVETICA_BOLDOBLIQUE", "HELVETICA_OBLIQUE", "SYMBOL", "TIMES_BOLD", "TIMES_BOLDITALIC", "TIMES_ITALIC", "TIMES_ROMAN":
+		return nil
+	default:
+		return fmt.Errorf("emailbrandinghistory: invalid enum value for font_family field: %q", ff)
+	}
+}
+
 // OrderOption defines the ordering options for the EmailBrandingHistory queries.
 type OrderOption func(*sql.Selector)
 
@@ -265,4 +278,11 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.Font must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Font)(nil)
+	// enums.Font must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Font)(nil)
 )

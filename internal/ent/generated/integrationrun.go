@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
@@ -41,11 +42,11 @@ type IntegrationRun struct {
 	// operation identifier executed for this run
 	OperationName string `json:"operation_name,omitempty"`
 	// operation category executed for this run
-	OperationKind string `json:"operation_kind,omitempty"`
-	// run type such as RUN or SYNC
-	RunType string `json:"run_type,omitempty"`
+	OperationKind enums.IntegrationOperationKind `json:"operation_kind,omitempty"`
+	// run type such as MANUAL, SCHEDULED, WEBHOOK, or EVENT
+	RunType enums.IntegrationRunType `json:"run_type,omitempty"`
 	// status of the run
-	Status string `json:"status,omitempty"`
+	Status enums.IntegrationRunStatus `json:"status,omitempty"`
 	// when the run started
 	StartedAt time.Time `json:"started_at,omitempty"`
 	// when the run completed
@@ -236,19 +237,19 @@ func (_m *IntegrationRun) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field operation_kind", values[i])
 			} else if value.Valid {
-				_m.OperationKind = value.String
+				_m.OperationKind = enums.IntegrationOperationKind(value.String)
 			}
 		case integrationrun.FieldRunType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field run_type", values[i])
 			} else if value.Valid {
-				_m.RunType = value.String
+				_m.RunType = enums.IntegrationRunType(value.String)
 			}
 		case integrationrun.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				_m.Status = value.String
+				_m.Status = enums.IntegrationRunStatus(value.String)
 			}
 		case integrationrun.FieldStartedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -396,13 +397,13 @@ func (_m *IntegrationRun) String() string {
 	builder.WriteString(_m.OperationName)
 	builder.WriteString(", ")
 	builder.WriteString("operation_kind=")
-	builder.WriteString(_m.OperationKind)
+	builder.WriteString(fmt.Sprintf("%v", _m.OperationKind))
 	builder.WriteString(", ")
 	builder.WriteString("run_type=")
-	builder.WriteString(_m.RunType)
+	builder.WriteString(fmt.Sprintf("%v", _m.RunType))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(_m.Status)
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("started_at=")
 	builder.WriteString(_m.StartedAt.Format(time.ANSIC))

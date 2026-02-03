@@ -7,10 +7,12 @@ package graphapi
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"time"
 
+	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
@@ -28,26 +30,53 @@ func (r *mutationResolver) UpdateWorkflowProposalChanges(ctx context.Context, in
 		return nil, ErrWorkflowsDisabled
 	}
 
-	if input.ID == "" {
-		return nil, rout.NewMissingRequiredFieldError("id")
+	// this is required to fetch the proposal but the requireworkflowObjectEditAccess check
+	// enforces permissions
+	allowCtx := workflows.AllowContext(ctx)
+	proposal, err := r.db.WorkflowProposal.Get(allowCtx, input.ID)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
+	}
+
+	objectType, objectID, err := workflowProposalObjectContext(ctx, r.db, proposal)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := r.requireWorkflowObjectEditAccess(ctx, objectType, objectID); err != nil {
+		return nil, err
+	}
+
+	if proposal.State != enums.WorkflowProposalStateDraft {
+		return nil, fmt.Errorf("%w: workflow proposal is not in draft state", rout.ErrBadRequest)
+	}
+
+	if err := validateWorkflowProposalChanges(proposal.DomainKey, objectType, input.Changes); err != nil {
+		return nil, err
 	}
 
 	proposedHash, err := workflows.ComputeProposalHash(input.Changes)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowproposal"})
+		return nil, err
 	}
 
-	res, err := withTransactionalMutation(ctx).WorkflowProposal.UpdateOneID(input.ID).
+	if proposal.OwnerID != "" {
+		if err := auth.SetOrganizationIDInAuthContext(allowCtx, proposal.OwnerID); err != nil {
+			return nil, err
+		}
+	}
+
+	updated, err := r.db.WorkflowProposal.UpdateOneID(proposal.ID).
 		SetChanges(input.Changes).
 		SetProposedHash(proposedHash).
-		AddRevision(1).
-		Save(ctx)
+		SetRevision(proposal.Revision + 1).
+		Save(allowCtx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowproposal"})
 	}
 
 	return &model.WorkflowProposalUpdatePayload{
-		WorkflowProposal: res,
+		WorkflowProposal: updated,
 	}, nil
 }
 
@@ -57,46 +86,60 @@ func (r *mutationResolver) SubmitWorkflowProposal(ctx context.Context, id string
 		return nil, ErrWorkflowsDisabled
 	}
 
-	if id == "" {
-		return nil, rout.NewMissingRequiredFieldError("id")
-	}
-
-	client := withTransactionalMutation(ctx)
-	proposal, err := client.WorkflowProposal.Get(ctx, id)
+	allowCtx := workflows.AllowContext(ctx)
+	proposal, err := r.db.WorkflowProposal.Get(allowCtx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowproposal"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
 	}
 
-	if proposal.State == enums.WorkflowProposalStateSubmitted {
-		return &model.WorkflowProposalSubmitPayload{
-			WorkflowProposal: proposal,
-		}, nil
+	objectType, objectID, err := workflowProposalObjectContext(ctx, r.db, proposal)
+	if err != nil {
+		return nil, err
 	}
+	if err := r.requireWorkflowObjectEditAccess(ctx, objectType, objectID); err != nil {
+		return nil, err
+	}
+
 	if proposal.State != enums.WorkflowProposalStateDraft {
+		return nil, fmt.Errorf("%w: workflow proposal is not in draft state", rout.ErrBadRequest)
+	}
+
+	if err := validateWorkflowProposalChanges(proposal.DomainKey, objectType, proposal.Changes); err != nil {
+		return nil, err
+	}
+
+	userID, err := auth.GetSubjectIDFromContext(ctx)
+	if err != nil || userID == "" {
 		return nil, rout.ErrPermissionDenied
 	}
 
-	proposedHash, err := workflows.ComputeProposalHash(proposal.Changes)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowproposal"})
+	if proposal.OwnerID != "" {
+		if err := auth.SetOrganizationIDInAuthContext(allowCtx, proposal.OwnerID); err != nil {
+			return nil, err
+		}
 	}
 
-	update := proposal.Update().
+	proposedHash := proposal.ProposedHash
+	if proposedHash == "" && len(proposal.Changes) > 0 {
+		proposedHash, err = workflows.ComputeProposalHash(proposal.Changes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	now := time.Now().UTC()
+	updated, err := r.db.WorkflowProposal.UpdateOneID(proposal.ID).
 		SetState(enums.WorkflowProposalStateSubmitted).
-		SetSubmittedAt(time.Now().UTC()).
-		SetProposedHash(proposedHash)
-
-	if userID, err := auth.GetSubjectIDFromContext(ctx); err == nil && userID != "" {
-		update.SetSubmittedByUserID(userID)
-	}
-
-	res, err := update.Save(ctx)
+		SetSubmittedAt(now).
+		SetSubmittedByUserID(userID).
+		SetProposedHash(proposedHash).
+		Save(allowCtx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowproposal"})
 	}
 
 	return &model.WorkflowProposalSubmitPayload{
-		WorkflowProposal: res,
+		WorkflowProposal: updated,
 	}, nil
 }
 
@@ -106,30 +149,72 @@ func (r *mutationResolver) WithdrawWorkflowProposal(ctx context.Context, id stri
 		return nil, ErrWorkflowsDisabled
 	}
 
-	if id == "" {
-		return nil, rout.NewMissingRequiredFieldError("id")
+	allowCtx := workflows.AllowContext(ctx)
+	proposal, err := r.db.WorkflowProposal.Get(allowCtx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
 	}
 
-	client := withTransactionalMutation(ctx)
-	proposal, err := client.WorkflowProposal.Get(ctx, id)
+	objectType, objectID, err := workflowProposalObjectContext(ctx, r.db, proposal)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowproposal"})
+		return nil, err
+	}
+	if err := r.requireWorkflowObjectEditAccess(ctx, objectType, objectID); err != nil {
+		return nil, err
 	}
 
 	switch proposal.State {
-	case enums.WorkflowProposalStateSuperseded:
-		return &model.WorkflowProposalWithdrawPayload{WorkflowProposal: proposal}, nil
-	case enums.WorkflowProposalStateApplied:
+	case enums.WorkflowProposalStateDraft, enums.WorkflowProposalStateSubmitted:
+	default:
+		return nil, fmt.Errorf("%w: workflow proposal is not withdrawable", rout.ErrBadRequest)
+	}
+
+	userID, err := auth.GetSubjectIDFromContext(ctx)
+	if err != nil || userID == "" {
 		return nil, rout.ErrPermissionDenied
 	}
 
-	res, err := proposal.Update().SetState(enums.WorkflowProposalStateSuperseded).Save(ctx)
+	if proposal.OwnerID != "" {
+		if err := auth.SetOrganizationIDInAuthContext(allowCtx, proposal.OwnerID); err != nil {
+			return nil, err
+		}
+	}
+
+	instances, err := r.db.WorkflowInstance.Query().
+		Where(
+			workflowinstance.WorkflowProposalIDEQ(proposal.ID),
+			workflowinstance.Not(workflowinstance.StateIn(
+				enums.WorkflowInstanceStateCompleted,
+				enums.WorkflowInstanceStateFailed,
+			)),
+			workflowinstance.OwnerIDEQ(proposal.OwnerID),
+		).
+		All(allowCtx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowinstance"})
+	}
+
+	for _, instance := range instances {
+		if err := closeWorkflowAssignments(ctx, r.db, instance.ID, proposal.OwnerID, enums.WorkflowAssignmentStatusRejected, userID, reason); err != nil {
+			return nil, err
+		}
+
+		if err := r.db.WorkflowInstance.UpdateOneID(instance.ID).
+			SetState(enums.WorkflowInstanceStateFailed).
+			Exec(allowCtx); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowinstance"})
+		}
+	}
+
+	updated, err := r.db.WorkflowProposal.UpdateOneID(proposal.ID).
+		SetState(enums.WorkflowProposalStateSuperseded).
+		Save(allowCtx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowproposal"})
 	}
 
 	return &model.WorkflowProposalWithdrawPayload{
-		WorkflowProposal: res,
+		WorkflowProposal: updated,
 	}, nil
 }
 
@@ -139,12 +224,39 @@ func (r *queryResolver) WorkflowProposal(ctx context.Context, id string) (*gener
 		return nil, ErrWorkflowsDisabled
 	}
 
-	res, err := withTransactionalMutation(ctx).WorkflowProposal.Query().Where(workflowproposal.ID(id)).Only(ctx)
+	allowCtx := workflows.AllowContext(ctx)
+	proposal, err := r.db.WorkflowProposal.Get(allowCtx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
 	}
 
-	return res, nil
+	objectType, objectID, err := workflowProposalObjectContext(ctx, r.db, proposal)
+	if err != nil {
+		return nil, err
+	}
+	if objectID == "" {
+		return nil, rout.ErrPermissionDenied
+	}
+
+	if err := r.requireWorkflowObjectEditAccess(ctx, objectType, objectID); err != nil {
+		if errors.Is(err, rout.ErrPermissionDenied) {
+			userID, err := auth.GetSubjectIDFromContext(ctx)
+			if err != nil || userID == "" {
+				return nil, rout.ErrPermissionDenied
+			}
+			isApprover, err := workflowProposalHasApprover(ctx, r.db, proposal.ID, userID)
+			if err != nil {
+				return nil, err
+			}
+			if !isApprover {
+				return nil, err
+			}
+		} else {
+			return nil, err
+		}
+	}
+
+	return proposal, nil
 }
 
 // WorkflowProposalsForObject is the resolver for the workflowProposalsForObject field.
@@ -153,90 +265,65 @@ func (r *queryResolver) WorkflowProposalsForObject(ctx context.Context, objectTy
 		return nil, ErrWorkflowsDisabled
 	}
 
-	if objectType == "" {
-		return nil, rout.NewMissingRequiredFieldError("objectType")
-	}
-	if objectID == "" {
-		return nil, rout.NewMissingRequiredFieldError("objectID")
-	}
-
-	objType := enums.ToWorkflowObjectType(objectType)
+	normalizedType := strcase.UpperCamelCase(objectType)
+	objType := enums.ToWorkflowObjectType(normalizedType)
 	if objType == nil {
-		return nil, rout.InvalidField("objectType")
+		objType = enums.ToWorkflowObjectType(objectType)
+	}
+	if objType == nil {
+		return nil, fmt.Errorf("%w: invalid workflow object type %q", rout.ErrBadRequest, objectType)
 	}
 
-	objRefIDs, err := workflows.ObjectRefIDs(ctx, withTransactionalMutation(ctx), &workflows.Object{
+	if err := r.requireWorkflowObjectEditAccess(ctx, *objType, objectID); err != nil {
+		return nil, err
+	}
+
+	allowCtx := workflows.AllowContext(ctx)
+	ownerID, err := workflows.ObjectOwnerID(allowCtx, r.db, *objType, objectID)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobject"})
+	}
+	if ownerID != "" {
+		if err := auth.SetOrganizationIDInAuthContext(allowCtx, ownerID); err != nil {
+			return nil, err
+		}
+	}
+
+	objRefIDs, err := workflows.ObjectRefIDs(allowCtx, r.db, &workflows.Object{
 		ID:   objectID,
 		Type: *objType,
 	})
 	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
+		return nil, err
 	}
-
 	if len(objRefIDs) == 0 {
 		return []*generated.WorkflowProposal{}, nil
 	}
 
-	query := withTransactionalMutation(ctx).WorkflowProposal.Query().
-		Where(workflowproposal.WorkflowObjectRefIDIn(objRefIDs...))
-	if len(includeStates) > 0 {
-		query = query.Where(workflowproposal.StateIn(includeStates...))
+	states := includeStates
+	if len(states) == 0 {
+		states = []enums.WorkflowProposalState{
+			enums.WorkflowProposalStateDraft,
+			enums.WorkflowProposalStateSubmitted,
+		}
 	}
 
-	res, err := query.All(ctx)
+	proposals, err := r.db.WorkflowProposal.Query().
+		Where(
+			workflowproposal.WorkflowObjectRefIDIn(objRefIDs...),
+			workflowproposal.StateIn(states...),
+		).
+		All(allowCtx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
 	}
 
-	return res, nil
+	return proposals, nil
 }
 
 // Preview is the resolver for the preview field.
 func (r *workflowProposalResolver) Preview(ctx context.Context, obj *generated.WorkflowProposal) (*model.WorkflowProposalPreview, error) {
-	if !workflowsEnabled(r.db) {
-		return nil, ErrWorkflowsDisabled
-	}
-
-	if obj == nil {
-		return nil, nil
-	}
-
-	client := withTransactionalMutation(ctx)
-	allowCtx := workflows.AllowContext(ctx)
-
-	instance, err := client.WorkflowInstance.Query().
-		Where(workflowinstance.WorkflowProposalIDEQ(obj.ID)).
-		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
-		First(allowCtx)
-	if err != nil && !generated.IsNotFound(err) {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowinstance"})
-	}
-
-	if instance == nil {
-		ref, err := client.WorkflowObjectRef.Get(allowCtx, obj.WorkflowObjectRefID)
-		if err != nil {
-			if generated.IsNotFound(err) {
-				return nil, nil
-			}
-			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobjectref"})
-		}
-
-		objRef, err := workflows.ObjectFromRef(ref)
-		if err != nil || objRef == nil {
-			return nil, err
-		}
-
-		instance = &generated.WorkflowInstance{
-			WorkflowProposalID: obj.ID,
-			OwnerID:            ref.OwnerID,
-			Context: models.WorkflowInstanceContext{
-				ObjectType: objRef.Type,
-				ObjectID:   objRef.ID,
-			},
-		}
-	}
-
-	return r.workflowInstanceProposalPreview(ctx, instance)
+	return r.workflowProposalPreview(ctx, obj)
 }
 
 // WorkflowProposal returns gqlgenerated.WorkflowProposalResolver implementation.

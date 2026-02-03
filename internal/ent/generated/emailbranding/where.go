@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -150,11 +151,6 @@ func ButtonTextColor(v string) predicate.EmailBranding {
 // LinkColor applies equality check predicate on the "link_color" field. It's identical to LinkColorEQ.
 func LinkColor(v string) predicate.EmailBranding {
 	return predicate.EmailBranding(sql.FieldEQ(FieldLinkColor, v))
-}
-
-// FontFamily applies equality check predicate on the "font_family" field. It's identical to FontFamilyEQ.
-func FontFamily(v string) predicate.EmailBranding {
-	return predicate.EmailBranding(sql.FieldEQ(FieldFontFamily, v))
 }
 
 // IsDefault applies equality check predicate on the "is_default" field. It's identical to IsDefaultEQ.
@@ -1363,58 +1359,33 @@ func LinkColorContainsFold(v string) predicate.EmailBranding {
 }
 
 // FontFamilyEQ applies the EQ predicate on the "font_family" field.
-func FontFamilyEQ(v string) predicate.EmailBranding {
-	return predicate.EmailBranding(sql.FieldEQ(FieldFontFamily, v))
+func FontFamilyEQ(v enums.Font) predicate.EmailBranding {
+	vc := v
+	return predicate.EmailBranding(sql.FieldEQ(FieldFontFamily, vc))
 }
 
 // FontFamilyNEQ applies the NEQ predicate on the "font_family" field.
-func FontFamilyNEQ(v string) predicate.EmailBranding {
-	return predicate.EmailBranding(sql.FieldNEQ(FieldFontFamily, v))
+func FontFamilyNEQ(v enums.Font) predicate.EmailBranding {
+	vc := v
+	return predicate.EmailBranding(sql.FieldNEQ(FieldFontFamily, vc))
 }
 
 // FontFamilyIn applies the In predicate on the "font_family" field.
-func FontFamilyIn(vs ...string) predicate.EmailBranding {
-	return predicate.EmailBranding(sql.FieldIn(FieldFontFamily, vs...))
+func FontFamilyIn(vs ...enums.Font) predicate.EmailBranding {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.EmailBranding(sql.FieldIn(FieldFontFamily, v...))
 }
 
 // FontFamilyNotIn applies the NotIn predicate on the "font_family" field.
-func FontFamilyNotIn(vs ...string) predicate.EmailBranding {
-	return predicate.EmailBranding(sql.FieldNotIn(FieldFontFamily, vs...))
-}
-
-// FontFamilyGT applies the GT predicate on the "font_family" field.
-func FontFamilyGT(v string) predicate.EmailBranding {
-	return predicate.EmailBranding(sql.FieldGT(FieldFontFamily, v))
-}
-
-// FontFamilyGTE applies the GTE predicate on the "font_family" field.
-func FontFamilyGTE(v string) predicate.EmailBranding {
-	return predicate.EmailBranding(sql.FieldGTE(FieldFontFamily, v))
-}
-
-// FontFamilyLT applies the LT predicate on the "font_family" field.
-func FontFamilyLT(v string) predicate.EmailBranding {
-	return predicate.EmailBranding(sql.FieldLT(FieldFontFamily, v))
-}
-
-// FontFamilyLTE applies the LTE predicate on the "font_family" field.
-func FontFamilyLTE(v string) predicate.EmailBranding {
-	return predicate.EmailBranding(sql.FieldLTE(FieldFontFamily, v))
-}
-
-// FontFamilyContains applies the Contains predicate on the "font_family" field.
-func FontFamilyContains(v string) predicate.EmailBranding {
-	return predicate.EmailBranding(sql.FieldContains(FieldFontFamily, v))
-}
-
-// FontFamilyHasPrefix applies the HasPrefix predicate on the "font_family" field.
-func FontFamilyHasPrefix(v string) predicate.EmailBranding {
-	return predicate.EmailBranding(sql.FieldHasPrefix(FieldFontFamily, v))
-}
-
-// FontFamilyHasSuffix applies the HasSuffix predicate on the "font_family" field.
-func FontFamilyHasSuffix(v string) predicate.EmailBranding {
-	return predicate.EmailBranding(sql.FieldHasSuffix(FieldFontFamily, v))
+func FontFamilyNotIn(vs ...enums.Font) predicate.EmailBranding {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.EmailBranding(sql.FieldNotIn(FieldFontFamily, v...))
 }
 
 // FontFamilyIsNil applies the IsNil predicate on the "font_family" field.
@@ -1425,16 +1396,6 @@ func FontFamilyIsNil() predicate.EmailBranding {
 // FontFamilyNotNil applies the NotNil predicate on the "font_family" field.
 func FontFamilyNotNil() predicate.EmailBranding {
 	return predicate.EmailBranding(sql.FieldNotNull(FieldFontFamily))
-}
-
-// FontFamilyEqualFold applies the EqualFold predicate on the "font_family" field.
-func FontFamilyEqualFold(v string) predicate.EmailBranding {
-	return predicate.EmailBranding(sql.FieldEqualFold(FieldFontFamily, v))
-}
-
-// FontFamilyContainsFold applies the ContainsFold predicate on the "font_family" field.
-func FontFamilyContainsFold(v string) predicate.EmailBranding {
-	return predicate.EmailBranding(sql.FieldContainsFold(FieldFontFamily, v))
 }
 
 // IsDefaultEQ applies the EQ predicate on the "is_default" field.

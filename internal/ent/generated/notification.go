@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -56,9 +57,8 @@ type Notification struct {
 	Topic enums.NotificationTopic `json:"topic,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NotificationQuery when eager-loading is set.
-	Edges                               NotificationEdges `json:"edges"`
-	notification_template_notifications *string
-	selectValues                        sql.SelectValues
+	Edges        NotificationEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // NotificationEdges holds the relations/edges for other nodes in the graph.
@@ -67,11 +67,13 @@ type NotificationEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// User holds the value of the user edge.
 	User *User `json:"user,omitempty"`
+	// NotificationTemplate holds the value of the notification_template edge.
+	NotificationTemplate *NotificationTemplate `json:"notification_template,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [2]map[string]int
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -96,6 +98,17 @@ func (e NotificationEdges) UserOrErr() (*User, error) {
 	return nil, &NotLoadedError{edge: "user"}
 }
 
+// NotificationTemplateOrErr returns the NotificationTemplate value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NotificationEdges) NotificationTemplateOrErr() (*NotificationTemplate, error) {
+	if e.NotificationTemplate != nil {
+		return e.NotificationTemplate, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: notificationtemplate.Label}
+	}
+	return nil, &NotLoadedError{edge: "notification_template"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Notification) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -109,8 +122,6 @@ func (*Notification) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case notification.FieldCreatedAt, notification.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case notification.ForeignKeys[0]: // notification_template_notifications
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -235,13 +246,6 @@ func (_m *Notification) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Topic = enums.NotificationTopic(value.String)
 			}
-		case notification.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field notification_template_notifications", values[i])
-			} else if value.Valid {
-				_m.notification_template_notifications = new(string)
-				*_m.notification_template_notifications = value.String
-			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -263,6 +267,11 @@ func (_m *Notification) QueryOwner() *OrganizationQuery {
 // QueryUser queries the "user" edge of the Notification entity.
 func (_m *Notification) QueryUser() *UserQuery {
 	return NewNotificationClient(_m.config).QueryUser(_m)
+}
+
+// QueryNotificationTemplate queries the "notification_template" edge of the Notification entity.
+func (_m *Notification) QueryNotificationTemplate() *NotificationTemplateQuery {
+	return NewNotificationClient(_m.config).QueryNotificationTemplate(_m)
 }
 
 // Update returns a builder for updating this Notification.

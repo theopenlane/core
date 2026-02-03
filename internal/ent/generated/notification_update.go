@@ -242,9 +242,6 @@ func (_u *NotificationUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.DataCleared() {
 		_spec.ClearField(notification.FieldData, field.TypeJSON)
 	}
-	if _u.mutation.TemplateIDCleared() {
-		_spec.ClearField(notification.FieldTemplateID, field.TypeString)
-	}
 	if value, ok := _u.mutation.ReadAt(); ok {
 		_spec.SetField(notification.FieldReadAt, field.TypeTime, value)
 	}
@@ -549,9 +546,6 @@ func (_u *NotificationUpdateOne) sqlSave(ctx context.Context) (_node *Notificati
 	}
 	if _u.mutation.DataCleared() {
 		_spec.ClearField(notification.FieldData, field.TypeJSON)
-	}
-	if _u.mutation.TemplateIDCleared() {
-		_spec.ClearField(notification.FieldTemplateID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ReadAt(); ok {
 		_spec.SetField(notification.FieldReadAt, field.TypeTime, value)

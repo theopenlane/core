@@ -786,7 +786,7 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString, Size: 64},
-		{Name: "brand_name", Type: field.TypeString, Nullable: true, Size: 160},
+		{Name: "brand_name", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "primary_color", Type: field.TypeString, Nullable: true},
 		{Name: "secondary_color", Type: field.TypeString, Nullable: true},
@@ -795,7 +795,7 @@ var (
 		{Name: "button_color", Type: field.TypeString, Nullable: true},
 		{Name: "button_text_color", Type: field.TypeString, Nullable: true},
 		{Name: "link_color", Type: field.TypeString, Nullable: true},
-		{Name: "font_family", Type: field.TypeString, Nullable: true},
+		{Name: "font_family", Type: field.TypeEnum, Nullable: true, Enums: []string{"COURIER", "COURIER_BOLD", "COURIER_BOLDOBLIQUE", "COURIER_OBLIQUE", "HELVETICA", "HELVETICA_BOLD", "HELVETICA_BOLDOBLIQUE", "HELVETICA_OBLIQUE", "SYMBOL", "TIMES_BOLD", "TIMES_BOLDITALIC", "TIMES_ITALIC", "TIMES_ROMAN"}, Default: "HELVETICA"},
 		{Name: "is_default", Type: field.TypeBool, Nullable: true, Default: false},
 	}
 	// EmailBrandingHistoryTable holds the schema information for the "email_branding_history" table.

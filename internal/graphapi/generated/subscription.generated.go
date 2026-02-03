@@ -90,6 +90,8 @@ func (ec *executionContext) fieldContext_Subscription_notificationCreated(_ cont
 				return ec.fieldContext_Notification_topic(ctx, field)
 			case "owner":
 				return ec.fieldContext_Notification_owner(ctx, field)
+			case "notificationTemplate":
+				return ec.fieldContext_Notification_notificationTemplate(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Notification", field.Name)
 		},

@@ -122,7 +122,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "notification" package.
 	NotificationsInverseTable = "notifications"
 	// NotificationsColumn is the table column denoting the notifications relation/edge.
-	NotificationsColumn = "notification_template_notifications"
+	NotificationsColumn = "template_id"
 )
 
 // Columns holds all SQL columns for notificationtemplate fields.

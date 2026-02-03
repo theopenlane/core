@@ -21927,21 +21927,12 @@ type EmailBrandingHistoryWhereInput struct {
 	LinkColorContainsFold *string  `json:"linkColorContainsFold,omitempty"`
 
 	// "font_family" field predicates.
-	FontFamily             *string  `json:"fontFamily,omitempty"`
-	FontFamilyNEQ          *string  `json:"fontFamilyNEQ,omitempty"`
-	FontFamilyIn           []string `json:"fontFamilyIn,omitempty"`
-	FontFamilyNotIn        []string `json:"fontFamilyNotIn,omitempty"`
-	FontFamilyGT           *string  `json:"fontFamilyGT,omitempty"`
-	FontFamilyGTE          *string  `json:"fontFamilyGTE,omitempty"`
-	FontFamilyLT           *string  `json:"fontFamilyLT,omitempty"`
-	FontFamilyLTE          *string  `json:"fontFamilyLTE,omitempty"`
-	FontFamilyContains     *string  `json:"fontFamilyContains,omitempty"`
-	FontFamilyHasPrefix    *string  `json:"fontFamilyHasPrefix,omitempty"`
-	FontFamilyHasSuffix    *string  `json:"fontFamilyHasSuffix,omitempty"`
-	FontFamilyIsNil        bool     `json:"fontFamilyIsNil,omitempty"`
-	FontFamilyNotNil       bool     `json:"fontFamilyNotNil,omitempty"`
-	FontFamilyEqualFold    *string  `json:"fontFamilyEqualFold,omitempty"`
-	FontFamilyContainsFold *string  `json:"fontFamilyContainsFold,omitempty"`
+	FontFamily       *enums.Font  `json:"fontFamily,omitempty"`
+	FontFamilyNEQ    *enums.Font  `json:"fontFamilyNEQ,omitempty"`
+	FontFamilyIn     []enums.Font `json:"fontFamilyIn,omitempty"`
+	FontFamilyNotIn  []enums.Font `json:"fontFamilyNotIn,omitempty"`
+	FontFamilyIsNil  bool         `json:"fontFamilyIsNil,omitempty"`
+	FontFamilyNotNil bool         `json:"fontFamilyNotNil,omitempty"`
 
 	// "is_default" field predicates.
 	IsDefault       *bool `json:"isDefault,omitempty"`
@@ -22783,38 +22774,11 @@ func (i *EmailBrandingHistoryWhereInput) P() (predicate.EmailBrandingHistory, er
 	if len(i.FontFamilyNotIn) > 0 {
 		predicates = append(predicates, emailbrandinghistory.FontFamilyNotIn(i.FontFamilyNotIn...))
 	}
-	if i.FontFamilyGT != nil {
-		predicates = append(predicates, emailbrandinghistory.FontFamilyGT(*i.FontFamilyGT))
-	}
-	if i.FontFamilyGTE != nil {
-		predicates = append(predicates, emailbrandinghistory.FontFamilyGTE(*i.FontFamilyGTE))
-	}
-	if i.FontFamilyLT != nil {
-		predicates = append(predicates, emailbrandinghistory.FontFamilyLT(*i.FontFamilyLT))
-	}
-	if i.FontFamilyLTE != nil {
-		predicates = append(predicates, emailbrandinghistory.FontFamilyLTE(*i.FontFamilyLTE))
-	}
-	if i.FontFamilyContains != nil {
-		predicates = append(predicates, emailbrandinghistory.FontFamilyContains(*i.FontFamilyContains))
-	}
-	if i.FontFamilyHasPrefix != nil {
-		predicates = append(predicates, emailbrandinghistory.FontFamilyHasPrefix(*i.FontFamilyHasPrefix))
-	}
-	if i.FontFamilyHasSuffix != nil {
-		predicates = append(predicates, emailbrandinghistory.FontFamilyHasSuffix(*i.FontFamilyHasSuffix))
-	}
 	if i.FontFamilyIsNil {
 		predicates = append(predicates, emailbrandinghistory.FontFamilyIsNil())
 	}
 	if i.FontFamilyNotNil {
 		predicates = append(predicates, emailbrandinghistory.FontFamilyNotNil())
-	}
-	if i.FontFamilyEqualFold != nil {
-		predicates = append(predicates, emailbrandinghistory.FontFamilyEqualFold(*i.FontFamilyEqualFold))
-	}
-	if i.FontFamilyContainsFold != nil {
-		predicates = append(predicates, emailbrandinghistory.FontFamilyContainsFold(*i.FontFamilyContainsFold))
 	}
 	if i.IsDefault != nil {
 		predicates = append(predicates, emailbrandinghistory.IsDefaultEQ(*i.IsDefault))

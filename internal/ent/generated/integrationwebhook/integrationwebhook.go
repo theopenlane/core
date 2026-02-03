@@ -3,11 +3,14 @@
 package integrationwebhook
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -131,6 +134,18 @@ var (
 	DefaultID func() string
 )
 
+const DefaultStatus enums.IntegrationWebhookStatus = "PENDING"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.IntegrationWebhookStatus) error {
+	switch s.String() {
+	case "ACTIVE", "INACTIVE", "FAILED", "PENDING":
+		return nil
+	default:
+		return fmt.Errorf("integrationwebhook: invalid enum value for status field: %q", s)
+	}
+}
+
 // OrderOption defines the ordering options for the IntegrationWebhook queries.
 type OrderOption func(*sql.Selector)
 
@@ -246,3 +261,10 @@ func newIntegrationStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, IntegrationTable, IntegrationColumn),
 	)
 }
+
+var (
+	// enums.IntegrationWebhookStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.IntegrationWebhookStatus)(nil)
+	// enums.IntegrationWebhookStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.IntegrationWebhookStatus)(nil)
+)

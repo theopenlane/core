@@ -3,11 +3,14 @@
 package integrationrun
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -164,6 +167,38 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+// OperationKindValidator is a validator for the "operation_kind" field enum values. It is called by the builders before save.
+func OperationKindValidator(ok enums.IntegrationOperationKind) error {
+	switch ok.String() {
+	case "SYNC", "PUSH", "PULL", "WEBHOOK", "SCHEDULED":
+		return nil
+	default:
+		return fmt.Errorf("integrationrun: invalid enum value for operation_kind field: %q", ok)
+	}
+}
+
+// RunTypeValidator is a validator for the "run_type" field enum values. It is called by the builders before save.
+func RunTypeValidator(rt enums.IntegrationRunType) error {
+	switch rt.String() {
+	case "MANUAL", "SCHEDULED", "WEBHOOK", "EVENT":
+		return nil
+	default:
+		return fmt.Errorf("integrationrun: invalid enum value for run_type field: %q", rt)
+	}
+}
+
+const DefaultStatus enums.IntegrationRunStatus = "PENDING"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.IntegrationRunStatus) error {
+	switch s.String() {
+	case "PENDING", "RUNNING", "SUCCESS", "FAILED", "CANCELLED":
+		return nil
+	default:
+		return fmt.Errorf("integrationrun: invalid enum value for status field: %q", s)
+	}
+}
 
 // OrderOption defines the ordering options for the IntegrationRun queries.
 type OrderOption func(*sql.Selector)
@@ -342,3 +377,24 @@ func newEventStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, EventTable, EventColumn),
 	)
 }
+
+var (
+	// enums.IntegrationOperationKind must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.IntegrationOperationKind)(nil)
+	// enums.IntegrationOperationKind must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.IntegrationOperationKind)(nil)
+)
+
+var (
+	// enums.IntegrationRunType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.IntegrationRunType)(nil)
+	// enums.IntegrationRunType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.IntegrationRunType)(nil)
+)
+
+var (
+	// enums.IntegrationRunStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.IntegrationRunStatus)(nil)
+	// enums.IntegrationRunStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.IntegrationRunStatus)(nil)
+)

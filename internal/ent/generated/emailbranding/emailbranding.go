@@ -3,11 +3,14 @@
 package emailbranding
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -192,6 +195,18 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultFontFamily enums.Font = "HELVETICA"
+
+// FontFamilyValidator is a validator for the "font_family" field enum values. It is called by the builders before save.
+func FontFamilyValidator(ff enums.Font) error {
+	switch ff.String() {
+	case "COURIER", "COURIER_BOLD", "COURIER_BOLDOBLIQUE", "COURIER_OBLIQUE", "HELVETICA", "HELVETICA_BOLD", "HELVETICA_BOLDOBLIQUE", "HELVETICA_OBLIQUE", "SYMBOL", "TIMES_BOLD", "TIMES_BOLDITALIC", "TIMES_ITALIC", "TIMES_ROMAN":
+		return nil
+	default:
+		return fmt.Errorf("emailbranding: invalid enum value for font_family field: %q", ff)
+	}
+}
 
 // OrderOption defines the ordering options for the EmailBranding queries.
 type OrderOption func(*sql.Selector)
@@ -414,3 +429,10 @@ func newEmailTemplatesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, EmailTemplatesTable, EmailTemplatesColumn),
 	)
 }
+
+var (
+	// enums.Font must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Font)(nil)
+	// enums.Font must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Font)(nil)
+)

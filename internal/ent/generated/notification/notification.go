@@ -54,6 +54,8 @@ const (
 	EdgeOwner = "owner"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
+	// EdgeNotificationTemplate holds the string denoting the notification_template edge name in mutations.
+	EdgeNotificationTemplate = "notification_template"
 	// Table holds the table name of the notification in the database.
 	Table = "notifications"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -70,6 +72,13 @@ const (
 	UserInverseTable = "users"
 	// UserColumn is the table column denoting the user relation/edge.
 	UserColumn = "user_id"
+	// NotificationTemplateTable is the table that holds the notification_template relation/edge.
+	NotificationTemplateTable = "notifications"
+	// NotificationTemplateInverseTable is the table name for the NotificationTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "notificationtemplate" package.
+	NotificationTemplateInverseTable = "notification_templates"
+	// NotificationTemplateColumn is the table column denoting the notification_template relation/edge.
+	NotificationTemplateColumn = "template_id"
 )
 
 // Columns holds all SQL columns for notification fields.
@@ -93,21 +102,10 @@ var Columns = []string{
 	FieldTopic,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "notifications"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"notification_template_notifications",
-}
-
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -249,6 +247,13 @@ func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByNotificationTemplateField orders the results by notification_template field.
+func ByNotificationTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNotificationTemplateStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -261,6 +266,13 @@ func newUserStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UserInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+	)
+}
+func newNotificationTemplateStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NotificationTemplateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, NotificationTemplateTable, NotificationTemplateColumn),
 	)
 }
 

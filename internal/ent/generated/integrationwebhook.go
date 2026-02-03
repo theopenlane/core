@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -39,7 +40,7 @@ type IntegrationWebhook struct {
 	// display name for the webhook endpoint
 	Name string `json:"name,omitempty"`
 	// status of the webhook endpoint
-	Status string `json:"status,omitempty"`
+	Status enums.IntegrationWebhookStatus `json:"status,omitempty"`
 	// destination URL for webhook delivery
 	EndpointURL *string `json:"endpoint_url,omitempty"`
 	// secret token for webhook signature validation
@@ -187,7 +188,7 @@ func (_m *IntegrationWebhook) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				_m.Status = value.String
+				_m.Status = enums.IntegrationWebhookStatus(value.String)
 			}
 		case integrationwebhook.FieldEndpointURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -317,7 +318,7 @@ func (_m *IntegrationWebhook) String() string {
 	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(_m.Status)
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	if v := _m.EndpointURL; v != nil {
 		builder.WriteString("endpoint_url=")

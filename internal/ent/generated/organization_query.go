@@ -9258,7 +9258,6 @@ func (_q *OrganizationQuery) loadNotifications(ctx context.Context, query *Notif
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(notification.FieldOwnerID)
 	}

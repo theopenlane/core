@@ -581,6 +581,11 @@ func (_u *NotificationPreferenceUpdate) check() error {
 			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "NotificationPreference.priority": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Timezone(); ok {
+		if err := notificationpreference.TimezoneValidator(v); err != nil {
+			return &ValidationError{Name: "timezone", err: fmt.Errorf(`generated: validator failed for field "NotificationPreference.timezone": %w`, err)}
+		}
+	}
 	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "NotificationPreference.user"`)
 	}
@@ -1382,6 +1387,11 @@ func (_u *NotificationPreferenceUpdateOne) check() error {
 	if v, ok := _u.mutation.Priority(); ok {
 		if err := notificationpreference.PriorityValidator(v); err != nil {
 			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "NotificationPreference.priority": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Timezone(); ok {
+		if err := notificationpreference.TimezoneValidator(v); err != nil {
+			return &ValidationError{Name: "timezone", err: fmt.Errorf(`generated: validator failed for field "NotificationPreference.timezone": %w`, err)}
 		}
 	}
 	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {

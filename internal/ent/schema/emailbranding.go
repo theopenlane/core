@@ -7,6 +7,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -51,7 +52,7 @@ func (EmailBranding) Fields() []ent.Field {
 			),
 		field.String("brand_name").
 			Comment("brand name displayed in templates").
-			MaxLen(trustCenterNameMaxLen).
+			MaxLen(nameMaxLen).
 			Optional(),
 		field.String("logo_remote_url").
 			Comment("URL of the brand logo for emails").
@@ -87,8 +88,10 @@ func (EmailBranding) Fields() []ent.Field {
 			Comment("link color for emails").
 			Validate(validator.HexColorValidator).
 			Optional(),
-		field.String("font_family").
+		field.Enum("font_family").
 			Comment("font family for emails").
+			GoType(enums.Font("")).
+			Default(enums.FontHelvetica.String()).
 			Optional(),
 		field.Bool("is_default").
 			Comment("whether this is the default email branding for the organization").

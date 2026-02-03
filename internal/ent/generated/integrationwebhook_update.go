@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -146,22 +147,16 @@ func (_u *IntegrationWebhookUpdate) ClearName() *IntegrationWebhookUpdate {
 }
 
 // SetStatus sets the "status" field.
-func (_u *IntegrationWebhookUpdate) SetStatus(v string) *IntegrationWebhookUpdate {
+func (_u *IntegrationWebhookUpdate) SetStatus(v enums.IntegrationWebhookStatus) *IntegrationWebhookUpdate {
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *IntegrationWebhookUpdate) SetNillableStatus(v *string) *IntegrationWebhookUpdate {
+func (_u *IntegrationWebhookUpdate) SetNillableStatus(v *enums.IntegrationWebhookStatus) *IntegrationWebhookUpdate {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *IntegrationWebhookUpdate) ClearStatus() *IntegrationWebhookUpdate {
-	_u.mutation.ClearStatus()
 	return _u
 }
 
@@ -355,6 +350,11 @@ func (_u *IntegrationWebhookUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *IntegrationWebhookUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
+		if err := integrationwebhook.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.EndpointURL(); ok {
 		if err := integrationwebhook.EndpointURLValidator(v); err != nil {
 			return &ValidationError{Name: "endpoint_url", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.endpoint_url": %w`, err)}
@@ -418,10 +418,7 @@ func (_u *IntegrationWebhookUpdate) sqlSave(ctx context.Context) (_node int, err
 		_spec.ClearField(integrationwebhook.FieldName, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(integrationwebhook.FieldStatus, field.TypeString, value)
-	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(integrationwebhook.FieldStatus, field.TypeString)
+		_spec.SetField(integrationwebhook.FieldStatus, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.EndpointURL(); ok {
 		_spec.SetField(integrationwebhook.FieldEndpointURL, field.TypeString, value)
@@ -641,22 +638,16 @@ func (_u *IntegrationWebhookUpdateOne) ClearName() *IntegrationWebhookUpdateOne 
 }
 
 // SetStatus sets the "status" field.
-func (_u *IntegrationWebhookUpdateOne) SetStatus(v string) *IntegrationWebhookUpdateOne {
+func (_u *IntegrationWebhookUpdateOne) SetStatus(v enums.IntegrationWebhookStatus) *IntegrationWebhookUpdateOne {
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *IntegrationWebhookUpdateOne) SetNillableStatus(v *string) *IntegrationWebhookUpdateOne {
+func (_u *IntegrationWebhookUpdateOne) SetNillableStatus(v *enums.IntegrationWebhookStatus) *IntegrationWebhookUpdateOne {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *IntegrationWebhookUpdateOne) ClearStatus() *IntegrationWebhookUpdateOne {
-	_u.mutation.ClearStatus()
 	return _u
 }
 
@@ -863,6 +854,11 @@ func (_u *IntegrationWebhookUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *IntegrationWebhookUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
+		if err := integrationwebhook.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.EndpointURL(); ok {
 		if err := integrationwebhook.EndpointURLValidator(v); err != nil {
 			return &ValidationError{Name: "endpoint_url", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.endpoint_url": %w`, err)}
@@ -943,10 +939,7 @@ func (_u *IntegrationWebhookUpdateOne) sqlSave(ctx context.Context) (_node *Inte
 		_spec.ClearField(integrationwebhook.FieldName, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(integrationwebhook.FieldStatus, field.TypeString, value)
-	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(integrationwebhook.FieldStatus, field.TypeString)
+		_spec.SetField(integrationwebhook.FieldStatus, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.EndpointURL(); ok {
 		_spec.SetField(integrationwebhook.FieldEndpointURL, field.TypeString, value)

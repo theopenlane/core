@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -216,6 +217,25 @@ func (_c *NotificationCreate) SetUser(v *User) *NotificationCreate {
 	return _c.SetUserID(v.ID)
 }
 
+// SetNotificationTemplateID sets the "notification_template" edge to the NotificationTemplate entity by ID.
+func (_c *NotificationCreate) SetNotificationTemplateID(id string) *NotificationCreate {
+	_c.mutation.SetNotificationTemplateID(id)
+	return _c
+}
+
+// SetNillableNotificationTemplateID sets the "notification_template" edge to the NotificationTemplate entity by ID if the given value is not nil.
+func (_c *NotificationCreate) SetNillableNotificationTemplateID(id *string) *NotificationCreate {
+	if id != nil {
+		_c = _c.SetNotificationTemplateID(*id)
+	}
+	return _c
+}
+
+// SetNotificationTemplate sets the "notification_template" edge to the NotificationTemplate entity.
+func (_c *NotificationCreate) SetNotificationTemplate(v *NotificationTemplate) *NotificationCreate {
+	return _c.SetNotificationTemplateID(v.ID)
+}
+
 // Mutation returns the NotificationMutation object of the builder.
 func (_c *NotificationCreate) Mutation() *NotificationMutation {
 	return _c.mutation
@@ -401,10 +421,6 @@ func (_c *NotificationCreate) createSpec() (*Notification, *sqlgraph.CreateSpec)
 		_spec.SetField(notification.FieldData, field.TypeJSON, value)
 		_node.Data = value
 	}
-	if value, ok := _c.mutation.TemplateID(); ok {
-		_spec.SetField(notification.FieldTemplateID, field.TypeString, value)
-		_node.TemplateID = value
-	}
 	if value, ok := _c.mutation.ReadAt(); ok {
 		_spec.SetField(notification.FieldReadAt, field.TypeTime, value)
 		_node.ReadAt = &value
@@ -451,6 +467,24 @@ func (_c *NotificationCreate) createSpec() (*Notification, *sqlgraph.CreateSpec)
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.UserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.NotificationTemplateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   notification.NotificationTemplateTable,
+			Columns: []string{notification.NotificationTemplateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Notification
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.TemplateID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
