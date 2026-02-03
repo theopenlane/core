@@ -36,41 +36,6 @@ func OperationTemplateFor(config *openapi.IntegrationConfig, operation string) (
 	return operationTemplateFromConfig(raw)
 }
 
-// OperationTemplateForMetadata loads an operation template from integration metadata (legacy).
-func OperationTemplateForMetadata(metadata map[string]any, operation string) (OperationTemplate, bool) {
-	if len(metadata) == 0 {
-		return OperationTemplate{}, false
-	}
-
-	operation = strings.TrimSpace(operation)
-	if operation == "" {
-		return OperationTemplate{}, false
-	}
-
-	templates := operationTemplateCatalog(metadata)
-	if len(templates) == 0 {
-		return OperationTemplate{}, false
-	}
-
-	raw, ok := templates[operation]
-	if !ok {
-		return OperationTemplate{}, false
-	}
-
-	config, overrides := parseOperationTemplateEntry(raw)
-	if config == nil && overrides == nil {
-		return OperationTemplate{}, false
-	}
-	if config == nil {
-		config = map[string]any{}
-	}
-
-	return OperationTemplate{
-		Config:           commonhelpers.DeepCloneMap(config),
-		AllowedOverrides: overrides,
-	}, true
-}
-
 // ApplyOperationTemplate merges a template with optional overrides.
 func ApplyOperationTemplate(template OperationTemplate, overrides map[string]any) (map[string]any, error) {
 	result := commonhelpers.DeepCloneMap(template.Config)
@@ -105,44 +70,6 @@ func ResolveOperationConfig(config *openapi.IntegrationConfig, operation string,
 		return nil, nil
 	}
 	return commonhelpers.DeepCloneMap(overrides), nil
-}
-
-func operationTemplateCatalog(metadata map[string]any) map[string]any {
-	if len(metadata) == 0 {
-		return nil
-	}
-
-	if raw, ok := metadata["operation_templates"]; ok {
-		if cast := toStringAnyMap(raw); len(cast) > 0 {
-			return cast
-		}
-	}
-	if raw, ok := metadata["operationTemplates"]; ok {
-		if cast := toStringAnyMap(raw); len(cast) > 0 {
-			return cast
-		}
-	}
-
-	return nil
-}
-
-func parseOperationTemplateEntry(raw any) (map[string]any, map[string]struct{}) {
-	entry := toStringAnyMap(raw)
-	if len(entry) == 0 {
-		return nil, nil
-	}
-
-	overrides := parseOverrideKeys(entry["allow_overrides"], entry["allowOverrides"])
-	if configRaw, ok := entry["config"]; ok {
-		return toStringAnyMap(configRaw), overrides
-	}
-
-	// Treat the entry itself as the config if no nested config is provided.
-	config := commonhelpers.DeepCloneMap(entry)
-	delete(config, "allow_overrides")
-	delete(config, "allowOverrides")
-
-	return config, overrides
 }
 
 func parseOverrideKeys(values ...any) map[string]struct{} {
