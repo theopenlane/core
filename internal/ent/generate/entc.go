@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
@@ -370,6 +371,10 @@ func schemaGenerate(extensions ...entc.Extension) {
 		entc.Dependency(
 			entc.DependencyName("Summarizer"),
 			entc.DependencyType(&summarizer.Client{}),
+		),
+		entc.Dependency(
+			entc.DependencyName("Shortlinks"),
+			entc.DependencyType(&shortlinks.Client{}),
 		),
 		entc.Dependency(
 			entc.DependencyName("Pool"),

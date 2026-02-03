@@ -33,6 +33,7 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
+	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
@@ -139,6 +140,8 @@ type Handler struct {
 	CampaignWebhook CampaignWebhookConfig
 	// CloudflareConfig contains the configuration for Cloudflare integration
 	CloudflareConfig CloudflareConfig
+	// ShortlinksClient provides URL shortening functionality
+	ShortlinksClient *shortlinks.Client
 }
 
 // CampaignWebhookConfig contains webhook configuration for campaign-related email providers.

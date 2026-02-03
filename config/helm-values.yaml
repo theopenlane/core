@@ -580,6 +580,11 @@ coreConfiguration:
   cloudflare:
     # -- Enabled toggles the Cloudflare snapshot handler
     enabled: false  # @schema type:boolean; default:false
+  # -- Shortlinks contains configuration for the URL shortening service
+  shortlinks:
+    enabled: false  # @schema type:boolean; default:false
+    clientid: "d5d5babbdd4ba64d59ae543ac3b6a74d.access"  # @schema type:string; default:d5d5babbdd4ba64d59ae543ac3b6a74d.access
+    endpointurl: "https://admin.s.theopenlane.io/api/links"  # @schema type:string; default:https://admin.s.theopenlane.io/api/links
 
 # -- External Secrets configuration
 externalSecrets:
@@ -939,3 +944,11 @@ externalSecrets:
       secretKey: "CORE_CLOUDFLARE_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-cloudflare-clientsecret"  # @schema type:string
+    # -- core-shortlinks-clientsecret secret configuration
+    core-shortlinks-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for shortlinks.clientsecret
+      secretKey: "CORE_SHORTLINKS_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-shortlinks-clientsecret"  # @schema type:string
