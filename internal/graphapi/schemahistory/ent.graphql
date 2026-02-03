@@ -5882,6 +5882,10 @@ type CustomDomainHistory implements Node {
   The ID of the dns verification record
   """
   dnsVerificationID: String
+  """
+  the ID of the trust center the domain belongs to, if applicable
+  """
+  trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -6173,6 +6177,24 @@ input CustomDomainHistoryWhereInput {
   dnsVerificationIDNotNil: Boolean
   dnsVerificationIDEqualFold: String
   dnsVerificationIDContainsFold: String
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
 }
 type DNSVerificationHistory implements Node {
   id: ID!

@@ -71,6 +71,9 @@ func (CustomDomain) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationCreateInput),
 			).
 			Optional(),
+		field.String("trust_center_id").
+			Comment("the ID of the trust center the domain belongs to, if applicable").
+			Optional(),
 	}
 }
 

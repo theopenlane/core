@@ -132,6 +132,11 @@ func DNSVerificationID(v string) predicate.CustomDomain {
 	return predicate.CustomDomain(sql.FieldEQ(FieldDNSVerificationID, v))
 }
 
+// TrustCenterID applies equality check predicate on the "trust_center_id" field. It's identical to TrustCenterIDEQ.
+func TrustCenterID(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.CustomDomain {
 	return predicate.CustomDomain(sql.FieldEQ(FieldCreatedAt, v))
@@ -965,6 +970,81 @@ func DNSVerificationIDEqualFold(v string) predicate.CustomDomain {
 // DNSVerificationIDContainsFold applies the ContainsFold predicate on the "dns_verification_id" field.
 func DNSVerificationIDContainsFold(v string) predicate.CustomDomain {
 	return predicate.CustomDomain(sql.FieldContainsFold(FieldDNSVerificationID, v))
+}
+
+// TrustCenterIDEQ applies the EQ predicate on the "trust_center_id" field.
+func TrustCenterIDEQ(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDNEQ applies the NEQ predicate on the "trust_center_id" field.
+func TrustCenterIDNEQ(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldNEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIn applies the In predicate on the "trust_center_id" field.
+func TrustCenterIDIn(vs ...string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDNotIn applies the NotIn predicate on the "trust_center_id" field.
+func TrustCenterIDNotIn(vs ...string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldNotIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDGT applies the GT predicate on the "trust_center_id" field.
+func TrustCenterIDGT(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldGT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDGTE applies the GTE predicate on the "trust_center_id" field.
+func TrustCenterIDGTE(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldGTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLT applies the LT predicate on the "trust_center_id" field.
+func TrustCenterIDLT(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldLT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLTE applies the LTE predicate on the "trust_center_id" field.
+func TrustCenterIDLTE(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldLTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContains applies the Contains predicate on the "trust_center_id" field.
+func TrustCenterIDContains(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldContains(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasPrefix applies the HasPrefix predicate on the "trust_center_id" field.
+func TrustCenterIDHasPrefix(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldHasPrefix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasSuffix applies the HasSuffix predicate on the "trust_center_id" field.
+func TrustCenterIDHasSuffix(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldHasSuffix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIsNil applies the IsNil predicate on the "trust_center_id" field.
+func TrustCenterIDIsNil() predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldIsNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDNotNil applies the NotNil predicate on the "trust_center_id" field.
+func TrustCenterIDNotNil() predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldNotNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDEqualFold applies the EqualFold predicate on the "trust_center_id" field.
+func TrustCenterIDEqualFold(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldEqualFold(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
+func TrustCenterIDContainsFold(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldContainsFold(FieldTrustCenterID, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

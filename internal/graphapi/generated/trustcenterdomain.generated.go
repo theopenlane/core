@@ -77,6 +77,8 @@ func (ec *executionContext) fieldContext_TrustCenterDomainCreatePayload_customDo
 				return ec.fieldContext_CustomDomain_mappableDomainID(ctx, field)
 			case "dnsVerificationID":
 				return ec.fieldContext_CustomDomain_dnsVerificationID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_CustomDomain_trustCenterID(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomDomain_owner(ctx, field)
 			case "mappableDomain":

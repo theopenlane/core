@@ -195,6 +195,20 @@ func (_c *CustomDomainCreate) SetNillableDNSVerificationID(v *string) *CustomDom
 	return _c
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *CustomDomainCreate) SetTrustCenterID(v string) *CustomDomainCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *CustomDomainCreate) SetNillableTrustCenterID(v *string) *CustomDomainCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *CustomDomainCreate) SetID(v string) *CustomDomainCreate {
 	_c.mutation.SetID(v)
@@ -393,6 +407,10 @@ func (_c *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.CnameRecord(); ok {
 		_spec.SetField(customdomain.FieldCnameRecord, field.TypeString, value)
 		_node.CnameRecord = value
+	}
+	if value, ok := _c.mutation.TrustCenterID(); ok {
+		_spec.SetField(customdomain.FieldTrustCenterID, field.TypeString, value)
+		_node.TrustCenterID = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

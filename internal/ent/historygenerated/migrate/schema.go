@@ -518,6 +518,7 @@ var (
 		{Name: "cname_record", Type: field.TypeString, Size: 255},
 		{Name: "mappable_domain_id", Type: field.TypeString},
 		{Name: "dns_verification_id", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 	}
 	// CustomDomainHistoryTable holds the schema information for the "custom_domain_history" table.
 	CustomDomainHistoryTable = &schema.Table{
