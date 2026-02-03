@@ -34376,10 +34376,12 @@ type UpdateCustomDomainInput struct {
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID      *string `json:"systemInternalID,omitempty"`
 	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
-	OwnerID               *string `json:"ownerID,omitempty"`
-	ClearOwner            *bool   `json:"clearOwner,omitempty"`
-	DNSVerificationID     *string `json:"dnsVerificationID,omitempty"`
-	ClearDNSVerification  *bool   `json:"clearDNSVerification,omitempty"`
+	// the name of the custom domain
+	CnameRecord          *string `json:"cnameRecord,omitempty"`
+	OwnerID              *string `json:"ownerID,omitempty"`
+	ClearOwner           *bool   `json:"clearOwner,omitempty"`
+	DNSVerificationID    *string `json:"dnsVerificationID,omitempty"`
+	ClearDNSVerification *bool   `json:"clearDNSVerification,omitempty"`
 }
 
 // UpdateCustomTypeEnumInput is used for update CustomTypeEnum object.

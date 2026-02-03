@@ -184,6 +184,20 @@ func (_u *CustomDomainUpdate) ClearSystemInternalID() *CustomDomainUpdate {
 	return _u
 }
 
+// SetCnameRecord sets the "cname_record" field.
+func (_u *CustomDomainUpdate) SetCnameRecord(v string) *CustomDomainUpdate {
+	_u.mutation.SetCnameRecord(v)
+	return _u
+}
+
+// SetNillableCnameRecord sets the "cname_record" field if the given value is not nil.
+func (_u *CustomDomainUpdate) SetNillableCnameRecord(v *string) *CustomDomainUpdate {
+	if v != nil {
+		_u.SetCnameRecord(*v)
+	}
+	return _u
+}
+
 // SetDNSVerificationID sets the "dns_verification_id" field.
 func (_u *CustomDomainUpdate) SetDNSVerificationID(v string) *CustomDomainUpdate {
 	_u.mutation.SetDNSVerificationID(v)
@@ -275,6 +289,11 @@ func (_u *CustomDomainUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *CustomDomainUpdate) check() error {
+	if v, ok := _u.mutation.CnameRecord(); ok {
+		if err := customdomain.CnameRecordValidator(v); err != nil {
+			return &ValidationError{Name: "cname_record", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.cname_record": %w`, err)}
+		}
+	}
 	if _u.mutation.MappableDomainCleared() && len(_u.mutation.MappableDomainIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "CustomDomain.mappable_domain"`)
 	}
@@ -354,6 +373,9 @@ func (_u *CustomDomainUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(customdomain.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.CnameRecord(); ok {
+		_spec.SetField(customdomain.FieldCnameRecord, field.TypeString, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -591,6 +613,20 @@ func (_u *CustomDomainUpdateOne) ClearSystemInternalID() *CustomDomainUpdateOne 
 	return _u
 }
 
+// SetCnameRecord sets the "cname_record" field.
+func (_u *CustomDomainUpdateOne) SetCnameRecord(v string) *CustomDomainUpdateOne {
+	_u.mutation.SetCnameRecord(v)
+	return _u
+}
+
+// SetNillableCnameRecord sets the "cname_record" field if the given value is not nil.
+func (_u *CustomDomainUpdateOne) SetNillableCnameRecord(v *string) *CustomDomainUpdateOne {
+	if v != nil {
+		_u.SetCnameRecord(*v)
+	}
+	return _u
+}
+
 // SetDNSVerificationID sets the "dns_verification_id" field.
 func (_u *CustomDomainUpdateOne) SetDNSVerificationID(v string) *CustomDomainUpdateOne {
 	_u.mutation.SetDNSVerificationID(v)
@@ -695,6 +731,11 @@ func (_u *CustomDomainUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *CustomDomainUpdateOne) check() error {
+	if v, ok := _u.mutation.CnameRecord(); ok {
+		if err := customdomain.CnameRecordValidator(v); err != nil {
+			return &ValidationError{Name: "cname_record", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.cname_record": %w`, err)}
+		}
+	}
 	if _u.mutation.MappableDomainCleared() && len(_u.mutation.MappableDomainIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "CustomDomain.mappable_domain"`)
 	}
@@ -791,6 +832,9 @@ func (_u *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDoma
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(customdomain.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.CnameRecord(); ok {
+		_spec.SetField(customdomain.FieldCnameRecord, field.TypeString, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

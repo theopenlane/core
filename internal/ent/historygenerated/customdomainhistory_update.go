@@ -184,6 +184,20 @@ func (_u *CustomDomainHistoryUpdate) ClearSystemInternalID() *CustomDomainHistor
 	return _u
 }
 
+// SetCnameRecord sets the "cname_record" field.
+func (_u *CustomDomainHistoryUpdate) SetCnameRecord(v string) *CustomDomainHistoryUpdate {
+	_u.mutation.SetCnameRecord(v)
+	return _u
+}
+
+// SetNillableCnameRecord sets the "cname_record" field if the given value is not nil.
+func (_u *CustomDomainHistoryUpdate) SetNillableCnameRecord(v *string) *CustomDomainHistoryUpdate {
+	if v != nil {
+		_u.SetCnameRecord(*v)
+	}
+	return _u
+}
+
 // SetDNSVerificationID sets the "dns_verification_id" field.
 func (_u *CustomDomainHistoryUpdate) SetDNSVerificationID(v string) *CustomDomainHistoryUpdate {
 	_u.mutation.SetDNSVerificationID(v)
@@ -330,6 +344,9 @@ func (_u *CustomDomainHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.CnameRecord(); ok {
+		_spec.SetField(customdomainhistory.FieldCnameRecord, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.DNSVerificationID(); ok {
 		_spec.SetField(customdomainhistory.FieldDNSVerificationID, field.TypeString, value)
@@ -511,6 +528,20 @@ func (_u *CustomDomainHistoryUpdateOne) ClearSystemInternalID() *CustomDomainHis
 	return _u
 }
 
+// SetCnameRecord sets the "cname_record" field.
+func (_u *CustomDomainHistoryUpdateOne) SetCnameRecord(v string) *CustomDomainHistoryUpdateOne {
+	_u.mutation.SetCnameRecord(v)
+	return _u
+}
+
+// SetNillableCnameRecord sets the "cname_record" field if the given value is not nil.
+func (_u *CustomDomainHistoryUpdateOne) SetNillableCnameRecord(v *string) *CustomDomainHistoryUpdateOne {
+	if v != nil {
+		_u.SetCnameRecord(*v)
+	}
+	return _u
+}
+
 // SetDNSVerificationID sets the "dns_verification_id" field.
 func (_u *CustomDomainHistoryUpdateOne) SetDNSVerificationID(v string) *CustomDomainHistoryUpdateOne {
 	_u.mutation.SetDNSVerificationID(v)
@@ -687,6 +718,9 @@ func (_u *CustomDomainHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Cus
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.CnameRecord(); ok {
+		_spec.SetField(customdomainhistory.FieldCnameRecord, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.DNSVerificationID(); ok {
 		_spec.SetField(customdomainhistory.FieldDNSVerificationID, field.TypeString, value)

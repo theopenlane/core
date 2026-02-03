@@ -4266,6 +4266,7 @@ type UpdateCustomDomainInput struct {
 	InternalNotes         *string
 	ClearSystemInternalID bool
 	SystemInternalID      *string
+	CnameRecord           *string
 	ClearOwner            bool
 	OwnerID               *string
 	ClearDNSVerification  bool
@@ -4294,6 +4295,9 @@ func (i *UpdateCustomDomainInput) Mutate(m *CustomDomainMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if v := i.CnameRecord; v != nil {
+		m.SetCnameRecord(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

@@ -111744,6 +111744,10 @@ input UpdateCustomDomainInput {
   """
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
+  """
+  the name of the custom domain
+  """
+  cnameRecord: String
   ownerID: ID
   clearOwner: Boolean
   dnsVerificationID: ID

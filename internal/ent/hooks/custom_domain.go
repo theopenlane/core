@@ -6,6 +6,8 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
@@ -14,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/iam/auth"
 )
 
 // HookCustomDomain runs on create mutations
@@ -43,7 +44,7 @@ func HookCreateCustomDomain() ent.Hook {
 	)
 }
 
-// HookCustomDomain runs on create mutations
+// HookDeleteCustomDomain runs on update and delete mutations
 func HookDeleteCustomDomain() ent.Hook {
 	return hook.If(
 		func(next ent.Mutator) ent.Mutator {
@@ -51,14 +52,71 @@ func HookDeleteCustomDomain() ent.Hook {
 				logx.FromContext(ctx).Debug().Msg("custom domain delete hook")
 
 				if !isDeleteOp(ctx, m) {
-					// only allow system admin to update
 					if !auth.IsSystemAdminFromContext(ctx) {
 						logx.FromContext(ctx).Warn().Msg("only system admins can update custom domains")
 
 						return nil, generated.ErrPermissionDenied
 					}
 
-					return next.Mutate(ctx, m)
+					if !m.Op().Is(ent.OpUpdateOne) {
+						return next.Mutate(ctx, m)
+					}
+
+					newCname, ok := m.CnameRecord()
+
+					var oldCname string
+					if ok {
+						var err error
+
+						oldCname, err = m.OldCnameRecord(ctx)
+						if err != nil {
+							return nil, err
+						}
+					}
+
+					v, err := next.Mutate(ctx, m)
+					if err != nil {
+						return v, err
+					}
+
+					if !ok || oldCname == newCname {
+						return v, nil
+					}
+
+					id, err := GetObjectIDFromEntValue(v)
+					if err != nil {
+						return v, err
+					}
+
+					if err := enqueueJob(ctx, m.Job, jobspec.ValidateCustomDomainArgs{
+						CustomDomainID: id,
+					}, nil); err != nil {
+						return nil, err
+					}
+
+					trustCenters, err := m.Client().TrustCenter.Query().
+						Where(trustcenter.Or(
+							trustcenter.HasCustomDomainWith(customdomain.ID(id)),
+							trustcenter.HasPreviewDomainWith(customdomain.ID(id)),
+						)).
+						All(ctx)
+					if err != nil {
+						return nil, err
+					}
+
+					for _, tc := range trustCenters {
+						if tc.PirschDomainID == "" {
+							continue
+						}
+
+						if err := enqueueJob(ctx, m.Job, jobspec.UpdatePirschDomainArgs{
+							TrustCenterID: tc.ID,
+						}, nil); err != nil {
+							return nil, err
+						}
+					}
+
+					return v, nil
 				}
 
 				id, ok := m.ID()

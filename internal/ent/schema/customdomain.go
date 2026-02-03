@@ -56,7 +56,6 @@ func (CustomDomain) Fields() []ent.Field {
 			Validate(validator.ValidateURL()).
 			MaxLen(maxDomainNameLen).
 			NotEmpty().
-			Immutable().
 			Annotations(
 				entgql.OrderField("cname_record"),
 			),
