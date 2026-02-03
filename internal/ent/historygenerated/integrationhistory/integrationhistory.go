@@ -63,6 +63,8 @@ const (
 	FieldKind = "kind"
 	// FieldIntegrationType holds the string denoting the integration_type field in the database.
 	FieldIntegrationType = "integration_type"
+	// FieldProviderMetadata holds the string denoting the provider_metadata field in the database.
+	FieldProviderMetadata = "provider_metadata"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
 	// Table holds the table name of the integrationhistory in the database.
@@ -94,6 +96,7 @@ var Columns = []string{
 	FieldDescription,
 	FieldKind,
 	FieldIntegrationType,
+	FieldProviderMetadata,
 	FieldMetadata,
 }
 

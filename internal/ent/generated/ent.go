@@ -32,6 +32,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -49,6 +51,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
@@ -61,6 +65,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -188,6 +194,8 @@ func checkColumn(t, c string) error {
 			directorysyncrun.Table:           directorysyncrun.ValidColumn,
 			discussion.Table:                 discussion.ValidColumn,
 			documentdata.Table:               documentdata.ValidColumn,
+			emailbranding.Table:              emailbranding.ValidColumn,
+			emailtemplate.Table:              emailtemplate.ValidColumn,
 			emailverificationtoken.Table:     emailverificationtoken.ValidColumn,
 			entity.Table:                     entity.ValidColumn,
 			entitytype.Table:                 entitytype.ValidColumn,
@@ -205,6 +213,8 @@ func checkColumn(t, c string) error {
 			identityholder.Table:             identityholder.ValidColumn,
 			impersonationevent.Table:         impersonationevent.ValidColumn,
 			integration.Table:                integration.ValidColumn,
+			integrationrun.Table:             integrationrun.ValidColumn,
+			integrationwebhook.Table:         integrationwebhook.ValidColumn,
 			internalpolicy.Table:             internalpolicy.ValidColumn,
 			invite.Table:                     invite.ValidColumn,
 			jobresult.Table:                  jobresult.ValidColumn,
@@ -217,6 +227,8 @@ func checkColumn(t, c string) error {
 			narrative.Table:                  narrative.ValidColumn,
 			note.Table:                       note.ValidColumn,
 			notification.Table:               notification.ValidColumn,
+			notificationpreference.Table:     notificationpreference.ValidColumn,
+			notificationtemplate.Table:       notificationtemplate.ValidColumn,
 			onboarding.Table:                 onboarding.ValidColumn,
 			orgmembership.Table:              orgmembership.ValidColumn,
 			orgmodule.Table:                  orgmodule.ValidColumn,

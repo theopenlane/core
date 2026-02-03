@@ -42,6 +42,10 @@ func (e *TxError) Is(target error) bool {
 func WithTx[T any](ctx context.Context, client *generated.Client, scope *observability.Scope, fn func(tx *generated.Tx) (T, error)) (T, error) {
 	var zero T
 
+	if existingTx := generated.TxFromContext(ctx); existingTx != nil {
+		return fn(existingTx)
+	}
+
 	if client == nil {
 		return zero, &TxError{Stage: ErrTxBegin, Err: ErrNilClient}
 	}

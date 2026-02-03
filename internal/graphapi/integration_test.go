@@ -149,10 +149,10 @@ func TestIntegrationWithSecretsRelationship(t *testing.T) {
 }
 
 func TestMutationDeleteIntegration(t *testing.T) {
-	// Create integration with secrets
-	integration1 := (&IntegrationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	integration2 := (&IntegrationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	integration3 := (&IntegrationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	// Create integrations with different kinds (unique constraint on owner_id + kind)
+	integration1 := (&IntegrationBuilder{client: suite.client, Kind: "github"}).MustNew(testUser1.UserCtx, t)
+	integration2 := (&IntegrationBuilder{client: suite.client, Kind: "slack"}).MustNew(testUser1.UserCtx, t)
+	integration3 := (&IntegrationBuilder{client: suite.client, Kind: "jira"}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -382,9 +382,9 @@ func TestQueryIntegrationWithSecrets(t *testing.T) {
 }
 
 func TestListIntegrations(t *testing.T) {
-	// create an integration to be queried using testUser1
-	integration1 := (&IntegrationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	integration2 := (&IntegrationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	// create integrations with different kinds (unique constraint on owner_id + kind)
+	integration1 := (&IntegrationBuilder{client: suite.client, Kind: "github"}).MustNew(testUser1.UserCtx, t)
+	integration2 := (&IntegrationBuilder{client: suite.client, Kind: "slack"}).MustNew(testUser1.UserCtx, t)
 
 	// add test cases for querying the Integration
 	testCases := []struct {

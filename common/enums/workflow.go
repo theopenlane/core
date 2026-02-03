@@ -108,15 +108,17 @@ func (r *WorkflowInstanceState) UnmarshalGQL(v interface{}) error {
 type WorkflowAssignmentStatus string
 
 var (
-	WorkflowAssignmentStatusPending  WorkflowAssignmentStatus = "PENDING"
-	WorkflowAssignmentStatusApproved WorkflowAssignmentStatus = "APPROVED"
-	WorkflowAssignmentStatusRejected WorkflowAssignmentStatus = "REJECTED"
+	WorkflowAssignmentStatusPending          WorkflowAssignmentStatus = "PENDING"
+	WorkflowAssignmentStatusApproved         WorkflowAssignmentStatus = "APPROVED"
+	WorkflowAssignmentStatusRejected         WorkflowAssignmentStatus = "REJECTED"
+	WorkflowAssignmentStatusChangesRequested WorkflowAssignmentStatus = "CHANGES_REQUESTED"
 )
 
 var WorkflowAssignmentStatuses = []string{
 	string(WorkflowAssignmentStatusPending),
 	string(WorkflowAssignmentStatusApproved),
 	string(WorkflowAssignmentStatusRejected),
+	string(WorkflowAssignmentStatusChangesRequested),
 }
 
 func (WorkflowAssignmentStatus) Values() (vals []string) {
@@ -133,6 +135,8 @@ func ToWorkflowAssignmentStatus(v string) *WorkflowAssignmentStatus {
 		return &WorkflowAssignmentStatusApproved
 	case WorkflowAssignmentStatusRejected.String():
 		return &WorkflowAssignmentStatusRejected
+	case WorkflowAssignmentStatusChangesRequested.String():
+		return &WorkflowAssignmentStatusChangesRequested
 	default:
 		return nil
 	}
@@ -308,11 +312,15 @@ func (r *WorkflowTargetType) UnmarshalGQL(v interface{}) error {
 type WorkflowActionType string
 
 var (
-	WorkflowActionTypeApproval     WorkflowActionType = "REQUEST_APPROVAL"
-	WorkflowActionTypeNotification WorkflowActionType = "NOTIFY"
-	WorkflowActionTypeWebhook      WorkflowActionType = "WEBHOOK"
-	WorkflowActionTypeFieldUpdate  WorkflowActionType = "UPDATE_FIELD"
-	WorkflowActionTypeIntegration  WorkflowActionType = "INTEGRATION"
+	WorkflowActionTypeApproval         WorkflowActionType = "REQUEST_APPROVAL"
+	WorkflowActionTypeNotification     WorkflowActionType = "NOTIFY"
+	WorkflowActionTypeWebhook          WorkflowActionType = "WEBHOOK"
+	WorkflowActionTypeFieldUpdate      WorkflowActionType = "UPDATE_FIELD"
+	WorkflowActionTypeIntegration      WorkflowActionType = "INTEGRATION"
+	WorkflowActionTypeReassignApproval WorkflowActionType = "REASSIGN_APPROVAL"
+	WorkflowActionTypeSendEmail        WorkflowActionType = "SEND_EMAIL"
+	WorkflowActionTypeCreateObject     WorkflowActionType = "CREATE_OBJECT"
+	WorkflowActionTypeReview           WorkflowActionType = "REQUEST_REVIEW"
 )
 
 var WorkflowActionTypes = []string{
@@ -321,6 +329,10 @@ var WorkflowActionTypes = []string{
 	string(WorkflowActionTypeWebhook),
 	string(WorkflowActionTypeFieldUpdate),
 	string(WorkflowActionTypeIntegration),
+	string(WorkflowActionTypeReassignApproval),
+	string(WorkflowActionTypeSendEmail),
+	string(WorkflowActionTypeReview),
+	string(WorkflowActionTypeCreateObject),
 }
 
 func (WorkflowActionType) Values() (vals []string) {
@@ -335,12 +347,20 @@ func ToWorkflowActionType(v string) *WorkflowActionType {
 		return &WorkflowActionTypeApproval
 	case WorkflowActionTypeNotification.String():
 		return &WorkflowActionTypeNotification
+	case WorkflowActionTypeReview.String():
+		return &WorkflowActionTypeReview
+	case WorkflowActionTypeCreateObject.String():
+		return &WorkflowActionTypeCreateObject
 	case WorkflowActionTypeWebhook.String():
 		return &WorkflowActionTypeWebhook
 	case WorkflowActionTypeFieldUpdate.String():
 		return &WorkflowActionTypeFieldUpdate
 	case WorkflowActionTypeIntegration.String():
 		return &WorkflowActionTypeIntegration
+	case WorkflowActionTypeReassignApproval.String():
+		return &WorkflowActionTypeReassignApproval
+	case WorkflowActionTypeSendEmail.String():
+		return &WorkflowActionTypeSendEmail
 	default:
 		return nil
 	}
@@ -463,5 +483,48 @@ func (r *WorkflowEventType) UnmarshalGQL(v interface{}) error {
 		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowEventType, v)
 	}
 	*r = WorkflowEventType(str)
+	return nil
+}
+
+// WorkflowApprovalTiming enumerates when approvals should block changes.
+type WorkflowApprovalTiming string
+
+var (
+	WorkflowApprovalTimingPreCommit  WorkflowApprovalTiming = "PRE_COMMIT"
+	WorkflowApprovalTimingPostCommit WorkflowApprovalTiming = "POST_COMMIT"
+)
+
+var WorkflowApprovalTimings = []string{
+	string(WorkflowApprovalTimingPreCommit),
+	string(WorkflowApprovalTimingPostCommit),
+}
+
+func (WorkflowApprovalTiming) Values() (vals []string) {
+	return WorkflowApprovalTimings
+}
+
+func (r WorkflowApprovalTiming) String() string { return string(r) }
+
+func ToWorkflowApprovalTiming(v string) *WorkflowApprovalTiming {
+	switch strings.ToUpper(v) {
+	case WorkflowApprovalTimingPreCommit.String():
+		return &WorkflowApprovalTimingPreCommit
+	case WorkflowApprovalTimingPostCommit.String():
+		return &WorkflowApprovalTimingPostCommit
+	default:
+		return nil
+	}
+}
+
+func (r WorkflowApprovalTiming) MarshalGQL(w io.Writer) {
+	_, _ = w.Write([]byte(`"` + r.String() + `"`))
+}
+
+func (r *WorkflowApprovalTiming) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowApprovalTiming, v)
+	}
+	*r = WorkflowApprovalTiming(str)
 	return nil
 }

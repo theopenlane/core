@@ -1,0 +1,158 @@
+extend type Query {
+    """
+    Look up workflow proposal by ID
+    """
+    workflowProposal(
+        """
+        ID of the workflow proposal
+        """
+        id: ID!
+    ): WorkflowProposal!
+    """
+    List workflow proposals for a specific object
+    """
+    workflowProposalsForObject(
+        """
+        Workflow object type (e.g. Control, InternalPolicy)
+        """
+        objectType: String!
+        """
+        ID of the object
+        """
+        objectID: ID!
+        """
+        Optional states to filter proposals by
+        """
+        includeStates: [WorkflowProposalState!]
+    ): [WorkflowProposal!]!
+}
+
+extend type Mutation {
+    """
+    Update the proposed changes for a workflow proposal
+    """
+    updateWorkflowProposalChanges(
+        input: UpdateWorkflowProposalChangesInput!
+    ): WorkflowProposalUpdatePayload!
+    """
+    Submit a draft workflow proposal for approval
+    """
+    submitWorkflowProposal(
+        """
+        ID of the workflow proposal to submit
+        """
+        id: ID!
+    ): WorkflowProposalSubmitPayload!
+    """
+    Withdraw a workflow proposal (mark as superseded)
+    """
+    withdrawWorkflowProposal(
+        """
+        ID of the workflow proposal to withdraw
+        """
+        id: ID!
+        """
+        Optional reason for withdrawal
+        """
+        reason: String
+    ): WorkflowProposalWithdrawPayload!
+}
+
+"""
+WorkflowProposal stores staged changes for a workflow approval domain.
+"""
+type WorkflowProposal @goModel(model: "github.com/theopenlane/core/internal/ent/generated.WorkflowProposal") {
+    """
+    ID of the workflow proposal
+    """
+    id: ID!
+    """
+    Stable key representing the approval domain for this proposal
+    """
+    domainKey: String!
+    """
+    Current state of the proposal
+    """
+    state: WorkflowProposalState!
+    """
+    Staged field updates for this domain
+    """
+    changes: Map
+    """
+    Hash of the current proposed changes for approval verification
+    """
+    proposedHash: String
+    """
+    Hash of the proposed changes that were approved
+    """
+    approvedHash: String
+    """
+    Timestamp when this proposal was submitted for approval
+    """
+    submittedAt: Time
+    """
+    User who submitted this proposal for approval
+    """
+    submittedByUserID: ID
+    """
+    WorkflowObjectRef record that identifies the target object for this proposal
+    """
+    workflowObjectRefID: ID!
+    """
+    Creation timestamp
+    """
+    createdAt: Time!
+    """
+    Last update timestamp
+    """
+    updatedAt: Time!
+    """
+    Precomputed proposal preview (diff + values) for approval workflows.
+    Only available to editors/owners of the target object.
+    """
+    preview: WorkflowProposalPreview
+}
+
+"""
+Input for updateWorkflowProposalChanges mutation
+"""
+input UpdateWorkflowProposalChangesInput {
+    """
+    ID of the workflow proposal to update
+    """
+    id: ID!
+    """
+    New proposed changes for the approval domain
+    """
+    changes: Map!
+}
+
+"""
+Return response for updateWorkflowProposalChanges mutation
+"""
+type WorkflowProposalUpdatePayload {
+    """
+    Updated workflow proposal
+    """
+    workflowProposal: WorkflowProposal!
+}
+
+"""
+Return response for submitWorkflowProposal mutation
+"""
+type WorkflowProposalSubmitPayload {
+    """
+    Submitted workflow proposal
+    """
+    workflowProposal: WorkflowProposal!
+}
+
+"""
+Return response for withdrawWorkflowProposal mutation
+"""
+type WorkflowProposalWithdrawPayload {
+    """
+    Withdrawn workflow proposal
+    """
+    workflowProposal: WorkflowProposal!
+}

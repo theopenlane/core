@@ -1726,6 +1726,308 @@ func (r *mutationResolver) bulkUpdateCSVDocumentData(ctx context.Context, inputs
 	}, nil
 }
 
+// bulkCreateEmailBranding uses the CreateBulk function to create multiple EmailBranding entities
+func (r *mutationResolver) bulkCreateEmailBranding(ctx context.Context, input []*generated.CreateEmailBrandingInput) (*model.EmailBrandingBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.EmailBrandingCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.EmailBranding.Create().SetInput(*data)
+	}
+
+	res, err := c.EmailBranding.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "emailbranding"})
+	}
+
+	// return response
+	return &model.EmailBrandingBulkCreatePayload{
+		EmailBrandings: res,
+	}, nil
+}
+
+// bulkUpdateEmailBranding updates multiple EmailBranding entities
+func (r *mutationResolver) bulkUpdateEmailBranding(ctx context.Context, ids []string, input generated.UpdateEmailBrandingInput) (*model.EmailBrandingBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.EmailBranding, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each emailbranding individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for emailbranding")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.EmailBranding.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("emailbranding_id", id).Msg("failed to get emailbranding in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("emailbranding_id", id).Msg("failed to update emailbranding in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.EmailBrandingBulkUpdatePayload{
+		EmailBrandings: results,
+		UpdatedIDs:     updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVEmailBranding updates multiple EmailBranding entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVEmailBranding(ctx context.Context, inputs []*csvgenerated.EmailBrandingCSVUpdateInput) (*model.EmailBrandingBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.EmailBranding, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each emailbranding individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for emailbranding")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.EmailBranding.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("emailbranding_id", input.ID).Msg("failed to get emailbranding in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("emailbranding_id", input.ID).Msg("failed to update emailbranding in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "emailbranding"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.EmailBrandingBulkUpdatePayload{
+		EmailBrandings: results,
+		UpdatedIDs:     updatedIDs,
+	}, nil
+}
+
+// bulkDeleteEmailBranding deletes multiple EmailBranding entities by their IDs
+func (r *mutationResolver) bulkDeleteEmailBranding(ctx context.Context, ids []string) (*model.EmailBrandingBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each emailbranding individually to ensure proper cleanup
+			if err := r.db.EmailBranding.DeleteOneID(id).Exec(ctx); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("emailbranding_id", id).Msg("failed to delete emailbranding in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.EmailBrandingEdgeCleanup(ctx, id); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("emailbranding_id", id).Msg("failed to cleanup emailbranding edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some emailbranding deletions failed")
+	}
+
+	return &model.EmailBrandingBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
+// bulkCreateEmailTemplate uses the CreateBulk function to create multiple EmailTemplate entities
+func (r *mutationResolver) bulkCreateEmailTemplate(ctx context.Context, input []*generated.CreateEmailTemplateInput) (*model.EmailTemplateBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.EmailTemplateCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.EmailTemplate.Create().SetInput(*data)
+	}
+
+	res, err := c.EmailTemplate.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "emailtemplate"})
+	}
+
+	// return response
+	return &model.EmailTemplateBulkCreatePayload{
+		EmailTemplates: res,
+	}, nil
+}
+
+// bulkUpdateEmailTemplate updates multiple EmailTemplate entities
+func (r *mutationResolver) bulkUpdateEmailTemplate(ctx context.Context, ids []string, input generated.UpdateEmailTemplateInput) (*model.EmailTemplateBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.EmailTemplate, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each emailtemplate individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for emailtemplate")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.EmailTemplate.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("emailtemplate_id", id).Msg("failed to get emailtemplate in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("emailtemplate_id", id).Msg("failed to update emailtemplate in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.EmailTemplateBulkUpdatePayload{
+		EmailTemplates: results,
+		UpdatedIDs:     updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVEmailTemplate updates multiple EmailTemplate entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVEmailTemplate(ctx context.Context, inputs []*csvgenerated.EmailTemplateCSVUpdateInput) (*model.EmailTemplateBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.EmailTemplate, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each emailtemplate individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for emailtemplate")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.EmailTemplate.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("emailtemplate_id", input.ID).Msg("failed to get emailtemplate in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("emailtemplate_id", input.ID).Msg("failed to update emailtemplate in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "emailtemplate"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.EmailTemplateBulkUpdatePayload{
+		EmailTemplates: results,
+		UpdatedIDs:     updatedIDs,
+	}, nil
+}
+
+// bulkDeleteEmailTemplate deletes multiple EmailTemplate entities by their IDs
+func (r *mutationResolver) bulkDeleteEmailTemplate(ctx context.Context, ids []string) (*model.EmailTemplateBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each emailtemplate individually to ensure proper cleanup
+			if err := r.db.EmailTemplate.DeleteOneID(id).Exec(ctx); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("emailtemplate_id", id).Msg("failed to delete emailtemplate in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.EmailTemplateEdgeCleanup(ctx, id); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("emailtemplate_id", id).Msg("failed to cleanup emailtemplate edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some emailtemplate deletions failed")
+	}
+
+	return &model.EmailTemplateBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateEntity uses the CreateBulk function to create multiple Entity entities
 func (r *mutationResolver) bulkCreateEntity(ctx context.Context, input []*generated.CreateEntityInput) (*model.EntityBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -3944,6 +4246,308 @@ func (r *mutationResolver) bulkUpdateCSVNarrative(ctx context.Context, inputs []
 	return &model.NarrativeBulkUpdatePayload{
 		Narratives: results,
 		UpdatedIDs: updatedIDs,
+	}, nil
+}
+
+// bulkCreateNotificationPreference uses the CreateBulk function to create multiple NotificationPreference entities
+func (r *mutationResolver) bulkCreateNotificationPreference(ctx context.Context, input []*generated.CreateNotificationPreferenceInput) (*model.NotificationPreferenceBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.NotificationPreferenceCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.NotificationPreference.Create().SetInput(*data)
+	}
+
+	res, err := c.NotificationPreference.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "notificationpreference"})
+	}
+
+	// return response
+	return &model.NotificationPreferenceBulkCreatePayload{
+		NotificationPreferences: res,
+	}, nil
+}
+
+// bulkUpdateNotificationPreference updates multiple NotificationPreference entities
+func (r *mutationResolver) bulkUpdateNotificationPreference(ctx context.Context, ids []string, input generated.UpdateNotificationPreferenceInput) (*model.NotificationPreferenceBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.NotificationPreference, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each notificationpreference individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for notificationpreference")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.NotificationPreference.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("notificationpreference_id", id).Msg("failed to get notificationpreference in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("notificationpreference_id", id).Msg("failed to update notificationpreference in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.NotificationPreferenceBulkUpdatePayload{
+		NotificationPreferences: results,
+		UpdatedIDs:              updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVNotificationPreference updates multiple NotificationPreference entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVNotificationPreference(ctx context.Context, inputs []*csvgenerated.NotificationPreferenceCSVUpdateInput) (*model.NotificationPreferenceBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.NotificationPreference, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each notificationpreference individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for notificationpreference")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.NotificationPreference.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("notificationpreference_id", input.ID).Msg("failed to get notificationpreference in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("notificationpreference_id", input.ID).Msg("failed to update notificationpreference in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "notificationpreference"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.NotificationPreferenceBulkUpdatePayload{
+		NotificationPreferences: results,
+		UpdatedIDs:              updatedIDs,
+	}, nil
+}
+
+// bulkDeleteNotificationPreference deletes multiple NotificationPreference entities by their IDs
+func (r *mutationResolver) bulkDeleteNotificationPreference(ctx context.Context, ids []string) (*model.NotificationPreferenceBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each notificationpreference individually to ensure proper cleanup
+			if err := r.db.NotificationPreference.DeleteOneID(id).Exec(ctx); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("notificationpreference_id", id).Msg("failed to delete notificationpreference in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.NotificationPreferenceEdgeCleanup(ctx, id); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("notificationpreference_id", id).Msg("failed to cleanup notificationpreference edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some notificationpreference deletions failed")
+	}
+
+	return &model.NotificationPreferenceBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
+// bulkCreateNotificationTemplate uses the CreateBulk function to create multiple NotificationTemplate entities
+func (r *mutationResolver) bulkCreateNotificationTemplate(ctx context.Context, input []*generated.CreateNotificationTemplateInput) (*model.NotificationTemplateBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.NotificationTemplateCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.NotificationTemplate.Create().SetInput(*data)
+	}
+
+	res, err := c.NotificationTemplate.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "notificationtemplate"})
+	}
+
+	// return response
+	return &model.NotificationTemplateBulkCreatePayload{
+		NotificationTemplates: res,
+	}, nil
+}
+
+// bulkUpdateNotificationTemplate updates multiple NotificationTemplate entities
+func (r *mutationResolver) bulkUpdateNotificationTemplate(ctx context.Context, ids []string, input generated.UpdateNotificationTemplateInput) (*model.NotificationTemplateBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.NotificationTemplate, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each notificationtemplate individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for notificationtemplate")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.NotificationTemplate.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("notificationtemplate_id", id).Msg("failed to get notificationtemplate in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("notificationtemplate_id", id).Msg("failed to update notificationtemplate in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.NotificationTemplateBulkUpdatePayload{
+		NotificationTemplates: results,
+		UpdatedIDs:            updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVNotificationTemplate updates multiple NotificationTemplate entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVNotificationTemplate(ctx context.Context, inputs []*csvgenerated.NotificationTemplateCSVUpdateInput) (*model.NotificationTemplateBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.NotificationTemplate, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each notificationtemplate individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for notificationtemplate")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.NotificationTemplate.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("notificationtemplate_id", input.ID).Msg("failed to get notificationtemplate in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("notificationtemplate_id", input.ID).Msg("failed to update notificationtemplate in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "notificationtemplate"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.NotificationTemplateBulkUpdatePayload{
+		NotificationTemplates: results,
+		UpdatedIDs:            updatedIDs,
+	}, nil
+}
+
+// bulkDeleteNotificationTemplate deletes multiple NotificationTemplate entities by their IDs
+func (r *mutationResolver) bulkDeleteNotificationTemplate(ctx context.Context, ids []string) (*model.NotificationTemplateBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each notificationtemplate individually to ensure proper cleanup
+			if err := r.db.NotificationTemplate.DeleteOneID(id).Exec(ctx); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("notificationtemplate_id", id).Msg("failed to delete notificationtemplate in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.NotificationTemplateEdgeCleanup(ctx, id); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("notificationtemplate_id", id).Msg("failed to cleanup notificationtemplate edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some notificationtemplate deletions failed")
+	}
+
+	return &model.NotificationTemplateBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 

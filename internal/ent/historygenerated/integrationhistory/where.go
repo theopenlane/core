@@ -1522,6 +1522,16 @@ func IntegrationTypeContainsFold(v string) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldIntegrationType, v))
 }
 
+// ProviderMetadataIsNil applies the IsNil predicate on the "provider_metadata" field.
+func ProviderMetadataIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldProviderMetadata))
+}
+
+// ProviderMetadataNotNil applies the NotNil predicate on the "provider_metadata" field.
+func ProviderMetadataNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldProviderMetadata))
+}
+
 // MetadataIsNil applies the IsNil predicate on the "metadata" field.
 func MetadataIsNil() predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldIsNull(FieldMetadata))

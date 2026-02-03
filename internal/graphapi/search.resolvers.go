@@ -22,44 +22,48 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
 	var (
-		errors                    []error
-		actionplanResults         *generated.ActionPlanConnection
-		assessmentResults         *generated.AssessmentConnection
-		assessmentresponseResults *generated.AssessmentResponseConnection
-		assetResults              *generated.AssetConnection
-		campaignResults           *generated.CampaignConnection
-		campaigntargetResults     *generated.CampaignTargetConnection
-		contactResults            *generated.ContactConnection
-		controlResults            *generated.ControlConnection
-		controlobjectiveResults   *generated.ControlObjectiveConnection
-		customtypeenumResults     *generated.CustomTypeEnumConnection
-		entityResults             *generated.EntityConnection
-		evidenceResults           *generated.EvidenceConnection
-		findingResults            *generated.FindingConnection
-		groupResults              *generated.GroupConnection
-		identityholderResults     *generated.IdentityHolderConnection
-		internalpolicyResults     *generated.InternalPolicyConnection
-		inviteResults             *generated.InviteConnection
-		jobrunnerResults          *generated.JobRunnerConnection
-		jobtemplateResults        *generated.JobTemplateConnection
-		narrativeResults          *generated.NarrativeConnection
-		organizationResults       *generated.OrganizationConnection
-		platformResults           *generated.PlatformConnection
-		procedureResults          *generated.ProcedureConnection
-		programResults            *generated.ProgramConnection
-		remediationResults        *generated.RemediationConnection
-		reviewResults             *generated.ReviewConnection
-		riskResults               *generated.RiskConnection
-		scanResults               *generated.ScanConnection
-		standardResults           *generated.StandardConnection
-		subcontrolResults         *generated.SubcontrolConnection
-		subprocessorResults       *generated.SubprocessorConnection
-		subscriberResults         *generated.SubscriberConnection
-		tagdefinitionResults      *generated.TagDefinitionConnection
-		taskResults               *generated.TaskConnection
-		templateResults           *generated.TemplateConnection
-		trustcenterentityResults  *generated.TrustCenterEntityConnection
-		vulnerabilityResults      *generated.VulnerabilityConnection
+		errors                      []error
+		actionplanResults           *generated.ActionPlanConnection
+		assessmentResults           *generated.AssessmentConnection
+		assessmentresponseResults   *generated.AssessmentResponseConnection
+		assetResults                *generated.AssetConnection
+		campaignResults             *generated.CampaignConnection
+		campaigntargetResults       *generated.CampaignTargetConnection
+		contactResults              *generated.ContactConnection
+		controlResults              *generated.ControlConnection
+		controlobjectiveResults     *generated.ControlObjectiveConnection
+		customtypeenumResults       *generated.CustomTypeEnumConnection
+		emailbrandingResults        *generated.EmailBrandingConnection
+		emailtemplateResults        *generated.EmailTemplateConnection
+		entityResults               *generated.EntityConnection
+		evidenceResults             *generated.EvidenceConnection
+		findingResults              *generated.FindingConnection
+		groupResults                *generated.GroupConnection
+		identityholderResults       *generated.IdentityHolderConnection
+		integrationResults          *generated.IntegrationConnection
+		internalpolicyResults       *generated.InternalPolicyConnection
+		inviteResults               *generated.InviteConnection
+		jobrunnerResults            *generated.JobRunnerConnection
+		jobtemplateResults          *generated.JobTemplateConnection
+		narrativeResults            *generated.NarrativeConnection
+		notificationtemplateResults *generated.NotificationTemplateConnection
+		organizationResults         *generated.OrganizationConnection
+		platformResults             *generated.PlatformConnection
+		procedureResults            *generated.ProcedureConnection
+		programResults              *generated.ProgramConnection
+		remediationResults          *generated.RemediationConnection
+		reviewResults               *generated.ReviewConnection
+		riskResults                 *generated.RiskConnection
+		scanResults                 *generated.ScanConnection
+		standardResults             *generated.StandardConnection
+		subcontrolResults           *generated.SubcontrolConnection
+		subprocessorResults         *generated.SubprocessorConnection
+		subscriberResults           *generated.SubscriberConnection
+		tagdefinitionResults        *generated.TagDefinitionConnection
+		taskResults                 *generated.TaskConnection
+		templateResults             *generated.TemplateConnection
+		trustcenterentityResults    *generated.TrustCenterEntityConnection
+		vulnerabilityResults        *generated.VulnerabilityConnection
 	)
 
 	highlightTracker := newContextTracker(query)
@@ -189,6 +193,30 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			emailbrandingResults, err = searchEmailBrandings(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, emailbrandingResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			emailtemplateResults, err = searchEmailTemplates(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, emailtemplateResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
 			entityResults, err = searchEntities(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -249,6 +277,18 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			integrationResults, err = searchIntegrations(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, integrationResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
 			internalpolicyResults, err = searchInternalPolicies(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -305,6 +345,18 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, narrativeResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			notificationtemplateResults, err = searchNotificationTemplates(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, notificationtemplateResults, highlightTracker)
 			}
 		},
 		func() {
@@ -575,6 +627,16 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += customtypeenumResults.TotalCount
 	}
+	if emailbrandingResults != nil && len(emailbrandingResults.Edges) > 0 {
+		res.EmailBrandings = emailbrandingResults
+
+		res.TotalCount += emailbrandingResults.TotalCount
+	}
+	if emailtemplateResults != nil && len(emailtemplateResults.Edges) > 0 {
+		res.EmailTemplates = emailtemplateResults
+
+		res.TotalCount += emailtemplateResults.TotalCount
+	}
 	if entityResults != nil && len(entityResults.Edges) > 0 {
 		res.Entities = entityResults
 
@@ -600,6 +662,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += identityholderResults.TotalCount
 	}
+	if integrationResults != nil && len(integrationResults.Edges) > 0 {
+		res.Integrations = integrationResults
+
+		res.TotalCount += integrationResults.TotalCount
+	}
 	if internalpolicyResults != nil && len(internalpolicyResults.Edges) > 0 {
 		res.InternalPolicies = internalpolicyResults
 
@@ -624,6 +691,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.Narratives = narrativeResults
 
 		res.TotalCount += narrativeResults.TotalCount
+	}
+	if notificationtemplateResults != nil && len(notificationtemplateResults.Edges) > 0 {
+		res.NotificationTemplates = notificationtemplateResults
+
+		res.TotalCount += notificationtemplateResults.TotalCount
 	}
 	if organizationResults != nil && len(organizationResults.Edges) > 0 {
 		res.Organizations = organizationResults
@@ -813,6 +885,26 @@ func (r *queryResolver) CustomTypeEnumSearch(ctx context.Context, query string, 
 	// return the results
 	return customtypeenumResults, nil
 }
+func (r *queryResolver) EmailBrandingSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EmailBrandingConnection, error) {
+	emailbrandingResults, err := searchEmailBrandings(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, common.ErrSearchFailed
+	}
+
+	// return the results
+	return emailbrandingResults, nil
+}
+func (r *queryResolver) EmailTemplateSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EmailTemplateConnection, error) {
+	emailtemplateResults, err := searchEmailTemplates(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, common.ErrSearchFailed
+	}
+
+	// return the results
+	return emailtemplateResults, nil
+}
 func (r *queryResolver) EntitySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EntityConnection, error) {
 	entityResults, err := searchEntities(ctx, query, after, first, before, last)
 
@@ -863,6 +955,16 @@ func (r *queryResolver) IdentityHolderSearch(ctx context.Context, query string, 
 	// return the results
 	return identityholderResults, nil
 }
+func (r *queryResolver) IntegrationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.IntegrationConnection, error) {
+	integrationResults, err := searchIntegrations(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, common.ErrSearchFailed
+	}
+
+	// return the results
+	return integrationResults, nil
+}
 func (r *queryResolver) InternalPolicySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.InternalPolicyConnection, error) {
 	internalpolicyResults, err := searchInternalPolicies(ctx, query, after, first, before, last)
 
@@ -912,6 +1014,16 @@ func (r *queryResolver) NarrativeSearch(ctx context.Context, query string, after
 
 	// return the results
 	return narrativeResults, nil
+}
+func (r *queryResolver) NotificationTemplateSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.NotificationTemplateConnection, error) {
+	notificationtemplateResults, err := searchNotificationTemplates(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, common.ErrSearchFailed
+	}
+
+	// return the results
+	return notificationtemplateResults, nil
 }
 func (r *queryResolver) OrganizationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrganizationConnection, error) {
 	organizationResults, err := searchOrganizations(ctx, query, after, first, before, last)

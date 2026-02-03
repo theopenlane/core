@@ -21,6 +21,36 @@ extend type Mutation{
         """
         reason: String
     ): WorkflowAssignmentRejectPayload!
+    """
+    Request changes on a workflow assignment and send it back to the originator
+    """
+    requestChangesWorkflowAssignment(
+        """
+        ID of the workflow assignment to request changes on
+        """
+        id: ID!
+        """
+        Optional reason for the change request
+        """
+        reason: String
+        """
+        Optional structured inputs for the change request
+        """
+        inputs: Map
+    ): WorkflowAssignmentRejectPayload!
+    """
+    Reassign a workflow assignment by creating an additional assignment for another user
+    """
+    reassignWorkflowAssignment(
+        """
+        ID of the workflow assignment to extend
+        """
+        id: ID!
+        """
+        User ID to assign an additional approval to
+        """
+        targetUserID: ID!
+    ): WorkflowAssignment!
 }
 
 extend type Query {

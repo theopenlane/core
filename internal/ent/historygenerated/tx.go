@@ -48,6 +48,10 @@ type Tx struct {
 	DiscussionHistory *DiscussionHistoryClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
 	DocumentDataHistory *DocumentDataHistoryClient
+	// EmailBrandingHistory is the client for interacting with the EmailBrandingHistory builders.
+	EmailBrandingHistory *EmailBrandingHistoryClient
+	// EmailTemplateHistory is the client for interacting with the EmailTemplateHistory builders.
+	EmailTemplateHistory *EmailTemplateHistoryClient
 	// EntityHistory is the client for interacting with the EntityHistory builders.
 	EntityHistory *EntityHistoryClient
 	// EntityTypeHistory is the client for interacting with the EntityTypeHistory builders.
@@ -84,6 +88,10 @@ type Tx struct {
 	NarrativeHistory *NarrativeHistoryClient
 	// NoteHistory is the client for interacting with the NoteHistory builders.
 	NoteHistory *NoteHistoryClient
+	// NotificationPreferenceHistory is the client for interacting with the NotificationPreferenceHistory builders.
+	NotificationPreferenceHistory *NotificationPreferenceHistoryClient
+	// NotificationTemplateHistory is the client for interacting with the NotificationTemplateHistory builders.
+	NotificationTemplateHistory *NotificationTemplateHistoryClient
 	// OrgMembershipHistory is the client for interacting with the OrgMembershipHistory builders.
 	OrgMembershipHistory *OrgMembershipHistoryClient
 	// OrgSubscriptionHistory is the client for interacting with the OrgSubscriptionHistory builders.
@@ -302,6 +310,8 @@ func (tx *Tx) init() {
 	tx.DirectoryMembershipHistory = NewDirectoryMembershipHistoryClient(tx.config)
 	tx.DiscussionHistory = NewDiscussionHistoryClient(tx.config)
 	tx.DocumentDataHistory = NewDocumentDataHistoryClient(tx.config)
+	tx.EmailBrandingHistory = NewEmailBrandingHistoryClient(tx.config)
+	tx.EmailTemplateHistory = NewEmailTemplateHistoryClient(tx.config)
 	tx.EntityHistory = NewEntityHistoryClient(tx.config)
 	tx.EntityTypeHistory = NewEntityTypeHistoryClient(tx.config)
 	tx.EvidenceHistory = NewEvidenceHistoryClient(tx.config)
@@ -320,6 +330,8 @@ func (tx *Tx) init() {
 	tx.MappedControlHistory = NewMappedControlHistoryClient(tx.config)
 	tx.NarrativeHistory = NewNarrativeHistoryClient(tx.config)
 	tx.NoteHistory = NewNoteHistoryClient(tx.config)
+	tx.NotificationPreferenceHistory = NewNotificationPreferenceHistoryClient(tx.config)
+	tx.NotificationTemplateHistory = NewNotificationTemplateHistoryClient(tx.config)
 	tx.OrgMembershipHistory = NewOrgMembershipHistoryClient(tx.config)
 	tx.OrgSubscriptionHistory = NewOrgSubscriptionHistoryClient(tx.config)
 	tx.OrganizationHistory = NewOrganizationHistoryClient(tx.config)

@@ -1,0 +1,110 @@
+extend type Mutation {
+    """
+    Force-complete a workflow instance (optionally applying proposal changes)
+    """
+    forceCompleteWorkflowInstance(
+        """
+        ID of the workflow instance to complete
+        """
+        id: ID!
+        """
+        Whether to apply proposal changes when present (defaults to true)
+        """
+        applyProposal: Boolean = true
+    ): WorkflowInstanceAdminPayload!
+    """
+    Cancel a workflow instance (mark as failed) and close pending assignments
+    """
+    cancelWorkflowInstance(
+        """
+        ID of the workflow instance to cancel
+        """
+        id: ID!
+        """
+        Optional reason for cancellation
+        """
+        reason: String
+    ): WorkflowInstanceAdminPayload!
+    """
+    Force-complete multiple workflow instances
+    """
+    bulkForceCompleteWorkflowInstances(
+        ids: [ID!]!
+        applyProposal: Boolean = true
+    ): WorkflowInstanceBulkAdminPayload!
+    """
+    Cancel multiple workflow instances
+    """
+    bulkCancelWorkflowInstances(
+        ids: [ID!]!
+        reason: String
+    ): WorkflowInstanceBulkAdminPayload!
+    """
+    Reassign a workflow assignment to new targets
+    """
+    adminReassignWorkflowAssignment(
+        input: ReassignWorkflowAssignmentInput!
+    ): WorkflowAssignmentReassignPayload!
+}
+
+"""
+Input target for reassigning workflow assignments
+"""
+input WorkflowAssignmentTargetInput {
+    """
+    Target type (USER, GROUP, ROLE, RESOLVER)
+    """
+    type: WorkflowAssignmentTargetWorkflowTargetType!
+    """
+    Target ID for USER/GROUP/ROLE targets
+    """
+    id: ID
+    """
+    Resolver key for RESOLVER targets
+    """
+    resolverKey: String
+}
+
+"""
+Input for adminReassignWorkflowAssignment mutation
+"""
+input ReassignWorkflowAssignmentInput {
+    """
+    ID of the workflow assignment to reassign
+    """
+    id: ID!
+    """
+    New targets for the assignment
+    """
+    targets: [WorkflowAssignmentTargetInput!]!
+}
+
+"""
+Return response for adminReassignWorkflowAssignment mutation
+"""
+type WorkflowAssignmentReassignPayload {
+    """
+    Updated workflow assignment
+    """
+    workflowAssignment: WorkflowAssignment!
+}
+
+"""
+Return response for workflow instance admin operations
+"""
+type WorkflowInstanceAdminPayload {
+    """
+    Updated workflow instance
+    """
+    workflowInstance: WorkflowInstance!
+}
+
+"""
+Return response for bulk workflow instance admin operations
+"""
+type WorkflowInstanceBulkAdminPayload {
+    """
+    IDs of workflow instances updated
+    """
+    updatedIDs: [ID!]!
+}

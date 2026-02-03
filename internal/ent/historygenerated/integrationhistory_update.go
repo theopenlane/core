@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 
@@ -338,6 +339,26 @@ func (_u *IntegrationHistoryUpdate) ClearIntegrationType() *IntegrationHistoryUp
 	return _u
 }
 
+// SetProviderMetadata sets the "provider_metadata" field.
+func (_u *IntegrationHistoryUpdate) SetProviderMetadata(v openapi.IntegrationProviderMetadata) *IntegrationHistoryUpdate {
+	_u.mutation.SetProviderMetadata(v)
+	return _u
+}
+
+// SetNillableProviderMetadata sets the "provider_metadata" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdate) SetNillableProviderMetadata(v *openapi.IntegrationProviderMetadata) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetProviderMetadata(*v)
+	}
+	return _u
+}
+
+// ClearProviderMetadata clears the value of the "provider_metadata" field.
+func (_u *IntegrationHistoryUpdate) ClearProviderMetadata() *IntegrationHistoryUpdate {
+	_u.mutation.ClearProviderMetadata()
+	return _u
+}
+
 // SetMetadata sets the "metadata" field.
 func (_u *IntegrationHistoryUpdate) SetMetadata(v map[string]interface{}) *IntegrationHistoryUpdate {
 	_u.mutation.SetMetadata(v)
@@ -521,6 +542,12 @@ func (_u *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.IntegrationTypeCleared() {
 		_spec.ClearField(integrationhistory.FieldIntegrationType, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProviderMetadata(); ok {
+		_spec.SetField(integrationhistory.FieldProviderMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.ProviderMetadataCleared() {
+		_spec.ClearField(integrationhistory.FieldProviderMetadata, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Metadata(); ok {
 		_spec.SetField(integrationhistory.FieldMetadata, field.TypeJSON, value)
@@ -856,6 +883,26 @@ func (_u *IntegrationHistoryUpdateOne) ClearIntegrationType() *IntegrationHistor
 	return _u
 }
 
+// SetProviderMetadata sets the "provider_metadata" field.
+func (_u *IntegrationHistoryUpdateOne) SetProviderMetadata(v openapi.IntegrationProviderMetadata) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetProviderMetadata(v)
+	return _u
+}
+
+// SetNillableProviderMetadata sets the "provider_metadata" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdateOne) SetNillableProviderMetadata(v *openapi.IntegrationProviderMetadata) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetProviderMetadata(*v)
+	}
+	return _u
+}
+
+// ClearProviderMetadata clears the value of the "provider_metadata" field.
+func (_u *IntegrationHistoryUpdateOne) ClearProviderMetadata() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearProviderMetadata()
+	return _u
+}
+
 // SetMetadata sets the "metadata" field.
 func (_u *IntegrationHistoryUpdateOne) SetMetadata(v map[string]interface{}) *IntegrationHistoryUpdateOne {
 	_u.mutation.SetMetadata(v)
@@ -1069,6 +1116,12 @@ func (_u *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Inte
 	}
 	if _u.mutation.IntegrationTypeCleared() {
 		_spec.ClearField(integrationhistory.FieldIntegrationType, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProviderMetadata(); ok {
+		_spec.SetField(integrationhistory.FieldProviderMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.ProviderMetadataCleared() {
+		_spec.ClearField(integrationhistory.FieldProviderMetadata, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Metadata(); ok {
 		_spec.SetField(integrationhistory.FieldMetadata, field.TypeJSON, value)

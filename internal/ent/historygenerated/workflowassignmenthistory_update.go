@@ -368,6 +368,26 @@ func (_u *WorkflowAssignmentHistoryUpdate) ClearNotes() *WorkflowAssignmentHisto
 	return _u
 }
 
+// SetDueAt sets the "due_at" field.
+func (_u *WorkflowAssignmentHistoryUpdate) SetDueAt(v time.Time) *WorkflowAssignmentHistoryUpdate {
+	_u.mutation.SetDueAt(v)
+	return _u
+}
+
+// SetNillableDueAt sets the "due_at" field if the given value is not nil.
+func (_u *WorkflowAssignmentHistoryUpdate) SetNillableDueAt(v *time.Time) *WorkflowAssignmentHistoryUpdate {
+	if v != nil {
+		_u.SetDueAt(*v)
+	}
+	return _u
+}
+
+// ClearDueAt clears the value of the "due_at" field.
+func (_u *WorkflowAssignmentHistoryUpdate) ClearDueAt() *WorkflowAssignmentHistoryUpdate {
+	_u.mutation.ClearDueAt()
+	return _u
+}
+
 // Mutation returns the WorkflowAssignmentHistoryMutation object of the builder.
 func (_u *WorkflowAssignmentHistoryUpdate) Mutation() *WorkflowAssignmentHistoryMutation {
 	return _u.mutation
@@ -558,6 +578,12 @@ func (_u *WorkflowAssignmentHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	}
 	if _u.mutation.NotesCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.DueAt(); ok {
+		_spec.SetField(workflowassignmenthistory.FieldDueAt, field.TypeTime, value)
+	}
+	if _u.mutation.DueAtCleared() {
+		_spec.ClearField(workflowassignmenthistory.FieldDueAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowAssignmentHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -915,6 +941,26 @@ func (_u *WorkflowAssignmentHistoryUpdateOne) ClearNotes() *WorkflowAssignmentHi
 	return _u
 }
 
+// SetDueAt sets the "due_at" field.
+func (_u *WorkflowAssignmentHistoryUpdateOne) SetDueAt(v time.Time) *WorkflowAssignmentHistoryUpdateOne {
+	_u.mutation.SetDueAt(v)
+	return _u
+}
+
+// SetNillableDueAt sets the "due_at" field if the given value is not nil.
+func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableDueAt(v *time.Time) *WorkflowAssignmentHistoryUpdateOne {
+	if v != nil {
+		_u.SetDueAt(*v)
+	}
+	return _u
+}
+
+// ClearDueAt clears the value of the "due_at" field.
+func (_u *WorkflowAssignmentHistoryUpdateOne) ClearDueAt() *WorkflowAssignmentHistoryUpdateOne {
+	_u.mutation.ClearDueAt()
+	return _u
+}
+
 // Mutation returns the WorkflowAssignmentHistoryMutation object of the builder.
 func (_u *WorkflowAssignmentHistoryUpdateOne) Mutation() *WorkflowAssignmentHistoryMutation {
 	return _u.mutation
@@ -1135,6 +1181,12 @@ func (_u *WorkflowAssignmentHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.NotesCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.DueAt(); ok {
+		_spec.SetField(workflowassignmenthistory.FieldDueAt, field.TypeTime, value)
+	}
+	if _u.mutation.DueAtCleared() {
+		_spec.ClearField(workflowassignmenthistory.FieldDueAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowAssignmentHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

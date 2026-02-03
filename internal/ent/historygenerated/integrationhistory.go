@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -65,6 +66,8 @@ type IntegrationHistory struct {
 	Kind string `json:"kind,omitempty"`
 	// the type of integration, such as communicattion, storage, SCM, etc.
 	IntegrationType string `json:"integration_type,omitempty"`
+	// cached provider metadata for UI and registry access
+	ProviderMetadata openapi.IntegrationProviderMetadata `json:"provider_metadata,omitempty"`
 	// additional metadata about the integration
 	Metadata     map[string]interface{} `json:"metadata,omitempty"`
 	selectValues sql.SelectValues
@@ -75,7 +78,7 @@ func (*IntegrationHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case integrationhistory.FieldTags, integrationhistory.FieldMetadata:
+		case integrationhistory.FieldTags, integrationhistory.FieldProviderMetadata, integrationhistory.FieldMetadata:
 			values[i] = new([]byte)
 		case integrationhistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -242,6 +245,14 @@ func (_m *IntegrationHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.IntegrationType = value.String
 			}
+		case integrationhistory.FieldProviderMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field provider_metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ProviderMetadata); err != nil {
+					return fmt.Errorf("unmarshal field provider_metadata: %w", err)
+				}
+			}
 		case integrationhistory.FieldMetadata:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field metadata", values[i])
@@ -355,6 +366,9 @@ func (_m *IntegrationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_type=")
 	builder.WriteString(_m.IntegrationType)
+	builder.WriteString(", ")
+	builder.WriteString("provider_metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ProviderMetadata))
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))

@@ -147,6 +147,7 @@
             "enum": [
               "IN_APP",
               "SLACK",
+              "TEAMS",
               "EMAIL"
             ],
             "description": "Notification delivery channel"
@@ -261,7 +262,11 @@
             "NOTIFY",
             "WEBHOOK",
             "UPDATE_FIELD",
-            "INTEGRATION"
+            "INTEGRATION",
+            "REASSIGN_APPROVAL",
+            "SEND_EMAIL",
+            "REQUEST_REVIEW",
+            "CREATE_OBJECT"
           ],
           "description": "Action type: REQUEST_APPROVAL, NOTIFY, WEBHOOK, UPDATE_FIELD, or INTEGRATION"
         },
@@ -333,6 +338,9 @@
     "WorkflowTrigger": {
       "properties": {
         "operation": {
+          "type": "string"
+        },
+        "interval": {
           "type": "string"
         },
         "objectType": {

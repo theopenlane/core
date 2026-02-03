@@ -35,4 +35,6 @@ var (
 	ErrWrongTypeWorkflowApprovalSubmissionMode = errors.New("wrong type for WorkflowApprovalSubmissionMode")
 	// ErrWrongTypeWorkflowActionType indicates the value type for WorkflowActionType is incorrect.
 	ErrWrongTypeWorkflowActionType = errors.New("wrong type for WorkflowActionType")
+	// ErrWrongTypeWorkflowApprovalTiming indicates the value type for WorkflowApprovalTiming is incorrect.
+	ErrWrongTypeWorkflowApprovalTiming = errors.New("wrong type for WorkflowApprovalTiming")
 )

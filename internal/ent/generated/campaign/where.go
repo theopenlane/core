@@ -229,6 +229,16 @@ func AssessmentID(v string) predicate.Campaign {
 	return predicate.Campaign(sql.FieldEQ(FieldAssessmentID, v))
 }
 
+// EmailBrandingID applies equality check predicate on the "email_branding_id" field. It's identical to EmailBrandingIDEQ.
+func EmailBrandingID(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEQ(FieldEmailBrandingID, v))
+}
+
+// EmailTemplateID applies equality check predicate on the "email_template_id" field. It's identical to EmailTemplateIDEQ.
+func EmailTemplateID(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEQ(FieldEmailTemplateID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Campaign {
 	return predicate.Campaign(sql.FieldEQ(FieldCreatedAt, v))
@@ -2199,6 +2209,156 @@ func MetadataNotNil() predicate.Campaign {
 	return predicate.Campaign(sql.FieldNotNull(FieldMetadata))
 }
 
+// EmailBrandingIDEQ applies the EQ predicate on the "email_branding_id" field.
+func EmailBrandingIDEQ(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEQ(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDNEQ applies the NEQ predicate on the "email_branding_id" field.
+func EmailBrandingIDNEQ(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldNEQ(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDIn applies the In predicate on the "email_branding_id" field.
+func EmailBrandingIDIn(vs ...string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldIn(FieldEmailBrandingID, vs...))
+}
+
+// EmailBrandingIDNotIn applies the NotIn predicate on the "email_branding_id" field.
+func EmailBrandingIDNotIn(vs ...string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldNotIn(FieldEmailBrandingID, vs...))
+}
+
+// EmailBrandingIDGT applies the GT predicate on the "email_branding_id" field.
+func EmailBrandingIDGT(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldGT(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDGTE applies the GTE predicate on the "email_branding_id" field.
+func EmailBrandingIDGTE(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldGTE(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDLT applies the LT predicate on the "email_branding_id" field.
+func EmailBrandingIDLT(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldLT(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDLTE applies the LTE predicate on the "email_branding_id" field.
+func EmailBrandingIDLTE(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldLTE(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDContains applies the Contains predicate on the "email_branding_id" field.
+func EmailBrandingIDContains(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldContains(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDHasPrefix applies the HasPrefix predicate on the "email_branding_id" field.
+func EmailBrandingIDHasPrefix(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldHasPrefix(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDHasSuffix applies the HasSuffix predicate on the "email_branding_id" field.
+func EmailBrandingIDHasSuffix(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldHasSuffix(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDIsNil applies the IsNil predicate on the "email_branding_id" field.
+func EmailBrandingIDIsNil() predicate.Campaign {
+	return predicate.Campaign(sql.FieldIsNull(FieldEmailBrandingID))
+}
+
+// EmailBrandingIDNotNil applies the NotNil predicate on the "email_branding_id" field.
+func EmailBrandingIDNotNil() predicate.Campaign {
+	return predicate.Campaign(sql.FieldNotNull(FieldEmailBrandingID))
+}
+
+// EmailBrandingIDEqualFold applies the EqualFold predicate on the "email_branding_id" field.
+func EmailBrandingIDEqualFold(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEqualFold(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDContainsFold applies the ContainsFold predicate on the "email_branding_id" field.
+func EmailBrandingIDContainsFold(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldContainsFold(FieldEmailBrandingID, v))
+}
+
+// EmailTemplateIDEQ applies the EQ predicate on the "email_template_id" field.
+func EmailTemplateIDEQ(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEQ(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDNEQ applies the NEQ predicate on the "email_template_id" field.
+func EmailTemplateIDNEQ(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldNEQ(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDIn applies the In predicate on the "email_template_id" field.
+func EmailTemplateIDIn(vs ...string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldIn(FieldEmailTemplateID, vs...))
+}
+
+// EmailTemplateIDNotIn applies the NotIn predicate on the "email_template_id" field.
+func EmailTemplateIDNotIn(vs ...string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldNotIn(FieldEmailTemplateID, vs...))
+}
+
+// EmailTemplateIDGT applies the GT predicate on the "email_template_id" field.
+func EmailTemplateIDGT(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldGT(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDGTE applies the GTE predicate on the "email_template_id" field.
+func EmailTemplateIDGTE(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldGTE(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDLT applies the LT predicate on the "email_template_id" field.
+func EmailTemplateIDLT(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldLT(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDLTE applies the LTE predicate on the "email_template_id" field.
+func EmailTemplateIDLTE(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldLTE(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDContains applies the Contains predicate on the "email_template_id" field.
+func EmailTemplateIDContains(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldContains(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDHasPrefix applies the HasPrefix predicate on the "email_template_id" field.
+func EmailTemplateIDHasPrefix(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldHasPrefix(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDHasSuffix applies the HasSuffix predicate on the "email_template_id" field.
+func EmailTemplateIDHasSuffix(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldHasSuffix(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDIsNil applies the IsNil predicate on the "email_template_id" field.
+func EmailTemplateIDIsNil() predicate.Campaign {
+	return predicate.Campaign(sql.FieldIsNull(FieldEmailTemplateID))
+}
+
+// EmailTemplateIDNotNil applies the NotNil predicate on the "email_template_id" field.
+func EmailTemplateIDNotNil() predicate.Campaign {
+	return predicate.Campaign(sql.FieldNotNull(FieldEmailTemplateID))
+}
+
+// EmailTemplateIDEqualFold applies the EqualFold predicate on the "email_template_id" field.
+func EmailTemplateIDEqualFold(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEqualFold(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDContainsFold applies the ContainsFold predicate on the "email_template_id" field.
+func EmailTemplateIDContainsFold(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldContainsFold(FieldEmailTemplateID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
@@ -2422,6 +2582,64 @@ func HasTemplateWith(preds ...predicate.Template) predicate.Campaign {
 		step := newTemplateStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.Campaign
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEmailBranding applies the HasEdge predicate on the "email_branding" edge.
+func HasEmailBranding() predicate.Campaign {
+	return predicate.Campaign(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, EmailBrandingTable, EmailBrandingColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.EmailBranding
+		step.Edge.Schema = schemaConfig.Campaign
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEmailBrandingWith applies the HasEdge predicate on the "email_branding" edge with a given conditions (other predicates).
+func HasEmailBrandingWith(preds ...predicate.EmailBranding) predicate.Campaign {
+	return predicate.Campaign(func(s *sql.Selector) {
+		step := newEmailBrandingStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.EmailBranding
+		step.Edge.Schema = schemaConfig.Campaign
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEmailTemplate applies the HasEdge predicate on the "email_template" edge.
+func HasEmailTemplate() predicate.Campaign {
+	return predicate.Campaign(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, EmailTemplateTable, EmailTemplateColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.Campaign
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEmailTemplateWith applies the HasEdge predicate on the "email_template" edge with a given conditions (other predicates).
+func HasEmailTemplateWith(preds ...predicate.EmailTemplate) predicate.Campaign {
+	return predicate.Campaign(func(s *sql.Selector) {
+		step := newEmailTemplateStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.EmailTemplate
 		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

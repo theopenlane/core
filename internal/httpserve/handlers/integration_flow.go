@@ -101,6 +101,9 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 
 		return h.InternalServerError(ctx, err, openapiCtx)
 	}
+	if err := h.updateIntegrationProviderMetadata(userCtx, integration.ID, providerType); err != nil {
+		logx.FromContext(userCtx).Warn().Err(err).Str("provider", string(providerType)).Msg("failed to update integration provider metadata")
+	}
 
 	state, err := h.generateOAuthState(user.OrganizationID, string(providerType))
 	if err != nil {

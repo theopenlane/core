@@ -591,6 +591,54 @@ func (f DocumentDataMutationRuleFunc) EvalMutation(ctx context.Context, m genera
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.DocumentDataMutation", m)
 }
 
+// The EmailBrandingQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type EmailBrandingQueryRuleFunc func(context.Context, *generated.EmailBrandingQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f EmailBrandingQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.EmailBrandingQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.EmailBrandingQuery", q)
+}
+
+// The EmailBrandingMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type EmailBrandingMutationRuleFunc func(context.Context, *generated.EmailBrandingMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f EmailBrandingMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.EmailBrandingMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.EmailBrandingMutation", m)
+}
+
+// The EmailTemplateQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type EmailTemplateQueryRuleFunc func(context.Context, *generated.EmailTemplateQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f EmailTemplateQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.EmailTemplateQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.EmailTemplateQuery", q)
+}
+
+// The EmailTemplateMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type EmailTemplateMutationRuleFunc func(context.Context, *generated.EmailTemplateMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f EmailTemplateMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.EmailTemplateMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.EmailTemplateMutation", m)
+}
+
 // The EmailVerificationTokenQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type EmailVerificationTokenQueryRuleFunc func(context.Context, *generated.EmailVerificationTokenQuery) error
@@ -999,6 +1047,54 @@ func (f IntegrationMutationRuleFunc) EvalMutation(ctx context.Context, m generat
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.IntegrationMutation", m)
 }
 
+// The IntegrationRunQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type IntegrationRunQueryRuleFunc func(context.Context, *generated.IntegrationRunQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f IntegrationRunQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.IntegrationRunQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.IntegrationRunQuery", q)
+}
+
+// The IntegrationRunMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type IntegrationRunMutationRuleFunc func(context.Context, *generated.IntegrationRunMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f IntegrationRunMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.IntegrationRunMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.IntegrationRunMutation", m)
+}
+
+// The IntegrationWebhookQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type IntegrationWebhookQueryRuleFunc func(context.Context, *generated.IntegrationWebhookQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f IntegrationWebhookQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.IntegrationWebhookQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.IntegrationWebhookQuery", q)
+}
+
+// The IntegrationWebhookMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type IntegrationWebhookMutationRuleFunc func(context.Context, *generated.IntegrationWebhookMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f IntegrationWebhookMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.IntegrationWebhookMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.IntegrationWebhookMutation", m)
+}
+
 // The InternalPolicyQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type InternalPolicyQueryRuleFunc func(context.Context, *generated.InternalPolicyQuery) error
@@ -1285,6 +1381,54 @@ func (f NotificationMutationRuleFunc) EvalMutation(ctx context.Context, m genera
 		return f(ctx, m)
 	}
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.NotificationMutation", m)
+}
+
+// The NotificationPreferenceQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type NotificationPreferenceQueryRuleFunc func(context.Context, *generated.NotificationPreferenceQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f NotificationPreferenceQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.NotificationPreferenceQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.NotificationPreferenceQuery", q)
+}
+
+// The NotificationPreferenceMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type NotificationPreferenceMutationRuleFunc func(context.Context, *generated.NotificationPreferenceMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f NotificationPreferenceMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.NotificationPreferenceMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.NotificationPreferenceMutation", m)
+}
+
+// The NotificationTemplateQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type NotificationTemplateQueryRuleFunc func(context.Context, *generated.NotificationTemplateQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f NotificationTemplateQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.NotificationTemplateQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.NotificationTemplateQuery", q)
+}
+
+// The NotificationTemplateMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type NotificationTemplateMutationRuleFunc func(context.Context, *generated.NotificationTemplateMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f NotificationTemplateMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.NotificationTemplateMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.NotificationTemplateMutation", m)
 }
 
 // The OnboardingQueryRuleFunc type is an adapter to allow the use of ordinary
@@ -2490,6 +2634,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.DocumentDataQuery:
 		return q.Filter(), nil
+	case *generated.EmailBrandingQuery:
+		return q.Filter(), nil
+	case *generated.EmailTemplateQuery:
+		return q.Filter(), nil
 	case *generated.EmailVerificationTokenQuery:
 		return q.Filter(), nil
 	case *generated.EntityQuery:
@@ -2524,6 +2672,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.IntegrationQuery:
 		return q.Filter(), nil
+	case *generated.IntegrationRunQuery:
+		return q.Filter(), nil
+	case *generated.IntegrationWebhookQuery:
+		return q.Filter(), nil
 	case *generated.InternalPolicyQuery:
 		return q.Filter(), nil
 	case *generated.InviteQuery:
@@ -2547,6 +2699,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 	case *generated.NoteQuery:
 		return q.Filter(), nil
 	case *generated.NotificationQuery:
+		return q.Filter(), nil
+	case *generated.NotificationPreferenceQuery:
+		return q.Filter(), nil
+	case *generated.NotificationTemplateQuery:
 		return q.Filter(), nil
 	case *generated.OnboardingQuery:
 		return q.Filter(), nil
@@ -2689,6 +2845,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *generated.DocumentDataMutation:
 		return m.Filter(), nil
+	case *generated.EmailBrandingMutation:
+		return m.Filter(), nil
+	case *generated.EmailTemplateMutation:
+		return m.Filter(), nil
 	case *generated.EmailVerificationTokenMutation:
 		return m.Filter(), nil
 	case *generated.EntityMutation:
@@ -2723,6 +2883,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *generated.IntegrationMutation:
 		return m.Filter(), nil
+	case *generated.IntegrationRunMutation:
+		return m.Filter(), nil
+	case *generated.IntegrationWebhookMutation:
+		return m.Filter(), nil
 	case *generated.InternalPolicyMutation:
 		return m.Filter(), nil
 	case *generated.InviteMutation:
@@ -2746,6 +2910,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.NoteMutation:
 		return m.Filter(), nil
 	case *generated.NotificationMutation:
+		return m.Filter(), nil
+	case *generated.NotificationPreferenceMutation:
+		return m.Filter(), nil
+	case *generated.NotificationTemplateMutation:
 		return m.Filter(), nil
 	case *generated.OnboardingMutation:
 		return m.Filter(), nil

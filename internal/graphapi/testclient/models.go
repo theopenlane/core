@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
 )
 
 type APIToken struct {
@@ -2503,7 +2504,11 @@ type Campaign struct {
 	// the assessment associated with the campaign
 	AssessmentID *string `json:"assessmentID,omitempty"`
 	// additional metadata about the campaign
-	Metadata            map[string]any                `json:"metadata,omitempty"`
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// the email branding associated with the campaign
+	EmailBrandingID *string `json:"emailBrandingID,omitempty"`
+	// the email template associated with the campaign
+	EmailTemplateID     *string                       `json:"emailTemplateID,omitempty"`
 	Owner               *Organization                 `json:"owner,omitempty"`
 	BlockedGroups       *GroupConnection              `json:"blockedGroups"`
 	Editors             *GroupConnection              `json:"editors"`
@@ -2512,6 +2517,8 @@ type Campaign struct {
 	InternalOwnerGroup  *Group                        `json:"internalOwnerGroup,omitempty"`
 	Assessment          *Assessment                   `json:"assessment,omitempty"`
 	Template            *Template                     `json:"template,omitempty"`
+	EmailBranding       *EmailBranding                `json:"emailBranding,omitempty"`
+	EmailTemplate       *EmailTemplate                `json:"emailTemplate,omitempty"`
 	Entity              *Entity                       `json:"entity,omitempty"`
 	CampaignTargets     *CampaignTargetConnection     `json:"campaignTargets"`
 	AssessmentResponses *AssessmentResponseConnection `json:"assessmentResponses"`
@@ -3331,6 +3338,38 @@ type CampaignWhereInput struct {
 	AssessmentIDNotNil       *bool    `json:"assessmentIDNotNil,omitempty"`
 	AssessmentIDEqualFold    *string  `json:"assessmentIDEqualFold,omitempty"`
 	AssessmentIDContainsFold *string  `json:"assessmentIDContainsFold,omitempty"`
+	// email_branding_id field predicates
+	EmailBrandingID             *string  `json:"emailBrandingID,omitempty"`
+	EmailBrandingIdneq          *string  `json:"emailBrandingIDNEQ,omitempty"`
+	EmailBrandingIDIn           []string `json:"emailBrandingIDIn,omitempty"`
+	EmailBrandingIDNotIn        []string `json:"emailBrandingIDNotIn,omitempty"`
+	EmailBrandingIdgt           *string  `json:"emailBrandingIDGT,omitempty"`
+	EmailBrandingIdgte          *string  `json:"emailBrandingIDGTE,omitempty"`
+	EmailBrandingIdlt           *string  `json:"emailBrandingIDLT,omitempty"`
+	EmailBrandingIdlte          *string  `json:"emailBrandingIDLTE,omitempty"`
+	EmailBrandingIDContains     *string  `json:"emailBrandingIDContains,omitempty"`
+	EmailBrandingIDHasPrefix    *string  `json:"emailBrandingIDHasPrefix,omitempty"`
+	EmailBrandingIDHasSuffix    *string  `json:"emailBrandingIDHasSuffix,omitempty"`
+	EmailBrandingIDIsNil        *bool    `json:"emailBrandingIDIsNil,omitempty"`
+	EmailBrandingIDNotNil       *bool    `json:"emailBrandingIDNotNil,omitempty"`
+	EmailBrandingIDEqualFold    *string  `json:"emailBrandingIDEqualFold,omitempty"`
+	EmailBrandingIDContainsFold *string  `json:"emailBrandingIDContainsFold,omitempty"`
+	// email_template_id field predicates
+	EmailTemplateID             *string  `json:"emailTemplateID,omitempty"`
+	EmailTemplateIdneq          *string  `json:"emailTemplateIDNEQ,omitempty"`
+	EmailTemplateIDIn           []string `json:"emailTemplateIDIn,omitempty"`
+	EmailTemplateIDNotIn        []string `json:"emailTemplateIDNotIn,omitempty"`
+	EmailTemplateIdgt           *string  `json:"emailTemplateIDGT,omitempty"`
+	EmailTemplateIdgte          *string  `json:"emailTemplateIDGTE,omitempty"`
+	EmailTemplateIdlt           *string  `json:"emailTemplateIDLT,omitempty"`
+	EmailTemplateIdlte          *string  `json:"emailTemplateIDLTE,omitempty"`
+	EmailTemplateIDContains     *string  `json:"emailTemplateIDContains,omitempty"`
+	EmailTemplateIDHasPrefix    *string  `json:"emailTemplateIDHasPrefix,omitempty"`
+	EmailTemplateIDHasSuffix    *string  `json:"emailTemplateIDHasSuffix,omitempty"`
+	EmailTemplateIDIsNil        *bool    `json:"emailTemplateIDIsNil,omitempty"`
+	EmailTemplateIDNotNil       *bool    `json:"emailTemplateIDNotNil,omitempty"`
+	EmailTemplateIDEqualFold    *string  `json:"emailTemplateIDEqualFold,omitempty"`
+	EmailTemplateIDContainsFold *string  `json:"emailTemplateIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -3355,6 +3394,12 @@ type CampaignWhereInput struct {
 	// template edge predicates
 	HasTemplate     *bool                 `json:"hasTemplate,omitempty"`
 	HasTemplateWith []*TemplateWhereInput `json:"hasTemplateWith,omitempty"`
+	// email_branding edge predicates
+	HasEmailBranding     *bool                      `json:"hasEmailBranding,omitempty"`
+	HasEmailBrandingWith []*EmailBrandingWhereInput `json:"hasEmailBrandingWith,omitempty"`
+	// email_template edge predicates
+	HasEmailTemplate     *bool                      `json:"hasEmailTemplate,omitempty"`
+	HasEmailTemplateWith []*EmailTemplateWhereInput `json:"hasEmailTemplateWith,omitempty"`
 	// entity edge predicates
 	HasEntity     *bool               `json:"hasEntity,omitempty"`
 	HasEntityWith []*EntityWhereInput `json:"hasEntityWith,omitempty"`
@@ -5547,6 +5592,8 @@ type CreateCampaignInput struct {
 	InternalOwnerGroupID  *string        `json:"internalOwnerGroupID,omitempty"`
 	AssessmentID          *string        `json:"assessmentID,omitempty"`
 	TemplateID            *string        `json:"templateID,omitempty"`
+	EmailBrandingID       *string        `json:"emailBrandingID,omitempty"`
+	EmailTemplateID       *string        `json:"emailTemplateID,omitempty"`
 	EntityID              *string        `json:"entityID,omitempty"`
 	CampaignTargetIDs     []string       `json:"campaignTargetIDs,omitempty"`
 	AssessmentResponseIDs []string       `json:"assessmentResponseIDs,omitempty"`
@@ -6054,6 +6101,87 @@ type CreateDocumentDataInput struct {
 	TemplateID    *string        `json:"templateID,omitempty"`
 	EntityIDs     []string       `json:"entityIDs,omitempty"`
 	FileIDs       []string       `json:"fileIDs,omitempty"`
+}
+
+// CreateEmailBrandingInput is used for create EmailBranding object.
+// Input was generated by ent.
+type CreateEmailBrandingInput struct {
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// friendly name for this email branding configuration
+	Name string `json:"name"`
+	// brand name displayed in templates
+	BrandName *string `json:"brandName,omitempty"`
+	// URL of the brand logo for emails
+	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
+	// primary brand color for emails
+	PrimaryColor *string `json:"primaryColor,omitempty"`
+	// secondary brand color for emails
+	SecondaryColor *string `json:"secondaryColor,omitempty"`
+	// background color for emails
+	BackgroundColor *string `json:"backgroundColor,omitempty"`
+	// text color for emails
+	TextColor *string `json:"textColor,omitempty"`
+	// button background color for emails
+	ButtonColor *string `json:"buttonColor,omitempty"`
+	// button text color for emails
+	ButtonTextColor *string `json:"buttonTextColor,omitempty"`
+	// link color for emails
+	LinkColor *string `json:"linkColor,omitempty"`
+	// font family for emails
+	FontFamily *enums.Font `json:"fontFamily,omitempty"`
+	// whether this is the default email branding for the organization
+	IsDefault        *bool    `json:"isDefault,omitempty"`
+	OwnerID          *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs  []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs        []string `json:"editorIDs,omitempty"`
+	ViewerIDs        []string `json:"viewerIDs,omitempty"`
+	CampaignIDs      []string `json:"campaignIDs,omitempty"`
+	EmailTemplateIDs []string `json:"emailTemplateIDs,omitempty"`
+}
+
+// CreateEmailTemplateInput is used for create EmailTemplate object.
+// Input was generated by ent.
+type CreateEmailTemplateInput struct {
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// stable identifier for the template
+	Key string `json:"key"`
+	// display name for the template
+	Name string `json:"name"`
+	// description of the template
+	Description *string `json:"description,omitempty"`
+	// template format for rendering
+	Format *enums.NotificationTemplateFormat `json:"format,omitempty"`
+	// locale for the template, e.g. en-US
+	Locale *string `json:"locale,omitempty"`
+	// subject template for email notifications
+	SubjectTemplate *string `json:"subjectTemplate,omitempty"`
+	// preheader/preview text template for email notifications
+	PreheaderTemplate *string `json:"preheaderTemplate,omitempty"`
+	// body template for the email
+	BodyTemplate *string `json:"bodyTemplate,omitempty"`
+	// plain text fallback template for the email
+	TextTemplate *string `json:"textTemplate,omitempty"`
+	// jsonschema for template data requirements
+	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
+	// uischema for a template builder
+	Uischema map[string]any `json:"uischema,omitempty"`
+	// additional template metadata
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// whether the template is active
+	Active *bool `json:"active,omitempty"`
+	// template version
+	Version                 *int64   `json:"version,omitempty"`
+	OwnerID                 *string  `json:"ownerID,omitempty"`
+	EmailBrandingID         *string  `json:"emailBrandingID,omitempty"`
+	IntegrationID           *string  `json:"integrationID,omitempty"`
+	WorkflowDefinitionID    *string  `json:"workflowDefinitionID,omitempty"`
+	WorkflowInstanceID      *string  `json:"workflowInstanceID,omitempty"`
+	CampaignIDs             []string `json:"campaignIDs,omitempty"`
+	NotificationTemplateIDs []string `json:"notificationTemplateIDs,omitempty"`
 }
 
 // CreateEntityInput is used for create Entity object.
@@ -6974,8 +7102,101 @@ type CreateNotificationInput struct {
 	// the channels this notification should be sent to (IN_APP, SLACK, EMAIL)
 	Channels []string `json:"channels,omitempty"`
 	// the topic of the notification (TASK_ASSIGNMENT, APPROVAL, MENTION, EXPORT)
-	Topic   *enums.NotificationTopic `json:"topic,omitempty"`
-	OwnerID *string                  `json:"ownerID,omitempty"`
+	Topic                  *enums.NotificationTopic `json:"topic,omitempty"`
+	OwnerID                *string                  `json:"ownerID,omitempty"`
+	NotificationTemplateID *string                  `json:"notificationTemplateID,omitempty"`
+}
+
+// CreateNotificationPreferenceInput is used for create NotificationPreference object.
+// Input was generated by ent.
+type CreateNotificationPreferenceInput struct {
+	// the channel this preference applies to
+	Channel enums.Channel `json:"channel"`
+	// status of the channel configuration
+	Status *enums.NotificationChannelStatus `json:"status,omitempty"`
+	// provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
+	Provider *string `json:"provider,omitempty"`
+	// destination address or endpoint for the channel
+	Destination *string `json:"destination,omitempty"`
+	// channel configuration payload
+	Config map[string]any `json:"config,omitempty"`
+	// whether this preference is enabled
+	Enabled *bool `json:"enabled,omitempty"`
+	// delivery cadence for this preference
+	Cadence *enums.NotificationCadence `json:"cadence,omitempty"`
+	// optional priority override for this preference
+	Priority *enums.Priority `json:"priority,omitempty"`
+	// soiree topic names or wildcard patterns this preference applies to; empty means all
+	TopicPatterns []string `json:"topicPatterns,omitempty"`
+	// optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+	TopicOverrides map[string]any `json:"topicOverrides,omitempty"`
+	// mute notifications until this time
+	MuteUntil *time.Time `json:"muteUntil,omitempty"`
+	// start of quiet hours in HH:MM
+	QuietHoursStart *string `json:"quietHoursStart,omitempty"`
+	// end of quiet hours in HH:MM
+	QuietHoursEnd *string `json:"quietHoursEnd,omitempty"`
+	// timezone for quiet hours and digests
+	Timezone *string `json:"timezone,omitempty"`
+	// whether this is the default config for the channel
+	IsDefault *bool `json:"isDefault,omitempty"`
+	// when the channel config was verified
+	VerifiedAt *time.Time `json:"verifiedAt,omitempty"`
+	// last time the channel config was used
+	LastUsedAt *time.Time `json:"lastUsedAt,omitempty"`
+	// last error encountered while using the channel
+	LastError *string `json:"lastError,omitempty"`
+	// additional preference metadata
+	Metadata               map[string]any `json:"metadata,omitempty"`
+	OwnerID                *string        `json:"ownerID,omitempty"`
+	UserID                 string         `json:"userID"`
+	NotificationTemplateID *string        `json:"notificationTemplateID,omitempty"`
+}
+
+// CreateNotificationTemplateInput is used for create NotificationTemplate object.
+// Input was generated by ent.
+type CreateNotificationTemplateInput struct {
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// stable identifier for the template
+	Key string `json:"key"`
+	// display name for the template
+	Name string `json:"name"`
+	// description of the template
+	Description *string `json:"description,omitempty"`
+	// channel this template is intended for
+	Channel enums.Channel `json:"channel"`
+	// template format for rendering
+	Format *enums.NotificationTemplateFormat `json:"format,omitempty"`
+	// locale for the template, e.g. en-US
+	Locale *string `json:"locale,omitempty"`
+	// soiree topic name or wildcard pattern this template targets
+	TopicPattern string `json:"topicPattern"`
+	// title template for external channel messages
+	TitleTemplate *string `json:"titleTemplate,omitempty"`
+	// subject template for email notifications
+	SubjectTemplate *string `json:"subjectTemplate,omitempty"`
+	// body template for the notification
+	BodyTemplate *string `json:"bodyTemplate,omitempty"`
+	// structured blocks for channels like Slack or Teams
+	Blocks map[string]any `json:"blocks,omitempty"`
+	// jsonschema for template data requirements
+	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
+	// uischema for a template builder
+	Uischema map[string]any `json:"uischema,omitempty"`
+	// additional template metadata
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// whether the template is active
+	Active *bool `json:"active,omitempty"`
+	// template version
+	Version              *int64   `json:"version,omitempty"`
+	OwnerID              *string  `json:"ownerID,omitempty"`
+	IntegrationID        *string  `json:"integrationID,omitempty"`
+	WorkflowDefinitionID *string  `json:"workflowDefinitionID,omitempty"`
+	EmailTemplateID      *string  `json:"emailTemplateID,omitempty"`
+	NotificationIDs      []string `json:"notificationIDs,omitempty"`
 }
 
 // CreateOnboardingInput is used for create Onboarding object.
@@ -7047,6 +7268,10 @@ type CreateOrganizationInput struct {
 	SettingID                         *string                         `json:"settingID,omitempty"`
 	PersonalAccessTokenIDs            []string                        `json:"personalAccessTokenIDs,omitempty"`
 	APITokenIDs                       []string                        `json:"apiTokenIDs,omitempty"`
+	EmailBrandingIDs                  []string                        `json:"emailBrandingIDs,omitempty"`
+	EmailTemplateIDs                  []string                        `json:"emailTemplateIDs,omitempty"`
+	NotificationPreferenceIDs         []string                        `json:"notificationPreferenceIDs,omitempty"`
+	NotificationTemplateIDs           []string                        `json:"notificationTemplateIDs,omitempty"`
 	FileIDs                           []string                        `json:"fileIDs,omitempty"`
 	EventIDs                          []string                        `json:"eventIDs,omitempty"`
 	SecretIDs                         []string                        `json:"secretIDs,omitempty"`
@@ -8309,6 +8534,12 @@ type CreateUserInput struct {
 type CreateUserSettingInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// user id to delegate workflow approvals to
+	DelegateUserID *string `json:"delegateUserID,omitempty"`
+	// when delegation becomes active
+	DelegateStartAt *time.Time `json:"delegateStartAt,omitempty"`
+	// when delegation ends
+	DelegateEndAt *time.Time `json:"delegateEndAt,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
 	Locked *bool `json:"locked,omitempty"`
 	// The time notifications regarding the user were silenced
@@ -8451,10 +8682,12 @@ type CreateWorkflowDefinitionInput struct {
 	// Typed document describing triggers, conditions, and actions
 	DefinitionJSON *models.WorkflowDefinitionDocument `json:"definitionJSON,omitempty"`
 	// Cached list of fields that should trigger workflow evaluation
-	TrackedFields    []string `json:"trackedFields,omitempty"`
-	OwnerID          *string  `json:"ownerID,omitempty"`
-	TagDefinitionIDs []string `json:"tagDefinitionIDs,omitempty"`
-	GroupIDs         []string `json:"groupIDs,omitempty"`
+	TrackedFields           []string `json:"trackedFields,omitempty"`
+	OwnerID                 *string  `json:"ownerID,omitempty"`
+	TagDefinitionIDs        []string `json:"tagDefinitionIDs,omitempty"`
+	GroupIDs                []string `json:"groupIDs,omitempty"`
+	NotificationTemplateIDs []string `json:"notificationTemplateIDs,omitempty"`
+	EmailTemplateIDs        []string `json:"emailTemplateIDs,omitempty"`
 }
 
 type CustomDomain struct {
@@ -11568,6 +11801,866 @@ type DocumentDataWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+}
+
+type EmailBranding struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// friendly name for this email branding configuration
+	Name string `json:"name"`
+	// brand name displayed in templates
+	BrandName *string `json:"brandName,omitempty"`
+	// URL of the brand logo for emails
+	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
+	// primary brand color for emails
+	PrimaryColor *string `json:"primaryColor,omitempty"`
+	// secondary brand color for emails
+	SecondaryColor *string `json:"secondaryColor,omitempty"`
+	// background color for emails
+	BackgroundColor *string `json:"backgroundColor,omitempty"`
+	// text color for emails
+	TextColor *string `json:"textColor,omitempty"`
+	// button background color for emails
+	ButtonColor *string `json:"buttonColor,omitempty"`
+	// button text color for emails
+	ButtonTextColor *string `json:"buttonTextColor,omitempty"`
+	// link color for emails
+	LinkColor *string `json:"linkColor,omitempty"`
+	// font family for emails
+	FontFamily *enums.Font `json:"fontFamily,omitempty"`
+	// whether this is the default email branding for the organization
+	IsDefault      *bool                    `json:"isDefault,omitempty"`
+	Owner          *Organization            `json:"owner,omitempty"`
+	BlockedGroups  *GroupConnection         `json:"blockedGroups"`
+	Editors        *GroupConnection         `json:"editors"`
+	Viewers        *GroupConnection         `json:"viewers"`
+	Campaigns      *CampaignConnection      `json:"campaigns"`
+	EmailTemplates *EmailTemplateConnection `json:"emailTemplates"`
+}
+
+func (EmailBranding) IsNode() {}
+
+// Return response for createBulkEmailBranding mutation
+type EmailBrandingBulkCreatePayload struct {
+	// Created emailBrandings
+	EmailBrandings []*EmailBranding `json:"emailBrandings,omitempty"`
+}
+
+// Return response for deleteBulkEmailBranding mutation
+type EmailBrandingBulkDeletePayload struct {
+	// Deleted emailBranding IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkEmailBranding mutation
+type EmailBrandingBulkUpdatePayload struct {
+	// Updated emailBrandings
+	EmailBrandings []*EmailBranding `json:"emailBrandings,omitempty"`
+	// IDs of the updated emailBrandings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// A connection to a list of items.
+type EmailBrandingConnection struct {
+	// A list of edges.
+	Edges []*EmailBrandingEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createEmailBranding mutation
+type EmailBrandingCreatePayload struct {
+	// Created emailBranding
+	EmailBranding *EmailBranding `json:"emailBranding"`
+}
+
+// Return response for deleteEmailBranding mutation
+type EmailBrandingDeletePayload struct {
+	// Deleted emailBranding ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type EmailBrandingEdge struct {
+	// The item at the end of the edge.
+	Node *EmailBranding `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for EmailBranding connections
+type EmailBrandingOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order EmailBrandings.
+	Field EmailBrandingOrderField `json:"field"`
+}
+
+// Return response for updateEmailBranding mutation
+type EmailBrandingUpdatePayload struct {
+	// Updated emailBranding
+	EmailBranding *EmailBranding `json:"emailBranding"`
+}
+
+// EmailBrandingWhereInput is used for filtering EmailBranding objects.
+// Input was generated by ent.
+type EmailBrandingWhereInput struct {
+	Not *EmailBrandingWhereInput   `json:"not,omitempty"`
+	And []*EmailBrandingWhereInput `json:"and,omitempty"`
+	Or  []*EmailBrandingWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// name field predicates
+	Name             *string  `json:"name,omitempty"`
+	NameNeq          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGt           *string  `json:"nameGT,omitempty"`
+	NameGte          *string  `json:"nameGTE,omitempty"`
+	NameLt           *string  `json:"nameLT,omitempty"`
+	NameLte          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// brand_name field predicates
+	BrandName             *string  `json:"brandName,omitempty"`
+	BrandNameNeq          *string  `json:"brandNameNEQ,omitempty"`
+	BrandNameIn           []string `json:"brandNameIn,omitempty"`
+	BrandNameNotIn        []string `json:"brandNameNotIn,omitempty"`
+	BrandNameGt           *string  `json:"brandNameGT,omitempty"`
+	BrandNameGte          *string  `json:"brandNameGTE,omitempty"`
+	BrandNameLt           *string  `json:"brandNameLT,omitempty"`
+	BrandNameLte          *string  `json:"brandNameLTE,omitempty"`
+	BrandNameContains     *string  `json:"brandNameContains,omitempty"`
+	BrandNameHasPrefix    *string  `json:"brandNameHasPrefix,omitempty"`
+	BrandNameHasSuffix    *string  `json:"brandNameHasSuffix,omitempty"`
+	BrandNameIsNil        *bool    `json:"brandNameIsNil,omitempty"`
+	BrandNameNotNil       *bool    `json:"brandNameNotNil,omitempty"`
+	BrandNameEqualFold    *string  `json:"brandNameEqualFold,omitempty"`
+	BrandNameContainsFold *string  `json:"brandNameContainsFold,omitempty"`
+	// logo_remote_url field predicates
+	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
+	LogoRemoteURLNeq          *string  `json:"logoRemoteURLNEQ,omitempty"`
+	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
+	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
+	LogoRemoteURLGt           *string  `json:"logoRemoteURLGT,omitempty"`
+	LogoRemoteURLGte          *string  `json:"logoRemoteURLGTE,omitempty"`
+	LogoRemoteURLLt           *string  `json:"logoRemoteURLLT,omitempty"`
+	LogoRemoteURLLte          *string  `json:"logoRemoteURLLTE,omitempty"`
+	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
+	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
+	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
+	LogoRemoteURLIsNil        *bool    `json:"logoRemoteURLIsNil,omitempty"`
+	LogoRemoteURLNotNil       *bool    `json:"logoRemoteURLNotNil,omitempty"`
+	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
+	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
+	// primary_color field predicates
+	PrimaryColor             *string  `json:"primaryColor,omitempty"`
+	PrimaryColorNeq          *string  `json:"primaryColorNEQ,omitempty"`
+	PrimaryColorIn           []string `json:"primaryColorIn,omitempty"`
+	PrimaryColorNotIn        []string `json:"primaryColorNotIn,omitempty"`
+	PrimaryColorGt           *string  `json:"primaryColorGT,omitempty"`
+	PrimaryColorGte          *string  `json:"primaryColorGTE,omitempty"`
+	PrimaryColorLt           *string  `json:"primaryColorLT,omitempty"`
+	PrimaryColorLte          *string  `json:"primaryColorLTE,omitempty"`
+	PrimaryColorContains     *string  `json:"primaryColorContains,omitempty"`
+	PrimaryColorHasPrefix    *string  `json:"primaryColorHasPrefix,omitempty"`
+	PrimaryColorHasSuffix    *string  `json:"primaryColorHasSuffix,omitempty"`
+	PrimaryColorIsNil        *bool    `json:"primaryColorIsNil,omitempty"`
+	PrimaryColorNotNil       *bool    `json:"primaryColorNotNil,omitempty"`
+	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
+	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
+	// secondary_color field predicates
+	SecondaryColor             *string  `json:"secondaryColor,omitempty"`
+	SecondaryColorNeq          *string  `json:"secondaryColorNEQ,omitempty"`
+	SecondaryColorIn           []string `json:"secondaryColorIn,omitempty"`
+	SecondaryColorNotIn        []string `json:"secondaryColorNotIn,omitempty"`
+	SecondaryColorGt           *string  `json:"secondaryColorGT,omitempty"`
+	SecondaryColorGte          *string  `json:"secondaryColorGTE,omitempty"`
+	SecondaryColorLt           *string  `json:"secondaryColorLT,omitempty"`
+	SecondaryColorLte          *string  `json:"secondaryColorLTE,omitempty"`
+	SecondaryColorContains     *string  `json:"secondaryColorContains,omitempty"`
+	SecondaryColorHasPrefix    *string  `json:"secondaryColorHasPrefix,omitempty"`
+	SecondaryColorHasSuffix    *string  `json:"secondaryColorHasSuffix,omitempty"`
+	SecondaryColorIsNil        *bool    `json:"secondaryColorIsNil,omitempty"`
+	SecondaryColorNotNil       *bool    `json:"secondaryColorNotNil,omitempty"`
+	SecondaryColorEqualFold    *string  `json:"secondaryColorEqualFold,omitempty"`
+	SecondaryColorContainsFold *string  `json:"secondaryColorContainsFold,omitempty"`
+	// background_color field predicates
+	BackgroundColor             *string  `json:"backgroundColor,omitempty"`
+	BackgroundColorNeq          *string  `json:"backgroundColorNEQ,omitempty"`
+	BackgroundColorIn           []string `json:"backgroundColorIn,omitempty"`
+	BackgroundColorNotIn        []string `json:"backgroundColorNotIn,omitempty"`
+	BackgroundColorGt           *string  `json:"backgroundColorGT,omitempty"`
+	BackgroundColorGte          *string  `json:"backgroundColorGTE,omitempty"`
+	BackgroundColorLt           *string  `json:"backgroundColorLT,omitempty"`
+	BackgroundColorLte          *string  `json:"backgroundColorLTE,omitempty"`
+	BackgroundColorContains     *string  `json:"backgroundColorContains,omitempty"`
+	BackgroundColorHasPrefix    *string  `json:"backgroundColorHasPrefix,omitempty"`
+	BackgroundColorHasSuffix    *string  `json:"backgroundColorHasSuffix,omitempty"`
+	BackgroundColorIsNil        *bool    `json:"backgroundColorIsNil,omitempty"`
+	BackgroundColorNotNil       *bool    `json:"backgroundColorNotNil,omitempty"`
+	BackgroundColorEqualFold    *string  `json:"backgroundColorEqualFold,omitempty"`
+	BackgroundColorContainsFold *string  `json:"backgroundColorContainsFold,omitempty"`
+	// text_color field predicates
+	TextColor             *string  `json:"textColor,omitempty"`
+	TextColorNeq          *string  `json:"textColorNEQ,omitempty"`
+	TextColorIn           []string `json:"textColorIn,omitempty"`
+	TextColorNotIn        []string `json:"textColorNotIn,omitempty"`
+	TextColorGt           *string  `json:"textColorGT,omitempty"`
+	TextColorGte          *string  `json:"textColorGTE,omitempty"`
+	TextColorLt           *string  `json:"textColorLT,omitempty"`
+	TextColorLte          *string  `json:"textColorLTE,omitempty"`
+	TextColorContains     *string  `json:"textColorContains,omitempty"`
+	TextColorHasPrefix    *string  `json:"textColorHasPrefix,omitempty"`
+	TextColorHasSuffix    *string  `json:"textColorHasSuffix,omitempty"`
+	TextColorIsNil        *bool    `json:"textColorIsNil,omitempty"`
+	TextColorNotNil       *bool    `json:"textColorNotNil,omitempty"`
+	TextColorEqualFold    *string  `json:"textColorEqualFold,omitempty"`
+	TextColorContainsFold *string  `json:"textColorContainsFold,omitempty"`
+	// button_color field predicates
+	ButtonColor             *string  `json:"buttonColor,omitempty"`
+	ButtonColorNeq          *string  `json:"buttonColorNEQ,omitempty"`
+	ButtonColorIn           []string `json:"buttonColorIn,omitempty"`
+	ButtonColorNotIn        []string `json:"buttonColorNotIn,omitempty"`
+	ButtonColorGt           *string  `json:"buttonColorGT,omitempty"`
+	ButtonColorGte          *string  `json:"buttonColorGTE,omitempty"`
+	ButtonColorLt           *string  `json:"buttonColorLT,omitempty"`
+	ButtonColorLte          *string  `json:"buttonColorLTE,omitempty"`
+	ButtonColorContains     *string  `json:"buttonColorContains,omitempty"`
+	ButtonColorHasPrefix    *string  `json:"buttonColorHasPrefix,omitempty"`
+	ButtonColorHasSuffix    *string  `json:"buttonColorHasSuffix,omitempty"`
+	ButtonColorIsNil        *bool    `json:"buttonColorIsNil,omitempty"`
+	ButtonColorNotNil       *bool    `json:"buttonColorNotNil,omitempty"`
+	ButtonColorEqualFold    *string  `json:"buttonColorEqualFold,omitempty"`
+	ButtonColorContainsFold *string  `json:"buttonColorContainsFold,omitempty"`
+	// button_text_color field predicates
+	ButtonTextColor             *string  `json:"buttonTextColor,omitempty"`
+	ButtonTextColorNeq          *string  `json:"buttonTextColorNEQ,omitempty"`
+	ButtonTextColorIn           []string `json:"buttonTextColorIn,omitempty"`
+	ButtonTextColorNotIn        []string `json:"buttonTextColorNotIn,omitempty"`
+	ButtonTextColorGt           *string  `json:"buttonTextColorGT,omitempty"`
+	ButtonTextColorGte          *string  `json:"buttonTextColorGTE,omitempty"`
+	ButtonTextColorLt           *string  `json:"buttonTextColorLT,omitempty"`
+	ButtonTextColorLte          *string  `json:"buttonTextColorLTE,omitempty"`
+	ButtonTextColorContains     *string  `json:"buttonTextColorContains,omitempty"`
+	ButtonTextColorHasPrefix    *string  `json:"buttonTextColorHasPrefix,omitempty"`
+	ButtonTextColorHasSuffix    *string  `json:"buttonTextColorHasSuffix,omitempty"`
+	ButtonTextColorIsNil        *bool    `json:"buttonTextColorIsNil,omitempty"`
+	ButtonTextColorNotNil       *bool    `json:"buttonTextColorNotNil,omitempty"`
+	ButtonTextColorEqualFold    *string  `json:"buttonTextColorEqualFold,omitempty"`
+	ButtonTextColorContainsFold *string  `json:"buttonTextColorContainsFold,omitempty"`
+	// link_color field predicates
+	LinkColor             *string  `json:"linkColor,omitempty"`
+	LinkColorNeq          *string  `json:"linkColorNEQ,omitempty"`
+	LinkColorIn           []string `json:"linkColorIn,omitempty"`
+	LinkColorNotIn        []string `json:"linkColorNotIn,omitempty"`
+	LinkColorGt           *string  `json:"linkColorGT,omitempty"`
+	LinkColorGte          *string  `json:"linkColorGTE,omitempty"`
+	LinkColorLt           *string  `json:"linkColorLT,omitempty"`
+	LinkColorLte          *string  `json:"linkColorLTE,omitempty"`
+	LinkColorContains     *string  `json:"linkColorContains,omitempty"`
+	LinkColorHasPrefix    *string  `json:"linkColorHasPrefix,omitempty"`
+	LinkColorHasSuffix    *string  `json:"linkColorHasSuffix,omitempty"`
+	LinkColorIsNil        *bool    `json:"linkColorIsNil,omitempty"`
+	LinkColorNotNil       *bool    `json:"linkColorNotNil,omitempty"`
+	LinkColorEqualFold    *string  `json:"linkColorEqualFold,omitempty"`
+	LinkColorContainsFold *string  `json:"linkColorContainsFold,omitempty"`
+	// font_family field predicates
+	FontFamily       *enums.Font  `json:"fontFamily,omitempty"`
+	FontFamilyNeq    *enums.Font  `json:"fontFamilyNEQ,omitempty"`
+	FontFamilyIn     []enums.Font `json:"fontFamilyIn,omitempty"`
+	FontFamilyNotIn  []enums.Font `json:"fontFamilyNotIn,omitempty"`
+	FontFamilyIsNil  *bool        `json:"fontFamilyIsNil,omitempty"`
+	FontFamilyNotNil *bool        `json:"fontFamilyNotNil,omitempty"`
+	// is_default field predicates
+	IsDefault       *bool `json:"isDefault,omitempty"`
+	IsDefaultNeq    *bool `json:"isDefaultNEQ,omitempty"`
+	IsDefaultIsNil  *bool `json:"isDefaultIsNil,omitempty"`
+	IsDefaultNotNil *bool `json:"isDefaultNotNil,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+	// campaigns edge predicates
+	HasCampaigns     *bool                 `json:"hasCampaigns,omitempty"`
+	HasCampaignsWith []*CampaignWhereInput `json:"hasCampaignsWith,omitempty"`
+	// email_templates edge predicates
+	HasEmailTemplates     *bool                      `json:"hasEmailTemplates,omitempty"`
+	HasEmailTemplatesWith []*EmailTemplateWhereInput `json:"hasEmailTemplatesWith,omitempty"`
+}
+
+type EmailTemplate struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// stable identifier for the template
+	Key string `json:"key"`
+	// display name for the template
+	Name string `json:"name"`
+	// description of the template
+	Description *string `json:"description,omitempty"`
+	// template format for rendering
+	Format enums.NotificationTemplateFormat `json:"format"`
+	// locale for the template, e.g. en-US
+	Locale string `json:"locale"`
+	// subject template for email notifications
+	SubjectTemplate *string `json:"subjectTemplate,omitempty"`
+	// preheader/preview text template for email notifications
+	PreheaderTemplate *string `json:"preheaderTemplate,omitempty"`
+	// body template for the email
+	BodyTemplate *string `json:"bodyTemplate,omitempty"`
+	// plain text fallback template for the email
+	TextTemplate *string `json:"textTemplate,omitempty"`
+	// jsonschema for template data requirements
+	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
+	// uischema for a template builder
+	Uischema map[string]any `json:"uischema,omitempty"`
+	// additional template metadata
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// whether the template is active
+	Active bool `json:"active"`
+	// template version
+	Version int64 `json:"version"`
+	// email branding configuration to apply for this template
+	EmailBrandingID *string `json:"emailBrandingID,omitempty"`
+	// integration used to deliver emails for this template
+	IntegrationID *string `json:"integrationID,omitempty"`
+	// workflow definition associated with this template
+	WorkflowDefinitionID *string `json:"workflowDefinitionID,omitempty"`
+	// workflow instance associated with this template
+	WorkflowInstanceID    *string                         `json:"workflowInstanceID,omitempty"`
+	Owner                 *Organization                   `json:"owner,omitempty"`
+	EmailBranding         *EmailBranding                  `json:"emailBranding,omitempty"`
+	Integration           *Integration                    `json:"integration,omitempty"`
+	WorkflowDefinition    *WorkflowDefinition             `json:"workflowDefinition,omitempty"`
+	WorkflowInstance      *WorkflowInstance               `json:"workflowInstance,omitempty"`
+	Campaigns             *CampaignConnection             `json:"campaigns"`
+	NotificationTemplates *NotificationTemplateConnection `json:"notificationTemplates"`
+}
+
+func (EmailTemplate) IsNode() {}
+
+// Return response for createBulkEmailTemplate mutation
+type EmailTemplateBulkCreatePayload struct {
+	// Created emailTemplates
+	EmailTemplates []*EmailTemplate `json:"emailTemplates,omitempty"`
+}
+
+// Return response for deleteBulkEmailTemplate mutation
+type EmailTemplateBulkDeletePayload struct {
+	// Deleted emailTemplate IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkEmailTemplate mutation
+type EmailTemplateBulkUpdatePayload struct {
+	// Updated emailTemplates
+	EmailTemplates []*EmailTemplate `json:"emailTemplates,omitempty"`
+	// IDs of the updated emailTemplates
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// A connection to a list of items.
+type EmailTemplateConnection struct {
+	// A list of edges.
+	Edges []*EmailTemplateEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createEmailTemplate mutation
+type EmailTemplateCreatePayload struct {
+	// Created emailTemplate
+	EmailTemplate *EmailTemplate `json:"emailTemplate"`
+}
+
+// Return response for deleteEmailTemplate mutation
+type EmailTemplateDeletePayload struct {
+	// Deleted emailTemplate ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type EmailTemplateEdge struct {
+	// The item at the end of the edge.
+	Node *EmailTemplate `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for EmailTemplate connections
+type EmailTemplateOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order EmailTemplates.
+	Field EmailTemplateOrderField `json:"field"`
+}
+
+// Return response for updateEmailTemplate mutation
+type EmailTemplateUpdatePayload struct {
+	// Updated emailTemplate
+	EmailTemplate *EmailTemplate `json:"emailTemplate"`
+}
+
+// EmailTemplateWhereInput is used for filtering EmailTemplate objects.
+// Input was generated by ent.
+type EmailTemplateWhereInput struct {
+	Not *EmailTemplateWhereInput   `json:"not,omitempty"`
+	And []*EmailTemplateWhereInput `json:"and,omitempty"`
+	Or  []*EmailTemplateWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+	// key field predicates
+	Key             *string  `json:"key,omitempty"`
+	KeyNeq          *string  `json:"keyNEQ,omitempty"`
+	KeyIn           []string `json:"keyIn,omitempty"`
+	KeyNotIn        []string `json:"keyNotIn,omitempty"`
+	KeyGt           *string  `json:"keyGT,omitempty"`
+	KeyGte          *string  `json:"keyGTE,omitempty"`
+	KeyLt           *string  `json:"keyLT,omitempty"`
+	KeyLte          *string  `json:"keyLTE,omitempty"`
+	KeyContains     *string  `json:"keyContains,omitempty"`
+	KeyHasPrefix    *string  `json:"keyHasPrefix,omitempty"`
+	KeyHasSuffix    *string  `json:"keyHasSuffix,omitempty"`
+	KeyEqualFold    *string  `json:"keyEqualFold,omitempty"`
+	KeyContainsFold *string  `json:"keyContainsFold,omitempty"`
+	// name field predicates
+	Name             *string  `json:"name,omitempty"`
+	NameNeq          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGt           *string  `json:"nameGT,omitempty"`
+	NameGte          *string  `json:"nameGTE,omitempty"`
+	NameLt           *string  `json:"nameLT,omitempty"`
+	NameLte          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// description field predicates
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// format field predicates
+	Format      *enums.NotificationTemplateFormat  `json:"format,omitempty"`
+	FormatNeq   *enums.NotificationTemplateFormat  `json:"formatNEQ,omitempty"`
+	FormatIn    []enums.NotificationTemplateFormat `json:"formatIn,omitempty"`
+	FormatNotIn []enums.NotificationTemplateFormat `json:"formatNotIn,omitempty"`
+	// locale field predicates
+	Locale             *string  `json:"locale,omitempty"`
+	LocaleNeq          *string  `json:"localeNEQ,omitempty"`
+	LocaleIn           []string `json:"localeIn,omitempty"`
+	LocaleNotIn        []string `json:"localeNotIn,omitempty"`
+	LocaleGt           *string  `json:"localeGT,omitempty"`
+	LocaleGte          *string  `json:"localeGTE,omitempty"`
+	LocaleLt           *string  `json:"localeLT,omitempty"`
+	LocaleLte          *string  `json:"localeLTE,omitempty"`
+	LocaleContains     *string  `json:"localeContains,omitempty"`
+	LocaleHasPrefix    *string  `json:"localeHasPrefix,omitempty"`
+	LocaleHasSuffix    *string  `json:"localeHasSuffix,omitempty"`
+	LocaleEqualFold    *string  `json:"localeEqualFold,omitempty"`
+	LocaleContainsFold *string  `json:"localeContainsFold,omitempty"`
+	// subject_template field predicates
+	SubjectTemplate             *string  `json:"subjectTemplate,omitempty"`
+	SubjectTemplateNeq          *string  `json:"subjectTemplateNEQ,omitempty"`
+	SubjectTemplateIn           []string `json:"subjectTemplateIn,omitempty"`
+	SubjectTemplateNotIn        []string `json:"subjectTemplateNotIn,omitempty"`
+	SubjectTemplateGt           *string  `json:"subjectTemplateGT,omitempty"`
+	SubjectTemplateGte          *string  `json:"subjectTemplateGTE,omitempty"`
+	SubjectTemplateLt           *string  `json:"subjectTemplateLT,omitempty"`
+	SubjectTemplateLte          *string  `json:"subjectTemplateLTE,omitempty"`
+	SubjectTemplateContains     *string  `json:"subjectTemplateContains,omitempty"`
+	SubjectTemplateHasPrefix    *string  `json:"subjectTemplateHasPrefix,omitempty"`
+	SubjectTemplateHasSuffix    *string  `json:"subjectTemplateHasSuffix,omitempty"`
+	SubjectTemplateIsNil        *bool    `json:"subjectTemplateIsNil,omitempty"`
+	SubjectTemplateNotNil       *bool    `json:"subjectTemplateNotNil,omitempty"`
+	SubjectTemplateEqualFold    *string  `json:"subjectTemplateEqualFold,omitempty"`
+	SubjectTemplateContainsFold *string  `json:"subjectTemplateContainsFold,omitempty"`
+	// preheader_template field predicates
+	PreheaderTemplate             *string  `json:"preheaderTemplate,omitempty"`
+	PreheaderTemplateNeq          *string  `json:"preheaderTemplateNEQ,omitempty"`
+	PreheaderTemplateIn           []string `json:"preheaderTemplateIn,omitempty"`
+	PreheaderTemplateNotIn        []string `json:"preheaderTemplateNotIn,omitempty"`
+	PreheaderTemplateGt           *string  `json:"preheaderTemplateGT,omitempty"`
+	PreheaderTemplateGte          *string  `json:"preheaderTemplateGTE,omitempty"`
+	PreheaderTemplateLt           *string  `json:"preheaderTemplateLT,omitempty"`
+	PreheaderTemplateLte          *string  `json:"preheaderTemplateLTE,omitempty"`
+	PreheaderTemplateContains     *string  `json:"preheaderTemplateContains,omitempty"`
+	PreheaderTemplateHasPrefix    *string  `json:"preheaderTemplateHasPrefix,omitempty"`
+	PreheaderTemplateHasSuffix    *string  `json:"preheaderTemplateHasSuffix,omitempty"`
+	PreheaderTemplateIsNil        *bool    `json:"preheaderTemplateIsNil,omitempty"`
+	PreheaderTemplateNotNil       *bool    `json:"preheaderTemplateNotNil,omitempty"`
+	PreheaderTemplateEqualFold    *string  `json:"preheaderTemplateEqualFold,omitempty"`
+	PreheaderTemplateContainsFold *string  `json:"preheaderTemplateContainsFold,omitempty"`
+	// body_template field predicates
+	BodyTemplate             *string  `json:"bodyTemplate,omitempty"`
+	BodyTemplateNeq          *string  `json:"bodyTemplateNEQ,omitempty"`
+	BodyTemplateIn           []string `json:"bodyTemplateIn,omitempty"`
+	BodyTemplateNotIn        []string `json:"bodyTemplateNotIn,omitempty"`
+	BodyTemplateGt           *string  `json:"bodyTemplateGT,omitempty"`
+	BodyTemplateGte          *string  `json:"bodyTemplateGTE,omitempty"`
+	BodyTemplateLt           *string  `json:"bodyTemplateLT,omitempty"`
+	BodyTemplateLte          *string  `json:"bodyTemplateLTE,omitempty"`
+	BodyTemplateContains     *string  `json:"bodyTemplateContains,omitempty"`
+	BodyTemplateHasPrefix    *string  `json:"bodyTemplateHasPrefix,omitempty"`
+	BodyTemplateHasSuffix    *string  `json:"bodyTemplateHasSuffix,omitempty"`
+	BodyTemplateIsNil        *bool    `json:"bodyTemplateIsNil,omitempty"`
+	BodyTemplateNotNil       *bool    `json:"bodyTemplateNotNil,omitempty"`
+	BodyTemplateEqualFold    *string  `json:"bodyTemplateEqualFold,omitempty"`
+	BodyTemplateContainsFold *string  `json:"bodyTemplateContainsFold,omitempty"`
+	// text_template field predicates
+	TextTemplate             *string  `json:"textTemplate,omitempty"`
+	TextTemplateNeq          *string  `json:"textTemplateNEQ,omitempty"`
+	TextTemplateIn           []string `json:"textTemplateIn,omitempty"`
+	TextTemplateNotIn        []string `json:"textTemplateNotIn,omitempty"`
+	TextTemplateGt           *string  `json:"textTemplateGT,omitempty"`
+	TextTemplateGte          *string  `json:"textTemplateGTE,omitempty"`
+	TextTemplateLt           *string  `json:"textTemplateLT,omitempty"`
+	TextTemplateLte          *string  `json:"textTemplateLTE,omitempty"`
+	TextTemplateContains     *string  `json:"textTemplateContains,omitempty"`
+	TextTemplateHasPrefix    *string  `json:"textTemplateHasPrefix,omitempty"`
+	TextTemplateHasSuffix    *string  `json:"textTemplateHasSuffix,omitempty"`
+	TextTemplateIsNil        *bool    `json:"textTemplateIsNil,omitempty"`
+	TextTemplateNotNil       *bool    `json:"textTemplateNotNil,omitempty"`
+	TextTemplateEqualFold    *string  `json:"textTemplateEqualFold,omitempty"`
+	TextTemplateContainsFold *string  `json:"textTemplateContainsFold,omitempty"`
+	// active field predicates
+	Active    *bool `json:"active,omitempty"`
+	ActiveNeq *bool `json:"activeNEQ,omitempty"`
+	// version field predicates
+	Version      *int64  `json:"version,omitempty"`
+	VersionNeq   *int64  `json:"versionNEQ,omitempty"`
+	VersionIn    []int64 `json:"versionIn,omitempty"`
+	VersionNotIn []int64 `json:"versionNotIn,omitempty"`
+	VersionGt    *int64  `json:"versionGT,omitempty"`
+	VersionGte   *int64  `json:"versionGTE,omitempty"`
+	VersionLt    *int64  `json:"versionLT,omitempty"`
+	VersionLte   *int64  `json:"versionLTE,omitempty"`
+	// email_branding_id field predicates
+	EmailBrandingID             *string  `json:"emailBrandingID,omitempty"`
+	EmailBrandingIdneq          *string  `json:"emailBrandingIDNEQ,omitempty"`
+	EmailBrandingIDIn           []string `json:"emailBrandingIDIn,omitempty"`
+	EmailBrandingIDNotIn        []string `json:"emailBrandingIDNotIn,omitempty"`
+	EmailBrandingIdgt           *string  `json:"emailBrandingIDGT,omitempty"`
+	EmailBrandingIdgte          *string  `json:"emailBrandingIDGTE,omitempty"`
+	EmailBrandingIdlt           *string  `json:"emailBrandingIDLT,omitempty"`
+	EmailBrandingIdlte          *string  `json:"emailBrandingIDLTE,omitempty"`
+	EmailBrandingIDContains     *string  `json:"emailBrandingIDContains,omitempty"`
+	EmailBrandingIDHasPrefix    *string  `json:"emailBrandingIDHasPrefix,omitempty"`
+	EmailBrandingIDHasSuffix    *string  `json:"emailBrandingIDHasSuffix,omitempty"`
+	EmailBrandingIDIsNil        *bool    `json:"emailBrandingIDIsNil,omitempty"`
+	EmailBrandingIDNotNil       *bool    `json:"emailBrandingIDNotNil,omitempty"`
+	EmailBrandingIDEqualFold    *string  `json:"emailBrandingIDEqualFold,omitempty"`
+	EmailBrandingIDContainsFold *string  `json:"emailBrandingIDContainsFold,omitempty"`
+	// integration_id field predicates
+	IntegrationID             *string  `json:"integrationID,omitempty"`
+	IntegrationIdneq          *string  `json:"integrationIDNEQ,omitempty"`
+	IntegrationIDIn           []string `json:"integrationIDIn,omitempty"`
+	IntegrationIDNotIn        []string `json:"integrationIDNotIn,omitempty"`
+	IntegrationIdgt           *string  `json:"integrationIDGT,omitempty"`
+	IntegrationIdgte          *string  `json:"integrationIDGTE,omitempty"`
+	IntegrationIdlt           *string  `json:"integrationIDLT,omitempty"`
+	IntegrationIdlte          *string  `json:"integrationIDLTE,omitempty"`
+	IntegrationIDContains     *string  `json:"integrationIDContains,omitempty"`
+	IntegrationIDHasPrefix    *string  `json:"integrationIDHasPrefix,omitempty"`
+	IntegrationIDHasSuffix    *string  `json:"integrationIDHasSuffix,omitempty"`
+	IntegrationIDIsNil        *bool    `json:"integrationIDIsNil,omitempty"`
+	IntegrationIDNotNil       *bool    `json:"integrationIDNotNil,omitempty"`
+	IntegrationIDEqualFold    *string  `json:"integrationIDEqualFold,omitempty"`
+	IntegrationIDContainsFold *string  `json:"integrationIDContainsFold,omitempty"`
+	// workflow_definition_id field predicates
+	WorkflowDefinitionID             *string  `json:"workflowDefinitionID,omitempty"`
+	WorkflowDefinitionIdneq          *string  `json:"workflowDefinitionIDNEQ,omitempty"`
+	WorkflowDefinitionIDIn           []string `json:"workflowDefinitionIDIn,omitempty"`
+	WorkflowDefinitionIDNotIn        []string `json:"workflowDefinitionIDNotIn,omitempty"`
+	WorkflowDefinitionIdgt           *string  `json:"workflowDefinitionIDGT,omitempty"`
+	WorkflowDefinitionIdgte          *string  `json:"workflowDefinitionIDGTE,omitempty"`
+	WorkflowDefinitionIdlt           *string  `json:"workflowDefinitionIDLT,omitempty"`
+	WorkflowDefinitionIdlte          *string  `json:"workflowDefinitionIDLTE,omitempty"`
+	WorkflowDefinitionIDContains     *string  `json:"workflowDefinitionIDContains,omitempty"`
+	WorkflowDefinitionIDHasPrefix    *string  `json:"workflowDefinitionIDHasPrefix,omitempty"`
+	WorkflowDefinitionIDHasSuffix    *string  `json:"workflowDefinitionIDHasSuffix,omitempty"`
+	WorkflowDefinitionIDIsNil        *bool    `json:"workflowDefinitionIDIsNil,omitempty"`
+	WorkflowDefinitionIDNotNil       *bool    `json:"workflowDefinitionIDNotNil,omitempty"`
+	WorkflowDefinitionIDEqualFold    *string  `json:"workflowDefinitionIDEqualFold,omitempty"`
+	WorkflowDefinitionIDContainsFold *string  `json:"workflowDefinitionIDContainsFold,omitempty"`
+	// workflow_instance_id field predicates
+	WorkflowInstanceID             *string  `json:"workflowInstanceID,omitempty"`
+	WorkflowInstanceIdneq          *string  `json:"workflowInstanceIDNEQ,omitempty"`
+	WorkflowInstanceIDIn           []string `json:"workflowInstanceIDIn,omitempty"`
+	WorkflowInstanceIDNotIn        []string `json:"workflowInstanceIDNotIn,omitempty"`
+	WorkflowInstanceIdgt           *string  `json:"workflowInstanceIDGT,omitempty"`
+	WorkflowInstanceIdgte          *string  `json:"workflowInstanceIDGTE,omitempty"`
+	WorkflowInstanceIdlt           *string  `json:"workflowInstanceIDLT,omitempty"`
+	WorkflowInstanceIdlte          *string  `json:"workflowInstanceIDLTE,omitempty"`
+	WorkflowInstanceIDContains     *string  `json:"workflowInstanceIDContains,omitempty"`
+	WorkflowInstanceIDHasPrefix    *string  `json:"workflowInstanceIDHasPrefix,omitempty"`
+	WorkflowInstanceIDHasSuffix    *string  `json:"workflowInstanceIDHasSuffix,omitempty"`
+	WorkflowInstanceIDIsNil        *bool    `json:"workflowInstanceIDIsNil,omitempty"`
+	WorkflowInstanceIDNotNil       *bool    `json:"workflowInstanceIDNotNil,omitempty"`
+	WorkflowInstanceIDEqualFold    *string  `json:"workflowInstanceIDEqualFold,omitempty"`
+	WorkflowInstanceIDContainsFold *string  `json:"workflowInstanceIDContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// email_branding edge predicates
+	HasEmailBranding     *bool                      `json:"hasEmailBranding,omitempty"`
+	HasEmailBrandingWith []*EmailBrandingWhereInput `json:"hasEmailBrandingWith,omitempty"`
+	// integration edge predicates
+	HasIntegration     *bool                    `json:"hasIntegration,omitempty"`
+	HasIntegrationWith []*IntegrationWhereInput `json:"hasIntegrationWith,omitempty"`
+	// workflow_definition edge predicates
+	HasWorkflowDefinition     *bool                           `json:"hasWorkflowDefinition,omitempty"`
+	HasWorkflowDefinitionWith []*WorkflowDefinitionWhereInput `json:"hasWorkflowDefinitionWith,omitempty"`
+	// workflow_instance edge predicates
+	HasWorkflowInstance     *bool                         `json:"hasWorkflowInstance,omitempty"`
+	HasWorkflowInstanceWith []*WorkflowInstanceWhereInput `json:"hasWorkflowInstanceWith,omitempty"`
+	// campaigns edge predicates
+	HasCampaigns     *bool                 `json:"hasCampaigns,omitempty"`
+	HasCampaignsWith []*CampaignWhereInput `json:"hasCampaignsWith,omitempty"`
+	// notification_templates edge predicates
+	HasNotificationTemplates     *bool                             `json:"hasNotificationTemplates,omitempty"`
+	HasNotificationTemplatesWith []*NotificationTemplateWhereInput `json:"hasNotificationTemplatesWith,omitempty"`
 }
 
 type Entity struct {
@@ -17310,24 +18403,26 @@ type Integration struct {
 	// the type of integration, such as communicattion, storage, SCM, etc.
 	IntegrationType *string `json:"integrationType,omitempty"`
 	// additional metadata about the integration
-	Metadata             map[string]any                 `json:"metadata,omitempty"`
-	Owner                *Organization                  `json:"owner,omitempty"`
-	Environment          *CustomTypeEnum                `json:"environment,omitempty"`
-	Scope                *CustomTypeEnum                `json:"scope,omitempty"`
-	Secrets              *HushConnection                `json:"secrets"`
-	Files                *FileConnection                `json:"files"`
-	Events               *EventConnection               `json:"events"`
-	Findings             *FindingConnection             `json:"findings"`
-	Vulnerabilities      *VulnerabilityConnection       `json:"vulnerabilities"`
-	Reviews              *ReviewConnection              `json:"reviews"`
-	Remediations         *RemediationConnection         `json:"remediations"`
-	Tasks                *TaskConnection                `json:"tasks"`
-	ActionPlans          *ActionPlanConnection          `json:"actionPlans"`
-	DirectoryAccounts    *DirectoryAccountConnection    `json:"directoryAccounts"`
-	DirectoryGroups      *DirectoryGroupConnection      `json:"directoryGroups"`
-	DirectoryMemberships *DirectoryMembershipConnection `json:"directoryMemberships"`
-	DirectorySyncRuns    *DirectorySyncRunConnection    `json:"directorySyncRuns"`
-	Entities             *EntityConnection              `json:"entities"`
+	Metadata              map[string]any                  `json:"metadata,omitempty"`
+	Owner                 *Organization                   `json:"owner,omitempty"`
+	Environment           *CustomTypeEnum                 `json:"environment,omitempty"`
+	Scope                 *CustomTypeEnum                 `json:"scope,omitempty"`
+	Secrets               *HushConnection                 `json:"secrets"`
+	Files                 *FileConnection                 `json:"files"`
+	Events                *EventConnection                `json:"events"`
+	Findings              *FindingConnection              `json:"findings"`
+	Vulnerabilities       *VulnerabilityConnection        `json:"vulnerabilities"`
+	Reviews               *ReviewConnection               `json:"reviews"`
+	Remediations          *RemediationConnection          `json:"remediations"`
+	Tasks                 *TaskConnection                 `json:"tasks"`
+	ActionPlans           *ActionPlanConnection           `json:"actionPlans"`
+	DirectoryAccounts     *DirectoryAccountConnection     `json:"directoryAccounts"`
+	DirectoryGroups       *DirectoryGroupConnection       `json:"directoryGroups"`
+	DirectoryMemberships  *DirectoryMembershipConnection  `json:"directoryMemberships"`
+	DirectorySyncRuns     *DirectorySyncRunConnection     `json:"directorySyncRuns"`
+	NotificationTemplates *NotificationTemplateConnection `json:"notificationTemplates"`
+	EmailTemplates        *EmailTemplateConnection        `json:"emailTemplates"`
+	Entities              *EntityConnection               `json:"entities"`
 }
 
 func (Integration) IsNode() {}
@@ -17646,6 +18741,12 @@ type IntegrationWhereInput struct {
 	// directory_sync_runs edge predicates
 	HasDirectorySyncRuns     *bool                         `json:"hasDirectorySyncRuns,omitempty"`
 	HasDirectorySyncRunsWith []*DirectorySyncRunWhereInput `json:"hasDirectorySyncRunsWith,omitempty"`
+	// notification_templates edge predicates
+	HasNotificationTemplates     *bool                             `json:"hasNotificationTemplates,omitempty"`
+	HasNotificationTemplatesWith []*NotificationTemplateWhereInput `json:"hasNotificationTemplatesWith,omitempty"`
+	// email_templates edge predicates
+	HasEmailTemplates     *bool                      `json:"hasEmailTemplates,omitempty"`
+	HasEmailTemplatesWith []*EmailTemplateWhereInput `json:"hasEmailTemplatesWith,omitempty"`
 	// entities edge predicates
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
@@ -20877,16 +21978,904 @@ type Notification struct {
 	Body string `json:"body"`
 	// structured payload containing IDs, links, and other notification data
 	Data map[string]any `json:"data,omitempty"`
+	// optional template used for external channel rendering
+	TemplateID *string `json:"templateID,omitempty"`
 	// the time the notification was read
 	ReadAt *models.DateTime `json:"readAt,omitempty"`
 	// the channels this notification should be sent to (IN_APP, SLACK, EMAIL)
 	Channels []string `json:"channels,omitempty"`
 	// the topic of the notification (TASK_ASSIGNMENT, APPROVAL, MENTION, EXPORT)
-	Topic *enums.NotificationTopic `json:"topic,omitempty"`
-	Owner *Organization            `json:"owner,omitempty"`
+	Topic                *enums.NotificationTopic `json:"topic,omitempty"`
+	Owner                *Organization            `json:"owner,omitempty"`
+	NotificationTemplate *NotificationTemplate    `json:"notificationTemplate,omitempty"`
 }
 
 func (Notification) IsNode() {}
+
+// A connection to a list of items.
+type NotificationConnection struct {
+	// A list of edges.
+	Edges []*NotificationEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type NotificationEdge struct {
+	// The item at the end of the edge.
+	Node *Notification `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for Notification connections
+type NotificationOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Notifications.
+	Field NotificationOrderField `json:"field"`
+}
+
+type NotificationPreference struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// the user this preference applies to
+	UserID string `json:"userID"`
+	// the channel this preference applies to
+	Channel enums.Channel `json:"channel"`
+	// status of the channel configuration
+	Status enums.NotificationChannelStatus `json:"status"`
+	// provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
+	Provider *string `json:"provider,omitempty"`
+	// destination address or endpoint for the channel
+	Destination *string `json:"destination,omitempty"`
+	// channel configuration payload
+	Config map[string]any `json:"config,omitempty"`
+	// whether this preference is enabled
+	Enabled bool `json:"enabled"`
+	// delivery cadence for this preference
+	Cadence enums.NotificationCadence `json:"cadence"`
+	// optional priority override for this preference
+	Priority *enums.Priority `json:"priority,omitempty"`
+	// soiree topic names or wildcard patterns this preference applies to; empty means all
+	TopicPatterns []string `json:"topicPatterns,omitempty"`
+	// optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+	TopicOverrides map[string]any `json:"topicOverrides,omitempty"`
+	// optional template to use by default for this preference (external channels only)
+	TemplateID *string `json:"templateID,omitempty"`
+	// mute notifications until this time
+	MuteUntil *time.Time `json:"muteUntil,omitempty"`
+	// start of quiet hours in HH:MM
+	QuietHoursStart *string `json:"quietHoursStart,omitempty"`
+	// end of quiet hours in HH:MM
+	QuietHoursEnd *string `json:"quietHoursEnd,omitempty"`
+	// timezone for quiet hours and digests
+	Timezone *string `json:"timezone,omitempty"`
+	// whether this is the default config for the channel
+	IsDefault bool `json:"isDefault"`
+	// when the channel config was verified
+	VerifiedAt *time.Time `json:"verifiedAt,omitempty"`
+	// last time the channel config was used
+	LastUsedAt *time.Time `json:"lastUsedAt,omitempty"`
+	// last error encountered while using the channel
+	LastError *string `json:"lastError,omitempty"`
+	// additional preference metadata
+	Metadata             map[string]any        `json:"metadata,omitempty"`
+	Owner                *Organization         `json:"owner,omitempty"`
+	User                 *User                 `json:"user"`
+	NotificationTemplate *NotificationTemplate `json:"notificationTemplate,omitempty"`
+}
+
+func (NotificationPreference) IsNode() {}
+
+// Return response for createBulkNotificationPreference mutation
+type NotificationPreferenceBulkCreatePayload struct {
+	// Created notificationPreferences
+	NotificationPreferences []*NotificationPreference `json:"notificationPreferences,omitempty"`
+}
+
+// Return response for deleteBulkNotificationPreference mutation
+type NotificationPreferenceBulkDeletePayload struct {
+	// Deleted notificationPreference IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkNotificationPreference mutation
+type NotificationPreferenceBulkUpdatePayload struct {
+	// Updated notificationPreferences
+	NotificationPreferences []*NotificationPreference `json:"notificationPreferences,omitempty"`
+	// IDs of the updated notificationPreferences
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// A connection to a list of items.
+type NotificationPreferenceConnection struct {
+	// A list of edges.
+	Edges []*NotificationPreferenceEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createNotificationPreference mutation
+type NotificationPreferenceCreatePayload struct {
+	// Created notificationPreference
+	NotificationPreference *NotificationPreference `json:"notificationPreference"`
+}
+
+// Return response for deleteNotificationPreference mutation
+type NotificationPreferenceDeletePayload struct {
+	// Deleted notificationPreference ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type NotificationPreferenceEdge struct {
+	// The item at the end of the edge.
+	Node *NotificationPreference `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for NotificationPreference connections
+type NotificationPreferenceOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order NotificationPreferences.
+	Field NotificationPreferenceOrderField `json:"field"`
+}
+
+// Return response for updateNotificationPreference mutation
+type NotificationPreferenceUpdatePayload struct {
+	// Updated notificationPreference
+	NotificationPreference *NotificationPreference `json:"notificationPreference"`
+}
+
+// NotificationPreferenceWhereInput is used for filtering NotificationPreference objects.
+// Input was generated by ent.
+type NotificationPreferenceWhereInput struct {
+	Not *NotificationPreferenceWhereInput   `json:"not,omitempty"`
+	And []*NotificationPreferenceWhereInput `json:"and,omitempty"`
+	Or  []*NotificationPreferenceWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// user_id field predicates
+	UserID             *string  `json:"userID,omitempty"`
+	UserIdneq          *string  `json:"userIDNEQ,omitempty"`
+	UserIDIn           []string `json:"userIDIn,omitempty"`
+	UserIDNotIn        []string `json:"userIDNotIn,omitempty"`
+	UserIdgt           *string  `json:"userIDGT,omitempty"`
+	UserIdgte          *string  `json:"userIDGTE,omitempty"`
+	UserIdlt           *string  `json:"userIDLT,omitempty"`
+	UserIdlte          *string  `json:"userIDLTE,omitempty"`
+	UserIDContains     *string  `json:"userIDContains,omitempty"`
+	UserIDHasPrefix    *string  `json:"userIDHasPrefix,omitempty"`
+	UserIDHasSuffix    *string  `json:"userIDHasSuffix,omitempty"`
+	UserIDEqualFold    *string  `json:"userIDEqualFold,omitempty"`
+	UserIDContainsFold *string  `json:"userIDContainsFold,omitempty"`
+	// channel field predicates
+	Channel      *enums.Channel  `json:"channel,omitempty"`
+	ChannelNeq   *enums.Channel  `json:"channelNEQ,omitempty"`
+	ChannelIn    []enums.Channel `json:"channelIn,omitempty"`
+	ChannelNotIn []enums.Channel `json:"channelNotIn,omitempty"`
+	// status field predicates
+	Status      *enums.NotificationChannelStatus  `json:"status,omitempty"`
+	StatusNeq   *enums.NotificationChannelStatus  `json:"statusNEQ,omitempty"`
+	StatusIn    []enums.NotificationChannelStatus `json:"statusIn,omitempty"`
+	StatusNotIn []enums.NotificationChannelStatus `json:"statusNotIn,omitempty"`
+	// provider field predicates
+	Provider             *string  `json:"provider,omitempty"`
+	ProviderNeq          *string  `json:"providerNEQ,omitempty"`
+	ProviderIn           []string `json:"providerIn,omitempty"`
+	ProviderNotIn        []string `json:"providerNotIn,omitempty"`
+	ProviderGt           *string  `json:"providerGT,omitempty"`
+	ProviderGte          *string  `json:"providerGTE,omitempty"`
+	ProviderLt           *string  `json:"providerLT,omitempty"`
+	ProviderLte          *string  `json:"providerLTE,omitempty"`
+	ProviderContains     *string  `json:"providerContains,omitempty"`
+	ProviderHasPrefix    *string  `json:"providerHasPrefix,omitempty"`
+	ProviderHasSuffix    *string  `json:"providerHasSuffix,omitempty"`
+	ProviderIsNil        *bool    `json:"providerIsNil,omitempty"`
+	ProviderNotNil       *bool    `json:"providerNotNil,omitempty"`
+	ProviderEqualFold    *string  `json:"providerEqualFold,omitempty"`
+	ProviderContainsFold *string  `json:"providerContainsFold,omitempty"`
+	// destination field predicates
+	Destination             *string  `json:"destination,omitempty"`
+	DestinationNeq          *string  `json:"destinationNEQ,omitempty"`
+	DestinationIn           []string `json:"destinationIn,omitempty"`
+	DestinationNotIn        []string `json:"destinationNotIn,omitempty"`
+	DestinationGt           *string  `json:"destinationGT,omitempty"`
+	DestinationGte          *string  `json:"destinationGTE,omitempty"`
+	DestinationLt           *string  `json:"destinationLT,omitempty"`
+	DestinationLte          *string  `json:"destinationLTE,omitempty"`
+	DestinationContains     *string  `json:"destinationContains,omitempty"`
+	DestinationHasPrefix    *string  `json:"destinationHasPrefix,omitempty"`
+	DestinationHasSuffix    *string  `json:"destinationHasSuffix,omitempty"`
+	DestinationIsNil        *bool    `json:"destinationIsNil,omitempty"`
+	DestinationNotNil       *bool    `json:"destinationNotNil,omitempty"`
+	DestinationEqualFold    *string  `json:"destinationEqualFold,omitempty"`
+	DestinationContainsFold *string  `json:"destinationContainsFold,omitempty"`
+	// enabled field predicates
+	Enabled    *bool `json:"enabled,omitempty"`
+	EnabledNeq *bool `json:"enabledNEQ,omitempty"`
+	// cadence field predicates
+	Cadence      *enums.NotificationCadence  `json:"cadence,omitempty"`
+	CadenceNeq   *enums.NotificationCadence  `json:"cadenceNEQ,omitempty"`
+	CadenceIn    []enums.NotificationCadence `json:"cadenceIn,omitempty"`
+	CadenceNotIn []enums.NotificationCadence `json:"cadenceNotIn,omitempty"`
+	// priority field predicates
+	Priority       *enums.Priority  `json:"priority,omitempty"`
+	PriorityNeq    *enums.Priority  `json:"priorityNEQ,omitempty"`
+	PriorityIn     []enums.Priority `json:"priorityIn,omitempty"`
+	PriorityNotIn  []enums.Priority `json:"priorityNotIn,omitempty"`
+	PriorityIsNil  *bool            `json:"priorityIsNil,omitempty"`
+	PriorityNotNil *bool            `json:"priorityNotNil,omitempty"`
+	// template_id field predicates
+	TemplateID             *string  `json:"templateID,omitempty"`
+	TemplateIdneq          *string  `json:"templateIDNEQ,omitempty"`
+	TemplateIDIn           []string `json:"templateIDIn,omitempty"`
+	TemplateIDNotIn        []string `json:"templateIDNotIn,omitempty"`
+	TemplateIdgt           *string  `json:"templateIDGT,omitempty"`
+	TemplateIdgte          *string  `json:"templateIDGTE,omitempty"`
+	TemplateIdlt           *string  `json:"templateIDLT,omitempty"`
+	TemplateIdlte          *string  `json:"templateIDLTE,omitempty"`
+	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
+	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
+	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
+	TemplateIDIsNil        *bool    `json:"templateIDIsNil,omitempty"`
+	TemplateIDNotNil       *bool    `json:"templateIDNotNil,omitempty"`
+	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
+	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
+	// mute_until field predicates
+	MuteUntil       *time.Time   `json:"muteUntil,omitempty"`
+	MuteUntilNeq    *time.Time   `json:"muteUntilNEQ,omitempty"`
+	MuteUntilIn     []*time.Time `json:"muteUntilIn,omitempty"`
+	MuteUntilNotIn  []*time.Time `json:"muteUntilNotIn,omitempty"`
+	MuteUntilGt     *time.Time   `json:"muteUntilGT,omitempty"`
+	MuteUntilGte    *time.Time   `json:"muteUntilGTE,omitempty"`
+	MuteUntilLt     *time.Time   `json:"muteUntilLT,omitempty"`
+	MuteUntilLte    *time.Time   `json:"muteUntilLTE,omitempty"`
+	MuteUntilIsNil  *bool        `json:"muteUntilIsNil,omitempty"`
+	MuteUntilNotNil *bool        `json:"muteUntilNotNil,omitempty"`
+	// quiet_hours_start field predicates
+	QuietHoursStart             *string  `json:"quietHoursStart,omitempty"`
+	QuietHoursStartNeq          *string  `json:"quietHoursStartNEQ,omitempty"`
+	QuietHoursStartIn           []string `json:"quietHoursStartIn,omitempty"`
+	QuietHoursStartNotIn        []string `json:"quietHoursStartNotIn,omitempty"`
+	QuietHoursStartGt           *string  `json:"quietHoursStartGT,omitempty"`
+	QuietHoursStartGte          *string  `json:"quietHoursStartGTE,omitempty"`
+	QuietHoursStartLt           *string  `json:"quietHoursStartLT,omitempty"`
+	QuietHoursStartLte          *string  `json:"quietHoursStartLTE,omitempty"`
+	QuietHoursStartContains     *string  `json:"quietHoursStartContains,omitempty"`
+	QuietHoursStartHasPrefix    *string  `json:"quietHoursStartHasPrefix,omitempty"`
+	QuietHoursStartHasSuffix    *string  `json:"quietHoursStartHasSuffix,omitempty"`
+	QuietHoursStartIsNil        *bool    `json:"quietHoursStartIsNil,omitempty"`
+	QuietHoursStartNotNil       *bool    `json:"quietHoursStartNotNil,omitempty"`
+	QuietHoursStartEqualFold    *string  `json:"quietHoursStartEqualFold,omitempty"`
+	QuietHoursStartContainsFold *string  `json:"quietHoursStartContainsFold,omitempty"`
+	// quiet_hours_end field predicates
+	QuietHoursEnd             *string  `json:"quietHoursEnd,omitempty"`
+	QuietHoursEndNeq          *string  `json:"quietHoursEndNEQ,omitempty"`
+	QuietHoursEndIn           []string `json:"quietHoursEndIn,omitempty"`
+	QuietHoursEndNotIn        []string `json:"quietHoursEndNotIn,omitempty"`
+	QuietHoursEndGt           *string  `json:"quietHoursEndGT,omitempty"`
+	QuietHoursEndGte          *string  `json:"quietHoursEndGTE,omitempty"`
+	QuietHoursEndLt           *string  `json:"quietHoursEndLT,omitempty"`
+	QuietHoursEndLte          *string  `json:"quietHoursEndLTE,omitempty"`
+	QuietHoursEndContains     *string  `json:"quietHoursEndContains,omitempty"`
+	QuietHoursEndHasPrefix    *string  `json:"quietHoursEndHasPrefix,omitempty"`
+	QuietHoursEndHasSuffix    *string  `json:"quietHoursEndHasSuffix,omitempty"`
+	QuietHoursEndIsNil        *bool    `json:"quietHoursEndIsNil,omitempty"`
+	QuietHoursEndNotNil       *bool    `json:"quietHoursEndNotNil,omitempty"`
+	QuietHoursEndEqualFold    *string  `json:"quietHoursEndEqualFold,omitempty"`
+	QuietHoursEndContainsFold *string  `json:"quietHoursEndContainsFold,omitempty"`
+	// timezone field predicates
+	Timezone             *string  `json:"timezone,omitempty"`
+	TimezoneNeq          *string  `json:"timezoneNEQ,omitempty"`
+	TimezoneIn           []string `json:"timezoneIn,omitempty"`
+	TimezoneNotIn        []string `json:"timezoneNotIn,omitempty"`
+	TimezoneGt           *string  `json:"timezoneGT,omitempty"`
+	TimezoneGte          *string  `json:"timezoneGTE,omitempty"`
+	TimezoneLt           *string  `json:"timezoneLT,omitempty"`
+	TimezoneLte          *string  `json:"timezoneLTE,omitempty"`
+	TimezoneContains     *string  `json:"timezoneContains,omitempty"`
+	TimezoneHasPrefix    *string  `json:"timezoneHasPrefix,omitempty"`
+	TimezoneHasSuffix    *string  `json:"timezoneHasSuffix,omitempty"`
+	TimezoneIsNil        *bool    `json:"timezoneIsNil,omitempty"`
+	TimezoneNotNil       *bool    `json:"timezoneNotNil,omitempty"`
+	TimezoneEqualFold    *string  `json:"timezoneEqualFold,omitempty"`
+	TimezoneContainsFold *string  `json:"timezoneContainsFold,omitempty"`
+	// is_default field predicates
+	IsDefault    *bool `json:"isDefault,omitempty"`
+	IsDefaultNeq *bool `json:"isDefaultNEQ,omitempty"`
+	// verified_at field predicates
+	VerifiedAt       *time.Time   `json:"verifiedAt,omitempty"`
+	VerifiedAtNeq    *time.Time   `json:"verifiedAtNEQ,omitempty"`
+	VerifiedAtIn     []*time.Time `json:"verifiedAtIn,omitempty"`
+	VerifiedAtNotIn  []*time.Time `json:"verifiedAtNotIn,omitempty"`
+	VerifiedAtGt     *time.Time   `json:"verifiedAtGT,omitempty"`
+	VerifiedAtGte    *time.Time   `json:"verifiedAtGTE,omitempty"`
+	VerifiedAtLt     *time.Time   `json:"verifiedAtLT,omitempty"`
+	VerifiedAtLte    *time.Time   `json:"verifiedAtLTE,omitempty"`
+	VerifiedAtIsNil  *bool        `json:"verifiedAtIsNil,omitempty"`
+	VerifiedAtNotNil *bool        `json:"verifiedAtNotNil,omitempty"`
+	// last_used_at field predicates
+	LastUsedAt       *time.Time   `json:"lastUsedAt,omitempty"`
+	LastUsedAtNeq    *time.Time   `json:"lastUsedAtNEQ,omitempty"`
+	LastUsedAtIn     []*time.Time `json:"lastUsedAtIn,omitempty"`
+	LastUsedAtNotIn  []*time.Time `json:"lastUsedAtNotIn,omitempty"`
+	LastUsedAtGt     *time.Time   `json:"lastUsedAtGT,omitempty"`
+	LastUsedAtGte    *time.Time   `json:"lastUsedAtGTE,omitempty"`
+	LastUsedAtLt     *time.Time   `json:"lastUsedAtLT,omitempty"`
+	LastUsedAtLte    *time.Time   `json:"lastUsedAtLTE,omitempty"`
+	LastUsedAtIsNil  *bool        `json:"lastUsedAtIsNil,omitempty"`
+	LastUsedAtNotNil *bool        `json:"lastUsedAtNotNil,omitempty"`
+	// last_error field predicates
+	LastError             *string  `json:"lastError,omitempty"`
+	LastErrorNeq          *string  `json:"lastErrorNEQ,omitempty"`
+	LastErrorIn           []string `json:"lastErrorIn,omitempty"`
+	LastErrorNotIn        []string `json:"lastErrorNotIn,omitempty"`
+	LastErrorGt           *string  `json:"lastErrorGT,omitempty"`
+	LastErrorGte          *string  `json:"lastErrorGTE,omitempty"`
+	LastErrorLt           *string  `json:"lastErrorLT,omitempty"`
+	LastErrorLte          *string  `json:"lastErrorLTE,omitempty"`
+	LastErrorContains     *string  `json:"lastErrorContains,omitempty"`
+	LastErrorHasPrefix    *string  `json:"lastErrorHasPrefix,omitempty"`
+	LastErrorHasSuffix    *string  `json:"lastErrorHasSuffix,omitempty"`
+	LastErrorIsNil        *bool    `json:"lastErrorIsNil,omitempty"`
+	LastErrorNotNil       *bool    `json:"lastErrorNotNil,omitempty"`
+	LastErrorEqualFold    *string  `json:"lastErrorEqualFold,omitempty"`
+	LastErrorContainsFold *string  `json:"lastErrorContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// user edge predicates
+	HasUser     *bool             `json:"hasUser,omitempty"`
+	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
+	// notification_template edge predicates
+	HasNotificationTemplate     *bool                             `json:"hasNotificationTemplate,omitempty"`
+	HasNotificationTemplateWith []*NotificationTemplateWhereInput `json:"hasNotificationTemplateWith,omitempty"`
+}
+
+type NotificationTemplate struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// stable identifier for the template
+	Key string `json:"key"`
+	// display name for the template
+	Name string `json:"name"`
+	// description of the template
+	Description *string `json:"description,omitempty"`
+	// channel this template is intended for
+	Channel enums.Channel `json:"channel"`
+	// template format for rendering
+	Format enums.NotificationTemplateFormat `json:"format"`
+	// locale for the template, e.g. en-US
+	Locale string `json:"locale"`
+	// soiree topic name or wildcard pattern this template targets
+	TopicPattern string `json:"topicPattern"`
+	// integration associated with this template
+	IntegrationID *string `json:"integrationID,omitempty"`
+	// workflow definition associated with this template
+	WorkflowDefinitionID *string `json:"workflowDefinitionID,omitempty"`
+	// optional email template used for branded email delivery
+	EmailTemplateID *string `json:"emailTemplateID,omitempty"`
+	// title template for external channel messages
+	TitleTemplate *string `json:"titleTemplate,omitempty"`
+	// subject template for email notifications
+	SubjectTemplate *string `json:"subjectTemplate,omitempty"`
+	// body template for the notification
+	BodyTemplate *string `json:"bodyTemplate,omitempty"`
+	// structured blocks for channels like Slack or Teams
+	Blocks map[string]any `json:"blocks,omitempty"`
+	// jsonschema for template data requirements
+	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
+	// uischema for a template builder
+	Uischema map[string]any `json:"uischema,omitempty"`
+	// additional template metadata
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// whether the template is active
+	Active bool `json:"active"`
+	// template version
+	Version            int64                   `json:"version"`
+	Owner              *Organization           `json:"owner,omitempty"`
+	Integration        *Integration            `json:"integration,omitempty"`
+	WorkflowDefinition *WorkflowDefinition     `json:"workflowDefinition,omitempty"`
+	EmailTemplate      *EmailTemplate          `json:"emailTemplate,omitempty"`
+	Notifications      *NotificationConnection `json:"notifications"`
+}
+
+func (NotificationTemplate) IsNode() {}
+
+// Return response for createBulkNotificationTemplate mutation
+type NotificationTemplateBulkCreatePayload struct {
+	// Created notificationTemplates
+	NotificationTemplates []*NotificationTemplate `json:"notificationTemplates,omitempty"`
+}
+
+// Return response for deleteBulkNotificationTemplate mutation
+type NotificationTemplateBulkDeletePayload struct {
+	// Deleted notificationTemplate IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkNotificationTemplate mutation
+type NotificationTemplateBulkUpdatePayload struct {
+	// Updated notificationTemplates
+	NotificationTemplates []*NotificationTemplate `json:"notificationTemplates,omitempty"`
+	// IDs of the updated notificationTemplates
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// A connection to a list of items.
+type NotificationTemplateConnection struct {
+	// A list of edges.
+	Edges []*NotificationTemplateEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createNotificationTemplate mutation
+type NotificationTemplateCreatePayload struct {
+	// Created notificationTemplate
+	NotificationTemplate *NotificationTemplate `json:"notificationTemplate"`
+}
+
+// Return response for deleteNotificationTemplate mutation
+type NotificationTemplateDeletePayload struct {
+	// Deleted notificationTemplate ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type NotificationTemplateEdge struct {
+	// The item at the end of the edge.
+	Node *NotificationTemplate `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for NotificationTemplate connections
+type NotificationTemplateOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order NotificationTemplates.
+	Field NotificationTemplateOrderField `json:"field"`
+}
+
+// Return response for updateNotificationTemplate mutation
+type NotificationTemplateUpdatePayload struct {
+	// Updated notificationTemplate
+	NotificationTemplate *NotificationTemplate `json:"notificationTemplate"`
+}
+
+// NotificationTemplateWhereInput is used for filtering NotificationTemplate objects.
+// Input was generated by ent.
+type NotificationTemplateWhereInput struct {
+	Not *NotificationTemplateWhereInput   `json:"not,omitempty"`
+	And []*NotificationTemplateWhereInput `json:"and,omitempty"`
+	Or  []*NotificationTemplateWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+	// key field predicates
+	Key             *string  `json:"key,omitempty"`
+	KeyNeq          *string  `json:"keyNEQ,omitempty"`
+	KeyIn           []string `json:"keyIn,omitempty"`
+	KeyNotIn        []string `json:"keyNotIn,omitempty"`
+	KeyGt           *string  `json:"keyGT,omitempty"`
+	KeyGte          *string  `json:"keyGTE,omitempty"`
+	KeyLt           *string  `json:"keyLT,omitempty"`
+	KeyLte          *string  `json:"keyLTE,omitempty"`
+	KeyContains     *string  `json:"keyContains,omitempty"`
+	KeyHasPrefix    *string  `json:"keyHasPrefix,omitempty"`
+	KeyHasSuffix    *string  `json:"keyHasSuffix,omitempty"`
+	KeyEqualFold    *string  `json:"keyEqualFold,omitempty"`
+	KeyContainsFold *string  `json:"keyContainsFold,omitempty"`
+	// name field predicates
+	Name             *string  `json:"name,omitempty"`
+	NameNeq          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGt           *string  `json:"nameGT,omitempty"`
+	NameGte          *string  `json:"nameGTE,omitempty"`
+	NameLt           *string  `json:"nameLT,omitempty"`
+	NameLte          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// description field predicates
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// channel field predicates
+	Channel      *enums.Channel  `json:"channel,omitempty"`
+	ChannelNeq   *enums.Channel  `json:"channelNEQ,omitempty"`
+	ChannelIn    []enums.Channel `json:"channelIn,omitempty"`
+	ChannelNotIn []enums.Channel `json:"channelNotIn,omitempty"`
+	// format field predicates
+	Format      *enums.NotificationTemplateFormat  `json:"format,omitempty"`
+	FormatNeq   *enums.NotificationTemplateFormat  `json:"formatNEQ,omitempty"`
+	FormatIn    []enums.NotificationTemplateFormat `json:"formatIn,omitempty"`
+	FormatNotIn []enums.NotificationTemplateFormat `json:"formatNotIn,omitempty"`
+	// locale field predicates
+	Locale             *string  `json:"locale,omitempty"`
+	LocaleNeq          *string  `json:"localeNEQ,omitempty"`
+	LocaleIn           []string `json:"localeIn,omitempty"`
+	LocaleNotIn        []string `json:"localeNotIn,omitempty"`
+	LocaleGt           *string  `json:"localeGT,omitempty"`
+	LocaleGte          *string  `json:"localeGTE,omitempty"`
+	LocaleLt           *string  `json:"localeLT,omitempty"`
+	LocaleLte          *string  `json:"localeLTE,omitempty"`
+	LocaleContains     *string  `json:"localeContains,omitempty"`
+	LocaleHasPrefix    *string  `json:"localeHasPrefix,omitempty"`
+	LocaleHasSuffix    *string  `json:"localeHasSuffix,omitempty"`
+	LocaleEqualFold    *string  `json:"localeEqualFold,omitempty"`
+	LocaleContainsFold *string  `json:"localeContainsFold,omitempty"`
+	// topic_pattern field predicates
+	TopicPattern             *string  `json:"topicPattern,omitempty"`
+	TopicPatternNeq          *string  `json:"topicPatternNEQ,omitempty"`
+	TopicPatternIn           []string `json:"topicPatternIn,omitempty"`
+	TopicPatternNotIn        []string `json:"topicPatternNotIn,omitempty"`
+	TopicPatternGt           *string  `json:"topicPatternGT,omitempty"`
+	TopicPatternGte          *string  `json:"topicPatternGTE,omitempty"`
+	TopicPatternLt           *string  `json:"topicPatternLT,omitempty"`
+	TopicPatternLte          *string  `json:"topicPatternLTE,omitempty"`
+	TopicPatternContains     *string  `json:"topicPatternContains,omitempty"`
+	TopicPatternHasPrefix    *string  `json:"topicPatternHasPrefix,omitempty"`
+	TopicPatternHasSuffix    *string  `json:"topicPatternHasSuffix,omitempty"`
+	TopicPatternEqualFold    *string  `json:"topicPatternEqualFold,omitempty"`
+	TopicPatternContainsFold *string  `json:"topicPatternContainsFold,omitempty"`
+	// integration_id field predicates
+	IntegrationID             *string  `json:"integrationID,omitempty"`
+	IntegrationIdneq          *string  `json:"integrationIDNEQ,omitempty"`
+	IntegrationIDIn           []string `json:"integrationIDIn,omitempty"`
+	IntegrationIDNotIn        []string `json:"integrationIDNotIn,omitempty"`
+	IntegrationIdgt           *string  `json:"integrationIDGT,omitempty"`
+	IntegrationIdgte          *string  `json:"integrationIDGTE,omitempty"`
+	IntegrationIdlt           *string  `json:"integrationIDLT,omitempty"`
+	IntegrationIdlte          *string  `json:"integrationIDLTE,omitempty"`
+	IntegrationIDContains     *string  `json:"integrationIDContains,omitempty"`
+	IntegrationIDHasPrefix    *string  `json:"integrationIDHasPrefix,omitempty"`
+	IntegrationIDHasSuffix    *string  `json:"integrationIDHasSuffix,omitempty"`
+	IntegrationIDIsNil        *bool    `json:"integrationIDIsNil,omitempty"`
+	IntegrationIDNotNil       *bool    `json:"integrationIDNotNil,omitempty"`
+	IntegrationIDEqualFold    *string  `json:"integrationIDEqualFold,omitempty"`
+	IntegrationIDContainsFold *string  `json:"integrationIDContainsFold,omitempty"`
+	// workflow_definition_id field predicates
+	WorkflowDefinitionID             *string  `json:"workflowDefinitionID,omitempty"`
+	WorkflowDefinitionIdneq          *string  `json:"workflowDefinitionIDNEQ,omitempty"`
+	WorkflowDefinitionIDIn           []string `json:"workflowDefinitionIDIn,omitempty"`
+	WorkflowDefinitionIDNotIn        []string `json:"workflowDefinitionIDNotIn,omitempty"`
+	WorkflowDefinitionIdgt           *string  `json:"workflowDefinitionIDGT,omitempty"`
+	WorkflowDefinitionIdgte          *string  `json:"workflowDefinitionIDGTE,omitempty"`
+	WorkflowDefinitionIdlt           *string  `json:"workflowDefinitionIDLT,omitempty"`
+	WorkflowDefinitionIdlte          *string  `json:"workflowDefinitionIDLTE,omitempty"`
+	WorkflowDefinitionIDContains     *string  `json:"workflowDefinitionIDContains,omitempty"`
+	WorkflowDefinitionIDHasPrefix    *string  `json:"workflowDefinitionIDHasPrefix,omitempty"`
+	WorkflowDefinitionIDHasSuffix    *string  `json:"workflowDefinitionIDHasSuffix,omitempty"`
+	WorkflowDefinitionIDIsNil        *bool    `json:"workflowDefinitionIDIsNil,omitempty"`
+	WorkflowDefinitionIDNotNil       *bool    `json:"workflowDefinitionIDNotNil,omitempty"`
+	WorkflowDefinitionIDEqualFold    *string  `json:"workflowDefinitionIDEqualFold,omitempty"`
+	WorkflowDefinitionIDContainsFold *string  `json:"workflowDefinitionIDContainsFold,omitempty"`
+	// email_template_id field predicates
+	EmailTemplateID             *string  `json:"emailTemplateID,omitempty"`
+	EmailTemplateIdneq          *string  `json:"emailTemplateIDNEQ,omitempty"`
+	EmailTemplateIDIn           []string `json:"emailTemplateIDIn,omitempty"`
+	EmailTemplateIDNotIn        []string `json:"emailTemplateIDNotIn,omitempty"`
+	EmailTemplateIdgt           *string  `json:"emailTemplateIDGT,omitempty"`
+	EmailTemplateIdgte          *string  `json:"emailTemplateIDGTE,omitempty"`
+	EmailTemplateIdlt           *string  `json:"emailTemplateIDLT,omitempty"`
+	EmailTemplateIdlte          *string  `json:"emailTemplateIDLTE,omitempty"`
+	EmailTemplateIDContains     *string  `json:"emailTemplateIDContains,omitempty"`
+	EmailTemplateIDHasPrefix    *string  `json:"emailTemplateIDHasPrefix,omitempty"`
+	EmailTemplateIDHasSuffix    *string  `json:"emailTemplateIDHasSuffix,omitempty"`
+	EmailTemplateIDIsNil        *bool    `json:"emailTemplateIDIsNil,omitempty"`
+	EmailTemplateIDNotNil       *bool    `json:"emailTemplateIDNotNil,omitempty"`
+	EmailTemplateIDEqualFold    *string  `json:"emailTemplateIDEqualFold,omitempty"`
+	EmailTemplateIDContainsFold *string  `json:"emailTemplateIDContainsFold,omitempty"`
+	// title_template field predicates
+	TitleTemplate             *string  `json:"titleTemplate,omitempty"`
+	TitleTemplateNeq          *string  `json:"titleTemplateNEQ,omitempty"`
+	TitleTemplateIn           []string `json:"titleTemplateIn,omitempty"`
+	TitleTemplateNotIn        []string `json:"titleTemplateNotIn,omitempty"`
+	TitleTemplateGt           *string  `json:"titleTemplateGT,omitempty"`
+	TitleTemplateGte          *string  `json:"titleTemplateGTE,omitempty"`
+	TitleTemplateLt           *string  `json:"titleTemplateLT,omitempty"`
+	TitleTemplateLte          *string  `json:"titleTemplateLTE,omitempty"`
+	TitleTemplateContains     *string  `json:"titleTemplateContains,omitempty"`
+	TitleTemplateHasPrefix    *string  `json:"titleTemplateHasPrefix,omitempty"`
+	TitleTemplateHasSuffix    *string  `json:"titleTemplateHasSuffix,omitempty"`
+	TitleTemplateIsNil        *bool    `json:"titleTemplateIsNil,omitempty"`
+	TitleTemplateNotNil       *bool    `json:"titleTemplateNotNil,omitempty"`
+	TitleTemplateEqualFold    *string  `json:"titleTemplateEqualFold,omitempty"`
+	TitleTemplateContainsFold *string  `json:"titleTemplateContainsFold,omitempty"`
+	// subject_template field predicates
+	SubjectTemplate             *string  `json:"subjectTemplate,omitempty"`
+	SubjectTemplateNeq          *string  `json:"subjectTemplateNEQ,omitempty"`
+	SubjectTemplateIn           []string `json:"subjectTemplateIn,omitempty"`
+	SubjectTemplateNotIn        []string `json:"subjectTemplateNotIn,omitempty"`
+	SubjectTemplateGt           *string  `json:"subjectTemplateGT,omitempty"`
+	SubjectTemplateGte          *string  `json:"subjectTemplateGTE,omitempty"`
+	SubjectTemplateLt           *string  `json:"subjectTemplateLT,omitempty"`
+	SubjectTemplateLte          *string  `json:"subjectTemplateLTE,omitempty"`
+	SubjectTemplateContains     *string  `json:"subjectTemplateContains,omitempty"`
+	SubjectTemplateHasPrefix    *string  `json:"subjectTemplateHasPrefix,omitempty"`
+	SubjectTemplateHasSuffix    *string  `json:"subjectTemplateHasSuffix,omitempty"`
+	SubjectTemplateIsNil        *bool    `json:"subjectTemplateIsNil,omitempty"`
+	SubjectTemplateNotNil       *bool    `json:"subjectTemplateNotNil,omitempty"`
+	SubjectTemplateEqualFold    *string  `json:"subjectTemplateEqualFold,omitempty"`
+	SubjectTemplateContainsFold *string  `json:"subjectTemplateContainsFold,omitempty"`
+	// body_template field predicates
+	BodyTemplate             *string  `json:"bodyTemplate,omitempty"`
+	BodyTemplateNeq          *string  `json:"bodyTemplateNEQ,omitempty"`
+	BodyTemplateIn           []string `json:"bodyTemplateIn,omitempty"`
+	BodyTemplateNotIn        []string `json:"bodyTemplateNotIn,omitempty"`
+	BodyTemplateGt           *string  `json:"bodyTemplateGT,omitempty"`
+	BodyTemplateGte          *string  `json:"bodyTemplateGTE,omitempty"`
+	BodyTemplateLt           *string  `json:"bodyTemplateLT,omitempty"`
+	BodyTemplateLte          *string  `json:"bodyTemplateLTE,omitempty"`
+	BodyTemplateContains     *string  `json:"bodyTemplateContains,omitempty"`
+	BodyTemplateHasPrefix    *string  `json:"bodyTemplateHasPrefix,omitempty"`
+	BodyTemplateHasSuffix    *string  `json:"bodyTemplateHasSuffix,omitempty"`
+	BodyTemplateIsNil        *bool    `json:"bodyTemplateIsNil,omitempty"`
+	BodyTemplateNotNil       *bool    `json:"bodyTemplateNotNil,omitempty"`
+	BodyTemplateEqualFold    *string  `json:"bodyTemplateEqualFold,omitempty"`
+	BodyTemplateContainsFold *string  `json:"bodyTemplateContainsFold,omitempty"`
+	// active field predicates
+	Active    *bool `json:"active,omitempty"`
+	ActiveNeq *bool `json:"activeNEQ,omitempty"`
+	// version field predicates
+	Version      *int64  `json:"version,omitempty"`
+	VersionNeq   *int64  `json:"versionNEQ,omitempty"`
+	VersionIn    []int64 `json:"versionIn,omitempty"`
+	VersionNotIn []int64 `json:"versionNotIn,omitempty"`
+	VersionGt    *int64  `json:"versionGT,omitempty"`
+	VersionGte   *int64  `json:"versionGTE,omitempty"`
+	VersionLt    *int64  `json:"versionLT,omitempty"`
+	VersionLte   *int64  `json:"versionLTE,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// integration edge predicates
+	HasIntegration     *bool                    `json:"hasIntegration,omitempty"`
+	HasIntegrationWith []*IntegrationWhereInput `json:"hasIntegrationWith,omitempty"`
+	// workflow_definition edge predicates
+	HasWorkflowDefinition     *bool                           `json:"hasWorkflowDefinition,omitempty"`
+	HasWorkflowDefinitionWith []*WorkflowDefinitionWhereInput `json:"hasWorkflowDefinitionWith,omitempty"`
+	// email_template edge predicates
+	HasEmailTemplate     *bool                      `json:"hasEmailTemplate,omitempty"`
+	HasEmailTemplateWith []*EmailTemplateWhereInput `json:"hasEmailTemplateWith,omitempty"`
+}
 
 // Return response for updateNotification mutation
 type NotificationUpdatePayload struct {
@@ -21413,6 +23402,10 @@ type Organization struct {
 	Setting                         *OrganizationSetting                  `json:"setting,omitempty"`
 	PersonalAccessTokens            *PersonalAccessTokenConnection        `json:"personalAccessTokens"`
 	APITokens                       *APITokenConnection                   `json:"apiTokens"`
+	EmailBrandings                  *EmailBrandingConnection              `json:"emailBrandings"`
+	EmailTemplates                  *EmailTemplateConnection              `json:"emailTemplates"`
+	NotificationPreferences         *NotificationPreferenceConnection     `json:"notificationPreferences"`
+	NotificationTemplates           *NotificationTemplateConnection       `json:"notificationTemplates"`
 	Users                           *UserConnection                       `json:"users"`
 	Files                           *FileConnection                       `json:"files"`
 	Events                          *EventConnection                      `json:"events"`
@@ -22235,6 +24228,18 @@ type OrganizationWhereInput struct {
 	// api_tokens edge predicates
 	HasAPITokens     *bool                 `json:"hasAPITokens,omitempty"`
 	HasAPITokensWith []*APITokenWhereInput `json:"hasAPITokensWith,omitempty"`
+	// email_brandings edge predicates
+	HasEmailBrandings     *bool                      `json:"hasEmailBrandings,omitempty"`
+	HasEmailBrandingsWith []*EmailBrandingWhereInput `json:"hasEmailBrandingsWith,omitempty"`
+	// email_templates edge predicates
+	HasEmailTemplates     *bool                      `json:"hasEmailTemplates,omitempty"`
+	HasEmailTemplatesWith []*EmailTemplateWhereInput `json:"hasEmailTemplatesWith,omitempty"`
+	// notification_preferences edge predicates
+	HasNotificationPreferences     *bool                               `json:"hasNotificationPreferences,omitempty"`
+	HasNotificationPreferencesWith []*NotificationPreferenceWhereInput `json:"hasNotificationPreferencesWith,omitempty"`
+	// notification_templates edge predicates
+	HasNotificationTemplates     *bool                             `json:"hasNotificationTemplates,omitempty"`
+	HasNotificationTemplatesWith []*NotificationTemplateWhereInput `json:"hasNotificationTemplatesWith,omitempty"`
 	// users edge predicates
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
@@ -24999,6 +27004,14 @@ type ProgramWhereInput struct {
 type Query struct {
 }
 
+// Input for adminReassignWorkflowAssignment mutation
+type ReassignWorkflowAssignmentInput struct {
+	// ID of the workflow assignment to reassign
+	ID string `json:"id"`
+	// New targets for the assignment
+	Targets []*WorkflowAssignmentTargetInput `json:"targets"`
+}
+
 type Remediation struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -25684,6 +27697,24 @@ type ResendCampaignIncompleteInput struct {
 	CampaignID string `json:"campaignID"`
 	// Optional time to schedule the resend for incomplete targets
 	ScheduledAt *models.DateTime `json:"scheduledAt,omitempty"`
+}
+
+// Input for resolving a vulnerability
+type ResolveVulnerabilityInput struct {
+	// status to set on the vulnerability (resolved, dismissed, fixed, etc.)
+	Status string `json:"status"`
+	// optional reason for the resolution (false_positive, wont_fix, etc.)
+	Reason *string `json:"reason,omitempty"`
+	// optional notes or context for the resolution
+	Details *string `json:"details,omitempty"`
+	// when true, create a Review record linked to the vulnerability
+	CreateReview *bool `json:"createReview,omitempty"`
+	// optional review title override
+	ReviewTitle *string `json:"reviewTitle,omitempty"`
+	// optional review category override (defaults to resolution)
+	ReviewCategory *string `json:"reviewCategory,omitempty"`
+	// optional review state override (defaults to the resolution status)
+	ReviewState *string `json:"reviewState,omitempty"`
 }
 
 type Review struct {
@@ -27934,45 +29965,49 @@ type SearchResults struct {
 	// Information to aid in pagination.
 	Page *PageInfo `json:"page"`
 	// Identifies the total count of items in the connection.
-	TotalCount          int64                         `json:"totalCount"`
-	ActionPlans         *ActionPlanConnection         `json:"actionPlans,omitempty"`
-	Assessments         *AssessmentConnection         `json:"assessments,omitempty"`
-	AssessmentResponses *AssessmentResponseConnection `json:"assessmentResponses,omitempty"`
-	Assets              *AssetConnection              `json:"assets,omitempty"`
-	Campaigns           *CampaignConnection           `json:"campaigns,omitempty"`
-	CampaignTargets     *CampaignTargetConnection     `json:"campaignTargets,omitempty"`
-	Contacts            *ContactConnection            `json:"contacts,omitempty"`
-	Controls            *ControlConnection            `json:"controls,omitempty"`
-	ControlObjectives   *ControlObjectiveConnection   `json:"controlObjectives,omitempty"`
-	CustomTypeEnums     *CustomTypeEnumConnection     `json:"customTypeEnums,omitempty"`
-	Entities            *EntityConnection             `json:"entities,omitempty"`
-	Evidences           *EvidenceConnection           `json:"evidences,omitempty"`
-	Findings            *FindingConnection            `json:"findings,omitempty"`
-	Groups              *GroupConnection              `json:"groups,omitempty"`
-	IdentityHolders     *IdentityHolderConnection     `json:"identityHolders,omitempty"`
-	InternalPolicies    *InternalPolicyConnection     `json:"internalPolicies,omitempty"`
-	Invites             *InviteConnection             `json:"invites,omitempty"`
-	JobRunners          *JobRunnerConnection          `json:"jobRunners,omitempty"`
-	JobTemplates        *JobTemplateConnection        `json:"jobTemplates,omitempty"`
-	Narratives          *NarrativeConnection          `json:"narratives,omitempty"`
-	Organizations       *OrganizationConnection       `json:"organizations,omitempty"`
-	Platforms           *PlatformConnection           `json:"platforms,omitempty"`
-	Procedures          *ProcedureConnection          `json:"procedures,omitempty"`
-	Programs            *ProgramConnection            `json:"programs,omitempty"`
-	Remediations        *RemediationConnection        `json:"remediations,omitempty"`
-	Reviews             *ReviewConnection             `json:"reviews,omitempty"`
-	Risks               *RiskConnection               `json:"risks,omitempty"`
-	Scans               *ScanConnection               `json:"scans,omitempty"`
-	Standards           *StandardConnection           `json:"standards,omitempty"`
-	Subcontrols         *SubcontrolConnection         `json:"subcontrols,omitempty"`
-	Subprocessors       *SubprocessorConnection       `json:"subprocessors,omitempty"`
-	Subscribers         *SubscriberConnection         `json:"subscribers,omitempty"`
-	TagDefinitions      *TagDefinitionConnection      `json:"tagDefinitions,omitempty"`
-	Tasks               *TaskConnection               `json:"tasks,omitempty"`
-	Templates           *TemplateConnection           `json:"templates,omitempty"`
-	TrustCenterEntities *TrustCenterEntityConnection  `json:"trustCenterEntities,omitempty"`
-	Vulnerabilities     *VulnerabilityConnection      `json:"vulnerabilities,omitempty"`
-	SearchContext       []*SearchContext              `json:"searchContext,omitempty"`
+	TotalCount            int64                           `json:"totalCount"`
+	ActionPlans           *ActionPlanConnection           `json:"actionPlans,omitempty"`
+	Assessments           *AssessmentConnection           `json:"assessments,omitempty"`
+	AssessmentResponses   *AssessmentResponseConnection   `json:"assessmentResponses,omitempty"`
+	Assets                *AssetConnection                `json:"assets,omitempty"`
+	Campaigns             *CampaignConnection             `json:"campaigns,omitempty"`
+	CampaignTargets       *CampaignTargetConnection       `json:"campaignTargets,omitempty"`
+	Contacts              *ContactConnection              `json:"contacts,omitempty"`
+	Controls              *ControlConnection              `json:"controls,omitempty"`
+	ControlObjectives     *ControlObjectiveConnection     `json:"controlObjectives,omitempty"`
+	CustomTypeEnums       *CustomTypeEnumConnection       `json:"customTypeEnums,omitempty"`
+	EmailBrandings        *EmailBrandingConnection        `json:"emailBrandings,omitempty"`
+	EmailTemplates        *EmailTemplateConnection        `json:"emailTemplates,omitempty"`
+	Entities              *EntityConnection               `json:"entities,omitempty"`
+	Evidences             *EvidenceConnection             `json:"evidences,omitempty"`
+	Findings              *FindingConnection              `json:"findings,omitempty"`
+	Groups                *GroupConnection                `json:"groups,omitempty"`
+	IdentityHolders       *IdentityHolderConnection       `json:"identityHolders,omitempty"`
+	Integrations          *IntegrationConnection          `json:"integrations,omitempty"`
+	InternalPolicies      *InternalPolicyConnection       `json:"internalPolicies,omitempty"`
+	Invites               *InviteConnection               `json:"invites,omitempty"`
+	JobRunners            *JobRunnerConnection            `json:"jobRunners,omitempty"`
+	JobTemplates          *JobTemplateConnection          `json:"jobTemplates,omitempty"`
+	Narratives            *NarrativeConnection            `json:"narratives,omitempty"`
+	NotificationTemplates *NotificationTemplateConnection `json:"notificationTemplates,omitempty"`
+	Organizations         *OrganizationConnection         `json:"organizations,omitempty"`
+	Platforms             *PlatformConnection             `json:"platforms,omitempty"`
+	Procedures            *ProcedureConnection            `json:"procedures,omitempty"`
+	Programs              *ProgramConnection              `json:"programs,omitempty"`
+	Remediations          *RemediationConnection          `json:"remediations,omitempty"`
+	Reviews               *ReviewConnection               `json:"reviews,omitempty"`
+	Risks                 *RiskConnection                 `json:"risks,omitempty"`
+	Scans                 *ScanConnection                 `json:"scans,omitempty"`
+	Standards             *StandardConnection             `json:"standards,omitempty"`
+	Subcontrols           *SubcontrolConnection           `json:"subcontrols,omitempty"`
+	Subprocessors         *SubprocessorConnection         `json:"subprocessors,omitempty"`
+	Subscribers           *SubscriberConnection           `json:"subscribers,omitempty"`
+	TagDefinitions        *TagDefinitionConnection        `json:"tagDefinitions,omitempty"`
+	Tasks                 *TaskConnection                 `json:"tasks,omitempty"`
+	Templates             *TemplateConnection             `json:"templates,omitempty"`
+	TrustCenterEntities   *TrustCenterEntityConnection    `json:"trustCenterEntities,omitempty"`
+	Vulnerabilities       *VulnerabilityConnection        `json:"vulnerabilities,omitempty"`
+	SearchContext         []*SearchContext                `json:"searchContext,omitempty"`
 }
 
 // SearchSnippet represents a piece of matched content with surrounding context
@@ -33945,6 +35980,10 @@ type UpdateCampaignInput struct {
 	ClearAssessment             *bool          `json:"clearAssessment,omitempty"`
 	TemplateID                  *string        `json:"templateID,omitempty"`
 	ClearTemplate               *bool          `json:"clearTemplate,omitempty"`
+	EmailBrandingID             *string        `json:"emailBrandingID,omitempty"`
+	ClearEmailBranding          *bool          `json:"clearEmailBranding,omitempty"`
+	EmailTemplateID             *string        `json:"emailTemplateID,omitempty"`
+	ClearEmailTemplate          *bool          `json:"clearEmailTemplate,omitempty"`
 	EntityID                    *string        `json:"entityID,omitempty"`
 	ClearEntity                 *bool          `json:"clearEntity,omitempty"`
 	AddCampaignTargetIDs        []string       `json:"addCampaignTargetIDs,omitempty"`
@@ -34737,6 +36776,126 @@ type UpdateDocumentDataInput struct {
 	AddFileIDs       []string       `json:"addFileIDs,omitempty"`
 	RemoveFileIDs    []string       `json:"removeFileIDs,omitempty"`
 	ClearFiles       *bool          `json:"clearFiles,omitempty"`
+}
+
+// UpdateEmailBrandingInput is used for update EmailBranding object.
+// Input was generated by ent.
+type UpdateEmailBrandingInput struct {
+	// tags associated with the object
+	Tags       []string `json:"tags,omitempty"`
+	AppendTags []string `json:"appendTags,omitempty"`
+	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// friendly name for this email branding configuration
+	Name *string `json:"name,omitempty"`
+	// brand name displayed in templates
+	BrandName      *string `json:"brandName,omitempty"`
+	ClearBrandName *bool   `json:"clearBrandName,omitempty"`
+	// URL of the brand logo for emails
+	LogoRemoteURL      *string `json:"logoRemoteURL,omitempty"`
+	ClearLogoRemoteURL *bool   `json:"clearLogoRemoteURL,omitempty"`
+	// primary brand color for emails
+	PrimaryColor      *string `json:"primaryColor,omitempty"`
+	ClearPrimaryColor *bool   `json:"clearPrimaryColor,omitempty"`
+	// secondary brand color for emails
+	SecondaryColor      *string `json:"secondaryColor,omitempty"`
+	ClearSecondaryColor *bool   `json:"clearSecondaryColor,omitempty"`
+	// background color for emails
+	BackgroundColor      *string `json:"backgroundColor,omitempty"`
+	ClearBackgroundColor *bool   `json:"clearBackgroundColor,omitempty"`
+	// text color for emails
+	TextColor      *string `json:"textColor,omitempty"`
+	ClearTextColor *bool   `json:"clearTextColor,omitempty"`
+	// button background color for emails
+	ButtonColor      *string `json:"buttonColor,omitempty"`
+	ClearButtonColor *bool   `json:"clearButtonColor,omitempty"`
+	// button text color for emails
+	ButtonTextColor      *string `json:"buttonTextColor,omitempty"`
+	ClearButtonTextColor *bool   `json:"clearButtonTextColor,omitempty"`
+	// link color for emails
+	LinkColor      *string `json:"linkColor,omitempty"`
+	ClearLinkColor *bool   `json:"clearLinkColor,omitempty"`
+	// font family for emails
+	FontFamily      *enums.Font `json:"fontFamily,omitempty"`
+	ClearFontFamily *bool       `json:"clearFontFamily,omitempty"`
+	// whether this is the default email branding for the organization
+	IsDefault              *bool    `json:"isDefault,omitempty"`
+	ClearIsDefault         *bool    `json:"clearIsDefault,omitempty"`
+	AddBlockedGroupIDs     []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs  []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups     *bool    `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs           []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs        []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors           *bool    `json:"clearEditors,omitempty"`
+	AddViewerIDs           []string `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs        []string `json:"removeViewerIDs,omitempty"`
+	ClearViewers           *bool    `json:"clearViewers,omitempty"`
+	AddCampaignIDs         []string `json:"addCampaignIDs,omitempty"`
+	RemoveCampaignIDs      []string `json:"removeCampaignIDs,omitempty"`
+	ClearCampaigns         *bool    `json:"clearCampaigns,omitempty"`
+	AddEmailTemplateIDs    []string `json:"addEmailTemplateIDs,omitempty"`
+	RemoveEmailTemplateIDs []string `json:"removeEmailTemplateIDs,omitempty"`
+	ClearEmailTemplates    *bool    `json:"clearEmailTemplates,omitempty"`
+}
+
+// UpdateEmailTemplateInput is used for update EmailTemplate object.
+// Input was generated by ent.
+type UpdateEmailTemplateInput struct {
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
+	// stable identifier for the template
+	Key *string `json:"key,omitempty"`
+	// display name for the template
+	Name *string `json:"name,omitempty"`
+	// description of the template
+	Description      *string `json:"description,omitempty"`
+	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	// template format for rendering
+	Format *enums.NotificationTemplateFormat `json:"format,omitempty"`
+	// locale for the template, e.g. en-US
+	Locale *string `json:"locale,omitempty"`
+	// subject template for email notifications
+	SubjectTemplate      *string `json:"subjectTemplate,omitempty"`
+	ClearSubjectTemplate *bool   `json:"clearSubjectTemplate,omitempty"`
+	// preheader/preview text template for email notifications
+	PreheaderTemplate      *string `json:"preheaderTemplate,omitempty"`
+	ClearPreheaderTemplate *bool   `json:"clearPreheaderTemplate,omitempty"`
+	// body template for the email
+	BodyTemplate      *string `json:"bodyTemplate,omitempty"`
+	ClearBodyTemplate *bool   `json:"clearBodyTemplate,omitempty"`
+	// plain text fallback template for the email
+	TextTemplate      *string `json:"textTemplate,omitempty"`
+	ClearTextTemplate *bool   `json:"clearTextTemplate,omitempty"`
+	// jsonschema for template data requirements
+	Jsonconfig      map[string]any `json:"jsonconfig,omitempty"`
+	ClearJsonconfig *bool          `json:"clearJsonconfig,omitempty"`
+	// uischema for a template builder
+	Uischema      map[string]any `json:"uischema,omitempty"`
+	ClearUischema *bool          `json:"clearUischema,omitempty"`
+	// additional template metadata
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
+	// whether the template is active
+	Active *bool `json:"active,omitempty"`
+	// template version
+	Version                       *int64   `json:"version,omitempty"`
+	EmailBrandingID               *string  `json:"emailBrandingID,omitempty"`
+	ClearEmailBranding            *bool    `json:"clearEmailBranding,omitempty"`
+	IntegrationID                 *string  `json:"integrationID,omitempty"`
+	ClearIntegration              *bool    `json:"clearIntegration,omitempty"`
+	WorkflowDefinitionID          *string  `json:"workflowDefinitionID,omitempty"`
+	ClearWorkflowDefinition       *bool    `json:"clearWorkflowDefinition,omitempty"`
+	WorkflowInstanceID            *string  `json:"workflowInstanceID,omitempty"`
+	ClearWorkflowInstance         *bool    `json:"clearWorkflowInstance,omitempty"`
+	AddCampaignIDs                []string `json:"addCampaignIDs,omitempty"`
+	RemoveCampaignIDs             []string `json:"removeCampaignIDs,omitempty"`
+	ClearCampaigns                *bool    `json:"clearCampaigns,omitempty"`
+	AddNotificationTemplateIDs    []string `json:"addNotificationTemplateIDs,omitempty"`
+	RemoveNotificationTemplateIDs []string `json:"removeNotificationTemplateIDs,omitempty"`
+	ClearNotificationTemplates    *bool    `json:"clearNotificationTemplates,omitempty"`
 }
 
 // UpdateEntityInput is used for update Entity object.
@@ -36263,6 +38422,128 @@ type UpdateNotificationInput struct {
 	ClearOwner  *bool            `json:"clearOwner,omitempty"`
 }
 
+// UpdateNotificationPreferenceInput is used for update NotificationPreference object.
+// Input was generated by ent.
+type UpdateNotificationPreferenceInput struct {
+	// the channel this preference applies to
+	Channel *enums.Channel `json:"channel,omitempty"`
+	// status of the channel configuration
+	Status *enums.NotificationChannelStatus `json:"status,omitempty"`
+	// provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
+	Provider      *string `json:"provider,omitempty"`
+	ClearProvider *bool   `json:"clearProvider,omitempty"`
+	// destination address or endpoint for the channel
+	Destination      *string `json:"destination,omitempty"`
+	ClearDestination *bool   `json:"clearDestination,omitempty"`
+	// channel configuration payload
+	Config      map[string]any `json:"config,omitempty"`
+	ClearConfig *bool          `json:"clearConfig,omitempty"`
+	// whether this preference is enabled
+	Enabled *bool `json:"enabled,omitempty"`
+	// delivery cadence for this preference
+	Cadence *enums.NotificationCadence `json:"cadence,omitempty"`
+	// optional priority override for this preference
+	Priority      *enums.Priority `json:"priority,omitempty"`
+	ClearPriority *bool           `json:"clearPriority,omitempty"`
+	// soiree topic names or wildcard patterns this preference applies to; empty means all
+	TopicPatterns       []string `json:"topicPatterns,omitempty"`
+	AppendTopicPatterns []string `json:"appendTopicPatterns,omitempty"`
+	ClearTopicPatterns  *bool    `json:"clearTopicPatterns,omitempty"`
+	// optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+	TopicOverrides      map[string]any `json:"topicOverrides,omitempty"`
+	ClearTopicOverrides *bool          `json:"clearTopicOverrides,omitempty"`
+	// mute notifications until this time
+	MuteUntil      *time.Time `json:"muteUntil,omitempty"`
+	ClearMuteUntil *bool      `json:"clearMuteUntil,omitempty"`
+	// start of quiet hours in HH:MM
+	QuietHoursStart      *string `json:"quietHoursStart,omitempty"`
+	ClearQuietHoursStart *bool   `json:"clearQuietHoursStart,omitempty"`
+	// end of quiet hours in HH:MM
+	QuietHoursEnd      *string `json:"quietHoursEnd,omitempty"`
+	ClearQuietHoursEnd *bool   `json:"clearQuietHoursEnd,omitempty"`
+	// timezone for quiet hours and digests
+	Timezone      *string `json:"timezone,omitempty"`
+	ClearTimezone *bool   `json:"clearTimezone,omitempty"`
+	// whether this is the default config for the channel
+	IsDefault *bool `json:"isDefault,omitempty"`
+	// when the channel config was verified
+	VerifiedAt      *time.Time `json:"verifiedAt,omitempty"`
+	ClearVerifiedAt *bool      `json:"clearVerifiedAt,omitempty"`
+	// last time the channel config was used
+	LastUsedAt      *time.Time `json:"lastUsedAt,omitempty"`
+	ClearLastUsedAt *bool      `json:"clearLastUsedAt,omitempty"`
+	// last error encountered while using the channel
+	LastError      *string `json:"lastError,omitempty"`
+	ClearLastError *bool   `json:"clearLastError,omitempty"`
+	// additional preference metadata
+	Metadata                  map[string]any `json:"metadata,omitempty"`
+	ClearMetadata             *bool          `json:"clearMetadata,omitempty"`
+	OwnerID                   *string        `json:"ownerID,omitempty"`
+	ClearOwner                *bool          `json:"clearOwner,omitempty"`
+	NotificationTemplateID    *string        `json:"notificationTemplateID,omitempty"`
+	ClearNotificationTemplate *bool          `json:"clearNotificationTemplate,omitempty"`
+}
+
+// UpdateNotificationTemplateInput is used for update NotificationTemplate object.
+// Input was generated by ent.
+type UpdateNotificationTemplateInput struct {
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
+	// stable identifier for the template
+	Key *string `json:"key,omitempty"`
+	// display name for the template
+	Name *string `json:"name,omitempty"`
+	// description of the template
+	Description      *string `json:"description,omitempty"`
+	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	// channel this template is intended for
+	Channel *enums.Channel `json:"channel,omitempty"`
+	// template format for rendering
+	Format *enums.NotificationTemplateFormat `json:"format,omitempty"`
+	// locale for the template, e.g. en-US
+	Locale *string `json:"locale,omitempty"`
+	// soiree topic name or wildcard pattern this template targets
+	TopicPattern *string `json:"topicPattern,omitempty"`
+	// title template for external channel messages
+	TitleTemplate      *string `json:"titleTemplate,omitempty"`
+	ClearTitleTemplate *bool   `json:"clearTitleTemplate,omitempty"`
+	// subject template for email notifications
+	SubjectTemplate      *string `json:"subjectTemplate,omitempty"`
+	ClearSubjectTemplate *bool   `json:"clearSubjectTemplate,omitempty"`
+	// body template for the notification
+	BodyTemplate      *string `json:"bodyTemplate,omitempty"`
+	ClearBodyTemplate *bool   `json:"clearBodyTemplate,omitempty"`
+	// structured blocks for channels like Slack or Teams
+	Blocks      map[string]any `json:"blocks,omitempty"`
+	ClearBlocks *bool          `json:"clearBlocks,omitempty"`
+	// jsonschema for template data requirements
+	Jsonconfig      map[string]any `json:"jsonconfig,omitempty"`
+	ClearJsonconfig *bool          `json:"clearJsonconfig,omitempty"`
+	// uischema for a template builder
+	Uischema      map[string]any `json:"uischema,omitempty"`
+	ClearUischema *bool          `json:"clearUischema,omitempty"`
+	// additional template metadata
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
+	// whether the template is active
+	Active *bool `json:"active,omitempty"`
+	// template version
+	Version                 *int64   `json:"version,omitempty"`
+	IntegrationID           *string  `json:"integrationID,omitempty"`
+	ClearIntegration        *bool    `json:"clearIntegration,omitempty"`
+	WorkflowDefinitionID    *string  `json:"workflowDefinitionID,omitempty"`
+	ClearWorkflowDefinition *bool    `json:"clearWorkflowDefinition,omitempty"`
+	EmailTemplateID         *string  `json:"emailTemplateID,omitempty"`
+	ClearEmailTemplate      *bool    `json:"clearEmailTemplate,omitempty"`
+	AddNotificationIDs      []string `json:"addNotificationIDs,omitempty"`
+	RemoveNotificationIDs   []string `json:"removeNotificationIDs,omitempty"`
+	ClearNotifications      *bool    `json:"clearNotifications,omitempty"`
+}
+
 // UpdateOrgMembershipInput is used for update OrgMembership object.
 // Input was generated by ent.
 type UpdateOrgMembershipInput struct {
@@ -36363,6 +38644,18 @@ type UpdateOrganizationInput struct {
 	AddAPITokenIDs                          []string                        `json:"addAPITokenIDs,omitempty"`
 	RemoveAPITokenIDs                       []string                        `json:"removeAPITokenIDs,omitempty"`
 	ClearAPITokens                          *bool                           `json:"clearAPITokens,omitempty"`
+	AddEmailBrandingIDs                     []string                        `json:"addEmailBrandingIDs,omitempty"`
+	RemoveEmailBrandingIDs                  []string                        `json:"removeEmailBrandingIDs,omitempty"`
+	ClearEmailBrandings                     *bool                           `json:"clearEmailBrandings,omitempty"`
+	AddEmailTemplateIDs                     []string                        `json:"addEmailTemplateIDs,omitempty"`
+	RemoveEmailTemplateIDs                  []string                        `json:"removeEmailTemplateIDs,omitempty"`
+	ClearEmailTemplates                     *bool                           `json:"clearEmailTemplates,omitempty"`
+	AddNotificationPreferenceIDs            []string                        `json:"addNotificationPreferenceIDs,omitempty"`
+	RemoveNotificationPreferenceIDs         []string                        `json:"removeNotificationPreferenceIDs,omitempty"`
+	ClearNotificationPreferences            *bool                           `json:"clearNotificationPreferences,omitempty"`
+	AddNotificationTemplateIDs              []string                        `json:"addNotificationTemplateIDs,omitempty"`
+	RemoveNotificationTemplateIDs           []string                        `json:"removeNotificationTemplateIDs,omitempty"`
+	ClearNotificationTemplates              *bool                           `json:"clearNotificationTemplates,omitempty"`
 	AddFileIDs                              []string                        `json:"addFileIDs,omitempty"`
 	RemoveFileIDs                           []string                        `json:"removeFileIDs,omitempty"`
 	ClearFiles                              *bool                           `json:"clearFiles,omitempty"`
@@ -38537,6 +40830,15 @@ type UpdateUserSettingInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// user id to delegate workflow approvals to
+	DelegateUserID      *string `json:"delegateUserID,omitempty"`
+	ClearDelegateUserID *bool   `json:"clearDelegateUserID,omitempty"`
+	// when delegation becomes active
+	DelegateStartAt      *time.Time `json:"delegateStartAt,omitempty"`
+	ClearDelegateStartAt *bool      `json:"clearDelegateStartAt,omitempty"`
+	// when delegation ends
+	DelegateEndAt      *time.Time `json:"delegateEndAt,omitempty"`
+	ClearDelegateEndAt *bool      `json:"clearDelegateEndAt,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
 	Locked *bool `json:"locked,omitempty"`
 	// The time notifications regarding the user were silenced
@@ -38764,15 +41066,29 @@ type UpdateWorkflowDefinitionInput struct {
 	DefinitionJSON      *models.WorkflowDefinitionDocument `json:"definitionJSON,omitempty"`
 	ClearDefinitionJSON *bool                              `json:"clearDefinitionJSON,omitempty"`
 	// Cached list of fields that should trigger workflow evaluation
-	TrackedFields          []string `json:"trackedFields,omitempty"`
-	AppendTrackedFields    []string `json:"appendTrackedFields,omitempty"`
-	ClearTrackedFields     *bool    `json:"clearTrackedFields,omitempty"`
-	AddTagDefinitionIDs    []string `json:"addTagDefinitionIDs,omitempty"`
-	RemoveTagDefinitionIDs []string `json:"removeTagDefinitionIDs,omitempty"`
-	ClearTagDefinitions    *bool    `json:"clearTagDefinitions,omitempty"`
-	AddGroupIDs            []string `json:"addGroupIDs,omitempty"`
-	RemoveGroupIDs         []string `json:"removeGroupIDs,omitempty"`
-	ClearGroups            *bool    `json:"clearGroups,omitempty"`
+	TrackedFields                 []string `json:"trackedFields,omitempty"`
+	AppendTrackedFields           []string `json:"appendTrackedFields,omitempty"`
+	ClearTrackedFields            *bool    `json:"clearTrackedFields,omitempty"`
+	AddTagDefinitionIDs           []string `json:"addTagDefinitionIDs,omitempty"`
+	RemoveTagDefinitionIDs        []string `json:"removeTagDefinitionIDs,omitempty"`
+	ClearTagDefinitions           *bool    `json:"clearTagDefinitions,omitempty"`
+	AddGroupIDs                   []string `json:"addGroupIDs,omitempty"`
+	RemoveGroupIDs                []string `json:"removeGroupIDs,omitempty"`
+	ClearGroups                   *bool    `json:"clearGroups,omitempty"`
+	AddNotificationTemplateIDs    []string `json:"addNotificationTemplateIDs,omitempty"`
+	RemoveNotificationTemplateIDs []string `json:"removeNotificationTemplateIDs,omitempty"`
+	ClearNotificationTemplates    *bool    `json:"clearNotificationTemplates,omitempty"`
+	AddEmailTemplateIDs           []string `json:"addEmailTemplateIDs,omitempty"`
+	RemoveEmailTemplateIDs        []string `json:"removeEmailTemplateIDs,omitempty"`
+	ClearEmailTemplates           *bool    `json:"clearEmailTemplates,omitempty"`
+}
+
+// Input for updateWorkflowProposalChanges mutation
+type UpdateWorkflowProposalChangesInput struct {
+	// ID of the workflow proposal to update
+	ID string `json:"id"`
+	// New proposed changes for the approval domain
+	Changes map[string]any `json:"changes"`
 }
 
 type User struct {
@@ -38894,6 +41210,12 @@ type UserSetting struct {
 	// tags associated with the object
 	Tags   []string `json:"tags,omitempty"`
 	UserID *string  `json:"userID,omitempty"`
+	// user id to delegate workflow approvals to
+	DelegateUserID *string `json:"delegateUserID,omitempty"`
+	// when delegation becomes active
+	DelegateStartAt *time.Time `json:"delegateStartAt,omitempty"`
+	// when delegation ends
+	DelegateEndAt *time.Time `json:"delegateEndAt,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
 	Locked bool `json:"locked"`
 	// The time notifications regarding the user were silenced
@@ -39060,6 +41382,44 @@ type UserSettingWhereInput struct {
 	UserIDNotNil       *bool    `json:"userIDNotNil,omitempty"`
 	UserIDEqualFold    *string  `json:"userIDEqualFold,omitempty"`
 	UserIDContainsFold *string  `json:"userIDContainsFold,omitempty"`
+	// delegate_user_id field predicates
+	DelegateUserID             *string  `json:"delegateUserID,omitempty"`
+	DelegateUserIdneq          *string  `json:"delegateUserIDNEQ,omitempty"`
+	DelegateUserIDIn           []string `json:"delegateUserIDIn,omitempty"`
+	DelegateUserIDNotIn        []string `json:"delegateUserIDNotIn,omitempty"`
+	DelegateUserIdgt           *string  `json:"delegateUserIDGT,omitempty"`
+	DelegateUserIdgte          *string  `json:"delegateUserIDGTE,omitempty"`
+	DelegateUserIdlt           *string  `json:"delegateUserIDLT,omitempty"`
+	DelegateUserIdlte          *string  `json:"delegateUserIDLTE,omitempty"`
+	DelegateUserIDContains     *string  `json:"delegateUserIDContains,omitempty"`
+	DelegateUserIDHasPrefix    *string  `json:"delegateUserIDHasPrefix,omitempty"`
+	DelegateUserIDHasSuffix    *string  `json:"delegateUserIDHasSuffix,omitempty"`
+	DelegateUserIDIsNil        *bool    `json:"delegateUserIDIsNil,omitempty"`
+	DelegateUserIDNotNil       *bool    `json:"delegateUserIDNotNil,omitempty"`
+	DelegateUserIDEqualFold    *string  `json:"delegateUserIDEqualFold,omitempty"`
+	DelegateUserIDContainsFold *string  `json:"delegateUserIDContainsFold,omitempty"`
+	// delegate_start_at field predicates
+	DelegateStartAt       *time.Time   `json:"delegateStartAt,omitempty"`
+	DelegateStartAtNeq    *time.Time   `json:"delegateStartAtNEQ,omitempty"`
+	DelegateStartAtIn     []*time.Time `json:"delegateStartAtIn,omitempty"`
+	DelegateStartAtNotIn  []*time.Time `json:"delegateStartAtNotIn,omitempty"`
+	DelegateStartAtGt     *time.Time   `json:"delegateStartAtGT,omitempty"`
+	DelegateStartAtGte    *time.Time   `json:"delegateStartAtGTE,omitempty"`
+	DelegateStartAtLt     *time.Time   `json:"delegateStartAtLT,omitempty"`
+	DelegateStartAtLte    *time.Time   `json:"delegateStartAtLTE,omitempty"`
+	DelegateStartAtIsNil  *bool        `json:"delegateStartAtIsNil,omitempty"`
+	DelegateStartAtNotNil *bool        `json:"delegateStartAtNotNil,omitempty"`
+	// delegate_end_at field predicates
+	DelegateEndAt       *time.Time   `json:"delegateEndAt,omitempty"`
+	DelegateEndAtNeq    *time.Time   `json:"delegateEndAtNEQ,omitempty"`
+	DelegateEndAtIn     []*time.Time `json:"delegateEndAtIn,omitempty"`
+	DelegateEndAtNotIn  []*time.Time `json:"delegateEndAtNotIn,omitempty"`
+	DelegateEndAtGt     *time.Time   `json:"delegateEndAtGT,omitempty"`
+	DelegateEndAtGte    *time.Time   `json:"delegateEndAtGTE,omitempty"`
+	DelegateEndAtLt     *time.Time   `json:"delegateEndAtLT,omitempty"`
+	DelegateEndAtLte    *time.Time   `json:"delegateEndAtLTE,omitempty"`
+	DelegateEndAtIsNil  *bool        `json:"delegateEndAtIsNil,omitempty"`
+	DelegateEndAtNotNil *bool        `json:"delegateEndAtNotNil,omitempty"`
 	// locked field predicates
 	Locked    *bool `json:"locked,omitempty"`
 	LockedNeq *bool `json:"lockedNEQ,omitempty"`
@@ -39631,6 +41991,34 @@ type VulnerabilityOrder struct {
 	Direction OrderDirection `json:"direction"`
 	// The field by which to order Vulnerabilities.
 	Field VulnerabilityOrderField `json:"field"`
+}
+
+// Return response for resolveVulnerability mutation
+type VulnerabilityResolvePayload struct {
+	// Resolved vulnerability
+	Vulnerability *Vulnerability `json:"vulnerability"`
+	// Review record created for the resolution, if requested
+	Review *Review `json:"review,omitempty"`
+}
+
+// Aggregated vulnerability summary for dashboards.
+type VulnerabilitySummary struct {
+	// Total vulnerabilities matching the filter.
+	Total int64 `json:"total"`
+	// Counts grouped by severity.
+	BySeverity []*VulnerabilitySummaryBucket `json:"bySeverity"`
+	// Counts grouped by source.
+	BySource []*VulnerabilitySummaryBucket `json:"bySource"`
+	// Counts grouped by status.
+	ByStatus []*VulnerabilitySummaryBucket `json:"byStatus"`
+}
+
+// Summary bucket for vulnerability groupings.
+type VulnerabilitySummaryBucket struct {
+	// Bucket label such as severity or source.
+	Key string `json:"key"`
+	// Count of vulnerabilities in this bucket.
+	Count int64 `json:"count"`
 }
 
 // Return response for updateVulnerability mutation
@@ -40380,7 +42768,9 @@ type WorkflowAssignment struct {
 	// Group that acted on the decision (if applicable)
 	ActorGroupID *string `json:"actorGroupID,omitempty"`
 	// Optional notes about the assignment
-	Notes *string       `json:"notes,omitempty"`
+	Notes *string `json:"notes,omitempty"`
+	// Timestamp when the assignment is due for delegation or escalation checks
+	DueAt *time.Time    `json:"dueAt,omitempty"`
 	Owner *Organization `json:"owner,omitempty"`
 	// Instance this assignment belongs to
 	WorkflowInstance          *WorkflowInstance                   `json:"workflowInstance"`
@@ -40423,6 +42813,12 @@ type WorkflowAssignmentOrder struct {
 	Direction OrderDirection `json:"direction"`
 	// The field by which to order WorkflowAssignments.
 	Field WorkflowAssignmentOrderField `json:"field"`
+}
+
+// Return response for adminReassignWorkflowAssignment mutation
+type WorkflowAssignmentReassignPayload struct {
+	// Updated workflow assignment
+	WorkflowAssignment *WorkflowAssignment `json:"workflowAssignment"`
 }
 
 // Return response for rejectWorkflowAssignment mutation
@@ -40480,6 +42876,16 @@ type WorkflowAssignmentTargetEdge struct {
 	Node *WorkflowAssignmentTarget `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Input target for reassigning workflow assignments
+type WorkflowAssignmentTargetInput struct {
+	// Target type (USER, GROUP, ROLE, RESOLVER)
+	Type enums.WorkflowTargetType `json:"type"`
+	// Target ID for USER/GROUP/ROLE targets
+	ID *string `json:"id,omitempty"`
+	// Resolver key for RESOLVER targets
+	ResolverKey *string `json:"resolverKey,omitempty"`
 }
 
 // Ordering options for WorkflowAssignmentTarget connections
@@ -40898,6 +43304,17 @@ type WorkflowAssignmentWhereInput struct {
 	NotesNotNil       *bool    `json:"notesNotNil,omitempty"`
 	NotesEqualFold    *string  `json:"notesEqualFold,omitempty"`
 	NotesContainsFold *string  `json:"notesContainsFold,omitempty"`
+	// due_at field predicates
+	DueAt       *time.Time   `json:"dueAt,omitempty"`
+	DueAtNeq    *time.Time   `json:"dueAtNEQ,omitempty"`
+	DueAtIn     []*time.Time `json:"dueAtIn,omitempty"`
+	DueAtNotIn  []*time.Time `json:"dueAtNotIn,omitempty"`
+	DueAtGt     *time.Time   `json:"dueAtGT,omitempty"`
+	DueAtGte    *time.Time   `json:"dueAtGTE,omitempty"`
+	DueAtLt     *time.Time   `json:"dueAtLT,omitempty"`
+	DueAtLte    *time.Time   `json:"dueAtLTE,omitempty"`
+	DueAtIsNil  *bool        `json:"dueAtIsNil,omitempty"`
+	DueAtNotNil *bool        `json:"dueAtNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -40956,10 +43373,12 @@ type WorkflowDefinition struct {
 	// Typed document describing triggers, conditions, and actions
 	DefinitionJSON *models.WorkflowDefinitionDocument `json:"definitionJSON,omitempty"`
 	// Cached list of fields that should trigger workflow evaluation
-	TrackedFields  []string                 `json:"trackedFields,omitempty"`
-	Owner          *Organization            `json:"owner,omitempty"`
-	TagDefinitions *TagDefinitionConnection `json:"tagDefinitions"`
-	Groups         *GroupConnection         `json:"groups"`
+	TrackedFields         []string                        `json:"trackedFields,omitempty"`
+	Owner                 *Organization                   `json:"owner,omitempty"`
+	TagDefinitions        *TagDefinitionConnection        `json:"tagDefinitions"`
+	Groups                *GroupConnection                `json:"groups"`
+	NotificationTemplates *NotificationTemplateConnection `json:"notificationTemplates"`
+	EmailTemplates        *EmailTemplateConnection        `json:"emailTemplates"`
 }
 
 func (WorkflowDefinition) IsNode() {}
@@ -41248,6 +43667,12 @@ type WorkflowDefinitionWhereInput struct {
 	// groups edge predicates
 	HasGroups     *bool              `json:"hasGroups,omitempty"`
 	HasGroupsWith []*GroupWhereInput `json:"hasGroupsWith,omitempty"`
+	// notification_templates edge predicates
+	HasNotificationTemplates     *bool                             `json:"hasNotificationTemplates,omitempty"`
+	HasNotificationTemplatesWith []*NotificationTemplateWhereInput `json:"hasNotificationTemplatesWith,omitempty"`
+	// email_templates edge predicates
+	HasEmailTemplates     *bool                      `json:"hasEmailTemplates,omitempty"`
+	HasEmailTemplatesWith []*EmailTemplateWhereInput `json:"hasEmailTemplatesWith,omitempty"`
 }
 
 type WorkflowEvent struct {
@@ -41525,6 +43950,7 @@ type WorkflowInstance struct {
 	Platform            *Platform                     `json:"platform,omitempty"`
 	WorkflowAssignments *WorkflowAssignmentConnection `json:"workflowAssignments"`
 	WorkflowEvents      *WorkflowEventConnection      `json:"workflowEvents"`
+	EmailTemplates      *EmailTemplateConnection      `json:"emailTemplates"`
 	WorkflowObjectRefs  *WorkflowObjectRefConnection  `json:"workflowObjectRefs"`
 	// Precomputed proposal preview (diff + values) for approval workflows.
 	// Only available to editors/owners of the target object.
@@ -41532,6 +43958,18 @@ type WorkflowInstance struct {
 }
 
 func (WorkflowInstance) IsNode() {}
+
+// Return response for workflow instance admin operations
+type WorkflowInstanceAdminPayload struct {
+	// Updated workflow instance
+	WorkflowInstance *WorkflowInstance `json:"workflowInstance"`
+}
+
+// Return response for bulk workflow instance admin operations
+type WorkflowInstanceBulkAdminPayload struct {
+	// IDs of workflow instances updated
+	UpdatedIDs []string `json:"updatedIDs"`
+}
 
 // A connection to a list of items.
 type WorkflowInstanceConnection struct {
@@ -41917,6 +44355,9 @@ type WorkflowInstanceWhereInput struct {
 	// workflow_events edge predicates
 	HasWorkflowEvents     *bool                      `json:"hasWorkflowEvents,omitempty"`
 	HasWorkflowEventsWith []*WorkflowEventWhereInput `json:"hasWorkflowEventsWith,omitempty"`
+	// email_templates edge predicates
+	HasEmailTemplates     *bool                      `json:"hasEmailTemplates,omitempty"`
+	HasEmailTemplatesWith []*EmailTemplateWhereInput `json:"hasEmailTemplatesWith,omitempty"`
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
@@ -42473,6 +44914,24 @@ type WorkflowProposalPreview struct {
 	CurrentValues map[string]any `json:"currentValues,omitempty"`
 	// Field-level diffs for the proposed changes
 	Diffs []*WorkflowFieldDiff `json:"diffs"`
+}
+
+// Return response for submitWorkflowProposal mutation
+type WorkflowProposalSubmitPayload struct {
+	// Submitted workflow proposal
+	WorkflowProposal *generated.WorkflowProposal `json:"workflowProposal"`
+}
+
+// Return response for updateWorkflowProposalChanges mutation
+type WorkflowProposalUpdatePayload struct {
+	// Updated workflow proposal
+	WorkflowProposal *generated.WorkflowProposal `json:"workflowProposal"`
+}
+
+// Return response for withdrawWorkflowProposal mutation
+type WorkflowProposalWithdrawPayload struct {
+	// Withdrawn workflow proposal
+	WorkflowProposal *generated.WorkflowProposal `json:"workflowProposal"`
 }
 
 // Properties by which APIToken connections can be ordered.
@@ -43848,6 +46307,132 @@ func (e *DocumentDataOrderField) UnmarshalJSON(b []byte) error {
 }
 
 func (e DocumentDataOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which EmailBranding connections can be ordered.
+type EmailBrandingOrderField string
+
+const (
+	EmailBrandingOrderFieldCreatedAt EmailBrandingOrderField = "created_at"
+	EmailBrandingOrderFieldUpdatedAt EmailBrandingOrderField = "updated_at"
+	EmailBrandingOrderFieldName      EmailBrandingOrderField = "name"
+)
+
+var AllEmailBrandingOrderField = []EmailBrandingOrderField{
+	EmailBrandingOrderFieldCreatedAt,
+	EmailBrandingOrderFieldUpdatedAt,
+	EmailBrandingOrderFieldName,
+}
+
+func (e EmailBrandingOrderField) IsValid() bool {
+	switch e {
+	case EmailBrandingOrderFieldCreatedAt, EmailBrandingOrderFieldUpdatedAt, EmailBrandingOrderFieldName:
+		return true
+	}
+	return false
+}
+
+func (e EmailBrandingOrderField) String() string {
+	return string(e)
+}
+
+func (e *EmailBrandingOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = EmailBrandingOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid EmailBrandingOrderField", str)
+	}
+	return nil
+}
+
+func (e EmailBrandingOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *EmailBrandingOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e EmailBrandingOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which EmailTemplate connections can be ordered.
+type EmailTemplateOrderField string
+
+const (
+	EmailTemplateOrderFieldCreatedAt EmailTemplateOrderField = "created_at"
+	EmailTemplateOrderFieldUpdatedAt EmailTemplateOrderField = "updated_at"
+	EmailTemplateOrderFieldKey       EmailTemplateOrderField = "KEY"
+	EmailTemplateOrderFieldName      EmailTemplateOrderField = "NAME"
+	EmailTemplateOrderFieldFormat    EmailTemplateOrderField = "FORMAT"
+	EmailTemplateOrderFieldLocale    EmailTemplateOrderField = "LOCALE"
+	EmailTemplateOrderFieldActive    EmailTemplateOrderField = "ACTIVE"
+	EmailTemplateOrderFieldVersion   EmailTemplateOrderField = "VERSION"
+)
+
+var AllEmailTemplateOrderField = []EmailTemplateOrderField{
+	EmailTemplateOrderFieldCreatedAt,
+	EmailTemplateOrderFieldUpdatedAt,
+	EmailTemplateOrderFieldKey,
+	EmailTemplateOrderFieldName,
+	EmailTemplateOrderFieldFormat,
+	EmailTemplateOrderFieldLocale,
+	EmailTemplateOrderFieldActive,
+	EmailTemplateOrderFieldVersion,
+}
+
+func (e EmailTemplateOrderField) IsValid() bool {
+	switch e {
+	case EmailTemplateOrderFieldCreatedAt, EmailTemplateOrderFieldUpdatedAt, EmailTemplateOrderFieldKey, EmailTemplateOrderFieldName, EmailTemplateOrderFieldFormat, EmailTemplateOrderFieldLocale, EmailTemplateOrderFieldActive, EmailTemplateOrderFieldVersion:
+		return true
+	}
+	return false
+}
+
+func (e EmailTemplateOrderField) String() string {
+	return string(e)
+}
+
+func (e *EmailTemplateOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = EmailTemplateOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid EmailTemplateOrderField", str)
+	}
+	return nil
+}
+
+func (e EmailTemplateOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *EmailTemplateOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e EmailTemplateOrderField) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	e.MarshalGQL(&buf)
 	return buf.Bytes(), nil
@@ -45482,6 +48067,196 @@ func (e *NoteOrderField) UnmarshalJSON(b []byte) error {
 }
 
 func (e NoteOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which Notification connections can be ordered.
+type NotificationOrderField string
+
+const (
+	NotificationOrderFieldCreatedAt NotificationOrderField = "created_at"
+	NotificationOrderFieldUpdatedAt NotificationOrderField = "updated_at"
+)
+
+var AllNotificationOrderField = []NotificationOrderField{
+	NotificationOrderFieldCreatedAt,
+	NotificationOrderFieldUpdatedAt,
+}
+
+func (e NotificationOrderField) IsValid() bool {
+	switch e {
+	case NotificationOrderFieldCreatedAt, NotificationOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e NotificationOrderField) String() string {
+	return string(e)
+}
+
+func (e *NotificationOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = NotificationOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid NotificationOrderField", str)
+	}
+	return nil
+}
+
+func (e NotificationOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *NotificationOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e NotificationOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which NotificationPreference connections can be ordered.
+type NotificationPreferenceOrderField string
+
+const (
+	NotificationPreferenceOrderFieldCreatedAt NotificationPreferenceOrderField = "created_at"
+	NotificationPreferenceOrderFieldUpdatedAt NotificationPreferenceOrderField = "updated_at"
+	NotificationPreferenceOrderFieldChannel   NotificationPreferenceOrderField = "CHANNEL"
+	NotificationPreferenceOrderFieldStatus    NotificationPreferenceOrderField = "STATUS"
+	NotificationPreferenceOrderFieldEnabled   NotificationPreferenceOrderField = "ENABLED"
+)
+
+var AllNotificationPreferenceOrderField = []NotificationPreferenceOrderField{
+	NotificationPreferenceOrderFieldCreatedAt,
+	NotificationPreferenceOrderFieldUpdatedAt,
+	NotificationPreferenceOrderFieldChannel,
+	NotificationPreferenceOrderFieldStatus,
+	NotificationPreferenceOrderFieldEnabled,
+}
+
+func (e NotificationPreferenceOrderField) IsValid() bool {
+	switch e {
+	case NotificationPreferenceOrderFieldCreatedAt, NotificationPreferenceOrderFieldUpdatedAt, NotificationPreferenceOrderFieldChannel, NotificationPreferenceOrderFieldStatus, NotificationPreferenceOrderFieldEnabled:
+		return true
+	}
+	return false
+}
+
+func (e NotificationPreferenceOrderField) String() string {
+	return string(e)
+}
+
+func (e *NotificationPreferenceOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = NotificationPreferenceOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid NotificationPreferenceOrderField", str)
+	}
+	return nil
+}
+
+func (e NotificationPreferenceOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *NotificationPreferenceOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e NotificationPreferenceOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which NotificationTemplate connections can be ordered.
+type NotificationTemplateOrderField string
+
+const (
+	NotificationTemplateOrderFieldCreatedAt    NotificationTemplateOrderField = "created_at"
+	NotificationTemplateOrderFieldUpdatedAt    NotificationTemplateOrderField = "updated_at"
+	NotificationTemplateOrderFieldKey          NotificationTemplateOrderField = "KEY"
+	NotificationTemplateOrderFieldName         NotificationTemplateOrderField = "NAME"
+	NotificationTemplateOrderFieldChannel      NotificationTemplateOrderField = "CHANNEL"
+	NotificationTemplateOrderFieldFormat       NotificationTemplateOrderField = "FORMAT"
+	NotificationTemplateOrderFieldLocale       NotificationTemplateOrderField = "LOCALE"
+	NotificationTemplateOrderFieldTopicPattern NotificationTemplateOrderField = "TOPIC_PATTERN"
+	NotificationTemplateOrderFieldActive       NotificationTemplateOrderField = "ACTIVE"
+	NotificationTemplateOrderFieldVersion      NotificationTemplateOrderField = "VERSION"
+)
+
+var AllNotificationTemplateOrderField = []NotificationTemplateOrderField{
+	NotificationTemplateOrderFieldCreatedAt,
+	NotificationTemplateOrderFieldUpdatedAt,
+	NotificationTemplateOrderFieldKey,
+	NotificationTemplateOrderFieldName,
+	NotificationTemplateOrderFieldChannel,
+	NotificationTemplateOrderFieldFormat,
+	NotificationTemplateOrderFieldLocale,
+	NotificationTemplateOrderFieldTopicPattern,
+	NotificationTemplateOrderFieldActive,
+	NotificationTemplateOrderFieldVersion,
+}
+
+func (e NotificationTemplateOrderField) IsValid() bool {
+	switch e {
+	case NotificationTemplateOrderFieldCreatedAt, NotificationTemplateOrderFieldUpdatedAt, NotificationTemplateOrderFieldKey, NotificationTemplateOrderFieldName, NotificationTemplateOrderFieldChannel, NotificationTemplateOrderFieldFormat, NotificationTemplateOrderFieldLocale, NotificationTemplateOrderFieldTopicPattern, NotificationTemplateOrderFieldActive, NotificationTemplateOrderFieldVersion:
+		return true
+	}
+	return false
+}
+
+func (e NotificationTemplateOrderField) String() string {
+	return string(e)
+}
+
+func (e *NotificationTemplateOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = NotificationTemplateOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid NotificationTemplateOrderField", str)
+	}
+	return nil
+}
+
+func (e NotificationTemplateOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *NotificationTemplateOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e NotificationTemplateOrderField) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	e.MarshalGQL(&buf)
 	return buf.Bytes(), nil

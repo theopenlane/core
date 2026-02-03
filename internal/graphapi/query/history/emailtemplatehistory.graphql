@@ -1,0 +1,106 @@
+
+
+query GetAllEmailTemplateHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [EmailTemplateHistoryOrder!]){
+  emailTemplateHistories(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        bodyTemplate
+        createdAt
+        createdBy
+        description
+        emailBrandingID
+        format
+        historyTime
+        id
+        integrationID
+        internalNotes
+        jsonconfig
+        key
+        locale
+        metadata
+        name
+        operation
+        ownerID
+        preheaderTemplate
+        ref
+        subjectTemplate
+        systemInternalID
+        systemOwned
+        textTemplate
+        uischema
+        updatedAt
+        updatedBy
+        version
+        workflowDefinitionID
+        workflowInstanceID
+      }
+    }
+  }
+}
+
+query GetEmailTemplateHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [EmailTemplateHistoryOrder!], $where: EmailTemplateHistoryWhereInput) {
+  emailTemplateHistories(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+    ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        bodyTemplate
+        createdAt
+        createdBy
+        description
+        emailBrandingID
+        format
+        historyTime
+        id
+        integrationID
+        internalNotes
+        jsonconfig
+        key
+        locale
+        metadata
+        name
+        operation
+        ownerID
+        preheaderTemplate
+        ref
+        subjectTemplate
+        systemInternalID
+        systemOwned
+        textTemplate
+        uischema
+        updatedAt
+        updatedBy
+        version
+        workflowDefinitionID
+        workflowInstanceID
+      }
+    }
+  }
+}

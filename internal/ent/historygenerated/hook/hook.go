@@ -215,6 +215,30 @@ func (f DocumentDataHistoryFunc) Mutate(ctx context.Context, m historygenerated.
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.DocumentDataHistoryMutation", m)
 }
 
+// The EmailBrandingHistoryFunc type is an adapter to allow the use of ordinary
+// function as EmailBrandingHistory mutator.
+type EmailBrandingHistoryFunc func(context.Context, *historygenerated.EmailBrandingHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f EmailBrandingHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.EmailBrandingHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.EmailBrandingHistoryMutation", m)
+}
+
+// The EmailTemplateHistoryFunc type is an adapter to allow the use of ordinary
+// function as EmailTemplateHistory mutator.
+type EmailTemplateHistoryFunc func(context.Context, *historygenerated.EmailTemplateHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f EmailTemplateHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.EmailTemplateHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.EmailTemplateHistoryMutation", m)
+}
+
 // The EntityHistoryFunc type is an adapter to allow the use of ordinary
 // function as EntityHistory mutator.
 type EntityHistoryFunc func(context.Context, *historygenerated.EntityHistoryMutation) (historygenerated.Value, error)
@@ -429,6 +453,30 @@ func (f NoteHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.NoteHistoryMutation", m)
+}
+
+// The NotificationPreferenceHistoryFunc type is an adapter to allow the use of ordinary
+// function as NotificationPreferenceHistory mutator.
+type NotificationPreferenceHistoryFunc func(context.Context, *historygenerated.NotificationPreferenceHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f NotificationPreferenceHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.NotificationPreferenceHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.NotificationPreferenceHistoryMutation", m)
+}
+
+// The NotificationTemplateHistoryFunc type is an adapter to allow the use of ordinary
+// function as NotificationTemplateHistory mutator.
+type NotificationTemplateHistoryFunc func(context.Context, *historygenerated.NotificationTemplateHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f NotificationTemplateHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.NotificationTemplateHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.NotificationTemplateHistoryMutation", m)
 }
 
 // The OrgMembershipHistoryFunc type is an adapter to allow the use of ordinary

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -24,14 +25,15 @@ import (
 // NotificationQuery is the builder for querying Notification entities.
 type NotificationQuery struct {
 	config
-	ctx        *QueryContext
-	order      []notification.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Notification
-	withOwner  *OrganizationQuery
-	withUser   *UserQuery
-	loadTotal  []func(context.Context, []*Notification) error
-	modifiers  []func(*sql.Selector)
+	ctx                      *QueryContext
+	order                    []notification.OrderOption
+	inters                   []Interceptor
+	predicates               []predicate.Notification
+	withOwner                *OrganizationQuery
+	withUser                 *UserQuery
+	withNotificationTemplate *NotificationTemplateQuery
+	loadTotal                []func(context.Context, []*Notification) error
+	modifiers                []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -111,6 +113,31 @@ func (_q *NotificationQuery) QueryUser() *UserQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Notification
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryNotificationTemplate chains the current query on the "notification_template" edge.
+func (_q *NotificationQuery) QueryNotificationTemplate() *NotificationTemplateQuery {
+	query := (&NotificationTemplateClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notification.Table, notification.FieldID, selector),
+			sqlgraph.To(notificationtemplate.Table, notificationtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, notification.NotificationTemplateTable, notification.NotificationTemplateColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.NotificationTemplate
 		step.Edge.Schema = schemaConfig.Notification
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -305,13 +332,14 @@ func (_q *NotificationQuery) Clone() *NotificationQuery {
 		return nil
 	}
 	return &NotificationQuery{
-		config:     _q.config,
-		ctx:        _q.ctx.Clone(),
-		order:      append([]notification.OrderOption{}, _q.order...),
-		inters:     append([]Interceptor{}, _q.inters...),
-		predicates: append([]predicate.Notification{}, _q.predicates...),
-		withOwner:  _q.withOwner.Clone(),
-		withUser:   _q.withUser.Clone(),
+		config:                   _q.config,
+		ctx:                      _q.ctx.Clone(),
+		order:                    append([]notification.OrderOption{}, _q.order...),
+		inters:                   append([]Interceptor{}, _q.inters...),
+		predicates:               append([]predicate.Notification{}, _q.predicates...),
+		withOwner:                _q.withOwner.Clone(),
+		withUser:                 _q.withUser.Clone(),
+		withNotificationTemplate: _q.withNotificationTemplate.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -338,6 +366,17 @@ func (_q *NotificationQuery) WithUser(opts ...func(*UserQuery)) *NotificationQue
 		opt(query)
 	}
 	_q.withUser = query
+	return _q
+}
+
+// WithNotificationTemplate tells the query-builder to eager-load the nodes that are connected to
+// the "notification_template" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *NotificationQuery) WithNotificationTemplate(opts ...func(*NotificationTemplateQuery)) *NotificationQuery {
+	query := (&NotificationTemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withNotificationTemplate = query
 	return _q
 }
 
@@ -425,9 +464,10 @@ func (_q *NotificationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Notification{}
 		_spec       = _q.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			_q.withOwner != nil,
 			_q.withUser != nil,
+			_q.withNotificationTemplate != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -462,6 +502,12 @@ func (_q *NotificationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	if query := _q.withUser; query != nil {
 		if err := _q.loadUser(ctx, query, nodes, nil,
 			func(n *Notification, e *User) { n.Edges.User = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withNotificationTemplate; query != nil {
+		if err := _q.loadNotificationTemplate(ctx, query, nodes, nil,
+			func(n *Notification, e *NotificationTemplate) { n.Edges.NotificationTemplate = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -531,6 +577,35 @@ func (_q *NotificationQuery) loadUser(ctx context.Context, query *UserQuery, nod
 	}
 	return nil
 }
+func (_q *NotificationQuery) loadNotificationTemplate(ctx context.Context, query *NotificationTemplateQuery, nodes []*Notification, init func(*Notification), assign func(*Notification, *NotificationTemplate)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Notification)
+	for i := range nodes {
+		fk := nodes[i].TemplateID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(notificationtemplate.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "template_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (_q *NotificationQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -567,6 +642,9 @@ func (_q *NotificationQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withUser != nil {
 			_spec.Node.AddColumnOnce(notification.FieldUserID)
+		}
+		if _q.withNotificationTemplate != nil {
+			_spec.Node.AddColumnOnce(notification.FieldTemplateID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

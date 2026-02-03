@@ -29,6 +29,7 @@ type WorkflowDefinitionDocument struct {
 // WorkflowTrigger describes when to run a workflow.
 type WorkflowTrigger struct {
 	Operation   string                   `json:"operation,omitempty"`   // e.g. CREATE, UPDATE, DELETE
+	Interval    string                   `json:"interval,omitempty"`    // schedule interval for periodic triggers (e.g. "1h")
 	ObjectType  enums.WorkflowObjectType `json:"objectType,omitempty"`  // schema/object type the trigger targets
 	Fields      []string                 `json:"fields,omitempty"`      // specific fields that should trigger evaluation
 	Edges       []string                 `json:"edges,omitempty"`       // specific edges (relationships) that should trigger evaluation

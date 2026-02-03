@@ -1,0 +1,158 @@
+extend type Query {
+    """
+    Look up notificationTemplate by ID
+    """
+     notificationTemplate(
+        """
+        ID of the notificationTemplate
+        """
+        id: ID!
+    ):  NotificationTemplate!
+}
+
+extend type Mutation{
+    """
+    Create a new notificationTemplate
+    """
+    createNotificationTemplate(
+        """
+        values of the notificationTemplate
+        """
+        input: CreateNotificationTemplateInput!
+    ): NotificationTemplateCreatePayload!
+    """
+    Create multiple new notificationTemplates
+    """
+    createBulkNotificationTemplate(
+        """
+        values of the notificationTemplate
+        """
+        input: [CreateNotificationTemplateInput!]
+    ): NotificationTemplateBulkCreatePayload!
+    """
+    Create multiple new notificationTemplates via file upload
+    """
+    createBulkCSVNotificationTemplate(
+        """
+        csv file containing values of the notificationTemplate
+        """
+        input: Upload!
+    ): NotificationTemplateBulkCreatePayload!
+    """
+    Update multiple existing notificationTemplates
+    """
+    updateBulkNotificationTemplate(
+        """
+        IDs of the notificationTemplates to update
+        """
+        ids: [ID!]!
+        """
+        values to update the notificationTemplates with
+        """
+        input: UpdateNotificationTemplateInput!
+    ): NotificationTemplateBulkUpdatePayload!
+    """
+    Update multiple existing notificationTemplates via file upload
+    """
+    updateBulkCSVNotificationTemplate(
+        """
+        csv file containing values of the notificationTemplate, must include ID column
+        """
+        input: Upload!
+    ): NotificationTemplateBulkUpdatePayload!
+    """
+    Update an existing notificationTemplate
+    """
+    updateNotificationTemplate(
+        """
+        ID of the notificationTemplate
+        """
+        id: ID!
+        """
+        New values for the notificationTemplate
+        """
+        input: UpdateNotificationTemplateInput!
+    ): NotificationTemplateUpdatePayload!
+    """
+    Delete an existing notificationTemplate
+    """
+    deleteNotificationTemplate(
+        """
+        ID of the notificationTemplate
+        """
+        id: ID!
+    ): NotificationTemplateDeletePayload!
+    """
+    Delete multiple notificationTemplates
+    """
+    deleteBulkNotificationTemplate(
+        """
+        IDs of the notificationTemplates to delete
+        """
+        ids: [ID!]!
+    ): NotificationTemplateBulkDeletePayload!
+}
+
+"""
+Return response for createNotificationTemplate mutation
+"""
+type NotificationTemplateCreatePayload {
+    """
+    Created notificationTemplate
+    """
+    notificationTemplate: NotificationTemplate!
+}
+
+"""
+Return response for updateNotificationTemplate mutation
+"""
+type NotificationTemplateUpdatePayload {
+    """
+    Updated notificationTemplate
+    """
+    notificationTemplate: NotificationTemplate!
+}
+
+"""
+Return response for deleteNotificationTemplate mutation
+"""
+type NotificationTemplateDeletePayload {
+    """
+    Deleted notificationTemplate ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkNotificationTemplate mutation
+"""
+type NotificationTemplateBulkCreatePayload {
+    """
+    Created notificationTemplates
+    """
+    notificationTemplates: [NotificationTemplate!]
+}
+
+"""
+Return response for updateBulkNotificationTemplate mutation
+"""
+type NotificationTemplateBulkUpdatePayload {
+    """
+    Updated notificationTemplates
+    """
+    notificationTemplates: [NotificationTemplate!]
+    """
+    IDs of the updated notificationTemplates
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkNotificationTemplate mutation
+"""
+type NotificationTemplateBulkDeletePayload {
+    """
+    Deleted notificationTemplate IDs
+    """
+    deletedIDs: [ID!]!
+}

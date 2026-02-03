@@ -195,6 +195,7 @@ func (w WorkflowInstance) Edges() []ent.Edge {
 			name:       "workflow_events",
 			comment:    "Events recorded for this instance",
 		}),
+		defaultEdgeToWithPagination(w, EmailTemplate{}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: w,
 			edgeSchema: WorkflowObjectRef{},

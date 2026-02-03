@@ -14,6 +14,8 @@ var (
 	ChannelInApp Channel = "IN_APP"
 	// ChannelSlack represents Slack notifications
 	ChannelSlack Channel = "SLACK"
+	// ChannelTeams represents Microsoft Teams notifications
+	ChannelTeams Channel = "TEAMS"
 	// ChannelEmail represents email notifications
 	ChannelEmail Channel = "EMAIL"
 	// ChannelInvalid represents an invalid channel
@@ -21,9 +23,9 @@ var (
 )
 
 // Values returns a slice of strings that represents all the possible values of the Channel enum.
-// Possible default values are "IN_APP", "SLACK", and "EMAIL".
+// Possible default values are "IN_APP", "SLACK", "TEAMS", and "EMAIL".
 func (Channel) Values() (kinds []string) {
-	for _, s := range []Channel{ChannelInApp, ChannelSlack, ChannelEmail} {
+	for _, s := range []Channel{ChannelInApp, ChannelSlack, ChannelTeams, ChannelEmail} {
 		kinds = append(kinds, string(s))
 	}
 
@@ -42,6 +44,8 @@ func ToChannel(r string) *Channel {
 		return &ChannelInApp
 	case ChannelSlack.String():
 		return &ChannelSlack
+	case ChannelTeams.String():
+		return &ChannelTeams
 	case ChannelEmail.String():
 		return &ChannelEmail
 	default:

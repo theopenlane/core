@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -58,6 +59,8 @@ type Integration struct {
 	Kind string `json:"kind,omitempty"`
 	// the type of integration, such as communicattion, storage, SCM, etc.
 	IntegrationType string `json:"integration_type,omitempty"`
+	// cached provider metadata for UI and registry access
+	ProviderMetadata openapi.IntegrationProviderMetadata `json:"provider_metadata,omitempty"`
 	// additional metadata about the integration
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -102,28 +105,40 @@ type IntegrationEdges struct {
 	DirectoryMemberships []*DirectoryMembership `json:"directory_memberships,omitempty"`
 	// DirectorySyncRuns holds the value of the directory_sync_runs edge.
 	DirectorySyncRuns []*DirectorySyncRun `json:"directory_sync_runs,omitempty"`
+	// NotificationTemplates holds the value of the notification_templates edge.
+	NotificationTemplates []*NotificationTemplate `json:"notification_templates,omitempty"`
+	// EmailTemplates holds the value of the email_templates edge.
+	EmailTemplates []*EmailTemplate `json:"email_templates,omitempty"`
+	// IntegrationWebhooks holds the value of the integration_webhooks edge.
+	IntegrationWebhooks []*IntegrationWebhook `json:"integration_webhooks,omitempty"`
+	// IntegrationRuns holds the value of the integration_runs edge.
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Entities holds the value of the entities edge.
 	Entities []*Entity `json:"entities,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [17]bool
+	loadedTypes [21]bool
 	// totalCount holds the count of the edges above.
-	totalCount [17]map[string]int
+	totalCount [19]map[string]int
 
-	namedSecrets              map[string][]*Hush
-	namedFiles                map[string][]*File
-	namedEvents               map[string][]*Event
-	namedFindings             map[string][]*Finding
-	namedVulnerabilities      map[string][]*Vulnerability
-	namedReviews              map[string][]*Review
-	namedRemediations         map[string][]*Remediation
-	namedTasks                map[string][]*Task
-	namedActionPlans          map[string][]*ActionPlan
-	namedDirectoryAccounts    map[string][]*DirectoryAccount
-	namedDirectoryGroups      map[string][]*DirectoryGroup
-	namedDirectoryMemberships map[string][]*DirectoryMembership
-	namedDirectorySyncRuns    map[string][]*DirectorySyncRun
-	namedEntities             map[string][]*Entity
+	namedSecrets               map[string][]*Hush
+	namedFiles                 map[string][]*File
+	namedEvents                map[string][]*Event
+	namedFindings              map[string][]*Finding
+	namedVulnerabilities       map[string][]*Vulnerability
+	namedReviews               map[string][]*Review
+	namedRemediations          map[string][]*Remediation
+	namedTasks                 map[string][]*Task
+	namedActionPlans           map[string][]*ActionPlan
+	namedDirectoryAccounts     map[string][]*DirectoryAccount
+	namedDirectoryGroups       map[string][]*DirectoryGroup
+	namedDirectoryMemberships  map[string][]*DirectoryMembership
+	namedDirectorySyncRuns     map[string][]*DirectorySyncRun
+	namedNotificationTemplates map[string][]*NotificationTemplate
+	namedEmailTemplates        map[string][]*EmailTemplate
+	namedIntegrationWebhooks   map[string][]*IntegrationWebhook
+	namedIntegrationRuns       map[string][]*IntegrationRun
+	namedEntities              map[string][]*Entity
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -276,10 +291,46 @@ func (e IntegrationEdges) DirectorySyncRunsOrErr() ([]*DirectorySyncRun, error) 
 	return nil, &NotLoadedError{edge: "directory_sync_runs"}
 }
 
+// NotificationTemplatesOrErr returns the NotificationTemplates value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) NotificationTemplatesOrErr() ([]*NotificationTemplate, error) {
+	if e.loadedTypes[16] {
+		return e.NotificationTemplates, nil
+	}
+	return nil, &NotLoadedError{edge: "notification_templates"}
+}
+
+// EmailTemplatesOrErr returns the EmailTemplates value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
+	if e.loadedTypes[17] {
+		return e.EmailTemplates, nil
+	}
+	return nil, &NotLoadedError{edge: "email_templates"}
+}
+
+// IntegrationWebhooksOrErr returns the IntegrationWebhooks value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) IntegrationWebhooksOrErr() ([]*IntegrationWebhook, error) {
+	if e.loadedTypes[18] {
+		return e.IntegrationWebhooks, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_webhooks"}
+}
+
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[19] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[20] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -290,7 +341,7 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case integration.FieldTags, integration.FieldMetadata:
+		case integration.FieldTags, integration.FieldProviderMetadata, integration.FieldMetadata:
 			values[i] = new([]byte)
 		case integration.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
@@ -441,6 +492,14 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.IntegrationType = value.String
 			}
+		case integration.FieldProviderMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field provider_metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ProviderMetadata); err != nil {
+					return fmt.Errorf("unmarshal field provider_metadata: %w", err)
+				}
+			}
 		case integration.FieldMetadata:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field metadata", values[i])
@@ -556,6 +615,26 @@ func (_m *Integration) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
 	return NewIntegrationClient(_m.config).QueryDirectorySyncRuns(_m)
 }
 
+// QueryNotificationTemplates queries the "notification_templates" edge of the Integration entity.
+func (_m *Integration) QueryNotificationTemplates() *NotificationTemplateQuery {
+	return NewIntegrationClient(_m.config).QueryNotificationTemplates(_m)
+}
+
+// QueryEmailTemplates queries the "email_templates" edge of the Integration entity.
+func (_m *Integration) QueryEmailTemplates() *EmailTemplateQuery {
+	return NewIntegrationClient(_m.config).QueryEmailTemplates(_m)
+}
+
+// QueryIntegrationWebhooks queries the "integration_webhooks" edge of the Integration entity.
+func (_m *Integration) QueryIntegrationWebhooks() *IntegrationWebhookQuery {
+	return NewIntegrationClient(_m.config).QueryIntegrationWebhooks(_m)
+}
+
+// QueryIntegrationRuns queries the "integration_runs" edge of the Integration entity.
+func (_m *Integration) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewIntegrationClient(_m.config).QueryIntegrationRuns(_m)
+}
+
 // QueryEntities queries the "entities" edge of the Integration entity.
 func (_m *Integration) QueryEntities() *EntityQuery {
 	return NewIntegrationClient(_m.config).QueryEntities(_m)
@@ -644,6 +723,9 @@ func (_m *Integration) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_type=")
 	builder.WriteString(_m.IntegrationType)
+	builder.WriteString(", ")
+	builder.WriteString("provider_metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ProviderMetadata))
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
@@ -960,6 +1042,102 @@ func (_m *Integration) appendNamedDirectorySyncRuns(name string, edges ...*Direc
 		_m.Edges.namedDirectorySyncRuns[name] = []*DirectorySyncRun{}
 	} else {
 		_m.Edges.namedDirectorySyncRuns[name] = append(_m.Edges.namedDirectorySyncRuns[name], edges...)
+	}
+}
+
+// NamedNotificationTemplates returns the NotificationTemplates named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedNotificationTemplates(name string) ([]*NotificationTemplate, error) {
+	if _m.Edges.namedNotificationTemplates == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedNotificationTemplates[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedNotificationTemplates(name string, edges ...*NotificationTemplate) {
+	if _m.Edges.namedNotificationTemplates == nil {
+		_m.Edges.namedNotificationTemplates = make(map[string][]*NotificationTemplate)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedNotificationTemplates[name] = []*NotificationTemplate{}
+	} else {
+		_m.Edges.namedNotificationTemplates[name] = append(_m.Edges.namedNotificationTemplates[name], edges...)
+	}
+}
+
+// NamedEmailTemplates returns the EmailTemplates named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedEmailTemplates(name string) ([]*EmailTemplate, error) {
+	if _m.Edges.namedEmailTemplates == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEmailTemplates[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedEmailTemplates(name string, edges ...*EmailTemplate) {
+	if _m.Edges.namedEmailTemplates == nil {
+		_m.Edges.namedEmailTemplates = make(map[string][]*EmailTemplate)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEmailTemplates[name] = []*EmailTemplate{}
+	} else {
+		_m.Edges.namedEmailTemplates[name] = append(_m.Edges.namedEmailTemplates[name], edges...)
+	}
+}
+
+// NamedIntegrationWebhooks returns the IntegrationWebhooks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedIntegrationWebhooks(name string) ([]*IntegrationWebhook, error) {
+	if _m.Edges.namedIntegrationWebhooks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationWebhooks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedIntegrationWebhooks(name string, edges ...*IntegrationWebhook) {
+	if _m.Edges.namedIntegrationWebhooks == nil {
+		_m.Edges.namedIntegrationWebhooks = make(map[string][]*IntegrationWebhook)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationWebhooks[name] = []*IntegrationWebhook{}
+	} else {
+		_m.Edges.namedIntegrationWebhooks[name] = append(_m.Edges.namedIntegrationWebhooks[name], edges...)
+	}
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
 	}
 }
 

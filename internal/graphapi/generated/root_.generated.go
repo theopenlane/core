@@ -52,6 +52,7 @@ type ResolverRoot interface {
 	Subcontrol() SubcontrolResolver
 	Subscription() SubscriptionResolver
 	WorkflowInstance() WorkflowInstanceResolver
+	WorkflowProposal() WorkflowProposalResolver
 	CreateDiscussionInput() CreateDiscussionInputResolver
 	CreateEntityInput() CreateEntityInputResolver
 	CreateGroupInput() CreateGroupInputResolver
@@ -483,6 +484,10 @@ type ComplexityRoot struct {
 		DisplayID               func(childComplexity int) int
 		DueDate                 func(childComplexity int) int
 		Editors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		EmailBranding           func(childComplexity int) int
+		EmailBrandingID         func(childComplexity int) int
+		EmailTemplate           func(childComplexity int) int
+		EmailTemplateID         func(childComplexity int) int
 		Entity                  func(childComplexity int) int
 		EntityID                func(childComplexity int) int
 		Groups                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -1496,6 +1501,143 @@ type ComplexityRoot struct {
 		DocumentData func(childComplexity int) int
 	}
 
+	EmailBranding struct {
+		BackgroundColor func(childComplexity int) int
+		BlockedGroups   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		BrandName       func(childComplexity int) int
+		ButtonColor     func(childComplexity int) int
+		ButtonTextColor func(childComplexity int) int
+		Campaigns       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Editors         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		EmailTemplates  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
+		FontFamily      func(childComplexity int) int
+		ID              func(childComplexity int) int
+		IsDefault       func(childComplexity int) int
+		LinkColor       func(childComplexity int) int
+		LogoRemoteURL   func(childComplexity int) int
+		Name            func(childComplexity int) int
+		Owner           func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		PrimaryColor    func(childComplexity int) int
+		SecondaryColor  func(childComplexity int) int
+		Tags            func(childComplexity int) int
+		TextColor       func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
+		Viewers         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+	}
+
+	EmailBrandingBulkCreatePayload struct {
+		EmailBrandings func(childComplexity int) int
+	}
+
+	EmailBrandingBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
+	EmailBrandingBulkUpdatePayload struct {
+		EmailBrandings func(childComplexity int) int
+		UpdatedIDs     func(childComplexity int) int
+	}
+
+	EmailBrandingConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	EmailBrandingCreatePayload struct {
+		EmailBranding func(childComplexity int) int
+	}
+
+	EmailBrandingDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	EmailBrandingEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	EmailBrandingUpdatePayload struct {
+		EmailBranding func(childComplexity int) int
+	}
+
+	EmailTemplate struct {
+		Active                func(childComplexity int) int
+		BodyTemplate          func(childComplexity int) int
+		Campaigns             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		EmailBranding         func(childComplexity int) int
+		EmailBrandingID       func(childComplexity int) int
+		Format                func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Integration           func(childComplexity int) int
+		IntegrationID         func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		Jsonconfig            func(childComplexity int) int
+		Key                   func(childComplexity int) int
+		Locale                func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		NotificationTemplates func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationTemplateOrder, where *generated.NotificationTemplateWhereInput) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		PreheaderTemplate     func(childComplexity int) int
+		SubjectTemplate       func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		TextTemplate          func(childComplexity int) int
+		Uischema              func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		Version               func(childComplexity int) int
+		WorkflowDefinition    func(childComplexity int) int
+		WorkflowDefinitionID  func(childComplexity int) int
+		WorkflowInstance      func(childComplexity int) int
+		WorkflowInstanceID    func(childComplexity int) int
+	}
+
+	EmailTemplateBulkCreatePayload struct {
+		EmailTemplates func(childComplexity int) int
+	}
+
+	EmailTemplateBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
+	EmailTemplateBulkUpdatePayload struct {
+		EmailTemplates func(childComplexity int) int
+		UpdatedIDs     func(childComplexity int) int
+	}
+
+	EmailTemplateConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	EmailTemplateCreatePayload struct {
+		EmailTemplate func(childComplexity int) int
+	}
+
+	EmailTemplateDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	EmailTemplateEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	EmailTemplateUpdatePayload struct {
+		EmailTemplate func(childComplexity int) int
+	}
+
 	Entity struct {
 		AnnualSpend                           func(childComplexity int) int
 		ApprovedForUse                        func(childComplexity int) int
@@ -2461,42 +2603,44 @@ type ComplexityRoot struct {
 	}
 
 	Integration struct {
-		ActionPlans          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		CreatedAt            func(childComplexity int) int
-		CreatedBy            func(childComplexity int) int
-		Description          func(childComplexity int) int
-		DirectoryAccounts    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
-		DirectoryGroups      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
-		DirectoryMemberships func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
-		DirectorySyncRuns    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
-		Entities             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		Environment          func(childComplexity int) int
-		EnvironmentID        func(childComplexity int) int
-		EnvironmentName      func(childComplexity int) int
-		Events               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		Files                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Findings             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
-		ID                   func(childComplexity int) int
-		IntegrationType      func(childComplexity int) int
-		InternalNotes        func(childComplexity int) int
-		Kind                 func(childComplexity int) int
-		Metadata             func(childComplexity int) int
-		Name                 func(childComplexity int) int
-		Owner                func(childComplexity int) int
-		OwnerID              func(childComplexity int) int
-		Remediations         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
-		Reviews              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
-		Scope                func(childComplexity int) int
-		ScopeID              func(childComplexity int) int
-		ScopeName            func(childComplexity int) int
-		Secrets              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
-		SystemInternalID     func(childComplexity int) int
-		SystemOwned          func(childComplexity int) int
-		Tags                 func(childComplexity int) int
-		Tasks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		UpdatedAt            func(childComplexity int) int
-		UpdatedBy            func(childComplexity int) int
-		Vulnerabilities      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		ActionPlans           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DirectoryAccounts     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
+		DirectoryGroups       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
+		DirectoryMemberships  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
+		DirectorySyncRuns     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
+		EmailTemplates        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
+		Entities              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment           func(childComplexity int) int
+		EnvironmentID         func(childComplexity int) int
+		EnvironmentName       func(childComplexity int) int
+		Events                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		Files                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		ID                    func(childComplexity int) int
+		IntegrationType       func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		Kind                  func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		NotificationTemplates func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationTemplateOrder, where *generated.NotificationTemplateWhereInput) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Remediations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		Reviews               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
+		Scope                 func(childComplexity int) int
+		ScopeID               func(childComplexity int) int
+		ScopeName             func(childComplexity int) int
+		Secrets               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		Tasks                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		Vulnerabilities       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 	}
 
 	IntegrationConnection struct {
@@ -3005,8 +3149,12 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
+		AdminReassignWorkflowAssignment      func(childComplexity int, input model.ReassignWorkflowAssignmentInput) int
 		ApproveNDARequests                   func(childComplexity int, ids []string) int
 		ApproveWorkflowAssignment            func(childComplexity int, id string) int
+		BulkCancelWorkflowInstances          func(childComplexity int, ids []string, reason *string) int
+		BulkForceCompleteWorkflowInstances   func(childComplexity int, ids []string, applyProposal *bool) int
+		CancelWorkflowInstance               func(childComplexity int, id string, reason *string) int
 		CloneBulkCSVControl                  func(childComplexity int, input graphql.Upload) int
 		CreateAPIToken                       func(childComplexity int, input generated.CreateAPITokenInput) int
 		CreateActionPlan                     func(childComplexity int, input generated.CreateActionPlanInput) int
@@ -3034,6 +3182,8 @@ type ComplexityRoot struct {
 		CreateBulkCSVDirectorySyncRun        func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDiscussion              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDocumentData            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEmailBranding           func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEmailTemplate           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEntity                  func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEntityType              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEvent                   func(childComplexity int, input graphql.Upload) int
@@ -3051,6 +3201,8 @@ type ComplexityRoot struct {
 		CreateBulkCSVMappableDomain          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVMappedControl           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVNarrative               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVNotificationPreference  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVNotificationTemplate    func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrgMembership           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrganizationSetting     func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVPlatform                func(childComplexity int, input graphql.Upload) int
@@ -3091,6 +3243,8 @@ type ComplexityRoot struct {
 		CreateBulkDirectorySyncRun           func(childComplexity int, input []*generated.CreateDirectorySyncRunInput) int
 		CreateBulkDiscussion                 func(childComplexity int, input []*generated.CreateDiscussionInput) int
 		CreateBulkDocumentData               func(childComplexity int, input []*generated.CreateDocumentDataInput) int
+		CreateBulkEmailBranding              func(childComplexity int, input []*generated.CreateEmailBrandingInput) int
+		CreateBulkEmailTemplate              func(childComplexity int, input []*generated.CreateEmailTemplateInput) int
 		CreateBulkEntity                     func(childComplexity int, input []*generated.CreateEntityInput) int
 		CreateBulkEntityType                 func(childComplexity int, input []*generated.CreateEntityTypeInput) int
 		CreateBulkEvent                      func(childComplexity int, input []*generated.CreateEventInput) int
@@ -3108,6 +3262,8 @@ type ComplexityRoot struct {
 		CreateBulkMappableDomain             func(childComplexity int, input []*generated.CreateMappableDomainInput) int
 		CreateBulkMappedControl              func(childComplexity int, input []*generated.CreateMappedControlInput) int
 		CreateBulkNarrative                  func(childComplexity int, input []*generated.CreateNarrativeInput) int
+		CreateBulkNotificationPreference     func(childComplexity int, input []*generated.CreateNotificationPreferenceInput) int
+		CreateBulkNotificationTemplate       func(childComplexity int, input []*generated.CreateNotificationTemplateInput) int
 		CreateBulkOrgMembership              func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
 		CreateBulkOrganizationSetting        func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
 		CreateBulkPlatform                   func(childComplexity int, input []*generated.CreatePlatformInput) int
@@ -3152,6 +3308,8 @@ type ComplexityRoot struct {
 		CreateDirectorySyncRun               func(childComplexity int, input generated.CreateDirectorySyncRunInput) int
 		CreateDiscussion                     func(childComplexity int, input generated.CreateDiscussionInput) int
 		CreateDocumentData                   func(childComplexity int, input generated.CreateDocumentDataInput) int
+		CreateEmailBranding                  func(childComplexity int, input generated.CreateEmailBrandingInput) int
+		CreateEmailTemplate                  func(childComplexity int, input generated.CreateEmailTemplateInput) int
 		CreateEntity                         func(childComplexity int, input generated.CreateEntityInput) int
 		CreateEntityType                     func(childComplexity int, input generated.CreateEntityTypeInput) int
 		CreateEvent                          func(childComplexity int, input generated.CreateEventInput) int
@@ -3177,6 +3335,8 @@ type ComplexityRoot struct {
 		CreateMappableDomain                 func(childComplexity int, input generated.CreateMappableDomainInput) int
 		CreateMappedControl                  func(childComplexity int, input generated.CreateMappedControlInput) int
 		CreateNarrative                      func(childComplexity int, input generated.CreateNarrativeInput) int
+		CreateNotificationPreference         func(childComplexity int, input generated.CreateNotificationPreferenceInput) int
+		CreateNotificationTemplate           func(childComplexity int, input generated.CreateNotificationTemplateInput) int
 		CreateOnboarding                     func(childComplexity int, input generated.CreateOnboardingInput) int
 		CreateOrgMembership                  func(childComplexity int, input generated.CreateOrgMembershipInput) int
 		CreateOrganization                   func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) int
@@ -3235,6 +3395,8 @@ type ComplexityRoot struct {
 		DeleteBulkCustomDomain               func(childComplexity int, ids []string) int
 		DeleteBulkDNSVerification            func(childComplexity int, ids []string) int
 		DeleteBulkDocumentData               func(childComplexity int, ids []string) int
+		DeleteBulkEmailBranding              func(childComplexity int, ids []string) int
+		DeleteBulkEmailTemplate              func(childComplexity int, ids []string) int
 		DeleteBulkEntity                     func(childComplexity int, ids []string) int
 		DeleteBulkEntityType                 func(childComplexity int, ids []string) int
 		DeleteBulkEvent                      func(childComplexity int, ids []string) int
@@ -3250,6 +3412,8 @@ type ComplexityRoot struct {
 		DeleteBulkMappableDomain             func(childComplexity int, ids []string) int
 		DeleteBulkMappedControl              func(childComplexity int, ids []string) int
 		DeleteBulkNarrative                  func(childComplexity int, ids []string) int
+		DeleteBulkNotificationPreference     func(childComplexity int, ids []string) int
+		DeleteBulkNotificationTemplate       func(childComplexity int, ids []string) int
 		DeleteBulkOrgMembership              func(childComplexity int, ids []string) int
 		DeleteBulkOrganizationSetting        func(childComplexity int, ids []string) int
 		DeleteBulkProcedure                  func(childComplexity int, ids []string) int
@@ -3281,6 +3445,8 @@ type ComplexityRoot struct {
 		DeleteDirectorySyncRun               func(childComplexity int, id string) int
 		DeleteDiscussion                     func(childComplexity int, id string) int
 		DeleteDocumentData                   func(childComplexity int, id string) int
+		DeleteEmailBranding                  func(childComplexity int, id string) int
+		DeleteEmailTemplate                  func(childComplexity int, id string) int
 		DeleteEntity                         func(childComplexity int, id string) int
 		DeleteEntityType                     func(childComplexity int, id string) int
 		DeleteEvent                          func(childComplexity int, id string) int
@@ -3306,6 +3472,8 @@ type ComplexityRoot struct {
 		DeleteMappedControl                  func(childComplexity int, id string) int
 		DeleteNarrative                      func(childComplexity int, id string) int
 		DeleteNote                           func(childComplexity int, id string) int
+		DeleteNotificationPreference         func(childComplexity int, id string) int
+		DeleteNotificationTemplate           func(childComplexity int, id string) int
 		DeleteOrgMembership                  func(childComplexity int, id string) int
 		DeleteOrganization                   func(childComplexity int, id string) int
 		DeleteOrganizationSetting            func(childComplexity int, id string) int
@@ -3340,12 +3508,17 @@ type ComplexityRoot struct {
 		DeleteWebauthn                       func(childComplexity int, id string) int
 		DeleteWorkflowDefinition             func(childComplexity int, id string) int
 		DenyNDARequests                      func(childComplexity int, ids []string) int
+		ForceCompleteWorkflowInstance        func(childComplexity int, id string, applyProposal *bool) int
 		LaunchCampaign                       func(childComplexity int, input model.LaunchCampaignInput) int
 		PublishTrustCenterSetting            func(childComplexity int) int
+		ReassignWorkflowAssignment           func(childComplexity int, id string, targetUserID string) int
 		RejectWorkflowAssignment             func(childComplexity int, id string, reason *string) int
+		RequestChangesWorkflowAssignment     func(childComplexity int, id string, reason *string, inputs map[string]any) int
 		ResendCampaignIncompleteTargets      func(childComplexity int, input model.ResendCampaignIncompleteInput) int
+		ResolveVulnerability                 func(childComplexity int, id string, input model.ResolveVulnerabilityInput) int
 		SendCampaignTestEmail                func(childComplexity int, input model.SendCampaignTestEmailInput) int
 		SubmitTrustCenterNDAResponse         func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
+		SubmitWorkflowProposal               func(childComplexity int, id string) int
 		TransferOrganizationOwnership        func(childComplexity int, newOwnerEmail string) int
 		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
@@ -3364,6 +3537,8 @@ type ComplexityRoot struct {
 		UpdateBulkCSVCustomDomain            func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVDNSVerification         func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVDocumentData            func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVEmailBranding           func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVEmailTemplate           func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVEntity                  func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVEntityType              func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVEvent                   func(childComplexity int, input graphql.Upload) int
@@ -3378,6 +3553,8 @@ type ComplexityRoot struct {
 		UpdateBulkCSVMappableDomain          func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVMappedControl           func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVNarrative               func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVNotificationPreference  func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVNotificationTemplate    func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVOrgMembership           func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVOrganizationSetting     func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVProcedure               func(childComplexity int, input graphql.Upload) int
@@ -3401,6 +3578,8 @@ type ComplexityRoot struct {
 		UpdateBulkCustomDomain               func(childComplexity int, ids []string, input generated.UpdateCustomDomainInput) int
 		UpdateBulkDNSVerification            func(childComplexity int, ids []string, input generated.UpdateDNSVerificationInput) int
 		UpdateBulkDocumentData               func(childComplexity int, ids []string, input generated.UpdateDocumentDataInput) int
+		UpdateBulkEmailBranding              func(childComplexity int, ids []string, input generated.UpdateEmailBrandingInput) int
+		UpdateBulkEmailTemplate              func(childComplexity int, ids []string, input generated.UpdateEmailTemplateInput) int
 		UpdateBulkEntity                     func(childComplexity int, ids []string, input generated.UpdateEntityInput) int
 		UpdateBulkEntityType                 func(childComplexity int, ids []string, input generated.UpdateEntityTypeInput) int
 		UpdateBulkEvent                      func(childComplexity int, ids []string, input generated.UpdateEventInput) int
@@ -3415,6 +3594,8 @@ type ComplexityRoot struct {
 		UpdateBulkMappableDomain             func(childComplexity int, ids []string, input generated.UpdateMappableDomainInput) int
 		UpdateBulkMappedControl              func(childComplexity int, ids []string, input generated.UpdateMappedControlInput) int
 		UpdateBulkNarrative                  func(childComplexity int, ids []string, input generated.UpdateNarrativeInput) int
+		UpdateBulkNotificationPreference     func(childComplexity int, ids []string, input generated.UpdateNotificationPreferenceInput) int
+		UpdateBulkNotificationTemplate       func(childComplexity int, ids []string, input generated.UpdateNotificationTemplateInput) int
 		UpdateBulkOrgMembership              func(childComplexity int, ids []string, input generated.UpdateOrgMembershipInput) int
 		UpdateBulkOrganizationSetting        func(childComplexity int, ids []string, input generated.UpdateOrganizationSettingInput) int
 		UpdateBulkProcedure                  func(childComplexity int, ids []string, input generated.UpdateProcedureInput) int
@@ -3447,6 +3628,8 @@ type ComplexityRoot struct {
 		UpdateDirectorySyncRun               func(childComplexity int, id string, input generated.UpdateDirectorySyncRunInput) int
 		UpdateDiscussion                     func(childComplexity int, id string, input generated.UpdateDiscussionInput) int
 		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput, documentDataFile *graphql.Upload) int
+		UpdateEmailBranding                  func(childComplexity int, id string, input generated.UpdateEmailBrandingInput) int
+		UpdateEmailTemplate                  func(childComplexity int, id string, input generated.UpdateEmailTemplateInput) int
 		UpdateEntity                         func(childComplexity int, id string, input generated.UpdateEntityInput) int
 		UpdateEntityType                     func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
 		UpdateEvent                          func(childComplexity int, id string, input generated.UpdateEventInput) int
@@ -3470,6 +3653,8 @@ type ComplexityRoot struct {
 		UpdateMappedControl                  func(childComplexity int, id string, input generated.UpdateMappedControlInput) int
 		UpdateNarrative                      func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
 		UpdateNotification                   func(childComplexity int, id string, input generated.UpdateNotificationInput) int
+		UpdateNotificationPreference         func(childComplexity int, id string, input generated.UpdateNotificationPreferenceInput) int
+		UpdateNotificationTemplate           func(childComplexity int, id string, input generated.UpdateNotificationTemplateInput) int
 		UpdateOrgMembership                  func(childComplexity int, id string, input generated.UpdateOrgMembershipInput) int
 		UpdateOrganization                   func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) int
 		UpdateOrganizationSetting            func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
@@ -3511,7 +3696,9 @@ type ComplexityRoot struct {
 		UpdateUserSetting                    func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
 		UpdateVulnerability                  func(childComplexity int, id string, input generated.UpdateVulnerabilityInput) int
 		UpdateWorkflowDefinition             func(childComplexity int, id string, input generated.UpdateWorkflowDefinitionInput) int
+		UpdateWorkflowProposalChanges        func(childComplexity int, input model.UpdateWorkflowProposalChangesInput) int
 		ValidateCustomDomain                 func(childComplexity int, id string) int
+		WithdrawWorkflowProposal             func(childComplexity int, id string, reason *string) int
 	}
 
 	Narrative struct {
@@ -3619,23 +3806,177 @@ type ComplexityRoot struct {
 	}
 
 	Notification struct {
-		Body             func(childComplexity int) int
-		Channels         func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Data             func(childComplexity int) int
-		ID               func(childComplexity int) int
-		NotificationType func(childComplexity int) int
-		ObjectType       func(childComplexity int) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		ReadAt           func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		Title            func(childComplexity int) int
-		Topic            func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		UserID           func(childComplexity int) int
+		Body                 func(childComplexity int) int
+		Channels             func(childComplexity int) int
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		Data                 func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		NotificationTemplate func(childComplexity int) int
+		NotificationType     func(childComplexity int) int
+		ObjectType           func(childComplexity int) int
+		Owner                func(childComplexity int) int
+		OwnerID              func(childComplexity int) int
+		ReadAt               func(childComplexity int) int
+		Tags                 func(childComplexity int) int
+		TemplateID           func(childComplexity int) int
+		Title                func(childComplexity int) int
+		Topic                func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
+		UserID               func(childComplexity int) int
+	}
+
+	NotificationConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	NotificationEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	NotificationPreference struct {
+		Cadence              func(childComplexity int) int
+		Channel              func(childComplexity int) int
+		Config               func(childComplexity int) int
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		Destination          func(childComplexity int) int
+		Enabled              func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		IsDefault            func(childComplexity int) int
+		LastError            func(childComplexity int) int
+		LastUsedAt           func(childComplexity int) int
+		Metadata             func(childComplexity int) int
+		MuteUntil            func(childComplexity int) int
+		NotificationTemplate func(childComplexity int) int
+		Owner                func(childComplexity int) int
+		OwnerID              func(childComplexity int) int
+		Priority             func(childComplexity int) int
+		Provider             func(childComplexity int) int
+		QuietHoursEnd        func(childComplexity int) int
+		QuietHoursStart      func(childComplexity int) int
+		Status               func(childComplexity int) int
+		TemplateID           func(childComplexity int) int
+		Timezone             func(childComplexity int) int
+		TopicOverrides       func(childComplexity int) int
+		TopicPatterns        func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
+		User                 func(childComplexity int) int
+		UserID               func(childComplexity int) int
+		VerifiedAt           func(childComplexity int) int
+	}
+
+	NotificationPreferenceBulkCreatePayload struct {
+		NotificationPreferences func(childComplexity int) int
+	}
+
+	NotificationPreferenceBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
+	NotificationPreferenceBulkUpdatePayload struct {
+		NotificationPreferences func(childComplexity int) int
+		UpdatedIDs              func(childComplexity int) int
+	}
+
+	NotificationPreferenceConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	NotificationPreferenceCreatePayload struct {
+		NotificationPreference func(childComplexity int) int
+	}
+
+	NotificationPreferenceDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	NotificationPreferenceEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	NotificationPreferenceUpdatePayload struct {
+		NotificationPreference func(childComplexity int) int
+	}
+
+	NotificationTemplate struct {
+		Active               func(childComplexity int) int
+		Blocks               func(childComplexity int) int
+		BodyTemplate         func(childComplexity int) int
+		Channel              func(childComplexity int) int
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		Description          func(childComplexity int) int
+		EmailTemplate        func(childComplexity int) int
+		EmailTemplateID      func(childComplexity int) int
+		Format               func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		Integration          func(childComplexity int) int
+		IntegrationID        func(childComplexity int) int
+		InternalNotes        func(childComplexity int) int
+		Jsonconfig           func(childComplexity int) int
+		Key                  func(childComplexity int) int
+		Locale               func(childComplexity int) int
+		Metadata             func(childComplexity int) int
+		Name                 func(childComplexity int) int
+		Notifications        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NotificationOrder) int
+		Owner                func(childComplexity int) int
+		OwnerID              func(childComplexity int) int
+		SubjectTemplate      func(childComplexity int) int
+		SystemInternalID     func(childComplexity int) int
+		SystemOwned          func(childComplexity int) int
+		TitleTemplate        func(childComplexity int) int
+		TopicPattern         func(childComplexity int) int
+		Uischema             func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
+		Version              func(childComplexity int) int
+		WorkflowDefinition   func(childComplexity int) int
+		WorkflowDefinitionID func(childComplexity int) int
+	}
+
+	NotificationTemplateBulkCreatePayload struct {
+		NotificationTemplates func(childComplexity int) int
+	}
+
+	NotificationTemplateBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
+	NotificationTemplateBulkUpdatePayload struct {
+		NotificationTemplates func(childComplexity int) int
+		UpdatedIDs            func(childComplexity int) int
+	}
+
+	NotificationTemplateConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	NotificationTemplateCreatePayload struct {
+		NotificationTemplate func(childComplexity int) int
+	}
+
+	NotificationTemplateDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	NotificationTemplateEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	NotificationTemplateUpdatePayload struct {
+		NotificationTemplate func(childComplexity int) int
 	}
 
 	NotificationUpdatePayload struct {
@@ -3773,6 +4114,8 @@ type ComplexityRoot struct {
 		Discussions                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayName                     func(childComplexity int) int
 		Documents                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
+		EmailBrandings                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailBrandingOrder, where *generated.EmailBrandingWhereInput) int
+		EmailTemplates                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
 		Entities                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		EntityTypes                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
 		Events                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
@@ -3802,6 +4145,8 @@ type ComplexityRoot struct {
 		NarrativeCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Narratives                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Notes                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		NotificationPreferences         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationPreferenceOrder, where *generated.NotificationPreferenceWhereInput) int
+		NotificationTemplates           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationTemplateOrder, where *generated.NotificationTemplateWhereInput) int
 		OrgSubscriptions                func(childComplexity int) int
 		Parent                          func(childComplexity int) int
 		PersonalAccessTokens            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
@@ -4424,6 +4769,12 @@ type ComplexityRoot struct {
 		Discussions                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DocumentData                    func(childComplexity int, id string) int
 		DocumentDataSlice               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
+		EmailBranding                   func(childComplexity int, id string) int
+		EmailBrandingSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		EmailBrandings                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailBrandingOrder, where *generated.EmailBrandingWhereInput) int
+		EmailTemplate                   func(childComplexity int, id string) int
+		EmailTemplateSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		EmailTemplates                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
 		Entities                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Entity                          func(childComplexity int, id string) int
 		EntitySearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -4456,6 +4807,7 @@ type ComplexityRoot struct {
 		IdentityHolderSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		IdentityHolders                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		Integration                     func(childComplexity int, id string) int
+		IntegrationSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalPolicies                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		InternalPolicy                  func(childComplexity int, id string) int
@@ -4487,6 +4839,11 @@ type ComplexityRoot struct {
 		Nodes                           func(childComplexity int, ids []string) int
 		Note                            func(childComplexity int, id string) int
 		Notes                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		NotificationPreference          func(childComplexity int, id string) int
+		NotificationPreferences         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationPreferenceOrder, where *generated.NotificationPreferenceWhereInput) int
+		NotificationTemplate            func(childComplexity int, id string) int
+		NotificationTemplateSearch      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		NotificationTemplates           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationTemplateOrder, where *generated.NotificationTemplateWhereInput) int
 		OrgMembership                   func(childComplexity int, id string) int
 		OrgMemberships                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
 		OrgSubscription                 func(childComplexity int, id string) int
@@ -4574,6 +4931,7 @@ type ComplexityRoot struct {
 		Vulnerabilities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 		Vulnerability                   func(childComplexity int, id string) int
 		VulnerabilitySearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		VulnerabilitySummary            func(childComplexity int, where *generated.VulnerabilityWhereInput) int
 		Webauthns                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebauthnOrder, where *generated.WebauthnWhereInput) int
 		WorkflowAssignment              func(childComplexity int, id string) int
 		WorkflowAssignmentTarget        func(childComplexity int, id string) int
@@ -4589,6 +4947,8 @@ type ComplexityRoot struct {
 		WorkflowMetadata                func(childComplexity int) int
 		WorkflowObjectRef               func(childComplexity int, id string) int
 		WorkflowObjectRefs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowProposal                func(childComplexity int, id string) int
+		WorkflowProposalsForObject      func(childComplexity int, objectType string, objectID string, includeStates []enums.WorkflowProposalState) int
 	}
 
 	Remediation struct {
@@ -5045,46 +5405,50 @@ type ComplexityRoot struct {
 	}
 
 	SearchResults struct {
-		ActionPlans         func(childComplexity int) int
-		AssessmentResponses func(childComplexity int) int
-		Assessments         func(childComplexity int) int
-		Assets              func(childComplexity int) int
-		CampaignTargets     func(childComplexity int) int
-		Campaigns           func(childComplexity int) int
-		Contacts            func(childComplexity int) int
-		ControlObjectives   func(childComplexity int) int
-		Controls            func(childComplexity int) int
-		CustomTypeEnums     func(childComplexity int) int
-		Entities            func(childComplexity int) int
-		Evidences           func(childComplexity int) int
-		Findings            func(childComplexity int) int
-		Groups              func(childComplexity int) int
-		IdentityHolders     func(childComplexity int) int
-		InternalPolicies    func(childComplexity int) int
-		Invites             func(childComplexity int) int
-		JobRunners          func(childComplexity int) int
-		JobTemplates        func(childComplexity int) int
-		Narratives          func(childComplexity int) int
-		Organizations       func(childComplexity int) int
-		Page                func(childComplexity int) int
-		Platforms           func(childComplexity int) int
-		Procedures          func(childComplexity int) int
-		Programs            func(childComplexity int) int
-		Remediations        func(childComplexity int) int
-		Reviews             func(childComplexity int) int
-		Risks               func(childComplexity int) int
-		Scans               func(childComplexity int) int
-		SearchContext       func(childComplexity int) int
-		Standards           func(childComplexity int) int
-		Subcontrols         func(childComplexity int) int
-		Subprocessors       func(childComplexity int) int
-		Subscribers         func(childComplexity int) int
-		TagDefinitions      func(childComplexity int) int
-		Tasks               func(childComplexity int) int
-		Templates           func(childComplexity int) int
-		TotalCount          func(childComplexity int) int
-		TrustCenterEntities func(childComplexity int) int
-		Vulnerabilities     func(childComplexity int) int
+		ActionPlans           func(childComplexity int) int
+		AssessmentResponses   func(childComplexity int) int
+		Assessments           func(childComplexity int) int
+		Assets                func(childComplexity int) int
+		CampaignTargets       func(childComplexity int) int
+		Campaigns             func(childComplexity int) int
+		Contacts              func(childComplexity int) int
+		ControlObjectives     func(childComplexity int) int
+		Controls              func(childComplexity int) int
+		CustomTypeEnums       func(childComplexity int) int
+		EmailBrandings        func(childComplexity int) int
+		EmailTemplates        func(childComplexity int) int
+		Entities              func(childComplexity int) int
+		Evidences             func(childComplexity int) int
+		Findings              func(childComplexity int) int
+		Groups                func(childComplexity int) int
+		IdentityHolders       func(childComplexity int) int
+		Integrations          func(childComplexity int) int
+		InternalPolicies      func(childComplexity int) int
+		Invites               func(childComplexity int) int
+		JobRunners            func(childComplexity int) int
+		JobTemplates          func(childComplexity int) int
+		Narratives            func(childComplexity int) int
+		NotificationTemplates func(childComplexity int) int
+		Organizations         func(childComplexity int) int
+		Page                  func(childComplexity int) int
+		Platforms             func(childComplexity int) int
+		Procedures            func(childComplexity int) int
+		Programs              func(childComplexity int) int
+		Remediations          func(childComplexity int) int
+		Reviews               func(childComplexity int) int
+		Risks                 func(childComplexity int) int
+		Scans                 func(childComplexity int) int
+		SearchContext         func(childComplexity int) int
+		Standards             func(childComplexity int) int
+		Subcontrols           func(childComplexity int) int
+		Subprocessors         func(childComplexity int) int
+		Subscribers           func(childComplexity int) int
+		TagDefinitions        func(childComplexity int) int
+		Tasks                 func(childComplexity int) int
+		Templates             func(childComplexity int) int
+		TotalCount            func(childComplexity int) int
+		TrustCenterEntities   func(childComplexity int) int
+		Vulnerabilities       func(childComplexity int) int
 	}
 
 	SearchSnippet struct {
@@ -6131,6 +6495,9 @@ type ComplexityRoot struct {
 		CreatedAt         func(childComplexity int) int
 		CreatedBy         func(childComplexity int) int
 		DefaultOrg        func(childComplexity int) int
+		DelegateEndAt     func(childComplexity int) int
+		DelegateStartAt   func(childComplexity int) int
+		DelegateUserID    func(childComplexity int) int
 		EmailConfirmed    func(childComplexity int) int
 		ID                func(childComplexity int) int
 		IsTfaEnabled      func(childComplexity int) int
@@ -6273,6 +6640,23 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	VulnerabilityResolvePayload struct {
+		Review        func(childComplexity int) int
+		Vulnerability func(childComplexity int) int
+	}
+
+	VulnerabilitySummary struct {
+		BySeverity func(childComplexity int) int
+		BySource   func(childComplexity int) int
+		ByStatus   func(childComplexity int) int
+		Total      func(childComplexity int) int
+	}
+
+	VulnerabilitySummaryBucket struct {
+		Count func(childComplexity int) int
+		Key   func(childComplexity int) int
+	}
+
 	VulnerabilityUpdatePayload struct {
 		Vulnerability func(childComplexity int) int
 	}
@@ -6314,6 +6698,7 @@ type ComplexityRoot struct {
 		CreatedBy                 func(childComplexity int) int
 		DecidedAt                 func(childComplexity int) int
 		DisplayID                 func(childComplexity int) int
+		DueAt                     func(childComplexity int) int
 		Group                     func(childComplexity int) int
 		ID                        func(childComplexity int) int
 		InvalidationMetadata      func(childComplexity int) int
@@ -6348,6 +6733,10 @@ type ComplexityRoot struct {
 	WorkflowAssignmentEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	WorkflowAssignmentReassignPayload struct {
+		WorkflowAssignment func(childComplexity int) int
 	}
 
 	WorkflowAssignmentRejectPayload struct {
@@ -6386,32 +6775,34 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowDefinition struct {
-		Active           func(childComplexity int) int
-		CooldownSeconds  func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		DefinitionJSON   func(childComplexity int) int
-		Description      func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		Draft            func(childComplexity int) int
-		Groups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ID               func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		IsDefault        func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		PublishedAt      func(childComplexity int) int
-		Revision         func(childComplexity int) int
-		SchemaType       func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		TagDefinitions   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
-		Tags             func(childComplexity int) int
-		TrackedFields    func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		WorkflowKind     func(childComplexity int) int
+		Active                func(childComplexity int) int
+		CooldownSeconds       func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DefinitionJSON        func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		Draft                 func(childComplexity int) int
+		EmailTemplates        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
+		Groups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID                    func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		IsDefault             func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		NotificationTemplates func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationTemplateOrder, where *generated.NotificationTemplateWhereInput) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		PublishedAt           func(childComplexity int) int
+		Revision              func(childComplexity int) int
+		SchemaType            func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		TagDefinitions        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
+		Tags                  func(childComplexity int) int
+		TrackedFields         func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		WorkflowKind          func(childComplexity int) int
 	}
 
 	WorkflowDefinitionBulkCreatePayload struct {
@@ -6498,6 +6889,7 @@ type ComplexityRoot struct {
 		CurrentActionIndex   func(childComplexity int) int
 		DefinitionSnapshot   func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
+		EmailTemplates       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
 		Evidence             func(childComplexity int) int
 		EvidenceID           func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -6525,6 +6917,14 @@ type ComplexityRoot struct {
 		WorkflowEvents       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput) int
 		WorkflowObjectRefs   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 		WorkflowProposalID   func(childComplexity int) int
+	}
+
+	WorkflowInstanceAdminPayload struct {
+		WorkflowInstance func(childComplexity int) int
+	}
+
+	WorkflowInstanceBulkAdminPayload struct {
+		UpdatedIDs func(childComplexity int) int
 	}
 
 	WorkflowInstanceConnection struct {
@@ -6604,6 +7004,21 @@ type ComplexityRoot struct {
 		Type           func(childComplexity int) int
 	}
 
+	WorkflowProposal struct {
+		ApprovedHash        func(childComplexity int) int
+		Changes             func(childComplexity int) int
+		CreatedAt           func(childComplexity int) int
+		DomainKey           func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		Preview             func(childComplexity int) int
+		ProposedHash        func(childComplexity int) int
+		State               func(childComplexity int) int
+		SubmittedAt         func(childComplexity int) int
+		SubmittedByUserID   func(childComplexity int) int
+		UpdatedAt           func(childComplexity int) int
+		WorkflowObjectRefID func(childComplexity int) int
+	}
+
 	WorkflowProposalPreview struct {
 		CurrentValues     func(childComplexity int) int
 		Diffs             func(childComplexity int) int
@@ -6613,6 +7028,18 @@ type ComplexityRoot struct {
 		State             func(childComplexity int) int
 		SubmittedAt       func(childComplexity int) int
 		SubmittedByUserID func(childComplexity int) int
+	}
+
+	WorkflowProposalSubmitPayload struct {
+		WorkflowProposal func(childComplexity int) int
+	}
+
+	WorkflowProposalUpdatePayload struct {
+		WorkflowProposal func(childComplexity int) int
+	}
+
+	WorkflowProposalWithdrawPayload struct {
+		WorkflowProposal func(childComplexity int) int
 	}
 }
 
@@ -8749,6 +9176,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Campaign.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Campaign.emailBranding":
+		if e.complexity.Campaign.EmailBranding == nil {
+			break
+		}
+
+		return e.complexity.Campaign.EmailBranding(childComplexity), true
+
+	case "Campaign.emailBrandingID":
+		if e.complexity.Campaign.EmailBrandingID == nil {
+			break
+		}
+
+		return e.complexity.Campaign.EmailBrandingID(childComplexity), true
+
+	case "Campaign.emailTemplate":
+		if e.complexity.Campaign.EmailTemplate == nil {
+			break
+		}
+
+		return e.complexity.Campaign.EmailTemplate(childComplexity), true
+
+	case "Campaign.emailTemplateID":
+		if e.complexity.Campaign.EmailTemplateID == nil {
+			break
+		}
+
+		return e.complexity.Campaign.EmailTemplateID(childComplexity), true
 
 	case "Campaign.entity":
 		if e.complexity.Campaign.Entity == nil {
@@ -13528,6 +13983,622 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DocumentDataUpdatePayload.DocumentData(childComplexity), true
+
+	case "EmailBranding.backgroundColor":
+		if e.complexity.EmailBranding.BackgroundColor == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.BackgroundColor(childComplexity), true
+
+	case "EmailBranding.blockedGroups":
+		if e.complexity.EmailBranding.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_EmailBranding_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.EmailBranding.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "EmailBranding.brandName":
+		if e.complexity.EmailBranding.BrandName == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.BrandName(childComplexity), true
+
+	case "EmailBranding.buttonColor":
+		if e.complexity.EmailBranding.ButtonColor == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.ButtonColor(childComplexity), true
+
+	case "EmailBranding.buttonTextColor":
+		if e.complexity.EmailBranding.ButtonTextColor == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.ButtonTextColor(childComplexity), true
+
+	case "EmailBranding.campaigns":
+		if e.complexity.EmailBranding.Campaigns == nil {
+			break
+		}
+
+		args, err := ec.field_EmailBranding_campaigns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.EmailBranding.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+
+	case "EmailBranding.createdAt":
+		if e.complexity.EmailBranding.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.CreatedAt(childComplexity), true
+
+	case "EmailBranding.createdBy":
+		if e.complexity.EmailBranding.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.CreatedBy(childComplexity), true
+
+	case "EmailBranding.editors":
+		if e.complexity.EmailBranding.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_EmailBranding_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.EmailBranding.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "EmailBranding.emailTemplates":
+		if e.complexity.EmailBranding.EmailTemplates == nil {
+			break
+		}
+
+		args, err := ec.field_EmailBranding_emailTemplates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.EmailBranding.EmailTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EmailTemplateOrder), args["where"].(*generated.EmailTemplateWhereInput)), true
+
+	case "EmailBranding.fontFamily":
+		if e.complexity.EmailBranding.FontFamily == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.FontFamily(childComplexity), true
+
+	case "EmailBranding.id":
+		if e.complexity.EmailBranding.ID == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.ID(childComplexity), true
+
+	case "EmailBranding.isDefault":
+		if e.complexity.EmailBranding.IsDefault == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.IsDefault(childComplexity), true
+
+	case "EmailBranding.linkColor":
+		if e.complexity.EmailBranding.LinkColor == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.LinkColor(childComplexity), true
+
+	case "EmailBranding.logoRemoteURL":
+		if e.complexity.EmailBranding.LogoRemoteURL == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.LogoRemoteURL(childComplexity), true
+
+	case "EmailBranding.name":
+		if e.complexity.EmailBranding.Name == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.Name(childComplexity), true
+
+	case "EmailBranding.owner":
+		if e.complexity.EmailBranding.Owner == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.Owner(childComplexity), true
+
+	case "EmailBranding.ownerID":
+		if e.complexity.EmailBranding.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.OwnerID(childComplexity), true
+
+	case "EmailBranding.primaryColor":
+		if e.complexity.EmailBranding.PrimaryColor == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.PrimaryColor(childComplexity), true
+
+	case "EmailBranding.secondaryColor":
+		if e.complexity.EmailBranding.SecondaryColor == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.SecondaryColor(childComplexity), true
+
+	case "EmailBranding.tags":
+		if e.complexity.EmailBranding.Tags == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.Tags(childComplexity), true
+
+	case "EmailBranding.textColor":
+		if e.complexity.EmailBranding.TextColor == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.TextColor(childComplexity), true
+
+	case "EmailBranding.updatedAt":
+		if e.complexity.EmailBranding.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.UpdatedAt(childComplexity), true
+
+	case "EmailBranding.updatedBy":
+		if e.complexity.EmailBranding.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.EmailBranding.UpdatedBy(childComplexity), true
+
+	case "EmailBranding.viewers":
+		if e.complexity.EmailBranding.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_EmailBranding_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.EmailBranding.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "EmailBrandingBulkCreatePayload.emailBrandings":
+		if e.complexity.EmailBrandingBulkCreatePayload.EmailBrandings == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingBulkCreatePayload.EmailBrandings(childComplexity), true
+
+	case "EmailBrandingBulkDeletePayload.deletedIDs":
+		if e.complexity.EmailBrandingBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "EmailBrandingBulkUpdatePayload.emailBrandings":
+		if e.complexity.EmailBrandingBulkUpdatePayload.EmailBrandings == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingBulkUpdatePayload.EmailBrandings(childComplexity), true
+
+	case "EmailBrandingBulkUpdatePayload.updatedIDs":
+		if e.complexity.EmailBrandingBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "EmailBrandingConnection.edges":
+		if e.complexity.EmailBrandingConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingConnection.Edges(childComplexity), true
+
+	case "EmailBrandingConnection.pageInfo":
+		if e.complexity.EmailBrandingConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingConnection.PageInfo(childComplexity), true
+
+	case "EmailBrandingConnection.totalCount":
+		if e.complexity.EmailBrandingConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingConnection.TotalCount(childComplexity), true
+
+	case "EmailBrandingCreatePayload.emailBranding":
+		if e.complexity.EmailBrandingCreatePayload.EmailBranding == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingCreatePayload.EmailBranding(childComplexity), true
+
+	case "EmailBrandingDeletePayload.deletedID":
+		if e.complexity.EmailBrandingDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingDeletePayload.DeletedID(childComplexity), true
+
+	case "EmailBrandingEdge.cursor":
+		if e.complexity.EmailBrandingEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingEdge.Cursor(childComplexity), true
+
+	case "EmailBrandingEdge.node":
+		if e.complexity.EmailBrandingEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingEdge.Node(childComplexity), true
+
+	case "EmailBrandingUpdatePayload.emailBranding":
+		if e.complexity.EmailBrandingUpdatePayload.EmailBranding == nil {
+			break
+		}
+
+		return e.complexity.EmailBrandingUpdatePayload.EmailBranding(childComplexity), true
+
+	case "EmailTemplate.active":
+		if e.complexity.EmailTemplate.Active == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.Active(childComplexity), true
+
+	case "EmailTemplate.bodyTemplate":
+		if e.complexity.EmailTemplate.BodyTemplate == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.BodyTemplate(childComplexity), true
+
+	case "EmailTemplate.campaigns":
+		if e.complexity.EmailTemplate.Campaigns == nil {
+			break
+		}
+
+		args, err := ec.field_EmailTemplate_campaigns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.EmailTemplate.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+
+	case "EmailTemplate.createdAt":
+		if e.complexity.EmailTemplate.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.CreatedAt(childComplexity), true
+
+	case "EmailTemplate.createdBy":
+		if e.complexity.EmailTemplate.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.CreatedBy(childComplexity), true
+
+	case "EmailTemplate.description":
+		if e.complexity.EmailTemplate.Description == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.Description(childComplexity), true
+
+	case "EmailTemplate.emailBranding":
+		if e.complexity.EmailTemplate.EmailBranding == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.EmailBranding(childComplexity), true
+
+	case "EmailTemplate.emailBrandingID":
+		if e.complexity.EmailTemplate.EmailBrandingID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.EmailBrandingID(childComplexity), true
+
+	case "EmailTemplate.format":
+		if e.complexity.EmailTemplate.Format == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.Format(childComplexity), true
+
+	case "EmailTemplate.id":
+		if e.complexity.EmailTemplate.ID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.ID(childComplexity), true
+
+	case "EmailTemplate.integration":
+		if e.complexity.EmailTemplate.Integration == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.Integration(childComplexity), true
+
+	case "EmailTemplate.integrationID":
+		if e.complexity.EmailTemplate.IntegrationID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.IntegrationID(childComplexity), true
+
+	case "EmailTemplate.internalNotes":
+		if e.complexity.EmailTemplate.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.InternalNotes(childComplexity), true
+
+	case "EmailTemplate.jsonconfig":
+		if e.complexity.EmailTemplate.Jsonconfig == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.Jsonconfig(childComplexity), true
+
+	case "EmailTemplate.key":
+		if e.complexity.EmailTemplate.Key == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.Key(childComplexity), true
+
+	case "EmailTemplate.locale":
+		if e.complexity.EmailTemplate.Locale == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.Locale(childComplexity), true
+
+	case "EmailTemplate.metadata":
+		if e.complexity.EmailTemplate.Metadata == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.Metadata(childComplexity), true
+
+	case "EmailTemplate.name":
+		if e.complexity.EmailTemplate.Name == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.Name(childComplexity), true
+
+	case "EmailTemplate.notificationTemplates":
+		if e.complexity.EmailTemplate.NotificationTemplates == nil {
+			break
+		}
+
+		args, err := ec.field_EmailTemplate_notificationTemplates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.EmailTemplate.NotificationTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NotificationTemplateOrder), args["where"].(*generated.NotificationTemplateWhereInput)), true
+
+	case "EmailTemplate.owner":
+		if e.complexity.EmailTemplate.Owner == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.Owner(childComplexity), true
+
+	case "EmailTemplate.ownerID":
+		if e.complexity.EmailTemplate.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.OwnerID(childComplexity), true
+
+	case "EmailTemplate.preheaderTemplate":
+		if e.complexity.EmailTemplate.PreheaderTemplate == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.PreheaderTemplate(childComplexity), true
+
+	case "EmailTemplate.subjectTemplate":
+		if e.complexity.EmailTemplate.SubjectTemplate == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.SubjectTemplate(childComplexity), true
+
+	case "EmailTemplate.systemInternalID":
+		if e.complexity.EmailTemplate.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.SystemInternalID(childComplexity), true
+
+	case "EmailTemplate.systemOwned":
+		if e.complexity.EmailTemplate.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.SystemOwned(childComplexity), true
+
+	case "EmailTemplate.textTemplate":
+		if e.complexity.EmailTemplate.TextTemplate == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.TextTemplate(childComplexity), true
+
+	case "EmailTemplate.uischema":
+		if e.complexity.EmailTemplate.Uischema == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.Uischema(childComplexity), true
+
+	case "EmailTemplate.updatedAt":
+		if e.complexity.EmailTemplate.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.UpdatedAt(childComplexity), true
+
+	case "EmailTemplate.updatedBy":
+		if e.complexity.EmailTemplate.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.UpdatedBy(childComplexity), true
+
+	case "EmailTemplate.version":
+		if e.complexity.EmailTemplate.Version == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.Version(childComplexity), true
+
+	case "EmailTemplate.workflowDefinition":
+		if e.complexity.EmailTemplate.WorkflowDefinition == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.WorkflowDefinition(childComplexity), true
+
+	case "EmailTemplate.workflowDefinitionID":
+		if e.complexity.EmailTemplate.WorkflowDefinitionID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.WorkflowDefinitionID(childComplexity), true
+
+	case "EmailTemplate.workflowInstance":
+		if e.complexity.EmailTemplate.WorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.WorkflowInstance(childComplexity), true
+
+	case "EmailTemplate.workflowInstanceID":
+		if e.complexity.EmailTemplate.WorkflowInstanceID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.WorkflowInstanceID(childComplexity), true
+
+	case "EmailTemplateBulkCreatePayload.emailTemplates":
+		if e.complexity.EmailTemplateBulkCreatePayload.EmailTemplates == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateBulkCreatePayload.EmailTemplates(childComplexity), true
+
+	case "EmailTemplateBulkDeletePayload.deletedIDs":
+		if e.complexity.EmailTemplateBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "EmailTemplateBulkUpdatePayload.emailTemplates":
+		if e.complexity.EmailTemplateBulkUpdatePayload.EmailTemplates == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateBulkUpdatePayload.EmailTemplates(childComplexity), true
+
+	case "EmailTemplateBulkUpdatePayload.updatedIDs":
+		if e.complexity.EmailTemplateBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "EmailTemplateConnection.edges":
+		if e.complexity.EmailTemplateConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateConnection.Edges(childComplexity), true
+
+	case "EmailTemplateConnection.pageInfo":
+		if e.complexity.EmailTemplateConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateConnection.PageInfo(childComplexity), true
+
+	case "EmailTemplateConnection.totalCount":
+		if e.complexity.EmailTemplateConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateConnection.TotalCount(childComplexity), true
+
+	case "EmailTemplateCreatePayload.emailTemplate":
+		if e.complexity.EmailTemplateCreatePayload.EmailTemplate == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateCreatePayload.EmailTemplate(childComplexity), true
+
+	case "EmailTemplateDeletePayload.deletedID":
+		if e.complexity.EmailTemplateDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateDeletePayload.DeletedID(childComplexity), true
+
+	case "EmailTemplateEdge.cursor":
+		if e.complexity.EmailTemplateEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateEdge.Cursor(childComplexity), true
+
+	case "EmailTemplateEdge.node":
+		if e.complexity.EmailTemplateEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateEdge.Node(childComplexity), true
+
+	case "EmailTemplateUpdatePayload.emailTemplate":
+		if e.complexity.EmailTemplateUpdatePayload.EmailTemplate == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplateUpdatePayload.EmailTemplate(childComplexity), true
 
 	case "Entity.annualSpend":
 		if e.complexity.Entity.AnnualSpend == nil {
@@ -18770,6 +19841,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Integration.DirectorySyncRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectorySyncRunOrder), args["where"].(*generated.DirectorySyncRunWhereInput)), true
 
+	case "Integration.emailTemplates":
+		if e.complexity.Integration.EmailTemplates == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_emailTemplates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.EmailTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EmailTemplateOrder), args["where"].(*generated.EmailTemplateWhereInput)), true
+
 	case "Integration.entities":
 		if e.complexity.Integration.Entities == nil {
 			break
@@ -18880,6 +19963,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Integration.Name(childComplexity), true
+
+	case "Integration.notificationTemplates":
+		if e.complexity.Integration.NotificationTemplates == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_notificationTemplates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.NotificationTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NotificationTemplateOrder), args["where"].(*generated.NotificationTemplateWhereInput)), true
 
 	case "Integration.owner":
 		if e.complexity.Integration.Owner == nil {
@@ -21169,6 +22264,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappedControlUpdatePayload.MappedControl(childComplexity), true
 
+	case "Mutation.adminReassignWorkflowAssignment":
+		if e.complexity.Mutation.AdminReassignWorkflowAssignment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_adminReassignWorkflowAssignment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.AdminReassignWorkflowAssignment(childComplexity, args["input"].(model.ReassignWorkflowAssignmentInput)), true
+
 	case "Mutation.approveNDARequests":
 		if e.complexity.Mutation.ApproveNDARequests == nil {
 			break
@@ -21192,6 +22299,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.ApproveWorkflowAssignment(childComplexity, args["id"].(string)), true
+
+	case "Mutation.bulkCancelWorkflowInstances":
+		if e.complexity.Mutation.BulkCancelWorkflowInstances == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_bulkCancelWorkflowInstances_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.BulkCancelWorkflowInstances(childComplexity, args["ids"].([]string), args["reason"].(*string)), true
+
+	case "Mutation.bulkForceCompleteWorkflowInstances":
+		if e.complexity.Mutation.BulkForceCompleteWorkflowInstances == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_bulkForceCompleteWorkflowInstances_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.BulkForceCompleteWorkflowInstances(childComplexity, args["ids"].([]string), args["applyProposal"].(*bool)), true
+
+	case "Mutation.cancelWorkflowInstance":
+		if e.complexity.Mutation.CancelWorkflowInstance == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_cancelWorkflowInstance_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CancelWorkflowInstance(childComplexity, args["id"].(string), args["reason"].(*string)), true
 
 	case "Mutation.cloneBulkCSVControl":
 		if e.complexity.Mutation.CloneBulkCSVControl == nil {
@@ -21517,6 +22660,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVDocumentData(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVEmailBranding":
+		if e.complexity.Mutation.CreateBulkCSVEmailBranding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVEmailBranding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVEmailBranding(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVEmailTemplate":
+		if e.complexity.Mutation.CreateBulkCSVEmailTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVEmailTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVEmailTemplate(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVEntity":
 		if e.complexity.Mutation.CreateBulkCSVEntity == nil {
 			break
@@ -21720,6 +22887,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkCSVNarrative(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVNotificationPreference":
+		if e.complexity.Mutation.CreateBulkCSVNotificationPreference == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVNotificationPreference_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVNotificationPreference(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVNotificationTemplate":
+		if e.complexity.Mutation.CreateBulkCSVNotificationTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVNotificationTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVNotificationTemplate(childComplexity, args["input"].(graphql.Upload)), true
 
 	case "Mutation.createBulkCSVOrgMembership":
 		if e.complexity.Mutation.CreateBulkCSVOrgMembership == nil {
@@ -22201,6 +23392,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkDocumentData(childComplexity, args["input"].([]*generated.CreateDocumentDataInput)), true
 
+	case "Mutation.createBulkEmailBranding":
+		if e.complexity.Mutation.CreateBulkEmailBranding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkEmailBranding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkEmailBranding(childComplexity, args["input"].([]*generated.CreateEmailBrandingInput)), true
+
+	case "Mutation.createBulkEmailTemplate":
+		if e.complexity.Mutation.CreateBulkEmailTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkEmailTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkEmailTemplate(childComplexity, args["input"].([]*generated.CreateEmailTemplateInput)), true
+
 	case "Mutation.createBulkEntity":
 		if e.complexity.Mutation.CreateBulkEntity == nil {
 			break
@@ -22404,6 +23619,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkNarrative(childComplexity, args["input"].([]*generated.CreateNarrativeInput)), true
+
+	case "Mutation.createBulkNotificationPreference":
+		if e.complexity.Mutation.CreateBulkNotificationPreference == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkNotificationPreference_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkNotificationPreference(childComplexity, args["input"].([]*generated.CreateNotificationPreferenceInput)), true
+
+	case "Mutation.createBulkNotificationTemplate":
+		if e.complexity.Mutation.CreateBulkNotificationTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkNotificationTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkNotificationTemplate(childComplexity, args["input"].([]*generated.CreateNotificationTemplateInput)), true
 
 	case "Mutation.createBulkOrgMembership":
 		if e.complexity.Mutation.CreateBulkOrgMembership == nil {
@@ -22933,6 +24172,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateDocumentData(childComplexity, args["input"].(generated.CreateDocumentDataInput)), true
 
+	case "Mutation.createEmailBranding":
+		if e.complexity.Mutation.CreateEmailBranding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createEmailBranding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateEmailBranding(childComplexity, args["input"].(generated.CreateEmailBrandingInput)), true
+
+	case "Mutation.createEmailTemplate":
+		if e.complexity.Mutation.CreateEmailTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createEmailTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateEmailTemplate(childComplexity, args["input"].(generated.CreateEmailTemplateInput)), true
+
 	case "Mutation.createEntity":
 		if e.complexity.Mutation.CreateEntity == nil {
 			break
@@ -23232,6 +24495,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateNarrative(childComplexity, args["input"].(generated.CreateNarrativeInput)), true
+
+	case "Mutation.createNotificationPreference":
+		if e.complexity.Mutation.CreateNotificationPreference == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createNotificationPreference_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateNotificationPreference(childComplexity, args["input"].(generated.CreateNotificationPreferenceInput)), true
+
+	case "Mutation.createNotificationTemplate":
+		if e.complexity.Mutation.CreateNotificationTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createNotificationTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateNotificationTemplate(childComplexity, args["input"].(generated.CreateNotificationTemplateInput)), true
 
 	case "Mutation.createOnboarding":
 		if e.complexity.Mutation.CreateOnboarding == nil {
@@ -23929,6 +25216,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteBulkDocumentData(childComplexity, args["ids"].([]string)), true
 
+	case "Mutation.deleteBulkEmailBranding":
+		if e.complexity.Mutation.DeleteBulkEmailBranding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkEmailBranding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkEmailBranding(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkEmailTemplate":
+		if e.complexity.Mutation.DeleteBulkEmailTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkEmailTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkEmailTemplate(childComplexity, args["ids"].([]string)), true
+
 	case "Mutation.deleteBulkEntity":
 		if e.complexity.Mutation.DeleteBulkEntity == nil {
 			break
@@ -24108,6 +25419,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteBulkNarrative(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkNotificationPreference":
+		if e.complexity.Mutation.DeleteBulkNotificationPreference == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkNotificationPreference_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkNotificationPreference(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkNotificationTemplate":
+		if e.complexity.Mutation.DeleteBulkNotificationTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkNotificationTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkNotificationTemplate(childComplexity, args["ids"].([]string)), true
 
 	case "Mutation.deleteBulkOrgMembership":
 		if e.complexity.Mutation.DeleteBulkOrgMembership == nil {
@@ -24481,6 +25816,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteDocumentData(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteEmailBranding":
+		if e.complexity.Mutation.DeleteEmailBranding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteEmailBranding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteEmailBranding(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteEmailTemplate":
+		if e.complexity.Mutation.DeleteEmailTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteEmailTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteEmailTemplate(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteEntity":
 		if e.complexity.Mutation.DeleteEntity == nil {
 			break
@@ -24780,6 +26139,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteNote(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteNotificationPreference":
+		if e.complexity.Mutation.DeleteNotificationPreference == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteNotificationPreference_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteNotificationPreference(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteNotificationTemplate":
+		if e.complexity.Mutation.DeleteNotificationTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteNotificationTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteNotificationTemplate(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteOrgMembership":
 		if e.complexity.Mutation.DeleteOrgMembership == nil {
@@ -25189,6 +26572,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DenyNDARequests(childComplexity, args["ids"].([]string)), true
 
+	case "Mutation.forceCompleteWorkflowInstance":
+		if e.complexity.Mutation.ForceCompleteWorkflowInstance == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_forceCompleteWorkflowInstance_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ForceCompleteWorkflowInstance(childComplexity, args["id"].(string), args["applyProposal"].(*bool)), true
+
 	case "Mutation.launchCampaign":
 		if e.complexity.Mutation.LaunchCampaign == nil {
 			break
@@ -25208,6 +26603,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.PublishTrustCenterSetting(childComplexity), true
 
+	case "Mutation.reassignWorkflowAssignment":
+		if e.complexity.Mutation.ReassignWorkflowAssignment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_reassignWorkflowAssignment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ReassignWorkflowAssignment(childComplexity, args["id"].(string), args["targetUserID"].(string)), true
+
 	case "Mutation.rejectWorkflowAssignment":
 		if e.complexity.Mutation.RejectWorkflowAssignment == nil {
 			break
@@ -25220,6 +26627,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.RejectWorkflowAssignment(childComplexity, args["id"].(string), args["reason"].(*string)), true
 
+	case "Mutation.requestChangesWorkflowAssignment":
+		if e.complexity.Mutation.RequestChangesWorkflowAssignment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_requestChangesWorkflowAssignment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.RequestChangesWorkflowAssignment(childComplexity, args["id"].(string), args["reason"].(*string), args["inputs"].(map[string]any)), true
+
 	case "Mutation.resendCampaignIncompleteTargets":
 		if e.complexity.Mutation.ResendCampaignIncompleteTargets == nil {
 			break
@@ -25231,6 +26650,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.ResendCampaignIncompleteTargets(childComplexity, args["input"].(model.ResendCampaignIncompleteInput)), true
+
+	case "Mutation.resolveVulnerability":
+		if e.complexity.Mutation.ResolveVulnerability == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_resolveVulnerability_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ResolveVulnerability(childComplexity, args["id"].(string), args["input"].(model.ResolveVulnerabilityInput)), true
 
 	case "Mutation.sendCampaignTestEmail":
 		if e.complexity.Mutation.SendCampaignTestEmail == nil {
@@ -25255,6 +26686,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.SubmitTrustCenterNDAResponse(childComplexity, args["input"].(model.SubmitTrustCenterNDAResponseInput)), true
+
+	case "Mutation.submitWorkflowProposal":
+		if e.complexity.Mutation.SubmitWorkflowProposal == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_submitWorkflowProposal_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.SubmitWorkflowProposal(childComplexity, args["id"].(string)), true
 
 	case "Mutation.transferOrganizationOwnership":
 		if e.complexity.Mutation.TransferOrganizationOwnership == nil {
@@ -25472,6 +26915,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateBulkCSVDocumentData(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.updateBulkCSVEmailBranding":
+		if e.complexity.Mutation.UpdateBulkCSVEmailBranding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVEmailBranding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVEmailBranding(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVEmailTemplate":
+		if e.complexity.Mutation.UpdateBulkCSVEmailTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVEmailTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVEmailTemplate(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.updateBulkCSVEntity":
 		if e.complexity.Mutation.UpdateBulkCSVEntity == nil {
 			break
@@ -25639,6 +27106,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateBulkCSVNarrative(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVNotificationPreference":
+		if e.complexity.Mutation.UpdateBulkCSVNotificationPreference == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVNotificationPreference_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVNotificationPreference(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVNotificationTemplate":
+		if e.complexity.Mutation.UpdateBulkCSVNotificationTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVNotificationTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVNotificationTemplate(childComplexity, args["input"].(graphql.Upload)), true
 
 	case "Mutation.updateBulkCSVOrgMembership":
 		if e.complexity.Mutation.UpdateBulkCSVOrgMembership == nil {
@@ -25916,6 +27407,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateBulkDocumentData(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateDocumentDataInput)), true
 
+	case "Mutation.updateBulkEmailBranding":
+		if e.complexity.Mutation.UpdateBulkEmailBranding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkEmailBranding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkEmailBranding(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateEmailBrandingInput)), true
+
+	case "Mutation.updateBulkEmailTemplate":
+		if e.complexity.Mutation.UpdateBulkEmailTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkEmailTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkEmailTemplate(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateEmailTemplateInput)), true
+
 	case "Mutation.updateBulkEntity":
 		if e.complexity.Mutation.UpdateBulkEntity == nil {
 			break
@@ -26083,6 +27598,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateBulkNarrative(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateNarrativeInput)), true
+
+	case "Mutation.updateBulkNotificationPreference":
+		if e.complexity.Mutation.UpdateBulkNotificationPreference == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkNotificationPreference_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkNotificationPreference(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateNotificationPreferenceInput)), true
+
+	case "Mutation.updateBulkNotificationTemplate":
+		if e.complexity.Mutation.UpdateBulkNotificationTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkNotificationTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkNotificationTemplate(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateNotificationTemplateInput)), true
 
 	case "Mutation.updateBulkOrgMembership":
 		if e.complexity.Mutation.UpdateBulkOrgMembership == nil {
@@ -26468,6 +28007,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateDocumentData(childComplexity, args["id"].(string), args["input"].(generated.UpdateDocumentDataInput), args["documentDataFile"].(*graphql.Upload)), true
 
+	case "Mutation.updateEmailBranding":
+		if e.complexity.Mutation.UpdateEmailBranding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateEmailBranding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateEmailBranding(childComplexity, args["id"].(string), args["input"].(generated.UpdateEmailBrandingInput)), true
+
+	case "Mutation.updateEmailTemplate":
+		if e.complexity.Mutation.UpdateEmailTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateEmailTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateEmailTemplate(childComplexity, args["id"].(string), args["input"].(generated.UpdateEmailTemplateInput)), true
+
 	case "Mutation.updateEntity":
 		if e.complexity.Mutation.UpdateEntity == nil {
 			break
@@ -26743,6 +28306,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateNotification(childComplexity, args["id"].(string), args["input"].(generated.UpdateNotificationInput)), true
+
+	case "Mutation.updateNotificationPreference":
+		if e.complexity.Mutation.UpdateNotificationPreference == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateNotificationPreference_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateNotificationPreference(childComplexity, args["id"].(string), args["input"].(generated.UpdateNotificationPreferenceInput)), true
+
+	case "Mutation.updateNotificationTemplate":
+		if e.complexity.Mutation.UpdateNotificationTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateNotificationTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateNotificationTemplate(childComplexity, args["id"].(string), args["input"].(generated.UpdateNotificationTemplateInput)), true
 
 	case "Mutation.updateOrgMembership":
 		if e.complexity.Mutation.UpdateOrgMembership == nil {
@@ -27236,6 +28823,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateWorkflowDefinition(childComplexity, args["id"].(string), args["input"].(generated.UpdateWorkflowDefinitionInput)), true
 
+	case "Mutation.updateWorkflowProposalChanges":
+		if e.complexity.Mutation.UpdateWorkflowProposalChanges == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateWorkflowProposalChanges_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateWorkflowProposalChanges(childComplexity, args["input"].(model.UpdateWorkflowProposalChangesInput)), true
+
 	case "Mutation.validateCustomDomain":
 		if e.complexity.Mutation.ValidateCustomDomain == nil {
 			break
@@ -27247,6 +28846,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.ValidateCustomDomain(childComplexity, args["id"].(string)), true
+
+	case "Mutation.withdrawWorkflowProposal":
+		if e.complexity.Mutation.WithdrawWorkflowProposal == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_withdrawWorkflowProposal_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.WithdrawWorkflowProposal(childComplexity, args["id"].(string), args["reason"].(*string)), true
 
 	case "Narrative.blockedGroups":
 		if e.complexity.Narrative.BlockedGroups == nil {
@@ -27785,6 +29396,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Notification.ID(childComplexity), true
 
+	case "Notification.notificationTemplate":
+		if e.complexity.Notification.NotificationTemplate == nil {
+			break
+		}
+
+		return e.complexity.Notification.NotificationTemplate(childComplexity), true
+
 	case "Notification.notificationType":
 		if e.complexity.Notification.NotificationType == nil {
 			break
@@ -27827,6 +29445,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Notification.Tags(childComplexity), true
 
+	case "Notification.templateID":
+		if e.complexity.Notification.TemplateID == nil {
+			break
+		}
+
+		return e.complexity.Notification.TemplateID(childComplexity), true
+
 	case "Notification.title":
 		if e.complexity.Notification.Title == nil {
 			break
@@ -27861,6 +29486,655 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Notification.UserID(childComplexity), true
+
+	case "NotificationConnection.edges":
+		if e.complexity.NotificationConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.NotificationConnection.Edges(childComplexity), true
+
+	case "NotificationConnection.pageInfo":
+		if e.complexity.NotificationConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.NotificationConnection.PageInfo(childComplexity), true
+
+	case "NotificationConnection.totalCount":
+		if e.complexity.NotificationConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.NotificationConnection.TotalCount(childComplexity), true
+
+	case "NotificationEdge.cursor":
+		if e.complexity.NotificationEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.NotificationEdge.Cursor(childComplexity), true
+
+	case "NotificationEdge.node":
+		if e.complexity.NotificationEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.NotificationEdge.Node(childComplexity), true
+
+	case "NotificationPreference.cadence":
+		if e.complexity.NotificationPreference.Cadence == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.Cadence(childComplexity), true
+
+	case "NotificationPreference.channel":
+		if e.complexity.NotificationPreference.Channel == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.Channel(childComplexity), true
+
+	case "NotificationPreference.config":
+		if e.complexity.NotificationPreference.Config == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.Config(childComplexity), true
+
+	case "NotificationPreference.createdAt":
+		if e.complexity.NotificationPreference.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.CreatedAt(childComplexity), true
+
+	case "NotificationPreference.createdBy":
+		if e.complexity.NotificationPreference.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.CreatedBy(childComplexity), true
+
+	case "NotificationPreference.destination":
+		if e.complexity.NotificationPreference.Destination == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.Destination(childComplexity), true
+
+	case "NotificationPreference.enabled":
+		if e.complexity.NotificationPreference.Enabled == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.Enabled(childComplexity), true
+
+	case "NotificationPreference.id":
+		if e.complexity.NotificationPreference.ID == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.ID(childComplexity), true
+
+	case "NotificationPreference.isDefault":
+		if e.complexity.NotificationPreference.IsDefault == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.IsDefault(childComplexity), true
+
+	case "NotificationPreference.lastError":
+		if e.complexity.NotificationPreference.LastError == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.LastError(childComplexity), true
+
+	case "NotificationPreference.lastUsedAt":
+		if e.complexity.NotificationPreference.LastUsedAt == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.LastUsedAt(childComplexity), true
+
+	case "NotificationPreference.metadata":
+		if e.complexity.NotificationPreference.Metadata == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.Metadata(childComplexity), true
+
+	case "NotificationPreference.muteUntil":
+		if e.complexity.NotificationPreference.MuteUntil == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.MuteUntil(childComplexity), true
+
+	case "NotificationPreference.notificationTemplate":
+		if e.complexity.NotificationPreference.NotificationTemplate == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.NotificationTemplate(childComplexity), true
+
+	case "NotificationPreference.owner":
+		if e.complexity.NotificationPreference.Owner == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.Owner(childComplexity), true
+
+	case "NotificationPreference.ownerID":
+		if e.complexity.NotificationPreference.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.OwnerID(childComplexity), true
+
+	case "NotificationPreference.priority":
+		if e.complexity.NotificationPreference.Priority == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.Priority(childComplexity), true
+
+	case "NotificationPreference.provider":
+		if e.complexity.NotificationPreference.Provider == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.Provider(childComplexity), true
+
+	case "NotificationPreference.quietHoursEnd":
+		if e.complexity.NotificationPreference.QuietHoursEnd == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.QuietHoursEnd(childComplexity), true
+
+	case "NotificationPreference.quietHoursStart":
+		if e.complexity.NotificationPreference.QuietHoursStart == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.QuietHoursStart(childComplexity), true
+
+	case "NotificationPreference.status":
+		if e.complexity.NotificationPreference.Status == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.Status(childComplexity), true
+
+	case "NotificationPreference.templateID":
+		if e.complexity.NotificationPreference.TemplateID == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.TemplateID(childComplexity), true
+
+	case "NotificationPreference.timezone":
+		if e.complexity.NotificationPreference.Timezone == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.Timezone(childComplexity), true
+
+	case "NotificationPreference.topicOverrides":
+		if e.complexity.NotificationPreference.TopicOverrides == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.TopicOverrides(childComplexity), true
+
+	case "NotificationPreference.topicPatterns":
+		if e.complexity.NotificationPreference.TopicPatterns == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.TopicPatterns(childComplexity), true
+
+	case "NotificationPreference.updatedAt":
+		if e.complexity.NotificationPreference.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.UpdatedAt(childComplexity), true
+
+	case "NotificationPreference.updatedBy":
+		if e.complexity.NotificationPreference.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.UpdatedBy(childComplexity), true
+
+	case "NotificationPreference.user":
+		if e.complexity.NotificationPreference.User == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.User(childComplexity), true
+
+	case "NotificationPreference.userID":
+		if e.complexity.NotificationPreference.UserID == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.UserID(childComplexity), true
+
+	case "NotificationPreference.verifiedAt":
+		if e.complexity.NotificationPreference.VerifiedAt == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreference.VerifiedAt(childComplexity), true
+
+	case "NotificationPreferenceBulkCreatePayload.notificationPreferences":
+		if e.complexity.NotificationPreferenceBulkCreatePayload.NotificationPreferences == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceBulkCreatePayload.NotificationPreferences(childComplexity), true
+
+	case "NotificationPreferenceBulkDeletePayload.deletedIDs":
+		if e.complexity.NotificationPreferenceBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "NotificationPreferenceBulkUpdatePayload.notificationPreferences":
+		if e.complexity.NotificationPreferenceBulkUpdatePayload.NotificationPreferences == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceBulkUpdatePayload.NotificationPreferences(childComplexity), true
+
+	case "NotificationPreferenceBulkUpdatePayload.updatedIDs":
+		if e.complexity.NotificationPreferenceBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "NotificationPreferenceConnection.edges":
+		if e.complexity.NotificationPreferenceConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceConnection.Edges(childComplexity), true
+
+	case "NotificationPreferenceConnection.pageInfo":
+		if e.complexity.NotificationPreferenceConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceConnection.PageInfo(childComplexity), true
+
+	case "NotificationPreferenceConnection.totalCount":
+		if e.complexity.NotificationPreferenceConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceConnection.TotalCount(childComplexity), true
+
+	case "NotificationPreferenceCreatePayload.notificationPreference":
+		if e.complexity.NotificationPreferenceCreatePayload.NotificationPreference == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceCreatePayload.NotificationPreference(childComplexity), true
+
+	case "NotificationPreferenceDeletePayload.deletedID":
+		if e.complexity.NotificationPreferenceDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceDeletePayload.DeletedID(childComplexity), true
+
+	case "NotificationPreferenceEdge.cursor":
+		if e.complexity.NotificationPreferenceEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceEdge.Cursor(childComplexity), true
+
+	case "NotificationPreferenceEdge.node":
+		if e.complexity.NotificationPreferenceEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceEdge.Node(childComplexity), true
+
+	case "NotificationPreferenceUpdatePayload.notificationPreference":
+		if e.complexity.NotificationPreferenceUpdatePayload.NotificationPreference == nil {
+			break
+		}
+
+		return e.complexity.NotificationPreferenceUpdatePayload.NotificationPreference(childComplexity), true
+
+	case "NotificationTemplate.active":
+		if e.complexity.NotificationTemplate.Active == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.Active(childComplexity), true
+
+	case "NotificationTemplate.blocks":
+		if e.complexity.NotificationTemplate.Blocks == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.Blocks(childComplexity), true
+
+	case "NotificationTemplate.bodyTemplate":
+		if e.complexity.NotificationTemplate.BodyTemplate == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.BodyTemplate(childComplexity), true
+
+	case "NotificationTemplate.channel":
+		if e.complexity.NotificationTemplate.Channel == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.Channel(childComplexity), true
+
+	case "NotificationTemplate.createdAt":
+		if e.complexity.NotificationTemplate.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.CreatedAt(childComplexity), true
+
+	case "NotificationTemplate.createdBy":
+		if e.complexity.NotificationTemplate.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.CreatedBy(childComplexity), true
+
+	case "NotificationTemplate.description":
+		if e.complexity.NotificationTemplate.Description == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.Description(childComplexity), true
+
+	case "NotificationTemplate.emailTemplate":
+		if e.complexity.NotificationTemplate.EmailTemplate == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.EmailTemplate(childComplexity), true
+
+	case "NotificationTemplate.emailTemplateID":
+		if e.complexity.NotificationTemplate.EmailTemplateID == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.EmailTemplateID(childComplexity), true
+
+	case "NotificationTemplate.format":
+		if e.complexity.NotificationTemplate.Format == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.Format(childComplexity), true
+
+	case "NotificationTemplate.id":
+		if e.complexity.NotificationTemplate.ID == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.ID(childComplexity), true
+
+	case "NotificationTemplate.integration":
+		if e.complexity.NotificationTemplate.Integration == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.Integration(childComplexity), true
+
+	case "NotificationTemplate.integrationID":
+		if e.complexity.NotificationTemplate.IntegrationID == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.IntegrationID(childComplexity), true
+
+	case "NotificationTemplate.internalNotes":
+		if e.complexity.NotificationTemplate.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.InternalNotes(childComplexity), true
+
+	case "NotificationTemplate.jsonconfig":
+		if e.complexity.NotificationTemplate.Jsonconfig == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.Jsonconfig(childComplexity), true
+
+	case "NotificationTemplate.key":
+		if e.complexity.NotificationTemplate.Key == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.Key(childComplexity), true
+
+	case "NotificationTemplate.locale":
+		if e.complexity.NotificationTemplate.Locale == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.Locale(childComplexity), true
+
+	case "NotificationTemplate.metadata":
+		if e.complexity.NotificationTemplate.Metadata == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.Metadata(childComplexity), true
+
+	case "NotificationTemplate.name":
+		if e.complexity.NotificationTemplate.Name == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.Name(childComplexity), true
+
+	case "NotificationTemplate.notifications":
+		if e.complexity.NotificationTemplate.Notifications == nil {
+			break
+		}
+
+		args, err := ec.field_NotificationTemplate_notifications_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.NotificationTemplate.Notifications(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.NotificationOrder)), true
+
+	case "NotificationTemplate.owner":
+		if e.complexity.NotificationTemplate.Owner == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.Owner(childComplexity), true
+
+	case "NotificationTemplate.ownerID":
+		if e.complexity.NotificationTemplate.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.OwnerID(childComplexity), true
+
+	case "NotificationTemplate.subjectTemplate":
+		if e.complexity.NotificationTemplate.SubjectTemplate == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.SubjectTemplate(childComplexity), true
+
+	case "NotificationTemplate.systemInternalID":
+		if e.complexity.NotificationTemplate.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.SystemInternalID(childComplexity), true
+
+	case "NotificationTemplate.systemOwned":
+		if e.complexity.NotificationTemplate.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.SystemOwned(childComplexity), true
+
+	case "NotificationTemplate.titleTemplate":
+		if e.complexity.NotificationTemplate.TitleTemplate == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.TitleTemplate(childComplexity), true
+
+	case "NotificationTemplate.topicPattern":
+		if e.complexity.NotificationTemplate.TopicPattern == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.TopicPattern(childComplexity), true
+
+	case "NotificationTemplate.uischema":
+		if e.complexity.NotificationTemplate.Uischema == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.Uischema(childComplexity), true
+
+	case "NotificationTemplate.updatedAt":
+		if e.complexity.NotificationTemplate.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.UpdatedAt(childComplexity), true
+
+	case "NotificationTemplate.updatedBy":
+		if e.complexity.NotificationTemplate.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.UpdatedBy(childComplexity), true
+
+	case "NotificationTemplate.version":
+		if e.complexity.NotificationTemplate.Version == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.Version(childComplexity), true
+
+	case "NotificationTemplate.workflowDefinition":
+		if e.complexity.NotificationTemplate.WorkflowDefinition == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.WorkflowDefinition(childComplexity), true
+
+	case "NotificationTemplate.workflowDefinitionID":
+		if e.complexity.NotificationTemplate.WorkflowDefinitionID == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplate.WorkflowDefinitionID(childComplexity), true
+
+	case "NotificationTemplateBulkCreatePayload.notificationTemplates":
+		if e.complexity.NotificationTemplateBulkCreatePayload.NotificationTemplates == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateBulkCreatePayload.NotificationTemplates(childComplexity), true
+
+	case "NotificationTemplateBulkDeletePayload.deletedIDs":
+		if e.complexity.NotificationTemplateBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "NotificationTemplateBulkUpdatePayload.notificationTemplates":
+		if e.complexity.NotificationTemplateBulkUpdatePayload.NotificationTemplates == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateBulkUpdatePayload.NotificationTemplates(childComplexity), true
+
+	case "NotificationTemplateBulkUpdatePayload.updatedIDs":
+		if e.complexity.NotificationTemplateBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "NotificationTemplateConnection.edges":
+		if e.complexity.NotificationTemplateConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateConnection.Edges(childComplexity), true
+
+	case "NotificationTemplateConnection.pageInfo":
+		if e.complexity.NotificationTemplateConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateConnection.PageInfo(childComplexity), true
+
+	case "NotificationTemplateConnection.totalCount":
+		if e.complexity.NotificationTemplateConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateConnection.TotalCount(childComplexity), true
+
+	case "NotificationTemplateCreatePayload.notificationTemplate":
+		if e.complexity.NotificationTemplateCreatePayload.NotificationTemplate == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateCreatePayload.NotificationTemplate(childComplexity), true
+
+	case "NotificationTemplateDeletePayload.deletedID":
+		if e.complexity.NotificationTemplateDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateDeletePayload.DeletedID(childComplexity), true
+
+	case "NotificationTemplateEdge.cursor":
+		if e.complexity.NotificationTemplateEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateEdge.Cursor(childComplexity), true
+
+	case "NotificationTemplateEdge.node":
+		if e.complexity.NotificationTemplateEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateEdge.Node(childComplexity), true
+
+	case "NotificationTemplateUpdatePayload.notificationTemplate":
+		if e.complexity.NotificationTemplateUpdatePayload.NotificationTemplate == nil {
+			break
+		}
+
+		return e.complexity.NotificationTemplateUpdatePayload.NotificationTemplate(childComplexity), true
 
 	case "NotificationUpdatePayload.notification":
 		if e.complexity.NotificationUpdatePayload.Notification == nil {
@@ -28625,6 +30899,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.Documents(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DocumentDataOrder), args["where"].(*generated.DocumentDataWhereInput)), true
 
+	case "Organization.emailBrandings":
+		if e.complexity.Organization.EmailBrandings == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_emailBrandings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.EmailBrandings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EmailBrandingOrder), args["where"].(*generated.EmailBrandingWhereInput)), true
+
+	case "Organization.emailTemplates":
+		if e.complexity.Organization.EmailTemplates == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_emailTemplates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.EmailTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EmailTemplateOrder), args["where"].(*generated.EmailTemplateWhereInput)), true
+
 	case "Organization.entities":
 		if e.complexity.Organization.Entities == nil {
 			break
@@ -28962,6 +31260,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.Notes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+
+	case "Organization.notificationPreferences":
+		if e.complexity.Organization.NotificationPreferences == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_notificationPreferences_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.NotificationPreferences(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NotificationPreferenceOrder), args["where"].(*generated.NotificationPreferenceWhereInput)), true
+
+	case "Organization.notificationTemplates":
+		if e.complexity.Organization.NotificationTemplates == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_notificationTemplates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.NotificationTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NotificationTemplateOrder), args["where"].(*generated.NotificationTemplateWhereInput)), true
 
 	case "Organization.orgSubscriptions":
 		if e.complexity.Organization.OrgSubscriptions == nil {
@@ -32803,6 +35125,78 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.DocumentDataSlice(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DocumentDataOrder), args["where"].(*generated.DocumentDataWhereInput)), true
 
+	case "Query.emailBranding":
+		if e.complexity.Query.EmailBranding == nil {
+			break
+		}
+
+		args, err := ec.field_Query_emailBranding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.EmailBranding(childComplexity, args["id"].(string)), true
+
+	case "Query.emailBrandingSearch":
+		if e.complexity.Query.EmailBrandingSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_emailBrandingSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.EmailBrandingSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.emailBrandings":
+		if e.complexity.Query.EmailBrandings == nil {
+			break
+		}
+
+		args, err := ec.field_Query_emailBrandings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.EmailBrandings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EmailBrandingOrder), args["where"].(*generated.EmailBrandingWhereInput)), true
+
+	case "Query.emailTemplate":
+		if e.complexity.Query.EmailTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Query_emailTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.EmailTemplate(childComplexity, args["id"].(string)), true
+
+	case "Query.emailTemplateSearch":
+		if e.complexity.Query.EmailTemplateSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_emailTemplateSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.EmailTemplateSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.emailTemplates":
+		if e.complexity.Query.EmailTemplates == nil {
+			break
+		}
+
+		args, err := ec.field_Query_emailTemplates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.EmailTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EmailTemplateOrder), args["where"].(*generated.EmailTemplateWhereInput)), true
+
 	case "Query.entities":
 		if e.complexity.Query.Entities == nil {
 			break
@@ -33187,6 +35581,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.Integration(childComplexity, args["id"].(string)), true
 
+	case "Query.integrationSearch":
+		if e.complexity.Query.IntegrationSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_integrationSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.IntegrationSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.integrations":
 		if e.complexity.Query.Integrations == nil {
 			break
@@ -33558,6 +35964,66 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Notes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+
+	case "Query.notificationPreference":
+		if e.complexity.Query.NotificationPreference == nil {
+			break
+		}
+
+		args, err := ec.field_Query_notificationPreference_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.NotificationPreference(childComplexity, args["id"].(string)), true
+
+	case "Query.notificationPreferences":
+		if e.complexity.Query.NotificationPreferences == nil {
+			break
+		}
+
+		args, err := ec.field_Query_notificationPreferences_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.NotificationPreferences(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NotificationPreferenceOrder), args["where"].(*generated.NotificationPreferenceWhereInput)), true
+
+	case "Query.notificationTemplate":
+		if e.complexity.Query.NotificationTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Query_notificationTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.NotificationTemplate(childComplexity, args["id"].(string)), true
+
+	case "Query.notificationTemplateSearch":
+		if e.complexity.Query.NotificationTemplateSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_notificationTemplateSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.NotificationTemplateSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.notificationTemplates":
+		if e.complexity.Query.NotificationTemplates == nil {
+			break
+		}
+
+		args, err := ec.field_Query_notificationTemplates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.NotificationTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NotificationTemplateOrder), args["where"].(*generated.NotificationTemplateWhereInput)), true
 
 	case "Query.orgMembership":
 		if e.complexity.Query.OrgMembership == nil {
@@ -34598,6 +37064,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.VulnerabilitySearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.vulnerabilitySummary":
+		if e.complexity.Query.VulnerabilitySummary == nil {
+			break
+		}
+
+		args, err := ec.field_Query_vulnerabilitySummary_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.VulnerabilitySummary(childComplexity, args["where"].(*generated.VulnerabilityWhereInput)), true
+
 	case "Query.webauthns":
 		if e.complexity.Query.Webauthns == nil {
 			break
@@ -34772,6 +37250,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "Query.workflowProposal":
+		if e.complexity.Query.WorkflowProposal == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowProposal_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowProposal(childComplexity, args["id"].(string)), true
+
+	case "Query.workflowProposalsForObject":
+		if e.complexity.Query.WorkflowProposalsForObject == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowProposalsForObject_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowProposalsForObject(childComplexity, args["objectType"].(string), args["objectID"].(string), args["includeStates"].([]enums.WorkflowProposalState)), true
 
 	case "Remediation.actionPlans":
 		if e.complexity.Remediation.ActionPlans == nil {
@@ -37336,6 +39838,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.CustomTypeEnums(childComplexity), true
 
+	case "SearchResults.emailBrandings":
+		if e.complexity.SearchResults.EmailBrandings == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.EmailBrandings(childComplexity), true
+
+	case "SearchResults.emailTemplates":
+		if e.complexity.SearchResults.EmailTemplates == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.EmailTemplates(childComplexity), true
+
 	case "SearchResults.entities":
 		if e.complexity.SearchResults.Entities == nil {
 			break
@@ -37371,6 +39887,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.IdentityHolders(childComplexity), true
 
+	case "SearchResults.integrations":
+		if e.complexity.SearchResults.Integrations == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.Integrations(childComplexity), true
+
 	case "SearchResults.internalPolicies":
 		if e.complexity.SearchResults.InternalPolicies == nil {
 			break
@@ -37405,6 +39928,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.Narratives(childComplexity), true
+
+	case "SearchResults.notificationTemplates":
+		if e.complexity.SearchResults.NotificationTemplates == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.NotificationTemplates(childComplexity), true
 
 	case "SearchResults.organizations":
 		if e.complexity.SearchResults.Organizations == nil {
@@ -42416,6 +44946,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.UserSetting.DefaultOrg(childComplexity), true
 
+	case "UserSetting.delegateEndAt":
+		if e.complexity.UserSetting.DelegateEndAt == nil {
+			break
+		}
+
+		return e.complexity.UserSetting.DelegateEndAt(childComplexity), true
+
+	case "UserSetting.delegateStartAt":
+		if e.complexity.UserSetting.DelegateStartAt == nil {
+			break
+		}
+
+		return e.complexity.UserSetting.DelegateStartAt(childComplexity), true
+
+	case "UserSetting.delegateUserID":
+		if e.complexity.UserSetting.DelegateUserID == nil {
+			break
+		}
+
+		return e.complexity.UserSetting.DelegateUserID(childComplexity), true
+
 	case "UserSetting.emailConfirmed":
 		if e.complexity.UserSetting.EmailConfirmed == nil {
 			break
@@ -43192,6 +45743,62 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.VulnerabilityEdge.Node(childComplexity), true
 
+	case "VulnerabilityResolvePayload.review":
+		if e.complexity.VulnerabilityResolvePayload.Review == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityResolvePayload.Review(childComplexity), true
+
+	case "VulnerabilityResolvePayload.vulnerability":
+		if e.complexity.VulnerabilityResolvePayload.Vulnerability == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityResolvePayload.Vulnerability(childComplexity), true
+
+	case "VulnerabilitySummary.bySeverity":
+		if e.complexity.VulnerabilitySummary.BySeverity == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilitySummary.BySeverity(childComplexity), true
+
+	case "VulnerabilitySummary.bySource":
+		if e.complexity.VulnerabilitySummary.BySource == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilitySummary.BySource(childComplexity), true
+
+	case "VulnerabilitySummary.byStatus":
+		if e.complexity.VulnerabilitySummary.ByStatus == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilitySummary.ByStatus(childComplexity), true
+
+	case "VulnerabilitySummary.total":
+		if e.complexity.VulnerabilitySummary.Total == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilitySummary.Total(childComplexity), true
+
+	case "VulnerabilitySummaryBucket.count":
+		if e.complexity.VulnerabilitySummaryBucket.Count == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilitySummaryBucket.Count(childComplexity), true
+
+	case "VulnerabilitySummaryBucket.key":
+		if e.complexity.VulnerabilitySummaryBucket.Key == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilitySummaryBucket.Key(childComplexity), true
+
 	case "VulnerabilityUpdatePayload.vulnerability":
 		if e.complexity.VulnerabilityUpdatePayload.Vulnerability == nil {
 			break
@@ -43366,6 +45973,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowAssignment.DisplayID(childComplexity), true
+
+	case "WorkflowAssignment.dueAt":
+		if e.complexity.WorkflowAssignment.DueAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.DueAt(childComplexity), true
 
 	case "WorkflowAssignment.group":
 		if e.complexity.WorkflowAssignment.Group == nil {
@@ -43546,6 +46160,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowAssignmentEdge.Node(childComplexity), true
+
+	case "WorkflowAssignmentReassignPayload.workflowAssignment":
+		if e.complexity.WorkflowAssignmentReassignPayload.WorkflowAssignment == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentReassignPayload.WorkflowAssignment(childComplexity), true
 
 	case "WorkflowAssignmentRejectPayload.workflowAssignment":
 		if e.complexity.WorkflowAssignmentRejectPayload.WorkflowAssignment == nil {
@@ -43764,6 +46385,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowDefinition.Draft(childComplexity), true
 
+	case "WorkflowDefinition.emailTemplates":
+		if e.complexity.WorkflowDefinition.EmailTemplates == nil {
+			break
+		}
+
+		args, err := ec.field_WorkflowDefinition_emailTemplates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.WorkflowDefinition.EmailTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EmailTemplateOrder), args["where"].(*generated.EmailTemplateWhereInput)), true
+
 	case "WorkflowDefinition.groups":
 		if e.complexity.WorkflowDefinition.Groups == nil {
 			break
@@ -43803,6 +46436,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowDefinition.Name(childComplexity), true
+
+	case "WorkflowDefinition.notificationTemplates":
+		if e.complexity.WorkflowDefinition.NotificationTemplates == nil {
+			break
+		}
+
+		args, err := ec.field_WorkflowDefinition_notificationTemplates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.WorkflowDefinition.NotificationTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NotificationTemplateOrder), args["where"].(*generated.NotificationTemplateWhereInput)), true
 
 	case "WorkflowDefinition.owner":
 		if e.complexity.WorkflowDefinition.Owner == nil {
@@ -44250,6 +46895,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowInstance.DisplayID(childComplexity), true
 
+	case "WorkflowInstance.emailTemplates":
+		if e.complexity.WorkflowInstance.EmailTemplates == nil {
+			break
+		}
+
+		args, err := ec.field_WorkflowInstance_emailTemplates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.WorkflowInstance.EmailTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EmailTemplateOrder), args["where"].(*generated.EmailTemplateWhereInput)), true
+
 	case "WorkflowInstance.evidence":
 		if e.complexity.WorkflowInstance.Evidence == nil {
 			break
@@ -44453,6 +47110,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowInstance.WorkflowProposalID(childComplexity), true
+
+	case "WorkflowInstanceAdminPayload.workflowInstance":
+		if e.complexity.WorkflowInstanceAdminPayload.WorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceAdminPayload.WorkflowInstance(childComplexity), true
+
+	case "WorkflowInstanceBulkAdminPayload.updatedIDs":
+		if e.complexity.WorkflowInstanceBulkAdminPayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceBulkAdminPayload.UpdatedIDs(childComplexity), true
 
 	case "WorkflowInstanceConnection.edges":
 		if e.complexity.WorkflowInstanceConnection.Edges == nil {
@@ -44846,6 +47517,90 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowObjectTypeMetadata.Type(childComplexity), true
 
+	case "WorkflowProposal.approvedHash":
+		if e.complexity.WorkflowProposal.ApprovedHash == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.ApprovedHash(childComplexity), true
+
+	case "WorkflowProposal.changes":
+		if e.complexity.WorkflowProposal.Changes == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.Changes(childComplexity), true
+
+	case "WorkflowProposal.createdAt":
+		if e.complexity.WorkflowProposal.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.CreatedAt(childComplexity), true
+
+	case "WorkflowProposal.domainKey":
+		if e.complexity.WorkflowProposal.DomainKey == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.DomainKey(childComplexity), true
+
+	case "WorkflowProposal.id":
+		if e.complexity.WorkflowProposal.ID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.ID(childComplexity), true
+
+	case "WorkflowProposal.preview":
+		if e.complexity.WorkflowProposal.Preview == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.Preview(childComplexity), true
+
+	case "WorkflowProposal.proposedHash":
+		if e.complexity.WorkflowProposal.ProposedHash == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.ProposedHash(childComplexity), true
+
+	case "WorkflowProposal.state":
+		if e.complexity.WorkflowProposal.State == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.State(childComplexity), true
+
+	case "WorkflowProposal.submittedAt":
+		if e.complexity.WorkflowProposal.SubmittedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.SubmittedAt(childComplexity), true
+
+	case "WorkflowProposal.submittedByUserID":
+		if e.complexity.WorkflowProposal.SubmittedByUserID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.SubmittedByUserID(childComplexity), true
+
+	case "WorkflowProposal.updatedAt":
+		if e.complexity.WorkflowProposal.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.UpdatedAt(childComplexity), true
+
+	case "WorkflowProposal.workflowObjectRefID":
+		if e.complexity.WorkflowProposal.WorkflowObjectRefID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.WorkflowObjectRefID(childComplexity), true
+
 	case "WorkflowProposalPreview.currentValues":
 		if e.complexity.WorkflowProposalPreview.CurrentValues == nil {
 			break
@@ -44901,6 +47656,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowProposalPreview.SubmittedByUserID(childComplexity), true
+
+	case "WorkflowProposalSubmitPayload.workflowProposal":
+		if e.complexity.WorkflowProposalSubmitPayload.WorkflowProposal == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposalSubmitPayload.WorkflowProposal(childComplexity), true
+
+	case "WorkflowProposalUpdatePayload.workflowProposal":
+		if e.complexity.WorkflowProposalUpdatePayload.WorkflowProposal == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposalUpdatePayload.WorkflowProposal(childComplexity), true
+
+	case "WorkflowProposalWithdrawPayload.workflowProposal":
+		if e.complexity.WorkflowProposalWithdrawPayload.WorkflowProposal == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposalWithdrawPayload.WorkflowProposal(childComplexity), true
 
 	}
 	return 0, false
@@ -44958,6 +47734,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateDirectorySyncRunInput,
 		ec.unmarshalInputCreateDiscussionInput,
 		ec.unmarshalInputCreateDocumentDataInput,
+		ec.unmarshalInputCreateEmailBrandingInput,
+		ec.unmarshalInputCreateEmailTemplateInput,
 		ec.unmarshalInputCreateEntityInput,
 		ec.unmarshalInputCreateEntityTypeInput,
 		ec.unmarshalInputCreateEventInput,
@@ -44985,6 +47763,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateNarrativeInput,
 		ec.unmarshalInputCreateNoteInput,
 		ec.unmarshalInputCreateNotificationInput,
+		ec.unmarshalInputCreateNotificationPreferenceInput,
+		ec.unmarshalInputCreateNotificationTemplateInput,
 		ec.unmarshalInputCreateOnboardingInput,
 		ec.unmarshalInputCreateOrgMembershipInput,
 		ec.unmarshalInputCreateOrganizationInput,
@@ -45042,6 +47822,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputDiscussionWhereInput,
 		ec.unmarshalInputDocumentDataOrder,
 		ec.unmarshalInputDocumentDataWhereInput,
+		ec.unmarshalInputEmailBrandingOrder,
+		ec.unmarshalInputEmailBrandingWhereInput,
+		ec.unmarshalInputEmailTemplateOrder,
+		ec.unmarshalInputEmailTemplateWhereInput,
 		ec.unmarshalInputEntityOrder,
 		ec.unmarshalInputEntityTypeOrder,
 		ec.unmarshalInputEntityTypeWhereInput,
@@ -45096,6 +47880,11 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputNarrativeWhereInput,
 		ec.unmarshalInputNoteOrder,
 		ec.unmarshalInputNoteWhereInput,
+		ec.unmarshalInputNotificationOrder,
+		ec.unmarshalInputNotificationPreferenceOrder,
+		ec.unmarshalInputNotificationPreferenceWhereInput,
+		ec.unmarshalInputNotificationTemplateOrder,
+		ec.unmarshalInputNotificationTemplateWhereInput,
 		ec.unmarshalInputOnboardingWhereInput,
 		ec.unmarshalInputOrgMembersInput,
 		ec.unmarshalInputOrgMembershipOrder,
@@ -45116,9 +47905,11 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputProgramMembershipWhereInput,
 		ec.unmarshalInputProgramOrder,
 		ec.unmarshalInputProgramWhereInput,
+		ec.unmarshalInputReassignWorkflowAssignmentInput,
 		ec.unmarshalInputRemediationOrder,
 		ec.unmarshalInputRemediationWhereInput,
 		ec.unmarshalInputResendCampaignIncompleteInput,
+		ec.unmarshalInputResolveVulnerabilityInput,
 		ec.unmarshalInputReviewOrder,
 		ec.unmarshalInputReviewWhereInput,
 		ec.unmarshalInputRiskOrder,
@@ -45183,6 +47974,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateDiscussionInput,
 		ec.unmarshalInputUpdateDiscussionsInput,
 		ec.unmarshalInputUpdateDocumentDataInput,
+		ec.unmarshalInputUpdateEmailBrandingInput,
+		ec.unmarshalInputUpdateEmailTemplateInput,
 		ec.unmarshalInputUpdateEntityInput,
 		ec.unmarshalInputUpdateEntityTypeInput,
 		ec.unmarshalInputUpdateEventInput,
@@ -45208,6 +48001,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateNarrativeInput,
 		ec.unmarshalInputUpdateNoteInput,
 		ec.unmarshalInputUpdateNotificationInput,
+		ec.unmarshalInputUpdateNotificationPreferenceInput,
+		ec.unmarshalInputUpdateNotificationTemplateInput,
 		ec.unmarshalInputUpdateOrgMembershipInput,
 		ec.unmarshalInputUpdateOrganizationInput,
 		ec.unmarshalInputUpdateOrganizationSettingInput,
@@ -45242,6 +48037,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateUserSettingInput,
 		ec.unmarshalInputUpdateVulnerabilityInput,
 		ec.unmarshalInputUpdateWorkflowDefinitionInput,
+		ec.unmarshalInputUpdateWorkflowProposalChangesInput,
 		ec.unmarshalInputUserOrder,
 		ec.unmarshalInputUserSettingOrder,
 		ec.unmarshalInputUserSettingWhereInput,
@@ -45251,6 +48047,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputWebauthnOrder,
 		ec.unmarshalInputWebauthnWhereInput,
 		ec.unmarshalInputWorkflowAssignmentOrder,
+		ec.unmarshalInputWorkflowAssignmentTargetInput,
 		ec.unmarshalInputWorkflowAssignmentTargetOrder,
 		ec.unmarshalInputWorkflowAssignmentTargetWhereInput,
 		ec.unmarshalInputWorkflowAssignmentWhereInput,
@@ -48632,6 +51429,324 @@ type DocumentDataBulkUpdatePayload {
     IDs of the updated documentDatas
     """
     updatedIDs: [ID!]
+}
+`, BuiltIn: false},
+	{Name: "../schema/emailbranding.graphql", Input: `extend type Query {
+    """
+    Look up emailBranding by ID
+    """
+     emailBranding(
+        """
+        ID of the emailBranding
+        """
+        id: ID!
+    ):  EmailBranding!
+}
+
+extend type Mutation{
+    """
+    Create a new emailBranding
+    """
+    createEmailBranding(
+        """
+        values of the emailBranding
+        """
+        input: CreateEmailBrandingInput!
+    ): EmailBrandingCreatePayload!
+    """
+    Create multiple new emailBrandings
+    """
+    createBulkEmailBranding(
+        """
+        values of the emailBranding
+        """
+        input: [CreateEmailBrandingInput!]
+    ): EmailBrandingBulkCreatePayload!
+    """
+    Create multiple new emailBrandings via file upload
+    """
+    createBulkCSVEmailBranding(
+        """
+        csv file containing values of the emailBranding
+        """
+        input: Upload!
+    ): EmailBrandingBulkCreatePayload!
+    """
+    Update multiple existing emailBrandings
+    """
+    updateBulkEmailBranding(
+        """
+        IDs of the emailBrandings to update
+        """
+        ids: [ID!]!
+        """
+        values to update the emailBrandings with
+        """
+        input: UpdateEmailBrandingInput!
+    ): EmailBrandingBulkUpdatePayload!
+    """
+    Update multiple existing emailBrandings via file upload
+    """
+    updateBulkCSVEmailBranding(
+        """
+        csv file containing values of the emailBranding, must include ID column
+        """
+        input: Upload!
+    ): EmailBrandingBulkUpdatePayload!
+    """
+    Update an existing emailBranding
+    """
+    updateEmailBranding(
+        """
+        ID of the emailBranding
+        """
+        id: ID!
+        """
+        New values for the emailBranding
+        """
+        input: UpdateEmailBrandingInput!
+    ): EmailBrandingUpdatePayload!
+    """
+    Delete an existing emailBranding
+    """
+    deleteEmailBranding(
+        """
+        ID of the emailBranding
+        """
+        id: ID!
+    ): EmailBrandingDeletePayload!
+    """
+    Delete multiple emailBrandings
+    """
+    deleteBulkEmailBranding(
+        """
+        IDs of the emailBrandings to delete
+        """
+        ids: [ID!]!
+    ): EmailBrandingBulkDeletePayload!
+}
+
+"""
+Return response for createEmailBranding mutation
+"""
+type EmailBrandingCreatePayload {
+    """
+    Created emailBranding
+    """
+    emailBranding: EmailBranding!
+}
+
+"""
+Return response for updateEmailBranding mutation
+"""
+type EmailBrandingUpdatePayload {
+    """
+    Updated emailBranding
+    """
+    emailBranding: EmailBranding!
+}
+
+"""
+Return response for deleteEmailBranding mutation
+"""
+type EmailBrandingDeletePayload {
+    """
+    Deleted emailBranding ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkEmailBranding mutation
+"""
+type EmailBrandingBulkCreatePayload {
+    """
+    Created emailBrandings
+    """
+    emailBrandings: [EmailBranding!]
+}
+
+"""
+Return response for updateBulkEmailBranding mutation
+"""
+type EmailBrandingBulkUpdatePayload {
+    """
+    Updated emailBrandings
+    """
+    emailBrandings: [EmailBranding!]
+    """
+    IDs of the updated emailBrandings
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkEmailBranding mutation
+"""
+type EmailBrandingBulkDeletePayload {
+    """
+    Deleted emailBranding IDs
+    """
+    deletedIDs: [ID!]!
+}
+`, BuiltIn: false},
+	{Name: "../schema/emailtemplate.graphql", Input: `extend type Query {
+    """
+    Look up emailTemplate by ID
+    """
+     emailTemplate(
+        """
+        ID of the emailTemplate
+        """
+        id: ID!
+    ):  EmailTemplate!
+}
+
+extend type Mutation{
+    """
+    Create a new emailTemplate
+    """
+    createEmailTemplate(
+        """
+        values of the emailTemplate
+        """
+        input: CreateEmailTemplateInput!
+    ): EmailTemplateCreatePayload!
+    """
+    Create multiple new emailTemplates
+    """
+    createBulkEmailTemplate(
+        """
+        values of the emailTemplate
+        """
+        input: [CreateEmailTemplateInput!]
+    ): EmailTemplateBulkCreatePayload!
+    """
+    Create multiple new emailTemplates via file upload
+    """
+    createBulkCSVEmailTemplate(
+        """
+        csv file containing values of the emailTemplate
+        """
+        input: Upload!
+    ): EmailTemplateBulkCreatePayload!
+    """
+    Update multiple existing emailTemplates
+    """
+    updateBulkEmailTemplate(
+        """
+        IDs of the emailTemplates to update
+        """
+        ids: [ID!]!
+        """
+        values to update the emailTemplates with
+        """
+        input: UpdateEmailTemplateInput!
+    ): EmailTemplateBulkUpdatePayload!
+    """
+    Update multiple existing emailTemplates via file upload
+    """
+    updateBulkCSVEmailTemplate(
+        """
+        csv file containing values of the emailTemplate, must include ID column
+        """
+        input: Upload!
+    ): EmailTemplateBulkUpdatePayload!
+    """
+    Update an existing emailTemplate
+    """
+    updateEmailTemplate(
+        """
+        ID of the emailTemplate
+        """
+        id: ID!
+        """
+        New values for the emailTemplate
+        """
+        input: UpdateEmailTemplateInput!
+    ): EmailTemplateUpdatePayload!
+    """
+    Delete an existing emailTemplate
+    """
+    deleteEmailTemplate(
+        """
+        ID of the emailTemplate
+        """
+        id: ID!
+    ): EmailTemplateDeletePayload!
+    """
+    Delete multiple emailTemplates
+    """
+    deleteBulkEmailTemplate(
+        """
+        IDs of the emailTemplates to delete
+        """
+        ids: [ID!]!
+    ): EmailTemplateBulkDeletePayload!
+}
+
+"""
+Return response for createEmailTemplate mutation
+"""
+type EmailTemplateCreatePayload {
+    """
+    Created emailTemplate
+    """
+    emailTemplate: EmailTemplate!
+}
+
+"""
+Return response for updateEmailTemplate mutation
+"""
+type EmailTemplateUpdatePayload {
+    """
+    Updated emailTemplate
+    """
+    emailTemplate: EmailTemplate!
+}
+
+"""
+Return response for deleteEmailTemplate mutation
+"""
+type EmailTemplateDeletePayload {
+    """
+    Deleted emailTemplate ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkEmailTemplate mutation
+"""
+type EmailTemplateBulkCreatePayload {
+    """
+    Created emailTemplates
+    """
+    emailTemplates: [EmailTemplate!]
+}
+
+"""
+Return response for updateBulkEmailTemplate mutation
+"""
+type EmailTemplateBulkUpdatePayload {
+    """
+    Updated emailTemplates
+    """
+    emailTemplates: [EmailTemplate!]
+    """
+    IDs of the updated emailTemplates
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkEmailTemplate mutation
+"""
+type EmailTemplateBulkDeletePayload {
+    """
+    Deleted emailTemplate IDs
+    """
+    deletedIDs: [ID!]!
 }
 `, BuiltIn: false},
 	{Name: "../schema/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
@@ -52781,6 +55896,14 @@ type Campaign implements Node {
   additional metadata about the campaign
   """
   metadata: Map
+  """
+  the email branding associated with the campaign
+  """
+  emailBrandingID: ID
+  """
+  the email template associated with the campaign
+  """
+  emailTemplateID: ID
   owner: Organization
   blockedGroups(
     """
@@ -52879,6 +56002,8 @@ type Campaign implements Node {
   internalOwnerGroup: Group
   assessment: Assessment
   template: Template
+  emailBranding: EmailBranding
+  emailTemplate: EmailTemplate
   entity: Entity
   campaignTargets(
     """
@@ -54088,6 +57213,42 @@ input CampaignWhereInput {
   assessmentIDEqualFold: ID
   assessmentIDContainsFold: ID
   """
+  email_branding_id field predicates
+  """
+  emailBrandingID: ID
+  emailBrandingIDNEQ: ID
+  emailBrandingIDIn: [ID!]
+  emailBrandingIDNotIn: [ID!]
+  emailBrandingIDGT: ID
+  emailBrandingIDGTE: ID
+  emailBrandingIDLT: ID
+  emailBrandingIDLTE: ID
+  emailBrandingIDContains: ID
+  emailBrandingIDHasPrefix: ID
+  emailBrandingIDHasSuffix: ID
+  emailBrandingIDIsNil: Boolean
+  emailBrandingIDNotNil: Boolean
+  emailBrandingIDEqualFold: ID
+  emailBrandingIDContainsFold: ID
+  """
+  email_template_id field predicates
+  """
+  emailTemplateID: ID
+  emailTemplateIDNEQ: ID
+  emailTemplateIDIn: [ID!]
+  emailTemplateIDNotIn: [ID!]
+  emailTemplateIDGT: ID
+  emailTemplateIDGTE: ID
+  emailTemplateIDLT: ID
+  emailTemplateIDLTE: ID
+  emailTemplateIDContains: ID
+  emailTemplateIDHasPrefix: ID
+  emailTemplateIDHasSuffix: ID
+  emailTemplateIDIsNil: Boolean
+  emailTemplateIDNotNil: Boolean
+  emailTemplateIDEqualFold: ID
+  emailTemplateIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -54127,6 +57288,16 @@ input CampaignWhereInput {
   """
   hasTemplate: Boolean
   hasTemplateWith: [TemplateWhereInput!]
+  """
+  email_branding edge predicates
+  """
+  hasEmailBranding: Boolean
+  hasEmailBrandingWith: [EmailBrandingWhereInput!]
+  """
+  email_template edge predicates
+  """
+  hasEmailTemplate: Boolean
+  hasEmailTemplateWith: [EmailTemplateWhereInput!]
   """
   entity edge predicates
   """
@@ -58207,6 +61378,8 @@ input CreateCampaignInput {
   internalOwnerGroupID: ID
   assessmentID: ID
   templateID: ID
+  emailBrandingID: ID
+  emailTemplateID: ID
   entityID: ID
   campaignTargetIDs: [ID!]
   assessmentResponseIDs: [ID!]
@@ -59012,6 +62185,147 @@ input CreateDocumentDataInput {
   templateID: ID
   entityIDs: [ID!]
   fileIDs: [ID!]
+}
+"""
+CreateEmailBrandingInput is used for create EmailBranding object.
+Input was generated by ent.
+"""
+input CreateEmailBrandingInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  friendly name for this email branding configuration
+  """
+  name: String!
+  """
+  brand name displayed in templates
+  """
+  brandName: String
+  """
+  URL of the brand logo for emails
+  """
+  logoRemoteURL: String
+  """
+  primary brand color for emails
+  """
+  primaryColor: String
+  """
+  secondary brand color for emails
+  """
+  secondaryColor: String
+  """
+  background color for emails
+  """
+  backgroundColor: String
+  """
+  text color for emails
+  """
+  textColor: String
+  """
+  button background color for emails
+  """
+  buttonColor: String
+  """
+  button text color for emails
+  """
+  buttonTextColor: String
+  """
+  link color for emails
+  """
+  linkColor: String
+  """
+  font family for emails
+  """
+  fontFamily: EmailBrandingFont
+  """
+  whether this is the default email branding for the organization
+  """
+  isDefault: Boolean
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  campaignIDs: [ID!]
+  emailTemplateIDs: [ID!]
+}
+"""
+CreateEmailTemplateInput is used for create EmailTemplate object.
+Input was generated by ent.
+"""
+input CreateEmailTemplateInput {
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
+  stable identifier for the template
+  """
+  key: String!
+  """
+  display name for the template
+  """
+  name: String!
+  """
+  description of the template
+  """
+  description: String
+  """
+  template format for rendering
+  """
+  format: EmailTemplateNotificationTemplateFormat
+  """
+  locale for the template, e.g. en-US
+  """
+  locale: String
+  """
+  subject template for email notifications
+  """
+  subjectTemplate: String
+  """
+  preheader/preview text template for email notifications
+  """
+  preheaderTemplate: String
+  """
+  body template for the email
+  """
+  bodyTemplate: String
+  """
+  plain text fallback template for the email
+  """
+  textTemplate: String
+  """
+  jsonschema for template data requirements
+  """
+  jsonconfig: Map
+  """
+  uischema for a template builder
+  """
+  uischema: Map
+  """
+  additional template metadata
+  """
+  metadata: Map
+  """
+  whether the template is active
+  """
+  active: Boolean
+  """
+  template version
+  """
+  version: Int
+  ownerID: ID
+  emailBrandingID: ID
+  integrationID: ID
+  workflowDefinitionID: ID
+  workflowInstanceID: ID
+  campaignIDs: [ID!]
+  notificationTemplateIDs: [ID!]
 }
 """
 CreateEntityInput is used for create Entity object.
@@ -60456,6 +63770,175 @@ input CreateNotificationInput {
   """
   topic: NotificationNotificationTopic
   ownerID: ID
+  notificationTemplateID: ID
+}
+"""
+CreateNotificationPreferenceInput is used for create NotificationPreference object.
+Input was generated by ent.
+"""
+input CreateNotificationPreferenceInput {
+  """
+  the channel this preference applies to
+  """
+  channel: NotificationPreferenceChannel!
+  """
+  status of the channel configuration
+  """
+  status: NotificationPreferenceNotificationChannelStatus
+  """
+  provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
+  """
+  provider: String
+  """
+  destination address or endpoint for the channel
+  """
+  destination: String
+  """
+  channel configuration payload
+  """
+  config: Map
+  """
+  whether this preference is enabled
+  """
+  enabled: Boolean
+  """
+  delivery cadence for this preference
+  """
+  cadence: NotificationPreferenceNotificationCadence
+  """
+  optional priority override for this preference
+  """
+  priority: NotificationPreferencePriority
+  """
+  soiree topic names or wildcard patterns this preference applies to; empty means all
+  """
+  topicPatterns: [String!]
+  """
+  optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+  """
+  topicOverrides: Map
+  """
+  mute notifications until this time
+  """
+  muteUntil: Time
+  """
+  start of quiet hours in HH:MM
+  """
+  quietHoursStart: String
+  """
+  end of quiet hours in HH:MM
+  """
+  quietHoursEnd: String
+  """
+  timezone for quiet hours and digests
+  """
+  timezone: String
+  """
+  whether this is the default config for the channel
+  """
+  isDefault: Boolean
+  """
+  when the channel config was verified
+  """
+  verifiedAt: Time
+  """
+  last time the channel config was used
+  """
+  lastUsedAt: Time
+  """
+  last error encountered while using the channel
+  """
+  lastError: String
+  """
+  additional preference metadata
+  """
+  metadata: Map
+  ownerID: ID
+  userID: ID!
+  notificationTemplateID: ID
+}
+"""
+CreateNotificationTemplateInput is used for create NotificationTemplate object.
+Input was generated by ent.
+"""
+input CreateNotificationTemplateInput {
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
+  stable identifier for the template
+  """
+  key: String!
+  """
+  display name for the template
+  """
+  name: String!
+  """
+  description of the template
+  """
+  description: String
+  """
+  channel this template is intended for
+  """
+  channel: NotificationTemplateChannel!
+  """
+  template format for rendering
+  """
+  format: NotificationTemplateNotificationTemplateFormat
+  """
+  locale for the template, e.g. en-US
+  """
+  locale: String
+  """
+  soiree topic name or wildcard pattern this template targets
+  """
+  topicPattern: String!
+  """
+  title template for external channel messages
+  """
+  titleTemplate: String
+  """
+  subject template for email notifications
+  """
+  subjectTemplate: String
+  """
+  body template for the notification
+  """
+  bodyTemplate: String
+  """
+  structured blocks for channels like Slack or Teams
+  """
+  blocks: Map
+  """
+  jsonschema for template data requirements
+  """
+  jsonconfig: Map
+  """
+  uischema for a template builder
+  """
+  uischema: Map
+  """
+  additional template metadata
+  """
+  metadata: Map
+  """
+  whether the template is active
+  """
+  active: Boolean
+  """
+  template version
+  """
+  version: Int
+  ownerID: ID
+  integrationID: ID
+  workflowDefinitionID: ID
+  emailTemplateID: ID
+  notificationIDs: [ID!]
 }
 """
 CreateOnboardingInput is used for create Onboarding object.
@@ -60556,6 +64039,10 @@ input CreateOrganizationInput {
   settingID: ID
   personalAccessTokenIDs: [ID!]
   apiTokenIDs: [ID!]
+  emailBrandingIDs: [ID!]
+  emailTemplateIDs: [ID!]
+  notificationPreferenceIDs: [ID!]
+  notificationTemplateIDs: [ID!]
   fileIDs: [ID!]
   eventIDs: [ID!]
   secretIDs: [ID!]
@@ -62453,6 +65940,18 @@ input CreateUserSettingInput {
   """
   tags: [String!]
   """
+  user id to delegate workflow approvals to
+  """
+  delegateUserID: String
+  """
+  when delegation becomes active
+  """
+  delegateStartAt: Time
+  """
+  when delegation ends
+  """
+  delegateEndAt: Time
+  """
   user account is locked if unconfirmed or explicitly locked
   """
   locked: Boolean
@@ -62710,6 +66209,8 @@ input CreateWorkflowDefinitionInput {
   ownerID: ID
   tagDefinitionIDs: [ID!]
   groupIDs: [ID!]
+  notificationTemplateIDs: [ID!]
+  emailTemplateIDs: [ID!]
 }
 """
 Define a Relay Cursor type:
@@ -67291,6 +70792,1260 @@ input DocumentDataWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+}
+type EmailBranding implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  friendly name for this email branding configuration
+  """
+  name: String!
+  """
+  brand name displayed in templates
+  """
+  brandName: String
+  """
+  URL of the brand logo for emails
+  """
+  logoRemoteURL: String
+  """
+  primary brand color for emails
+  """
+  primaryColor: String
+  """
+  secondary brand color for emails
+  """
+  secondaryColor: String
+  """
+  background color for emails
+  """
+  backgroundColor: String
+  """
+  text color for emails
+  """
+  textColor: String
+  """
+  button background color for emails
+  """
+  buttonColor: String
+  """
+  button text color for emails
+  """
+  buttonTextColor: String
+  """
+  link color for emails
+  """
+  linkColor: String
+  """
+  font family for emails
+  """
+  fontFamily: EmailBrandingFont
+  """
+  whether this is the default email branding for the organization
+  """
+  isDefault: Boolean
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+  emailTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailTemplates returned from the connection.
+    """
+    orderBy: [EmailTemplateOrder!]
+
+    """
+    Filtering options for EmailTemplates returned from the connection.
+    """
+    where: EmailTemplateWhereInput
+  ): EmailTemplateConnection!
+}
+"""
+A connection to a list of items.
+"""
+type EmailBrandingConnection {
+  """
+  A list of edges.
+  """
+  edges: [EmailBrandingEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type EmailBrandingEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: EmailBranding
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+EmailBrandingFont is enum for the field font_family
+"""
+enum EmailBrandingFont @goModel(model: "github.com/theopenlane/core/common/enums.Font") {
+  COURIER
+  COURIER_BOLD
+  COURIER_BOLDOBLIQUE
+  COURIER_OBLIQUE
+  HELVETICA
+  HELVETICA_BOLD
+  HELVETICA_BOLDOBLIQUE
+  HELVETICA_OBLIQUE
+  SYMBOL
+  TIMES_BOLD
+  TIMES_BOLDITALIC
+  TIMES_ITALIC
+  TIMES_ROMAN
+}
+"""
+Ordering options for EmailBranding connections
+"""
+input EmailBrandingOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order EmailBrandings.
+  """
+  field: EmailBrandingOrderField!
+}
+"""
+Properties by which EmailBranding connections can be ordered.
+"""
+enum EmailBrandingOrderField {
+  created_at
+  updated_at
+  name
+}
+"""
+EmailBrandingWhereInput is used for filtering EmailBranding objects.
+Input was generated by ent.
+"""
+input EmailBrandingWhereInput {
+  not: EmailBrandingWhereInput
+  and: [EmailBrandingWhereInput!]
+  or: [EmailBrandingWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  brand_name field predicates
+  """
+  brandName: String
+  brandNameNEQ: String
+  brandNameIn: [String!]
+  brandNameNotIn: [String!]
+  brandNameGT: String
+  brandNameGTE: String
+  brandNameLT: String
+  brandNameLTE: String
+  brandNameContains: String
+  brandNameHasPrefix: String
+  brandNameHasSuffix: String
+  brandNameIsNil: Boolean
+  brandNameNotNil: Boolean
+  brandNameEqualFold: String
+  brandNameContainsFold: String
+  """
+  logo_remote_url field predicates
+  """
+  logoRemoteURL: String
+  logoRemoteURLNEQ: String
+  logoRemoteURLIn: [String!]
+  logoRemoteURLNotIn: [String!]
+  logoRemoteURLGT: String
+  logoRemoteURLGTE: String
+  logoRemoteURLLT: String
+  logoRemoteURLLTE: String
+  logoRemoteURLContains: String
+  logoRemoteURLHasPrefix: String
+  logoRemoteURLHasSuffix: String
+  logoRemoteURLIsNil: Boolean
+  logoRemoteURLNotNil: Boolean
+  logoRemoteURLEqualFold: String
+  logoRemoteURLContainsFold: String
+  """
+  primary_color field predicates
+  """
+  primaryColor: String
+  primaryColorNEQ: String
+  primaryColorIn: [String!]
+  primaryColorNotIn: [String!]
+  primaryColorGT: String
+  primaryColorGTE: String
+  primaryColorLT: String
+  primaryColorLTE: String
+  primaryColorContains: String
+  primaryColorHasPrefix: String
+  primaryColorHasSuffix: String
+  primaryColorIsNil: Boolean
+  primaryColorNotNil: Boolean
+  primaryColorEqualFold: String
+  primaryColorContainsFold: String
+  """
+  secondary_color field predicates
+  """
+  secondaryColor: String
+  secondaryColorNEQ: String
+  secondaryColorIn: [String!]
+  secondaryColorNotIn: [String!]
+  secondaryColorGT: String
+  secondaryColorGTE: String
+  secondaryColorLT: String
+  secondaryColorLTE: String
+  secondaryColorContains: String
+  secondaryColorHasPrefix: String
+  secondaryColorHasSuffix: String
+  secondaryColorIsNil: Boolean
+  secondaryColorNotNil: Boolean
+  secondaryColorEqualFold: String
+  secondaryColorContainsFold: String
+  """
+  background_color field predicates
+  """
+  backgroundColor: String
+  backgroundColorNEQ: String
+  backgroundColorIn: [String!]
+  backgroundColorNotIn: [String!]
+  backgroundColorGT: String
+  backgroundColorGTE: String
+  backgroundColorLT: String
+  backgroundColorLTE: String
+  backgroundColorContains: String
+  backgroundColorHasPrefix: String
+  backgroundColorHasSuffix: String
+  backgroundColorIsNil: Boolean
+  backgroundColorNotNil: Boolean
+  backgroundColorEqualFold: String
+  backgroundColorContainsFold: String
+  """
+  text_color field predicates
+  """
+  textColor: String
+  textColorNEQ: String
+  textColorIn: [String!]
+  textColorNotIn: [String!]
+  textColorGT: String
+  textColorGTE: String
+  textColorLT: String
+  textColorLTE: String
+  textColorContains: String
+  textColorHasPrefix: String
+  textColorHasSuffix: String
+  textColorIsNil: Boolean
+  textColorNotNil: Boolean
+  textColorEqualFold: String
+  textColorContainsFold: String
+  """
+  button_color field predicates
+  """
+  buttonColor: String
+  buttonColorNEQ: String
+  buttonColorIn: [String!]
+  buttonColorNotIn: [String!]
+  buttonColorGT: String
+  buttonColorGTE: String
+  buttonColorLT: String
+  buttonColorLTE: String
+  buttonColorContains: String
+  buttonColorHasPrefix: String
+  buttonColorHasSuffix: String
+  buttonColorIsNil: Boolean
+  buttonColorNotNil: Boolean
+  buttonColorEqualFold: String
+  buttonColorContainsFold: String
+  """
+  button_text_color field predicates
+  """
+  buttonTextColor: String
+  buttonTextColorNEQ: String
+  buttonTextColorIn: [String!]
+  buttonTextColorNotIn: [String!]
+  buttonTextColorGT: String
+  buttonTextColorGTE: String
+  buttonTextColorLT: String
+  buttonTextColorLTE: String
+  buttonTextColorContains: String
+  buttonTextColorHasPrefix: String
+  buttonTextColorHasSuffix: String
+  buttonTextColorIsNil: Boolean
+  buttonTextColorNotNil: Boolean
+  buttonTextColorEqualFold: String
+  buttonTextColorContainsFold: String
+  """
+  link_color field predicates
+  """
+  linkColor: String
+  linkColorNEQ: String
+  linkColorIn: [String!]
+  linkColorNotIn: [String!]
+  linkColorGT: String
+  linkColorGTE: String
+  linkColorLT: String
+  linkColorLTE: String
+  linkColorContains: String
+  linkColorHasPrefix: String
+  linkColorHasSuffix: String
+  linkColorIsNil: Boolean
+  linkColorNotNil: Boolean
+  linkColorEqualFold: String
+  linkColorContainsFold: String
+  """
+  font_family field predicates
+  """
+  fontFamily: EmailBrandingFont
+  fontFamilyNEQ: EmailBrandingFont
+  fontFamilyIn: [EmailBrandingFont!]
+  fontFamilyNotIn: [EmailBrandingFont!]
+  fontFamilyIsNil: Boolean
+  fontFamilyNotNil: Boolean
+  """
+  is_default field predicates
+  """
+  isDefault: Boolean
+  isDefaultNEQ: Boolean
+  isDefaultIsNil: Boolean
+  isDefaultNotNil: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
+  """
+  email_templates edge predicates
+  """
+  hasEmailTemplates: Boolean
+  hasEmailTemplatesWith: [EmailTemplateWhereInput!]
+}
+type EmailTemplate implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  stable identifier for the template
+  """
+  key: String!
+  """
+  display name for the template
+  """
+  name: String!
+  """
+  description of the template
+  """
+  description: String
+  """
+  template format for rendering
+  """
+  format: EmailTemplateNotificationTemplateFormat!
+  """
+  locale for the template, e.g. en-US
+  """
+  locale: String!
+  """
+  subject template for email notifications
+  """
+  subjectTemplate: String
+  """
+  preheader/preview text template for email notifications
+  """
+  preheaderTemplate: String
+  """
+  body template for the email
+  """
+  bodyTemplate: String
+  """
+  plain text fallback template for the email
+  """
+  textTemplate: String
+  """
+  jsonschema for template data requirements
+  """
+  jsonconfig: Map
+  """
+  uischema for a template builder
+  """
+  uischema: Map
+  """
+  additional template metadata
+  """
+  metadata: Map
+  """
+  whether the template is active
+  """
+  active: Boolean!
+  """
+  template version
+  """
+  version: Int!
+  """
+  email branding configuration to apply for this template
+  """
+  emailBrandingID: ID
+  """
+  integration used to deliver emails for this template
+  """
+  integrationID: ID
+  """
+  workflow definition associated with this template
+  """
+  workflowDefinitionID: ID
+  """
+  workflow instance associated with this template
+  """
+  workflowInstanceID: ID
+  owner: Organization
+  emailBranding: EmailBranding
+  integration: Integration
+  workflowDefinition: WorkflowDefinition
+  workflowInstance: WorkflowInstance
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+  notificationTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationTemplates returned from the connection.
+    """
+    orderBy: [NotificationTemplateOrder!]
+
+    """
+    Filtering options for NotificationTemplates returned from the connection.
+    """
+    where: NotificationTemplateWhereInput
+  ): NotificationTemplateConnection!
+}
+"""
+A connection to a list of items.
+"""
+type EmailTemplateConnection {
+  """
+  A list of edges.
+  """
+  edges: [EmailTemplateEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type EmailTemplateEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: EmailTemplate
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+EmailTemplateNotificationTemplateFormat is enum for the field format
+"""
+enum EmailTemplateNotificationTemplateFormat @goModel(model: "github.com/theopenlane/core/common/enums.NotificationTemplateFormat") {
+  TEXT
+  MARKDOWN
+  HTML
+  JSON
+}
+"""
+Ordering options for EmailTemplate connections
+"""
+input EmailTemplateOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order EmailTemplates.
+  """
+  field: EmailTemplateOrderField!
+}
+"""
+Properties by which EmailTemplate connections can be ordered.
+"""
+enum EmailTemplateOrderField {
+  created_at
+  updated_at
+  KEY
+  NAME
+  FORMAT
+  LOCALE
+  ACTIVE
+  VERSION
+}
+"""
+EmailTemplateWhereInput is used for filtering EmailTemplate objects.
+Input was generated by ent.
+"""
+input EmailTemplateWhereInput {
+  not: EmailTemplateWhereInput
+  and: [EmailTemplateWhereInput!]
+  or: [EmailTemplateWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  key field predicates
+  """
+  key: String
+  keyNEQ: String
+  keyIn: [String!]
+  keyNotIn: [String!]
+  keyGT: String
+  keyGTE: String
+  keyLT: String
+  keyLTE: String
+  keyContains: String
+  keyHasPrefix: String
+  keyHasSuffix: String
+  keyEqualFold: String
+  keyContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  format field predicates
+  """
+  format: EmailTemplateNotificationTemplateFormat
+  formatNEQ: EmailTemplateNotificationTemplateFormat
+  formatIn: [EmailTemplateNotificationTemplateFormat!]
+  formatNotIn: [EmailTemplateNotificationTemplateFormat!]
+  """
+  locale field predicates
+  """
+  locale: String
+  localeNEQ: String
+  localeIn: [String!]
+  localeNotIn: [String!]
+  localeGT: String
+  localeGTE: String
+  localeLT: String
+  localeLTE: String
+  localeContains: String
+  localeHasPrefix: String
+  localeHasSuffix: String
+  localeEqualFold: String
+  localeContainsFold: String
+  """
+  subject_template field predicates
+  """
+  subjectTemplate: String
+  subjectTemplateNEQ: String
+  subjectTemplateIn: [String!]
+  subjectTemplateNotIn: [String!]
+  subjectTemplateGT: String
+  subjectTemplateGTE: String
+  subjectTemplateLT: String
+  subjectTemplateLTE: String
+  subjectTemplateContains: String
+  subjectTemplateHasPrefix: String
+  subjectTemplateHasSuffix: String
+  subjectTemplateIsNil: Boolean
+  subjectTemplateNotNil: Boolean
+  subjectTemplateEqualFold: String
+  subjectTemplateContainsFold: String
+  """
+  preheader_template field predicates
+  """
+  preheaderTemplate: String
+  preheaderTemplateNEQ: String
+  preheaderTemplateIn: [String!]
+  preheaderTemplateNotIn: [String!]
+  preheaderTemplateGT: String
+  preheaderTemplateGTE: String
+  preheaderTemplateLT: String
+  preheaderTemplateLTE: String
+  preheaderTemplateContains: String
+  preheaderTemplateHasPrefix: String
+  preheaderTemplateHasSuffix: String
+  preheaderTemplateIsNil: Boolean
+  preheaderTemplateNotNil: Boolean
+  preheaderTemplateEqualFold: String
+  preheaderTemplateContainsFold: String
+  """
+  body_template field predicates
+  """
+  bodyTemplate: String
+  bodyTemplateNEQ: String
+  bodyTemplateIn: [String!]
+  bodyTemplateNotIn: [String!]
+  bodyTemplateGT: String
+  bodyTemplateGTE: String
+  bodyTemplateLT: String
+  bodyTemplateLTE: String
+  bodyTemplateContains: String
+  bodyTemplateHasPrefix: String
+  bodyTemplateHasSuffix: String
+  bodyTemplateIsNil: Boolean
+  bodyTemplateNotNil: Boolean
+  bodyTemplateEqualFold: String
+  bodyTemplateContainsFold: String
+  """
+  text_template field predicates
+  """
+  textTemplate: String
+  textTemplateNEQ: String
+  textTemplateIn: [String!]
+  textTemplateNotIn: [String!]
+  textTemplateGT: String
+  textTemplateGTE: String
+  textTemplateLT: String
+  textTemplateLTE: String
+  textTemplateContains: String
+  textTemplateHasPrefix: String
+  textTemplateHasSuffix: String
+  textTemplateIsNil: Boolean
+  textTemplateNotNil: Boolean
+  textTemplateEqualFold: String
+  textTemplateContainsFold: String
+  """
+  active field predicates
+  """
+  active: Boolean
+  activeNEQ: Boolean
+  """
+  version field predicates
+  """
+  version: Int
+  versionNEQ: Int
+  versionIn: [Int!]
+  versionNotIn: [Int!]
+  versionGT: Int
+  versionGTE: Int
+  versionLT: Int
+  versionLTE: Int
+  """
+  email_branding_id field predicates
+  """
+  emailBrandingID: ID
+  emailBrandingIDNEQ: ID
+  emailBrandingIDIn: [ID!]
+  emailBrandingIDNotIn: [ID!]
+  emailBrandingIDGT: ID
+  emailBrandingIDGTE: ID
+  emailBrandingIDLT: ID
+  emailBrandingIDLTE: ID
+  emailBrandingIDContains: ID
+  emailBrandingIDHasPrefix: ID
+  emailBrandingIDHasSuffix: ID
+  emailBrandingIDIsNil: Boolean
+  emailBrandingIDNotNil: Boolean
+  emailBrandingIDEqualFold: ID
+  emailBrandingIDContainsFold: ID
+  """
+  integration_id field predicates
+  """
+  integrationID: ID
+  integrationIDNEQ: ID
+  integrationIDIn: [ID!]
+  integrationIDNotIn: [ID!]
+  integrationIDGT: ID
+  integrationIDGTE: ID
+  integrationIDLT: ID
+  integrationIDLTE: ID
+  integrationIDContains: ID
+  integrationIDHasPrefix: ID
+  integrationIDHasSuffix: ID
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: ID
+  integrationIDContainsFold: ID
+  """
+  workflow_definition_id field predicates
+  """
+  workflowDefinitionID: ID
+  workflowDefinitionIDNEQ: ID
+  workflowDefinitionIDIn: [ID!]
+  workflowDefinitionIDNotIn: [ID!]
+  workflowDefinitionIDGT: ID
+  workflowDefinitionIDGTE: ID
+  workflowDefinitionIDLT: ID
+  workflowDefinitionIDLTE: ID
+  workflowDefinitionIDContains: ID
+  workflowDefinitionIDHasPrefix: ID
+  workflowDefinitionIDHasSuffix: ID
+  workflowDefinitionIDIsNil: Boolean
+  workflowDefinitionIDNotNil: Boolean
+  workflowDefinitionIDEqualFold: ID
+  workflowDefinitionIDContainsFold: ID
+  """
+  workflow_instance_id field predicates
+  """
+  workflowInstanceID: ID
+  workflowInstanceIDNEQ: ID
+  workflowInstanceIDIn: [ID!]
+  workflowInstanceIDNotIn: [ID!]
+  workflowInstanceIDGT: ID
+  workflowInstanceIDGTE: ID
+  workflowInstanceIDLT: ID
+  workflowInstanceIDLTE: ID
+  workflowInstanceIDContains: ID
+  workflowInstanceIDHasPrefix: ID
+  workflowInstanceIDHasSuffix: ID
+  workflowInstanceIDIsNil: Boolean
+  workflowInstanceIDNotNil: Boolean
+  workflowInstanceIDEqualFold: ID
+  workflowInstanceIDContainsFold: ID
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  email_branding edge predicates
+  """
+  hasEmailBranding: Boolean
+  hasEmailBrandingWith: [EmailBrandingWhereInput!]
+  """
+  integration edge predicates
+  """
+  hasIntegration: Boolean
+  hasIntegrationWith: [IntegrationWhereInput!]
+  """
+  workflow_definition edge predicates
+  """
+  hasWorkflowDefinition: Boolean
+  hasWorkflowDefinitionWith: [WorkflowDefinitionWhereInput!]
+  """
+  workflow_instance edge predicates
+  """
+  hasWorkflowInstance: Boolean
+  hasWorkflowInstanceWith: [WorkflowInstanceWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
+  """
+  notification_templates edge predicates
+  """
+  hasNotificationTemplates: Boolean
+  hasNotificationTemplatesWith: [NotificationTemplateWhereInput!]
 }
 type Entity implements Node {
   id: ID!
@@ -78683,6 +83438,68 @@ type Integration implements Node {
     """
     where: DirectorySyncRunWhereInput
   ): DirectorySyncRunConnection!
+  notificationTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationTemplates returned from the connection.
+    """
+    orderBy: [NotificationTemplateOrder!]
+
+    """
+    Filtering options for NotificationTemplates returned from the connection.
+    """
+    where: NotificationTemplateWhereInput
+  ): NotificationTemplateConnection!
+  emailTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailTemplates returned from the connection.
+    """
+    orderBy: [EmailTemplateOrder!]
+
+    """
+    Filtering options for EmailTemplates returned from the connection.
+    """
+    where: EmailTemplateWhereInput
+  ): EmailTemplateConnection!
   entities(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -79116,6 +83933,16 @@ input IntegrationWhereInput {
   """
   hasDirectorySyncRuns: Boolean
   hasDirectorySyncRunsWith: [DirectorySyncRunWhereInput!]
+  """
+  notification_templates edge predicates
+  """
+  hasNotificationTemplates: Boolean
+  hasNotificationTemplatesWith: [NotificationTemplateWhereInput!]
+  """
+  email_templates edge predicates
+  """
+  hasEmailTemplates: Boolean
+  hasEmailTemplatesWith: [EmailTemplateWhereInput!]
   """
   entities edge predicates
   """
@@ -84063,6 +88890,10 @@ type Notification implements Node {
   """
   data: Map
   """
+  optional template used for external channel rendering
+  """
+  templateID: ID
+  """
   the time the notification was read
   """
   readAt: DateTime
@@ -84075,6 +88906,37 @@ type Notification implements Node {
   """
   topic: NotificationNotificationTopic
   owner: Organization
+  notificationTemplate: NotificationTemplate
+}
+"""
+A connection to a list of items.
+"""
+type NotificationConnection {
+  """
+  A list of edges.
+  """
+  edges: [NotificationEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type NotificationEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Notification
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
 }
 """
 NotificationNotificationTopic is enum for the field topic
@@ -84091,6 +88953,1143 @@ NotificationNotificationType is enum for the field notification_type
 enum NotificationNotificationType @goModel(model: "github.com/theopenlane/core/common/enums.NotificationType") {
   ORGANIZATION
   USER
+}
+"""
+Ordering options for Notification connections
+"""
+input NotificationOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Notifications.
+  """
+  field: NotificationOrderField!
+}
+"""
+Properties by which Notification connections can be ordered.
+"""
+enum NotificationOrderField {
+  created_at
+  updated_at
+}
+type NotificationPreference implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the user this preference applies to
+  """
+  userID: ID!
+  """
+  the channel this preference applies to
+  """
+  channel: NotificationPreferenceChannel!
+  """
+  status of the channel configuration
+  """
+  status: NotificationPreferenceNotificationChannelStatus!
+  """
+  provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
+  """
+  provider: String
+  """
+  destination address or endpoint for the channel
+  """
+  destination: String
+  """
+  channel configuration payload
+  """
+  config: Map
+  """
+  whether this preference is enabled
+  """
+  enabled: Boolean!
+  """
+  delivery cadence for this preference
+  """
+  cadence: NotificationPreferenceNotificationCadence!
+  """
+  optional priority override for this preference
+  """
+  priority: NotificationPreferencePriority
+  """
+  soiree topic names or wildcard patterns this preference applies to; empty means all
+  """
+  topicPatterns: [String!]
+  """
+  optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+  """
+  topicOverrides: Map
+  """
+  optional template to use by default for this preference (external channels only)
+  """
+  templateID: ID
+  """
+  mute notifications until this time
+  """
+  muteUntil: Time
+  """
+  start of quiet hours in HH:MM
+  """
+  quietHoursStart: String
+  """
+  end of quiet hours in HH:MM
+  """
+  quietHoursEnd: String
+  """
+  timezone for quiet hours and digests
+  """
+  timezone: String
+  """
+  whether this is the default config for the channel
+  """
+  isDefault: Boolean!
+  """
+  when the channel config was verified
+  """
+  verifiedAt: Time
+  """
+  last time the channel config was used
+  """
+  lastUsedAt: Time
+  """
+  last error encountered while using the channel
+  """
+  lastError: String
+  """
+  additional preference metadata
+  """
+  metadata: Map
+  owner: Organization
+  user: User!
+  notificationTemplate: NotificationTemplate
+}
+"""
+NotificationPreferenceChannel is enum for the field channel
+"""
+enum NotificationPreferenceChannel @goModel(model: "github.com/theopenlane/core/common/enums.Channel") {
+  IN_APP
+  SLACK
+  TEAMS
+  EMAIL
+}
+"""
+A connection to a list of items.
+"""
+type NotificationPreferenceConnection {
+  """
+  A list of edges.
+  """
+  edges: [NotificationPreferenceEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type NotificationPreferenceEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: NotificationPreference
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+NotificationPreferenceNotificationCadence is enum for the field cadence
+"""
+enum NotificationPreferenceNotificationCadence @goModel(model: "github.com/theopenlane/core/common/enums.NotificationCadence") {
+  IMMEDIATE
+  DAILY_DIGEST
+  WEEKLY_DIGEST
+  MONTHLY_DIGEST
+  MUTE
+}
+"""
+NotificationPreferenceNotificationChannelStatus is enum for the field status
+"""
+enum NotificationPreferenceNotificationChannelStatus @goModel(model: "github.com/theopenlane/core/common/enums.NotificationChannelStatus") {
+  ENABLED
+  DISABLED
+  PENDING
+  VERIFIED
+  ERROR
+}
+"""
+Ordering options for NotificationPreference connections
+"""
+input NotificationPreferenceOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order NotificationPreferences.
+  """
+  field: NotificationPreferenceOrderField!
+}
+"""
+Properties by which NotificationPreference connections can be ordered.
+"""
+enum NotificationPreferenceOrderField {
+  created_at
+  updated_at
+  CHANNEL
+  STATUS
+  ENABLED
+}
+"""
+NotificationPreferencePriority is enum for the field priority
+"""
+enum NotificationPreferencePriority @goModel(model: "github.com/theopenlane/core/common/enums.Priority") {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+"""
+NotificationPreferenceWhereInput is used for filtering NotificationPreference objects.
+Input was generated by ent.
+"""
+input NotificationPreferenceWhereInput {
+  not: NotificationPreferenceWhereInput
+  and: [NotificationPreferenceWhereInput!]
+  or: [NotificationPreferenceWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  user_id field predicates
+  """
+  userID: ID
+  userIDNEQ: ID
+  userIDIn: [ID!]
+  userIDNotIn: [ID!]
+  userIDGT: ID
+  userIDGTE: ID
+  userIDLT: ID
+  userIDLTE: ID
+  userIDContains: ID
+  userIDHasPrefix: ID
+  userIDHasSuffix: ID
+  userIDEqualFold: ID
+  userIDContainsFold: ID
+  """
+  channel field predicates
+  """
+  channel: NotificationPreferenceChannel
+  channelNEQ: NotificationPreferenceChannel
+  channelIn: [NotificationPreferenceChannel!]
+  channelNotIn: [NotificationPreferenceChannel!]
+  """
+  status field predicates
+  """
+  status: NotificationPreferenceNotificationChannelStatus
+  statusNEQ: NotificationPreferenceNotificationChannelStatus
+  statusIn: [NotificationPreferenceNotificationChannelStatus!]
+  statusNotIn: [NotificationPreferenceNotificationChannelStatus!]
+  """
+  provider field predicates
+  """
+  provider: String
+  providerNEQ: String
+  providerIn: [String!]
+  providerNotIn: [String!]
+  providerGT: String
+  providerGTE: String
+  providerLT: String
+  providerLTE: String
+  providerContains: String
+  providerHasPrefix: String
+  providerHasSuffix: String
+  providerIsNil: Boolean
+  providerNotNil: Boolean
+  providerEqualFold: String
+  providerContainsFold: String
+  """
+  destination field predicates
+  """
+  destination: String
+  destinationNEQ: String
+  destinationIn: [String!]
+  destinationNotIn: [String!]
+  destinationGT: String
+  destinationGTE: String
+  destinationLT: String
+  destinationLTE: String
+  destinationContains: String
+  destinationHasPrefix: String
+  destinationHasSuffix: String
+  destinationIsNil: Boolean
+  destinationNotNil: Boolean
+  destinationEqualFold: String
+  destinationContainsFold: String
+  """
+  enabled field predicates
+  """
+  enabled: Boolean
+  enabledNEQ: Boolean
+  """
+  cadence field predicates
+  """
+  cadence: NotificationPreferenceNotificationCadence
+  cadenceNEQ: NotificationPreferenceNotificationCadence
+  cadenceIn: [NotificationPreferenceNotificationCadence!]
+  cadenceNotIn: [NotificationPreferenceNotificationCadence!]
+  """
+  priority field predicates
+  """
+  priority: NotificationPreferencePriority
+  priorityNEQ: NotificationPreferencePriority
+  priorityIn: [NotificationPreferencePriority!]
+  priorityNotIn: [NotificationPreferencePriority!]
+  priorityIsNil: Boolean
+  priorityNotNil: Boolean
+  """
+  template_id field predicates
+  """
+  templateID: ID
+  templateIDNEQ: ID
+  templateIDIn: [ID!]
+  templateIDNotIn: [ID!]
+  templateIDGT: ID
+  templateIDGTE: ID
+  templateIDLT: ID
+  templateIDLTE: ID
+  templateIDContains: ID
+  templateIDHasPrefix: ID
+  templateIDHasSuffix: ID
+  templateIDIsNil: Boolean
+  templateIDNotNil: Boolean
+  templateIDEqualFold: ID
+  templateIDContainsFold: ID
+  """
+  mute_until field predicates
+  """
+  muteUntil: Time
+  muteUntilNEQ: Time
+  muteUntilIn: [Time!]
+  muteUntilNotIn: [Time!]
+  muteUntilGT: Time
+  muteUntilGTE: Time
+  muteUntilLT: Time
+  muteUntilLTE: Time
+  muteUntilIsNil: Boolean
+  muteUntilNotNil: Boolean
+  """
+  quiet_hours_start field predicates
+  """
+  quietHoursStart: String
+  quietHoursStartNEQ: String
+  quietHoursStartIn: [String!]
+  quietHoursStartNotIn: [String!]
+  quietHoursStartGT: String
+  quietHoursStartGTE: String
+  quietHoursStartLT: String
+  quietHoursStartLTE: String
+  quietHoursStartContains: String
+  quietHoursStartHasPrefix: String
+  quietHoursStartHasSuffix: String
+  quietHoursStartIsNil: Boolean
+  quietHoursStartNotNil: Boolean
+  quietHoursStartEqualFold: String
+  quietHoursStartContainsFold: String
+  """
+  quiet_hours_end field predicates
+  """
+  quietHoursEnd: String
+  quietHoursEndNEQ: String
+  quietHoursEndIn: [String!]
+  quietHoursEndNotIn: [String!]
+  quietHoursEndGT: String
+  quietHoursEndGTE: String
+  quietHoursEndLT: String
+  quietHoursEndLTE: String
+  quietHoursEndContains: String
+  quietHoursEndHasPrefix: String
+  quietHoursEndHasSuffix: String
+  quietHoursEndIsNil: Boolean
+  quietHoursEndNotNil: Boolean
+  quietHoursEndEqualFold: String
+  quietHoursEndContainsFold: String
+  """
+  timezone field predicates
+  """
+  timezone: String
+  timezoneNEQ: String
+  timezoneIn: [String!]
+  timezoneNotIn: [String!]
+  timezoneGT: String
+  timezoneGTE: String
+  timezoneLT: String
+  timezoneLTE: String
+  timezoneContains: String
+  timezoneHasPrefix: String
+  timezoneHasSuffix: String
+  timezoneIsNil: Boolean
+  timezoneNotNil: Boolean
+  timezoneEqualFold: String
+  timezoneContainsFold: String
+  """
+  is_default field predicates
+  """
+  isDefault: Boolean
+  isDefaultNEQ: Boolean
+  """
+  verified_at field predicates
+  """
+  verifiedAt: Time
+  verifiedAtNEQ: Time
+  verifiedAtIn: [Time!]
+  verifiedAtNotIn: [Time!]
+  verifiedAtGT: Time
+  verifiedAtGTE: Time
+  verifiedAtLT: Time
+  verifiedAtLTE: Time
+  verifiedAtIsNil: Boolean
+  verifiedAtNotNil: Boolean
+  """
+  last_used_at field predicates
+  """
+  lastUsedAt: Time
+  lastUsedAtNEQ: Time
+  lastUsedAtIn: [Time!]
+  lastUsedAtNotIn: [Time!]
+  lastUsedAtGT: Time
+  lastUsedAtGTE: Time
+  lastUsedAtLT: Time
+  lastUsedAtLTE: Time
+  lastUsedAtIsNil: Boolean
+  lastUsedAtNotNil: Boolean
+  """
+  last_error field predicates
+  """
+  lastError: String
+  lastErrorNEQ: String
+  lastErrorIn: [String!]
+  lastErrorNotIn: [String!]
+  lastErrorGT: String
+  lastErrorGTE: String
+  lastErrorLT: String
+  lastErrorLTE: String
+  lastErrorContains: String
+  lastErrorHasPrefix: String
+  lastErrorHasSuffix: String
+  lastErrorIsNil: Boolean
+  lastErrorNotNil: Boolean
+  lastErrorEqualFold: String
+  lastErrorContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  user edge predicates
+  """
+  hasUser: Boolean
+  hasUserWith: [UserWhereInput!]
+  """
+  notification_template edge predicates
+  """
+  hasNotificationTemplate: Boolean
+  hasNotificationTemplateWith: [NotificationTemplateWhereInput!]
+}
+type NotificationTemplate implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  stable identifier for the template
+  """
+  key: String!
+  """
+  display name for the template
+  """
+  name: String!
+  """
+  description of the template
+  """
+  description: String
+  """
+  channel this template is intended for
+  """
+  channel: NotificationTemplateChannel!
+  """
+  template format for rendering
+  """
+  format: NotificationTemplateNotificationTemplateFormat!
+  """
+  locale for the template, e.g. en-US
+  """
+  locale: String!
+  """
+  soiree topic name or wildcard pattern this template targets
+  """
+  topicPattern: String!
+  """
+  integration associated with this template
+  """
+  integrationID: ID
+  """
+  workflow definition associated with this template
+  """
+  workflowDefinitionID: ID
+  """
+  optional email template used for branded email delivery
+  """
+  emailTemplateID: ID
+  """
+  title template for external channel messages
+  """
+  titleTemplate: String
+  """
+  subject template for email notifications
+  """
+  subjectTemplate: String
+  """
+  body template for the notification
+  """
+  bodyTemplate: String
+  """
+  structured blocks for channels like Slack or Teams
+  """
+  blocks: Map
+  """
+  jsonschema for template data requirements
+  """
+  jsonconfig: Map
+  """
+  uischema for a template builder
+  """
+  uischema: Map
+  """
+  additional template metadata
+  """
+  metadata: Map
+  """
+  whether the template is active
+  """
+  active: Boolean!
+  """
+  template version
+  """
+  version: Int!
+  owner: Organization
+  integration: Integration
+  workflowDefinition: WorkflowDefinition
+  emailTemplate: EmailTemplate
+  notifications(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notifications returned from the connection.
+    """
+    orderBy: NotificationOrder
+  ): NotificationConnection!
+}
+"""
+NotificationTemplateChannel is enum for the field channel
+"""
+enum NotificationTemplateChannel @goModel(model: "github.com/theopenlane/core/common/enums.Channel") {
+  IN_APP
+  SLACK
+  TEAMS
+  EMAIL
+}
+"""
+A connection to a list of items.
+"""
+type NotificationTemplateConnection {
+  """
+  A list of edges.
+  """
+  edges: [NotificationTemplateEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type NotificationTemplateEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: NotificationTemplate
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+NotificationTemplateNotificationTemplateFormat is enum for the field format
+"""
+enum NotificationTemplateNotificationTemplateFormat @goModel(model: "github.com/theopenlane/core/common/enums.NotificationTemplateFormat") {
+  TEXT
+  MARKDOWN
+  HTML
+  JSON
+}
+"""
+Ordering options for NotificationTemplate connections
+"""
+input NotificationTemplateOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order NotificationTemplates.
+  """
+  field: NotificationTemplateOrderField!
+}
+"""
+Properties by which NotificationTemplate connections can be ordered.
+"""
+enum NotificationTemplateOrderField {
+  created_at
+  updated_at
+  KEY
+  NAME
+  CHANNEL
+  FORMAT
+  LOCALE
+  TOPIC_PATTERN
+  ACTIVE
+  VERSION
+}
+"""
+NotificationTemplateWhereInput is used for filtering NotificationTemplate objects.
+Input was generated by ent.
+"""
+input NotificationTemplateWhereInput {
+  not: NotificationTemplateWhereInput
+  and: [NotificationTemplateWhereInput!]
+  or: [NotificationTemplateWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  key field predicates
+  """
+  key: String
+  keyNEQ: String
+  keyIn: [String!]
+  keyNotIn: [String!]
+  keyGT: String
+  keyGTE: String
+  keyLT: String
+  keyLTE: String
+  keyContains: String
+  keyHasPrefix: String
+  keyHasSuffix: String
+  keyEqualFold: String
+  keyContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  channel field predicates
+  """
+  channel: NotificationTemplateChannel
+  channelNEQ: NotificationTemplateChannel
+  channelIn: [NotificationTemplateChannel!]
+  channelNotIn: [NotificationTemplateChannel!]
+  """
+  format field predicates
+  """
+  format: NotificationTemplateNotificationTemplateFormat
+  formatNEQ: NotificationTemplateNotificationTemplateFormat
+  formatIn: [NotificationTemplateNotificationTemplateFormat!]
+  formatNotIn: [NotificationTemplateNotificationTemplateFormat!]
+  """
+  locale field predicates
+  """
+  locale: String
+  localeNEQ: String
+  localeIn: [String!]
+  localeNotIn: [String!]
+  localeGT: String
+  localeGTE: String
+  localeLT: String
+  localeLTE: String
+  localeContains: String
+  localeHasPrefix: String
+  localeHasSuffix: String
+  localeEqualFold: String
+  localeContainsFold: String
+  """
+  topic_pattern field predicates
+  """
+  topicPattern: String
+  topicPatternNEQ: String
+  topicPatternIn: [String!]
+  topicPatternNotIn: [String!]
+  topicPatternGT: String
+  topicPatternGTE: String
+  topicPatternLT: String
+  topicPatternLTE: String
+  topicPatternContains: String
+  topicPatternHasPrefix: String
+  topicPatternHasSuffix: String
+  topicPatternEqualFold: String
+  topicPatternContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: ID
+  integrationIDNEQ: ID
+  integrationIDIn: [ID!]
+  integrationIDNotIn: [ID!]
+  integrationIDGT: ID
+  integrationIDGTE: ID
+  integrationIDLT: ID
+  integrationIDLTE: ID
+  integrationIDContains: ID
+  integrationIDHasPrefix: ID
+  integrationIDHasSuffix: ID
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: ID
+  integrationIDContainsFold: ID
+  """
+  workflow_definition_id field predicates
+  """
+  workflowDefinitionID: ID
+  workflowDefinitionIDNEQ: ID
+  workflowDefinitionIDIn: [ID!]
+  workflowDefinitionIDNotIn: [ID!]
+  workflowDefinitionIDGT: ID
+  workflowDefinitionIDGTE: ID
+  workflowDefinitionIDLT: ID
+  workflowDefinitionIDLTE: ID
+  workflowDefinitionIDContains: ID
+  workflowDefinitionIDHasPrefix: ID
+  workflowDefinitionIDHasSuffix: ID
+  workflowDefinitionIDIsNil: Boolean
+  workflowDefinitionIDNotNil: Boolean
+  workflowDefinitionIDEqualFold: ID
+  workflowDefinitionIDContainsFold: ID
+  """
+  email_template_id field predicates
+  """
+  emailTemplateID: ID
+  emailTemplateIDNEQ: ID
+  emailTemplateIDIn: [ID!]
+  emailTemplateIDNotIn: [ID!]
+  emailTemplateIDGT: ID
+  emailTemplateIDGTE: ID
+  emailTemplateIDLT: ID
+  emailTemplateIDLTE: ID
+  emailTemplateIDContains: ID
+  emailTemplateIDHasPrefix: ID
+  emailTemplateIDHasSuffix: ID
+  emailTemplateIDIsNil: Boolean
+  emailTemplateIDNotNil: Boolean
+  emailTemplateIDEqualFold: ID
+  emailTemplateIDContainsFold: ID
+  """
+  title_template field predicates
+  """
+  titleTemplate: String
+  titleTemplateNEQ: String
+  titleTemplateIn: [String!]
+  titleTemplateNotIn: [String!]
+  titleTemplateGT: String
+  titleTemplateGTE: String
+  titleTemplateLT: String
+  titleTemplateLTE: String
+  titleTemplateContains: String
+  titleTemplateHasPrefix: String
+  titleTemplateHasSuffix: String
+  titleTemplateIsNil: Boolean
+  titleTemplateNotNil: Boolean
+  titleTemplateEqualFold: String
+  titleTemplateContainsFold: String
+  """
+  subject_template field predicates
+  """
+  subjectTemplate: String
+  subjectTemplateNEQ: String
+  subjectTemplateIn: [String!]
+  subjectTemplateNotIn: [String!]
+  subjectTemplateGT: String
+  subjectTemplateGTE: String
+  subjectTemplateLT: String
+  subjectTemplateLTE: String
+  subjectTemplateContains: String
+  subjectTemplateHasPrefix: String
+  subjectTemplateHasSuffix: String
+  subjectTemplateIsNil: Boolean
+  subjectTemplateNotNil: Boolean
+  subjectTemplateEqualFold: String
+  subjectTemplateContainsFold: String
+  """
+  body_template field predicates
+  """
+  bodyTemplate: String
+  bodyTemplateNEQ: String
+  bodyTemplateIn: [String!]
+  bodyTemplateNotIn: [String!]
+  bodyTemplateGT: String
+  bodyTemplateGTE: String
+  bodyTemplateLT: String
+  bodyTemplateLTE: String
+  bodyTemplateContains: String
+  bodyTemplateHasPrefix: String
+  bodyTemplateHasSuffix: String
+  bodyTemplateIsNil: Boolean
+  bodyTemplateNotNil: Boolean
+  bodyTemplateEqualFold: String
+  bodyTemplateContainsFold: String
+  """
+  active field predicates
+  """
+  active: Boolean
+  activeNEQ: Boolean
+  """
+  version field predicates
+  """
+  version: Int
+  versionNEQ: Int
+  versionIn: [Int!]
+  versionNotIn: [Int!]
+  versionGT: Int
+  versionGTE: Int
+  versionLT: Int
+  versionLTE: Int
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  integration edge predicates
+  """
+  hasIntegration: Boolean
+  hasIntegrationWith: [IntegrationWhereInput!]
+  """
+  workflow_definition edge predicates
+  """
+  hasWorkflowDefinition: Boolean
+  hasWorkflowDefinitionWith: [WorkflowDefinitionWhereInput!]
+  """
+  email_template edge predicates
+  """
+  hasEmailTemplate: Boolean
+  hasEmailTemplateWith: [EmailTemplateWhereInput!]
 }
 type Onboarding implements Node {
   id: ID!
@@ -85499,6 +91498,130 @@ type Organization implements Node {
     """
     where: APITokenWhereInput
   ): APITokenConnection!
+  emailBrandings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailBrandings returned from the connection.
+    """
+    orderBy: [EmailBrandingOrder!]
+
+    """
+    Filtering options for EmailBrandings returned from the connection.
+    """
+    where: EmailBrandingWhereInput
+  ): EmailBrandingConnection!
+  emailTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailTemplates returned from the connection.
+    """
+    orderBy: [EmailTemplateOrder!]
+
+    """
+    Filtering options for EmailTemplates returned from the connection.
+    """
+    where: EmailTemplateWhereInput
+  ): EmailTemplateConnection!
+  notificationPreferences(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationPreferences returned from the connection.
+    """
+    orderBy: [NotificationPreferenceOrder!]
+
+    """
+    Filtering options for NotificationPreferences returned from the connection.
+    """
+    where: NotificationPreferenceWhereInput
+  ): NotificationPreferenceConnection!
+  notificationTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationTemplates returned from the connection.
+    """
+    orderBy: [NotificationTemplateOrder!]
+
+    """
+    Filtering options for NotificationTemplates returned from the connection.
+    """
+    where: NotificationTemplateWhereInput
+  ): NotificationTemplateConnection!
   users(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -88541,6 +94664,26 @@ input OrganizationWhereInput {
   """
   hasAPITokens: Boolean
   hasAPITokensWith: [APITokenWhereInput!]
+  """
+  email_brandings edge predicates
+  """
+  hasEmailBrandings: Boolean
+  hasEmailBrandingsWith: [EmailBrandingWhereInput!]
+  """
+  email_templates edge predicates
+  """
+  hasEmailTemplates: Boolean
+  hasEmailTemplatesWith: [EmailTemplateWhereInput!]
+  """
+  notification_preferences edge predicates
+  """
+  hasNotificationPreferences: Boolean
+  hasNotificationPreferencesWith: [NotificationPreferenceWhereInput!]
+  """
+  notification_templates edge predicates
+  """
+  hasNotificationTemplates: Boolean
+  hasNotificationTemplatesWith: [NotificationTemplateWhereInput!]
   """
   users edge predicates
   """
@@ -94248,6 +100391,68 @@ type Query {
     """
     where: DocumentDataWhereInput
   ): DocumentDataConnection!
+  emailBrandings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailBrandings returned from the connection.
+    """
+    orderBy: [EmailBrandingOrder!]
+
+    """
+    Filtering options for EmailBrandings returned from the connection.
+    """
+    where: EmailBrandingWhereInput
+  ): EmailBrandingConnection!
+  emailTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailTemplates returned from the connection.
+    """
+    orderBy: [EmailTemplateOrder!]
+
+    """
+    Filtering options for EmailTemplates returned from the connection.
+    """
+    where: EmailTemplateWhereInput
+  ): EmailTemplateConnection!
   entities(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -95023,6 +101228,68 @@ type Query {
     """
     where: NoteWhereInput
   ): NoteConnection!
+  notificationPreferences(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationPreferences returned from the connection.
+    """
+    orderBy: [NotificationPreferenceOrder!]
+
+    """
+    Filtering options for NotificationPreferences returned from the connection.
+    """
+    where: NotificationPreferenceWhereInput
+  ): NotificationPreferenceConnection!
+  notificationTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationTemplates returned from the connection.
+    """
+    orderBy: [NotificationTemplateOrder!]
+
+    """
+    Filtering options for NotificationTemplates returned from the connection.
+    """
+    where: NotificationTemplateWhereInput
+  ): NotificationTemplateConnection!
   orgMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -111177,6 +117444,10 @@ input UpdateCampaignInput {
   clearAssessment: Boolean
   templateID: ID
   clearTemplate: Boolean
+  emailBrandingID: ID
+  clearEmailBranding: Boolean
+  emailTemplateID: ID
+  clearEmailTemplate: Boolean
   entityID: ID
   clearEntity: Boolean
   addCampaignTargetIDs: [ID!]
@@ -112246,6 +118517,186 @@ input UpdateDocumentDataInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+}
+"""
+UpdateEmailBrandingInput is used for update EmailBranding object.
+Input was generated by ent.
+"""
+input UpdateEmailBrandingInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  friendly name for this email branding configuration
+  """
+  name: String
+  """
+  brand name displayed in templates
+  """
+  brandName: String
+  clearBrandName: Boolean
+  """
+  URL of the brand logo for emails
+  """
+  logoRemoteURL: String
+  clearLogoRemoteURL: Boolean
+  """
+  primary brand color for emails
+  """
+  primaryColor: String
+  clearPrimaryColor: Boolean
+  """
+  secondary brand color for emails
+  """
+  secondaryColor: String
+  clearSecondaryColor: Boolean
+  """
+  background color for emails
+  """
+  backgroundColor: String
+  clearBackgroundColor: Boolean
+  """
+  text color for emails
+  """
+  textColor: String
+  clearTextColor: Boolean
+  """
+  button background color for emails
+  """
+  buttonColor: String
+  clearButtonColor: Boolean
+  """
+  button text color for emails
+  """
+  buttonTextColor: String
+  clearButtonTextColor: Boolean
+  """
+  link color for emails
+  """
+  linkColor: String
+  clearLinkColor: Boolean
+  """
+  font family for emails
+  """
+  fontFamily: EmailBrandingFont
+  clearFontFamily: Boolean
+  """
+  whether this is the default email branding for the organization
+  """
+  isDefault: Boolean
+  clearIsDefault: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
+  addEmailTemplateIDs: [ID!]
+  removeEmailTemplateIDs: [ID!]
+  clearEmailTemplates: Boolean
+}
+"""
+UpdateEmailTemplateInput is used for update EmailTemplate object.
+Input was generated by ent.
+"""
+input UpdateEmailTemplateInput {
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
+  stable identifier for the template
+  """
+  key: String
+  """
+  display name for the template
+  """
+  name: String
+  """
+  description of the template
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  template format for rendering
+  """
+  format: EmailTemplateNotificationTemplateFormat
+  """
+  locale for the template, e.g. en-US
+  """
+  locale: String
+  """
+  subject template for email notifications
+  """
+  subjectTemplate: String
+  clearSubjectTemplate: Boolean
+  """
+  preheader/preview text template for email notifications
+  """
+  preheaderTemplate: String
+  clearPreheaderTemplate: Boolean
+  """
+  body template for the email
+  """
+  bodyTemplate: String
+  clearBodyTemplate: Boolean
+  """
+  plain text fallback template for the email
+  """
+  textTemplate: String
+  clearTextTemplate: Boolean
+  """
+  jsonschema for template data requirements
+  """
+  jsonconfig: Map
+  clearJsonconfig: Boolean
+  """
+  uischema for a template builder
+  """
+  uischema: Map
+  clearUischema: Boolean
+  """
+  additional template metadata
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  """
+  whether the template is active
+  """
+  active: Boolean
+  """
+  template version
+  """
+  version: Int
+  emailBrandingID: ID
+  clearEmailBranding: Boolean
+  integrationID: ID
+  clearIntegration: Boolean
+  workflowDefinitionID: ID
+  clearWorkflowDefinition: Boolean
+  workflowInstanceID: ID
+  clearWorkflowInstance: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
+  addNotificationTemplateIDs: [ID!]
+  removeNotificationTemplateIDs: [ID!]
+  clearNotificationTemplates: Boolean
 }
 """
 UpdateEntityInput is used for update Entity object.
@@ -114268,6 +120719,204 @@ input UpdateNotificationInput {
   clearOwner: Boolean
 }
 """
+UpdateNotificationPreferenceInput is used for update NotificationPreference object.
+Input was generated by ent.
+"""
+input UpdateNotificationPreferenceInput {
+  """
+  the channel this preference applies to
+  """
+  channel: NotificationPreferenceChannel
+  """
+  status of the channel configuration
+  """
+  status: NotificationPreferenceNotificationChannelStatus
+  """
+  provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
+  """
+  provider: String
+  clearProvider: Boolean
+  """
+  destination address or endpoint for the channel
+  """
+  destination: String
+  clearDestination: Boolean
+  """
+  channel configuration payload
+  """
+  config: Map
+  clearConfig: Boolean
+  """
+  whether this preference is enabled
+  """
+  enabled: Boolean
+  """
+  delivery cadence for this preference
+  """
+  cadence: NotificationPreferenceNotificationCadence
+  """
+  optional priority override for this preference
+  """
+  priority: NotificationPreferencePriority
+  clearPriority: Boolean
+  """
+  soiree topic names or wildcard patterns this preference applies to; empty means all
+  """
+  topicPatterns: [String!]
+  appendTopicPatterns: [String!]
+  clearTopicPatterns: Boolean
+  """
+  optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+  """
+  topicOverrides: Map
+  clearTopicOverrides: Boolean
+  """
+  mute notifications until this time
+  """
+  muteUntil: Time
+  clearMuteUntil: Boolean
+  """
+  start of quiet hours in HH:MM
+  """
+  quietHoursStart: String
+  clearQuietHoursStart: Boolean
+  """
+  end of quiet hours in HH:MM
+  """
+  quietHoursEnd: String
+  clearQuietHoursEnd: Boolean
+  """
+  timezone for quiet hours and digests
+  """
+  timezone: String
+  clearTimezone: Boolean
+  """
+  whether this is the default config for the channel
+  """
+  isDefault: Boolean
+  """
+  when the channel config was verified
+  """
+  verifiedAt: Time
+  clearVerifiedAt: Boolean
+  """
+  last time the channel config was used
+  """
+  lastUsedAt: Time
+  clearLastUsedAt: Boolean
+  """
+  last error encountered while using the channel
+  """
+  lastError: String
+  clearLastError: Boolean
+  """
+  additional preference metadata
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  notificationTemplateID: ID
+  clearNotificationTemplate: Boolean
+}
+"""
+UpdateNotificationTemplateInput is used for update NotificationTemplate object.
+Input was generated by ent.
+"""
+input UpdateNotificationTemplateInput {
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
+  stable identifier for the template
+  """
+  key: String
+  """
+  display name for the template
+  """
+  name: String
+  """
+  description of the template
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  channel this template is intended for
+  """
+  channel: NotificationTemplateChannel
+  """
+  template format for rendering
+  """
+  format: NotificationTemplateNotificationTemplateFormat
+  """
+  locale for the template, e.g. en-US
+  """
+  locale: String
+  """
+  soiree topic name or wildcard pattern this template targets
+  """
+  topicPattern: String
+  """
+  title template for external channel messages
+  """
+  titleTemplate: String
+  clearTitleTemplate: Boolean
+  """
+  subject template for email notifications
+  """
+  subjectTemplate: String
+  clearSubjectTemplate: Boolean
+  """
+  body template for the notification
+  """
+  bodyTemplate: String
+  clearBodyTemplate: Boolean
+  """
+  structured blocks for channels like Slack or Teams
+  """
+  blocks: Map
+  clearBlocks: Boolean
+  """
+  jsonschema for template data requirements
+  """
+  jsonconfig: Map
+  clearJsonconfig: Boolean
+  """
+  uischema for a template builder
+  """
+  uischema: Map
+  clearUischema: Boolean
+  """
+  additional template metadata
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  """
+  whether the template is active
+  """
+  active: Boolean
+  """
+  template version
+  """
+  version: Int
+  integrationID: ID
+  clearIntegration: Boolean
+  workflowDefinitionID: ID
+  clearWorkflowDefinition: Boolean
+  emailTemplateID: ID
+  clearEmailTemplate: Boolean
+  addNotificationIDs: [ID!]
+  removeNotificationIDs: [ID!]
+  clearNotifications: Boolean
+}
+"""
 UpdateOrgMembershipInput is used for update OrgMembership object.
 Input was generated by ent.
 """
@@ -114382,6 +121031,18 @@ input UpdateOrganizationInput {
   addAPITokenIDs: [ID!]
   removeAPITokenIDs: [ID!]
   clearAPITokens: Boolean
+  addEmailBrandingIDs: [ID!]
+  removeEmailBrandingIDs: [ID!]
+  clearEmailBrandings: Boolean
+  addEmailTemplateIDs: [ID!]
+  removeEmailTemplateIDs: [ID!]
+  clearEmailTemplates: Boolean
+  addNotificationPreferenceIDs: [ID!]
+  removeNotificationPreferenceIDs: [ID!]
+  clearNotificationPreferences: Boolean
+  addNotificationTemplateIDs: [ID!]
+  removeNotificationTemplateIDs: [ID!]
+  clearNotificationTemplates: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -117212,6 +123873,21 @@ input UpdateUserSettingInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  user id to delegate workflow approvals to
+  """
+  delegateUserID: String
+  clearDelegateUserID: Boolean
+  """
+  when delegation becomes active
+  """
+  delegateStartAt: Time
+  clearDelegateStartAt: Boolean
+  """
+  when delegation ends
+  """
+  delegateEndAt: Time
+  clearDelegateEndAt: Boolean
+  """
   user account is locked if unconfirmed or explicitly locked
   """
   locked: Boolean
@@ -117559,6 +124235,12 @@ input UpdateWorkflowDefinitionInput {
   addGroupIDs: [ID!]
   removeGroupIDs: [ID!]
   clearGroups: Boolean
+  addNotificationTemplateIDs: [ID!]
+  removeNotificationTemplateIDs: [ID!]
+  clearNotificationTemplates: Boolean
+  addEmailTemplateIDs: [ID!]
+  removeEmailTemplateIDs: [ID!]
+  clearEmailTemplates: Boolean
 }
 type User implements Node {
   id: ID!
@@ -118308,6 +124990,18 @@ type UserSetting implements Node {
   tags: [String!]
   userID: ID
   """
+  user id to delegate workflow approvals to
+  """
+  delegateUserID: String
+  """
+  when delegation becomes active
+  """
+  delegateStartAt: Time
+  """
+  when delegation ends
+  """
+  delegateEndAt: Time
+  """
   user account is locked if unconfirmed or explicitly locked
   """
   locked: Boolean!
@@ -118502,6 +125196,50 @@ input UserSettingWhereInput {
   userIDNotNil: Boolean
   userIDEqualFold: ID
   userIDContainsFold: ID
+  """
+  delegate_user_id field predicates
+  """
+  delegateUserID: String
+  delegateUserIDNEQ: String
+  delegateUserIDIn: [String!]
+  delegateUserIDNotIn: [String!]
+  delegateUserIDGT: String
+  delegateUserIDGTE: String
+  delegateUserIDLT: String
+  delegateUserIDLTE: String
+  delegateUserIDContains: String
+  delegateUserIDHasPrefix: String
+  delegateUserIDHasSuffix: String
+  delegateUserIDIsNil: Boolean
+  delegateUserIDNotNil: Boolean
+  delegateUserIDEqualFold: String
+  delegateUserIDContainsFold: String
+  """
+  delegate_start_at field predicates
+  """
+  delegateStartAt: Time
+  delegateStartAtNEQ: Time
+  delegateStartAtIn: [Time!]
+  delegateStartAtNotIn: [Time!]
+  delegateStartAtGT: Time
+  delegateStartAtGTE: Time
+  delegateStartAtLT: Time
+  delegateStartAtLTE: Time
+  delegateStartAtIsNil: Boolean
+  delegateStartAtNotNil: Boolean
+  """
+  delegate_end_at field predicates
+  """
+  delegateEndAt: Time
+  delegateEndAtNEQ: Time
+  delegateEndAtIn: [Time!]
+  delegateEndAtNotIn: [Time!]
+  delegateEndAtGT: Time
+  delegateEndAtGTE: Time
+  delegateEndAtLT: Time
+  delegateEndAtLTE: Time
+  delegateEndAtIsNil: Boolean
+  delegateEndAtNotNil: Boolean
   """
   locked field predicates
   """
@@ -120732,6 +127470,10 @@ type WorkflowAssignment implements Node {
   Optional notes about the assignment
   """
   notes: String
+  """
+  Timestamp when the assignment is due for delegation or escalation checks
+  """
+  dueAt: Time
   owner: Organization
   """
   Instance this assignment belongs to
@@ -121416,6 +128158,19 @@ input WorkflowAssignmentWhereInput {
   notesEqualFold: String
   notesContainsFold: String
   """
+  due_at field predicates
+  """
+  dueAt: Time
+  dueAtNEQ: Time
+  dueAtIn: [Time!]
+  dueAtNotIn: [Time!]
+  dueAtGT: Time
+  dueAtGTE: Time
+  dueAtLT: Time
+  dueAtLTE: Time
+  dueAtIsNil: Boolean
+  dueAtNotNil: Boolean
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -121448,6 +128203,7 @@ enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theo
   PENDING
   APPROVED
   REJECTED
+  CHANGES_REQUESTED
 }
 type WorkflowDefinition implements Node {
   id: ID!
@@ -121590,6 +128346,68 @@ type WorkflowDefinition implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  notificationTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationTemplates returned from the connection.
+    """
+    orderBy: [NotificationTemplateOrder!]
+
+    """
+    Filtering options for NotificationTemplates returned from the connection.
+    """
+    where: NotificationTemplateWhereInput
+  ): NotificationTemplateConnection!
+  emailTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailTemplates returned from the connection.
+    """
+    orderBy: [EmailTemplateOrder!]
+
+    """
+    Filtering options for EmailTemplates returned from the connection.
+    """
+    where: EmailTemplateWhereInput
+  ): EmailTemplateConnection!
 }
 """
 A connection to a list of items.
@@ -121923,6 +128741,16 @@ input WorkflowDefinitionWhereInput {
   """
   hasGroups: Boolean
   hasGroupsWith: [GroupWhereInput!]
+  """
+  notification_templates edge predicates
+  """
+  hasNotificationTemplates: Boolean
+  hasNotificationTemplatesWith: [NotificationTemplateWhereInput!]
+  """
+  email_templates edge predicates
+  """
+  hasEmailTemplates: Boolean
+  hasEmailTemplatesWith: [EmailTemplateWhereInput!]
 }
 """
 WorkflowDefinitionWorkflowKind is enum for the field workflow_kind
@@ -122382,6 +129210,37 @@ type WorkflowInstance implements Node {
     """
     where: WorkflowEventWhereInput
   ): WorkflowEventConnection!
+  emailTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailTemplates returned from the connection.
+    """
+    orderBy: [EmailTemplateOrder!]
+
+    """
+    Filtering options for EmailTemplates returned from the connection.
+    """
+    where: EmailTemplateWhereInput
+  ): EmailTemplateConnection!
   workflowObjectRefs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -122896,6 +129755,11 @@ input WorkflowInstanceWhereInput {
   """
   hasWorkflowEvents: Boolean
   hasWorkflowEventsWith: [WorkflowEventWhereInput!]
+  """
+  email_templates edge predicates
+  """
+  hasEmailTemplates: Boolean
+  hasEmailTemplatesWith: [EmailTemplateWhereInput!]
   """
   workflow_object_refs edge predicates
   """
@@ -127247,6 +134111,324 @@ type NotificationUpdatePayload {
     """
     notification: Notification!
 }`, BuiltIn: false},
+	{Name: "../schema/notificationpreference.graphql", Input: `extend type Query {
+    """
+    Look up notificationPreference by ID
+    """
+     notificationPreference(
+        """
+        ID of the notificationPreference
+        """
+        id: ID!
+    ):  NotificationPreference!
+}
+
+extend type Mutation{
+    """
+    Create a new notificationPreference
+    """
+    createNotificationPreference(
+        """
+        values of the notificationPreference
+        """
+        input: CreateNotificationPreferenceInput!
+    ): NotificationPreferenceCreatePayload!
+    """
+    Create multiple new notificationPreferences
+    """
+    createBulkNotificationPreference(
+        """
+        values of the notificationPreference
+        """
+        input: [CreateNotificationPreferenceInput!]
+    ): NotificationPreferenceBulkCreatePayload!
+    """
+    Create multiple new notificationPreferences via file upload
+    """
+    createBulkCSVNotificationPreference(
+        """
+        csv file containing values of the notificationPreference
+        """
+        input: Upload!
+    ): NotificationPreferenceBulkCreatePayload!
+    """
+    Update multiple existing notificationPreferences
+    """
+    updateBulkNotificationPreference(
+        """
+        IDs of the notificationPreferences to update
+        """
+        ids: [ID!]!
+        """
+        values to update the notificationPreferences with
+        """
+        input: UpdateNotificationPreferenceInput!
+    ): NotificationPreferenceBulkUpdatePayload!
+    """
+    Update multiple existing notificationPreferences via file upload
+    """
+    updateBulkCSVNotificationPreference(
+        """
+        csv file containing values of the notificationPreference, must include ID column
+        """
+        input: Upload!
+    ): NotificationPreferenceBulkUpdatePayload!
+    """
+    Update an existing notificationPreference
+    """
+    updateNotificationPreference(
+        """
+        ID of the notificationPreference
+        """
+        id: ID!
+        """
+        New values for the notificationPreference
+        """
+        input: UpdateNotificationPreferenceInput!
+    ): NotificationPreferenceUpdatePayload!
+    """
+    Delete an existing notificationPreference
+    """
+    deleteNotificationPreference(
+        """
+        ID of the notificationPreference
+        """
+        id: ID!
+    ): NotificationPreferenceDeletePayload!
+    """
+    Delete multiple notificationPreferences
+    """
+    deleteBulkNotificationPreference(
+        """
+        IDs of the notificationPreferences to delete
+        """
+        ids: [ID!]!
+    ): NotificationPreferenceBulkDeletePayload!
+}
+
+"""
+Return response for createNotificationPreference mutation
+"""
+type NotificationPreferenceCreatePayload {
+    """
+    Created notificationPreference
+    """
+    notificationPreference: NotificationPreference!
+}
+
+"""
+Return response for updateNotificationPreference mutation
+"""
+type NotificationPreferenceUpdatePayload {
+    """
+    Updated notificationPreference
+    """
+    notificationPreference: NotificationPreference!
+}
+
+"""
+Return response for deleteNotificationPreference mutation
+"""
+type NotificationPreferenceDeletePayload {
+    """
+    Deleted notificationPreference ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkNotificationPreference mutation
+"""
+type NotificationPreferenceBulkCreatePayload {
+    """
+    Created notificationPreferences
+    """
+    notificationPreferences: [NotificationPreference!]
+}
+
+"""
+Return response for updateBulkNotificationPreference mutation
+"""
+type NotificationPreferenceBulkUpdatePayload {
+    """
+    Updated notificationPreferences
+    """
+    notificationPreferences: [NotificationPreference!]
+    """
+    IDs of the updated notificationPreferences
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkNotificationPreference mutation
+"""
+type NotificationPreferenceBulkDeletePayload {
+    """
+    Deleted notificationPreference IDs
+    """
+    deletedIDs: [ID!]!
+}
+`, BuiltIn: false},
+	{Name: "../schema/notificationtemplate.graphql", Input: `extend type Query {
+    """
+    Look up notificationTemplate by ID
+    """
+     notificationTemplate(
+        """
+        ID of the notificationTemplate
+        """
+        id: ID!
+    ):  NotificationTemplate!
+}
+
+extend type Mutation{
+    """
+    Create a new notificationTemplate
+    """
+    createNotificationTemplate(
+        """
+        values of the notificationTemplate
+        """
+        input: CreateNotificationTemplateInput!
+    ): NotificationTemplateCreatePayload!
+    """
+    Create multiple new notificationTemplates
+    """
+    createBulkNotificationTemplate(
+        """
+        values of the notificationTemplate
+        """
+        input: [CreateNotificationTemplateInput!]
+    ): NotificationTemplateBulkCreatePayload!
+    """
+    Create multiple new notificationTemplates via file upload
+    """
+    createBulkCSVNotificationTemplate(
+        """
+        csv file containing values of the notificationTemplate
+        """
+        input: Upload!
+    ): NotificationTemplateBulkCreatePayload!
+    """
+    Update multiple existing notificationTemplates
+    """
+    updateBulkNotificationTemplate(
+        """
+        IDs of the notificationTemplates to update
+        """
+        ids: [ID!]!
+        """
+        values to update the notificationTemplates with
+        """
+        input: UpdateNotificationTemplateInput!
+    ): NotificationTemplateBulkUpdatePayload!
+    """
+    Update multiple existing notificationTemplates via file upload
+    """
+    updateBulkCSVNotificationTemplate(
+        """
+        csv file containing values of the notificationTemplate, must include ID column
+        """
+        input: Upload!
+    ): NotificationTemplateBulkUpdatePayload!
+    """
+    Update an existing notificationTemplate
+    """
+    updateNotificationTemplate(
+        """
+        ID of the notificationTemplate
+        """
+        id: ID!
+        """
+        New values for the notificationTemplate
+        """
+        input: UpdateNotificationTemplateInput!
+    ): NotificationTemplateUpdatePayload!
+    """
+    Delete an existing notificationTemplate
+    """
+    deleteNotificationTemplate(
+        """
+        ID of the notificationTemplate
+        """
+        id: ID!
+    ): NotificationTemplateDeletePayload!
+    """
+    Delete multiple notificationTemplates
+    """
+    deleteBulkNotificationTemplate(
+        """
+        IDs of the notificationTemplates to delete
+        """
+        ids: [ID!]!
+    ): NotificationTemplateBulkDeletePayload!
+}
+
+"""
+Return response for createNotificationTemplate mutation
+"""
+type NotificationTemplateCreatePayload {
+    """
+    Created notificationTemplate
+    """
+    notificationTemplate: NotificationTemplate!
+}
+
+"""
+Return response for updateNotificationTemplate mutation
+"""
+type NotificationTemplateUpdatePayload {
+    """
+    Updated notificationTemplate
+    """
+    notificationTemplate: NotificationTemplate!
+}
+
+"""
+Return response for deleteNotificationTemplate mutation
+"""
+type NotificationTemplateDeletePayload {
+    """
+    Deleted notificationTemplate ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkNotificationTemplate mutation
+"""
+type NotificationTemplateBulkCreatePayload {
+    """
+    Created notificationTemplates
+    """
+    notificationTemplates: [NotificationTemplate!]
+}
+
+"""
+Return response for updateBulkNotificationTemplate mutation
+"""
+type NotificationTemplateBulkUpdatePayload {
+    """
+    Updated notificationTemplates
+    """
+    notificationTemplates: [NotificationTemplate!]
+    """
+    IDs of the updated notificationTemplates
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkNotificationTemplate mutation
+"""
+type NotificationTemplateBulkDeletePayload {
+    """
+    Deleted notificationTemplate IDs
+    """
+    deletedIDs: [ID!]!
+}
+`, BuiltIn: false},
 	{Name: "../schema/onboarding.graphql", Input: `extend type Mutation{
     """
     Create a new onboarding
@@ -129624,6 +136806,56 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): CustomTypeEnumConnection
     """
+    Search across EmailBranding objects
+    """
+    emailBrandingSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): EmailBrandingConnection
+    """
+    Search across EmailTemplate objects
+    """
+    emailTemplateSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): EmailTemplateConnection
+    """
     Search across Entity objects
     """
     entitySearch(
@@ -129749,6 +136981,31 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): IdentityHolderConnection
     """
+    Search across Integration objects
+    """
+    integrationSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): IntegrationConnection
+    """
     Search across InternalPolicy objects
     """
     internalPolicySearch(
@@ -129873,6 +137130,31 @@ type ScheduledJobRunDeletePayload {
         """
         last: Int
     ): NarrativeConnection
+    """
+    Search across NotificationTemplate objects
+    """
+    notificationTemplateSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): NotificationTemplateConnection
     """
     Search across Organization objects
     """
@@ -130318,16 +137600,20 @@ type SearchResults{
   controls: ControlConnection
   controlObjectives: ControlObjectiveConnection
   customTypeEnums: CustomTypeEnumConnection
+  emailBrandings: EmailBrandingConnection
+  emailTemplates: EmailTemplateConnection
   entities: EntityConnection
   evidences: EvidenceConnection
   findings: FindingConnection
   groups: GroupConnection
   identityHolders: IdentityHolderConnection
+  integrations: IntegrationConnection
   internalPolicies: InternalPolicyConnection
   invites: InviteConnection
   jobRunners: JobRunnerConnection
   jobTemplates: JobTemplateConnection
   narratives: NarrativeConnection
+  notificationTemplates: NotificationTemplateConnection
   organizations: OrganizationConnection
   platforms: PlatformConnection
   procedures: ProcedureConnection
@@ -132985,6 +140271,118 @@ type VulnerabilityBulkCreatePayload {
     """
     vulnerabilities: [Vulnerability!]
 }`, BuiltIn: false},
+	{Name: "../schema/vulnerability_extended.graphql", Input: `extend type Mutation{
+    """
+    Resolve a vulnerability and optionally capture a review record.
+    """
+    resolveVulnerability(
+        """
+        ID of the vulnerability to resolve
+        """
+        id: ID!
+        """
+        Resolution details
+        """
+        input: ResolveVulnerabilityInput!
+    ): VulnerabilityResolvePayload!
+}
+
+"""
+Input for resolving a vulnerability
+"""
+input ResolveVulnerabilityInput {
+    """
+    status to set on the vulnerability (resolved, dismissed, fixed, etc.)
+    """
+    status: String!
+    """
+    optional reason for the resolution (false_positive, wont_fix, etc.)
+    """
+    reason: String
+    """
+    optional notes or context for the resolution
+    """
+    details: String
+    """
+    when true, create a Review record linked to the vulnerability
+    """
+    createReview: Boolean = true
+    """
+    optional review title override
+    """
+    reviewTitle: String
+    """
+    optional review category override (defaults to resolution)
+    """
+    reviewCategory: String
+    """
+    optional review state override (defaults to the resolution status)
+    """
+    reviewState: String
+}
+
+"""
+Return response for resolveVulnerability mutation
+"""
+type VulnerabilityResolvePayload {
+    """
+    Resolved vulnerability
+    """
+    vulnerability: Vulnerability!
+    """
+    Review record created for the resolution, if requested
+    """
+    review: Review
+}
+`, BuiltIn: false},
+	{Name: "../schema/vulnerability_summary.graphql", Input: `"""
+Summary bucket for vulnerability groupings.
+"""
+type VulnerabilitySummaryBucket {
+  """
+  Bucket label such as severity or source.
+  """
+  key: String!
+  """
+  Count of vulnerabilities in this bucket.
+  """
+  count: Int!
+}
+
+"""
+Aggregated vulnerability summary for dashboards.
+"""
+type VulnerabilitySummary {
+  """
+  Total vulnerabilities matching the filter.
+  """
+  total: Int!
+  """
+  Counts grouped by severity.
+  """
+  bySeverity: [VulnerabilitySummaryBucket!]!
+  """
+  Counts grouped by source.
+  """
+  bySource: [VulnerabilitySummaryBucket!]!
+  """
+  Counts grouped by status.
+  """
+  byStatus: [VulnerabilitySummaryBucket!]!
+}
+
+extend type Query {
+  """
+  Aggregate vulnerability counts for dashboards.
+  """
+  vulnerabilitySummary(
+    """
+    Filtering options for vulnerabilities included in the summary.
+    """
+    where: VulnerabilityWhereInput
+  ): VulnerabilitySummary!
+}
+`, BuiltIn: false},
 	{Name: "../schema/webauthn.graphql", Input: `extend type Mutation{
     """
     Delete an existing webauthn
@@ -133005,6 +140403,117 @@ type WebauthnDeletePayload {
     Deleted webauthn ID
     """
     deletedID: ID!
+}
+`, BuiltIn: false},
+	{Name: "../schema/workflowadmin.graphql", Input: `extend type Mutation {
+    """
+    Force-complete a workflow instance (optionally applying proposal changes)
+    """
+    forceCompleteWorkflowInstance(
+        """
+        ID of the workflow instance to complete
+        """
+        id: ID!
+        """
+        Whether to apply proposal changes when present (defaults to true)
+        """
+        applyProposal: Boolean = true
+    ): WorkflowInstanceAdminPayload!
+    """
+    Cancel a workflow instance (mark as failed) and close pending assignments
+    """
+    cancelWorkflowInstance(
+        """
+        ID of the workflow instance to cancel
+        """
+        id: ID!
+        """
+        Optional reason for cancellation
+        """
+        reason: String
+    ): WorkflowInstanceAdminPayload!
+    """
+    Force-complete multiple workflow instances
+    """
+    bulkForceCompleteWorkflowInstances(
+        ids: [ID!]!
+        applyProposal: Boolean = true
+    ): WorkflowInstanceBulkAdminPayload!
+    """
+    Cancel multiple workflow instances
+    """
+    bulkCancelWorkflowInstances(
+        ids: [ID!]!
+        reason: String
+    ): WorkflowInstanceBulkAdminPayload!
+    """
+    Reassign a workflow assignment to new targets
+    """
+    adminReassignWorkflowAssignment(
+        input: ReassignWorkflowAssignmentInput!
+    ): WorkflowAssignmentReassignPayload!
+}
+
+"""
+Input target for reassigning workflow assignments
+"""
+input WorkflowAssignmentTargetInput {
+    """
+    Target type (USER, GROUP, ROLE, RESOLVER)
+    """
+    type: WorkflowAssignmentTargetWorkflowTargetType!
+    """
+    Target ID for USER/GROUP/ROLE targets
+    """
+    id: ID
+    """
+    Resolver key for RESOLVER targets
+    """
+    resolverKey: String
+}
+
+"""
+Input for adminReassignWorkflowAssignment mutation
+"""
+input ReassignWorkflowAssignmentInput {
+    """
+    ID of the workflow assignment to reassign
+    """
+    id: ID!
+    """
+    New targets for the assignment
+    """
+    targets: [WorkflowAssignmentTargetInput!]!
+}
+
+"""
+Return response for adminReassignWorkflowAssignment mutation
+"""
+type WorkflowAssignmentReassignPayload {
+    """
+    Updated workflow assignment
+    """
+    workflowAssignment: WorkflowAssignment!
+}
+
+"""
+Return response for workflow instance admin operations
+"""
+type WorkflowInstanceAdminPayload {
+    """
+    Updated workflow instance
+    """
+    workflowInstance: WorkflowInstance!
+}
+
+"""
+Return response for bulk workflow instance admin operations
+"""
+type WorkflowInstanceBulkAdminPayload {
+    """
+    IDs of workflow instances updated
+    """
+    updatedIDs: [ID!]!
 }
 `, BuiltIn: false},
 	{Name: "../schema/workflowassignment.graphql", Input: `extend type Query {
@@ -133042,6 +140551,36 @@ type WebauthnDeletePayload {
         """
         reason: String
     ): WorkflowAssignmentRejectPayload!
+    """
+    Request changes on a workflow assignment and send it back to the originator
+    """
+    requestChangesWorkflowAssignment(
+        """
+        ID of the workflow assignment to request changes on
+        """
+        id: ID!
+        """
+        Optional reason for the change request
+        """
+        reason: String
+        """
+        Optional structured inputs for the change request
+        """
+        inputs: Map
+    ): WorkflowAssignmentRejectPayload!
+    """
+    Reassign a workflow assignment by creating an additional assignment for another user
+    """
+    reassignWorkflowAssignment(
+        """
+        ID of the workflow assignment to extend
+        """
+        id: ID!
+        """
+        User ID to assign an additional approval to
+        """
+        targetUserID: ID!
+    ): WorkflowAssignment!
 }
 
 extend type Query {
@@ -133440,6 +140979,165 @@ enum WorkflowProposalState @goModel(model: "github.com/theopenlane/core/common/e
         """
         id: ID!
     ):  WorkflowObjectRef!
+}
+`, BuiltIn: false},
+	{Name: "../schema/workflowproposalextended.graphql", Input: `extend type Query {
+    """
+    Look up workflow proposal by ID
+    """
+    workflowProposal(
+        """
+        ID of the workflow proposal
+        """
+        id: ID!
+    ): WorkflowProposal!
+    """
+    List workflow proposals for a specific object
+    """
+    workflowProposalsForObject(
+        """
+        Workflow object type (e.g. Control, InternalPolicy)
+        """
+        objectType: String!
+        """
+        ID of the object
+        """
+        objectID: ID!
+        """
+        Optional states to filter proposals by
+        """
+        includeStates: [WorkflowProposalState!]
+    ): [WorkflowProposal!]!
+}
+
+extend type Mutation {
+    """
+    Update the proposed changes for a workflow proposal
+    """
+    updateWorkflowProposalChanges(
+        input: UpdateWorkflowProposalChangesInput!
+    ): WorkflowProposalUpdatePayload!
+    """
+    Submit a draft workflow proposal for approval
+    """
+    submitWorkflowProposal(
+        """
+        ID of the workflow proposal to submit
+        """
+        id: ID!
+    ): WorkflowProposalSubmitPayload!
+    """
+    Withdraw a workflow proposal (mark as superseded)
+    """
+    withdrawWorkflowProposal(
+        """
+        ID of the workflow proposal to withdraw
+        """
+        id: ID!
+        """
+        Optional reason for withdrawal
+        """
+        reason: String
+    ): WorkflowProposalWithdrawPayload!
+}
+
+"""
+WorkflowProposal stores staged changes for a workflow approval domain.
+"""
+type WorkflowProposal @goModel(model: "github.com/theopenlane/core/internal/ent/generated.WorkflowProposal") {
+    """
+    ID of the workflow proposal
+    """
+    id: ID!
+    """
+    Stable key representing the approval domain for this proposal
+    """
+    domainKey: String!
+    """
+    Current state of the proposal
+    """
+    state: WorkflowProposalState!
+    """
+    Staged field updates for this domain
+    """
+    changes: Map
+    """
+    Hash of the current proposed changes for approval verification
+    """
+    proposedHash: String
+    """
+    Hash of the proposed changes that were approved
+    """
+    approvedHash: String
+    """
+    Timestamp when this proposal was submitted for approval
+    """
+    submittedAt: Time
+    """
+    User who submitted this proposal for approval
+    """
+    submittedByUserID: ID
+    """
+    WorkflowObjectRef record that identifies the target object for this proposal
+    """
+    workflowObjectRefID: ID!
+    """
+    Creation timestamp
+    """
+    createdAt: Time!
+    """
+    Last update timestamp
+    """
+    updatedAt: Time!
+    """
+    Precomputed proposal preview (diff + values) for approval workflows.
+    Only available to editors/owners of the target object.
+    """
+    preview: WorkflowProposalPreview
+}
+
+"""
+Input for updateWorkflowProposalChanges mutation
+"""
+input UpdateWorkflowProposalChangesInput {
+    """
+    ID of the workflow proposal to update
+    """
+    id: ID!
+    """
+    New proposed changes for the approval domain
+    """
+    changes: Map!
+}
+
+"""
+Return response for updateWorkflowProposalChanges mutation
+"""
+type WorkflowProposalUpdatePayload {
+    """
+    Updated workflow proposal
+    """
+    workflowProposal: WorkflowProposal!
+}
+
+"""
+Return response for submitWorkflowProposal mutation
+"""
+type WorkflowProposalSubmitPayload {
+    """
+    Submitted workflow proposal
+    """
+    workflowProposal: WorkflowProposal!
+}
+
+"""
+Return response for withdrawWorkflowProposal mutation
+"""
+type WorkflowProposalWithdrawPayload {
+    """
+    Withdrawn workflow proposal
+    """
+    workflowProposal: WorkflowProposal!
 }
 `, BuiltIn: false},
 }

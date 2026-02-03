@@ -53,6 +53,8 @@ const (
 	FieldKind = "kind"
 	// FieldIntegrationType holds the string denoting the integration_type field in the database.
 	FieldIntegrationType = "integration_type"
+	// FieldProviderMetadata holds the string denoting the provider_metadata field in the database.
+	FieldProviderMetadata = "provider_metadata"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
@@ -87,6 +89,14 @@ const (
 	EdgeDirectoryMemberships = "directory_memberships"
 	// EdgeDirectorySyncRuns holds the string denoting the directory_sync_runs edge name in mutations.
 	EdgeDirectorySyncRuns = "directory_sync_runs"
+	// EdgeNotificationTemplates holds the string denoting the notification_templates edge name in mutations.
+	EdgeNotificationTemplates = "notification_templates"
+	// EdgeEmailTemplates holds the string denoting the email_templates edge name in mutations.
+	EdgeEmailTemplates = "email_templates"
+	// EdgeIntegrationWebhooks holds the string denoting the integration_webhooks edge name in mutations.
+	EdgeIntegrationWebhooks = "integration_webhooks"
+	// EdgeIntegrationRuns holds the string denoting the integration_runs edge name in mutations.
+	EdgeIntegrationRuns = "integration_runs"
 	// EdgeEntities holds the string denoting the entities edge name in mutations.
 	EdgeEntities = "entities"
 	// Table holds the table name of the integration in the database.
@@ -189,6 +199,34 @@ const (
 	DirectorySyncRunsInverseTable = "directory_sync_runs"
 	// DirectorySyncRunsColumn is the table column denoting the directory_sync_runs relation/edge.
 	DirectorySyncRunsColumn = "integration_directory_sync_runs"
+	// NotificationTemplatesTable is the table that holds the notification_templates relation/edge.
+	NotificationTemplatesTable = "notification_templates"
+	// NotificationTemplatesInverseTable is the table name for the NotificationTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "notificationtemplate" package.
+	NotificationTemplatesInverseTable = "notification_templates"
+	// NotificationTemplatesColumn is the table column denoting the notification_templates relation/edge.
+	NotificationTemplatesColumn = "integration_id"
+	// EmailTemplatesTable is the table that holds the email_templates relation/edge.
+	EmailTemplatesTable = "email_templates"
+	// EmailTemplatesInverseTable is the table name for the EmailTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "emailtemplate" package.
+	EmailTemplatesInverseTable = "email_templates"
+	// EmailTemplatesColumn is the table column denoting the email_templates relation/edge.
+	EmailTemplatesColumn = "integration_id"
+	// IntegrationWebhooksTable is the table that holds the integration_webhooks relation/edge.
+	IntegrationWebhooksTable = "integration_webhooks"
+	// IntegrationWebhooksInverseTable is the table name for the IntegrationWebhook entity.
+	// It exists in this package in order to avoid circular dependency with the "integrationwebhook" package.
+	IntegrationWebhooksInverseTable = "integration_webhooks"
+	// IntegrationWebhooksColumn is the table column denoting the integration_webhooks relation/edge.
+	IntegrationWebhooksColumn = "integration_id"
+	// IntegrationRunsTable is the table that holds the integration_runs relation/edge.
+	IntegrationRunsTable = "integration_runs"
+	// IntegrationRunsInverseTable is the table name for the IntegrationRun entity.
+	// It exists in this package in order to avoid circular dependency with the "integrationrun" package.
+	IntegrationRunsInverseTable = "integration_runs"
+	// IntegrationRunsColumn is the table column denoting the integration_runs relation/edge.
+	IntegrationRunsColumn = "integration_id"
 	// EntitiesTable is the table that holds the entities relation/edge. The primary key declared below.
 	EntitiesTable = "entity_integrations"
 	// EntitiesInverseTable is the table name for the Entity entity.
@@ -218,6 +256,7 @@ var Columns = []string{
 	FieldDescription,
 	FieldKind,
 	FieldIntegrationType,
+	FieldProviderMetadata,
 	FieldMetadata,
 }
 
@@ -596,6 +635,62 @@ func ByDirectorySyncRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption
 	}
 }
 
+// ByNotificationTemplatesCount orders the results by notification_templates count.
+func ByNotificationTemplatesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newNotificationTemplatesStep(), opts...)
+	}
+}
+
+// ByNotificationTemplates orders the results by notification_templates terms.
+func ByNotificationTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNotificationTemplatesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEmailTemplatesCount orders the results by email_templates count.
+func ByEmailTemplatesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEmailTemplatesStep(), opts...)
+	}
+}
+
+// ByEmailTemplates orders the results by email_templates terms.
+func ByEmailTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEmailTemplatesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIntegrationWebhooksCount orders the results by integration_webhooks count.
+func ByIntegrationWebhooksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationWebhooksStep(), opts...)
+	}
+}
+
+// ByIntegrationWebhooks orders the results by integration_webhooks terms.
+func ByIntegrationWebhooks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationWebhooksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIntegrationRunsCount orders the results by integration_runs count.
+func ByIntegrationRunsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationRunsStep(), opts...)
+	}
+}
+
+// ByIntegrationRuns orders the results by integration_runs terms.
+func ByIntegrationRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByEntitiesCount orders the results by entities count.
 func ByEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -719,6 +814,34 @@ func newDirectorySyncRunsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DirectorySyncRunsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
+	)
+}
+func newNotificationTemplatesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NotificationTemplatesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, NotificationTemplatesTable, NotificationTemplatesColumn),
+	)
+}
+func newEmailTemplatesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EmailTemplatesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EmailTemplatesTable, EmailTemplatesColumn),
+	)
+}
+func newIntegrationWebhooksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationWebhooksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationWebhooksTable, IntegrationWebhooksColumn),
+	)
+}
+func newIntegrationRunsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationRunsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationRunsTable, IntegrationRunsColumn),
 	)
 }
 func newEntitiesStep() *sqlgraph.Step {

@@ -1,0 +1,158 @@
+extend type Query {
+    """
+    Look up emailBranding by ID
+    """
+     emailBranding(
+        """
+        ID of the emailBranding
+        """
+        id: ID!
+    ):  EmailBranding!
+}
+
+extend type Mutation{
+    """
+    Create a new emailBranding
+    """
+    createEmailBranding(
+        """
+        values of the emailBranding
+        """
+        input: CreateEmailBrandingInput!
+    ): EmailBrandingCreatePayload!
+    """
+    Create multiple new emailBrandings
+    """
+    createBulkEmailBranding(
+        """
+        values of the emailBranding
+        """
+        input: [CreateEmailBrandingInput!]
+    ): EmailBrandingBulkCreatePayload!
+    """
+    Create multiple new emailBrandings via file upload
+    """
+    createBulkCSVEmailBranding(
+        """
+        csv file containing values of the emailBranding
+        """
+        input: Upload!
+    ): EmailBrandingBulkCreatePayload!
+    """
+    Update multiple existing emailBrandings
+    """
+    updateBulkEmailBranding(
+        """
+        IDs of the emailBrandings to update
+        """
+        ids: [ID!]!
+        """
+        values to update the emailBrandings with
+        """
+        input: UpdateEmailBrandingInput!
+    ): EmailBrandingBulkUpdatePayload!
+    """
+    Update multiple existing emailBrandings via file upload
+    """
+    updateBulkCSVEmailBranding(
+        """
+        csv file containing values of the emailBranding, must include ID column
+        """
+        input: Upload!
+    ): EmailBrandingBulkUpdatePayload!
+    """
+    Update an existing emailBranding
+    """
+    updateEmailBranding(
+        """
+        ID of the emailBranding
+        """
+        id: ID!
+        """
+        New values for the emailBranding
+        """
+        input: UpdateEmailBrandingInput!
+    ): EmailBrandingUpdatePayload!
+    """
+    Delete an existing emailBranding
+    """
+    deleteEmailBranding(
+        """
+        ID of the emailBranding
+        """
+        id: ID!
+    ): EmailBrandingDeletePayload!
+    """
+    Delete multiple emailBrandings
+    """
+    deleteBulkEmailBranding(
+        """
+        IDs of the emailBrandings to delete
+        """
+        ids: [ID!]!
+    ): EmailBrandingBulkDeletePayload!
+}
+
+"""
+Return response for createEmailBranding mutation
+"""
+type EmailBrandingCreatePayload {
+    """
+    Created emailBranding
+    """
+    emailBranding: EmailBranding!
+}
+
+"""
+Return response for updateEmailBranding mutation
+"""
+type EmailBrandingUpdatePayload {
+    """
+    Updated emailBranding
+    """
+    emailBranding: EmailBranding!
+}
+
+"""
+Return response for deleteEmailBranding mutation
+"""
+type EmailBrandingDeletePayload {
+    """
+    Deleted emailBranding ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkEmailBranding mutation
+"""
+type EmailBrandingBulkCreatePayload {
+    """
+    Created emailBrandings
+    """
+    emailBrandings: [EmailBranding!]
+}
+
+"""
+Return response for updateBulkEmailBranding mutation
+"""
+type EmailBrandingBulkUpdatePayload {
+    """
+    Updated emailBrandings
+    """
+    emailBrandings: [EmailBranding!]
+    """
+    IDs of the updated emailBrandings
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkEmailBranding mutation
+"""
+type EmailBrandingBulkDeletePayload {
+    """
+    Deleted emailBranding IDs
+    """
+    deletedIDs: [ID!]!
+}

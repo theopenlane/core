@@ -341,6 +341,20 @@ func (_c *WorkflowAssignmentHistoryCreate) SetNillableNotes(v *string) *Workflow
 	return _c
 }
 
+// SetDueAt sets the "due_at" field.
+func (_c *WorkflowAssignmentHistoryCreate) SetDueAt(v time.Time) *WorkflowAssignmentHistoryCreate {
+	_c.mutation.SetDueAt(v)
+	return _c
+}
+
+// SetNillableDueAt sets the "due_at" field if the given value is not nil.
+func (_c *WorkflowAssignmentHistoryCreate) SetNillableDueAt(v *time.Time) *WorkflowAssignmentHistoryCreate {
+	if v != nil {
+		_c.SetDueAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *WorkflowAssignmentHistoryCreate) SetID(v string) *WorkflowAssignmentHistoryCreate {
 	_c.mutation.SetID(v)
@@ -614,6 +628,10 @@ func (_c *WorkflowAssignmentHistoryCreate) createSpec() (*WorkflowAssignmentHist
 	if value, ok := _c.mutation.Notes(); ok {
 		_spec.SetField(workflowassignmenthistory.FieldNotes, field.TypeString, value)
 		_node.Notes = value
+	}
+	if value, ok := _c.mutation.DueAt(); ok {
+		_spec.SetField(workflowassignmenthistory.FieldDueAt, field.TypeTime, value)
+		_node.DueAt = &value
 	}
 	return _node, _spec
 }

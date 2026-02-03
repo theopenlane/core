@@ -14,5 +14,9 @@ import (
 
 // ProposalPreview is the resolver for the proposalPreview field.
 func (r *workflowInstanceResolver) ProposalPreview(ctx context.Context, obj *generated.WorkflowInstance) (*model.WorkflowProposalPreview, error) {
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
 	return r.workflowInstanceProposalPreview(ctx, obj)
 }

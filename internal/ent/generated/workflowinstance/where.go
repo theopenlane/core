@@ -2168,6 +2168,35 @@ func HasWorkflowEventsWith(preds ...predicate.WorkflowEvent) predicate.WorkflowI
 	})
 }
 
+// HasEmailTemplates applies the HasEdge predicate on the "email_templates" edge.
+func HasEmailTemplates() predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, EmailTemplatesTable, EmailTemplatesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEmailTemplatesWith applies the HasEdge predicate on the "email_templates" edge with a given conditions (other predicates).
+func HasEmailTemplatesWith(preds ...predicate.EmailTemplate) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(func(s *sql.Selector) {
+		step := newEmailTemplatesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasWorkflowObjectRefs applies the HasEdge predicate on the "workflow_object_refs" edge.
 func HasWorkflowObjectRefs() predicate.WorkflowInstance {
 	return predicate.WorkflowInstance(func(s *sql.Selector) {

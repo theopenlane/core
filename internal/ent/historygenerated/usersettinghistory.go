@@ -44,6 +44,12 @@ type UserSettingHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID string `json:"user_id,omitempty"`
+	// user id to delegate workflow approvals to
+	DelegateUserID *string `json:"delegate_user_id,omitempty"`
+	// when delegation becomes active
+	DelegateStartAt *time.Time `json:"delegate_start_at,omitempty"`
+	// when delegation ends
+	DelegateEndAt *time.Time `json:"delegate_end_at,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
 	Locked bool `json:"locked,omitempty"`
 	// The time notifications regarding the user were silenced
@@ -74,9 +80,9 @@ func (*UserSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case usersettinghistory.FieldLocked, usersettinghistory.FieldEmailConfirmed, usersettinghistory.FieldIsWebauthnAllowed, usersettinghistory.FieldIsTfaEnabled:
 			values[i] = new(sql.NullBool)
-		case usersettinghistory.FieldID, usersettinghistory.FieldRef, usersettinghistory.FieldCreatedBy, usersettinghistory.FieldUpdatedBy, usersettinghistory.FieldDeletedBy, usersettinghistory.FieldUserID, usersettinghistory.FieldStatus, usersettinghistory.FieldPhoneNumber:
+		case usersettinghistory.FieldID, usersettinghistory.FieldRef, usersettinghistory.FieldCreatedBy, usersettinghistory.FieldUpdatedBy, usersettinghistory.FieldDeletedBy, usersettinghistory.FieldUserID, usersettinghistory.FieldDelegateUserID, usersettinghistory.FieldStatus, usersettinghistory.FieldPhoneNumber:
 			values[i] = new(sql.NullString)
-		case usersettinghistory.FieldHistoryTime, usersettinghistory.FieldCreatedAt, usersettinghistory.FieldUpdatedAt, usersettinghistory.FieldDeletedAt, usersettinghistory.FieldSilencedAt, usersettinghistory.FieldSuspendedAt:
+		case usersettinghistory.FieldHistoryTime, usersettinghistory.FieldCreatedAt, usersettinghistory.FieldUpdatedAt, usersettinghistory.FieldDeletedAt, usersettinghistory.FieldDelegateStartAt, usersettinghistory.FieldDelegateEndAt, usersettinghistory.FieldSilencedAt, usersettinghistory.FieldSuspendedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -166,6 +172,27 @@ func (_m *UserSettingHistory) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
 				_m.UserID = value.String
+			}
+		case usersettinghistory.FieldDelegateUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_user_id", values[i])
+			} else if value.Valid {
+				_m.DelegateUserID = new(string)
+				*_m.DelegateUserID = value.String
+			}
+		case usersettinghistory.FieldDelegateStartAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_start_at", values[i])
+			} else if value.Valid {
+				_m.DelegateStartAt = new(time.Time)
+				*_m.DelegateStartAt = value.Time
+			}
+		case usersettinghistory.FieldDelegateEndAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_end_at", values[i])
+			} else if value.Valid {
+				_m.DelegateEndAt = new(time.Time)
+				*_m.DelegateEndAt = value.Time
 			}
 		case usersettinghistory.FieldLocked:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -286,6 +313,21 @@ func (_m *UserSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
 	builder.WriteString(_m.UserID)
+	builder.WriteString(", ")
+	if v := _m.DelegateUserID; v != nil {
+		builder.WriteString("delegate_user_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.DelegateStartAt; v != nil {
+		builder.WriteString("delegate_start_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.DelegateEndAt; v != nil {
+		builder.WriteString("delegate_end_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("locked=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Locked))
