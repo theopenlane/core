@@ -3,7 +3,6 @@ package keystore
 import (
 	"context"
 	"encoding/json"
-	"reflect"
 	"strings"
 	"time"
 
@@ -12,7 +11,6 @@ import (
 
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -59,8 +57,6 @@ func (s *Store) SaveCredential(ctx context.Context, orgID string, payload types.
 		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to ensure integration record")
 		return types.CredentialPayload{}, err
 	}
-
-	s.updateIntegrationProviderState(systemCtx, integrationRecord, payload.Provider, payload.Data.ProviderData)
 
 	secretName := string(payload.Provider)
 	envelope := payloadToCredentialSet(payload, s.now)
@@ -240,29 +236,6 @@ func (s *Store) ensureIntegration(ctx context.Context, orgID string, provider ty
 		return nil, createErr
 	}
 	return record, nil
-}
-
-func (s *Store) updateIntegrationProviderState(ctx context.Context, record *ent.Integration, provider types.ProviderType, data map[string]any) {
-	if s == nil || s.db == nil || record == nil || len(data) == 0 {
-		return
-	}
-
-	update := helpers.ProviderStateFromProviderData(provider, data)
-	if update == nil {
-		return
-	}
-
-	next := helpers.MergeProviderState(record.ProviderState, update)
-	if reflect.DeepEqual(record.ProviderState, next) {
-		return
-	}
-
-	if err := s.db.Integration.UpdateOneID(record.ID).SetProviderState(next).Exec(ctx); err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Str("provider", string(provider)).Msg("failed to update integration provider state")
-		return
-	}
-
-	record.ProviderState = next
 }
 
 // payloadToCredentialSet converts a CredentialPayload into a storable CredentialSet
