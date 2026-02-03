@@ -78,6 +78,8 @@ func (ec *executionContext) fieldContext_CustomDomainBulkCreatePayload_customDom
 				return ec.fieldContext_CustomDomain_mappableDomainID(ctx, field)
 			case "dnsVerificationID":
 				return ec.fieldContext_CustomDomain_dnsVerificationID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_CustomDomain_trustCenterID(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomDomain_owner(ctx, field)
 			case "mappableDomain":
@@ -170,6 +172,8 @@ func (ec *executionContext) fieldContext_CustomDomainBulkUpdatePayload_customDom
 				return ec.fieldContext_CustomDomain_mappableDomainID(ctx, field)
 			case "dnsVerificationID":
 				return ec.fieldContext_CustomDomain_dnsVerificationID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_CustomDomain_trustCenterID(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomDomain_owner(ctx, field)
 			case "mappableDomain":
@@ -262,6 +266,8 @@ func (ec *executionContext) fieldContext_CustomDomainCreatePayload_customDomain(
 				return ec.fieldContext_CustomDomain_mappableDomainID(ctx, field)
 			case "dnsVerificationID":
 				return ec.fieldContext_CustomDomain_dnsVerificationID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_CustomDomain_trustCenterID(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomDomain_owner(ctx, field)
 			case "mappableDomain":
@@ -354,6 +360,8 @@ func (ec *executionContext) fieldContext_CustomDomainUpdatePayload_customDomain(
 				return ec.fieldContext_CustomDomain_mappableDomainID(ctx, field)
 			case "dnsVerificationID":
 				return ec.fieldContext_CustomDomain_dnsVerificationID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_CustomDomain_trustCenterID(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomDomain_owner(ctx, field)
 			case "mappableDomain":
@@ -417,6 +425,8 @@ func (ec *executionContext) fieldContext_CustomDomainValidatePayload_customDomai
 				return ec.fieldContext_CustomDomain_mappableDomainID(ctx, field)
 			case "dnsVerificationID":
 				return ec.fieldContext_CustomDomain_dnsVerificationID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_CustomDomain_trustCenterID(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomDomain_owner(ctx, field)
 			case "mappableDomain":

@@ -72,6 +72,7 @@ func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input mo
 			CnameRecord:      input.CnameRecord,
 			OwnerID:          &trustCenter.OwnerID,
 			MappableDomainID: mappableDomainID,
+			TrustCenterID:    &trustCenter.ID,
 		}).
 		Save(ctx)
 	if err != nil {

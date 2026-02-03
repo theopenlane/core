@@ -4249,6 +4249,7 @@ type CreateCustomDomainInput struct {
 	InternalNotes     *string
 	SystemInternalID  *string
 	CnameRecord       string
+	TrustCenterID     *string
 	OwnerID           *string
 	MappableDomainID  string
 	DNSVerificationID *string
@@ -4266,6 +4267,9 @@ func (i *CreateCustomDomainInput) Mutate(m *CustomDomainMutation) {
 		m.SetSystemInternalID(*v)
 	}
 	m.SetCnameRecord(i.CnameRecord)
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -4290,6 +4294,8 @@ type UpdateCustomDomainInput struct {
 	InternalNotes         *string
 	ClearSystemInternalID bool
 	SystemInternalID      *string
+	ClearTrustCenterID    bool
+	TrustCenterID         *string
 	ClearOwner            bool
 	OwnerID               *string
 	ClearDNSVerification  bool
@@ -4318,6 +4324,12 @@ func (i *UpdateCustomDomainInput) Mutate(m *CustomDomainMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if i.ClearTrustCenterID {
+		m.ClearTrustCenterID()
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

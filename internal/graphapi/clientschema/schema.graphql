@@ -10896,6 +10896,10 @@ input CreateCustomDomainInput {
 	the name of the custom domain
 	"""
 	cnameRecord: String!
+	"""
+	the ID of the trust center the domain belongs to, if applicable
+	"""
+	trustCenterID: String
 	ownerID: ID
 	mappableDomainID: ID!
 	dnsVerificationID: ID
@@ -15527,6 +15531,10 @@ type CustomDomain implements Node {
 	The ID of the dns verification record
 	"""
 	dnsVerificationID: ID
+	"""
+	the ID of the trust center the domain belongs to, if applicable
+	"""
+	trustCenterID: String
 	owner: Organization
 	mappableDomain: MappableDomain!
 	dnsVerification: DNSVerification
@@ -15843,6 +15851,24 @@ input CustomDomainWhereInput {
 	dnsVerificationIDNotNil: Boolean
 	dnsVerificationIDEqualFold: ID
 	dnsVerificationIDContainsFold: ID
+	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: String
+	trustCenterIDNEQ: String
+	trustCenterIDIn: [String!]
+	trustCenterIDNotIn: [String!]
+	trustCenterIDGT: String
+	trustCenterIDGTE: String
+	trustCenterIDLT: String
+	trustCenterIDLTE: String
+	trustCenterIDContains: String
+	trustCenterIDHasPrefix: String
+	trustCenterIDHasSuffix: String
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: String
+	trustCenterIDContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -78967,6 +78993,11 @@ input UpdateCustomDomainInput {
 	"""
 	systemInternalID: String @readOnly
 	clearSystemInternalID: Boolean
+	"""
+	the ID of the trust center the domain belongs to, if applicable
+	"""
+	trustCenterID: String
+	clearTrustCenterID: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	dnsVerificationID: ID

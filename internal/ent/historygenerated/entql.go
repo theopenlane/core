@@ -564,6 +564,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			customdomainhistory.FieldCnameRecord:       {Type: field.TypeString, Column: customdomainhistory.FieldCnameRecord},
 			customdomainhistory.FieldMappableDomainID:  {Type: field.TypeString, Column: customdomainhistory.FieldMappableDomainID},
 			customdomainhistory.FieldDNSVerificationID: {Type: field.TypeString, Column: customdomainhistory.FieldDNSVerificationID},
+			customdomainhistory.FieldTrustCenterID:     {Type: field.TypeString, Column: customdomainhistory.FieldTrustCenterID},
 		},
 	}
 	graph.Nodes[11] = &sqlgraph.Node{
@@ -5145,6 +5146,11 @@ func (f *CustomDomainHistoryFilter) WhereMappableDomainID(p entql.StringP) {
 // WhereDNSVerificationID applies the entql string predicate on the dns_verification_id field.
 func (f *CustomDomainHistoryFilter) WhereDNSVerificationID(p entql.StringP) {
 	f.Where(p.Field(customdomainhistory.FieldDNSVerificationID))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *CustomDomainHistoryFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(customdomainhistory.FieldTrustCenterID))
 }
 
 // addPredicate implements the predicateAdder interface.

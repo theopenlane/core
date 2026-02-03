@@ -4169,6 +4169,10 @@ func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetDNSVerificationID(dnsVerificationID)
 	}
 
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -4284,6 +4288,12 @@ func (m *CustomDomainMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetDNSVerificationID(customdomain.DNSVerificationID)
 		}
 
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(customdomain.TrustCenterID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -4333,6 +4343,7 @@ func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetCnameRecord(customdomain.CnameRecord).
 			SetMappableDomainID(customdomain.MappableDomainID).
 			SetDNSVerificationID(customdomain.DNSVerificationID).
+			SetTrustCenterID(customdomain.TrustCenterID).
 			Save(ctx)
 		if err != nil {
 			return err

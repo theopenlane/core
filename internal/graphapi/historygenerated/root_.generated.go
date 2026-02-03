@@ -508,6 +508,7 @@ type ComplexityRoot struct {
 		SystemInternalID  func(childComplexity int) int
 		SystemOwned       func(childComplexity int) int
 		Tags              func(childComplexity int) int
+		TrustCenterID     func(childComplexity int) int
 		UpdatedAt         func(childComplexity int) int
 		UpdatedBy         func(childComplexity int) int
 	}
@@ -5691,6 +5692,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CustomDomainHistory.Tags(childComplexity), true
+
+	case "CustomDomainHistory.trustCenterID":
+		if e.complexity.CustomDomainHistory.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.TrustCenterID(childComplexity), true
 
 	case "CustomDomainHistory.updatedAt":
 		if e.complexity.CustomDomainHistory.UpdatedAt == nil {
@@ -26231,6 +26239,10 @@ type CustomDomainHistory implements Node {
   The ID of the dns verification record
   """
   dnsVerificationID: String
+  """
+  the ID of the trust center the domain belongs to, if applicable
+  """
+  trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -26522,6 +26534,24 @@ input CustomDomainHistoryWhereInput {
   dnsVerificationIDNotNil: Boolean
   dnsVerificationIDEqualFold: String
   dnsVerificationIDContainsFold: String
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
 }
 type DNSVerificationHistory implements Node {
   id: ID!
