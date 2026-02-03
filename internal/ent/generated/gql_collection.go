@@ -11393,6 +11393,11 @@ func (_q *CustomDomainQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, customdomain.FieldDNSVerificationID)
 				fieldSeen[customdomain.FieldDNSVerificationID] = struct{}{}
 			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[customdomain.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldTrustCenterID)
+				fieldSeen[customdomain.FieldTrustCenterID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

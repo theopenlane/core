@@ -986,6 +986,7 @@ type ComplexityRoot struct {
 		SystemInternalID  func(childComplexity int) int
 		SystemOwned       func(childComplexity int) int
 		Tags              func(childComplexity int) int
+		TrustCenterID     func(childComplexity int) int
 		UpdatedAt         func(childComplexity int) int
 		UpdatedBy         func(childComplexity int) int
 	}
@@ -11716,6 +11717,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CustomDomain.Tags(childComplexity), true
+
+	case "CustomDomain.trustCenterID":
+		if e.complexity.CustomDomain.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.TrustCenterID(childComplexity), true
 
 	case "CustomDomain.updatedAt":
 		if e.complexity.CustomDomain.UpdatedAt == nil {
@@ -61764,6 +61772,10 @@ input CreateCustomDomainInput {
   the name of the custom domain
   """
   cnameRecord: String!
+  """
+  the ID of the trust center the domain belongs to, if applicable
+  """
+  trustCenterID: String
   ownerID: ID
   mappableDomainID: ID!
   dnsVerificationID: ID
@@ -66255,6 +66267,10 @@ type CustomDomain implements Node {
   The ID of the dns verification record
   """
   dnsVerificationID: ID
+  """
+  the ID of the trust center the domain belongs to, if applicable
+  """
+  trustCenterID: String
   owner: Organization
   mappableDomain: MappableDomain!
   dnsVerification: DNSVerification
@@ -66504,6 +66520,24 @@ input CustomDomainWhereInput {
   dnsVerificationIDNotNil: Boolean
   dnsVerificationIDEqualFold: ID
   dnsVerificationIDContainsFold: ID
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
   """
   owner edge predicates
   """
@@ -118015,6 +118049,11 @@ input UpdateCustomDomainInput {
   """
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
+  """
+  the ID of the trust center the domain belongs to, if applicable
+  """
+  trustCenterID: String
+  clearTrustCenterID: Boolean
   ownerID: ID
   clearOwner: Boolean
   dnsVerificationID: ID

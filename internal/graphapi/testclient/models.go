@@ -5844,7 +5844,9 @@ type CreateCustomDomainInput struct {
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the custom domain
-	CnameRecord       string  `json:"cnameRecord"`
+	CnameRecord string `json:"cnameRecord"`
+	// the ID of the trust center the domain belongs to, if applicable
+	TrustCenterID     *string `json:"trustCenterID,omitempty"`
 	OwnerID           *string `json:"ownerID,omitempty"`
 	MappableDomainID  string  `json:"mappableDomainID"`
 	DNSVerificationID *string `json:"dnsVerificationID,omitempty"`
@@ -8711,10 +8713,12 @@ type CustomDomain struct {
 	// The mappable domain id that this custom domain maps to
 	MappableDomainID string `json:"mappableDomainID"`
 	// The ID of the dns verification record
-	DNSVerificationID *string          `json:"dnsVerificationID,omitempty"`
-	Owner             *Organization    `json:"owner,omitempty"`
-	MappableDomain    *MappableDomain  `json:"mappableDomain"`
-	DNSVerification   *DNSVerification `json:"dnsVerification,omitempty"`
+	DNSVerificationID *string `json:"dnsVerificationID,omitempty"`
+	// the ID of the trust center the domain belongs to, if applicable
+	TrustCenterID   *string          `json:"trustCenterID,omitempty"`
+	Owner           *Organization    `json:"owner,omitempty"`
+	MappableDomain  *MappableDomain  `json:"mappableDomain"`
+	DNSVerification *DNSVerification `json:"dnsVerification,omitempty"`
 }
 
 func (CustomDomain) IsNode() {}
@@ -8957,6 +8961,22 @@ type CustomDomainWhereInput struct {
 	DNSVerificationIDNotNil       *bool    `json:"dnsVerificationIDNotNil,omitempty"`
 	DNSVerificationIDEqualFold    *string  `json:"dnsVerificationIDEqualFold,omitempty"`
 	DNSVerificationIDContainsFold *string  `json:"dnsVerificationIDContainsFold,omitempty"`
+	// trust_center_id field predicates
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIdgt           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIdgte          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIdlt           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIdlte          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -36415,10 +36435,13 @@ type UpdateCustomDomainInput struct {
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID      *string `json:"systemInternalID,omitempty"`
 	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
-	OwnerID               *string `json:"ownerID,omitempty"`
-	ClearOwner            *bool   `json:"clearOwner,omitempty"`
-	DNSVerificationID     *string `json:"dnsVerificationID,omitempty"`
-	ClearDNSVerification  *bool   `json:"clearDNSVerification,omitempty"`
+	// the ID of the trust center the domain belongs to, if applicable
+	TrustCenterID        *string `json:"trustCenterID,omitempty"`
+	ClearTrustCenterID   *bool   `json:"clearTrustCenterID,omitempty"`
+	OwnerID              *string `json:"ownerID,omitempty"`
+	ClearOwner           *bool   `json:"clearOwner,omitempty"`
+	DNSVerificationID    *string `json:"dnsVerificationID,omitempty"`
+	ClearDNSVerification *bool   `json:"clearDNSVerification,omitempty"`
 }
 
 // UpdateCustomTypeEnumInput is used for update CustomTypeEnum object.

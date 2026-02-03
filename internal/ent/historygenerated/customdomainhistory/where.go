@@ -142,6 +142,11 @@ func DNSVerificationID(v string) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.FieldEQ(FieldDNSVerificationID, v))
 }
 
+// TrustCenterID applies equality check predicate on the "trust_center_id" field. It's identical to TrustCenterIDEQ.
+func TrustCenterID(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1110,6 +1115,81 @@ func DNSVerificationIDEqualFold(v string) predicate.CustomDomainHistory {
 // DNSVerificationIDContainsFold applies the ContainsFold predicate on the "dns_verification_id" field.
 func DNSVerificationIDContainsFold(v string) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.FieldContainsFold(FieldDNSVerificationID, v))
+}
+
+// TrustCenterIDEQ applies the EQ predicate on the "trust_center_id" field.
+func TrustCenterIDEQ(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDNEQ applies the NEQ predicate on the "trust_center_id" field.
+func TrustCenterIDNEQ(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldNEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIn applies the In predicate on the "trust_center_id" field.
+func TrustCenterIDIn(vs ...string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDNotIn applies the NotIn predicate on the "trust_center_id" field.
+func TrustCenterIDNotIn(vs ...string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldNotIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDGT applies the GT predicate on the "trust_center_id" field.
+func TrustCenterIDGT(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldGT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDGTE applies the GTE predicate on the "trust_center_id" field.
+func TrustCenterIDGTE(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldGTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLT applies the LT predicate on the "trust_center_id" field.
+func TrustCenterIDLT(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldLT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLTE applies the LTE predicate on the "trust_center_id" field.
+func TrustCenterIDLTE(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldLTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContains applies the Contains predicate on the "trust_center_id" field.
+func TrustCenterIDContains(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldContains(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasPrefix applies the HasPrefix predicate on the "trust_center_id" field.
+func TrustCenterIDHasPrefix(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldHasPrefix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasSuffix applies the HasSuffix predicate on the "trust_center_id" field.
+func TrustCenterIDHasSuffix(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldHasSuffix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIsNil applies the IsNil predicate on the "trust_center_id" field.
+func TrustCenterIDIsNil() predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldIsNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDNotNil applies the NotNil predicate on the "trust_center_id" field.
+func TrustCenterIDNotNil() predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldNotNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDEqualFold applies the EqualFold predicate on the "trust_center_id" field.
+func TrustCenterIDEqualFold(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldEqualFold(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
+func TrustCenterIDContainsFold(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldContainsFold(FieldTrustCenterID, v))
 }
 
 // And groups predicates with the AND operator between them.

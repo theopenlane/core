@@ -1,4 +1,4 @@
-h1:u1EvlSu/AFmQ5t7dkowSFpJ6mAws5pVJOVXCYm99wNk=
+h1:yPg3UsCvvjAXeZ2BAb682Dzt0VGbYLlNnCyzPuKgeNo=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -40,3 +40,5 @@ h1:u1EvlSu/AFmQ5t7dkowSFpJ6mAws5pVJOVXCYm99wNk=
 20260201054412_trust_center_updates_history.sql h1:n3G0LyP+TWmzxLtcjM+7ki8GZrVcQoAgxwflrbxPV3Y=
 20260203000851_emailbrandingintegrations.sql h1:NL2qWXtr7fCcvk+0+aWQObTSAj+azlrmRvCPx+8a9l0=
 20260203000855_emailbrandingintegrations_history.sql h1:NRIhkbxsu6C3fqAgvaYhdj9KNbrH9/OnQ551hmkFtZY=
+20260203212421_custom_domain_trust_center.sql h1:n+l4ukeGWH+a9T5EjstpYAWRoF6emu5bVKVCAyUHXho=
+20260203212426_custom_domain_trust_center_history.sql h1:uEHIYw0r7+6Jl8Xa10EN9/iWezdIxRNow8Nl3a/IMNg=
