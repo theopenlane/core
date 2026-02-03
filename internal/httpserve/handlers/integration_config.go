@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/integrations/helpers"
 	"github.com/theopenlane/core/common/integrations/types"
 	credentialmodels "github.com/theopenlane/core/common/models"
 	openapi "github.com/theopenlane/core/common/openapi"
@@ -66,7 +67,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	}
 
 	if key, ok := attrs["serviceAccountKey"].(string); ok && strings.TrimSpace(key) != "" {
-		attrs["serviceAccountKey"] = normalizeServiceAccountKey(key)
+		attrs["serviceAccountKey"] = helpers.NormalizeServiceAccountKey(key)
 	}
 
 	schemaLoader := gojsonschema.NewGoLoader(spec.CredentialsSchema)
@@ -145,7 +146,7 @@ func cloneProviderData(data map[string]any) map[string]any {
 	cloned := make(map[string]any, len(data))
 	for key, value := range data {
 		if key == "serviceAccountKey" {
-			cloned[key] = normalizeServiceAccountKey(stringifyValue(value))
+			cloned[key] = helpers.NormalizeServiceAccountKey(stringifyValue(value))
 			continue
 		}
 		cloned[key] = cloneProviderValue(value)
@@ -196,20 +197,6 @@ func stringifyValue(value any) string {
 		}
 		return string(b)
 	}
-}
-
-func normalizeServiceAccountKey(input string) string {
-	trimmed := strings.TrimSpace(input)
-	if trimmed == "" {
-		return ""
-	}
-
-	var decoded string
-	if err := json.Unmarshal([]byte(trimmed), &decoded); err == nil {
-		return strings.TrimSpace(decoded)
-	}
-
-	return trimmed
 }
 
 const defaultHealthOperation types.OperationName = "health.default"

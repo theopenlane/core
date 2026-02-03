@@ -6,6 +6,7 @@ import (
 	"github.com/samber/lo"
 
 	commonhelpers "github.com/theopenlane/core/common/helpers"
+	openapi "github.com/theopenlane/core/common/openapi"
 )
 
 // OperationTemplate captures a stored configuration and optional override keys.
@@ -16,8 +17,27 @@ type OperationTemplate struct {
 	AllowedOverrides map[string]struct{}
 }
 
-// OperationTemplateFor loads an operation template from integration metadata.
-func OperationTemplateFor(metadata map[string]any, operation string) (OperationTemplate, bool) {
+// OperationTemplateFor loads an operation template from integration config.
+func OperationTemplateFor(config *openapi.IntegrationConfig, operation string) (OperationTemplate, bool) {
+	if config == nil || len(config.OperationTemplates) == 0 {
+		return OperationTemplate{}, false
+	}
+
+	operation = strings.TrimSpace(operation)
+	if operation == "" {
+		return OperationTemplate{}, false
+	}
+
+	raw, ok := config.OperationTemplates[operation]
+	if !ok {
+		return OperationTemplate{}, false
+	}
+
+	return operationTemplateFromConfig(raw)
+}
+
+// OperationTemplateForMetadata loads an operation template from integration metadata (legacy).
+func OperationTemplateForMetadata(metadata map[string]any, operation string) (OperationTemplate, bool) {
 	if len(metadata) == 0 {
 		return OperationTemplate{}, false
 	}
@@ -76,6 +96,17 @@ func ApplyOperationTemplate(template OperationTemplate, overrides map[string]any
 	return result, nil
 }
 
+// ResolveOperationConfig merges stored templates with optional overrides.
+func ResolveOperationConfig(config *openapi.IntegrationConfig, operation string, overrides map[string]any) (map[string]any, error) {
+	if template, ok := OperationTemplateFor(config, operation); ok {
+		return ApplyOperationTemplate(template, overrides)
+	}
+	if len(overrides) == 0 {
+		return nil, nil
+	}
+	return commonhelpers.DeepCloneMap(overrides), nil
+}
+
 func operationTemplateCatalog(metadata map[string]any) map[string]any {
 	if len(metadata) == 0 {
 		return nil
@@ -127,4 +158,20 @@ func parseOverrideKeys(values ...any) map[string]struct{} {
 	return lo.SliceToMap(items, func(item string) (string, struct{}) {
 		return item, struct{}{}
 	})
+}
+
+func operationTemplateFromConfig(template openapi.IntegrationOperationTemplate) (OperationTemplate, bool) {
+	config := commonhelpers.DeepCloneMap(template.Config)
+	overrides := parseOverrideKeys(template.AllowOverrides)
+	if config == nil && overrides == nil {
+		return OperationTemplate{}, false
+	}
+	if config == nil {
+		config = map[string]any{}
+	}
+
+	return OperationTemplate{
+		Config:           config,
+		AllowedOverrides: overrides,
+	}, true
 }
