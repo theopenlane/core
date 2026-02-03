@@ -10,9 +10,11 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/common/integrations/helpers"
 	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/keystore"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // RunIntegrationOperation executes a provider-published operation using stored credentials
@@ -45,11 +47,24 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.BadRequest(ctx, rout.MissingField("operation"), openapiCtx)
 	}
 
+	operationConfig := cloneOperationConfig(req.Body.Config)
+	if h.IntegrationStore != nil {
+		if integrationRecord, err := h.IntegrationStore.EnsureIntegration(requestCtx, user.OrganizationID, providerType); err != nil {
+			logx.FromContext(requestCtx).Warn().Err(err).Str("provider", string(providerType)).Msg("failed to load integration config")
+		} else {
+			merged, err := helpers.ResolveOperationConfig(&integrationRecord.Config, string(operationName), req.Body.Config)
+			if err != nil {
+				return h.BadRequest(ctx, err, openapiCtx)
+			}
+			operationConfig = merged
+		}
+	}
+
 	result, runErr := h.IntegrationOperations.Run(requestCtx, types.OperationRequest{
 		OrgID:    user.OrganizationID,
 		Provider: providerType,
 		Name:     operationName,
-		Config:   cloneOperationConfig(req.Body.Config),
+		Config:   operationConfig,
 		Force:    req.Body.Force,
 	})
 	if runErr != nil {
