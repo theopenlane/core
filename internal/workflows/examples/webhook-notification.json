@@ -30,9 +30,7 @@
         "headers": {
           "Content-Type": "application/json"
         },
-        "payload": {
-          "text": "Control status approved. Control details are included in the payload."
-        },
+        "payload_expr": "{\"text\": \"Control status approved. Control details are included in the payload.\"}",
         "timeout_ms": 5000
       }
     }

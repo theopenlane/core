@@ -161,7 +161,7 @@ func (r *mutationResolver) UpdateWorkflowDefinition(ctx context.Context, id stri
 		doc = input.DefinitionJSON
 	}
 
-	if err := validateWorkflowDefinitionInput(res.SchemaType, doc); err != nil {
+	if err := validateWorkflowDefinitionInput(res.SchemaType, doc, &r.workflowsConfig); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowdefinition"})
 	}
 

@@ -308,6 +308,54 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		s.Equal(instance.ID, receivedPayload["instance_id"])
 	})
 
+	s.Run("executes webhook with payload expression", func() {
+		var receivedPayload map[string]any
+		serverCalled := make(chan struct{}, 1)
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			body, _ := io.ReadAll(r.Body)
+			_ = json.Unmarshal(body, &receivedPayload)
+			serverCalled <- struct{}{}
+			w.WriteHeader(http.StatusOK)
+		}))
+		defer server.Close()
+
+		params := workflows.WebhookActionParams{
+			URL:         server.URL,
+			PayloadExpr: `{"custom": "ok", "event_type": event_type}`,
+		}
+
+		paramsBytes, err := json.Marshal(params)
+		s.Require().NoError(err)
+
+		action := models.WorkflowAction{
+			Type:   enums.WorkflowActionTypeWebhook.String(),
+			Key:    "test_webhook_expr",
+			Params: paramsBytes,
+		}
+
+		err = wfEngine.Execute(userCtx, action, instance, obj)
+		s.Require().NoError(err)
+
+		<-serverCalled
+		s.Equal(instance.ID, receivedPayload["instance_id"])
+		s.Equal("ok", receivedPayload["custom"])
+		s.Equal("UPDATE", receivedPayload["event_type"])
+	})
+
+	s.Run("fails webhook with legacy payload", func() {
+		params := json.RawMessage(`{"url": "https://example.com/webhook", "payload": {"text": "nope"}}`)
+
+		action := models.WorkflowAction{
+			Type:   enums.WorkflowActionTypeWebhook.String(),
+			Key:    "test_webhook_legacy_payload",
+			Params: params,
+		}
+
+		err = wfEngine.Execute(userCtx, action, instance, obj)
+		s.Error(err)
+		s.ErrorIs(err, engine.ErrWebhookPayloadUnsupported)
+	})
+
 	s.Run("fails webhook without URL", func() {
 		params := workflows.WebhookActionParams{}
 

@@ -104,8 +104,8 @@ func TestBuildWorkflowActionContext(t *testing.T) {
 }
 
 func TestValidateCELExpression(t *testing.T) {
-	assert.NoError(t, ValidateCELExpression("1 + 1"))
+	assert.NoError(t, ValidateCELExpression(nil, CELScopeAction, "1 + 1"))
 
-	err := ValidateCELExpression("1 +")
+	err := ValidateCELExpression(nil, CELScopeAction, "1 +")
 	assert.Error(t, err)
 }
