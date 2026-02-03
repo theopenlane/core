@@ -164,6 +164,7 @@ func serve(ctx context.Context) error {
 		ent.EntitlementManager(so.Config.Handler.Entitlements),
 		ent.ObjectManager(so.Config.StorageService),
 		ent.Summarizer(so.Config.Handler.Summarizer),
+		ent.Shortlinks(so.Config.Handler.ShortlinksClient),
 		ent.Pool(pool),
 		ent.EmailVerifier(verifier),
 		ent.HistoryClient(historyClient),
@@ -201,6 +202,7 @@ func serve(ctx context.Context) error {
 	}
 
 	so.AddServerOptions(serveropts.WithCloudflareConfig())
+	so.AddServerOptions(serveropts.WithShortlinks())
 
 	go func() {
 		<-ctx.Done()

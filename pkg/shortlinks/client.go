@@ -24,6 +24,67 @@ const (
 	headerAccessClientSecret = "Cf-Access-Client-Secret"
 )
 
+// Config holds the configuration for the shortlinks client
+type Config struct {
+	// Enabled indicates whether shortlinks functionality is enabled
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// ClientID is the Cloudflare Access client ID for shortlink API requests
+	ClientID string `json:"clientid" koanf:"clientid" default:"d5d5babbdd4ba64d59ae543ac3b6a74d.access"`
+	// ClientSecret is the Cloudflare Access client secret for shortlink API requests
+	ClientSecret string `json:"clientsecret" koanf:"clientsecret" default:"" sensitive:"true"`
+	// EndpointURL is the shortlink service API endpoint
+	EndpointURL string `json:"endpointurl" koanf:"endpointurl" default:"https://admin.s.theopenlane.io/api/links"`
+}
+
+// Client wraps the shortlink service credentials and provides methods for creating short URLs
+type Client struct {
+	clientID     string
+	clientSecret string
+	endpointURL  string
+}
+
+// Option is a functional option for configuring the Client
+type Option func(*Client)
+
+// WithEndpointURL sets a custom endpoint URL for the shortlink service
+func WithEndpointURL(url string) Option {
+	return func(c *Client) {
+		if url != "" {
+			c.endpointURL = url
+		}
+	}
+}
+
+// NewClient creates a new shortlinks client with the provided credentials
+func NewClient(clientID, clientSecret string, opts ...Option) (*Client, error) {
+	if clientID == "" || clientSecret == "" {
+		return nil, ErrMissingAuthenticationParams
+	}
+
+	c := &Client{
+		clientID:     clientID,
+		clientSecret: clientSecret,
+		endpointURL:  defaultEndpointURL,
+	}
+
+	for _, opt := range opts {
+		opt(c)
+	}
+
+	return c, nil
+}
+
+// NewClientFromConfig creates a new shortlinks client from the provided config
+func NewClientFromConfig(cfg Config) (*Client, error) {
+	var opts []Option
+
+	if cfg.EndpointURL != "" {
+		opts = append(opts, WithEndpointURL(cfg.EndpointURL))
+	}
+
+	return NewClient(cfg.ClientID, cfg.ClientSecret, opts...)
+}
+
 // createLinkRequest represents the payload for creating a shortlink
 type createLinkRequest struct {
 	// URL is the original URL to shorten (the target URL)
@@ -45,17 +106,12 @@ func (e *responseError) Error() string {
 	if e == nil {
 		return ""
 	}
+
 	return fmt.Sprintf("shortlinks: request failed (%s)", e.Status)
 }
 
 // Create issues a POST to the hosted shortlink API and returns the short URL
-func Create(ctx context.Context, clientID, clientSecret, url, slug string) (string, error) {
-	clientID = strings.TrimSpace(clientID)
-	if clientID == "" || clientSecret == "" {
-		return "", ErrMissingAuthenticationParams
-	}
-
-	url = strings.TrimSpace(url)
+func (c *Client) Create(ctx context.Context, url, slug string) (string, error) {
 	if url == "" {
 		return "", ErrMissingURL
 	}
@@ -66,12 +122,12 @@ func Create(ctx context.Context, clientID, clientSecret, url, slug string) (stri
 	}
 
 	opts := []httpsling.Option{
-		httpsling.Post(defaultEndpointURL),
+		httpsling.Post(c.endpointURL),
 		httpsling.Body(payload),
 		httpsling.ContentType(httpsling.ContentTypeJSON),
 		httpsling.Accept(httpsling.ContentTypeJSON),
-		httpsling.Header(headerAccessClientID, clientID),
-		httpsling.Header(headerAccessClientSecret, clientSecret),
+		httpsling.Header(headerAccessClientID, c.clientID),
+		httpsling.Header(headerAccessClientSecret, c.clientSecret),
 		httpsling.Client(httpclient.Timeout(defaultRequestTimeout)),
 	}
 

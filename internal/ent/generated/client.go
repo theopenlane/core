@@ -126,6 +126,7 @@ import (
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
@@ -498,6 +499,7 @@ type (
 		EntitlementManager *entitlements.StripeClient
 		ObjectManager      *objects.Service
 		Summarizer         *summarizer.Client
+		Shortlinks         *shortlinks.Client
 		Pool               *soiree.Pool
 		EmailVerifier      *validator.EmailVerifier
 		// Job is the job client to insert jobs into the queue.
@@ -625,6 +627,13 @@ func ObjectManager(v *objects.Service) Option {
 func Summarizer(v *summarizer.Client) Option {
 	return func(c *config) {
 		c.Summarizer = v
+	}
+}
+
+// Shortlinks configures the Shortlinks.
+func Shortlinks(v *shortlinks.Client) Option {
+	return func(c *config) {
+		c.Shortlinks = v
 	}
 }
 

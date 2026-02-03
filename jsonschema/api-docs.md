@@ -29,6 +29,7 @@ Config contains the configuration for the core server
 |[**workflows**](#workflows)|`object`|||
 |[**campaignwebhook**](#campaignwebhook)|`object`|CampaignWebhookConfig contains webhook configuration for campaign-related email providers.<br/>||
 |[**cloudflare**](#cloudflare)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
+|[**shortlinks**](#shortlinks)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -139,7 +140,8 @@ Config contains the configuration for the core server
         "cel": {}
     },
     "campaignwebhook": {},
-    "cloudflare": {}
+    "cloudflare": {},
+    "shortlinks": {}
 }
 ```
 
@@ -1753,6 +1755,19 @@ CloudflareConfig contains configuration for Cloudflare integration.
 |**accountid**|`string`|AccountID is the Cloudflare account ID to use for snapshot operations<br/>||
 |**clientid**|`string`|ClientID is the Cloudflare Access client ID for shortlink API requests<br/>||
 |**clientsecret**|`string`|ClientSecret is the Cloudflare Access client secret for shortlink API requests<br/>||
+
+**Additional Properties:** not allowed  
+<a name="shortlinks"></a>
+## shortlinks: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|**clientid**|`string`|||
+|**clientsecret**|`string`|||
+|**endpointurl**|`string`|||
 
 **Additional Properties:** not allowed  
 

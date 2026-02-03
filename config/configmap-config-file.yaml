@@ -1183,4 +1183,16 @@ data:
       enabled: {{ .Values.openlane.coreConfiguration.cloudflare.enabled }}
       {{- end }}
     {{- end }}
+    {{- if .Values.openlane.coreConfiguration.shortlinks }}
+    shortlinks:
+      {{- if .Values.openlane.coreConfiguration.shortlinks.enabled }}
+      enabled: {{ .Values.openlane.coreConfiguration.shortlinks.enabled }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.shortlinks.clientid }}
+      clientid: {{ .Values.openlane.coreConfiguration.shortlinks.clientid | quote }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.shortlinks.endpointurl }}
+      endpointurl: {{ .Values.openlane.coreConfiguration.shortlinks.endpointurl | quote }}
+      {{- end }}
+    {{- end }}
 {{- end }}

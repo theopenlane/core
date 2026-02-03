@@ -50,6 +50,7 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
 )
 
@@ -631,5 +632,22 @@ func WithCampaignWebhookConfig() ServerOption {
 func WithCloudflareConfig() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		s.Config.Handler.CloudflareConfig = s.Config.Settings.Cloudflare
+	})
+}
+
+// WithShortlinks sets up the shortlinks client for URL shortening
+func WithShortlinks() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		if !s.Config.Settings.Shortlinks.Enabled {
+			return
+		}
+
+		client, err := shortlinks.NewClientFromConfig(s.Config.Settings.Shortlinks)
+		if err != nil {
+			log.Warn().Err(err).Msg("failed to create shortlinks client, URL shortening will be disabled")
+			return
+		}
+
+		s.Config.Handler.ShortlinksClient = client
 	})
 }

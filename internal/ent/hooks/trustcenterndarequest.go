@@ -239,11 +239,13 @@ func createNDARequestNotification(ctx context.Context, m *generated.TrustCenterN
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	_, err := m.Client().Notification.Create().SetInput(input).Save(allowCtx)
+
 	return err
 }
 
 func sendTrustCenterNDARequestEmail(ctx context.Context, m *generated.TrustCenterNDARequestMutation, ndaRequest *generated.TrustCenterNDARequest) {
 	if ndaRequest.TrustCenterID == "" || ndaRequest.Email == "" {
+
 		return
 	}
 
@@ -254,6 +256,7 @@ func sendTrustCenterNDARequestEmail(ctx context.Context, m *generated.TrustCente
 		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to get trust center for NDA email")
+
 		return
 	}
 
@@ -270,10 +273,20 @@ func sendTrustCenterNDARequestEmail(ctx context.Context, m *generated.TrustCente
 	})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create token for NDA email")
+
 		return
 	}
 
 	trustCenterURL := buildNDATrustCenterURL(tc)
+
+	if m.Shortlinks != nil {
+		shortenedURL, shortenErr := m.Shortlinks.Create(ctx, trustCenterURL, "")
+		if shortenErr != nil {
+			logx.FromContext(ctx).Error().Err(shortenErr).Msg("failed to shorten trust center URL, using original")
+		} else {
+			trustCenterURL = shortenedURL
+		}
+	}
 
 	emailMsg, err := m.Emailer.NewTrustCenterNDARequestEmail(emailtemplates.Recipient{
 		Email: ndaRequest.Email,
@@ -283,6 +296,7 @@ func sendTrustCenterNDARequestEmail(ctx context.Context, m *generated.TrustCente
 	})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA email")
+
 		return
 	}
 
@@ -310,6 +324,7 @@ func getTrustCenterURL(tc *generated.TrustCenter) url.URL {
 			customHost = normalized
 		}
 		trustCenterURL.Host = customHost
+
 		return trustCenterURL
 	}
 
@@ -350,16 +365,27 @@ func sendTrustCenterAuthEmail(ctx context.Context, m *generated.TrustCenterNDARe
 	})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create token for auth email")
+
 		return
 	}
 
 	trustCenterURL := getTrustCenterURL(tc)
+	trustCenterURLStr := trustCenterURL.String()
+
+	if m.Shortlinks != nil {
+		shortenedURL, shortenErr := m.Shortlinks.Create(ctx, trustCenterURL.String(), "")
+		if shortenErr != nil {
+			logx.FromContext(ctx).Error().Err(shortenErr).Msg("failed to shorten trust center URL, using original")
+		} else {
+			trustCenterURLStr = shortenedURL
+		}
+	}
 
 	emailMsg, err := m.Emailer.NewTrustCenterAuthEmail(emailtemplates.Recipient{
 		Email: ndaRequest.Email,
 	}, accessToken, emailtemplates.TrustCenterAuthData{
 		OrganizationName: tc.Edges.Setting.CompanyName,
-		TrustCenterURL:   trustCenterURL.String(),
+		TrustCenterURL:   trustCenterURLStr,
 	})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create auth email")

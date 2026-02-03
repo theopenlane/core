@@ -39,6 +39,7 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/shortlinks"
 )
 
 const (
@@ -92,6 +93,8 @@ type Config struct {
 	CampaignWebhook handlers.CampaignWebhookConfig `json:"campaignwebhook" koanf:"campaignwebhook"`
 	// Cloudflare contains configuration for Cloudflare integration
 	Cloudflare handlers.CloudflareConfig `json:"cloudflare" koanf:"cloudflare"`
+	// Shortlinks contains configuration for the URL shortening service
+	Shortlinks shortlinks.Config `json:"shortlinks" koanf:"shortlinks"`
 }
 
 // Server settings for the echo server
