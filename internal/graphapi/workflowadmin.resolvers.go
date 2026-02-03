@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -123,7 +122,7 @@ func (r *mutationResolver) AdminReassignWorkflowAssignment(ctx context.Context, 
 	}
 
 	if assignment.OwnerID != "" {
-		if err := auth.SetOrganizationIDInAuthContext(allowCtx, assignment.OwnerID); err != nil {
+		if err := common.SetOrganizationInAuthContext(allowCtx, &assignment.OwnerID); err != nil {
 			return nil, err
 		}
 	}

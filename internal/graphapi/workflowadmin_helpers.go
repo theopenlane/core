@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/workflows"
@@ -75,6 +74,7 @@ func recordWorkflowInstanceAdminCompletion(ctx context.Context, client *generate
 		Exec(allowCtx)
 }
 
+// requireWorkflowAdmin checks that the user in the context is an admin for the given organization
 func (r *Resolver) requireWorkflowAdmin(ctx context.Context, ownerID string) error {
 	if ownerID == "" {
 		return fmt.Errorf("%w: missing organization", rout.ErrBadRequest)
@@ -89,21 +89,17 @@ func (r *Resolver) requireWorkflowAdmin(ctx context.Context, ownerID string) err
 		return rout.ErrPermissionDenied
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
-	membership, err := r.db.OrgMembership.Query().
-		Where(
-			orgmembership.OrganizationIDEQ(ownerID),
-			orgmembership.UserIDEQ(userID),
-		).
-		Only(allowCtx)
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
-		if generated.IsNotFound(err) {
-			return rout.ErrPermissionDenied
-		}
-		return parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "org_membership"})
+		return err
 	}
 
-	if membership.Role != enums.RoleOwner && membership.Role != enums.RoleAdmin {
+	// make sure the `ownerID` matches the organgaizationID
+	if au.OrganizationID != ownerID {
+		return rout.ErrPermissionDenied
+	}
+
+	if au.OrganizationRole != auth.OwnerRole && au.OrganizationRole != auth.AdminRole {
 		return rout.ErrPermissionDenied
 	}
 
@@ -225,11 +221,6 @@ func (r *mutationResolver) forceCompleteWorkflowInstance(ctx context.Context, id
 			bypassCtx := workflows.AllowBypassContext(ctx)
 			bypassCtx = workflows.WithSkipEventEmission(bypassCtx)
 			workflows.MarkSkipEventEmission(bypassCtx)
-			if instance.OwnerID != "" {
-				if err := auth.SetOrganizationIDInAuthContext(bypassCtx, instance.OwnerID); err != nil {
-					return nil, err
-				}
-			}
 
 			if err := workflows.ApplyObjectFieldUpdates(bypassCtx, r.db, objectType, objectID, proposal.Changes); err != nil {
 				return nil, err

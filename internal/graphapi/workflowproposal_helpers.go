@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -98,10 +99,9 @@ func validateWorkflowProposalChanges(domainKey string, objectType enums.Workflow
 		return nil
 	}
 
-	allowed := make(map[string]struct{}, len(fields))
-	for _, field := range fields {
-		allowed[field] = struct{}{}
-	}
+	allowed := lo.SliceToMap(fields, func(field string) (string, struct{}) {
+		return field, struct{}{}
+	})
 
 	for field := range changes {
 		if _, ok := allowed[field]; !ok {
