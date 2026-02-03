@@ -202,10 +202,10 @@ func isCredentialSetEmpty(set models.CredentialSet) bool {
 		set.OAuthTokenType,
 	}
 
-	for _, field := range fields {
-		if strings.TrimSpace(field) != "" {
-			return false
-		}
+	if lo.ContainsBy(fields, func(field string) bool {
+		return strings.TrimSpace(field) != ""
+	}) {
+		return false
 	}
 
 	if len(set.ProviderData) > 0 {

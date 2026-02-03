@@ -18,6 +18,8 @@ const (
 	OperationKindCollectFindings OperationKind = "collect_findings"
 	// OperationKindScanSettings represents a settings scan operation
 	OperationKindScanSettings OperationKind = "scan_settings"
+	// OperationKindNotify represents a notification operation
+	OperationKindNotify OperationKind = "notify"
 )
 
 // OperationStatus communicates the result of an operation run

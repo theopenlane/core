@@ -31,10 +31,18 @@ type Provider struct {
 	tokenParams  map[string]string
 	capabilities types.ProviderCapabilities
 	operations   []types.OperationDescriptor
+	clients      []types.ClientDescriptor
 }
 
 // ProviderOption customizes OAuth provider construction.
 type ProviderOption func(*Provider)
+
+// WithClientDescriptors registers client descriptors for pooling.
+func WithClientDescriptors(descriptors []types.ClientDescriptor) ProviderOption {
+	return func(p *Provider) {
+		p.clients = helpers.SanitizeClientDescriptors(p.providerType, descriptors)
+	}
+}
 
 // New constructs a Provider from the supplied spec
 func New(_ context.Context, spec config.ProviderSpec, options ...ProviderOption) (*Provider, error) {
@@ -106,6 +114,17 @@ func (p *Provider) Operations() []types.OperationDescriptor {
 	copy(ops, p.operations)
 
 	return ops
+}
+
+// ClientDescriptors returns provider-published client descriptors when configured.
+func (p *Provider) ClientDescriptors() []types.ClientDescriptor {
+	if p == nil || len(p.clients) == 0 {
+		return nil
+	}
+
+	out := make([]types.ClientDescriptor, len(p.clients))
+	copy(out, p.clients)
+	return out
 }
 
 // BeginAuth starts an OAuth authorization flow

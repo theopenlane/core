@@ -11,4 +11,8 @@ var (
 	ErrOAuthTokenMissing = errors.New("slack: oauth token missing")
 	// ErrAccessTokenEmpty indicates the access token field is empty
 	ErrAccessTokenEmpty = errors.New("slack: access token empty")
+	// ErrSlackChannelMissing indicates the Slack message channel is missing
+	ErrSlackChannelMissing = errors.New("slack: message channel missing")
+	// ErrSlackMessageEmpty indicates the Slack message is empty
+	ErrSlackMessageEmpty = errors.New("slack: message text or blocks required")
 )

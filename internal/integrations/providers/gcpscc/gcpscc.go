@@ -3,7 +3,6 @@ package gcpscc
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"maps"
 	"strings"
@@ -19,6 +18,7 @@ import (
 	stsv1 "google.golang.org/api/sts/v1"
 
 	"github.com/theopenlane/core/common/integrations/config"
+	"github.com/theopenlane/core/common/integrations/helpers"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/providers"
@@ -46,14 +46,13 @@ const ClientSecurityCenter types.ClientName = "securitycenter.v2"
 const securityCenterDescription = "Google Cloud Security Command Center v2 client"
 
 var (
-	errSubjectTokenRequired   = errors.New("gcpscc: subject token required")
-	errProjectIDRequired      = errors.New("gcpscc: projectId required")
-	errAudienceRequired       = errors.New("gcpscc: audience required")
-	errServiceAccountRequired = errors.New("gcpscc: service account email required")
-	errSourceIDRequired       = errors.New("gcpscc: sourceId required")
-	errCredentialMetadata     = errors.New("gcpscc: provider metadata required")
-	errAccessTokenMissing     = errors.New("gcpscc: oauth token missing from credential payload")
-	errServiceAccountKey      = errors.New("gcpscc: service account key invalid")
+	errSubjectTokenRequired   = ErrSubjectTokenRequired
+	errProjectIDRequired      = ErrProjectIDRequired
+	errAudienceRequired       = ErrAudienceRequired
+	errServiceAccountRequired = ErrServiceAccountRequired
+	errSourceIDRequired       = ErrSourceIDRequired
+	errCredentialMetadata     = ErrCredentialMetadataRequired
+	errAccessTokenMissing     = ErrAccessTokenMissing
 )
 
 var _ types.ClientProvider = (*Provider)(nil)
@@ -223,7 +222,7 @@ func (p *Provider) ClientDescriptors() []types.ClientDescriptor {
 func (p *Provider) mintWorkloadToken(ctx context.Context, meta credentialMetadata, subjectToken, subjectTokenType string) (*oauth2.Token, error) {
 	stsSvc, err := p.stsClient(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("gcpscc: init sts service: %w", err)
+		return nil, fmt.Errorf("%w: %w", ErrSTSInit, err)
 	}
 
 	scope := strings.Join(meta.Scopes, " ")
@@ -248,7 +247,7 @@ func (p *Provider) mintWorkloadToken(ctx context.Context, meta credentialMetadat
 
 	resp, err := stsSvc.V1.Token(req).Context(ctx).Do()
 	if err != nil {
-		return nil, fmt.Errorf("gcpscc: exchange workload identity token: %w", err)
+		return nil, fmt.Errorf("%w: %w", ErrWorkloadIdentityExchange, err)
 	}
 
 	baseToken := &oauth2.Token{
@@ -272,12 +271,12 @@ func (p *Provider) mintWorkloadToken(ctx context.Context, meta credentialMetadat
 
 	ts, err := impersonate.CredentialsTokenSource(ctx, cfg, option.WithTokenSource(staticSource))
 	if err != nil {
-		return nil, fmt.Errorf("gcpscc: impersonate service account: %w", err)
+		return nil, fmt.Errorf("%w: %w", ErrImpersonateServiceAccount, err)
 	}
 
 	token, err := ts.Token()
 	if err != nil {
-		return nil, fmt.Errorf("gcpscc: fetch impersonated token: %w", err)
+		return nil, fmt.Errorf("%w: %w", ErrImpersonatedTokenFetch, err)
 	}
 
 	return token, nil
@@ -301,7 +300,7 @@ func buildSecurityCenterClient(ctx context.Context, payload types.CredentialPayl
 
 	client, err := cloudscc.NewClient(ctx, opts...)
 	if err != nil {
-		return nil, fmt.Errorf("gcpscc: create security center client: %w", err)
+		return nil, fmt.Errorf("%w: %w", ErrSecurityCenterClientCreate, err)
 	}
 
 	return client, nil
@@ -343,24 +342,10 @@ func securityCenterClientOptions(ctx context.Context, meta credentialMetadata, t
 	return nil, errAccessTokenMissing
 }
 
-func normalizeServiceAccountKey(value string) string {
-	trimmed := strings.TrimSpace(value)
-	if trimmed == "" {
-		return ""
-	}
-
-	var decoded string
-	if err := json.Unmarshal([]byte(trimmed), &decoded); err == nil {
-		return strings.TrimSpace(decoded)
-	}
-
-	return trimmed
-}
-
 func serviceAccountCredentials(ctx context.Context, rawKey string, scopes []string) (*google.Credentials, error) {
-	key := normalizeServiceAccountKey(rawKey)
+	key := helpers.NormalizeServiceAccountKey(rawKey)
 	if key == "" {
-		return nil, errServiceAccountKey
+		return nil, ErrServiceAccountKeyInvalid
 	}
 
 	scopeList := scopes
@@ -370,7 +355,7 @@ func serviceAccountCredentials(ctx context.Context, rawKey string, scopes []stri
 
 	creds, err := google.CredentialsFromJSONWithType(ctx, []byte(key), google.ServiceAccount, scopeList...)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %v", errServiceAccountKey, err)
+		return nil, fmt.Errorf("%w: %w", ErrServiceAccountKeyInvalid, err)
 	}
 
 	return creds, nil
@@ -483,7 +468,7 @@ func metadataFromPayload(payload types.CredentialPayload) (credentialMetadata, e
 	}
 
 	if err := decoder.Decode(payload.Data.ProviderData); err != nil {
-		return credentialMetadata{}, fmt.Errorf("gcpscc: decode metadata: %w", err)
+		return credentialMetadata{}, fmt.Errorf("%w: %w", ErrMetadataDecode, err)
 	}
 
 	return meta.normalize(), nil
@@ -520,7 +505,7 @@ func buildSTSOptions(meta credentialMetadata) (string, error) {
 
 	encoded, err := json.Marshal(payload)
 	if err != nil {
-		return "", fmt.Errorf("gcpscc: encode sts options: %w", err)
+		return "", fmt.Errorf("%w: %w", ErrSTSOptionsEncode, err)
 	}
 
 	return string(encoded), nil
@@ -548,7 +533,7 @@ func setIfNotEmpty(target map[string]any, key, value string) {
 
 func (m credentialMetadata) normalize() credentialMetadata {
 	normalized := m
-	normalized.ServiceAccountKey = normalizeServiceAccountKey(normalized.ServiceAccountKey)
+	normalized.ServiceAccountKey = helpers.NormalizeServiceAccountKey(normalized.ServiceAccountKey)
 	normalized.Scopes = normalizeScopes(normalized.Scopes)
 	return normalized
 }

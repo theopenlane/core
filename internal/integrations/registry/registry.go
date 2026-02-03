@@ -2,7 +2,6 @@ package registry
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"maps"
 
@@ -13,12 +12,6 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/providers/catalog"
-)
-
-var (
-	errRegistryNil     = errors.New("integrations/registry: registry is nil")
-	errProviderType    = errors.New("integrations/registry: provider type required")
-	errBuilderMismatch = errors.New("integrations/registry: builder missing or type mismatch")
 )
 
 // Registry exposes loaded provider configs and runtime providers to callers
@@ -58,7 +51,7 @@ func NewRegistry(ctx context.Context) (*Registry, error) {
 
 		provider, err := builder.Build(ctx, spec)
 		if err != nil {
-			return nil, fmt.Errorf("integrations/registry: build provider %s: %w", providerType, err)
+			return nil, fmt.Errorf("%w: %w", ErrProviderBuildFailed, err)
 		}
 
 		instance.providers[providerType] = provider
@@ -178,20 +171,20 @@ func (r *Registry) OperationDescriptorCatalog() map[types.ProviderType][]types.O
 // UpsertProvider adds or replaces a provider/spec after initialization (primarily for tests).
 func (r *Registry) UpsertProvider(ctx context.Context, spec config.ProviderSpec, builder providers.Builder) error {
 	if r == nil {
-		return errRegistryNil
+		return ErrRegistryNil
 	}
 
 	providerType := spec.ProviderType()
 	if providerType == types.ProviderUnknown {
-		return errProviderType
+		return ErrProviderTypeRequired
 	}
 	if builder == nil || builder.Type() != providerType {
-		return fmt.Errorf("%w for %s", errBuilderMismatch, providerType)
+		return ErrBuilderMismatch
 	}
 
 	provider, err := builder.Build(ctx, spec)
 	if err != nil {
-		return fmt.Errorf("integrations/registry: build provider %s: %w", providerType, err)
+		return fmt.Errorf("%w: %w", ErrProviderBuildFailed, err)
 	}
 
 	r.configs[providerType] = spec

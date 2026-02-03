@@ -18,7 +18,7 @@ func Builder() providers.Builder {
 		ProviderType: TypeOIDCGeneric,
 		BuildFunc: func(ctx context.Context, spec config.ProviderSpec) (providers.Provider, error) {
 			ops := oidcOperations(userInfoURL(spec))
-			return oauth.New(ctx, spec, oauth.WithOperations(ops))
+			return oauth.New(ctx, spec, oauth.WithOperations(ops), oauth.WithClientDescriptors(oidcClientDescriptors()))
 		},
 	}
 }

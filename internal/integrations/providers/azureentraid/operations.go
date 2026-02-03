@@ -13,30 +13,34 @@ const (
 	azureEntraTenantOp types.OperationName = "directory.inspect"
 )
 
+// azureOperations returns the Azure Entra ID operations supported by this provider.
 func azureOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		{
 			Name:        azureEntraHealthOp,
 			Kind:        types.OperationKindHealth,
 			Description: "Call Microsoft Graph /organization to verify tenant access.",
+			Client:      ClientAzureEntraAPI,
 			Run:         runAzureEntraHealth,
 		},
 		{
 			Name:        azureEntraTenantOp,
 			Kind:        types.OperationKindScanSettings,
 			Description: "Collect basic tenant metadata via Microsoft Graph.",
+			Client:      ClientAzureEntraAPI,
 			Run:         runAzureEntraTenantInspect,
 		},
 	}
 }
 
 func runAzureEntraHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+	client := helpers.AuthenticatedClientFromAny(input.Client)
 	token, err := helpers.OAuthTokenFromPayload(input.Credential, string(TypeAzureEntraID))
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	org, err := fetchOrganization(ctx, token)
+	org, err := fetchOrganization(ctx, token, client)
 	if err != nil {
 		return types.OperationResult{
 			Status:  types.OperationStatusFailed,
@@ -58,12 +62,13 @@ func runAzureEntraHealth(ctx context.Context, input types.OperationInput) (types
 }
 
 func runAzureEntraTenantInspect(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+	client := helpers.AuthenticatedClientFromAny(input.Client)
 	token, err := helpers.OAuthTokenFromPayload(input.Credential, string(TypeAzureEntraID))
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	org, err := fetchOrganization(ctx, token)
+	org, err := fetchOrganization(ctx, token, client)
 	if err != nil {
 		return types.OperationResult{
 			Status:  types.OperationStatusFailed,
@@ -96,10 +101,15 @@ type graphOrganizationResponse struct {
 	Value []graphOrganization `json:"value"`
 }
 
-func fetchOrganization(ctx context.Context, token string) (graphOrganization, error) {
+// fetchOrganization retrieves the first organization entry from Microsoft Graph.
+func fetchOrganization(ctx context.Context, token string, client *helpers.AuthenticatedClient) (graphOrganization, error) {
 	endpoint := "https://graph.microsoft.com/v1.0/organization?$select=id,displayName,tenantId,verifiedDomains&$top=1"
 	var resp graphOrganizationResponse
-	if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, nil, &resp); err != nil {
+	if client != nil {
+		if err := client.GetJSON(ctx, endpoint, &resp); err != nil {
+			return graphOrganization{}, err
+		}
+	} else if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, nil, &resp); err != nil {
 		return graphOrganization{}, err
 	}
 

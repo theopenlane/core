@@ -14,6 +14,7 @@ func oidcOperations(userInfoURL string) []types.OperationDescriptor {
 			Name:        types.OperationName("health.default"),
 			Kind:        types.OperationKindHealth,
 			Description: "Call the configured userinfo endpoint (when available) to validate the OIDC token.",
+			Client:      ClientOIDCAPI,
 			Run:         runOIDCHealth(userInfoURL),
 		},
 		{
@@ -27,6 +28,7 @@ func oidcOperations(userInfoURL string) []types.OperationDescriptor {
 
 func runOIDCHealth(userInfoURL string) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+		client := helpers.AuthenticatedClientFromAny(input.Client)
 		token, err := helpers.OAuthTokenFromPayload(input.Credential, string(TypeOIDCGeneric))
 		if err != nil {
 			return types.OperationResult{}, err
@@ -40,7 +42,15 @@ func runOIDCHealth(userInfoURL string) types.OperationFunc {
 		}
 
 		var resp map[string]any
-		if err := helpers.HTTPGetJSON(ctx, nil, userInfoURL, token, nil, &resp); err != nil {
+		if client != nil {
+			if err := client.GetJSON(ctx, userInfoURL, &resp); err != nil {
+				return types.OperationResult{
+					Status:  types.OperationStatusFailed,
+					Summary: "OIDC userinfo call failed",
+					Details: map[string]any{"error": err.Error()},
+				}, err
+			}
+		} else if err := helpers.HTTPGetJSON(ctx, nil, userInfoURL, token, nil, &resp); err != nil {
 			return types.OperationResult{
 				Status:  types.OperationStatusFailed,
 				Summary: "OIDC userinfo call failed",
