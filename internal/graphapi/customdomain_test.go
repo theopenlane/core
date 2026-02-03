@@ -4,12 +4,18 @@ import (
 	"context"
 	"testing"
 
+	"github.com/brianvoe/gofakeit/v7"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/iam/fgax"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
+
+	"github.com/theopenlane/iam/fgax"
+
+	"github.com/theopenlane/core/common/jobspec"
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
 func TestQueryCustomDomainByID(t *testing.T) {
@@ -398,6 +404,137 @@ func TestUpdateCustomDomain(t *testing.T) {
 	}
 	(&Cleanup[*generated.DNSVerificationDeleteOne]{client: suite.client.db.DNSVerification, ID: dnsVerification.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{customDomain.MappableDomainID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestUpdateCustomDomainCname(t *testing.T) {
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	trustCenter := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain.ID}).MustNew(testUser1.UserCtx, t)
+
+	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	fakePirschDomainID := "fake-pirsch-domain-id-cname-test"
+	_, err := suite.client.db.TrustCenter.UpdateOneID(trustCenter.ID).SetPirschDomainID(fakePirschDomainID).Save(ctx)
+	assert.NilError(t, err)
+
+	newCname := gofakeit.DomainName()
+
+	testCases := []struct {
+		name                        string
+		updateInput                 testclient.UpdateCustomDomainInput
+		expectValidateJob           bool
+		expectUpdatePirschJob       bool
+		expectCreateCustomDomainJob bool
+	}{
+		{
+			name: "same cname - no jobs",
+			updateInput: testclient.UpdateCustomDomainInput{
+				CnameRecord: &customDomain.CnameRecord,
+			},
+			expectValidateJob:           false,
+			expectUpdatePirschJob:       false,
+			expectCreateCustomDomainJob: false,
+		},
+		{
+			name: "no cname in update - no jobs",
+			updateInput: testclient.UpdateCustomDomainInput{
+				Tags: []string{"updated"},
+			},
+			expectValidateJob:           false,
+			expectUpdatePirschJob:       false,
+			expectCreateCustomDomainJob: false,
+		},
+		{
+			name: "different cname - fires validate and update pirsch jobs",
+			updateInput: testclient.UpdateCustomDomainInput{
+				CnameRecord: &newCname,
+			},
+			expectValidateJob:           true,
+			expectUpdatePirschJob:       true,
+			expectCreateCustomDomainJob: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := suite.client.db.Job.TruncateRiverTables(systemAdminUser.UserCtx)
+			assert.NilError(t, err)
+
+			resp, err := suite.client.api.UpdateCustomDomain(systemAdminUser.UserCtx, customDomain.ID, tc.updateInput)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			if tc.expectValidateJob {
+				jobs := rivertest.RequireManyInserted(systemAdminUser.UserCtx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+					[]rivertest.ExpectedJob{
+						{
+							Args: jobspec.ValidateCustomDomainArgs{
+								CustomDomainID: customDomain.ID,
+							},
+						},
+					})
+				assert.Assert(t, jobs != nil)
+				assert.Assert(t, is.Len(jobs, 1))
+			} else {
+				rivertest.RequireNotInserted(systemAdminUser.UserCtx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobspec.ValidateCustomDomainArgs{}, nil)
+			}
+
+			if tc.expectUpdatePirschJob {
+				jobs := rivertest.RequireManyInserted(systemAdminUser.UserCtx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+					[]rivertest.ExpectedJob{
+						{
+							Args: jobspec.UpdatePirschDomainArgs{
+								TrustCenterID: trustCenter.ID,
+							},
+						},
+					})
+				assert.Assert(t, jobs != nil)
+				assert.Assert(t, is.Len(jobs, 1))
+			} else {
+				rivertest.RequireNotInserted(systemAdminUser.UserCtx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobspec.UpdatePirschDomainArgs{}, nil)
+			}
+
+			rivertest.RequireNotInserted(systemAdminUser.UserCtx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobspec.CreateCustomDomainArgs{}, nil)
+		})
+	}
+
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestUpdateCustomDomainCnameChangeNoPirschJob(t *testing.T) {
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// trust center without pirsch domain ID set
+	trustCenter := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain.ID}).MustNew(testUser1.UserCtx, t)
+
+	err := suite.client.db.Job.TruncateRiverTables(systemAdminUser.UserCtx)
+	assert.NilError(t, err)
+
+	newCname := gofakeit.DomainName()
+
+	resp, err := suite.client.api.UpdateCustomDomain(systemAdminUser.UserCtx, customDomain.ID, testclient.UpdateCustomDomainInput{
+		CnameRecord: &newCname,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	jobs := rivertest.RequireManyInserted(systemAdminUser.UserCtx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+		[]rivertest.ExpectedJob{
+			{
+				Args: jobspec.ValidateCustomDomainArgs{
+					CustomDomainID: customDomain.ID,
+				},
+			},
+		})
+	assert.Assert(t, jobs != nil)
+	assert.Assert(t, is.Len(jobs, 1))
+
+	rivertest.RequireNotInserted(systemAdminUser.UserCtx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobspec.UpdatePirschDomainArgs{}, nil)
+
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
