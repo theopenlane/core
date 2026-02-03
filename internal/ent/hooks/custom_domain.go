@@ -22,8 +22,6 @@ func HookCreateCustomDomain() ent.Hook {
 	return hook.If(
 		func(next ent.Mutator) ent.Mutator {
 			return hook.CustomDomainFunc(func(ctx context.Context, m *generated.CustomDomainMutation) (generated.Value, error) {
-				// set trust center id if not set
-
 				v, err := next.Mutate(ctx, m)
 				if err != nil {
 					return v, err
