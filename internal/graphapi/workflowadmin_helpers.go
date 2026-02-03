@@ -117,7 +117,7 @@ func closeWorkflowAssignments(ctx context.Context, client *generated.Client, ins
 
 	allowCtx := workflows.AllowContext(ctx)
 	if ownerID != "" {
-		if err := auth.SetOrganizationIDInAuthContext(allowCtx, ownerID); err != nil {
+		if err := common.SetOrganizationInAuthContext(allowCtx, &ownerID); err != nil {
 			return err
 		}
 	}
@@ -195,7 +195,7 @@ func (r *mutationResolver) forceCompleteWorkflowInstance(ctx context.Context, id
 	workflows.MarkSkipEventEmission(skipCtx)
 
 	if instance.OwnerID != "" {
-		if err := auth.SetOrganizationIDInAuthContext(skipCtx, instance.OwnerID); err != nil {
+		if err := common.SetOrganizationInAuthContext(skipCtx, &instance.OwnerID); err != nil {
 			return nil, err
 		}
 	}
@@ -280,7 +280,7 @@ func (r *mutationResolver) cancelWorkflowInstance(ctx context.Context, id string
 	workflows.MarkSkipEventEmission(skipCtx)
 
 	if instance.OwnerID != "" {
-		if err := auth.SetOrganizationIDInAuthContext(skipCtx, instance.OwnerID); err != nil {
+		if err := common.SetOrganizationInAuthContext(skipCtx, &instance.OwnerID); err != nil {
 			return nil, err
 		}
 	}
