@@ -11,5 +11,9 @@ const TypeAWSAuditManager = types.ProviderType("aws_audit_manager")
 
 // Builder returns the AWS Audit Manager provider builder
 func Builder() providers.Builder {
-	return awssts.Builder(TypeAWSAuditManager, awssts.WithOperations(awsAuditOperations()))
+	return awssts.Builder(
+		TypeAWSAuditManager,
+		awssts.WithOperations(awsAuditOperations()),
+		awssts.WithClientDescriptors(awsAuditManagerClientDescriptors()),
+	)
 }

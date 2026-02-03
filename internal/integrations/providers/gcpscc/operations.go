@@ -9,7 +9,9 @@ import (
 	cloudscc "cloud.google.com/go/securitycenter/apiv2"
 	securitycenterpb "cloud.google.com/go/securitycenter/apiv2/securitycenterpb"
 	"google.golang.org/api/iterator"
+	"google.golang.org/protobuf/encoding/protojson"
 
+	"github.com/theopenlane/core/common/integrations/helpers"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -23,6 +25,7 @@ const (
 	maxSampleSize         = 5
 	settingsPageSize      = 10
 	sampleConfigsCapacity = 5
+	sccAlertTypeFinding   = "finding"
 )
 
 var (
@@ -56,6 +59,18 @@ func (p *Provider) Operations() []types.OperationDescriptor {
 					"filter": map[string]any{
 						"type":        "string",
 						"description": "Optional SCC findings filter overriding stored metadata.",
+					},
+					"page_size": map[string]any{
+						"type":        "integer",
+						"description": "Optional page size override (max 1000).",
+					},
+					"max_findings": map[string]any{
+						"type":        "integer",
+						"description": "Optional cap on total findings returned.",
+					},
+					"include_payloads": map[string]any{
+						"type":        "boolean",
+						"description": "Return raw finding payloads in the response (defaults to false).",
 					},
 				},
 			},
@@ -135,20 +150,34 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 		return types.OperationResult{}, err
 	}
 
-	filter := operationConfigString(input.Config, "filter")
+	filter := helpers.ConfigString(input.Config, "filter")
 	if filter == "" {
 		filter = strings.TrimSpace(meta.FindingFilter)
 	}
 
+	pageSize := helpers.ConfigInt(input.Config, "page_size", findingsPageSize)
+	if pageSize <= 0 {
+		pageSize = findingsPageSize
+	}
+	if pageSize > 1000 {
+		pageSize = 1000
+	}
+
+	maxFindings := helpers.ConfigInt(input.Config, "max_findings", 0)
+
 	req := &securitycenterpb.ListFindingsRequest{
 		Parent:   sourceName,
 		Filter:   filter,
-		PageSize: findingsPageSize,
+		PageSize: int32(pageSize),
 	}
 
 	it := client.ListFindings(ctx, req)
 	total := 0
 	samples := make([]map[string]any, 0, maxSampleSize)
+	envelopes := make([]types.AlertEnvelope, 0)
+	severityCounts := map[string]int{}
+	stateCounts := map[string]int{}
+	marshaler := protojson.MarshalOptions{UseProtoNames: true}
 
 	for {
 		result, err := it.Next()
@@ -167,8 +196,49 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 			}, err
 		}
 
+		finding := result.GetFinding()
+		if finding == nil {
+			continue
+		}
+
+		if maxFindings > 0 && total >= maxFindings {
+			break
+		}
+
+		payload, err := marshaler.Marshal(finding)
+		if err != nil {
+			return types.OperationResult{
+				Status:  types.OperationStatusFailed,
+				Summary: "Security Command Center finding serialization failed",
+				Details: map[string]any{
+					"source": sourceName,
+					"error":  err.Error(),
+				},
+			}, err
+		}
+
+		resourceName := strings.TrimSpace(finding.GetResourceName())
+		envelopes = append(envelopes, types.AlertEnvelope{
+			AlertType: sccAlertTypeFinding,
+			Resource:  resourceName,
+			Payload:   payload,
+		})
 		total++
-		if finding := result.GetFinding(); finding != nil && len(samples) < cap(samples) {
+
+		if severity := strings.TrimSpace(finding.GetSeverity().String()); severity != "" {
+			key := strings.ToLower(severity)
+			if key != "severity_unspecified" {
+				severityCounts[key]++
+			}
+		}
+		if state := strings.TrimSpace(finding.GetState().String()); state != "" {
+			key := strings.ToLower(state)
+			if key != "state_unspecified" {
+				stateCounts[key]++
+			}
+		}
+
+		if len(samples) < cap(samples) {
 			samples = append(samples, map[string]any{
 				"name":     finding.GetName(),
 				"category": finding.GetCategory(),
@@ -178,15 +248,20 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 		}
 	}
 
+	details := map[string]any{
+		"source":          sourceName,
+		"filter":          filter,
+		"totalFindings":   total,
+		"severity_counts": severityCounts,
+		"state_counts":    stateCounts,
+		"samples":         samples,
+	}
+	details = helpers.AddPayloadIf(details, helpers.ConfigBool(input.Config, "include_payloads", false), "alerts", envelopes)
+
 	return types.OperationResult{
 		Status:  types.OperationStatusOK,
 		Summary: fmt.Sprintf("Collected %d findings from %s", total, sourceName),
-		Details: map[string]any{
-			"source":        sourceName,
-			"filter":        filter,
-			"totalFindings": total,
-			"samples":       samples,
-		},
+		Details: details,
 	}, nil
 }
 
@@ -265,7 +340,7 @@ func resolveSecurityCenterParent(meta credentialMetadata) (string, error) {
 }
 
 func resolveSecurityCenterSource(meta credentialMetadata, config map[string]any) (string, error) {
-	if source := operationConfigString(config, "sourceId"); source != "" {
+	if source := helpers.ConfigString(config, "sourceId"); source != "" {
 		return normalizeSourceName(source, meta)
 	}
 
@@ -288,22 +363,4 @@ func normalizeSourceName(source string, meta credentialMetadata) (string, error)
 	}
 
 	return fmt.Sprintf("%s/sources/%s", parent, source), nil
-}
-
-func operationConfigString(config map[string]any, key string) string {
-	if len(config) == 0 {
-		return ""
-	}
-
-	value, ok := config[key]
-	if !ok {
-		return ""
-	}
-
-	str, ok := value.(string)
-	if !ok {
-		return ""
-	}
-
-	return strings.TrimSpace(str)
 }

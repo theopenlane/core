@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
-	"strings"
 	"time"
 
 	"github.com/theopenlane/core/common/integrations/helpers"
@@ -15,24 +14,32 @@ import (
 const (
 	githubOperationHealth types.OperationName = "health.default"
 	githubOperationRepos  types.OperationName = "repos.collect_metadata"
+	githubOperationVulns  types.OperationName = "vulnerabilities.collect"
 
 	defaultPerPage = 50
 	maxPerPage     = 100
 	maxSampleSize  = 5
+
+	defaultAlertState = "open"
+	githubAPIVersion  = "2022-11-28"
+	githubAPIBaseURL  = "https://api.github.com/"
 )
 
+// githubOperations returns the GitHub operations supported by this provider.
 func githubOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		{
 			Name:        githubOperationHealth,
 			Kind:        types.OperationKindHealth,
 			Description: "Validate GitHub OAuth token by calling the /user endpoint.",
+			Client:      ClientGitHubAPI,
 			Run:         runGitHubHealthOperation,
 		},
 		{
 			Name:        githubOperationRepos,
 			Kind:        types.OperationKindCollectFindings,
 			Description: "Collect repository metadata for the authenticated account.",
+			Client:      ClientGitHubAPI,
 			Run:         runGitHubRepoOperation,
 			ConfigSchema: map[string]any{
 				"type": "object",
@@ -48,6 +55,64 @@ func githubOperations() []types.OperationDescriptor {
 				},
 			},
 		},
+		{
+			Name:        githubOperationVulns,
+			Kind:        types.OperationKindCollectFindings,
+			Description: "Collect GitHub vulnerability alerts (Dependabot, code scanning, secret scanning) for repositories accessible to the token.",
+			Client:      ClientGitHubAPI,
+			Run:         runGitHubVulnerabilityOperation,
+			ConfigSchema: map[string]any{
+				"type": "object",
+				"properties": map[string]any{
+					"alert_types": map[string]any{
+						"type":        "array",
+						"description": "Optional alert types to collect (dependabot, code_scanning, secret_scanning). Defaults to all.",
+						"items": map[string]any{
+							"type": "string",
+						},
+					},
+					"repositories": map[string]any{
+						"type":        "array",
+						"description": "Optional list of full repo names (owner/repo). If omitted, all accessible repos are scanned.",
+						"items": map[string]any{
+							"type": "string",
+						},
+					},
+					"visibility": map[string]any{
+						"type":        "string",
+						"description": "Optional visibility filter (all, public, private) when listing repos.",
+					},
+					"affiliation": map[string]any{
+						"type":        "string",
+						"description": "Optional repo affiliation filter (owner, collaborator, organization_member).",
+					},
+					"per_page": map[string]any{
+						"type":        "integer",
+						"description": "Override the number of repos/alerts fetched per page (max 100).",
+					},
+					"max_repos": map[string]any{
+						"type":        "integer",
+						"description": "Optional cap on the number of repositories to scan.",
+					},
+					"include_payloads": map[string]any{
+						"type":        "boolean",
+						"description": "Return raw alert payloads in the response (defaults to false).",
+					},
+					"alert_state": map[string]any{
+						"type":        "string",
+						"description": "Dependabot alert state filter (open, dismissed, fixed, all). Defaults to open.",
+					},
+					"severity": map[string]any{
+						"type":        "string",
+						"description": "Optional severity filter (low, medium, high, critical).",
+					},
+					"ecosystem": map[string]any{
+						"type":        "string",
+						"description": "Optional package ecosystem filter (npm, maven, pip, etc.).",
+					},
+				},
+			},
+		},
 	}
 }
 
@@ -58,20 +123,73 @@ type githubUserResponse struct {
 }
 
 type githubRepoResponse struct {
-	Name      string    `json:"name"`
-	Private   bool      `json:"private"`
-	UpdatedAt time.Time `json:"updated_at"`
-	HTMLURL   string    `json:"html_url"`
+	Name      string          `json:"name"`
+	FullName  string          `json:"full_name"`
+	Owner     githubRepoOwner `json:"owner"`
+	Private   bool            `json:"private"`
+	UpdatedAt time.Time       `json:"updated_at"`
+	HTMLURL   string          `json:"html_url"`
 }
 
+type githubRepoOwner struct {
+	Login string `json:"login"`
+	ID    int64  `json:"id"`
+}
+
+// runGitHubHealthOperation validates GitHub access for OAuth or App credentials.
 func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+	client := helpers.AuthenticatedClientFromAny(input.Client)
 	token, err := oauthTokenFromPayload(input.Credential)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
+	if input.Provider == TypeGitHubApp {
+		if client != nil {
+			var resp githubInstallationRepositoriesResponse
+			endpoint := githubAPIBaseURL + "installation/repositories?per_page=1"
+			if err := client.GetJSON(ctx, endpoint, &resp); err != nil {
+				return types.OperationResult{
+					Status:  types.OperationStatusFailed,
+					Summary: "GitHub App installation lookup failed",
+					Details: map[string]any{"error": err.Error()},
+				}, err
+			}
+
+			return types.OperationResult{
+				Status:  types.OperationStatusOK,
+				Summary: fmt.Sprintf("GitHub App installation token valid (%d repositories accessible)", len(resp.Repositories)),
+				Details: map[string]any{"repositories": len(resp.Repositories)},
+			}, nil
+		}
+
+		repos, err := listGitHubInstallationRepos(ctx, nil, token, map[string]any{"per_page": 1})
+		if err != nil {
+			return types.OperationResult{
+				Status:  types.OperationStatusFailed,
+				Summary: "GitHub App installation lookup failed",
+				Details: map[string]any{"error": err.Error()},
+			}, err
+		}
+
+		return types.OperationResult{
+			Status:  types.OperationStatusOK,
+			Summary: fmt.Sprintf("GitHub App installation token valid (%d repositories accessible)", len(repos)),
+			Details: map[string]any{"repositories": len(repos)},
+		}, nil
+	}
+
 	var user githubUserResponse
-	if err := fetchGitHubResource(ctx, token, "user", nil, &user); err != nil {
+	if client != nil {
+		endpoint := githubAPIBaseURL + "user"
+		if err := client.GetJSON(ctx, endpoint, &user); err != nil {
+			return types.OperationResult{
+				Status:  types.OperationStatusFailed,
+				Summary: "GitHub user lookup failed",
+				Details: map[string]any{"error": err.Error()},
+			}, err
+		}
+	} else if err := fetchGitHubResource(ctx, nil, token, "user", nil, &user); err != nil {
 		return types.OperationResult{
 			Status:  types.OperationStatusFailed,
 			Summary: "GitHub user lookup failed",
@@ -92,20 +210,17 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 	}, nil
 }
 
+// runGitHubRepoOperation lists repositories for the authenticated account.
 func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+	client := helpers.AuthenticatedClientFromAny(input.Client)
 	token, err := oauthTokenFromPayload(input.Credential)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	params := url.Values{}
-	params.Set("per_page", fmt.Sprintf("%d", clampPerPage(intFromConfig(input.Config, "per_page", defaultPerPage))))
-	if visibility := stringFromConfig(input.Config, "visibility"); visibility != "" {
-		params.Set("visibility", visibility)
-	}
-
 	var repos []githubRepoResponse
-	if err := fetchGitHubResource(ctx, token, "user/repos", params, &repos); err != nil {
+	repos, err = listGitHubReposForProvider(ctx, client, token, input.Provider, input.Config)
+	if err != nil {
 		return types.OperationResult{
 			Status:  types.OperationStatusFailed,
 			Summary: "GitHub repository collection failed",
@@ -132,13 +247,13 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 		Details: map[string]any{
 			"count":   len(repos),
 			"samples": samples,
-			"params":  params.Encode(),
 		},
 	}, nil
 }
 
-func fetchGitHubResource(ctx context.Context, token, path string, params url.Values, out any) error {
-	endpoint := "https://api.github.com/" + path
+// fetchGitHubResource retrieves GitHub REST API resources with optional pooled client support.
+func fetchGitHubResource(ctx context.Context, client *helpers.AuthenticatedClient, token, path string, params url.Values, out any) error {
+	endpoint := githubAPIBaseURL + path
 	if params != nil {
 		if encoded := params.Encode(); encoded != "" {
 			endpoint += "?" + encoded
@@ -146,12 +261,19 @@ func fetchGitHubResource(ctx context.Context, token, path string, params url.Val
 	}
 
 	headers := map[string]string{
-		"Accept": "application/vnd.github+json",
+		"Accept":               "application/vnd.github+json",
+		"X-GitHub-Api-Version": githubAPIVersion,
 	}
 
-	if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, headers, out); err != nil {
+	var err error
+	if client != nil {
+		err = client.GetJSON(ctx, endpoint, out)
+	} else {
+		err = helpers.HTTPGetJSON(ctx, nil, endpoint, token, headers, out)
+	}
+	if err != nil {
 		if errors.Is(err, helpers.ErrHTTPRequestFailed) {
-			return fmt.Errorf("%w (path %s): %s", ErrAPIRequest, path, err.Error())
+			return fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}
 		return err
 	}
@@ -171,33 +293,6 @@ func oauthTokenFromPayload(payload types.CredentialPayload) (string, error) {
 	}
 
 	return token.AccessToken, nil
-}
-
-func stringFromConfig(config map[string]any, key string) string {
-	if len(config) == 0 {
-		return ""
-	}
-	if value, ok := config[key]; ok {
-		if str, ok := value.(string); ok {
-			return strings.TrimSpace(str)
-		}
-	}
-	return ""
-}
-
-func intFromConfig(config map[string]any, key string, fallback int) int {
-	if len(config) == 0 {
-		return fallback
-	}
-	if value, ok := config[key]; ok {
-		switch v := value.(type) {
-		case int:
-			return v
-		case float64:
-			return int(v)
-		}
-	}
-	return fallback
 }
 
 func clampPerPage(value int) int {

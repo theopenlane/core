@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -15,7 +16,10 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
-const defaultHTTPTimeout = 10 * time.Second
+const (
+	defaultHTTPTimeout = 10 * time.Second
+	maxHTTPErrorBody   = 2048
+)
 
 var defaultHTTPRequester = httpsling.MustNew(
 	httpsling.Client(httpclient.Timeout(defaultHTTPTimeout)),
@@ -25,12 +29,12 @@ var defaultHTTPRequester = httpsling.MustNew(
 func OAuthTokenFromPayload(payload types.CredentialPayload, provider string) (string, error) {
 	tokenOpt := payload.OAuthTokenOption()
 	if !tokenOpt.IsPresent() {
-		return "", fmt.Errorf("%w (provider %s)", ErrOAuthTokenMissing, provider)
+		return "", ErrOAuthTokenMissing
 	}
 
 	token := tokenOpt.MustGet()
 	if token == nil || token.AccessToken == "" {
-		return "", fmt.Errorf("%w (provider %s)", ErrAccessTokenEmpty, provider)
+		return "", ErrAccessTokenEmpty
 	}
 
 	return token.AccessToken, nil
@@ -40,7 +44,7 @@ func OAuthTokenFromPayload(payload types.CredentialPayload, provider string) (st
 func APITokenFromPayload(payload types.CredentialPayload, provider string) (string, error) {
 	token := strings.TrimSpace(payload.Data.APIToken)
 	if token == "" {
-		return "", fmt.Errorf("%w (provider %s)", ErrAPITokenMissing, provider)
+		return "", ErrAPITokenMissing
 	}
 
 	return token, nil
@@ -78,7 +82,49 @@ func HTTPGetJSON(ctx context.Context, client *http.Client, url string, bearer st
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= http.StatusBadRequest {
-		return fmt.Errorf("%w (url %s): %s", ErrHTTPRequestFailed, url, resp.Status)
+		return httpRequestError(resp, url)
+	}
+
+	return nil
+}
+
+// HTTPPostJSON issues a POST request with the provided bearer token and JSON body, then decodes JSON responses.
+func HTTPPostJSON(ctx context.Context, client *http.Client, url string, bearer string, headers map[string]string, body any, out any) error {
+	requester := defaultHTTPRequester
+	if client != nil {
+		var err error
+		requester, err = httpsling.New(httpsling.WithHTTPClient(client))
+		if err != nil {
+			return err
+		}
+	}
+
+	options := []httpsling.Option{
+		httpsling.Post(url),
+		httpsling.Header(httpsling.HeaderAccept, "application/json"),
+	}
+
+	if body != nil {
+		options = append(options, httpsling.JSONBody(body))
+	}
+
+	if bearer != "" {
+		options = append(options, httpsling.BearerAuth(bearer))
+	}
+
+	if len(headers) > 0 {
+		options = append(options, httpsling.HeadersFromMap(headers))
+	}
+
+	resp, err := requester.ReceiveWithContext(ctx, out, options...)
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode >= http.StatusBadRequest {
+		return httpRequestError(resp, url)
 	}
 
 	return nil
@@ -92,8 +138,26 @@ func RandomState(bytes int) (string, error) {
 
 	buf := make([]byte, bytes)
 	if _, err := rand.Read(buf); err != nil {
-		return "", fmt.Errorf("integrations/helpers: random state: %w", err)
+		return "", fmt.Errorf("%w: %w", ErrRandomStateGeneration, err)
 	}
 
 	return base64.RawURLEncoding.EncodeToString(buf), nil
+}
+
+func httpRequestError(resp *http.Response, url string) error {
+	if resp == nil {
+		return ErrHTTPRequestFailed
+	}
+	body := ""
+	if resp.Body != nil {
+		data, _ := io.ReadAll(io.LimitReader(resp.Body, maxHTTPErrorBody))
+		body = strings.TrimSpace(string(data))
+	}
+
+	return &HTTPRequestError{
+		URL:        url,
+		Status:     resp.Status,
+		StatusCode: resp.StatusCode,
+		Body:       body,
+	}
 }

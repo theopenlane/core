@@ -14,6 +14,7 @@ func Builder() providers.Builder {
 	return apikey.Builder(
 		TypeCloudflare,
 		apikey.WithTokenField("apiToken"),
+		apikey.WithClientDescriptors(cloudflareClientDescriptors()),
 		apikey.WithOperations(cloudflareOperations()),
 	)
 }

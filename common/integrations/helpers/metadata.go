@@ -1,8 +1,7 @@
 package helpers
 
 import (
-	"fmt"
-	"strings"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/integrations/types"
 )
@@ -18,7 +17,20 @@ func StringValue(data map[string]any, key string) string {
 		return ""
 	}
 
-	return strings.TrimSpace(fmt.Sprint(value))
+	return StringFromAny(value)
+}
+
+// FirstStringValue returns the first non-empty string for the provided keys.
+func FirstStringValue(data map[string]any, keys ...string) string {
+	if len(data) == 0 {
+		return ""
+	}
+	for _, key := range keys {
+		if value := StringValue(data, key); value != "" {
+			return value
+		}
+	}
+	return ""
 }
 
 // SanitizeOperationDescriptors filters and cleans a slice of OperationDescriptor
@@ -27,19 +39,18 @@ func SanitizeOperationDescriptors(provider types.ProviderType, descriptors []typ
 		return nil
 	}
 
-	out := make([]types.OperationDescriptor, 0, len(descriptors))
-	for _, descriptor := range descriptors {
+	out := lo.FilterMap(descriptors, func(descriptor types.OperationDescriptor, _ int) (types.OperationDescriptor, bool) {
 		if descriptor.Run == nil || descriptor.Name == "" {
-			continue
+			return types.OperationDescriptor{}, false
 		}
-
 		if descriptor.Provider == types.ProviderUnknown {
 			descriptor.Provider = provider
 		}
-
-		out = append(out, descriptor)
+		return descriptor, true
+	})
+	if len(out) == 0 {
+		return nil
 	}
-
 	return out
 }
 
@@ -49,18 +60,17 @@ func SanitizeClientDescriptors(provider types.ProviderType, descriptors []types.
 		return nil
 	}
 
-	out := make([]types.ClientDescriptor, 0, len(descriptors))
-	for _, descriptor := range descriptors {
+	out := lo.FilterMap(descriptors, func(descriptor types.ClientDescriptor, _ int) (types.ClientDescriptor, bool) {
 		if descriptor.Build == nil {
-			continue
+			return types.ClientDescriptor{}, false
 		}
-
 		if descriptor.Provider == types.ProviderUnknown {
 			descriptor.Provider = provider
 		}
-
-		out = append(out, descriptor)
+		return descriptor, true
+	})
+	if len(out) == 0 {
+		return nil
 	}
-
 	return out
 }

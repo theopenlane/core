@@ -14,24 +14,28 @@ const (
 	googleWorkspaceUsersOp  types.OperationName = "directory.sample_users"
 )
 
+// googleWorkspaceOperations returns the Google Workspace operations supported by this provider.
 func googleWorkspaceOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		{
 			Name:        googleWorkspaceHealthOp,
 			Kind:        types.OperationKindHealth,
 			Description: "Call Google OAuth userinfo to verify the workspace token.",
+			Client:      ClientGoogleWorkspaceAPI,
 			Run:         runGoogleWorkspaceHealth,
 		},
 		{
 			Name:        googleWorkspaceUsersOp,
 			Kind:        types.OperationKindCollectFindings,
 			Description: "List sample Admin Directory users for posture checks.",
+			Client:      ClientGoogleWorkspaceAPI,
 			Run:         runGoogleWorkspaceUsers,
 		},
 	}
 }
 
 func runGoogleWorkspaceHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+	client := helpers.AuthenticatedClientFromAny(input.Client)
 	token, err := helpers.OAuthTokenFromPayload(input.Credential, string(TypeGoogleWorkspace))
 	if err != nil {
 		return types.OperationResult{}, err
@@ -43,7 +47,16 @@ func runGoogleWorkspaceHealth(ctx context.Context, input types.OperationInput) (
 		Name  string `json:"name"`
 	}
 
-	if err := helpers.HTTPGetJSON(ctx, nil, "https://www.googleapis.com/oauth2/v3/userinfo", token, nil, &userinfo); err != nil {
+	endpoint := "https://www.googleapis.com/oauth2/v3/userinfo"
+	if client != nil {
+		if err := client.GetJSON(ctx, endpoint, &userinfo); err != nil {
+			return types.OperationResult{
+				Status:  types.OperationStatusFailed,
+				Summary: "Google userinfo failed",
+				Details: map[string]any{"error": err.Error()},
+			}, err
+		}
+	} else if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, nil, &userinfo); err != nil {
 		return types.OperationResult{
 			Status:  types.OperationStatusFailed,
 			Summary: "Google userinfo failed",
@@ -62,7 +75,9 @@ func runGoogleWorkspaceHealth(ctx context.Context, input types.OperationInput) (
 	}, nil
 }
 
+// runGoogleWorkspaceUsers returns a small sample of directory users for posture checks.
 func runGoogleWorkspaceUsers(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+	client := helpers.AuthenticatedClientFromAny(input.Client)
 	token, err := helpers.OAuthTokenFromPayload(input.Credential, string(TypeGoogleWorkspace))
 	if err != nil {
 		return types.OperationResult{}, err
@@ -82,7 +97,12 @@ func runGoogleWorkspaceUsers(ctx context.Context, input types.OperationInput) (t
 		} `json:"users"`
 	}
 
-	if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, nil, &resp); err != nil {
+	if client != nil {
+		err = client.GetJSON(ctx, endpoint, &resp)
+	} else {
+		err = helpers.HTTPGetJSON(ctx, nil, endpoint, token, nil, &resp)
+	}
+	if err != nil {
 		return types.OperationResult{
 			Status:  types.OperationStatusFailed,
 			Summary: "Directory users fetch failed",

@@ -11,5 +11,5 @@ const TypeSlack = types.ProviderType("slack")
 
 // Builder returns the Slack provider builder
 func Builder() providers.Builder {
-	return oauth.Builder(TypeSlack, oauth.WithOperations(slackOperations()))
+	return oauth.Builder(TypeSlack, oauth.WithOperations(slackOperations()), oauth.WithClientDescriptors(slackClientDescriptors()))
 }

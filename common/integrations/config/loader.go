@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/fs"
 	"path/filepath"
 	"strings"
@@ -33,13 +32,16 @@ func NewFSLoader(fsys fs.FS, path string) *FSLoader {
 
 // Load walks the configured directory and decodes every JSON provider file
 func (l *FSLoader) Load() (map[types.ProviderType]ProviderSpec, error) {
-	if l == nil || l.FS == nil {
-		return nil, fmt.Errorf("%w: %w", ErrLoaderRequired, ErrFSLoaderNotConfigured)
+	if l == nil {
+		return nil, ErrLoaderRequired
+	}
+	if l.FS == nil {
+		return nil, ErrFSLoaderNotConfigured
 	}
 
 	dirEntries, err := fs.ReadDir(l.FS, l.Path)
 	if err != nil {
-		return nil, fmt.Errorf("%w %q: %w", ErrReadDirectory, l.Path, err)
+		return nil, &LoaderPathError{Err: ErrReadDirectory, Path: l.Path, Cause: err}
 	}
 
 	specs := make(map[types.ProviderType]ProviderSpec, len(dirEntries))
@@ -57,12 +59,12 @@ func (l *FSLoader) Load() (map[types.ProviderType]ProviderSpec, error) {
 		fullPath := filepath.Join(l.Path, entry.Name())
 		bytes, readErr := fs.ReadFile(l.FS, fullPath)
 		if readErr != nil {
-			return nil, fmt.Errorf("%w %q: %w", ErrReadFile, fullPath, readErr)
+			return nil, &LoaderPathError{Err: ErrReadFile, Path: fullPath, Cause: readErr}
 		}
 
 		spec, decodeErr := decodeProviderSpec(bytes, parser)
 		if decodeErr != nil {
-			return nil, fmt.Errorf("%w %q: %w", ErrDecodeSpec, fullPath, decodeErr)
+			return nil, &LoaderPathError{Err: ErrDecodeSpec, Path: fullPath, Cause: decodeErr}
 		}
 
 		if !spec.Active {
@@ -75,7 +77,7 @@ func (l *FSLoader) Load() (map[types.ProviderType]ProviderSpec, error) {
 		}
 
 		if !spec.supportsSchemaVersion() {
-			return nil, fmt.Errorf("%w: %s (declared %q)", ErrSchemaVersionUnsupported, fullPath, spec.SchemaVersion)
+			return nil, &SchemaVersionError{Path: fullPath, Version: spec.SchemaVersion}
 		}
 
 		pt := spec.ProviderType()

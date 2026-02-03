@@ -3,6 +3,8 @@ package config
 import (
 	"time"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -74,12 +76,9 @@ func ToProviderConfigs(specs map[types.ProviderType]ProviderSpec) map[types.Prov
 		return nil
 	}
 
-	out := make(map[types.ProviderType]types.ProviderConfig, len(specs))
-	for provider, spec := range specs {
-		out[provider] = spec.ToProviderConfig()
-	}
-
-	return out
+	return lo.MapEntries(specs, func(provider types.ProviderType, spec ProviderSpec) (types.ProviderType, types.ProviderConfig) {
+		return provider, spec.ToProviderConfig()
+	})
 }
 
 // PersistenceSpec controls how secrets are stored

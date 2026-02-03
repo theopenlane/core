@@ -18,3 +18,32 @@ var (
 	// ErrLoaderRequired indicates a loader dependency was omitted.
 	ErrLoaderRequired = errors.New("integrations: loader required")
 )
+
+// LoaderPathError captures loader failures tied to a specific path.
+type LoaderPathError struct {
+	Err   error
+	Path  string
+	Cause error
+}
+
+func (e *LoaderPathError) Error() string {
+	return e.Err.Error()
+}
+
+func (e *LoaderPathError) Unwrap() error {
+	return e.Err
+}
+
+// SchemaVersionError captures schema version mismatch details.
+type SchemaVersionError struct {
+	Path    string
+	Version string
+}
+
+func (e *SchemaVersionError) Error() string {
+	return ErrSchemaVersionUnsupported.Error()
+}
+
+func (e *SchemaVersionError) Unwrap() error {
+	return ErrSchemaVersionUnsupported
+}

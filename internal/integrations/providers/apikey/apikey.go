@@ -2,7 +2,6 @@ package apikey
 
 import (
 	"context"
-	"fmt"
 	"maps"
 	"strings"
 
@@ -19,6 +18,7 @@ type ProviderOption func(*providerConfig)
 type providerConfig struct {
 	tokenField string
 	operations []types.OperationDescriptor
+	clients    []types.ClientDescriptor
 }
 
 // WithTokenField overrides the metadata field used to extract the API token.
@@ -38,6 +38,13 @@ func WithOperations(descriptors []types.OperationDescriptor) ProviderOption {
 	}
 }
 
+// WithClientDescriptors registers client descriptors for pooling.
+func WithClientDescriptors(descriptors []types.ClientDescriptor) ProviderOption {
+	return func(cfg *providerConfig) {
+		cfg.clients = descriptors
+	}
+}
+
 // Builder returns a providers.Builder that constructs API key providers.
 func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Builder {
 	cfg := providerConfig{
@@ -53,18 +60,20 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 		ProviderType: provider,
 		BuildFunc: func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
 			if spec.AuthType != "" && spec.AuthType != types.AuthKindAPIKey {
-				return nil, fmt.Errorf("%w (provider %s expects %s, found %s)", ErrAuthTypeMismatch, provider, types.AuthKindAPIKey, spec.AuthType)
+				return nil, ErrAuthTypeMismatch
 			}
 
+			clients := helpers.SanitizeClientDescriptors(provider, cfg.clients)
 			return &Provider{
 				provider:   provider,
 				tokenField: cfg.tokenField,
 				caps: types.ProviderCapabilities{
 					SupportsRefreshTokens: false,
-					SupportsClientPooling: false,
+					SupportsClientPooling: len(clients) > 0,
 					SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
 				},
 				operations: helpers.SanitizeOperationDescriptors(provider, cfg.operations),
+				clients:    clients,
 			}, nil
 		},
 	}
@@ -76,6 +85,7 @@ type Provider struct {
 	tokenField string
 	caps       types.ProviderCapabilities
 	operations []types.OperationDescriptor
+	clients    []types.ClientDescriptor
 }
 
 // Type returns the provider identifier.
@@ -105,9 +115,20 @@ func (p *Provider) Operations() []types.OperationDescriptor {
 	return out
 }
 
+// ClientDescriptors returns provider-published client descriptors when configured.
+func (p *Provider) ClientDescriptors() []types.ClientDescriptor {
+	if p == nil || len(p.clients) == 0 {
+		return nil
+	}
+
+	out := make([]types.ClientDescriptor, len(p.clients))
+	copy(out, p.clients)
+	return out
+}
+
 // BeginAuth is not supported for API key providers.
 func (p *Provider) BeginAuth(context.Context, types.AuthContext) (types.AuthSession, error) {
-	return nil, fmt.Errorf("%w (provider %s)", ErrBeginAuthNotSupported, p.provider)
+	return nil, ErrBeginAuthNotSupported
 }
 
 // Mint materializes a stored API key configuration into a credential payload.
@@ -125,9 +146,9 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 		return types.CredentialPayload{}, ErrProviderMetadataRequired
 	}
 
-	token := strings.TrimSpace(fmt.Sprint(providerData[p.tokenField]))
+	token := helpers.StringFromAny(providerData[p.tokenField])
 	if token == "" {
-		return types.CredentialPayload{}, fmt.Errorf("%w: %s", ErrTokenFieldRequired, p.tokenField)
+		return types.CredentialPayload{}, ErrTokenFieldRequired
 	}
 
 	cloned := maps.Clone(providerData)

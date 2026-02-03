@@ -14,6 +14,7 @@ func Builder() providers.Builder {
 	return apikey.Builder(
 		TypeVercel,
 		apikey.WithTokenField("apiToken"),
+		apikey.WithClientDescriptors(vercelClientDescriptors()),
 		apikey.WithOperations(vercelOperations()),
 	)
 }

@@ -15,6 +15,7 @@
       "read:user",
       "user:email",
       "repo",
+      "security_events",
       "admin:repo_hook"
     ],
     "redirectUri": "http://localhost:17608/v1/integrations/oauth/callback"
