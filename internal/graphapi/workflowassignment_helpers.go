@@ -3,18 +3,11 @@ package graphapi
 import (
 	"context"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/internal/workflows/resolvers"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
@@ -62,39 +55,6 @@ func (r *mutationResolver) validateAssignmentDecision(ctx context.Context, id st
 	}, nil
 }
 
-// assertOwnerOrSystemAdmin checks that the user in the context is either a system admin or the owner of the organization.
-// This is used for admin operations on workflow instances. It returns early if the user is a system admin without
-// requiring any database queries.
-func (r *mutationResolver) assertOwnerOrSystemAdmin(ctx context.Context) error {
-	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
-	if err == nil && isAdmin {
-		return nil
-	}
-
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil || userID == "" {
-		return rout.ErrPermissionDenied
-	}
-
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil || orgID == "" {
-		return rout.ErrPermissionDenied
-	}
-
-	membership, err := withTransactionalMutation(ctx).OrgMembership.Query().
-		Where(
-			orgmembership.UserIDEQ(userID),
-			orgmembership.OrganizationIDEQ(orgID),
-			orgmembership.RoleEQ(enums.RoleOwner),
-		).
-		Exist(ctx)
-	if err != nil || !membership {
-		return rout.ErrPermissionDenied
-	}
-
-	return nil
-}
-
 // assertAssignmentActor checks that the user in the context is a valid actor for the given assignment
 func (r *mutationResolver) assertAssignmentActor(ctx context.Context, assignment *generated.WorkflowAssignment) error {
 	userID, err := auth.GetSubjectIDFromContext(ctx)
@@ -137,79 +97,4 @@ func (r *mutationResolver) assertAssignmentActor(ctx context.Context, assignment
 	}
 
 	return nil
-}
-
-// resolveWorkflowAssignmentTargetUsers resolves the user IDs for a workflow assignment target input
-func resolveWorkflowAssignmentTargetUsers(ctx context.Context, client *generated.Client, obj *workflows.Object, input *model.WorkflowAssignmentTargetInput) ([]string, string, string, error) {
-	switch input.Type {
-	case enums.WorkflowTargetTypeUser:
-		if input.ID == nil || *input.ID == "" {
-			return nil, "", "", rout.NewMissingRequiredFieldError("targets.id")
-		}
-		return []string{*input.ID}, "", "", nil
-
-	case enums.WorkflowTargetTypeGroup:
-		if input.ID == nil || *input.ID == "" {
-			return nil, "", "", rout.NewMissingRequiredFieldError("targets.id")
-		}
-		userIDs, err := resolvers.ResolveGroupMembers(ctx, client, *input.ID)
-		if err != nil {
-			return nil, "", "", err
-		}
-		return lo.Uniq(userIDs), "", *input.ID, nil
-
-	case enums.WorkflowTargetTypeRole:
-		if input.ID == nil || *input.ID == "" {
-			return nil, "", "", rout.NewMissingRequiredFieldError("targets.id")
-		}
-
-		role := enums.ToRole(*input.ID)
-		if role == nil || *role == enums.RoleInvalid {
-			return nil, "", "", rout.InvalidField("targets.id")
-		}
-
-		orgID, err := auth.GetOrganizationIDFromContext(ctx)
-		if err != nil {
-			return nil, "", "", err
-		}
-
-		memberships, err := client.OrgMembership.Query().
-			Where(
-				orgmembership.OrganizationIDEQ(orgID),
-				orgmembership.RoleEQ(*role),
-			).
-			All(ctx)
-		if err != nil {
-			return nil, "", "", err
-		}
-
-		userIDs := lo.Map(memberships, func(m *generated.OrgMembership, _ int) string {
-			return m.UserID
-		})
-
-		return lo.Uniq(userIDs), "", "", nil
-
-	case enums.WorkflowTargetTypeResolver:
-		if input.ResolverKey == nil || *input.ResolverKey == "" {
-			return nil, "", "", rout.NewMissingRequiredFieldError("targets.resolverKey")
-		}
-		if obj == nil {
-			return nil, "", "", rout.ErrBadRequest
-		}
-
-		resolver, ok := resolvers.Get(*input.ResolverKey)
-		if !ok {
-			return nil, "", "", rout.InvalidField("targets.resolverKey")
-		}
-
-		userIDs, err := resolver(ctx, client, obj)
-		if err != nil {
-			return nil, "", "", err
-		}
-
-		return lo.Uniq(userIDs), *input.ResolverKey, "", nil
-
-	default:
-		return nil, "", "", rout.InvalidField("targets.type")
-	}
 }

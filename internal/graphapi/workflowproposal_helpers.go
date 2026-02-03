@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/workflows"
 )
 
+// requireWorkflowObjectEditAccess checks that the user in the context has edit access to the given workflow object
 func (r *Resolver) requireWorkflowObjectEditAccess(ctx context.Context, objectType enums.WorkflowObjectType, objectID string) error {
 	if objectID == "" || objectType == "" {
 		return fmt.Errorf("%w: missing workflow object context", rout.ErrBadRequest)
@@ -45,14 +46,15 @@ func (r *Resolver) requireWorkflowObjectEditAccess(ctx context.Context, objectTy
 	return nil
 }
 
+// workflowProposalDomainFields parses the domain key into object type and fields
 func workflowProposalDomainFields(domainKey string) (string, []string, error) {
 	trimmed := strings.TrimSpace(domainKey)
 	if trimmed == "" {
 		return "", nil, fmt.Errorf("%w: proposal domain key missing", rout.ErrBadRequest)
 	}
 
-	parts := strings.SplitN(trimmed, ":", 2)
-	if len(parts) != 2 {
+	parts := strings.SplitN(trimmed, ":", 2) //nolint:mnd
+	if len(parts) != 2 {                     //nolint:mnd
 		return "", nil, fmt.Errorf("%w: invalid proposal domain key", rout.ErrBadRequest)
 	}
 
@@ -69,6 +71,7 @@ func workflowProposalDomainFields(domainKey string) (string, []string, error) {
 		if trimmedField == "" {
 			continue
 		}
+
 		fields = append(fields, trimmedField)
 	}
 
@@ -80,6 +83,7 @@ func workflowProposalDomainFields(domainKey string) (string, []string, error) {
 	return objectType, fields, nil
 }
 
+// validateWorkflowProposalChanges ensures that the proposed changes are valid for the given domain
 func validateWorkflowProposalChanges(domainKey string, objectType enums.WorkflowObjectType, changes map[string]any) error {
 	domainObjectType, fields, err := workflowProposalDomainFields(domainKey)
 	if err != nil {
