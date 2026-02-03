@@ -100,7 +100,7 @@ func createWorkflowAssignmentWithTarget(t *testing.T, ctx context.Context, owner
 	return assignment
 }
 
-func createWorkflowProposal(t *testing.T, ctx context.Context, ownerID string, instance *ent.WorkflowInstance, control *ent.Control, changes map[string]any) *ent.WorkflowProposal {
+func createWorkflowProposal(t *testing.T, ctx context.Context, ownerID string, instance *ent.WorkflowInstance, control *ent.Control, domainKey string, changes map[string]any) *ent.WorkflowProposal {
 	t.Helper()
 
 	objRef, err := suite.client.db.WorkflowObjectRef.Create().
@@ -112,7 +112,7 @@ func createWorkflowProposal(t *testing.T, ctx context.Context, ownerID string, i
 
 	proposal, err := suite.client.db.WorkflowProposal.Create().
 		SetWorkflowObjectRefID(objRef.ID).
-		SetDomainKey("status").
+		SetDomainKey(domainKey).
 		SetChanges(changes).
 		SetOwnerID(ownerID).
 		Save(ctx)
@@ -271,7 +271,7 @@ func TestWorkflowProposalSubmitAndWithdraw(t *testing.T) {
 	instance := createWorkflowInstance(t, ctx, user.OrganizationID, definition.ID, control)
 
 	changes := map[string]any{"status": string(enums.ControlStatusApproved)}
-	proposal := createWorkflowProposal(t, ctx, user.OrganizationID, instance, control, changes)
+	proposal := createWorkflowProposal(t, ctx, user.OrganizationID, instance, control, "Control:status", changes)
 
 	submitRes, err := resolver.Mutation().SubmitWorkflowProposal(ctx, proposal.ID)
 	assert.NilError(t, err)
@@ -302,7 +302,7 @@ func TestWorkflowProposalPreview(t *testing.T) {
 	instance := createWorkflowInstance(t, ctx, user.OrganizationID, definition.ID, control)
 
 	changes := map[string]any{"status": string(enums.ControlStatusApproved)}
-	proposal := createWorkflowProposal(t, ctx, user.OrganizationID, instance, control, changes)
+	proposal := createWorkflowProposal(t, ctx, user.OrganizationID, instance, control, "Control:status", changes)
 
 	_, err := suite.client.db.WorkflowInstance.UpdateOneID(instance.ID).
 		SetWorkflowProposalID(proposal.ID).

@@ -122,10 +122,6 @@ func (r *mutationResolver) AdminReassignWorkflowAssignment(ctx context.Context, 
 		return nil, err
 	}
 
-	if assignment.Status != enums.WorkflowAssignmentStatusPending {
-		return nil, fmt.Errorf("%w: only pending assignments can be reassigned", rout.ErrBadRequest)
-	}
-
 	if assignment.OwnerID != "" {
 		if err := auth.SetOrganizationIDInAuthContext(allowCtx, assignment.OwnerID); err != nil {
 			return nil, err
@@ -216,7 +212,19 @@ func (r *mutationResolver) AdminReassignWorkflowAssignment(ctx context.Context, 
 		return nil, fmt.Errorf("%w: no assignment targets resolved", rout.ErrBadRequest)
 	}
 
-	updated, err := r.db.WorkflowAssignment.Get(allowCtx, assignment.ID)
+	updated, err := r.db.WorkflowAssignment.UpdateOneID(assignment.ID).
+		SetStatus(enums.WorkflowAssignmentStatusPending).
+		ClearDecidedAt().
+		ClearActorUserID().
+		ClearNotes().
+		ClearRejectionMetadata().
+		ClearMetadata().
+		Save(skipCtx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowassignment"})
+	}
+
+	updated, err = r.db.WorkflowAssignment.Get(allowCtx, assignment.ID)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignment"})
 	}
