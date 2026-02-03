@@ -63,7 +63,7 @@ func (IntegrationWebhook) Fields() []ent.Field {
 			Comment("display name for the webhook endpoint").
 			Optional().
 			Annotations(
-				entgql.OrderField("NAME"),
+				entgql.OrderField("name"),
 			),
 		field.Enum("status").
 			Comment("status of the webhook endpoint").
@@ -78,7 +78,7 @@ func (IntegrationWebhook) Fields() []ent.Field {
 			Validate(validator.ValidateURL()).
 			Nillable().
 			Annotations(
-				entgql.OrderField("ENDPOINT_URL"),
+				entgql.OrderField("endpoint_url"),
 			),
 		field.String("secret_token").
 			Comment("secret token for webhook signature validation").
@@ -105,7 +105,7 @@ func (IntegrationWebhook) Fields() []ent.Field {
 			Optional().
 			Nillable().
 			Annotations(
-				entgql.OrderField("LAST_DELIVERY_AT"),
+				entgql.OrderField("last_delivery_at"),
 				entgql.Skip(entgql.SkipMutationUpdateInput),
 			),
 		field.String("last_delivery_status").
