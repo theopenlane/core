@@ -91917,14 +91917,24 @@ type WorkflowObjectTypeMetadata {
 	"""
 	resolverKeys: [String!]!
 }
-"""
-WorkflowProposal stores staged changes for a workflow approval domain.
-"""
-type WorkflowProposal @goModel(model: "github.com/theopenlane/core/internal/ent/generated.WorkflowProposal") {
-	"""
-	ID of the workflow proposal
-	"""
+type WorkflowProposal implements Node {
 	id: ID!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: ID
+	"""
+	WorkflowObjectRef record that identifies the target object for this proposal
+	"""
+	workflowObjectRefID: ID!
 	"""
 	Stable key representing the approval domain for this proposal
 	"""
@@ -91932,9 +91942,13 @@ type WorkflowProposal @goModel(model: "github.com/theopenlane/core/internal/ent/
 	"""
 	Current state of the proposal
 	"""
-	state: WorkflowProposalState!
+	state: WorkflowProposalWorkflowProposalState!
 	"""
-	Staged field updates for this domain
+	Monotonic revision counter; incremented on edits
+	"""
+	revision: Int!
+	"""
+	Staged field updates for this domain; applied only after approval
 	"""
 	changes: Map
 	"""
@@ -91942,7 +91956,7 @@ type WorkflowProposal @goModel(model: "github.com/theopenlane/core/internal/ent/
 	"""
 	proposedHash: String
 	"""
-	Hash of the proposed changes that were approved
+	Hash of the proposed changes that satisfied approvals (what was approved)
 	"""
 	approvedHash: String
 	"""
@@ -91953,18 +91967,7 @@ type WorkflowProposal @goModel(model: "github.com/theopenlane/core/internal/ent/
 	User who submitted this proposal for approval
 	"""
 	submittedByUserID: ID
-	"""
-	WorkflowObjectRef record that identifies the target object for this proposal
-	"""
-	workflowObjectRefID: ID!
-	"""
-	Creation timestamp
-	"""
-	createdAt: Time!
-	"""
-	Last update timestamp
-	"""
-	updatedAt: Time!
+	owner: Organization
 	"""
 	Precomputed proposal preview (diff + values) for approval workflows.
 	Only available to editors/owners of the target object.
@@ -92041,4 +92044,14 @@ type WorkflowProposalWithdrawPayload {
 	Withdrawn workflow proposal
 	"""
 	workflowProposal: WorkflowProposal!
+}
+"""
+WorkflowProposalWorkflowProposalState is enum for the field state
+"""
+enum WorkflowProposalWorkflowProposalState @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowProposalState") {
+	DRAFT
+	SUBMITTED
+	APPLIED
+	REJECTED
+	SUPERSEDED
 }

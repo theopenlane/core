@@ -78738,3 +78738,65 @@ input WorkflowObjectRefWhereInput {
   hasPlatform: Boolean
   hasPlatformWith: [PlatformWhereInput!]
 }
+type WorkflowProposal implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  WorkflowObjectRef record that identifies the target object for this proposal
+  """
+  workflowObjectRefID: ID!
+  """
+  Stable key representing the approval domain for this proposal
+  """
+  domainKey: String!
+  """
+  Current state of the proposal
+  """
+  state: WorkflowProposalWorkflowProposalState!
+  """
+  Monotonic revision counter; incremented on edits
+  """
+  revision: Int!
+  """
+  Staged field updates for this domain; applied only after approval
+  """
+  changes: Map
+  """
+  Hash of the current proposed changes for approval verification
+  """
+  proposedHash: String
+  """
+  Hash of the proposed changes that satisfied approvals (what was approved)
+  """
+  approvedHash: String
+  """
+  Timestamp when this proposal was submitted for approval
+  """
+  submittedAt: Time
+  """
+  User who submitted this proposal for approval
+  """
+  submittedByUserID: ID
+  owner: Organization
+}
+"""
+WorkflowProposalWorkflowProposalState is enum for the field state
+"""
+enum WorkflowProposalWorkflowProposalState @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowProposalState") {
+  DRAFT
+  SUBMITTED
+  APPLIED
+  REJECTED
+  SUPERSEDED
+}

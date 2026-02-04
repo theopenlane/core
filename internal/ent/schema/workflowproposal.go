@@ -53,7 +53,7 @@ func (WorkflowProposal) Fields() []ent.Field {
 		field.Enum("state").
 			Comment("Current state of the proposal").
 			GoType(enums.WorkflowProposalState("")).
-			Default(string(enums.WorkflowProposalStateDraft)),
+			Default(enums.WorkflowProposalStateDraft.String()),
 		field.Int("revision").
 			Comment("Monotonic revision counter; incremented on edits").
 			Default(1),
@@ -151,7 +151,8 @@ func (WorkflowProposal) Hooks() []ent.Hook {
 // Annotations returns the annotations for the WorkflowProposal schema
 func (WorkflowProposal) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.Skip(entgql.SkipAll),
+		// only create the type and enums
+		entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput | entgql.SkipOrderField | entgql.SkipWhereInput),
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
 		history.Annotations{

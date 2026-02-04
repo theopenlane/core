@@ -102,6 +102,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 )
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
@@ -79890,6 +79891,177 @@ func newWorkflowObjectRefPaginateArgs(rv map[string]any) *workflowobjectrefPagin
 	}
 	if v, ok := rv[whereField].(*WorkflowObjectRefWhereInput); ok {
 		args.opts = append(args.opts, WithWorkflowObjectRefFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *WorkflowProposalQuery) CollectFields(ctx context.Context, satisfies ...string) (*WorkflowProposalQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *WorkflowProposalQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(workflowproposal.Columns))
+		selectedFields = []string{workflowproposal.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[workflowproposal.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldOwnerID)
+				fieldSeen[workflowproposal.FieldOwnerID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[workflowproposal.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldCreatedAt)
+				fieldSeen[workflowproposal.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[workflowproposal.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldUpdatedAt)
+				fieldSeen[workflowproposal.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[workflowproposal.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldCreatedBy)
+				fieldSeen[workflowproposal.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[workflowproposal.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldUpdatedBy)
+				fieldSeen[workflowproposal.FieldUpdatedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[workflowproposal.FieldTags]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldTags)
+				fieldSeen[workflowproposal.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[workflowproposal.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldOwnerID)
+				fieldSeen[workflowproposal.FieldOwnerID] = struct{}{}
+			}
+		case "workflowObjectRefID":
+			if _, ok := fieldSeen[workflowproposal.FieldWorkflowObjectRefID]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldWorkflowObjectRefID)
+				fieldSeen[workflowproposal.FieldWorkflowObjectRefID] = struct{}{}
+			}
+		case "domainKey":
+			if _, ok := fieldSeen[workflowproposal.FieldDomainKey]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldDomainKey)
+				fieldSeen[workflowproposal.FieldDomainKey] = struct{}{}
+			}
+		case "state":
+			if _, ok := fieldSeen[workflowproposal.FieldState]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldState)
+				fieldSeen[workflowproposal.FieldState] = struct{}{}
+			}
+		case "revision":
+			if _, ok := fieldSeen[workflowproposal.FieldRevision]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldRevision)
+				fieldSeen[workflowproposal.FieldRevision] = struct{}{}
+			}
+		case "changes":
+			if _, ok := fieldSeen[workflowproposal.FieldChanges]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldChanges)
+				fieldSeen[workflowproposal.FieldChanges] = struct{}{}
+			}
+		case "proposedHash":
+			if _, ok := fieldSeen[workflowproposal.FieldProposedHash]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldProposedHash)
+				fieldSeen[workflowproposal.FieldProposedHash] = struct{}{}
+			}
+		case "approvedHash":
+			if _, ok := fieldSeen[workflowproposal.FieldApprovedHash]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldApprovedHash)
+				fieldSeen[workflowproposal.FieldApprovedHash] = struct{}{}
+			}
+		case "submittedAt":
+			if _, ok := fieldSeen[workflowproposal.FieldSubmittedAt]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldSubmittedAt)
+				fieldSeen[workflowproposal.FieldSubmittedAt] = struct{}{}
+			}
+		case "submittedByUserID":
+			if _, ok := fieldSeen[workflowproposal.FieldSubmittedByUserID]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldSubmittedByUserID)
+				fieldSeen[workflowproposal.FieldSubmittedByUserID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type workflowproposalPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []WorkflowProposalPaginateOption
+}
+
+func newWorkflowProposalPaginateArgs(rv map[string]any) *workflowproposalPaginateArgs {
+	args := &workflowproposalPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &WorkflowProposalOrder{Field: &WorkflowProposalOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithWorkflowProposalOrder(order))
+			}
+		case *WorkflowProposalOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithWorkflowProposalOrder(v))
+			}
+		}
 	}
 	return args
 }
