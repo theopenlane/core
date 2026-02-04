@@ -38,6 +38,15 @@ func (c *AuthenticatedClient) GetJSON(ctx context.Context, endpoint string, out 
 	return HTTPGetJSON(ctx, nil, endpoint, c.BearerToken, c.Headers, out)
 }
 
+// GetJSONWithClient uses the authenticated client when available, otherwise falls back to HTTPGetJSON
+func GetJSONWithClient(ctx context.Context, client *AuthenticatedClient, endpoint string, bearer string, headers map[string]string, out any) error {
+	if client != nil {
+		return client.GetJSON(ctx, endpoint, out)
+	}
+
+	return HTTPGetJSON(ctx, nil, endpoint, bearer, headers, out)
+}
+
 // AuthenticatedClientFromAny attempts to unwrap an AuthenticatedClient from an arbitrary value
 func AuthenticatedClientFromAny(value any) *AuthenticatedClient {
 	client, ok := value.(*AuthenticatedClient)

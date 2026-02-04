@@ -36,5 +36,13 @@ func (f BuilderFunc) Build(ctx context.Context, spec config.ProviderSpec) (Provi
 	if f.BuildFunc == nil {
 		return nil, ErrRelyingPartyInit
 	}
-	return f.BuildFunc(ctx, spec)
+
+	provider, err := f.BuildFunc(ctx, spec)
+	if err != nil {
+		return nil, err
+	}
+	if provider == nil {
+		return nil, ErrProviderNil
+	}
+	return provider, nil
 }

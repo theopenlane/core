@@ -171,6 +171,7 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 			if finding.Severity != nil {
 				severityLabel = strings.ToLower(helpers.StringFromAny(finding.Severity.Label))
 			}
+
 			recordState := strings.ToUpper(helpers.StringFromAny(finding.RecordState))
 			workflowStatus := ""
 			if finding.Workflow != nil {
@@ -180,9 +181,11 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 			if severityFilter != "" && severityLabel != severityFilter {
 				continue
 			}
+
 			if recordStateFilter != "" && recordState != recordStateFilter {
 				continue
 			}
+
 			if workflowFilter != "" && workflowStatus != workflowFilter {
 				continue
 			}
@@ -271,6 +274,7 @@ func resolveSecurityHubClient(ctx context.Context, input types.OperationInput) (
 	return buildSecurityHubClient(ctx, input.Credential)
 }
 
+// buildSecurityHubClient builds a Security Hub client from stored credentials
 func buildSecurityHubClient(ctx context.Context, payload types.CredentialPayload) (*securityhub.Client, awsSecurityHubMetadata, error) {
 	meta, err := awsSecurityHubMetadataFromPayload(payload)
 	if err != nil {
@@ -290,6 +294,7 @@ func buildSecurityHubClient(ctx context.Context, payload types.CredentialPayload
 	return securityhub.NewFromConfig(cfg), meta, nil
 }
 
+// awsSecurityHubMetadataFromPayload extracts required AWS metadata from the payload
 func awsSecurityHubMetadataFromPayload(payload types.CredentialPayload) (awsSecurityHubMetadata, error) {
 	meta := payload.Data.ProviderData
 	if len(meta) == 0 {

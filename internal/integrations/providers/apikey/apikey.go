@@ -65,15 +65,17 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 
 			clients := helpers.SanitizeClientDescriptors(provider, cfg.clients)
 			return &Provider{
-				provider:   provider,
+				BaseProvider: providers.NewBaseProvider(
+					provider,
+					types.ProviderCapabilities{
+						SupportsRefreshTokens: false,
+						SupportsClientPooling: len(clients) > 0,
+						SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
+					},
+					helpers.SanitizeOperationDescriptors(provider, cfg.operations),
+					clients,
+				),
 				tokenField: cfg.tokenField,
-				caps: types.ProviderCapabilities{
-					SupportsRefreshTokens: false,
-					SupportsClientPooling: len(clients) > 0,
-					SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
-				},
-				operations: helpers.SanitizeOperationDescriptors(provider, cfg.operations),
-				clients:    clients,
 			}, nil
 		},
 	}
@@ -81,49 +83,8 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 
 // Provider implements API key based integrations.
 type Provider struct {
-	provider   types.ProviderType
+	providers.BaseProvider
 	tokenField string
-	caps       types.ProviderCapabilities
-	operations []types.OperationDescriptor
-	clients    []types.ClientDescriptor
-}
-
-// Type returns the provider identifier.
-func (p *Provider) Type() types.ProviderType {
-	if p == nil {
-		return types.ProviderUnknown
-	}
-	return p.provider
-}
-
-// Capabilities exposes optional provider behaviour flags.
-func (p *Provider) Capabilities() types.ProviderCapabilities {
-	if p == nil {
-		return types.ProviderCapabilities{}
-	}
-	return p.caps
-}
-
-// Operations returns provider-published operations when configured.
-func (p *Provider) Operations() []types.OperationDescriptor {
-	if p == nil || len(p.operations) == 0 {
-		return nil
-	}
-
-	out := make([]types.OperationDescriptor, len(p.operations))
-	copy(out, p.operations)
-	return out
-}
-
-// ClientDescriptors returns provider-published client descriptors when configured.
-func (p *Provider) ClientDescriptors() []types.ClientDescriptor {
-	if p == nil || len(p.clients) == 0 {
-		return nil
-	}
-
-	out := make([]types.ClientDescriptor, len(p.clients))
-	copy(out, p.clients)
-	return out
 }
 
 // BeginAuth is not supported for API key providers.
@@ -153,7 +114,7 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 
 	cloned := maps.Clone(providerData)
 
-	builder := types.NewCredentialBuilder(p.provider).With(
+	builder := types.NewCredentialBuilder(p.Type()).With(
 		types.WithCredentialKind(types.CredentialKindAPIKey),
 		types.WithCredentialSet(models.CredentialSet{
 			APIToken:     token,

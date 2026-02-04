@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/common/integrations/helpers"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/pkg/integrations/providers"
 )
 
 const (
@@ -22,63 +23,25 @@ const (
 
 // Provider implements client-credential authentication for Microsoft Defender for Cloud.
 type Provider struct {
-	provider      types.ProviderType
-	operations    []types.OperationDescriptor
-	caps          types.ProviderCapabilities
+	providers.BaseProvider
 	tokenEndpoint func(tenantID string) string
-	clients       []types.ClientDescriptor
 }
 
 // newProvider constructs the Azure Security Center provider from a spec.
 func newProvider(spec config.ProviderSpec) *Provider {
 	return &Provider{
-		provider:   TypeAzureSecurityCenter,
-		operations: helpers.SanitizeOperationDescriptors(TypeAzureSecurityCenter, azureSecurityOperations()),
-		caps: types.ProviderCapabilities{
-			SupportsRefreshTokens: true,
-			SupportsClientPooling: true,
-			SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
-		},
+		BaseProvider: providers.NewBaseProvider(
+			TypeAzureSecurityCenter,
+			types.ProviderCapabilities{
+				SupportsRefreshTokens: true,
+				SupportsClientPooling: true,
+				SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
+			},
+			helpers.SanitizeOperationDescriptors(TypeAzureSecurityCenter, azureSecurityOperations()),
+			helpers.SanitizeClientDescriptors(TypeAzureSecurityCenter, azureSecurityCenterClientDescriptors()),
+		),
 		tokenEndpoint: defaultAzureTokenEndpoint,
-		clients:       helpers.SanitizeClientDescriptors(TypeAzureSecurityCenter, azureSecurityCenterClientDescriptors()),
 	}
-}
-
-// Type returns the provider identifier.
-func (p *Provider) Type() types.ProviderType {
-	if p == nil {
-		return types.ProviderUnknown
-	}
-	return p.provider
-}
-
-// Capabilities returns the provider capabilities.
-func (p *Provider) Capabilities() types.ProviderCapabilities {
-	if p == nil {
-		return types.ProviderCapabilities{}
-	}
-	return p.caps
-}
-
-// Operations returns provider-published operations.
-func (p *Provider) Operations() []types.OperationDescriptor {
-	if p == nil || len(p.operations) == 0 {
-		return nil
-	}
-	out := make([]types.OperationDescriptor, len(p.operations))
-	copy(out, p.operations)
-	return out
-}
-
-// ClientDescriptors returns provider-published client descriptors when configured.
-func (p *Provider) ClientDescriptors() []types.ClientDescriptor {
-	if p == nil || len(p.clients) == 0 {
-		return nil
-	}
-
-	out := make([]types.ClientDescriptor, len(p.clients))
-	copy(out, p.clients)
-	return out
 }
 
 // BeginAuth is not supported for Azure Security Center client credentials.
@@ -108,7 +71,7 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 	}
 
 	providerData := credentials.persist(meta)
-	builder := types.NewCredentialBuilder(p.provider).With(
+	builder := types.NewCredentialBuilder(p.Type()).With(
 		types.WithCredentialKind(types.CredentialKindOAuthToken),
 		types.WithOAuthToken(token),
 		types.WithCredentialSet(models.CredentialSet{

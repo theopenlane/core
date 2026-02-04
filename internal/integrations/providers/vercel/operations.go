@@ -34,9 +34,9 @@ func vercelOperations() []types.OperationDescriptor {
 	}
 }
 
+// runVercelHealth verifies the Vercel API token by fetching the user account
 func runVercelHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := helpers.AuthenticatedClientFromAny(input.Client)
-	token, err := helpers.APITokenFromPayload(input.Credential, string(TypeVercel))
+	client, token, err := helpers.ClientAndAPIToken(input, TypeVercel)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -50,20 +50,8 @@ func runVercelHealth(ctx context.Context, input types.OperationInput) (types.Ope
 	}
 
 	endpoint := "https://api.vercel.com/v2/user"
-	if client != nil {
-		if err := client.GetJSON(ctx, endpoint, &resp); err != nil {
-			return types.OperationResult{
-				Status:  types.OperationStatusFailed,
-				Summary: "Vercel user lookup failed",
-				Details: map[string]any{"error": err.Error()},
-			}, err
-		}
-	} else if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, nil, &resp); err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Vercel user lookup failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+	if err := helpers.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
+		return helpers.OperationFailure("Vercel user lookup failed", err), err
 	}
 
 	summary := fmt.Sprintf("Vercel token valid for %s", resp.User.Email)
@@ -80,8 +68,7 @@ func runVercelHealth(ctx context.Context, input types.OperationInput) (types.Ope
 
 // runVercelProjects returns a sample of projects for drift detection.
 func runVercelProjects(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := helpers.AuthenticatedClientFromAny(input.Client)
-	token, err := helpers.APITokenFromPayload(input.Credential, string(TypeVercel))
+	client, token, err := helpers.ClientAndAPIToken(input, TypeVercel)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -99,17 +86,8 @@ func runVercelProjects(ctx context.Context, input types.OperationInput) (types.O
 
 	endpoint := "https://api.vercel.com/v4/projects?" + params.Encode()
 
-	if client != nil {
-		err = client.GetJSON(ctx, endpoint, &resp)
-	} else {
-		err = helpers.HTTPGetJSON(ctx, nil, endpoint, token, nil, &resp)
-	}
-	if err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Vercel projects fetch failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+	if err := helpers.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
+		return helpers.OperationFailure("Vercel projects fetch failed", err), err
 	}
 
 	samples := make([]map[string]any, 0, len(resp.Projects))

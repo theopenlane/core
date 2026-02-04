@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"reflect"
 	"strings"
 
 	"github.com/go-viper/mapstructure/v2"
@@ -23,6 +24,7 @@ func DecodeConfig(config map[string]any, target any) error {
 		DecodeHook: mapstructure.ComposeDecodeHookFunc(
 			mapstructure.StringToTimeDurationHookFunc(),
 			mapstructure.TextUnmarshallerHookFunc(),
+			stringSliceDecodeHook(),
 		),
 	})
 	if err != nil {
@@ -41,4 +43,23 @@ func normalizeConfigKey(value string) string {
 	value = strings.ReplaceAll(value, "_", "")
 	value = strings.ReplaceAll(value, "-", "")
 	return value
+}
+
+func stringSliceDecodeHook() mapstructure.DecodeHookFunc {
+	return func(from reflect.Type, to reflect.Type, data any) (any, error) {
+		if to != reflect.TypeOf([]string{}) {
+			return data, nil
+		}
+
+		switch v := data.(type) {
+		case []string:
+			return stringsFromAny(v), nil
+		case []any:
+			return stringsFromAny(v), nil
+		case string:
+			return stringsFromAny(v), nil
+		default:
+			return data, nil
+		}
+	}
 }

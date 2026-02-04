@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
+// oidcOperations handles oidc operations
 func oidcOperations(userInfoURL string) []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		{
@@ -26,10 +27,10 @@ func oidcOperations(userInfoURL string) []types.OperationDescriptor {
 	}
 }
 
+// runOIDCHealth runs oidc health
 func runOIDCHealth(userInfoURL string) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-		client := helpers.AuthenticatedClientFromAny(input.Client)
-		token, err := helpers.OAuthTokenFromPayload(input.Credential, string(TypeOIDCGeneric))
+		client, token, err := helpers.ClientAndOAuthToken(input, TypeOIDCGeneric)
 		if err != nil {
 			return types.OperationResult{}, err
 		}
@@ -42,20 +43,8 @@ func runOIDCHealth(userInfoURL string) types.OperationFunc {
 		}
 
 		var resp map[string]any
-		if client != nil {
-			if err := client.GetJSON(ctx, userInfoURL, &resp); err != nil {
-				return types.OperationResult{
-					Status:  types.OperationStatusFailed,
-					Summary: "OIDC userinfo call failed",
-					Details: map[string]any{"error": err.Error()},
-				}, err
-			}
-		} else if err := helpers.HTTPGetJSON(ctx, nil, userInfoURL, token, nil, &resp); err != nil {
-			return types.OperationResult{
-				Status:  types.OperationStatusFailed,
-				Summary: "OIDC userinfo call failed",
-				Details: map[string]any{"error": err.Error()},
-			}, err
+		if err := helpers.GetJSONWithClient(ctx, client, userInfoURL, token, nil, &resp); err != nil {
+			return helpers.OperationFailure("OIDC userinfo call failed", err), err
 		}
 
 		summary := "OIDC userinfo call succeeded"
@@ -71,6 +60,7 @@ func runOIDCHealth(userInfoURL string) types.OperationFunc {
 	}
 }
 
+// runOIDCClaims runs oidc claims
 func runOIDCClaims(_ context.Context, input types.OperationInput) (types.OperationResult, error) {
 	claims := input.Credential.Claims
 	if claims == nil {

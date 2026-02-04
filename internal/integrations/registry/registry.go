@@ -53,6 +53,9 @@ func NewRegistry(ctx context.Context) (*Registry, error) {
 		if err != nil {
 			return nil, fmt.Errorf("%w: %w", ErrProviderBuildFailed, err)
 		}
+		if provider == nil {
+			return nil, fmt.Errorf("%w: provider is nil", ErrProviderBuildFailed)
+		}
 
 		instance.providers[providerType] = provider
 
@@ -185,6 +188,9 @@ func (r *Registry) UpsertProvider(ctx context.Context, spec config.ProviderSpec,
 	provider, err := builder.Build(ctx, spec)
 	if err != nil {
 		return fmt.Errorf("%w: %w", ErrProviderBuildFailed, err)
+	}
+	if provider == nil {
+		return fmt.Errorf("%w: provider is nil", ErrProviderBuildFailed)
 	}
 
 	r.configs[providerType] = spec

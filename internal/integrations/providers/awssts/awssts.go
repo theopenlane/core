@@ -51,14 +51,16 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 
 			clients := helpers.SanitizeClientDescriptors(provider, cfg.clients)
 			return &Provider{
-				provider:   provider,
-				operations: helpers.SanitizeOperationDescriptors(provider, cfg.operations),
-				caps: types.ProviderCapabilities{
-					SupportsRefreshTokens: false,
-					SupportsClientPooling: len(clients) > 0,
-					SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
-				},
-				clients: clients,
+				BaseProvider: providers.NewBaseProvider(
+					provider,
+					types.ProviderCapabilities{
+						SupportsRefreshTokens: false,
+						SupportsClientPooling: len(clients) > 0,
+						SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
+					},
+					helpers.SanitizeOperationDescriptors(provider, cfg.operations),
+					clients,
+				),
 			}, nil
 		},
 	}
@@ -66,48 +68,7 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 
 // Provider persists AWS STS metadata and exposes it via CredentialSet.
 type Provider struct {
-	provider   types.ProviderType
-	operations []types.OperationDescriptor
-	caps       types.ProviderCapabilities
-	clients    []types.ClientDescriptor
-}
-
-// Type returns the provider identifier.
-func (p *Provider) Type() types.ProviderType {
-	if p == nil {
-		return types.ProviderUnknown
-	}
-	return p.provider
-}
-
-// Capabilities returns optional capability flags.
-func (p *Provider) Capabilities() types.ProviderCapabilities {
-	if p == nil {
-		return types.ProviderCapabilities{}
-	}
-	return p.caps
-}
-
-// Operations returns provider-published operations.
-func (p *Provider) Operations() []types.OperationDescriptor {
-	if p == nil || len(p.operations) == 0 {
-		return nil
-	}
-
-	out := make([]types.OperationDescriptor, len(p.operations))
-	copy(out, p.operations)
-	return out
-}
-
-// ClientDescriptors returns provider-published client descriptors when configured.
-func (p *Provider) ClientDescriptors() []types.ClientDescriptor {
-	if p == nil || len(p.clients) == 0 {
-		return nil
-	}
-
-	out := make([]types.ClientDescriptor, len(p.clients))
-	copy(out, p.clients)
-	return out
+	providers.BaseProvider
 }
 
 // BeginAuth is not supported for AWS STS metadata flows.
@@ -152,7 +113,7 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 		sanitized["sessionToken"] = creds.SessionToken
 	}
 
-	builder := types.NewCredentialBuilder(p.provider).With(
+	builder := types.NewCredentialBuilder(p.Type()).With(
 		types.WithCredentialKind(types.CredentialKindMetadata),
 		types.WithCredentialSet(models.CredentialSet{
 			AccessKeyID:     creds.AccessKeyID,
@@ -164,6 +125,7 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 	return builder.Build()
 }
 
+// cloneProviderData returns a shallow copy of provider data
 func cloneProviderData(data map[string]any) map[string]any {
 	if len(data) == 0 {
 		return nil

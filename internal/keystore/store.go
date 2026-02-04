@@ -11,6 +11,8 @@ import (
 
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
+	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -57,6 +59,8 @@ func (s *Store) SaveCredential(ctx context.Context, orgID string, payload types.
 		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to ensure integration record")
 		return types.CredentialPayload{}, err
 	}
+
+	s.updateIntegrationProviderState(systemCtx, integrationRecord, payload.Provider, payload.Data.ProviderData)
 
 	secretName := string(payload.Provider)
 	envelope := payloadToCredentialSet(payload, s.now)
@@ -145,7 +149,16 @@ func (s *Store) LoadCredential(ctx context.Context, orgID string, provider types
 
 		envelope := secret.CredentialSet
 
-		return credentialSetToPayload(provider, envelope)
+		s.updateIntegrationProviderState(ctx, integrationRecord, provider, envelope.ProviderData)
+
+		payload, err := credentialSetToPayload(provider, envelope)
+		if err != nil {
+			return types.CredentialPayload{}, err
+		}
+		providerState := integrationRecord.ProviderState
+		payload.ProviderState = &providerState
+
+		return payload, nil
 	}
 
 	return types.CredentialPayload{}, ErrCredentialNotFound
@@ -236,6 +249,69 @@ func (s *Store) ensureIntegration(ctx context.Context, orgID string, provider ty
 		return nil, createErr
 	}
 	return record, nil
+}
+
+func (s *Store) updateIntegrationProviderState(ctx context.Context, record *ent.Integration, provider types.ProviderType, data map[string]any) {
+	if len(data) == 0 {
+		return
+	}
+
+	var (
+		updated bool
+		next    = record.ProviderState
+	)
+
+	switch provider {
+	case types.ProviderType("github"), types.ProviderType("github_app"):
+		appID := helpers.FirstStringValue(data, "appId", "app_id")
+		installationID := helpers.FirstStringValue(data, "installationId", "installation_id")
+		if appID == "" && installationID == "" {
+			return
+		}
+
+		current := next.GitHub
+		currentAppID := ""
+		currentInstallationID := ""
+		if current != nil {
+			currentAppID = current.AppID
+			currentInstallationID = current.InstallationID
+		}
+
+		nextAppID := currentAppID
+		if appID != "" {
+			nextAppID = appID
+		}
+		nextInstallationID := currentInstallationID
+		if installationID != "" {
+			nextInstallationID = installationID
+		}
+
+		if nextAppID == currentAppID && nextInstallationID == currentInstallationID {
+			return
+		}
+
+		nextGitHub := state.GitHubState{}
+		if current != nil {
+			nextGitHub = *current
+		}
+		nextGitHub.AppID = nextAppID
+		nextGitHub.InstallationID = nextInstallationID
+		next.GitHub = &nextGitHub
+		updated = true
+	default:
+		return
+	}
+
+	if !updated {
+		return
+	}
+
+	if err := s.db.Integration.UpdateOneID(record.ID).SetProviderState(next).Exec(ctx); err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Str("provider", string(provider)).Msg("failed to update integration provider state")
+		return
+	}
+
+	record.ProviderState = next
 }
 
 // payloadToCredentialSet converts a CredentialPayload into a storable CredentialSet

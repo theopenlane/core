@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 )
 
+// TestProviderMint handles test provider mint
 func TestProviderMint(t *testing.T) {
 	spec := config.ProviderSpec{
 		Name:              "test_apikey",
@@ -42,6 +43,7 @@ func TestProviderMint(t *testing.T) {
 	require.Equal(t, map[string]any{"apiToken": "secret-token", "alias": "test"}, payload.Data.ProviderData)
 }
 
+// mustBuildPayload handles must build payload
 func mustBuildPayload(t *testing.T, provider string, providerData map[string]any) types.CredentialPayload {
 	t.Helper()
 

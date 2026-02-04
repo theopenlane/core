@@ -12,6 +12,7 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 
 	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/opsconfig"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -31,6 +32,15 @@ const (
 var (
 	_ types.OperationProvider = (*Provider)(nil)
 )
+
+type securityCenterFindingsConfig struct {
+	opsconfig.Pagination
+	opsconfig.PayloadOptions
+
+	Filter      string `mapstructure:"filter"`
+	SourceID    string `mapstructure:"sourceId"`
+	MaxFindings int    `mapstructure:"max_findings"`
+}
 
 // Operations returns the provider operations published by GCP SCC.
 func (p *Provider) Operations() []types.OperationDescriptor {
@@ -87,6 +97,7 @@ func (p *Provider) Operations() []types.OperationDescriptor {
 	}
 }
 
+// runSecurityCenterHealthOperation checks SCC reachability for the org or project
 func runSecurityCenterHealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	meta, err := metadataFromPayload(input.Credential)
 	if err != nil {
@@ -134,8 +145,14 @@ func runSecurityCenterHealthOperation(ctx context.Context, input types.Operation
 	}, nil
 }
 
+// runSecurityCenterFindingsOperation collects findings from SCC
 func runSecurityCenterFindingsOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	meta, err := metadataFromPayload(input.Credential)
+	if err != nil {
+		return types.OperationResult{}, err
+	}
+
+	config, err := decodeSecurityCenterFindingsConfig(input.Config)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -145,17 +162,17 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 		return types.OperationResult{}, ErrSecurityCenterClientRequired
 	}
 
-	sourceName, err := resolveSecurityCenterSource(meta, input.Config)
+	sourceName, err := resolveSecurityCenterSource(meta, config)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	filter := helpers.ConfigString(input.Config, "filter")
+	filter := strings.TrimSpace(config.Filter)
 	if filter == "" {
 		filter = strings.TrimSpace(meta.FindingFilter)
 	}
 
-	pageSize := helpers.ConfigInt(input.Config, "page_size", findingsPageSize)
+	pageSize := config.EffectivePageSize(findingsPageSize)
 	if pageSize <= 0 {
 		pageSize = findingsPageSize
 	}
@@ -163,7 +180,7 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 		pageSize = 1000
 	}
 
-	maxFindings := helpers.ConfigInt(input.Config, "max_findings", 0)
+	maxFindings := config.MaxFindings
 
 	req := &securitycenterpb.ListFindingsRequest{
 		Parent:   sourceName,
@@ -256,7 +273,7 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 		"state_counts":    stateCounts,
 		"samples":         samples,
 	}
-	details = helpers.AddPayloadIf(details, helpers.ConfigBool(input.Config, "include_payloads", false), "alerts", envelopes)
+	details = helpers.AddPayloadIf(details, config.IncludePayloads, "alerts", envelopes)
 
 	return types.OperationResult{
 		Status:  types.OperationStatusOK,
@@ -265,6 +282,7 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 	}, nil
 }
 
+// runSecurityCenterSettingsOperation lists SCC notification configs
 func runSecurityCenterSettingsOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	meta, err := metadataFromPayload(input.Credential)
 	if err != nil {
@@ -327,6 +345,7 @@ func runSecurityCenterSettingsOperation(ctx context.Context, input types.Operati
 	}, nil
 }
 
+// resolveSecurityCenterParent chooses an org or project parent resource
 func resolveSecurityCenterParent(meta credentialMetadata) (string, error) {
 	if org := strings.TrimSpace(meta.OrganizationID); org != "" {
 		return fmt.Sprintf("organizations/%s", org), nil
@@ -339,8 +358,9 @@ func resolveSecurityCenterParent(meta credentialMetadata) (string, error) {
 	return "", errProjectIDRequired
 }
 
-func resolveSecurityCenterSource(meta credentialMetadata, config map[string]any) (string, error) {
-	if source := helpers.ConfigString(config, "sourceId"); source != "" {
+// resolveSecurityCenterSource resolves the source name from config or metadata
+func resolveSecurityCenterSource(meta credentialMetadata, config securityCenterFindingsConfig) (string, error) {
+	if source := strings.TrimSpace(config.SourceID); source != "" {
 		return normalizeSourceName(source, meta)
 	}
 
@@ -351,6 +371,7 @@ func resolveSecurityCenterSource(meta credentialMetadata, config map[string]any)
 	return "", errSourceIDRequired
 }
 
+// normalizeSourceName expands a source short name to a full resource path
 func normalizeSourceName(source string, meta credentialMetadata) (string, error) {
 	source = strings.TrimSpace(source)
 	if strings.HasPrefix(source, "organizations/") || strings.HasPrefix(source, "projects/") {
@@ -363,4 +384,13 @@ func normalizeSourceName(source string, meta credentialMetadata) (string, error)
 	}
 
 	return fmt.Sprintf("%s/sources/%s", parent, source), nil
+}
+
+// decodeSecurityCenterFindingsConfig decodes operation config into a typed struct
+func decodeSecurityCenterFindingsConfig(config map[string]any) (securityCenterFindingsConfig, error) {
+	var decoded securityCenterFindingsConfig
+	if err := helpers.DecodeConfig(config, &decoded); err != nil {
+		return decoded, err
+	}
+	return decoded, nil
 }

@@ -23,7 +23,7 @@ type Session struct {
 
 // ProviderType returns the provider identifier
 func (s *Session) ProviderType() types.ProviderType {
-	return s.provider.providerType
+	return s.provider.Type()
 }
 
 // State returns the authorization state value
@@ -52,7 +52,7 @@ func (s *Session) Finish(ctx context.Context, code string) (types.CredentialPayl
 		return types.CredentialPayload{}, fmt.Errorf("%w: %w", providers.ErrCodeExchange, err)
 	}
 
-	builder := types.NewCredentialBuilder(s.provider.providerType).
+	builder := types.NewCredentialBuilder(s.provider.Type()).
 		With(
 			types.WithCredentialSet(models.CredentialSet{}),
 			types.WithOAuthToken(tokens.Token),

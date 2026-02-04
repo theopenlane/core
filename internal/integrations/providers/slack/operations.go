@@ -69,6 +69,7 @@ func slackOperations() []types.OperationDescriptor {
 	}
 }
 
+// slackAuthTestResponse represents the response from Slack auth.test
 type slackAuthTestResponse struct {
 	OK    bool   `json:"ok"`
 	URL   string `json:"url"`
@@ -77,12 +78,14 @@ type slackAuthTestResponse struct {
 	Error string `json:"error"`
 }
 
+// slackTeamInfoResponse represents the response from Slack team.info
 type slackTeamInfoResponse struct {
 	OK    bool          `json:"ok"`
 	Team  slackTeamInfo `json:"team"`
 	Error string        `json:"error"`
 }
 
+// slackTeamInfo represents Slack workspace information
 type slackTeamInfo struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
@@ -90,29 +93,16 @@ type slackTeamInfo struct {
 	EmailDomain string `json:"email_domain"`
 }
 
+// runSlackHealthOperation verifies the Slack OAuth token via auth.test
 func runSlackHealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := helpers.AuthenticatedClientFromAny(input.Client)
-	token, err := oauthTokenFromPayload(input.Credential)
+	client, token, err := helpers.ClientAndOAuthToken(input, TypeSlack)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
 	var resp slackAuthTestResponse
-	if client != nil {
-		endpoint := "https://slack.com/api/auth.test"
-		if err := client.GetJSON(ctx, endpoint, &resp); err != nil {
-			return types.OperationResult{
-				Status:  types.OperationStatusFailed,
-				Summary: "Slack auth.test failed",
-				Details: map[string]any{"error": err.Error()},
-			}, err
-		}
-	} else if err := slackAPIGet(ctx, token, "auth.test", nil, &resp); err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Slack auth.test failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+	if err := slackAPIGet(ctx, client, token, "auth.test", nil, &resp); err != nil {
+		return helpers.OperationFailure("Slack auth.test failed", err), err
 	}
 
 	if !resp.OK {
@@ -134,30 +124,16 @@ func runSlackHealthOperation(ctx context.Context, input types.OperationInput) (t
 	}, nil
 }
 
-// runSlackTeamOperation fetches workspace metadata for posture analysis.
+// runSlackTeamOperation fetches workspace metadata for posture analysis
 func runSlackTeamOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := helpers.AuthenticatedClientFromAny(input.Client)
-	token, err := oauthTokenFromPayload(input.Credential)
+	client, token, err := helpers.ClientAndOAuthToken(input, TypeSlack)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
 	var resp slackTeamInfoResponse
-	if client != nil {
-		endpoint := "https://slack.com/api/team.info"
-		if err := client.GetJSON(ctx, endpoint, &resp); err != nil {
-			return types.OperationResult{
-				Status:  types.OperationStatusFailed,
-				Summary: "Slack team.info failed",
-				Details: map[string]any{"error": err.Error()},
-			}, err
-		}
-	} else if err := slackAPIGet(ctx, token, "team.info", nil, &resp); err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Slack team.info failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+	if err := slackAPIGet(ctx, client, token, "team.info", nil, &resp); err != nil {
+		return helpers.OperationFailure("Slack team.info failed", err), err
 	}
 
 	if !resp.OK {
@@ -188,8 +164,9 @@ type slackMessageResponse struct {
 	Error   string `json:"error"`
 }
 
+// runSlackMessagePostOperation sends a message to a Slack channel or user
 func runSlackMessagePostOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	token, err := helpers.OAuthTokenFromPayload(input.Credential, string(TypeSlack))
+	_, token, err := helpers.ClientAndOAuthToken(input, TypeSlack)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -233,11 +210,7 @@ func runSlackMessagePostOperation(ctx context.Context, input types.OperationInpu
 	var resp slackMessageResponse
 	endpoint := "https://slack.com/api/chat.postMessage"
 	if err := helpers.HTTPPostJSON(ctx, nil, endpoint, token, nil, payload, &resp); err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Slack chat.postMessage failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+		return helpers.OperationFailure("Slack chat.postMessage failed", err), err
 	}
 
 	if !resp.OK {
@@ -258,7 +231,8 @@ func runSlackMessagePostOperation(ctx context.Context, input types.OperationInpu
 	}, nil
 }
 
-func slackAPIGet(ctx context.Context, token, method string, params url.Values, out any) error {
+// slackAPIGet performs a GET request to the Slack API and decodes the JSON response
+func slackAPIGet(ctx context.Context, client *helpers.AuthenticatedClient, token, method string, params url.Values, out any) error {
 	endpoint := "https://slack.com/api/" + method
 	if params != nil {
 		if query := params.Encode(); query != "" {
@@ -266,7 +240,7 @@ func slackAPIGet(ctx context.Context, token, method string, params url.Values, o
 		}
 	}
 
-	if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, nil, out); err != nil {
+	if err := helpers.GetJSONWithClient(ctx, client, endpoint, token, nil, out); err != nil {
 		if errors.Is(err, helpers.ErrHTTPRequestFailed) {
 			return fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}
@@ -276,6 +250,7 @@ func slackAPIGet(ctx context.Context, token, method string, params url.Values, o
 	return nil
 }
 
+// oauthTokenFromPayload extracts the OAuth access token from the credential payload
 func oauthTokenFromPayload(payload types.CredentialPayload) (string, error) {
 	tokenOpt := payload.OAuthTokenOption()
 	if !tokenOpt.IsPresent() {

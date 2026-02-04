@@ -23,15 +23,12 @@ const (
 
 // Provider implements the types.Provider interface using Zitadel's relying party helpers
 type Provider struct {
-	providerType types.ProviderType
+	providers.BaseProvider
 	spec         config.ProviderSpec
 	oauthConfig  *oauth2.Config
 	relyingParty rp.RelyingParty
 	authParams   map[string]string
 	tokenParams  map[string]string
-	capabilities types.ProviderCapabilities
-	operations   []types.OperationDescriptor
-	clients      []types.ClientDescriptor
 }
 
 // ProviderOption customizes OAuth provider construction.
@@ -40,7 +37,7 @@ type ProviderOption func(*Provider)
 // WithClientDescriptors registers client descriptors for pooling.
 func WithClientDescriptors(descriptors []types.ClientDescriptor) ProviderOption {
 	return func(p *Provider) {
-		p.clients = helpers.SanitizeClientDescriptors(p.providerType, descriptors)
+		p.Clients = helpers.SanitizeClientDescriptors(p.Type(), descriptors)
 	}
 }
 
@@ -71,18 +68,19 @@ func New(_ context.Context, spec config.ProviderSpec, options ...ProviderOption)
 		return nil, fmt.Errorf("%w: %w", providers.ErrRelyingPartyInit, err)
 	}
 
+	caps := types.ProviderCapabilities{
+		SupportsRefreshTokens: true,
+		SupportsClientPooling: true,
+		SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
+	}
+
 	provider := &Provider{
-		providerType: spec.ProviderType(),
+		BaseProvider: providers.NewBaseProvider(spec.ProviderType(), caps, nil, nil),
 		spec:         spec,
 		oauthConfig:  cfg,
 		relyingParty: rparty,
 		authParams:   lo.Assign(map[string]string{}, spec.OAuth.AuthParams),
 		tokenParams:  lo.Assign(map[string]string{}, spec.OAuth.TokenParams),
-		capabilities: types.ProviderCapabilities{
-			SupportsRefreshTokens: true,
-			SupportsClientPooling: true,
-			SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
-		},
 	}
 
 	for _, opt := range options {
@@ -92,39 +90,6 @@ func New(_ context.Context, spec config.ProviderSpec, options ...ProviderOption)
 	}
 
 	return provider, nil
-}
-
-// Type returns the provider identifier
-func (p *Provider) Type() types.ProviderType {
-	return p.providerType
-}
-
-// Capabilities describes supported behaviours
-func (p *Provider) Capabilities() types.ProviderCapabilities {
-	return p.capabilities
-}
-
-// Operations returns the provider-published operations if configured.
-func (p *Provider) Operations() []types.OperationDescriptor {
-	if len(p.operations) == 0 {
-		return nil
-	}
-
-	ops := make([]types.OperationDescriptor, len(p.operations))
-	copy(ops, p.operations)
-
-	return ops
-}
-
-// ClientDescriptors returns provider-published client descriptors when configured.
-func (p *Provider) ClientDescriptors() []types.ClientDescriptor {
-	if p == nil || len(p.clients) == 0 {
-		return nil
-	}
-
-	out := make([]types.ClientDescriptor, len(p.clients))
-	copy(out, p.clients)
-	return out
 }
 
 // BeginAuth starts an OAuth authorization flow
@@ -185,7 +150,7 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 		return types.CredentialPayload{}, fmt.Errorf("%w: %w", providers.ErrTokenRefresh, err)
 	}
 
-	builder := types.NewCredentialBuilder(p.providerType).
+	builder := types.NewCredentialBuilder(p.Type()).
 		With(
 			types.WithCredentialSet(models.CredentialSet{}),
 			types.WithOAuthToken(freshToken),
@@ -206,6 +171,6 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 // WithOperations configures provider-managed operations.
 func WithOperations(descriptors []types.OperationDescriptor) ProviderOption {
 	return func(p *Provider) {
-		p.operations = helpers.SanitizeOperationDescriptors(p.providerType, descriptors)
+		p.Ops = helpers.SanitizeOperationDescriptors(p.Type(), descriptors)
 	}
 }

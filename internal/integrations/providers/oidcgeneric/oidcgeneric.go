@@ -23,6 +23,7 @@ func Builder() providers.Builder {
 	}
 }
 
+// userInfoURL returns the configured userinfo endpoint when present
 func userInfoURL(spec config.ProviderSpec) string {
 	if spec.UserInfo != nil {
 		return spec.UserInfo.URL
