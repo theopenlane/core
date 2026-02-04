@@ -17,4 +17,6 @@ var (
 	ErrCodeExchange = errors.New("integrations/providers: code exchange failed")
 	// ErrTokenRefresh indicates token refresh failed
 	ErrTokenRefresh = errors.New("integrations/providers: token refresh failed")
+	// ErrProviderNil indicates a builder returned a nil provider without an error
+	ErrProviderNil = errors.New("integrations/providers: provider is nil")
 )

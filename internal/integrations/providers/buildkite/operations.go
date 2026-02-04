@@ -36,6 +36,7 @@ func buildkiteOperations() []types.OperationDescriptor {
 	}
 }
 
+// buildkiteUserResponse represents the response from the Buildkite /v2/user endpoint
 type buildkiteUserResponse struct {
 	ID       string `json:"id"`
 	Name     string `json:"name"`
@@ -43,6 +44,7 @@ type buildkiteUserResponse struct {
 	Username string `json:"username"`
 }
 
+// buildkiteOrgResponse represents the response from the Buildkite /v2/organizations endpoint
 type buildkiteOrgResponse struct {
 	ID     string `json:"id"`
 	Name   string `json:"name"`
@@ -52,19 +54,14 @@ type buildkiteOrgResponse struct {
 
 // runBuildkiteHealthOperation verifies access to the Buildkite API using the current token.
 func runBuildkiteHealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := helpers.AuthenticatedClientFromAny(input.Client)
-	token, err := helpers.APITokenFromPayload(input.Credential, string(TypeBuildkite))
+	client, token, err := helpers.ClientAndAPIToken(input, TypeBuildkite)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
 	var user buildkiteUserResponse
 	if err := fetchBuildkiteResource(ctx, client, token, "user", &user); err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Buildkite user lookup failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+		return helpers.OperationFailure("Buildkite user lookup failed", err), err
 	}
 
 	return types.OperationResult{
@@ -81,19 +78,14 @@ func runBuildkiteHealthOperation(ctx context.Context, input types.OperationInput
 
 // runBuildkiteOrganizationsOperation collects Buildkite org metadata for reporting.
 func runBuildkiteOrganizationsOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := helpers.AuthenticatedClientFromAny(input.Client)
-	token, err := helpers.APITokenFromPayload(input.Credential, string(TypeBuildkite))
+	client, token, err := helpers.ClientAndAPIToken(input, TypeBuildkite)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
 	var orgs []buildkiteOrgResponse
 	if err := fetchBuildkiteResource(ctx, client, token, "organizations", &orgs); err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Buildkite organizations fetch failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+		return helpers.OperationFailure("Buildkite organizations fetch failed", err), err
 	}
 
 	samples := make([]map[string]any, 0, minInt(maxSampleSize, len(orgs)))
@@ -122,13 +114,7 @@ func runBuildkiteOrganizationsOperation(ctx context.Context, input types.Operati
 // fetchBuildkiteResource retrieves Buildkite API resources with either a pooled client or raw token.
 func fetchBuildkiteResource(ctx context.Context, client *helpers.AuthenticatedClient, token, path string, out any) error {
 	endpoint := fmt.Sprintf("https://api.buildkite.com/v2/%s", path)
-	var err error
-	if client != nil {
-		err = client.GetJSON(ctx, endpoint, out)
-	} else {
-		err = helpers.HTTPGetJSON(ctx, nil, endpoint, token, nil, out)
-	}
-	if err != nil {
+	if err := helpers.GetJSONWithClient(ctx, client, endpoint, token, nil, out); err != nil {
 		if errors.Is(err, helpers.ErrHTTPRequestFailed) {
 			return fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}

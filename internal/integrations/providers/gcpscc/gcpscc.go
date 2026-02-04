@@ -59,8 +59,8 @@ var _ types.ClientProvider = (*Provider)(nil)
 
 // Provider implements the GCP SCC integration using workload identity federation.
 type Provider struct {
+	providers.BaseProvider
 	spec      config.ProviderSpec
-	caps      types.ProviderCapabilities
 	defaults  workloadDefaults
 	stsClient func(ctx context.Context) (*stsv1.Service, error)
 }
@@ -87,6 +87,7 @@ func Builder() providers.Builder {
 	}
 }
 
+// newProvider constructs the GCP SCC provider instance
 func newProvider(spec config.ProviderSpec) *Provider {
 	defaultScopes := append([]string(nil), spec.GoogleWorkloadIdentity.Scopes...)
 	if len(defaultScopes) == 0 {
@@ -111,28 +112,20 @@ func newProvider(spec config.ProviderSpec) *Provider {
 		subjectTokenType:  subjectTokenType,
 	}
 
+	caps := types.ProviderCapabilities{
+		SupportsRefreshTokens: false,
+		SupportsClientPooling: true,
+		SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
+	}
+
 	return &Provider{
-		spec: spec,
-		caps: types.ProviderCapabilities{
-			SupportsRefreshTokens: false,
-			SupportsClientPooling: true,
-			SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
-		},
-		defaults: defaults,
+		BaseProvider: providers.NewBaseProvider(TypeGCPSCC, caps, nil, nil),
+		spec:         spec,
+		defaults:     defaults,
 		stsClient: func(ctx context.Context) (*stsv1.Service, error) {
 			return stsv1.NewService(ctx)
 		},
 	}
-}
-
-// Type returns the provider identifier.
-func (p *Provider) Type() types.ProviderType {
-	return TypeGCPSCC
-}
-
-// Capabilities returns the provider capabilities.
-func (p *Provider) Capabilities() types.ProviderCapabilities {
-	return p.caps
 }
 
 // BeginAuth is not applicable for workload identity flows; callers should rely on declarative metadata.
@@ -219,6 +212,7 @@ func (p *Provider) ClientDescriptors() []types.ClientDescriptor {
 	}
 }
 
+// mintWorkloadToken exchanges subject tokens for an impersonated access token
 func (p *Provider) mintWorkloadToken(ctx context.Context, meta credentialMetadata, subjectToken, subjectTokenType string) (*oauth2.Token, error) {
 	stsSvc, err := p.stsClient(ctx)
 	if err != nil {
@@ -282,6 +276,7 @@ func (p *Provider) mintWorkloadToken(ctx context.Context, meta credentialMetadat
 	return token, nil
 }
 
+// buildSecurityCenterClient builds the SCC client using stored credentials
 func buildSecurityCenterClient(ctx context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
 	meta, err := metadataFromPayload(payload)
 	if err != nil {
@@ -306,6 +301,7 @@ func buildSecurityCenterClient(ctx context.Context, payload types.CredentialPayl
 	return client, nil
 }
 
+// securityCenterClientOptions builds client options based on available credentials
 func securityCenterClientOptions(ctx context.Context, meta credentialMetadata, token *oauth2.Token) ([]option.ClientOption, error) {
 	logger := logx.FromContext(ctx).With().
 		Str("provider", string(TypeGCPSCC)).
@@ -342,6 +338,7 @@ func securityCenterClientOptions(ctx context.Context, meta credentialMetadata, t
 	return nil, errAccessTokenMissing
 }
 
+// serviceAccountCredentials parses and validates a service account key
 func serviceAccountCredentials(ctx context.Context, rawKey string, scopes []string) (*google.Credentials, error) {
 	key := helpers.NormalizeServiceAccountKey(rawKey)
 	if key == "" {
@@ -378,6 +375,7 @@ type credentialMetadata struct {
 	ServiceAccountKey        string   `mapstructure:"serviceAccountKey"`
 }
 
+// withDefaults applies provider defaults to missing metadata values
 func (m credentialMetadata) withDefaults(defaults workloadDefaults) credentialMetadata {
 	result := m
 	if len(result.Scopes) == 0 {
@@ -392,6 +390,7 @@ func (m credentialMetadata) withDefaults(defaults workloadDefaults) credentialMe
 	return result
 }
 
+// validate ensures required metadata values are present
 func (m credentialMetadata) validate() error {
 	if strings.TrimSpace(m.ProjectID) == "" {
 		return errProjectIDRequired
@@ -410,6 +409,7 @@ func (m credentialMetadata) validate() error {
 	return nil
 }
 
+// persist merges metadata into the existing provider data map
 func (m credentialMetadata) persist(existing map[string]any) map[string]any {
 	out := map[string]any{}
 	if len(existing) > 0 {
@@ -441,6 +441,7 @@ func (m credentialMetadata) persist(existing map[string]any) map[string]any {
 	return out
 }
 
+// tokenLifetime parses the configured token lifetime
 func (m credentialMetadata) tokenLifetime() time.Duration {
 	if strings.TrimSpace(m.TokenLifetime) == "" {
 		return 0
@@ -452,6 +453,7 @@ func (m credentialMetadata) tokenLifetime() time.Duration {
 	return dur
 }
 
+// metadataFromPayload decodes provider metadata from the credential payload
 func metadataFromPayload(payload types.CredentialPayload) (credentialMetadata, error) {
 	if payload.Data.ProviderData == nil {
 		return credentialMetadata{}, errCredentialMetadata
@@ -474,6 +476,7 @@ func metadataFromPayload(payload types.CredentialPayload) (credentialMetadata, e
 	return meta.normalize(), nil
 }
 
+// resolveSubjectToken selects the subject token and token type for STS exchange
 func resolveSubjectToken(subject types.CredentialSubject, meta credentialMetadata, defaults workloadDefaults) (token string, tokenType string, err error) {
 	if attr := strings.TrimSpace(subject.Attributes[subjectTokenAttr]); attr != "" {
 		token = attr
@@ -494,6 +497,7 @@ func resolveSubjectToken(subject types.CredentialSubject, meta credentialMetadat
 	return token, tokenType, nil
 }
 
+// buildSTSOptions encodes STS options for workload pool billing
 func buildSTSOptions(meta credentialMetadata) (string, error) {
 	if strings.TrimSpace(meta.WorkloadPoolProject) == "" {
 		return "", nil
@@ -511,6 +515,7 @@ func buildSTSOptions(meta credentialMetadata) (string, error) {
 	return string(encoded), nil
 }
 
+// clampLifetime bounds token lifetimes to supported ranges
 func clampLifetime(value time.Duration) time.Duration {
 	if value <= 0 {
 		return defaultImpersonationLife
@@ -524,6 +529,7 @@ func clampLifetime(value time.Duration) time.Duration {
 	return value
 }
 
+// setIfNotEmpty writes a key when the value is non-empty
 func setIfNotEmpty(target map[string]any, key, value string) {
 	if strings.TrimSpace(value) == "" {
 		return
@@ -531,6 +537,7 @@ func setIfNotEmpty(target map[string]any, key, value string) {
 	target[key] = value
 }
 
+// normalize cleans up metadata values for persistence
 func (m credentialMetadata) normalize() credentialMetadata {
 	normalized := m
 	normalized.ServiceAccountKey = helpers.NormalizeServiceAccountKey(normalized.ServiceAccountKey)
@@ -538,6 +545,7 @@ func (m credentialMetadata) normalize() credentialMetadata {
 	return normalized
 }
 
+// normalizeScopes trims, flattens, and de-duplicates scope values
 func normalizeScopes(scopes []string) []string {
 	if len(scopes) == 0 {
 		return nil

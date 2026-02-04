@@ -32,14 +32,16 @@ func AppBuilder() providers.Builder {
 			}
 
 			return &AppProvider{
-				provider:   TypeGitHubApp,
-				operations: helpers.SanitizeOperationDescriptors(TypeGitHubApp, githubOperations()),
-				caps: types.ProviderCapabilities{
-					SupportsRefreshTokens: true,
-					SupportsClientPooling: true,
-					SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
-				},
-				clients: helpers.SanitizeClientDescriptors(TypeGitHubApp, githubClientDescriptors(TypeGitHubApp)),
+				BaseProvider: providers.NewBaseProvider(
+					TypeGitHubApp,
+					types.ProviderCapabilities{
+						SupportsRefreshTokens: true,
+						SupportsClientPooling: true,
+						SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
+					},
+					helpers.SanitizeOperationDescriptors(TypeGitHubApp, githubOperations()),
+					helpers.SanitizeClientDescriptors(TypeGitHubApp, githubClientDescriptors(TypeGitHubApp)),
+				),
 			}, nil
 		},
 	}
@@ -47,48 +49,7 @@ func AppBuilder() providers.Builder {
 
 // AppProvider implements GitHub App authentication via installation tokens.
 type AppProvider struct {
-	provider   types.ProviderType
-	operations []types.OperationDescriptor
-	caps       types.ProviderCapabilities
-	clients    []types.ClientDescriptor
-}
-
-// Type returns the provider identifier.
-func (p *AppProvider) Type() types.ProviderType {
-	if p == nil {
-		return types.ProviderUnknown
-	}
-	return p.provider
-}
-
-// Capabilities returns optional capability flags.
-func (p *AppProvider) Capabilities() types.ProviderCapabilities {
-	if p == nil {
-		return types.ProviderCapabilities{}
-	}
-	return p.caps
-}
-
-// Operations returns provider-published operations.
-func (p *AppProvider) Operations() []types.OperationDescriptor {
-	if p == nil || len(p.operations) == 0 {
-		return nil
-	}
-
-	out := make([]types.OperationDescriptor, len(p.operations))
-	copy(out, p.operations)
-	return out
-}
-
-// ClientDescriptors returns provider-published client descriptors when configured.
-func (p *AppProvider) ClientDescriptors() []types.ClientDescriptor {
-	if p == nil || len(p.clients) == 0 {
-		return nil
-	}
-
-	out := make([]types.ClientDescriptor, len(p.clients))
-	copy(out, p.clients)
-	return out
+	providers.BaseProvider
 }
 
 // BeginAuth is not supported for GitHub App providers.
@@ -102,19 +63,24 @@ func (p *AppProvider) Mint(ctx context.Context, subject types.CredentialSubject)
 		return types.CredentialPayload{}, ErrProviderNotInitialized
 	}
 
-	meta := cloneGitHubProviderData(subject.Credential.Data.ProviderData)
-	if len(meta) == 0 {
+	state := subject.Credential.ProviderState
+	if state == nil || state.GitHub == nil {
 		return types.CredentialPayload{}, ErrProviderMetadataRequired
 	}
 
-	appID := helpers.FirstStringValue(meta, "appId", "app_id")
+	appID := strings.TrimSpace(state.GitHub.AppID)
 	if appID == "" {
 		return types.CredentialPayload{}, ErrAppIDMissing
 	}
 
-	installationID := helpers.FirstStringValue(meta, "installationId", "installation_id")
+	installationID := strings.TrimSpace(state.GitHub.InstallationID)
 	if installationID == "" {
 		return types.CredentialPayload{}, ErrInstallationIDMissing
+	}
+
+	meta := subject.Credential.Data.ProviderData
+	if len(meta) == 0 {
+		return types.CredentialPayload{}, ErrProviderMetadataRequired
 	}
 
 	privateKey := helpers.FirstStringValue(meta, "privateKey", "private_key")
@@ -141,7 +107,7 @@ func (p *AppProvider) Mint(ctx context.Context, subject types.CredentialSubject)
 	}
 
 	cloned := maps.Clone(meta)
-	builder := types.NewCredentialBuilder(p.provider).With(
+	builder := types.NewCredentialBuilder(p.Type()).With(
 		types.WithOAuthToken(oauthToken),
 		types.WithCredentialSet(models.CredentialSet{
 			ProviderData: cloned,
@@ -151,14 +117,7 @@ func (p *AppProvider) Mint(ctx context.Context, subject types.CredentialSubject)
 	return builder.Build()
 }
 
-func cloneGitHubProviderData(data map[string]any) map[string]any {
-	if len(data) == 0 {
-		return nil
-	}
-
-	return maps.Clone(data)
-}
-
+// buildGitHubAppJWT signs a JWT for GitHub App authentication
 func buildGitHubAppJWT(appID string, privateKey string) (string, error) {
 	privateKey = normalizeGitHubPrivateKey(privateKey)
 	key, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(privateKey))
@@ -182,6 +141,7 @@ func buildGitHubAppJWT(appID string, privateKey string) (string, error) {
 	return signed, nil
 }
 
+// normalizeGitHubPrivateKey normalizes and decodes private key input
 func normalizeGitHubPrivateKey(value string) string {
 	value = strings.TrimSpace(value)
 	if value == "" {
@@ -203,6 +163,7 @@ type githubInstallationTokenResponse struct {
 	ExpiresAt time.Time `json:"expires_at"`
 }
 
+// requestGitHubInstallationToken exchanges a JWT for an installation token
 func requestGitHubInstallationToken(ctx context.Context, jwtToken string, installationID string) (githubInstallationTokenResponse, error) {
 	if strings.TrimSpace(jwtToken) == "" {
 		return githubInstallationTokenResponse{}, errors.New("github: app jwt missing")

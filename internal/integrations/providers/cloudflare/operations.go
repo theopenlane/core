@@ -11,6 +11,7 @@ const (
 	cloudflareHealthOp types.OperationName = "health.default"
 )
 
+// cloudflareOperations handles cloudflare operations
 func cloudflareOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		{
@@ -23,9 +24,9 @@ func cloudflareOperations() []types.OperationDescriptor {
 	}
 }
 
+// runCloudflareHealth runs cloudflare health
 func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := helpers.AuthenticatedClientFromAny(input.Client)
-	token, err := helpers.APITokenFromPayload(input.Credential, string(TypeCloudflare))
+	client, token, err := helpers.ClientAndAPIToken(input, TypeCloudflare)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -45,20 +46,8 @@ func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types
 		"Content-Type": "application/json",
 	}
 	endpoint := "https://api.cloudflare.com/client/v4/user/tokens/verify"
-	if client != nil {
-		if err := client.GetJSON(ctx, endpoint, &resp); err != nil {
-			return types.OperationResult{
-				Status:  types.OperationStatusFailed,
-				Summary: "Cloudflare token verification failed",
-				Details: map[string]any{"error": err.Error()},
-			}, err
-		}
-	} else if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, headers, &resp); err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Cloudflare token verification failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+	if err := helpers.GetJSONWithClient(ctx, client, endpoint, token, headers, &resp); err != nil {
+		return helpers.OperationFailure("Cloudflare token verification failed", err), err
 	}
 
 	if !resp.Success {

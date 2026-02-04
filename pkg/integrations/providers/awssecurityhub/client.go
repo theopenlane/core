@@ -30,5 +30,6 @@ func buildAWSSecurityHubClient(ctx context.Context, payload types.CredentialPayl
 	if err != nil {
 		return nil, err
 	}
+
 	return client, nil
 }

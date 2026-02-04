@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 )
 
+// TestProviderMint handles test provider mint
 func TestProviderMint(t *testing.T) {
 	spec := config.ProviderSpec{
 		Name:              "aws_test",

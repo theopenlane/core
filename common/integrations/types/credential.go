@@ -10,6 +10,7 @@ import (
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
 	"github.com/theopenlane/core/common/helpers"
+	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/models"
 )
 
@@ -35,6 +36,8 @@ type CredentialPayload struct {
 	Provider ProviderType `json:"provider"`
 	// Kind indicates the credential kind (oauth token, metadata, etc)
 	Kind CredentialKind `json:"kind"`
+	// ProviderState carries optional provider state from the integration record
+	ProviderState *state.IntegrationProviderState `json:"-"`
 	// Token optionally embeds the upstream oauth2 token
 	Token *oauth2.Token `json:"token,omitempty"`
 	// Claims optionally carries upstream OIDC claims
@@ -76,8 +79,10 @@ func BuildCredentialPayload(provider ProviderType, opts ...CredentialOption) (Cr
 
 // CredentialBuilder offers a fluent API around BuildCredentialPayload.
 type CredentialBuilder struct {
+	// provider is the provider used for the payload
 	provider ProviderType
-	options  []CredentialOption
+	// options holds the queued credential options
+	options []CredentialOption
 }
 
 // NewCredentialBuilder initializes a builder for the given provider.

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/opsconfig"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -138,8 +139,7 @@ type githubRepoOwner struct {
 
 // runGitHubHealthOperation validates GitHub access for OAuth or App credentials.
 func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := helpers.AuthenticatedClientFromAny(input.Client)
-	token, err := oauthTokenFromPayload(input.Credential)
+	client, token, err := helpers.ClientAndOAuthToken(input, input.Provider)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -149,11 +149,7 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 			var resp githubInstallationRepositoriesResponse
 			endpoint := githubAPIBaseURL + "installation/repositories?per_page=1"
 			if err := client.GetJSON(ctx, endpoint, &resp); err != nil {
-				return types.OperationResult{
-					Status:  types.OperationStatusFailed,
-					Summary: "GitHub App installation lookup failed",
-					Details: map[string]any{"error": err.Error()},
-				}, err
+				return helpers.OperationFailure("GitHub App installation lookup failed", err), err
 			}
 
 			return types.OperationResult{
@@ -163,13 +159,11 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 			}, nil
 		}
 
-		repos, err := listGitHubInstallationRepos(ctx, nil, token, map[string]any{"per_page": 1})
+		repos, err := listGitHubInstallationRepos(ctx, nil, token, githubVulnerabilityConfig{
+			Pagination: opsconfig.Pagination{PerPage: 1},
+		})
 		if err != nil {
-			return types.OperationResult{
-				Status:  types.OperationStatusFailed,
-				Summary: "GitHub App installation lookup failed",
-				Details: map[string]any{"error": err.Error()},
-			}, err
+			return helpers.OperationFailure("GitHub App installation lookup failed", err), err
 		}
 
 		return types.OperationResult{
@@ -180,21 +174,8 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 	}
 
 	var user githubUserResponse
-	if client != nil {
-		endpoint := githubAPIBaseURL + "user"
-		if err := client.GetJSON(ctx, endpoint, &user); err != nil {
-			return types.OperationResult{
-				Status:  types.OperationStatusFailed,
-				Summary: "GitHub user lookup failed",
-				Details: map[string]any{"error": err.Error()},
-			}, err
-		}
-	} else if err := fetchGitHubResource(ctx, nil, token, "user", nil, &user); err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "GitHub user lookup failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+	if err := fetchGitHubResource(ctx, client, token, "user", nil, &user); err != nil {
+		return helpers.OperationFailure("GitHub user lookup failed", err), err
 	}
 
 	details := map[string]any{
@@ -212,20 +193,20 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 
 // runGitHubRepoOperation lists repositories for the authenticated account.
 func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := helpers.AuthenticatedClientFromAny(input.Client)
-	token, err := oauthTokenFromPayload(input.Credential)
+	client, token, err := helpers.ClientAndOAuthToken(input, input.Provider)
+	if err != nil {
+		return types.OperationResult{}, err
+	}
+
+	config, err := decodeGitHubVulnerabilityConfig(input.Config)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
 	var repos []githubRepoResponse
-	repos, err = listGitHubReposForProvider(ctx, client, token, input.Provider, input.Config)
+	repos, err = listGitHubReposForProvider(ctx, client, token, input.Provider, config)
 	if err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "GitHub repository collection failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+		return helpers.OperationFailure("GitHub repository collection failed", err), err
 	}
 
 	samples := make([]map[string]any, 0, minInt(maxSampleSize, len(repos)))
@@ -265,13 +246,7 @@ func fetchGitHubResource(ctx context.Context, client *helpers.AuthenticatedClien
 		"X-GitHub-Api-Version": githubAPIVersion,
 	}
 
-	var err error
-	if client != nil {
-		err = client.GetJSON(ctx, endpoint, out)
-	} else {
-		err = helpers.HTTPGetJSON(ctx, nil, endpoint, token, headers, out)
-	}
-	if err != nil {
+	if err := helpers.GetJSONWithClient(ctx, client, endpoint, token, headers, out); err != nil {
 		if errors.Is(err, helpers.ErrHTTPRequestFailed) {
 			return fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}
@@ -281,27 +256,16 @@ func fetchGitHubResource(ctx context.Context, client *helpers.AuthenticatedClien
 	return nil
 }
 
-func oauthTokenFromPayload(payload types.CredentialPayload) (string, error) {
-	tokenOpt := payload.OAuthTokenOption()
-	if !tokenOpt.IsPresent() {
-		return "", ErrOAuthTokenMissing
-	}
-
-	token := tokenOpt.MustGet()
-	if token == nil || token.AccessToken == "" {
-		return "", ErrAccessTokenEmpty
-	}
-
-	return token.AccessToken, nil
-}
-
+// clampPerPage bounds the per-page value for GitHub API requests
 func clampPerPage(value int) int {
 	if value <= 0 {
 		return defaultPerPage
 	}
+
 	if value > maxPerPage {
 		return maxPerPage
 	}
+
 	return value
 }
 

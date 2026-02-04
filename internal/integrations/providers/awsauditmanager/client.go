@@ -30,5 +30,6 @@ func buildAWSAuditManagerClient(ctx context.Context, payload types.CredentialPay
 	if err != nil {
 		return nil, err
 	}
+
 	return client, nil
 }

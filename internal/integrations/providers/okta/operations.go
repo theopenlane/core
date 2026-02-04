@@ -36,6 +36,7 @@ func oktaOperations() []types.OperationDescriptor {
 	}
 }
 
+// runOktaHealth verifies the Okta API token by fetching the org information
 func runOktaHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client := helpers.AuthenticatedClientFromAny(input.Client)
 	baseURL, apiToken, err := oktaCredentials(input)
@@ -45,20 +46,8 @@ func runOktaHealth(ctx context.Context, input types.OperationInput) (types.Opera
 
 	endpoint := strings.TrimRight(baseURL, "/") + "/api/v1/org"
 	var resp map[string]any
-	if client != nil {
-		if err := client.GetJSON(ctx, endpoint, &resp); err != nil {
-			return types.OperationResult{
-				Status:  types.OperationStatusFailed,
-				Summary: "Okta org lookup failed",
-				Details: map[string]any{"error": err.Error()},
-			}, err
-		}
-	} else if err := oktaGET(ctx, endpoint, apiToken, &resp); err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Okta org lookup failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+	if err := oktaGET(ctx, client, endpoint, apiToken, &resp); err != nil {
+		return helpers.OperationFailure("Okta org lookup failed", err), err
 	}
 
 	summary := fmt.Sprintf("Okta org %s reachable", baseURL)
@@ -69,7 +58,7 @@ func runOktaHealth(ctx context.Context, input types.OperationInput) (types.Opera
 	}, nil
 }
 
-// runOktaPolicies collects a sample of Okta sign-on policies for reporting.
+// runOktaPolicies collects a sample of Okta sign-on policies for reporting
 func runOktaPolicies(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client := helpers.AuthenticatedClientFromAny(input.Client)
 	baseURL, apiToken, err := oktaCredentials(input)
@@ -79,20 +68,8 @@ func runOktaPolicies(ctx context.Context, input types.OperationInput) (types.Ope
 
 	endpoint := strings.TrimRight(baseURL, "/") + "/api/v1/policies?type=SIGN_ON"
 	var resp []map[string]any
-	if client != nil {
-		if err := client.GetJSON(ctx, endpoint, &resp); err != nil {
-			return types.OperationResult{
-				Status:  types.OperationStatusFailed,
-				Summary: "Okta policies fetch failed",
-				Details: map[string]any{"error": err.Error()},
-			}, err
-		}
-	} else if err := oktaGET(ctx, endpoint, apiToken, &resp); err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Okta policies fetch failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+	if err := oktaGET(ctx, client, endpoint, apiToken, &resp); err != nil {
+		return helpers.OperationFailure("Okta policies fetch failed", err), err
 	}
 
 	samples := resp
@@ -110,6 +87,7 @@ func runOktaPolicies(ctx context.Context, input types.OperationInput) (types.Ope
 	}, nil
 }
 
+// oktaCredentials extracts the Okta base URL and API token from the credential payload
 func oktaCredentials(input types.OperationInput) (string, string, error) {
 	data := input.Credential.Data
 	baseURL := ""
@@ -125,12 +103,13 @@ func oktaCredentials(input types.OperationInput) (string, string, error) {
 	return baseURL, apiToken, nil
 }
 
-func oktaGET(ctx context.Context, endpoint, apiToken string, out any) error {
+// oktaGET performs a GET request to the Okta API and decodes the JSON response
+func oktaGET(ctx context.Context, client *helpers.AuthenticatedClient, endpoint, apiToken string, out any) error {
 	headers := map[string]string{
 		"Authorization": "SSWS " + apiToken,
 	}
 
-	if err := helpers.HTTPGetJSON(ctx, nil, endpoint, "", headers, out); err != nil {
+	if err := helpers.GetJSONWithClient(ctx, client, endpoint, "", headers, out); err != nil {
 		if errors.Is(err, helpers.ErrHTTPRequestFailed) {
 			return fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}

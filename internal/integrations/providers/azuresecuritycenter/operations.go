@@ -39,8 +39,7 @@ func azureSecurityOperations() []types.OperationDescriptor {
 
 // runAzureSecurityHealth verifies access by fetching Defender pricing data.
 func runAzureSecurityHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := helpers.AuthenticatedClientFromAny(input.Client)
-	token, err := helpers.OAuthTokenFromPayload(input.Credential, string(TypeAzureSecurityCenter))
+	client, token, err := helpers.ClientAndOAuthToken(input, TypeAzureSecurityCenter)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -52,11 +51,7 @@ func runAzureSecurityHealth(ctx context.Context, input types.OperationInput) (ty
 
 	resp, err := listSecurityPricings(ctx, token, subscriptionID, client)
 	if err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Azure Security Center pricing fetch failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+		return helpers.OperationFailure("Azure Security Center pricing fetch failed", err), err
 	}
 
 	return types.OperationResult{
@@ -70,8 +65,7 @@ func runAzureSecurityHealth(ctx context.Context, input types.OperationInput) (ty
 
 // runAzureSecurityPricing collects Defender pricing metadata.
 func runAzureSecurityPricing(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := helpers.AuthenticatedClientFromAny(input.Client)
-	token, err := helpers.OAuthTokenFromPayload(input.Credential, string(TypeAzureSecurityCenter))
+	client, token, err := helpers.ClientAndOAuthToken(input, TypeAzureSecurityCenter)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -83,11 +77,7 @@ func runAzureSecurityPricing(ctx context.Context, input types.OperationInput) (t
 
 	resp, err := listSecurityPricings(ctx, token, subscriptionID, client)
 	if err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Azure Security Center pricing fetch failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+		return helpers.OperationFailure("Azure Security Center pricing fetch failed", err), err
 	}
 
 	samples := make([]map[string]any, 0, maxSampleSize)
@@ -132,11 +122,7 @@ type defenderPricingDetails struct {
 func listSecurityPricings(ctx context.Context, token string, subscriptionID string, client *helpers.AuthenticatedClient) (defenderPricingResponse, error) {
 	endpoint := fmt.Sprintf("https://management.azure.com/subscriptions/%s/providers/Microsoft.Security/pricings?api-version=2024-01-01", url.PathEscape(subscriptionID))
 	var resp defenderPricingResponse
-	if client != nil {
-		if err := client.GetJSON(ctx, endpoint, &resp); err != nil {
-			return defenderPricingResponse{}, err
-		}
-	} else if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, nil, &resp); err != nil {
+	if err := helpers.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
 		return defenderPricingResponse{}, err
 	}
 
@@ -149,5 +135,6 @@ func subscriptionIDFromPayload(payload types.CredentialPayload) (string, error) 
 	if strings.TrimSpace(subscriptionID) == "" {
 		return "", ErrSubscriptionIDMissing
 	}
+
 	return subscriptionID, nil
 }

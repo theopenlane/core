@@ -33,20 +33,16 @@ func azureOperations() []types.OperationDescriptor {
 	}
 }
 
+// runAzureEntraHealth performs a basic tenant reachability check
 func runAzureEntraHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := helpers.AuthenticatedClientFromAny(input.Client)
-	token, err := helpers.OAuthTokenFromPayload(input.Credential, string(TypeAzureEntraID))
+	client, token, err := helpers.ClientAndOAuthToken(input, TypeAzureEntraID)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
 	org, err := fetchOrganization(ctx, token, client)
 	if err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Graph organization lookup failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+		return helpers.OperationFailure("Graph organization lookup failed", err), err
 	}
 
 	summary := fmt.Sprintf("Tenant %s reachable", org.DisplayName)
@@ -61,20 +57,16 @@ func runAzureEntraHealth(ctx context.Context, input types.OperationInput) (types
 	}, nil
 }
 
+// runAzureEntraTenantInspect collects tenant metadata from Microsoft Graph
 func runAzureEntraTenantInspect(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := helpers.AuthenticatedClientFromAny(input.Client)
-	token, err := helpers.OAuthTokenFromPayload(input.Credential, string(TypeAzureEntraID))
+	client, token, err := helpers.ClientAndOAuthToken(input, TypeAzureEntraID)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
 	org, err := fetchOrganization(ctx, token, client)
 	if err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Graph organization lookup failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+		return helpers.OperationFailure("Graph organization lookup failed", err), err
 	}
 
 	details := map[string]any{
@@ -105,11 +97,7 @@ type graphOrganizationResponse struct {
 func fetchOrganization(ctx context.Context, token string, client *helpers.AuthenticatedClient) (graphOrganization, error) {
 	endpoint := "https://graph.microsoft.com/v1.0/organization?$select=id,displayName,tenantId,verifiedDomains&$top=1"
 	var resp graphOrganizationResponse
-	if client != nil {
-		if err := client.GetJSON(ctx, endpoint, &resp); err != nil {
-			return graphOrganization{}, err
-		}
-	} else if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, nil, &resp); err != nil {
+	if err := helpers.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
 		return graphOrganization{}, err
 	}
 
