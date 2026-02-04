@@ -45,16 +45,6 @@ merge_helm_values() {
             yq e -i '.openlane.coreConfiguration = load("/tmp/core-section.yaml")' "$temp_merged"
         fi
 
-        # Also merge any externalSecrets configuration if it exists in generated file
-        # Always merge into openlane.coreConfiguration.externalSecrets and remove any root-level externalSecrets
-        external_secrets_section=$(yq e '.externalSecrets' "$source" 2>/dev/null || echo "")
-        if [[ -n "$external_secrets_section" ]] && [[ "$external_secrets_section" != "null" ]]; then
-            echo "$external_secrets_section" > /tmp/external-secrets-section.yaml
-            yq e -i '.openlane.coreConfiguration.externalSecrets = load("/tmp/external-secrets-section.yaml")' "$temp_merged"
-            # Remove any root-level externalSecrets to avoid duplication
-            yq e -i 'del(.externalSecrets)' "$temp_merged"
-        fi
-
     else
         # If target doesn't exist, create a new structure with source content
         # Always structure as openlane.coreConfiguration regardless of source structure
@@ -76,18 +66,12 @@ merge_helm_values() {
             yq e -i '.openlane.coreConfiguration = {}' "$temp_merged"
         fi
 
-        # Add externalSecrets if it exists
-        external_secrets_section=$(yq e '.externalSecrets' "$source" 2>/dev/null || echo "")
-        if [[ -n "$external_secrets_section" ]] && [[ "$external_secrets_section" != "null" ]]; then
-            echo "$external_secrets_section" > /tmp/external-secrets-section.yaml
-            yq e -i '.openlane.coreConfiguration.externalSecrets = load("/tmp/external-secrets-section.yaml")' "$temp_merged"
-        fi
     fi
 
     # Check if there are actual differences
     if [[ -f "$target" ]] && diff -q "$target" "$temp_merged" > /dev/null 2>&1; then
         echo "  ℹ️  No changes detected in $description" >&2  # Send status to stderr, not stdout
-        rm -f "$temp_merged" "${target}.backup" /tmp/core-section.yaml /tmp/external-secrets-section.yaml
+        rm -f "$temp_merged" "${target}.backup" /tmp/core-section.yaml
         return 1
     fi
 
@@ -103,10 +87,6 @@ merge_helm_values() {
             fi
         fi
 
-        # Check for new/modified external secrets
-        if [[ -f /tmp/external-secrets-section.yaml ]]; then
-            changes_detail+="\n- 🔐 External secrets configuration updated"
-        fi
     else
         changes_detail+="\n- ✅ Initial values file created"
     fi
@@ -116,7 +96,7 @@ merge_helm_values() {
     git add "$target"
 
     # Cleanup
-    rm -f "${target}.backup" /tmp/core-section.yaml /tmp/external-secrets-section.yaml /tmp/old-core.yaml
+    rm -f "${target}.backup" /tmp/core-section.yaml /tmp/old-core.yaml
 
     echo "$changes_detail"
     return 0
@@ -279,15 +259,6 @@ apply_helm_config_changes() {
         "Helm values.yaml" 2>&1); then
         changes_made=true
         change_summary+="\n- 🔄 Merged Helm values.yaml$values_changes"
-    fi
-
-    # Update external secrets directory
-    if copy_directory_and_track \
-        "$source_dir/external-secrets" \
-        "$chart_dir/templates/external-secrets" \
-        "External Secrets templates" 2>&1; then
-        changes_made=true
-        change_summary+="\n- 🔐 Updated External Secrets templates"
     fi
 
     # ConfigMap that embeds config.yaml for runtime mounting

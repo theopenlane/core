@@ -160,7 +160,7 @@ This PR contains changes that will affect the Helm chart configuration. A draft 
 ### Changes Preview:
 $change_summary
 
-The infrastructure PR will automatically convert from draft to ready for review once this core PR is merged."
+After this core PR merges, the draft will be closed and a new infrastructure PR will be opened from \`main\` for review."
 
   if gh pr comment "${core_pr_number}" \
     --repo "theopenlane/core" \

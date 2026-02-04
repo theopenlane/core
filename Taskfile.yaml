@@ -169,19 +169,9 @@ tasks:
         msg: "Only runs in PR context"
 
   buildkite:post-merge:
-    desc: Finalize config PRs after merge
-    deps: ['buildkite:helm-update']
+    desc: Close draft PRs after merge
     cmds:
       - sh -c "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/post-merge-pr-automation.sh"
-    preconditions:
-      - sh: '[[ "${BUILDKITE_BRANCH:-}" == "main" ]]'
-        msg: "Only runs on main branch"
-
-  buildkite:cleanup:
-    desc: Cleanup draft PRs
-    deps: ['buildkite:post-merge']
-    cmds:
-      - sh -c "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/cleanup-draft-prs.sh"
     preconditions:
       - sh: '[[ "${BUILDKITE_BRANCH:-}" == "main" ]]'
         msg: "Only runs on main branch"

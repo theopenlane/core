@@ -31,12 +31,10 @@ const (
 	yamlConfigPath          = "./config/config.example.yaml"
 	envConfigPath           = "./config/.env.example"
 	configFileConfigMapPath = "./config/configmap-config-file.yaml"
-	externalSecretsDir      = "./config/external-secrets" // #nosec G101 - this is a directory path, not a secret
 	helmValuesPath          = "./config/helm-values.yaml"
 	sensitiveTag            = "sensitive"
 	varPrefix               = "CORE"
 	ownerReadWrite          = 0600
-	dirPermission           = 0755
 )
 
 // commentPackages is a minimal list of packages to parse for Go comments.
@@ -53,13 +51,6 @@ var commentPackages = []string{
 }
 
 // sensitiveFields lists configuration paths that are sensitive but reside in external packages
-// SensitiveField represents a sensitive configuration field
-type SensitiveField struct {
-	Key        string // Environment variable key (e.g., CORE_AUTH_PROVIDERS_GITHUB_CLIENTSECRET)
-	Path       string // Config path (e.g., auth.providers.github.clientSecret)
-	SecretName string // Secret name for external secrets (e.g., github-client-secret)
-}
-
 // externalSensitiveFields maps configuration paths for sensitive fields from external packages
 // that the envparse library cannot automatically detect due to struct tag traversal limitations
 // Only includes fields where envparse fails to detect the sensitive:"true" tag
@@ -86,8 +77,6 @@ type schemaConfig struct {
 	envConfigPath string
 	// configFileConfigMapPath is the file path to the kubernetes config map that embeds config.yaml
 	configFileConfigMapPath string
-	// externalSecretsDir is the directory for ExternalSecret files for Helm chart
-	externalSecretsDir string
 	// helmValuesPath is the file path to the helm values.yaml to be generated
 	helmValuesPath string
 }
@@ -102,7 +91,6 @@ func newSchemaConfig(opts ...schemaOption) schemaConfig {
 		yamlConfigPath:          yamlConfigPath,
 		envConfigPath:           envConfigPath,
 		configFileConfigMapPath: configFileConfigMapPath,
-		externalSecretsDir:      externalSecretsDir,
 		helmValuesPath:          helmValuesPath,
 	}
 
@@ -147,7 +135,7 @@ func main() {
 	}
 }
 
-// generateSchema generates all configuration files (JSON schema, YAML config, env file, config map, secrets, Helm values)
+// generateSchema generates all configuration files (JSON schema, YAML config, env file, config map, Helm values)
 // from the provided structure and schemaConfig paths.
 func generateSchema(c schemaConfig, cfg *config.Config, commentMap map[string]string, collectionIndex collectionIndex) error {
 	// Generate JSON schema file
@@ -160,8 +148,8 @@ func generateSchema(c schemaConfig, cfg *config.Config, commentMap map[string]st
 		return err
 	}
 
-	// Process environment variables and sensitive fields
-	envVars, sensitiveFields, err := processEnvironmentVariables(cfg, collectionIndex)
+	// Process environment variables
+	envVars, err := processEnvironmentVariables(cfg, collectionIndex)
 	if err != nil {
 		return err
 	}
@@ -174,13 +162,6 @@ func generateSchema(c schemaConfig, cfg *config.Config, commentMap map[string]st
 	// Generate ConfigMap containing the rendered config.yaml content
 	if err := generateConfigFileConfigMap(c.configFileConfigMapPath, cfg); err != nil {
 		return err
-	}
-
-	// Generate secret files if any sensitive fields are present
-	if len(sensitiveFields) > 0 {
-		if err := generateSecretFiles(c, sensitiveFields); err != nil {
-			return err
-		}
 	}
 
 	// Generate Helm values.yaml file
@@ -556,7 +537,7 @@ func sanitizeMapKeyForEnv(mapKey string) string {
 }
 
 // appendMapFieldEnvVars processes a map field and appends its entries to the environment variables
-func appendMapFieldEnvVars(envVars *strings.Builder, index collectionIndex, cfg *config.Config, field envparse.VarInfo, isSecret bool, sensitiveFields *[]SensitiveField) error {
+func appendMapFieldEnvVars(envVars *strings.Builder, index collectionIndex, cfg *config.Config, field envparse.VarInfo) error {
 	mapEntries := index.mapEntries[field.FullPath]
 	if mapEntries == nil {
 		var err error
@@ -573,14 +554,14 @@ func appendMapFieldEnvVars(envVars *strings.Builder, index collectionIndex, cfg 
 
 		baseKey := fmt.Sprintf("%s_%s", field.Key, sanitizeMapKeyForEnv(entry.Key))
 		basePath := fmt.Sprintf("%s.%s", field.FullPath, entry.Key)
-		appendMapValueEnvVars(envVars, baseKey, basePath, entry.Value, isSecret, sensitiveFields)
+		appendMapValueEnvVars(envVars, baseKey, basePath, entry.Value)
 	}
 
 	return nil
 }
 
 // appendSliceStructFieldEnvVars processes a slice of structs field and appends its entries to the environment variables
-func appendSliceStructFieldEnvVars(envVars *strings.Builder, index collectionIndex, cfg *config.Config, field envparse.VarInfo, isSecret bool, sensitiveFields *[]SensitiveField) error {
+func appendSliceStructFieldEnvVars(envVars *strings.Builder, index collectionIndex, cfg *config.Config, field envparse.VarInfo) error {
 	values := index.sliceEntries[field.FullPath]
 	if values == nil {
 		var err error
@@ -593,14 +574,14 @@ func appendSliceStructFieldEnvVars(envVars *strings.Builder, index collectionInd
 	for idx, val := range values {
 		baseKey := fmt.Sprintf("%s_%d", field.Key, idx)
 		basePath := fmt.Sprintf("%s.%d", field.FullPath, idx)
-		appendMapValueEnvVars(envVars, baseKey, basePath, val, isSecret, sensitiveFields)
+		appendMapValueEnvVars(envVars, baseKey, basePath, val)
 	}
 
 	return nil
 }
 
 // appendMapValueEnvVars recursively appends environment variable entries for a given reflect.Value
-func appendMapValueEnvVars(envVars *strings.Builder, baseKey, basePath string, value reflect.Value, parentSecret bool, sensitiveFields *[]SensitiveField) {
+func appendMapValueEnvVars(envVars *strings.Builder, baseKey, basePath string, value reflect.Value) {
 	if !value.IsValid() {
 		return
 	}
@@ -614,7 +595,7 @@ func appendMapValueEnvVars(envVars *strings.Builder, baseKey, basePath string, v
 
 	switch value.Kind() {
 	case reflect.Struct:
-		appendStructEnvVars(envVars, baseKey, basePath, value, parentSecret, sensitiveFields)
+		appendStructEnvVars(envVars, baseKey, basePath, value)
 	case reflect.Map:
 		iter := value.MapRange()
 		for iter.Next() {
@@ -625,7 +606,7 @@ func appendMapValueEnvVars(envVars *strings.Builder, baseKey, basePath string, v
 
 			subKey := fmt.Sprintf("%s_%s", baseKey, sanitizeMapKeyForEnv(keyVal.String()))
 			subPath := fmt.Sprintf("%s.%s", basePath, keyVal.String())
-			appendMapValueEnvVars(envVars, subKey, subPath, iter.Value(), parentSecret, sensitiveFields)
+			appendMapValueEnvVars(envVars, subKey, subPath, iter.Value())
 		}
 	case reflect.Slice, reflect.Array:
 		if value.Type().Elem().Kind() == reflect.Struct {
@@ -633,24 +614,18 @@ func appendMapValueEnvVars(envVars *strings.Builder, baseKey, basePath string, v
 				sub := value.Index(i)
 				subKey := fmt.Sprintf("%s_%d", baseKey, i)
 				subPath := fmt.Sprintf("%s.%d", basePath, i)
-				appendMapValueEnvVars(envVars, subKey, subPath, sub, parentSecret, sensitiveFields)
+				appendMapValueEnvVars(envVars, subKey, subPath, sub)
 			}
 		} else {
 			envVars.WriteString(fmt.Sprintf("%s=\"%s\"\n", baseKey, sliceToEnvString(value)))
-			if parentSecret {
-				appendSensitiveField(sensitiveFields, baseKey, basePath)
-			}
 		}
 	default:
 		envVars.WriteString(fmt.Sprintf("%s=\"%v\"\n", baseKey, value.Interface()))
-		if parentSecret {
-			appendSensitiveField(sensitiveFields, baseKey, basePath)
-		}
 	}
 }
 
 // appendStructEnvVars processes a struct value and appends its fields to the environment variables
-func appendStructEnvVars(envVars *strings.Builder, baseKey, basePath string, val reflect.Value, parentSecret bool, sensitiveFields *[]SensitiveField) {
+func appendStructEnvVars(envVars *strings.Builder, baseKey, basePath string, val reflect.Value) {
 	typeInfo := val.Type()
 	for i := 0; i < val.NumField(); i++ {
 		field := typeInfo.Field(i)
@@ -666,19 +641,8 @@ func appendStructEnvVars(envVars *strings.Builder, baseKey, basePath string, val
 		subValue := val.Field(i)
 		subKey := fmt.Sprintf("%s_%s", baseKey, sanitizeMapKeyForEnv(tag))
 		subPath := fmt.Sprintf("%s.%s", basePath, tag)
-		fieldSecret := parentSecret || field.Tag.Get(sensitiveTag) == "true" || isExternalSensitiveField(subPath)
-
-		appendMapValueEnvVars(envVars, subKey, subPath, subValue, fieldSecret, sensitiveFields)
+		appendMapValueEnvVars(envVars, subKey, subPath, subValue)
 	}
-}
-
-// appendSensitiveField adds a sensitive field to the list of sensitive fields
-func appendSensitiveField(target *[]SensitiveField, key, path string) {
-	*target = append(*target, SensitiveField{
-		Key:        key,
-		Path:       path,
-		SecretName: generateSecretName(path),
-	})
 }
 
 // sliceToEnvString converts a slice reflect.Value to a comma-separated string for environment variables
@@ -780,7 +744,7 @@ func convertValueForYAML(val reflect.Value) any {
 }
 
 // processEnvironmentVariables extracts and processes all environment variables from the config
-func processEnvironmentVariables(defaultConfig *config.Config, collectionIndex collectionIndex) (string, []SensitiveField, error) {
+func processEnvironmentVariables(defaultConfig *config.Config, collectionIndex collectionIndex) (string, error) {
 	if defaultConfig == nil {
 		defaultConfig = buildDefaultConfig()
 	}
@@ -792,11 +756,10 @@ func processEnvironmentVariables(defaultConfig *config.Config, collectionIndex c
 
 	out, err := cp.GatherEnvInfo(varPrefix, defaultConfig)
 	if err != nil {
-		return "", nil, fmt.Errorf("failed to gather environment info: %w", err)
+		return "", fmt.Errorf("failed to gather environment info: %w", err)
 	}
 
 	var envVars strings.Builder
-	var sensitiveFields []SensitiveField
 
 	for _, field := range out {
 		if strings.EqualFold(field.FieldName, "domain") {
@@ -805,36 +768,28 @@ func processEnvironmentVariables(defaultConfig *config.Config, collectionIndex c
 		}
 
 		defaultVal := field.Tags.Get(defaultTag)
-		isSecret := field.Tags.Get(sensitiveTag) == "true" || isExternalSensitiveField(field.FullPath)
-
 		isComplexCollection := field.Type.Kind() == reflect.Map || (field.Type.Kind() == reflect.Slice && field.Type.Elem().Kind() == reflect.Struct)
 
 		switch {
 		case !isComplexCollection:
 			// Always add to environment variables
 			envVars.WriteString(fmt.Sprintf("%s=\"%s\"\n", field.Key, defaultVal))
-
-			if isSecret {
-				appendSensitiveField(&sensitiveFields, field.Key, field.FullPath)
-			}
-		case isSecret:
-			appendSensitiveField(&sensitiveFields, field.Key, field.FullPath)
 		}
 
 		if field.Type.Kind() == reflect.Map {
-			if err := appendMapFieldEnvVars(&envVars, collectionIndex, defaultConfig, field, isSecret, &sensitiveFields); err != nil {
-				return "", nil, err
+			if err := appendMapFieldEnvVars(&envVars, collectionIndex, defaultConfig, field); err != nil {
+				return "", err
 			}
 		}
 
 		if field.Type.Kind() == reflect.Slice && field.Type.Elem().Kind() == reflect.Struct {
-			if err := appendSliceStructFieldEnvVars(&envVars, collectionIndex, defaultConfig, field, isSecret, &sensitiveFields); err != nil {
-				return "", nil, err
+			if err := appendSliceStructFieldEnvVars(&envVars, collectionIndex, defaultConfig, field); err != nil {
+				return "", err
 			}
 		}
 	}
 
-	return envVars.String(), sensitiveFields, nil
+	return envVars.String(), nil
 }
 
 // generateEnvironmentFile writes the environment variables to a file
@@ -1216,28 +1171,6 @@ func generateHelmValues(structure interface{}, commentMap map[string]string) (st
 	err := generateYAMLWithComments(&regularResult, "", reflect.ValueOf(structure).Elem(), commentMap, 1)
 	if err != nil {
 		return "", err
-	}
-
-	// Add external secrets configuration to regular values
-	sensitiveFields := findSensitiveFields(reflect.ValueOf(structure).Elem(), "")
-	if len(sensitiveFields) > 0 {
-		regularResult.WriteString("\n# -- External Secrets configuration\n")
-		regularResult.WriteString("externalSecrets:\n")
-		regularResult.WriteString("  # -- Enable external secrets integration\n")
-		regularResult.WriteString("  enabled: true  # @schema type:boolean; default:true\n")
-		regularResult.WriteString("  # -- List of external secrets to create\n")
-		regularResult.WriteString("  secrets:\n")
-
-		for _, field := range sensitiveFields {
-			regularResult.WriteString(fmt.Sprintf("    # -- %s secret configuration\n", field.SecretName))
-			regularResult.WriteString(fmt.Sprintf("    %s:\n", field.SecretName))
-			regularResult.WriteString("      # -- Enable this external secret\n")
-			regularResult.WriteString("      enabled: true  # @schema type:boolean; default:true\n")
-			regularResult.WriteString(fmt.Sprintf("      # -- Environment variable key for %s\n", field.Path))
-			regularResult.WriteString(fmt.Sprintf("      secretKey: \"%s\"  # @schema type:string\n", field.Key))
-			regularResult.WriteString("      # -- Remote key in GCP Secret Manager\n")
-			regularResult.WriteString(fmt.Sprintf("      remoteKey: \"%s\"  # @schema type:string\n", field.SecretName))
-		}
 	}
 
 	return regularResult.String(), nil
@@ -1627,161 +1560,8 @@ func hasNonSecretChildren(v reflect.Value, prefix string) bool {
 	return false
 }
 
-// generateSecretName creates a Kubernetes-friendly secret name from a config path
-func generateSecretName(path string) string {
-	// Convert path like "auth.providers.github.clientSecret" to "auth-providers-github-client-secret"
-	name := strings.ToLower(path)
-	name = strings.ReplaceAll(name, ".", "-")
-	// Convert camelCase to kebab-case
-	var result strings.Builder
-	for i, r := range name {
-		if i > 0 && r >= 'A' && r <= 'Z' {
-			result.WriteByte('-')
-		}
-		result.WriteRune(r)
-	}
-	return strings.ToLower(result.String())
-}
-
-// generateSecretFiles ensures the ExternalSecret template exists when sensitive fields are present
-func generateSecretFiles(c schemaConfig, fields []SensitiveField) error {
-	if len(fields) == 0 {
-		return nil
-	}
-
-	if err := os.MkdirAll(c.externalSecretsDir, dirPermission); err != nil {
-		return err
-	}
-
-	return generateExternalSecretsTemplate(c.externalSecretsDir)
-}
-
-// generateExternalSecretsTemplate creates a single dynamic ExternalSecret template for Helm chart
-func generateExternalSecretsTemplate(dir string) error {
-	templateFile := fmt.Sprintf("%s/external-secrets.yaml", dir)
-
-	content := `{{- if and .Values.externalSecrets .Values.externalSecrets.enabled }}
-{{- range $secretName, $config := .Values.externalSecrets.secrets | default dict }}
-{{- if $config.enabled }}
----
-apiVersion: external-secrets.io/v1
-kind: ExternalSecret
-metadata:
-  name: {{ $secretName }}-ext
-  namespace: {{ $.Release.Namespace }}
-spec:
-  secretStoreRef:
-    name: gcp-secret-store
-    kind: ClusterSecretStore
-  target:
-    name: {{ $secretName }}
-    creationPolicy: Owner
-  data:
-  - secretKey: {{ $config.secretKey }}
-    remoteRef:
-      key: {{ $config.remoteKey }}
-{{- end }}
-{{- end }}
-{{- end }}
-`
-	return os.WriteFile(templateFile, []byte(content), ownerReadWrite)
-}
-
 // isExternalSensitiveField checks if a field path corresponds to a sensitive field from external packages
 func isExternalSensitiveField(path string) bool {
 	_, ok := externalSensitiveFields[path]
 	return ok
-}
-
-// findSensitiveFields recursively finds all sensitive fields in a struct
-func findSensitiveFields(v reflect.Value, prefix string) []SensitiveField {
-	var fields []SensitiveField
-
-	if !v.IsValid() {
-		return fields
-	}
-
-	t := v.Type()
-	for i := 0; i < v.NumField(); i++ {
-		field := t.Field(i)
-		fieldValue := v.Field(i)
-
-		// Skip unexported fields
-		if !field.IsExported() {
-			continue
-		}
-
-		jsonTag := field.Tag.Get("json")
-		if jsonTag == "" || jsonTag == "-" {
-			continue
-		}
-
-		parts := strings.Split(jsonTag, ",")
-		fieldName := parts[0]
-		if fieldName == "" {
-			fieldName = strings.ToLower(field.Name)
-		}
-
-		if fieldName == "" {
-			continue
-		}
-
-		// Build current path
-		var currentPath string
-		if prefix != "" {
-			currentPath = fmt.Sprintf("%s.%s", prefix, fieldName)
-		} else {
-			currentPath = fieldName
-		}
-
-		envKeyName := strings.ToUpper(strings.ReplaceAll(currentPath, ".", "_"))
-		secretKeyName := strings.ToLower(strings.ReplaceAll(currentPath, ".", "-"))
-		baseEnvKey := fmt.Sprintf("CORE_%s", envKeyName)
-		baseSecretName := fmt.Sprintf("core-%s", secretKeyName)
-
-		// Check if this field is sensitive
-		if sensitiveTag := field.Tag.Get("sensitive"); sensitiveTag == "true" {
-			fields = append(fields, SensitiveField{
-				Key:        baseEnvKey,
-				Path:       currentPath,
-				SecretName: baseSecretName,
-			})
-
-			if fieldValue.Kind() == reflect.Map && strings.EqualFold(currentPath, "subscription.stripewebhooksecrets") && fieldValue.Len() > 0 {
-				keys := fieldValue.MapKeys()
-				keyStrings := make([]string, 0, len(keys))
-				for _, k := range keys {
-					if k.Kind() == reflect.String {
-						keyStrings = append(keyStrings, k.String())
-					}
-				}
-
-				sort.Strings(keyStrings)
-
-				for _, mapKey := range keyStrings {
-					if mapKey == "" {
-						continue
-					}
-					envKey := fmt.Sprintf("%s_%s", baseEnvKey, sanitizeMapKeyForEnv(mapKey))
-					mapPath := fmt.Sprintf("%s.%s", currentPath, mapKey)
-					fields = append(fields, SensitiveField{
-						Key:        envKey,
-						Path:       mapPath,
-						SecretName: generateSecretName(fmt.Sprintf("core.%s", mapPath)),
-					})
-				}
-			}
-		}
-
-		// Recursively check nested structs
-		if fieldValue.Kind() == reflect.Struct && fieldValue.Type() != reflect.TypeOf(time.Time{}) {
-			nestedFields := findSensitiveFields(fieldValue, currentPath)
-			fields = append(fields, nestedFields...)
-		} else if fieldValue.Kind() == reflect.Ptr && !fieldValue.IsNil() && fieldValue.Elem().Kind() == reflect.Struct {
-			nestedFields := findSensitiveFields(fieldValue.Elem(), currentPath)
-			fields = append(fields, nestedFields...)
-		}
-	}
-
-	return fields
 }

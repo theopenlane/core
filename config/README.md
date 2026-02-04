@@ -1,31 +1,23 @@
-# Openlane Configuration and Secret Management
+# Openlane Configuration
 
-This directory contains the auto-generated configuration files and secret management resources for Openlane deployment automation.
+This directory contains the auto-generated configuration files and deployment automation resources for Openlane.
 
 ## Overview
 
-The configuration system provides automated generation of Helm values and secret management resources from Go configuration structures. It bridges the gap between the core configuration repository and the deployment infrastructure (openlane-infra) by:
+The configuration system provides automated generation of Helm values from Go configuration structures. It bridges the gap between the core configuration repository and the deployment infrastructure (openlane-infra) by:
 
 1. **Auto-generating Helm-compatible values** from Go struct definitions
-2. **Separating sensitive values** for secure secret management
-3. **Creating External Secrets resources** for automated secret injection
-4. **Integrating with Kubernetes External Secrets** so sensitive data stays in GCP Secret Manager
-5. **Automating pull request creation** when configuration changes
-6. **Sending Slack notifications** for team awareness and approval workflows
+2. **Omitting sensitive values** from generated Helm values (env examples keep variable names as placeholders)
+3. **Automating pull request creation** when configuration changes
+4. **Sending Slack notifications** for team awareness and approval workflows
 
 ## Generated Files
 
 ### Core Configuration Files
 
-- **`helm-values.yaml`** - Complete Helm values with comments, schema annotations, and External Secrets configuration (sensitive fields are excluded and managed via External Secrets)
+- **`helm-values.yaml`** - Complete Helm values with comments and schema annotations (sensitive fields are excluded)
 - **`config.example.yaml`** - Example configuration file showing all available options
 - **`configmap-config-file.yaml`** - Helm template that embeds a rendered `config.yaml` for pods to mount directly (preferred for Kubernetes deployments)
-
-### Secret Management Resources
-
-- **`external-secrets/`** - Helm templates for automated secret injection
-  - `external-secrets.yaml` - Dynamic template that creates ExternalSecrets based on values configuration
-  - Used by the Helm chart to pull secrets from GCP Secret Manager into the application
 
 ## How It Works
 
@@ -40,47 +32,26 @@ The system uses Go struct reflection to automatically detect:
 ### 2. Sensitive Field Processing
 
 For each field tagged with `sensitive:"true"`:
-- **Environment Variable**: `CORE_<UPPERCASE_PATH>` (e.g., `CORE_OBJECTSTORAGE_ACCESSKEY`)
-- **Secret Name**: `core-<lowercase-path>` (e.g., `core-objectstorage-accesskey`)
-- **Remote Key**: Same as secret name for GCP Secret Manager
+- The value is **omitted** from generated `helm-values.yaml`
+- The variable name still appears in `.env.example` as a placeholder
+- You must provide the value at runtime via your preferred secret management approach
 
 ### 3. Dynamic Helm Integration
 
-The generated `helm-values.yaml` includes an `externalSecrets` configuration block:
-
-```yaml
-externalSecrets:
-  enabled: true  # Global toggle for external secrets
-  secrets:
-    core-objectstorage-accesskey:
-      enabled: true  # Individual secret toggle
-      secretKey: "CORE_OBJECTSTORAGE_ACCESSKEY"
-      remoteKey: "core-objectstorage-accesskey"
-      property: "value"
-```
-
-The Helm chart uses this configuration to dynamically create ExternalSecret resources:
-
-```yaml
-{{- range $secretName, $config := .Values.externalSecrets.secrets }}
-{{- if $config.enabled }}
-# Creates ExternalSecret for each enabled secret
-{{- end }}
-{{- end }}
-```
+The generated `helm-values.yaml` includes only non-sensitive configuration values. Sensitive fields are excluded from Helm values and must be injected separately.
 
 ## Secret Management Workflow
 
 ### For DevOps/Infrastructure Teams
 
-1. **Ensure secrets exist in GCP Secret Manager** using your preferred workflow (Terraform, manual entry, etc.).
-2. **Deploy the application**: the Helm chart automatically creates ExternalSecrets that pull those secrets into the cluster.
+1. **Store sensitive values** in your preferred secret manager (Vault, SOPS, Kubernetes Secrets, etc.).
+2. **Inject them at runtime** using your existing deployment workflow.
 
 ### For Development Teams
 
 1. **Add sensitive fields** to Go structs with `sensitive:"true"` tags
 2. **Run configuration generation** (happens automatically in CI/CD)
-3. **Secrets are automatically detected** and included in the deployment pipeline
+3. **Sensitive values are excluded** from generated Helm values
 
 ## Automation Pipeline
 
@@ -88,7 +59,7 @@ The Helm chart uses this configuration to dynamically create ExternalSecret reso
 
 The `.buildkite/pipeline.yaml` includes a comprehensive helm automation step that:
 1. **Generates configuration files** from Go structs using the schema generator
-2. **Detects changes** in values, secrets, or external secrets
+2. **Detects changes** in values or configmap templates
 3. **Creates pull requests** in the openlane-infra repository with detailed change summaries
 4. **Updates Helm chart versions** automatically (patch version increment)
 5. **Sends Slack notifications** to alert teams when manual review is required
@@ -97,7 +68,6 @@ The `.buildkite/pipeline.yaml` includes a comprehensive helm automation step tha
 
 The automation detects multiple types of changes:
 - **Values Changes**: Updates to `values.yaml` with new configuration schema
-- **External Secret Changes**: Updates to `templates/external-secrets/`
 - **ConfigMap Changes**: Updates to legacy configmap templates (backward compatibility)
 
 ### Slack Notification Integration
@@ -135,7 +105,6 @@ A new PR has been created that updates the Helm chart configuration and needs re
 
 Changes Made:
 ✅ Updated Helm values.yaml
-🔐 Updated External Secrets templates
 📈 Bumped chart version to 1.2.34
 
 Build: 1234 | Source Branch: feat-new-config
@@ -165,31 +134,17 @@ All generated values include:
 - **Default Values**: Automatically populated from struct defaults
 - **Validation**: Type constraints and validation rules
 
-### External Secrets Configuration
-
-Each detected sensitive field generates:
-```yaml
-secretName:
-  enabled: true                    # Enable/disable this secret
-  secretKey: "ENV_VAR_NAME"       # Environment variable name
-  remoteKey: "gcp-secret-name"    # GCP Secret Manager key
-  property: "value"               # Property within the secret
-```
-
 ## Security Considerations
 
-1. **Separation of Concerns**: Sensitive values are never stored in plain text in the Helm chart
-2. **Secret Store Integration**: All secrets are managed through GCP Secret Manager
-3. **Individual Secret Control**: Each secret can be enabled/disabled independently
-4. **Secure Namespacing**: ExternalSecrets target the `openlane` namespace while sourcing values from GCP Secret Manager
+1. **Separation of Concerns**: Sensitive values are never stored in plain text in the Helm chart; `.env.example` contains placeholders only
+2. **Secret Store Agnostic**: Provide sensitive values via your preferred secret management system
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Missing Secrets**: Check that fields are tagged with `sensitive:"true"`
-2. **ExternalSecret Not Working**: Verify ClusterSecretStore `gcp-secretstore` exists and that the target secret name matches the configured `remoteKey`
-4. **Schema Validation**: Check that schema annotations match field types
+1. **Missing Sensitive Values**: Check that fields are tagged with `sensitive:"true"`
+2. **Schema Validation**: Check that schema annotations match field types
 
 ### Regenerating Configuration
 
@@ -198,21 +153,6 @@ To manually regenerate all configuration files:
 cd /path/to/core
 go run ./jsonschema/schema_generator.go
 ```
-
-## Integration with External Systems
-
-### GCP Secret Manager
-
-- **ClusterSecretStore**: `gcp-secretstore` must be configured in the cluster
-- **Permissions**: Service account needs Secret Manager access
-- **Secret Format**: Secrets are stored with `value` property
-
-### Helm Chart Requirements
-
-The openlane-infra Helm chart must include:
-- Common label and annotation templates (`common.names.fullname`, etc.)
-- External Secrets Operator installed in the cluster
-- Proper RBAC for ExternalSecret resources
 
 ## Development
 
@@ -227,19 +167,7 @@ The openlane-infra Helm chart must include:
 
 2. Run the generator or let CI/CD handle it automatically
 
-3. The field will appear in:
-   - `externalSecrets.secrets` in `helm-values.yaml`
-   - The dynamic ExternalSecret template used by the Helm chart
-
-### Modifying Secret Configuration
-
-Edit the `externalSecrets.secrets` section in your Helm values to:
-- Enable/disable individual secrets
-- Change environment variable names
-- Modify GCP Secret Manager keys
-- Adjust secret properties
-
-This system provides a complete, automated bridge between Go configuration structures and Kubernetes secret management, ensuring secure and maintainable deployments.
+3. The field will be omitted from generated `helm-values.yaml` and must be provided via your secret management workflow.
 
 ## Local Development Configuration
 
@@ -393,8 +321,7 @@ Instead of overwriting the entire `values.yaml` file, the system:
 
 1. **Extracts Core Configuration**: Pulls the `core` section from generated values
 2. **Preserves Kubernetes Config**: Maintains existing deployment, service, ingress, and other K8s settings
-3. **Merges External Secrets**: Updates `externalSecrets` configuration while preserving other secrets
-4. **Maintains Structure**: Keeps all non-core sections intact
+3. **Maintains Structure**: Keeps all non-core sections intact
 
 ### Merge Strategy
 
@@ -410,7 +337,6 @@ yq eval '. as $target | load("generated-core.yaml") as $core | $target | .core =
 
 **Merged Sections** (replaced with generated content):
 - `core.*` - All application configuration
-- `externalSecrets.*` - Secret management configuration
 
 **Preserved Sections** (maintained from existing values):
 - `replicaCount` - Pod replica configuration
@@ -448,10 +374,6 @@ core:
     version: "2.0.0"
   database:
     host: "db.example.com"
-externalSecrets:
-  enabled: true
-  secrets:
-    - name: "db-password"
 ```
 
 **Merged result:**
@@ -469,10 +391,6 @@ core:                        # Merged from generated
     version: "2.0.0"
   database:
     host: "db.example.com"
-externalSecrets:             # Merged from generated
-  enabled: true
-  secrets:
-    - name: "db-password"
 ```
 
 ## Automation Testing
@@ -552,7 +470,6 @@ cat /tmp/test-*/target-repo/charts/*/CHANGELOG.md
 The test suite validates:
 - ✅ Configuration merging preserves Kubernetes settings
 - ✅ Domain inheritance works correctly
-- ✅ External secrets are properly integrated
 - ✅ Chart versions increment automatically
 - ✅ Changelogs capture all changes
 - ✅ Slack notifications include relevant details
@@ -571,8 +488,8 @@ When a PR is opened in the core repository with changes that affect configuratio
 1. **Detects Configuration Changes**: Monitors changes to `config/`, `pkg/objects/config.go`, and other configuration-related files
 2. **Creates Draft PR**: Automatically creates a **DRAFT** PR in the openlane-infra repository showing the exact configuration changes
 3. **Links PRs**: Adds comments to both PRs linking them together for easy navigation
-4. **Converts to Ready**: After the core PR is merged, automatically converts the draft PR to ready for review
-5. **Finalizes Changes**: Updates the infrastructure PR with any final changes from the merge
+4. **Opens Final PR on Main**: After the core PR is merged, the main-branch automation opens the final infrastructure PR
+5. **Closes Draft PRs**: Post-merge automation closes any draft PRs tied to merged core PRs
 
 ### Workflow Diagram
 
@@ -582,13 +499,12 @@ graph TD
     B -->|Yes| C[Generate Config Files]
     C --> D[Create Draft Infrastructure PR]
     D --> E[Add Linking Comments to Both PRs]
-    E --> F[Send Slack Notification]
-    F --> G[Review Both PRs Together]
-    G --> H[Merge Core PR]
-    H --> I[Auto-Convert Draft to Ready]
-    I --> J[Update Infrastructure PR]
-    J --> K[Review & Merge Infrastructure PR]
-    B -->|No| L[Normal PR Flow]
+    E --> F[Review Both PRs Together]
+    F --> G[Merge Core PR]
+    G --> H[Open Final Infrastructure PR from main]
+    H --> I[Close Draft PR]
+    I --> J[Review & Merge Infrastructure PR]
+    B -->|No| K[Normal PR Flow]
 ```
 
 ### Benefits
@@ -640,7 +556,7 @@ A draft PR has been automatically created in the infrastructure repository:
 ### 📋 Review Process
 
 1. Review both PRs together - The draft PR shows exactly what configuration changes will be applied
-2. Merge this core PR first - The infrastructure PR will automatically convert from draft to ready
+2. Merge this core PR first - The draft PR will be closed and a new infra PR will be opened from `main`
 3. Review and merge the infrastructure PR - Complete the deployment of configuration changes
 ```
 
@@ -657,7 +573,7 @@ This draft PR shows configuration changes from:
 
 - **This is a DRAFT PR** - Do not merge until the core PR is merged first
 - **Review both PRs together** - This shows the configuration impact of the core changes
-- **Auto-conversion** - This PR will automatically convert from draft to ready after core PR merge
+- **Post-merge cleanup** - This draft PR will be closed after core PR merge
 ```
 
 #### 4. Silent Draft Creation
@@ -667,21 +583,20 @@ Draft PRs are created silently without Slack notifications to avoid noise. The s
 #### 5. Post-Merge Automation & Notification
 
 After core PR merge:
-- Draft PR automatically converts to ready for review
-- Title updates from "🚧 DRAFT: ..." to "🔄 ..."
-- Final configuration changes applied
+- Main branch automation opens a new infrastructure PR with final configuration changes
 - Chart version incremented
-- **Slack notification sent** - Infrastructure team notified that PR is ready
+- Draft PRs are automatically closed
+- **Slack notification sent** - Infrastructure team notified that a new infra PR is ready for review
 
 **Slack Notification Example:**
 
 ```
-✅ Infrastructure PR Ready for Review
+🤖 Helm Chart Update Required
 
-A configuration PR has been finalized and is ready for infrastructure team review and deployment, so get to work ya lazy DevOps slackers!
+A configuration PR has been finalized and is ready for infrastructure team review and deployment.
 
 Core PR: #123 (Merged)
-Infrastructure PR: Ready for Review
+Infrastructure PR: Review
 
 Changes Made:
 - 🔄 Merged Helm values.yaml
@@ -701,7 +616,6 @@ The system triggers draft PR creation for changes to:
 
 - `config/helm-values.yaml`
 - `config/configmap-config-file.yaml`
-- `config/external-secrets/`
 
 **Configuration Source Files:**
 
@@ -736,7 +650,7 @@ The automation uses external message templates for consistent, maintainable noti
 #### Message Templates
 
 - **`helm-update-notification.json`** - Sent when infrastructure PRs are ready for review (AKA PR's against a helm chart for image bumps)
-- **`pr-ready-notification.json`** - Sent when draft PRs are converted to ready after core merge
+- **`pr-ready-notification.json`** - Reserved for optional draft-related notifications (currently unused)
 
 #### Template System
 ```bash
@@ -788,7 +702,6 @@ Edit the template files in `.buildkite/templates/`:
 ```bash
 # Edit notification templates
 vim .buildkite/templates/helm-update-notification.json
-vim .buildkite/templates/pr-ready-notification.json
 
 # Test changes
 ./.buildkite/test-helm-automation.sh webhook-test
@@ -803,7 +716,7 @@ Check if:
 - The build pipeline completed successfully
 - GitHub token has permissions to create PRs in the infrastructure repository
 
-#### Draft PR Not Converting to Ready
+#### Draft PR Not Closing
 
 Check if:
 - The core PR was actually merged (not just closed)
@@ -832,6 +745,6 @@ The draft PR workflow integrates with the existing Buildkite pipeline:
 
 1. `generate_config` - Regenerate final configuration
 2. `helm_automation` - Update infrastructure repository
-3. `post_merge_automation` - Convert draft PRs to ready
+3. `post_merge_automation` - Close draft PRs tied to merged core PRs
 
 This workflow ensures that configuration changes are fully visible and reviewable before they impact production deployments, eliminating the bad development loop where issues are discovered after merge.

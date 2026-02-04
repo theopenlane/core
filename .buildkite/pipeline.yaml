@@ -144,13 +144,9 @@ steps:
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
-      - label: ":arrows_counterclockwise: finalize config PRs"
+      - label: ":arrows_counterclockwise: close draft config PRs"
         key: "post_merge_automation"
-        depends_on: "helm_automation"
         if: build.branch == "main"
-        if_changed:
-          - config/configmap-config-file.yaml
-          - config/helm-values.yaml
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -167,23 +163,6 @@ steps:
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
-      - label: ":broom: cleanup draft PRs"
-        key: "cleanup_draft_prs"
-        depends_on: "post_merge_automation"
-        if: build.branch == "main"
-        if_changed:
-          - config/configmap-config-file.yaml
-          - config/helm-values.yaml
-        plugins:
-          - docker#v5.13.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/cleanup-draft-prs.sh"]
-              propagate-environment: true
-              environment:
-                - "GITHUB_TOKEN"
-                - "GITHUB_SSH_PRIVATE_KEY"
-                - "HELM_CHART_REPO"
       - label: ":rocket: update image tag for release"
         key: "image_tag_automation"
         depends_on: "docker-build-and-tag"

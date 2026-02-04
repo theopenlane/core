@@ -2,4 +2,4 @@
 
 Config changes from core PR: {{CORE_PR_URL}}
 
-This PR converts to ready when core PR merges.
+This draft PR is for preview only. After the core PR merges, this draft will be closed and a new infrastructure PR will be opened from `main`.
