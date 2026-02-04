@@ -125,9 +125,6 @@ steps:
         key: "helm_automation"
         depends_on: "generate_config"
         if: build.branch == "main"
-        if_changed:
-          - config/configmap-config-file.yaml
-          - config/helm-values.yaml
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -148,9 +145,6 @@ steps:
         key: "post_merge_automation"
         depends_on: "helm_automation"
         if: build.branch == "main"
-        if_changed:
-          - config/configmap-config-file.yaml
-          - config/helm-values.yaml
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -171,9 +165,6 @@ steps:
         key: "cleanup_draft_prs"
         depends_on: "post_merge_automation"
         if: build.branch == "main"
-        if_changed:
-          - config/configmap-config-file.yaml
-          - config/helm-values.yaml
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
