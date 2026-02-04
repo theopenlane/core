@@ -56,8 +56,7 @@ github.com/go-viper/mapstructure/v2 v2.5.0 h1:vM5IJoUAy3d7zRSVtIwQgBj7BiWtMPfmPE
 github.com/go-viper/mapstructure/v2 v2.5.0/go.mod h1:oJDH3BJKyqBA2TXFhDsKDGDTlndYOZ6rGS0BRZIxGhM=
 github.com/go-webauthn/webauthn v0.15.0 h1:LR1vPv62E0/6+sTenX35QrCmpMCzLeVAcnXeH4MrbJY=
 github.com/go-webauthn/webauthn v0.15.0/go.mod h1:hcAOhVChPRG7oqG7Xj6XKN1mb+8eXTGP/B7zBLzkX5A=
-github.com/go-webauthn/x v0.1.27 h1:CLyuB8JGn9xvw0etBl4fnclcbPTwhKpN4Xg32zaSYnI=
-github.com/go-webauthn/x v0.1.27/go.mod h1:KGYJQAPPgbpDKi4N7zKMGL+Iz6WgxKg3OlhVbPtuJXI=
+github.com/go-webauthn/x v0.1.28 h1:1Q2iyjQvlBRMnB2wLWd4LfyxYsr7jA4MFDG4X49686M=
 github.com/goccy/go-yaml v1.19.2 h1:PmFC1S6h8ljIz6gMRBopkjP1TVT7xuwrButHID66PoM=
 github.com/goccy/go-yaml v1.19.2/go.mod h1:XBurs7gK8ATbW4ZPGKgcbrY1Br56PdM69F7LkFRi1kA=
 github.com/godbus/dbus/v5 v5.0.4/go.mod h1:xhWf0FNVPg57R7Z0UbKHbJfkEywrmjJnf7w5xrFpKfA=
