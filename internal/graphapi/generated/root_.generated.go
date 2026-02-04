@@ -149,10 +149,6 @@ type ComplexityRoot struct {
 		ReadIDs func(childComplexity int) int
 	}
 
-	ActionNotificationsReadPayload struct {
-		ReadIDs func(childComplexity int) int
-	}
-
 	ActionPlan struct {
 		ActionPlanKind                  func(childComplexity int) int
 		ActionPlanKindID                func(childComplexity int) int
