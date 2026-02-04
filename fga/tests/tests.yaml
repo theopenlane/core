@@ -365,7 +365,7 @@ tests:
         object: group:cat-lovers
         assertions:
           admin: true
-          member: false
+          member: true
           can_delete: true
           can_edit: true
           can_view: true
@@ -402,7 +402,7 @@ tests:
         object: group:cat-haters
         assertions:
           admin: true
-          member: false
+          member: true
           can_delete: true
           can_edit: true
           can_view: true
@@ -969,6 +969,12 @@ tests:
           can_edit: false
           can_delete: false
       - user: user:ulid-group-control-1-editor
+        object: control:control-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-group-admin-control-1-editor
         object: control:control-1
         assertions:
           can_view: true

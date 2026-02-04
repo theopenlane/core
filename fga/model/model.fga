@@ -190,7 +190,7 @@ type group
   relations
     # main roles
     define admin: [user]
-    define member: [user]
+    define member: [user] or admin
     # parent inheritance
     define parent: [organization with public_group]
     define parent_admin: [organization#owner]
