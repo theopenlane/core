@@ -20,6 +20,9 @@
 - user: group:group-control-1-editor#member
   relation: editor
   object: control:control-1
+- user: user:ulid-group-admin-control-1-editor
+  relation: admin
+  object: group:group-control-1-editor
 - user: user:ulid-group-control-1-editor
   relation: member
   object: group:group-control-1-editor

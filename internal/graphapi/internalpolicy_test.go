@@ -493,6 +493,12 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 
 	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 
+	// group admins should also have edit permissions when added to the group
+	anotherViewerGroupAdminUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherViewerGroupAdminUser, enums.RoleMember, testUser1.OrganizationID)
+
+	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerGroupAdminUser.ID, GroupID: testUser1.GroupID, Role: enums.RoleAdmin.String()}).MustNew(testUser1.UserCtx, t)
+
 	// create one more group that will be used to test the blocked group permissions and add anotherViewerUser to it
 	blockGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: blockGroup.ID}).MustNew(testUser1.UserCtx, t)
@@ -579,6 +585,15 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			},
 			client: suite.client.api,
 			ctx:    anotherViewerUser.UserCtx, // user assigned to the group which has editor permissions
+		},
+		{
+			name:     "member update allowed, user in editor group as admin",
+			policyID: internalPolicy.ID,
+			request: testclient.UpdateInternalPolicyInput{
+				Name: lo.ToPtr("Updated Procedure Name Again by Group Admin"),
+			},
+			client: suite.client.api,
+			ctx:    anotherViewerGroupAdminUser.UserCtx, // user assigned to the group which has editor permissions as admin
 		},
 		{
 			name:     "happy path, block the group from editing",
