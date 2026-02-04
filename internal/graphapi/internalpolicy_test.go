@@ -590,7 +590,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			name:     "member update allowed, user in editor group as admin",
 			policyID: internalPolicy.ID,
 			request: testclient.UpdateInternalPolicyInput{
-				Name: lo.ToPtr("Updated Procedure Name Again"),
+				Name: lo.ToPtr("Updated Procedure Name Again by Group Admin"),
 			},
 			client: suite.client.api,
 			ctx:    anotherViewerGroupAdminUser.UserCtx, // user assigned to the group which has editor permissions as admin
