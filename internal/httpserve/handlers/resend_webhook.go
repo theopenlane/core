@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/resend/resend-go/v2"
+	"github.com/resend/resend-go/v3"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
