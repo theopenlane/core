@@ -101,6 +101,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 )
 
 // Noder wraps the basic Node method.
@@ -567,6 +568,11 @@ var workflowobjectrefImplementors = []string{"WorkflowObjectRef", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*WorkflowObjectRef) IsNode() {}
+
+var workflowproposalImplementors = []string{"WorkflowProposal", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*WorkflowProposal) IsNode() {}
 
 var errNodeInvalidID = &NotFoundError{"node"}
 
@@ -1450,6 +1456,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(workflowobjectref.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowobjectrefImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case workflowproposal.Table:
+		query := c.WorkflowProposal.Query().
+			Where(workflowproposal.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowproposalImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2987,6 +3002,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.WorkflowObjectRef.Query().
 			Where(workflowobjectref.IDIn(ids...))
 		query, err := query.CollectFields(ctx, workflowobjectrefImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case workflowproposal.Table:
+		query := c.WorkflowProposal.Query().
+			Where(workflowproposal.IDIn(ids...))
+		query, err := query.CollectFields(ctx, workflowproposalImplementors...)
 		if err != nil {
 			return nil, err
 		}

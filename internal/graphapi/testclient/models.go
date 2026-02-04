@@ -11,7 +11,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
 )
 
 type APIToken struct {
@@ -44919,6 +44918,42 @@ type WorkflowObjectTypeMetadata struct {
 	ResolverKeys []string `json:"resolverKeys"`
 }
 
+type WorkflowProposal struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// WorkflowObjectRef record that identifies the target object for this proposal
+	WorkflowObjectRefID string `json:"workflowObjectRefID"`
+	// Stable key representing the approval domain for this proposal
+	DomainKey string `json:"domainKey"`
+	// Current state of the proposal
+	State enums.WorkflowProposalState `json:"state"`
+	// Monotonic revision counter; incremented on edits
+	Revision int64 `json:"revision"`
+	// Staged field updates for this domain; applied only after approval
+	Changes map[string]any `json:"changes,omitempty"`
+	// Hash of the current proposed changes for approval verification
+	ProposedHash *string `json:"proposedHash,omitempty"`
+	// Hash of the proposed changes that satisfied approvals (what was approved)
+	ApprovedHash *string `json:"approvedHash,omitempty"`
+	// Timestamp when this proposal was submitted for approval
+	SubmittedAt *time.Time `json:"submittedAt,omitempty"`
+	// User who submitted this proposal for approval
+	SubmittedByUserID *string       `json:"submittedByUserID,omitempty"`
+	Owner             *Organization `json:"owner,omitempty"`
+	// Precomputed proposal preview (diff + values) for approval workflows.
+	// Only available to editors/owners of the target object.
+	Preview *WorkflowProposalPreview `json:"preview,omitempty"`
+}
+
+func (WorkflowProposal) IsNode() {}
+
 // WorkflowProposalPreview describes the proposed changes alongside current values and diffs.
 type WorkflowProposalPreview struct {
 	// ID of the workflow proposal
@@ -44942,19 +44977,19 @@ type WorkflowProposalPreview struct {
 // Return response for submitWorkflowProposal mutation
 type WorkflowProposalSubmitPayload struct {
 	// Submitted workflow proposal
-	WorkflowProposal *generated.WorkflowProposal `json:"workflowProposal"`
+	WorkflowProposal *WorkflowProposal `json:"workflowProposal"`
 }
 
 // Return response for updateWorkflowProposalChanges mutation
 type WorkflowProposalUpdatePayload struct {
 	// Updated workflow proposal
-	WorkflowProposal *generated.WorkflowProposal `json:"workflowProposal"`
+	WorkflowProposal *WorkflowProposal `json:"workflowProposal"`
 }
 
 // Return response for withdrawWorkflowProposal mutation
 type WorkflowProposalWithdrawPayload struct {
 	// Withdrawn workflow proposal
-	WorkflowProposal *generated.WorkflowProposal `json:"workflowProposal"`
+	WorkflowProposal *WorkflowProposal `json:"workflowProposal"`
 }
 
 // Properties by which APIToken connections can be ordered.

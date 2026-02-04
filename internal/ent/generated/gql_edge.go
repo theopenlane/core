@@ -16083,3 +16083,11 @@ func (_m *WorkflowObjectRef) Platform(ctx context.Context) (*Platform, error) {
 	}
 	return result, MaskNotFound(err)
 }
+
+func (_m *WorkflowProposal) Owner(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}

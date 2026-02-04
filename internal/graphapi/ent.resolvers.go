@@ -3179,6 +3179,11 @@ func (r *Resolver) WorkflowInstance() gqlgenerated.WorkflowInstanceResolver {
 	return &workflowInstanceResolver{r}
 }
 
+// WorkflowProposal returns gqlgenerated.WorkflowProposalResolver implementation.
+func (r *Resolver) WorkflowProposal() gqlgenerated.WorkflowProposalResolver {
+	return &workflowProposalResolver{r}
+}
+
 // CreateDiscussionInput returns gqlgenerated.CreateDiscussionInputResolver implementation.
 func (r *Resolver) CreateDiscussionInput() gqlgenerated.CreateDiscussionInputResolver {
 	return &createDiscussionInputResolver{r}
@@ -3318,6 +3323,7 @@ type procedureResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type subcontrolResolver struct{ *Resolver }
 type workflowInstanceResolver struct{ *Resolver }
+type workflowProposalResolver struct{ *Resolver }
 type createDiscussionInputResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }

@@ -59,61 +59,6 @@ extend type Mutation {
 }
 
 """
-WorkflowProposal stores staged changes for a workflow approval domain.
-"""
-type WorkflowProposal @goModel(model: "github.com/theopenlane/core/internal/ent/generated.WorkflowProposal") {
-    """
-    ID of the workflow proposal
-    """
-    id: ID!
-    """
-    Stable key representing the approval domain for this proposal
-    """
-    domainKey: String!
-    """
-    Current state of the proposal
-    """
-    state: WorkflowProposalState!
-    """
-    Staged field updates for this domain
-    """
-    changes: Map
-    """
-    Hash of the current proposed changes for approval verification
-    """
-    proposedHash: String
-    """
-    Hash of the proposed changes that were approved
-    """
-    approvedHash: String
-    """
-    Timestamp when this proposal was submitted for approval
-    """
-    submittedAt: Time
-    """
-    User who submitted this proposal for approval
-    """
-    submittedByUserID: ID
-    """
-    WorkflowObjectRef record that identifies the target object for this proposal
-    """
-    workflowObjectRefID: ID!
-    """
-    Creation timestamp
-    """
-    createdAt: Time!
-    """
-    Last update timestamp
-    """
-    updatedAt: Time!
-    """
-    Precomputed proposal preview (diff + values) for approval workflows.
-    Only available to editors/owners of the target object.
-    """
-    preview: WorkflowProposalPreview
-}
-
-"""
 Input for updateWorkflowProposalChanges mutation
 """
 input UpdateWorkflowProposalChangesInput {
@@ -155,4 +100,12 @@ type WorkflowProposalWithdrawPayload {
     Withdrawn workflow proposal
     """
     workflowProposal: WorkflowProposal!
+}
+
+extend type WorkflowProposal {
+    """
+    Precomputed proposal preview (diff + values) for approval workflows.
+    Only available to editors/owners of the target object.
+    """
+    preview: WorkflowProposalPreview
 }

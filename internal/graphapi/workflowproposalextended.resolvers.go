@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/internal/graphapi/common"
-	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/iam/auth"
@@ -325,10 +324,3 @@ func (r *queryResolver) WorkflowProposalsForObject(ctx context.Context, objectTy
 func (r *workflowProposalResolver) Preview(ctx context.Context, obj *generated.WorkflowProposal) (*model.WorkflowProposalPreview, error) {
 	return r.workflowProposalPreview(ctx, obj)
 }
-
-// WorkflowProposal returns gqlgenerated.WorkflowProposalResolver implementation.
-func (r *Resolver) WorkflowProposal() gqlgenerated.WorkflowProposalResolver {
-	return &workflowProposalResolver{r}
-}
-
-type workflowProposalResolver struct{ *Resolver }

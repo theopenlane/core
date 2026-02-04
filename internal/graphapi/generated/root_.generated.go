@@ -7009,14 +7009,20 @@ type ComplexityRoot struct {
 		ApprovedHash        func(childComplexity int) int
 		Changes             func(childComplexity int) int
 		CreatedAt           func(childComplexity int) int
+		CreatedBy           func(childComplexity int) int
 		DomainKey           func(childComplexity int) int
 		ID                  func(childComplexity int) int
+		Owner               func(childComplexity int) int
+		OwnerID             func(childComplexity int) int
 		Preview             func(childComplexity int) int
 		ProposedHash        func(childComplexity int) int
+		Revision            func(childComplexity int) int
 		State               func(childComplexity int) int
 		SubmittedAt         func(childComplexity int) int
 		SubmittedByUserID   func(childComplexity int) int
+		Tags                func(childComplexity int) int
 		UpdatedAt           func(childComplexity int) int
+		UpdatedBy           func(childComplexity int) int
 		WorkflowObjectRefID func(childComplexity int) int
 	}
 
@@ -47546,6 +47552,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowProposal.CreatedAt(childComplexity), true
 
+	case "WorkflowProposal.createdBy":
+		if e.complexity.WorkflowProposal.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.CreatedBy(childComplexity), true
+
 	case "WorkflowProposal.domainKey":
 		if e.complexity.WorkflowProposal.DomainKey == nil {
 			break
@@ -47560,6 +47573,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowProposal.ID(childComplexity), true
 
+	case "WorkflowProposal.owner":
+		if e.complexity.WorkflowProposal.Owner == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.Owner(childComplexity), true
+
+	case "WorkflowProposal.ownerID":
+		if e.complexity.WorkflowProposal.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.OwnerID(childComplexity), true
+
 	case "WorkflowProposal.preview":
 		if e.complexity.WorkflowProposal.Preview == nil {
 			break
@@ -47573,6 +47600,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowProposal.ProposedHash(childComplexity), true
+
+	case "WorkflowProposal.revision":
+		if e.complexity.WorkflowProposal.Revision == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.Revision(childComplexity), true
 
 	case "WorkflowProposal.state":
 		if e.complexity.WorkflowProposal.State == nil {
@@ -47595,12 +47629,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowProposal.SubmittedByUserID(childComplexity), true
 
+	case "WorkflowProposal.tags":
+		if e.complexity.WorkflowProposal.Tags == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.Tags(childComplexity), true
+
 	case "WorkflowProposal.updatedAt":
 		if e.complexity.WorkflowProposal.UpdatedAt == nil {
 			break
 		}
 
 		return e.complexity.WorkflowProposal.UpdatedAt(childComplexity), true
+
+	case "WorkflowProposal.updatedBy":
+		if e.complexity.WorkflowProposal.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowProposal.UpdatedBy(childComplexity), true
 
 	case "WorkflowProposal.workflowObjectRefID":
 		if e.complexity.WorkflowProposal.WorkflowObjectRefID == nil {
@@ -130497,6 +130545,68 @@ input WorkflowObjectRefWhereInput {
   hasPlatform: Boolean
   hasPlatformWith: [PlatformWhereInput!]
 }
+type WorkflowProposal implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  WorkflowObjectRef record that identifies the target object for this proposal
+  """
+  workflowObjectRefID: ID!
+  """
+  Stable key representing the approval domain for this proposal
+  """
+  domainKey: String!
+  """
+  Current state of the proposal
+  """
+  state: WorkflowProposalWorkflowProposalState!
+  """
+  Monotonic revision counter; incremented on edits
+  """
+  revision: Int!
+  """
+  Staged field updates for this domain; applied only after approval
+  """
+  changes: Map
+  """
+  Hash of the current proposed changes for approval verification
+  """
+  proposedHash: String
+  """
+  Hash of the proposed changes that satisfied approvals (what was approved)
+  """
+  approvedHash: String
+  """
+  Timestamp when this proposal was submitted for approval
+  """
+  submittedAt: Time
+  """
+  User who submitted this proposal for approval
+  """
+  submittedByUserID: ID
+  owner: Organization
+}
+"""
+WorkflowProposalWorkflowProposalState is enum for the field state
+"""
+enum WorkflowProposalWorkflowProposalState @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowProposalState") {
+  DRAFT
+  SUBMITTED
+  APPLIED
+  REJECTED
+  SUPERSEDED
+}
 `, BuiltIn: false},
 	{Name: "../schema/entity.graphql", Input: `extend type Query {
     """
@@ -141081,61 +141191,6 @@ extend type Mutation {
 }
 
 """
-WorkflowProposal stores staged changes for a workflow approval domain.
-"""
-type WorkflowProposal @goModel(model: "github.com/theopenlane/core/internal/ent/generated.WorkflowProposal") {
-    """
-    ID of the workflow proposal
-    """
-    id: ID!
-    """
-    Stable key representing the approval domain for this proposal
-    """
-    domainKey: String!
-    """
-    Current state of the proposal
-    """
-    state: WorkflowProposalState!
-    """
-    Staged field updates for this domain
-    """
-    changes: Map
-    """
-    Hash of the current proposed changes for approval verification
-    """
-    proposedHash: String
-    """
-    Hash of the proposed changes that were approved
-    """
-    approvedHash: String
-    """
-    Timestamp when this proposal was submitted for approval
-    """
-    submittedAt: Time
-    """
-    User who submitted this proposal for approval
-    """
-    submittedByUserID: ID
-    """
-    WorkflowObjectRef record that identifies the target object for this proposal
-    """
-    workflowObjectRefID: ID!
-    """
-    Creation timestamp
-    """
-    createdAt: Time!
-    """
-    Last update timestamp
-    """
-    updatedAt: Time!
-    """
-    Precomputed proposal preview (diff + values) for approval workflows.
-    Only available to editors/owners of the target object.
-    """
-    preview: WorkflowProposalPreview
-}
-
-"""
 Input for updateWorkflowProposalChanges mutation
 """
 input UpdateWorkflowProposalChangesInput {
@@ -141177,6 +141232,14 @@ type WorkflowProposalWithdrawPayload {
     Withdrawn workflow proposal
     """
     workflowProposal: WorkflowProposal!
+}
+
+extend type WorkflowProposal {
+    """
+    Precomputed proposal preview (diff + values) for approval workflows.
+    Only available to editors/owners of the target object.
+    """
+    preview: WorkflowProposalPreview
 }
 `, BuiltIn: false},
 }

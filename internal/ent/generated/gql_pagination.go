@@ -106,6 +106,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -38698,6 +38699,320 @@ func (_m *WorkflowObjectRef) ToEdge(order *WorkflowObjectRefOrder) *WorkflowObje
 		order = DefaultWorkflowObjectRefOrder
 	}
 	return &WorkflowObjectRefEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// WorkflowProposalEdge is the edge representation of WorkflowProposal.
+type WorkflowProposalEdge struct {
+	Node   *WorkflowProposal `json:"node"`
+	Cursor Cursor            `json:"cursor"`
+}
+
+// WorkflowProposalConnection is the connection containing edges to WorkflowProposal.
+type WorkflowProposalConnection struct {
+	Edges      []*WorkflowProposalEdge `json:"edges"`
+	PageInfo   PageInfo                `json:"pageInfo"`
+	TotalCount int                     `json:"totalCount"`
+}
+
+func (c *WorkflowProposalConnection) build(nodes []*WorkflowProposal, pager *workflowproposalPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *WorkflowProposal
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *WorkflowProposal {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *WorkflowProposal {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*WorkflowProposalEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &WorkflowProposalEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// WorkflowProposalPaginateOption enables pagination customization.
+type WorkflowProposalPaginateOption func(*workflowproposalPager) error
+
+// WithWorkflowProposalOrder configures pagination ordering.
+func WithWorkflowProposalOrder(order *WorkflowProposalOrder) WorkflowProposalPaginateOption {
+	if order == nil {
+		order = DefaultWorkflowProposalOrder
+	}
+	o := *order
+	return func(pager *workflowproposalPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultWorkflowProposalOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithWorkflowProposalFilter configures pagination filter.
+func WithWorkflowProposalFilter(filter func(*WorkflowProposalQuery) (*WorkflowProposalQuery, error)) WorkflowProposalPaginateOption {
+	return func(pager *workflowproposalPager) error {
+		if filter == nil {
+			return errors.New("WorkflowProposalQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type workflowproposalPager struct {
+	reverse bool
+	order   *WorkflowProposalOrder
+	filter  func(*WorkflowProposalQuery) (*WorkflowProposalQuery, error)
+}
+
+func newWorkflowProposalPager(opts []WorkflowProposalPaginateOption, reverse bool) (*workflowproposalPager, error) {
+	pager := &workflowproposalPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultWorkflowProposalOrder
+	}
+	return pager, nil
+}
+
+func (p *workflowproposalPager) applyFilter(query *WorkflowProposalQuery) (*WorkflowProposalQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *workflowproposalPager) toCursor(_m *WorkflowProposal) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *workflowproposalPager) applyCursors(query *WorkflowProposalQuery, after, before *Cursor) (*WorkflowProposalQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultWorkflowProposalOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *workflowproposalPager) applyOrder(query *WorkflowProposalQuery) *WorkflowProposalQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultWorkflowProposalOrder.Field {
+		query = query.Order(DefaultWorkflowProposalOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *workflowproposalPager) orderExpr(query *WorkflowProposalQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultWorkflowProposalOrder.Field {
+			b.Comma().Ident(DefaultWorkflowProposalOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to WorkflowProposal.
+func (_m *WorkflowProposalQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...WorkflowProposalPaginateOption,
+) (*WorkflowProposalConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newWorkflowProposalPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &WorkflowProposalConnection{Edges: []*WorkflowProposalEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// WorkflowProposalOrderFieldCreatedAt orders WorkflowProposal by created_at.
+	WorkflowProposalOrderFieldCreatedAt = &WorkflowProposalOrderField{
+		Value: func(_m *WorkflowProposal) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: workflowproposal.FieldCreatedAt,
+		toTerm: workflowproposal.ByCreatedAt,
+		toCursor: func(_m *WorkflowProposal) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// WorkflowProposalOrderFieldUpdatedAt orders WorkflowProposal by updated_at.
+	WorkflowProposalOrderFieldUpdatedAt = &WorkflowProposalOrderField{
+		Value: func(_m *WorkflowProposal) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: workflowproposal.FieldUpdatedAt,
+		toTerm: workflowproposal.ByUpdatedAt,
+		toCursor: func(_m *WorkflowProposal) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f WorkflowProposalOrderField) String() string {
+	var str string
+	switch f.column {
+	case WorkflowProposalOrderFieldCreatedAt.column:
+		str = "created_at"
+	case WorkflowProposalOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f WorkflowProposalOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *WorkflowProposalOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("WorkflowProposalOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *WorkflowProposalOrderFieldCreatedAt
+	case "updated_at":
+		*f = *WorkflowProposalOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid WorkflowProposalOrderField", str)
+	}
+	return nil
+}
+
+// WorkflowProposalOrderField defines the ordering field of WorkflowProposal.
+type WorkflowProposalOrderField struct {
+	// Value extracts the ordering value from the given WorkflowProposal.
+	Value    func(*WorkflowProposal) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) workflowproposal.OrderOption
+	toCursor func(*WorkflowProposal) Cursor
+}
+
+// WorkflowProposalOrder defines the ordering of WorkflowProposal.
+type WorkflowProposalOrder struct {
+	Direction OrderDirection              `json:"direction"`
+	Field     *WorkflowProposalOrderField `json:"field"`
+}
+
+// DefaultWorkflowProposalOrder is the default ordering of WorkflowProposal.
+var DefaultWorkflowProposalOrder = &WorkflowProposalOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &WorkflowProposalOrderField{
+		Value: func(_m *WorkflowProposal) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: workflowproposal.FieldID,
+		toTerm: workflowproposal.ByID,
+		toCursor: func(_m *WorkflowProposal) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts WorkflowProposal into WorkflowProposalEdge.
+func (_m *WorkflowProposal) ToEdge(order *WorkflowProposalOrder) *WorkflowProposalEdge {
+	if order == nil {
+		order = DefaultWorkflowProposalOrder
+	}
+	return &WorkflowProposalEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
