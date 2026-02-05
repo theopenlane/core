@@ -6,7 +6,7 @@ services:
       - "16686:16686" #jaeger UI
   # Collector
   otel-collector:
-    image: "otel/opentelemetry-collector:0.144.0"
+    image: "otel/opentelemetry-collector:0.145.0"
     restart: always
     command: ["--config=/etc/otel-collector-config.yaml", "${OTELCOL_ARGS}"]
     volumes:
