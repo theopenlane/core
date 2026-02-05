@@ -65,6 +65,10 @@ const (
 	FieldIntegrationType = "integration_type"
 	// FieldProviderMetadata holds the string denoting the provider_metadata field in the database.
 	FieldProviderMetadata = "provider_metadata"
+	// FieldConfig holds the string denoting the config field in the database.
+	FieldConfig = "config"
+	// FieldProviderState holds the string denoting the provider_state field in the database.
+	FieldProviderState = "provider_state"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
 	// Table holds the table name of the integrationhistory in the database.
@@ -97,6 +101,8 @@ var Columns = []string{
 	FieldKind,
 	FieldIntegrationType,
 	FieldProviderMetadata,
+	FieldConfig,
+	FieldProviderState,
 	FieldMetadata,
 }
 

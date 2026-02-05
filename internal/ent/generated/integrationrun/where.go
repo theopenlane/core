@@ -113,6 +113,11 @@ func OperationName(v string) predicate.IntegrationRun {
 	return predicate.IntegrationRun(sql.FieldEQ(FieldOperationName, v))
 }
 
+// MappingVersion applies equality check predicate on the "mapping_version" field. It's identical to MappingVersionEQ.
+func MappingVersion(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldEQ(FieldMappingVersion, v))
+}
+
 // StartedAt applies equality check predicate on the "started_at" field. It's identical to StartedAtEQ.
 func StartedAt(v time.Time) predicate.IntegrationRun {
 	return predicate.IntegrationRun(sql.FieldEQ(FieldStartedAt, v))
@@ -831,6 +836,91 @@ func RunTypeIsNil() predicate.IntegrationRun {
 // RunTypeNotNil applies the NotNil predicate on the "run_type" field.
 func RunTypeNotNil() predicate.IntegrationRun {
 	return predicate.IntegrationRun(sql.FieldNotNull(FieldRunType))
+}
+
+// OperationConfigIsNil applies the IsNil predicate on the "operation_config" field.
+func OperationConfigIsNil() predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldIsNull(FieldOperationConfig))
+}
+
+// OperationConfigNotNil applies the NotNil predicate on the "operation_config" field.
+func OperationConfigNotNil() predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldNotNull(FieldOperationConfig))
+}
+
+// MappingVersionEQ applies the EQ predicate on the "mapping_version" field.
+func MappingVersionEQ(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldEQ(FieldMappingVersion, v))
+}
+
+// MappingVersionNEQ applies the NEQ predicate on the "mapping_version" field.
+func MappingVersionNEQ(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldNEQ(FieldMappingVersion, v))
+}
+
+// MappingVersionIn applies the In predicate on the "mapping_version" field.
+func MappingVersionIn(vs ...string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldIn(FieldMappingVersion, vs...))
+}
+
+// MappingVersionNotIn applies the NotIn predicate on the "mapping_version" field.
+func MappingVersionNotIn(vs ...string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldNotIn(FieldMappingVersion, vs...))
+}
+
+// MappingVersionGT applies the GT predicate on the "mapping_version" field.
+func MappingVersionGT(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldGT(FieldMappingVersion, v))
+}
+
+// MappingVersionGTE applies the GTE predicate on the "mapping_version" field.
+func MappingVersionGTE(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldGTE(FieldMappingVersion, v))
+}
+
+// MappingVersionLT applies the LT predicate on the "mapping_version" field.
+func MappingVersionLT(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldLT(FieldMappingVersion, v))
+}
+
+// MappingVersionLTE applies the LTE predicate on the "mapping_version" field.
+func MappingVersionLTE(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldLTE(FieldMappingVersion, v))
+}
+
+// MappingVersionContains applies the Contains predicate on the "mapping_version" field.
+func MappingVersionContains(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldContains(FieldMappingVersion, v))
+}
+
+// MappingVersionHasPrefix applies the HasPrefix predicate on the "mapping_version" field.
+func MappingVersionHasPrefix(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldHasPrefix(FieldMappingVersion, v))
+}
+
+// MappingVersionHasSuffix applies the HasSuffix predicate on the "mapping_version" field.
+func MappingVersionHasSuffix(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldHasSuffix(FieldMappingVersion, v))
+}
+
+// MappingVersionIsNil applies the IsNil predicate on the "mapping_version" field.
+func MappingVersionIsNil() predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldIsNull(FieldMappingVersion))
+}
+
+// MappingVersionNotNil applies the NotNil predicate on the "mapping_version" field.
+func MappingVersionNotNil() predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldNotNull(FieldMappingVersion))
+}
+
+// MappingVersionEqualFold applies the EqualFold predicate on the "mapping_version" field.
+func MappingVersionEqualFold(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldEqualFold(FieldMappingVersion, v))
+}
+
+// MappingVersionContainsFold applies the ContainsFold predicate on the "mapping_version" field.
+func MappingVersionContainsFold(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldContainsFold(FieldMappingVersion, v))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

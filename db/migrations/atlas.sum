@@ -1,4 +1,4 @@
-h1:7XWo52ZvXJbkCxYwLQZcjzGBjrXatca6eTy21cYfYQA=
+h1:5W/ENMqInBJOF2QlD33WjHO4ZEgvK57NIoPKwcNiqNg=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -42,3 +42,5 @@ h1:7XWo52ZvXJbkCxYwLQZcjzGBjrXatca6eTy21cYfYQA=
 20260203000846_emailbrandingintegrations_history.sql h1:K4LisPFRONXpHkVnA21DPy+nhu4uFZj6j8lkhFE0l/0=
 20260203212411_custom_domain_trust_center.sql h1:WOQFgfrM3od99D/4FzSnZW+mETm+PA8uK6tG5SaMyb4=
 20260203212415_custom_domain_trust_center_history.sql h1:1g54u0nU8OJMbT6a/BWPKTyaHj+/L7CdY5S9cMMI6i0=
+20260205173022_integrationsaddon.sql h1:edMg+rI5m+2Viz/WSB4NsuWAvmG2exZqx805m+cs5Iw=
+20260205173026_integrationsaddon_history.sql h1:EhSrCpnHmAvkyQ8w2LpjyQBLJNmq8PkVbVNjrKwM7G4=

@@ -71,6 +71,7 @@ const (
 	entGeneratedAuthzPath    = "internal/ent/authzgenerated"
 	entGeneratedWorkflowPath = "internal/ent/workflowgenerated"
 	csvGeneratedPath         = "internal/ent/csvgenerated"
+	integrationGeneratedPath = "internal/ent/integrationgenerated"
 
 	schemaInputChecksumFile  = "./internal/ent/checksum/.schema_checksum"
 	historyInputChecksumFile = "./internal/ent/checksum/.history_schema_checksum"
@@ -320,6 +321,10 @@ func schemaGenerate(extensions ...entc.Extension) {
 				genhooks.WithCSVPackageName("csvgenerated"),
 				genhooks.WithCSVEntPackage("github.com/theopenlane/core/"+entGeneratedPath),
 				genhooks.WithCSVGenerateAllWrappers(true)),
+			genhooks.GenIntegrationMappingSchema(
+				genhooks.WithIntegrationMappingOutputDir(integrationGeneratedPath),
+				genhooks.WithIntegrationMappingPackageName("integrationgenerated"),
+			),
 			accessMapExt.Hook(),
 			exportenums.New().Hook(),
 			workflowGenExt.Hook(),

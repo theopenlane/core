@@ -126,6 +126,20 @@ func (_u *IntegrationWebhookUpdate) ClearIntegrationID() *IntegrationWebhookUpda
 	return _u
 }
 
+// SetProvider sets the "provider" field.
+func (_u *IntegrationWebhookUpdate) SetProvider(v string) *IntegrationWebhookUpdate {
+	_u.mutation.SetProvider(v)
+	return _u
+}
+
+// SetNillableProvider sets the "provider" field if the given value is not nil.
+func (_u *IntegrationWebhookUpdate) SetNillableProvider(v *string) *IntegrationWebhookUpdate {
+	if v != nil {
+		_u.SetProvider(*v)
+	}
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *IntegrationWebhookUpdate) SetName(v string) *IntegrationWebhookUpdate {
 	_u.mutation.SetName(v)
@@ -350,6 +364,11 @@ func (_u *IntegrationWebhookUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *IntegrationWebhookUpdate) check() error {
+	if v, ok := _u.mutation.Provider(); ok {
+		if err := integrationwebhook.ProviderValidator(v); err != nil {
+			return &ValidationError{Name: "provider", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.provider": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Status(); ok {
 		if err := integrationwebhook.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.status": %w`, err)}
@@ -411,6 +430,9 @@ func (_u *IntegrationWebhookUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(integrationwebhook.FieldDeletedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.Provider(); ok {
+		_spec.SetField(integrationwebhook.FieldProvider, field.TypeString, value)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(integrationwebhook.FieldName, field.TypeString, value)
 	}
@@ -463,6 +485,9 @@ func (_u *IntegrationWebhookUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.LastDeliveryErrorCleared() {
 		_spec.ClearField(integrationwebhook.FieldLastDeliveryError, field.TypeString)
+	}
+	if _u.mutation.ExternalEventIDCleared() {
+		_spec.ClearField(integrationwebhook.FieldExternalEventID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Metadata(); ok {
 		_spec.SetField(integrationwebhook.FieldMetadata, field.TypeJSON, value)
@@ -614,6 +639,20 @@ func (_u *IntegrationWebhookUpdateOne) SetNillableIntegrationID(v *string) *Inte
 // ClearIntegrationID clears the value of the "integration_id" field.
 func (_u *IntegrationWebhookUpdateOne) ClearIntegrationID() *IntegrationWebhookUpdateOne {
 	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetProvider sets the "provider" field.
+func (_u *IntegrationWebhookUpdateOne) SetProvider(v string) *IntegrationWebhookUpdateOne {
+	_u.mutation.SetProvider(v)
+	return _u
+}
+
+// SetNillableProvider sets the "provider" field if the given value is not nil.
+func (_u *IntegrationWebhookUpdateOne) SetNillableProvider(v *string) *IntegrationWebhookUpdateOne {
+	if v != nil {
+		_u.SetProvider(*v)
+	}
 	return _u
 }
 
@@ -854,6 +893,11 @@ func (_u *IntegrationWebhookUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *IntegrationWebhookUpdateOne) check() error {
+	if v, ok := _u.mutation.Provider(); ok {
+		if err := integrationwebhook.ProviderValidator(v); err != nil {
+			return &ValidationError{Name: "provider", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.provider": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Status(); ok {
 		if err := integrationwebhook.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.status": %w`, err)}
@@ -932,6 +976,9 @@ func (_u *IntegrationWebhookUpdateOne) sqlSave(ctx context.Context) (_node *Inte
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(integrationwebhook.FieldDeletedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.Provider(); ok {
+		_spec.SetField(integrationwebhook.FieldProvider, field.TypeString, value)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(integrationwebhook.FieldName, field.TypeString, value)
 	}
@@ -984,6 +1031,9 @@ func (_u *IntegrationWebhookUpdateOne) sqlSave(ctx context.Context) (_node *Inte
 	}
 	if _u.mutation.LastDeliveryErrorCleared() {
 		_spec.ClearField(integrationwebhook.FieldLastDeliveryError, field.TypeString)
+	}
+	if _u.mutation.ExternalEventIDCleared() {
+		_spec.ClearField(integrationwebhook.FieldExternalEventID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Metadata(); ok {
 		_spec.SetField(integrationwebhook.FieldMetadata, field.TypeJSON, value)

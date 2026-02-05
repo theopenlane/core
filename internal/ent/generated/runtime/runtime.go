@@ -3524,7 +3524,7 @@ func init() {
 	// integrationrun.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	integrationrun.OwnerIDValidator = integrationrunDescOwnerID.Validators[0].(func(string) error)
 	// integrationrunDescStartedAt is the schema descriptor for started_at field.
-	integrationrunDescStartedAt := integrationrunFields[5].Descriptor()
+	integrationrunDescStartedAt := integrationrunFields[7].Descriptor()
 	// integrationrun.DefaultStartedAt holds the default value on creation for the started_at field.
 	integrationrun.DefaultStartedAt = integrationrunDescStartedAt.Default.(func() time.Time)
 	// integrationrunDescID is the schema descriptor for id field.
@@ -3579,12 +3579,16 @@ func init() {
 	integrationwebhookDescOwnerID := integrationwebhookMixinFields3[0].Descriptor()
 	// integrationwebhook.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	integrationwebhook.OwnerIDValidator = integrationwebhookDescOwnerID.Validators[0].(func(string) error)
+	// integrationwebhookDescProvider is the schema descriptor for provider field.
+	integrationwebhookDescProvider := integrationwebhookFields[1].Descriptor()
+	// integrationwebhook.ProviderValidator is a validator for the "provider" field. It is called by the builders before save.
+	integrationwebhook.ProviderValidator = integrationwebhookDescProvider.Validators[0].(func(string) error)
 	// integrationwebhookDescEndpointURL is the schema descriptor for endpoint_url field.
-	integrationwebhookDescEndpointURL := integrationwebhookFields[3].Descriptor()
+	integrationwebhookDescEndpointURL := integrationwebhookFields[4].Descriptor()
 	// integrationwebhook.EndpointURLValidator is a validator for the "endpoint_url" field. It is called by the builders before save.
 	integrationwebhook.EndpointURLValidator = integrationwebhookDescEndpointURL.Validators[0].(func(string) error)
 	// integrationwebhookDescSecretToken is the schema descriptor for secret_token field.
-	integrationwebhookDescSecretToken := integrationwebhookFields[4].Descriptor()
+	integrationwebhookDescSecretToken := integrationwebhookFields[5].Descriptor()
 	// integrationwebhook.DefaultSecretToken holds the default value on creation for the secret_token field.
 	integrationwebhook.DefaultSecretToken = integrationwebhookDescSecretToken.Default.(func() string)
 	// integrationwebhookDescID is the schema descriptor for id field.
