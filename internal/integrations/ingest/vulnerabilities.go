@@ -107,18 +107,18 @@ func IngestVulnerabilityAlerts(ctx context.Context, req VulnerabilityIngestReque
 			continue
 		}
 
-		vars := map[string]any{
-			"payload":            payloadMap,
-			"resource":           envelope.Resource,
-			"alert_type":         envelope.AlertType,
-			"provider":           string(req.Provider),
-			"operation":          string(req.Operation),
-			"org_id":             req.OrgID,
-			"integration_id":     req.IntegrationID,
-			"config":             req.OperationConfig,
-			"integration_config": integrationConfigMap,
-			"provider_state":     providerStateMap,
-		}
+		vars := MappingVars{
+			Payload:           payloadMap,
+			Resource:          envelope.Resource,
+			AlertType:         envelope.AlertType,
+			Provider:          req.Provider,
+			Operation:         req.Operation,
+			OrgID:             req.OrgID,
+			IntegrationID:     req.IntegrationID,
+			Config:            req.OperationConfig,
+			IntegrationConfig: integrationConfigMap,
+			ProviderState:     providerStateMap,
+		}.Map()
 
 		allowed, err := mapper.EvaluateFilter(ctx, spec.FilterExpr, vars)
 		if err != nil {
@@ -146,7 +146,7 @@ func IngestVulnerabilityAlerts(ctx context.Context, req VulnerabilityIngestReque
 		}
 
 		if !storeRaw {
-			delete(mapped, "rawPayload")
+			delete(mapped, integrationgenerated.IntegrationMappingVulnerabilityRawPayload)
 		}
 
 		input, err := decodeVulnerabilityInput(mapped)

@@ -1,10 +1,12 @@
 package ingest
 
 import (
+	"strconv"
 	"strings"
 
 	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 )
 
 const (
@@ -13,53 +15,192 @@ const (
 	githubAlertTypeSecretScanning = "secret_scanning"
 )
 
-const (
-	mapExprGitHubDependabot = `{
-  "externalID": "github:" + resource + ":dependabot:" + (payload.number != 0 ? string(payload.number) : (payload.security_advisory.ghsa_id != "" ? payload.security_advisory.ghsa_id : "unknown")),
-  "externalOwnerID": resource,
-  "source": "github",
-  "category": "dependabot",
-  "severity": payload.security_advisory.severity,
-  "status": payload.state,
-  "summary": payload.security_advisory.summary,
-  "description": payload.security_advisory.description,
-  "cveID": payload.security_advisory.cve_id,
-  "externalURI": payload.html_url,
-  "sourceUpdatedAt": payload.updated_at,
-  "discoveredAt": payload.created_at,
-  "open": payload.state == "open",
-  "rawPayload": payload
-}`
+type celMapEntry struct {
+	key  string
+	expr string
+}
 
-	mapExprGitHubCodeScanning = `{
-  "externalID": "github:" + resource + ":code_scanning:" + (payload.number != 0 ? string(payload.number) : (payload.id != 0 ? string(payload.id) : "unknown")),
-  "externalOwnerID": resource,
-  "source": "github",
-  "category": "code_scanning",
-  "severity": payload.rule.security_severity_level != "" ? payload.rule.security_severity_level : payload.rule.severity,
-  "status": payload.state,
-  "summary": payload.rule.description != "" ? payload.rule.description : payload.rule.name,
-  "externalURI": payload.html_url,
-  "sourceUpdatedAt": payload.updated_at,
-  "discoveredAt": payload.created_at,
-  "open": payload.state == "open",
-  "rawPayload": payload
-}`
+func celMapExpr(entries []celMapEntry) string {
+	if len(entries) == 0 {
+		return "{}"
+	}
 
-	mapExprGitHubSecretScanning = `{
-  "externalID": "github:" + resource + ":secret_scanning:" + (payload.number != 0 ? string(payload.number) : "unknown"),
-  "externalOwnerID": resource,
-  "source": "github",
-  "category": "secret_scanning",
-  "status": payload.state,
-  "summary": payload.secret_type_display_name != "" ? payload.secret_type_display_name : payload.secret_type,
-  "externalURI": payload.html_url,
-  "sourceUpdatedAt": payload.updated_at,
-  "discoveredAt": payload.created_at,
-  "open": payload.state == "open",
-  "rawPayload": payload
-}`
+	var b strings.Builder
+	b.WriteString("{\n")
+	for i, entry := range entries {
+		b.WriteString("  ")
+		b.WriteString(strconv.Quote(entry.key))
+		b.WriteString(": ")
+		b.WriteString(entry.expr)
+		if i < len(entries)-1 {
+			b.WriteString(",")
+		}
+		b.WriteString("\n")
+	}
+	b.WriteString("}")
+	return b.String()
+}
+
+var (
+	mapExprGitHubDependabot = celMapExpr([]celMapEntry{
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityExternalID,
+			expr: `"github:" + resource + ":dependabot:" + (payload.number != 0 ? string(payload.number) : (payload.security_advisory.ghsa_id != "" ? payload.security_advisory.ghsa_id : "unknown"))`,
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityExternalOwnerID,
+			expr: "resource",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilitySource,
+			expr: `"github"`,
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityCategory,
+			expr: `"dependabot"`,
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilitySeverity,
+			expr: "payload.security_advisory.severity",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityStatus,
+			expr: "payload.state",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilitySummary,
+			expr: "payload.security_advisory.summary",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityDescription,
+			expr: "payload.security_advisory.description",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityCveID,
+			expr: "payload.security_advisory.cve_id",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityExternalURI,
+			expr: "payload.html_url",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilitySourceUpdatedAt,
+			expr: "payload.updated_at",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityDiscoveredAt,
+			expr: "payload.created_at",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityOpen,
+			expr: `payload.state == "open"`,
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityRawPayload,
+			expr: "payload",
+		},
+	})
+
+	mapExprGitHubCodeScanning = celMapExpr([]celMapEntry{
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityExternalID,
+			expr: `"github:" + resource + ":code_scanning:" + (payload.number != 0 ? string(payload.number) : (payload.id != 0 ? string(payload.id) : "unknown"))`,
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityExternalOwnerID,
+			expr: "resource",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilitySource,
+			expr: `"github"`,
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityCategory,
+			expr: `"code_scanning"`,
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilitySeverity,
+			expr: `payload.rule.security_severity_level != "" ? payload.rule.security_severity_level : payload.rule.severity`,
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityStatus,
+			expr: "payload.state",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilitySummary,
+			expr: `payload.rule.description != "" ? payload.rule.description : payload.rule.name`,
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityExternalURI,
+			expr: "payload.html_url",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilitySourceUpdatedAt,
+			expr: "payload.updated_at",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityDiscoveredAt,
+			expr: "payload.created_at",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityOpen,
+			expr: `payload.state == "open"`,
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityRawPayload,
+			expr: "payload",
+		},
+	})
+
+	mapExprGitHubSecretScanning = celMapExpr([]celMapEntry{
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityExternalID,
+			expr: `"github:" + resource + ":secret_scanning:" + (payload.number != 0 ? string(payload.number) : "unknown")`,
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityExternalOwnerID,
+			expr: "resource",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilitySource,
+			expr: `"github"`,
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityCategory,
+			expr: `"secret_scanning"`,
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityStatus,
+			expr: "payload.state",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilitySummary,
+			expr: `payload.secret_type_display_name != "" ? payload.secret_type_display_name : payload.secret_type`,
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityExternalURI,
+			expr: "payload.html_url",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilitySourceUpdatedAt,
+			expr: "payload.updated_at",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityDiscoveredAt,
+			expr: "payload.created_at",
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityOpen,
+			expr: `payload.state == "open"`,
+		},
+		{
+			key:  integrationgenerated.IntegrationMappingVulnerabilityRawPayload,
+			expr: "payload",
+		},
+	})
 )
+
+var normalizedVulnerabilitySchema = normalizeMappingKey(mappingSchemaVulnerability)
 
 var githubVulnerabilityMappings = map[string]openapi.IntegrationMappingOverride{
 	githubAlertTypeDependabot: {
@@ -78,7 +219,7 @@ var githubVulnerabilityMappings = map[string]openapi.IntegrationMappingOverride{
 
 // defaultMappingSpec returns built-in mappings for supported providers
 func defaultMappingSpec(provider integrationtypes.ProviderType, schemaName string, variant string) (openapi.IntegrationMappingOverride, bool) {
-	if normalizeMappingKey(schemaName) != normalizeMappingKey(mappingSchemaVulnerability) {
+	if normalizeMappingKey(schemaName) != normalizedVulnerabilitySchema {
 		return openapi.IntegrationMappingOverride{}, false
 	}
 
@@ -92,7 +233,7 @@ func defaultMappingSpec(provider integrationtypes.ProviderType, schemaName strin
 
 // supportsDefaultMapping reports whether built-in mappings exist for a schema
 func supportsDefaultMapping(provider integrationtypes.ProviderType, schemaName string) bool {
-	if normalizeMappingKey(schemaName) != normalizeMappingKey(mappingSchemaVulnerability) {
+	if normalizeMappingKey(schemaName) != normalizedVulnerabilitySchema {
 		return false
 	}
 
