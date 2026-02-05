@@ -91946,6 +91946,10 @@ type WorkflowObjectTypeMetadata {
 	"""
 	eligibleFields: [WorkflowFieldMetadata!]!
 	"""
+	List of edges that can be tracked in workflows for this type
+	"""
+	eligibleEdges: [String!]!
+	"""
 	Available resolver keys for this object type
 	"""
 	resolverKeys: [String!]!

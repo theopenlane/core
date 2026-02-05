@@ -7009,6 +7009,7 @@ type ComplexityRoot struct {
 
 	WorkflowObjectTypeMetadata struct {
 		Description    func(childComplexity int) int
+		EligibleEdges  func(childComplexity int) int
 		EligibleFields func(childComplexity int) int
 		Label          func(childComplexity int) int
 		ResolverKeys   func(childComplexity int) int
@@ -47550,6 +47551,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowObjectTypeMetadata.Description(childComplexity), true
+
+	case "WorkflowObjectTypeMetadata.eligibleEdges":
+		if e.complexity.WorkflowObjectTypeMetadata.EligibleEdges == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectTypeMetadata.EligibleEdges(childComplexity), true
 
 	case "WorkflowObjectTypeMetadata.eligibleFields":
 		if e.complexity.WorkflowObjectTypeMetadata.EligibleFields == nil {
@@ -141024,6 +141032,10 @@ type WorkflowObjectTypeMetadata {
     List of fields that can be tracked in workflows for this type
     """
     eligibleFields: [WorkflowFieldMetadata!]!
+    """
+    List of edges that can be tracked in workflows for this type
+    """
+    eligibleEdges: [String!]!
     """
     Available resolver keys for this object type
     """
