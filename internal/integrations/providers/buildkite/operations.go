@@ -19,13 +19,7 @@ const (
 // buildkiteOperations returns the Buildkite operations supported by this provider.
 func buildkiteOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		{
-			Name:        buildkiteOperationHealth,
-			Kind:        types.OperationKindHealth,
-			Description: "Validate Buildkite token by calling the /v2/user endpoint.",
-			Client:      ClientBuildkiteAPI,
-			Run:         runBuildkiteHealthOperation,
-		},
+		helpers.HealthOperation(buildkiteOperationHealth, "Validate Buildkite token by calling the /v2/user endpoint.", ClientBuildkiteAPI, runBuildkiteHealthOperation),
 		{
 			Name:        buildkiteOperationOrgs,
 			Kind:        types.OperationKindCollectFindings,
@@ -88,7 +82,7 @@ func runBuildkiteOrganizationsOperation(ctx context.Context, input types.Operati
 		return helpers.OperationFailure("Buildkite organizations fetch failed", err), err
 	}
 
-	samples := make([]map[string]any, 0, minInt(maxSampleSize, len(orgs)))
+	samples := make([]map[string]any, 0, min(maxSampleSize, len(orgs)))
 	for _, org := range orgs {
 		if len(samples) >= cap(samples) {
 			break
@@ -122,12 +116,4 @@ func fetchBuildkiteResource(ctx context.Context, client *helpers.AuthenticatedCl
 	}
 
 	return nil
-}
-
-// minInt returns the minimum of two integers
-func minInt(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
 }

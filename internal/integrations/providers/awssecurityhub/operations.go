@@ -14,8 +14,7 @@ import (
 )
 
 const (
-	awsSecurityHubHealth      types.OperationName = "health.default"
-	awsSecurityHubCollectVuln types.OperationName = "vulnerabilities.collect"
+	awsSecurityHubHealth types.OperationName = "health.default"
 
 	awsSecurityHubAlertTypeFinding = "finding"
 	awsSecurityHubMaxPageSize      = 100
@@ -24,59 +23,27 @@ const (
 )
 
 type securityHubFindingsConfig struct {
-	PageSize        int
-	MaxFindings     int
-	Severity        string
-	RecordState     string
-	WorkflowStatus  string
-	IncludePayloads bool
+	PageSize        int                 `json:"page_size,omitempty" jsonschema:"description=Optional page size override (max 100)."`
+	MaxFindings     int                 `json:"max_findings,omitempty" jsonschema:"description=Optional cap on total findings returned."`
+	Severity        helpers.LowerString `json:"severity,omitempty" jsonschema:"description=Optional severity label filter (low, medium, high, critical)."`
+	RecordState     helpers.UpperString `json:"record_state,omitempty" jsonschema:"description=Optional record state filter (ACTIVE, ARCHIVED)."`
+	WorkflowStatus  helpers.UpperString `json:"workflow_status,omitempty" jsonschema:"description=Optional workflow status filter (NEW, NOTIFIED, RESOLVED, SUPPRESSED)."`
+	IncludePayloads bool                `json:"include_payloads,omitempty" jsonschema:"description=Return raw finding payloads in the response (defaults to false)."`
 }
+
+var securityHubFindingsSchema = helpers.SchemaFrom[securityHubFindingsConfig]()
 
 // awsSecurityHubOperations lists the AWS Security Hub operations supported by this provider
 func awsSecurityHubOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
+		helpers.HealthOperation(awsSecurityHubHealth, "Validate AWS Security Hub access by listing a finding.", ClientAWSSecurityHub, runAWSSecurityHubHealth),
 		{
-			Name:        awsSecurityHubHealth,
-			Kind:        types.OperationKindHealth,
-			Description: "Validate AWS Security Hub access by listing a finding.",
-			Client:      ClientAWSSecurityHub,
-			Run:         runAWSSecurityHubHealth,
-		},
-		{
-			Name:        awsSecurityHubCollectVuln,
-			Kind:        types.OperationKindCollectFindings,
-			Description: "Collect AWS Security Hub findings for vulnerability ingestion.",
-			Client:      ClientAWSSecurityHub,
-			Run:         runAWSSecurityHubFindings,
-			ConfigSchema: map[string]any{
-				"type": "object",
-				"properties": map[string]any{
-					"page_size": map[string]any{
-						"type":        "integer",
-						"description": "Optional page size override (max 100).",
-					},
-					"max_findings": map[string]any{
-						"type":        "integer",
-						"description": "Optional cap on total findings returned.",
-					},
-					"severity": map[string]any{
-						"type":        "string",
-						"description": "Optional severity label filter (low, medium, high, critical).",
-					},
-					"record_state": map[string]any{
-						"type":        "string",
-						"description": "Optional record state filter (ACTIVE, ARCHIVED).",
-					},
-					"workflow_status": map[string]any{
-						"type":        "string",
-						"description": "Optional workflow status filter (NEW, NOTIFIED, RESOLVED, SUPPRESSED).",
-					},
-					"include_payloads": map[string]any{
-						"type":        "boolean",
-						"description": "Return raw finding payloads in the response (defaults to false).",
-					},
-				},
-			},
+			Name:         types.OperationVulnerabilitiesCollect,
+			Kind:         types.OperationKindCollectFindings,
+			Description:  "Collect AWS Security Hub findings for vulnerability ingestion.",
+			Client:       ClientAWSSecurityHub,
+			Run:          runAWSSecurityHubFindings,
+			ConfigSchema: securityHubFindingsSchema,
 		},
 	}
 }
@@ -132,9 +99,9 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 	}
 
 	maxFindings := cfg.MaxFindings
-	severityFilter := strings.ToLower(strings.TrimSpace(cfg.Severity))
-	recordStateFilter := strings.ToUpper(strings.TrimSpace(cfg.RecordState))
-	workflowFilter := strings.ToUpper(strings.TrimSpace(cfg.WorkflowStatus))
+	severityFilter := string(cfg.Severity)
+	recordStateFilter := string(cfg.RecordState)
+	workflowFilter := string(cfg.WorkflowStatus)
 
 	var (
 		envelopes []types.AlertEnvelope
@@ -217,7 +184,7 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 			break
 		}
 
-		if resp.NextToken == nil || strings.TrimSpace(*resp.NextToken) == "" {
+		if resp.NextToken == nil || *resp.NextToken == "" {
 			break
 		}
 		nextToken = resp.NextToken

@@ -14,15 +14,7 @@ const (
 
 // vercelClientDescriptors returns the client descriptors published by Vercel.
 func vercelClientDescriptors() []types.ClientDescriptor {
-	return []types.ClientDescriptor{
-		{
-			Provider:     TypeVercel,
-			Name:         ClientVercelAPI,
-			Description:  "Vercel REST API client",
-			Build:        buildVercelClient,
-			ConfigSchema: map[string]any{"type": "object"},
-		},
-	}
+	return helpers.DefaultClientDescriptors(TypeVercel, ClientVercelAPI, "Vercel REST API client", buildVercelClient)
 }
 
 // buildVercelClient constructs an authenticated Vercel API client.

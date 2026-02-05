@@ -10,7 +10,6 @@ import (
 
 	cloudscc "cloud.google.com/go/securitycenter/apiv2"
 
-	"github.com/go-viper/mapstructure/v2"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/impersonate"
@@ -99,16 +98,18 @@ func newProvider(spec config.ProviderSpec) *Provider {
 		lifetime = defaultImpersonationLife
 	}
 
-	subjectTokenType := spec.GoogleWorkloadIdentity.SubjectTokenType
-	if strings.TrimSpace(subjectTokenType) == "" {
+	subjectTokenType := strings.TrimSpace(spec.GoogleWorkloadIdentity.SubjectTokenType)
+	if subjectTokenType == "" {
 		subjectTokenType = defaultSubjectTokenType
 	}
+	audience := strings.TrimSpace(spec.GoogleWorkloadIdentity.Audience)
+	targetServiceAcct := strings.TrimSpace(spec.GoogleWorkloadIdentity.TargetServiceAccount)
 
 	defaults := workloadDefaults{
 		scopes:            defaultScopes,
 		tokenLifetime:     clampLifetime(lifetime),
-		audience:          spec.GoogleWorkloadIdentity.Audience,
-		targetServiceAcct: spec.GoogleWorkloadIdentity.TargetServiceAccount,
+		audience:          audience,
+		targetServiceAcct: targetServiceAcct,
 		subjectTokenType:  subjectTokenType,
 	}
 
@@ -145,8 +146,8 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 		return types.CredentialPayload{}, err
 	}
 
-	if key := strings.TrimSpace(meta.ServiceAccountKey); key != "" {
-		if _, err := serviceAccountCredentials(ctx, key, meta.Scopes); err != nil {
+	if meta.ServiceAccountKey != "" {
+		if _, err := serviceAccountCredentials(ctx, string(meta.ServiceAccountKey), meta.Scopes); err != nil {
 			return types.CredentialPayload{}, err
 		}
 
@@ -167,7 +168,7 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 	if err != nil {
 		return types.CredentialPayload{}, err
 	}
-	meta.SubjectToken = subjectToken
+	meta.SubjectToken = helpers.TrimmedString(subjectToken)
 
 	accessToken, err := p.mintWorkloadToken(ctx, meta, subjectToken, tokenType)
 	if err != nil {
@@ -220,7 +221,7 @@ func (p *Provider) mintWorkloadToken(ctx context.Context, meta credentialMetadat
 	}
 
 	scope := strings.Join(meta.Scopes, " ")
-	if strings.TrimSpace(scope) == "" {
+	if scope == "" {
 		scope = defaultScope
 	}
 
@@ -230,7 +231,7 @@ func (p *Provider) mintWorkloadToken(ctx context.Context, meta credentialMetadat
 	}
 
 	req := &stsv1.GoogleIdentityStsV1ExchangeTokenRequest{
-		Audience:           meta.Audience,
+		Audience:           string(meta.Audience),
 		GrantType:          workloadGrantType,
 		RequestedTokenType: requestedTokenType,
 		Scope:              scope,
@@ -258,7 +259,7 @@ func (p *Provider) mintWorkloadToken(ctx context.Context, meta credentialMetadat
 
 	lifetime := clampLifetime(meta.tokenLifetime())
 	cfg := impersonate.CredentialsConfig{
-		TargetPrincipal: meta.ServiceAccountEmail,
+		TargetPrincipal: string(meta.ServiceAccountEmail),
 		Scopes:          meta.Scopes,
 		Lifetime:        lifetime,
 	}
@@ -290,7 +291,7 @@ func buildSecurityCenterClient(ctx context.Context, payload types.CredentialPayl
 
 	opts := append([]option.ClientOption{}, clientOpts...)
 	if meta.ProjectID != "" {
-		opts = append(opts, option.WithQuotaProject(meta.ProjectID))
+		opts = append(opts, option.WithQuotaProject(string(meta.ProjectID)))
 	}
 
 	client, err := cloudscc.NewClient(ctx, opts...)
@@ -305,11 +306,11 @@ func buildSecurityCenterClient(ctx context.Context, payload types.CredentialPayl
 func securityCenterClientOptions(ctx context.Context, meta credentialMetadata, token *oauth2.Token) ([]option.ClientOption, error) {
 	logger := logx.FromContext(ctx).With().
 		Str("provider", string(TypeGCPSCC)).
-		Str("projectId", meta.ProjectID).
+		Str("projectId", string(meta.ProjectID)).
 		Logger()
 
-	if strings.TrimSpace(meta.ServiceAccountKey) != "" {
-		creds, err := serviceAccountCredentials(ctx, meta.ServiceAccountKey, meta.Scopes)
+	if meta.ServiceAccountKey != "" {
+		creds, err := serviceAccountCredentials(ctx, string(meta.ServiceAccountKey), meta.Scopes)
 		if err != nil {
 			logger.Error().Err(err).Msg("gcpscc: failed to parse service account key for client")
 			return nil, err
@@ -360,19 +361,19 @@ func serviceAccountCredentials(ctx context.Context, rawKey string, scopes []stri
 
 // credentialMetadata captures the persisted SCC metadata supplied during activation.
 type credentialMetadata struct {
-	ProjectID                string   `mapstructure:"projectId"`
-	OrganizationID           string   `mapstructure:"organizationId"`
-	WorkloadIdentityProvider string   `mapstructure:"workloadIdentityProvider"`
-	Audience                 string   `mapstructure:"audience"`
-	ServiceAccountEmail      string   `mapstructure:"serviceAccountEmail"`
-	SourceID                 string   `mapstructure:"sourceId"`
-	Scopes                   []string `mapstructure:"scopes"`
-	TokenLifetime            string   `mapstructure:"tokenLifetime"`
-	AudienceHint             string   `mapstructure:"audienceHint"`
-	WorkloadPoolProject      string   `mapstructure:"workloadPoolProject"`
-	FindingFilter            string   `mapstructure:"findingFilter"`
-	SubjectToken             string   `mapstructure:"subjectToken"`
-	ServiceAccountKey        string   `mapstructure:"serviceAccountKey"`
+	ProjectID                helpers.TrimmedString `mapstructure:"projectId"`
+	OrganizationID           helpers.TrimmedString `mapstructure:"organizationId"`
+	WorkloadIdentityProvider helpers.TrimmedString `mapstructure:"workloadIdentityProvider"`
+	Audience                 helpers.TrimmedString `mapstructure:"audience"`
+	ServiceAccountEmail      helpers.TrimmedString `mapstructure:"serviceAccountEmail"`
+	SourceID                 helpers.TrimmedString `mapstructure:"sourceId"`
+	Scopes                   []string              `mapstructure:"scopes"`
+	TokenLifetime            helpers.TrimmedString `mapstructure:"tokenLifetime"`
+	AudienceHint             helpers.TrimmedString `mapstructure:"audienceHint"`
+	WorkloadPoolProject      helpers.TrimmedString `mapstructure:"workloadPoolProject"`
+	FindingFilter            helpers.TrimmedString `mapstructure:"findingFilter"`
+	SubjectToken             helpers.TrimmedString `mapstructure:"subjectToken"`
+	ServiceAccountKey        helpers.TrimmedString `mapstructure:"serviceAccountKey"`
 }
 
 // withDefaults applies provider defaults to missing metadata values
@@ -381,29 +382,29 @@ func (m credentialMetadata) withDefaults(defaults workloadDefaults) credentialMe
 	if len(result.Scopes) == 0 {
 		result.Scopes = append([]string(nil), defaults.scopes...)
 	}
-	if strings.TrimSpace(result.ServiceAccountEmail) == "" {
-		result.ServiceAccountEmail = defaults.targetServiceAcct
+	if result.ServiceAccountEmail == "" {
+		result.ServiceAccountEmail = helpers.TrimmedString(defaults.targetServiceAcct)
 	}
-	if strings.TrimSpace(result.Audience) == "" {
-		result.Audience = defaults.audience
+	if result.Audience == "" {
+		result.Audience = helpers.TrimmedString(defaults.audience)
 	}
 	return result
 }
 
 // validate ensures required metadata values are present
 func (m credentialMetadata) validate() error {
-	if strings.TrimSpace(m.ProjectID) == "" {
+	if m.ProjectID == "" {
 		return errProjectIDRequired
 	}
 
-	if strings.TrimSpace(m.ServiceAccountKey) != "" {
+	if m.ServiceAccountKey != "" {
 		return nil
 	}
 
 	switch {
-	case strings.TrimSpace(m.Audience) == "":
+	case m.Audience == "":
 		return errAudienceRequired
-	case strings.TrimSpace(m.ServiceAccountEmail) == "":
+	case m.ServiceAccountEmail == "":
 		return errServiceAccountRequired
 	}
 	return nil
@@ -429,13 +430,13 @@ func (m credentialMetadata) persist(existing map[string]any) map[string]any {
 	if len(m.Scopes) > 0 {
 		out["scopes"] = append([]string(nil), m.Scopes...)
 	}
-	if strings.TrimSpace(m.TokenLifetime) != "" {
-		out["tokenLifetime"] = m.TokenLifetime
+	if m.TokenLifetime != "" {
+		out["tokenLifetime"] = string(m.TokenLifetime)
 	}
 
 	// Persist subject token only when explicitly supplied to allow autonomous refresh.
-	if strings.TrimSpace(m.SubjectToken) != "" {
-		out["subjectToken"] = m.SubjectToken
+	if m.SubjectToken != "" {
+		out["subjectToken"] = string(m.SubjectToken)
 	}
 
 	return out
@@ -443,10 +444,10 @@ func (m credentialMetadata) persist(existing map[string]any) map[string]any {
 
 // tokenLifetime parses the configured token lifetime
 func (m credentialMetadata) tokenLifetime() time.Duration {
-	if strings.TrimSpace(m.TokenLifetime) == "" {
+	if m.TokenLifetime == "" {
 		return 0
 	}
-	dur, err := time.ParseDuration(m.TokenLifetime)
+	dur, err := time.ParseDuration(string(m.TokenLifetime))
 	if err != nil {
 		return 0
 	}
@@ -460,16 +461,7 @@ func metadataFromPayload(payload types.CredentialPayload) (credentialMetadata, e
 	}
 
 	var meta credentialMetadata
-	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
-		TagName:          "mapstructure",
-		Result:           &meta,
-		WeaklyTypedInput: true,
-	})
-	if err != nil {
-		return credentialMetadata{}, err
-	}
-
-	if err := decoder.Decode(payload.Data.ProviderData); err != nil {
+	if err := helpers.DecodeConfig(payload.Data.ProviderData, &meta); err != nil {
 		return credentialMetadata{}, fmt.Errorf("%w: %w", ErrMetadataDecode, err)
 	}
 
@@ -481,7 +473,7 @@ func resolveSubjectToken(subject types.CredentialSubject, meta credentialMetadat
 	if attr := strings.TrimSpace(subject.Attributes[subjectTokenAttr]); attr != "" {
 		token = attr
 	} else {
-		token = strings.TrimSpace(meta.SubjectToken)
+		token = string(meta.SubjectToken)
 	}
 
 	if token == "" {
@@ -499,12 +491,12 @@ func resolveSubjectToken(subject types.CredentialSubject, meta credentialMetadat
 
 // buildSTSOptions encodes STS options for workload pool billing
 func buildSTSOptions(meta credentialMetadata) (string, error) {
-	if strings.TrimSpace(meta.WorkloadPoolProject) == "" {
+	if meta.WorkloadPoolProject == "" {
 		return "", nil
 	}
 
 	payload := map[string]string{
-		"userProject": meta.WorkloadPoolProject,
+		"userProject": string(meta.WorkloadPoolProject),
 	}
 
 	encoded, err := json.Marshal(payload)
@@ -530,17 +522,17 @@ func clampLifetime(value time.Duration) time.Duration {
 }
 
 // setIfNotEmpty writes a key when the value is non-empty
-func setIfNotEmpty(target map[string]any, key, value string) {
-	if strings.TrimSpace(value) == "" {
+func setIfNotEmpty[T ~string](target map[string]any, key string, value T) {
+	if value == "" {
 		return
 	}
-	target[key] = value
+	target[key] = string(value)
 }
 
 // normalize cleans up metadata values for persistence
 func (m credentialMetadata) normalize() credentialMetadata {
 	normalized := m
-	normalized.ServiceAccountKey = helpers.NormalizeServiceAccountKey(normalized.ServiceAccountKey)
+	normalized.ServiceAccountKey = helpers.TrimmedString(helpers.NormalizeServiceAccountKey(string(normalized.ServiceAccountKey)))
 	normalized.Scopes = normalizeScopes(normalized.Scopes)
 	return normalized
 }

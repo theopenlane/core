@@ -9,6 +9,7 @@ func ClientAndOAuthToken(input types.OperationInput, provider types.ProviderType
 	if err != nil {
 		return client, "", err
 	}
+
 	return client, token, nil
 }
 
@@ -19,6 +20,7 @@ func ClientAndAPIToken(input types.OperationInput, provider types.ProviderType) 
 	if err != nil {
 		return client, "", err
 	}
+
 	return client, token, nil
 }
 
@@ -30,9 +32,21 @@ func OperationFailure(summary string, err error) types.OperationResult {
 			Summary: summary,
 		}
 	}
+
 	return types.OperationResult{
 		Status:  types.OperationStatusFailed,
 		Summary: summary,
 		Details: map[string]any{"error": err.Error()},
+	}
+}
+
+// HealthOperation builds a standard health check descriptor.
+func HealthOperation(name types.OperationName, description string, client types.ClientName, run types.OperationFunc) types.OperationDescriptor {
+	return types.OperationDescriptor{
+		Name:        name,
+		Kind:        types.OperationKindHealth,
+		Description: description,
+		Client:      client,
+		Run:         run,
 	}
 }

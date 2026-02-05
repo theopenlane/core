@@ -14,13 +14,7 @@ const (
 // cloudflareOperations handles cloudflare operations
 func cloudflareOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		{
-			Name:        cloudflareHealthOp,
-			Kind:        types.OperationKindHealth,
-			Description: "Verify Cloudflare API token via /user/tokens/verify.",
-			Client:      ClientCloudflareAPI,
-			Run:         runCloudflareHealth,
-		},
+		helpers.HealthOperation(cloudflareHealthOp, "Verify Cloudflare API token via /user/tokens/verify.", ClientCloudflareAPI, runCloudflareHealth),
 	}
 }
 

@@ -14,15 +14,7 @@ const (
 
 // cloudflareClientDescriptors returns the client descriptors published by Cloudflare.
 func cloudflareClientDescriptors() []types.ClientDescriptor {
-	return []types.ClientDescriptor{
-		{
-			Provider:     TypeCloudflare,
-			Name:         ClientCloudflareAPI,
-			Description:  "Cloudflare REST API client",
-			Build:        buildCloudflareClient,
-			ConfigSchema: map[string]any{"type": "object"},
-		},
-	}
+	return helpers.DefaultClientDescriptors(TypeCloudflare, ClientCloudflareAPI, "Cloudflare REST API client", buildCloudflareClient)
 }
 
 // buildCloudflareClient constructs an authenticated Cloudflare API client.

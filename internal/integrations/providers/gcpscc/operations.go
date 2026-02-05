@@ -37,10 +37,20 @@ type securityCenterFindingsConfig struct {
 	opsconfig.Pagination
 	opsconfig.PayloadOptions
 
-	Filter      string `mapstructure:"filter"`
-	SourceID    string `mapstructure:"sourceId"`
-	MaxFindings int    `mapstructure:"max_findings"`
+	Filter      helpers.TrimmedString `mapstructure:"filter"`
+	SourceID    helpers.TrimmedString `mapstructure:"sourceId"`
+	MaxFindings int                   `mapstructure:"max_findings"`
 }
+
+type securityCenterFindingsSchema struct {
+	SourceID        helpers.TrimmedString `json:"sourceId,omitempty" jsonschema:"description=Optional SCC source override (full resource name or bare source ID)."`
+	Filter          helpers.TrimmedString `json:"filter,omitempty" jsonschema:"description=Optional SCC findings filter overriding stored metadata."`
+	PageSize        int                   `json:"page_size,omitempty" jsonschema:"description=Optional page size override (max 1000)."`
+	MaxFindings     int                   `json:"max_findings,omitempty" jsonschema:"description=Optional cap on total findings returned."`
+	IncludePayloads bool                  `json:"include_payloads,omitempty" jsonschema:"description=Return raw finding payloads in the response (defaults to false)."`
+}
+
+var securityCenterFindingsConfigSchema = helpers.SchemaFrom[securityCenterFindingsSchema]()
 
 // Operations returns the provider operations published by GCP SCC.
 func (p *Provider) Operations() []types.OperationDescriptor {
@@ -54,37 +64,13 @@ func (p *Provider) Operations() []types.OperationDescriptor {
 			Run:         runSecurityCenterHealthOperation,
 		},
 		{
-			Provider:    TypeGCPSCC,
-			Name:        OperationCollectFindings,
-			Kind:        types.OperationKindCollectFindings,
-			Description: "Collect Security Command Center findings using the configured source/filter.",
-			Client:      ClientSecurityCenter,
-			ConfigSchema: map[string]any{
-				"type": "object",
-				"properties": map[string]any{
-					"sourceId": map[string]any{
-						"type":        "string",
-						"description": "Optional SCC source override (full resource name or bare source ID).",
-					},
-					"filter": map[string]any{
-						"type":        "string",
-						"description": "Optional SCC findings filter overriding stored metadata.",
-					},
-					"page_size": map[string]any{
-						"type":        "integer",
-						"description": "Optional page size override (max 1000).",
-					},
-					"max_findings": map[string]any{
-						"type":        "integer",
-						"description": "Optional cap on total findings returned.",
-					},
-					"include_payloads": map[string]any{
-						"type":        "boolean",
-						"description": "Return raw finding payloads in the response (defaults to false).",
-					},
-				},
-			},
-			Run: runSecurityCenterFindingsOperation,
+			Provider:     TypeGCPSCC,
+			Name:         OperationCollectFindings,
+			Kind:         types.OperationKindCollectFindings,
+			Description:  "Collect Security Command Center findings using the configured source/filter.",
+			Client:       ClientSecurityCenter,
+			ConfigSchema: securityCenterFindingsConfigSchema,
+			Run:          runSecurityCenterFindingsOperation,
 		},
 		{
 			Provider:    TypeGCPSCC,
@@ -167,9 +153,9 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 		return types.OperationResult{}, err
 	}
 
-	filter := strings.TrimSpace(config.Filter)
+	filter := string(config.Filter)
 	if filter == "" {
-		filter = strings.TrimSpace(meta.FindingFilter)
+		filter = string(meta.FindingFilter)
 	}
 
 	pageSize := config.EffectivePageSize(findingsPageSize)
@@ -347,12 +333,12 @@ func runSecurityCenterSettingsOperation(ctx context.Context, input types.Operati
 
 // resolveSecurityCenterParent chooses an org or project parent resource
 func resolveSecurityCenterParent(meta credentialMetadata) (string, error) {
-	if org := strings.TrimSpace(meta.OrganizationID); org != "" {
-		return fmt.Sprintf("organizations/%s", org), nil
+	if meta.OrganizationID != "" {
+		return fmt.Sprintf("organizations/%s", meta.OrganizationID), nil
 	}
 
-	if project := strings.TrimSpace(meta.ProjectID); project != "" {
-		return fmt.Sprintf("projects/%s", project), nil
+	if meta.ProjectID != "" {
+		return fmt.Sprintf("projects/%s", meta.ProjectID), nil
 	}
 
 	return "", errProjectIDRequired
@@ -360,12 +346,12 @@ func resolveSecurityCenterParent(meta credentialMetadata) (string, error) {
 
 // resolveSecurityCenterSource resolves the source name from config or metadata
 func resolveSecurityCenterSource(meta credentialMetadata, config securityCenterFindingsConfig) (string, error) {
-	if source := strings.TrimSpace(config.SourceID); source != "" {
-		return normalizeSourceName(source, meta)
+	if config.SourceID != "" {
+		return normalizeSourceName(string(config.SourceID), meta)
 	}
 
-	if source := strings.TrimSpace(meta.SourceID); source != "" {
-		return normalizeSourceName(source, meta)
+	if meta.SourceID != "" {
+		return normalizeSourceName(string(meta.SourceID), meta)
 	}
 
 	return "", errSourceIDRequired
@@ -373,7 +359,6 @@ func resolveSecurityCenterSource(meta credentialMetadata, config securityCenterF
 
 // normalizeSourceName expands a source short name to a full resource path
 func normalizeSourceName(source string, meta credentialMetadata) (string, error) {
-	source = strings.TrimSpace(source)
 	if strings.HasPrefix(source, "organizations/") || strings.HasPrefix(source, "projects/") {
 		return source, nil
 	}

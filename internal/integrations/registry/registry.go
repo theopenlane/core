@@ -7,6 +7,7 @@ import (
 
 	"github.com/samber/lo"
 
+	commonhelpers "github.com/theopenlane/core/common/helpers"
 	"github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/common/integrations/helpers"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -53,6 +54,7 @@ func NewRegistry(ctx context.Context) (*Registry, error) {
 		if err != nil {
 			return nil, fmt.Errorf("%w: %w", ErrProviderBuildFailed, err)
 		}
+
 		if provider == nil {
 			return nil, fmt.Errorf("%w: provider is nil", ErrProviderBuildFailed)
 		}
@@ -109,13 +111,11 @@ func (r *Registry) ProviderMetadata(provider types.ProviderType) (types.Provider
 
 // ProviderMetadataCatalog returns a copy of all provider metadata entries.
 func (r *Registry) ProviderMetadataCatalog() map[types.ProviderType]types.ProviderConfig {
-	out := make(map[types.ProviderType]types.ProviderConfig, len(r.configs))
-
-	for key, spec := range r.configs {
-		out[key] = spec.ToProviderConfig()
-	}
-
-	return out
+	return commonhelpers.FoldMap(r.configs, func(capacity int) map[types.ProviderType]types.ProviderConfig {
+		return make(map[types.ProviderType]types.ProviderConfig, capacity)
+	}, func(acc *map[types.ProviderType]types.ProviderConfig, key types.ProviderType, spec config.ProviderSpec) {
+		(*acc)[key] = spec.ToProviderConfig()
+	})
 }
 
 // ClientDescriptors returns the registered client descriptors for a provider.
@@ -133,16 +133,13 @@ func (r *Registry) ClientDescriptors(provider types.ProviderType) []types.Client
 
 // ClientDescriptorCatalog returns a copy of all provider client descriptors.
 func (r *Registry) ClientDescriptorCatalog() map[types.ProviderType][]types.ClientDescriptor {
-	out := make(map[types.ProviderType][]types.ClientDescriptor, len(r.clients))
-	for provider, descriptors := range r.clients {
+	return commonhelpers.FoldMap(r.clients, func(capacity int) map[types.ProviderType][]types.ClientDescriptor {
+		return make(map[types.ProviderType][]types.ClientDescriptor, capacity)
+	}, func(acc *map[types.ProviderType][]types.ClientDescriptor, provider types.ProviderType, descriptors []types.ClientDescriptor) {
 		copied := make([]types.ClientDescriptor, len(descriptors))
-
 		copy(copied, descriptors)
-
-		out[provider] = copied
-	}
-
-	return out
+		(*acc)[provider] = copied
+	})
 }
 
 // OperationDescriptors returns the registered operation descriptors for a provider.
@@ -160,15 +157,13 @@ func (r *Registry) OperationDescriptors(provider types.ProviderType) []types.Ope
 
 // OperationDescriptorCatalog returns a copy of all provider operation descriptors.
 func (r *Registry) OperationDescriptorCatalog() map[types.ProviderType][]types.OperationDescriptor {
-	out := make(map[types.ProviderType][]types.OperationDescriptor, len(r.operations))
-
-	for provider, descriptors := range r.operations {
+	return commonhelpers.FoldMap(r.operations, func(capacity int) map[types.ProviderType][]types.OperationDescriptor {
+		return make(map[types.ProviderType][]types.OperationDescriptor, capacity)
+	}, func(acc *map[types.ProviderType][]types.OperationDescriptor, provider types.ProviderType, descriptors []types.OperationDescriptor) {
 		copied := make([]types.OperationDescriptor, len(descriptors))
 		copy(copied, descriptors)
-		out[provider] = copied
-	}
-
-	return out
+		(*acc)[provider] = copied
+	})
 }
 
 // UpsertProvider adds or replaces a provider/spec after initialization (primarily for tests).

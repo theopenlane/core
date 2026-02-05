@@ -16,13 +16,7 @@ const (
 // azureOperations returns the Azure Entra ID operations supported by this provider.
 func azureOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		{
-			Name:        azureEntraHealthOp,
-			Kind:        types.OperationKindHealth,
-			Description: "Call Microsoft Graph /organization to verify tenant access.",
-			Client:      ClientAzureEntraAPI,
-			Run:         runAzureEntraHealth,
-		},
+		helpers.HealthOperation(azureEntraHealthOp, "Call Microsoft Graph /organization to verify tenant access.", ClientAzureEntraAPI, runAzureEntraHealth),
 		{
 			Name:        azureEntraTenantOp,
 			Kind:        types.OperationKindScanSettings,

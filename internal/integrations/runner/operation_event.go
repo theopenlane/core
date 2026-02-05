@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/integrations/opsconfig"
 	"github.com/theopenlane/core/common/integrations/types"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
@@ -16,8 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/events/soiree"
 )
-
-const vulnerabilityCollectOperation types.OperationName = "vulnerabilities.collect"
 
 // OperationEventContext provides dependencies for integration operation listeners
 type OperationEventContext struct {
@@ -75,8 +74,8 @@ func HandleIntegrationOperationRequested(ctx *soiree.EventContext, payload soire
 	}
 
 	operationConfig := maps.Clone(run.OperationConfig)
-	if operationName == vulnerabilityCollectOperation {
-		operationConfig = ensureIncludePayloads(operationConfig)
+	if operationName == types.OperationVulnerabilitiesCollect {
+		operationConfig = opsconfig.EnsureIncludePayloads(operationConfig)
 	}
 
 	result, opErr := deps.Operations.Run(systemCtx, types.OperationRequest{
@@ -101,7 +100,7 @@ func HandleIntegrationOperationRequested(ctx *soiree.EventContext, payload soire
 
 	metrics := buildOperationMetrics(result)
 
-	if runStatus == enums.IntegrationRunStatusSuccess && operationName == vulnerabilityCollectOperation {
+	if runStatus == enums.IntegrationRunStatusSuccess && operationName == types.OperationVulnerabilitiesCollect {
 		var ingestErr error
 		var ingestResult ingest.VulnerabilityIngestResult
 
@@ -154,15 +153,6 @@ func HandleIntegrationOperationRequested(ctx *soiree.EventContext, payload soire
 	}
 
 	return nil
-}
-
-// ensureIncludePayloads forces include_payloads to true
-func ensureIncludePayloads(config map[string]any) map[string]any {
-	if config == nil {
-		config = map[string]any{}
-	}
-	config["include_payloads"] = true
-	return config
 }
 
 // extractAlertEnvelopes pulls alert envelopes from operation details

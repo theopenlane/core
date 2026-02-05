@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/samber/lo"
+
 	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -51,34 +53,7 @@ func SupportsVulnerabilityIngest(provider integrationtypes.ProviderType, config 
 		return true
 	}
 
-	overrides := mappingOverrideLookup(config)
-	providerKey := normalizeMappingKey(string(provider))
-	schemaKey := normalizeMappingKey(mappingSchemaVulnerability)
-	providerPrefix := ""
-	if providerKey != "" {
-		providerPrefix = fmt.Sprintf("%s:%s:", providerKey, schemaKey)
-	}
-	schemaPrefix := ""
-	if schemaKey != "" {
-		schemaPrefix = fmt.Sprintf("%s:", schemaKey)
-	}
-
-	for key := range overrides {
-		if key == schemaKey {
-			return true
-		}
-		if providerKey != "" && key == fmt.Sprintf("%s:%s", providerKey, schemaKey) {
-			return true
-		}
-		if schemaPrefix != "" && strings.HasPrefix(key, schemaPrefix) {
-			return true
-		}
-		if providerPrefix != "" && strings.HasPrefix(key, providerPrefix) {
-			return true
-		}
-	}
-
-	return false
+	return newMappingOverrideIndex(config).HasAny(provider, mappingSchemaVulnerability)
 }
 
 // IngestVulnerabilityAlerts maps provider alerts into vulnerability inputs and persists them
@@ -108,6 +83,8 @@ func IngestVulnerabilityAlerts(ctx context.Context, req VulnerabilityIngestReque
 		return result, err
 	}
 
+	overrideIndex := newMappingOverrideIndex(req.IntegrationConfig)
+
 	storeRaw := true
 	if req.IntegrationConfig.RetentionPolicy != nil {
 		storeRaw = req.IntegrationConfig.RetentionPolicy.StoreRawPayload
@@ -123,7 +100,7 @@ func IngestVulnerabilityAlerts(ctx context.Context, req VulnerabilityIngestReque
 			continue
 		}
 
-		spec, ok := resolveMappingSpec(req.IntegrationConfig, req.Provider, mappingSchemaVulnerability, envelope.AlertType)
+		spec, ok := resolveMappingSpecWithIndex(overrideIndex, req.Provider, mappingSchemaVulnerability, envelope.AlertType)
 		if !ok {
 			result.Summary.Failed++
 			result.Errors = append(result.Errors, ErrMappingNotFound.Error())
@@ -183,8 +160,8 @@ func IngestVulnerabilityAlerts(ctx context.Context, req VulnerabilityIngestReque
 			owner := req.OrgID
 			input.OwnerID = &owner
 		}
-		if req.IntegrationID != "" {
-			input.IntegrationIDs = appendUnique(input.IntegrationIDs, req.IntegrationID)
+		if req.IntegrationID != "" && !lo.Contains(input.IntegrationIDs, req.IntegrationID) {
+			input.IntegrationIDs = append(input.IntegrationIDs, req.IntegrationID)
 		}
 
 		created, err := upsertVulnerability(ctx, req.DB, req.OrgID, req.IntegrationID, input)
@@ -231,29 +208,13 @@ func decodeVulnerabilityInput(data map[string]any) (generated.CreateVulnerabilit
 	return input, nil
 }
 
-// appendUnique adds a value to a slice only if it is not already present
-func appendUnique(values []string, value string) []string {
-	for _, existing := range values {
-		if existing == value {
-			return values
-		}
-	}
-
-	return append(values, value)
-}
-
 // upsertVulnerability inserts or updates a vulnerability based on external identifiers
 func upsertVulnerability(ctx context.Context, db *generated.Client, orgID string, integrationID string, input generated.CreateVulnerabilityInput) (bool, error) {
-	if db == nil {
-		return false, fmt.Errorf("db client required")
-	}
-	if orgID == "" {
-		return false, fmt.Errorf("org id required")
-	}
 	externalID := strings.TrimSpace(input.ExternalID)
 	if externalID == "" {
 		return false, fmt.Errorf("external id required")
 	}
+
 	input.ExternalID = externalID
 	if input.CveID != nil {
 		trimmed := strings.TrimSpace(*input.CveID)

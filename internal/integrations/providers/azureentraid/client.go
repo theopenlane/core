@@ -14,15 +14,7 @@ const (
 
 // azureEntraClientDescriptors returns the client descriptors published by Azure Entra ID.
 func azureEntraClientDescriptors() []types.ClientDescriptor {
-	return []types.ClientDescriptor{
-		{
-			Provider:     TypeAzureEntraID,
-			Name:         ClientAzureEntraAPI,
-			Description:  "Microsoft Graph API client",
-			Build:        buildAzureEntraClient,
-			ConfigSchema: map[string]any{"type": "object"},
-		},
-	}
+	return helpers.DefaultClientDescriptors(TypeAzureEntraID, ClientAzureEntraAPI, "Microsoft Graph API client", buildAzureEntraClient)
 }
 
 // buildAzureEntraClient constructs an authenticated Graph API client.

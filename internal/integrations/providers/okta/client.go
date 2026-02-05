@@ -14,15 +14,7 @@ const (
 
 // oktaClientDescriptors returns the client descriptors published by Okta.
 func oktaClientDescriptors() []types.ClientDescriptor {
-	return []types.ClientDescriptor{
-		{
-			Provider:     TypeOkta,
-			Name:         ClientOktaAPI,
-			Description:  "Okta REST API client",
-			Build:        buildOktaClient,
-			ConfigSchema: map[string]any{"type": "object"},
-		},
-	}
+	return helpers.DefaultClientDescriptors(TypeOkta, ClientOktaAPI, "Okta REST API client", buildOktaClient)
 }
 
 // buildOktaClient constructs an authenticated Okta API client.

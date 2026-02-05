@@ -11,6 +11,7 @@ tool (
 )
 
 replace github.com/theopenlane/core/common => ./common
+replace github.com/theopenlane/entx => /Users/manderson/entx
 
 require (
 	ariga.io/entcache v0.1.0

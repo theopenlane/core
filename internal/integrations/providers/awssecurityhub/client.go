@@ -3,6 +3,7 @@ package awssecurityhub
 import (
 	"context"
 
+	"github.com/theopenlane/core/common/integrations/helpers"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -13,15 +14,7 @@ const (
 
 // awsSecurityHubClientDescriptors returns the AWS Security Hub client descriptors for pooling.
 func awsSecurityHubClientDescriptors() []types.ClientDescriptor {
-	return []types.ClientDescriptor{
-		{
-			Provider:     TypeAWSSecurityHub,
-			Name:         ClientAWSSecurityHub,
-			Description:  "AWS Security Hub client",
-			Build:        buildAWSSecurityHubClient,
-			ConfigSchema: map[string]any{"type": "object"},
-		},
-	}
+	return helpers.DefaultClientDescriptors(TypeAWSSecurityHub, ClientAWSSecurityHub, "AWS Security Hub client", buildAWSSecurityHubClient)
 }
 
 // buildAWSSecurityHubClient builds the AWS Security Hub client for pooling.

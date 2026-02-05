@@ -14,15 +14,7 @@ const (
 
 // oidcClientDescriptors returns the client descriptors published by the generic OIDC provider.
 func oidcClientDescriptors() []types.ClientDescriptor {
-	return []types.ClientDescriptor{
-		{
-			Provider:     TypeOIDCGeneric,
-			Name:         ClientOIDCAPI,
-			Description:  "OIDC userinfo HTTP client",
-			Build:        buildOIDCClient,
-			ConfigSchema: map[string]any{"type": "object"},
-		},
-	}
+	return helpers.DefaultClientDescriptors(TypeOIDCGeneric, ClientOIDCAPI, "OIDC userinfo HTTP client", buildOIDCClient)
 }
 
 // buildOIDCClient constructs an authenticated OIDC client.

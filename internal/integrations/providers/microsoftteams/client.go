@@ -14,15 +14,7 @@ const (
 
 // teamsClientDescriptors returns the client descriptors published by Microsoft Teams.
 func teamsClientDescriptors() []types.ClientDescriptor {
-	return []types.ClientDescriptor{
-		{
-			Provider:     TypeMicrosoftTeams,
-			Name:         ClientMicrosoftTeamsAPI,
-			Description:  "Microsoft Graph API client",
-			Build:        buildMicrosoftTeamsClient,
-			ConfigSchema: map[string]any{"type": "object"},
-		},
-	}
+	return helpers.DefaultClientDescriptors(TypeMicrosoftTeams, ClientMicrosoftTeamsAPI, "Microsoft Graph API client", buildMicrosoftTeamsClient)
 }
 
 // buildMicrosoftTeamsClient constructs an authenticated Microsoft Graph client.

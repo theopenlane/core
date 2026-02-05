@@ -17,10 +17,31 @@ func StringFromAny(value any) string {
 	switch v := value.(type) {
 	case string:
 		return strings.TrimSpace(v)
+	case TrimmedString:
+		return string(v)
+	case LowerString:
+		return string(v)
+	case UpperString:
+		return string(v)
 	case []byte:
 		return strings.TrimSpace(string(v))
 	case json.Number:
 		return strings.TrimSpace(v.String())
+	case *TrimmedString:
+		if v == nil {
+			return ""
+		}
+		return string(*v)
+	case *LowerString:
+		if v == nil {
+			return ""
+		}
+		return string(*v)
+	case *UpperString:
+		if v == nil {
+			return ""
+		}
+		return string(*v)
 	case fmt.Stringer:
 		return strings.TrimSpace(v.String())
 	case *string:
@@ -86,6 +107,21 @@ func stringsFromAny(value any) []string {
 		return lo.FilterMap(v, func(item string, _ int) (string, bool) {
 			cleaned := strings.TrimSpace(item)
 			return cleaned, cleaned != ""
+		})
+	case []TrimmedString:
+		return lo.FilterMap(v, func(item TrimmedString, _ int) (string, bool) {
+			value := string(item)
+			return value, value != ""
+		})
+	case []LowerString:
+		return lo.FilterMap(v, func(item LowerString, _ int) (string, bool) {
+			value := string(item)
+			return value, value != ""
+		})
+	case []UpperString:
+		return lo.FilterMap(v, func(item UpperString, _ int) (string, bool) {
+			value := string(item)
+			return value, value != ""
 		})
 	case []any:
 		return lo.FilterMap(v, func(item any, _ int) (string, bool) {
