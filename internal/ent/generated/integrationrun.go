@@ -45,6 +45,10 @@ type IntegrationRun struct {
 	OperationKind enums.IntegrationOperationKind `json:"operation_kind,omitempty"`
 	// run type such as MANUAL, SCHEDULED, WEBHOOK, or EVENT
 	RunType enums.IntegrationRunType `json:"run_type,omitempty"`
+	// resolved operation configuration used for this run
+	OperationConfig map[string]interface{} `json:"operation_config,omitempty"`
+	// mapping version used to produce outputs
+	MappingVersion string `json:"mapping_version,omitempty"`
 	// status of the run
 	Status enums.IntegrationRunStatus `json:"status,omitempty"`
 	// when the run started
@@ -150,11 +154,11 @@ func (*IntegrationRun) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case integrationrun.FieldMetrics:
+		case integrationrun.FieldOperationConfig, integrationrun.FieldMetrics:
 			values[i] = new([]byte)
 		case integrationrun.FieldDurationMs:
 			values[i] = new(sql.NullInt64)
-		case integrationrun.FieldID, integrationrun.FieldCreatedBy, integrationrun.FieldUpdatedBy, integrationrun.FieldDeletedBy, integrationrun.FieldOwnerID, integrationrun.FieldIntegrationID, integrationrun.FieldOperationName, integrationrun.FieldOperationKind, integrationrun.FieldRunType, integrationrun.FieldStatus, integrationrun.FieldRequestFileID, integrationrun.FieldResponseFileID, integrationrun.FieldEventID, integrationrun.FieldSummary, integrationrun.FieldError:
+		case integrationrun.FieldID, integrationrun.FieldCreatedBy, integrationrun.FieldUpdatedBy, integrationrun.FieldDeletedBy, integrationrun.FieldOwnerID, integrationrun.FieldIntegrationID, integrationrun.FieldOperationName, integrationrun.FieldOperationKind, integrationrun.FieldRunType, integrationrun.FieldMappingVersion, integrationrun.FieldStatus, integrationrun.FieldRequestFileID, integrationrun.FieldResponseFileID, integrationrun.FieldEventID, integrationrun.FieldSummary, integrationrun.FieldError:
 			values[i] = new(sql.NullString)
 		case integrationrun.FieldCreatedAt, integrationrun.FieldUpdatedAt, integrationrun.FieldDeletedAt, integrationrun.FieldStartedAt, integrationrun.FieldFinishedAt:
 			values[i] = new(sql.NullTime)
@@ -244,6 +248,20 @@ func (_m *IntegrationRun) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field run_type", values[i])
 			} else if value.Valid {
 				_m.RunType = enums.IntegrationRunType(value.String)
+			}
+		case integrationrun.FieldOperationConfig:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field operation_config", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.OperationConfig); err != nil {
+					return fmt.Errorf("unmarshal field operation_config: %w", err)
+				}
+			}
+		case integrationrun.FieldMappingVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field mapping_version", values[i])
+			} else if value.Valid {
+				_m.MappingVersion = value.String
 			}
 		case integrationrun.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -401,6 +419,12 @@ func (_m *IntegrationRun) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("run_type=")
 	builder.WriteString(fmt.Sprintf("%v", _m.RunType))
+	builder.WriteString(", ")
+	builder.WriteString("operation_config=")
+	builder.WriteString(fmt.Sprintf("%v", _m.OperationConfig))
+	builder.WriteString(", ")
+	builder.WriteString("mapping_version=")
+	builder.WriteString(_m.MappingVersion)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

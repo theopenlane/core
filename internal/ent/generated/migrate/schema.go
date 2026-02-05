@@ -3575,6 +3575,8 @@ var (
 		{Name: "kind", Type: field.TypeString, Nullable: true},
 		{Name: "integration_type", Type: field.TypeString, Nullable: true},
 		{Name: "provider_metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "config", Type: field.TypeJSON, Nullable: true},
+		{Name: "provider_state", Type: field.TypeJSON, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "file_integrations", Type: field.TypeString, Nullable: true},
 		{Name: "group_integrations", Type: field.TypeString, Nullable: true},
@@ -3590,31 +3592,31 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "integrations_files_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[19]},
+				Columns:    []*schema.Column{IntegrationsColumns[21]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_groups_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[20]},
+				Columns:    []*schema.Column{IntegrationsColumns[22]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_custom_type_enums_environment",
-				Columns:    []*schema.Column{IntegrationsColumns[21]},
+				Columns:    []*schema.Column{IntegrationsColumns[23]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_custom_type_enums_scope",
-				Columns:    []*schema.Column{IntegrationsColumns[22]},
+				Columns:    []*schema.Column{IntegrationsColumns[24]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_organizations_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[23]},
+				Columns:    []*schema.Column{IntegrationsColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3623,7 +3625,7 @@ var (
 			{
 				Name:    "integration_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationsColumns[23]},
+				Columns: []*schema.Column{IntegrationsColumns[25]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3631,7 +3633,7 @@ var (
 			{
 				Name:    "integration_owner_id_kind",
 				Unique:  true,
-				Columns: []*schema.Column{IntegrationsColumns[23], IntegrationsColumns[15]},
+				Columns: []*schema.Column{IntegrationsColumns[25], IntegrationsColumns[15]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3650,6 +3652,8 @@ var (
 		{Name: "operation_name", Type: field.TypeString, Nullable: true},
 		{Name: "operation_kind", Type: field.TypeEnum, Nullable: true, Enums: []string{"SYNC", "PUSH", "PULL", "WEBHOOK", "SCHEDULED"}},
 		{Name: "run_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"MANUAL", "SCHEDULED", "WEBHOOK", "EVENT"}},
+		{Name: "operation_config", Type: field.TypeJSON, Nullable: true},
+		{Name: "mapping_version", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "RUNNING", "SUCCESS", "FAILED", "CANCELLED"}, Default: "PENDING"},
 		{Name: "started_at", Type: field.TypeTime},
 		{Name: "finished_at", Type: field.TypeTime, Nullable: true},
@@ -3671,31 +3675,31 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "integration_runs_integrations_integration_runs",
-				Columns:    []*schema.Column{IntegrationRunsColumns[17]},
+				Columns:    []*schema.Column{IntegrationRunsColumns[19]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integration_runs_files_request_file",
-				Columns:    []*schema.Column{IntegrationRunsColumns[18]},
+				Columns:    []*schema.Column{IntegrationRunsColumns[20]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integration_runs_files_response_file",
-				Columns:    []*schema.Column{IntegrationRunsColumns[19]},
+				Columns:    []*schema.Column{IntegrationRunsColumns[21]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integration_runs_events_event",
-				Columns:    []*schema.Column{IntegrationRunsColumns[20]},
+				Columns:    []*schema.Column{IntegrationRunsColumns[22]},
 				RefColumns: []*schema.Column{EventsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integration_runs_organizations_integration_runs",
-				Columns:    []*schema.Column{IntegrationRunsColumns[21]},
+				Columns:    []*schema.Column{IntegrationRunsColumns[23]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3704,7 +3708,7 @@ var (
 			{
 				Name:    "integrationrun_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationRunsColumns[21]},
+				Columns: []*schema.Column{IntegrationRunsColumns[23]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3712,7 +3716,7 @@ var (
 			{
 				Name:    "integrationrun_integration_id_started_at",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationRunsColumns[17], IntegrationRunsColumns[11]},
+				Columns: []*schema.Column{IntegrationRunsColumns[19], IntegrationRunsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3728,6 +3732,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "provider", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "FAILED", "PENDING"}, Default: "PENDING"},
 		{Name: "endpoint_url", Type: field.TypeString, Nullable: true},
@@ -3737,6 +3742,7 @@ var (
 		{Name: "last_delivery_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_delivery_status", Type: field.TypeString, Nullable: true},
 		{Name: "last_delivery_error", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "external_event_id", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -3749,13 +3755,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "integration_webhooks_integrations_integration_webhooks",
-				Columns:    []*schema.Column{IntegrationWebhooksColumns[17]},
+				Columns:    []*schema.Column{IntegrationWebhooksColumns[19]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integration_webhooks_organizations_integration_webhooks",
-				Columns:    []*schema.Column{IntegrationWebhooksColumns[18]},
+				Columns:    []*schema.Column{IntegrationWebhooksColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3764,9 +3770,17 @@ var (
 			{
 				Name:    "integrationwebhook_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationWebhooksColumns[18]},
+				Columns: []*schema.Column{IntegrationWebhooksColumns[20]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "integrationwebhook_owner_id_provider_external_event_id",
+				Unique:  true,
+				Columns: []*schema.Column{IntegrationWebhooksColumns[20], IntegrationWebhooksColumns[7], IntegrationWebhooksColumns[17]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL AND external_event_id IS NOT NULL",
 				},
 			},
 		},

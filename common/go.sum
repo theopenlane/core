@@ -165,7 +165,14 @@ github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
+<<<<<<< HEAD
 github.com/theopenlane/entx v0.22.3 h1:tKTCjFsT7knZ9V+FgXYvIHBE9KEPBRShjvJir/uKtQQ=
+||||||| 52946e84b
+github.com/theopenlane/entx v0.22.2 h1:Uy5rnIwdP17psxYWeUnxoPKO9BgWlgppelFh1TgGMUA=
+github.com/theopenlane/entx v0.22.2/go.mod h1:sgPQGmgyLK7bOPK7IteNs9AS53gk1GMlFneQTcROE5g=
+=======
+github.com/theopenlane/entx v0.22.4 h1:UjcYKLE3oSiAYq/LybjU6YE4HZWOKjA60kMNBUSYhiU=
+>>>>>>> origin/main
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
 github.com/theopenlane/utils v0.6.2 h1:7TgABVt0rb+Dhph3N7DEBAO3jcB/J+wgVv47F2Nry7c=

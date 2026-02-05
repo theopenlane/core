@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
@@ -359,6 +360,46 @@ func (_u *IntegrationHistoryUpdate) ClearProviderMetadata() *IntegrationHistoryU
 	return _u
 }
 
+// SetConfig sets the "config" field.
+func (_u *IntegrationHistoryUpdate) SetConfig(v openapi.IntegrationConfig) *IntegrationHistoryUpdate {
+	_u.mutation.SetConfig(v)
+	return _u
+}
+
+// SetNillableConfig sets the "config" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdate) SetNillableConfig(v *openapi.IntegrationConfig) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetConfig(*v)
+	}
+	return _u
+}
+
+// ClearConfig clears the value of the "config" field.
+func (_u *IntegrationHistoryUpdate) ClearConfig() *IntegrationHistoryUpdate {
+	_u.mutation.ClearConfig()
+	return _u
+}
+
+// SetProviderState sets the "provider_state" field.
+func (_u *IntegrationHistoryUpdate) SetProviderState(v state.IntegrationProviderState) *IntegrationHistoryUpdate {
+	_u.mutation.SetProviderState(v)
+	return _u
+}
+
+// SetNillableProviderState sets the "provider_state" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdate) SetNillableProviderState(v *state.IntegrationProviderState) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetProviderState(*v)
+	}
+	return _u
+}
+
+// ClearProviderState clears the value of the "provider_state" field.
+func (_u *IntegrationHistoryUpdate) ClearProviderState() *IntegrationHistoryUpdate {
+	_u.mutation.ClearProviderState()
+	return _u
+}
+
 // SetMetadata sets the "metadata" field.
 func (_u *IntegrationHistoryUpdate) SetMetadata(v map[string]interface{}) *IntegrationHistoryUpdate {
 	_u.mutation.SetMetadata(v)
@@ -548,6 +589,18 @@ func (_u *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.ProviderMetadataCleared() {
 		_spec.ClearField(integrationhistory.FieldProviderMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Config(); ok {
+		_spec.SetField(integrationhistory.FieldConfig, field.TypeJSON, value)
+	}
+	if _u.mutation.ConfigCleared() {
+		_spec.ClearField(integrationhistory.FieldConfig, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProviderState(); ok {
+		_spec.SetField(integrationhistory.FieldProviderState, field.TypeJSON, value)
+	}
+	if _u.mutation.ProviderStateCleared() {
+		_spec.ClearField(integrationhistory.FieldProviderState, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Metadata(); ok {
 		_spec.SetField(integrationhistory.FieldMetadata, field.TypeJSON, value)
@@ -903,6 +956,46 @@ func (_u *IntegrationHistoryUpdateOne) ClearProviderMetadata() *IntegrationHisto
 	return _u
 }
 
+// SetConfig sets the "config" field.
+func (_u *IntegrationHistoryUpdateOne) SetConfig(v openapi.IntegrationConfig) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetConfig(v)
+	return _u
+}
+
+// SetNillableConfig sets the "config" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdateOne) SetNillableConfig(v *openapi.IntegrationConfig) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetConfig(*v)
+	}
+	return _u
+}
+
+// ClearConfig clears the value of the "config" field.
+func (_u *IntegrationHistoryUpdateOne) ClearConfig() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearConfig()
+	return _u
+}
+
+// SetProviderState sets the "provider_state" field.
+func (_u *IntegrationHistoryUpdateOne) SetProviderState(v state.IntegrationProviderState) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetProviderState(v)
+	return _u
+}
+
+// SetNillableProviderState sets the "provider_state" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdateOne) SetNillableProviderState(v *state.IntegrationProviderState) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetProviderState(*v)
+	}
+	return _u
+}
+
+// ClearProviderState clears the value of the "provider_state" field.
+func (_u *IntegrationHistoryUpdateOne) ClearProviderState() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearProviderState()
+	return _u
+}
+
 // SetMetadata sets the "metadata" field.
 func (_u *IntegrationHistoryUpdateOne) SetMetadata(v map[string]interface{}) *IntegrationHistoryUpdateOne {
 	_u.mutation.SetMetadata(v)
@@ -1122,6 +1215,18 @@ func (_u *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Inte
 	}
 	if _u.mutation.ProviderMetadataCleared() {
 		_spec.ClearField(integrationhistory.FieldProviderMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Config(); ok {
+		_spec.SetField(integrationhistory.FieldConfig, field.TypeJSON, value)
+	}
+	if _u.mutation.ConfigCleared() {
+		_spec.ClearField(integrationhistory.FieldConfig, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProviderState(); ok {
+		_spec.SetField(integrationhistory.FieldProviderState, field.TypeJSON, value)
+	}
+	if _u.mutation.ProviderStateCleared() {
+		_spec.ClearField(integrationhistory.FieldProviderState, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Metadata(); ok {
 		_spec.SetField(integrationhistory.FieldMetadata, field.TypeJSON, value)

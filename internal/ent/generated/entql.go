@@ -1512,6 +1512,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integration.FieldKind:             {Type: field.TypeString, Column: integration.FieldKind},
 			integration.FieldIntegrationType:  {Type: field.TypeString, Column: integration.FieldIntegrationType},
 			integration.FieldProviderMetadata: {Type: field.TypeJSON, Column: integration.FieldProviderMetadata},
+			integration.FieldConfig:           {Type: field.TypeJSON, Column: integration.FieldConfig},
+			integration.FieldProviderState:    {Type: field.TypeJSON, Column: integration.FieldProviderState},
 			integration.FieldMetadata:         {Type: field.TypeJSON, Column: integration.FieldMetadata},
 		},
 	}
@@ -1526,27 +1528,29 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "IntegrationRun",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			integrationrun.FieldCreatedAt:      {Type: field.TypeTime, Column: integrationrun.FieldCreatedAt},
-			integrationrun.FieldUpdatedAt:      {Type: field.TypeTime, Column: integrationrun.FieldUpdatedAt},
-			integrationrun.FieldCreatedBy:      {Type: field.TypeString, Column: integrationrun.FieldCreatedBy},
-			integrationrun.FieldUpdatedBy:      {Type: field.TypeString, Column: integrationrun.FieldUpdatedBy},
-			integrationrun.FieldDeletedAt:      {Type: field.TypeTime, Column: integrationrun.FieldDeletedAt},
-			integrationrun.FieldDeletedBy:      {Type: field.TypeString, Column: integrationrun.FieldDeletedBy},
-			integrationrun.FieldOwnerID:        {Type: field.TypeString, Column: integrationrun.FieldOwnerID},
-			integrationrun.FieldIntegrationID:  {Type: field.TypeString, Column: integrationrun.FieldIntegrationID},
-			integrationrun.FieldOperationName:  {Type: field.TypeString, Column: integrationrun.FieldOperationName},
-			integrationrun.FieldOperationKind:  {Type: field.TypeEnum, Column: integrationrun.FieldOperationKind},
-			integrationrun.FieldRunType:        {Type: field.TypeEnum, Column: integrationrun.FieldRunType},
-			integrationrun.FieldStatus:         {Type: field.TypeEnum, Column: integrationrun.FieldStatus},
-			integrationrun.FieldStartedAt:      {Type: field.TypeTime, Column: integrationrun.FieldStartedAt},
-			integrationrun.FieldFinishedAt:     {Type: field.TypeTime, Column: integrationrun.FieldFinishedAt},
-			integrationrun.FieldDurationMs:     {Type: field.TypeInt, Column: integrationrun.FieldDurationMs},
-			integrationrun.FieldRequestFileID:  {Type: field.TypeString, Column: integrationrun.FieldRequestFileID},
-			integrationrun.FieldResponseFileID: {Type: field.TypeString, Column: integrationrun.FieldResponseFileID},
-			integrationrun.FieldEventID:        {Type: field.TypeString, Column: integrationrun.FieldEventID},
-			integrationrun.FieldSummary:        {Type: field.TypeString, Column: integrationrun.FieldSummary},
-			integrationrun.FieldError:          {Type: field.TypeString, Column: integrationrun.FieldError},
-			integrationrun.FieldMetrics:        {Type: field.TypeJSON, Column: integrationrun.FieldMetrics},
+			integrationrun.FieldCreatedAt:       {Type: field.TypeTime, Column: integrationrun.FieldCreatedAt},
+			integrationrun.FieldUpdatedAt:       {Type: field.TypeTime, Column: integrationrun.FieldUpdatedAt},
+			integrationrun.FieldCreatedBy:       {Type: field.TypeString, Column: integrationrun.FieldCreatedBy},
+			integrationrun.FieldUpdatedBy:       {Type: field.TypeString, Column: integrationrun.FieldUpdatedBy},
+			integrationrun.FieldDeletedAt:       {Type: field.TypeTime, Column: integrationrun.FieldDeletedAt},
+			integrationrun.FieldDeletedBy:       {Type: field.TypeString, Column: integrationrun.FieldDeletedBy},
+			integrationrun.FieldOwnerID:         {Type: field.TypeString, Column: integrationrun.FieldOwnerID},
+			integrationrun.FieldIntegrationID:   {Type: field.TypeString, Column: integrationrun.FieldIntegrationID},
+			integrationrun.FieldOperationName:   {Type: field.TypeString, Column: integrationrun.FieldOperationName},
+			integrationrun.FieldOperationKind:   {Type: field.TypeEnum, Column: integrationrun.FieldOperationKind},
+			integrationrun.FieldRunType:         {Type: field.TypeEnum, Column: integrationrun.FieldRunType},
+			integrationrun.FieldOperationConfig: {Type: field.TypeJSON, Column: integrationrun.FieldOperationConfig},
+			integrationrun.FieldMappingVersion:  {Type: field.TypeString, Column: integrationrun.FieldMappingVersion},
+			integrationrun.FieldStatus:          {Type: field.TypeEnum, Column: integrationrun.FieldStatus},
+			integrationrun.FieldStartedAt:       {Type: field.TypeTime, Column: integrationrun.FieldStartedAt},
+			integrationrun.FieldFinishedAt:      {Type: field.TypeTime, Column: integrationrun.FieldFinishedAt},
+			integrationrun.FieldDurationMs:      {Type: field.TypeInt, Column: integrationrun.FieldDurationMs},
+			integrationrun.FieldRequestFileID:   {Type: field.TypeString, Column: integrationrun.FieldRequestFileID},
+			integrationrun.FieldResponseFileID:  {Type: field.TypeString, Column: integrationrun.FieldResponseFileID},
+			integrationrun.FieldEventID:         {Type: field.TypeString, Column: integrationrun.FieldEventID},
+			integrationrun.FieldSummary:         {Type: field.TypeString, Column: integrationrun.FieldSummary},
+			integrationrun.FieldError:           {Type: field.TypeString, Column: integrationrun.FieldError},
+			integrationrun.FieldMetrics:         {Type: field.TypeJSON, Column: integrationrun.FieldMetrics},
 		},
 	}
 	graph.Nodes[40] = &sqlgraph.Node{
@@ -1568,6 +1572,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integrationwebhook.FieldDeletedBy:          {Type: field.TypeString, Column: integrationwebhook.FieldDeletedBy},
 			integrationwebhook.FieldOwnerID:            {Type: field.TypeString, Column: integrationwebhook.FieldOwnerID},
 			integrationwebhook.FieldIntegrationID:      {Type: field.TypeString, Column: integrationwebhook.FieldIntegrationID},
+			integrationwebhook.FieldProvider:           {Type: field.TypeString, Column: integrationwebhook.FieldProvider},
 			integrationwebhook.FieldName:               {Type: field.TypeString, Column: integrationwebhook.FieldName},
 			integrationwebhook.FieldStatus:             {Type: field.TypeEnum, Column: integrationwebhook.FieldStatus},
 			integrationwebhook.FieldEndpointURL:        {Type: field.TypeString, Column: integrationwebhook.FieldEndpointURL},
@@ -1577,6 +1582,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integrationwebhook.FieldLastDeliveryAt:     {Type: field.TypeTime, Column: integrationwebhook.FieldLastDeliveryAt},
 			integrationwebhook.FieldLastDeliveryStatus: {Type: field.TypeString, Column: integrationwebhook.FieldLastDeliveryStatus},
 			integrationwebhook.FieldLastDeliveryError:  {Type: field.TypeString, Column: integrationwebhook.FieldLastDeliveryError},
+			integrationwebhook.FieldExternalEventID:    {Type: field.TypeString, Column: integrationwebhook.FieldExternalEventID},
 			integrationwebhook.FieldMetadata:           {Type: field.TypeJSON, Column: integrationwebhook.FieldMetadata},
 		},
 	}
@@ -27726,6 +27732,16 @@ func (f *IntegrationFilter) WhereProviderMetadata(p entql.BytesP) {
 	f.Where(p.Field(integration.FieldProviderMetadata))
 }
 
+// WhereConfig applies the entql json.RawMessage predicate on the config field.
+func (f *IntegrationFilter) WhereConfig(p entql.BytesP) {
+	f.Where(p.Field(integration.FieldConfig))
+}
+
+// WhereProviderState applies the entql json.RawMessage predicate on the provider_state field.
+func (f *IntegrationFilter) WhereProviderState(p entql.BytesP) {
+	f.Where(p.Field(integration.FieldProviderState))
+}
+
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *IntegrationFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(integration.FieldMetadata))
@@ -28120,6 +28136,16 @@ func (f *IntegrationRunFilter) WhereRunType(p entql.StringP) {
 	f.Where(p.Field(integrationrun.FieldRunType))
 }
 
+// WhereOperationConfig applies the entql json.RawMessage predicate on the operation_config field.
+func (f *IntegrationRunFilter) WhereOperationConfig(p entql.BytesP) {
+	f.Where(p.Field(integrationrun.FieldOperationConfig))
+}
+
+// WhereMappingVersion applies the entql string predicate on the mapping_version field.
+func (f *IntegrationRunFilter) WhereMappingVersion(p entql.StringP) {
+	f.Where(p.Field(integrationrun.FieldMappingVersion))
+}
+
 // WhereStatus applies the entql string predicate on the status field.
 func (f *IntegrationRunFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(integrationrun.FieldStatus))
@@ -28320,6 +28346,11 @@ func (f *IntegrationWebhookFilter) WhereIntegrationID(p entql.StringP) {
 	f.Where(p.Field(integrationwebhook.FieldIntegrationID))
 }
 
+// WhereProvider applies the entql string predicate on the provider field.
+func (f *IntegrationWebhookFilter) WhereProvider(p entql.StringP) {
+	f.Where(p.Field(integrationwebhook.FieldProvider))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *IntegrationWebhookFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(integrationwebhook.FieldName))
@@ -28363,6 +28394,11 @@ func (f *IntegrationWebhookFilter) WhereLastDeliveryStatus(p entql.StringP) {
 // WhereLastDeliveryError applies the entql string predicate on the last_delivery_error field.
 func (f *IntegrationWebhookFilter) WhereLastDeliveryError(p entql.StringP) {
 	f.Where(p.Field(integrationwebhook.FieldLastDeliveryError))
+}
+
+// WhereExternalEventID applies the entql string predicate on the external_event_id field.
+func (f *IntegrationWebhookFilter) WhereExternalEventID(p entql.StringP) {
+	f.Where(p.Field(integrationwebhook.FieldExternalEventID))
 }
 
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.

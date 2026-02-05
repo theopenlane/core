@@ -73,6 +73,15 @@ func (IntegrationRun) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("RUN_TYPE"),
 			),
+		field.JSON("operation_config", map[string]any{}).
+			Comment("resolved operation configuration used for this run").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+			),
+		field.String("mapping_version").
+			Comment("mapping version used to produce outputs").
+			Optional(),
 		field.Enum("status").
 			Comment("status of the run").
 			GoType(enums.IntegrationRunStatus("")).

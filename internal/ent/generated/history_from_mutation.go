@@ -11139,6 +11139,14 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetProviderMetadata(providerMetadata)
 	}
 
+	if config, exists := m.Config(); exists {
+		create = create.SetConfig(config)
+	}
+
+	if providerState, exists := m.ProviderState(); exists {
+		create = create.SetProviderState(providerState)
+	}
+
 	if metadata, exists := m.Metadata(); exists {
 		create = create.SetMetadata(metadata)
 	}
@@ -11294,6 +11302,18 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetProviderMetadata(integration.ProviderMetadata)
 		}
 
+		if config, exists := m.Config(); exists {
+			create = create.SetConfig(config)
+		} else {
+			create = create.SetConfig(integration.Config)
+		}
+
+		if providerState, exists := m.ProviderState(); exists {
+			create = create.SetProviderState(providerState)
+		} else {
+			create = create.SetProviderState(integration.ProviderState)
+		}
+
 		if metadata, exists := m.Metadata(); exists {
 			create = create.SetMetadata(metadata)
 		} else {
@@ -11355,6 +11375,8 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetKind(integration.Kind).
 			SetIntegrationType(integration.IntegrationType).
 			SetProviderMetadata(integration.ProviderMetadata).
+			SetConfig(integration.Config).
+			SetProviderState(integration.ProviderState).
 			SetMetadata(integration.Metadata).
 			Save(ctx)
 		if err != nil {

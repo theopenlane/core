@@ -37,6 +37,8 @@ type IntegrationWebhook struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// integration connection this webhook belongs to
 	IntegrationID string `json:"integration_id,omitempty"`
+	// provider identifier for webhook source
+	Provider string `json:"provider,omitempty"`
 	// display name for the webhook endpoint
 	Name string `json:"name,omitempty"`
 	// status of the webhook endpoint
@@ -55,6 +57,8 @@ type IntegrationWebhook struct {
 	LastDeliveryStatus string `json:"last_delivery_status,omitempty"`
 	// error details from the last delivery attempt
 	LastDeliveryError string `json:"last_delivery_error,omitempty"`
+	// upstream event identifier for idempotency
+	ExternalEventID *string `json:"external_event_id,omitempty"`
 	// additional webhook metadata
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -105,7 +109,7 @@ func (*IntegrationWebhook) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case integrationwebhook.FieldAllowedEvents, integrationwebhook.FieldMetadata:
 			values[i] = new([]byte)
-		case integrationwebhook.FieldID, integrationwebhook.FieldCreatedBy, integrationwebhook.FieldUpdatedBy, integrationwebhook.FieldDeletedBy, integrationwebhook.FieldOwnerID, integrationwebhook.FieldIntegrationID, integrationwebhook.FieldName, integrationwebhook.FieldStatus, integrationwebhook.FieldEndpointURL, integrationwebhook.FieldSecretToken, integrationwebhook.FieldLastDeliveryID, integrationwebhook.FieldLastDeliveryStatus, integrationwebhook.FieldLastDeliveryError:
+		case integrationwebhook.FieldID, integrationwebhook.FieldCreatedBy, integrationwebhook.FieldUpdatedBy, integrationwebhook.FieldDeletedBy, integrationwebhook.FieldOwnerID, integrationwebhook.FieldIntegrationID, integrationwebhook.FieldProvider, integrationwebhook.FieldName, integrationwebhook.FieldStatus, integrationwebhook.FieldEndpointURL, integrationwebhook.FieldSecretToken, integrationwebhook.FieldLastDeliveryID, integrationwebhook.FieldLastDeliveryStatus, integrationwebhook.FieldLastDeliveryError, integrationwebhook.FieldExternalEventID:
 			values[i] = new(sql.NullString)
 		case integrationwebhook.FieldCreatedAt, integrationwebhook.FieldUpdatedAt, integrationwebhook.FieldDeletedAt, integrationwebhook.FieldLastDeliveryAt:
 			values[i] = new(sql.NullTime)
@@ -178,6 +182,12 @@ func (_m *IntegrationWebhook) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.IntegrationID = value.String
 			}
+		case integrationwebhook.FieldProvider:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field provider", values[i])
+			} else if value.Valid {
+				_m.Provider = value.String
+			}
 		case integrationwebhook.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -235,6 +245,13 @@ func (_m *IntegrationWebhook) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field last_delivery_error", values[i])
 			} else if value.Valid {
 				_m.LastDeliveryError = value.String
+			}
+		case integrationwebhook.FieldExternalEventID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_event_id", values[i])
+			} else if value.Valid {
+				_m.ExternalEventID = new(string)
+				*_m.ExternalEventID = value.String
 			}
 		case integrationwebhook.FieldMetadata:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -314,6 +331,9 @@ func (_m *IntegrationWebhook) String() string {
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)
 	builder.WriteString(", ")
+	builder.WriteString("provider=")
+	builder.WriteString(_m.Provider)
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
@@ -343,6 +363,11 @@ func (_m *IntegrationWebhook) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("last_delivery_error=")
 	builder.WriteString(_m.LastDeliveryError)
+	builder.WriteString(", ")
+	if v := _m.ExternalEventID; v != nil {
+		builder.WriteString("external_event_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))

@@ -34,6 +34,8 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldIntegrationID holds the string denoting the integration_id field in the database.
 	FieldIntegrationID = "integration_id"
+	// FieldProvider holds the string denoting the provider field in the database.
+	FieldProvider = "provider"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldStatus holds the string denoting the status field in the database.
@@ -52,6 +54,8 @@ const (
 	FieldLastDeliveryStatus = "last_delivery_status"
 	// FieldLastDeliveryError holds the string denoting the last_delivery_error field in the database.
 	FieldLastDeliveryError = "last_delivery_error"
+	// FieldExternalEventID holds the string denoting the external_event_id field in the database.
+	FieldExternalEventID = "external_event_id"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
@@ -87,6 +91,7 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldOwnerID,
 	FieldIntegrationID,
+	FieldProvider,
 	FieldName,
 	FieldStatus,
 	FieldEndpointURL,
@@ -96,6 +101,7 @@ var Columns = []string{
 	FieldLastDeliveryAt,
 	FieldLastDeliveryStatus,
 	FieldLastDeliveryError,
+	FieldExternalEventID,
 	FieldMetadata,
 }
 
@@ -126,6 +132,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
+	// ProviderValidator is a validator for the "provider" field. It is called by the builders before save.
+	ProviderValidator func(string) error
 	// EndpointURLValidator is a validator for the "endpoint_url" field. It is called by the builders before save.
 	EndpointURLValidator func(string) error
 	// DefaultSecretToken holds the default value on creation for the "secret_token" field.
@@ -194,6 +202,11 @@ func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationID, opts...).ToFunc()
 }
 
+// ByProvider orders the results by the provider field.
+func ByProvider(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProvider, opts...).ToFunc()
+}
+
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
@@ -232,6 +245,11 @@ func ByLastDeliveryStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByLastDeliveryError orders the results by the last_delivery_error field.
 func ByLastDeliveryError(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastDeliveryError, opts...).ToFunc()
+}
+
+// ByExternalEventID orders the results by the external_event_id field.
+func ByExternalEventID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalEventID, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

@@ -18,6 +18,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/integrations/config"
+	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/storagetypes"
@@ -2451,6 +2452,62 @@ type IntegrationProviderMetadata struct {
 	Labels                 map[string]string                  `json:"labels,omitempty"`
 	Operations             []IntegrationOperationMetadata     `json:"operations,omitempty"`
 }
+
+// IntegrationOperationTemplate captures persisted configuration for an operation.
+type IntegrationOperationTemplate struct {
+	// Config holds the IntegrationOperationTemplate configuration
+	Config map[string]any `json:"config,omitempty"`
+	// AllowOverrides lists which config fields can be overridden at runtime
+	AllowOverrides []string `json:"allowOverrides,omitempty"`
+}
+
+// IntegrationMappingOverride customizes how provider payloads map into system types.
+type IntegrationMappingOverride struct {
+	// Version is the version of the IntegrationMappingOverride
+	Version string `json:"version,omitempty"`
+	// FilterExpr is the filter expression for the IntegrationMappingOverride
+	FilterExpr string `json:"filterExpr,omitempty"`
+	// MapExpr is the mapping expression for the IntegrationMappingOverride
+	MapExpr string `json:"mapExpr,omitempty"`
+}
+
+// IntegrationRetentionPolicy defines storage settings for integration payloads.
+type IntegrationRetentionPolicy struct {
+	// StoreRawPayload indicates whether to store the raw payload
+	StoreRawPayload bool `json:"storeRawPayload,omitempty"`
+	// PayloadTTL defines the payload TTL
+	PayloadTTL time.Duration `json:"payloadTtl,omitempty"`
+}
+
+// IntegrationConfig stores runtime configuration for an integration instance.
+type IntegrationConfig struct {
+	// OperationsTemplates holds saved operation templates for the IntegrationConfig
+	OperationTemplates map[string]IntegrationOperationTemplate `json:"operationTemplates,omitempty"`
+	// EnabledOperations lists which operations are enabled
+	EnabledOperations []string `json:"enabledOperations,omitempty"`
+	// ClientConfig holds provider-specific client configuration
+	ClientConfig map[string]any `json:"clientConfig,omitempty"`
+	// CollectionStrategy defines how data is collected from the provider
+	CollectionStrategy string `json:"collectionStrategy,omitempty"`
+	// Schedule defines the integration schedule
+	Schedule string `json:"schedule,omitempty"`
+	// PollInterval defines how often to poll the provider for new data
+	PollInterval time.Duration `json:"pollInterval,omitempty"`
+	// MappingOverrides holds the mapping overrides
+	MappingOverrides map[string]IntegrationMappingOverride `json:"mappingOverrides,omitempty"`
+	// RetentionPolicy definesw the data retention policy
+	RetentionPolicy *IntegrationRetentionPolicy `json:"retentionPolicy,omitempty"`
+}
+
+// IntegrationProviderState stores provider-specific integration state captured during auth/config.
+// This is separate from provider metadata (catalog) and per-run configuration.
+type IntegrationProviderState = state.IntegrationProviderState
+
+// IntegrationGitHubState captures GitHub App installation details for an integration.
+type IntegrationGitHubState = state.GitHubState
+
+// IntegrationSlackState captures Slack workspace details for an integration.
+type IntegrationSlackState = state.SlackState
 
 // ExampleIntegrationConfigPayload demonstrates a full integration configuration request.
 var ExampleIntegrationConfigPayload = IntegrationConfigPayload{

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
@@ -301,6 +302,34 @@ func (_c *IntegrationCreate) SetProviderMetadata(v openapi.IntegrationProviderMe
 func (_c *IntegrationCreate) SetNillableProviderMetadata(v *openapi.IntegrationProviderMetadata) *IntegrationCreate {
 	if v != nil {
 		_c.SetProviderMetadata(*v)
+	}
+	return _c
+}
+
+// SetConfig sets the "config" field.
+func (_c *IntegrationCreate) SetConfig(v openapi.IntegrationConfig) *IntegrationCreate {
+	_c.mutation.SetConfig(v)
+	return _c
+}
+
+// SetNillableConfig sets the "config" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableConfig(v *openapi.IntegrationConfig) *IntegrationCreate {
+	if v != nil {
+		_c.SetConfig(*v)
+	}
+	return _c
+}
+
+// SetProviderState sets the "provider_state" field.
+func (_c *IntegrationCreate) SetProviderState(v state.IntegrationProviderState) *IntegrationCreate {
+	_c.mutation.SetProviderState(v)
+	return _c
+}
+
+// SetNillableProviderState sets the "provider_state" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableProviderState(v *state.IntegrationProviderState) *IntegrationCreate {
+	if v != nil {
+		_c.SetProviderState(*v)
 	}
 	return _c
 }
@@ -792,6 +821,14 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ProviderMetadata(); ok {
 		_spec.SetField(integration.FieldProviderMetadata, field.TypeJSON, value)
 		_node.ProviderMetadata = value
+	}
+	if value, ok := _c.mutation.Config(); ok {
+		_spec.SetField(integration.FieldConfig, field.TypeJSON, value)
+		_node.Config = value
+	}
+	if value, ok := _c.mutation.ProviderState(); ok {
+		_spec.SetField(integration.FieldProviderState, field.TypeJSON, value)
+		_node.ProviderState = value
 	}
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(integration.FieldMetadata, field.TypeJSON, value)

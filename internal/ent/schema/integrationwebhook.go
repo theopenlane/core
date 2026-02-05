@@ -3,8 +3,10 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
@@ -51,6 +53,12 @@ func (IntegrationWebhook) Fields() []ent.Field {
 		field.String("integration_id").
 			Comment("integration connection this webhook belongs to").
 			Optional(),
+		field.String("provider").
+			Comment("provider identifier for webhook source").
+			NotEmpty().
+			Annotations(
+				entgql.OrderField("provider"),
+			),
 		field.String("name").
 			Comment("display name for the webhook endpoint").
 			Optional().
@@ -112,12 +120,30 @@ func (IntegrationWebhook) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipMutationUpdateInput),
 			),
+		field.String("external_event_id").
+			Comment("upstream event identifier for idempotency").
+			Optional().
+			Nillable().
+			Immutable().
+			Annotations(
+				entgql.OrderField("external_event_id"),
+				entgql.Skip(entgql.SkipMutationUpdateInput),
+			),
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional webhook metadata").
 			Optional().
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
 			),
+	}
+}
+
+// Indexes of the IntegrationWebhook.
+func (IntegrationWebhook) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields(ownerFieldName, "provider", "external_event_id").
+			Unique().
+			Annotations(entsql.IndexWhere("deleted_at is NULL AND external_event_id IS NOT NULL")),
 	}
 }
 

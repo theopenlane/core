@@ -179,6 +179,26 @@ func (_c *IntegrationRunCreate) SetNillableRunType(v *enums.IntegrationRunType) 
 	return _c
 }
 
+// SetOperationConfig sets the "operation_config" field.
+func (_c *IntegrationRunCreate) SetOperationConfig(v map[string]interface{}) *IntegrationRunCreate {
+	_c.mutation.SetOperationConfig(v)
+	return _c
+}
+
+// SetMappingVersion sets the "mapping_version" field.
+func (_c *IntegrationRunCreate) SetMappingVersion(v string) *IntegrationRunCreate {
+	_c.mutation.SetMappingVersion(v)
+	return _c
+}
+
+// SetNillableMappingVersion sets the "mapping_version" field if the given value is not nil.
+func (_c *IntegrationRunCreate) SetNillableMappingVersion(v *string) *IntegrationRunCreate {
+	if v != nil {
+		_c.SetMappingVersion(*v)
+	}
+	return _c
+}
+
 // SetStatus sets the "status" field.
 func (_c *IntegrationRunCreate) SetStatus(v enums.IntegrationRunStatus) *IntegrationRunCreate {
 	_c.mutation.SetStatus(v)
@@ -521,6 +541,14 @@ func (_c *IntegrationRunCreate) createSpec() (*IntegrationRun, *sqlgraph.CreateS
 	if value, ok := _c.mutation.RunType(); ok {
 		_spec.SetField(integrationrun.FieldRunType, field.TypeEnum, value)
 		_node.RunType = value
+	}
+	if value, ok := _c.mutation.OperationConfig(); ok {
+		_spec.SetField(integrationrun.FieldOperationConfig, field.TypeJSON, value)
+		_node.OperationConfig = value
+	}
+	if value, ok := _c.mutation.MappingVersion(); ok {
+		_spec.SetField(integrationrun.FieldMappingVersion, field.TypeString, value)
+		_node.MappingVersion = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(integrationrun.FieldStatus, field.TypeEnum, value)
