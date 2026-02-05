@@ -7,7 +7,6 @@ import (
 
 	"github.com/samber/lo"
 
-	commonhelpers "github.com/theopenlane/core/common/helpers"
 	"github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/common/integrations/helpers"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -111,10 +110,8 @@ func (r *Registry) ProviderMetadata(provider types.ProviderType) (types.Provider
 
 // ProviderMetadataCatalog returns a copy of all provider metadata entries.
 func (r *Registry) ProviderMetadataCatalog() map[types.ProviderType]types.ProviderConfig {
-	return commonhelpers.FoldMap(r.configs, func(capacity int) map[types.ProviderType]types.ProviderConfig {
-		return make(map[types.ProviderType]types.ProviderConfig, capacity)
-	}, func(acc *map[types.ProviderType]types.ProviderConfig, key types.ProviderType, spec config.ProviderSpec) {
-		(*acc)[key] = spec.ToProviderConfig()
+	return lo.MapEntries(r.configs, func(key types.ProviderType, spec config.ProviderSpec) (types.ProviderType, types.ProviderConfig) {
+		return key, spec.ToProviderConfig()
 	})
 }
 
@@ -133,12 +130,10 @@ func (r *Registry) ClientDescriptors(provider types.ProviderType) []types.Client
 
 // ClientDescriptorCatalog returns a copy of all provider client descriptors.
 func (r *Registry) ClientDescriptorCatalog() map[types.ProviderType][]types.ClientDescriptor {
-	return commonhelpers.FoldMap(r.clients, func(capacity int) map[types.ProviderType][]types.ClientDescriptor {
-		return make(map[types.ProviderType][]types.ClientDescriptor, capacity)
-	}, func(acc *map[types.ProviderType][]types.ClientDescriptor, provider types.ProviderType, descriptors []types.ClientDescriptor) {
+	return lo.MapEntries(r.clients, func(provider types.ProviderType, descriptors []types.ClientDescriptor) (types.ProviderType, []types.ClientDescriptor) {
 		copied := make([]types.ClientDescriptor, len(descriptors))
 		copy(copied, descriptors)
-		(*acc)[provider] = copied
+		return provider, copied
 	})
 }
 
@@ -157,12 +152,10 @@ func (r *Registry) OperationDescriptors(provider types.ProviderType) []types.Ope
 
 // OperationDescriptorCatalog returns a copy of all provider operation descriptors.
 func (r *Registry) OperationDescriptorCatalog() map[types.ProviderType][]types.OperationDescriptor {
-	return commonhelpers.FoldMap(r.operations, func(capacity int) map[types.ProviderType][]types.OperationDescriptor {
-		return make(map[types.ProviderType][]types.OperationDescriptor, capacity)
-	}, func(acc *map[types.ProviderType][]types.OperationDescriptor, provider types.ProviderType, descriptors []types.OperationDescriptor) {
+	return lo.MapEntries(r.operations, func(provider types.ProviderType, descriptors []types.OperationDescriptor) (types.ProviderType, []types.OperationDescriptor) {
 		copied := make([]types.OperationDescriptor, len(descriptors))
 		copy(copied, descriptors)
-		(*acc)[provider] = copied
+		return provider, copied
 	})
 }
 

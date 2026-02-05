@@ -10,8 +10,8 @@ import (
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/common/decls"
 	"github.com/google/cel-go/common/types"
+	"github.com/samber/lo"
 
-	commonhelpers "github.com/theopenlane/core/common/helpers"
 	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
@@ -177,18 +177,18 @@ type mappingOverrideIndex struct {
 }
 
 func newMappingOverrideIndex(config openapi.IntegrationConfig) mappingOverrideIndex {
-	return commonhelpers.FoldMap(config.MappingOverrides, func(capacity int) mappingOverrideIndex {
-		return mappingOverrideIndex{
-			overrides:         make(map[string]openapi.IntegrationMappingOverride, capacity),
-			hasSchema:         map[string]struct{}{},
-			hasProviderSchema: map[string]struct{}{},
-		}
-	}, func(acc *mappingOverrideIndex, key string, override openapi.IntegrationMappingOverride) {
-		normalized := normalizeMappingKey(key)
+	init := mappingOverrideIndex{
+		overrides:         make(map[string]openapi.IntegrationMappingOverride, len(config.MappingOverrides)),
+		hasSchema:         map[string]struct{}{},
+		hasProviderSchema: map[string]struct{}{},
+	}
+
+	return lo.Reduce(lo.Entries(config.MappingOverrides), func(acc mappingOverrideIndex, entry lo.Entry[string, openapi.IntegrationMappingOverride], _ int) mappingOverrideIndex {
+		normalized := normalizeMappingKey(entry.Key)
 		if normalized == "" {
-			return
+			return acc
 		}
-		acc.overrides[normalized] = override
+		acc.overrides[normalized] = entry.Value
 		schemaKey, providerKey := mappingKeyParts(normalized)
 		if schemaKey != "" {
 			acc.hasSchema[schemaKey] = struct{}{}
@@ -196,7 +196,8 @@ func newMappingOverrideIndex(config openapi.IntegrationConfig) mappingOverrideIn
 		if providerKey != "" && schemaKey != "" {
 			acc.hasProviderSchema[fmt.Sprintf("%s:%s", providerKey, schemaKey)] = struct{}{}
 		}
-	})
+		return acc
+	}, init)
 }
 
 func (m mappingOverrideIndex) HasAny(provider integrationtypes.ProviderType, schemaName string) bool {
@@ -301,13 +302,9 @@ func allowedMappingKeys(schema integrationgenerated.IntegrationMappingSchema) ma
 // filterMappingOutput strips fields that are not part of the schema mapping
 func filterMappingOutput(schema integrationgenerated.IntegrationMappingSchema, input map[string]any) map[string]any {
 	allowed := allowedMappingKeys(schema)
-	return commonhelpers.FoldMap(input, func(capacity int) map[string]any {
-		return make(map[string]any, capacity)
-	}, func(acc *map[string]any, key string, value any) {
-		if _, ok := allowed[key]; !ok {
-			return
-		}
-		(*acc)[key] = value
+	return lo.PickBy(input, func(key string, _ any) bool {
+		_, ok := allowed[key]
+		return ok
 	})
 }
 
