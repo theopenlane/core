@@ -14,15 +14,7 @@ const (
 
 // githubClientDescriptors returns the client descriptors for the GitHub provider.
 func githubClientDescriptors(provider types.ProviderType) []types.ClientDescriptor {
-	return []types.ClientDescriptor{
-		{
-			Provider:     provider,
-			Name:         ClientGitHubAPI,
-			Description:  "GitHub REST API client",
-			Build:        buildGitHubClient(provider),
-			ConfigSchema: map[string]any{"type": "object"},
-		},
-	}
+	return helpers.DefaultClientDescriptors(provider, ClientGitHubAPI, "GitHub REST API client", buildGitHubClient(provider))
 }
 
 // buildGitHubClient constructs an authenticated GitHub REST API client.

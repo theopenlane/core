@@ -14,15 +14,7 @@ const (
 
 // slackClientDescriptors returns the client descriptors published by Slack.
 func slackClientDescriptors() []types.ClientDescriptor {
-	return []types.ClientDescriptor{
-		{
-			Provider:     TypeSlack,
-			Name:         ClientSlackAPI,
-			Description:  "Slack Web API client",
-			Build:        buildSlackClient,
-			ConfigSchema: map[string]any{"type": "object"},
-		},
-	}
+	return helpers.DefaultClientDescriptors(TypeSlack, ClientSlackAPI, "Slack Web API client", buildSlackClient)
 }
 
 // buildSlackClient constructs an authenticated Slack API client.

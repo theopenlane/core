@@ -15,7 +15,6 @@ import (
 const (
 	githubOperationHealth types.OperationName = "health.default"
 	githubOperationRepos  types.OperationName = "repos.collect_metadata"
-	githubOperationVulns  types.OperationName = "vulnerabilities.collect"
 
 	defaultPerPage = 50
 	maxPerPage     = 100
@@ -26,93 +25,48 @@ const (
 	githubAPIBaseURL  = "https://api.github.com/"
 )
 
+type githubRepoOperationConfig struct {
+	Visibility helpers.LowerString `json:"visibility,omitempty" jsonschema:"description=Optional visibility filter (all, public, private)"`
+	PerPage    int                 `json:"per_page,omitempty" jsonschema:"description=Override the number of repos fetched per page (max 100)."`
+}
+
+type githubVulnerabilityOperationConfig struct {
+	AlertTypes      []helpers.LowerString   `json:"alert_types,omitempty" jsonschema:"description=Optional alert types to collect (dependabot, code_scanning, secret_scanning). Defaults to all."`
+	Repositories    []helpers.TrimmedString `json:"repositories,omitempty" jsonschema:"description=Optional list of full repo names (owner/repo). If omitted, all accessible repos are scanned."`
+	Visibility      helpers.LowerString     `json:"visibility,omitempty" jsonschema:"description=Optional visibility filter (all, public, private) when listing repos."`
+	Affiliation     helpers.LowerString     `json:"affiliation,omitempty" jsonschema:"description=Optional repo affiliation filter (owner, collaborator, organization_member)."`
+	PerPage         int                     `json:"per_page,omitempty" jsonschema:"description=Override the number of repos/alerts fetched per page (max 100)."`
+	MaxRepos        int                     `json:"max_repos,omitempty" jsonschema:"description=Optional cap on the number of repositories to scan."`
+	IncludePayloads bool                    `json:"include_payloads,omitempty" jsonschema:"description=Return raw alert payloads in the response (defaults to false)."`
+	AlertState      helpers.LowerString     `json:"alert_state,omitempty" jsonschema:"description=Dependabot alert state filter (open, dismissed, fixed, all). Defaults to open."`
+	Severity        helpers.LowerString     `json:"severity,omitempty" jsonschema:"description=Optional severity filter (low, medium, high, critical)."`
+	Ecosystem       helpers.LowerString     `json:"ecosystem,omitempty" jsonschema:"description=Optional package ecosystem filter (npm, maven, pip, etc.)."`
+}
+
+var (
+	githubRepoConfigSchema          = helpers.SchemaFrom[githubRepoOperationConfig]()
+	githubVulnerabilityConfigSchema = helpers.SchemaFrom[githubVulnerabilityOperationConfig]()
+)
+
 // githubOperations returns the GitHub operations supported by this provider.
 func githubOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
+		helpers.HealthOperation(githubOperationHealth, "Validate GitHub OAuth token by calling the /user endpoint.", ClientGitHubAPI, runGitHubHealthOperation),
 		{
-			Name:        githubOperationHealth,
-			Kind:        types.OperationKindHealth,
-			Description: "Validate GitHub OAuth token by calling the /user endpoint.",
-			Client:      ClientGitHubAPI,
-			Run:         runGitHubHealthOperation,
+			Name:         githubOperationRepos,
+			Kind:         types.OperationKindCollectFindings,
+			Description:  "Collect repository metadata for the authenticated account.",
+			Client:       ClientGitHubAPI,
+			Run:          runGitHubRepoOperation,
+			ConfigSchema: githubRepoConfigSchema,
 		},
 		{
-			Name:        githubOperationRepos,
-			Kind:        types.OperationKindCollectFindings,
-			Description: "Collect repository metadata for the authenticated account.",
-			Client:      ClientGitHubAPI,
-			Run:         runGitHubRepoOperation,
-			ConfigSchema: map[string]any{
-				"type": "object",
-				"properties": map[string]any{
-					"visibility": map[string]any{
-						"type":        "string",
-						"description": "Optional visibility filter (all, public, private)",
-					},
-					"per_page": map[string]any{
-						"type":        "integer",
-						"description": "Override the number of repos fetched per page (max 100).",
-					},
-				},
-			},
-		},
-		{
-			Name:        githubOperationVulns,
-			Kind:        types.OperationKindCollectFindings,
-			Description: "Collect GitHub vulnerability alerts (Dependabot, code scanning, secret scanning) for repositories accessible to the token.",
-			Client:      ClientGitHubAPI,
-			Run:         runGitHubVulnerabilityOperation,
-			ConfigSchema: map[string]any{
-				"type": "object",
-				"properties": map[string]any{
-					"alert_types": map[string]any{
-						"type":        "array",
-						"description": "Optional alert types to collect (dependabot, code_scanning, secret_scanning). Defaults to all.",
-						"items": map[string]any{
-							"type": "string",
-						},
-					},
-					"repositories": map[string]any{
-						"type":        "array",
-						"description": "Optional list of full repo names (owner/repo). If omitted, all accessible repos are scanned.",
-						"items": map[string]any{
-							"type": "string",
-						},
-					},
-					"visibility": map[string]any{
-						"type":        "string",
-						"description": "Optional visibility filter (all, public, private) when listing repos.",
-					},
-					"affiliation": map[string]any{
-						"type":        "string",
-						"description": "Optional repo affiliation filter (owner, collaborator, organization_member).",
-					},
-					"per_page": map[string]any{
-						"type":        "integer",
-						"description": "Override the number of repos/alerts fetched per page (max 100).",
-					},
-					"max_repos": map[string]any{
-						"type":        "integer",
-						"description": "Optional cap on the number of repositories to scan.",
-					},
-					"include_payloads": map[string]any{
-						"type":        "boolean",
-						"description": "Return raw alert payloads in the response (defaults to false).",
-					},
-					"alert_state": map[string]any{
-						"type":        "string",
-						"description": "Dependabot alert state filter (open, dismissed, fixed, all). Defaults to open.",
-					},
-					"severity": map[string]any{
-						"type":        "string",
-						"description": "Optional severity filter (low, medium, high, critical).",
-					},
-					"ecosystem": map[string]any{
-						"type":        "string",
-						"description": "Optional package ecosystem filter (npm, maven, pip, etc.).",
-					},
-				},
-			},
+			Name:         types.OperationVulnerabilitiesCollect,
+			Kind:         types.OperationKindCollectFindings,
+			Description:  "Collect GitHub vulnerability alerts (Dependabot, code scanning, secret scanning) for repositories accessible to the token.",
+			Client:       ClientGitHubAPI,
+			Run:          runGitHubVulnerabilityOperation,
+			ConfigSchema: githubVulnerabilityConfigSchema,
 		},
 	}
 }
@@ -209,7 +163,7 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 		return helpers.OperationFailure("GitHub repository collection failed", err), err
 	}
 
-	samples := make([]map[string]any, 0, minInt(maxSampleSize, len(repos)))
+	samples := make([]map[string]any, 0, min(maxSampleSize, len(repos)))
 	for _, repo := range repos {
 		if len(samples) >= cap(samples) {
 			break
@@ -267,12 +221,4 @@ func clampPerPage(value int) int {
 	}
 
 	return value
-}
-
-// minInt returns the minimum of two integers
-func minInt(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
 }

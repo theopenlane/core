@@ -20,13 +20,7 @@ const (
 // awsAuditOperations lists the AWS Audit Manager operations supported by this provider.
 func awsAuditOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		{
-			Name:        awsAuditHealth,
-			Kind:        types.OperationKindHealth,
-			Description: "Validate AWS Audit Manager access by listing assessments.",
-			Client:      ClientAWSAuditManager,
-			Run:         runAWSAuditHealth,
-		},
+		helpers.HealthOperation(awsAuditHealth, "Validate AWS Audit Manager access by listing assessments.", ClientAWSAuditManager, runAWSAuditHealth),
 	}
 }
 

@@ -16,13 +16,7 @@ const (
 // teamsOperations returns the Microsoft Teams operations supported by this provider
 func teamsOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		{
-			Name:        teamsHealthOp,
-			Kind:        types.OperationKindHealth,
-			Description: "Call Graph /me to verify Teams access.",
-			Client:      ClientMicrosoftTeamsAPI,
-			Run:         runTeamsHealth,
-		},
+		helpers.HealthOperation(teamsHealthOp, "Call Graph /me to verify Teams access.", ClientMicrosoftTeamsAPI, runTeamsHealth),
 		{
 			Name:        teamsChannelsOp,
 			Kind:        types.OperationKindCollectFindings,

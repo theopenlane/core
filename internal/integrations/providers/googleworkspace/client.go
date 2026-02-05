@@ -14,15 +14,7 @@ const (
 
 // googleWorkspaceClientDescriptors returns the client descriptors published by Google Workspace.
 func googleWorkspaceClientDescriptors() []types.ClientDescriptor {
-	return []types.ClientDescriptor{
-		{
-			Provider:     TypeGoogleWorkspace,
-			Name:         ClientGoogleWorkspaceAPI,
-			Description:  "Google Workspace REST API client",
-			Build:        buildGoogleWorkspaceClient,
-			ConfigSchema: map[string]any{"type": "object"},
-		},
-	}
+	return helpers.DefaultClientDescriptors(TypeGoogleWorkspace, ClientGoogleWorkspaceAPI, "Google Workspace REST API client", buildGoogleWorkspaceClient)
 }
 
 // buildGoogleWorkspaceClient constructs an authenticated Google Workspace API client.

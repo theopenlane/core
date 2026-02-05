@@ -17,13 +17,7 @@ const (
 // vercelOperations returns the Vercel operations supported by this provider.
 func vercelOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		{
-			Name:        vercelHealthOp,
-			Kind:        types.OperationKindHealth,
-			Description: "Call Vercel /v2/user to verify token and account.",
-			Client:      ClientVercelAPI,
-			Run:         runVercelHealth,
-		},
+		helpers.HealthOperation(vercelHealthOp, "Call Vercel /v2/user to verify token and account.", ClientVercelAPI, runVercelHealth),
 		{
 			Name:        vercelProjectsOp,
 			Kind:        types.OperationKindCollectFindings,

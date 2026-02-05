@@ -8,12 +8,14 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/opsconfig"
 	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -24,8 +26,7 @@ import (
 )
 
 const (
-	emitEnqueueTimeout                = 200 * time.Millisecond
-	vulnerabilityCollectOperationName = "vulnerabilities.collect"
+	emitEnqueueTimeout = 200 * time.Millisecond
 )
 
 // RunIntegrationOperation queues a provider-published operation for async execution
@@ -80,8 +81,8 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 	operationConfig = merged
-	if operationName == vulnerabilityCollectOperationName {
-		operationConfig = ensureIncludePayloads(operationConfig)
+	if operationName == types.OperationVulnerabilitiesCollect {
+		operationConfig = opsconfig.EnsureIncludePayloads(operationConfig)
 	}
 
 	systemCtx := privacy.DecisionContext(requestCtx, privacy.Allow)
@@ -145,26 +146,14 @@ func cloneOperationConfig(input map[string]any) map[string]any {
 	return maps.Clone(input)
 }
 
-// ensureIncludePayloads forces include_payloads for operation execution
-func ensureIncludePayloads(config map[string]any) map[string]any {
-	if config == nil {
-		config = map[string]any{}
-	}
-	config["include_payloads"] = true
-	return config
-}
-
 // operationDescriptorRegistered checks if the operation is registered for the provider
 func operationDescriptorRegistered(reg ProviderRegistry, provider types.ProviderType, name types.OperationName) bool {
 	if reg == nil {
 		return false
 	}
-	for _, descriptor := range reg.OperationDescriptors(provider) {
-		if descriptor.Name == name {
-			return true
-		}
-	}
-	return false
+	return lo.ContainsBy(reg.OperationDescriptors(provider), func(descriptor types.OperationDescriptor) bool {
+		return descriptor.Name == name
+	})
 }
 
 // emitIntegrationOperationEvent emits an async integration operation event

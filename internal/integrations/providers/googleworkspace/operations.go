@@ -17,13 +17,7 @@ const (
 // googleWorkspaceOperations returns the Google Workspace operations supported by this provider.
 func googleWorkspaceOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		{
-			Name:        googleWorkspaceHealthOp,
-			Kind:        types.OperationKindHealth,
-			Description: "Call Google OAuth userinfo to verify the workspace token.",
-			Client:      ClientGoogleWorkspaceAPI,
-			Run:         runGoogleWorkspaceHealth,
-		},
+		helpers.HealthOperation(googleWorkspaceHealthOp, "Call Google OAuth userinfo to verify the workspace token.", ClientGoogleWorkspaceAPI, runGoogleWorkspaceHealth),
 		{
 			Name:        googleWorkspaceUsersOp,
 			Kind:        types.OperationKindCollectFindings,

@@ -16,16 +16,35 @@ const (
 	slackOperationMessagePost types.OperationName = "message.post"
 )
 
+type slackMessageOperationConfig struct {
+	Channel     string           `json:"channel" jsonschema:"required,description=Slack channel ID or user ID to receive the message."`
+	Text        string           `json:"text,omitempty" jsonschema:"description=Message text (required unless blocks are supplied)."`
+	Blocks      []map[string]any `json:"blocks,omitempty" jsonschema:"description=Optional Slack Block Kit payload."`
+	Attachments []map[string]any `json:"attachments,omitempty" jsonschema:"description=Optional legacy attachments payload."`
+	ThreadTS    string           `json:"thread_ts,omitempty" jsonschema:"description=Optional thread timestamp to reply within an existing thread."`
+	UnfurlLinks *bool            `json:"unfurl_links,omitempty" jsonschema:"description=Whether to unfurl links in the message."`
+	UnfurlMedia *bool            `json:"unfurl_media,omitempty" jsonschema:"description=Whether to unfurl media in the message."`
+}
+
+type slackMessageConfig struct {
+	Channel     helpers.TrimmedString `mapstructure:"channel"`
+	ChannelID   helpers.TrimmedString `mapstructure:"channel_id"`
+	Text        helpers.TrimmedString `mapstructure:"text"`
+	Message     helpers.TrimmedString `mapstructure:"message"`
+	Body        helpers.TrimmedString `mapstructure:"body"`
+	Blocks      any                   `mapstructure:"blocks"`
+	Attachments any                   `mapstructure:"attachments"`
+	ThreadTS    helpers.TrimmedString `mapstructure:"thread_ts"`
+	UnfurlLinks *bool                 `mapstructure:"unfurl_links"`
+	UnfurlMedia *bool                 `mapstructure:"unfurl_media"`
+}
+
+var slackMessageConfigSchema = helpers.SchemaFrom[slackMessageOperationConfig]()
+
 // slackOperations returns the Slack operations supported by this provider.
 func slackOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		{
-			Name:        slackOperationHealth,
-			Kind:        types.OperationKindHealth,
-			Description: "Call auth.test to ensure the Slack token is valid and scoped correctly.",
-			Client:      ClientSlackAPI,
-			Run:         runSlackHealthOperation,
-		},
+		helpers.HealthOperation(slackOperationHealth, "Call auth.test to ensure the Slack token is valid and scoped correctly.", ClientSlackAPI, runSlackHealthOperation),
 		{
 			Name:        slackOperationTeam,
 			Kind:        types.OperationKindScanSettings,
@@ -34,37 +53,12 @@ func slackOperations() []types.OperationDescriptor {
 			Run:         runSlackTeamOperation,
 		},
 		{
-			Name:        slackOperationMessagePost,
-			Kind:        types.OperationKindNotify,
-			Description: "Send a Slack message via chat.postMessage.",
-			Client:      ClientSlackAPI,
-			Run:         runSlackMessagePostOperation,
-			ConfigSchema: map[string]any{
-				"type": "object",
-				"properties": map[string]any{
-					"channel": map[string]any{
-						"type":        "string",
-						"description": "Slack channel ID or user ID to receive the message.",
-					},
-					"text": map[string]any{
-						"type":        "string",
-						"description": "Message text (required unless blocks are supplied).",
-					},
-					"blocks": map[string]any{
-						"type":        "array",
-						"description": "Optional Slack Block Kit payload.",
-					},
-					"attachments": map[string]any{
-						"type":        "array",
-						"description": "Optional legacy attachments payload.",
-					},
-					"thread_ts": map[string]any{
-						"type":        "string",
-						"description": "Optional thread timestamp to reply within an existing thread.",
-					},
-				},
-				"required": []string{"channel"},
-			},
+			Name:         slackOperationMessagePost,
+			Kind:         types.OperationKindNotify,
+			Description:  "Send a Slack message via chat.postMessage.",
+			Client:       ClientSlackAPI,
+			Run:          runSlackMessagePostOperation,
+			ConfigSchema: slackMessageConfigSchema,
 		},
 	}
 }
@@ -171,7 +165,15 @@ func runSlackMessagePostOperation(ctx context.Context, input types.OperationInpu
 		return types.OperationResult{}, err
 	}
 
-	channel := helpers.FirstStringValue(input.Config, "channel", "channel_id", "channelId")
+	var cfg slackMessageConfig
+	if err := helpers.DecodeConfig(input.Config, &cfg); err != nil {
+		return types.OperationResult{}, err
+	}
+
+	channel := string(cfg.Channel)
+	if channel == "" {
+		channel = string(cfg.ChannelID)
+	}
 	if channel == "" {
 		return types.OperationResult{}, ErrSlackChannelMissing
 	}
@@ -180,23 +182,31 @@ func runSlackMessagePostOperation(ctx context.Context, input types.OperationInpu
 		"channel": channel,
 	}
 
-	if text := helpers.FirstStringValue(input.Config, "text", "message", "body"); text != "" {
+	text := string(cfg.Text)
+	if text == "" {
+		text = string(cfg.Message)
+	}
+	if text == "" {
+		text = string(cfg.Body)
+	}
+	if text != "" {
 		payload["text"] = text
 	}
-	if blocks, ok := input.Config["blocks"]; ok {
-		payload["blocks"] = blocks
+
+	if cfg.Blocks != nil {
+		payload["blocks"] = cfg.Blocks
 	}
-	if attachments, ok := input.Config["attachments"]; ok {
-		payload["attachments"] = attachments
+	if cfg.Attachments != nil {
+		payload["attachments"] = cfg.Attachments
 	}
-	if threadTS, ok := input.Config["thread_ts"]; ok {
-		payload["thread_ts"] = threadTS
+	if cfg.ThreadTS != "" {
+		payload["thread_ts"] = string(cfg.ThreadTS)
 	}
-	if unfurlLinks, ok := input.Config["unfurl_links"]; ok {
-		payload["unfurl_links"] = unfurlLinks
+	if cfg.UnfurlLinks != nil {
+		payload["unfurl_links"] = cfg.UnfurlLinks
 	}
-	if unfurlMedia, ok := input.Config["unfurl_media"]; ok {
-		payload["unfurl_media"] = unfurlMedia
+	if cfg.UnfurlMedia != nil {
+		payload["unfurl_media"] = cfg.UnfurlMedia
 	}
 
 	if _, ok := payload["text"]; !ok {
@@ -248,19 +258,4 @@ func slackAPIGet(ctx context.Context, client *helpers.AuthenticatedClient, token
 	}
 
 	return nil
-}
-
-// oauthTokenFromPayload extracts the OAuth access token from the credential payload
-func oauthTokenFromPayload(payload types.CredentialPayload) (string, error) {
-	tokenOpt := payload.OAuthTokenOption()
-	if !tokenOpt.IsPresent() {
-		return "", ErrOAuthTokenMissing
-	}
-
-	token := tokenOpt.MustGet()
-	if token == nil || token.AccessToken == "" {
-		return "", ErrAccessTokenEmpty
-	}
-
-	return token.AccessToken, nil
 }

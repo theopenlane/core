@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/url"
-	"strings"
 
 	"github.com/theopenlane/core/common/integrations/helpers"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -20,13 +19,7 @@ const (
 // azureSecurityOperations registers the Defender for Cloud operations.
 func azureSecurityOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		{
-			Name:        azureSecurityHealth,
-			Kind:        types.OperationKindHealth,
-			Description: "Call Azure Security Center pricings API to verify access.",
-			Client:      ClientAzureSecurityCenterAPI,
-			Run:         runAzureSecurityHealth,
-		},
+		helpers.HealthOperation(azureSecurityHealth, "Call Azure Security Center pricings API to verify access.", ClientAzureSecurityCenterAPI, runAzureSecurityHealth),
 		{
 			Name:        azureSecurityPricing,
 			Kind:        types.OperationKindCollectFindings,
@@ -132,7 +125,7 @@ func listSecurityPricings(ctx context.Context, token string, subscriptionID stri
 // subscriptionIDFromPayload extracts the subscription ID from provider metadata.
 func subscriptionIDFromPayload(payload types.CredentialPayload) (string, error) {
 	subscriptionID := helpers.StringValue(payload.Data.ProviderData, "subscriptionId")
-	if strings.TrimSpace(subscriptionID) == "" {
+	if subscriptionID == "" {
 		return "", ErrSubscriptionIDMissing
 	}
 

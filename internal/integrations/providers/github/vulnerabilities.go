@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	gh "github.com/google/go-github/v80/github"
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/integrations/helpers"
 	"github.com/theopenlane/core/common/integrations/opsconfig"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -29,13 +30,13 @@ type githubVulnerabilityConfig struct {
 	opsconfig.Pagination
 	opsconfig.PayloadOptions
 
-	AlertTypes  []string `mapstructure:"alert_types"`
-	MaxRepos    int      `mapstructure:"max_repos"`
-	Visibility  string   `mapstructure:"visibility"`
-	Affiliation string   `mapstructure:"affiliation"`
-	AlertState  string   `mapstructure:"alert_state"`
-	Severity    string   `mapstructure:"severity"`
-	Ecosystem   string   `mapstructure:"ecosystem"`
+	AlertTypes  []helpers.LowerString `mapstructure:"alert_types"`
+	MaxRepos    int                   `mapstructure:"max_repos"`
+	Visibility  helpers.LowerString   `mapstructure:"visibility"`
+	Affiliation helpers.LowerString   `mapstructure:"affiliation"`
+	AlertState  helpers.LowerString   `mapstructure:"alert_state"`
+	Severity    helpers.LowerString   `mapstructure:"severity"`
+	Ecosystem   helpers.LowerString   `mapstructure:"ecosystem"`
 }
 
 // runGitHubVulnerabilityOperation collects GitHub alert data and returns envelope payloads
@@ -58,7 +59,7 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		if err != nil {
 			return helpers.OperationFailure("GitHub repository listing failed", err), err
 		}
-		repoNames = repoNamesFromResponses(repos, config.Owner)
+		repoNames = repoNamesFromResponses(repos, string(config.Owner))
 	}
 
 	if len(repoNames) == 0 {
@@ -161,24 +162,20 @@ func listGitHubReposForProvider(ctx context.Context, client *helpers.Authenticat
 // listGitHubInstallationRepos lists repositories visible to a GitHub App installation
 func listGitHubInstallationRepos(ctx context.Context, client *helpers.AuthenticatedClient, token string, config githubVulnerabilityConfig) ([]githubRepoResponse, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
-	page := 1
 	out := make([]githubRepoResponse, 0)
-
-	for {
-		params := url.Values{}
-		params.Set("per_page", fmt.Sprintf("%d", perPage))
-		params.Set("page", fmt.Sprintf("%d", page))
-
+	err := collectGitHubPaged(ctx, perPage, func(page, perPage int) ([]githubRepoResponse, error) {
+		params := gitHubPageParams(page, perPage)
 		var batch githubInstallationRepositoriesResponse
 		if err := fetchGitHubResource(ctx, client, token, "installation/repositories", params, &batch); err != nil {
 			return nil, err
 		}
-
-		out = append(out, batch.Repositories...)
-		if len(batch.Repositories) < perPage {
-			break
-		}
-		page++
+		return batch.Repositories, nil
+	}, func(batch []githubRepoResponse) error {
+		out = append(out, batch...)
+		return nil
+	})
+	if err != nil {
+		return nil, err
 	}
 
 	return out, nil
@@ -187,17 +184,13 @@ func listGitHubInstallationRepos(ctx context.Context, client *helpers.Authentica
 // listGitHubRepos lists repositories accessible to the OAuth token
 func listGitHubRepos(ctx context.Context, client *helpers.AuthenticatedClient, token string, config githubVulnerabilityConfig) ([]githubRepoResponse, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
-	page := 1
 	out := make([]githubRepoResponse, 0)
-
-	for {
-		params := url.Values{}
-		params.Set("per_page", fmt.Sprintf("%d", perPage))
-		params.Set("page", fmt.Sprintf("%d", page))
-		if visibility := strings.TrimSpace(config.Visibility); visibility != "" {
+	err := collectGitHubPaged(ctx, perPage, func(page, perPage int) ([]githubRepoResponse, error) {
+		params := gitHubPageParams(page, perPage)
+		if visibility := string(config.Visibility); visibility != "" {
 			params.Set("visibility", visibility)
 		}
-		if affiliation := strings.TrimSpace(config.Affiliation); affiliation != "" {
+		if affiliation := string(config.Affiliation); affiliation != "" {
 			params.Set("affiliation", affiliation)
 		}
 
@@ -206,11 +199,13 @@ func listGitHubRepos(ctx context.Context, client *helpers.AuthenticatedClient, t
 			return nil, err
 		}
 
+		return batch, nil
+	}, func(batch []githubRepoResponse) error {
 		out = append(out, batch...)
-		if len(batch) < perPage {
-			break
-		}
-		page++
+		return nil
+	})
+	if err != nil {
+		return nil, err
 	}
 
 	return out, nil
@@ -218,140 +213,101 @@ func listGitHubRepos(ctx context.Context, client *helpers.AuthenticatedClient, t
 
 // listDependabotAlerts fetches Dependabot alerts for a repository
 func listDependabotAlerts(ctx context.Context, client *helpers.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
-	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
-	page := 1
-	out := make([]json.RawMessage, 0)
-
-	state := strings.TrimSpace(config.AlertState)
-	if state == "" {
-		state = defaultAlertState
-	}
-
-	for {
-		params := url.Values{}
-		params.Set("per_page", fmt.Sprintf("%d", perPage))
-		params.Set("page", fmt.Sprintf("%d", page))
-		if state != "" {
-			params.Set("state", state)
-		}
-		if severity := strings.TrimSpace(config.Severity); severity != "" {
+	path := fmt.Sprintf("repos/%s/dependabot/alerts", repo)
+	return listGitHubAlerts[*gh.DependabotAlert](ctx, client, token, path, config, func(params url.Values) {
+		if severity := string(config.Severity); severity != "" {
 			params.Set("severity", severity)
 		}
-		if ecosystem := strings.TrimSpace(config.Ecosystem); ecosystem != "" {
+		if ecosystem := string(config.Ecosystem); ecosystem != "" {
 			params.Set("ecosystem", ecosystem)
 		}
-
-		var batch []*gh.DependabotAlert
-		path := fmt.Sprintf("repos/%s/dependabot/alerts", strings.TrimSpace(repo))
-		if err := fetchGitHubResource(ctx, client, token, path, params, &batch); err != nil {
-			return nil, err
-		}
-
-		for _, alert := range batch {
-			if alert == nil {
-				continue
-			}
-			payload, err := json.Marshal(alert)
-			if err != nil {
-				return nil, err
-			}
-			out = append(out, payload)
-		}
-		if len(batch) < perPage {
-			break
-		}
-		page++
-	}
-
-	return out, nil
+	})
 }
 
 // listCodeScanningAlerts fetches code scanning alerts for a repository
 func listCodeScanningAlerts(ctx context.Context, client *helpers.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
+	path := fmt.Sprintf("repos/%s/code-scanning/alerts", repo)
+	return listGitHubAlerts[*gh.Alert](ctx, client, token, path, config, nil)
+}
+
+// listSecretScanningAlerts fetches secret scanning alerts for a repository
+func listSecretScanningAlerts(ctx context.Context, client *helpers.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
+	path := fmt.Sprintf("repos/%s/secret-scanning/alerts", repo)
+	return listGitHubAlerts[*gh.SecretScanningAlert](ctx, client, token, path, config, nil)
+}
+
+func listGitHubAlerts[T any](ctx context.Context, client *helpers.AuthenticatedClient, token, path string, config githubVulnerabilityConfig, decorate func(url.Values)) ([]json.RawMessage, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
-	page := 1
+	state := resolveAlertState(string(config.AlertState))
 	out := make([]json.RawMessage, 0)
 
-	state := strings.TrimSpace(config.AlertState)
-	if state == "" {
-		state = defaultAlertState
-	}
-
-	for {
-		params := url.Values{}
-		params.Set("per_page", fmt.Sprintf("%d", perPage))
-		params.Set("page", fmt.Sprintf("%d", page))
+	err := collectGitHubPaged(ctx, perPage, func(page, perPage int) ([]T, error) {
+		params := gitHubPageParams(page, perPage)
 		if state != "" {
 			params.Set("state", state)
 		}
+		if decorate != nil {
+			decorate(params)
+		}
 
-		var batch []*gh.Alert
-		path := fmt.Sprintf("repos/%s/code-scanning/alerts", strings.TrimSpace(repo))
+		var batch []T
 		if err := fetchGitHubResource(ctx, client, token, path, params, &batch); err != nil {
 			return nil, err
 		}
 
+		return batch, nil
+	}, func(batch []T) error {
 		for _, alert := range batch {
-			if alert == nil {
+			if lo.IsNil(alert) {
 				continue
 			}
 			payload, err := json.Marshal(alert)
 			if err != nil {
-				return nil, err
+				return err
 			}
 			out = append(out, payload)
 		}
-		if len(batch) < perPage {
-			break
-		}
-		page++
+		return nil
+	})
+	if err != nil {
+		return nil, err
 	}
 
 	return out, nil
 }
 
-// listSecretScanningAlerts fetches secret scanning alerts for a repository
-func listSecretScanningAlerts(ctx context.Context, client *helpers.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
-	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
+func collectGitHubPaged[T any](ctx context.Context, perPage int, fetch func(page, perPage int) ([]T, error), handle func([]T) error) error {
 	page := 1
-	out := make([]json.RawMessage, 0)
-
-	state := strings.TrimSpace(config.AlertState)
-	if state == "" {
-		state = defaultAlertState
-	}
-
 	for {
-		params := url.Values{}
-		params.Set("per_page", fmt.Sprintf("%d", perPage))
-		params.Set("page", fmt.Sprintf("%d", page))
-		if state != "" {
-			params.Set("state", state)
+		if err := ctx.Err(); err != nil {
+			return err
 		}
-
-		var batch []*gh.SecretScanningAlert
-		path := fmt.Sprintf("repos/%s/secret-scanning/alerts", strings.TrimSpace(repo))
-		if err := fetchGitHubResource(ctx, client, token, path, params, &batch); err != nil {
-			return nil, err
+		batch, err := fetch(page, perPage)
+		if err != nil {
+			return err
 		}
-
-		for _, alert := range batch {
-			if alert == nil {
-				continue
-			}
-			payload, err := json.Marshal(alert)
-			if err != nil {
-				return nil, err
-			}
-			out = append(out, payload)
+		if err := handle(batch); err != nil {
+			return err
 		}
 		if len(batch) < perPage {
-			break
+			return nil
 		}
 		page++
 	}
+}
 
-	return out, nil
+func gitHubPageParams(page, perPage int) url.Values {
+	params := url.Values{}
+	params.Set("per_page", fmt.Sprintf("%d", perPage))
+	params.Set("page", fmt.Sprintf("%d", page))
+	return params
+}
+
+func resolveAlertState(value string) string {
+	if value == "" {
+		return defaultAlertState
+	}
+	return value
 }
 
 // appendAlertEnvelopes wraps payloads into alert envelopes
@@ -369,13 +325,13 @@ func appendAlertEnvelopes(envelopes []types.AlertEnvelope, alertType, resource s
 
 // repoNamesFromResponses builds full repo names from API responses
 func repoNamesFromResponses(repos []githubRepoResponse, ownerFilter string) []string {
-	filter := strings.TrimSpace(ownerFilter)
+	filter := ownerFilter
 	names := make([]string, 0, len(repos))
 
 	for _, repo := range repos {
-		full := strings.TrimSpace(repo.FullName)
+		full := repo.FullName
 		if full == "" && repo.Owner.Login != "" {
-			full = strings.TrimSpace(repo.Owner.Login + "/" + repo.Name)
+			full = repo.Owner.Login + "/" + repo.Name
 		}
 
 		if full == "" {
@@ -396,7 +352,7 @@ func repoNamesFromResponses(repos []githubRepoResponse, ownerFilter string) []st
 }
 
 // alertTypesFromConfig normalizes and defaults the requested alert types
-func alertTypesFromConfig(values []string) []string {
+func alertTypesFromConfig(values []helpers.LowerString) []string {
 	if len(values) == 0 {
 		return []string{githubAlertTypeDependabot, githubAlertTypeCodeScanning, githubAlertTypeSecretScanning}
 	}
@@ -404,7 +360,7 @@ func alertTypesFromConfig(values []string) []string {
 	seen := map[string]struct{}{}
 	out := make([]string, 0, len(values))
 	for _, value := range values {
-		normalized := normalizeAlertType(value)
+		normalized := normalizeAlertType(string(value))
 		if normalized == "" {
 			continue
 		}
@@ -442,19 +398,13 @@ func alertTypeRequested(alertTypes []string, target string) bool {
 	if needle == "" {
 		return false
 	}
-
-	for _, value := range alertTypes {
-		if normalizeAlertType(value) == needle {
-			return true
-		}
-	}
-
-	return false
+	return lo.ContainsBy(alertTypes, func(value string) bool {
+		return normalizeAlertType(value) == needle
+	})
 }
 
 // normalizeAlertType standardizes alert type identifiers
 func normalizeAlertType(value string) string {
-	value = strings.TrimSpace(strings.ToLower(value))
 	value = strings.ReplaceAll(value, "-", "_")
 	value = strings.ReplaceAll(value, " ", "_")
 	switch value {

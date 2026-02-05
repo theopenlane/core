@@ -22,6 +22,11 @@ const (
 	OperationKindNotify OperationKind = "notify"
 )
 
+const (
+	// OperationVulnerabilitiesCollect identifies the vulnerabilities collection operation.
+	OperationVulnerabilitiesCollect OperationName = "vulnerabilities.collect"
+)
+
 // OperationStatus communicates the result of an operation run
 type OperationStatus string
 

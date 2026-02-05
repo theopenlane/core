@@ -19,13 +19,7 @@ const maxSampleSize = 5
 // oktaOperations returns the Okta operations supported by this provider.
 func oktaOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		{
-			Name:        oktaHealthOp,
-			Kind:        types.OperationKindHealth,
-			Description: "Call Okta org endpoint to verify API token.",
-			Client:      ClientOktaAPI,
-			Run:         runOktaHealth,
-		},
+		helpers.HealthOperation(oktaHealthOp, "Call Okta org endpoint to verify API token.", ClientOktaAPI, runOktaHealth),
 		{
 			Name:        oktaPoliciesOp,
 			Kind:        types.OperationKindCollectFindings,
@@ -90,12 +84,7 @@ func runOktaPolicies(ctx context.Context, input types.OperationInput) (types.Ope
 // oktaCredentials extracts the Okta base URL and API token from the credential payload
 func oktaCredentials(input types.OperationInput) (string, string, error) {
 	data := input.Credential.Data
-	baseURL := ""
-	if data.ProviderData != nil {
-		if value, ok := data.ProviderData["orgUrl"].(string); ok {
-			baseURL = strings.TrimSpace(value)
-		}
-	}
+	baseURL := helpers.StringValue(data.ProviderData, "orgUrl")
 	apiToken := strings.TrimSpace(data.APIToken)
 	if baseURL == "" || apiToken == "" {
 		return "", "", ErrCredentialsMissing

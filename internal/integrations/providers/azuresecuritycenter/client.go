@@ -14,15 +14,7 @@ const (
 
 // azureSecurityCenterClientDescriptors returns the client descriptors published by Defender for Cloud.
 func azureSecurityCenterClientDescriptors() []types.ClientDescriptor {
-	return []types.ClientDescriptor{
-		{
-			Provider:     TypeAzureSecurityCenter,
-			Name:         ClientAzureSecurityCenterAPI,
-			Description:  "Azure management API client for Defender for Cloud",
-			Build:        buildAzureSecurityCenterClient,
-			ConfigSchema: map[string]any{"type": "object"},
-		},
-	}
+	return helpers.DefaultClientDescriptors(TypeAzureSecurityCenter, ClientAzureSecurityCenterAPI, "Azure management API client for Defender for Cloud", buildAzureSecurityCenterClient)
 }
 
 // buildAzureSecurityCenterClient constructs an authenticated Azure management API client.

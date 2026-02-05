@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"maps"
-	"strings"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
@@ -108,7 +107,6 @@ func (p *Provider) requestToken(ctx context.Context, meta azureSecurityCenterMet
 
 // defaultAzureTokenEndpoint builds the Azure token endpoint for the tenant.
 func defaultAzureTokenEndpoint(tenantID string) string {
-	tenantID = strings.TrimSpace(tenantID)
 	if tenantID == "" {
 		return ""
 	}
@@ -168,8 +166,8 @@ func (m azureSecurityCenterMetadata) scopes(overrides []string) []string {
 	if len(overrides) > 0 {
 		return append([]string(nil), overrides...)
 	}
-	if strings.TrimSpace(m.Scope) != "" {
-		return []string{strings.TrimSpace(m.Scope)}
+	if m.Scope != "" {
+		return []string{m.Scope}
 	}
 	return []string{defaultAzureScope}
 }
@@ -190,8 +188,8 @@ func (m azureSecurityCenterMetadata) persist(base map[string]any) map[string]any
 	if m.WorkspaceID != "" {
 		out["workspaceId"] = m.WorkspaceID
 	}
-	if strings.TrimSpace(m.Scope) != "" {
-		out["scope"] = strings.TrimSpace(m.Scope)
+	if m.Scope != "" {
+		out["scope"] = m.Scope
 	}
 	return out
 }

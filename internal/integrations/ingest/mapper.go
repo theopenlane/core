@@ -11,6 +11,7 @@ import (
 	"github.com/google/cel-go/common/decls"
 	"github.com/google/cel-go/common/types"
 
+	commonhelpers "github.com/theopenlane/core/common/helpers"
 	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
@@ -25,6 +26,18 @@ const (
 )
 
 var defaultCELTimeout = 100 * time.Millisecond
+
+var normalizedMappingSchemas = func() map[string]struct{} {
+	out := map[string]struct{}{}
+	for name := range integrationgenerated.IntegrationMappingSchemas {
+		key := normalizeMappingKey(name)
+		if key == "" {
+			continue
+		}
+		out[key] = struct{}{}
+	}
+	return out
+}()
 
 // MappingEvaluator runs CEL expressions against integration payloads
 // It is intentionally small to keep evaluation consistent across integrations
@@ -114,23 +127,53 @@ func normalizeMappingKey(value string) string {
 	return strings.ToLower(strings.TrimSpace(value))
 }
 
-// mappingOverrideLookup normalizes override keys for fast lookup
-func mappingOverrideLookup(config openapi.IntegrationConfig) map[string]openapi.IntegrationMappingOverride {
-	out := make(map[string]openapi.IntegrationMappingOverride, len(config.MappingOverrides))
-	for key, override := range config.MappingOverrides {
-		normalized := normalizeMappingKey(key)
-		if normalized == "" {
-			continue
-		}
-		out[normalized] = override
-	}
-
-	return out
+type mappingOverrideIndex struct {
+	overrides         map[string]openapi.IntegrationMappingOverride
+	hasSchema         map[string]struct{}
+	hasProviderSchema map[string]struct{}
 }
 
-// resolveMappingOverride locates a mapping override using a provider/schema/variant key
-func resolveMappingOverride(config openapi.IntegrationConfig, provider integrationtypes.ProviderType, schemaName string, variant string) (openapi.IntegrationMappingOverride, bool) {
-	overrides := mappingOverrideLookup(config)
+func newMappingOverrideIndex(config openapi.IntegrationConfig) mappingOverrideIndex {
+	return commonhelpers.FoldMap(config.MappingOverrides, func(capacity int) mappingOverrideIndex {
+		return mappingOverrideIndex{
+			overrides:         make(map[string]openapi.IntegrationMappingOverride, capacity),
+			hasSchema:         map[string]struct{}{},
+			hasProviderSchema: map[string]struct{}{},
+		}
+	}, func(acc *mappingOverrideIndex, key string, override openapi.IntegrationMappingOverride) {
+		normalized := normalizeMappingKey(key)
+		if normalized == "" {
+			return
+		}
+		acc.overrides[normalized] = override
+		schemaKey, providerKey := mappingKeyParts(normalized)
+		if schemaKey != "" {
+			acc.hasSchema[schemaKey] = struct{}{}
+		}
+		if providerKey != "" && schemaKey != "" {
+			acc.hasProviderSchema[fmt.Sprintf("%s:%s", providerKey, schemaKey)] = struct{}{}
+		}
+	})
+}
+
+func (m mappingOverrideIndex) HasAny(provider integrationtypes.ProviderType, schemaName string) bool {
+	schemaKey := normalizeMappingKey(schemaName)
+	if schemaKey == "" {
+		return false
+	}
+	if _, ok := m.hasSchema[schemaKey]; ok {
+		return true
+	}
+
+	providerKey := normalizeMappingKey(string(provider))
+	if providerKey == "" {
+		return false
+	}
+	_, ok := m.hasProviderSchema[fmt.Sprintf("%s:%s", providerKey, schemaKey)]
+	return ok
+}
+
+func (m mappingOverrideIndex) Resolve(provider integrationtypes.ProviderType, schemaName string, variant string) (openapi.IntegrationMappingOverride, bool) {
 	providerKey := normalizeMappingKey(string(provider))
 	schemaKey := normalizeMappingKey(schemaName)
 	variantKey := normalizeMappingKey(variant)
@@ -150,7 +193,7 @@ func resolveMappingOverride(config openapi.IntegrationConfig, provider integrati
 	}
 
 	for _, key := range candidates {
-		if override, ok := overrides[key]; ok {
+		if override, ok := m.overrides[key]; ok {
 			return override, true
 		}
 	}
@@ -158,9 +201,37 @@ func resolveMappingOverride(config openapi.IntegrationConfig, provider integrati
 	return openapi.IntegrationMappingOverride{}, false
 }
 
-// resolveMappingSpec selects an override or default mapping for the given variant
-func resolveMappingSpec(config openapi.IntegrationConfig, provider integrationtypes.ProviderType, schemaName string, variant string) (openapi.IntegrationMappingOverride, bool) {
-	if override, ok := resolveMappingOverride(config, provider, schemaName, variant); ok {
+func mappingKeyParts(key string) (schemaKey string, providerKey string) {
+	parts := strings.SplitN(key, ":", 3)
+	switch len(parts) {
+	case 1:
+		return parts[0], ""
+	case 2:
+		if isMappingSchema(parts[0]) {
+			return parts[0], ""
+		}
+		if isMappingSchema(parts[1]) {
+			return parts[1], parts[0]
+		}
+		return parts[0], ""
+	default:
+		if isMappingSchema(parts[1]) {
+			return parts[1], parts[0]
+		}
+		if isMappingSchema(parts[0]) {
+			return parts[0], ""
+		}
+		return parts[1], parts[0]
+	}
+}
+
+func isMappingSchema(value string) bool {
+	_, ok := normalizedMappingSchemas[value]
+	return ok
+}
+
+func resolveMappingSpecWithIndex(index mappingOverrideIndex, provider integrationtypes.ProviderType, schemaName string, variant string) (openapi.IntegrationMappingOverride, bool) {
+	if override, ok := index.Resolve(provider, schemaName, variant); ok {
 		return override, true
 	}
 
@@ -184,15 +255,14 @@ func allowedMappingKeys(schema integrationgenerated.IntegrationMappingSchema) ma
 // filterMappingOutput strips fields that are not part of the schema mapping
 func filterMappingOutput(schema integrationgenerated.IntegrationMappingSchema, input map[string]any) map[string]any {
 	allowed := allowedMappingKeys(schema)
-	out := make(map[string]any, len(input))
-	for key, value := range input {
+	return commonhelpers.FoldMap(input, func(capacity int) map[string]any {
+		return make(map[string]any, capacity)
+	}, func(acc *map[string]any, key string, value any) {
 		if _, ok := allowed[key]; !ok {
-			continue
+			return
 		}
-		out[key] = value
-	}
-
-	return out
+		(*acc)[key] = value
+	})
 }
 
 // validateMappingOutput checks required fields are present in mapped output

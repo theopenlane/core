@@ -1,8 +1,6 @@
 package opsconfig
 
-import (
-	"strings"
-)
+import "github.com/theopenlane/core/common/integrations/helpers"
 
 // Pagination captures common paging controls.
 type Pagination struct {
@@ -27,12 +25,22 @@ type PayloadOptions struct {
 	IncludePayloads bool `mapstructure:"include_payloads"`
 }
 
+// EnsureIncludePayloads forces include_payloads to true.
+func EnsureIncludePayloads(config map[string]any) map[string]any {
+	if config == nil {
+		config = map[string]any{}
+	}
+	config["include_payloads"] = true
+
+	return config
+}
+
 // RepositorySelector captures repository selection settings.
 type RepositorySelector struct {
-	Repositories []string `mapstructure:"repositories"`
-	Repos        []string `mapstructure:"repos"`
-	Repository   string   `mapstructure:"repository"`
-	Owner        string   `mapstructure:"owner"`
+	Repositories []helpers.TrimmedString `mapstructure:"repositories"`
+	Repos        []helpers.TrimmedString `mapstructure:"repos"`
+	Repository   helpers.TrimmedString   `mapstructure:"repository"`
+	Owner        helpers.TrimmedString   `mapstructure:"owner"`
 }
 
 // List returns a merged, de-duplicated repository list.
@@ -40,16 +48,16 @@ func (r RepositorySelector) List() []string {
 	out := make([]string, 0, len(r.Repositories)+len(r.Repos)+1)
 	seen := map[string]struct{}{}
 
-	appendValue := func(value string) {
-		value = strings.TrimSpace(value)
+	appendValue := func(value helpers.TrimmedString) {
 		if value == "" {
 			return
 		}
-		if _, ok := seen[value]; ok {
+		key := string(value)
+		if _, ok := seen[key]; ok {
 			return
 		}
-		seen[value] = struct{}{}
-		out = append(out, value)
+		seen[key] = struct{}{}
+		out = append(out, key)
 	}
 
 	for _, value := range r.Repositories {

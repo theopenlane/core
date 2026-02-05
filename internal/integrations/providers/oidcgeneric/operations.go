@@ -11,13 +11,7 @@ import (
 // oidcOperations handles oidc operations
 func oidcOperations(userInfoURL string) []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		{
-			Name:        types.OperationName("health.default"),
-			Kind:        types.OperationKindHealth,
-			Description: "Call the configured userinfo endpoint (when available) to validate the OIDC token.",
-			Client:      ClientOIDCAPI,
-			Run:         runOIDCHealth(userInfoURL),
-		},
+		helpers.HealthOperation(types.OperationName("health.default"), "Call the configured userinfo endpoint (when available) to validate the OIDC token.", ClientOIDCAPI, runOIDCHealth(userInfoURL)),
 		{
 			Name:        types.OperationName("claims.inspect"),
 			Kind:        types.OperationKindScanSettings,

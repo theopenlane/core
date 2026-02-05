@@ -5,7 +5,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"reflect"
 	"strings"
 
 	"github.com/theopenlane/core/common/integrations/types"
@@ -119,11 +118,7 @@ func (h *Handler) updateIntegrationProviderMetadata(ctx context.Context, integra
 	}
 
 	entry := buildIntegrationProviderMetadata(provider, spec, meta, h.IntegrationRegistry)
-	update := h.DBClient.Integration.UpdateOneID(integrationID)
-	if setMethod := reflect.ValueOf(update).MethodByName("SetProviderMetadata"); setMethod.IsValid() {
-		setMethod.Call([]reflect.Value{reflect.ValueOf(entry)})
-		return update.Exec(ctx)
-	}
-
-	return nil
+	return h.DBClient.Integration.UpdateOneID(integrationID).
+		SetProviderMetadata(entry).
+		Exec(ctx)
 }
