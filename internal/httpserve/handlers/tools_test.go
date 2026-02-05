@@ -42,6 +42,8 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
@@ -49,8 +51,6 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/integrations/providers"
-	"github.com/theopenlane/core/pkg/integrations/registry"
 	authmiddleware "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 

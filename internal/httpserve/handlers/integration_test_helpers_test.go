@@ -8,8 +8,8 @@ import (
 
 	"github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/common/integrations/types"
-	"github.com/theopenlane/core/pkg/integrations/providers"
-	"github.com/theopenlane/core/pkg/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/registry"
 )
 
 func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[types.ProviderType]config.ProviderSpec) func() {

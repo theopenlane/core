@@ -17,7 +17,7 @@ import (
 	hushschema "github.com/theopenlane/core/internal/ent/generated/hush"
 	integration "github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/integrations"
+	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"

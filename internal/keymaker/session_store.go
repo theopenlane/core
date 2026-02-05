@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/integrations/types"
-	"github.com/theopenlane/core/pkg/integrations"
+	"github.com/theopenlane/core/internal/integrations"
 )
 
 // ActivationSession captures the temporary state required to complete an OAuth flow

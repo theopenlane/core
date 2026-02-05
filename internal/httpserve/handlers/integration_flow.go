@@ -21,9 +21,9 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/pkg/integrations"
 	"github.com/theopenlane/core/pkg/logx"
 )
 

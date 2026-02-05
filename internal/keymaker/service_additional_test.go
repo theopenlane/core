@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/integrations/types"
-	"github.com/theopenlane/core/pkg/integrations"
+	"github.com/theopenlane/core/internal/integrations"
 )
 
 func TestNewServiceValidatesDependencies(t *testing.T) {

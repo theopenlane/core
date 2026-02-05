@@ -8,8 +8,8 @@ import (
 
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/pkg/integrations"
-	"github.com/theopenlane/core/pkg/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations"
+	"github.com/theopenlane/core/internal/integrations/providers"
 )
 
 func TestService_BeginAndComplete(t *testing.T) {
