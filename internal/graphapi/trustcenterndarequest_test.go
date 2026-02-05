@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
@@ -65,6 +66,10 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 		TrustCenterID: &trustCenterWithApproval.ID,
 	}
 
+	reqCleanupOrg1 := []string{}
+	reqCleanupOrg2 := []string{}
+	ndaEmail := "Trust Center NDA Request"
+	authEmail := "Access"
 	testCases := []struct {
 		name                   string
 		input                  testclient.CreateTrustCenterNDARequestInput
@@ -72,9 +77,10 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 		ctx                    context.Context
 		expectedErr            string
 		expectedStatus         enums.TrustCenterNDARequestStatus
-		expectEmailSent        bool
+		expectEmailSent        string
 		setStatus              *enums.TrustCenterNDARequestStatus
-		expectedSecondaryEmail bool
+		setEmptyStatus         bool
+		expectedSecondaryEmail string
 	}{
 		{
 			name:            "happy path - no approval required, status should be REQUESTED",
@@ -82,7 +88,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
 			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
-			expectEmailSent: true,
+			expectEmailSent: ndaEmail,
 		},
 		{
 			name:                   "happy path - resend request with no approval required, status should be REQUESTED",
@@ -90,9 +96,9 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			client:                 suite.client.api,
 			ctx:                    testUser1.UserCtx,
 			expectedStatus:         enums.TrustCenterNDARequestStatusRequested,
-			expectEmailSent:        true, // should get initial email
+			expectEmailSent:        ndaEmail,
 			setStatus:              &enums.TrustCenterNDARequestStatusSigned,
-			expectedSecondaryEmail: true, //should get auth email
+			expectedSecondaryEmail: authEmail,
 		},
 		{
 			name:                   "happy path - approval required, status should be NEEDS_APPROVAL, set to approved",
@@ -100,9 +106,28 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			client:                 suite.client.api,
 			ctx:                    testUser2.UserCtx,
 			expectedStatus:         enums.TrustCenterNDARequestStatusNeedsApproval,
-			expectEmailSent:        false, // no email because not approved yet
+			expectEmailSent:        "", // no email because not approved yet
 			setStatus:              &enums.TrustCenterNDARequestStatusApproved,
-			expectedSecondaryEmail: true, // should get approved email
+			expectedSecondaryEmail: ndaEmail, // should get nda email
+		},
+		{
+			name:                   "happy path - sign after approval",
+			input:                  emailApprovedRequest,
+			client:                 suite.client.api,
+			ctx:                    testUser2.UserCtx,
+			expectedStatus:         enums.TrustCenterNDARequestStatusApproved,
+			expectEmailSent:        ndaEmail,
+			setStatus:              &enums.TrustCenterNDARequestStatusSigned,
+			expectedSecondaryEmail: authEmail,
+		},
+		{
+			name:            "happy path - re-request after approval",
+			input:           emailApprovedRequest,
+			client:          suite.client.api,
+			ctx:             testUser2.UserCtx,
+			expectedStatus:  enums.TrustCenterNDARequestStatusSigned,
+			expectEmailSent: authEmail, // no email because already signed and not updating in the request here
+
 		},
 		{
 			name:                   "happy path - approval required, status should be NEEDS_APPROVAL, set to declined for next test",
@@ -110,9 +135,9 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			client:                 suite.client.api,
 			ctx:                    testUser2.UserCtx,
 			expectedStatus:         enums.TrustCenterNDARequestStatusNeedsApproval,
-			expectEmailSent:        false, // no email because not approved yet
+			expectEmailSent:        "", // no email because not approved yet
 			setStatus:              &enums.TrustCenterNDARequestStatusDeclined,
-			expectedSecondaryEmail: false,
+			expectedSecondaryEmail: "",
 		},
 		{
 			name: "happy path - with company name and reason",
@@ -127,7 +152,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
 			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
-			expectEmailSent: true,
+			expectEmailSent: ndaEmail,
 		},
 		{
 			name: "view only user cannot create",
@@ -208,7 +233,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			}
 
 			// Verify the job was or was not created based on expectation
-			if tc.expectEmailSent {
+			if tc.expectEmailSent != "" {
 				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
 					[]rivertest.ExpectedJob{
 						{
@@ -217,11 +242,21 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 					})
 				assert.Assert(t, jobs != nil)
 				assert.Assert(t, is.Len(jobs, 1))
+
+				found := false
+				for _, v := range jobs {
+					if strings.Contains(string(v.EncodedArgs), tc.expectEmailSent) {
+						found = true
+						break
+					}
+				}
+
+				assert.Assert(t, found, "expected email containing '%s' to be sent", tc.expectEmailSent)
 			} else {
 				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
 			}
 
-			if tc.setStatus != nil {
+			if tc.setStatus != nil || tc.setEmptyStatus {
 				// Clear any existing jobs
 				err = suite.client.db.Job.TruncateRiverTables(tc.ctx)
 				assert.NilError(t, err)
@@ -232,9 +267,17 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 				assert.NilError(t, err)
 				assert.Assert(t, resp != nil)
 
-				assert.Equal(t, *tc.setStatus, *resp.UpdateTrustCenterNDARequest.TrustCenterNDARequest.Status)
+				if tc.setStatus != nil {
+					assert.Equal(t, *tc.setStatus, *resp.UpdateTrustCenterNDARequest.TrustCenterNDARequest.Status)
+				} else {
+					assert.Equal(t, tc.expectedStatus, *resp.UpdateTrustCenterNDARequest.TrustCenterNDARequest.Status)
+				}
 
-				if tc.expectedSecondaryEmail {
+				if tc.setStatus == &enums.TrustCenterNDARequestStatusSigned {
+					assert.Check(t, resp.UpdateTrustCenterNDARequest.TrustCenterNDARequest.SignedAt != nil, "signed_at should be set when status is signed")
+				}
+
+				if tc.expectedSecondaryEmail != "" {
 					jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
 						[]rivertest.ExpectedJob{
 							{
@@ -243,15 +286,34 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 						})
 					assert.Assert(t, jobs != nil)
 					assert.Assert(t, is.Len(jobs, 1))
+
+					found := false
+
+					for _, v := range jobs {
+						if strings.Contains(string(v.EncodedArgs), tc.expectedSecondaryEmail) {
+							found = true
+							break
+						}
+					}
+					assert.Assert(t, found, "expected email containing '%s' to be sent", tc.expectedSecondaryEmail)
 				} else {
 					rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
 				}
 			}
 
-			(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(tc.ctx, t)
+			if tc.input.TrustCenterID == &trustCenterNoApproval.ID {
+				reqCleanupOrg1 = append(reqCleanupOrg1, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+			} else if tc.input.TrustCenterID == &trustCenterWithApproval.ID {
+				reqCleanupOrg2 = append(reqCleanupOrg2, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+			}
 		})
 	}
 
+	reqCleanupOrg1 = lo.Uniq(reqCleanupOrg1)
+	reqCleanupOrg2 = lo.Uniq(reqCleanupOrg2)
+
+	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, IDs: reqCleanupOrg1}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, IDs: reqCleanupOrg2}).MustDelete(testUser2.UserCtx, t)
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate1.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate2.ID}).MustDelete(testUser2.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenterNoApproval.ID}).MustDelete(testUser1.UserCtx, t)
