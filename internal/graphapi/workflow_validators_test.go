@@ -75,6 +75,33 @@ func TestValidateWorkflowDefinitionInput(t *testing.T) {
 			},
 			wantErr: ErrSchemaTypeMismatch,
 		},
+		{
+			name:       "review action missing params",
+			schemaType: "Control",
+			doc: &models.WorkflowDefinitionDocument{
+				Triggers: []models.WorkflowTrigger{
+					{Operation: "UPDATE", ObjectType: enums.WorkflowObjectTypeControl},
+				},
+				Actions: []models.WorkflowAction{
+					{Key: "review", Type: string(enums.WorkflowActionTypeReview)},
+				},
+			},
+			wantErr: ErrActionInvalidParams,
+		},
+		{
+			name:       "invalid approval timing",
+			schemaType: "Control",
+			doc: &models.WorkflowDefinitionDocument{
+				ApprovalTiming: enums.WorkflowApprovalTiming("INVALID"),
+				Triggers: []models.WorkflowTrigger{
+					{Operation: "UPDATE", ObjectType: enums.WorkflowObjectTypeControl},
+				},
+				Actions: []models.WorkflowAction{
+					{Key: "notify", Type: string(enums.WorkflowActionTypeNotification)},
+				},
+			},
+			wantErr: ErrApprovalTimingInvalid,
+		},
 	}
 
 	for _, tt := range tests {
@@ -89,6 +116,22 @@ func TestValidateWorkflowDefinitionInput(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestValidateReviewActionParams(t *testing.T) {
+	params := workflows.ReviewActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{
+				{Type: enums.WorkflowTargetTypeUser, ID: "user-1"},
+			},
+		},
+		Label: "Review Required",
+	}
+	raw, err := json.Marshal(params)
+	require.NoError(t, err)
+
+	err = validateReviewActionParams(raw)
+	assert.NoError(t, err)
 }
 
 func TestValidateTrigger(t *testing.T) {

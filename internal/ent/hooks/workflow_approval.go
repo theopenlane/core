@@ -4,11 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"reflect"
+	"strings"
 	"time"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
+	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -117,9 +120,24 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			if err := validateWorkflowEligibleFields(mut.Type(), allChangedFields); err != nil {
-				return nil, err
+			eligibleFields, ineligibleFields := workflows.SeparateFieldsByEligibility(mut.Type(), allChangedFields)
+			ineligibleFields = filterNonSystemFields(ineligibleFields)
+
+			eligibleChanges := workflows.BuildProposedChanges(mut, eligibleFields)
+			hasDirectChanges := len(ineligibleFields) > 0 || len(changedEdges) > 0
+			if hasDirectChanges {
+				resetMutationFields(m, eligibleFields)
+				bypassCtx := workflows.WithContext(ctx)
+				if _, err := next.Mutate(bypassCtx, m); err != nil {
+					return nil, err
+				}
 			}
+
+			if len(eligibleFields) == 0 {
+				return workflows.LoadWorkflowObject(allowCtx, client, mut.Type(), id)
+			}
+
+			proposedChanges = eligibleChanges
 
 			// Route to proposed changes instead of applying directly
 			workflows.MarkSkipEventEmission(ctx)
@@ -202,6 +220,62 @@ var workflowApprovalIgnoredFields = map[string]struct{}{
 	"updated_by": {},
 	"deleted_at": {},
 	"deleted_by": {},
+}
+
+// filterNonSystemFields removes system fields from the given field list
+func filterNonSystemFields(fields []string) []string {
+	if len(fields) == 0 {
+		return fields
+	}
+	remaining := make([]string, 0, len(fields))
+	for _, field := range fields {
+		if _, ok := workflowApprovalIgnoredFields[field]; ok {
+			continue
+		}
+		remaining = append(remaining, field)
+	}
+	return remaining
+}
+
+// resetMutationFields removes any pending changes for the provided field names.
+// It relies on ent-generated Reset<Field> methods, falling back silently when no reset exists.
+func resetMutationFields(m ent.Mutation, fields []string) {
+	if m == nil || len(fields) == 0 {
+		return
+	}
+
+	fieldSet := make(map[string]struct{}, len(fields))
+	for _, field := range fields {
+		fieldSet[field] = struct{}{}
+	}
+
+	value := reflect.ValueOf(m)
+	if value.Kind() != reflect.Ptr {
+		return
+	}
+
+	typ := value.Type()
+	for i := 0; i < typ.NumMethod(); i++ {
+		method := typ.Method(i)
+		if !strings.HasPrefix(method.Name, "Reset") {
+			continue
+		}
+		if method.Type.NumIn() != 1 || method.Type.NumOut() != 0 {
+			continue
+		}
+
+		suffix := strings.TrimPrefix(method.Name, "Reset")
+		if suffix == "" {
+			continue
+		}
+
+		fieldName := strcase.SnakeCase(suffix)
+		if _, ok := fieldSet[fieldName]; !ok {
+			continue
+		}
+
+		value.Method(i).Call(nil)
+	}
 }
 
 // stageProposalChanges creates or updates WorkflowProposal records for each domain

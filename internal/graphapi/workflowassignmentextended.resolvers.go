@@ -149,6 +149,19 @@ func (r *mutationResolver) RequestChangesWorkflowAssignment(ctx context.Context,
 		metadata["change_inputs"] = inputs
 	}
 
+	rejectionMeta := assignment.RejectionMetadata
+	rejectionMeta.RejectedAt = decidedAt.Format(time.RFC3339)
+	rejectionMeta.RejectedByUserID = decisionCtx.UserID
+	if reason != nil && *reason != "" {
+		rejectionMeta.RejectionReason = *reason
+	}
+	if len(inputs) > 0 {
+		rejectionMeta.ChangeRequestInputs = inputs
+	}
+	if rejectionMeta.ActionKey == "" {
+		rejectionMeta.ActionKey = assignment.ApprovalMetadata.ActionKey
+	}
+
 	allowCtx := workflows.AllowContext(ctx)
 
 	update := withTransactionalMutation(ctx).WorkflowAssignment.Update().
@@ -158,6 +171,7 @@ func (r *mutationResolver) RequestChangesWorkflowAssignment(ctx context.Context,
 		).
 		SetStatus(enums.WorkflowAssignmentStatusChangesRequested).
 		SetMetadata(metadata).
+		SetRejectionMetadata(rejectionMeta).
 		SetDecidedAt(decidedAt).
 		SetActorUserID(decisionCtx.UserID)
 

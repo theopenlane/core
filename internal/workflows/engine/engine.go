@@ -325,7 +325,7 @@ func (e *WorkflowEngine) ProcessAction(ctx context.Context, instance *generated.
 	}
 
 	// Approval actions pause the workflow until decisions arrive
-	if actionType != nil && *actionType == enums.WorkflowActionTypeApproval {
+	if actionType != nil && isGatedActionType(*actionType) {
 		allowCtx := workflows.AllowContext(ctx)
 		if err := e.client.WorkflowInstance.UpdateOneID(instance.ID).
 			SetState(enums.WorkflowInstanceStatePaused).
@@ -372,7 +372,7 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 		if approvalMetadata != nil {
 			update.SetApprovalMetadata(*approvalMetadata)
 		}
-	case enums.WorkflowAssignmentStatusRejected:
+	case enums.WorkflowAssignmentStatusRejected, enums.WorkflowAssignmentStatusChangesRequested:
 		if rejectionMetadata != nil {
 			update.SetRejectionMetadata(*rejectionMetadata)
 		}

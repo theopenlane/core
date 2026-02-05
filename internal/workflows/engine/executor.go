@@ -49,6 +49,8 @@ func (e *WorkflowEngine) Execute(ctx context.Context, action models.WorkflowActi
 	switch *actionType {
 	case enums.WorkflowActionTypeApproval:
 		return e.executeApproval(ctx, action, instance, obj)
+	case enums.WorkflowActionTypeReview:
+		return e.executeReview(ctx, action, instance, obj)
 	case enums.WorkflowActionTypeNotification:
 		return e.executeNotification(ctx, action, instance, obj)
 	case enums.WorkflowActionTypeFieldUpdate:
@@ -91,9 +93,17 @@ func (e *WorkflowEngine) executeFieldUpdate(ctx context.Context, action models.W
 		return fmt.Errorf("%w: updates", ErrMissingRequiredField)
 	}
 
+	updates := params.Updates
+	if obj != nil {
+		replacements := wfworkflows.BuildObjectReplacements(obj)
+		if len(replacements) > 0 {
+			updates = applyStringTemplates(updates, replacements)
+		}
+	}
+
 	// Use both workflow bypass and privacy bypass for internal field updates
 	bypassCtx := wfworkflows.AllowBypassContext(ctx)
-	return wfworkflows.ApplyObjectFieldUpdates(bypassCtx, e.client, obj.Type, obj.ID, params.Updates)
+	return wfworkflows.ApplyObjectFieldUpdates(bypassCtx, e.client, obj.Type, obj.ID, updates)
 }
 
 // executeApproval creates workflow assignments for approval actions
@@ -252,7 +262,7 @@ func (e *WorkflowEngine) executeApproval(ctx context.Context, action models.Work
 			}
 
 			if assignmentCreated {
-				e.emitAssignmentCreated(ctx, instance, obj, assignment.ID, userID)
+				e.emitAssignmentCreated(ctx, instance, obj, assignment.ID, userID, enums.WorkflowActionTypeApproval)
 			}
 		}
 	}
@@ -494,6 +504,165 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 			wait = defaultWebhookFallbackBackoffMS * time.Millisecond
 		}
 		time.Sleep(wait)
+	}
+
+	return nil
+}
+
+// executeReview creates workflow assignments for review actions
+func (e *WorkflowEngine) executeReview(ctx context.Context, action models.WorkflowAction, instance *generated.WorkflowInstance, obj *wfworkflows.Object) error {
+	// Use allow context for internal workflow operations
+	allowCtx := wfworkflows.AllowContext(ctx)
+
+	// Parse review params
+	var params wfworkflows.ReviewActionParams
+
+	if action.Params != nil {
+		if err := json.Unmarshal(action.Params, &params); err != nil {
+			return fmt.Errorf("%w: %w", ErrUnmarshalParams, err)
+		}
+	}
+
+	required := true
+	if params.Required != nil {
+		required = *params.Required
+	}
+	requiredCount := max(params.RequiredCount, 0)
+	if !required && requiredCount == 0 {
+		// Optional reviews without an explicit quorum should still allow forward progress
+		requiredCount = 1
+	}
+
+	if len(params.Targets) == 0 {
+		observability.WarnEngine(ctx, observability.OpExecuteAction, action.Type, observability.ActionFields(action.Key, nil), nil)
+		return ErrReviewNoTargets
+	}
+
+	if obj == nil {
+		return ErrObjectRefMissingID
+	}
+
+	ownerID := instance.OwnerID
+	if ownerID == "" {
+		extracted, err := auth.GetOrganizationIDFromContext(ctx)
+		if err != nil {
+			return err
+		}
+
+		ownerID = extracted
+	}
+
+	actionIndex := actionIndexForKey(instance.DefinitionSnapshot.Actions, action.Key)
+	assignmentIDs := make([]string, 0)
+	targetUserIDs := make([]string, 0)
+	seenAssignmentIDs := make(map[string]struct{})
+	seenTargetUserIDs := make(map[string]struct{})
+	seenAssignments := make(map[string]struct{})
+
+	// Resolve each target and create one assignment per resolved user
+	for _, targetConfig := range params.Targets {
+		userIDs, err := e.resolveTargetUsers(ctx, targetConfig, obj, action.Type, action.Key)
+		if err != nil {
+			return fmt.Errorf("%w %s: %w", ErrFailedToResolveTarget, targetConfig.Type.String(), err)
+		}
+		if len(userIDs) == 0 {
+			continue
+		}
+
+		for _, userID := range userIDs {
+			assignmentKey := fmt.Sprintf("review_%s_%s", action.Key, userID)
+			if _, ok := seenAssignments[assignmentKey]; ok {
+				continue
+			}
+			seenAssignments[assignmentKey] = struct{}{}
+
+			reviewMeta := models.WorkflowAssignmentApproval{
+				ActionKey:     action.Key,
+				Required:      required,
+				Label:         params.Label,
+				RequiredCount: requiredCount,
+			}
+
+			assignmentCreate := e.client.WorkflowAssignment.
+				Create().
+				SetWorkflowInstanceID(instance.ID).
+				SetAssignmentKey(assignmentKey).
+				SetStatus(enums.WorkflowAssignmentStatusPending).
+				SetRequired(required).
+				SetLabel(params.Label).
+				SetRole("REVIEWER").
+				SetApprovalMetadata(reviewMeta)
+			assignmentCreate.SetOwnerID(ownerID)
+
+			assignmentCreated := true
+			assignment, err := assignmentCreate.Save(allowCtx)
+			if err != nil {
+				if generated.IsConstraintError(err) {
+					assignmentCreated = false
+					assignment, err = e.client.WorkflowAssignment.
+						Query().
+						Where(
+							workflowassignment.WorkflowInstanceIDEQ(instance.ID),
+							workflowassignment.AssignmentKeyEQ(assignmentKey),
+							workflowassignment.OwnerIDEQ(ownerID),
+						).
+						Only(allowCtx)
+				}
+			}
+
+			if err != nil {
+				return ErrAssignmentCreationFailed
+			}
+
+			if assignment != nil {
+				if _, ok := seenAssignmentIDs[assignment.ID]; !ok {
+					seenAssignmentIDs[assignment.ID] = struct{}{}
+					assignmentIDs = append(assignmentIDs, assignment.ID)
+				}
+			}
+			if _, ok := seenTargetUserIDs[userID]; !ok {
+				seenTargetUserIDs[userID] = struct{}{}
+				targetUserIDs = append(targetUserIDs, userID)
+			}
+
+			targetCreate := e.client.WorkflowAssignmentTarget.
+				Create().
+				SetWorkflowAssignmentID(assignment.ID).
+				SetTargetType(targetConfig.Type).
+				SetTargetUserID(userID)
+
+			switch targetConfig.Type {
+			case enums.WorkflowTargetTypeGroup:
+				if targetConfig.ID != "" {
+					targetCreate.SetTargetGroupID(targetConfig.ID)
+				}
+			case enums.WorkflowTargetTypeResolver:
+				if targetConfig.ResolverKey != "" {
+					targetCreate.SetResolverKey(targetConfig.ResolverKey)
+				}
+			}
+
+			targetCreate.SetOwnerID(ownerID)
+
+			if err := targetCreate.Exec(allowCtx); err != nil {
+				if !generated.IsConstraintError(err) {
+					return ErrFailedToCreateAssignmentTarget
+				}
+			}
+
+			if assignmentCreated {
+				e.emitAssignmentCreated(ctx, instance, obj, assignment.ID, userID, enums.WorkflowActionTypeReview)
+			}
+		}
+	}
+
+	if len(assignmentIDs) > 0 {
+		details := assignmentCreatedDetailsForReview(action, actionIndex, obj, assignmentIDs, targetUserIDs, required, requiredCount, params.Label)
+		e.recordAssignmentsCreated(ctx, instance, details)
+	}
+
+	if len(assignmentIDs) == 0 {
+		return ErrReviewNoTargets
 	}
 
 	return nil

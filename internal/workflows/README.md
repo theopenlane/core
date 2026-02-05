@@ -651,7 +651,7 @@ flowchart TB
     end
 
     subgraph "Routing Decision"
-        Route1["ERROR: ErrWorkflowIneligibleField<br/>Cannot mix eligible and ineligible<br/>fields in same mutation"]
+        Route1["Apply ineligible directly<br/>and route eligible to proposal"]
         Route2["Route to WorkflowProposal<br/>Changes: {reference_id: NEW}"]
         Route3["Apply directly<br/>(no workflow)"]
     end

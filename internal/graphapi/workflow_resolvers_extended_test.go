@@ -158,6 +158,17 @@ func TestRequestChangesWorkflowAssignment(t *testing.T) {
 	if ok {
 		assert.Check(t, is.Equal(inputsVal["status"], "in_review"))
 	}
+
+	rejection := updated.RejectionMetadata
+	assert.Check(t, rejection.RejectedAt != "")
+	assert.Check(t, is.Equal(rejection.RejectedByUserID, user.ID))
+	assert.Check(t, is.Equal(rejection.RejectionReason, reason))
+	assert.Check(t, rejection.ActionKey != "")
+	inputsVal = rejection.ChangeRequestInputs
+	assert.Check(t, inputsVal != nil)
+	if inputsVal != nil {
+		assert.Check(t, is.Equal(inputsVal["status"], "in_review"))
+	}
 }
 
 func TestReassignWorkflowAssignment(t *testing.T) {

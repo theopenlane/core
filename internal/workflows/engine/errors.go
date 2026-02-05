@@ -113,4 +113,6 @@ var (
 	ErrApprovalNoTargets = errors.New("approval action has no resolved targets")
 	// ErrMissingObjectRef is returned when a workflow object ref is nil
 	ErrMissingObjectRef = errors.New("workflow object ref is required")
+	// ErrReviewNoTargets indicates a review action resolved no targets and should be skipped
+	ErrReviewNoTargets = errors.New("review action has no resolved targets")
 )

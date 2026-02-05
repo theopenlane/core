@@ -4,7 +4,9 @@ package engine_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
+	"time"
 
 	"github.com/oklog/ulid/v2"
 
@@ -16,7 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/utils/ulids"
@@ -661,8 +663,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
 	s.Equal(newRef, appliedControl.ReferenceID)
 }
 
-// TestApprovalHookRejectsIneligibleFields verifies that mutations containing both workflow-eligible
-// fields AND non-eligible fields are rejected outright. This prevents partial staging.
+// TestApprovalHookAppliesIneligibleFields verifies that when a mutation contains both
+// workflow-eligible and ineligible fields, the ineligible fields are applied immediately
+// while eligible fields are staged for approval.
 //
 // Workflow Definition (Plain English):
 //
@@ -672,16 +675,15 @@ func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
 // Test Flow:
 //  1. Creates an approval workflow for reference_id changes
 //  2. Creates a Control with an initial reference_id
-//  3. Attempts to update BOTH reference_id AND description in the same mutation
-//  4. Verifies the mutation is REJECTED with ErrWorkflowIneligibleField
-//  5. Confirms the Control remains unchanged (neither field was modified)
+//  3. Updates BOTH reference_id AND description in the same mutation
+//  4. Verifies a proposal was created for reference_id
+//  5. Confirms description was applied immediately, while reference_id remains unchanged
 //
 // Why This Matters:
 //
-//	Workflow staging can only capture specific fields. If a mutation includes non-eligible
-//	fields alongside eligible ones, we cannot partially stage it. The entire mutation must
-//	be rejected to maintain data integrity and prevent unexpected partial updates.
-func (s *WorkflowEngineTestSuite) TestApprovalHookRejectsIneligibleFields() {
+//	Workflow staging should not block unrelated edits. Ineligible fields should pass through
+//	while eligible fields are staged for approval.
+func (s *WorkflowEngineTestSuite) TestApprovalHookAppliesIneligibleFields() {
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -723,11 +725,133 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookRejectsIneligibleFields() {
 		SetReferenceID(newRef).
 		SetDescription("not eligible").
 		Save(seedCtx)
-	s.Require().ErrorIs(err, hooks.ErrWorkflowIneligibleField)
+	s.Require().NoError(err)
+
+	s.WaitForEvents()
 
 	reloaded, err := s.client.Control.Get(seedCtx, control.ID)
 	s.Require().NoError(err)
 	s.Equal(oldRef, reloaded.ReferenceID)
+	s.Equal("not eligible", reloaded.Description)
+
+	instance, err := s.client.WorkflowInstance.Query().
+		Where(
+			workflowinstance.OwnerIDEQ(orgID),
+			workflowinstance.ControlIDEQ(control.ID),
+		).
+		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
+		First(seedCtx)
+	s.Require().NoError(err)
+	s.Require().NotEmpty(instance.WorkflowProposalID)
+
+	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
+	s.Require().NoError(err)
+	value, ok := proposal.Changes["reference_id"]
+	s.Require().True(ok)
+	s.Equal(newRef, value)
+}
+
+// TestApprovalChangesRequestedCreatesRequesterAssignment verifies that when an approval assignment
+// is marked as CHANGES_REQUESTED, a requester assignment is created with the change details.
+func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedCreatesRequesterAssignment() {
+	approverID, orgID, userCtx := s.SetupTestUser()
+	seedCtx := s.SeedContext(approverID, orgID)
+
+	wfEngine := s.Engine()
+
+	params := workflows.ApprovalActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{
+				{Type: enums.WorkflowTargetTypeUser, ID: approverID},
+			},
+		},
+		Required: boolPtr(true),
+		Label:    "Status Approval",
+		Fields:   []string{"status"},
+	}
+	paramsBytes, err := json.Marshal(params)
+	s.Require().NoError(err)
+
+	action := models.WorkflowAction{
+		Type:   enums.WorkflowActionTypeApproval.String(),
+		Key:    "status_approval",
+		Params: paramsBytes,
+	}
+
+	_ = s.CreateApprovalWorkflowDefinition(seedCtx, orgID, action)
+
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-" + ulid.Make().String()).
+		SetOwnerID(orgID).
+		SetStatus(enums.ControlStatusPreparing).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	_, err = s.client.Control.UpdateOneID(control.ID).
+		SetStatus(enums.ControlStatusApproved).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	s.WaitForEvents()
+
+	instance, err := s.client.WorkflowInstance.Query().
+		Where(
+			workflowinstance.OwnerIDEQ(orgID),
+			workflowinstance.ControlIDEQ(control.ID),
+		).
+		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
+		First(seedCtx)
+	s.Require().NoError(err)
+
+	assignment, err := s.client.WorkflowAssignment.Query().
+		Where(
+			workflowassignment.WorkflowInstanceIDEQ(instance.ID),
+			workflowassignment.AssignmentKeyHasPrefix("approval_"+action.Key+"_"),
+		).
+		Only(seedCtx)
+	s.Require().NoError(err)
+
+	rejectionMeta := models.WorkflowAssignmentRejection{
+		ActionKey:            action.Key,
+		RejectionReason:      "needs more detail",
+		RejectedAt:           time.Now().Format(time.RFC3339),
+		RejectedByUserID:     approverID,
+		ChangeRequestInputs:  map[string]any{"status": "in_review"},
+	}
+
+	err = wfEngine.CompleteAssignment(userCtx, assignment.ID, enums.WorkflowAssignmentStatusChangesRequested, nil, &rejectionMeta)
+	s.Require().NoError(err)
+
+	s.WaitForEvents()
+
+	requesterKey := fmt.Sprintf("change_request_%s_%s", action.Key, approverID)
+	requesterAssignment, err := s.client.WorkflowAssignment.Query().
+		Where(
+			workflowassignment.WorkflowInstanceIDEQ(instance.ID),
+			workflowassignment.AssignmentKeyEQ(requesterKey),
+		).
+		Only(seedCtx)
+	s.Require().NoError(err)
+	s.Equal("REQUESTER", requesterAssignment.Role)
+	s.Equal(enums.WorkflowAssignmentStatusPending, requesterAssignment.Status)
+	s.False(requesterAssignment.Required)
+
+	meta := requesterAssignment.Metadata
+	s.Require().NotNil(meta)
+	s.Equal(action.Key, meta["change_request_action_key"])
+	s.Equal("needs more detail", meta["change_request_reason"])
+	inputs, ok := meta["change_request_inputs"].(map[string]any)
+	s.Require().True(ok)
+	s.Equal("in_review", inputs["status"])
+
+	exists, err := s.client.WorkflowAssignmentTarget.Query().
+		Where(
+			workflowassignmenttarget.WorkflowAssignmentIDEQ(requesterAssignment.ID),
+			workflowassignmenttarget.TargetUserIDEQ(approverID),
+		).
+		Exist(seedCtx)
+	s.Require().NoError(err)
+	s.True(exists)
 }
 
 // TestApprovalHookCreatesInstancesForAllMatchingDefinitions verifies that when multiple workflow

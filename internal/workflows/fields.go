@@ -29,6 +29,30 @@ func EligibleWorkflowFields(objectType enums.WorkflowObjectType) map[string]stru
 	return fields
 }
 
+// SeparateFieldsByEligibility splits fields into eligible (workflow-controlled) and
+// ineligible (pass-through) sets for a given schema type.
+func SeparateFieldsByEligibility(schemaType string, fields []string) (eligible, ineligible []string) {
+	objectType := enums.ToWorkflowObjectType(schemaType)
+	if objectType == nil {
+		return nil, fields
+	}
+
+	eligibleSet := EligibleWorkflowFields(*objectType)
+	if len(eligibleSet) == 0 {
+		return nil, fields
+	}
+
+	for _, field := range fields {
+		if _, ok := eligibleSet[field]; ok {
+			eligible = append(eligible, field)
+		} else {
+			ineligible = append(ineligible, field)
+		}
+	}
+
+	return eligible, ineligible
+}
+
 // CollectChangedFields returns the union of modified and cleared fields from a mutation,
 // filtered to only include fields eligible for workflow processing.
 func CollectChangedFields(m utils.GenericMutation) []string {

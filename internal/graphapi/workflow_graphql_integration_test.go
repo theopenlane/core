@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/utils/ulids"
@@ -182,6 +183,72 @@ func TestWorkflowGraphQLUserApproval(t *testing.T) {
 		assert.Check(t, updatedAssignment.RejectionMetadata.RejectedAt != "")
 		assert.Check(t, is.Equal(reason, updatedAssignment.RejectionMetadata.RejectionReason))
 	})
+}
+
+func TestWorkflowGraphQLUpdateControlRespectsPermissions(t *testing.T) {
+	initiator := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	viewer := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	suite.addUserToOrganization(initiator.UserCtx, t, &viewer, enums.RoleMember, initiator.OrganizationID)
+
+	prevEngine := suite.client.db.WorkflowEngine
+	workflowEngine, err := engine.NewWorkflowEngine(suite.client.db, nil)
+	assert.NilError(t, err)
+	suite.client.db.WorkflowEngine = workflowEngine
+	t.Cleanup(func() { suite.client.db.WorkflowEngine = prevEngine })
+
+	ctx := setContext(initiator.UserCtx, suite.client.db)
+
+	required := true
+	params := workflows.ApprovalActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{
+				{Type: enums.WorkflowTargetTypeUser, ID: initiator.ID},
+			},
+		},
+		Required: &required,
+		Label:    "Control Status Approval",
+		Fields:   []string{"status"},
+	}
+	paramsBytes, err := json.Marshal(params)
+	assert.NilError(t, err)
+
+	_, err = suite.client.db.WorkflowDefinition.Create().
+		SetName("Workflow Status Approval " + ulids.New().String()).
+		SetSchemaType("Control").
+		SetWorkflowKind(enums.WorkflowKindApproval).
+		SetActive(true).
+		SetDraft(false).
+		SetOwnerID(initiator.OrganizationID).
+		SetDefinitionJSON(models.WorkflowDefinitionDocument{
+			Triggers: []models.WorkflowTrigger{
+				{Operation: "UPDATE", Fields: []string{"status"}},
+			},
+			Actions: []models.WorkflowAction{
+				{
+					Type:   enums.WorkflowActionTypeApproval.String(),
+					Key:    "control_status_approval",
+					Params: paramsBytes,
+				},
+			},
+		}).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	program := (&ProgramBuilder{client: suite.client, EditorIDs: initiator.GroupID}).MustNew(initiator.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client, ProgramID: program.ID}).MustNew(initiator.UserCtx, t)
+
+	status := enums.ControlStatusPreparing
+	desc := "should not apply"
+	_, err = suite.client.api.UpdateControl(viewer.UserCtx, control.ID, testclient.UpdateControlInput{
+		Status:      &status,
+		Description: &desc,
+	})
+	assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+
+	dbCtx := setContext(initiator.UserCtx, suite.client.db)
+	reloaded, err := suite.client.db.Control.Get(dbCtx, control.ID)
+	assert.NilError(t, err)
+	assert.Check(t, reloaded.Description == "")
 }
 
 // TestWorkflowGraphQLGroupApproval tests group-based approval workflows through GraphQL API

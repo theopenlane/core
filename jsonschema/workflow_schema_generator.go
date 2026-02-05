@@ -29,10 +29,12 @@ var workflowSchemaTypes = []any{
 	models.WorkflowSelector{},
 	workflows.TargetConfig{},
 	workflows.ApprovalActionParams{},
+	workflows.ReviewActionParams{},
 	workflows.NotificationActionParams{},
 	workflows.WebhookActionParams{},
 	workflows.FieldUpdateActionParams{},
 	workflows.IntegrationActionParams{},
+	workflows.CreateObjectActionParams{},
 }
 
 // main generates the workflow definition JSON schema
@@ -103,6 +105,12 @@ func workflowTypeMapper(t reflect.Type) *jsonschema.Schema {
 			Enum:        toInterfaceSlice(enums.WorkflowApprovalSubmissionModes),
 			Description: "Controls draft vs auto-submit behavior for approval domains",
 		}
+	case reflect.TypeOf(enums.WorkflowApprovalTiming("")):
+		return &jsonschema.Schema{
+			Type:        "string",
+			Enum:        toInterfaceSlice(enums.WorkflowApprovalTimings),
+			Description: "Controls whether approvals block changes (PRE_COMMIT) or happen after commit (POST_COMMIT)",
+		}
 	case reflect.TypeOf(enums.WorkflowTargetType("")):
 		return &jsonschema.Schema{
 			Type:        "string",
@@ -154,6 +162,10 @@ func addActionParamsDefinitions(schema *jsonschema.Schema) error {
 	schema.Definitions["ApprovalActionParams"] = approvalSchema
 	addApprovalParamsDescription(approvalSchema)
 
+	reviewSchema := r.Reflect(&workflows.ReviewActionParams{})
+	schema.Definitions["ReviewActionParams"] = reviewSchema
+	addReviewParamsDescription(reviewSchema)
+
 	notificationSchema := r.Reflect(&workflows.NotificationActionParams{})
 	schema.Definitions["NotificationActionParams"] = notificationSchema
 	addNotificationParamsDescription(notificationSchema)
@@ -169,6 +181,10 @@ func addActionParamsDefinitions(schema *jsonschema.Schema) error {
 	integrationSchema := r.Reflect(&workflows.IntegrationActionParams{})
 	schema.Definitions["IntegrationActionParams"] = integrationSchema
 	addIntegrationParamsDescription(integrationSchema)
+
+	createObjectSchema := r.Reflect(&workflows.CreateObjectActionParams{})
+	schema.Definitions["CreateObjectActionParams"] = createObjectSchema
+	addCreateObjectParamsDescription(createObjectSchema)
 
 	// Add action type descriptions to the main schema
 	addWorkflowActionDescription(schema)
@@ -214,6 +230,27 @@ func addApprovalParamsDescription(schema *jsonschema.Schema) {
 		}
 		if prop, ok := schema.Properties.Get("fields"); ok {
 			prop.Description = "Fields that are gated by this approval action (used for domain derivation)"
+		}
+	}
+}
+
+// addReviewParamsDescription adds descriptions to ReviewActionParams schema
+func addReviewParamsDescription(schema *jsonschema.Schema) {
+	schema.Title = "ReviewActionParams"
+	schema.Description = "Parameters for REQUEST_REVIEW actions that require user or group review"
+
+	if schema.Properties != nil {
+		if prop, ok := schema.Properties.Get("targets"); ok {
+			prop.Description = "List of users, groups, roles, or resolvers who can review"
+		}
+		if prop, ok := schema.Properties.Get("required"); ok {
+			prop.Description = "Whether this review is required for workflow completion (defaults to true)"
+		}
+		if prop, ok := schema.Properties.Get("label"); ok {
+			prop.Description = "Optional display label for the review action"
+		}
+		if prop, ok := schema.Properties.Get("required_count"); ok {
+			prop.Description = "Number of reviews needed (quorum threshold); 0 means all targets must review"
 		}
 	}
 }
@@ -323,6 +360,24 @@ func addIntegrationParamsDescription(schema *jsonschema.Schema) {
 	}
 }
 
+// addCreateObjectParamsDescription adds descriptions to CreateObjectActionParams schema
+func addCreateObjectParamsDescription(schema *jsonschema.Schema) {
+	schema.Title = "CreateObjectActionParams"
+	schema.Description = "Parameters for CREATE_OBJECT actions that create new objects"
+
+	if schema.Properties != nil {
+		if prop, ok := schema.Properties.Get("object_type"); ok {
+			prop.Description = "The schema type to create (e.g., Task, Review, Finding, Vulnerability)"
+		}
+		if prop, ok := schema.Properties.Get("fields"); ok {
+			prop.Description = "Field values to apply to the new object"
+		}
+		if prop, ok := schema.Properties.Get("link_to_trigger"); ok {
+			prop.Description = "Whether to attach the created object to the triggering object when supported"
+		}
+	}
+}
+
 // addWorkflowActionDescription enhances the WorkflowAction schema with action type descriptions
 func addWorkflowActionDescription(schema *jsonschema.Schema) {
 	if schema.Definitions == nil {
@@ -367,5 +422,6 @@ func toInterfaceSlice(strings []string) []any {
 	for i, s := range strings {
 		result[i] = s
 	}
+
 	return result
 }
