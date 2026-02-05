@@ -329,7 +329,7 @@ func sendTrustCenterNDARequestEmail(ctx context.Context, ndaRequest ndaAuthEmail
 		return err
 	}
 
-	trustCenterURL := getTrustCenterEmailURL(ctx, tc, buildNDATrustCenterURL(tc))
+	trustCenterURL := getTrustCenterEmailURL(ctx, buildNDATrustCenterURL(tc))
 
 	emailMsg, err := transactionFromContext(ctx).Emailer.NewTrustCenterNDARequestEmail(emailtemplates.Recipient{
 		Email: ndaRequest.email,
@@ -374,7 +374,7 @@ func sendTrustCenterAuthEmail(ctx context.Context, ndaRequest ndaAuthEmailData) 
 		return err
 	}
 
-	trustCenterURL := getTrustCenterEmailURL(ctx, tc, getTrustCenterBaseURL(tc))
+	trustCenterURL := getTrustCenterEmailURL(ctx, getTrustCenterBaseURL(tc))
 
 	emailMsg, err := transactionFromContext(ctx).Emailer.NewTrustCenterAuthEmail(emailtemplates.Recipient{
 		Email: ndaRequest.email,
@@ -416,7 +416,7 @@ func generateTrustCenterJWT(ctx context.Context, tc *generated.TrustCenter, emai
 	return accessToken, nil
 }
 
-func getTrustCenterEmailURL(ctx context.Context, tc *generated.TrustCenter, u url.URL) string {
+func getTrustCenterEmailURL(ctx context.Context, u url.URL) string {
 	trustCenterURLStr := u.String()
 
 	if transactionFromContext(ctx).Shortlinks == nil {
