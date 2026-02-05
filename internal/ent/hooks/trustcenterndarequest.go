@@ -398,6 +398,8 @@ func sendTrustCenterAuthEmail(ctx context.Context, ndaRequest ndaAuthEmailData) 
 func generateTrustCenterJWT(ctx context.Context, tc *generated.TrustCenter, email string) (string, error) {
 	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, uuid.New().String())
 
+	duration := tc.TokenManager.Config().TrustCenterNDARequestAccessDuration
+
 	accessToken, _, err := transactionFromContext(ctx).TokenManager.CreateTokenPair(&tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject: anonUserID,
@@ -406,7 +408,7 @@ func generateTrustCenterJWT(ctx context.Context, tc *generated.TrustCenter, emai
 		OrgID:         tc.OwnerID,
 		TrustCenterID: tc.ID,
 		Email:         email,
-	})
+	}, tokens.WithAccessDuration(duration))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create token for auth email")
 

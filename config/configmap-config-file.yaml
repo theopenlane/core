@@ -465,6 +465,9 @@ data:
         {{- if .Values.openlane.coreConfiguration.auth.token.assessmentaccessduration }}
         assessmentaccessduration: {{ .Values.openlane.coreConfiguration.auth.token.assessmentaccessduration | quote }}
         {{- end }}
+        {{- if .Values.openlane.coreConfiguration.auth.token.trustcenterndarequestaccessduration }}
+        trustcenterndarequestaccessduration: {{ .Values.openlane.coreConfiguration.auth.token.trustcenterndarequestaccessduration | quote }}
+        {{- end }}
       {{- end }}
       {{- $sliceValue := (.Values.openlane.coreConfiguration.auth.supportedproviders | default (list)) }}
       {{- if gt (len $sliceValue) 0 }}

@@ -61,6 +61,7 @@ auth:
         refreshaudience: ""
         refreshduration: 7200000000000
         refreshoverlap: -900000000000
+        trustcenterndarequestaccessduration: 3600000000000
 authz:
     createnewmodel: false
     credentials:

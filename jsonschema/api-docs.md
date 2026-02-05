@@ -696,6 +696,7 @@ Auth settings including oauth2 providers and token configuration
 |[**redis**](#authtokenredis)|`object`||no|
 |[**apitokens**](#authtokenapitokens)|`object`||no|
 |**assessmentaccessduration**|`integer`||no|
+|**trustcenterndarequestaccessduration**|`integer`||no|
 
 **Additional Properties:** not allowed  
 **Example**

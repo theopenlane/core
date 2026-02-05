@@ -249,7 +249,9 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 		Email:        emailAddress,
 	}
 
-	accessToken, _, err := m.TokenManager.CreateTokenPair(newClaims)
+	duration := m.Client().TokenManager.Config().AssessmentAccessDuration
+
+	accessToken, _, err := m.TokenManager.CreateTokenPair(newClaims, tokens.WithAccessDuration(duration))
 	if err != nil {
 		return err
 	}
