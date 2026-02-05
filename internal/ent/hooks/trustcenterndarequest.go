@@ -292,7 +292,7 @@ func createNDARequestNotification(ctx context.Context, m *generated.TrustCenterN
 			"nda_request_id":  ndaRequest.ID,
 			"trust_center_id": ndaRequest.TrustCenterID,
 			"email":           ndaRequest.Email,
-			"url": "trust-center/NDAs"
+			"url":             "trust-center/NDAs",
 		},
 	}
 
