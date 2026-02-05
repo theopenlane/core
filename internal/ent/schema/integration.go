@@ -78,6 +78,20 @@ func (Integration) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipType),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
+		field.JSON("config", openapi.IntegrationConfig{}).
+			Comment("runtime configuration for operations, scheduling, and mappings").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+				entgql.Skip(entgql.SkipWhereInput),
+			),
+		field.JSON("provider_state", openapi.IntegrationProviderState{}).
+			Comment("provider-specific integration state captured during auth/config").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional metadata about the integration").
 			Optional().
