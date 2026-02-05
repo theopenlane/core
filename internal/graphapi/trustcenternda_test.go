@@ -3,13 +3,18 @@ package graphapi_test
 import (
 	"context"
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -37,30 +42,36 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	// Create anonymous trust center context helper
 	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
 
+	email := "test@example.com"
+
 	anonUser := &auth.AnonymousTrustCenterUser{
 		SubjectID:          anonUserID,
 		SubjectName:        "Anonymous User",
 		OrganizationID:     trustCenter.OwnerID,
 		AuthenticationType: auth.JWTAuthentication,
 		TrustCenterID:      trustCenter.ID,
-		SubjectEmail:       "test@example.com",
+		SubjectEmail:       email,
 	}
 
 	anonCtxForRequest := auth.WithAnonymousTrustCenterUser(context.Background(), anonUser)
-	_, err = suite.client.api.CreateTrustCenterNDARequest(anonCtxForRequest, testclient.CreateTrustCenterNDARequestInput{
+	ndaCreateResp, err := suite.client.api.CreateTrustCenterNDARequest(anonCtxForRequest, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     "Test",
 		LastName:      "User",
 		CompanyName:   lo.ToPtr("Test Company"),
-		Email:         "test@example.com",
+		Email:         email,
 		TrustCenterID: &trustCenter.ID,
 	})
 	assert.NilError(t, err)
+
+	assert.Assert(t, ndaCreateResp != nil)
+	// make sure the nda request is in requested status, the approval is off by default
+	assert.Check(t, *ndaCreateResp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status == enums.TrustCenterNDARequestStatusRequested)
 
 	input := testclient.SubmitTrustCenterNDAResponseInput{
 		TemplateID: trustCenterNDA.CreateTrustCenterNda.Template.ID,
 		Response: map[string]any{
 			"signatory_info": map[string]any{
-				"email": "test@example.com",
+				"email": email,
 			},
 			"acknowledgment": true,
 			"signature_metadata": map[string]any{
@@ -82,10 +93,42 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Assert(t, getTrustCenterDocResp.TrustCenterDoc.OriginalFile == nil)
 
+	// Clear any existing jobs
+	err = suite.client.db.Job.TruncateRiverTables(testUser1.UserCtx)
+	assert.NilError(t, err)
+
 	resp, err := suite.client.api.SubmitTrustCenterNDAResponse(anonCtx, input)
 
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
+
+	jobs := rivertest.RequireManyInserted(testUser1.UserCtx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+		[]rivertest.ExpectedJob{
+			{
+				Args: jobs.EmailArgs{},
+			},
+		})
+	assert.Assert(t, jobs != nil)
+	assert.Assert(t, is.Len(jobs, 1))
+
+	found := false
+	for _, v := range jobs {
+		if strings.Contains(string(v.EncodedArgs), "Access") {
+			found = true
+			break
+		}
+	}
+
+	assert.Assert(t, found, "expected access email to be sent")
+
+	// make sure the nda request is marked as signed
+	ndaRequest, err := suite.client.api.GetTrustCenterNDARequests(testUser1.UserCtx, nil, nil, nil, nil, []*testclient.TrustCenterNDARequestOrder{}, &testclient.TrustCenterNDARequestWhereInput{
+		Email: &email,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, len(ndaRequest.TrustCenterNdaRequests.Edges) == 1)
+	assert.Equal(t, ndaRequest.TrustCenterNdaRequests.Edges[0].Node.Status.String(), enums.TrustCenterNDARequestStatusSigned.String())
+	assert.Check(t, ndaRequest.TrustCenterNdaRequests.Edges[0].Node.SignedAt != nil)
 
 	// now, check that the anonymous user can query the protected doc's files
 	getTrustCenterDocResp, err = suite.client.api.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)
