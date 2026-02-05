@@ -4497,6 +4497,8 @@ func init() {
 	note.Hooks[6] = noteHooks[0]
 
 	note.Hooks[7] = noteHooks[1]
+
+	note.Hooks[8] = noteHooks[2]
 	noteMixinInters1 := noteMixin[1].Interceptors()
 	noteMixinInters4 := noteMixin[4].Interceptors()
 	note.Interceptors[0] = noteMixinInters1[0]

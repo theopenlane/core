@@ -1,438 +1,438 @@
 auth:
-    enabled: true
-    providers:
-        github:
-            clientendpoint: ""
-            clientid: ""
-            clientsecret: ""
-            redirecturl: /v1/github/callback
-            scopes: null
-        google:
-            clientendpoint: ""
-            clientid: ""
-            clientsecret: ""
-            redirecturl: /v1/google/callback
-            scopes: null
-        redirecturl: http://localhost:3001/api/auth/callback/theopenlane
-        webauthn:
-            debug: false
-            displayname: ""
-            enabled: true
-            enforcetimeout: true
-            maxdevices: 10
-            relyingpartyid: ""
-            requestorigins: null
-            timeout: 60000000000
-    supportedproviders: null
-    token:
-        accessduration: 3600000000000
-        apitokens:
-            delimiter: .
-            enabled: false
-            envprefix: IAM_API_TOKEN_KEY_
-            keys: null
-            prefix: ""
-            secretsize: 32
-        assessmentaccessduration: 3600000000000
-        audience: ""
-        generatekeys: true
-        issuer: ""
-        jwkscachettl: 300000000000
-        jwksendpoint: ""
-        keys: null
-        kid: ""
-        redis:
-            blacklistprefix: 'token:blacklist:'
-            config:
-                address: localhost:6379
-                db: 0
-                dialtimeout: 5000000000
-                enabled: true
-                maxactiveconns: 0
-                maxidleconns: 0
-                maxretries: 3
-                minidleconns: 0
-                name: ""
-                password: ""
-                readtimeout: 0
-                username: ""
-                writetimeout: 0
-            enabled: false
-        refreshaudience: ""
-        refreshduration: 7200000000000
-        refreshoverlap: -900000000000
-        trustcenterndarequestaccessduration: 3600000000000
+  enabled: true
+  providers:
+    github:
+      clientendpoint: ""
+      clientid: ""
+      clientsecret: ""
+      redirecturl: /v1/github/callback
+      scopes: null
+    google:
+      clientendpoint: ""
+      clientid: ""
+      clientsecret: ""
+      redirecturl: /v1/google/callback
+      scopes: null
+    redirecturl: http://localhost:3001/api/auth/callback/theopenlane
+    webauthn:
+      debug: false
+      displayname: ""
+      enabled: true
+      enforcetimeout: true
+      maxdevices: 10
+      relyingpartyid: ""
+      requestorigins: null
+      timeout: 60000000000
+  supportedproviders: null
+  token:
+    accessduration: 3600000000000
+    apitokens:
+      delimiter: .
+      enabled: false
+      envprefix: IAM_API_TOKEN_KEY_
+      keys: null
+      prefix: ""
+      secretsize: 32
+    assessmentaccessduration: 3600000000000
+    audience: ""
+    generatekeys: true
+    issuer: ""
+    jwkscachettl: 300000000000
+    jwksendpoint: ""
+    keys: null
+    kid: ""
+    redis:
+      blacklistprefix: "token:blacklist:"
+      config:
+        address: localhost:6379
+        db: 0
+        dialtimeout: 5000000000
+        enabled: true
+        maxactiveconns: 0
+        maxidleconns: 0
+        maxretries: 3
+        minidleconns: 0
+        name: ""
+        password: ""
+        readtimeout: 0
+        username: ""
+        writetimeout: 0
+      enabled: false
+    refreshaudience: ""
+    refreshduration: 7200000000000
+    refreshoverlap: -900000000000
+    trustcenterndarequestaccessduration: 3600000000000
 authz:
-    createnewmodel: false
-    credentials:
-        apitoken: ""
-        audience: ""
-        clientid: ""
-        clientsecret: ""
-        issuer: ""
-        scopes: ""
-    enabled: true
-    hosturl: https://authz.theopenlane.io
-    maxbatchwritesize: 100
-    modelfile: fga/model/model.fga
-    modelid: ""
-    storeid: ""
-    storename: openlane
-campaignwebhook:
-    enabled: false
-    resendapikey: ""
-    resendsecret: ""
-cloudflare:
-    accountid: ""
+  createnewmodel: false
+  credentials:
     apitoken: ""
+    audience: ""
     clientid: ""
     clientsecret: ""
-    enabled: false
+    issuer: ""
+    scopes: ""
+  enabled: true
+  hosturl: https://authz.theopenlane.io
+  maxbatchwritesize: 100
+  modelfile: fga/model/model.fga
+  modelid: ""
+  storeid: ""
+  storename: openlane
+campaignwebhook:
+  enabled: false
+  resendapikey: ""
+  resendsecret: ""
+cloudflare:
+  accountid: ""
+  apitoken: ""
+  clientid: ""
+  clientsecret: ""
+  enabled: false
 db:
-    cachettl: 1000000000
-    databasename: openlane
-    debug: false
-    drivername: pgx
-    enablehistory: false
-    maxconnections: 0
-    maxidleconnections: 0
-    migrationprovider: atlas
-    multiwrite: false
-    primarydbsource: postgres://postgres:password@0.0.0.0:5432/core?sslmode=disable
-    runmigrations: true
-    secondarydbsource: postgres://postgres:password@0.0.0.0:5432/core-secondary?sslmode=disable
+  cachettl: 1000000000
+  databasename: openlane
+  debug: false
+  drivername: pgx
+  enablehistory: false
+  maxconnections: 0
+  maxidleconnections: 0
+  migrationprovider: atlas
+  multiwrite: false
+  primarydbsource: postgres://postgres:password@0.0.0.0:5432/core?sslmode=disable
+  runmigrations: true
+  secondarydbsource: postgres://postgres:password@0.0.0.0:5432/core-secondary?sslmode=disable
 domain: ""
 email:
-    companyaddress: ""
-    companyname: ""
-    corporation: ""
-    fromemail: ""
-    logourl: ""
-    questionnaireemail: ""
-    supportemail: ""
-    templatespath: ""
-    urls:
-        docs: ""
-        invite: ""
-        product: ""
-        questionnaire: ""
-        reset: ""
-        root: ""
-        verify: ""
-        verifybilling: ""
-        verifysubscriber: ""
-    year: 0
+  companyaddress: ""
+  companyname: ""
+  corporation: ""
+  fromemail: ""
+  logourl: ""
+  questionnaireemail: ""
+  supportemail: ""
+  templatespath: ""
+  urls:
+    docs: ""
+    invite: ""
+    product: ""
+    questionnaire: ""
+    reset: ""
+    root: ""
+    verify: ""
+    verifybilling: ""
+    verifysubscriber: ""
+  year: 0
 entconfig:
-    billing:
-        bypassemaildomains: null
-        requirepaymentmethod: false
-    emailvalidation:
-        allowedemailtypes:
-            disposable: false
-            free: false
-            role: false
-        enableautoupdatedisposable: true
-        enabled: false
-        enablegravatarcheck: true
-        enablesmtpcheck: false
-    entitytypes: null
-    maxpoolsize: 200
-    maxschemaimportsize: 262144
-    modules:
-        devmode: false
-        enabled: true
-        usesandbox: false
-    notifications:
-        consoleurl: http://localhost:3001
-    summarizer:
-        llm:
-            anthropic:
-                apiKey: ""
-                baseurl: ""
-                betaheader: ""
-                legacytextcompletion: false
-                model: ""
-            cloudflare:
-                accountid: ""
-                apiKey: ""
-                model: ""
-                serverurl: ""
-            openai:
-                apiKey: ""
-                model: ""
-                organizationid: ""
-                url: ""
-            provider: none
-        maximumsentences: 10
-        type: lexrank
-integrationoauthprovider:
+  billing:
+    bypassemaildomains: null
+    requirepaymentmethod: false
+  emailvalidation:
+    allowedemailtypes:
+      disposable: false
+      free: false
+      role: false
+    enableautoupdatedisposable: true
     enabled: false
-    successredirecturl: ""
-jobqueue:
-    connectionuri: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
-    metrics:
-        enablemetrics: false
-        enablesemanticmetrics: true
-        metricsdurationunit: ms
-    riverconf:
-        AdvisoryLockPrefix: 0
-        CancelledJobRetentionPeriod: 0
-        CompletedJobRetentionPeriod: 0
-        DiscardedJobRetentionPeriod: 0
-        ErrorHandler: null
-        FetchCooldown: 0
-        FetchPollInterval: 0
-        Hooks: null
-        ID: ""
-        JobCleanerTimeout: 0
-        JobInsertMiddleware: null
-        JobTimeout: 0
-        Logger: null
-        MaxAttempts: 0
-        Middleware: null
-        PeriodicJobs: null
-        PollOnly: false
-        Queues: null
-        ReindexerSchedule: null
-        ReindexerTimeout: 0
-        RescueStuckJobsAfter: 0
-        RetryPolicy: null
-        Schema: ""
-        SkipJobKindValidation: false
-        SkipUnknownJobCheck: false
-        Test:
-            DisableUniqueEnforcement: false
-            Time: null
-        TestOnly: false
-        WorkerMiddleware: null
-        Workers: null
-    runmigrations: false
-keywatcher:
-    enabled: false
-    externalsecretsintegration: false
-    keydir: ./keys
-    secretmanager: ""
-objectstorage:
+    enablegravatarcheck: true
+    enablesmtpcheck: false
+  entitytypes: null
+  maxpoolsize: 200
+  maxschemaimportsize: 262144
+  modules:
     devmode: false
     enabled: true
-    keys:
-        - uploadFile
-    maxmemorymb: 0
-    maxsizemb: 0
-    providers:
-        database:
-            baseurl: http://localhost:17608/v1/files
-            bucket: ""
-            credentials:
-                accesskeyid: ""
-                accountid: ""
-                apitoken: ""
-                projectid: ""
-                secretaccesskey: ""
-            enabled: false
-            endpoint: ""
-            ensureavailable: false
-            proxypresignenabled: false
-            region: ""
-        disk:
-            baseurl: http://localhost:17608/v1/files
-            bucket: ""
-            credentials:
-                accesskeyid: ""
-                accountid: ""
-                apitoken: ""
-                projectid: ""
-                secretaccesskey: ""
-            enabled: false
-            endpoint: ""
-            ensureavailable: false
-            proxypresignenabled: false
-            region: ""
-        r2:
-            baseurl: http://localhost:17608/v1/files
-            bucket: ""
-            credentials:
-                accesskeyid: ""
-                accountid: ""
-                apitoken: ""
-                projectid: ""
-                secretaccesskey: ""
-            enabled: false
-            endpoint: ""
-            ensureavailable: false
-            proxypresignenabled: false
-            region: ""
-        s3:
-            baseurl: http://localhost:17608/v1/files
-            bucket: ""
-            credentials:
-                accesskeyid: ""
-                accountid: ""
-                apitoken: ""
-                projectid: ""
-                secretaccesskey: ""
-            enabled: false
-            endpoint: ""
-            ensureavailable: false
-            proxypresignenabled: false
-            region: ""
+    usesandbox: false
+  notifications:
+    consoleurl: http://localhost:3001
+  summarizer:
+    llm:
+      anthropic:
+        apiKey: ""
+        baseurl: ""
+        betaheader: ""
+        legacytextcompletion: false
+        model: ""
+      cloudflare:
+        accountid: ""
+        apiKey: ""
+        model: ""
+        serverurl: ""
+      openai:
+        apiKey: ""
+        model: ""
+        organizationid: ""
+        url: ""
+      provider: none
+    maximumsentences: 10
+    type: lexrank
+integrationoauthprovider:
+  enabled: false
+  successredirecturl: ""
+jobqueue:
+  connectionuri: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
+  metrics:
+    enablemetrics: false
+    enablesemanticmetrics: true
+    metricsdurationunit: ms
+  riverconf:
+    AdvisoryLockPrefix: 0
+    CancelledJobRetentionPeriod: 0
+    CompletedJobRetentionPeriod: 0
+    DiscardedJobRetentionPeriod: 0
+    ErrorHandler: null
+    FetchCooldown: 0
+    FetchPollInterval: 0
+    Hooks: null
+    ID: ""
+    JobCleanerTimeout: 0
+    JobInsertMiddleware: null
+    JobTimeout: 0
+    Logger: null
+    MaxAttempts: 0
+    Middleware: null
+    PeriodicJobs: null
+    PollOnly: false
+    Queues: null
+    ReindexerSchedule: null
+    ReindexerTimeout: 0
+    RescueStuckJobsAfter: 0
+    RetryPolicy: null
+    Schema: ""
+    SkipJobKindValidation: false
+    SkipUnknownJobCheck: false
+    Test:
+      DisableUniqueEnforcement: false
+      Time: null
+    TestOnly: false
+    WorkerMiddleware: null
+    Workers: null
+  runmigrations: false
+keywatcher:
+  enabled: false
+  externalsecretsintegration: false
+  keydir: ./keys
+  secretmanager: ""
+objectstorage:
+  devmode: false
+  enabled: true
+  keys:
+    - uploadFile
+  maxmemorymb: 0
+  maxsizemb: 0
+  providers:
+    database:
+      baseurl: http://localhost:17608/v1/files
+      bucket: ""
+      credentials:
+        accesskeyid: ""
+        accountid: ""
+        apitoken: ""
+        projectid: ""
+        secretaccesskey: ""
+      enabled: false
+      endpoint: ""
+      ensureavailable: false
+      proxypresignenabled: false
+      region: ""
+    disk:
+      baseurl: http://localhost:17608/v1/files
+      bucket: ""
+      credentials:
+        accesskeyid: ""
+        accountid: ""
+        apitoken: ""
+        projectid: ""
+        secretaccesskey: ""
+      enabled: false
+      endpoint: ""
+      ensureavailable: false
+      proxypresignenabled: false
+      region: ""
+    r2:
+      baseurl: http://localhost:17608/v1/files
+      bucket: ""
+      credentials:
+        accesskeyid: ""
+        accountid: ""
+        apitoken: ""
+        projectid: ""
+        secretaccesskey: ""
+      enabled: false
+      endpoint: ""
+      ensureavailable: false
+      proxypresignenabled: false
+      region: ""
+    s3:
+      baseurl: http://localhost:17608/v1/files
+      bucket: ""
+      credentials:
+        accesskeyid: ""
+        accountid: ""
+        apitoken: ""
+        projectid: ""
+        secretaccesskey: ""
+      enabled: false
+      endpoint: ""
+      ensureavailable: false
+      proxypresignenabled: false
+      region: ""
 ratelimit:
-    denymessage: Too many requests
-    denystatus: 429
-    dryrun: true
-    enabled: false
-    forwardedindexfrombehind: 0
-    headers:
-        - True-Client-IP
-    includemethod: false
-    includepath: false
-    keyprefix: ""
-    options:
-        - expiration: 0
-          flushinterval: 0
-          requests: 500
-          window: 60000000000
-    sendretryafterheader: true
+  denymessage: Too many requests
+  denystatus: 429
+  dryrun: true
+  enabled: false
+  forwardedindexfrombehind: 0
+  headers:
+    - True-Client-IP
+  includemethod: false
+  includepath: false
+  keyprefix: ""
+  options:
+    - expiration: 0
+      flushinterval: 0
+      requests: 500
+      window: 60000000000
+  sendretryafterheader: true
 redis:
-    address: localhost:6379
-    db: 0
-    dialtimeout: 5000000000
-    enabled: true
-    maxactiveconns: 0
-    maxidleconns: 0
-    maxretries: 3
-    minidleconns: 0
-    name: ""
-    password: ""
-    readtimeout: 0
-    username: ""
-    writetimeout: 0
+  address: localhost:6379
+  db: 0
+  dialtimeout: 5000000000
+  enabled: true
+  maxactiveconns: 0
+  maxidleconns: 0
+  maxretries: 3
+  minidleconns: 0
+  name: ""
+  password: ""
+  readtimeout: 0
+  username: ""
+  writetimeout: 0
 refreshinterval: 600000000000
 server:
-    cachecontrol:
-        enabled: true
-        etagheaders: null
-        nocacheheaders: null
-    complexitylimit: 100
-    cors:
-        alloworigins: null
-        cookieinsecure: false
-        enabled: true
-        prefixes: null
-    csrfprotection:
-        cookie: ol.csrf-token
-        cookiedomain: ""
-        cookiehttponly: false
-        cookiepath: /
-        enabled: false
-        header: X-CSRF-Token
-        samesite: Lax
-        secure: true
-    defaulttrustcenterdomain: ""
-    dev: false
-    enablegraphextensions: true
-    enablegraphsubscriptions: false
-    graphpool:
-        maxworkers: 100
-    idletimeout: 30000000000
-    listen: :17608
-    maxresultlimit: 100
-    metricsport: :17609
-    mime:
-        defaultcontenttype: application/data
-        enabled: true
-        mimetypesfile: ""
-    readheadertimeout: 2000000000
-    readtimeout: 15000000000
-    redirects:
-        code: 0
-        enabled: true
-        redirects: null
-    secretmanager: ""
-    secure:
-        contentsecuritypolicy: default-src 'self'
-        contenttypenosniff: nosniff
-        cspreportonly: false
-        enabled: true
-        hstsmaxage: 31536000
-        hstspreloadenabled: false
-        referrerpolicy: same-origin
-        xframeoptions: SAMEORIGIN
-        xssprotection: 1; mode=block
-    shutdowngraceperiod: 10000000000
-    tls:
-        autocert: false
-        certfile: server.crt
-        certkey: server.key
-        enabled: false
-    trustcentercnametarget: ""
-    trustcenterpreviewzoneid: ""
-    writetimeout: 15000000000
-sessions:
-    domain: ""
-    encryptionkey: encryptionsecret
-    httponly: true
-    maxage: 3600
-    samesite: Strict
-    secure: true
-    signingkey: my-signing-secret
-shortlinks:
-    clientid: d5d5babbdd4ba64d59ae543ac3b6a74d.access
-    clientsecret: ""
-    enabled: false
-    endpointurl: https://admin.s.theopenlane.io/api/links
-slack:
-    newsubscribermessagefile: ""
-    newusermessagefile: ""
-    webhookurl: ""
-subscription:
-    enabled: false
-    privatestripekey: ""
-    stripebillingportalsuccessurl: https://console.theopenlane.io/organization-settings/billing
-    stripecancellationreturnurl: https://console.theopenlane.io/organization-settings/billing
-    stripewebhookapiversion: 2025_12_15_CLOVER
-    stripewebhookdiscardapiversion: 2025_11_17_CLOVER
-    stripewebhookevents: null
-    stripewebhooksecret: ""
-    stripewebhooksecrets:
-        2025_11_17_CLOVER: ""
-        2025_12_15_CLOVER: ""
-    stripewebhookurl: https://api.theopenlane.io/stripe/webhook
-totp:
-    codelength: 6
+  cachecontrol:
     enabled: true
-    issuer: ""
-    recoverycodecount: 16
-    recoverycodelength: 8
-    redis: true
-    secret: ""
+    etagheaders: null
+    nocacheheaders: null
+  complexitylimit: 100
+  cors:
+    alloworigins: null
+    cookieinsecure: false
+    enabled: true
+    prefixes: null
+  csrfprotection:
+    cookie: ol.csrf-token
+    cookiedomain: ""
+    cookiehttponly: false
+    cookiepath: /
+    enabled: false
+    header: X-CSRF-Token
+    samesite: Lax
+    secure: true
+  defaulttrustcenterdomain: ""
+  dev: false
+  enablegraphextensions: true
+  enablegraphsubscriptions: false
+  graphpool:
+    maxworkers: 100
+  idletimeout: 30000000000
+  listen: :17608
+  maxresultlimit: 100
+  metricsport: :17609
+  mime:
+    defaultcontenttype: application/data
+    enabled: true
+    mimetypesfile: ""
+  readheadertimeout: 2000000000
+  readtimeout: 15000000000
+  redirects:
+    code: 0
+    enabled: true
+    redirects: null
+  secretmanager: ""
+  secure:
+    contentsecuritypolicy: default-src 'self'
+    contenttypenosniff: nosniff
+    cspreportonly: false
+    enabled: true
+    hstsmaxage: 31536000
+    hstspreloadenabled: false
+    referrerpolicy: same-origin
+    xframeoptions: SAMEORIGIN
+    xssprotection: 1; mode=block
+  shutdowngraceperiod: 10000000000
+  tls:
+    autocert: false
+    certfile: server.crt
+    certkey: server.key
+    enabled: false
+  trustcentercnametarget: ""
+  trustcenterpreviewzoneid: ""
+  writetimeout: 15000000000
+sessions:
+  domain: ""
+  encryptionkey: encryptionsecret
+  httponly: true
+  maxage: 3600
+  samesite: Strict
+  secure: true
+  signingkey: my-signing-secret
+shortlinks:
+  clientid: d5d5babbdd4ba64d59ae543ac3b6a74d.access
+  clientsecret: ""
+  enabled: false
+  endpointurl: https://admin.s.theopenlane.io/api/links
+slack:
+  newsubscribermessagefile: ""
+  newusermessagefile: ""
+  webhookurl: ""
+subscription:
+  enabled: false
+  privatestripekey: ""
+  stripebillingportalsuccessurl: https://console.theopenlane.io/organization-settings/billing
+  stripecancellationreturnurl: https://console.theopenlane.io/organization-settings/billing
+  stripewebhookapiversion: 2025_12_15_CLOVER
+  stripewebhookdiscardapiversion: 2025_11_17_CLOVER
+  stripewebhookevents: null
+  stripewebhooksecret: ""
+  stripewebhooksecrets:
+    2025_11_17_CLOVER: ""
+    2025_12_15_CLOVER: ""
+  stripewebhookurl: https://api.theopenlane.io/stripe/webhook
+totp:
+  codelength: 6
+  enabled: true
+  issuer: ""
+  recoverycodecount: 16
+  recoverycodelength: 8
+  redis: true
+  secret: ""
 tracer:
-    enabled: false
-    environment: development
-    otlp:
-        certificate: ""
-        compression: ""
-        endpoint: localhost:4317
-        headers: null
-        insecure: true
-        timeout: 10000000000
-    provider: stdout
-    stdout:
-        disabletimestamp: false
-        pretty: true
+  enabled: false
+  environment: development
+  otlp:
+    certificate: ""
+    compression: ""
+    endpoint: localhost:4317
+    headers: null
+    insecure: true
+    timeout: 10000000000
+  provider: stdout
+  stdout:
+    disabletimestamp: false
+    pretty: true
 workflows:
-    cel:
-        comprehensionnestinglimit: 0
-        costlimit: 0
-        crosstypenumericcomparisons: false
-        evaloptimize: true
-        extendedvalidations: true
-        identifierescapesyntax: false
-        interruptcheckfrequency: 100
-        macrocalltracking: false
-        optionaltypes: false
-        parserexpressionsizelimit: 100000
-        parserrecursionlimit: 250
-        timeout: 100000000
-        trackstate: false
-    enabled: false
+  cel:
+    comprehensionnestinglimit: 0
+    costlimit: 0
+    crosstypenumericcomparisons: false
+    evaloptimize: true
+    extendedvalidations: true
+    identifierescapesyntax: false
+    interruptcheckfrequency: 100
+    macrocalltracking: false
+    optionaltypes: false
+    parserexpressionsizelimit: 100000
+    parserrecursionlimit: 250
+    timeout: 100000000
+    trackstate: false
+  enabled: false

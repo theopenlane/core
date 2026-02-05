@@ -6,7 +6,9 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
@@ -27,6 +29,55 @@ func HookNoteFiles() ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
+}
+
+// HookDeleteDiscussionOnLastComment deletes the discussion when the last comment is deleted
+func HookDeleteDiscussionOnLastComment() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.NoteFunc(func(ctx context.Context, m *generated.NoteMutation) (generated.Value, error) {
+			if !isDeleteOp(ctx, m) {
+				return next.Mutate(ctx, m)
+			}
+
+			id, ok := m.ID()
+			if !ok {
+				return next.Mutate(ctx, m)
+			}
+
+			obj, err := m.Client().Note.Get(ctx, id)
+			if err != nil {
+				return nil, err
+			}
+
+			if obj.DiscussionID == "" {
+				return next.Mutate(ctx, m)
+			}
+
+			discussionID := obj.DiscussionID
+
+			v, err := next.Mutate(ctx, m)
+			if err != nil {
+				return v, err
+			}
+
+			count, err := m.Client().Note.Query().
+				Where(note.HasDiscussionWith(discussion.ID(discussionID))).
+				Count(ctx)
+			if err != nil {
+				return v, err
+			}
+
+			if count > 0 {
+				return v, nil
+			}
+
+			if err := m.Client().Discussion.DeleteOneID(discussionID).Exec(ctx); err != nil {
+				return v, err
+			}
+
+			return v, nil
+		})
+	}, ent.OpDeleteOne|ent.OpUpdateOne)
 }
 
 // checkNoteFiles checks if note files are provided and sets the local file ID(s)
