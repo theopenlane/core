@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/shortlinks"
@@ -136,6 +137,8 @@ type Handler struct {
 	IntegrationClients *keystore.ClientPoolManager
 	// IntegrationOperations standardizes executing provider operations
 	IntegrationOperations *keystore.OperationManager
+	// EventEmitter publishes asynchronous integration events
+	EventEmitter soiree.Emitter
 	// KeymakerService orchestrates integration activation flows
 	KeymakerService *keymaker.Service
 	// WorkflowEngine orchestrates workflow execution.

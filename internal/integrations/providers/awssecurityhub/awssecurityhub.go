@@ -2,8 +2,8 @@ package awssecurityhub
 
 import (
 	"github.com/theopenlane/core/common/integrations/types"
-	"github.com/theopenlane/core/pkg/integrations/providers"
-	"github.com/theopenlane/core/pkg/integrations/providers/awssts"
+	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/providers/awssts"
 )
 
 // TypeAWSSecurityHub identifies the AWS Security Hub provider.

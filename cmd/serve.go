@@ -250,6 +250,7 @@ func serve(ctx context.Context) error {
 
 	// add auth options
 	so.AddServerOptions(serveropts.WithAuth())
+	so.AddServerOptions(serveropts.WithEventEmitter(eventer.Emitter))
 	so.AddServerOptions(serveropts.WithIntegrationStore(dbClient))
 	so.AddServerOptions(serveropts.WithIntegrationBroker())
 	so.AddServerOptions(serveropts.WithIntegrationClients())

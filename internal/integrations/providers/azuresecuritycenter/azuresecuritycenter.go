@@ -5,12 +5,7 @@ import (
 
 	"github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/common/integrations/types"
-<<<<<<< HEAD:internal/integrations/providers/azuresecuritycenter/azuresecuritycenter.go
 	"github.com/theopenlane/core/internal/integrations/providers"
-	"github.com/theopenlane/core/internal/integrations/providers/oauth"
-=======
-	"github.com/theopenlane/core/pkg/integrations/providers"
->>>>>>> 11b940e6b (add new integration descriptors, client initialization, swing at health checks per provider):pkg/integrations/providers/azuresecuritycenter/azuresecuritycenter.go
 )
 
 // TypeAzureSecurityCenter identifies the Azure Security Center provider.
