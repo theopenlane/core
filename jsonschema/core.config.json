@@ -1591,6 +1591,9 @@
         },
         "assessmentaccessduration": {
           "type": "integer"
+        },
+        "trustcenterndarequestaccessduration": {
+          "type": "integer"
         }
       },
       "additionalProperties": false,
