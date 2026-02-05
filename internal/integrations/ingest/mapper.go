@@ -19,10 +19,23 @@ import (
 )
 
 const (
-	mappingSchemaVulnerability        = "Vulnerability"
+	mappingSchemaVulnerability        = integrationgenerated.IntegrationMappingSchemaVulnerability
 	defaultCELInterruptCheckFrequency = 100
 	defaultCELParserRecursionLimit    = 250
 	defaultCELExpressionSizeLimit     = 100000
+)
+
+const (
+	mappingVarPayload           = "payload"
+	mappingVarResource          = "resource"
+	mappingVarAlertType         = "alert_type"
+	mappingVarProvider          = "provider"
+	mappingVarOperation         = "operation"
+	mappingVarOrgID             = "org_id"
+	mappingVarIntegrationID     = "integration_id"
+	mappingVarConfig            = "config"
+	mappingVarIntegrationConfig = "integration_config"
+	mappingVarProviderState     = "provider_state"
 )
 
 var defaultCELTimeout = 100 * time.Millisecond
@@ -43,6 +56,36 @@ var normalizedMappingSchemas = func() map[string]struct{} {
 // It is intentionally small to keep evaluation consistent across integrations
 type MappingEvaluator struct {
 	evaluator *celx.Evaluator
+}
+
+// MappingVars holds CEL variables for integration mappings.
+type MappingVars struct {
+	Payload           map[string]any
+	Resource          string
+	AlertType         string
+	Provider          integrationtypes.ProviderType
+	Operation         integrationtypes.OperationName
+	OrgID             string
+	IntegrationID     string
+	Config            map[string]any
+	IntegrationConfig map[string]any
+	ProviderState     map[string]any
+}
+
+// Map converts MappingVars into the CEL variable map.
+func (m MappingVars) Map() map[string]any {
+	return map[string]any{
+		mappingVarPayload:           m.Payload,
+		mappingVarResource:          m.Resource,
+		mappingVarAlertType:         m.AlertType,
+		mappingVarProvider:          string(m.Provider),
+		mappingVarOperation:         string(m.Operation),
+		mappingVarOrgID:             m.OrgID,
+		mappingVarIntegrationID:     m.IntegrationID,
+		mappingVarConfig:            m.Config,
+		mappingVarIntegrationConfig: m.IntegrationConfig,
+		mappingVarProviderState:     m.ProviderState,
+	}
 }
 
 // NewMappingEvaluator creates a CEL evaluator for integration mappings
@@ -74,16 +117,16 @@ func newMappingEnv() (*cel.Env, error) {
 
 	return celx.NewEnv(cfg,
 		cel.VariableDecls(
-			decls.NewVariable("payload", types.DynType),
-			decls.NewVariable("resource", types.StringType),
-			decls.NewVariable("alert_type", types.StringType),
-			decls.NewVariable("provider", types.StringType),
-			decls.NewVariable("operation", types.StringType),
-			decls.NewVariable("org_id", types.StringType),
-			decls.NewVariable("integration_id", types.StringType),
-			decls.NewVariable("config", types.DynType),
-			decls.NewVariable("integration_config", types.DynType),
-			decls.NewVariable("provider_state", types.DynType),
+			decls.NewVariable(mappingVarPayload, types.DynType),
+			decls.NewVariable(mappingVarResource, types.StringType),
+			decls.NewVariable(mappingVarAlertType, types.StringType),
+			decls.NewVariable(mappingVarProvider, types.StringType),
+			decls.NewVariable(mappingVarOperation, types.StringType),
+			decls.NewVariable(mappingVarOrgID, types.StringType),
+			decls.NewVariable(mappingVarIntegrationID, types.StringType),
+			decls.NewVariable(mappingVarConfig, types.DynType),
+			decls.NewVariable(mappingVarIntegrationConfig, types.DynType),
+			decls.NewVariable(mappingVarProviderState, types.DynType),
 		),
 	)
 }
@@ -240,9 +283,12 @@ func resolveMappingSpecWithIndex(index mappingOverrideIndex, provider integratio
 
 // allowedMappingKeys returns the set of allowed input keys for a schema
 func allowedMappingKeys(schema integrationgenerated.IntegrationMappingSchema) map[string]struct{} {
+	if len(schema.AllowedKeys) > 0 {
+		return schema.AllowedKeys
+	}
 	out := make(map[string]struct{}, len(schema.Fields))
 	for _, field := range schema.Fields {
-		key := strings.TrimSpace(field.InputKey)
+		key := field.InputKey
 		if key == "" {
 			continue
 		}
@@ -267,16 +313,22 @@ func filterMappingOutput(schema integrationgenerated.IntegrationMappingSchema, i
 
 // validateMappingOutput checks required fields are present in mapped output
 func validateMappingOutput(schema integrationgenerated.IntegrationMappingSchema, input map[string]any) error {
-	for _, field := range schema.Fields {
-		if !field.Required {
-			continue
+	requiredKeys := schema.RequiredKeys
+	if len(requiredKeys) == 0 {
+		for _, field := range schema.Fields {
+			if field.Required {
+				requiredKeys = append(requiredKeys, field.InputKey)
+			}
 		}
-		value, ok := input[field.InputKey]
+	}
+
+	for _, key := range requiredKeys {
+		value, ok := input[key]
 		if !ok || value == nil {
-			return fmt.Errorf("%w: %s", ErrMappingRequiredField, field.InputKey)
+			return fmt.Errorf("%w: %s", ErrMappingRequiredField, key)
 		}
 		if str, ok := value.(string); ok && strings.TrimSpace(str) == "" {
-			return fmt.Errorf("%w: %s", ErrMappingRequiredField, field.InputKey)
+			return fmt.Errorf("%w: %s", ErrMappingRequiredField, key)
 		}
 	}
 
