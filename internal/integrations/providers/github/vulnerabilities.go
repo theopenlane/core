@@ -38,7 +38,7 @@ type githubVulnerabilityConfig struct {
 	Ecosystem   string   `mapstructure:"ecosystem"`
 }
 
-// runGitHubVulnerabilityOperation collects GitHub alert data and returns envelope payloads.
+// runGitHubVulnerabilityOperation collects GitHub alert data and returns envelope payloads
 func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, token, err := helpers.ClientAndOAuthToken(input, input.Provider)
 	if err != nil {
@@ -79,9 +79,7 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 	var (
 		totalAlerts     int
 		envelopes       []types.AlertEnvelope
-		severityCounts  = map[string]int{}
 		alertTypeCounts = map[string]int{}
-		samples         []map[string]any
 	)
 
 	for _, repo := range repoNames {
@@ -97,41 +95,9 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 					},
 				}, err
 			}
-
-			for _, alert := range batch {
-				if alert == nil {
-					continue
-				}
-				payload, err := json.Marshal(alert)
-				if err != nil {
-					return types.OperationResult{
-						Status:  types.OperationStatusFailed,
-						Summary: "GitHub Dependabot alert serialization failed",
-						Details: map[string]any{
-							"repository": repo,
-							"error":      err.Error(),
-						},
-					}, err
-				}
-				envelopes = append(envelopes, types.AlertEnvelope{
-					AlertType: githubAlertTypeDependabot,
-					Resource:  repo,
-					Payload:   payload,
-				})
-				totalAlerts++
-				alertTypeCounts[githubAlertTypeDependabot]++
-				if severity := strings.TrimSpace(dependabotAlertSeverity(alert)); severity != "" {
-					severityCounts[strings.ToLower(severity)]++
-				}
-				if len(samples) < maxSampleSize {
-					samples = append(samples, map[string]any{
-						"external_id": formatDependabotExternalID(repo, alert),
-						"severity":    dependabotAlertSeverity(alert),
-						"summary":     dependabotAlertSummary(alert),
-						"owner":       repo,
-					})
-				}
-			}
+			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeDependabot, repo, batch)
+			totalAlerts += len(batch)
+			alertTypeCounts[githubAlertTypeDependabot] += len(batch)
 		}
 
 		if alertTypeRequested(alertTypes, githubAlertTypeCodeScanning) {
@@ -146,41 +112,9 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 					},
 				}, err
 			}
-
-			for _, alert := range batch {
-				if alert == nil {
-					continue
-				}
-				payload, err := json.Marshal(alert)
-				if err != nil {
-					return types.OperationResult{
-						Status:  types.OperationStatusFailed,
-						Summary: "GitHub code scanning alert serialization failed",
-						Details: map[string]any{
-							"repository": repo,
-							"error":      err.Error(),
-						},
-					}, err
-				}
-				envelopes = append(envelopes, types.AlertEnvelope{
-					AlertType: githubAlertTypeCodeScanning,
-					Resource:  repo,
-					Payload:   payload,
-				})
-				totalAlerts++
-				alertTypeCounts[githubAlertTypeCodeScanning]++
-				if severity := strings.TrimSpace(codeScanningAlertSeverity(alert)); severity != "" {
-					severityCounts[strings.ToLower(severity)]++
-				}
-				if len(samples) < maxSampleSize {
-					samples = append(samples, map[string]any{
-						"external_id": formatCodeScanningExternalID(repo, alert),
-						"severity":    codeScanningAlertSeverity(alert),
-						"summary":     codeScanningAlertSummary(alert),
-						"owner":       repo,
-					})
-				}
-			}
+			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeCodeScanning, repo, batch)
+			totalAlerts += len(batch)
+			alertTypeCounts[githubAlertTypeCodeScanning] += len(batch)
 		}
 
 		if alertTypeRequested(alertTypes, githubAlertTypeSecretScanning) {
@@ -195,46 +129,16 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 					},
 				}, err
 			}
-
-			for _, alert := range batch {
-				if alert == nil {
-					continue
-				}
-				payload, err := json.Marshal(alert)
-				if err != nil {
-					return types.OperationResult{
-						Status:  types.OperationStatusFailed,
-						Summary: "GitHub secret scanning alert serialization failed",
-						Details: map[string]any{
-							"repository": repo,
-							"error":      err.Error(),
-						},
-					}, err
-				}
-				envelopes = append(envelopes, types.AlertEnvelope{
-					AlertType: githubAlertTypeSecretScanning,
-					Resource:  repo,
-					Payload:   payload,
-				})
-				totalAlerts++
-				alertTypeCounts[githubAlertTypeSecretScanning]++
-				if len(samples) < maxSampleSize {
-					samples = append(samples, map[string]any{
-						"external_id": formatSecretScanningExternalID(repo, alert),
-						"summary":     secretScanningAlertSummary(alert),
-						"owner":       repo,
-					})
-				}
-			}
+			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeSecretScanning, repo, batch)
+			totalAlerts += len(batch)
+			alertTypeCounts[githubAlertTypeSecretScanning] += len(batch)
 		}
 	}
 
 	details := map[string]any{
 		"repositories_scanned": len(repoNames),
 		"alerts_total":         totalAlerts,
-		"severity_counts":      severityCounts,
 		"alert_type_counts":    alertTypeCounts,
-		"samples":              samples,
 	}
 	details = helpers.AddPayloadIf(details, config.IncludePayloads, "alerts", envelopes)
 
@@ -245,7 +149,7 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 	}, nil
 }
 
-// listGitHubReposForProvider enumerates repositories using either OAuth or app installation tokens.
+// listGitHubReposForProvider enumerates repositories using either OAuth or app installation tokens
 func listGitHubReposForProvider(ctx context.Context, client *helpers.AuthenticatedClient, token string, provider types.ProviderType, config githubVulnerabilityConfig) ([]githubRepoResponse, error) {
 	if provider == TypeGitHubApp {
 		return listGitHubInstallationRepos(ctx, client, token, config)
@@ -254,7 +158,7 @@ func listGitHubReposForProvider(ctx context.Context, client *helpers.Authenticat
 	return listGitHubRepos(ctx, client, token, config)
 }
 
-// listGitHubInstallationRepos lists repositories visible to a GitHub App installation.
+// listGitHubInstallationRepos lists repositories visible to a GitHub App installation
 func listGitHubInstallationRepos(ctx context.Context, client *helpers.AuthenticatedClient, token string, config githubVulnerabilityConfig) ([]githubRepoResponse, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
 	page := 1
@@ -280,7 +184,7 @@ func listGitHubInstallationRepos(ctx context.Context, client *helpers.Authentica
 	return out, nil
 }
 
-// listGitHubRepos lists repositories accessible to the OAuth token.
+// listGitHubRepos lists repositories accessible to the OAuth token
 func listGitHubRepos(ctx context.Context, client *helpers.AuthenticatedClient, token string, config githubVulnerabilityConfig) ([]githubRepoResponse, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
 	page := 1
@@ -312,11 +216,11 @@ func listGitHubRepos(ctx context.Context, client *helpers.AuthenticatedClient, t
 	return out, nil
 }
 
-// listDependabotAlerts fetches Dependabot alerts for a repository.
-func listDependabotAlerts(ctx context.Context, client *helpers.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]*gh.DependabotAlert, error) {
+// listDependabotAlerts fetches Dependabot alerts for a repository
+func listDependabotAlerts(ctx context.Context, client *helpers.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
 	page := 1
-	out := make([]*gh.DependabotAlert, 0)
+	out := make([]json.RawMessage, 0)
 
 	state := strings.TrimSpace(config.AlertState)
 	if state == "" {
@@ -343,7 +247,16 @@ func listDependabotAlerts(ctx context.Context, client *helpers.AuthenticatedClie
 			return nil, err
 		}
 
-		out = append(out, batch...)
+		for _, alert := range batch {
+			if alert == nil {
+				continue
+			}
+			payload, err := json.Marshal(alert)
+			if err != nil {
+				return nil, err
+			}
+			out = append(out, payload)
+		}
 		if len(batch) < perPage {
 			break
 		}
@@ -353,11 +266,11 @@ func listDependabotAlerts(ctx context.Context, client *helpers.AuthenticatedClie
 	return out, nil
 }
 
-// listCodeScanningAlerts fetches code scanning alerts for a repository.
-func listCodeScanningAlerts(ctx context.Context, client *helpers.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]*gh.Alert, error) {
+// listCodeScanningAlerts fetches code scanning alerts for a repository
+func listCodeScanningAlerts(ctx context.Context, client *helpers.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
 	page := 1
-	out := make([]*gh.Alert, 0)
+	out := make([]json.RawMessage, 0)
 
 	state := strings.TrimSpace(config.AlertState)
 	if state == "" {
@@ -378,7 +291,16 @@ func listCodeScanningAlerts(ctx context.Context, client *helpers.AuthenticatedCl
 			return nil, err
 		}
 
-		out = append(out, batch...)
+		for _, alert := range batch {
+			if alert == nil {
+				continue
+			}
+			payload, err := json.Marshal(alert)
+			if err != nil {
+				return nil, err
+			}
+			out = append(out, payload)
+		}
 		if len(batch) < perPage {
 			break
 		}
@@ -388,11 +310,11 @@ func listCodeScanningAlerts(ctx context.Context, client *helpers.AuthenticatedCl
 	return out, nil
 }
 
-// listSecretScanningAlerts fetches secret scanning alerts for a repository.
-func listSecretScanningAlerts(ctx context.Context, client *helpers.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]*gh.SecretScanningAlert, error) {
+// listSecretScanningAlerts fetches secret scanning alerts for a repository
+func listSecretScanningAlerts(ctx context.Context, client *helpers.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
 	page := 1
-	out := make([]*gh.SecretScanningAlert, 0)
+	out := make([]json.RawMessage, 0)
 
 	state := strings.TrimSpace(config.AlertState)
 	if state == "" {
@@ -413,7 +335,16 @@ func listSecretScanningAlerts(ctx context.Context, client *helpers.Authenticated
 			return nil, err
 		}
 
-		out = append(out, batch...)
+		for _, alert := range batch {
+			if alert == nil {
+				continue
+			}
+			payload, err := json.Marshal(alert)
+			if err != nil {
+				return nil, err
+			}
+			out = append(out, payload)
+		}
 		if len(batch) < perPage {
 			break
 		}
@@ -423,120 +354,17 @@ func listSecretScanningAlerts(ctx context.Context, client *helpers.Authenticated
 	return out, nil
 }
 
-// dependabotAlertSeverity extracts the severity label from a Dependabot alert.
-func dependabotAlertSeverity(alert *gh.DependabotAlert) string {
-	if alert == nil {
-		return ""
-	}
-	advisory := alert.GetSecurityAdvisory()
-	vulnerability := alert.GetSecurityVulnerability()
-	severity := strings.TrimSpace(advisory.GetSeverity())
-	if severity == "" {
-		severity = strings.TrimSpace(vulnerability.GetSeverity())
-	}
-	return severity
-}
-
-// dependabotAlertSummary builds a concise summary for a Dependabot alert.
-func dependabotAlertSummary(alert *gh.DependabotAlert) string {
-	if alert == nil {
-		return ""
+// appendAlertEnvelopes wraps payloads into alert envelopes
+func appendAlertEnvelopes(envelopes []types.AlertEnvelope, alertType, resource string, payloads []json.RawMessage) []types.AlertEnvelope {
+	for _, payload := range payloads {
+		envelopes = append(envelopes, types.AlertEnvelope{
+			AlertType: alertType,
+			Resource:  resource,
+			Payload:   payload,
+		})
 	}
 
-	advisory := alert.GetSecurityAdvisory()
-	summary := strings.TrimSpace(advisory.GetSummary())
-	if summary == "" {
-		summary = strings.TrimSpace(advisory.GetGHSAID())
-	}
-
-	return summary
-}
-
-// codeScanningAlertSeverity extracts the severity label from a code scanning alert.
-func codeScanningAlertSeverity(alert *gh.Alert) string {
-	if alert == nil {
-		return ""
-	}
-
-	rule := alert.GetRule()
-	severity := strings.TrimSpace(rule.GetSecuritySeverityLevel())
-	if severity == "" {
-		severity = strings.TrimSpace(rule.GetSeverity())
-	}
-
-	return severity
-}
-
-// codeScanningAlertSummary builds a concise summary for a code scanning alert.
-func codeScanningAlertSummary(alert *gh.Alert) string {
-	if alert == nil {
-		return ""
-	}
-
-	rule := alert.GetRule()
-	instance := alert.GetMostRecentInstance()
-	summary := strings.TrimSpace(rule.GetDescription())
-	if summary == "" {
-		summary = strings.TrimSpace(rule.GetName())
-	}
-
-	if summary == "" {
-		summary = strings.TrimSpace(instance.GetMessage().GetText())
-	}
-
-	return summary
-}
-
-// secretScanningAlertSummary builds a concise summary for a secret scanning alert.
-func secretScanningAlertSummary(alert *gh.SecretScanningAlert) string {
-	if alert == nil {
-		return ""
-	}
-
-	summary := strings.TrimSpace(alert.GetSecretTypeDisplayName())
-	if summary == "" {
-		summary = strings.TrimSpace(alert.GetSecretType())
-	}
-
-	return summary
-}
-
-// formatDependabotExternalID builds a stable external ID for a Dependabot alert.
-func formatDependabotExternalID(repo string, alert *gh.DependabotAlert) string {
-	if number := alert.GetNumber(); number != 0 {
-		return fmt.Sprintf("github:%s:dependabot:%d", repo, number)
-	}
-
-	if ghsa := strings.TrimSpace(alert.GetSecurityAdvisory().GetGHSAID()); ghsa != "" {
-		return fmt.Sprintf("github:%s:dependabot:%s", repo, ghsa)
-	}
-
-	return fmt.Sprintf("github:%s:dependabot:unknown", repo)
-}
-
-// formatCodeScanningExternalID builds a stable external ID for a code scanning alert.
-func formatCodeScanningExternalID(repo string, alert *gh.Alert) string {
-	if id := alert.ID(); id != 0 {
-		return fmt.Sprintf("github:%s:code_scanning:%d", repo, id)
-	}
-
-	if number := alert.GetNumber(); number != 0 {
-		return fmt.Sprintf("github:%s:code_scanning:%d", repo, number)
-	}
-
-	if ruleID := strings.TrimSpace(alert.GetRule().GetID()); ruleID != "" {
-		return fmt.Sprintf("github:%s:code_scanning:%s", repo, ruleID)
-	}
-
-	return fmt.Sprintf("github:%s:code_scanning:unknown", repo)
-}
-
-// formatSecretScanningExternalID builds a stable external ID for a secret scanning alert.
-func formatSecretScanningExternalID(repo string, alert *gh.SecretScanningAlert) string {
-	if number := alert.GetNumber(); number != 0 {
-		return fmt.Sprintf("github:%s:secret_scanning:%d", repo, number)
-	}
-	return fmt.Sprintf("github:%s:secret_scanning:unknown", repo)
+	return envelopes
 }
 
 // repoNamesFromResponses builds full repo names from API responses

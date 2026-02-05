@@ -384,6 +384,7 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 			RedirectURL: "http://localhost",
 		},
 		DefaultTrustCenterDomain: "trust.openlane.com",
+		EventEmitter:             soiree.New(),
 	}
 
 	return h

@@ -15,6 +15,7 @@ var (
 	errIntegrationStoreNotConfigured      = errors.New("integration store not configured")
 	errIntegrationRegistryNotConfigured   = errors.New("integration registry not configured")
 	errIntegrationOperationsNotConfigured = errors.New("integration operations manager not configured")
+	errIntegrationEmitterNotConfigured    = errors.New("integration event emitter not configured")
 	errKeymakerNotConfigured              = errors.New("integration keymaker service not configured")
 )
 

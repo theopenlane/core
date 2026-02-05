@@ -20,7 +20,6 @@ const (
 	awsSecurityHubAlertTypeFinding = "finding"
 	awsSecurityHubMaxPageSize      = 100
 	awsSecurityHubDefaultPageSize  = 100
-	awsSecurityHubMaxSampleSize    = 5
 	awsSecurityHubDefaultSession   = "openlane-securityhub"
 )
 
@@ -33,7 +32,7 @@ type securityHubFindingsConfig struct {
 	IncludePayloads bool
 }
 
-// awsSecurityHubOperations lists the AWS Security Hub operations supported by this provider.
+// awsSecurityHubOperations lists the AWS Security Hub operations supported by this provider
 func awsSecurityHubOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		{
@@ -82,7 +81,7 @@ func awsSecurityHubOperations() []types.OperationDescriptor {
 	}
 }
 
-// runAWSSecurityHubHealth validates Security Hub access via GetFindings.
+// runAWSSecurityHubHealth validates Security Hub access via GetFindings
 func runAWSSecurityHubHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, meta, err := resolveSecurityHubClient(ctx, input)
 	if err != nil {
@@ -112,7 +111,7 @@ func runAWSSecurityHubHealth(ctx context.Context, input types.OperationInput) (t
 	}, nil
 }
 
-// runAWSSecurityHubFindings collects Security Hub findings for ingestion.
+// runAWSSecurityHubFindings collects Security Hub findings for ingestion
 func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, meta, err := resolveSecurityHubClient(ctx, input)
 	if err != nil {
@@ -138,12 +137,9 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 	workflowFilter := strings.ToUpper(strings.TrimSpace(cfg.WorkflowStatus))
 
 	var (
-		envelopes      []types.AlertEnvelope
-		total          int
-		severityCounts = map[string]int{}
-		workflowCounts = map[string]int{}
-		samples        []map[string]any
-		nextToken      *string
+		envelopes []types.AlertEnvelope
+		total     int
+		nextToken *string
 	)
 
 	for {
@@ -215,22 +211,6 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 				Payload:   payload,
 			})
 			total++
-
-			if severityLabel != "" {
-				severityCounts[severityLabel]++
-			}
-			if workflowStatus != "" {
-				workflowCounts[strings.ToLower(workflowStatus)]++
-			}
-
-			if len(samples) < awsSecurityHubMaxSampleSize {
-				samples = append(samples, map[string]any{
-					"id":       helpers.StringFromAny(finding.Id),
-					"title":    helpers.StringFromAny(finding.Title),
-					"severity": severityLabel,
-					"state":    recordState,
-				})
-			}
 		}
 
 		if maxFindings > 0 && total >= maxFindings {
@@ -243,12 +223,13 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 		nextToken = resp.NextToken
 	}
 
+	alertTypeCounts := map[string]int{
+		awsSecurityHubAlertTypeFinding: total,
+	}
 	details := map[string]any{
-		"region":          meta.Region,
-		"totalFindings":   total,
-		"severity_counts": severityCounts,
-		"workflow_counts": workflowCounts,
-		"samples":         samples,
+		"region":            meta.Region,
+		"alerts_total":      total,
+		"alert_type_counts": alertTypeCounts,
 	}
 	details = helpers.AddPayloadIf(details, cfg.IncludePayloads, "alerts", envelopes)
 

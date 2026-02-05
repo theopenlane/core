@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/core/common/integrations/helpers"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/pkg/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/providers"
 )
 
 const (
