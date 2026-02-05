@@ -108,6 +108,11 @@ func IntegrationID(v string) predicate.IntegrationWebhook {
 	return predicate.IntegrationWebhook(sql.FieldEQ(FieldIntegrationID, v))
 }
 
+// Provider applies equality check predicate on the "provider" field. It's identical to ProviderEQ.
+func Provider(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldEQ(FieldProvider, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.IntegrationWebhook {
 	return predicate.IntegrationWebhook(sql.FieldEQ(FieldName, v))
@@ -141,6 +146,11 @@ func LastDeliveryStatus(v string) predicate.IntegrationWebhook {
 // LastDeliveryError applies equality check predicate on the "last_delivery_error" field. It's identical to LastDeliveryErrorEQ.
 func LastDeliveryError(v string) predicate.IntegrationWebhook {
 	return predicate.IntegrationWebhook(sql.FieldEQ(FieldLastDeliveryError, v))
+}
+
+// ExternalEventID applies equality check predicate on the "external_event_id" field. It's identical to ExternalEventIDEQ.
+func ExternalEventID(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldEQ(FieldExternalEventID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -666,6 +676,71 @@ func IntegrationIDEqualFold(v string) predicate.IntegrationWebhook {
 // IntegrationIDContainsFold applies the ContainsFold predicate on the "integration_id" field.
 func IntegrationIDContainsFold(v string) predicate.IntegrationWebhook {
 	return predicate.IntegrationWebhook(sql.FieldContainsFold(FieldIntegrationID, v))
+}
+
+// ProviderEQ applies the EQ predicate on the "provider" field.
+func ProviderEQ(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldEQ(FieldProvider, v))
+}
+
+// ProviderNEQ applies the NEQ predicate on the "provider" field.
+func ProviderNEQ(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldNEQ(FieldProvider, v))
+}
+
+// ProviderIn applies the In predicate on the "provider" field.
+func ProviderIn(vs ...string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldIn(FieldProvider, vs...))
+}
+
+// ProviderNotIn applies the NotIn predicate on the "provider" field.
+func ProviderNotIn(vs ...string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldNotIn(FieldProvider, vs...))
+}
+
+// ProviderGT applies the GT predicate on the "provider" field.
+func ProviderGT(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldGT(FieldProvider, v))
+}
+
+// ProviderGTE applies the GTE predicate on the "provider" field.
+func ProviderGTE(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldGTE(FieldProvider, v))
+}
+
+// ProviderLT applies the LT predicate on the "provider" field.
+func ProviderLT(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldLT(FieldProvider, v))
+}
+
+// ProviderLTE applies the LTE predicate on the "provider" field.
+func ProviderLTE(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldLTE(FieldProvider, v))
+}
+
+// ProviderContains applies the Contains predicate on the "provider" field.
+func ProviderContains(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldContains(FieldProvider, v))
+}
+
+// ProviderHasPrefix applies the HasPrefix predicate on the "provider" field.
+func ProviderHasPrefix(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldHasPrefix(FieldProvider, v))
+}
+
+// ProviderHasSuffix applies the HasSuffix predicate on the "provider" field.
+func ProviderHasSuffix(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldHasSuffix(FieldProvider, v))
+}
+
+// ProviderEqualFold applies the EqualFold predicate on the "provider" field.
+func ProviderEqualFold(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldEqualFold(FieldProvider, v))
+}
+
+// ProviderContainsFold applies the ContainsFold predicate on the "provider" field.
+func ProviderContainsFold(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldContainsFold(FieldProvider, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -1206,6 +1281,81 @@ func LastDeliveryErrorEqualFold(v string) predicate.IntegrationWebhook {
 // LastDeliveryErrorContainsFold applies the ContainsFold predicate on the "last_delivery_error" field.
 func LastDeliveryErrorContainsFold(v string) predicate.IntegrationWebhook {
 	return predicate.IntegrationWebhook(sql.FieldContainsFold(FieldLastDeliveryError, v))
+}
+
+// ExternalEventIDEQ applies the EQ predicate on the "external_event_id" field.
+func ExternalEventIDEQ(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldEQ(FieldExternalEventID, v))
+}
+
+// ExternalEventIDNEQ applies the NEQ predicate on the "external_event_id" field.
+func ExternalEventIDNEQ(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldNEQ(FieldExternalEventID, v))
+}
+
+// ExternalEventIDIn applies the In predicate on the "external_event_id" field.
+func ExternalEventIDIn(vs ...string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldIn(FieldExternalEventID, vs...))
+}
+
+// ExternalEventIDNotIn applies the NotIn predicate on the "external_event_id" field.
+func ExternalEventIDNotIn(vs ...string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldNotIn(FieldExternalEventID, vs...))
+}
+
+// ExternalEventIDGT applies the GT predicate on the "external_event_id" field.
+func ExternalEventIDGT(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldGT(FieldExternalEventID, v))
+}
+
+// ExternalEventIDGTE applies the GTE predicate on the "external_event_id" field.
+func ExternalEventIDGTE(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldGTE(FieldExternalEventID, v))
+}
+
+// ExternalEventIDLT applies the LT predicate on the "external_event_id" field.
+func ExternalEventIDLT(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldLT(FieldExternalEventID, v))
+}
+
+// ExternalEventIDLTE applies the LTE predicate on the "external_event_id" field.
+func ExternalEventIDLTE(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldLTE(FieldExternalEventID, v))
+}
+
+// ExternalEventIDContains applies the Contains predicate on the "external_event_id" field.
+func ExternalEventIDContains(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldContains(FieldExternalEventID, v))
+}
+
+// ExternalEventIDHasPrefix applies the HasPrefix predicate on the "external_event_id" field.
+func ExternalEventIDHasPrefix(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldHasPrefix(FieldExternalEventID, v))
+}
+
+// ExternalEventIDHasSuffix applies the HasSuffix predicate on the "external_event_id" field.
+func ExternalEventIDHasSuffix(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldHasSuffix(FieldExternalEventID, v))
+}
+
+// ExternalEventIDIsNil applies the IsNil predicate on the "external_event_id" field.
+func ExternalEventIDIsNil() predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldIsNull(FieldExternalEventID))
+}
+
+// ExternalEventIDNotNil applies the NotNil predicate on the "external_event_id" field.
+func ExternalEventIDNotNil() predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldNotNull(FieldExternalEventID))
+}
+
+// ExternalEventIDEqualFold applies the EqualFold predicate on the "external_event_id" field.
+func ExternalEventIDEqualFold(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldEqualFold(FieldExternalEventID, v))
+}
+
+// ExternalEventIDContainsFold applies the ContainsFold predicate on the "external_event_id" field.
+func ExternalEventIDContainsFold(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldContainsFold(FieldExternalEventID, v))
 }
 
 // MetadataIsNil applies the IsNil predicate on the "metadata" field.

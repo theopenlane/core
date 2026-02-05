@@ -135,6 +135,12 @@ func (_c *IntegrationWebhookCreate) SetNillableIntegrationID(v *string) *Integra
 	return _c
 }
 
+// SetProvider sets the "provider" field.
+func (_c *IntegrationWebhookCreate) SetProvider(v string) *IntegrationWebhookCreate {
+	_c.mutation.SetProvider(v)
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *IntegrationWebhookCreate) SetName(v string) *IntegrationWebhookCreate {
 	_c.mutation.SetName(v)
@@ -253,6 +259,20 @@ func (_c *IntegrationWebhookCreate) SetNillableLastDeliveryError(v *string) *Int
 	return _c
 }
 
+// SetExternalEventID sets the "external_event_id" field.
+func (_c *IntegrationWebhookCreate) SetExternalEventID(v string) *IntegrationWebhookCreate {
+	_c.mutation.SetExternalEventID(v)
+	return _c
+}
+
+// SetNillableExternalEventID sets the "external_event_id" field if the given value is not nil.
+func (_c *IntegrationWebhookCreate) SetNillableExternalEventID(v *string) *IntegrationWebhookCreate {
+	if v != nil {
+		_c.SetExternalEventID(*v)
+	}
+	return _c
+}
+
 // SetMetadata sets the "metadata" field.
 func (_c *IntegrationWebhookCreate) SetMetadata(v map[string]interface{}) *IntegrationWebhookCreate {
 	_c.mutation.SetMetadata(v)
@@ -362,6 +382,14 @@ func (_c *IntegrationWebhookCreate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.owner_id": %w`, err)}
 		}
 	}
+	if _, ok := _c.mutation.Provider(); !ok {
+		return &ValidationError{Name: "provider", err: errors.New(`generated: missing required field "IntegrationWebhook.provider"`)}
+	}
+	if v, ok := _c.mutation.Provider(); ok {
+		if err := integrationwebhook.ProviderValidator(v); err != nil {
+			return &ValidationError{Name: "provider", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.provider": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "IntegrationWebhook.status"`)}
 	}
@@ -435,6 +463,10 @@ func (_c *IntegrationWebhookCreate) createSpec() (*IntegrationWebhook, *sqlgraph
 		_spec.SetField(integrationwebhook.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
+	if value, ok := _c.mutation.Provider(); ok {
+		_spec.SetField(integrationwebhook.FieldProvider, field.TypeString, value)
+		_node.Provider = value
+	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(integrationwebhook.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -470,6 +502,10 @@ func (_c *IntegrationWebhookCreate) createSpec() (*IntegrationWebhook, *sqlgraph
 	if value, ok := _c.mutation.LastDeliveryError(); ok {
 		_spec.SetField(integrationwebhook.FieldLastDeliveryError, field.TypeString, value)
 		_node.LastDeliveryError = value
+	}
+	if value, ok := _c.mutation.ExternalEventID(); ok {
+		_spec.SetField(integrationwebhook.FieldExternalEventID, field.TypeString, value)
+		_node.ExternalEventID = &value
 	}
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(integrationwebhook.FieldMetadata, field.TypeJSON, value)

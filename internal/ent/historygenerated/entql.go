@@ -1356,6 +1356,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integrationhistory.FieldKind:             {Type: field.TypeString, Column: integrationhistory.FieldKind},
 			integrationhistory.FieldIntegrationType:  {Type: field.TypeString, Column: integrationhistory.FieldIntegrationType},
 			integrationhistory.FieldProviderMetadata: {Type: field.TypeJSON, Column: integrationhistory.FieldProviderMetadata},
+			integrationhistory.FieldConfig:           {Type: field.TypeJSON, Column: integrationhistory.FieldConfig},
+			integrationhistory.FieldProviderState:    {Type: field.TypeJSON, Column: integrationhistory.FieldProviderState},
 			integrationhistory.FieldMetadata:         {Type: field.TypeJSON, Column: integrationhistory.FieldMetadata},
 		},
 	}
@@ -8606,6 +8608,16 @@ func (f *IntegrationHistoryFilter) WhereIntegrationType(p entql.StringP) {
 // WhereProviderMetadata applies the entql json.RawMessage predicate on the provider_metadata field.
 func (f *IntegrationHistoryFilter) WhereProviderMetadata(p entql.BytesP) {
 	f.Where(p.Field(integrationhistory.FieldProviderMetadata))
+}
+
+// WhereConfig applies the entql json.RawMessage predicate on the config field.
+func (f *IntegrationHistoryFilter) WhereConfig(p entql.BytesP) {
+	f.Where(p.Field(integrationhistory.FieldConfig))
+}
+
+// WhereProviderState applies the entql json.RawMessage predicate on the provider_state field.
+func (f *IntegrationHistoryFilter) WhereProviderState(p entql.BytesP) {
+	f.Where(p.Field(integrationhistory.FieldProviderState))
 }
 
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.

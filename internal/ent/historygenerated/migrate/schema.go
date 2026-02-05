@@ -1390,6 +1390,8 @@ var (
 		{Name: "kind", Type: field.TypeString, Nullable: true},
 		{Name: "integration_type", Type: field.TypeString, Nullable: true},
 		{Name: "provider_metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "config", Type: field.TypeJSON, Nullable: true},
+		{Name: "provider_state", Type: field.TypeJSON, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 	}
 	// IntegrationHistoryTable holds the schema information for the "integration_history" table.

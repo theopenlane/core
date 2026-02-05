@@ -187,6 +187,38 @@ func (_u *IntegrationRunUpdate) ClearRunType() *IntegrationRunUpdate {
 	return _u
 }
 
+// SetOperationConfig sets the "operation_config" field.
+func (_u *IntegrationRunUpdate) SetOperationConfig(v map[string]interface{}) *IntegrationRunUpdate {
+	_u.mutation.SetOperationConfig(v)
+	return _u
+}
+
+// ClearOperationConfig clears the value of the "operation_config" field.
+func (_u *IntegrationRunUpdate) ClearOperationConfig() *IntegrationRunUpdate {
+	_u.mutation.ClearOperationConfig()
+	return _u
+}
+
+// SetMappingVersion sets the "mapping_version" field.
+func (_u *IntegrationRunUpdate) SetMappingVersion(v string) *IntegrationRunUpdate {
+	_u.mutation.SetMappingVersion(v)
+	return _u
+}
+
+// SetNillableMappingVersion sets the "mapping_version" field if the given value is not nil.
+func (_u *IntegrationRunUpdate) SetNillableMappingVersion(v *string) *IntegrationRunUpdate {
+	if v != nil {
+		_u.SetMappingVersion(*v)
+	}
+	return _u
+}
+
+// ClearMappingVersion clears the value of the "mapping_version" field.
+func (_u *IntegrationRunUpdate) ClearMappingVersion() *IntegrationRunUpdate {
+	_u.mutation.ClearMappingVersion()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *IntegrationRunUpdate) SetStatus(v enums.IntegrationRunStatus) *IntegrationRunUpdate {
 	_u.mutation.SetStatus(v)
@@ -551,6 +583,18 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.RunTypeCleared() {
 		_spec.ClearField(integrationrun.FieldRunType, field.TypeEnum)
 	}
+	if value, ok := _u.mutation.OperationConfig(); ok {
+		_spec.SetField(integrationrun.FieldOperationConfig, field.TypeJSON, value)
+	}
+	if _u.mutation.OperationConfigCleared() {
+		_spec.ClearField(integrationrun.FieldOperationConfig, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.MappingVersion(); ok {
+		_spec.SetField(integrationrun.FieldMappingVersion, field.TypeString, value)
+	}
+	if _u.mutation.MappingVersionCleared() {
+		_spec.ClearField(integrationrun.FieldMappingVersion, field.TypeString)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(integrationrun.FieldStatus, field.TypeEnum, value)
 	}
@@ -887,6 +931,38 @@ func (_u *IntegrationRunUpdateOne) SetNillableRunType(v *enums.IntegrationRunTyp
 // ClearRunType clears the value of the "run_type" field.
 func (_u *IntegrationRunUpdateOne) ClearRunType() *IntegrationRunUpdateOne {
 	_u.mutation.ClearRunType()
+	return _u
+}
+
+// SetOperationConfig sets the "operation_config" field.
+func (_u *IntegrationRunUpdateOne) SetOperationConfig(v map[string]interface{}) *IntegrationRunUpdateOne {
+	_u.mutation.SetOperationConfig(v)
+	return _u
+}
+
+// ClearOperationConfig clears the value of the "operation_config" field.
+func (_u *IntegrationRunUpdateOne) ClearOperationConfig() *IntegrationRunUpdateOne {
+	_u.mutation.ClearOperationConfig()
+	return _u
+}
+
+// SetMappingVersion sets the "mapping_version" field.
+func (_u *IntegrationRunUpdateOne) SetMappingVersion(v string) *IntegrationRunUpdateOne {
+	_u.mutation.SetMappingVersion(v)
+	return _u
+}
+
+// SetNillableMappingVersion sets the "mapping_version" field if the given value is not nil.
+func (_u *IntegrationRunUpdateOne) SetNillableMappingVersion(v *string) *IntegrationRunUpdateOne {
+	if v != nil {
+		_u.SetMappingVersion(*v)
+	}
+	return _u
+}
+
+// ClearMappingVersion clears the value of the "mapping_version" field.
+func (_u *IntegrationRunUpdateOne) ClearMappingVersion() *IntegrationRunUpdateOne {
+	_u.mutation.ClearMappingVersion()
 	return _u
 }
 
@@ -1283,6 +1359,18 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 	}
 	if _u.mutation.RunTypeCleared() {
 		_spec.ClearField(integrationrun.FieldRunType, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.OperationConfig(); ok {
+		_spec.SetField(integrationrun.FieldOperationConfig, field.TypeJSON, value)
+	}
+	if _u.mutation.OperationConfigCleared() {
+		_spec.ClearField(integrationrun.FieldOperationConfig, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.MappingVersion(); ok {
+		_spec.SetField(integrationrun.FieldMappingVersion, field.TypeString, value)
+	}
+	if _u.mutation.MappingVersionCleared() {
+		_spec.ClearField(integrationrun.FieldMappingVersion, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(integrationrun.FieldStatus, field.TypeEnum, value)

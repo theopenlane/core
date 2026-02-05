@@ -40,6 +40,10 @@ const (
 	FieldOperationKind = "operation_kind"
 	// FieldRunType holds the string denoting the run_type field in the database.
 	FieldRunType = "run_type"
+	// FieldOperationConfig holds the string denoting the operation_config field in the database.
+	FieldOperationConfig = "operation_config"
+	// FieldMappingVersion holds the string denoting the mapping_version field in the database.
+	FieldMappingVersion = "mapping_version"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldStartedAt holds the string denoting the started_at field in the database.
@@ -123,6 +127,8 @@ var Columns = []string{
 	FieldOperationName,
 	FieldOperationKind,
 	FieldRunType,
+	FieldOperationConfig,
+	FieldMappingVersion,
 	FieldStatus,
 	FieldStartedAt,
 	FieldFinishedAt,
@@ -261,6 +267,11 @@ func ByOperationKind(opts ...sql.OrderTermOption) OrderOption {
 // ByRunType orders the results by the run_type field.
 func ByRunType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRunType, opts...).ToFunc()
+}
+
+// ByMappingVersion orders the results by the mapping_version field.
+func ByMappingVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMappingVersion, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.
