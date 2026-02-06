@@ -7,11 +7,12 @@ import (
 
 	"entgo.io/ent"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/riverboat/pkg/jobs"
+	"github.com/theopenlane/utils/ulids"s"
+	"github.com/theopenlane/utils/ulid
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -237,7 +238,7 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 		return err
 	}
 
-	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonQuestionnaireJWTPrefix, uuid.New().String())
+	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonQuestionnaireJWTPrefix, ulids.New().String())
 
 	newClaims := &tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
