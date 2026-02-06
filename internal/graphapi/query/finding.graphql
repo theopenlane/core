@@ -209,6 +209,26 @@ query GetAllFindings {
         updatedBy
         validated
         vector
+        remediations {
+          edges {
+            node {
+              id
+              intent
+              dueAt
+              completedAt
+            }
+          }
+        }
+        vulnerabilities {
+          edges {
+            node {
+              id
+              displayName
+              cveID
+              severity
+            }
+          }
+        }
       }
     }
   }
@@ -258,6 +278,26 @@ query GetFindingByID($findingId: ID!) {
     updatedBy
     validated
     vector
+    remediations {
+      edges {
+        node {
+          id
+          intent
+          dueAt
+          completedAt
+        }
+      }
+    }
+    vulnerabilities {
+      edges {
+        node {
+          id
+          displayName
+          cveID
+          severity
+        }
+      }
+    }
   }
 }
 
@@ -315,6 +355,26 @@ query GetFindings($first: Int, $last: Int, $where: FindingWhereInput) {
         updatedBy
         validated
         vector
+        remediations {
+          edges {
+            node {
+              id
+              intent
+              dueAt
+              completedAt
+            }
+          }
+        }
+        vulnerabilities {
+          edges {
+            node {
+              id
+              displayName
+              cveID
+              severity
+            }
+          }
+        }
       }
     }
   }

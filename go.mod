@@ -86,12 +86,12 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v84 v84.1.0
 	github.com/theopenlane/beacon v0.3.0
-	github.com/theopenlane/core/common v1.0.6
+	github.com/theopenlane/core/common v1.0.7
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/emailtemplates v0.3.2
 	github.com/theopenlane/entx v0.22.4
-	github.com/theopenlane/go-client v0.7.6
+	github.com/theopenlane/go-client v0.8.2
 	github.com/theopenlane/gqlgen-plugins v0.14.1
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.23.8

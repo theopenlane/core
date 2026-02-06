@@ -26,13 +26,12 @@ func init() {
 	updateCmd.Flags().StringP("id", "i", "", "trust center subprocessor id to update")
 
 	// command line flags for the update command
-	updateCmd.Flags().StringP("subprocessor-id", "s", "", "ID of the subprocessor")
-	updateCmd.Flags().StringP("trust-center-id", "t", "", "ID of the trust center")
-	updateCmd.Flags().StringP("category", "c", "", "category of the subprocessor (e.g. 'Data Warehouse' or 'Infrastructure Hosting')")
+	updateCmd.Flags().StringP("kind-id", "k", "", "ID of the trust center subprocessor kind")
+	updateCmd.Flags().StringP("kind-name", "", "", "name of the trust center subprocessor kind (e.g. 'Data Warehouse' or 'Infrastructure Hosting')")
 	updateCmd.Flags().StringSliceP("countries", "", []string{}, "country codes or countries where the subprocessor is located")
 	updateCmd.Flags().StringSliceP("append-countries", "", []string{}, "append country codes or countries to the existing list")
 	updateCmd.Flags().BoolP("clear-countries", "", false, "clear all countries")
-	updateCmd.Flags().BoolP("clear-trust-center", "", false, "clear the trust center field")
+	updateCmd.Flags().BoolP("clear-kind", "", false, "clear the subprocessor kind field")
 }
 
 // updateValidation validates the required fields for the command
@@ -42,19 +41,14 @@ func updateValidation() (id string, input graphclient.UpdateTrustCenterSubproces
 		return id, input, cmd.NewRequiredFieldMissingError("trust center subprocessor id")
 	}
 
-	subprocessorID := cmd.Config.String("subprocessor-id")
-	if subprocessorID != "" {
-		input.SubprocessorID = &subprocessorID
+	kindID := cmd.Config.String("kind-id")
+	if kindID != "" {
+		input.TrustCenterSubprocessorKindID = &kindID
 	}
 
-	category := cmd.Config.String("category")
-	if category != "" {
-		input.Category = &category
-	}
-
-	trustCenterID := cmd.Config.String("trust-center-id")
-	if trustCenterID != "" {
-		input.TrustCenterID = &trustCenterID
+	kindName := cmd.Config.String("kind-name")
+	if kindName != "" {
+		input.TrustCenterSubprocessorKindName = &kindName
 	}
 
 	countries := cmd.Config.Strings("countries")
@@ -73,9 +67,9 @@ func updateValidation() (id string, input graphclient.UpdateTrustCenterSubproces
 		input.ClearCountries = &clearCountries
 	}
 
-	if cmd.Config.Bool("clear-trust-center") {
-		clearTrustCenter := true
-		input.ClearTrustCenter = &clearTrustCenter
+	if cmd.Config.Bool("clear-kind") {
+		clearKind := true
+		input.ClearTrustCenterSubprocessorKind = &clearKind
 	}
 
 	return id, input, nil

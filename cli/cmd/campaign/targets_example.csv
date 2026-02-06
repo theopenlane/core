@@ -1,0 +1,10 @@
+# Example targets file for campaign create-with-targets command
+# Format: email,fullname (fullname is optional)
+# Lines starting with # are treated as comments and ignored
+# Empty lines are also ignored
+
+alice@example.com,Alice Smith
+bob@example.com,Bob Johnson
+charlie@example.com
+david@example.com,David Wilson
+emma@example.com,Emma Lee

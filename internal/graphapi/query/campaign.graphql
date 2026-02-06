@@ -187,6 +187,19 @@ query GetAllCampaigns($first: Int, $last: Int, $after: Cursor, $before: Cursor, 
         updatedAt
         updatedBy
         workflowEligibleMarker
+        campaignTargets {
+          edges {
+            node {
+              id
+              email
+              fullName
+              status
+              contactID
+              userID
+              groupID
+            }
+          }
+        }
       }
     }
   }
@@ -229,6 +242,19 @@ query GetCampaignByID($campaignId: ID!) {
     updatedAt
     updatedBy
     workflowEligibleMarker
+    campaignTargets {
+      edges {
+        node {
+          id
+          email
+          fullName
+          status
+          contactID
+          userID
+          groupID
+        }
+      }
+    }
   }
 }
 
@@ -286,6 +312,19 @@ query GetCampaigns($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
         updatedAt
         updatedBy
         workflowEligibleMarker
+        campaignTargets {
+          edges {
+            node {
+              id
+              email
+              fullName
+              status
+              contactID
+              userID
+              groupID
+            }
+          }
+        }
       }
     }
   }

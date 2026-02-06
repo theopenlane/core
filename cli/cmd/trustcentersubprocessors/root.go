@@ -90,7 +90,7 @@ func jsonOutput(out any) error {
 // tableOutput prints the output in a table format
 func tableOutput(out []graphclient.GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) {
 	// create a table writer
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Trust Center ID", "Subprocessor Name", "Category", "Countries")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Trust Center ID", "Subprocessor Name", "Kind", "Countries")
 	for _, i := range out {
 		trustCenterID := ""
 		if i.TrustCenterID != nil {
@@ -99,9 +99,14 @@ func tableOutput(out []graphclient.GetAllTrustCenterSubprocessors_TrustCenterSub
 
 		subprocessorName := i.Subprocessor.Name
 
+		kindName := ""
+		if i.TrustCenterSubprocessorKindName != nil {
+			kindName = *i.TrustCenterSubprocessorKindName
+		}
+
 		countries := strings.Join(i.Countries, ", ")
 
-		writer.AddRow(i.ID, trustCenterID, subprocessorName, i.Category, countries)
+		writer.AddRow(i.ID, trustCenterID, subprocessorName, kindName, countries)
 	}
 
 	writer.Render()
