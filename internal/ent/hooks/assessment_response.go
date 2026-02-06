@@ -11,8 +11,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/riverboat/pkg/jobs"
-	"github.com/theopenlane/utils/ulids"s"
-	"github.com/theopenlane/utils/ulid
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
