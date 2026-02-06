@@ -96,7 +96,7 @@ require (
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.23.8
 	github.com/theopenlane/newman v0.2.1
-	github.com/theopenlane/riverboat v0.8.8
+	github.com/theopenlane/riverboat v0.9.3
 	github.com/theopenlane/utils v0.6.2
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.6.2
@@ -120,7 +120,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/signin v1.0.5 // indirect
 	github.com/clipperhouse/displaywidth v0.6.2 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
-	github.com/clipperhouse/uax29/v2 v2.4.0 // indirect
+	github.com/clipperhouse/uax29/v2 v2.5.0 // indirect
 	github.com/di-wu/parser v0.3.0 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
 	github.com/fumiama/imgsz v0.0.4 // indirect
