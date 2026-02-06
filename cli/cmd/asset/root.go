@@ -88,12 +88,19 @@ func jsonOutput(out any) error {
 
 // tableOutput prints the output in a table format
 func tableOutput(out []graphclient.Asset) {
-	// create a table writer
-
-	// TODO: add additional columns to the table writer
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Type", "Description", "Environment")
 	for _, i := range out {
-		writer.AddRow(i.ID)
+		description := ""
+		if i.Description != nil {
+			description = *i.Description
+		}
+
+		environment := ""
+		if i.EnvironmentName != nil {
+			environment = *i.EnvironmentName
+		}
+
+		writer.AddRow(i.ID, i.Name, string(i.AssetType), description, environment)
 	}
 
 	writer.Render()

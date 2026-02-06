@@ -568,7 +568,7 @@ type asset
     define editor: [group#member, organization#owner] or can_edit from parent
     define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
-    define parent: [user, service, organization]
+    define parent: [user, service, organization, platform, entity]
 # findings can be associated with programs, controls, subcontrols, risks, assets, entities, or scans
 # permissions are inherited from the parent object or organization
 type finding
