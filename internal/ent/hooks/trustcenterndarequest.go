@@ -318,7 +318,7 @@ func handleNDARequestDelete(ctx context.Context, m *generated.TrustCenterNDARequ
 	}
 
 	// delete any tuples associated with the nda request
-	delete := fgax.GetTupleKey(fgax.TupleRequest{
+	deleteTuple := fgax.GetTupleKey(fgax.TupleRequest{
 		SubjectID:   fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, id),
 		SubjectType: "user",
 		ObjectID:    tcID,
@@ -326,7 +326,7 @@ func handleNDARequestDelete(ctx context.Context, m *generated.TrustCenterNDARequ
 		Relation:    "nda_signed",
 	})
 
-	if _, err := m.Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{delete}); err != nil {
+	if _, err := m.Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{deleteTuple}); err != nil {
 		return err
 	}
 
