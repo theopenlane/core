@@ -127,6 +127,7 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			comment:    "Workflow proposals targeting this object reference",
 			annotations: []schema.Annotation{
 				entgql.Skip(entgql.SkipAll),
+				entx.CascadeAnnotationField("WorkflowObjectRefID"),
 			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{

@@ -118,8 +118,13 @@ func invalidateInstanceAssignments(ctx context.Context, client *generated.Client
 	assignments, err := client.WorkflowAssignment.Query().
 		Where(
 			workflowassignment.WorkflowInstanceIDEQ(instance.ID),
-			workflowassignment.StatusEQ(enums.WorkflowAssignmentStatusApproved),
+			workflowassignment.StatusIn(
+				enums.WorkflowAssignmentStatusApproved,
+				enums.WorkflowAssignmentStatusRejected,
+				enums.WorkflowAssignmentStatusChangesRequested,
+			),
 			workflowassignment.OwnerIDEQ(orgID),
+			workflowassignment.Not(workflowassignment.AssignmentKeyHasPrefix("change_request_")),
 		).
 		WithWorkflowAssignmentTargets().
 		All(ctx)
@@ -137,17 +142,21 @@ func invalidateInstanceAssignments(ctx context.Context, client *generated.Client
 	for _, assignment := range assignments {
 		invalidation := models.WorkflowAssignmentInvalidation{
 			Reason:              "proposal changes edited after approval",
-			PreviousStatus:      enums.WorkflowAssignmentStatusApproved.String(),
+			PreviousStatus:      assignment.Status.String(),
 			InvalidatedAt:       invalidatedAt.Format(time.RFC3339),
 			InvalidatedByUserID: invalidatedByUserID,
 			ApprovedHash:        oldProposedHash,
 			NewProposedHash:     newProposedHash,
 		}
 
-		if err := client.WorkflowAssignment.UpdateOneID(assignment.ID).
+		update := client.WorkflowAssignment.UpdateOneID(assignment.ID).
 			SetStatus(enums.WorkflowAssignmentStatusPending).
 			SetInvalidationMetadata(invalidation).
-			Exec(ctx); err != nil {
+			ClearDecidedAt().
+			ClearActorUserID().
+			ClearActorGroupID().
+			ClearRejectionMetadata()
+		if err := update.Exec(ctx); err != nil {
 			return ErrFailedToInvalidateAssignment
 		}
 

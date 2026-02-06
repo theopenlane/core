@@ -81,7 +81,7 @@ User Request ──► Mutation commits ──► soiree event emitted ──►
 
 ### Approval Submission Modes
 
-Workflow definitions with approval actions have an `approvalSubmissionMode` that controls when the approval process begins:
+Workflow definitions with approval actions have an `approvalSubmissionMode` that controls when the approval process begins. When omitted, the system defaults to `AUTO_SUBMIT`.
 
 | Mode | Proposal Initial State | Behavior |
 |------|----------------------|----------|
@@ -89,7 +89,7 @@ Workflow definitions with approval actions have an `approvalSubmissionMode` that
 | `MANUAL_SUBMIT` | `DRAFT` | The proposal is created in DRAFT state. Assignments are NOT created until the proposal is explicitly submitted. |
 
 **Current Implementation Note:**
-`AUTO_SUBMIT` is the primary supported mode. The `MANUAL_SUBMIT` mode creates proposals in DRAFT state, but the GraphQL mutation to submit draft proposals is not yet exposed (`WorkflowProposal` is an internal entity with `entgql.Skip(entgql.SkipAll)`). When MANUAL_SUBMIT support is completed, it will enable staging changes before requesting approval.
+`AUTO_SUBMIT` is the primary supported mode and the default when not specified. The `MANUAL_SUBMIT` mode creates proposals in DRAFT state, but the GraphQL mutation to submit draft proposals is not yet exposed (`WorkflowProposal` is an internal entity with `entgql.Skip(entgql.SkipAll)`). When MANUAL_SUBMIT support is completed, it will enable staging changes before requesting approval.
 
 ### Definition Prefiltering
 

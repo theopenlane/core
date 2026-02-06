@@ -27,7 +27,7 @@ func (r *mutationResolver) CreateWorkflowDefinition(ctx context.Context, input g
 		return nil, ErrWorkflowsDisabled
 	}
 
-	if err := validateWorkflowDefinitionInput(input.SchemaType, input.DefinitionJSON, nil); err != nil {
+	if err := validateWorkflowDefinitionInput(ctx, input.SchemaType, input.DefinitionJSON, nil); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowdefinition"})
 	}
 
@@ -161,7 +161,7 @@ func (r *mutationResolver) UpdateWorkflowDefinition(ctx context.Context, id stri
 		doc = input.DefinitionJSON
 	}
 
-	if err := validateWorkflowDefinitionInput(res.SchemaType, doc, &r.workflowsConfig); err != nil {
+	if err := validateWorkflowDefinitionInput(ctx, res.SchemaType, doc, &r.workflowsConfig); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowdefinition"})
 	}
 

@@ -15565,6 +15565,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
+		"workflow_instances",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowdefinition.WorkflowInstancesTable,
+			Columns: []string{workflowdefinition.WorkflowInstancesColumn},
+			Bidi:    false,
+		},
+		"WorkflowDefinition",
+		"WorkflowInstance",
+	)
+	graph.MustAddE(
 		"notification_templates",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -44468,6 +44480,20 @@ func (f *WorkflowDefinitionFilter) WhereHasGroups() {
 // WhereHasGroupsWith applies a predicate to check if query has an edge groups with a given conditions (other predicates).
 func (f *WorkflowDefinitionFilter) WhereHasGroupsWith(preds ...predicate.Group) {
 	f.Where(entql.HasEdgeWith("groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasWorkflowInstances applies a predicate to check if query has an edge workflow_instances.
+func (f *WorkflowDefinitionFilter) WhereHasWorkflowInstances() {
+	f.Where(entql.HasEdge("workflow_instances"))
+}
+
+// WhereHasWorkflowInstancesWith applies a predicate to check if query has an edge workflow_instances with a given conditions (other predicates).
+func (f *WorkflowDefinitionFilter) WhereHasWorkflowInstancesWith(preds ...predicate.WorkflowInstance) {
+	f.Where(entql.HasEdgeWith("workflow_instances", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

@@ -11,11 +11,13 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -188,12 +190,18 @@ func (w WorkflowInstance) Edges() []ent.Edge {
 			edgeSchema: WorkflowAssignment{},
 			name:       "workflow_assignments",
 			comment:    "Assignments associated with this workflow instance",
+			annotations: []schema.Annotation{
+				entx.CascadeAnnotationField("WorkflowInstanceID"),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: w,
 			edgeSchema: WorkflowEvent{},
 			name:       "workflow_events",
 			comment:    "Events recorded for this instance",
+			annotations: []schema.Annotation{
+				entx.CascadeAnnotationField("WorkflowInstanceID"),
+			},
 		}),
 		defaultEdgeToWithPagination(w, EmailTemplate{}),
 		edgeToWithPagination(&edgeDefinition{
@@ -201,6 +209,9 @@ func (w WorkflowInstance) Edges() []ent.Edge {
 			edgeSchema: WorkflowObjectRef{},
 			name:       "workflow_object_refs",
 			comment:    "Object references for this workflow instance",
+			annotations: []schema.Annotation{
+				entx.CascadeAnnotationField("WorkflowInstanceID"),
+			},
 		}),
 	}
 }
@@ -236,6 +247,13 @@ func (WorkflowInstance) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+	}
+}
+
+// Hooks of the WorkflowInstance
+func (WorkflowInstance) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookWorkflowInstanceCascadeDelete(),
 	}
 }
 

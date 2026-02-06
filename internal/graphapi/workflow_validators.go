@@ -8,6 +8,8 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/theopenlane/core/pkg/logx"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -24,7 +26,7 @@ var allowedTriggerOperations = map[string]struct{}{
 }
 
 // validateWorkflowDefinitionInput validates the workflow definition document against schema constraints
-func validateWorkflowDefinitionInput(schemaType string, doc *models.WorkflowDefinitionDocument, celCfg *workflows.Config) error {
+func validateWorkflowDefinitionInput(ctx context.Context, schemaType string, doc *models.WorkflowDefinitionDocument, celCfg *workflows.Config) error {
 	if doc == nil {
 		return ErrDefinitionRequired
 	}
@@ -58,6 +60,13 @@ func validateWorkflowDefinitionInput(schemaType string, doc *models.WorkflowDefi
 	}
 	if err := validateApprovalTiming(doc.ApprovalTiming); err != nil {
 		return err
+	}
+
+	if workflows.DefinitionUsesPostCommitApprovals(*doc) {
+		logx.FromContext(ctx).Warn().
+			Str("workflow_name", doc.Name).
+			Str("schema_type", doc.SchemaType).
+			Msg("approvalTiming POST_COMMIT will be treated as REVIEW actions")
 	}
 
 	return nil

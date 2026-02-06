@@ -1,6 +1,7 @@
 package graphapi
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"testing"
@@ -106,7 +107,7 @@ func TestValidateWorkflowDefinitionInput(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := validateWorkflowDefinitionInput(tt.schemaType, tt.doc, nil)
+			err := validateWorkflowDefinitionInput(context.Background(), tt.schemaType, tt.doc, nil)
 
 			if tt.wantErr != nil {
 				require.Error(t, err)

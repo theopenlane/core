@@ -99,7 +99,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			matchingDefs := make([]*generated.WorkflowDefinition, 0, len(definitions))
+			preCommitDefs := make([]*generated.WorkflowDefinition, 0, len(definitions))
 			for _, def := range definitions {
 				if !workflows.DefinitionHasApprovalAction(def.DefinitionJSON) {
 					continue
@@ -113,10 +113,14 @@ func HookWorkflowApprovalRouting() ent.Hook {
 					continue
 				}
 
-				matchingDefs = append(matchingDefs, def)
+				if !workflows.DefinitionUsesPreCommitApprovals(def.DefinitionJSON) {
+					continue
+				}
+
+				preCommitDefs = append(preCommitDefs, def)
 			}
 
-			if len(matchingDefs) == 0 {
+			if len(preCommitDefs) == 0 {
 				return next.Mutate(ctx, m)
 			}
 
@@ -141,7 +145,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 
 			// Route to proposed changes instead of applying directly
 			workflows.MarkSkipEventEmission(ctx)
-			return routeMutationToProposals(ctx, client, mut, proposedChanges, matchingDefs)
+			return routeMutationToProposals(ctx, client, mut, proposedChanges, preCommitDefs)
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne)
 }
@@ -278,13 +282,45 @@ func resetMutationFields(m ent.Mutation, fields []string) {
 	}
 }
 
+// resolveApprovalSubmissionMode returns the effective approval submission mode.
+// Defaults to AUTO_SUBMIT when not explicitly set in the definition JSON.
+func resolveApprovalSubmissionMode(def *generated.WorkflowDefinition) enums.WorkflowApprovalSubmissionMode {
+	if def == nil || def.DefinitionJSON.ApprovalSubmissionMode == "" {
+		if def == nil {
+			return enums.WorkflowApprovalSubmissionModeAutoSubmit
+		}
+
+		// Fall back to the persisted definition column when the JSON omits it.
+		if def.ApprovalSubmissionMode != "" {
+			if parsed := enums.ToWorkflowApprovalSubmissionMode(def.ApprovalSubmissionMode.String()); parsed != nil {
+				if *parsed == enums.WorkflowApprovalSubmissionModeManualSubmit {
+					return enums.WorkflowApprovalSubmissionModeAutoSubmit
+				}
+				return *parsed
+			}
+		}
+
+		return enums.WorkflowApprovalSubmissionModeAutoSubmit
+	}
+
+	if parsed := enums.ToWorkflowApprovalSubmissionMode(def.DefinitionJSON.ApprovalSubmissionMode.String()); parsed != nil {
+		if *parsed == enums.WorkflowApprovalSubmissionModeManualSubmit {
+			return enums.WorkflowApprovalSubmissionModeAutoSubmit
+		}
+		return *parsed
+	}
+
+	return enums.WorkflowApprovalSubmissionModeAutoSubmit
+}
+
 // stageProposalChanges creates or updates WorkflowProposal records for each domain
 func stageProposalChanges(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID string, domainChanges []workflows.DomainChanges, userID string) error {
 	// Use privacy bypass for internal workflow operations
 	allowCtx := workflows.AllowContext(ctx)
 
+	submissionMode := resolveApprovalSubmissionMode(def)
 	initialState := lo.Ternary(
-		def.ApprovalSubmissionMode == enums.WorkflowApprovalSubmissionModeAutoSubmit,
+		submissionMode == enums.WorkflowApprovalSubmissionModeAutoSubmit,
 		enums.WorkflowProposalStateSubmitted,
 		enums.WorkflowProposalStateDraft,
 	)
@@ -321,8 +357,15 @@ func stageProposalChanges(ctx context.Context, client *generated.Client, def *ge
 				return err
 			}
 
-			if err := ensureInstanceForExistingProposal(ctx, client, def, objectType, objectID, ownerID, existing); err != nil {
+			instance, err := ensureInstanceForExistingProposal(ctx, client, def, objectType, objectID, ownerID, existing)
+			if err != nil {
 				return err
+			}
+
+			if submissionMode == enums.WorkflowApprovalSubmissionModeAutoSubmit && instance != nil {
+				if err := triggerWorkflowAfterProposalCreation(ctx, client, def, objectType, objectID, domain, instance.ID); err != nil {
+					log.Ctx(ctx).Error().Err(err).Str("instance_id", instance.ID).Msg("failed to trigger workflow after proposal update")
+				}
 			}
 
 			continue
@@ -342,25 +385,26 @@ func stageProposalChanges(ctx context.Context, client *generated.Client, def *ge
 }
 
 // ensureInstanceForExistingProposal makes sure a workflow instance exists for the definition + proposal.
-func ensureInstanceForExistingProposal(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID, ownerID string, proposal *generated.WorkflowProposal) error {
+func ensureInstanceForExistingProposal(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID, ownerID string, proposal *generated.WorkflowProposal) (*generated.WorkflowInstance, error) {
 	// Use privacy bypass for internal workflow operations
 	allowCtx := workflows.AllowContext(ctx)
 
-	exists, err := client.WorkflowInstance.Query().
+	instance, err := client.WorkflowInstance.Query().
 		Where(
 			workflowinstance.WorkflowDefinitionIDEQ(def.ID),
 			workflowinstance.WorkflowProposalIDEQ(proposal.ID),
 		).
-		Exist(allowCtx)
-	if err != nil {
-		return err
+		First(allowCtx)
+	if err == nil {
+		return instance, nil
 	}
-	if exists {
-		return nil
+	if !generated.IsNotFound(err) {
+		return nil, err
 	}
 
+	var created *generated.WorkflowInstance
 	_, err = workflows.WithTx(allowCtx, client, nil, func(tx *generated.Tx) (string, error) {
-		instance, _, createErr := workflows.CreateWorkflowInstanceWithObjectRef(allowCtx, tx, workflows.WorkflowInstanceBuilderParams{
+		createdInstance, _, createErr := workflows.CreateWorkflowInstanceWithObjectRef(allowCtx, tx, workflows.WorkflowInstanceBuilderParams{
 			WorkflowDefinitionID: def.ID,
 			DefinitionSnapshot:   def.DefinitionJSON,
 			State:                enums.WorkflowInstanceStatePaused,
@@ -387,25 +431,26 @@ func ensureInstanceForExistingProposal(ctx context.Context, client *generated.Cl
 			return "", createErr
 		}
 
-		if err := tx.WorkflowInstance.UpdateOneID(instance.ID).
+		if err := tx.WorkflowInstance.UpdateOneID(createdInstance.ID).
 			SetWorkflowProposalID(proposal.ID).
 			Exec(allowCtx); err != nil {
 			return "", ErrFailedToLinkProposalToInstance
 		}
 
+		created = createdInstance
 		return "", nil
 	})
 	if err != nil {
 		switch {
 		case errors.Is(err, workflows.ErrTxBegin):
-			return ErrFailedToBeginTransaction
+			return nil, ErrFailedToBeginTransaction
 		case errors.Is(err, workflows.ErrTxCommit):
-			return ErrFailedToCommitProposalTransaction
+			return nil, ErrFailedToCommitProposalTransaction
 		}
-		return err
+		return nil, err
 	}
 
-	return nil
+	return created, nil
 }
 
 // stageWorkflowProposals stages proposals for the given proposed changes
@@ -426,12 +471,13 @@ func updateExistingProposal(ctx context.Context, def *generated.WorkflowDefiniti
 	// Use privacy bypass for internal workflow operations
 	allowCtx := workflows.AllowContext(ctx)
 
+	submissionMode := resolveApprovalSubmissionMode(def)
 	updater := existing.Update().
 		SetChanges(changes).
 		SetProposedHash(proposedHash).
 		SetRevision(existing.Revision + 1)
 
-	if def.ApprovalSubmissionMode == enums.WorkflowApprovalSubmissionModeAutoSubmit || existing.State == enums.WorkflowProposalStateSubmitted {
+	if submissionMode == enums.WorkflowApprovalSubmissionModeAutoSubmit || existing.State == enums.WorkflowProposalStateSubmitted {
 		updater = updater.
 			SetState(enums.WorkflowProposalStateSubmitted).
 			SetSubmittedAt(now).
@@ -573,6 +619,10 @@ func triggerWorkflowAfterProposalCreation(ctx context.Context, client *generated
 	instance, err := client.WorkflowInstance.Get(allowCtx, instanceID)
 	if err != nil {
 		return fmt.Errorf("failed to load instance: %w", err)
+	}
+	if instance.State != enums.WorkflowInstanceStatePaused {
+		log.Ctx(ctx).Debug().Str("instance_id", instance.ID).Str("state", instance.State.String()).Msg("workflow instance not paused, skipping trigger")
+		return nil
 	}
 
 	obj := &workflows.Object{

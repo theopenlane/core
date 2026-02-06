@@ -4088,6 +4088,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "workflow_instances": {
+	ObjectType:      "workflow_instance",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "notification_templates": {
 	ObjectType:      "notification_template",
 	SkipEditCheck:   false,

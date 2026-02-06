@@ -1493,6 +1493,13 @@ func WebauthnEdgeCleanup(ctx context.Context, id string) error {
 func WorkflowAssignmentEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowassignment edge")), entfga.DeleteTuplesFirstKey{})
 
+	if exists, err := FromContext(ctx).WorkflowAssignmentTarget.Query().Where((workflowassignmenttarget.WorkflowAssignmentID(id))).Exist(ctx); err == nil && exists {
+		if workflowassignmenttargetCount, err := FromContext(ctx).WorkflowAssignmentTarget.Delete().Where(workflowassignmenttarget.WorkflowAssignmentID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowassignmenttargetCount).Msg("error deleting workflowassignmenttarget")
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -1504,6 +1511,13 @@ func WorkflowAssignmentTargetEdgeCleanup(ctx context.Context, id string) error {
 
 func WorkflowDefinitionEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowdefinition edge")), entfga.DeleteTuplesFirstKey{})
+
+	if exists, err := FromContext(ctx).WorkflowInstance.Query().Where((workflowinstance.WorkflowDefinitionID(id))).Exist(ctx); err == nil && exists {
+		if workflowinstanceCount, err := FromContext(ctx).WorkflowInstance.Delete().Where(workflowinstance.WorkflowDefinitionID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowinstanceCount).Msg("error deleting workflowinstance")
+			return err
+		}
+	}
 
 	return nil
 }
@@ -1517,11 +1531,39 @@ func WorkflowEventEdgeCleanup(ctx context.Context, id string) error {
 func WorkflowInstanceEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowinstance edge")), entfga.DeleteTuplesFirstKey{})
 
+	if exists, err := FromContext(ctx).WorkflowAssignment.Query().Where((workflowassignment.WorkflowInstanceID(id))).Exist(ctx); err == nil && exists {
+		if workflowassignmentCount, err := FromContext(ctx).WorkflowAssignment.Delete().Where(workflowassignment.WorkflowInstanceID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowassignmentCount).Msg("error deleting workflowassignment")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).WorkflowEvent.Query().Where((workflowevent.WorkflowInstanceID(id))).Exist(ctx); err == nil && exists {
+		if workfloweventCount, err := FromContext(ctx).WorkflowEvent.Delete().Where(workflowevent.WorkflowInstanceID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workfloweventCount).Msg("error deleting workflowevent")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).WorkflowObjectRef.Query().Where((workflowobjectref.WorkflowInstanceID(id))).Exist(ctx); err == nil && exists {
+		if workflowobjectrefCount, err := FromContext(ctx).WorkflowObjectRef.Delete().Where(workflowobjectref.WorkflowInstanceID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowobjectrefCount).Msg("error deleting workflowobjectref")
+			return err
+		}
+	}
+
 	return nil
 }
 
 func WorkflowObjectRefEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowobjectref edge")), entfga.DeleteTuplesFirstKey{})
+
+	if exists, err := FromContext(ctx).WorkflowProposal.Query().Where((workflowproposal.WorkflowObjectRefID(id))).Exist(ctx); err == nil && exists {
+		if workflowproposalCount, err := FromContext(ctx).WorkflowProposal.Delete().Where(workflowproposal.WorkflowObjectRefID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowproposalCount).Msg("error deleting workflowproposal")
+			return err
+		}
+	}
 
 	return nil
 }

@@ -14,11 +14,12 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/utils/ulids"
@@ -182,6 +183,118 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 	updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
 	s.Require().NoError(err)
 	s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+}
+
+// TestProposalApplyDoesNotCreateRecursiveWorkflow verifies that applying an approved proposal
+// does not trigger a new approval workflow for the same definition/object.
+//
+// Workflow Definition (Plain English):
+//
+//	"Require approval before Control.reference_id changes"
+//
+// Test Flow:
+//  1. Creates an approval workflow for reference_id changes
+//  2. Updates a Control.reference_id (proposal created)
+//  3. Approves the assignment (proposal applied)
+//  4. Verifies the Control.reference_id is updated
+//  5. Confirms no additional workflow instances or proposals were created
+//
+// Why This Matters:
+//
+//	When applying proposals, the engine uses bypass context to avoid re-entering
+//	approval routing. This test guards against recursive proposal creation.
+func (s *WorkflowEngineTestSuite) TestProposalApplyDoesNotCreateRecursiveWorkflow() {
+	approverID, orgID, userCtx := s.SetupTestUser()
+	seedCtx := s.SeedContext(approverID, orgID)
+
+	wfEngine := s.Engine()
+
+	params := workflows.ApprovalActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{
+				{Type: enums.WorkflowTargetTypeUser, ID: approverID},
+			},
+		},
+		Required: boolPtr(true),
+		Label:    "Reference ID Approval",
+		Fields:   []string{"reference_id"},
+	}
+	paramsBytes, err := json.Marshal(params)
+	s.Require().NoError(err)
+
+	action := models.WorkflowAction{
+		Type:   enums.WorkflowActionTypeApproval.String(),
+		Key:    "reference_id_approval",
+		Params: paramsBytes,
+	}
+
+	def := s.CreateApprovalWorkflowDefinition(seedCtx, orgID, action)
+
+	oldRef := "REF-RECURSION-OLD-" + ulid.Make().String()
+	newRef := "REF-RECURSION-NEW-" + ulid.Make().String()
+
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-RECURSION-" + ulid.Make().String()).
+		SetOwnerID(orgID).
+		SetReferenceID(oldRef).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	updated, err := s.client.Control.UpdateOneID(control.ID).
+		SetReferenceID(newRef).
+		Save(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(oldRef, updated.ReferenceID)
+
+	s.WaitForEvents()
+
+	instance, err := s.client.WorkflowInstance.Query().
+		Where(
+			workflowinstance.WorkflowDefinitionIDEQ(def.ID),
+			workflowinstance.OwnerIDEQ(orgID),
+			workflowinstance.ControlIDEQ(control.ID),
+		).
+		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
+		First(seedCtx)
+	s.Require().NoError(err)
+	s.Require().NotEmpty(instance.WorkflowProposalID)
+
+	assignments, err := s.client.WorkflowAssignment.Query().
+		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+		All(userCtx)
+	s.Require().NoError(err)
+	s.Len(assignments, 1)
+
+	err = wfEngine.CompleteAssignment(userCtx, assignments[0].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
+	s.Require().NoError(err)
+
+	s.WaitForEvents()
+
+	appliedControl, err := s.client.Control.Get(seedCtx, control.ID)
+	s.Require().NoError(err)
+	s.Equal(newRef, appliedControl.ReferenceID)
+
+	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowProposalStateApplied, proposal.State)
+
+	instanceCount, err := s.client.WorkflowInstance.Query().
+		Where(
+			workflowinstance.WorkflowDefinitionIDEQ(def.ID),
+			workflowinstance.ControlIDEQ(control.ID),
+		).
+		Count(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(1, instanceCount)
+
+	proposalCount, err := s.client.WorkflowProposal.Query().
+		Where(
+			workflowproposal.HasWorkflowObjectRefWith(workflowobjectref.ControlIDEQ(control.ID)),
+			workflowproposal.OwnerIDEQ(orgID),
+		).
+		Count(seedCtx)
+	s.Require().NoError(err)
+	s.Equal(1, proposalCount)
 }
 
 // TestApprovalFlowOptionalQuorumProceedsEarly verifies that optional (non-required) approval
@@ -364,6 +477,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 		SetTriggerFields([]string{"reference_id"}).
 		SetApprovalSubmissionMode(enums.WorkflowApprovalSubmissionModeManualSubmit).
 		SetDefinitionJSON(models.WorkflowDefinitionDocument{
+			ApprovalSubmissionMode: enums.WorkflowApprovalSubmissionModeManualSubmit,
 			Triggers: []models.WorkflowTrigger{
 				{Operation: "UPDATE", Fields: []string{"reference_id"}},
 			},
@@ -754,8 +868,10 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookAppliesIneligibleFields() {
 // TestApprovalChangesRequestedCreatesRequesterAssignment verifies that when an approval assignment
 // is marked as CHANGES_REQUESTED, a requester assignment is created with the change details.
 func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedCreatesRequesterAssignment() {
-	approverID, orgID, userCtx := s.SetupTestUser()
-	seedCtx := s.SeedContext(approverID, orgID)
+	submitterID, orgID, _ := s.SetupTestUser()
+	seedCtx := s.SeedContext(submitterID, orgID)
+
+	approverID, approverCtx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
 	wfEngine := s.Engine()
 
@@ -812,19 +928,19 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedCreatesRequesterAs
 	s.Require().NoError(err)
 
 	rejectionMeta := models.WorkflowAssignmentRejection{
-		ActionKey:            action.Key,
-		RejectionReason:      "needs more detail",
-		RejectedAt:           time.Now().Format(time.RFC3339),
-		RejectedByUserID:     approverID,
-		ChangeRequestInputs:  map[string]any{"status": "in_review"},
+		ActionKey:           action.Key,
+		RejectionReason:     "needs more detail",
+		RejectedAt:          time.Now().Format(time.RFC3339),
+		RejectedByUserID:    approverID,
+		ChangeRequestInputs: map[string]any{"status": "in_review"},
 	}
 
-	err = wfEngine.CompleteAssignment(userCtx, assignment.ID, enums.WorkflowAssignmentStatusChangesRequested, nil, &rejectionMeta)
+	err = wfEngine.CompleteAssignment(approverCtx, assignment.ID, enums.WorkflowAssignmentStatusChangesRequested, nil, &rejectionMeta)
 	s.Require().NoError(err)
 
 	s.WaitForEvents()
 
-	requesterKey := fmt.Sprintf("change_request_%s_%s", action.Key, approverID)
+	requesterKey := fmt.Sprintf("change_request_%s_%s", action.Key, submitterID)
 	requesterAssignment, err := s.client.WorkflowAssignment.Query().
 		Where(
 			workflowassignment.WorkflowInstanceIDEQ(instance.ID),
@@ -847,11 +963,151 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedCreatesRequesterAs
 	exists, err := s.client.WorkflowAssignmentTarget.Query().
 		Where(
 			workflowassignmenttarget.WorkflowAssignmentIDEQ(requesterAssignment.ID),
-			workflowassignmenttarget.TargetUserIDEQ(approverID),
+			workflowassignmenttarget.TargetUserIDEQ(submitterID),
 		).
 		Exist(seedCtx)
 	s.Require().NoError(err)
 	s.True(exists)
+}
+
+// TestApprovalChangesRequestedClosesApprovalsAndResubmitReopens verifies that when changes
+// are requested, outstanding approvals are closed and a re-submission re-opens approvals.
+func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedClosesApprovalsAndResubmitReopens() {
+
+	submitterID, orgID, submitterCtx := s.SetupTestUser()
+	seedCtx := s.SeedContext(submitterID, orgID)
+
+	approver1ID, approver1Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
+	approver2ID, _ := s.CreateTestUserInOrg(orgID, enums.RoleMember)
+
+	wfEngine := s.Engine()
+	s.client.WorkflowEngine = wfEngine
+
+	params := workflows.ApprovalActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{
+				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
+				{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
+			},
+		},
+		Required:      boolPtr(true),
+		RequiredCount: 2,
+		Label:         "Status Approval",
+		Fields:        []string{"status"},
+	}
+	paramsBytes, err := json.Marshal(params)
+	s.Require().NoError(err)
+
+	action := models.WorkflowAction{
+		Type:   enums.WorkflowActionTypeApproval.String(),
+		Key:    "status_approval_changes",
+		Params: paramsBytes,
+	}
+
+	_ = s.CreateApprovalWorkflowDefinition(seedCtx, orgID, action)
+
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-" + ulid.Make().String()).
+		SetOwnerID(orgID).
+		SetStatus(enums.ControlStatusPreparing).
+		Save(submitterCtx)
+	s.Require().NoError(err)
+
+	_, err = s.client.Control.UpdateOneID(control.ID).
+		SetStatus(enums.ControlStatusApproved).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	s.WaitForEvents()
+
+	instance, err := s.client.WorkflowInstance.Query().
+		Where(
+			workflowinstance.OwnerIDEQ(orgID),
+			workflowinstance.ControlIDEQ(control.ID),
+		).
+		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
+		First(seedCtx)
+	s.Require().NoError(err)
+
+	assignment1Key := fmt.Sprintf("approval_%s_%s", action.Key, approver1ID)
+	assignment2Key := fmt.Sprintf("approval_%s_%s", action.Key, approver2ID)
+
+	assignment1, err := s.client.WorkflowAssignment.Query().
+		Where(
+			workflowassignment.WorkflowInstanceIDEQ(instance.ID),
+			workflowassignment.AssignmentKeyEQ(assignment1Key),
+		).
+		Only(seedCtx)
+	s.Require().NoError(err)
+
+	assignment2, err := s.client.WorkflowAssignment.Query().
+		Where(
+			workflowassignment.WorkflowInstanceIDEQ(instance.ID),
+			workflowassignment.AssignmentKeyEQ(assignment2Key),
+		).
+		Only(seedCtx)
+	s.Require().NoError(err)
+
+	rejectionMeta := models.WorkflowAssignmentRejection{
+		ActionKey:        action.Key,
+		RejectionReason:  "needs updates",
+		RejectedAt:       time.Now().Format(time.RFC3339),
+		RejectedByUserID: approver1ID,
+	}
+
+	err = wfEngine.CompleteAssignment(approver1Ctx, assignment1.ID, enums.WorkflowAssignmentStatusChangesRequested, nil, &rejectionMeta)
+	s.Require().NoError(err)
+
+	s.WaitForEvents()
+
+	reloaded1, err := s.client.WorkflowAssignment.Get(seedCtx, assignment1.ID)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowAssignmentStatusChangesRequested, reloaded1.Status)
+
+	reloaded2, err := s.client.WorkflowAssignment.Get(seedCtx, assignment2.ID)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowAssignmentStatusRejected, reloaded2.Status)
+
+	reloadedInstance, err := s.client.WorkflowInstance.Get(seedCtx, instance.ID)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowInstanceStatePaused, reloadedInstance.State)
+
+	requesterKey := fmt.Sprintf("change_request_%s_%s", action.Key, submitterID)
+	requesterAssignment, err := s.client.WorkflowAssignment.Query().
+		Where(
+			workflowassignment.WorkflowInstanceIDEQ(instance.ID),
+			workflowassignment.AssignmentKeyEQ(requesterKey),
+		).
+		Only(seedCtx)
+	s.Require().NoError(err)
+	s.Equal("REQUESTER", requesterAssignment.Role)
+	s.Equal(enums.WorkflowAssignmentStatusPending, requesterAssignment.Status)
+
+	requesterTargetExists, err := s.client.WorkflowAssignmentTarget.Query().
+		Where(
+			workflowassignmenttarget.WorkflowAssignmentIDEQ(requesterAssignment.ID),
+			workflowassignmenttarget.TargetUserIDEQ(submitterID),
+		).
+		Exist(seedCtx)
+	s.Require().NoError(err)
+	s.True(requesterTargetExists)
+
+	_, err = s.client.Control.UpdateOneID(control.ID).
+		SetStatus(enums.ControlStatusArchived).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	s.WaitForEvents()
+
+	assignment1Again, err := s.client.WorkflowAssignment.Get(seedCtx, assignment1.ID)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowAssignmentStatusPending, assignment1Again.Status)
+	s.NotEmpty(assignment1Again.InvalidationMetadata.Reason)
+
+	assignment2Again, err := s.client.WorkflowAssignment.Get(seedCtx, assignment2.ID)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowAssignmentStatusPending, assignment2Again.Status)
+	s.NotEmpty(assignment2Again.InvalidationMetadata.Reason)
 }
 
 // TestApprovalHookCreatesInstancesForAllMatchingDefinitions verifies that when multiple workflow

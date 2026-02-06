@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 )
 
 // WorkflowDefinitionCreate is the builder for creating a WorkflowDefinition entity.
@@ -400,6 +401,21 @@ func (_c *WorkflowDefinitionCreate) AddGroups(v ...*Group) *WorkflowDefinitionCr
 		ids[i] = v[i].ID
 	}
 	return _c.AddGroupIDs(ids...)
+}
+
+// AddWorkflowInstanceIDs adds the "workflow_instances" edge to the WorkflowInstance entity by IDs.
+func (_c *WorkflowDefinitionCreate) AddWorkflowInstanceIDs(ids ...string) *WorkflowDefinitionCreate {
+	_c.mutation.AddWorkflowInstanceIDs(ids...)
+	return _c
+}
+
+// AddWorkflowInstances adds the "workflow_instances" edges to the WorkflowInstance entity.
+func (_c *WorkflowDefinitionCreate) AddWorkflowInstances(v ...*WorkflowInstance) *WorkflowDefinitionCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddWorkflowInstanceIDs(ids...)
 }
 
 // AddNotificationTemplateIDs adds the "notification_templates" edge to the NotificationTemplate entity by IDs.
@@ -795,6 +811,23 @@ func (_c *WorkflowDefinitionCreate) createSpec() (*WorkflowDefinition, *sqlgraph
 			},
 		}
 		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.WorkflowInstancesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowdefinition.WorkflowInstancesTable,
+			Columns: []string{workflowdefinition.WorkflowInstancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowInstance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

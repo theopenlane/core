@@ -73,7 +73,7 @@ type WorkflowDefinition struct {
 	ApprovalFields []string `json:"approval_fields,omitempty"`
 	// Derived: edges that are approval-gated for this definition; not user editable
 	ApprovalEdges []string `json:"approval_edges,omitempty"`
-	// Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable
+	// Derived: AUTO_SUBMIT (default) or MANUAL_SUBMIT for approval domains; not user editable
 	ApprovalSubmissionMode enums.WorkflowApprovalSubmissionMode `json:"approval_submission_mode,omitempty"`
 	// Typed document describing triggers, conditions, and actions
 	DefinitionJSON models.WorkflowDefinitionDocument `json:"definition_json,omitempty"`
@@ -93,18 +93,21 @@ type WorkflowDefinitionEdges struct {
 	TagDefinitions []*TagDefinition `json:"tag_definitions,omitempty"`
 	// Groups this workflow targets for scoping
 	Groups []*Group `json:"groups,omitempty"`
+	// Workflow instances created from this definition
+	WorkflowInstances []*WorkflowInstance `json:"workflow_instances,omitempty"`
 	// NotificationTemplates holds the value of the notification_templates edge.
 	NotificationTemplates []*NotificationTemplate `json:"notification_templates,omitempty"`
 	// EmailTemplates holds the value of the email_templates edge.
 	EmailTemplates []*EmailTemplate `json:"email_templates,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
 	totalCount [5]map[string]int
 
 	namedTagDefinitions        map[string][]*TagDefinition
 	namedGroups                map[string][]*Group
+	namedWorkflowInstances     map[string][]*WorkflowInstance
 	namedNotificationTemplates map[string][]*NotificationTemplate
 	namedEmailTemplates        map[string][]*EmailTemplate
 }
@@ -138,10 +141,19 @@ func (e WorkflowDefinitionEdges) GroupsOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "groups"}
 }
 
+// WorkflowInstancesOrErr returns the WorkflowInstances value or an error if the edge
+// was not loaded in eager-loading.
+func (e WorkflowDefinitionEdges) WorkflowInstancesOrErr() ([]*WorkflowInstance, error) {
+	if e.loadedTypes[3] {
+		return e.WorkflowInstances, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_instances"}
+}
+
 // NotificationTemplatesOrErr returns the NotificationTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e WorkflowDefinitionEdges) NotificationTemplatesOrErr() ([]*NotificationTemplate, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.NotificationTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "notification_templates"}
@@ -150,7 +162,7 @@ func (e WorkflowDefinitionEdges) NotificationTemplatesOrErr() ([]*NotificationTe
 // EmailTemplatesOrErr returns the EmailTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e WorkflowDefinitionEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.EmailTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "email_templates"}
@@ -411,6 +423,11 @@ func (_m *WorkflowDefinition) QueryGroups() *GroupQuery {
 	return NewWorkflowDefinitionClient(_m.config).QueryGroups(_m)
 }
 
+// QueryWorkflowInstances queries the "workflow_instances" edge of the WorkflowDefinition entity.
+func (_m *WorkflowDefinition) QueryWorkflowInstances() *WorkflowInstanceQuery {
+	return NewWorkflowDefinitionClient(_m.config).QueryWorkflowInstances(_m)
+}
+
 // QueryNotificationTemplates queries the "notification_templates" edge of the WorkflowDefinition entity.
 func (_m *WorkflowDefinition) QueryNotificationTemplates() *NotificationTemplateQuery {
 	return NewWorkflowDefinitionClient(_m.config).QueryNotificationTemplates(_m)
@@ -585,6 +602,30 @@ func (_m *WorkflowDefinition) appendNamedGroups(name string, edges ...*Group) {
 		_m.Edges.namedGroups[name] = []*Group{}
 	} else {
 		_m.Edges.namedGroups[name] = append(_m.Edges.namedGroups[name], edges...)
+	}
+}
+
+// NamedWorkflowInstances returns the WorkflowInstances named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *WorkflowDefinition) NamedWorkflowInstances(name string) ([]*WorkflowInstance, error) {
+	if _m.Edges.namedWorkflowInstances == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowInstances[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *WorkflowDefinition) appendNamedWorkflowInstances(name string, edges ...*WorkflowInstance) {
+	if _m.Edges.namedWorkflowInstances == nil {
+		_m.Edges.namedWorkflowInstances = make(map[string][]*WorkflowInstance)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowInstances[name] = []*WorkflowInstance{}
+	} else {
+		_m.Edges.namedWorkflowInstances[name] = append(_m.Edges.namedWorkflowInstances[name], edges...)
 	}
 }
 
