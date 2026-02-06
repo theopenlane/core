@@ -1065,7 +1065,7 @@ func TestMutationRevokeNDARequestsRemovesDocAccess(t *testing.T) {
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	_ = (&TemplateBuilder{
+	ndaTemplate := (&TemplateBuilder{
 		client:        suite.client,
 		Kind:          enums.TemplateKindTrustCenterNda,
 		TrustCenterID: trustCenter.ID,
@@ -1154,5 +1154,6 @@ func TestMutationRevokeNDARequestsRemovesDocAccess(t *testing.T) {
 	}
 
 	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: protectedDoc.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }

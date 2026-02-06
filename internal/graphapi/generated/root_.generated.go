@@ -139726,7 +139726,7 @@ type BulkUpdateStatusPayload {
 }
 
 """
-Return response for revokeNDARequests mutation
+Return response for deleteBulkTrustCenterNDARequest mutation
 """
 type TrustCenterNDARequestBulkDeletePayload {
     """
