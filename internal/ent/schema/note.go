@@ -177,5 +177,6 @@ func (Note) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookNoteFiles(),
 		hooks.HookSlateJSON(),
+		hooks.HookDeleteDiscussion(),
 	}
 }
