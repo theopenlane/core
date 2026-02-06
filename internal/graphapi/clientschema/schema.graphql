@@ -44232,6 +44232,15 @@ type Mutation {
 		ids: [ID!]!
 	): BulkUpdateStatusPayload!
 	"""
+	Create a new requestNewTrustCenterToken for users that have already signed an NDA
+	"""
+	requestNewTrustCenterToken(
+		"""
+		email address of the user already signed an NDA
+		"""
+		email: String!
+	): TrustCenterAccessTokenPayload!
+	"""
 	Create or replace preview environment trust center settings
 	"""
 	createTrustCenterPreviewSetting(
@@ -73960,6 +73969,12 @@ type TrustCenter implements Node {
 		"""
 		where: TrustCenterNDARequestWhereInput
 	): TrustCenterNDARequestConnection!
+}
+"""
+Return response for requestNewTrustCenterToken mutation
+"""
+type TrustCenterAccessTokenPayload {
+	success: Boolean!
 }
 type TrustCenterCompliance implements Node {
 	id: ID!

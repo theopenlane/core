@@ -3515,6 +3515,7 @@ type ComplexityRoot struct {
 		ReassignWorkflowAssignment           func(childComplexity int, id string, targetUserID string) int
 		RejectWorkflowAssignment             func(childComplexity int, id string, reason *string) int
 		RequestChangesWorkflowAssignment     func(childComplexity int, id string, reason *string, inputs map[string]any) int
+		RequestNewTrustCenterToken           func(childComplexity int, email string) int
 		ResendCampaignIncompleteTargets      func(childComplexity int, input model.ResendCampaignIncompleteInput) int
 		ResolveVulnerability                 func(childComplexity int, id string, input model.ResolveVulnerabilityInput) int
 		SendCampaignTestEmail                func(childComplexity int, input model.SendCampaignTestEmailInput) int
@@ -6001,6 +6002,10 @@ type ComplexityRoot struct {
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
 		WatermarkConfig          func(childComplexity int) int
+	}
+
+	TrustCenterAccessTokenPayload struct {
+		Success func(childComplexity int) int
 	}
 
 	TrustCenterCompliance struct {
@@ -26653,6 +26658,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.RequestChangesWorkflowAssignment(childComplexity, args["id"].(string), args["reason"].(*string), args["inputs"].(map[string]any)), true
 
+	case "Mutation.requestNewTrustCenterToken":
+		if e.complexity.Mutation.RequestNewTrustCenterToken == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_requestNewTrustCenterToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.RequestNewTrustCenterToken(childComplexity, args["email"].(string)), true
+
 	case "Mutation.resendCampaignIncompleteTargets":
 		if e.complexity.Mutation.ResendCampaignIncompleteTargets == nil {
 			break
@@ -42815,6 +42832,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenter.WatermarkConfig(childComplexity), true
+
+	case "TrustCenterAccessTokenPayload.success":
+		if e.complexity.TrustCenterAccessTokenPayload.Success == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterAccessTokenPayload.Success(childComplexity), true
 
 	case "TrustCenterCompliance.blockedGroups":
 		if e.complexity.TrustCenterCompliance.BlockedGroups == nil {
@@ -139600,6 +139624,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): BulkUpdateStatusPayload!
+    """
+    Create a new requestNewTrustCenterToken for users that have already signed an NDA
+    """
+    requestNewTrustCenterToken(
+        """
+        email address of the user already signed an NDA
+        """
+        email: String!
+    ): TrustCenterAccessTokenPayload!
 }
 
 """
@@ -139610,6 +139643,13 @@ type TrustCenterNDARequestCreatePayload {
     Created trustCenterNDARequest
     """
     trustCenterNDARequest: TrustCenterNDARequest!
+}
+
+"""
+Return response for requestNewTrustCenterToken mutation
+"""
+type TrustCenterAccessTokenPayload {
+    success: Boolean!
 }
 
 """

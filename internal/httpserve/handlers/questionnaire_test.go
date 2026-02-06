@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
@@ -21,6 +20,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/contextx"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
@@ -290,7 +290,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 	completedAt := time.Now().Add(-1 * time.Hour)
 
 	anonUser := &auth.AnonymousQuestionnaireUser{
-		SubjectID:      fmt.Sprintf("anon_questionnaire_%s", uuid.New().String()),
+		SubjectID:      fmt.Sprintf("anon_questionnaire_%s", ulids.New().String()),
 		SubjectEmail:   testEmail,
 		OrganizationID: testUser1.OrganizationID,
 		AssessmentID:   assessment.ID,
@@ -339,7 +339,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 		Save(allowCtx)
 	require.NoError(t, err)
 
-	anonUserID := fmt.Sprintf("anon_questionnaire_%s", uuid.New().String())
+	anonUserID := fmt.Sprintf("anon_questionnaire_%s", ulids.New().String())
 	claims := &tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject: anonUserID,
@@ -425,7 +425,7 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
 
 	testEmail := "test@example.com"
 
-	anonUserID := fmt.Sprintf("anon_questionnaire_%s", uuid.New().String())
+	anonUserID := fmt.Sprintf("anon_questionnaire_%s", ulids.New().String())
 	claims := &tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject: anonUserID,
@@ -620,7 +620,7 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 	completedAt := time.Now().Add(-1 * time.Hour)
 
 	anonUser := &auth.AnonymousQuestionnaireUser{
-		SubjectID:      fmt.Sprintf("anon_questionnaire_%s", uuid.New().String()),
+		SubjectID:      fmt.Sprintf("anon_questionnaire_%s", ulids.New().String()),
 		SubjectEmail:   testEmail,
 		OrganizationID: testUser1.OrganizationID,
 		AssessmentID:   assessment.ID,
@@ -665,7 +665,7 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 		Save(allowCtx)
 	require.NoError(t, err)
 
-	anonUserID := fmt.Sprintf("anon_questionnaire_%s", uuid.New().String())
+	anonUserID := fmt.Sprintf("anon_questionnaire_%s", ulids.New().String())
 	claims := &tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject: anonUserID,

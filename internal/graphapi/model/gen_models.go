@@ -2653,6 +2653,11 @@ type TemplateUpdatePayload struct {
 	Template *generated.Template `json:"template"`
 }
 
+// Return response for requestNewTrustCenterToken mutation
+type TrustCenterAccessTokenPayload struct {
+	Success bool `json:"success"`
+}
+
 // Return response for createBulkTrustCenterCompliance mutation
 type TrustCenterComplianceBulkCreatePayload struct {
 	// Created trustCenterCompliances

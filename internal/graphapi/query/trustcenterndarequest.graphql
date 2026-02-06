@@ -194,3 +194,10 @@ mutation UpdateTrustCenterNDARequest($updateTrustCenterNDARequestId: ID!, $input
     }
   }
 }
+
+
+mutation RequestNewTrustCenterToken($email: String!) {
+  requestNewTrustCenterToken(email: $email) {
+    success
+  }
+}

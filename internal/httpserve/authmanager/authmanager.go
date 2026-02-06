@@ -6,13 +6,13 @@ import (
 	"net/http"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/utils/contextx"
+	"github.com/theopenlane/utils/ulids"
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -108,7 +108,7 @@ func (a *Client) generateAnonymousSession(ctx context.Context, w http.ResponseWr
 
 // GenerateAnonymousTrustCenterSession creates a new auth session for the anonymous trust center user
 func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http.ResponseWriter, targetOrgID string, targetTrustCenterID string) (*models.AuthData, error) {
-	anonUserID := fmt.Sprintf("%s%s", AnonTrustCenterJWTPrefix, uuid.New().String())
+	anonUserID := fmt.Sprintf("%s%s", AnonTrustCenterJWTPrefix, ulids.New().String())
 
 	claims := &tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -124,7 +124,7 @@ func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http
 
 // GenerateAnonymousQuestionnaireSession creates a new auth session for the anonymous questionnaire user
 func (a *Client) GenerateAnonymousQuestionnaireSession(ctx context.Context, w http.ResponseWriter, targetOrgID string, targetAssessmentID string, email string) (*models.AuthData, error) {
-	anonUserID := fmt.Sprintf("%s%s", AnonQuestionnaireJWTPrefix, uuid.New().String())
+	anonUserID := fmt.Sprintf("%s%s", AnonQuestionnaireJWTPrefix, ulids.New().String())
 
 	claims := &tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
