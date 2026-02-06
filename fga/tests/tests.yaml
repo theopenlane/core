@@ -827,6 +827,18 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+      - user: user:ulid-of-owner # org owner has access to asset with platform parent
+        object: asset:asset-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-owner # org owner has access to asset with entity parent
+        object: asset:asset-3
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
   - name: entity
     description: entities are always assigned to an organization and permissions are inherited from the organization
     tuple_file: tuples/entities.yaml
