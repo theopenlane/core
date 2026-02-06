@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"testing"
 
@@ -10,6 +11,7 @@ import (
 	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -18,6 +20,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/internal/httpserve/authmanager"
 )
 
 func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
@@ -1054,5 +1057,102 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 
 	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, IDs: []string{ndaRequestSigned.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, ndaRequestRequested.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestMutationRevokeNDARequestsRemovesDocAccess(t *testing.T) {
+	cleanupTrustCenterData(t)
+
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	_ = (&TemplateBuilder{
+		client:        suite.client,
+		Kind:          enums.TemplateKindTrustCenterNda,
+		TrustCenterID: trustCenter.ID,
+	}).MustNew(testUser1.UserCtx, t)
+
+	protectedDoc := (&TrustCenterDocBuilder{
+		client:        suite.client,
+		TrustCenterID: trustCenter.ID,
+		Visibility:    enums.TrustCenterDocumentVisibilityProtected,
+	}).MustNew(testUser1.UserCtx, t)
+
+	// create two NDA requests
+	ndaReq1, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         gofakeit.Email(),
+		TrustCenterID: &trustCenter.ID,
+	})
+	assert.NilError(t, err)
+
+	ndaReq2, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         gofakeit.Email(),
+		TrustCenterID: &trustCenter.ID,
+	})
+	assert.NilError(t, err)
+
+	ndaReqIDs := []string{
+		ndaReq1.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID,
+		ndaReq2.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID,
+	}
+
+	// simulate signed NDA access by creating anonymous contexts with subject IDs
+	// matching what generateTrustCenterJWT produces: AnonTrustCenterJWTPrefix + ndaRequestID
+	anonCtxs := make([]context.Context, 0, len(ndaReqIDs))
+
+	for _, id := range ndaReqIDs {
+		subjectID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, id)
+
+		anonCtx := auth.WithAnonymousTrustCenterUser(context.Background(), &auth.AnonymousTrustCenterUser{
+			SubjectID:          subjectID,
+			SubjectName:        "Anonymous User",
+			OrganizationID:     trustCenter.OwnerID,
+			AuthenticationType: auth.JWTAuthentication,
+			TrustCenterID:      trustCenter.ID,
+		})
+
+		anonCtxs = append(anonCtxs, anonCtx)
+
+		tuple := fgax.GetTupleKey(fgax.TupleRequest{
+			SubjectID:   subjectID,
+			SubjectType: "user",
+			ObjectID:    trustCenter.ID,
+			ObjectType:  "trust_center",
+			Relation:    "nda_signed",
+		})
+
+		_, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil)
+		assert.NilError(t, err)
+	}
+
+	// verify both anon users CAN see protected doc file details
+	for _, ctx := range anonCtxs {
+		resp, err := suite.client.api.GetTrustCenterDocByID(ctx, protectedDoc.ID)
+		assert.NilError(t, err)
+		assert.Assert(t, resp.TrustCenterDoc.OriginalFile != nil, "anon user should see file details before revocation")
+	}
+
+	// now we are revoking the NDA requests
+	revokeResp, err := suite.client.api.DeleteBulkTrustCenterNDARequest(testUser1.UserCtx, ndaReqIDs)
+	assert.NilError(t, err)
+	assert.Equal(t, len(ndaReqIDs), len(revokeResp.DeleteBulkTrustCenterNDARequest.DeletedIDs))
+
+	// anon users should not be able to see the file after we revoked their access
+	for _, anonCtx := range anonCtxs {
+		resp, err := suite.client.api.GetTrustCenterDocByID(anonCtx, protectedDoc.ID)
+		assert.NilError(t, err)
+		assert.Assert(t, resp.TrustCenterDoc.OriginalFile == nil, "anon user should NOT see file details after revocation")
+	}
+
+	// verify the NDA requests are actually deleted
+	for _, id := range ndaReqIDs {
+		_, err = suite.client.api.GetTrustCenterNDARequestByID(testUser1.UserCtx, id)
+		assert.ErrorContains(t, err, notFoundErrorMsg)
+	}
+
+	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: protectedDoc.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }

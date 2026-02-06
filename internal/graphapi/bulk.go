@@ -6798,6 +6798,56 @@ func (r *mutationResolver) bulkCreateTrustCenterNDARequest(ctx context.Context, 
 	}, nil
 }
 
+// bulkDeleteTrustCenterNDARequest deletes multiple TrustCenterNDARequest entities by their IDs
+func (r *mutationResolver) bulkDeleteTrustCenterNDARequest(ctx context.Context, ids []string) (*model.TrustCenterNDARequestBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each trustcenterndarequest individually to ensure proper cleanup
+			if err := r.db.TrustCenterNDARequest.DeleteOneID(id).Exec(ctx); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("trustcenterndarequest_id", id).Msg("failed to delete trustcenterndarequest in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.TrustCenterNDARequestEdgeCleanup(ctx, id); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("trustcenterndarequest_id", id).Msg("failed to cleanup trustcenterndarequest edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcenterndarequest deletions failed")
+	}
+
+	return &model.TrustCenterNDARequestBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateTrustCenterSubprocessor uses the CreateBulk function to create multiple TrustCenterSubprocessor entities
 func (r *mutationResolver) bulkCreateTrustCenterSubprocessor(ctx context.Context, input []*generated.CreateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

@@ -166,6 +166,29 @@ func (r *mutationResolver) DenyNDARequests(ctx context.Context, ids []string) (*
 	}, nil
 }
 
+// DeleteBulkTrustCenterNDARequest is the resolver for the deleteBulkTrustCenterNDARequest field.
+func (r *mutationResolver) DeleteBulkTrustCenterNDARequest(ctx context.Context, ids []string) (*model.TrustCenterNDARequestBulkDeletePayload, error) {
+	client := withTransactionalMutation(ctx)
+
+	deletedIDs := make([]string, 0, len(ids))
+
+	for _, id := range ids {
+		if err := client.TrustCenterNDARequest.DeleteOneID(id).Exec(ctx); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "trustcenterndarequest"})
+		}
+
+		if err := generated.TrustCenterNDARequestEdgeCleanup(ctx, id); err != nil {
+			return nil, common.NewCascadeDeleteError(ctx, err)
+		}
+
+		deletedIDs = append(deletedIDs, id)
+	}
+
+	return &model.TrustCenterNDARequestBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // RequestNewTrustCenterToken is the resolver for the requestNewTrustCenterToken field.
 func (r *mutationResolver) RequestNewTrustCenterToken(ctx context.Context, email string) (*model.TrustCenterAccessTokenPayload, error) {
 	// check if the nda for the user and trust center combination is signed
