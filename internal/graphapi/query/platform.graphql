@@ -262,6 +262,16 @@ query GetAllPlatforms($first: Int, $last: Int, $after: Cursor, $before: Cursor, 
         updatedAt
         updatedBy
         workflowEligibleMarker
+        identityHolders {
+          edges {
+            node {
+              id
+              fullName
+              email
+              displayID
+            }
+          }
+        }
       }
     }
   }

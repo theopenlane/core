@@ -62,6 +62,19 @@ import (
 	_ "github.com/theopenlane/core/cli/cmd/user"
 	_ "github.com/theopenlane/core/cli/cmd/usersetting"
 	_ "github.com/theopenlane/core/cli/cmd/version"
+	_ "github.com/theopenlane/core/cli/cmd/asset"
+	_ "github.com/theopenlane/core/cli/cmd/actionplan"
+	_ "github.com/theopenlane/core/cli/cmd/assessment"
+	_ "github.com/theopenlane/core/cli/cmd/campaign"
+	_ "github.com/theopenlane/core/cli/cmd/finding"
+	_ "github.com/theopenlane/core/cli/cmd/platform"
+	_ "github.com/theopenlane/core/cli/cmd/remediation"
+	_ "github.com/theopenlane/core/cli/cmd/review"
+	_ "github.com/theopenlane/core/cli/cmd/scan"
+	_ "github.com/theopenlane/core/cli/cmd/vulnerability"
+	_ "github.com/theopenlane/core/cli/cmd/identityholder"
+	_ "github.com/theopenlane/core/cli/cmd/workflowinstance"
+	_ "github.com/theopenlane/core/cli/cmd/workflowassignment"
 )
 
 func main() {

@@ -134,7 +134,7 @@ type organization
     define subprocessor_creator: [group#member]
     define can_create_subprocessor: can_edit or subprocessor_creator
 
-    define trust_center_admin: [user] 
+    define trust_center_admin: [user]
     define can_manage_trust_center: trust_center_admin or owner
 
     define trust_center_doc_creator: [group#member]
@@ -178,6 +178,21 @@ type organization
 
     define vulnerability_creator: [group#member]
     define can_create_vulnerability: can_edit or vulnerability_creator
+
+    define remediation_creator: [group#member]
+    define can_create_remediation: can_edit or remediation_creator
+
+    define review_creator: [group#member]
+    define can_create_review: can_edit or review_creator
+
+    define scan_creator: [group#member]
+    define can_create_scan: can_edit or scan_creator
+
+    define platform_creator: [group#member]
+    define can_create_platform: can_edit or platform_creator
+
+    define identity_holder_creator: [group#member]
+    define can_create_identity_holder: can_edit or identity_holder_creator
     # additional relations
     define user_in_context: [user]
 
@@ -590,6 +605,7 @@ type review
     define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
     define parent: [user, service, organization, program, control, subcontrol, risk, action_plan, finding, vulnerability, asset, entity, task]
+
 # contacts are always assigned to an organization and permissions are inherited from the organization
 # individual users or groups can also be given permission to a contact but they must be a member of the organization
 type contact
@@ -969,6 +985,51 @@ type campaign_target
     define editor: [group#member, organization#owner] or can_edit from parent
     define viewer: [group#member] or editor or can_view from parent
     define blocked: [user, group#member]
+
+type remediation
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization, finding, vulnerability]
+
+type scan
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization, platform, asset]
+
+type platform
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization]
+
+type identity_holder
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization, platform]
+
 
 ## Conditions
 # Public groups access; affects the view access of users in the organization

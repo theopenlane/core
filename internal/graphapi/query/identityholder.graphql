@@ -183,6 +183,16 @@ query GetAllIdentityHolders($first: Int, $last: Int, $after: Cursor, $before: Cu
         updatedBy
         userID
         workflowEligibleMarker
+        campaigns {
+          edges {
+            node {
+              id
+              name
+              status
+              displayID
+            }
+          }
+        }
       }
     }
   }
@@ -224,6 +234,16 @@ query GetIdentityHolderByID($identityHolderId: ID!) {
     updatedBy
     userID
     workflowEligibleMarker
+    campaigns {
+      edges {
+        node {
+          id
+          name
+          status
+          displayID
+        }
+      }
+    }
   }
 }
 
@@ -280,6 +300,16 @@ query GetIdentityHolders($first: Int, $last: Int, $after: Cursor, $before: Curso
         updatedBy
         userID
         workflowEligibleMarker
+        campaigns {
+          edges {
+            node {
+              id
+              name
+              status
+              displayID
+            }
+          }
+        }
       }
     }
   }

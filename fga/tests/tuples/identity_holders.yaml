@@ -1,0 +1,26 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to identity_holders
+############################################
+
+# identity_holder-1 is owned by openlane organization
+- user: organization:openlane
+  relation: parent
+  object: identity_holder:identity_holder-1
+# org owner has editor access via organization
+- user: organization:openlane#owner
+  relation: editor
+  object: identity_holder:identity_holder-1
+# blocked user
+- user: user:ulid-blocked
+  relation: blocked
+  object: identity_holder:identity_holder-1
+
+# identity_holder-2 is associated with a platform
+- user: platform:platform-1
+  relation: parent
+  object: identity_holder:identity_holder-2
+# org owner has editor access via organization
+- user: organization:openlane#owner
+  relation: editor
+  object: identity_holder:identity_holder-2
