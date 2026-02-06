@@ -189,6 +189,8 @@ var (
 	ErrFailedToResumeWorkflowInstance = errors.New("failed to resume workflow instance")
 	// ErrFailedToTriggerWorkflow is returned when a workflow cannot be triggered
 	ErrFailedToTriggerWorkflow = errors.New("failed to trigger workflow")
+	// ErrMissingIDForTrustCenterNDARequest is returned when a mutation for trust center nda request is missing the ID field, which is required to determine the trust center and send the appropriate email
+	ErrMissingIDForTrustCenterNDARequest = errors.New("missing ID for trust center NDA request mutation")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

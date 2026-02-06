@@ -78,6 +78,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): BulkUpdateStatusPayload!
+    """
+    Create a new requestNewTrustCenterToken for users that have already signed an NDA
+    """
+    requestNewTrustCenterToken(
+        """
+        email address of the user already signed an NDA
+        """
+        email: String!
+    ): TrustCenterAccessTokenPayload!
 }
 
 """
@@ -88,6 +97,13 @@ type TrustCenterNDARequestCreatePayload {
     Created trustCenterNDARequest
     """
     trustCenterNDARequest: TrustCenterNDARequest!
+}
+
+"""
+Return response for requestNewTrustCenterToken mutation
+"""
+type TrustCenterAccessTokenPayload {
+    success: Boolean!
 }
 
 """

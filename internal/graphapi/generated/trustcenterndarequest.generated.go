@@ -57,6 +57,35 @@ func (ec *executionContext) fieldContext_BulkUpdateStatusPayload_totalUpdated(_ 
 	return fc, nil
 }
 
+func (ec *executionContext) _TrustCenterAccessTokenPayload_success(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterAccessTokenPayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TrustCenterAccessTokenPayload_success,
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_TrustCenterAccessTokenPayload_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TrustCenterAccessTokenPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _TrustCenterNDARequestBulkCreatePayload_trustCenterNDARequests(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterNDARequestBulkCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -380,6 +409,45 @@ func (ec *executionContext) _BulkUpdateStatusPayload(ctx context.Context, sel as
 	return out
 }
 
+var trustCenterAccessTokenPayloadImplementors = []string{"TrustCenterAccessTokenPayload"}
+
+func (ec *executionContext) _TrustCenterAccessTokenPayload(ctx context.Context, sel ast.SelectionSet, obj *model.TrustCenterAccessTokenPayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterAccessTokenPayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TrustCenterAccessTokenPayload")
+		case "success":
+			out.Values[i] = ec._TrustCenterAccessTokenPayload_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var trustCenterNDARequestBulkCreatePayloadImplementors = []string{"TrustCenterNDARequestBulkCreatePayload"}
 
 func (ec *executionContext) _TrustCenterNDARequestBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TrustCenterNDARequestBulkCreatePayload) graphql.Marshaler {
@@ -549,6 +617,20 @@ func (ec *executionContext) marshalNBulkUpdateStatusPayload2ᚖgithubᚗcomᚋth
 		return graphql.Null
 	}
 	return ec._BulkUpdateStatusPayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNTrustCenterAccessTokenPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterAccessTokenPayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterAccessTokenPayload) graphql.Marshaler {
+	return ec._TrustCenterAccessTokenPayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNTrustCenterAccessTokenPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterAccessTokenPayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterAccessTokenPayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._TrustCenterAccessTokenPayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNTrustCenterNDARequestBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDARequestBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterNDARequestBulkCreatePayload) graphql.Marshaler {
