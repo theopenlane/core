@@ -66,6 +66,7 @@ func serve(ctx context.Context) error {
 		serveropts.WithSummarizer(),
 		serveropts.WithKeyDirOption(),
 		serveropts.WithSecretManagerKeysOption(),
+		serveropts.WithShortlinks(),
 	)
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))
@@ -202,7 +203,6 @@ func serve(ctx context.Context) error {
 	}
 
 	so.AddServerOptions(serveropts.WithCloudflareConfig())
-	so.AddServerOptions(serveropts.WithShortlinks())
 
 	go func() {
 		<-ctx.Done()
