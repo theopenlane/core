@@ -196,6 +196,12 @@ mutation UpdateTrustCenterNDARequest($updateTrustCenterNDARequestId: ID!, $input
 }
 
 
+mutation DeleteBulkTrustCenterNDARequest($ids: [ID!]!) {
+  deleteBulkTrustCenterNDARequest(ids: $ids) {
+    deletedIDs
+  }
+}
+
 mutation RequestNewTrustCenterToken($email: String!) {
   requestNewTrustCenterToken(email: $email) {
     success

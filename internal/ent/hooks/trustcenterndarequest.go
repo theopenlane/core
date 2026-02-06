@@ -307,14 +307,16 @@ func handleNDARequestDelete(ctx context.Context, m *generated.TrustCenterNDARequ
 	}
 
 	tcID, ok := m.TrustCenterID()
-	if !ok {
-		oldID, err := m.OldTrustCenterID(ctx)
+	if !ok && m.Op().Is(ent.OpUpdateOne) {
+
+		oldTrustcenterID, err := m.OldTrustCenterID(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("missing trust center ID for deleted NDA request, unable to cleanup tuples")
 
-			return nil
+			return err
 		}
-		tcID = oldID
+
+		tcID = oldTrustcenterID
 	}
 
 	// delete any tuples associated with the nda request

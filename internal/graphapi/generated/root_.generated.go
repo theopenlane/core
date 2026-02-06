@@ -3429,6 +3429,7 @@ type ComplexityRoot struct {
 		DeleteBulkTemplate                   func(childComplexity int, ids []string) int
 		DeleteBulkTrustCenterCompliance      func(childComplexity int, ids []string) int
 		DeleteBulkTrustCenterDoc             func(childComplexity int, ids []string) int
+		DeleteBulkTrustCenterNDARequest      func(childComplexity int, ids []string) int
 		DeleteBulkTrustCenterSubprocessor    func(childComplexity int, ids []string) int
 		DeleteBulkUserSetting                func(childComplexity int, ids []string) int
 		DeleteCampaign                       func(childComplexity int, id string) int
@@ -6223,6 +6224,10 @@ type ComplexityRoot struct {
 
 	TrustCenterNDARequestBulkCreatePayload struct {
 		TrustCenterNDARequests func(childComplexity int) int
+	}
+
+	TrustCenterNDARequestBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	TrustCenterNDARequestConnection struct {
@@ -25631,6 +25636,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteBulkTrustCenterDoc(childComplexity, args["ids"].([]string)), true
 
+	case "Mutation.deleteBulkTrustCenterNDARequest":
+		if e.complexity.Mutation.DeleteBulkTrustCenterNDARequest == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkTrustCenterNDARequest_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkTrustCenterNDARequest(childComplexity, args["ids"].([]string)), true
+
 	case "Mutation.deleteBulkTrustCenterSubprocessor":
 		if e.complexity.Mutation.DeleteBulkTrustCenterSubprocessor == nil {
 			break
@@ -43710,6 +43727,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterNDARequestBulkCreatePayload.TrustCenterNDARequests(childComplexity), true
+
+	case "TrustCenterNDARequestBulkDeletePayload.deletedIDs":
+		if e.complexity.TrustCenterNDARequestBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "TrustCenterNDARequestConnection.edges":
 		if e.complexity.TrustCenterNDARequestConnection.Edges == nil {
@@ -139625,6 +139649,15 @@ extend type Mutation{
         ids: [ID!]!
     ): BulkUpdateStatusPayload!
     """
+    Delete multiple existing nda requests (soft-deletes them and removes FGA tuples)
+    """
+    deleteBulkTrustCenterNDARequest(
+        """
+        IDs of the nda requests to delete
+        """
+        ids: [ID!]!
+    ): TrustCenterNDARequestBulkDeletePayload!
+    """
     Create a new requestNewTrustCenterToken for users that have already signed an NDA
     """
     requestNewTrustCenterToken(
@@ -139690,6 +139723,16 @@ type BulkUpdateStatusPayload {
     Updated nda request IDs
     """
     totalUpdated: Int!
+}
+
+"""
+Return response for deleteBulkTrustCenterNDARequest mutation
+"""
+type TrustCenterNDARequestBulkDeletePayload {
+    """
+    Deleted trustCenterNDARequest IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/trustcenterpreviewsetting.graphql", Input: `extend type Mutation {
   """

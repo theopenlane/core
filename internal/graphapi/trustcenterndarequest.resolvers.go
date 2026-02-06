@@ -166,6 +166,15 @@ func (r *mutationResolver) DenyNDARequests(ctx context.Context, ids []string) (*
 	}, nil
 }
 
+// DeleteBulkTrustCenterNDARequest is the resolver for the deleteBulkTrustCenterNDARequest field.
+func (r *mutationResolver) DeleteBulkTrustCenterNDARequest(ctx context.Context, ids []string) (*model.TrustCenterNDARequestBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteTrustCenterNDARequest(ctx, ids)
+}
+
 // RequestNewTrustCenterToken is the resolver for the requestNewTrustCenterToken field.
 func (r *mutationResolver) RequestNewTrustCenterToken(ctx context.Context, email string) (*model.TrustCenterAccessTokenPayload, error) {
 	// check if the nda for the user and trust center combination is signed
