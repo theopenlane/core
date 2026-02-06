@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
@@ -71,13 +72,15 @@ func HookDeleteDiscussionOnLastComment() ent.Hook {
 				return v, nil
 			}
 
-			if err := m.Client().Discussion.DeleteOneID(discussionID).Exec(ctx); err != nil {
+			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+			if err := m.Client().Discussion.DeleteOneID(discussionID).Exec(allowCtx); err != nil {
 				return v, err
 			}
 
 			return v, nil
 		})
-	}, ent.OpDeleteOne|ent.OpUpdateOne)
+	}, ent.OpDeleteOne|ent.OpDelete|ent.OpUpdateOne|ent.OpUpdate)
 }
 
 // checkNoteFiles checks if note files are provided and sets the local file ID(s)
