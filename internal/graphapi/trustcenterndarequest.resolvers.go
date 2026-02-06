@@ -168,25 +168,11 @@ func (r *mutationResolver) DenyNDARequests(ctx context.Context, ids []string) (*
 
 // DeleteBulkTrustCenterNDARequest is the resolver for the deleteBulkTrustCenterNDARequest field.
 func (r *mutationResolver) DeleteBulkTrustCenterNDARequest(ctx context.Context, ids []string) (*model.TrustCenterNDARequestBulkDeletePayload, error) {
-	client := withTransactionalMutation(ctx)
-
-	deletedIDs := make([]string, 0, len(ids))
-
-	for _, id := range ids {
-		if err := client.TrustCenterNDARequest.DeleteOneID(id).Exec(ctx); err != nil {
-			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "trustcenterndarequest"})
-		}
-
-		if err := generated.TrustCenterNDARequestEdgeCleanup(ctx, id); err != nil {
-			return nil, common.NewCascadeDeleteError(ctx, err)
-		}
-
-		deletedIDs = append(deletedIDs, id)
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	return &model.TrustCenterNDARequestBulkDeletePayload{
-		DeletedIDs: deletedIDs,
-	}, nil
+	return r.bulkDeleteTrustCenterNDARequest(ctx, ids)
 }
 
 // RequestNewTrustCenterToken is the resolver for the requestNewTrustCenterToken field.
