@@ -18,8 +18,8 @@ require (
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.2
 	github.com/theopenlane/core v1.8.1
-	github.com/theopenlane/core/common v1.0.6
-	github.com/theopenlane/go-client v0.7.6
+	github.com/theopenlane/core/common v1.0.7
+	github.com/theopenlane/go-client v0.8.2
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.23.8
 	github.com/theopenlane/utils v0.6.2
