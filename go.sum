@@ -657,8 +657,7 @@ github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rM
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
 github.com/theopenlane/eddy v0.1.0 h1:mtsBL9COYCJWMkjxPOb7LefPaysyPVmYb4idy7kL4lY=
 github.com/theopenlane/eddy v0.1.0/go.mod h1:UvovGX5x0N9RdKk2Kb5CMbGziRUasARDy8xSEAT8aDs=
-github.com/theopenlane/emailtemplates v0.3.2 h1:4rvmp/a0JO+/OBUC/ue1WF8n3MDLlbBpXusyAkdJIdk=
-github.com/theopenlane/emailtemplates v0.3.2/go.mod h1:nLNXcp1fj53qUA5akgJpl/3ovERORr4sSZoa6lA5Vso=
+github.com/theopenlane/emailtemplates v0.3.3 h1:vBnG3inSbOGGy3SyYJBaL6up92qQpXoyXzCJQTsIieA=
 github.com/theopenlane/entx v0.22.4 h1:UjcYKLE3oSiAYq/LybjU6YE4HZWOKjA60kMNBUSYhiU=
 github.com/theopenlane/entx v0.22.4/go.mod h1:sgPQGmgyLK7bOPK7IteNs9AS53gk1GMlFneQTcROE5g=
 github.com/theopenlane/go-client v0.8.2 h1:3JFri3+i5LnSmeBC4cGDUcyAfKpb7M4OclI+/2WeddA=

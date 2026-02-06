@@ -396,13 +396,16 @@ func sendTrustCenterNDARequestEmail(ctx context.Context, ndaRequest ndaAuthEmail
 		return err
 	}
 
-	trustCenterURL := getTrustCenterEmailURL(ctx, buildNDATrustCenterURL(tc))
+	fullURL, err := addTokenToURLAndShorten(ctx, buildNDATrustCenterURL(tc), accessToken)
+	if err != nil {
+		return err
+	}
 
 	emailMsg, err := transactionFromContext(ctx).Emailer.NewTrustCenterNDARequestEmail(emailtemplates.Recipient{
 		Email: ndaRequest.email,
-	}, accessToken, emailtemplates.TrustCenterNDARequestData{
-		OrganizationName: tc.Edges.Setting.CompanyName,
-		TrustCenterURL:   trustCenterURL,
+	}, "", emailtemplates.TrustCenterNDARequestData{
+		OrganizationName:      tc.Edges.Setting.CompanyName,
+		TrustCenterNDAFullURL: fullURL,
 	})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA email")
@@ -447,13 +450,17 @@ func sendTrustCenterAuthEmail(ctx context.Context, ndaRequest ndaAuthEmailData) 
 		return err
 	}
 
-	trustCenterURL := getTrustCenterEmailURL(ctx, getTrustCenterBaseURL(tc))
+	fullURL, err := addTokenToURLAndShorten(ctx, getTrustCenterBaseURL(tc), accessToken)
+	if err != nil {
+		return err
+	}
 
+	// pass the full url and leave the token empty
 	emailMsg, err := transactionFromContext(ctx).Emailer.NewTrustCenterAuthEmail(emailtemplates.Recipient{
 		Email: ndaRequest.email,
-	}, accessToken, emailtemplates.TrustCenterAuthData{
-		OrganizationName: tc.Edges.Setting.CompanyName,
-		TrustCenterURL:   trustCenterURL,
+	}, "", emailtemplates.TrustCenterAuthData{
+		OrganizationName:       tc.Edges.Setting.CompanyName,
+		TrustCenterAuthFullURL: fullURL,
 	})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create auth email")
@@ -466,6 +473,28 @@ func sendTrustCenterAuthEmail(ctx context.Context, ndaRequest ndaAuthEmailData) 
 	}
 
 	return nil
+}
+
+// addTokenToURLAndShorten adds a token to the URL as a query parameter and returns a shortened version of the URL if the shortlinks client is available, otherwise returns the original URL with the token added
+func addTokenToURLAndShorten(ctx context.Context, baseURL url.URL, token string) (string, error) {
+	url := baseURL.ResolveReference(&url.URL{RawQuery: url.Values{"token": []string{token}}.Encode()})
+
+	regularLink := url.String()
+
+	// if no shortlinks client, return the regular link with the token
+	if transactionFromContext(ctx).Shortlinks == nil {
+		return regularLink, nil
+	}
+
+	shortenedURL, shortenErr := transactionFromContext(ctx).Shortlinks.Create(ctx, regularLink, "")
+	if shortenErr != nil {
+		// don't log the full link as it contains a confidential token, just log the base URL
+		logx.FromContext(ctx).Error().Str("baseURL", baseURL.String()).Err(shortenErr).Msg("failed to shorten URL, using original")
+
+		return regularLink, nil
+	}
+
+	return shortenedURL, nil
 }
 
 func generateTrustCenterJWT(ctx context.Context, tc *generated.TrustCenter, ndaRequest ndaAuthEmailData) (string, error) {
@@ -489,23 +518,6 @@ func generateTrustCenterJWT(ctx context.Context, tc *generated.TrustCenter, ndaR
 	}
 
 	return accessToken, nil
-}
-
-func getTrustCenterEmailURL(ctx context.Context, u url.URL) string {
-	trustCenterURLStr := u.String()
-
-	if transactionFromContext(ctx).Shortlinks == nil {
-		return trustCenterURLStr
-	}
-
-	shortenedURL, shortenErr := transactionFromContext(ctx).Shortlinks.Create(ctx, trustCenterURLStr, "")
-	if shortenErr != nil {
-		logx.FromContext(ctx).Error().Err(shortenErr).Msg("failed to shorten trust center URL, using original")
-
-		return trustCenterURLStr
-	}
-
-	return shortenedURL
 }
 
 func buildNDATrustCenterURL(tc *generated.TrustCenter) url.URL {
