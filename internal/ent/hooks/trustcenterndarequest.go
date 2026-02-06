@@ -10,6 +10,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
@@ -188,6 +189,14 @@ func getTrustCenter(ctx context.Context, trustCenterID string) (*generated.Trust
 func HookTrustCenterNDARequestUpdate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterNDARequestFunc(func(ctx context.Context, m *generated.TrustCenterNDARequestMutation) (generated.Value, error) {
+			if isDeleteOp(ctx, m) {
+				if err := handleNDARequestDelete(ctx, m); err != nil {
+					return nil, err
+				}
+
+				return next.Mutate(ctx, m)
+			}
+
 			status, ok := m.Status()
 
 			// on update one, check if status is set, if not get old status
@@ -286,7 +295,42 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 
 			return v, nil
 		})
-	}, ent.OpUpdateOne|ent.OpUpdate)
+	}, ent.OpUpdateOne|ent.OpUpdate|ent.OpDeleteOne)
+}
+
+func handleNDARequestDelete(ctx context.Context, m *generated.TrustCenterNDARequestMutation) error {
+	id, ok := m.ID()
+	if !ok {
+		logx.FromContext(ctx).Error().Msg("missing ID for deleted NDA request, unable to cleanup tuples")
+
+		return nil
+	}
+
+	tcID, ok := m.TrustCenterID()
+	if !ok {
+		oldID, err := m.OldTrustCenterID(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("missing trust center ID for deleted NDA request, unable to cleanup tuples")
+
+			return nil
+		}
+		tcID = oldID
+	}
+
+	// delete any tuples associated with the nda request
+	delete := fgax.GetTupleKey(fgax.TupleRequest{
+		SubjectID:   fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, id),
+		SubjectType: "user",
+		ObjectID:    tcID,
+		ObjectType:  "trust_center",
+		Relation:    "nda_signed",
+	})
+
+	if _, err := m.Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{delete}); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func createNDARequestNotification(ctx context.Context, ndaRequest *generated.TrustCenterNDARequest, ownerID string) error {
