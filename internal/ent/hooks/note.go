@@ -32,8 +32,8 @@ func HookNoteFiles() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
 }
 
-// HookDeleteDiscussionOnLastComment deletes the discussion when the last comment is deleted
-func HookDeleteDiscussionOnLastComment() ent.Hook {
+// HookDeleteDiscussionDelete deletes the discussion when the last comment is deleted
+func HookDeleteDiscussion() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.NoteFunc(func(ctx context.Context, m *generated.NoteMutation) (generated.Value, error) {
 			if !isDeleteOp(ctx, m) {
@@ -45,7 +45,10 @@ func HookDeleteDiscussionOnLastComment() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			obj, err := m.Client().Note.Get(ctx, id)
+			obj, err := m.Client().Note.Query().
+				Select(note.FieldDiscussionID).
+				Where(note.ID(id)).
+				Only(ctx)
 			if err != nil {
 				return nil, err
 			}
