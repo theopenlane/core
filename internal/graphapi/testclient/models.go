@@ -33048,6 +33048,11 @@ type TrustCenter struct {
 
 func (TrustCenter) IsNode() {}
 
+// Return response for requestNewTrustCenterToken mutation
+type TrustCenterAccessTokenPayload struct {
+	Success bool `json:"success"`
+}
+
 type TrustCenterCompliance struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`

@@ -908,3 +908,151 @@ func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }
+
+func TestMutationRequestNewTrustCenterToken(t *testing.T) {
+	cleanupTrustCenterData(t)
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	ndaTemplate := (&TemplateBuilder{
+		client:        suite.client,
+		Kind:          enums.TemplateKindTrustCenterNda,
+		TrustCenterID: trustCenter.ID,
+	}).MustNew(testUser1.UserCtx, t)
+
+	ndaSigned := testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         gofakeit.Email(),
+		TrustCenterID: &trustCenter.ID,
+	}
+
+	ndaRequested := testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         gofakeit.Email(),
+		TrustCenterID: &trustCenter.ID,
+	}
+
+	ndaNeedsApproval := testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         gofakeit.Email(),
+		TrustCenterID: &trustCenter.ID,
+	}
+
+	ndaRequestSigned, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, ndaSigned)
+	assert.NilError(t, err)
+
+	ndaRequestRequested, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, ndaRequested)
+	assert.NilError(t, err)
+
+	ndaRequestNeedsApproval, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, ndaNeedsApproval)
+	assert.NilError(t, err)
+
+	_, err = suite.client.api.UpdateTrustCenterNDARequest(testUser1.UserCtx, ndaRequestSigned.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
+		Status: lo.ToPtr(enums.TrustCenterNDARequestStatusSigned),
+	})
+	assert.NilError(t, err)
+
+	_, err = suite.client.api.UpdateTrustCenterNDARequest(testUser1.UserCtx, ndaRequestNeedsApproval.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
+		Status: lo.ToPtr(enums.TrustCenterNDARequestStatusNeedsApproval),
+	})
+	assert.NilError(t, err)
+
+	anonCtxSigned, _ := createAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, ndaSigned.Email)
+	anonCtxRequested, _ := createAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, ndaRequested.Email)
+	anonCtxNeedsApproval, _ := createAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, ndaNeedsApproval.Email)
+	anonCtxRandom, _ := createAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, gofakeit.Email())
+
+	ndaEmail := "Trust Center NDA Request"
+	authEmail := "Access"
+	testCases := []struct {
+		name            string
+		email           string
+		client          *testclient.TestClient
+		ctx             context.Context
+		expectedErr     string
+		expectEmailSent string
+	}{
+		{
+			name:            "happy path - already signed, request new token, email sent with NDA in it",
+			email:           ndaSigned.Email,
+			client:          suite.client.api,
+			ctx:             anonCtxSigned,
+			expectEmailSent: authEmail,
+		},
+		{
+			name:            "happy path - not signed, resends nda email",
+			email:           ndaRequested.Email,
+			client:          suite.client.api,
+			ctx:             anonCtxRequested,
+			expectEmailSent: ndaEmail,
+		},
+		{
+			name:   "needs approval, but no email sent still because not approved yet",
+			email:  ndaNeedsApproval.Email,
+			client: suite.client.api,
+			ctx:    anonCtxNeedsApproval,
+		},
+		{
+			name:   "no nda request, no-op",
+			email:  gofakeit.Email(),
+			client: suite.client.api,
+			ctx:    anonCtxRandom,
+		},
+		{
+			name:        "not anonymous context, error",
+			email:       gofakeit.Email(),
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			// Clear any existing jobs
+			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
+			assert.NilError(t, err)
+
+			resp, err := tc.client.RequestNewTrustCenterToken(tc.ctx, tc.email)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, resp.RequestNewTrustCenterToken.Success == true)
+
+			// Verify the job was or was not created based on expectation
+			if tc.expectEmailSent != "" {
+				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+					[]rivertest.ExpectedJob{
+						{
+							Args: jobs.EmailArgs{},
+						},
+					})
+				assert.Assert(t, jobs != nil)
+				assert.Assert(t, is.Len(jobs, 1))
+
+				found := false
+				for _, v := range jobs {
+					if strings.Contains(string(v.EncodedArgs), tc.expectEmailSent) {
+						found = true
+						break
+					}
+				}
+
+				assert.Assert(t, found, "expected email containing '%s' to be sent", tc.expectEmailSent)
+			} else {
+				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+			}
+		})
+	}
+
+	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, IDs: []string{ndaRequestSigned.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, ndaRequestRequested.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+}
