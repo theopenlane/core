@@ -272,7 +272,7 @@ steps:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
           location: "NYC"
-        key: "go_test_graph"
+        key: "go_test_handlers"
         cancel_on_build_failing: true
         if_changed:
           include:
@@ -392,6 +392,9 @@ steps:
           - artifacts#v1.9.4:
               download: "junit-no-api.xml"
               step: "go_test_no_api"
+          - artifacts#v1.9.4:
+              download: "junit-handlers.xml"
+              step: "go_test_handlers"
       - label: ":github: upload PR reports"
         key: "scan-upload-pr"
         cancel_on_build_failing: true
