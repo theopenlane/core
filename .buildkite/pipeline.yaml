@@ -186,7 +186,9 @@ steps:
                 - "HELM_CHART_REPO"
       - label: ":rocket: update image tag for release"
         key: "image_tag_automation"
-        depends_on: "docker-build-and-tag"
+        depends_on: 
+          - "docker-build-and-tag"
+          - "go_tests"
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
         plugins:
           - docker#v5.13.0:
@@ -204,12 +206,12 @@ steps:
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
-  - group: ":test_tube: Tests"
-    key: "tests"
+  - group: ":golangci-lint: Linter"
+    key: "linter"
     steps:
-      - label: ":golangci-lint: lint :lint-roller:"
+      - label: ":golangci-lint: lint graphapi package :lint-roller:"
         if_changed:
-          - "**.go"
+          - "internal/graphapi/**.go"
           - .golangci.yaml
         agents:
           queue: $LARGE_RUNNER_QUEUE
@@ -217,11 +219,11 @@ steps:
           location: "NYC"
         cancel_on_build_failing: true
         timeout_in_minutes: 30
-        key: "lint"
+        key: "lint_graphapi"
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
-              command: ["task", "go:lint:ci"]
+              command: ["task", "go:lint:ci:graphapi"]
               always_pull: true
               propagate-environment: true
               volumes:
@@ -230,7 +232,60 @@ steps:
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
                 - "GOTOOLCHAIN=auto"
-      - label: ":golang: go test graphapi"
+      - label: ":golangci-lint: lint handlers package :lint-roller:"
+        if_changed:
+          - "internal/httpserve/handlers/**.go"
+          - .golangci.yaml
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
+          location: "NYC"
+        cancel_on_build_failing: true
+        timeout_in_minutes: 30
+        key: "lint_handlers"
+        plugins:
+          - docker#v5.13.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              command: ["task", "go:lint:ci:handlers"]
+              always_pull: true
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+              environment:
+                - "GOTOOLCHAIN=auto"
+      - label: ":golangci-lint: lint - non-api packages :lint-roller:"
+        if_changed:
+          include:
+            - "**.go"
+            - .golangci.yaml
+          exclude:
+            - internal/graphapi/**
+            - internal/httpserve/handlers/**
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
+          location: "NYC"
+        cancel_on_build_failing: true
+        timeout_in_minutes: 30
+        key: "lint_non_api"
+        plugins:
+          - docker#v5.13.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              command: ["task", "go:lint:ci:no_api"]
+              always_pull: true
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+              environment:
+                - "GOTOOLCHAIN=auto"
+  - group: ":test_tube: Tests"
+    key: "go_tests"
+    steps:
+      - label: ":golang: go test - graphapi only"
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
@@ -267,7 +322,7 @@ steps:
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
         artifact_paths: ["coverage-graph.out", "junit-graph.xml"]
-      - label: ":golang: go test handlers"
+      - label: ":golang: go test - handlers only"
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
