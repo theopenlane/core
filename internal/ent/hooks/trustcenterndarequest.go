@@ -227,49 +227,6 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 					return nil, err
 				}
 
-				email := ""
-				trustCenterID := ""
-				requestID := ""
-
-				// if this is a trust center nda request, we can get the email and trust center ID from the request
-				request, ok := retVal.(*generated.TrustCenterNDARequest)
-				if ok {
-					email = request.Email
-					trustCenterID = request.TrustCenterID
-					requestID = request.ID
-				} else {
-					// otherwise its a document data mutation, get from the anonymous trust center user context
-					anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx)
-					if ok {
-						email = anon.SubjectEmail
-						trustCenterID = anon.TrustCenterID
-
-						// lookup the request ID for the JWT
-						req, err := transactionFromContext(ctx).TrustCenterNDARequest.Query().
-							Where(
-								trustcenterndarequest.EmailEQ(email),
-								trustcenterndarequest.TrustCenterIDEQ(trustCenterID),
-							).
-							Only(ctx)
-						if err != nil {
-							logx.FromContext(ctx).Error().Err(err).Msg("failed to lookup NDA request for anonymous user upon signing, unable to set sub for JWT and send auth email")
-
-							return retVal, err
-						}
-
-						requestID = req.ID
-					}
-				}
-
-				// send auth email upon signing
-				if err := sendTrustCenterAuthEmail(ctx, ndaAuthEmailData{
-					requestID:     requestID,
-					email:         email,
-					trustCenterID: trustCenterID,
-				}); err != nil {
-					return nil, err
-				}
-
 				return retVal, nil
 			}
 
@@ -424,17 +381,13 @@ func sendTrustCenterNDARequestEmail(ctx context.Context, ndaRequest ndaAuthEmail
 	return nil
 }
 
-func sendTrustCenterAuthEmail(ctx context.Context, ndaRequest ndaAuthEmailData) error {
+func buildTrustCenterAuthURL(ctx context.Context, ndaRequest ndaAuthEmailData) (string, *generated.TrustCenter, error) {
 	if ndaRequest.trustCenterID == "" || ndaRequest.email == "" {
-		logx.FromContext(ctx).Error().Msg("missing trust center ID or email for auth email")
-
-		return nil
+		return "", nil, fmt.Errorf("missing trust center ID or email for auth URL")
 	}
 
 	if ndaRequest.requestID == "" {
-		logx.FromContext(ctx).Error().Msg("created NDA request has empty ID, unable to set sub for JWT and send email")
-
-		return ErrMissingIDForTrustCenterNDARequest
+		return "", nil, ErrMissingIDForTrustCenterNDARequest
 	}
 
 	tc, err := transactionFromContext(ctx).TrustCenter.Query().
@@ -443,21 +396,28 @@ func sendTrustCenterAuthEmail(ctx context.Context, ndaRequest ndaAuthEmailData) 
 		WithSetting().
 		Only(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to get trust center for auth email")
-		return err
+		return "", nil, err
 	}
 
 	accessToken, err := generateTrustCenterJWT(ctx, tc, ndaRequest)
 	if err != nil {
-		return err
+		return "", nil, err
 	}
 
 	fullURL, err := addTokenToURLAndShorten(ctx, getTrustCenterBaseURL(tc), accessToken)
 	if err != nil {
+		return "", nil, err
+	}
+
+	return fullURL, tc, nil
+}
+
+func sendTrustCenterAuthEmail(ctx context.Context, ndaRequest ndaAuthEmailData) error {
+	fullURL, tc, err := buildTrustCenterAuthURL(ctx, ndaRequest)
+	if err != nil {
 		return err
 	}
 
-	// pass the full url and leave the token empty
 	emailMsg, err := transactionFromContext(ctx).Emailer.NewTrustCenterAuthEmail(emailtemplates.Recipient{
 		Email: ndaRequest.email,
 	}, "", emailtemplates.TrustCenterAuthData{
