@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/opsconfig"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
@@ -75,7 +75,7 @@ func HandleIntegrationOperationRequested(ctx *soiree.EventContext, payload soire
 
 	operationConfig := maps.Clone(run.OperationConfig)
 	if operationName == types.OperationVulnerabilitiesCollect {
-		operationConfig = opsconfig.EnsureIncludePayloads(operationConfig)
+		operationConfig = operations.EnsureIncludePayloads(operationConfig)
 	}
 
 	result, opErr := deps.Operations.Run(systemCtx, types.OperationRequest{

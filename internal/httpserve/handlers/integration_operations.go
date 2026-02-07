@@ -14,8 +14,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/helpers"
-	"github.com/theopenlane/core/common/integrations/opsconfig"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -34,19 +33,6 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.ExampleIntegrationOperationPayload, openapi.IntegrationOperationResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
-	}
-
-	if h.IntegrationRegistry == nil {
-		return h.InternalServerError(ctx, errIntegrationRegistryNotConfigured, openapiCtx)
-	}
-	if h.IntegrationOperations == nil {
-		return h.InternalServerError(ctx, errIntegrationOperationsNotConfigured, openapiCtx)
-	}
-	if h.EventEmitter == nil {
-		return h.InternalServerError(ctx, errIntegrationEmitterNotConfigured, openapiCtx)
-	}
-	if h.DBClient == nil || h.IntegrationStore == nil {
-		return h.InternalServerError(ctx, errIntegrationStoreNotConfigured, openapiCtx)
 	}
 
 	requestCtx := ctx.Request().Context()
@@ -76,13 +62,13 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.BadRequest(ctx, keystore.ErrOperationNotRegistered, openapiCtx)
 	}
 
-	merged, err := helpers.ResolveOperationConfig(&integrationRecord.Config, string(operationName), req.Body.Config)
+	merged, err := operations.ResolveOperationConfig(&integrationRecord.Config, string(operationName), req.Body.Config)
 	if err != nil {
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 	operationConfig = merged
 	if operationName == types.OperationVulnerabilitiesCollect {
-		operationConfig = opsconfig.EnsureIncludePayloads(operationConfig)
+		operationConfig = operations.EnsureIncludePayloads(operationConfig)
 	}
 
 	systemCtx := privacy.DecisionContext(requestCtx, privacy.Allow)

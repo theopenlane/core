@@ -12,8 +12,9 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/oauth2"
 
+	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/providers"
@@ -39,8 +40,8 @@ func AppBuilder() providers.Builder {
 						SupportsClientPooling: true,
 						SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
 					},
-					helpers.SanitizeOperationDescriptors(TypeGitHubApp, githubOperations()),
-					helpers.SanitizeClientDescriptors(TypeGitHubApp, githubClientDescriptors(TypeGitHubApp)),
+					operations.SanitizeOperationDescriptors(TypeGitHubApp, githubOperations()),
+					operations.SanitizeClientDescriptors(TypeGitHubApp, githubClientDescriptors(TypeGitHubApp)),
 				),
 			}, nil
 		},
@@ -83,7 +84,15 @@ func (p *AppProvider) Mint(ctx context.Context, subject types.CredentialSubject)
 		return types.CredentialPayload{}, ErrProviderMetadataRequired
 	}
 
-	privateKey := helpers.FirstStringValue(meta, "privateKey", "private_key")
+	var decoded struct {
+		AppID          string `json:"appId"`
+		InstallationID string `json:"installationId"`
+		PrivateKey     string `json:"privateKey"`
+	}
+	if err := operations.DecodeConfig(meta, &decoded); err != nil {
+		return types.CredentialPayload{}, err
+	}
+	privateKey := decoded.PrivateKey
 	if privateKey == "" {
 		return types.CredentialPayload{}, ErrPrivateKeyMissing
 	}
@@ -182,8 +191,8 @@ func requestGitHubInstallationToken(ctx context.Context, jwtToken string, instal
 	}
 
 	var resp githubInstallationTokenResponse
-	if err := helpers.HTTPPostJSON(ctx, nil, endpoint, jwtToken, headers, map[string]any{}, &resp); err != nil {
-		if errors.Is(err, helpers.ErrHTTPRequestFailed) {
+	if err := auth.HTTPPostJSON(ctx, nil, endpoint, jwtToken, headers, map[string]any{}, &resp); err != nil {
+		if errors.Is(err, auth.ErrHTTPRequestFailed) {
 			return githubInstallationTokenResponse{}, fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}
 		return githubInstallationTokenResponse{}, err

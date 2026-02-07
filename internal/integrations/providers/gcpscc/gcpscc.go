@@ -16,8 +16,9 @@ import (
 	"google.golang.org/api/option"
 	stsv1 "google.golang.org/api/sts/v1"
 
+	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/providers"
@@ -168,7 +169,7 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 	if err != nil {
 		return types.CredentialPayload{}, err
 	}
-	meta.SubjectToken = helpers.TrimmedString(subjectToken)
+	meta.SubjectToken = types.TrimmedString(subjectToken)
 
 	accessToken, err := p.mintWorkloadToken(ctx, meta, subjectToken, tokenType)
 	if err != nil {
@@ -341,7 +342,7 @@ func securityCenterClientOptions(ctx context.Context, meta credentialMetadata, t
 
 // serviceAccountCredentials parses and validates a service account key
 func serviceAccountCredentials(ctx context.Context, rawKey string, scopes []string) (*google.Credentials, error) {
-	key := helpers.NormalizeServiceAccountKey(rawKey)
+	key := auth.NormalizeServiceAccountKey(rawKey)
 	if key == "" {
 		return nil, ErrServiceAccountKeyInvalid
 	}
@@ -361,19 +362,19 @@ func serviceAccountCredentials(ctx context.Context, rawKey string, scopes []stri
 
 // credentialMetadata captures the persisted SCC metadata supplied during activation.
 type credentialMetadata struct {
-	ProjectID                helpers.TrimmedString `mapstructure:"projectId"`
-	OrganizationID           helpers.TrimmedString `mapstructure:"organizationId"`
-	WorkloadIdentityProvider helpers.TrimmedString `mapstructure:"workloadIdentityProvider"`
-	Audience                 helpers.TrimmedString `mapstructure:"audience"`
-	ServiceAccountEmail      helpers.TrimmedString `mapstructure:"serviceAccountEmail"`
-	SourceID                 helpers.TrimmedString `mapstructure:"sourceId"`
-	Scopes                   []string              `mapstructure:"scopes"`
-	TokenLifetime            helpers.TrimmedString `mapstructure:"tokenLifetime"`
-	AudienceHint             helpers.TrimmedString `mapstructure:"audienceHint"`
-	WorkloadPoolProject      helpers.TrimmedString `mapstructure:"workloadPoolProject"`
-	FindingFilter            helpers.TrimmedString `mapstructure:"findingFilter"`
-	SubjectToken             helpers.TrimmedString `mapstructure:"subjectToken"`
-	ServiceAccountKey        helpers.TrimmedString `mapstructure:"serviceAccountKey"`
+	ProjectID                types.TrimmedString `json:"projectId"`
+	OrganizationID           types.TrimmedString `json:"organizationId"`
+	WorkloadIdentityProvider types.TrimmedString `json:"workloadIdentityProvider"`
+	Audience                 types.TrimmedString `json:"audience"`
+	ServiceAccountEmail      types.TrimmedString `json:"serviceAccountEmail"`
+	SourceID                 types.TrimmedString `json:"sourceId"`
+	Scopes                   []string            `json:"scopes"`
+	TokenLifetime            types.TrimmedString `json:"tokenLifetime"`
+	AudienceHint             types.TrimmedString `json:"audienceHint"`
+	WorkloadPoolProject      types.TrimmedString `json:"workloadPoolProject"`
+	FindingFilter            types.TrimmedString `json:"findingFilter"`
+	SubjectToken             types.TrimmedString `json:"subjectToken"`
+	ServiceAccountKey        types.TrimmedString `json:"serviceAccountKey"`
 }
 
 // withDefaults applies provider defaults to missing metadata values
@@ -383,10 +384,10 @@ func (m credentialMetadata) withDefaults(defaults workloadDefaults) credentialMe
 		result.Scopes = append([]string(nil), defaults.scopes...)
 	}
 	if result.ServiceAccountEmail == "" {
-		result.ServiceAccountEmail = helpers.TrimmedString(defaults.targetServiceAcct)
+		result.ServiceAccountEmail = types.TrimmedString(defaults.targetServiceAcct)
 	}
 	if result.Audience == "" {
-		result.Audience = helpers.TrimmedString(defaults.audience)
+		result.Audience = types.TrimmedString(defaults.audience)
 	}
 	return result
 }
@@ -461,7 +462,7 @@ func metadataFromPayload(payload types.CredentialPayload) (credentialMetadata, e
 	}
 
 	var meta credentialMetadata
-	if err := helpers.DecodeConfig(payload.Data.ProviderData, &meta); err != nil {
+	if err := operations.DecodeConfig(payload.Data.ProviderData, &meta); err != nil {
 		return credentialMetadata{}, fmt.Errorf("%w: %w", ErrMetadataDecode, err)
 	}
 
@@ -532,7 +533,7 @@ func setIfNotEmpty[T ~string](target map[string]any, key string, value T) {
 // normalize cleans up metadata values for persistence
 func (m credentialMetadata) normalize() credentialMetadata {
 	normalized := m
-	normalized.ServiceAccountKey = helpers.TrimmedString(helpers.NormalizeServiceAccountKey(string(normalized.ServiceAccountKey)))
+	normalized.ServiceAccountKey = types.TrimmedString(auth.NormalizeServiceAccountKey(string(normalized.ServiceAccountKey)))
 	normalized.Scopes = normalizeScopes(normalized.Scopes)
 	return normalized
 }

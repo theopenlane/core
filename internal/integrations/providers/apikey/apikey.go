@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/providers"
@@ -63,7 +63,7 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 				return nil, ErrAuthTypeMismatch
 			}
 
-			clients := helpers.SanitizeClientDescriptors(provider, cfg.clients)
+			clients := operations.SanitizeClientDescriptors(provider, cfg.clients)
 			return &Provider{
 				BaseProvider: providers.NewBaseProvider(
 					provider,
@@ -72,7 +72,7 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 						SupportsClientPooling: len(clients) > 0,
 						SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
 					},
-					helpers.SanitizeOperationDescriptors(provider, cfg.operations),
+					operations.SanitizeOperationDescriptors(provider, cfg.operations),
 					clients,
 				),
 				tokenField: cfg.tokenField,
@@ -107,7 +107,7 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 		return types.CredentialPayload{}, ErrProviderMetadataRequired
 	}
 
-	token := helpers.StringFromAny(providerData[p.tokenField])
+	token, _ := providerData[p.tokenField].(string)
 	if token == "" {
 		return types.CredentialPayload{}, ErrTokenFieldRequired
 	}

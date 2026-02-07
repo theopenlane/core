@@ -11,7 +11,6 @@ import (
 
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
 	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
@@ -263,8 +262,8 @@ func (s *Store) updateIntegrationProviderState(ctx context.Context, record *ent.
 
 	switch provider {
 	case types.ProviderType("github"), types.ProviderType("github_app"):
-		appID := helpers.FirstStringValue(data, "appId", "app_id")
-		installationID := helpers.FirstStringValue(data, "installationId", "installation_id")
+		appID, _ := data["appId"].(string)
+		installationID, _ := data["installationId"].(string)
 		if appID == "" && installationID == "" {
 			return
 		}

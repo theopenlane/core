@@ -8,7 +8,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/providers/catalog"
@@ -61,13 +61,13 @@ func NewRegistry(ctx context.Context) (*Registry, error) {
 		instance.providers[providerType] = provider
 
 		if clientProvider, ok := provider.(types.ClientProvider); ok {
-			if descriptors := helpers.SanitizeClientDescriptors(providerType, clientProvider.ClientDescriptors()); len(descriptors) > 0 {
+			if descriptors := operations.SanitizeClientDescriptors(providerType, clientProvider.ClientDescriptors()); len(descriptors) > 0 {
 				instance.clients[providerType] = descriptors
 			}
 		}
 
 		if operationProvider, ok := provider.(types.OperationProvider); ok {
-			if ops := helpers.SanitizeOperationDescriptors(providerType, operationProvider.Operations()); len(ops) > 0 {
+			if ops := operations.SanitizeOperationDescriptors(providerType, operationProvider.Operations()); len(ops) > 0 {
 				instance.operations[providerType] = ops
 			}
 		}
@@ -185,7 +185,7 @@ func (r *Registry) UpsertProvider(ctx context.Context, spec config.ProviderSpec,
 	r.providers[providerType] = provider
 
 	if clientProvider, ok := provider.(types.ClientProvider); ok {
-		if descriptors := helpers.SanitizeClientDescriptors(providerType, clientProvider.ClientDescriptors()); len(descriptors) > 0 {
+		if descriptors := operations.SanitizeClientDescriptors(providerType, clientProvider.ClientDescriptors()); len(descriptors) > 0 {
 			r.clients[providerType] = descriptors
 		} else {
 			delete(r.clients, providerType)
@@ -195,7 +195,7 @@ func (r *Registry) UpsertProvider(ctx context.Context, spec config.ProviderSpec,
 	}
 
 	if operationProvider, ok := provider.(types.OperationProvider); ok {
-		if ops := helpers.SanitizeOperationDescriptors(providerType, operationProvider.Operations()); len(ops) > 0 {
+		if ops := operations.SanitizeOperationDescriptors(providerType, operationProvider.Operations()); len(ops) > 0 {
 			r.operations[providerType] = ops
 		} else {
 			delete(r.operations, providerType)

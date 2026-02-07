@@ -15,7 +15,6 @@
     "required": [
       "appId",
       "privateKey",
-      "webhookSecret",
       "installationId"
     ],
     "properties": {

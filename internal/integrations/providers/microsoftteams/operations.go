@@ -4,7 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -16,7 +17,7 @@ const (
 // teamsOperations returns the Microsoft Teams operations supported by this provider
 func teamsOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		helpers.HealthOperation(teamsHealthOp, "Call Graph /me to verify Teams access.", ClientMicrosoftTeamsAPI, runTeamsHealth),
+		operations.HealthOperation(teamsHealthOp, "Call Graph /me to verify Teams access.", ClientMicrosoftTeamsAPI, runTeamsHealth),
 		{
 			Name:        teamsChannelsOp,
 			Kind:        types.OperationKindCollectFindings,
@@ -29,7 +30,7 @@ func teamsOperations() []types.OperationDescriptor {
 
 // runTeamsHealth verifies the Microsoft Graph token by fetching the user profile
 func runTeamsHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := helpers.ClientAndOAuthToken(input, TypeMicrosoftTeams)
+	client, token, err := auth.ClientAndOAuthToken(input, TypeMicrosoftTeams)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -41,8 +42,8 @@ func runTeamsHealth(ctx context.Context, input types.OperationInput) (types.Oper
 	}
 
 	endpoint := "https://graph.microsoft.com/v1.0/me"
-	if err := helpers.GetJSONWithClient(ctx, client, endpoint, token, nil, &profile); err != nil {
-		return helpers.OperationFailure("Graph /me failed", err), err
+	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &profile); err != nil {
+		return operations.OperationFailure("Graph /me failed", err), err
 	}
 
 	return types.OperationResult{
@@ -54,7 +55,7 @@ func runTeamsHealth(ctx context.Context, input types.OperationInput) (types.Oper
 
 // runTeamsSample collects a sample of joined Teams for the authenticated user
 func runTeamsSample(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := helpers.ClientAndOAuthToken(input, TypeMicrosoftTeams)
+	client, token, err := auth.ClientAndOAuthToken(input, TypeMicrosoftTeams)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -68,8 +69,8 @@ func runTeamsSample(ctx context.Context, input types.OperationInput) (types.Oper
 
 	endpoint := "https://graph.microsoft.com/v1.0/me/joinedTeams?$top=5"
 
-	if err := helpers.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
-		return helpers.OperationFailure("Graph joinedTeams failed", err), err
+	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
+		return operations.OperationFailure("Graph joinedTeams failed", err), err
 	}
 
 	samples := make([]map[string]any, 0, len(resp.Value))

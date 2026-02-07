@@ -4,7 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -16,7 +17,7 @@ const (
 // azureOperations returns the Azure Entra ID operations supported by this provider.
 func azureOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		helpers.HealthOperation(azureEntraHealthOp, "Call Microsoft Graph /organization to verify tenant access.", ClientAzureEntraAPI, runAzureEntraHealth),
+		operations.HealthOperation(azureEntraHealthOp, "Call Microsoft Graph /organization to verify tenant access.", ClientAzureEntraAPI, runAzureEntraHealth),
 		{
 			Name:        azureEntraTenantOp,
 			Kind:        types.OperationKindScanSettings,
@@ -29,14 +30,14 @@ func azureOperations() []types.OperationDescriptor {
 
 // runAzureEntraHealth performs a basic tenant reachability check
 func runAzureEntraHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := helpers.ClientAndOAuthToken(input, TypeAzureEntraID)
+	client, token, err := auth.ClientAndOAuthToken(input, TypeAzureEntraID)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
 	org, err := fetchOrganization(ctx, token, client)
 	if err != nil {
-		return helpers.OperationFailure("Graph organization lookup failed", err), err
+		return operations.OperationFailure("Graph organization lookup failed", err), err
 	}
 
 	summary := fmt.Sprintf("Tenant %s reachable", org.DisplayName)
@@ -53,14 +54,14 @@ func runAzureEntraHealth(ctx context.Context, input types.OperationInput) (types
 
 // runAzureEntraTenantInspect collects tenant metadata from Microsoft Graph
 func runAzureEntraTenantInspect(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := helpers.ClientAndOAuthToken(input, TypeAzureEntraID)
+	client, token, err := auth.ClientAndOAuthToken(input, TypeAzureEntraID)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
 	org, err := fetchOrganization(ctx, token, client)
 	if err != nil {
-		return helpers.OperationFailure("Graph organization lookup failed", err), err
+		return operations.OperationFailure("Graph organization lookup failed", err), err
 	}
 
 	details := map[string]any{
@@ -88,10 +89,10 @@ type graphOrganizationResponse struct {
 }
 
 // fetchOrganization retrieves the first organization entry from Microsoft Graph.
-func fetchOrganization(ctx context.Context, token string, client *helpers.AuthenticatedClient) (graphOrganization, error) {
+func fetchOrganization(ctx context.Context, token string, client *auth.AuthenticatedClient) (graphOrganization, error) {
 	endpoint := "https://graph.microsoft.com/v1.0/organization?$select=id,displayName,tenantId,verifiedDomains&$top=1"
 	var resp graphOrganizationResponse
-	if err := helpers.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
+	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
 		return graphOrganization{}, err
 	}
 

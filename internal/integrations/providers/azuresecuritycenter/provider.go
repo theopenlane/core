@@ -9,7 +9,7 @@ import (
 	"golang.org/x/oauth2/clientcredentials"
 
 	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/providers"
@@ -36,8 +36,8 @@ func newProvider(spec config.ProviderSpec) *Provider {
 				SupportsClientPooling: true,
 				SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
 			},
-			helpers.SanitizeOperationDescriptors(TypeAzureSecurityCenter, azureSecurityOperations()),
-			helpers.SanitizeClientDescriptors(TypeAzureSecurityCenter, azureSecurityCenterClientDescriptors()),
+			operations.SanitizeOperationDescriptors(TypeAzureSecurityCenter, azureSecurityOperations()),
+			operations.SanitizeClientDescriptors(TypeAzureSecurityCenter, azureSecurityCenterClientDescriptors()),
 		),
 		tokenEndpoint: defaultAzureTokenEndpoint,
 	}
@@ -122,43 +122,34 @@ func cloneProviderData(data map[string]any) map[string]any {
 }
 
 type azureSecurityCenterMetadata struct {
-	TenantID       string
-	ClientID       string
-	ClientSecret   string
-	SubscriptionID string
-	ResourceGroup  string
-	WorkspaceID    string
-	Scope          string
+	TenantID       string `json:"tenantId"`
+	ClientID       string `json:"clientId"`
+	ClientSecret   string `json:"clientSecret"`
+	SubscriptionID string `json:"subscriptionId"`
+	ResourceGroup  string `json:"resourceGroup"`
+	WorkspaceID    string `json:"workspaceId"`
+	Scope          string `json:"scope"`
 }
 
 // azureSecurityCenterMetadataFromMap normalizes and validates provider metadata.
 func azureSecurityCenterMetadataFromMap(meta map[string]any) (azureSecurityCenterMetadata, error) {
-	tenantID, err := helpers.RequiredString(meta, "tenantId", ErrTenantIDMissing)
-	if err != nil {
-		return azureSecurityCenterMetadata{}, err
-	}
-	clientID, err := helpers.RequiredString(meta, "clientId", ErrClientIDMissing)
-	if err != nil {
-		return azureSecurityCenterMetadata{}, err
-	}
-	clientSecret, err := helpers.RequiredString(meta, "clientSecret", ErrClientSecretMissing)
-	if err != nil {
-		return azureSecurityCenterMetadata{}, err
-	}
-	subscriptionID, err := helpers.RequiredString(meta, "subscriptionId", ErrSubscriptionIDMissing)
-	if err != nil {
+	var decoded azureSecurityCenterMetadata
+	if err := operations.DecodeConfig(meta, &decoded); err != nil {
 		return azureSecurityCenterMetadata{}, err
 	}
 
-	return azureSecurityCenterMetadata{
-		TenantID:       tenantID,
-		ClientID:       clientID,
-		ClientSecret:   clientSecret,
-		SubscriptionID: subscriptionID,
-		ResourceGroup:  helpers.StringValue(meta, "resourceGroup"),
-		WorkspaceID:    helpers.StringValue(meta, "workspaceId"),
-		Scope:          helpers.StringValue(meta, "scope"),
-	}, nil
+	switch {
+	case decoded.TenantID == "":
+		return azureSecurityCenterMetadata{}, ErrTenantIDMissing
+	case decoded.ClientID == "":
+		return azureSecurityCenterMetadata{}, ErrClientIDMissing
+	case decoded.ClientSecret == "":
+		return azureSecurityCenterMetadata{}, ErrClientSecretMissing
+	case decoded.SubscriptionID == "":
+		return azureSecurityCenterMetadata{}, ErrSubscriptionIDMissing
+	}
+
+	return decoded, nil
 }
 
 // scopes returns the scopes to request for the client credentials flow.

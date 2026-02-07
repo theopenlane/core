@@ -1,0 +1,86 @@
+{
+  "name": "aws",
+  "displayName": "Amazon Web Services",
+  "category": "cloud",
+  "authType": "aws_sts",
+  "active": true,
+  "logoUrl": "",
+  "docsUrl": "https://docs.aws.amazon.com/STS/latest/APIReference/Welcome.html",
+  "awsSts": {
+    "sessionName": "openlane-aws",
+    "duration": "3600s",
+    "region": "us-east-1"
+  },
+  "labels": {
+    "vendor": "aws"
+  },
+  "credentialsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "roleArn",
+      "region"
+    ],
+    "properties": {
+      "alias": {
+        "type": "string",
+        "title": "Credential Alias",
+        "description": "Friendly identifier for this AWS integration."
+      },
+      "roleArn": {
+        "type": "string",
+        "title": "IAM Role ARN",
+        "description": "Role assumed to query AWS services."
+      },
+      "externalId": {
+        "type": "string",
+        "title": "External ID",
+        "description": "Optional external ID required by the delegated role."
+      },
+      "region": {
+        "type": "string",
+        "title": "Default Region",
+        "description": "AWS region used for service queries.",
+        "default": "us-east-1"
+      },
+      "sessionDuration": {
+        "type": "string",
+        "title": "Session Duration",
+        "description": "Optional session duration (Go duration string, e.g. 1h30m)."
+      },
+      "sessionName": {
+        "type": "string",
+        "title": "Session Name",
+        "description": "Optional session name override for STS AssumeRole calls."
+      },
+      "accessKeyId": {
+        "type": "string",
+        "title": "Access Key ID",
+        "description": "Optional static credentials if role assumption is not available."
+      },
+      "secretAccessKey": {
+        "type": "string",
+        "title": "Secret Access Key",
+        "description": "Optional static credentials if role assumption is not available."
+      },
+      "sessionToken": {
+        "type": "string",
+        "title": "Session Token",
+        "description": "Optional session token paired with the static credentials."
+      },
+      "accountId": {
+        "type": "string",
+        "title": "Account ID",
+        "description": "Optional AWS account identifier for reference."
+      },
+      "tags": {
+        "type": "object",
+        "title": "Default Tags",
+        "description": "Optional key/value map added to generated integrations for traceability.",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

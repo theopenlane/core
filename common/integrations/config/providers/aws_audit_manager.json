@@ -3,7 +3,7 @@
   "displayName": "AWS Audit & Compliance",
   "category": "compliance",
   "authType": "aws_sts",
-  "active": true,
+  "active": false,
   "logoUrl": "",
   "docsUrl": "https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html",
   "awsSts": {

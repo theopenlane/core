@@ -3,7 +3,7 @@ package okta
 import (
 	"context"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -14,12 +14,12 @@ const (
 
 // oktaClientDescriptors returns the client descriptors published by Okta.
 func oktaClientDescriptors() []types.ClientDescriptor {
-	return helpers.DefaultClientDescriptors(TypeOkta, ClientOktaAPI, "Okta REST API client", buildOktaClient)
+	return auth.DefaultClientDescriptors(TypeOkta, ClientOktaAPI, "Okta REST API client", buildOktaClient)
 }
 
 // buildOktaClient constructs an authenticated Okta API client.
 func buildOktaClient(_ context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
-	apiToken, err := helpers.APITokenFromPayload(payload, string(TypeOkta))
+	apiToken, err := auth.APITokenFromPayload(payload, string(TypeOkta))
 	if err != nil {
 		return nil, err
 	}
@@ -28,5 +28,5 @@ func buildOktaClient(_ context.Context, payload types.CredentialPayload, _ map[s
 		"Authorization": "SSWS " + apiToken,
 	}
 
-	return helpers.NewAuthenticatedClient("", headers), nil
+	return auth.NewAuthenticatedClient("", headers), nil
 }

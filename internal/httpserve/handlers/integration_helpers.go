@@ -15,7 +15,7 @@ var (
 	errIntegrationRegistryNotConfigured   = errors.New("integration registry not configured")
 	errIntegrationOperationsNotConfigured = errors.New("integration operations manager not configured")
 	errIntegrationEmitterNotConfigured    = errors.New("integration event emitter not configured")
-	errKeymakerNotConfigured              = errors.New("integration keymaker service not configured")
+	errActivationNotConfigured            = errors.New("integration activation service not configured")
 )
 
 // IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.
@@ -47,8 +47,6 @@ var (
 	ErrDeleteSecrets = fmt.Errorf("failed to delete integration secrets")
 	// ErrUnsupportedAuthType indicates the provider does not support the requested flow
 	ErrUnsupportedAuthType = fmt.Errorf("provider does not support this authentication flow")
-	// ErrProviderHealthCheckFailed indicates the provider health check failed
-	ErrProviderHealthCheckFailed = errors.New("provider health check failed")
 )
 
 // buildStatePayload encodes the OAuth state payload for cookies and callbacks.

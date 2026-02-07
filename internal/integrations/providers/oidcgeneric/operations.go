@@ -4,14 +4,15 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
 // oidcOperations handles oidc operations
 func oidcOperations(userInfoURL string) []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		helpers.HealthOperation(types.OperationName("health.default"), "Call the configured userinfo endpoint (when available) to validate the OIDC token.", ClientOIDCAPI, runOIDCHealth(userInfoURL)),
+		operations.HealthOperation(types.OperationName("health.default"), "Call the configured userinfo endpoint (when available) to validate the OIDC token.", ClientOIDCAPI, runOIDCHealth(userInfoURL)),
 		{
 			Name:        types.OperationName("claims.inspect"),
 			Kind:        types.OperationKindScanSettings,
@@ -24,7 +25,7 @@ func oidcOperations(userInfoURL string) []types.OperationDescriptor {
 // runOIDCHealth runs oidc health
 func runOIDCHealth(userInfoURL string) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-		client, token, err := helpers.ClientAndOAuthToken(input, TypeOIDCGeneric)
+		client, token, err := auth.ClientAndOAuthToken(input, TypeOIDCGeneric)
 		if err != nil {
 			return types.OperationResult{}, err
 		}
@@ -37,8 +38,8 @@ func runOIDCHealth(userInfoURL string) types.OperationFunc {
 		}
 
 		var resp map[string]any
-		if err := helpers.GetJSONWithClient(ctx, client, userInfoURL, token, nil, &resp); err != nil {
-			return helpers.OperationFailure("OIDC userinfo call failed", err), err
+		if err := auth.GetJSONWithClient(ctx, client, userInfoURL, token, nil, &resp); err != nil {
+			return operations.OperationFailure("OIDC userinfo call failed", err), err
 		}
 
 		summary := "OIDC userinfo call succeeded"

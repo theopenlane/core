@@ -9,8 +9,8 @@ import (
 
 	gh "github.com/google/go-github/v80/github"
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/common/integrations/helpers"
-	"github.com/theopenlane/core/common/integrations/opsconfig"
+	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -26,22 +26,22 @@ type githubInstallationRepositoriesResponse struct {
 }
 
 type githubVulnerabilityConfig struct {
-	opsconfig.RepositorySelector
-	opsconfig.Pagination
-	opsconfig.PayloadOptions
+	operations.RepositorySelector
+	operations.Pagination
+	operations.PayloadOptions
 
-	AlertTypes  []helpers.LowerString `mapstructure:"alert_types"`
-	MaxRepos    int                   `mapstructure:"max_repos"`
-	Visibility  helpers.LowerString   `mapstructure:"visibility"`
-	Affiliation helpers.LowerString   `mapstructure:"affiliation"`
-	AlertState  helpers.LowerString   `mapstructure:"alert_state"`
-	Severity    helpers.LowerString   `mapstructure:"severity"`
-	Ecosystem   helpers.LowerString   `mapstructure:"ecosystem"`
+	AlertTypes  []types.LowerString `json:"alert_types"`
+	MaxRepos    int                 `json:"max_repos"`
+	Visibility  types.LowerString   `json:"visibility"`
+	Affiliation types.LowerString   `json:"affiliation"`
+	AlertState  types.LowerString   `json:"alert_state"`
+	Severity    types.LowerString   `json:"severity"`
+	Ecosystem   types.LowerString   `json:"ecosystem"`
 }
 
 // runGitHubVulnerabilityOperation collects GitHub alert data and returns envelope payloads
 func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := helpers.ClientAndOAuthToken(input, input.Provider)
+	client, token, err := auth.ClientAndOAuthToken(input, input.Provider)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -57,7 +57,7 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 	if len(repoNames) == 0 {
 		repos, err := listGitHubReposForProvider(ctx, client, token, input.Provider, config)
 		if err != nil {
-			return helpers.OperationFailure("GitHub repository listing failed", err), err
+			return operations.OperationFailure("GitHub repository listing failed", err), err
 		}
 		repoNames = repoNamesFromResponses(repos, string(config.Owner))
 	}
@@ -141,7 +141,7 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		"alerts_total":         totalAlerts,
 		"alert_type_counts":    alertTypeCounts,
 	}
-	details = helpers.AddPayloadIf(details, config.IncludePayloads, "alerts", envelopes)
+	details = operations.AddPayloadIf(details, config.IncludePayloads, "alerts", envelopes)
 
 	return types.OperationResult{
 		Status:  types.OperationStatusOK,
@@ -151,7 +151,7 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 }
 
 // listGitHubReposForProvider enumerates repositories using either OAuth or app installation tokens
-func listGitHubReposForProvider(ctx context.Context, client *helpers.AuthenticatedClient, token string, provider types.ProviderType, config githubVulnerabilityConfig) ([]githubRepoResponse, error) {
+func listGitHubReposForProvider(ctx context.Context, client *auth.AuthenticatedClient, token string, provider types.ProviderType, config githubVulnerabilityConfig) ([]githubRepoResponse, error) {
 	if provider == TypeGitHubApp {
 		return listGitHubInstallationRepos(ctx, client, token, config)
 	}
@@ -160,7 +160,7 @@ func listGitHubReposForProvider(ctx context.Context, client *helpers.Authenticat
 }
 
 // listGitHubInstallationRepos lists repositories visible to a GitHub App installation
-func listGitHubInstallationRepos(ctx context.Context, client *helpers.AuthenticatedClient, token string, config githubVulnerabilityConfig) ([]githubRepoResponse, error) {
+func listGitHubInstallationRepos(ctx context.Context, client *auth.AuthenticatedClient, token string, config githubVulnerabilityConfig) ([]githubRepoResponse, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
 	out := make([]githubRepoResponse, 0)
 	err := collectGitHubPaged(ctx, perPage, func(page, perPage int) ([]githubRepoResponse, error) {
@@ -182,7 +182,7 @@ func listGitHubInstallationRepos(ctx context.Context, client *helpers.Authentica
 }
 
 // listGitHubRepos lists repositories accessible to the OAuth token
-func listGitHubRepos(ctx context.Context, client *helpers.AuthenticatedClient, token string, config githubVulnerabilityConfig) ([]githubRepoResponse, error) {
+func listGitHubRepos(ctx context.Context, client *auth.AuthenticatedClient, token string, config githubVulnerabilityConfig) ([]githubRepoResponse, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
 	out := make([]githubRepoResponse, 0)
 	err := collectGitHubPaged(ctx, perPage, func(page, perPage int) ([]githubRepoResponse, error) {
@@ -212,7 +212,7 @@ func listGitHubRepos(ctx context.Context, client *helpers.AuthenticatedClient, t
 }
 
 // listDependabotAlerts fetches Dependabot alerts for a repository
-func listDependabotAlerts(ctx context.Context, client *helpers.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
+func listDependabotAlerts(ctx context.Context, client *auth.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
 	path := fmt.Sprintf("repos/%s/dependabot/alerts", repo)
 	return listGitHubAlerts[*gh.DependabotAlert](ctx, client, token, path, config, func(params url.Values) {
 		if severity := string(config.Severity); severity != "" {
@@ -225,18 +225,18 @@ func listDependabotAlerts(ctx context.Context, client *helpers.AuthenticatedClie
 }
 
 // listCodeScanningAlerts fetches code scanning alerts for a repository
-func listCodeScanningAlerts(ctx context.Context, client *helpers.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
+func listCodeScanningAlerts(ctx context.Context, client *auth.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
 	path := fmt.Sprintf("repos/%s/code-scanning/alerts", repo)
 	return listGitHubAlerts[*gh.Alert](ctx, client, token, path, config, nil)
 }
 
 // listSecretScanningAlerts fetches secret scanning alerts for a repository
-func listSecretScanningAlerts(ctx context.Context, client *helpers.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
+func listSecretScanningAlerts(ctx context.Context, client *auth.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
 	path := fmt.Sprintf("repos/%s/secret-scanning/alerts", repo)
 	return listGitHubAlerts[*gh.SecretScanningAlert](ctx, client, token, path, config, nil)
 }
 
-func listGitHubAlerts[T any](ctx context.Context, client *helpers.AuthenticatedClient, token, path string, config githubVulnerabilityConfig, decorate func(url.Values)) ([]json.RawMessage, error) {
+func listGitHubAlerts[T any](ctx context.Context, client *auth.AuthenticatedClient, token, path string, config githubVulnerabilityConfig, decorate func(url.Values)) ([]json.RawMessage, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
 	state := resolveAlertState(string(config.AlertState))
 	out := make([]json.RawMessage, 0)
@@ -352,7 +352,7 @@ func repoNamesFromResponses(repos []githubRepoResponse, ownerFilter string) []st
 }
 
 // alertTypesFromConfig normalizes and defaults the requested alert types
-func alertTypesFromConfig(values []helpers.LowerString) []string {
+func alertTypesFromConfig(values []types.LowerString) []string {
 	if len(values) == 0 {
 		return []string{githubAlertTypeDependabot, githubAlertTypeCodeScanning, githubAlertTypeSecretScanning}
 	}
@@ -382,7 +382,7 @@ func alertTypesFromConfig(values []helpers.LowerString) []string {
 // decodeGitHubVulnerabilityConfig decodes operation config into a typed struct
 func decodeGitHubVulnerabilityConfig(config map[string]any) (githubVulnerabilityConfig, error) {
 	var decoded githubVulnerabilityConfig
-	if err := helpers.DecodeConfig(config, &decoded); err != nil {
+	if err := operations.DecodeConfig(config, &decoded); err != nil {
 		return decoded, err
 	}
 

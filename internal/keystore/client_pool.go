@@ -360,6 +360,7 @@ func credentialVersion(payload types.CredentialPayload) string {
 	builder.WriteStrings(
 		payload.Data.AccessKeyID,
 		payload.Data.SecretAccessKey,
+		payload.Data.SessionToken,
 		payload.Data.ProjectID,
 		payload.Data.AccountID,
 		payload.Data.APIToken,
