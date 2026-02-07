@@ -1,8 +1,6 @@
 package cloudflare
 
 import (
-	"context"
-
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/types"
 )
@@ -14,19 +12,5 @@ const (
 
 // cloudflareClientDescriptors returns the client descriptors published by Cloudflare.
 func cloudflareClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeCloudflare, ClientCloudflareAPI, "Cloudflare REST API client", buildCloudflareClient)
-}
-
-// buildCloudflareClient constructs an authenticated Cloudflare API client.
-func buildCloudflareClient(_ context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
-	token, err := auth.APITokenFromPayload(payload, string(TypeCloudflare))
-	if err != nil {
-		return nil, err
-	}
-
-	headers := map[string]string{
-		"Content-Type": "application/json",
-	}
-
-	return auth.NewAuthenticatedClient(token, headers), nil
+	return auth.DefaultClientDescriptors(TypeCloudflare, ClientCloudflareAPI, "Cloudflare REST API client", auth.APITokenClientBuilder(map[string]string{"Content-Type": "application/json"}))
 }

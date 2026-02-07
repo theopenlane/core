@@ -7,15 +7,15 @@ import (
 	openapi "github.com/theopenlane/core/common/openapi"
 )
 
-// OperationTemplate captures a stored configuration and optional override keys.
+// OperationTemplate captures a stored configuration and optional override keys
 type OperationTemplate struct {
-	// Config is the base configuration for the operation.
+	// Config is the base configuration for the operation
 	Config map[string]any
-	// AllowedOverrides contains keys that may be overridden at runtime.
+	// AllowedOverrides contains keys that may be overridden at runtime
 	AllowedOverrides map[string]struct{}
 }
 
-// OperationTemplateFor loads an operation template from integration config.
+// OperationTemplateFor loads an operation template from integration config
 func OperationTemplateFor(config *openapi.IntegrationConfig, operation string) (OperationTemplate, bool) {
 	if config == nil || len(config.OperationTemplates) == 0 {
 		return OperationTemplate{}, false
@@ -34,7 +34,7 @@ func OperationTemplateFor(config *openapi.IntegrationConfig, operation string) (
 	return operationTemplateFromConfig(raw)
 }
 
-// ApplyOperationTemplate merges a template with optional overrides.
+// ApplyOperationTemplate merges a template with optional overrides
 func ApplyOperationTemplate(template OperationTemplate, overrides map[string]any) (map[string]any, error) {
 	result := commonhelpers.DeepCloneMap(template.Config)
 
@@ -59,7 +59,7 @@ func ApplyOperationTemplate(template OperationTemplate, overrides map[string]any
 	return result, nil
 }
 
-// ResolveOperationConfig merges stored templates with optional overrides.
+// ResolveOperationConfig merges stored templates with optional overrides
 func ResolveOperationConfig(config *openapi.IntegrationConfig, operation string, overrides map[string]any) (map[string]any, error) {
 	if template, ok := OperationTemplateFor(config, operation); ok {
 		return ApplyOperationTemplate(template, overrides)

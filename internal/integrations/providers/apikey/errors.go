@@ -11,6 +11,4 @@ var (
 	ErrAuthTypeMismatch = errors.New("apikey: auth type mismatch")
 	// ErrBeginAuthNotSupported indicates BeginAuth is not supported for API key providers
 	ErrBeginAuthNotSupported = errors.New("apikey: BeginAuth is not supported; configure credentials via metadata")
-	// ErrProviderNotInitialized indicates the provider instance is nil
-	ErrProviderNotInitialized = errors.New("apikey: provider not initialized")
 )

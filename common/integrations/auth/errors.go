@@ -3,8 +3,6 @@ package auth
 import "errors"
 
 var (
-	// ErrAuthenticatedClientNil indicates the authenticated client is nil.
-	ErrAuthenticatedClientNil = errors.New("auth: authenticated client is nil")
 	// ErrOAuthTokenMissing indicates the OAuth token is not present in the credential payload.
 	ErrOAuthTokenMissing = errors.New("auth: oauth token missing")
 	// ErrAccessTokenEmpty indicates the access token field is empty.

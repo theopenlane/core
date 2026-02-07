@@ -15,8 +15,6 @@ var (
 	ErrRawBytesProviderRead = errors.New("config: rawBytesProvider does not support Read")
 	// ErrSchemaVersionUnsupported indicates a provider spec declares an unknown schema version.
 	ErrSchemaVersionUnsupported = errors.New("integrations: schema version unsupported")
-	// ErrLoaderRequired indicates a loader dependency was omitted.
-	ErrLoaderRequired = errors.New("integrations: loader required")
 )
 
 // LoaderPathError captures loader failures tied to a specific path.

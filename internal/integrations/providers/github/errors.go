@@ -11,8 +11,6 @@ var (
 	ErrAuthTypeMismatch = errors.New("github: auth type mismatch")
 	// ErrBeginAuthNotSupported indicates BeginAuth is not supported for this provider
 	ErrBeginAuthNotSupported = errors.New("github: BeginAuth is not supported; configure credentials via metadata")
-	// ErrProviderNotInitialized indicates the provider instance is nil
-	ErrProviderNotInitialized = errors.New("github: provider not initialized")
 	// ErrOAuthTokenMissing indicates the OAuth token is not present in the credential payload
 	ErrOAuthTokenMissing = errors.New("github: oauth token missing")
 	// ErrAccessTokenEmpty indicates the access token field is empty

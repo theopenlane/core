@@ -26,7 +26,7 @@ var defaultHTTPRequester = httpsling.MustNew(
 )
 
 // OAuthTokenFromPayload extracts a usable access token from the credential payload
-func OAuthTokenFromPayload(payload types.CredentialPayload, provider string) (string, error) {
+func OAuthTokenFromPayload(payload types.CredentialPayload) (string, error) {
 	tokenOpt := payload.OAuthTokenOption()
 	if !tokenOpt.IsPresent() {
 		return "", ErrOAuthTokenMissing
@@ -41,7 +41,7 @@ func OAuthTokenFromPayload(payload types.CredentialPayload, provider string) (st
 }
 
 // APITokenFromPayload extracts a raw API token from the credential payload.
-func APITokenFromPayload(payload types.CredentialPayload, provider string) (string, error) {
+func APITokenFromPayload(payload types.CredentialPayload) (string, error) {
 	token := strings.TrimSpace(payload.Data.APIToken)
 	if token == "" {
 		return "", ErrAPITokenMissing
@@ -146,9 +146,6 @@ func RandomState(bytes int) (string, error) {
 
 // httpRequestError constructs an HTTPRequestError from a non-2xx HTTP response
 func httpRequestError(resp *http.Response, url string) error {
-	if resp == nil {
-		return ErrHTTPRequestFailed
-	}
 	body := ""
 	if resp.Body != nil {
 		data, _ := io.ReadAll(io.LimitReader(resp.Body, maxHTTPErrorBody))

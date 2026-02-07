@@ -3,9 +3,9 @@ package auth
 import "github.com/theopenlane/core/common/integrations/types"
 
 // ClientAndOAuthToken returns the optional authenticated client and OAuth token.
-func ClientAndOAuthToken(input types.OperationInput, provider types.ProviderType) (*AuthenticatedClient, string, error) {
+func ClientAndOAuthToken(input types.OperationInput) (*AuthenticatedClient, string, error) {
 	client := AuthenticatedClientFromAny(input.Client)
-	token, err := OAuthTokenFromPayload(input.Credential, string(provider))
+	token, err := OAuthTokenFromPayload(input.Credential)
 	if err != nil {
 		return client, "", err
 	}
@@ -14,9 +14,9 @@ func ClientAndOAuthToken(input types.OperationInput, provider types.ProviderType
 }
 
 // ClientAndAPIToken returns the optional authenticated client and API token.
-func ClientAndAPIToken(input types.OperationInput, provider types.ProviderType) (*AuthenticatedClient, string, error) {
+func ClientAndAPIToken(input types.OperationInput) (*AuthenticatedClient, string, error) {
 	client := AuthenticatedClientFromAny(input.Client)
-	token, err := APITokenFromPayload(input.Credential, string(provider))
+	token, err := APITokenFromPayload(input.Credential)
 	if err != nil {
 		return client, "", err
 	}

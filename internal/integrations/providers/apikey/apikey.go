@@ -93,10 +93,6 @@ func (p *Provider) BeginAuth(context.Context, types.AuthContext) (types.AuthSess
 
 // Mint materializes a stored API key configuration into a credential payload.
 func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	if p == nil {
-		return types.CredentialPayload{}, ErrProviderNotInitialized
-	}
-
 	providerData := subject.Credential.Data.ProviderData
 	if len(providerData) == 0 {
 		if token := subject.Credential.Data.APIToken; token != "" {

@@ -21,7 +21,7 @@ func cloudflareOperations() []types.OperationDescriptor {
 
 // runCloudflareHealth validates Cloudflare credentials via token verification
 func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndAPIToken(input, TypeCloudflare)
+	client, token, err := auth.ClientAndAPIToken(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

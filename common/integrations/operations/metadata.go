@@ -6,19 +6,21 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
-// SanitizeOperationDescriptors filters and cleans a slice of OperationDescriptor
-func SanitizeOperationDescriptors(provider types.ProviderType, descriptors []types.OperationDescriptor) []types.OperationDescriptor {
+// sanitizeDescriptors is a generic helper that filters and assigns provider type to descriptors
+func sanitizeDescriptors[T any](provider types.ProviderType, descriptors []T, isValid func(T) bool, getProvider func(T) types.ProviderType, setProvider func(*T, types.ProviderType)) []T {
 	if len(descriptors) == 0 {
 		return nil
 	}
 
-	out := lo.FilterMap(descriptors, func(descriptor types.OperationDescriptor, _ int) (types.OperationDescriptor, bool) {
-		if descriptor.Run == nil || descriptor.Name == "" {
-			return types.OperationDescriptor{}, false
+	out := lo.FilterMap(descriptors, func(descriptor T, _ int) (T, bool) {
+		if !isValid(descriptor) {
+			var zero T
+			return zero, false
 		}
-		if descriptor.Provider == types.ProviderUnknown {
-			descriptor.Provider = provider
+		if getProvider(descriptor) == types.ProviderUnknown {
+			setProvider(&descriptor, provider)
 		}
+
 		return descriptor, true
 	})
 	if len(out) == 0 {
@@ -28,24 +30,24 @@ func SanitizeOperationDescriptors(provider types.ProviderType, descriptors []typ
 	return out
 }
 
+// SanitizeOperationDescriptors filters and cleans a slice of OperationDescriptor
+func SanitizeOperationDescriptors(provider types.ProviderType, descriptors []types.OperationDescriptor) []types.OperationDescriptor {
+	return sanitizeDescriptors(
+		provider,
+		descriptors,
+		func(d types.OperationDescriptor) bool { return d.Run != nil && d.Name != "" },
+		func(d types.OperationDescriptor) types.ProviderType { return d.Provider },
+		func(d *types.OperationDescriptor, p types.ProviderType) { d.Provider = p },
+	)
+}
+
 // SanitizeClientDescriptors filters out invalid client descriptors and assigns provider type
 func SanitizeClientDescriptors(provider types.ProviderType, descriptors []types.ClientDescriptor) []types.ClientDescriptor {
-	if len(descriptors) == 0 {
-		return nil
-	}
-
-	out := lo.FilterMap(descriptors, func(descriptor types.ClientDescriptor, _ int) (types.ClientDescriptor, bool) {
-		if descriptor.Build == nil {
-			return types.ClientDescriptor{}, false
-		}
-		if descriptor.Provider == types.ProviderUnknown {
-			descriptor.Provider = provider
-		}
-		return descriptor, true
-	})
-	if len(out) == 0 {
-		return nil
-	}
-
-	return out
+	return sanitizeDescriptors(
+		provider,
+		descriptors,
+		func(d types.ClientDescriptor) bool { return d.Build != nil },
+		func(d types.ClientDescriptor) types.ProviderType { return d.Provider },
+		func(d *types.ClientDescriptor, p types.ProviderType) { d.Provider = p },
+	)
 }

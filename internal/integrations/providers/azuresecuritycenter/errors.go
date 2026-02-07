@@ -7,8 +7,6 @@ var (
 	ErrAuthTypeMismatch = errors.New("azuresecuritycenter: auth type mismatch")
 	// ErrBeginAuthNotSupported indicates BeginAuth is not supported for this provider.
 	ErrBeginAuthNotSupported = errors.New("azuresecuritycenter: BeginAuth is not supported; configure credentials via metadata")
-	// ErrProviderNotInitialized indicates the provider has not been initialized.
-	ErrProviderNotInitialized = errors.New("azuresecuritycenter: provider not initialized")
 	// ErrProviderMetadataRequired indicates required provider metadata is missing.
 	ErrProviderMetadataRequired = errors.New("azuresecuritycenter: provider metadata required")
 	// ErrTenantIDMissing indicates the tenant ID is missing.

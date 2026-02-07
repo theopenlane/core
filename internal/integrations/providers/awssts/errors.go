@@ -13,6 +13,4 @@ var (
 	ErrAuthTypeMismatch = errors.New("awssts: auth type mismatch")
 	// ErrBeginAuthNotSupported indicates BeginAuth is not supported for AWS STS providers
 	ErrBeginAuthNotSupported = errors.New("awssts: BeginAuth is not supported; configure credentials via metadata")
-	// ErrProviderNotInitialized indicates the provider instance is nil
-	ErrProviderNotInitialized = errors.New("awssts: provider not initialized")
 )

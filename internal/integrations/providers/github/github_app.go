@@ -61,10 +61,6 @@ func (p *AppProvider) BeginAuth(context.Context, types.AuthContext) (types.AuthS
 
 // Mint exchanges the stored GitHub App credentials for a short-lived installation token.
 func (p *AppProvider) Mint(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	if p == nil {
-		return types.CredentialPayload{}, ErrProviderNotInitialized
-	}
-
 	state := subject.Credential.ProviderState
 	if state == nil || state.GitHub == nil {
 		return types.CredentialPayload{}, ErrProviderMetadataRequired

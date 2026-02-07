@@ -64,6 +64,15 @@ type VulnerabilityIngestResult struct {
 	Errors  []string
 }
 
+type vulnerabilityIngestContext struct {
+	mapper               *MappingEvaluator
+	schema               integrationgenerated.IntegrationMappingSchema
+	overrideIndex        mappingOverrideIndex
+	integrationConfigMap map[string]any
+	providerStateMap     map[string]any
+	storeRaw             bool
+}
+
 // SupportsVulnerabilityIngest reports whether default or configured mappings exist
 func SupportsVulnerabilityIngest(provider integrationtypes.ProviderType, config openapi.IntegrationConfig) bool {
 	if supportsDefaultMapping(provider, mappingSchemaVulnerability) {
@@ -71,6 +80,88 @@ func SupportsVulnerabilityIngest(provider integrationtypes.ProviderType, config 
 	}
 
 	return newMappingOverrideIndex(config).HasAny(provider, mappingSchemaVulnerability)
+}
+
+// newVulnerabilityIngestContext prepares shared state for ingest runs
+func newVulnerabilityIngestContext(req VulnerabilityIngestRequest) (vulnerabilityIngestContext, error) {
+	mapper, err := NewMappingEvaluator()
+	if err != nil {
+		return vulnerabilityIngestContext{}, err
+	}
+
+	schema, ok := integrationgenerated.IntegrationMappingSchemas[mappingSchemaVulnerability]
+	if !ok {
+		return vulnerabilityIngestContext{}, ErrMappingSchemaNotFound
+	}
+
+	integrationConfigMap, err := toMap(req.IntegrationConfig)
+	if err != nil {
+		return vulnerabilityIngestContext{}, err
+	}
+	providerStateMap, err := toMap(req.ProviderState)
+	if err != nil {
+		return vulnerabilityIngestContext{}, err
+	}
+
+	storeRaw := true
+	if req.IntegrationConfig.RetentionPolicy != nil {
+		storeRaw = req.IntegrationConfig.RetentionPolicy.StoreRawPayload
+	}
+
+	return vulnerabilityIngestContext{
+		mapper:               mapper,
+		schema:               schema,
+		overrideIndex:        newMappingOverrideIndex(req.IntegrationConfig),
+		integrationConfigMap: integrationConfigMap,
+		providerStateMap:     providerStateMap,
+		storeRaw:             storeRaw,
+	}, nil
+}
+
+// mapEnvelopeToVulnerability applies mapping rules to a single alert envelope
+func (c *vulnerabilityIngestContext) mapEnvelopeToVulnerability(ctx context.Context, req VulnerabilityIngestRequest, envelope integrationtypes.AlertEnvelope) (map[string]any, bool, error) {
+	payloadMap, err := decodeAlertPayload(envelope.Payload)
+	if err != nil {
+		return nil, false, err
+	}
+
+	spec, ok := resolveMappingSpecWithIndex(c.overrideIndex, req.Provider, mappingSchemaVulnerability, envelope.AlertType)
+	if !ok {
+		return nil, false, ErrMappingNotFound
+	}
+
+	vars := MappingVars{
+		Payload:           payloadMap,
+		Resource:          envelope.Resource,
+		AlertType:         envelope.AlertType,
+		Provider:          req.Provider,
+		Operation:         req.Operation,
+		OrgID:             req.OrgID,
+		IntegrationID:     req.IntegrationID,
+		Config:            req.OperationConfig,
+		IntegrationConfig: c.integrationConfigMap,
+		ProviderState:     c.providerStateMap,
+	}.Map()
+
+	allowed, err := c.mapper.EvaluateFilter(ctx, spec.FilterExpr, vars)
+	if err != nil {
+		return nil, false, err
+	}
+	if !allowed {
+		return nil, false, nil
+	}
+
+	mapped, err := c.mapper.EvaluateMap(ctx, spec.MapExpr, vars)
+	if err != nil {
+		return nil, false, err
+	}
+
+	mapped = filterMappingOutput(c.schema, mapped)
+	if err := validateMappingOutput(c.schema, mapped); err != nil {
+		return nil, false, err
+	}
+
+	return mapped, true, nil
 }
 
 // IngestVulnerabilityAlerts maps provider alerts into vulnerability inputs and persists them
@@ -81,63 +172,15 @@ func IngestVulnerabilityAlerts(ctx context.Context, req VulnerabilityIngestReque
 		return result, ErrDBClientRequired
 	}
 
-	mapper, err := NewMappingEvaluator()
+	ingestCtx, err := newVulnerabilityIngestContext(req)
 	if err != nil {
 		return result, err
-	}
-
-	schema, ok := integrationgenerated.IntegrationMappingSchemas[mappingSchemaVulnerability]
-	if !ok {
-		return result, ErrMappingSchemaNotFound
-	}
-
-	integrationConfigMap, err := toMap(req.IntegrationConfig)
-	if err != nil {
-		return result, err
-	}
-	providerStateMap, err := toMap(req.ProviderState)
-	if err != nil {
-		return result, err
-	}
-
-	overrideIndex := newMappingOverrideIndex(req.IntegrationConfig)
-
-	storeRaw := true
-	if req.IntegrationConfig.RetentionPolicy != nil {
-		storeRaw = req.IntegrationConfig.RetentionPolicy.StoreRawPayload
 	}
 
 	for _, envelope := range req.Envelopes {
 		result.Summary.Total++
 
-		payloadMap, err := decodeAlertPayload(envelope.Payload)
-		if err != nil {
-			result.Summary.Failed++
-			result.Errors = append(result.Errors, err.Error())
-			continue
-		}
-
-		spec, ok := resolveMappingSpecWithIndex(overrideIndex, req.Provider, mappingSchemaVulnerability, envelope.AlertType)
-		if !ok {
-			result.Summary.Failed++
-			result.Errors = append(result.Errors, ErrMappingNotFound.Error())
-			continue
-		}
-
-		vars := MappingVars{
-			Payload:           payloadMap,
-			Resource:          envelope.Resource,
-			AlertType:         envelope.AlertType,
-			Provider:          req.Provider,
-			Operation:         req.Operation,
-			OrgID:             req.OrgID,
-			IntegrationID:     req.IntegrationID,
-			Config:            req.OperationConfig,
-			IntegrationConfig: integrationConfigMap,
-			ProviderState:     providerStateMap,
-		}.Map()
-
-		allowed, err := mapper.EvaluateFilter(ctx, spec.FilterExpr, vars)
+		mapped, allowed, err := ingestCtx.mapEnvelopeToVulnerability(ctx, req, envelope)
 		if err != nil {
 			result.Summary.Failed++
 			result.Errors = append(result.Errors, err.Error())
@@ -148,21 +191,7 @@ func IngestVulnerabilityAlerts(ctx context.Context, req VulnerabilityIngestReque
 			continue
 		}
 
-		mapped, err := mapper.EvaluateMap(ctx, spec.MapExpr, vars)
-		if err != nil {
-			result.Summary.Failed++
-			result.Errors = append(result.Errors, err.Error())
-			continue
-		}
-
-		mapped = filterMappingOutput(schema, mapped)
-		if err := validateMappingOutput(schema, mapped); err != nil {
-			result.Summary.Failed++
-			result.Errors = append(result.Errors, err.Error())
-			continue
-		}
-
-		if !storeRaw {
+		if !ingestCtx.storeRaw {
 			delete(mapped, integrationgenerated.IntegrationMappingVulnerabilityRawPayload)
 		}
 

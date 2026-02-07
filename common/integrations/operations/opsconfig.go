@@ -2,7 +2,7 @@ package operations
 
 import "github.com/theopenlane/core/common/integrations/types"
 
-// Pagination captures common paging controls.
+// Pagination captures common paging controls
 type Pagination struct {
 	// PerPage sets the number of items to request per page
 	PerPage int `json:"per_page"`
@@ -12,7 +12,7 @@ type Pagination struct {
 	Page int `json:"page"`
 }
 
-// EffectivePageSize returns the configured page size or the provided default.
+// EffectivePageSize returns the configured page size or the provided default
 func (p Pagination) EffectivePageSize(defaultValue int) int {
 	if p.PerPage > 0 {
 		return p.PerPage
@@ -23,7 +23,7 @@ func (p Pagination) EffectivePageSize(defaultValue int) int {
 	return defaultValue
 }
 
-// PayloadOptions captures optional payload controls.
+// PayloadOptions captures optional payload controls
 type PayloadOptions struct {
 	// IncludePayloads controls whether raw payloads are returned
 	IncludePayloads bool `json:"include_payloads"`
@@ -39,7 +39,7 @@ func EnsureIncludePayloads(config map[string]any) map[string]any {
 	return config
 }
 
-// RepositorySelector captures repository selection settings.
+// RepositorySelector captures repository selection settings
 type RepositorySelector struct {
 	// Repositories lists repository names to include
 	Repositories []types.TrimmedString `json:"repositories"`
@@ -51,7 +51,7 @@ type RepositorySelector struct {
 	Owner types.TrimmedString `json:"owner"`
 }
 
-// List returns a merged, de-duplicated repository list.
+// List returns a merged, de-duplicated repository list
 func (r RepositorySelector) List() []string {
 	out := make([]string, 0, len(r.Repositories)+len(r.Repos)+1)
 	seen := map[string]struct{}{}

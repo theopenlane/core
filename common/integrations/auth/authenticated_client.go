@@ -25,10 +25,6 @@ func NewAuthenticatedClient(bearerToken string, headers map[string]string) *Auth
 
 // GetJSON issues a GET request using the stored credentials and decodes the JSON response
 func (c *AuthenticatedClient) GetJSON(ctx context.Context, endpoint string, out any) error {
-	if c == nil {
-		return ErrAuthenticatedClientNil
-	}
-
 	return HTTPGetJSON(ctx, nil, endpoint, c.BearerToken, c.Headers, out)
 }
 

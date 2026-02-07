@@ -43,7 +43,7 @@ func WithClientDescriptors(descriptors []types.ClientDescriptor) ProviderOption 
 }
 
 // New constructs a Provider from the supplied spec
-func New(_ context.Context, spec config.ProviderSpec, options ...ProviderOption) (*Provider, error) {
+func New(spec config.ProviderSpec, options ...ProviderOption) (*Provider, error) {
 	if spec.OAuth == nil {
 		return nil, providers.ErrSpecOAuthRequired
 	}
