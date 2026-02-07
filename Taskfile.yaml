@@ -251,7 +251,15 @@ tasks:
   go:lint:ci:no-api:
     desc: runs golangci-lint on all packages except graphapi and handlers for CI
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 $(go list ./... | grep -v /internal/graphapi | grep -v /internal/httpserve/handlers | grep -v /internal/ent/generated | grep -v /internal/ent/historygenerated | sed 's|github.com/theopenlane/core[^/]*/||' | sed 's|^|./|')
+      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 $(
+          go list ./... \
+          | grep -v /internal/graphapi \
+          | grep -v /internal/httpserve/handlers \
+          | grep -v generated \
+          | grep -v '^github.com/theopenlane/core$' \
+          | sed 's|github.com/theopenlane/core[^/]*/||' \
+          | sed 's|^|./|'
+        )
 
   go:test:
     desc: runs and outputs results of created go tests
