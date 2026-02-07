@@ -24,7 +24,7 @@ var allowedTriggerOperations = map[string]struct{}{
 }
 
 // validateWorkflowDefinitionInput validates the workflow definition document against schema constraints
-func validateWorkflowDefinitionInput(ctx context.Context, schemaType string, doc *models.WorkflowDefinitionDocument, celCfg *workflows.Config) error {
+func validateWorkflowDefinitionInput(schemaType string, doc *models.WorkflowDefinitionDocument, celCfg *workflows.Config) error {
 	if doc == nil {
 		return ErrDefinitionRequired
 	}
@@ -367,6 +367,9 @@ func validateApprovalSubmissionMode(mode enums.WorkflowApprovalSubmissionMode) e
 
 // validateApprovalTiming validates the approval timing if specified
 func validateApprovalTiming(timing enums.WorkflowApprovalTiming) error {
+	if timing == "" {
+		return nil
+	}
 	if enums.ToWorkflowApprovalTiming(timing.String()) == nil {
 		return fmt.Errorf("%w: %q", ErrApprovalTimingInvalid, timing)
 	}

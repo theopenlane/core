@@ -187,30 +187,6 @@ func routeMutationToProposals(ctx context.Context, client *generated.Client, m u
 	return originalEntity, nil
 }
 
-// validateWorkflowEligibleFields checks that all changed fields are eligible for workflow processing
-func validateWorkflowEligibleFields(schemaType string, changedFields []string) error {
-	objectType := enums.ToWorkflowObjectType(schemaType)
-	if objectType == nil {
-		return ErrWorkflowUnknownSchemaType
-	}
-
-	eligible := workflows.EligibleWorkflowFields(*objectType)
-	if len(eligible) == 0 {
-		return ErrWorkflowNoEligibleFields
-	}
-
-	for _, field := range changedFields {
-		if _, ok := workflowApprovalIgnoredFields[field]; ok {
-			continue
-		}
-		if _, ok := eligible[field]; !ok {
-			return fmt.Errorf("%w: %s", ErrWorkflowIneligibleField, field)
-		}
-	}
-
-	return nil
-}
-
 var workflowApprovalIgnoredFields = map[string]struct{}{
 	"created_at": {},
 	"created_by": {},
