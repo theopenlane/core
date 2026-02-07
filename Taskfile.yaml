@@ -251,7 +251,8 @@ tasks:
   go:lint:ci:no-api:
     desc: runs golangci-lint on all packages except graphapi and handlers for CI
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 $(
+      - |
+        golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 $(
           go list ./... \
           | grep -v /internal/graphapi \
           | grep -v /internal/httpserve/handlers \
