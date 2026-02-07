@@ -3,7 +3,8 @@ package cloudflare
 import (
 	"context"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -14,13 +15,13 @@ const (
 // cloudflareOperations handles cloudflare operations
 func cloudflareOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		helpers.HealthOperation(cloudflareHealthOp, "Verify Cloudflare API token via /user/tokens/verify.", ClientCloudflareAPI, runCloudflareHealth),
+		operations.HealthOperation(cloudflareHealthOp, "Verify Cloudflare API token via /user/tokens/verify.", ClientCloudflareAPI, runCloudflareHealth),
 	}
 }
 
 // runCloudflareHealth runs cloudflare health
 func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := helpers.ClientAndAPIToken(input, TypeCloudflare)
+	client, token, err := auth.ClientAndAPIToken(input, TypeCloudflare)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -40,8 +41,8 @@ func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types
 		"Content-Type": "application/json",
 	}
 	endpoint := "https://api.cloudflare.com/client/v4/user/tokens/verify"
-	if err := helpers.GetJSONWithClient(ctx, client, endpoint, token, headers, &resp); err != nil {
-		return helpers.OperationFailure("Cloudflare token verification failed", err), err
+	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, headers, &resp); err != nil {
+		return operations.OperationFailure("Cloudflare token verification failed", err), err
 	}
 
 	if !resp.Success {

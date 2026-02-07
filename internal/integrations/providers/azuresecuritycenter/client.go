@@ -3,7 +3,7 @@ package azuresecuritycenter
 import (
 	"context"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -14,15 +14,15 @@ const (
 
 // azureSecurityCenterClientDescriptors returns the client descriptors published by Defender for Cloud.
 func azureSecurityCenterClientDescriptors() []types.ClientDescriptor {
-	return helpers.DefaultClientDescriptors(TypeAzureSecurityCenter, ClientAzureSecurityCenterAPI, "Azure management API client for Defender for Cloud", buildAzureSecurityCenterClient)
+	return auth.DefaultClientDescriptors(TypeAzureSecurityCenter, ClientAzureSecurityCenterAPI, "Azure management API client for Defender for Cloud", buildAzureSecurityCenterClient)
 }
 
 // buildAzureSecurityCenterClient constructs an authenticated Azure management API client.
 func buildAzureSecurityCenterClient(_ context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
-	token, err := helpers.OAuthTokenFromPayload(payload, string(TypeAzureSecurityCenter))
+	token, err := auth.OAuthTokenFromPayload(payload, string(TypeAzureSecurityCenter))
 	if err != nil {
 		return nil, err
 	}
 
-	return helpers.NewAuthenticatedClient(token, nil), nil
+	return auth.NewAuthenticatedClient(token, nil), nil
 }

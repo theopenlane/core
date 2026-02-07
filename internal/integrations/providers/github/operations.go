@@ -7,8 +7,8 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
-	"github.com/theopenlane/core/common/integrations/opsconfig"
+	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -26,32 +26,32 @@ const (
 )
 
 type githubRepoOperationConfig struct {
-	Visibility helpers.LowerString `json:"visibility,omitempty" jsonschema:"description=Optional visibility filter (all, public, private)"`
-	PerPage    int                 `json:"per_page,omitempty" jsonschema:"description=Override the number of repos fetched per page (max 100)."`
+	Visibility types.LowerString `json:"visibility,omitempty" jsonschema:"description=Optional visibility filter (all, public, private)"`
+	PerPage    int               `json:"per_page,omitempty" jsonschema:"description=Override the number of repos fetched per page (max 100)."`
 }
 
 type githubVulnerabilityOperationConfig struct {
-	AlertTypes      []helpers.LowerString   `json:"alert_types,omitempty" jsonschema:"description=Optional alert types to collect (dependabot, code_scanning, secret_scanning). Defaults to all."`
-	Repositories    []helpers.TrimmedString `json:"repositories,omitempty" jsonschema:"description=Optional list of full repo names (owner/repo). If omitted, all accessible repos are scanned."`
-	Visibility      helpers.LowerString     `json:"visibility,omitempty" jsonschema:"description=Optional visibility filter (all, public, private) when listing repos."`
-	Affiliation     helpers.LowerString     `json:"affiliation,omitempty" jsonschema:"description=Optional repo affiliation filter (owner, collaborator, organization_member)."`
-	PerPage         int                     `json:"per_page,omitempty" jsonschema:"description=Override the number of repos/alerts fetched per page (max 100)."`
-	MaxRepos        int                     `json:"max_repos,omitempty" jsonschema:"description=Optional cap on the number of repositories to scan."`
-	IncludePayloads bool                    `json:"include_payloads,omitempty" jsonschema:"description=Return raw alert payloads in the response (defaults to false)."`
-	AlertState      helpers.LowerString     `json:"alert_state,omitempty" jsonschema:"description=Dependabot alert state filter (open, dismissed, fixed, all). Defaults to open."`
-	Severity        helpers.LowerString     `json:"severity,omitempty" jsonschema:"description=Optional severity filter (low, medium, high, critical)."`
-	Ecosystem       helpers.LowerString     `json:"ecosystem,omitempty" jsonschema:"description=Optional package ecosystem filter (npm, maven, pip, etc.)."`
+	AlertTypes      []types.LowerString   `json:"alert_types,omitempty" jsonschema:"description=Optional alert types to collect (dependabot, code_scanning, secret_scanning). Defaults to all."`
+	Repositories    []types.TrimmedString `json:"repositories,omitempty" jsonschema:"description=Optional list of full repo names (owner/repo). If omitted, all accessible repos are scanned."`
+	Visibility      types.LowerString     `json:"visibility,omitempty" jsonschema:"description=Optional visibility filter (all, public, private) when listing repos."`
+	Affiliation     types.LowerString     `json:"affiliation,omitempty" jsonschema:"description=Optional repo affiliation filter (owner, collaborator, organization_member)."`
+	PerPage         int                   `json:"per_page,omitempty" jsonschema:"description=Override the number of repos/alerts fetched per page (max 100)."`
+	MaxRepos        int                   `json:"max_repos,omitempty" jsonschema:"description=Optional cap on the number of repositories to scan."`
+	IncludePayloads bool                  `json:"include_payloads,omitempty" jsonschema:"description=Return raw alert payloads in the response (defaults to false)."`
+	AlertState      types.LowerString     `json:"alert_state,omitempty" jsonschema:"description=Dependabot alert state filter (open, dismissed, fixed, all). Defaults to open."`
+	Severity        types.LowerString     `json:"severity,omitempty" jsonschema:"description=Optional severity filter (low, medium, high, critical)."`
+	Ecosystem       types.LowerString     `json:"ecosystem,omitempty" jsonschema:"description=Optional package ecosystem filter (npm, maven, pip, etc.)."`
 }
 
 var (
-	githubRepoConfigSchema          = helpers.SchemaFrom[githubRepoOperationConfig]()
-	githubVulnerabilityConfigSchema = helpers.SchemaFrom[githubVulnerabilityOperationConfig]()
+	githubRepoConfigSchema          = operations.SchemaFrom[githubRepoOperationConfig]()
+	githubVulnerabilityConfigSchema = operations.SchemaFrom[githubVulnerabilityOperationConfig]()
 )
 
 // githubOperations returns the GitHub operations supported by this provider.
 func githubOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		helpers.HealthOperation(githubOperationHealth, "Validate GitHub OAuth token by calling the /user endpoint.", ClientGitHubAPI, runGitHubHealthOperation),
+		operations.HealthOperation(githubOperationHealth, "Validate GitHub OAuth token by calling the /user endpoint.", ClientGitHubAPI, runGitHubHealthOperation),
 		{
 			Name:         githubOperationRepos,
 			Kind:         types.OperationKindCollectFindings,
@@ -93,7 +93,7 @@ type githubRepoOwner struct {
 
 // runGitHubHealthOperation validates GitHub access for OAuth or App credentials.
 func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := helpers.ClientAndOAuthToken(input, input.Provider)
+	client, token, err := auth.ClientAndOAuthToken(input, input.Provider)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -103,7 +103,7 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 			var resp githubInstallationRepositoriesResponse
 			endpoint := githubAPIBaseURL + "installation/repositories?per_page=1"
 			if err := client.GetJSON(ctx, endpoint, &resp); err != nil {
-				return helpers.OperationFailure("GitHub App installation lookup failed", err), err
+				return operations.OperationFailure("GitHub App installation lookup failed", err), err
 			}
 
 			return types.OperationResult{
@@ -114,10 +114,10 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 		}
 
 		repos, err := listGitHubInstallationRepos(ctx, nil, token, githubVulnerabilityConfig{
-			Pagination: opsconfig.Pagination{PerPage: 1},
+			Pagination: operations.Pagination{PerPage: 1},
 		})
 		if err != nil {
-			return helpers.OperationFailure("GitHub App installation lookup failed", err), err
+			return operations.OperationFailure("GitHub App installation lookup failed", err), err
 		}
 
 		return types.OperationResult{
@@ -129,7 +129,7 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 
 	var user githubUserResponse
 	if err := fetchGitHubResource(ctx, client, token, "user", nil, &user); err != nil {
-		return helpers.OperationFailure("GitHub user lookup failed", err), err
+		return operations.OperationFailure("GitHub user lookup failed", err), err
 	}
 
 	details := map[string]any{
@@ -147,20 +147,25 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 
 // runGitHubRepoOperation lists repositories for the authenticated account.
 func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := helpers.ClientAndOAuthToken(input, input.Provider)
+	client, token, err := auth.ClientAndOAuthToken(input, input.Provider)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	config, err := decodeGitHubVulnerabilityConfig(input.Config)
+	repoConfig, err := decodeGitHubRepoConfig(input.Config)
 	if err != nil {
 		return types.OperationResult{}, err
+	}
+
+	config := githubVulnerabilityConfig{
+		Pagination: operations.Pagination{PerPage: repoConfig.PerPage},
+		Visibility: repoConfig.Visibility,
 	}
 
 	var repos []githubRepoResponse
 	repos, err = listGitHubReposForProvider(ctx, client, token, input.Provider, config)
 	if err != nil {
-		return helpers.OperationFailure("GitHub repository collection failed", err), err
+		return operations.OperationFailure("GitHub repository collection failed", err), err
 	}
 
 	samples := make([]map[string]any, 0, min(maxSampleSize, len(repos)))
@@ -187,7 +192,7 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 }
 
 // fetchGitHubResource retrieves GitHub REST API resources with optional pooled client support.
-func fetchGitHubResource(ctx context.Context, client *helpers.AuthenticatedClient, token, path string, params url.Values, out any) error {
+func fetchGitHubResource(ctx context.Context, client *auth.AuthenticatedClient, token, path string, params url.Values, out any) error {
 	endpoint := githubAPIBaseURL + path
 	if params != nil {
 		if encoded := params.Encode(); encoded != "" {
@@ -200,8 +205,8 @@ func fetchGitHubResource(ctx context.Context, client *helpers.AuthenticatedClien
 		"X-GitHub-Api-Version": githubAPIVersion,
 	}
 
-	if err := helpers.GetJSONWithClient(ctx, client, endpoint, token, headers, out); err != nil {
-		if errors.Is(err, helpers.ErrHTTPRequestFailed) {
+	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, headers, out); err != nil {
+		if errors.Is(err, auth.ErrHTTPRequestFailed) {
 			return fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}
 		return err
@@ -221,4 +226,14 @@ func clampPerPage(value int) int {
 	}
 
 	return value
+}
+
+// decodeGitHubRepoConfig decodes repo collection config into a typed struct.
+func decodeGitHubRepoConfig(config map[string]any) (githubRepoOperationConfig, error) {
+	var decoded githubRepoOperationConfig
+	if err := operations.DecodeConfig(config, &decoded); err != nil {
+		return decoded, err
+	}
+
+	return decoded, nil
 }

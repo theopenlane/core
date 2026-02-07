@@ -3,7 +3,7 @@
   "displayName": "AWS Security Hub",
   "category": "cloud",
   "authType": "aws_sts",
-  "active": true,
+  "active": false,
   "logoUrl": "",
   "docsUrl": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html",
   "awsSts": {

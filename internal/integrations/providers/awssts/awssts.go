@@ -4,8 +4,9 @@ import (
 	"context"
 	"maps"
 
+	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/providers"
@@ -49,7 +50,7 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 				return nil, ErrAuthTypeMismatch
 			}
 
-			clients := helpers.SanitizeClientDescriptors(provider, cfg.clients)
+			clients := operations.SanitizeClientDescriptors(provider, cfg.clients)
 			return &Provider{
 				BaseProvider: providers.NewBaseProvider(
 					provider,
@@ -58,7 +59,7 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 						SupportsClientPooling: len(clients) > 0,
 						SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
 					},
-					helpers.SanitizeOperationDescriptors(provider, cfg.operations),
+					operations.SanitizeOperationDescriptors(provider, cfg.operations),
 					clients,
 				),
 			}, nil
@@ -82,27 +83,48 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 		return types.CredentialPayload{}, ErrProviderNotInitialized
 	}
 
-	meta := cloneProviderData(subject.Credential.Data.ProviderData)
+	meta := subject.Credential.Data.ProviderData
 	if len(meta) == 0 {
 		return types.CredentialPayload{}, ErrProviderMetadataRequired
 	}
 
-	roleArn, err := helpers.RequiredString(meta, "roleArn", ErrRoleARNRequired)
-	if err != nil {
+	var decoded awsSTSMetadata
+	if err := auth.DecodeProviderData(meta, &decoded); err != nil {
 		return types.CredentialPayload{}, err
 	}
 
-	region, err := helpers.RequiredString(meta, "region", ErrRegionRequired)
-	if err != nil {
-		return types.CredentialPayload{}, err
+	if decoded.RoleARN == "" {
+		return types.CredentialPayload{}, ErrRoleARNRequired
+	}
+	if decoded.Region == "" {
+		return types.CredentialPayload{}, ErrRegionRequired
 	}
 
 	sanitized := maps.Clone(meta)
-	sanitized["roleArn"] = roleArn
-	sanitized["region"] = region
+	if sanitized == nil {
+		sanitized = map[string]any{}
+	}
+	sanitized["roleArn"] = decoded.RoleARN
+	sanitized["region"] = decoded.Region
 
-	creds := helpers.AWSCredentialsFromProviderData(meta)
+	creds := auth.AWSCredentials{
+		AccessKeyID:     decoded.AccessKeyID,
+		SecretAccessKey: decoded.SecretAccessKey,
+		SessionToken:    decoded.SessionToken,
+	}
 
+	if decoded.ExternalID != "" {
+		sanitized["externalId"] = decoded.ExternalID
+	}
+	if decoded.SessionName != "" {
+		sanitized["sessionName"] = decoded.SessionName
+	}
+	if decoded.SessionDuration != "" {
+		sanitized["sessionDuration"] = decoded.SessionDuration
+	}
+	if decoded.AccountID != "" {
+		sanitized["accountId"] = decoded.AccountID
+	}
 	if creds.AccessKeyID != "" {
 		sanitized["accessKeyId"] = creds.AccessKeyID
 	}
@@ -118,6 +140,7 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 		types.WithCredentialSet(models.CredentialSet{
 			AccessKeyID:     creds.AccessKeyID,
 			SecretAccessKey: creds.SecretAccessKey,
+			SessionToken:    creds.SessionToken,
 			ProviderData:    sanitized,
 		}),
 	)
@@ -125,11 +148,14 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 	return builder.Build()
 }
 
-// cloneProviderData returns a shallow copy of provider data
-func cloneProviderData(data map[string]any) map[string]any {
-	if len(data) == 0 {
-		return nil
-	}
-
-	return maps.Clone(data)
+type awsSTSMetadata struct {
+	RoleARN         string `json:"roleArn"`
+	Region          string `json:"region"`
+	ExternalID      string `json:"externalId"`
+	SessionName     string `json:"sessionName"`
+	SessionDuration string `json:"sessionDuration"`
+	AccountID       string `json:"accountId"`
+	AccessKeyID     string `json:"accessKeyId"`
+	SecretAccessKey string `json:"secretAccessKey"`
+	SessionToken    string `json:"sessionToken"`
 }

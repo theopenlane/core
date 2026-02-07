@@ -11,8 +11,7 @@ import (
 	"google.golang.org/api/iterator"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
-	"github.com/theopenlane/core/common/integrations/opsconfig"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -34,23 +33,23 @@ var (
 )
 
 type securityCenterFindingsConfig struct {
-	opsconfig.Pagination
-	opsconfig.PayloadOptions
+	operations.Pagination
+	operations.PayloadOptions
 
-	Filter      helpers.TrimmedString `mapstructure:"filter"`
-	SourceID    helpers.TrimmedString `mapstructure:"sourceId"`
-	MaxFindings int                   `mapstructure:"max_findings"`
+	Filter      types.TrimmedString `json:"filter"`
+	SourceID    types.TrimmedString `json:"sourceId"`
+	MaxFindings int                 `json:"max_findings"`
 }
 
 type securityCenterFindingsSchema struct {
-	SourceID        helpers.TrimmedString `json:"sourceId,omitempty" jsonschema:"description=Optional SCC source override (full resource name or bare source ID)."`
-	Filter          helpers.TrimmedString `json:"filter,omitempty" jsonschema:"description=Optional SCC findings filter overriding stored metadata."`
-	PageSize        int                   `json:"page_size,omitempty" jsonschema:"description=Optional page size override (max 1000)."`
-	MaxFindings     int                   `json:"max_findings,omitempty" jsonschema:"description=Optional cap on total findings returned."`
-	IncludePayloads bool                  `json:"include_payloads,omitempty" jsonschema:"description=Return raw finding payloads in the response (defaults to false)."`
+	SourceID        types.TrimmedString `json:"sourceId,omitempty" jsonschema:"description=Optional SCC source override (full resource name or bare source ID)."`
+	Filter          types.TrimmedString `json:"filter,omitempty" jsonschema:"description=Optional SCC findings filter overriding stored metadata."`
+	PageSize        int                 `json:"page_size,omitempty" jsonschema:"description=Optional page size override (max 1000)."`
+	MaxFindings     int                 `json:"max_findings,omitempty" jsonschema:"description=Optional cap on total findings returned."`
+	IncludePayloads bool                `json:"include_payloads,omitempty" jsonschema:"description=Return raw finding payloads in the response (defaults to false)."`
 }
 
-var securityCenterFindingsConfigSchema = helpers.SchemaFrom[securityCenterFindingsSchema]()
+var securityCenterFindingsConfigSchema = operations.SchemaFrom[securityCenterFindingsSchema]()
 
 // Operations returns the provider operations published by GCP SCC.
 func (p *Provider) Operations() []types.OperationDescriptor {
@@ -259,7 +258,7 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 		"state_counts":    stateCounts,
 		"samples":         samples,
 	}
-	details = helpers.AddPayloadIf(details, config.IncludePayloads, "alerts", envelopes)
+	details = operations.AddPayloadIf(details, config.IncludePayloads, "alerts", envelopes)
 
 	return types.OperationResult{
 		Status:  types.OperationStatusOK,
@@ -374,7 +373,7 @@ func normalizeSourceName(source string, meta credentialMetadata) (string, error)
 // decodeSecurityCenterFindingsConfig decodes operation config into a typed struct
 func decodeSecurityCenterFindingsConfig(config map[string]any) (securityCenterFindingsConfig, error) {
 	var decoded securityCenterFindingsConfig
-	if err := helpers.DecodeConfig(config, &decoded); err != nil {
+	if err := operations.DecodeConfig(config, &decoded); err != nil {
 		return decoded, err
 	}
 	return decoded, nil

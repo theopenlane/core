@@ -199,6 +199,7 @@ func isCredentialSetEmpty(set models.CredentialSet) bool {
 	fields := []string{
 		set.AccessKeyID,
 		set.SecretAccessKey,
+		set.SessionToken,
 		set.ProjectID,
 		set.AccountID,
 		set.APIToken,

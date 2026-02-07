@@ -255,7 +255,7 @@ func serve(ctx context.Context) error {
 	so.AddServerOptions(serveropts.WithIntegrationBroker())
 	so.AddServerOptions(serveropts.WithIntegrationClients())
 	so.AddServerOptions(serveropts.WithIntegrationOperations())
-	so.AddServerOptions(serveropts.WithKeymaker())
+	so.AddServerOptions(serveropts.WithIntegrationActivation())
 
 	// add session manager
 	so.AddServerOptions(

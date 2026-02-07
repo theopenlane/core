@@ -1,3 +1,2 @@
-// Package keymaker orchestrates activation flows, credential minting, and client pooling
-// for integrations using the new keystore/registry types.
+// Package keymaker orchestrates OAuth/OIDC activation flows for integrations.
 package keymaker

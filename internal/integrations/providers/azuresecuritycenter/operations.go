@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -19,7 +20,7 @@ const (
 // azureSecurityOperations registers the Defender for Cloud operations.
 func azureSecurityOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		helpers.HealthOperation(azureSecurityHealth, "Call Azure Security Center pricings API to verify access.", ClientAzureSecurityCenterAPI, runAzureSecurityHealth),
+		operations.HealthOperation(azureSecurityHealth, "Call Azure Security Center pricings API to verify access.", ClientAzureSecurityCenterAPI, runAzureSecurityHealth),
 		{
 			Name:        azureSecurityPricing,
 			Kind:        types.OperationKindCollectFindings,
@@ -32,7 +33,7 @@ func azureSecurityOperations() []types.OperationDescriptor {
 
 // runAzureSecurityHealth verifies access by fetching Defender pricing data.
 func runAzureSecurityHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := helpers.ClientAndOAuthToken(input, TypeAzureSecurityCenter)
+	client, token, err := auth.ClientAndOAuthToken(input, TypeAzureSecurityCenter)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -44,7 +45,7 @@ func runAzureSecurityHealth(ctx context.Context, input types.OperationInput) (ty
 
 	resp, err := listSecurityPricings(ctx, token, subscriptionID, client)
 	if err != nil {
-		return helpers.OperationFailure("Azure Security Center pricing fetch failed", err), err
+		return operations.OperationFailure("Azure Security Center pricing fetch failed", err), err
 	}
 
 	return types.OperationResult{
@@ -58,7 +59,7 @@ func runAzureSecurityHealth(ctx context.Context, input types.OperationInput) (ty
 
 // runAzureSecurityPricing collects Defender pricing metadata.
 func runAzureSecurityPricing(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := helpers.ClientAndOAuthToken(input, TypeAzureSecurityCenter)
+	client, token, err := auth.ClientAndOAuthToken(input, TypeAzureSecurityCenter)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -70,7 +71,7 @@ func runAzureSecurityPricing(ctx context.Context, input types.OperationInput) (t
 
 	resp, err := listSecurityPricings(ctx, token, subscriptionID, client)
 	if err != nil {
-		return helpers.OperationFailure("Azure Security Center pricing fetch failed", err), err
+		return operations.OperationFailure("Azure Security Center pricing fetch failed", err), err
 	}
 
 	samples := make([]map[string]any, 0, maxSampleSize)
@@ -112,10 +113,10 @@ type defenderPricingDetails struct {
 }
 
 // listSecurityPricings queries Defender pricing data for a subscription.
-func listSecurityPricings(ctx context.Context, token string, subscriptionID string, client *helpers.AuthenticatedClient) (defenderPricingResponse, error) {
+func listSecurityPricings(ctx context.Context, token string, subscriptionID string, client *auth.AuthenticatedClient) (defenderPricingResponse, error) {
 	endpoint := fmt.Sprintf("https://management.azure.com/subscriptions/%s/providers/Microsoft.Security/pricings?api-version=2024-01-01", url.PathEscape(subscriptionID))
 	var resp defenderPricingResponse
-	if err := helpers.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
+	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
 		return defenderPricingResponse{}, err
 	}
 
@@ -124,7 +125,7 @@ func listSecurityPricings(ctx context.Context, token string, subscriptionID stri
 
 // subscriptionIDFromPayload extracts the subscription ID from provider metadata.
 func subscriptionIDFromPayload(payload types.CredentialPayload) (string, error) {
-	subscriptionID := helpers.StringValue(payload.Data.ProviderData, "subscriptionId")
+	subscriptionID, _ := payload.Data.ProviderData["subscriptionId"].(string)
 	if subscriptionID == "" {
 		return "", ErrSubscriptionIDMissing
 	}

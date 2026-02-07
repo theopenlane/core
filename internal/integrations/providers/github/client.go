@@ -3,7 +3,7 @@ package github
 import (
 	"context"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -14,13 +14,13 @@ const (
 
 // githubClientDescriptors returns the client descriptors for the GitHub provider.
 func githubClientDescriptors(provider types.ProviderType) []types.ClientDescriptor {
-	return helpers.DefaultClientDescriptors(provider, ClientGitHubAPI, "GitHub REST API client", buildGitHubClient(provider))
+	return auth.DefaultClientDescriptors(provider, ClientGitHubAPI, "GitHub REST API client", buildGitHubClient(provider))
 }
 
 // buildGitHubClient constructs an authenticated GitHub REST API client.
 func buildGitHubClient(provider types.ProviderType) types.ClientBuilderFunc {
 	return func(_ context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
-		token, err := helpers.OAuthTokenFromPayload(payload, string(provider))
+		token, err := auth.OAuthTokenFromPayload(payload, string(provider))
 		if err != nil {
 			return nil, err
 		}
@@ -30,6 +30,6 @@ func buildGitHubClient(provider types.ProviderType) types.ClientBuilderFunc {
 			"X-GitHub-Api-Version": githubAPIVersion,
 		}
 
-		return helpers.NewAuthenticatedClient(token, headers), nil
+		return auth.NewAuthenticatedClient(token, headers), nil
 	}
 }

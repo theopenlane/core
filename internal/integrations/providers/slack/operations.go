@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -27,24 +28,24 @@ type slackMessageOperationConfig struct {
 }
 
 type slackMessageConfig struct {
-	Channel     helpers.TrimmedString `mapstructure:"channel"`
-	ChannelID   helpers.TrimmedString `mapstructure:"channel_id"`
-	Text        helpers.TrimmedString `mapstructure:"text"`
-	Message     helpers.TrimmedString `mapstructure:"message"`
-	Body        helpers.TrimmedString `mapstructure:"body"`
-	Blocks      any                   `mapstructure:"blocks"`
-	Attachments any                   `mapstructure:"attachments"`
-	ThreadTS    helpers.TrimmedString `mapstructure:"thread_ts"`
-	UnfurlLinks *bool                 `mapstructure:"unfurl_links"`
-	UnfurlMedia *bool                 `mapstructure:"unfurl_media"`
+	Channel     types.TrimmedString `json:"channel"`
+	ChannelID   types.TrimmedString `json:"channel_id"`
+	Text        types.TrimmedString `json:"text"`
+	Message     types.TrimmedString `json:"message"`
+	Body        types.TrimmedString `json:"body"`
+	Blocks      any                 `json:"blocks"`
+	Attachments any                 `json:"attachments"`
+	ThreadTS    types.TrimmedString `json:"thread_ts"`
+	UnfurlLinks *bool               `json:"unfurl_links"`
+	UnfurlMedia *bool               `json:"unfurl_media"`
 }
 
-var slackMessageConfigSchema = helpers.SchemaFrom[slackMessageOperationConfig]()
+var slackMessageConfigSchema = operations.SchemaFrom[slackMessageOperationConfig]()
 
 // slackOperations returns the Slack operations supported by this provider.
 func slackOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		helpers.HealthOperation(slackOperationHealth, "Call auth.test to ensure the Slack token is valid and scoped correctly.", ClientSlackAPI, runSlackHealthOperation),
+		operations.HealthOperation(slackOperationHealth, "Call auth.test to ensure the Slack token is valid and scoped correctly.", ClientSlackAPI, runSlackHealthOperation),
 		{
 			Name:        slackOperationTeam,
 			Kind:        types.OperationKindScanSettings,
@@ -89,14 +90,14 @@ type slackTeamInfo struct {
 
 // runSlackHealthOperation verifies the Slack OAuth token via auth.test
 func runSlackHealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := helpers.ClientAndOAuthToken(input, TypeSlack)
+	client, token, err := auth.ClientAndOAuthToken(input, TypeSlack)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
 	var resp slackAuthTestResponse
 	if err := slackAPIGet(ctx, client, token, "auth.test", nil, &resp); err != nil {
-		return helpers.OperationFailure("Slack auth.test failed", err), err
+		return operations.OperationFailure("Slack auth.test failed", err), err
 	}
 
 	if !resp.OK {
@@ -120,14 +121,14 @@ func runSlackHealthOperation(ctx context.Context, input types.OperationInput) (t
 
 // runSlackTeamOperation fetches workspace metadata for posture analysis
 func runSlackTeamOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := helpers.ClientAndOAuthToken(input, TypeSlack)
+	client, token, err := auth.ClientAndOAuthToken(input, TypeSlack)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
 	var resp slackTeamInfoResponse
 	if err := slackAPIGet(ctx, client, token, "team.info", nil, &resp); err != nil {
-		return helpers.OperationFailure("Slack team.info failed", err), err
+		return operations.OperationFailure("Slack team.info failed", err), err
 	}
 
 	if !resp.OK {
@@ -160,13 +161,13 @@ type slackMessageResponse struct {
 
 // runSlackMessagePostOperation sends a message to a Slack channel or user
 func runSlackMessagePostOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	_, token, err := helpers.ClientAndOAuthToken(input, TypeSlack)
+	_, token, err := auth.ClientAndOAuthToken(input, TypeSlack)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
 	var cfg slackMessageConfig
-	if err := helpers.DecodeConfig(input.Config, &cfg); err != nil {
+	if err := operations.DecodeConfig(input.Config, &cfg); err != nil {
 		return types.OperationResult{}, err
 	}
 
@@ -219,8 +220,8 @@ func runSlackMessagePostOperation(ctx context.Context, input types.OperationInpu
 
 	var resp slackMessageResponse
 	endpoint := "https://slack.com/api/chat.postMessage"
-	if err := helpers.HTTPPostJSON(ctx, nil, endpoint, token, nil, payload, &resp); err != nil {
-		return helpers.OperationFailure("Slack chat.postMessage failed", err), err
+	if err := auth.HTTPPostJSON(ctx, nil, endpoint, token, nil, payload, &resp); err != nil {
+		return operations.OperationFailure("Slack chat.postMessage failed", err), err
 	}
 
 	if !resp.OK {
@@ -242,7 +243,7 @@ func runSlackMessagePostOperation(ctx context.Context, input types.OperationInpu
 }
 
 // slackAPIGet performs a GET request to the Slack API and decodes the JSON response
-func slackAPIGet(ctx context.Context, client *helpers.AuthenticatedClient, token, method string, params url.Values, out any) error {
+func slackAPIGet(ctx context.Context, client *auth.AuthenticatedClient, token, method string, params url.Values, out any) error {
 	endpoint := "https://slack.com/api/" + method
 	if params != nil {
 		if query := params.Encode(); query != "" {
@@ -250,8 +251,8 @@ func slackAPIGet(ctx context.Context, client *helpers.AuthenticatedClient, token
 		}
 	}
 
-	if err := helpers.GetJSONWithClient(ctx, client, endpoint, token, nil, out); err != nil {
-		if errors.Is(err, helpers.ErrHTTPRequestFailed) {
+	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, out); err != nil {
+		if errors.Is(err, auth.ErrHTTPRequestFailed) {
 			return fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}
 		return err

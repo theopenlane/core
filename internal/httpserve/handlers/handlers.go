@@ -26,7 +26,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/common"
-	"github.com/theopenlane/core/internal/keymaker"
+	"github.com/theopenlane/core/internal/integrations/activation"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -139,8 +139,8 @@ type Handler struct {
 	IntegrationOperations *keystore.OperationManager
 	// EventEmitter publishes asynchronous integration events
 	EventEmitter soiree.Emitter
-	// KeymakerService orchestrates integration activation flows
-	KeymakerService *keymaker.Service
+	// IntegrationActivation orchestrates integration activation flows
+	IntegrationActivation *activation.Service
 	// WorkflowEngine orchestrates workflow execution.
 	WorkflowEngine *engine.WorkflowEngine
 	// CampaignWebhook contains the configuration for campaign-related email webhooks
