@@ -21,16 +21,22 @@ var (
 
 // HTTPRequestError captures metadata for failed HTTP requests.
 type HTTPRequestError struct {
-	URL        string
-	Status     string
+	// URL is the URL that was requested
+	URL string
+	// Status is the HTTP status text returned by the request
+	Status string
+	// StatusCode is the HTTP status code returned by the request
 	StatusCode int
-	Body       string
+	// Body is the response body returned by the request, if any
+	Body string
 }
 
+// Error returns a formatted error message for the HTTP request failure
 func (e *HTTPRequestError) Error() string {
 	return ErrHTTPRequestFailed.Error()
 }
 
+// Unwrap allows errors.Is and errors.As to work with HTTPRequestError
 func (e *HTTPRequestError) Unwrap() error {
 	return ErrHTTPRequestFailed
 }

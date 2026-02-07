@@ -21,29 +21,38 @@ var (
 
 // LoaderPathError captures loader failures tied to a specific path.
 type LoaderPathError struct {
+	// Err is the base error for the loader failure
 	Err   error
+	// Path is the file or directory that failed to load
 	Path  string
+	// Cause is the underlying error returned by the filesystem or parser
 	Cause error
 }
 
+// Error returns the base error message for the loader failure
 func (e *LoaderPathError) Error() string {
 	return e.Err.Error()
 }
 
+// Unwrap exposes the base error for errors.Is and errors.As
 func (e *LoaderPathError) Unwrap() error {
 	return e.Err
 }
 
 // SchemaVersionError captures schema version mismatch details.
 type SchemaVersionError struct {
+	// Path is the provider spec path that failed validation
 	Path    string
+	// Version is the unsupported schema version
 	Version string
 }
 
+// Error returns the base schema version error message
 func (e *SchemaVersionError) Error() string {
 	return ErrSchemaVersionUnsupported.Error()
 }
 
+// Unwrap exposes the base schema version error for errors.Is and errors.As
 func (e *SchemaVersionError) Unwrap() error {
 	return ErrSchemaVersionUnsupported
 }

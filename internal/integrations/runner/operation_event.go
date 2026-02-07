@@ -2,7 +2,6 @@ package runner
 
 import (
 	"encoding/json"
-	"fmt"
 	"maps"
 	"strings"
 	"time"
@@ -30,12 +29,12 @@ type OperationEventContext struct {
 func HandleIntegrationOperationRequested(ctx *soiree.EventContext, payload soiree.IntegrationOperationRequestedPayload) error {
 	deps, ok := soiree.ClientAs[*OperationEventContext](ctx)
 	if !ok || deps == nil || deps.DB == nil || deps.Operations == nil {
-		return fmt.Errorf("integration operation context missing")
+		return ErrOperationContextMissing
 	}
 
 	runID := strings.TrimSpace(payload.RunID)
 	if runID == "" {
-		return fmt.Errorf("integration run id required")
+		return ErrIntegrationRunIDRequired
 	}
 
 	systemCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
@@ -49,17 +48,17 @@ func HandleIntegrationOperationRequested(ctx *soiree.EventContext, payload soire
 
 	integrationRecord := run.Edges.Integration
 	if integrationRecord == nil {
-		return fmt.Errorf("integration record missing for run")
+		return ErrIntegrationRecordMissing
 	}
 
 	provider := types.ProviderTypeFromString(integrationRecord.Kind)
 	if provider == types.ProviderUnknown {
-		return fmt.Errorf("integration provider unknown: %s", integrationRecord.Kind)
+		return ErrIntegrationProviderUnknown
 	}
 
 	operationName := types.OperationName(strings.TrimSpace(run.OperationName))
 	if operationName == "" {
-		return fmt.Errorf("operation name required for run")
+		return ErrOperationNameRequired
 	}
 
 	startedAt := time.Now()
@@ -149,7 +148,7 @@ func HandleIntegrationOperationRequested(ctx *soiree.EventContext, payload soire
 	}
 
 	if runStatus != enums.IntegrationRunStatusSuccess {
-		return fmt.Errorf("integration operation failed: %s", errorText)
+		return ErrOperationFailed
 	}
 
 	return nil
@@ -158,11 +157,11 @@ func HandleIntegrationOperationRequested(ctx *soiree.EventContext, payload soire
 // extractAlertEnvelopes pulls alert envelopes from operation details
 func extractAlertEnvelopes(details map[string]any) ([]types.AlertEnvelope, error) {
 	if details == nil {
-		return nil, fmt.Errorf("alert payloads missing")
+		return nil, ErrAlertPayloadsMissing
 	}
 	raw, ok := details["alerts"]
 	if !ok || raw == nil {
-		return nil, fmt.Errorf("alert payloads missing")
+		return nil, ErrAlertPayloadsMissing
 	}
 
 	switch value := raw.(type) {
@@ -208,6 +207,7 @@ func decodeAlertEnvelope(value any) (types.AlertEnvelope, error) {
 	if err := json.Unmarshal(encoded, &envelope); err != nil {
 		return envelope, err
 	}
+
 	return envelope, nil
 }
 
@@ -223,6 +223,7 @@ func buildOperationMetrics(result types.OperationResult) map[string]any {
 	if result.Details != nil {
 		operation["details"] = result.Details
 	}
+
 	return metrics
 }
 
@@ -235,5 +236,6 @@ func appendIngestMetrics(metrics map[string]any, result ingest.VulnerabilityInge
 	if len(result.Errors) > 0 {
 		metrics["ingest_errors"] = result.Errors
 	}
+
 	return metrics
 }

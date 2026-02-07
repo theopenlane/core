@@ -24,6 +24,7 @@ func SanitizeOperationDescriptors(provider types.ProviderType, descriptors []typ
 	if len(out) == 0 {
 		return nil
 	}
+
 	return out
 }
 
@@ -45,5 +46,6 @@ func SanitizeClientDescriptors(provider types.ProviderType, descriptors []types.
 	if len(out) == 0 {
 		return nil
 	}
+
 	return out
 }

@@ -21,22 +21,34 @@ const (
 )
 
 type githubInstallationRepositoriesResponse struct {
-	TotalCount   int                  `json:"total_count"`
+	// TotalCount is the number of repositories returned by GitHub
+	TotalCount int `json:"total_count"`
+	// Repositories lists the repositories in the response
 	Repositories []githubRepoResponse `json:"repositories"`
 }
 
 type githubVulnerabilityConfig struct {
+	// RepositorySelector controls which repositories to scan
 	operations.RepositorySelector
+	// Pagination controls page sizing for list calls
 	operations.Pagination
+	// PayloadOptions controls payload inclusion
 	operations.PayloadOptions
 
-	AlertTypes  []types.LowerString `json:"alert_types"`
-	MaxRepos    int                 `json:"max_repos"`
-	Visibility  types.LowerString   `json:"visibility"`
-	Affiliation types.LowerString   `json:"affiliation"`
-	AlertState  types.LowerString   `json:"alert_state"`
-	Severity    types.LowerString   `json:"severity"`
-	Ecosystem   types.LowerString   `json:"ecosystem"`
+	// AlertTypes selects which alert types to collect
+	AlertTypes []types.LowerString `json:"alert_types"`
+	// MaxRepos caps the number of repositories to scan
+	MaxRepos int `json:"max_repos"`
+	// Visibility filters repositories by visibility
+	Visibility types.LowerString `json:"visibility"`
+	// Affiliation filters repositories by affiliation
+	Affiliation types.LowerString `json:"affiliation"`
+	// AlertState filters alert state for Dependabot alerts
+	AlertState types.LowerString `json:"alert_state"`
+	// Severity filters alerts by severity
+	Severity types.LowerString `json:"severity"`
+	// Ecosystem filters alerts by package ecosystem
+	Ecosystem types.LowerString `json:"ecosystem"`
 }
 
 // runGitHubVulnerabilityOperation collects GitHub alert data and returns envelope payloads
@@ -236,6 +248,7 @@ func listSecretScanningAlerts(ctx context.Context, client *auth.AuthenticatedCli
 	return listGitHubAlerts[*gh.SecretScanningAlert](ctx, client, token, path, config, nil)
 }
 
+// listGitHubAlerts fetches and marshals GitHub alert payloads with pagination
 func listGitHubAlerts[T any](ctx context.Context, client *auth.AuthenticatedClient, token, path string, config githubVulnerabilityConfig, decorate func(url.Values)) ([]json.RawMessage, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
 	state := resolveAlertState(string(config.AlertState))
@@ -276,6 +289,7 @@ func listGitHubAlerts[T any](ctx context.Context, client *auth.AuthenticatedClie
 	return out, nil
 }
 
+// collectGitHubPaged iterates through paged GitHub API responses
 func collectGitHubPaged[T any](ctx context.Context, perPage int, fetch func(page, perPage int) ([]T, error), handle func([]T) error) error {
 	page := 1
 	for {
@@ -296,6 +310,7 @@ func collectGitHubPaged[T any](ctx context.Context, perPage int, fetch func(page
 	}
 }
 
+// gitHubPageParams builds query parameters for paged GitHub API requests
 func gitHubPageParams(page, perPage int) url.Values {
 	params := url.Values{}
 	params.Set("per_page", fmt.Sprintf("%d", perPage))
@@ -303,6 +318,7 @@ func gitHubPageParams(page, perPage int) url.Values {
 	return params
 }
 
+// resolveAlertState applies the default alert state when none is supplied
 func resolveAlertState(value string) string {
 	if value == "" {
 		return defaultAlertState

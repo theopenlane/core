@@ -18,26 +18,43 @@ const (
 )
 
 type slackMessageOperationConfig struct {
-	Channel     string           `json:"channel" jsonschema:"required,description=Slack channel ID or user ID to receive the message."`
-	Text        string           `json:"text,omitempty" jsonschema:"description=Message text (required unless blocks are supplied)."`
-	Blocks      []map[string]any `json:"blocks,omitempty" jsonschema:"description=Optional Slack Block Kit payload."`
+	// Channel identifies the Slack channel or user to receive the message
+	Channel string `json:"channel" jsonschema:"required,description=Slack channel ID or user ID to receive the message."`
+	// Text is the message text when blocks are not supplied
+	Text string `json:"text,omitempty" jsonschema:"description=Message text (required unless blocks are supplied)."`
+	// Blocks carries optional Block Kit payloads
+	Blocks []map[string]any `json:"blocks,omitempty" jsonschema:"description=Optional Slack Block Kit payload."`
+	// Attachments carries optional legacy attachments
 	Attachments []map[string]any `json:"attachments,omitempty" jsonschema:"description=Optional legacy attachments payload."`
-	ThreadTS    string           `json:"thread_ts,omitempty" jsonschema:"description=Optional thread timestamp to reply within an existing thread."`
-	UnfurlLinks *bool            `json:"unfurl_links,omitempty" jsonschema:"description=Whether to unfurl links in the message."`
-	UnfurlMedia *bool            `json:"unfurl_media,omitempty" jsonschema:"description=Whether to unfurl media in the message."`
+	// ThreadTS identifies the thread timestamp for replies
+	ThreadTS string `json:"thread_ts,omitempty" jsonschema:"description=Optional thread timestamp to reply within an existing thread."`
+	// UnfurlLinks controls link unfurling in messages
+	UnfurlLinks *bool `json:"unfurl_links,omitempty" jsonschema:"description=Whether to unfurl links in the message."`
+	// UnfurlMedia controls media unfurling in messages
+	UnfurlMedia *bool `json:"unfurl_media,omitempty" jsonschema:"description=Whether to unfurl media in the message."`
 }
 
 type slackMessageConfig struct {
-	Channel     types.TrimmedString `json:"channel"`
-	ChannelID   types.TrimmedString `json:"channel_id"`
-	Text        types.TrimmedString `json:"text"`
-	Message     types.TrimmedString `json:"message"`
-	Body        types.TrimmedString `json:"body"`
-	Blocks      any                 `json:"blocks"`
-	Attachments any                 `json:"attachments"`
-	ThreadTS    types.TrimmedString `json:"thread_ts"`
-	UnfurlLinks *bool               `json:"unfurl_links"`
-	UnfurlMedia *bool               `json:"unfurl_media"`
+	// Channel selects the Slack channel
+	Channel types.TrimmedString `json:"channel"`
+	// ChannelID is an alias for Channel
+	ChannelID types.TrimmedString `json:"channel_id"`
+	// Text is the message text input
+	Text types.TrimmedString `json:"text"`
+	// Message is an alternate message text input
+	Message types.TrimmedString `json:"message"`
+	// Body is an alternate message body input
+	Body types.TrimmedString `json:"body"`
+	// Blocks carries Block Kit payloads
+	Blocks any `json:"blocks"`
+	// Attachments carries legacy attachment payloads
+	Attachments any `json:"attachments"`
+	// ThreadTS identifies the thread timestamp for replies
+	ThreadTS types.TrimmedString `json:"thread_ts"`
+	// UnfurlLinks controls link unfurling
+	UnfurlLinks *bool `json:"unfurl_links"`
+	// UnfurlMedia controls media unfurling
+	UnfurlMedia *bool `json:"unfurl_media"`
 }
 
 var slackMessageConfigSchema = operations.SchemaFrom[slackMessageOperationConfig]()
@@ -66,25 +83,37 @@ func slackOperations() []types.OperationDescriptor {
 
 // slackAuthTestResponse represents the response from Slack auth.test
 type slackAuthTestResponse struct {
-	OK    bool   `json:"ok"`
-	URL   string `json:"url"`
-	Team  string `json:"team"`
-	User  string `json:"user"`
+	// OK indicates whether the request succeeded
+	OK bool `json:"ok"`
+	// URL is the workspace URL
+	URL string `json:"url"`
+	// Team is the workspace name
+	Team string `json:"team"`
+	// User is the user name associated with the token
+	User string `json:"user"`
+	// Error contains the error message when ok is false
 	Error string `json:"error"`
 }
 
 // slackTeamInfoResponse represents the response from Slack team.info
 type slackTeamInfoResponse struct {
-	OK    bool          `json:"ok"`
-	Team  slackTeamInfo `json:"team"`
-	Error string        `json:"error"`
+	// OK indicates whether the request succeeded
+	OK bool `json:"ok"`
+	// Team holds the workspace details
+	Team slackTeamInfo `json:"team"`
+	// Error contains the error message when ok is false
+	Error string `json:"error"`
 }
 
 // slackTeamInfo represents Slack workspace information
 type slackTeamInfo struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Domain      string `json:"domain"`
+	// ID is the workspace identifier
+	ID string `json:"id"`
+	// Name is the workspace name
+	Name string `json:"name"`
+	// Domain is the workspace domain
+	Domain string `json:"domain"`
+	// EmailDomain is the workspace email domain
 	EmailDomain string `json:"email_domain"`
 }
 
@@ -153,10 +182,14 @@ func runSlackTeamOperation(ctx context.Context, input types.OperationInput) (typ
 }
 
 type slackMessageResponse struct {
-	OK      bool   `json:"ok"`
+	// OK indicates whether the message was posted
+	OK bool `json:"ok"`
+	// Channel is the channel identifier where the message was posted
 	Channel string `json:"channel"`
-	TS      string `json:"ts"`
-	Error   string `json:"error"`
+	// TS is the message timestamp
+	TS string `json:"ts"`
+	// Error contains the error message when ok is false
+	Error string `json:"error"`
 }
 
 // runSlackMessagePostOperation sends a message to a Slack channel or user
@@ -253,7 +286,7 @@ func slackAPIGet(ctx context.Context, client *auth.AuthenticatedClient, token, m
 
 	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, out); err != nil {
 		if errors.Is(err, auth.ErrHTTPRequestFailed) {
-			return fmt.Errorf("%w: %w", ErrAPIRequest, err)
+			return ErrAPIRequest
 		}
 		return err
 	}

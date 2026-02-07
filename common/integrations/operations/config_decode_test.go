@@ -9,14 +9,21 @@ import (
 )
 
 type normalizedConfig struct {
-	Name  types.TrimmedString   `json:"name"`
-	Label types.LowerString     `json:"label"`
-	Code  types.UpperString     `json:"code"`
-	Tags  []types.TrimmedString `json:"tags"`
-	Modes []types.LowerString   `json:"modes"`
-	Flags []types.UpperString   `json:"flags"`
+	// Name holds the trimmed name value
+	Name types.TrimmedString `json:"name"`
+	// Label holds the lower-cased label value
+	Label types.LowerString `json:"label"`
+	// Code holds the upper-cased code value
+	Code types.UpperString `json:"code"`
+	// Tags lists trimmed tag values
+	Tags []types.TrimmedString `json:"tags"`
+	// Modes lists lower-cased mode values
+	Modes []types.LowerString `json:"modes"`
+	// Flags lists upper-cased flag values
+	Flags []types.UpperString `json:"flags"`
 }
 
+// TestDecodeConfigNormalizedStrings verifies normalized strings are decoded correctly
 func TestDecodeConfigNormalizedStrings(t *testing.T) {
 	config := map[string]any{
 		"name":  "  Alice ",

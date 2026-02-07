@@ -33,17 +33,25 @@ func buildkiteOperations() []types.OperationDescriptor {
 
 // buildkiteUserResponse represents the response from the Buildkite /v2/user endpoint
 type buildkiteUserResponse struct {
+	// ID is the user identifier
 	ID       string `json:"id"`
+	// Name is the user display name
 	Name     string `json:"name"`
+	// Email is the user email address
 	Email    string `json:"email"`
+	// Username is the user handle
 	Username string `json:"username"`
 }
 
 // buildkiteOrgResponse represents the response from the Buildkite /v2/organizations endpoint
 type buildkiteOrgResponse struct {
+	// ID is the organization identifier
 	ID     string `json:"id"`
+	// Name is the organization name
 	Name   string `json:"name"`
+	// Slug is the organization slug
 	Slug   string `json:"slug"`
+	// WebURL is the organization URL
 	WebURL string `json:"web_url"`
 }
 
@@ -111,7 +119,7 @@ func fetchBuildkiteResource(ctx context.Context, client *auth.AuthenticatedClien
 	endpoint := fmt.Sprintf("https://api.buildkite.com/v2/%s", path)
 	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, out); err != nil {
 		if errors.Is(err, auth.ErrHTTPRequestFailed) {
-			return fmt.Errorf("%w: %w", ErrAPIRequest, err)
+			return ErrAPIRequest
 		}
 		return err
 	}

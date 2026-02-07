@@ -69,6 +69,7 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 
 // Provider persists AWS STS metadata and exposes it via CredentialSet.
 type Provider struct {
+	// BaseProvider holds shared provider metadata
 	providers.BaseProvider
 }
 
@@ -149,13 +150,22 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 }
 
 type awsSTSMetadata struct {
+	// RoleARN is the role ARN to assume
 	RoleARN         string `json:"roleArn"`
+	// Region is the AWS region for API calls
 	Region          string `json:"region"`
+	// ExternalID is the optional external ID for role assumption
 	ExternalID      string `json:"externalId"`
+	// SessionName is the optional session name for STS
 	SessionName     string `json:"sessionName"`
+	// SessionDuration is the optional session duration string
 	SessionDuration string `json:"sessionDuration"`
+	// AccountID is the AWS account identifier
 	AccountID       string `json:"accountId"`
+	// AccessKeyID is the AWS access key ID
 	AccessKeyID     string `json:"accessKeyId"`
+	// SecretAccessKey is the AWS secret access key
 	SecretAccessKey string `json:"secretAccessKey"`
+	// SessionToken is the AWS session token
 	SessionToken    string `json:"sessionToken"`
 }

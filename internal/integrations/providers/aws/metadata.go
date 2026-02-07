@@ -7,6 +7,7 @@ import (
 
 const awsDefaultSession = "openlane-aws"
 
+// awsMetadataFromPayload extracts and validates AWS metadata from a credential payload
 func awsMetadataFromPayload(payload types.CredentialPayload, defaultSessionName string) (auth.AWSMetadata, error) {
 	meta := payload.Data.ProviderData
 	if len(meta) == 0 {

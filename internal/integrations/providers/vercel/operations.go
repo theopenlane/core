@@ -37,9 +37,13 @@ func runVercelHealth(ctx context.Context, input types.OperationInput) (types.Ope
 	}
 
 	var resp struct {
+		// User holds the authenticated user account
 		User struct {
+			// ID is the user identifier
 			ID    string `json:"uid"`
+			// Name is the user display name
 			Name  string `json:"name"`
+			// Email is the user email address
 			Email string `json:"email"`
 		} `json:"user"`
 	}
@@ -72,9 +76,13 @@ func runVercelProjects(ctx context.Context, input types.OperationInput) (types.O
 	params.Set("limit", "5")
 
 	var resp struct {
+		// Projects lists projects returned by the API
 		Projects []struct {
+			// ID is the project identifier
 			ID        string `json:"id"`
+			// Name is the project name
 			Name      string `json:"name"`
+			// Framework is the detected framework name
 			Framework string `json:"framework"`
 		} `json:"projects"`
 	}

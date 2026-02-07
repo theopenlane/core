@@ -26,21 +26,33 @@ const (
 )
 
 type githubRepoOperationConfig struct {
+	// Visibility filters repositories by visibility
 	Visibility types.LowerString `json:"visibility,omitempty" jsonschema:"description=Optional visibility filter (all, public, private)"`
-	PerPage    int               `json:"per_page,omitempty" jsonschema:"description=Override the number of repos fetched per page (max 100)."`
+	// PerPage overrides the number of repositories requested per page
+	PerPage int `json:"per_page,omitempty" jsonschema:"description=Override the number of repos fetched per page (max 100)."`
 }
 
 type githubVulnerabilityOperationConfig struct {
-	AlertTypes      []types.LowerString   `json:"alert_types,omitempty" jsonschema:"description=Optional alert types to collect (dependabot, code_scanning, secret_scanning). Defaults to all."`
-	Repositories    []types.TrimmedString `json:"repositories,omitempty" jsonschema:"description=Optional list of full repo names (owner/repo). If omitted, all accessible repos are scanned."`
-	Visibility      types.LowerString     `json:"visibility,omitempty" jsonschema:"description=Optional visibility filter (all, public, private) when listing repos."`
-	Affiliation     types.LowerString     `json:"affiliation,omitempty" jsonschema:"description=Optional repo affiliation filter (owner, collaborator, organization_member)."`
-	PerPage         int                   `json:"per_page,omitempty" jsonschema:"description=Override the number of repos/alerts fetched per page (max 100)."`
-	MaxRepos        int                   `json:"max_repos,omitempty" jsonschema:"description=Optional cap on the number of repositories to scan."`
-	IncludePayloads bool                  `json:"include_payloads,omitempty" jsonschema:"description=Return raw alert payloads in the response (defaults to false)."`
-	AlertState      types.LowerString     `json:"alert_state,omitempty" jsonschema:"description=Dependabot alert state filter (open, dismissed, fixed, all). Defaults to open."`
-	Severity        types.LowerString     `json:"severity,omitempty" jsonschema:"description=Optional severity filter (low, medium, high, critical)."`
-	Ecosystem       types.LowerString     `json:"ecosystem,omitempty" jsonschema:"description=Optional package ecosystem filter (npm, maven, pip, etc.)."`
+	// AlertTypes selects which alert types to collect
+	AlertTypes []types.LowerString `json:"alert_types,omitempty" jsonschema:"description=Optional alert types to collect (dependabot, code_scanning, secret_scanning). Defaults to all."`
+	// Repositories lists explicit repositories to scan
+	Repositories []types.TrimmedString `json:"repositories,omitempty" jsonschema:"description=Optional list of full repo names (owner/repo). If omitted, all accessible repos are scanned."`
+	// Visibility filters repositories by visibility when listing
+	Visibility types.LowerString `json:"visibility,omitempty" jsonschema:"description=Optional visibility filter (all, public, private) when listing repos."`
+	// Affiliation filters repositories by affiliation
+	Affiliation types.LowerString `json:"affiliation,omitempty" jsonschema:"description=Optional repo affiliation filter (owner, collaborator, organization_member)."`
+	// PerPage overrides the number of repos or alerts requested per page
+	PerPage int `json:"per_page,omitempty" jsonschema:"description=Override the number of repos/alerts fetched per page (max 100)."`
+	// MaxRepos caps the number of repositories to scan
+	MaxRepos int `json:"max_repos,omitempty" jsonschema:"description=Optional cap on the number of repositories to scan."`
+	// IncludePayloads controls whether raw payloads are returned
+	IncludePayloads bool `json:"include_payloads,omitempty" jsonschema:"description=Return raw alert payloads in the response (defaults to false)."`
+	// AlertState filters Dependabot alert state
+	AlertState types.LowerString `json:"alert_state,omitempty" jsonschema:"description=Dependabot alert state filter (open, dismissed, fixed, all). Defaults to open."`
+	// Severity filters alerts by severity
+	Severity types.LowerString `json:"severity,omitempty" jsonschema:"description=Optional severity filter (low, medium, high, critical)."`
+	// Ecosystem filters alerts by package ecosystem
+	Ecosystem types.LowerString `json:"ecosystem,omitempty" jsonschema:"description=Optional package ecosystem filter (npm, maven, pip, etc.)."`
 }
 
 var (
@@ -72,23 +84,34 @@ func githubOperations() []types.OperationDescriptor {
 }
 
 type githubUserResponse struct {
+	// Login is the GitHub username
 	Login string `json:"login"`
-	ID    int64  `json:"id"`
-	Name  string `json:"name"`
+	// ID is the GitHub user identifier
+	ID int64 `json:"id"`
+	// Name is the display name for the user
+	Name string `json:"name"`
 }
 
 type githubRepoResponse struct {
-	Name      string          `json:"name"`
-	FullName  string          `json:"full_name"`
-	Owner     githubRepoOwner `json:"owner"`
-	Private   bool            `json:"private"`
-	UpdatedAt time.Time       `json:"updated_at"`
-	HTMLURL   string          `json:"html_url"`
+	// Name is the repository name
+	Name string `json:"name"`
+	// FullName is the owner/name identifier
+	FullName string `json:"full_name"`
+	// Owner describes the repository owner
+	Owner githubRepoOwner `json:"owner"`
+	// Private reports whether the repository is private
+	Private bool `json:"private"`
+	// UpdatedAt is the last update timestamp
+	UpdatedAt time.Time `json:"updated_at"`
+	// HTMLURL is the web URL for the repository
+	HTMLURL string `json:"html_url"`
 }
 
 type githubRepoOwner struct {
+	// Login is the owner login name
 	Login string `json:"login"`
-	ID    int64  `json:"id"`
+	// ID is the owner identifier
+	ID int64 `json:"id"`
 }
 
 // runGitHubHealthOperation validates GitHub access for OAuth or App credentials.
@@ -207,7 +230,7 @@ func fetchGitHubResource(ctx context.Context, client *auth.AuthenticatedClient, 
 
 	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, headers, out); err != nil {
 		if errors.Is(err, auth.ErrHTTPRequestFailed) {
-			return fmt.Errorf("%w: %w", ErrAPIRequest, err)
+			return ErrAPIRequest
 		}
 		return err
 	}

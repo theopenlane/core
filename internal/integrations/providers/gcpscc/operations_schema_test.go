@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// TestSecurityCenterFindingsConfigSchema verifies the Security Center schema exposes expected fields
 func TestSecurityCenterFindingsConfigSchema(t *testing.T) {
 	schema := securityCenterFindingsConfigSchema
 	require.NotNil(t, schema)
@@ -23,6 +24,7 @@ func TestSecurityCenterFindingsConfigSchema(t *testing.T) {
 	}
 }
 
+// schemaProperties extracts schema properties and fails the test if missing
 func schemaProperties(t *testing.T, schema map[string]any) map[string]any {
 	t.Helper()
 

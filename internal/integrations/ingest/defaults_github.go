@@ -20,6 +20,7 @@ type celMapEntry struct {
 	expr string
 }
 
+// celMapExpr renders CEL map entries into a CEL object literal string
 func celMapExpr(entries []celMapEntry) string {
 	if len(entries) == 0 {
 		return "{}"

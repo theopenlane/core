@@ -3,7 +3,6 @@ package ingest
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"strings"
 
 	"github.com/samber/lo"
@@ -19,31 +18,49 @@ import (
 // VulnerabilityIngestRequest defines the inputs required for vulnerability ingestion
 // It expects alert envelopes produced by integration operations
 type VulnerabilityIngestRequest struct {
+	// OrgID identifies the organization that owns the vulnerabilities
 	OrgID             string
+	// IntegrationID identifies the integration record
 	IntegrationID     string
+	// Provider identifies the integration provider
 	Provider          integrationtypes.ProviderType
+	// Operation identifies the operation that produced the alerts
 	Operation         integrationtypes.OperationName
+	// IntegrationConfig supplies integration-level configuration for mapping
 	IntegrationConfig openapi.IntegrationConfig
+	// ProviderState carries provider-specific state for mapping
 	ProviderState     any
+	// OperationConfig supplies operation-level configuration for mapping
 	OperationConfig   map[string]any
+	// Envelopes holds the alert payloads to ingest
 	Envelopes         []integrationtypes.AlertEnvelope
+	// DB provides access to the persistence layer
 	DB                *generated.Client
 }
 
 // VulnerabilityIngestSummary reports mapping and persistence stats
 type VulnerabilityIngestSummary struct {
+	// Total counts total alerts processed
 	Total     int
+	// Mapped counts alerts that produced mapped output
 	Mapped    int
+	// Persisted counts alerts that were persisted
 	Persisted int
+	// Skipped counts alerts filtered out by mapping
 	Skipped   int
+	// Failed counts alerts that failed mapping or persistence
 	Failed    int
+	// Created counts new vulnerabilities created
 	Created   int
+	// Updated counts existing vulnerabilities updated
 	Updated   int
 }
 
 // VulnerabilityIngestResult captures the results of an ingestion run
 type VulnerabilityIngestResult struct {
+	// Summary aggregates ingestion totals
 	Summary VulnerabilityIngestSummary
+	// Errors captures per-alert error messages
 	Errors  []string
 }
 
@@ -61,7 +78,7 @@ func IngestVulnerabilityAlerts(ctx context.Context, req VulnerabilityIngestReque
 	result := VulnerabilityIngestResult{}
 
 	if req.DB == nil {
-		return result, fmt.Errorf("db client required")
+		return result, ErrDBClientRequired
 	}
 
 	mapper, err := NewMappingEvaluator()
@@ -71,7 +88,7 @@ func IngestVulnerabilityAlerts(ctx context.Context, req VulnerabilityIngestReque
 
 	schema, ok := integrationgenerated.IntegrationMappingSchemas[mappingSchemaVulnerability]
 	if !ok {
-		return result, fmt.Errorf("mapping schema not found: %s", mappingSchemaVulnerability)
+		return result, ErrMappingSchemaNotFound
 	}
 
 	integrationConfigMap, err := toMap(req.IntegrationConfig)
@@ -212,7 +229,7 @@ func decodeVulnerabilityInput(data map[string]any) (generated.CreateVulnerabilit
 func upsertVulnerability(ctx context.Context, db *generated.Client, orgID string, integrationID string, input generated.CreateVulnerabilityInput) (bool, error) {
 	externalID := strings.TrimSpace(input.ExternalID)
 	if externalID == "" {
-		return false, fmt.Errorf("external id required")
+		return false, ErrExternalIDRequired
 	}
 
 	input.ExternalID = externalID

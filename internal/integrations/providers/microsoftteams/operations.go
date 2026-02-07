@@ -36,8 +36,11 @@ func runTeamsHealth(ctx context.Context, input types.OperationInput) (types.Oper
 	}
 
 	var profile struct {
+		// ID is the user identifier
 		ID          string `json:"id"`
+		// DisplayName is the user display name
 		DisplayName string `json:"displayName"`
+		// Mail is the primary email address
 		Mail        string `json:"mail"`
 	}
 
@@ -61,8 +64,11 @@ func runTeamsSample(ctx context.Context, input types.OperationInput) (types.Oper
 	}
 
 	var resp struct {
+		// Value lists the joined teams
 		Value []struct {
+			// ID is the team identifier
 			ID          string `json:"id"`
+			// DisplayName is the team display name
 			DisplayName string `json:"displayName"`
 		} `json:"value"`
 	}

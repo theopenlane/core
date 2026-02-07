@@ -50,6 +50,7 @@ func AppBuilder() providers.Builder {
 
 // AppProvider implements GitHub App authentication via installation tokens.
 type AppProvider struct {
+	// BaseProvider holds shared provider metadata
 	providers.BaseProvider
 }
 
@@ -69,12 +70,12 @@ func (p *AppProvider) Mint(ctx context.Context, subject types.CredentialSubject)
 		return types.CredentialPayload{}, ErrProviderMetadataRequired
 	}
 
-	appID := strings.TrimSpace(state.GitHub.AppID)
+	appID := state.GitHub.AppID
 	if appID == "" {
 		return types.CredentialPayload{}, ErrAppIDMissing
 	}
 
-	installationID := strings.TrimSpace(state.GitHub.InstallationID)
+	installationID := state.GitHub.InstallationID
 	if installationID == "" {
 		return types.CredentialPayload{}, ErrInstallationIDMissing
 	}
@@ -85,10 +86,14 @@ func (p *AppProvider) Mint(ctx context.Context, subject types.CredentialSubject)
 	}
 
 	var decoded struct {
-		AppID          string `json:"appId"`
+		// AppID identifies the GitHub App ID
+		AppID string `json:"appId"`
+		// InstallationID identifies the GitHub App installation
 		InstallationID string `json:"installationId"`
-		PrivateKey     string `json:"privateKey"`
+		// PrivateKey holds the GitHub App private key
+		PrivateKey string `json:"privateKey"`
 	}
+
 	if err := operations.DecodeConfig(meta, &decoded); err != nil {
 		return types.CredentialPayload{}, err
 	}
@@ -131,7 +136,7 @@ func buildGitHubAppJWT(appID string, privateKey string) (string, error) {
 	privateKey = normalizeGitHubPrivateKey(privateKey)
 	key, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(privateKey))
 	if err != nil {
-		return "", fmt.Errorf("%w: %w", ErrAppPrivateKeyParse, err)
+		return "", ErrAppPrivateKeyParse
 	}
 
 	now := time.Now().UTC()
@@ -144,7 +149,7 @@ func buildGitHubAppJWT(appID string, privateKey string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 	signed, err := token.SignedString(key)
 	if err != nil {
-		return "", fmt.Errorf("%w: %w", ErrAppJWTSign, err)
+		return "", ErrAppJWTSign
 	}
 
 	return signed, nil
@@ -152,7 +157,6 @@ func buildGitHubAppJWT(appID string, privateKey string) (string, error) {
 
 // normalizeGitHubPrivateKey normalizes and decodes private key input
 func normalizeGitHubPrivateKey(value string) string {
-	value = strings.TrimSpace(value)
 	if value == "" {
 		return ""
 	}
@@ -162,22 +166,25 @@ func normalizeGitHubPrivateKey(value string) string {
 	}
 	decoded, err := base64.StdEncoding.DecodeString(value)
 	if err == nil {
-		return strings.TrimSpace(string(decoded))
+		return string(decoded)
 	}
+
 	return value
 }
 
+// githubInstallationTokenResponse captures the response from GitHub's installation token endpoint
 type githubInstallationTokenResponse struct {
-	Token     string    `json:"token"`
+	// Token is the installation access token
+	Token string `json:"token"`
+	// ExpiresAt is the token expiration time
 	ExpiresAt time.Time `json:"expires_at"`
 }
 
 // requestGitHubInstallationToken exchanges a JWT for an installation token
 func requestGitHubInstallationToken(ctx context.Context, jwtToken string, installationID string) (githubInstallationTokenResponse, error) {
-	if strings.TrimSpace(jwtToken) == "" {
-		return githubInstallationTokenResponse{}, errors.New("github: app jwt missing")
+	if jwtToken == "" {
+		return githubInstallationTokenResponse{}, ErrAppJWTMissing
 	}
-	installationID = strings.TrimSpace(installationID)
 	if installationID == "" {
 		return githubInstallationTokenResponse{}, ErrInstallationIDMissing
 	}
@@ -193,7 +200,7 @@ func requestGitHubInstallationToken(ctx context.Context, jwtToken string, instal
 	var resp githubInstallationTokenResponse
 	if err := auth.HTTPPostJSON(ctx, nil, endpoint, jwtToken, headers, map[string]any{}, &resp); err != nil {
 		if errors.Is(err, auth.ErrHTTPRequestFailed) {
-			return githubInstallationTokenResponse{}, fmt.Errorf("%w: %w", ErrAPIRequest, err)
+			return githubInstallationTokenResponse{}, ErrAPIRequest
 		}
 		return githubInstallationTokenResponse{}, err
 	}

@@ -4,10 +4,14 @@ import "github.com/theopenlane/core/common/integrations/types"
 
 // BaseProvider stores shared provider metadata
 type BaseProvider struct {
+	// Provider is the unique identifier for this provider (e.g. "github", "slack", etc.)
 	Provider types.ProviderType
-	Caps     types.ProviderCapabilities
-	Ops      []types.OperationDescriptor
-	Clients  []types.ClientDescriptor
+	// Caps is a set of capability flags for this provider
+	Caps types.ProviderCapabilities
+	// Ops is a list of operations published by this provider
+	Ops []types.OperationDescriptor
+	// Clients is a list of client descriptors published by this provider
+	Clients []types.ClientDescriptor
 }
 
 // NewBaseProvider constructs a BaseProvider with shared metadata
@@ -38,6 +42,7 @@ func (p *BaseProvider) Operations() []types.OperationDescriptor {
 
 	out := make([]types.OperationDescriptor, len(p.Ops))
 	copy(out, p.Ops)
+
 	return out
 }
 
@@ -49,5 +54,6 @@ func (p *BaseProvider) ClientDescriptors() []types.ClientDescriptor {
 
 	out := make([]types.ClientDescriptor, len(p.Clients))
 	copy(out, p.Clients)
+
 	return out
 }

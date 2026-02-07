@@ -98,17 +98,23 @@ func runAzureSecurityPricing(ctx context.Context, input types.OperationInput) (t
 }
 
 type defenderPricingResponse struct {
+	// Value holds pricing entries returned by the API
 	Value []defenderPricing `json:"value"`
 }
 
 type defenderPricing struct {
-	Name       string                 `json:"name"`
+	// Name is the pricing resource name
+	Name string `json:"name"`
+	// Properties holds pricing details for the resource
 	Properties defenderPricingDetails `json:"properties"`
 }
 
 type defenderPricingDetails struct {
-	PricingTier            string `json:"pricingTier"`
-	SubPlan                string `json:"subPlan"`
+	// PricingTier is the Defender pricing tier
+	PricingTier string `json:"pricingTier"`
+	// SubPlan is the Defender sub-plan identifier
+	SubPlan string `json:"subPlan"`
+	// FreeTrialRemainingTime reports remaining free trial duration
 	FreeTrialRemainingTime string `json:"freeTrialRemainingTime"`
 }
 

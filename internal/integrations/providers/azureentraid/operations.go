@@ -78,13 +78,18 @@ func runAzureEntraTenantInspect(ctx context.Context, input types.OperationInput)
 }
 
 type graphOrganization struct {
-	ID              string        `json:"id"`
-	DisplayName     string        `json:"displayName"`
-	TenantID        string        `json:"tenantId"`
+	// ID is the organization identifier
+	ID string `json:"id"`
+	// DisplayName is the organization display name
+	DisplayName string `json:"displayName"`
+	// TenantID is the Azure AD tenant identifier
+	TenantID string `json:"tenantId"`
+	// VerifiedDomains lists verified domains for the tenant
 	VerifiedDomains []interface{} `json:"verifiedDomains"`
 }
 
 type graphOrganizationResponse struct {
+	// Value holds organization entries returned by Graph
 	Value []graphOrganization `json:"value"`
 }
 

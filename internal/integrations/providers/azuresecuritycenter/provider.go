@@ -22,6 +22,7 @@ const (
 
 // Provider implements client-credential authentication for Microsoft Defender for Cloud.
 type Provider struct {
+	// BaseProvider provides shared provider metadata
 	providers.BaseProvider
 	tokenEndpoint func(tenantID string) string
 }
@@ -99,7 +100,7 @@ func (p *Provider) requestToken(ctx context.Context, meta azureSecurityCenterMet
 
 	token, err := cfg.Token(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrTokenExchangeFailed, err)
+		return nil, ErrTokenExchangeFailed
 	}
 
 	return token, nil
@@ -122,13 +123,20 @@ func cloneProviderData(data map[string]any) map[string]any {
 }
 
 type azureSecurityCenterMetadata struct {
-	TenantID       string `json:"tenantId"`
-	ClientID       string `json:"clientId"`
-	ClientSecret   string `json:"clientSecret"`
+	// TenantID identifies the Azure tenant
+	TenantID string `json:"tenantId"`
+	// ClientID identifies the Azure application
+	ClientID string `json:"clientId"`
+	// ClientSecret holds the client credential secret
+	ClientSecret string `json:"clientSecret"`
+	// SubscriptionID identifies the Azure subscription
 	SubscriptionID string `json:"subscriptionId"`
-	ResourceGroup  string `json:"resourceGroup"`
-	WorkspaceID    string `json:"workspaceId"`
-	Scope          string `json:"scope"`
+	// ResourceGroup scopes access to a resource group
+	ResourceGroup string `json:"resourceGroup"`
+	// WorkspaceID identifies the Defender workspace
+	WorkspaceID string `json:"workspaceId"`
+	// Scope overrides the default OAuth scope
+	Scope string `json:"scope"`
 }
 
 // azureSecurityCenterMetadataFromMap normalizes and validates provider metadata.

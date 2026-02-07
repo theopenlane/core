@@ -14,7 +14,7 @@ type Provider interface {
 
 // Builder creates provider instances from specs
 type Builder interface {
-	// Type returns the provider type this builder handles
+	// Type returns the provider type this builder constructs
 	Type() types.ProviderType
 	// Build constructs the provider instance from the spec
 	Build(ctx context.Context, spec config.ProviderSpec) (Provider, error)
@@ -22,8 +22,10 @@ type Builder interface {
 
 // BuilderFunc adapts a function to the Builder interface
 type BuilderFunc struct {
+	// ProviderType identifies the provider type this builder constructs
 	ProviderType types.ProviderType
-	BuildFunc    func(ctx context.Context, spec config.ProviderSpec) (Provider, error)
+	// BuildFunc is the function that constructs the provider instance from the spec
+	BuildFunc func(ctx context.Context, spec config.ProviderSpec) (Provider, error)
 }
 
 // Type returns the provider identifier handled by the builder
@@ -41,8 +43,10 @@ func (f BuilderFunc) Build(ctx context.Context, spec config.ProviderSpec) (Provi
 	if err != nil {
 		return nil, err
 	}
+
 	if provider == nil {
 		return nil, ErrProviderNil
 	}
+
 	return provider, nil
 }
