@@ -44,3 +44,18 @@ func TestDecodeConfigNormalizedStrings(t *testing.T) {
 	require.Equal(t, []types.LowerString{"on", "off"}, decoded.Modes)
 	require.Equal(t, []types.UpperString{"AA", "BB"}, decoded.Flags)
 }
+
+func TestDecodeConfigUnknownField(t *testing.T) {
+	type sample struct {
+		Name string `json:"name"`
+	}
+
+	var decoded sample
+	err := DecodeConfig(map[string]any{
+		"name":  "ok",
+		"extra": "nope",
+	}, &decoded)
+	if err == nil {
+		t.Fatalf("expected error for unknown field")
+	}
+}
