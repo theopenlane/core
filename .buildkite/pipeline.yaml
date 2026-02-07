@@ -273,7 +273,7 @@ steps:
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
-              command: ["task", "go:lint:ci:no_api"]
+              command: ["task", "go:lint:ci:no-api"]
               always_pull: true
               propagate-environment: true
               volumes:
