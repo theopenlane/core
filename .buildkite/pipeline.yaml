@@ -729,7 +729,7 @@ steps:
               ignore-unfixed: true
               scanners: misconfig,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
-              trivy-version: "0.67.0"
+              trivy-version: "0.69.1"
       - label: ":docker: docker build and publish"
         key: "docker-build-and-tag"
         cancel_on_build_failing: true
