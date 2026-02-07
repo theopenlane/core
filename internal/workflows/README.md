@@ -31,10 +31,13 @@ You can simplify all of the moving parts related to workflows into 2 buckets:
 
 ### Pre-Commit Interception
 
-For workflows where we intercept the change before its applied :
+For workflows where we intercept the change before its applied (`approvalTiming = PRE_COMMIT`):
+- Eligible fields are staged into proposals for approval.
+- Ineligible fields and edge changes are applied immediately.
+- The response reflects direct changes, while approval-gated fields remain unchanged.
 
 ```
-User Request ──► Hook intercepts ──► Creates WorkflowProposal ──► Returns unchanged entity
+User Request ──► Hook intercepts ──► Creates WorkflowProposal ──► Returns entity with direct changes
                      │
                      ▼
             Proposal submitted ──► WorkflowInstance created ──► Assignments created
@@ -74,7 +77,7 @@ User Request ──► Mutation commits ──► soiree event emitted ──►
 
 | Hook | Purpose | Trigger |
 |------|---------|---------|
-| `HookWorkflowApprovalRouting` | Intercepts mutations, routes to proposal if approval required | UPDATE on workflowable schemas |
+| `HookWorkflowApprovalRouting` | Intercepts PRE_COMMIT approvals, stages eligible fields into proposals and applies ineligible/edge changes directly | UPDATE on workflowable schemas |
 | `HookWorkflowProposalTriggerOnSubmit` | Starts workflow when proposal submitted | CREATE/UPDATE on WorkflowProposal |
 | `HookWorkflowProposalInvalidateAssignments` | Invalidates approvals when proposal changes edited | UPDATE on WorkflowProposal |
 | `HookWorkflowDefinitionPrefilter` | Derives trigger prefilter fields from definition JSON | CREATE/UPDATE on WorkflowDefinition |
@@ -86,10 +89,19 @@ Workflow definitions with approval actions have an `approvalSubmissionMode` that
 | Mode | Proposal Initial State | Behavior |
 |------|----------------------|----------|
 | `AUTO_SUBMIT` | `SUBMITTED` | Approval assignments are created immediately when the mutation is intercepted. Approvers are notified right away. This is the standard flow. |
-| `MANUAL_SUBMIT` | `DRAFT` | The proposal is created in DRAFT state. Assignments are NOT created until the proposal is explicitly submitted. |
+| `MANUAL_SUBMIT` | `DRAFT` (planned) | Intended: proposal is created in DRAFT state and assignments are created only after explicit submit. Current behavior is coerced to AUTO_SUBMIT. |
 
 **Current Implementation Note:**
-`AUTO_SUBMIT` is the primary supported mode and the default when not specified. The `MANUAL_SUBMIT` mode creates proposals in DRAFT state, but the GraphQL mutation to submit draft proposals is not yet exposed (`WorkflowProposal` is an internal entity with `entgql.Skip(entgql.SkipAll)`). When MANUAL_SUBMIT support is completed, it will enable staging changes before requesting approval.
+`AUTO_SUBMIT` is the default and currently the only effective mode. `MANUAL_SUBMIT` is accepted in definitions but currently coerced to `AUTO_SUBMIT`, so proposals are submitted immediately and assignments are created. The GraphQL mutation to submit draft proposals is not yet exposed (`WorkflowProposal` is an internal entity with `entgql.Skip(entgql.SkipAll)`). Completing MANUAL_SUBMIT support will enable true draft staging before requesting approval.
+
+### Approval Timing
+
+`approvalTiming` controls whether approvals block changes or run after commit.
+
+| Timing | Behavior |
+|--------|----------|
+| `PRE_COMMIT` | Hook intercepts updates, stages eligible fields into proposals; ineligible fields and edge changes apply immediately. |
+| `POST_COMMIT` | Mutation commits normally; approval actions are converted to review actions and run after commit (no mutation blocking). |
 
 ### Definition Prefiltering
 
@@ -138,6 +150,10 @@ When a WorkflowProposal's changes are modified after approvals have been given:
 
 This implements GitHub-style "dismiss stale reviews" behavior.
 
+## Workflow Metadata
+
+The `workflowMetadata` query exposes eligible fields and eligible edges per workflow object type for UI composition and trigger authoring. Eligible edges are derived from the generated edge registry (`internal/ent/workflowgenerated/workflow_edge_extractor.go`).
+
 ## Adding Workflow Support to a Schema
 
 1. Add the `WorkflowApprovalMixin` to your schema:
@@ -151,7 +167,7 @@ func (Policy) Mixin() []ent.Mixin {
 }
 ```
 
-1. Register eligible fields in the workflow metadata (use the entx annotation)
+1. Register eligible fields (entx annotation) and eligible edges (workflow edge annotations/mixins) in the workflow metadata
 1. Add edges from WorkflowObjectRef schema if they don't already exist
 1. Run code generation / `task regenerate`, merge the output / changes
 1. Create workflow definitions targeting your schema type and test it out
@@ -253,10 +269,11 @@ sequenceDiagram
     alt Has approval actions for these fields
         Hook->>DB: Create WorkflowProposal(state: DRAFT/SUBMITTED)
         Hook->>DB: Create WorkflowObjectRef(control_id)
-        Hook->>DB: Create WorkflowInstance(state: RUNNING, proposal_id)
+        Hook->>DB: Create WorkflowInstance(state: PAUSED, proposal_id)
 
-        Note over Hook: Strip workflow fields from mutation
-        Hook-->>API: Return entity with ORIGINAL values
+        Note over Hook: Strip eligible workflow fields from mutation
+        Note over Hook: Apply ineligible fields + edge changes immediately
+        Hook-->>API: Return entity with direct changes applied (eligible fields unchanged)
 
         alt Auto-Submit Mode
             Hook->>Bus: Emit WorkflowTriggered

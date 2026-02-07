@@ -8,8 +8,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/theopenlane/core/pkg/logx"
-
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -58,15 +56,9 @@ func validateWorkflowDefinitionInput(ctx context.Context, schemaType string, doc
 	if err := validateApprovalSubmissionMode(doc.ApprovalSubmissionMode); err != nil {
 		return err
 	}
+
 	if err := validateApprovalTiming(doc.ApprovalTiming); err != nil {
 		return err
-	}
-
-	if workflows.DefinitionUsesPostCommitApprovals(*doc) {
-		logx.FromContext(ctx).Warn().
-			Str("workflow_name", doc.Name).
-			Str("schema_type", doc.SchemaType).
-			Msg("approvalTiming POST_COMMIT will be treated as REVIEW actions")
 	}
 
 	return nil
@@ -375,12 +367,10 @@ func validateApprovalSubmissionMode(mode enums.WorkflowApprovalSubmissionMode) e
 
 // validateApprovalTiming validates the approval timing if specified
 func validateApprovalTiming(timing enums.WorkflowApprovalTiming) error {
-	if timing == "" {
-		return nil
-	}
 	if enums.ToWorkflowApprovalTiming(timing.String()) == nil {
 		return fmt.Errorf("%w: %q", ErrApprovalTimingInvalid, timing)
 	}
+
 	return nil
 }
 

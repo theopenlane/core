@@ -34,5 +34,5 @@ func HookWorkflowInstanceCascadeDelete() ent.Hook {
 
 			return next.Mutate(ctx, m)
 		})
-	}, ent.OpDelete|ent.OpDeleteOne)
+	}, ent.OpDelete|ent.OpDeleteOne|ent.OpUpdate|ent.OpUpdateOne)
 }

@@ -1,7 +1,7 @@
 # Outstanding TODO's
 
 - Ensure entire setup end to end works with Redis (including tests)
-- Build out full support for `MANUAL_SUBMIT` mode (allow for someone to submit changes in `DRAFT` mode and make ongoing updates before submitting for approval rather than triggering approvals immediately)
+- Build out full support for `MANUAL_SUBMIT` mode (currently coerced to AUTO_SUBMIT; needs draft submit/withdraw UX and APIs)
 
 ┌───────────────────┬─────────────────────────────────────────────────────────────────────────────────┐
 │       Area        │                                 Changes Needed                                  │
@@ -22,9 +22,9 @@
 └───────────────────┴─────────────────────────────────────────────────────────────────────────────────┘
 
 - Make webhook template / replacement configurable input
-- Add email notification support and sending
+- Add delivery channels (email/Slack/etc) for workflow NOTIFY actions beyond DB notifications
 - Add circuit breaker for external calls in actions to prevent worker saturation
-- Add ability (or expose additional schemas / requests) which would allow for easy visual indicators of what field(s) would require approval to modify and which wouldn't
+- Add per-definition approval gating indicators (workflowMetadata now exposes eligible fields/edges, but not which are actually gated by active definitions)
 - Add ability (or expose additional schemas / requests) which would be able to show the approval flow or hierarchy related to object modification before a workflow instance actually exists
 - Refactor existing "job" and "scheduled job" to tie into this framework and allow for scheduling, remote job processing, etc.
 - Add Delegation & Escalation
@@ -39,7 +39,7 @@
 ├────────────────────────┼──────────────────────────────────────────────────────────┤
 │ Out-of-office handling │ Automatic delegation when user is marked OOO             │
 └────────────────────────┴──────────────────────────────────────────────────────────┘
-- Add more robust Rejection flows
+- Expand rejection/change-request flows (CHANGES_REQUESTED + requester assignments exist; remaining improvements below)
 ┌───────────────────┬────────────────────────────────────────────────────────────────────┐
 │      Feature      │                            Description                             │
 ├───────────────────┼────────────────────────────────────────────────────────────────────┤

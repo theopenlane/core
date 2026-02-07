@@ -4,14 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"reflect"
-	"strings"
 	"time"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
-	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -248,37 +245,9 @@ func resetMutationFields(m ent.Mutation, fields []string) {
 		return
 	}
 
-	fieldSet := make(map[string]struct{}, len(fields))
 	for _, field := range fields {
-		fieldSet[field] = struct{}{}
-	}
-
-	value := reflect.ValueOf(m)
-	if value.Kind() != reflect.Ptr {
-		return
-	}
-
-	typ := value.Type()
-	for i := 0; i < typ.NumMethod(); i++ {
-		method := typ.Method(i)
-		if !strings.HasPrefix(method.Name, "Reset") {
-			continue
-		}
-		if method.Type.NumIn() != 1 || method.Type.NumOut() != 0 {
-			continue
-		}
-
-		suffix := strings.TrimPrefix(method.Name, "Reset")
-		if suffix == "" {
-			continue
-		}
-
-		fieldName := strcase.SnakeCase(suffix)
-		if _, ok := fieldSet[fieldName]; !ok {
-			continue
-		}
-
-		value.Method(i).Call(nil)
+		// Ignore unknown fields to preserve the prior "silent fallback" behavior.
+		_ = m.ResetField(field)
 	}
 }
 

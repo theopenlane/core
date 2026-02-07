@@ -38,6 +38,7 @@ func FromContext(ctx context.Context) (WorkflowBypassContextKey, bool) {
 // Used by workflow interceptors to skip approval routing for system operations
 func IsWorkflowBypass(ctx context.Context) bool {
 	_, ok := FromContext(ctx)
+
 	return ok
 }
 
@@ -46,9 +47,11 @@ func WithAllowWorkflowEventEmission(ctx context.Context) context.Context {
 	if ctx == nil {
 		return ctx
 	}
+
 	if _, ok := contextx.From[WorkflowAllowEventEmissionKey](ctx); ok {
 		return ctx
 	}
+
 	return contextx.With(ctx, WorkflowAllowEventEmissionKey{})
 }
 
@@ -57,7 +60,9 @@ func AllowWorkflowEventEmission(ctx context.Context) bool {
 	if ctx == nil {
 		return false
 	}
+
 	_, ok := contextx.From[WorkflowAllowEventEmissionKey](ctx)
+
 	return ok
 }
 
@@ -67,9 +72,11 @@ func WithSkipEventEmission(ctx context.Context) context.Context {
 	if ctx == nil {
 		return ctx
 	}
+
 	if existing, ok := contextx.From[*skipEventEmissionFlag](ctx); ok && existing != nil {
 		return ctx
 	}
+
 	return contextx.With(ctx, &skipEventEmissionFlag{})
 }
 
@@ -88,9 +95,11 @@ func ShouldSkipEventEmission(ctx context.Context) bool {
 	if ctx == nil {
 		return false
 	}
+
 	if flag, ok := contextx.From[*skipEventEmissionFlag](ctx); ok && flag != nil {
 		return flag.skip
 	}
+
 	return false
 }
 
@@ -128,5 +137,6 @@ func allowContextWithOrg(ctx context.Context, bypass bool) (context.Context, str
 	}
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+
 	return allowCtx, orgID, err
 }
