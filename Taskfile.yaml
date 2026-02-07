@@ -239,16 +239,19 @@ tasks:
       - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --print-resources-usage
 
   go:lint:ci:graphapi:
+    silent: true
     desc: runs golangci-lint only on the graphapi package for CI, excluding generated code
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 $(go list ./... | grep internal/graphapi | grep -v internal/graphapi/generated | grep -v internal/graphapi/historygenerated | sed 's|github.com/theopenlane/core[^/]*/||' | sed 's|^|./|')
+      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 $(go list ./... | grep internal/graphapi | grep -v generated | sed 's|github.com/theopenlane/core[^/]*/||' | sed 's|^|./|')
 
   go:lint:ci:handlers:
+    silent: true
     desc: runs golangci-lint only on the httpserve handlers package for CI
     cmds:
       - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --print-resources-usage ./internal/httpserve/handlers/...
 
   go:lint:ci:no-api:
+    silent: true
     desc: runs golangci-lint on all packages except graphapi and handlers for CI
     cmds:
       - |
