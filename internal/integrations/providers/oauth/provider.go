@@ -2,7 +2,6 @@ package oauth
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"github.com/samber/lo"
@@ -24,6 +23,7 @@ const (
 
 // Provider implements the types.Provider interface using Zitadel's relying party helpers
 type Provider struct {
+	// BaseProvider holds shared provider metadata
 	providers.BaseProvider
 	spec         config.ProviderSpec
 	oauthConfig  *oauth2.Config
@@ -66,7 +66,7 @@ func New(_ context.Context, spec config.ProviderSpec, options ...ProviderOption)
 
 	rparty, err := rp.NewRelyingPartyOAuth(cfg, rpOpts...)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", providers.ErrRelyingPartyInit, err)
+		return nil, providers.ErrRelyingPartyInit
 	}
 
 	caps := types.ProviderCapabilities{
@@ -102,10 +102,10 @@ func (p *Provider) BeginAuth(_ context.Context, input types.AuthContext) (types.
 
 	state := input.State
 
-	if strings.TrimSpace(state) == "" {
+	if state == "" {
 		generated, err := auth.RandomState(stateLength)
 		if err != nil {
-			return nil, fmt.Errorf("%w: %w", providers.ErrStateGeneration, err)
+			return nil, providers.ErrStateGeneration
 		}
 
 		state = generated
@@ -148,7 +148,7 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 	tokenSource := p.oauthConfig.TokenSource(ctx, tokenOpt.MustGet())
 	freshToken, err := tokenSource.Token()
 	if err != nil {
-		return types.CredentialPayload{}, fmt.Errorf("%w: %w", providers.ErrTokenRefresh, err)
+		return types.CredentialPayload{}, providers.ErrTokenRefresh
 	}
 
 	builder := types.NewCredentialBuilder(p.Type()).

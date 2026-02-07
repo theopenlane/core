@@ -14,6 +14,7 @@ import (
 
 const awsHealthDefault types.OperationName = "health.default"
 
+// awsHealthOperation builds the AWS health operation descriptor
 func awsHealthOperation() types.OperationDescriptor {
 	return operations.HealthOperation(awsHealthDefault, "Validate AWS access via STS GetCallerIdentity.", "", runAWSHealth)
 }

@@ -70,6 +70,7 @@ func ResolveOperationConfig(config *openapi.IntegrationConfig, operation string,
 	return commonhelpers.DeepCloneMap(overrides), nil
 }
 
+// parseOverrideKeys normalizes and deduplicates override keys
 func parseOverrideKeys(values []string) map[string]struct{} {
 	if len(values) == 0 {
 		return nil
@@ -89,6 +90,7 @@ func parseOverrideKeys(values []string) map[string]struct{} {
 	return out
 }
 
+// operationTemplateFromConfig converts stored template config into an OperationTemplate
 func operationTemplateFromConfig(template openapi.IntegrationOperationTemplate) (OperationTemplate, bool) {
 	config := commonhelpers.DeepCloneMap(template.Config)
 	overrides := parseOverrideKeys(template.AllowOverrides)

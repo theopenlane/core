@@ -25,7 +25,7 @@ var defaultHTTPRequester = httpsling.MustNew(
 	httpsling.Client(httpclient.Timeout(defaultHTTPTimeout)),
 )
 
-// OAuthTokenFromPayload extracts a usable access token from the credential payload.
+// OAuthTokenFromPayload extracts a usable access token from the credential payload
 func OAuthTokenFromPayload(payload types.CredentialPayload, provider string) (string, error) {
 	tokenOpt := payload.OAuthTokenOption()
 	if !tokenOpt.IsPresent() {
@@ -50,7 +50,7 @@ func APITokenFromPayload(payload types.CredentialPayload, provider string) (stri
 	return token, nil
 }
 
-// HTTPGetJSON issues a GET request with the provided bearer token and decodes JSON responses.
+// HTTPGetJSON issues a GET request with the provided bearer token and decodes JSON responses
 func HTTPGetJSON(ctx context.Context, client *http.Client, url string, bearer string, headers map[string]string, out any) error {
 	requester := defaultHTTPRequester
 	if client != nil {
@@ -88,7 +88,7 @@ func HTTPGetJSON(ctx context.Context, client *http.Client, url string, bearer st
 	return nil
 }
 
-// HTTPPostJSON issues a POST request with the provided bearer token and JSON body, then decodes JSON responses.
+// HTTPPostJSON issues a POST request with the provided bearer token and JSON body, then decodes JSON responses
 func HTTPPostJSON(ctx context.Context, client *http.Client, url string, bearer string, headers map[string]string, body any, out any) error {
 	requester := defaultHTTPRequester
 	if client != nil {
@@ -144,6 +144,7 @@ func RandomState(bytes int) (string, error) {
 	return base64.RawURLEncoding.EncodeToString(buf), nil
 }
 
+// httpRequestError constructs an HTTPRequestError from a non-2xx HTTP response
 func httpRequestError(resp *http.Response, url string) error {
 	if resp == nil {
 		return ErrHTTPRequestFailed

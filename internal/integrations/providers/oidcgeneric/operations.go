@@ -9,7 +9,7 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
-// oidcOperations handles oidc operations
+// oidcOperations returns OIDC operation descriptors
 func oidcOperations(userInfoURL string) []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		operations.HealthOperation(types.OperationName("health.default"), "Call the configured userinfo endpoint (when available) to validate the OIDC token.", ClientOIDCAPI, runOIDCHealth(userInfoURL)),
@@ -22,7 +22,7 @@ func oidcOperations(userInfoURL string) []types.OperationDescriptor {
 	}
 }
 
-// runOIDCHealth runs oidc health
+// runOIDCHealth builds a health check function for OIDC tokens
 func runOIDCHealth(userInfoURL string) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 		client, token, err := auth.ClientAndOAuthToken(input, TypeOIDCGeneric)
@@ -55,7 +55,7 @@ func runOIDCHealth(userInfoURL string) types.OperationFunc {
 	}
 }
 
-// runOIDCClaims runs oidc claims
+// runOIDCClaims returns stored OIDC claims for inspection
 func runOIDCClaims(_ context.Context, input types.OperationInput) (types.OperationResult, error) {
 	claims := input.Credential.Claims
 	if claims == nil {

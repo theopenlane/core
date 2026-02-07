@@ -49,6 +49,7 @@ var normalizedMappingSchemas = func() map[string]struct{} {
 		}
 		out[key] = struct{}{}
 	}
+
 	return out
 }()
 
@@ -58,21 +59,31 @@ type MappingEvaluator struct {
 	evaluator *celx.Evaluator
 }
 
-// MappingVars holds CEL variables for integration mappings.
+// MappingVars holds CEL variables for integration mappings
 type MappingVars struct {
-	Payload           map[string]any
-	Resource          string
-	AlertType         string
-	Provider          integrationtypes.ProviderType
-	Operation         integrationtypes.OperationName
-	OrgID             string
-	IntegrationID     string
-	Config            map[string]any
+	// Payload holds the raw provider payload for mapping
+	Payload map[string]any
+	// Resource identifies the upstream resource associated with the payload
+	Resource string
+	// AlertType identifies the alert type for the payload
+	AlertType string
+	// Provider identifies the integration provider
+	Provider integrationtypes.ProviderType
+	// Operation identifies the operation that produced the payload
+	Operation integrationtypes.OperationName
+	// OrgID identifies the organization that owns the integration
+	OrgID string
+	// IntegrationID identifies the integration record
+	IntegrationID string
+	// Config holds operation configuration values
+	Config map[string]any
+	// IntegrationConfig holds integration-level configuration values
 	IntegrationConfig map[string]any
-	ProviderState     map[string]any
+	// ProviderState holds provider state captured during activation
+	ProviderState map[string]any
 }
 
-// Map converts MappingVars into the CEL variable map.
+// Map converts MappingVars into the CEL variable map
 func (m MappingVars) Map() map[string]any {
 	return map[string]any{
 		mappingVarPayload:           m.Payload,
@@ -176,6 +187,7 @@ type mappingOverrideIndex struct {
 	hasProviderSchema map[string]struct{}
 }
 
+// newMappingOverrideIndex builds a lookup index for mapping overrides
 func newMappingOverrideIndex(config openapi.IntegrationConfig) mappingOverrideIndex {
 	init := mappingOverrideIndex{
 		overrides:         make(map[string]openapi.IntegrationMappingOverride, len(config.MappingOverrides)),
@@ -188,18 +200,22 @@ func newMappingOverrideIndex(config openapi.IntegrationConfig) mappingOverrideIn
 		if normalized == "" {
 			return acc
 		}
+
 		acc.overrides[normalized] = entry.Value
 		schemaKey, providerKey := mappingKeyParts(normalized)
 		if schemaKey != "" {
 			acc.hasSchema[schemaKey] = struct{}{}
 		}
+
 		if providerKey != "" && schemaKey != "" {
 			acc.hasProviderSchema[fmt.Sprintf("%s:%s", providerKey, schemaKey)] = struct{}{}
 		}
+
 		return acc
 	}, init)
 }
 
+// HasAny reports whether any overrides exist for the provider and schema
 func (m mappingOverrideIndex) HasAny(provider integrationtypes.ProviderType, schemaName string) bool {
 	schemaKey := normalizeMappingKey(schemaName)
 	if schemaKey == "" {
@@ -213,10 +229,13 @@ func (m mappingOverrideIndex) HasAny(provider integrationtypes.ProviderType, sch
 	if providerKey == "" {
 		return false
 	}
+
 	_, ok := m.hasProviderSchema[fmt.Sprintf("%s:%s", providerKey, schemaKey)]
+
 	return ok
 }
 
+// Resolve selects the most specific override for the provider, schema, and variant
 func (m mappingOverrideIndex) Resolve(provider integrationtypes.ProviderType, schemaName string, variant string) (openapi.IntegrationMappingOverride, bool) {
 	providerKey := normalizeMappingKey(string(provider))
 	schemaKey := normalizeMappingKey(schemaName)
@@ -226,12 +245,15 @@ func (m mappingOverrideIndex) Resolve(provider integrationtypes.ProviderType, sc
 	if providerKey != "" && schemaKey != "" && variantKey != "" {
 		candidates = append(candidates, fmt.Sprintf("%s:%s:%s", providerKey, schemaKey, variantKey))
 	}
+
 	if providerKey != "" && schemaKey != "" {
 		candidates = append(candidates, fmt.Sprintf("%s:%s", providerKey, schemaKey))
 	}
+
 	if schemaKey != "" && variantKey != "" {
 		candidates = append(candidates, fmt.Sprintf("%s:%s", schemaKey, variantKey))
 	}
+
 	if schemaKey != "" {
 		candidates = append(candidates, schemaKey)
 	}
@@ -245,6 +267,7 @@ func (m mappingOverrideIndex) Resolve(provider integrationtypes.ProviderType, sc
 	return openapi.IntegrationMappingOverride{}, false
 }
 
+// mappingKeyParts splits a normalized override key into schema and provider parts
 func mappingKeyParts(key string) (schemaKey string, providerKey string) {
 	parts := strings.SplitN(key, ":", 3)
 	switch len(parts) {
@@ -269,11 +292,14 @@ func mappingKeyParts(key string) (schemaKey string, providerKey string) {
 	}
 }
 
+// isMappingSchema reports whether a name matches a known mapping schema
 func isMappingSchema(value string) bool {
 	_, ok := normalizedMappingSchemas[value]
+
 	return ok
 }
 
+// resolveMappingSpecWithIndex resolves overrides using a precomputed index
 func resolveMappingSpecWithIndex(index mappingOverrideIndex, provider integrationtypes.ProviderType, schemaName string, variant string) (openapi.IntegrationMappingOverride, bool) {
 	if override, ok := index.Resolve(provider, schemaName, variant); ok {
 		return override, true
@@ -304,6 +330,7 @@ func filterMappingOutput(schema integrationgenerated.IntegrationMappingSchema, i
 	allowed := allowedMappingKeys(schema)
 	return lo.PickBy(input, func(key string, _ any) bool {
 		_, ok := allowed[key]
+
 		return ok
 	})
 }
@@ -322,10 +349,10 @@ func validateMappingOutput(schema integrationgenerated.IntegrationMappingSchema,
 	for _, key := range requiredKeys {
 		value, ok := input[key]
 		if !ok || value == nil {
-			return fmt.Errorf("%w: %s", ErrMappingRequiredField, key)
+			return ErrMappingRequiredField
 		}
 		if str, ok := value.(string); ok && strings.TrimSpace(str) == "" {
-			return fmt.Errorf("%w: %s", ErrMappingRequiredField, key)
+			return ErrMappingRequiredField
 		}
 	}
 

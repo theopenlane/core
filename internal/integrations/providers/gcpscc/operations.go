@@ -33,20 +33,30 @@ var (
 )
 
 type securityCenterFindingsConfig struct {
+	// Pagination controls page sizing for SCC findings
 	operations.Pagination
+	// PayloadOptions controls payload inclusion for findings
 	operations.PayloadOptions
 
-	Filter      types.TrimmedString `json:"filter"`
-	SourceID    types.TrimmedString `json:"sourceId"`
-	MaxFindings int                 `json:"max_findings"`
+	// Filter overrides the stored findings filter
+	Filter types.TrimmedString `json:"filter"`
+	// SourceID overrides the stored SCC source identifier
+	SourceID types.TrimmedString `json:"sourceId"`
+	// MaxFindings caps the number of findings returned
+	MaxFindings int `json:"max_findings"`
 }
 
 type securityCenterFindingsSchema struct {
-	SourceID        types.TrimmedString `json:"sourceId,omitempty" jsonschema:"description=Optional SCC source override (full resource name or bare source ID)."`
-	Filter          types.TrimmedString `json:"filter,omitempty" jsonschema:"description=Optional SCC findings filter overriding stored metadata."`
-	PageSize        int                 `json:"page_size,omitempty" jsonschema:"description=Optional page size override (max 1000)."`
-	MaxFindings     int                 `json:"max_findings,omitempty" jsonschema:"description=Optional cap on total findings returned."`
-	IncludePayloads bool                `json:"include_payloads,omitempty" jsonschema:"description=Return raw finding payloads in the response (defaults to false)."`
+	// SourceID overrides the SCC source identifier
+	SourceID types.TrimmedString `json:"sourceId,omitempty" jsonschema:"description=Optional SCC source override (full resource name or bare source ID)."`
+	// Filter overrides the stored SCC findings filter
+	Filter types.TrimmedString `json:"filter,omitempty" jsonschema:"description=Optional SCC findings filter overriding stored metadata."`
+	// PageSize overrides the findings page size
+	PageSize int `json:"page_size,omitempty" jsonschema:"description=Optional page size override (max 1000)."`
+	// MaxFindings caps the total findings returned
+	MaxFindings int `json:"max_findings,omitempty" jsonschema:"description=Optional cap on total findings returned."`
+	// IncludePayloads controls whether raw payloads are returned
+	IncludePayloads bool `json:"include_payloads,omitempty" jsonschema:"description=Return raw finding payloads in the response (defaults to false)."`
 }
 
 var securityCenterFindingsConfigSchema = operations.SchemaFrom[securityCenterFindingsSchema]()
@@ -219,7 +229,7 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 			}, err
 		}
 
-		resourceName := strings.TrimSpace(finding.GetResourceName())
+		resourceName := finding.GetResourceName()
 		envelopes = append(envelopes, types.AlertEnvelope{
 			AlertType: sccAlertTypeFinding,
 			Resource:  resourceName,
@@ -227,13 +237,13 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 		})
 		total++
 
-		if severity := strings.TrimSpace(finding.GetSeverity().String()); severity != "" {
+		if severity := finding.GetSeverity().String(); severity != "" {
 			key := strings.ToLower(severity)
 			if key != "severity_unspecified" {
 				severityCounts[key]++
 			}
 		}
-		if state := strings.TrimSpace(finding.GetState().String()); state != "" {
+		if state := finding.GetState().String(); state != "" {
 			key := strings.ToLower(state)
 			if key != "state_unspecified" {
 				stateCounts[key]++

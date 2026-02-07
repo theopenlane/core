@@ -3,7 +3,6 @@ package apikey
 import (
 	"context"
 	"maps"
-	"strings"
 
 	"github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/common/integrations/operations"
@@ -24,7 +23,6 @@ type providerConfig struct {
 // WithTokenField overrides the metadata field used to extract the API token.
 func WithTokenField(field string) ProviderOption {
 	return func(cfg *providerConfig) {
-		field = strings.TrimSpace(field)
 		if field != "" {
 			cfg.tokenField = field
 		}
@@ -83,6 +81,7 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 
 // Provider implements API key based integrations.
 type Provider struct {
+	// BaseProvider holds shared provider metadata
 	providers.BaseProvider
 	tokenField string
 }
@@ -100,7 +99,7 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 
 	providerData := subject.Credential.Data.ProviderData
 	if len(providerData) == 0 {
-		if token := strings.TrimSpace(subject.Credential.Data.APIToken); token != "" {
+		if token := subject.Credential.Data.APIToken; token != "" {
 			return subject.Credential, nil
 		}
 

@@ -9,5 +9,6 @@ func AddPayloadIf(details map[string]any, include bool, key string, payload any)
 		details = map[string]any{}
 	}
 	details[key] = payload
+
 	return details
 }

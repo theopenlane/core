@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// ParseDuration returns a parsed duration or zero when invalid.
+// ParseDuration returns a parsed duration or zero when invalid
 func ParseDuration(value string) time.Duration {
 	value = strings.TrimSpace(value)
 	if value == "" {
@@ -15,5 +15,6 @@ func ParseDuration(value string) time.Duration {
 	if err != nil {
 		return 0
 	}
+
 	return duration
 }

@@ -12,14 +12,14 @@ const (
 	cloudflareHealthOp types.OperationName = "health.default"
 )
 
-// cloudflareOperations handles cloudflare operations
+// cloudflareOperations returns Cloudflare operation descriptors
 func cloudflareOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		operations.HealthOperation(cloudflareHealthOp, "Verify Cloudflare API token via /user/tokens/verify.", ClientCloudflareAPI, runCloudflareHealth),
 	}
 }
 
-// runCloudflareHealth runs cloudflare health
+// runCloudflareHealth validates Cloudflare credentials via token verification
 func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, token, err := auth.ClientAndAPIToken(input, TypeCloudflare)
 	if err != nil {
@@ -27,12 +27,18 @@ func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types
 	}
 
 	var resp struct {
+		// Success indicates whether the API call succeeded
 		Success bool `json:"success"`
+		// Result holds token metadata returned by the API
 		Result  struct {
+			// IssuedOn is the token issued timestamp
 			IssuedOn  string `json:"issued_on"`
+			// ExpiresOn is the token expiration timestamp
 			ExpiresOn string `json:"expires_on"`
 		} `json:"result"`
+		// Errors lists any API errors returned by the verification call
 		Errors []struct {
+			// Message is the error message returned by the API
 			Message string `json:"message"`
 		} `json:"errors"`
 	}

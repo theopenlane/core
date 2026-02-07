@@ -28,5 +28,6 @@ func userInfoURL(spec config.ProviderSpec) string {
 	if spec.UserInfo != nil {
 		return spec.UserInfo.URL
 	}
+
 	return ""
 }

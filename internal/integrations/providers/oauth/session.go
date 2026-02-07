@@ -2,7 +2,6 @@ package oauth
 
 import (
 	"context"
-	"fmt"
 
 	"golang.org/x/oauth2"
 
@@ -49,7 +48,7 @@ func (s *Session) Finish(ctx context.Context, code string) (types.CredentialPayl
 
 	tokens, err := rp.CodeExchange[*oidc.IDTokenClaims](ctx, code, s.provider.relyingParty, codeOpts...)
 	if err != nil {
-		return types.CredentialPayload{}, fmt.Errorf("%w: %w", providers.ErrCodeExchange, err)
+		return types.CredentialPayload{}, providers.ErrCodeExchange
 	}
 
 	builder := types.NewCredentialBuilder(s.provider.Type()).

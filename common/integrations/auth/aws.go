@@ -14,44 +14,67 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
+// awsProviderData holds AWS provider data fields used for authentication
 type awsProviderData struct {
-	Region          string `json:"region"`
-	RoleARN         string `json:"roleArn"`
-	AccountID       string `json:"accountId"`
-	ExternalID      string `json:"externalId"`
-	SessionName     string `json:"sessionName"`
+	// Region is the AWS region for API calls
+	Region string `json:"region"`
+	// RoleARN is the ARN of the role to assume
+	RoleARN string `json:"roleArn"`
+	// AccountID is the AWS account ID
+	AccountID string `json:"accountId"`
+	// ExternalID is the external ID for role assumption
+	ExternalID string `json:"externalId"`
+	// SessionName is the name for the session
+	SessionName string `json:"sessionName"`
+	// SessionDuration is the duration for the session
 	SessionDuration string `json:"sessionDuration"`
-	AccessKeyID     string `json:"accessKeyId"`
+	// AccessKeyID is the AWS access key ID
+	AccessKeyID string `json:"accessKeyId"`
+	// SecretAccessKey is the AWS secret access key
 	SecretAccessKey string `json:"secretAccessKey"`
-	SessionToken    string `json:"sessionToken"`
+	// SessionToken is the AWS session token
+	SessionToken string `json:"sessionToken"`
 }
 
-// AWSMetadata captures common AWS configuration fields stored in provider metadata.
+// AWSMetadata captures common AWS configuration fields stored in provider metadata
 type AWSMetadata struct {
-	Region          string
-	RoleARN         string
-	AccountID       string
-	ExternalID      string
-	SessionName     string
+	// Region is the AWS region for API calls
+	Region string
+	// RoleARN is the ARN of the role to assume
+	RoleARN string
+	// AccountID is the AWS account ID
+	AccountID string
+	// ExternalID is the external ID for role assumption
+	ExternalID string
+	// SessionName is the name for the session
+	SessionName string
+	// SessionDuration is the duration for the session
 	SessionDuration time.Duration
 }
 
-// AWSAssumeRole captures the optional STS assume-role settings.
+// AWSAssumeRole captures the optional STS assume-role settings
 type AWSAssumeRole struct {
-	RoleARN         string
-	ExternalID      string
-	SessionName     string
+	// RoleARN is the ARN of the role to assume
+	RoleARN string
+	// ExternalID is the external ID for role assumption
+	ExternalID string
+	// SessionName is the name for the session
+	SessionName string
+	// SessionDuration is the duration for the session
 	SessionDuration time.Duration
 }
 
-// AWSCredentials captures static AWS access key credentials.
+// AWSCredentials captures static AWS access key credentials
 type AWSCredentials struct {
-	AccessKeyID     string
+	// AccessKeyID is the AWS access key ID
+	AccessKeyID string
+	// SecretAccessKey is the AWS secret access key
 	SecretAccessKey string
-	SessionToken    string
+	// SessionToken is the AWS session token
+	SessionToken string
 }
 
-// AWSMetadataFromProviderData normalizes AWS metadata with a default session name.
+// AWSMetadataFromProviderData normalizes AWS metadata with a default session name
 func AWSMetadataFromProviderData(meta map[string]any, defaultSessionName string) (AWSMetadata, error) {
 	var decoded awsProviderData
 	if err := DecodeProviderData(meta, &decoded); err != nil {
@@ -73,7 +96,7 @@ func AWSMetadataFromProviderData(meta map[string]any, defaultSessionName string)
 	}, nil
 }
 
-// AWSCredentialsFromPayload extracts access keys from payload credentials with metadata fallback.
+// AWSCredentialsFromPayload extracts access keys from payload credentials with metadata fallback
 func AWSCredentialsFromPayload(payload types.CredentialPayload) AWSCredentials {
 	accessKey := strings.TrimSpace(payload.Data.AccessKeyID)
 	secretKey := strings.TrimSpace(payload.Data.SecretAccessKey)
@@ -99,7 +122,7 @@ func AWSCredentialsFromPayload(payload types.CredentialPayload) AWSCredentials {
 	}
 }
 
-// BuildAWSConfig constructs an AWS SDK config with optional static and assumed credentials.
+// BuildAWSConfig constructs an AWS SDK config with optional static and assumed credentials
 func BuildAWSConfig(ctx context.Context, region string, creds AWSCredentials, assume AWSAssumeRole) (aws.Config, error) {
 	opts := []func(*config.LoadOptions) error{
 		config.WithRegion(region),

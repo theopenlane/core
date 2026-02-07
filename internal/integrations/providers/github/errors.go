@@ -21,6 +21,8 @@ var (
 	ErrAppIDMissing = errors.New("github: app id missing")
 	// ErrInstallationIDMissing indicates the GitHub App installation ID is missing
 	ErrInstallationIDMissing = errors.New("github: installation id missing")
+	// ErrAppJWTMissing indicates the GitHub App JWT is missing
+	ErrAppJWTMissing = errors.New("github: app jwt missing")
 	// ErrPrivateKeyMissing indicates the GitHub App private key is missing
 	ErrPrivateKeyMissing = errors.New("github: private key missing")
 	// ErrPrivateKeyInvalid indicates the GitHub App private key could not be parsed

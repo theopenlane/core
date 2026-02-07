@@ -86,10 +86,11 @@ func runOktaPolicies(ctx context.Context, input types.OperationInput) (types.Ope
 func oktaCredentials(input types.OperationInput) (string, string, error) {
 	data := input.Credential.Data
 	baseURL, _ := data.ProviderData["orgUrl"].(string)
-	apiToken := strings.TrimSpace(data.APIToken)
+	apiToken := data.APIToken
 	if baseURL == "" || apiToken == "" {
 		return "", "", ErrCredentialsMissing
 	}
+
 	return baseURL, apiToken, nil
 }
 
@@ -101,7 +102,7 @@ func oktaGET(ctx context.Context, client *auth.AuthenticatedClient, endpoint, ap
 
 	if err := auth.GetJSONWithClient(ctx, client, endpoint, "", headers, out); err != nil {
 		if errors.Is(err, auth.ErrHTTPRequestFailed) {
-			return fmt.Errorf("%w: %w", ErrAPIRequest, err)
+			return ErrAPIRequest
 		}
 		return err
 	}

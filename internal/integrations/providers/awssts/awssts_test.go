@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 )
 
-// TestProviderMint handles test provider mint
+// TestProviderMint verifies AWS STS metadata is normalized and persisted
 func TestProviderMint(t *testing.T) {
 	spec := config.ProviderSpec{
 		Name:              "aws_test",

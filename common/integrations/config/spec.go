@@ -47,7 +47,7 @@ type ProviderSpec struct {
 	// Metadata stores additional provider metadata
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// Defaults stores provider-specific defaults
-	Defaults map[string]interface{} `json:"defaults,omitempty"`
+	Defaults map[string]any `json:"defaults,omitempty"`
 }
 
 // ProviderType returns the normalized provider identifier

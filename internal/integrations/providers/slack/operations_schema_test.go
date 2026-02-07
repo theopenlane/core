@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// TestSlackMessageConfigSchema verifies the Slack message schema has expected fields
 func TestSlackMessageConfigSchema(t *testing.T) {
 	schema := slackMessageConfigSchema
 	require.NotNil(t, schema)
@@ -28,6 +29,7 @@ func TestSlackMessageConfigSchema(t *testing.T) {
 	require.Contains(t, required, "channel")
 }
 
+// schemaProperties extracts schema properties and fails the test if missing
 func schemaProperties(t *testing.T, schema map[string]any) map[string]any {
 	t.Helper()
 
@@ -36,6 +38,7 @@ func schemaProperties(t *testing.T, schema map[string]any) map[string]any {
 	return props
 }
 
+// schemaRequired extracts required fields from a schema and returns them as strings
 func schemaRequired(t *testing.T, schema map[string]any) []string {
 	t.Helper()
 

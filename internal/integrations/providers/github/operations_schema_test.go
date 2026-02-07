@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// TestGitHubRepoConfigSchema verifies the repository config schema has expected fields
 func TestGitHubRepoConfigSchema(t *testing.T) {
 	schema := githubRepoConfigSchema
 	require.NotNil(t, schema)
@@ -16,6 +17,7 @@ func TestGitHubRepoConfigSchema(t *testing.T) {
 	require.Contains(t, props, "per_page")
 }
 
+// TestGitHubVulnerabilityConfigSchema verifies the vulnerability schema has expected fields
 func TestGitHubVulnerabilityConfigSchema(t *testing.T) {
 	schema := githubVulnerabilityConfigSchema
 	require.NotNil(t, schema)
@@ -38,6 +40,7 @@ func TestGitHubVulnerabilityConfigSchema(t *testing.T) {
 	}
 }
 
+// schemaProperties extracts schema properties and fails the test if missing
 func schemaProperties(t *testing.T, schema map[string]any) map[string]any {
 	t.Helper()
 

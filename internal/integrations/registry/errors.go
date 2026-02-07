@@ -13,4 +13,6 @@ var (
 	ErrBuilderMismatch = errors.New("integrations/registry: builder missing or type mismatch")
 	// ErrProviderBuildFailed indicates provider construction failed
 	ErrProviderBuildFailed = errors.New("integrations/registry: build provider failed")
+	// ErrProviderNil indicates a provider build returned a nil instance
+	ErrProviderNil = errors.New("integrations/registry: provider is nil")
 )
