@@ -383,7 +383,7 @@ func sendTrustCenterNDARequestEmail(ctx context.Context, ndaRequest ndaAuthEmail
 
 func buildTrustCenterAuthURL(ctx context.Context, ndaRequest ndaAuthEmailData) (string, *generated.TrustCenter, error) {
 	if ndaRequest.trustCenterID == "" || ndaRequest.email == "" {
-		return "", nil, fmt.Errorf("missing trust center ID or email for auth URL")
+		return "", nil, fmt.Errorf("missing trust center ID or email for auth URL") //nolint:err113
 	}
 
 	if ndaRequest.requestID == "" {

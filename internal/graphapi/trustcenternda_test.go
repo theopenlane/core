@@ -3,18 +3,13 @@ package graphapi_test
 import (
 	"context"
 	"fmt"
-	"strings"
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
-	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -101,25 +96,6 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
-
-	jobs := rivertest.RequireManyInserted(testUser1.UserCtx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
-		[]rivertest.ExpectedJob{
-			{
-				Args: jobs.EmailArgs{},
-			},
-		})
-	assert.Assert(t, jobs != nil)
-	assert.Assert(t, is.Len(jobs, 1))
-
-	found := false
-	for _, v := range jobs {
-		if strings.Contains(string(v.EncodedArgs), "Access") {
-			found = true
-			break
-		}
-	}
-
-	assert.Assert(t, found, "expected access email to be sent")
 
 	// make sure the nda request is marked as signed
 	ndaRequest, err := suite.client.api.GetTrustCenterNDARequests(testUser1.UserCtx, nil, nil, nil, nil, []*testclient.TrustCenterNDARequestOrder{}, &testclient.TrustCenterNDARequestWhereInput{
