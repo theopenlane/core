@@ -10,6 +10,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/common/enums"
@@ -114,6 +115,9 @@ func (w WorkflowAssignment) Edges() []ent.Edge {
 			edgeSchema: WorkflowAssignmentTarget{},
 			name:       "targets",
 			comment:    "Targets for this assignment (user/group/resolver)",
+			annotations: []schema.Annotation{
+				entx.CascadeAnnotationField("WorkflowAssignmentID"),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,

@@ -165,7 +165,7 @@ func (m *ProposalManager) Apply(scope *observability.Scope, proposalID string, o
 		return fmt.Errorf("%w: %w", ErrFailedToLoadProposal, err)
 	}
 
-	bypassCtx := workflows.AllowBypassContext(ctx)
+	bypassCtx := workflows.AllowBypassContextWithEvents(ctx)
 	if err := workflows.ApplyObjectFieldUpdates(bypassCtx, m.client, obj.Type, obj.ID, proposal.Changes); err != nil {
 		return fmt.Errorf("%w: %w", ErrFailedToApplyFieldUpdates, err)
 	}

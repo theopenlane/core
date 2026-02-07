@@ -44925,6 +44925,8 @@ type WorkflowObjectTypeMetadata struct {
 	Description string `json:"description"`
 	// List of fields that can be tracked in workflows for this type
 	EligibleFields []*WorkflowFieldMetadata `json:"eligibleFields"`
+	// List of edges that can be tracked in workflows for this type
+	EligibleEdges []string `json:"eligibleEdges"`
 	// Available resolver keys for this object type
 	ResolverKeys []string `json:"resolverKeys"`
 }

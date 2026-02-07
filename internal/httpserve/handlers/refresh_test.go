@@ -85,8 +85,14 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 	_, refresh, err := tm.CreateTokenPair(claims)
 	require.NoError(t, err)
 
-	// ensure refresh token is valid by waiting
-	time.Sleep(1 * time.Second)
+	// Ensure refresh token is valid by waiting until its NotBefore time instead of a fixed sleep.
+	nbf, err := tokens.NotBefore(refresh)
+	require.NoError(t, err)
+	if !nbf.IsZero() {
+		if wait := time.Until(nbf); wait > 0 {
+			time.Sleep(wait + 10*time.Millisecond)
+		}
+	}
 
 	testCases := []struct {
 		name               string

@@ -88,6 +88,66 @@ func DefinitionHasApprovalAction(doc models.WorkflowDefinitionDocument) bool {
 	})
 }
 
+// DefinitionHasReviewAction returns true if the workflow definition contains at least one review action.
+func DefinitionHasReviewAction(doc models.WorkflowDefinitionDocument) bool {
+	return lo.SomeBy(doc.Actions, func(action models.WorkflowAction) bool {
+		actionType := enums.ToWorkflowActionType(action.Type)
+		return actionType != nil && *actionType == enums.WorkflowActionTypeReview
+	})
+}
+
+// ApprovalTimingOrDefault resolves the approval timing, defaulting to PRE_COMMIT.
+func ApprovalTimingOrDefault(doc models.WorkflowDefinitionDocument) enums.WorkflowApprovalTiming {
+	if doc.ApprovalTiming == "" {
+		return enums.WorkflowApprovalTimingPreCommit
+	}
+	if parsed := enums.ToWorkflowApprovalTiming(doc.ApprovalTiming.String()); parsed != nil {
+		return *parsed
+	}
+
+	return enums.WorkflowApprovalTimingPreCommit
+}
+
+// DefinitionUsesPreCommitApprovals returns true if approvals should block changes.
+func DefinitionUsesPreCommitApprovals(doc models.WorkflowDefinitionDocument) bool {
+	return DefinitionHasApprovalAction(doc) && ApprovalTimingOrDefault(doc) == enums.WorkflowApprovalTimingPreCommit
+}
+
+// DefinitionUsesPostCommitApprovals returns true if approvals should run after commit.
+func DefinitionUsesPostCommitApprovals(doc models.WorkflowDefinitionDocument) bool {
+	return DefinitionHasApprovalAction(doc) && ApprovalTimingOrDefault(doc) == enums.WorkflowApprovalTimingPostCommit
+}
+
+// ConvertApprovalActionsToReview returns a copy of the definition with approval actions
+// converted to review actions. This is used to reuse review handling for POST_COMMIT flows.
+func ConvertApprovalActionsToReview(doc models.WorkflowDefinitionDocument) models.WorkflowDefinitionDocument {
+	if len(doc.Actions) == 0 {
+		return doc
+	}
+
+	actions := make([]models.WorkflowAction, len(doc.Actions))
+	copy(actions, doc.Actions)
+
+	updated := false
+	for i, action := range actions {
+		actionType := enums.ToWorkflowActionType(action.Type)
+		if actionType == nil || *actionType != enums.WorkflowActionTypeApproval {
+			continue
+		}
+
+		actions[i].Type = string(enums.WorkflowActionTypeReview)
+		updated = true
+	}
+
+	if !updated {
+		return doc
+	}
+
+	out := doc
+	out.Actions = actions
+	return out
+}
+
 // ApprovalDomains returns the distinct field sets used by approval actions in a definition
 // It returns an error when approval action params cannot be parsed
 func ApprovalDomains(doc models.WorkflowDefinitionDocument) ([][]string, error) {

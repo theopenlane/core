@@ -8618,6 +8618,7 @@ func init() {
 	workflowinstanceMixinHooks2 := workflowinstanceMixin[2].Hooks()
 	workflowinstanceMixinHooks3 := workflowinstanceMixin[3].Hooks()
 	workflowinstanceMixinHooks5 := workflowinstanceMixin[5].Hooks()
+	workflowinstanceHooks := schema.WorkflowInstance{}.Hooks()
 
 	workflowinstance.Hooks[1] = workflowinstanceMixinHooks0[0]
 
@@ -8630,6 +8631,8 @@ func init() {
 	workflowinstance.Hooks[5] = workflowinstanceMixinHooks5[0]
 
 	workflowinstance.Hooks[6] = workflowinstanceMixinHooks5[1]
+
+	workflowinstance.Hooks[7] = workflowinstanceHooks[0]
 	workflowinstanceMixinInters1 := workflowinstanceMixin[1].Interceptors()
 	workflowinstanceMixinInters5 := workflowinstanceMixin[5].Interceptors()
 	workflowinstance.Interceptors[0] = workflowinstanceMixinInters1[0]

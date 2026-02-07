@@ -1445,6 +1445,35 @@ func HasGroupsWith(preds ...predicate.Group) predicate.WorkflowDefinition {
 	})
 }
 
+// HasWorkflowInstances applies the HasEdge predicate on the "workflow_instances" edge.
+func HasWorkflowInstances() predicate.WorkflowDefinition {
+	return predicate.WorkflowDefinition(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, WorkflowInstancesTable, WorkflowInstancesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWorkflowInstancesWith applies the HasEdge predicate on the "workflow_instances" edge with a given conditions (other predicates).
+func HasWorkflowInstancesWith(preds ...predicate.WorkflowInstance) predicate.WorkflowDefinition {
+	return predicate.WorkflowDefinition(func(s *sql.Selector) {
+		step := newWorkflowInstancesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasNotificationTemplates applies the HasEdge predicate on the "notification_templates" edge.
 func HasNotificationTemplates() predicate.WorkflowDefinition {
 	return predicate.WorkflowDefinition(func(s *sql.Selector) {

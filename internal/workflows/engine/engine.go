@@ -171,9 +171,9 @@ func (e *WorkflowEngine) guardTrigger(ctx context.Context, def *generated.Workfl
 		return err
 	}
 
-	// For approval workflows, guard per (object, domain) to allow multiple concurrent instances
-	// for different approval domains on the same object
-	if workflows.DefinitionHasApprovalAction(def.DefinitionJSON) && domain != nil && len(domain.Fields) > 0 {
+	// For PRE_COMMIT approval workflows, guard per (object, domain) to allow multiple concurrent instances
+	// for different approval domains on the same object. POST_COMMIT approvals behave like reviews.
+	if workflows.DefinitionUsesPreCommitApprovals(def.DefinitionJSON) && domain != nil && len(domain.Fields) > 0 {
 		return e.guardTriggerPerDomain(ctx, def, obj, domain.Fields)
 	}
 
@@ -325,7 +325,7 @@ func (e *WorkflowEngine) ProcessAction(ctx context.Context, instance *generated.
 	}
 
 	// Approval actions pause the workflow until decisions arrive
-	if actionType != nil && *actionType == enums.WorkflowActionTypeApproval {
+	if actionType != nil && isGatedActionType(*actionType) {
 		allowCtx := workflows.AllowContext(ctx)
 		if err := e.client.WorkflowInstance.UpdateOneID(instance.ID).
 			SetState(enums.WorkflowInstanceStatePaused).
@@ -372,7 +372,7 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 		if approvalMetadata != nil {
 			update.SetApprovalMetadata(*approvalMetadata)
 		}
-	case enums.WorkflowAssignmentStatusRejected:
+	case enums.WorkflowAssignmentStatusRejected, enums.WorkflowAssignmentStatusChangesRequested:
 		if rejectionMetadata != nil {
 			update.SetRejectionMetadata(*rejectionMetadata)
 		}
@@ -426,7 +426,12 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 
 // serializeDefinition converts a workflow definition to the storage format
 func (e *WorkflowEngine) serializeDefinition(def *generated.WorkflowDefinition) models.WorkflowDefinitionDocument {
-	return def.DefinitionJSON
+	doc := def.DefinitionJSON
+	if workflows.DefinitionUsesPostCommitApprovals(doc) {
+		doc = workflows.ConvertApprovalActionsToReview(doc)
+	}
+
+	return doc
 }
 
 // approvalDomainForTrigger picks the first matching approval domain for a trigger event

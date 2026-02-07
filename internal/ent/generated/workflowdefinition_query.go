@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -35,12 +36,14 @@ type WorkflowDefinitionQuery struct {
 	withOwner                      *OrganizationQuery
 	withTagDefinitions             *TagDefinitionQuery
 	withGroups                     *GroupQuery
+	withWorkflowInstances          *WorkflowInstanceQuery
 	withNotificationTemplates      *NotificationTemplateQuery
 	withEmailTemplates             *EmailTemplateQuery
 	loadTotal                      []func(context.Context, []*WorkflowDefinition) error
 	modifiers                      []func(*sql.Selector)
 	withNamedTagDefinitions        map[string]*TagDefinitionQuery
 	withNamedGroups                map[string]*GroupQuery
+	withNamedWorkflowInstances     map[string]*WorkflowInstanceQuery
 	withNamedNotificationTemplates map[string]*NotificationTemplateQuery
 	withNamedEmailTemplates        map[string]*EmailTemplateQuery
 	// intermediate query (i.e. traversal path).
@@ -148,6 +151,31 @@ func (_q *WorkflowDefinitionQuery) QueryGroups() *GroupQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryWorkflowInstances chains the current query on the "workflow_instances" edge.
+func (_q *WorkflowDefinitionQuery) QueryWorkflowInstances() *WorkflowInstanceQuery {
+	query := (&WorkflowInstanceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowdefinition.Table, workflowdefinition.FieldID, selector),
+			sqlgraph.To(workflowinstance.Table, workflowinstance.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, workflowdefinition.WorkflowInstancesTable, workflowdefinition.WorkflowInstancesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.WorkflowInstance
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -399,6 +427,7 @@ func (_q *WorkflowDefinitionQuery) Clone() *WorkflowDefinitionQuery {
 		withOwner:                 _q.withOwner.Clone(),
 		withTagDefinitions:        _q.withTagDefinitions.Clone(),
 		withGroups:                _q.withGroups.Clone(),
+		withWorkflowInstances:     _q.withWorkflowInstances.Clone(),
 		withNotificationTemplates: _q.withNotificationTemplates.Clone(),
 		withEmailTemplates:        _q.withEmailTemplates.Clone(),
 		// clone intermediate query.
@@ -438,6 +467,17 @@ func (_q *WorkflowDefinitionQuery) WithGroups(opts ...func(*GroupQuery)) *Workfl
 		opt(query)
 	}
 	_q.withGroups = query
+	return _q
+}
+
+// WithWorkflowInstances tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_instances" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowDefinitionQuery) WithWorkflowInstances(opts ...func(*WorkflowInstanceQuery)) *WorkflowDefinitionQuery {
+	query := (&WorkflowInstanceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowInstances = query
 	return _q
 }
 
@@ -547,10 +587,11 @@ func (_q *WorkflowDefinitionQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	var (
 		nodes       = []*WorkflowDefinition{}
 		_spec       = _q.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [6]bool{
 			_q.withOwner != nil,
 			_q.withTagDefinitions != nil,
 			_q.withGroups != nil,
+			_q.withWorkflowInstances != nil,
 			_q.withNotificationTemplates != nil,
 			_q.withEmailTemplates != nil,
 		}
@@ -600,6 +641,15 @@ func (_q *WorkflowDefinitionQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 			return nil, err
 		}
 	}
+	if query := _q.withWorkflowInstances; query != nil {
+		if err := _q.loadWorkflowInstances(ctx, query, nodes,
+			func(n *WorkflowDefinition) { n.Edges.WorkflowInstances = []*WorkflowInstance{} },
+			func(n *WorkflowDefinition, e *WorkflowInstance) {
+				n.Edges.WorkflowInstances = append(n.Edges.WorkflowInstances, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withNotificationTemplates; query != nil {
 		if err := _q.loadNotificationTemplates(ctx, query, nodes,
 			func(n *WorkflowDefinition) { n.Edges.NotificationTemplates = []*NotificationTemplate{} },
@@ -629,6 +679,13 @@ func (_q *WorkflowDefinitionQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 		if err := _q.loadGroups(ctx, query, nodes,
 			func(n *WorkflowDefinition) { n.appendNamedGroups(name) },
 			func(n *WorkflowDefinition, e *Group) { n.appendNamedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowInstances {
+		if err := _q.loadWorkflowInstances(ctx, query, nodes,
+			func(n *WorkflowDefinition) { n.appendNamedWorkflowInstances(name) },
+			func(n *WorkflowDefinition, e *WorkflowInstance) { n.appendNamedWorkflowInstances(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -740,6 +797,36 @@ func (_q *WorkflowDefinitionQuery) loadGroups(ctx context.Context, query *GroupQ
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "workflow_definition_groups" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *WorkflowDefinitionQuery) loadWorkflowInstances(ctx context.Context, query *WorkflowInstanceQuery, nodes []*WorkflowDefinition, init func(*WorkflowDefinition), assign func(*WorkflowDefinition, *WorkflowInstance)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*WorkflowDefinition)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowinstance.FieldWorkflowDefinitionID)
+	}
+	query.Where(predicate.WorkflowInstance(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(workflowdefinition.WorkflowInstancesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.WorkflowDefinitionID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "workflow_definition_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -932,6 +1019,20 @@ func (_q *WorkflowDefinitionQuery) WithNamedGroups(name string, opts ...func(*Gr
 		_q.withNamedGroups = make(map[string]*GroupQuery)
 	}
 	_q.withNamedGroups[name] = query
+	return _q
+}
+
+// WithNamedWorkflowInstances tells the query-builder to eager-load the nodes that are connected to the "workflow_instances"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowDefinitionQuery) WithNamedWorkflowInstances(name string, opts ...func(*WorkflowInstanceQuery)) *WorkflowDefinitionQuery {
+	query := (&WorkflowInstanceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowInstances == nil {
+		_q.withNamedWorkflowInstances = make(map[string]*WorkflowInstanceQuery)
+	}
+	_q.withNamedWorkflowInstances[name] = query
 	return _q
 }
 

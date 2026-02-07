@@ -7863,7 +7863,7 @@ var (
 		{Name: "trigger_fields", Type: field.TypeJSON, Nullable: true},
 		{Name: "approval_fields", Type: field.TypeJSON, Nullable: true},
 		{Name: "approval_edges", Type: field.TypeJSON, Nullable: true},
-		{Name: "approval_submission_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"MANUAL_SUBMIT", "AUTO_SUBMIT"}, Default: "MANUAL_SUBMIT"},
+		{Name: "approval_submission_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"MANUAL_SUBMIT", "AUTO_SUBMIT"}, Default: "AUTO_SUBMIT"},
 		{Name: "definition_json", Type: field.TypeJSON, Nullable: true},
 		{Name: "tracked_fields", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},

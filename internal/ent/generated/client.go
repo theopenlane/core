@@ -33389,6 +33389,25 @@ func (c *WorkflowDefinitionClient) QueryGroups(_m *WorkflowDefinition) *GroupQue
 	return query
 }
 
+// QueryWorkflowInstances queries the workflow_instances edge of a WorkflowDefinition.
+func (c *WorkflowDefinitionClient) QueryWorkflowInstances(_m *WorkflowDefinition) *WorkflowInstanceQuery {
+	query := (&WorkflowInstanceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowdefinition.Table, workflowdefinition.FieldID, id),
+			sqlgraph.To(workflowinstance.Table, workflowinstance.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, workflowdefinition.WorkflowInstancesTable, workflowdefinition.WorkflowInstancesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryNotificationTemplates queries the notification_templates edge of a WorkflowDefinition.
 func (c *WorkflowDefinitionClient) QueryNotificationTemplates(_m *WorkflowDefinition) *NotificationTemplateQuery {
 	query := (&NotificationTemplateClient{config: c.config}).Query()

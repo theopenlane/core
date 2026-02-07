@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/internal/workflows/resolvers"
 )
@@ -33,11 +34,20 @@ func (r *queryResolver) WorkflowMetadata(ctx context.Context) (*model.WorkflowMe
 			})
 		}
 
+		edges := workflowgenerated.WorkflowEligibleEdges[m.Type.String()]
+		if edges == nil {
+			edges = []string{}
+		} else {
+			// Copy to avoid exposing the shared backing array.
+			edges = append([]string(nil), edges...)
+		}
+
 		objectTypes = append(objectTypes, &model.WorkflowObjectTypeMetadata{
 			Type:           m.Type.String(),
 			Label:          m.Label,
 			Description:    m.Description,
 			EligibleFields: fields,
+			EligibleEdges:  edges,
 			ResolverKeys:   allResolverKeys,
 		})
 	}

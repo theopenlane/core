@@ -172,7 +172,10 @@ func (e *WorkflowEngine) FindMatchingDefinitions(ctx context.Context, schemaType
 			workflowdefinition.SchemaTypeEQ(schemaType),
 			workflowdefinition.ActiveEQ(true),
 			workflowdefinition.DraftEQ(false),
-			workflowdefinition.OwnerIDEQ(orgID),
+			workflowdefinition.Or(
+				workflowdefinition.OwnerIDEQ(orgID),
+				workflowdefinition.SystemOwnedEQ(true),
+			),
 		)
 
 	if eventType != "" {

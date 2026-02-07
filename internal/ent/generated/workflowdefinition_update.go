@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -494,6 +495,21 @@ func (_u *WorkflowDefinitionUpdate) AddGroups(v ...*Group) *WorkflowDefinitionUp
 	return _u.AddGroupIDs(ids...)
 }
 
+// AddWorkflowInstanceIDs adds the "workflow_instances" edge to the WorkflowInstance entity by IDs.
+func (_u *WorkflowDefinitionUpdate) AddWorkflowInstanceIDs(ids ...string) *WorkflowDefinitionUpdate {
+	_u.mutation.AddWorkflowInstanceIDs(ids...)
+	return _u
+}
+
+// AddWorkflowInstances adds the "workflow_instances" edges to the WorkflowInstance entity.
+func (_u *WorkflowDefinitionUpdate) AddWorkflowInstances(v ...*WorkflowInstance) *WorkflowDefinitionUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowInstanceIDs(ids...)
+}
+
 // AddNotificationTemplateIDs adds the "notification_templates" edge to the NotificationTemplate entity by IDs.
 func (_u *WorkflowDefinitionUpdate) AddNotificationTemplateIDs(ids ...string) *WorkflowDefinitionUpdate {
 	_u.mutation.AddNotificationTemplateIDs(ids...)
@@ -569,6 +585,27 @@ func (_u *WorkflowDefinitionUpdate) RemoveGroups(v ...*Group) *WorkflowDefinitio
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveGroupIDs(ids...)
+}
+
+// ClearWorkflowInstances clears all "workflow_instances" edges to the WorkflowInstance entity.
+func (_u *WorkflowDefinitionUpdate) ClearWorkflowInstances() *WorkflowDefinitionUpdate {
+	_u.mutation.ClearWorkflowInstances()
+	return _u
+}
+
+// RemoveWorkflowInstanceIDs removes the "workflow_instances" edge to WorkflowInstance entities by IDs.
+func (_u *WorkflowDefinitionUpdate) RemoveWorkflowInstanceIDs(ids ...string) *WorkflowDefinitionUpdate {
+	_u.mutation.RemoveWorkflowInstanceIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowInstances removes "workflow_instances" edges to WorkflowInstance entities.
+func (_u *WorkflowDefinitionUpdate) RemoveWorkflowInstances(v ...*WorkflowInstance) *WorkflowDefinitionUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowInstanceIDs(ids...)
 }
 
 // ClearNotificationTemplates clears all "notification_templates" edges to the NotificationTemplate entity.
@@ -954,6 +991,54 @@ func (_u *WorkflowDefinitionUpdate) sqlSave(ctx context.Context) (_node int, err
 			},
 		}
 		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowInstancesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowdefinition.WorkflowInstancesTable,
+			Columns: []string{workflowdefinition.WorkflowInstancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowInstancesIDs(); len(nodes) > 0 && !_u.mutation.WorkflowInstancesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowdefinition.WorkflowInstancesTable,
+			Columns: []string{workflowdefinition.WorkflowInstancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowInstancesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowdefinition.WorkflowInstancesTable,
+			Columns: []string{workflowdefinition.WorkflowInstancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1535,6 +1620,21 @@ func (_u *WorkflowDefinitionUpdateOne) AddGroups(v ...*Group) *WorkflowDefinitio
 	return _u.AddGroupIDs(ids...)
 }
 
+// AddWorkflowInstanceIDs adds the "workflow_instances" edge to the WorkflowInstance entity by IDs.
+func (_u *WorkflowDefinitionUpdateOne) AddWorkflowInstanceIDs(ids ...string) *WorkflowDefinitionUpdateOne {
+	_u.mutation.AddWorkflowInstanceIDs(ids...)
+	return _u
+}
+
+// AddWorkflowInstances adds the "workflow_instances" edges to the WorkflowInstance entity.
+func (_u *WorkflowDefinitionUpdateOne) AddWorkflowInstances(v ...*WorkflowInstance) *WorkflowDefinitionUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowInstanceIDs(ids...)
+}
+
 // AddNotificationTemplateIDs adds the "notification_templates" edge to the NotificationTemplate entity by IDs.
 func (_u *WorkflowDefinitionUpdateOne) AddNotificationTemplateIDs(ids ...string) *WorkflowDefinitionUpdateOne {
 	_u.mutation.AddNotificationTemplateIDs(ids...)
@@ -1610,6 +1710,27 @@ func (_u *WorkflowDefinitionUpdateOne) RemoveGroups(v ...*Group) *WorkflowDefini
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveGroupIDs(ids...)
+}
+
+// ClearWorkflowInstances clears all "workflow_instances" edges to the WorkflowInstance entity.
+func (_u *WorkflowDefinitionUpdateOne) ClearWorkflowInstances() *WorkflowDefinitionUpdateOne {
+	_u.mutation.ClearWorkflowInstances()
+	return _u
+}
+
+// RemoveWorkflowInstanceIDs removes the "workflow_instances" edge to WorkflowInstance entities by IDs.
+func (_u *WorkflowDefinitionUpdateOne) RemoveWorkflowInstanceIDs(ids ...string) *WorkflowDefinitionUpdateOne {
+	_u.mutation.RemoveWorkflowInstanceIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowInstances removes "workflow_instances" edges to WorkflowInstance entities.
+func (_u *WorkflowDefinitionUpdateOne) RemoveWorkflowInstances(v ...*WorkflowInstance) *WorkflowDefinitionUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowInstanceIDs(ids...)
 }
 
 // ClearNotificationTemplates clears all "notification_templates" edges to the NotificationTemplate entity.
@@ -2025,6 +2146,54 @@ func (_u *WorkflowDefinitionUpdateOne) sqlSave(ctx context.Context) (_node *Work
 			},
 		}
 		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowInstancesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowdefinition.WorkflowInstancesTable,
+			Columns: []string{workflowdefinition.WorkflowInstancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowInstancesIDs(); len(nodes) > 0 && !_u.mutation.WorkflowInstancesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowdefinition.WorkflowInstancesTable,
+			Columns: []string{workflowdefinition.WorkflowInstancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowInstancesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowdefinition.WorkflowInstancesTable,
+			Columns: []string{workflowdefinition.WorkflowInstancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

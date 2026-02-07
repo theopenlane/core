@@ -57,6 +57,10 @@ func validateWorkflowDefinitionInput(schemaType string, doc *models.WorkflowDefi
 		return err
 	}
 
+	if err := validateApprovalTiming(doc.ApprovalTiming); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -260,6 +264,8 @@ func validateActionParams(actionType enums.WorkflowActionType, params json.RawMe
 	switch actionType {
 	case enums.WorkflowActionTypeApproval:
 		err = validateApprovalActionParams(params, eligibleFields)
+	case enums.WorkflowActionTypeReview:
+		err = validateReviewActionParams(params)
 	case enums.WorkflowActionTypeWebhook:
 		err = validateWebhookActionParams(params, celCfg)
 	case enums.WorkflowActionTypeFieldUpdate:
@@ -354,6 +360,18 @@ func validateApprovalSubmissionMode(mode enums.WorkflowApprovalSubmissionMode) e
 
 	if mode == enums.WorkflowApprovalSubmissionModeManualSubmit {
 		return ErrManualSubmitModeNotSupported
+	}
+
+	return nil
+}
+
+// validateApprovalTiming validates the approval timing if specified
+func validateApprovalTiming(timing enums.WorkflowApprovalTiming) error {
+	if timing == "" {
+		return nil
+	}
+	if enums.ToWorkflowApprovalTiming(timing.String()) == nil {
+		return fmt.Errorf("%w: %q", ErrApprovalTimingInvalid, timing)
 	}
 
 	return nil
@@ -693,4 +711,30 @@ func validateFieldUpdateActionParams(raw json.RawMessage) error {
 	}
 
 	return nil
+}
+
+// validateReviewActionParams validates review action parameters
+func validateReviewActionParams(raw json.RawMessage) error {
+	if len(raw) == 0 {
+		return ErrReviewParamsRequired
+	}
+
+	var params workflows.ReviewActionParams
+	if err := json.Unmarshal(raw, &params); err != nil {
+		return err
+	}
+
+	if len(params.Targets) == 0 {
+		return ErrReviewTargetsRequired
+	}
+
+	if err := validateRequiredCount(params.RequiredCount); err != nil {
+		return err
+	}
+
+	if err := validateRequiredField(params.Required); err != nil {
+		return err
+	}
+
+	return validateTargets(params.Targets)
 }

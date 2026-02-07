@@ -82,9 +82,15 @@ func createWorkflowInstance(t *testing.T, ctx context.Context, ownerID string, d
 func createWorkflowAssignmentWithTarget(t *testing.T, ctx context.Context, ownerID string, instanceID string, targetUserID string) *ent.WorkflowAssignment {
 	t.Helper()
 
+	actionKey := "action_" + ulids.New().String()
+
 	assignment, err := suite.client.db.WorkflowAssignment.Create().
 		SetWorkflowInstanceID(instanceID).
-		SetAssignmentKey("assignment-" + ulids.New().String()).
+		SetAssignmentKey("approval_" + actionKey + "_" + ulids.New().String()).
+		SetApprovalMetadata(models.WorkflowAssignmentApproval{
+			ActionKey: actionKey,
+			Required:  true,
+		}).
 		SetOwnerID(ownerID).
 		Save(ctx)
 	assert.NilError(t, err)
@@ -156,6 +162,17 @@ func TestRequestChangesWorkflowAssignment(t *testing.T) {
 	inputsVal, ok := meta["change_inputs"].(map[string]any)
 	assert.Check(t, ok)
 	if ok {
+		assert.Check(t, is.Equal(inputsVal["status"], "in_review"))
+	}
+
+	rejection := updated.RejectionMetadata
+	assert.Check(t, rejection.RejectedAt != "")
+	assert.Check(t, is.Equal(rejection.RejectedByUserID, user.ID))
+	assert.Check(t, is.Equal(rejection.RejectionReason, reason))
+	assert.Check(t, rejection.ActionKey != "")
+	inputsVal = rejection.ChangeRequestInputs
+	assert.Check(t, inputsVal != nil)
+	if inputsVal != nil {
 		assert.Check(t, is.Equal(inputsVal["status"], "in_review"))
 	}
 }
