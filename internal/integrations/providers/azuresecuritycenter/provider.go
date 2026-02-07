@@ -51,10 +51,6 @@ func (p *Provider) BeginAuth(context.Context, types.AuthContext) (types.AuthSess
 
 // Mint exchanges stored client credentials for an Azure access token.
 func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	if p == nil {
-		return types.CredentialPayload{}, ErrProviderNotInitialized
-	}
-
 	meta := cloneProviderData(subject.Credential.Data.ProviderData)
 	if len(meta) == 0 {
 		return types.CredentialPayload{}, ErrProviderMetadataRequired
@@ -85,7 +81,7 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 // requestToken obtains an Azure access token using the client credentials flow.
 func (p *Provider) requestToken(ctx context.Context, meta azureSecurityCenterMetadata, scopes []string) (*oauth2.Token, error) {
 	tokenURL := defaultAzureTokenEndpoint(meta.TenantID)
-	if p != nil && p.tokenEndpoint != nil {
+	if p.tokenEndpoint != nil {
 		tokenURL = p.tokenEndpoint(meta.TenantID)
 	}
 
@@ -174,9 +170,6 @@ func (m azureSecurityCenterMetadata) scopes(overrides []string) []string {
 // persist merges normalized metadata back into the provider data map.
 func (m azureSecurityCenterMetadata) persist(base map[string]any) map[string]any {
 	out := maps.Clone(base)
-	if out == nil {
-		out = map[string]any{}
-	}
 	out["tenantId"] = m.TenantID
 	out["clientId"] = m.ClientID
 	out["clientSecret"] = m.ClientSecret

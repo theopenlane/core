@@ -30,7 +30,7 @@ func teamsOperations() []types.OperationDescriptor {
 
 // runTeamsHealth verifies the Microsoft Graph token by fetching the user profile
 func runTeamsHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input, TypeMicrosoftTeams)
+	client, token, err := auth.ClientAndOAuthToken(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -58,7 +58,7 @@ func runTeamsHealth(ctx context.Context, input types.OperationInput) (types.Oper
 
 // runTeamsSample collects a sample of joined Teams for the authenticated user
 func runTeamsSample(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input, TypeMicrosoftTeams)
+	client, token, err := auth.ClientAndOAuthToken(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

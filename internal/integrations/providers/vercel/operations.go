@@ -15,10 +15,26 @@ const (
 	vercelProjectsOp types.OperationName = "projects.sample"
 )
 
+type vercelUserResponse struct {
+	User struct {
+		ID    string `json:"uid"`
+		Name  string `json:"name"`
+		Email string `json:"email"`
+	} `json:"user"`
+}
+
 // vercelOperations returns the Vercel operations supported by this provider.
 func vercelOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		operations.HealthOperation(vercelHealthOp, "Call Vercel /v2/user to verify token and account.", ClientVercelAPI, runVercelHealth),
+		operations.HealthOperation(vercelHealthOp, "Call Vercel /v2/user to verify token and account.", ClientVercelAPI,
+			operations.HealthCheckRunner(operations.TokenTypeAPI, "https://api.vercel.com/v2/user", "Vercel user lookup failed",
+				func(resp vercelUserResponse) (string, map[string]any) {
+					return fmt.Sprintf("Vercel token valid for %s", resp.User.Email), map[string]any{
+						"id":    resp.User.ID,
+						"name":  resp.User.Name,
+						"email": resp.User.Email,
+					}
+				})),
 		{
 			Name:        vercelProjectsOp,
 			Kind:        types.OperationKindCollectFindings,
@@ -29,45 +45,9 @@ func vercelOperations() []types.OperationDescriptor {
 	}
 }
 
-// runVercelHealth verifies the Vercel API token by fetching the user account
-func runVercelHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndAPIToken(input, TypeVercel)
-	if err != nil {
-		return types.OperationResult{}, err
-	}
-
-	var resp struct {
-		// User holds the authenticated user account
-		User struct {
-			// ID is the user identifier
-			ID    string `json:"uid"`
-			// Name is the user display name
-			Name  string `json:"name"`
-			// Email is the user email address
-			Email string `json:"email"`
-		} `json:"user"`
-	}
-
-	endpoint := "https://api.vercel.com/v2/user"
-	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
-		return operations.OperationFailure("Vercel user lookup failed", err), err
-	}
-
-	summary := fmt.Sprintf("Vercel token valid for %s", resp.User.Email)
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: summary,
-		Details: map[string]any{
-			"id":    resp.User.ID,
-			"name":  resp.User.Name,
-			"email": resp.User.Email,
-		},
-	}, nil
-}
-
 // runVercelProjects returns a sample of projects for drift detection.
 func runVercelProjects(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndAPIToken(input, TypeVercel)
+	client, token, err := auth.ClientAndAPIToken(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

@@ -17,10 +17,35 @@ const (
 	maxSampleSize = 5
 )
 
+// buildkiteUserResponse represents the response from the Buildkite /v2/user endpoint
+type buildkiteUserResponse struct {
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Username string `json:"username"`
+}
+
+// buildkiteOrgResponse represents the response from the Buildkite /v2/organizations endpoint
+type buildkiteOrgResponse struct {
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	Slug   string `json:"slug"`
+	WebURL string `json:"web_url"`
+}
+
 // buildkiteOperations returns the Buildkite operations supported by this provider.
 func buildkiteOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		operations.HealthOperation(buildkiteOperationHealth, "Validate Buildkite token by calling the /v2/user endpoint.", ClientBuildkiteAPI, runBuildkiteHealthOperation),
+		operations.HealthOperation(buildkiteOperationHealth, "Validate Buildkite token by calling the /v2/user endpoint.", ClientBuildkiteAPI,
+			operations.HealthCheckRunner(operations.TokenTypeAPI, "https://api.buildkite.com/v2/user", "Buildkite user lookup failed",
+				func(user buildkiteUserResponse) (string, map[string]any) {
+					return fmt.Sprintf("Buildkite token valid for %s", user.Name), map[string]any{
+						"id":       user.ID,
+						"name":     user.Name,
+						"email":    user.Email,
+						"username": user.Username,
+					}
+				})),
 		{
 			Name:        buildkiteOperationOrgs,
 			Kind:        types.OperationKindCollectFindings,
@@ -31,57 +56,9 @@ func buildkiteOperations() []types.OperationDescriptor {
 	}
 }
 
-// buildkiteUserResponse represents the response from the Buildkite /v2/user endpoint
-type buildkiteUserResponse struct {
-	// ID is the user identifier
-	ID       string `json:"id"`
-	// Name is the user display name
-	Name     string `json:"name"`
-	// Email is the user email address
-	Email    string `json:"email"`
-	// Username is the user handle
-	Username string `json:"username"`
-}
-
-// buildkiteOrgResponse represents the response from the Buildkite /v2/organizations endpoint
-type buildkiteOrgResponse struct {
-	// ID is the organization identifier
-	ID     string `json:"id"`
-	// Name is the organization name
-	Name   string `json:"name"`
-	// Slug is the organization slug
-	Slug   string `json:"slug"`
-	// WebURL is the organization URL
-	WebURL string `json:"web_url"`
-}
-
-// runBuildkiteHealthOperation verifies access to the Buildkite API using the current token.
-func runBuildkiteHealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndAPIToken(input, TypeBuildkite)
-	if err != nil {
-		return types.OperationResult{}, err
-	}
-
-	var user buildkiteUserResponse
-	if err := fetchBuildkiteResource(ctx, client, token, "user", &user); err != nil {
-		return operations.OperationFailure("Buildkite user lookup failed", err), err
-	}
-
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Buildkite token valid for %s", user.Name),
-		Details: map[string]any{
-			"id":       user.ID,
-			"name":     user.Name,
-			"email":    user.Email,
-			"username": user.Username,
-		},
-	}, nil
-}
-
 // runBuildkiteOrganizationsOperation collects Buildkite org metadata for reporting.
 func runBuildkiteOrganizationsOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndAPIToken(input, TypeBuildkite)
+	client, token, err := auth.ClientAndAPIToken(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

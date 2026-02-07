@@ -74,10 +74,6 @@ type BeginOAuthResponse struct {
 
 // BeginOAuth starts an OAuth/OIDC transaction with the requested provider
 func (s *Service) BeginOAuth(ctx context.Context, req BeginOAuthRequest) (BeginOAuthResponse, error) {
-	if s == nil || s.keymaker == nil {
-		return BeginOAuthResponse{}, ErrKeymakerRequired
-	}
-
 	begin, err := s.keymaker.BeginAuthorization(ctx, keymaker.BeginRequest{
 		OrgID:          req.OrgID,
 		IntegrationID:  req.IntegrationID,
@@ -121,10 +117,6 @@ type CompleteOAuthResult struct {
 
 // CompleteOAuth finalizes an OAuth/OIDC transaction and persists credentials
 func (s *Service) CompleteOAuth(ctx context.Context, req CompleteOAuthRequest) (CompleteOAuthResult, error) {
-	if s == nil || s.keymaker == nil {
-		return CompleteOAuthResult{}, ErrKeymakerRequired
-	}
-
 	result, err := s.keymaker.CompleteAuthorization(ctx, keymaker.CompleteRequest{
 		State: req.State,
 		Code:  req.Code,
@@ -163,10 +155,7 @@ type ConfigureResult struct {
 
 // Configure persists non-OAuth credentials and optionally runs a health check
 func (s *Service) Configure(ctx context.Context, req ConfigureRequest) (ConfigureResult, error) {
-	if s == nil || s.store == nil {
-		return ConfigureResult{}, ErrStoreRequired
-	}
-	if strings.TrimSpace(req.OrgID) == "" {
+	if req.OrgID == "" {
 		return ConfigureResult{}, keystore.ErrOrgIDRequired
 	}
 	if req.Provider == types.ProviderUnknown {

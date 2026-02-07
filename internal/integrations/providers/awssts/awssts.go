@@ -80,10 +80,6 @@ func (p *Provider) BeginAuth(context.Context, types.AuthContext) (types.AuthSess
 
 // Mint validates the stored AWS metadata and persists structured credential fields.
 func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	if p == nil {
-		return types.CredentialPayload{}, ErrProviderNotInitialized
-	}
-
 	meta := subject.Credential.Data.ProviderData
 	if len(meta) == 0 {
 		return types.CredentialPayload{}, ErrProviderMetadataRequired
@@ -102,9 +98,6 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 	}
 
 	sanitized := maps.Clone(meta)
-	if sanitized == nil {
-		sanitized = map[string]any{}
-	}
 	sanitized["roleArn"] = decoded.RoleARN
 	sanitized["region"] = decoded.Region
 

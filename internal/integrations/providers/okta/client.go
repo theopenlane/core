@@ -19,7 +19,7 @@ func oktaClientDescriptors() []types.ClientDescriptor {
 
 // buildOktaClient constructs an authenticated Okta API client.
 func buildOktaClient(_ context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
-	apiToken, err := auth.APITokenFromPayload(payload, string(TypeOkta))
+	apiToken, err := auth.APITokenFromPayload(payload)
 	if err != nil {
 		return nil, err
 	}

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 )
 
-// DecodeConfig decodes a config map into a target struct, respecting defaults on the target.
+// DecodeConfig decodes a config map into a target struct, respecting defaults on the target
 func DecodeConfig(config map[string]any, target any) error {
 	if target == nil {
 		return ErrDecodeConfigTargetNil

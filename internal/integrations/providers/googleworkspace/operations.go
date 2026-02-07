@@ -31,7 +31,7 @@ func googleWorkspaceOperations() []types.OperationDescriptor {
 
 // runGoogleWorkspaceHealth validates the OAuth token with userinfo
 func runGoogleWorkspaceHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input, TypeGoogleWorkspace)
+	client, token, err := auth.ClientAndOAuthToken(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -63,7 +63,7 @@ func runGoogleWorkspaceHealth(ctx context.Context, input types.OperationInput) (
 
 // runGoogleWorkspaceUsers returns a small sample of directory users for posture checks.
 func runGoogleWorkspaceUsers(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input, TypeGoogleWorkspace)
+	client, token, err := auth.ClientAndOAuthToken(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

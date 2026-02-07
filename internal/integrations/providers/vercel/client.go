@@ -1,8 +1,6 @@
 package vercel
 
 import (
-	"context"
-
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/types"
 )
@@ -14,14 +12,5 @@ const (
 
 // vercelClientDescriptors returns the client descriptors published by Vercel.
 func vercelClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeVercel, ClientVercelAPI, "Vercel REST API client", buildVercelClient)
-}
-
-// buildVercelClient constructs an authenticated Vercel API client.
-func buildVercelClient(_ context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
-	token, err := auth.APITokenFromPayload(payload, string(TypeVercel))
-	if err != nil {
-		return nil, err
-	}
-	return auth.NewAuthenticatedClient(token, nil), nil
+	return auth.DefaultClientDescriptors(TypeVercel, ClientVercelAPI, "Vercel REST API client", auth.APITokenClientBuilder(nil))
 }

@@ -119,7 +119,7 @@ type slackTeamInfo struct {
 
 // runSlackHealthOperation verifies the Slack OAuth token via auth.test
 func runSlackHealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input, TypeSlack)
+	client, token, err := auth.ClientAndOAuthToken(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -150,7 +150,7 @@ func runSlackHealthOperation(ctx context.Context, input types.OperationInput) (t
 
 // runSlackTeamOperation fetches workspace metadata for posture analysis
 func runSlackTeamOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input, TypeSlack)
+	client, token, err := auth.ClientAndOAuthToken(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -194,7 +194,7 @@ type slackMessageResponse struct {
 
 // runSlackMessagePostOperation sends a message to a Slack channel or user
 func runSlackMessagePostOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	_, token, err := auth.ClientAndOAuthToken(input, TypeSlack)
+	_, token, err := auth.ClientAndOAuthToken(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

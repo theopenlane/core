@@ -116,7 +116,7 @@ type githubRepoOwner struct {
 
 // runGitHubHealthOperation validates GitHub access for OAuth or App credentials.
 func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input, input.Provider)
+	client, token, err := auth.ClientAndOAuthToken(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -170,7 +170,7 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 
 // runGitHubRepoOperation lists repositories for the authenticated account.
 func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input, input.Provider)
+	client, token, err := auth.ClientAndOAuthToken(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

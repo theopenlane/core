@@ -32,9 +32,6 @@ func NewFSLoader(fsys fs.FS, path string) *FSLoader {
 
 // Load walks the configured directory and decodes every JSON provider file
 func (l *FSLoader) Load() (map[types.ProviderType]ProviderSpec, error) {
-	if l == nil {
-		return nil, ErrLoaderRequired
-	}
 	if l.FS == nil {
 		return nil, ErrFSLoaderNotConfigured
 	}
