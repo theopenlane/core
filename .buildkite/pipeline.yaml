@@ -267,7 +267,44 @@ steps:
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
         artifact_paths: ["coverage-graph.out", "junit-graph.xml"]
-      - label: ":golang: go test - all except graphapi"
+      - label: ":golang: go test handlers"
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
+          location: "NYC"
+        key: "go_test_graph"
+        cancel_on_build_failing: true
+        if_changed:
+          include:
+            - "**.go"
+            - go.{mod,sum}
+          exclude: # do not run tests if only cli files changed
+            - cli/**
+        env:
+          TEST_DB_URL: "docker://postgres:{{matrix.version}}"
+        matrix:
+          setup:
+            version:
+              - 17-alpine
+        plugins:
+          - docker#v5.13.0:
+              image: ghcr.io/theopenlane/build-image:latest
+              always_pull: true
+              command: ["task", "go:testsum:ci:handlers"]
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - "/var/run/docker.sock:/var/run/docker.sock"
+              environment:
+                - "ANALYTICS_KEY"
+                - "GOMAXPROCS=16"
+                - "TEST_DB_URL"
+                - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
+                - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
+        artifact_paths: ["coverage-handlers.out", "junit-handlers.xml"]
+      - label: ":golang: go test - all except api"
         if_changed:
           include:
             - "**.go"
@@ -278,7 +315,7 @@ steps:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
           location: "NYC"
-        key: "go_test_no_graph"
+        key: "go_test_no_api"
         cancel_on_build_failing: true
         env:
           TEST_DB_URL: "docker://postgres:{{matrix.version}}"
@@ -329,7 +366,7 @@ steps:
             - go.{mod,sum}
           exclude:
             - cli/**
-        depends_on: ["go_test_graph", "go_test_no_graph"]
+        depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers"]
         commands: |
           #!/bin/bash
           curl \
@@ -353,8 +390,8 @@ steps:
               download: "junit-graph.xml"
               step: "go_test_graph"
           - artifacts#v1.9.4:
-              download: "junit-no-graph.xml"
-              step: "go_test_no_graph"
+              download: "junit-no-api.xml"
+              step: "go_test_no_api"
       - label: ":github: upload PR reports"
         key: "scan-upload-pr"
         cancel_on_build_failing: true
@@ -365,20 +402,27 @@ steps:
           exclude:
             - cli/**
         if: build.pull_request.id != null
-        depends_on: ["go_test_graph", "go_test_no_graph"]
+        depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers"]
         plugins:
           - artifacts#v1.9.4:
-              download: "coverage-no-graph.out"
-              step: "go_test_no_graph"
+              download: "coverage-handlers.out"
+              step: "go_test_handlers"
+          - artifacts#v1.9.4:
+              download: "coverage-no-api.out"
+              step: "go_test_no_api"
           - artifacts#v1.9.4:
               download: "coverage-graph.out"
               step: "go_test_graph"
           - artifacts#v1.9.4:
-              download: "junit-no-graph.xml"
-              step: "go_test_no_graph"
+              download: "junit-handlers.xml"
+              step: "go_test_handlers"
+          - artifacts#v1.9.4:
+              download: "junit-no-api.xml"
+              step: "go_test_no_api"
           - artifacts#v1.9.4:
               download: "junit-graph.xml"
               step: "go_test_graph"
+              
           - docker#v5.13.0:
               image: "sonarsource/sonar-scanner-cli:11.5"
               propagate-environment: true
@@ -400,17 +444,23 @@ steps:
             - cli/**
         cancel_on_build_failing: true
         if: build.branch == "main" && build.tag == null
-        depends_on: ["go_test_graph", "go_test_no_graph"]
+        depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers"]
         plugins:
           - artifacts#v1.9.4:
-              download: "coverage-no-graph.out"
-              step: "go_test_no_graph"
+              download: "coverage-no-api.out"
+              step: "go_test_no_api"
           - artifacts#v1.9.4:
               download: "coverage-graph.out"
               step: "go_test_graph"
           - artifacts#v1.9.4:
-              download: "junit-no-graph.xml"
-              step: "go_test_no_graph"
+              download: "coverage-handlers.out"
+              step: "go_test_handlers"
+          - artifacts#v1.9.4:
+              download: "junit-handlers.xml"
+              step: "go_test_handlers"
+          - artifacts#v1.9.4:
+              download: "junit-no-api.xml"
+              step: "go_test_no_api"
           - artifacts#v1.9.4:
               download: "junit-graph.xml"
               step: "go_test_graph"
