@@ -345,6 +345,7 @@ func (s *WorkflowEngineTestSuite) TestNotificationWorkflowOnCreate() {
 		SetWorkflowKind(enums.WorkflowKindNotification).
 		SetSchemaType("Control").
 		SetActive(true).
+		SetDraft(false).
 		SetOwnerID(orgID).
 		SetTriggerOperations(operations).
 		SetTriggerFields(fields).

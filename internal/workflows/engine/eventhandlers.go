@@ -90,14 +90,14 @@ func (l *WorkflowListeners) HandleWorkflowMutation(ctx *soiree.EventContext, pay
 		return nil
 	}
 
-	obj, err := loadWorkflowObject(ctx.Context(), client, payload.Mutation.Type(), entityID)
+	allowCtx := workflows.AllowContext(ctx.Context())
+	obj, err := loadWorkflowObject(allowCtx, client, payload.Mutation.Type(), entityID)
 	if err != nil {
 		return nil
 	}
 
 	proposedChanges := workflows.BuildProposedChanges(mut, changedFields)
 
-	allowCtx := workflows.AllowContext(ctx.Context())
 	definitions, err := l.engine.FindMatchingDefinitions(allowCtx, payload.Mutation.Type(), eventType, changedFields, changedEdges, addedIDs, removedIDs, proposedChanges, obj)
 	if err != nil || len(definitions) == 0 {
 		return nil

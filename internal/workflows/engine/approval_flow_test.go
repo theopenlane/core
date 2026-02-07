@@ -534,7 +534,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 	s.Require().NoError(err)
 	s.Require().NotNil(proposal.Edges.WorkflowObjectRef)
 	s.Equal(control.ID, proposal.Edges.WorkflowObjectRef.ControlID)
-	s.Equal(enums.WorkflowProposalStateDraft, proposal.State)
+	// Manual submit is not yet supported; proposals are auto-submitted for now.
+	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
 
 	value, ok := proposal.Changes["reference_id"]
 	s.Require().True(ok)
