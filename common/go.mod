@@ -22,7 +22,7 @@ require (
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/utils v0.6.2
 	github.com/zitadel/oidc/v3 v3.45.3
-	golang.org/x/oauth2 v0.34.0
+	golang.org/x/oauth2 v0.35.0
 	gotest.tools/v3 v3.5.2
 )
 
