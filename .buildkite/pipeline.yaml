@@ -386,7 +386,7 @@ steps:
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
-        artifact_paths: ["coverage-no-graph.out", "junit-no-graph.xml"]
+        artifact_paths: ["coverage-no-api.out", "junit-no-api.xml"]
       - label: ":auth0: fga model test"
         if_changed:
           - "fga/**"
