@@ -153,8 +153,8 @@ github.com/clipperhouse/displaywidth v0.6.2 h1:ZDpTkFfpHOKte4RG5O/BOyf3ysnvFswpy
 github.com/clipperhouse/displaywidth v0.6.2/go.mod h1:R+kHuzaYWFkTm7xoMmK1lFydbci4X2CicfbGstSGg0o=
 github.com/clipperhouse/stringish v0.1.1 h1:+NSqMOr3GR6k1FdRhhnXrLfztGzuG+VuFDfatpWHKCs=
 github.com/clipperhouse/stringish v0.1.1/go.mod h1:v/WhFtE1q0ovMta2+m+UbpZ+2/HEXNWYXQgCt4hdOzA=
-github.com/clipperhouse/uax29/v2 v2.4.0 h1:RXqE/l5EiAbA4u97giimKNlmpvkmz+GrBVTelsoXy9g=
-github.com/clipperhouse/uax29/v2 v2.4.0/go.mod h1:Wn1g7MK6OoeDT0vL+Q0SQLDz/KpfsVRgg6W7ihQeh4g=
+github.com/clipperhouse/uax29/v2 v2.5.0 h1:x7T0T4eTHDONxFJsL94uKNKPHrclyFI0lm7+w94cO8U=
+github.com/clipperhouse/uax29/v2 v2.5.0/go.mod h1:Wn1g7MK6OoeDT0vL+Q0SQLDz/KpfsVRgg6W7ihQeh4g=
 github.com/cloudflare/cloudflare-go/v6 v6.6.0 h1:EboC3hfMoxnDnU9f8Feth3/EYTiIwF5jBkSrMNV2vno=
 github.com/cloudflare/cloudflare-go/v6 v6.6.0/go.mod h1:Lj3MUqjvKctXRpdRhLQxZYRrNZHuRs0XYuH8JtQGyoI=
 github.com/cncf/xds/go v0.0.0-20251022180443-0feb69152e9f h1:Y8xYupdHxryycyPlc9Y+bSQAYZnetRJ70VMVKm5CKI0=
@@ -671,8 +671,8 @@ github.com/theopenlane/iam v0.23.8 h1:9A4+sgBWoVbeHjNQWb7m5WddG+6FGve9cf6AXTCj2H
 github.com/theopenlane/iam v0.23.8/go.mod h1:r/8IELBc3aAgeqgOT+GjPuXgcBSZmJh6xZFBccWXgYk=
 github.com/theopenlane/newman v0.2.1 h1:9tbkP0W0q3HJZKWpMbJ/W7YoeE92zghEoa7hBeJt80o=
 github.com/theopenlane/newman v0.2.1/go.mod h1:+kr2ZIdSRUaOHw+MwUqRdof6dEdw9qCHDZfyfTfPnAQ=
-github.com/theopenlane/riverboat v0.8.8 h1:MnArmNTqcM8cM21chiFkwVp9F74vdHevNoTeEIJtmpE=
-github.com/theopenlane/riverboat v0.8.8/go.mod h1:RNYPAn0PLNlAFXAEi0UADhrhmqhjLHqd2ZUX5IDVXFE=
+github.com/theopenlane/riverboat v0.9.3 h1:XNwqlTqimNRM9JyD2qa/PCfKS88ArEgFnpUmcAda0+k=
+github.com/theopenlane/riverboat v0.9.3/go.mod h1:nTTbBpWgL2kiQUJXf+F6fkd+Px8d8qVMF3nv/tFLkjs=
 github.com/theopenlane/utils v0.6.2 h1:7TgABVt0rb+Dhph3N7DEBAO3jcB/J+wgVv47F2Nry7c=
 github.com/theopenlane/utils v0.6.2/go.mod h1:7STP+gs2LAYYKLS7blxq8FTY5jvL7R0riLiUQJfTeM0=
 github.com/tidwall/gjson v1.14.2/go.mod h1:/wbyibRr2FHMks5tjHJ5F8dMZh3AcwJEMf5vlfC0lxk=
