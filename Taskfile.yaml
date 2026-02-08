@@ -238,6 +238,33 @@ tasks:
     cmds:
       - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --print-resources-usage
 
+  go:lint:ci:graphapi:
+    silent: true
+    desc: runs golangci-lint only on the graphapi package for CI, excluding generated code
+    cmds:
+      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 $(go list ./... | grep internal/graphapi | grep -v generated | sed 's|github.com/theopenlane/core[^/]*/||' | sed 's|^|./|')
+
+  go:lint:ci:handlers:
+    silent: true
+    desc: runs golangci-lint only on the httpserve handlers package for CI
+    cmds:
+      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --print-resources-usage ./internal/httpserve/handlers/...
+
+  go:lint:ci:no-api:
+    silent: true
+    desc: runs golangci-lint on all packages except graphapi and handlers for CI
+    cmds:
+      - |
+        golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 $(
+          go list ./... \
+          | grep -v /internal/graphapi \
+          | grep -v /internal/httpserve/handlers \
+          | grep -v generated \
+          | grep -v '^github.com/theopenlane/core$' \
+          | sed 's|github.com/theopenlane/core[^/]*/||' \
+          | sed 's|^|./|'
+        )
+
   go:test:
     desc: runs and outputs results of created go tests
     aliases: ["go:test:psql", "test:psql"]
@@ -309,14 +336,24 @@ tasks:
     cmds:
       - go run gotest.tools/gotestsum@latest --junitfile junit-graph.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/internal/graphapi/" --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage-graph.out -tags test
 
-  go:testsum:ci:no-graph:
+
+  go:testsum:ci:handlers:
+    desc: runs tests only graph tests using gotestsum for CI
+    silent: true
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
+    aliases: ['testsum:ci:handlers']
+    cmds:
+      - go run gotest.tools/gotestsum@latest --junitfile junit-handlers.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/internal/httpserve/handlers" --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage-handlers.out -tags test
+
+  go:testsum:ci:no-api:
     desc: runs tests using gotestsum for CI
     silent: true
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
-    aliases: ['testsum:ci:no-graph']
+    aliases: ['testsum:ci:no-api', 'testsum:ci:no-graph', 'go:testsum:ci:no-graph']
     cmds:
-      - go run gotest.tools/gotestsum@latest --junitfile junit-no-graph.xml --junitfile-hide-empty-pkg --packages "$(go list ./... | grep -v /internal/graphapi)" --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage-no-graph.out -tags test
+      - go run gotest.tools/gotestsum@latest --junitfile junit-no-api.xml --junitfile-hide-empty-pkg --packages "$(go list ./... | grep -v /internal/graphapi | grep -v /internal/httpserve/handlers)" --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage-no-api.out -tags test
 
   go:testsum:ci:cover:
     desc: pushes test results to buildkite using gotestsum
@@ -350,6 +387,15 @@ tasks:
     aliases: ['testsum:graph']
     cmds:
       - gotestsum --packages "github.com/theopenlane/core/internal/graphapi" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
+
+  go:testsum:handlers:
+    desc: runs only the httpserve handlers tests using gotestsum
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
+    silent: true
+    aliases: ['testsum:graph']
+    cmds:
+      - gotestsum --packages "github.com/theopenlane/core/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
 
   go:fmt:
     desc: format all go code
