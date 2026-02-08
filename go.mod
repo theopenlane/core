@@ -20,7 +20,7 @@ require (
 	entgo.io/ent v0.14.6-0.20260108211107-2eb36418a02e
 	github.com/99designs/gqlgen v0.17.86
 	github.com/AfterShip/email-verifier v1.4.1
-	github.com/Yamashou/gqlgenc v0.33.0
+	github.com/Yamashou/gqlgenc v0.33.1
 	github.com/alicebob/miniredis/v2 v2.36.1
 	github.com/alitto/pond/v2 v2.6.0
 	github.com/aws/aws-sdk-go-v2 v1.41.1
@@ -61,7 +61,7 @@ require (
 	github.com/labstack/echo-contrib v0.17.4
 	github.com/labstack/echo/v4 v4.15.0
 	github.com/labstack/gommon v0.4.2
-	github.com/lestrrat-go/httprc/v3 v3.0.3
+	github.com/lestrrat-go/httprc/v3 v3.0.4
 	github.com/lestrrat-go/jwx/v3 v3.0.13
 	github.com/lib/pq v1.11.1
 	github.com/manifoldco/promptui v0.9.0
@@ -86,10 +86,10 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v84 v84.1.0
 	github.com/theopenlane/beacon v0.3.0
-	github.com/theopenlane/core/common v1.0.7
+	github.com/theopenlane/core/common v1.0.8
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/emailtemplates v0.3.3
+	github.com/theopenlane/emailtemplates v0.3.4
 	github.com/theopenlane/entx v0.22.4
 	github.com/theopenlane/go-client v0.8.2
 	github.com/theopenlane/gqlgen-plugins v0.14.1
