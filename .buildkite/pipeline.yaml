@@ -729,8 +729,8 @@ steps:
               severity: CRITICAL,HIGH
               ignore-unfixed: true
               scanners: misconfig,secret,vuln
-              skip-files: "cosign.key,Dockerfile.dev"
-              trivy-version: "0.68.2"
+              skip-files: "cosign.key,Dockerfile.dev,internal/graphapi/generated/*,internal/ent/generated/*,internal/ent/historygenerated/*"
+              trivy-version: "0.69.1"
       - label: ":docker: docker build and publish"
         key: "docker-build-and-tag"
         cancel_on_build_failing: true
