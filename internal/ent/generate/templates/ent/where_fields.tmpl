@@ -1,0 +1,13 @@
+{{/* A template that adds the sql predicate for JSON (strings) fields. */}}
+{{ define "where/additional/strings" }}
+    {{ range $f := $.Fields }}
+        {{ if $f.IsJSON }}
+            {{ $func := print $f.StructField "Glob" }}
+            func {{ pascal $f.Name }}Has(v string) predicate.{{ $.Name }} {
+                return predicate.{{ $.Name }}(func(s *sql.Selector) {
+                    s.Where(sqljson.ValueContains(s.C(Field{{ pascal $f.Name }}), v))
+                })
+            }
+        {{ end }}
+    {{ end }}
+{{ end }}

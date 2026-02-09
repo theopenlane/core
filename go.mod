@@ -1,6 +1,6 @@
 module github.com/theopenlane/core
 
-go 1.25.6
+go 1.25.7
 
 tool (
 	github.com/dave/jennifer
@@ -11,6 +11,8 @@ tool (
 )
 
 replace github.com/theopenlane/core/common => ./common
+
+replace github.com/theopenlane/entx => ../entx
 
 require (
 	ariga.io/entcache v0.1.0
@@ -61,7 +63,7 @@ require (
 	github.com/labstack/echo-contrib v0.17.4
 	github.com/labstack/echo/v4 v4.15.0
 	github.com/labstack/gommon v0.4.2
-	github.com/lestrrat-go/httprc/v3 v3.0.3
+	github.com/lestrrat-go/httprc/v3 v3.0.4
 	github.com/lestrrat-go/jwx/v3 v3.0.13
 	github.com/lib/pq v1.11.1
 	github.com/manifoldco/promptui v0.9.0
@@ -94,7 +96,7 @@ require (
 	github.com/theopenlane/go-client v0.8.2
 	github.com/theopenlane/gqlgen-plugins v0.14.1
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.23.8
+	github.com/theopenlane/iam v0.24.0
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.8.8
 	github.com/theopenlane/utils v0.6.2
@@ -125,6 +127,7 @@ require (
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
 	github.com/fumiama/imgsz v0.0.4 // indirect
 	github.com/google/go-github/v80 v80.0.0 // indirect
+	github.com/gqlgo/gqlgenc v0.33.1 // indirect
 	github.com/riverqueue/river/rivertype v0.30.2 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
@@ -362,7 +365,7 @@ require (
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	golang.org/x/exp v0.0.0-20260112195511-716be5621a96 // indirect
 	golang.org/x/net v0.49.0 // indirect
-	golang.org/x/sys v0.40.0 // indirect
+	golang.org/x/sys v0.41.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260114163908-3f89685c29c3 // indirect
