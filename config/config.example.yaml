@@ -168,6 +168,13 @@ entconfig:
 integrationoauthprovider:
     enabled: false
     successredirecturl: ""
+integrationgithubapp:
+    enabled: false
+    appid: ""
+    appslug: ""
+    privatekey: ""
+    webhooksecret: ""
+    successredirecturl: ""
 jobqueue:
     connectionuri: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     metrics:

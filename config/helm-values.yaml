@@ -556,6 +556,20 @@ coreConfiguration:
     enabled: false  # @schema type:boolean; default:false
     # -- SuccessRedirectURL is the URL to redirect to after successful OAuth integration.
     successredirecturl: ""  # @schema type:string
+  # -- IntegrationGitHubApp contains configuration for GitHub App integrations
+  integrationgithubapp:
+    # -- Enabled toggles the GitHub App integration handlers
+    enabled: false  # @schema type:boolean; default:false
+    # -- AppID is the GitHub App ID
+    appid: ""  # @schema type:string
+    # -- AppSlug is the GitHub App slug
+    appslug: ""  # @schema type:string
+    # -- PrivateKey is the GitHub App private key (PEM)
+    privatekey: ""  # @schema type:string
+    # -- WebhookSecret is the GitHub App webhook secret
+    webhooksecret: ""  # @schema type:string
+    # -- SuccessRedirectURL is the URL to redirect to after successful GitHub App installation
+    successredirecturl: ""  # @schema type:string
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false
@@ -617,6 +631,22 @@ externalSecrets:
       secretKey: "CORE_AUTH_PROVIDERS_GOOGLE_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-auth-providers-google-clientsecret"  # @schema type:string
+    # -- core-integrationgithubapp-privatekey secret configuration
+    core-integrationgithubapp-privatekey:
+      # -- Enable this external secret
+      enabled: false  # @schema type:boolean; default:false
+      # -- Environment variable key for integrationgithubapp.privatekey
+      secretKey: "CORE_INTEGRATIONGITHUBAPP_PRIVATEKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrationgithubapp-privatekey"  # @schema type:string
+    # -- core-integrationgithubapp-webhooksecret secret configuration
+    core-integrationgithubapp-webhooksecret:
+      # -- Enable this external secret
+      enabled: false  # @schema type:boolean; default:false
+      # -- Environment variable key for integrationgithubapp.webhooksecret
+      secretKey: "CORE_INTEGRATIONGITHUBAPP_WEBHOOKSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrationgithubapp-webhooksecret"  # @schema type:string
     # -- core-authz-credentials-apitoken secret configuration
     core-authz-credentials-apitoken:
       # -- Enable this external secret

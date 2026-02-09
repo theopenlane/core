@@ -30,6 +30,8 @@ const (
 	AuthKindOIDC AuthKind = "oidc"
 	// AuthKindAPIKey represents API key authentication
 	AuthKindAPIKey AuthKind = "apikey"
+	// AuthKindGitHubApp represents GitHub App authentication
+	AuthKindGitHubApp AuthKind = "github_app"
 	// AuthKindWorkloadIdentity represents workload identity authentication
 	AuthKindWorkloadIdentity AuthKind = "workload_identity"
 	// AuthKindAWSFederation represents AWS STS federation authentication

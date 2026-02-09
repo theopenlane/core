@@ -87,6 +87,8 @@ type Config struct {
 	Slack Slack `json:"slack" koanf:"slack"`
 	// IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)
 	IntegrationOauthProvider handlers.IntegrationOauthProviderConfig `json:"integrationoauthprovider" koanf:"integrationoauthprovider"`
+	// IntegrationGitHubApp contains configuration for GitHub App integrations
+	IntegrationGitHubApp handlers.IntegrationGitHubAppConfig `json:"integrationgithubapp" koanf:"integrationgithubapp"`
 	// Workflows contains the configuration for the workflows engine
 	Workflows workflows.Config `json:"workflows" koanf:"workflows"`
 	// CampaignWebhook contains webhook configuration for campaign-related email providers

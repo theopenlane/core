@@ -193,7 +193,8 @@ func WithAuth() ServerOption {
 
 		// add oauth providers for integrations (separate config)
 		s.Config.Handler.IntegrationOauthProvider = s.Config.Settings.IntegrationOauthProvider
-		if s.Config.Settings.IntegrationOauthProvider.Enabled && s.Config.Handler.IntegrationRegistry == nil {
+		s.Config.Handler.IntegrationGitHubApp = s.Config.Settings.IntegrationGitHubApp
+		if (s.Config.Settings.IntegrationOauthProvider.Enabled || s.Config.Settings.IntegrationGitHubApp.Enabled) && s.Config.Handler.IntegrationRegistry == nil {
 			registry, err := registry.NewRegistry(context.Background())
 			if err != nil {
 				log.Panic().Err(err).Msg("failed to build integration provider registry")

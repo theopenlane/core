@@ -27,6 +27,7 @@ func Builders() []providers.Builder {
 		cloudflare.Builder(),
 		gcpscc.Builder(),
 		github.Builder(),
+		github.AppBuilder(),
 		googleworkspace.Builder(),
 		microsoftteams.Builder(),
 		oidcgeneric.Builder(),

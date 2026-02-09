@@ -100,6 +100,32 @@ Before testing integrations, you need to be authenticated:
 2. Complete OAuth flow (requires Slack app configuration)
 3. Test using similar buttons as GitHub
 
+### 5. Test GitHub App Installation Flow
+
+Before using the GitHub App install button in the UI, configure the app and server settings:
+
+**GitHub App Settings (in GitHub):**
+- **Callback URL**: `http://localhost:17608/v1/integrations/github/app/callback`
+- **Webhook URL** (if you want to test webhooks): `http://localhost:17608/github/app/webhook`
+
+**Server Configuration (config.yaml):**
+```yaml
+integrationgithubapp:
+  enabled: true
+  appid: "123456"            # GitHub App ID
+  appslug: "openlane"        # The slug from https://github.com/apps/<slug>
+  privatekey:
+  webhooksecret: "your-secret"
+  successredirecturl: "http://localhost:3004/"
+```
+
+**Success redirect for local UI:**
+- If using `task oauth-test-ui`, set `successredirecturl` to: `http://localhost:3004/`
+- If loading the UI from the API server, set it to: `http://localhost:17608/internal/testutils/integrations/index.html`
+
+Then in the UI, click **"Start GitHub App Install"**. After GitHub completes the installation, you should be redirected back to the UI with the status banner.
+You can then click **"Run GitHub App Health"** to verify end-to-end connectivity (it calls the installation repos endpoint).
+
 ## Features
 
 ### 🔐 **Authentication Status**
