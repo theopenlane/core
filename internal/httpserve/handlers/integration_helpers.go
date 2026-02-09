@@ -11,6 +11,9 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
+// statePayloadParts is the number of parts in an encoded OAuth state payload.
+const statePayloadParts = 3
+
 var (
 	errIntegrationBrokerNotConfigured     = errors.New("integration broker not configured")
 	errIntegrationStoreNotConfigured      = errors.New("integration store not configured")
@@ -71,8 +74,8 @@ func parseStatePayload(state string) (string, string, error) {
 		return "", "", ErrInvalidStateFormat
 	}
 
-	parts := strings.SplitN(string(decoded), ":", 3)
-	if len(parts) != 3 {
+	parts := strings.SplitN(string(decoded), ":", statePayloadParts)
+	if len(parts) != statePayloadParts {
 		return "", "", ErrInvalidStateFormat
 	}
 

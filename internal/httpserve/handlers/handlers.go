@@ -78,7 +78,7 @@ type OpenAPIContext struct {
 	// Operation is the OpenAPI operation metadata for the handler.
 	Operation *openapi3.Operation
 	// Registry provides schema registration and lookup for OpenAPI models.
-	Registry  SchemaRegistry
+	Registry SchemaRegistry
 }
 
 // Handler contains configuration options for handlers

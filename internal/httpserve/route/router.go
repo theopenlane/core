@@ -159,17 +159,17 @@ var (
 // Router is a struct that holds the echo router, the OpenAPI schema, and the handler - it's a way to group these components together
 type Router struct {
 	// Echo is the underlying Echo router instance.
-	Echo           *echo.Echo
+	Echo *echo.Echo
 	// OAS is the OpenAPI spec being assembled.
-	OAS            *openapi3.T
+	OAS *openapi3.T
 	// Handler provides the HTTP handlers wired into routes.
-	Handler        *handlers.Handler
+	Handler *handlers.Handler
 	// StartConfig holds Echo start configuration.
-	StartConfig    *echo.StartConfig
+	StartConfig *echo.StartConfig
 	// LocalFilePath points to static file roots for local assets.
-	LocalFilePath  string
+	LocalFilePath string
 	// Logger is the Echo logger used by the router.
-	Logger         *echo.Logger
+	Logger *echo.Logger
 	// SchemaRegistry registers and resolves OpenAPI schemas.
 	SchemaRegistry SchemaRegistry
 }
@@ -312,23 +312,23 @@ func (r *Router) Base() *echo.Group {
 // Config holds the configuration for a route with automatic OpenAPI registration
 type Config struct {
 	// Path is the route path pattern.
-	Path          string
+	Path string
 	// Method is the HTTP method for the route.
-	Method        string
+	Method string
 	// Name is the OpenAPI summary for the route.
-	Name          string
+	Name string
 	// Description is the OpenAPI description for the route.
-	Description   string
+	Description string
 	// Tags are the OpenAPI tags for grouping.
-	Tags          []string
+	Tags []string
 	// OperationID is the OpenAPI operation ID.
-	OperationID   string
+	OperationID string
 	// Security defines OpenAPI security requirements for the route.
-	Security      *openapi3.SecurityRequirements
+	Security *openapi3.SecurityRequirements
 	// Middlewares are applied before the handler.
-	Middlewares   []echo.MiddlewareFunc
+	Middlewares []echo.MiddlewareFunc
 	// Handler is the OpenAPI-aware handler function.
-	Handler       func(echo.Context, *handlers.OpenAPIContext) error
+	Handler func(echo.Context, *handlers.OpenAPIContext) error
 	// SimpleHandler is used for routes without OpenAPI context.
 	SimpleHandler func(echo.Context) error // For handlers that don't need OpenAPI context
 }

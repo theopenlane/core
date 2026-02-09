@@ -269,11 +269,13 @@ func (h *Handler) findGitHubAppIntegrationByInstallationID(ctx context.Context, 
 	record, err := query.Only(ctx)
 	if err != nil {
 		if ent.IsNotSingular(err) {
-			record, err = query.First(ctx)
+			return query.First(ctx)
 		}
+
 		if ent.IsNotFound(err) {
 			return nil, nil
 		}
+
 		return nil, err
 	}
 
