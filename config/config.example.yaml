@@ -165,15 +165,15 @@ entconfig:
             provider: none
         maximumsentences: 10
         type: lexrank
-integrationoauthprovider:
-    enabled: false
-    successredirecturl: ""
 integrationgithubapp:
-    enabled: false
     appid: ""
     appslug: ""
+    enabled: false
     privatekey: ""
+    successredirecturl: ""
     webhooksecret: ""
+integrationoauthprovider:
+    enabled: false
     successredirecturl: ""
 jobqueue:
     connectionuri: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
