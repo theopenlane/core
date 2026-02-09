@@ -15,4 +15,4 @@ const (
 )
 
 var AllOrgModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogDomainScanningAddon, CatalogEntityManagementModule, CatalogExtraEvidenceStorageAddon, CatalogPolicyManagementAddon, CatalogRiskManagementAddon, CatalogTrustCenterModule, CatalogVulnerabilityManagementModule}
-var TrialModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule}
+var TrialModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogTrustCenterModule}
