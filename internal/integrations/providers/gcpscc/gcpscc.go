@@ -368,7 +368,7 @@ func serviceAccountCredentials(ctx context.Context, rawKey string, scopes []stri
 		scopeList = []string{defaultScope}
 	}
 
-	creds, err := google.CredentialsFromJSON(ctx, []byte(key), scopeList...)
+	creds, err := google.CredentialsFromJSONWithType(ctx, []byte(key), google.ServiceAccount, scopeList...)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %v", errServiceAccountKey, err)
 	}
