@@ -146,6 +146,10 @@ type ComplexityRoot struct {
 		APIToken func(childComplexity int) int
 	}
 
+	ActionNotificationsReadPayload struct {
+		ReadIDs func(childComplexity int) int
+	}
+
 	ActionPlan struct {
 		ActionPlanKind                  func(childComplexity int) int
 		ActionPlanKindID                func(childComplexity int) int
@@ -3512,6 +3516,7 @@ type ComplexityRoot struct {
 		DenyNDARequests                      func(childComplexity int, ids []string) int
 		ForceCompleteWorkflowInstance        func(childComplexity int, id string, applyProposal *bool) int
 		LaunchCampaign                       func(childComplexity int, input model.LaunchCampaignInput) int
+		MarkNotificationsAsRead              func(childComplexity int, ids []string) int
 		PublishTrustCenterSetting            func(childComplexity int) int
 		ReassignWorkflowAssignment           func(childComplexity int, id string, targetUserID string) int
 		RejectWorkflowAssignment             func(childComplexity int, id string, reason *string) int
@@ -7296,6 +7301,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.APITokenUpdatePayload.APIToken(childComplexity), true
+
+	case "ActionNotificationsReadPayload.readIDs":
+		if e.complexity.ActionNotificationsReadPayload.ReadIDs == nil {
+			break
+		}
+
+		return e.complexity.ActionNotificationsReadPayload.ReadIDs(childComplexity), true
 
 	case "ActionPlan.actionPlanKind":
 		if e.complexity.ActionPlan.ActionPlanKind == nil {
@@ -26632,6 +26644,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.LaunchCampaign(childComplexity, args["input"].(model.LaunchCampaignInput)), true
+
+	case "Mutation.markNotificationsAsRead":
+		if e.complexity.Mutation.MarkNotificationsAsRead == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_markNotificationsAsRead_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.MarkNotificationsAsRead(childComplexity, args["ids"].([]string)), true
 
 	case "Mutation.publishTrustCenterSetting":
 		if e.complexity.Mutation.PublishTrustCenterSetting == nil {
@@ -134305,6 +134329,16 @@ type NoteDeletePayload {
         """
         input: UpdateNotificationInput!
     ): NotificationUpdatePayload!
+
+    """
+    Update multiple existing notifications
+    """
+    markNotificationsAsRead(
+        """
+        IDs of the notifications to update
+        """
+        ids: [ID!]!
+    ): ActionNotificationsReadPayload!
 }
 
 """
@@ -134315,6 +134349,16 @@ type NotificationUpdatePayload {
     Updated notification
     """
     notification: Notification!
+}
+
+"""
+Return response for markNotificationsAsRead mutation
+"""
+type ActionNotificationsReadPayload {
+    """
+    Updated notification IDs
+    """
+    readIDs: [ID]!
 }`, BuiltIn: false},
 	{Name: "../schema/notificationpreference.graphql", Input: `extend type Query {
     """
