@@ -1428,6 +1428,20 @@ type IdentityHolderBulkCreatePayload struct {
 	IdentityHolders []*generated.IdentityHolder `json:"identityHolders,omitempty"`
 }
 
+// Return response for deleteBulkIdentityHolder mutation
+type IdentityHolderBulkDeletePayload struct {
+	// Deleted identityHolder IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkIdentityHolder mutation
+type IdentityHolderBulkUpdatePayload struct {
+	// Updated identityHolders
+	IdentityHolders []*generated.IdentityHolder `json:"identityHolders,omitempty"`
+	// IDs of the updated identityHolders
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createIdentityHolder mutation
 type IdentityHolderCreatePayload struct {
 	// Created identityHolder

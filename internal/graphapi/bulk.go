@@ -3343,6 +3343,138 @@ func (r *mutationResolver) bulkCreateIdentityHolder(ctx context.Context, input [
 	}, nil
 }
 
+// bulkDeleteIdentityHolder deletes multiple IdentityHolder entities by their IDs
+func (r *mutationResolver) bulkDeleteIdentityHolder(ctx context.Context, ids []string) (*model.IdentityHolderBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each identityholder individually to ensure proper cleanup
+			if err := r.db.IdentityHolder.DeleteOneID(id).Exec(ctx); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("identityholder_id", id).Msg("failed to delete identityholder in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.IdentityHolderEdgeCleanup(ctx, id); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("identityholder_id", id).Msg("failed to cleanup identityholder edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some identityholder deletions failed")
+	}
+
+	return &model.IdentityHolderBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
+// bulkUpdateIdentityHolder updates multiple IdentityHolder entities
+func (r *mutationResolver) bulkUpdateIdentityHolder(ctx context.Context, ids []string, input generated.UpdateIdentityHolderInput) (*model.IdentityHolderBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.IdentityHolder, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each identityholder individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for identityholder")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.IdentityHolder.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("identityholder_id", id).Msg("failed to get identityholder in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("identityholder_id", id).Msg("failed to update identityholder in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.IdentityHolderBulkUpdatePayload{
+		IdentityHolders: results,
+		UpdatedIDs:      updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVIdentityHolder updates multiple IdentityHolder entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVIdentityHolder(ctx context.Context, inputs []*csvgenerated.IdentityHolderCSVUpdateInput) (*model.IdentityHolderBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.IdentityHolder, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each identityholder individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for identityholder")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.IdentityHolder.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("identityholder_id", input.ID).Msg("failed to get identityholder in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("identityholder_id", input.ID).Msg("failed to update identityholder in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "identityholder"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.IdentityHolderBulkUpdatePayload{
+		IdentityHolders: results,
+		UpdatedIDs:      updatedIDs,
+	}, nil
+}
+
 // bulkCreateInternalPolicy uses the CreateBulk function to create multiple InternalPolicy entities
 func (r *mutationResolver) bulkCreateInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*model.InternalPolicyBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

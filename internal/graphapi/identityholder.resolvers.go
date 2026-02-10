@@ -154,6 +154,44 @@ func (r *mutationResolver) DeleteIdentityHolder(ctx context.Context, id string) 
 	}, nil
 }
 
+// DeleteBulkIdentityHolder is the resolver for the deleteBulkIdentityHolder field.
+func (r *mutationResolver) DeleteBulkIdentityHolder(ctx context.Context, ids []string) (*model.IdentityHolderBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteIdentityHolder(ctx, ids)
+}
+
+// UpdateBulkIdentityHolder is the resolver for the updateBulkIdentityHolder field.
+func (r *mutationResolver) UpdateBulkIdentityHolder(ctx context.Context, ids []string, input generated.UpdateIdentityHolderInput) (*model.IdentityHolderBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateIdentityHolder(ctx, ids, input)
+}
+
+// UpdateBulkCSVIdentityHolder is the resolver for the updateBulkCSVIdentityHolder field.
+func (r *mutationResolver) UpdateBulkCSVIdentityHolder(ctx context.Context, input graphql.Upload) (*model.IdentityHolderBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.IdentityHolderCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "identityholder"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "IdentityHolder", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVIdentityHolder(ctx, data)
+}
+
 // IdentityHolder is the resolver for the identityHolder field.
 func (r *queryResolver) IdentityHolder(ctx context.Context, id string) (*generated.IdentityHolder, error) {
 	query, err := withTransactionalMutation(ctx).IdentityHolder.Query().Where(identityholder.ID(id)).CollectFields(ctx)

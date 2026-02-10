@@ -2584,6 +2584,15 @@ type ComplexityRoot struct {
 		IdentityHolders func(childComplexity int) int
 	}
 
+	IdentityHolderBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
+	IdentityHolderBulkUpdatePayload struct {
+		IdentityHolders func(childComplexity int) int
+		UpdatedIDs      func(childComplexity int) int
+	}
+
 	IdentityHolderConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -3411,6 +3420,7 @@ type ComplexityRoot struct {
 		DeleteBulkGroupMembership            func(childComplexity int, ids []string) int
 		DeleteBulkGroupSetting               func(childComplexity int, ids []string) int
 		DeleteBulkHush                       func(childComplexity int, ids []string) int
+		DeleteBulkIdentityHolder             func(childComplexity int, ids []string) int
 		DeleteBulkInternalPolicy             func(childComplexity int, ids []string) int
 		DeleteBulkInvite                     func(childComplexity int, ids []string) int
 		DeleteBulkJobTemplate                func(childComplexity int, ids []string) int
@@ -3555,6 +3565,7 @@ type ComplexityRoot struct {
 		UpdateBulkCSVGroupMembership         func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVGroupSetting            func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVHush                    func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVIdentityHolder          func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVInternalPolicy          func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVInvite                  func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVJobTemplate             func(childComplexity int, input graphql.Upload) int
@@ -3596,6 +3607,7 @@ type ComplexityRoot struct {
 		UpdateBulkGroupMembership            func(childComplexity int, ids []string, input generated.UpdateGroupMembershipInput) int
 		UpdateBulkGroupSetting               func(childComplexity int, ids []string, input generated.UpdateGroupSettingInput) int
 		UpdateBulkHush                       func(childComplexity int, ids []string, input generated.UpdateHushInput) int
+		UpdateBulkIdentityHolder             func(childComplexity int, ids []string, input generated.UpdateIdentityHolderInput) int
 		UpdateBulkInternalPolicy             func(childComplexity int, ids []string, input generated.UpdateInternalPolicyInput) int
 		UpdateBulkInvite                     func(childComplexity int, ids []string, input generated.UpdateInviteInput) int
 		UpdateBulkJobTemplate                func(childComplexity int, ids []string, input generated.UpdateJobTemplateInput) int
@@ -19741,6 +19753,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.IdentityHolderBulkCreatePayload.IdentityHolders(childComplexity), true
 
+	case "IdentityHolderBulkDeletePayload.deletedIDs":
+		if e.complexity.IdentityHolderBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "IdentityHolderBulkUpdatePayload.identityHolders":
+		if e.complexity.IdentityHolderBulkUpdatePayload.IdentityHolders == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderBulkUpdatePayload.IdentityHolders(childComplexity), true
+
+	case "IdentityHolderBulkUpdatePayload.updatedIDs":
+		if e.complexity.IdentityHolderBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "IdentityHolderConnection.edges":
 		if e.complexity.IdentityHolderConnection.Edges == nil {
 			break
@@ -25385,6 +25418,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteBulkHush(childComplexity, args["ids"].([]string)), true
 
+	case "Mutation.deleteBulkIdentityHolder":
+		if e.complexity.Mutation.DeleteBulkIdentityHolder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkIdentityHolder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkIdentityHolder(childComplexity, args["ids"].([]string)), true
+
 	case "Mutation.deleteBulkInternalPolicy":
 		if e.complexity.Mutation.DeleteBulkInternalPolicy == nil {
 			break
@@ -27108,6 +27153,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateBulkCSVHush(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.updateBulkCSVIdentityHolder":
+		if e.complexity.Mutation.UpdateBulkCSVIdentityHolder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVIdentityHolder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVIdentityHolder(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.updateBulkCSVInternalPolicy":
 		if e.complexity.Mutation.UpdateBulkCSVInternalPolicy == nil {
 			break
@@ -27599,6 +27656,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateBulkHush(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateHushInput)), true
+
+	case "Mutation.updateBulkIdentityHolder":
+		if e.complexity.Mutation.UpdateBulkIdentityHolder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkIdentityHolder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkIdentityHolder(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateIdentityHolderInput)), true
 
 	case "Mutation.updateBulkInternalPolicy":
 		if e.complexity.Mutation.UpdateBulkInternalPolicy == nil {
@@ -133133,6 +133202,37 @@ extend type Mutation{
         """
         id: ID!
     ): IdentityHolderDeletePayload!
+    """
+    Delete multiple identityHolders
+    """
+    deleteBulkIdentityHolder(
+        """
+        IDs of the identityHolders to delete
+        """
+        ids: [ID!]!
+    ): IdentityHolderBulkDeletePayload!
+    """
+    Update multiple existing identityHolders
+    """
+    updateBulkIdentityHolder(
+        """
+        IDs of the identityHolders to update
+        """
+        ids: [ID!]!
+        """
+        values to update the identityHolders with
+        """
+        input: UpdateIdentityHolderInput!
+    ): IdentityHolderBulkUpdatePayload!
+    """
+    Update multiple existing identityHolders via file upload
+    """
+    updateBulkCSVIdentityHolder(
+        """
+        csv file containing values of the identityHolder, must include ID column
+        """
+        input: Upload!
+    ): IdentityHolderBulkUpdatePayload!
 }
 
 """
@@ -133173,6 +133273,30 @@ type IdentityHolderBulkCreatePayload {
     Created identityHolders
     """
     identityHolders: [IdentityHolder!]
+}
+
+"""
+Return response for deleteBulkIdentityHolder mutation
+"""
+type IdentityHolderBulkDeletePayload {
+    """
+    Deleted identityHolder IDs
+    """
+    deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkIdentityHolder mutation
+"""
+type IdentityHolderBulkUpdatePayload {
+    """
+    Updated identityHolders
+    """
+    identityHolders: [IdentityHolder!]
+    """
+    IDs of the updated identityHolders
+    """
+    updatedIDs: [ID!]
 }`, BuiltIn: false},
 	{Name: "../schema/integration.graphql", Input: `extend type Query {
     """
