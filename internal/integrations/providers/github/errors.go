@@ -37,4 +37,6 @@ var (
 	ErrAppPrivateKeyParse = errors.New("github: app private key parse failed")
 	// ErrAppJWTSign indicates signing the GitHub App JWT failed
 	ErrAppJWTSign = errors.New("github: app jwt sign failed")
+	// ErrProviderNotInitialized indicates the provider instance is nil
+	ErrProviderNotInitialized = errors.New("github: provider not initialized")
 )

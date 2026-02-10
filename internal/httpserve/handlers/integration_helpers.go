@@ -20,6 +20,8 @@ var (
 	errIntegrationOperationsNotConfigured     = errors.New("integration operations manager not configured")
 	errIntegrationWorkflowEngineNotConfigured = errors.New("integration workflow engine not configured")
 	errActivationNotConfigured                = errors.New("integration activation service not configured")
+	// errDBClientNotConfigured indicates the database client is missing.
+	errDBClientNotConfigured = errors.New("database client not configured")
 )
 
 // IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.
@@ -51,6 +53,8 @@ var (
 	ErrDeleteSecrets = errors.New("failed to delete integration secrets")
 	// ErrUnsupportedAuthType indicates the provider does not support the requested flow
 	ErrUnsupportedAuthType = errors.New("provider does not support this authentication flow")
+	// ErrProviderHealthCheckFailed indicates the provider health check failed
+	ErrProviderHealthCheckFailed = errors.New("provider health check failed")
 )
 
 // buildStatePayload encodes the OAuth state payload for cookies and callbacks.

@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/integrations/state"
+	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -309,4 +310,44 @@ func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, orgID 
 		).
 		SetProviderState(statePayload).
 		Exec(ctx)
+}
+
+const defaultHealthOperation types.OperationName = "health.default"
+
+// runIntegrationHealthCheck performs a health check operation for the given provider if supported
+func (h *Handler) runIntegrationHealthCheck(ctx context.Context, orgID string, provider types.ProviderType) error {
+	if !h.providerHasHealthOperation(provider) {
+		return nil
+	}
+
+	result, err := h.IntegrationOperations.Run(ctx, types.OperationRequest{
+		OrgID:    orgID,
+		Provider: provider,
+		Name:     defaultHealthOperation,
+		Force:    true,
+	})
+	if err != nil {
+		return err
+	}
+
+	if result.Status != types.OperationStatusOK {
+		summary := strings.TrimSpace(result.Summary)
+		if summary == "" {
+			return ErrProviderHealthCheckFailed
+		}
+		return fmt.Errorf("%w: %s", ErrProviderHealthCheckFailed, summary)
+	}
+
+	return nil
+}
+
+// providerHasHealthOperation checks if the provider has a health check operation defined
+func (h *Handler) providerHasHealthOperation(provider types.ProviderType) bool {
+	for _, descriptor := range h.IntegrationRegistry.OperationDescriptors(provider) {
+		if descriptor.Name == defaultHealthOperation {
+			return true
+		}
+	}
+
+	return false
 }

@@ -251,9 +251,6 @@ func validateGitHubWebhookSignature(secret string, signatureHeader string, paylo
 
 // findGitHubAppIntegrationByInstallationID locates the integration record for an installation ID.
 func (h *Handler) findGitHubAppIntegrationByInstallationID(ctx context.Context, installationID string) (*ent.Integration, error) {
-	if h.DBClient == nil {
-		return nil, errDBClientNotConfigured
-	}
 	installationID = strings.TrimSpace(installationID)
 	if installationID == "" {
 		return nil, nil

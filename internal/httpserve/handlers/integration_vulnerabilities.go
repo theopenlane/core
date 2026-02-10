@@ -164,6 +164,22 @@ func extractAlertEnvelopes(result types.OperationResult) []types.AlertEnvelope {
 	}
 }
 
+// stringifyValue converts various types to a trimmed string representation
+func stringifyValue(value any) string {
+	switch v := value.(type) {
+	case string:
+		return strings.TrimSpace(v)
+	case fmt.Stringer:
+		return strings.TrimSpace(v.String())
+	default:
+		b, err := json.Marshal(v)
+		if err != nil {
+			return ""
+		}
+		return string(b)
+	}
+}
+
 // buildGitHubVulnerability maps an alert envelope into a normalized vulnerability.
 func buildGitHubVulnerability(alert types.AlertEnvelope, source string) (githubVulnerability, bool) {
 	repo := strings.TrimSpace(alert.Resource)
