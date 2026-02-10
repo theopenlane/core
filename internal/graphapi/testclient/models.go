@@ -285,6 +285,10 @@ type APITokenWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for scopesHas to contain a specific value
+	ScopesHas *string `json:"scopesHas,omitempty"`
 }
 
 // Return response for markNotificationsAsRead mutation
@@ -926,6 +930,20 @@ type ActionPlanWhereInput struct {
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for tagSuggestionsHas to contain a specific value
+	TagSuggestionsHas *string `json:"tagSuggestionsHas,omitempty"`
+	// Filter for dismissedTagSuggestionsHas to contain a specific value
+	DismissedTagSuggestionsHas *string `json:"dismissedTagSuggestionsHas,omitempty"`
+	// Filter for controlSuggestionsHas to contain a specific value
+	ControlSuggestionsHas *string `json:"controlSuggestionsHas,omitempty"`
+	// Filter for dismissedControlSuggestionsHas to contain a specific value
+	DismissedControlSuggestionsHas *string `json:"dismissedControlSuggestionsHas,omitempty"`
+	// Filter for improvementSuggestionsHas to contain a specific value
+	ImprovementSuggestionsHas *string `json:"improvementSuggestionsHas,omitempty"`
+	// Filter for dismissedImprovementSuggestionsHas to contain a specific value
+	DismissedImprovementSuggestionsHas *string `json:"dismissedImprovementSuggestionsHas,omitempty"`
 }
 
 // AddProgramMembershipInput is used for create ProgramMembership object under an existing program
@@ -1580,6 +1598,8 @@ type AssessmentWhereInput struct {
 	// campaigns edge predicates
 	HasCampaigns     *bool                 `json:"hasCampaigns,omitempty"`
 	HasCampaignsWith []*CampaignWhereInput `json:"hasCampaignsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Asset struct {
@@ -2434,6 +2454,10 @@ type AssetWhereInput struct {
 	// connected_from edge predicates
 	HasConnectedFrom     *bool              `json:"hasConnectedFrom,omitempty"`
 	HasConnectedFromWith []*AssetWhereInput `json:"hasConnectedFromWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for categoriesHas to contain a specific value
+	CategoriesHas *string `json:"categoriesHas,omitempty"`
 }
 
 // Return response for approveNDARequests or denyNDARequests mutation
@@ -3429,6 +3453,8 @@ type CampaignWhereInput struct {
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // CloneControlInput is used to clone controls and their subcontrols
@@ -3782,6 +3808,8 @@ type ContactWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Control struct {
@@ -4306,6 +4334,8 @@ type ControlImplementationWhereInput struct {
 	// tasks edge predicates
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type ControlObjective struct {
@@ -4710,6 +4740,8 @@ type ControlObjectiveWhereInput struct {
 	// tasks edge predicates
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // Ordering options for Control connections
@@ -5291,6 +5323,14 @@ type ControlWhereInput struct {
 	// control_mappings edge predicates
 	HasControlMappings     *bool                       `json:"hasControlMappings,omitempty"`
 	HasControlMappingsWith []*FindingControlWhereInput `json:"hasControlMappingsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for aliasesHas to contain a specific value
+	AliasesHas *string `json:"aliasesHas,omitempty"`
+	// Filter for mappedCategoriesHas to contain a specific value
+	MappedCategoriesHas *string `json:"mappedCategoriesHas,omitempty"`
+	// Filter for controlQuestionsHas to contain a specific value
+	ControlQuestionsHas *string `json:"controlQuestionsHas,omitempty"`
 }
 
 // CreateAPITokenInput is used for create APIToken object.
@@ -8991,6 +9031,8 @@ type CustomDomainWhereInput struct {
 	// dns_verification edge predicates
 	HasDNSVerification     *bool                        `json:"hasDNSVerification,omitempty"`
 	HasDNSVerificationWith []*DNSVerificationWhereInput `json:"hasDNSVerificationWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type CustomTypeEnum struct {
@@ -9640,6 +9682,8 @@ type DNSVerificationWhereInput struct {
 	// custom_domains edge predicates
 	HasCustomDomains     *bool                     `json:"hasCustomDomains,omitempty"`
 	HasCustomDomainsWith []*CustomDomainWhereInput `json:"hasCustomDomainsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type DirectoryAccount struct {
@@ -10210,6 +10254,8 @@ type DirectoryAccountWhereInput struct {
 	// memberships edge predicates
 	HasMemberships     *bool                            `json:"hasMemberships,omitempty"`
 	HasMembershipsWith []*DirectoryMembershipWhereInput `json:"hasMembershipsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type DirectoryGroup struct {
@@ -10654,6 +10700,8 @@ type DirectoryGroupWhereInput struct {
 	// members edge predicates
 	HasMembers     *bool                            `json:"hasMembers,omitempty"`
 	HasMembersWith []*DirectoryMembershipWhereInput `json:"hasMembersWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type DirectoryMembership struct {
@@ -11826,6 +11874,8 @@ type DocumentDataWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type EmailBranding struct {
@@ -12211,6 +12261,8 @@ type EmailBrandingWhereInput struct {
 	// email_templates edge predicates
 	HasEmailTemplates     *bool                      `json:"hasEmailTemplates,omitempty"`
 	HasEmailTemplatesWith []*EmailTemplateWhereInput `json:"hasEmailTemplatesWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type EmailTemplate struct {
@@ -13124,6 +13176,8 @@ type EntityTypeWhereInput struct {
 	// entities edge predicates
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // Return response for updateEntity mutation
@@ -13898,6 +13952,16 @@ type EntityWhereInput struct {
 	// entity_type edge predicates
 	HasEntityType     *bool                   `json:"hasEntityType,omitempty"`
 	HasEntityTypeWith []*EntityTypeWhereInput `json:"hasEntityTypeWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for domainsHas to contain a specific value
+	DomainsHas *string `json:"domainsHas,omitempty"`
+	// Filter for linkedAssetIdsHas to contain a specific value
+	LinkedAssetIdsHas *string `json:"linkedAssetIdsHas,omitempty"`
+	// Filter for providedServicesHas to contain a specific value
+	ProvidedServicesHas *string `json:"providedServicesHas,omitempty"`
+	// Filter for linksHas to contain a specific value
+	LinksHas *string `json:"linksHas,omitempty"`
 }
 
 type Event struct {
@@ -14145,6 +14209,8 @@ type EventWhereInput struct {
 	// org_subscriptions edge predicates
 	HasOrgSubscriptions     *bool                        `json:"hasOrgSubscriptions,omitempty"`
 	HasOrgSubscriptionsWith []*OrgSubscriptionWhereInput `json:"hasOrgSubscriptionsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Evidence struct {
@@ -14599,6 +14665,8 @@ type EvidenceWhereInput struct {
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Export struct {
@@ -14845,6 +14913,8 @@ type ExportWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// Filter for fieldsHas to contain a specific value
+	FieldsHas *string `json:"fieldsHas,omitempty"`
 }
 
 type File struct {
@@ -15422,6 +15492,8 @@ type FileWhereInput struct {
 	// original_trust_center_doc edge predicates
 	HasOriginalTrustCenterDoc     *bool                       `json:"hasOriginalTrustCenterDoc,omitempty"`
 	HasOriginalTrustCenterDocWith []*TrustCenterDocWhereInput `json:"hasOriginalTrustCenterDocWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Finding struct {
@@ -16486,6 +16558,16 @@ type FindingWhereInput struct {
 	// control_mappings edge predicates
 	HasControlMappings     *bool                       `json:"hasControlMappings,omitempty"`
 	HasControlMappingsWith []*FindingControlWhereInput `json:"hasControlMappingsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for categoriesHas to contain a specific value
+	CategoriesHas *string `json:"categoriesHas,omitempty"`
+	// Filter for referencesHas to contain a specific value
+	ReferencesHas *string `json:"referencesHas,omitempty"`
+	// Filter for stepsToReproduceHas to contain a specific value
+	StepsToReproduceHas *string `json:"stepsToReproduceHas,omitempty"`
+	// Filter for targetsHas to contain a specific value
+	TargetsHas *string `json:"targetsHas,omitempty"`
 }
 
 type Group struct {
@@ -17430,6 +17512,8 @@ type GroupWhereInput struct {
 	// members edge predicates
 	HasMembers     *bool                        `json:"hasMembers,omitempty"`
 	HasMembersWith []*GroupMembershipWhereInput `json:"hasMembersWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Hush struct {
@@ -18393,6 +18477,8 @@ type IdentityHolderWhereInput struct {
 	// user edge predicates
 	HasUser     *bool             `json:"hasUser,omitempty"`
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Integration struct {
@@ -18775,6 +18861,8 @@ type IntegrationWhereInput struct {
 	// entities edge predicates
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type InternalPolicy struct {
@@ -19387,6 +19475,20 @@ type InternalPolicyWhereInput struct {
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for tagSuggestionsHas to contain a specific value
+	TagSuggestionsHas *string `json:"tagSuggestionsHas,omitempty"`
+	// Filter for dismissedTagSuggestionsHas to contain a specific value
+	DismissedTagSuggestionsHas *string `json:"dismissedTagSuggestionsHas,omitempty"`
+	// Filter for controlSuggestionsHas to contain a specific value
+	ControlSuggestionsHas *string `json:"controlSuggestionsHas,omitempty"`
+	// Filter for dismissedControlSuggestionsHas to contain a specific value
+	DismissedControlSuggestionsHas *string `json:"dismissedControlSuggestionsHas,omitempty"`
+	// Filter for improvementSuggestionsHas to contain a specific value
+	ImprovementSuggestionsHas *string `json:"improvementSuggestionsHas,omitempty"`
+	// Filter for dismissedImprovementSuggestionsHas to contain a specific value
+	DismissedImprovementSuggestionsHas *string `json:"dismissedImprovementSuggestionsHas,omitempty"`
 }
 
 type Invite struct {
@@ -20150,6 +20252,8 @@ type JobRunnerRegistrationTokenWhereInput struct {
 	// job_runner edge predicates
 	HasJobRunner     *bool                  `json:"hasJobRunner,omitempty"`
 	HasJobRunnerWith []*JobRunnerWhereInput `json:"hasJobRunnerWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type JobRunnerToken struct {
@@ -20387,6 +20491,8 @@ type JobRunnerTokenWhereInput struct {
 	// job_runners edge predicates
 	HasJobRunners     *bool                  `json:"hasJobRunners,omitempty"`
 	HasJobRunnersWith []*JobRunnerWhereInput `json:"hasJobRunnersWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // Return response for updateJobRunner mutation
@@ -20617,6 +20723,8 @@ type JobRunnerWhereInput struct {
 	// job_runner_tokens edge predicates
 	HasJobRunnerTokens     *bool                       `json:"hasJobRunnerTokens,omitempty"`
 	HasJobRunnerTokensWith []*JobRunnerTokenWhereInput `json:"hasJobRunnerTokensWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type JobTemplate struct {
@@ -20898,6 +21006,8 @@ type JobTemplateWhereInput struct {
 	// scheduled_jobs edge predicates
 	HasScheduledJobs     *bool                     `json:"hasScheduledJobs,omitempty"`
 	HasScheduledJobsWith []*ScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // Input for launchCampaign mutation
@@ -21093,6 +21203,8 @@ type MappableDomainWhereInput struct {
 	// custom_domains edge predicates
 	HasCustomDomains     *bool                     `json:"hasCustomDomains,omitempty"`
 	HasCustomDomainsWith []*CustomDomainWhereInput `json:"hasCustomDomainsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type MappedControl struct {
@@ -21378,6 +21490,8 @@ type MappedControlWhereInput struct {
 	// to_subcontrols edge predicates
 	HasToSubcontrols     *bool                   `json:"hasToSubcontrols,omitempty"`
 	HasToSubcontrolsWith []*SubcontrolWhereInput `json:"hasToSubcontrolsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Mutation struct {
@@ -21691,6 +21805,8 @@ type NarrativeWhereInput struct {
 	// procedures edge predicates
 	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
 	HasProceduresWith []*ProcedureWhereInput `json:"hasProceduresWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Note struct {
@@ -22447,6 +22563,8 @@ type NotificationPreferenceWhereInput struct {
 	// notification_template edge predicates
 	HasNotificationTemplate     *bool                             `json:"hasNotificationTemplate,omitempty"`
 	HasNotificationTemplateWith []*NotificationTemplateWhereInput `json:"hasNotificationTemplateWith,omitempty"`
+	// Filter for topicPatternsHas to contain a specific value
+	TopicPatternsHas *string `json:"topicPatternsHas,omitempty"`
 }
 
 type NotificationTemplate struct {
@@ -22982,6 +23100,8 @@ type OnboardingWhereInput struct {
 	// organization edge predicates
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
+	// Filter for domainsHas to contain a specific value
+	DomainsHas *string `json:"domainsHas,omitempty"`
 }
 
 // OrgMembersInput is used to create members for a organization
@@ -23373,6 +23493,8 @@ type OrgSubscriptionWhereInput struct {
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Organization struct {
@@ -24010,6 +24132,12 @@ type OrganizationSettingWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for domainsHas to contain a specific value
+	DomainsHas *string `json:"domainsHas,omitempty"`
+	// Filter for allowedEmailDomainsHas to contain a specific value
+	AllowedEmailDomainsHas *string `json:"allowedEmailDomainsHas,omitempty"`
 }
 
 // Return response for transferOrganizationOwnership mutation
@@ -24472,6 +24600,8 @@ type OrganizationWhereInput struct {
 	// members edge predicates
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // Information about pagination in a connection.
@@ -24735,6 +24865,10 @@ type PersonalAccessTokenWhereInput struct {
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for scopesHas to contain a specific value
+	ScopesHas *string `json:"scopesHas,omitempty"`
 }
 
 type Platform struct {
@@ -25790,6 +25924,8 @@ type PlatformWhereInput struct {
 	// platform_owner edge predicates
 	HasPlatformOwner     *bool             `json:"hasPlatformOwner,omitempty"`
 	HasPlatformOwnerWith []*UserWhereInput `json:"hasPlatformOwnerWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Procedure struct {
@@ -26394,6 +26530,20 @@ type ProcedureWhereInput struct {
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for tagSuggestionsHas to contain a specific value
+	TagSuggestionsHas *string `json:"tagSuggestionsHas,omitempty"`
+	// Filter for dismissedTagSuggestionsHas to contain a specific value
+	DismissedTagSuggestionsHas *string `json:"dismissedTagSuggestionsHas,omitempty"`
+	// Filter for controlSuggestionsHas to contain a specific value
+	ControlSuggestionsHas *string `json:"controlSuggestionsHas,omitempty"`
+	// Filter for dismissedControlSuggestionsHas to contain a specific value
+	DismissedControlSuggestionsHas *string `json:"dismissedControlSuggestionsHas,omitempty"`
+	// Filter for improvementSuggestionsHas to contain a specific value
+	ImprovementSuggestionsHas *string `json:"improvementSuggestionsHas,omitempty"`
+	// Filter for dismissedImprovementSuggestionsHas to contain a specific value
+	DismissedImprovementSuggestionsHas *string `json:"dismissedImprovementSuggestionsHas,omitempty"`
 }
 
 type Program struct {
@@ -27024,6 +27174,8 @@ type ProgramWhereInput struct {
 	// members edge predicates
 	HasMembers     *bool                          `json:"hasMembers,omitempty"`
 	HasMembersWith []*ProgramMembershipWhereInput `json:"hasMembersWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Query struct {
@@ -27714,6 +27866,8 @@ type RemediationWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // Input for resendCampaignIncompleteTargets mutation
@@ -28357,6 +28511,8 @@ type ReviewWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Risk struct {
@@ -28930,6 +29086,8 @@ type RiskWhereInput struct {
 	// discussions edge predicates
 	HasDiscussions     *bool                   `json:"hasDiscussions,omitempty"`
 	HasDiscussionsWith []*DiscussionWhereInput `json:"hasDiscussionsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Scan struct {
@@ -29503,6 +29661,10 @@ type ScanWhereInput struct {
 	// performed_by_group edge predicates
 	HasPerformedByGroup     *bool              `json:"hasPerformedByGroup,omitempty"`
 	HasPerformedByGroupWith []*GroupWhereInput `json:"hasPerformedByGroupWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for vulnerabilityIdsHas to contain a specific value
+	VulnerabilityIdsHas *string `json:"vulnerabilityIdsHas,omitempty"`
 }
 
 type ScheduledJob struct {
@@ -30490,6 +30652,10 @@ type StandardWhereInput struct {
 	// logo_file edge predicates
 	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
 	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for domainsHas to contain a specific value
+	DomainsHas *string `json:"domainsHas,omitempty"`
 }
 
 type Subcontrol struct {
@@ -31134,6 +31300,14 @@ type SubcontrolWhereInput struct {
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for aliasesHas to contain a specific value
+	AliasesHas *string `json:"aliasesHas,omitempty"`
+	// Filter for mappedCategoriesHas to contain a specific value
+	MappedCategoriesHas *string `json:"mappedCategoriesHas,omitempty"`
+	// Filter for controlQuestionsHas to contain a specific value
+	ControlQuestionsHas *string `json:"controlQuestionsHas,omitempty"`
 }
 
 type SubmitTrustCenterNDAResponseInput struct {
@@ -31441,6 +31615,8 @@ type SubprocessorWhereInput struct {
 	// entities edge predicates
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Subscriber struct {
@@ -31667,6 +31843,8 @@ type SubscriberWhereInput struct {
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Subscription struct {
@@ -32082,6 +32260,8 @@ type TagDefinitionWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// Filter for aliasesHas to contain a specific value
+	AliasesHas *string `json:"aliasesHas,omitempty"`
 }
 
 type Task struct {
@@ -32617,6 +32797,10 @@ type TaskWhereInput struct {
 	// tasks edge predicates
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for externalReferenceUrlHas to contain a specific value
+	ExternalReferenceURLHas *string `json:"externalReferenceUrlHas,omitempty"`
 }
 
 type Template struct {
@@ -33007,6 +33191,8 @@ type TemplateWhereInput struct {
 	// identity_holders edge predicates
 	HasIdentityHolders     *bool                       `json:"hasIdentityHolders,omitempty"`
 	HasIdentityHoldersWith []*IdentityHolderWhereInput `json:"hasIdentityHoldersWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type TrustCenter struct {
@@ -33256,6 +33442,8 @@ type TrustCenterComplianceWhereInput struct {
 	// standard edge predicates
 	HasStandard     *bool                 `json:"hasStandard,omitempty"`
 	HasStandardWith []*StandardWhereInput `json:"hasStandardWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // A connection to a list of items.
@@ -33606,6 +33794,8 @@ type TrustCenterDocWhereInput struct {
 	// original_file edge predicates
 	HasOriginalFile     *bool             `json:"hasOriginalFile,omitempty"`
 	HasOriginalFileWith []*FileWhereInput `json:"hasOriginalFileWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // Return response for createTrustCenterDomain mutation
@@ -34215,6 +34405,8 @@ type TrustCenterNDARequestWhereInput struct {
 	// file edge predicates
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type TrustCenterNDAUpdatePayload struct {
@@ -34995,6 +35187,8 @@ type TrustCenterSubprocessorWhereInput struct {
 	// subprocessor edge predicates
 	HasSubprocessor     *bool                     `json:"hasSubprocessor,omitempty"`
 	HasSubprocessorWith []*SubprocessorWhereInput `json:"hasSubprocessorWith,omitempty"`
+	// Filter for countriesHas to contain a specific value
+	CountriesHas *string `json:"countriesHas,omitempty"`
 }
 
 // Return response for updateTrustCenter mutation
@@ -35553,6 +35747,8 @@ type TrustCenterWhereInput struct {
 	// trust_center_nda_requests edge predicates
 	HasTrustCenterNdaRequests     *bool                              `json:"hasTrustCenterNdaRequests,omitempty"`
 	HasTrustCenterNdaRequestsWith []*TrustCenterNDARequestWhereInput `json:"hasTrustCenterNdaRequestsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // UpdateAPITokenInput is used for update APIToken object.
@@ -41503,6 +41699,8 @@ type UserSettingWhereInput struct {
 	// default_org edge predicates
 	HasDefaultOrg     *bool                     `json:"hasDefaultOrg,omitempty"`
 	HasDefaultOrgWith []*OrganizationWhereInput `json:"hasDefaultOrgWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // Return response for updateUser mutation
@@ -41877,6 +42075,8 @@ type UserWhereInput struct {
 	// program_memberships edge predicates
 	HasProgramMemberships     *bool                          `json:"hasProgramMemberships,omitempty"`
 	HasProgramMembershipsWith []*ProgramMembershipWhereInput `json:"hasProgramMembershipsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type Vulnerability struct {
@@ -42639,6 +42839,12 @@ type VulnerabilityWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for referencesHas to contain a specific value
+	ReferencesHas *string `json:"referencesHas,omitempty"`
+	// Filter for impactsHas to contain a specific value
+	ImpactsHas *string `json:"impactsHas,omitempty"`
 }
 
 type Webauthn struct {
@@ -42766,6 +42972,8 @@ type WebauthnWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool             `json:"hasOwner,omitempty"`
 	HasOwnerWith []*UserWhereInput `json:"hasOwnerWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type WorkflowAssignment struct {
@@ -43115,6 +43323,8 @@ type WorkflowAssignmentTargetWhereInput struct {
 	// group edge predicates
 	HasGroup     *bool              `json:"hasGroup,omitempty"`
 	HasGroupWith []*GroupWhereInput `json:"hasGroupWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // WorkflowAssignmentWhereInput is used for filtering WorkflowAssignment objects.
@@ -43369,6 +43579,8 @@ type WorkflowAssignmentWhereInput struct {
 	// group edge predicates
 	HasGroup     *bool              `json:"hasGroup,omitempty"`
 	HasGroupWith []*GroupWhereInput `json:"hasGroupWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 type WorkflowDefinition struct {
@@ -43712,6 +43924,10 @@ type WorkflowDefinitionWhereInput struct {
 	// email_templates edge predicates
 	HasEmailTemplates     *bool                      `json:"hasEmailTemplates,omitempty"`
 	HasEmailTemplatesWith []*EmailTemplateWhereInput `json:"hasEmailTemplatesWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for trackedFieldsHas to contain a specific value
+	TrackedFieldsHas *string `json:"trackedFieldsHas,omitempty"`
 }
 
 type WorkflowEvent struct {
@@ -43890,6 +44106,8 @@ type WorkflowEventWhereInput struct {
 	// workflow_instance edge predicates
 	HasWorkflowInstance     *bool                         `json:"hasWorkflowInstance,omitempty"`
 	HasWorkflowInstanceWith []*WorkflowInstanceWhereInput `json:"hasWorkflowInstanceWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // WorkflowFieldDiff describes a proposed change for a single field.
@@ -44400,6 +44618,8 @@ type WorkflowInstanceWhereInput struct {
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // Workflow metadata including supported object types and their fields
