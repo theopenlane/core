@@ -46,12 +46,12 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 
 	queueCtx := context.WithoutCancel(requestCtx)
 	result, err := h.WorkflowEngine.QueueIntegrationOperation(queueCtx, engine.IntegrationQueueRequest{
-		OrgID:    user.OrganizationID,
-		Provider: providerType,
+		OrgID:     user.OrganizationID,
+		Provider:  providerType,
 		Operation: operationName,
-		Config:   req.Body.Config,
-		Force:    req.Body.Force,
-		RunType:  enums.IntegrationRunTypeManual,
+		Config:    req.Body.Config,
+		Force:     req.Body.Force,
+		RunType:   enums.IntegrationRunTypeManual,
 	})
 	if err != nil {
 		if errors.Is(err, keystore.ErrOperationNotRegistered) {

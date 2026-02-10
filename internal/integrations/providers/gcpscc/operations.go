@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
 	"strings"
 
 	cloudscc "cloud.google.com/go/securitycenter/apiv2"
@@ -22,6 +23,7 @@ const (
 	OperationScanSettings    types.OperationName = "settings.scan"
 
 	findingsPageSize      = 100
+	findingsMaxPageSize   = 1000
 	maxSampleSize         = 5
 	settingsPageSize      = 10
 	sampleConfigsCapacity = 5
@@ -171,8 +173,8 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 	if pageSize <= 0 {
 		pageSize = findingsPageSize
 	}
-	if pageSize > 1000 {
-		pageSize = 1000
+	if pageSize > findingsMaxPageSize {
+		pageSize = findingsMaxPageSize
 	}
 
 	maxFindings := config.MaxFindings
@@ -180,7 +182,7 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 	req := &securitycenterpb.ListFindingsRequest{
 		Parent:   sourceName,
 		Filter:   filter,
-		PageSize: int32(pageSize),
+		PageSize: int32(min(pageSize, math.MaxInt32)), //nolint:gosec // bounds checked via min
 	}
 
 	it := client.ListFindings(ctx, req)

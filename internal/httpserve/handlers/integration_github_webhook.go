@@ -135,7 +135,7 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 	}
 
 	if h.IntegrationIngestEmitter != nil {
-		errCh := h.IntegrationIngestEmitter.Emit(ingest.TopicIntegrationIngestRequested, ingest.IngestRequestedPayload{
+		errCh := h.IntegrationIngestEmitter.Emit(ingest.TopicIntegrationIngestRequested, ingest.RequestedPayload{
 			IntegrationID: integrationRecord.ID,
 			Schema:        integrationgenerated.IntegrationMappingSchemaVulnerability,
 			Envelopes:     alerts,

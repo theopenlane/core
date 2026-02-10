@@ -19,23 +19,23 @@ import (
 // It expects alert envelopes produced by integration operations
 type VulnerabilityIngestRequest struct {
 	// OrgID identifies the organization that owns the vulnerabilities
-	OrgID             string
+	OrgID string
 	// IntegrationID identifies the integration record
-	IntegrationID     string
+	IntegrationID string
 	// Provider identifies the integration provider
-	Provider          integrationtypes.ProviderType
+	Provider integrationtypes.ProviderType
 	// Operation identifies the operation that produced the alerts
-	Operation         integrationtypes.OperationName
+	Operation integrationtypes.OperationName
 	// IntegrationConfig supplies integration-level configuration for mapping
 	IntegrationConfig openapi.IntegrationConfig
 	// ProviderState carries provider-specific state for mapping
-	ProviderState     any
+	ProviderState any
 	// OperationConfig supplies operation-level configuration for mapping
-	OperationConfig   map[string]any
+	OperationConfig map[string]any
 	// Envelopes holds the alert payloads to ingest
-	Envelopes         []integrationtypes.AlertEnvelope
+	Envelopes []integrationtypes.AlertEnvelope
 	// DB provides access to the persistence layer
-	DB                *generated.Client
+	DB *generated.Client
 }
 
 // Validate checks that required fields are present
@@ -56,19 +56,19 @@ func (r *VulnerabilityIngestRequest) Validate() error {
 // VulnerabilityIngestSummary reports mapping and persistence stats
 type VulnerabilityIngestSummary struct {
 	// Total counts total alerts processed
-	Total     int
+	Total int
 	// Mapped counts alerts that produced mapped output
-	Mapped    int
+	Mapped int
 	// Persisted counts alerts that were persisted
 	Persisted int
 	// Skipped counts alerts filtered out by mapping
-	Skipped   int
+	Skipped int
 	// Failed counts alerts that failed mapping or persistence
-	Failed    int
+	Failed int
 	// Created counts new vulnerabilities created
-	Created   int
+	Created int
 	// Updated counts existing vulnerabilities updated
-	Updated   int
+	Updated int
 }
 
 // VulnerabilityIngestResult captures the results of an ingestion run
@@ -76,7 +76,7 @@ type VulnerabilityIngestResult struct {
 	// Summary aggregates ingestion totals
 	Summary VulnerabilityIngestSummary
 	// Errors captures per-alert error messages
-	Errors  []string
+	Errors []string
 }
 
 type vulnerabilityIngestContext struct {
@@ -179,8 +179,8 @@ func (c *vulnerabilityIngestContext) mapEnvelopeToVulnerability(ctx context.Cont
 	return mapped, true, nil
 }
 
-// IngestVulnerabilityAlerts maps provider alerts into vulnerability inputs and persists them
-func IngestVulnerabilityAlerts(ctx context.Context, req VulnerabilityIngestRequest) (VulnerabilityIngestResult, error) {
+// VulnerabilityAlerts maps provider alerts into vulnerability inputs and persists them
+func VulnerabilityAlerts(ctx context.Context, req VulnerabilityIngestRequest) (VulnerabilityIngestResult, error) {
 	result := VulnerabilityIngestResult{}
 
 	if req.DB == nil {

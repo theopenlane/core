@@ -23,6 +23,11 @@ const (
 	defaultCELInterruptCheckFrequency = 100
 	defaultCELParserRecursionLimit    = 250
 	defaultCELExpressionSizeLimit     = 100000
+
+	// mappingKeySplitParts defines how many parts to split a mapping key into
+	mappingKeySplitParts = 3
+	// mappingKeyTwoParts indicates a mapping key with two parts
+	mappingKeyTwoParts = 2
 )
 
 const (
@@ -280,11 +285,11 @@ func (m mappingOverrideIndex) Resolve(provider integrationtypes.ProviderType, sc
 
 // mappingKeyParts splits a normalized override key into schema and provider parts
 func mappingKeyParts(key string) (schemaKey string, providerKey string) {
-	parts := strings.SplitN(key, ":", 3)
+	parts := strings.SplitN(key, ":", mappingKeySplitParts)
 	switch len(parts) {
 	case 1:
 		return parts[0], ""
-	case 2:
+	case mappingKeyTwoParts:
 		if isMappingSchema(parts[0]) {
 			return parts[0], ""
 		}

@@ -38,11 +38,11 @@ func runGoogleWorkspaceHealth(ctx context.Context, input types.OperationInput) (
 
 	var userinfo struct {
 		// Sub is the subject identifier for the user
-		Sub   string `json:"sub"`
+		Sub string `json:"sub"`
 		// Email is the primary email address
 		Email string `json:"email"`
 		// Name is the display name for the user
-		Name  string `json:"name"`
+		Name string `json:"name"`
 	}
 
 	endpoint := "https://www.googleapis.com/oauth2/v3/userinfo"
@@ -79,7 +79,7 @@ func runGoogleWorkspaceUsers(ctx context.Context, input types.OperationInput) (t
 			// PrimaryEmail is the user's primary email address
 			PrimaryEmail string `json:"primaryEmail"`
 			// Name holds the user's name metadata
-			Name         struct {
+			Name struct {
 				// FullName is the user's full display name
 				FullName string `json:"fullName"`
 			} `json:"name"`

@@ -65,7 +65,7 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 
 	alertTypes := alertTypesFromConfig(config.AlertTypes)
 
-	repoNames := config.RepositorySelector.List()
+	repoNames := config.List()
 	if len(repoNames) == 0 {
 		repos, err := listGitHubReposForProvider(ctx, client, token, input.Provider, config)
 		if err != nil {

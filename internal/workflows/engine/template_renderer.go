@@ -152,16 +152,26 @@ func normalizeTemplateExpr(expr string) string {
 func isTemplateIdentifier(expr string) bool {
 	for i, r := range expr {
 		if i == 0 {
-			if !(r == '_' || (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z')) {
+			if !isIdentifierStart(r) {
 				return false
 			}
 			continue
 		}
-		if !(r == '_' || (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z') || (r >= '0' && r <= '9')) {
+		if !isIdentifierChar(r) {
 			return false
 		}
 	}
 	return expr != ""
+}
+
+// isIdentifierStart reports whether r is a valid start character for an identifier
+func isIdentifierStart(r rune) bool {
+	return r == '_' || (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z')
+}
+
+// isIdentifierChar reports whether r is a valid identifier character
+func isIdentifierChar(r rune) bool {
+	return r == '_' || (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z') || (r >= '0' && r <= '9')
 }
 
 // templateRootVars enumerates top-level variables available in templates

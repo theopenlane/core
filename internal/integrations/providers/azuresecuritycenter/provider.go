@@ -17,7 +17,7 @@ import (
 
 const (
 	defaultAzureScope     = "https://management.azure.com/.default"
-	azureTokenURLTemplate = "https://login.microsoftonline.com/%s/oauth2/v2.0/token"
+	azureTokenURLTemplate = "https://login.microsoftonline.com/%s/oauth2/v2.0/token" //nolint:gosec // G101: URL template, not credentials
 )
 
 // Provider implements client-credential authentication for Microsoft Defender for Cloud.

@@ -434,7 +434,7 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx *soiree.EventCo
 			if err != nil {
 				ingestErr = err
 			} else {
-				ingestResult, ingestErr = ingest.IngestVulnerabilityAlerts(systemCtx, ingest.VulnerabilityIngestRequest{
+				ingestResult, ingestErr = ingest.VulnerabilityAlerts(systemCtx, ingest.VulnerabilityIngestRequest{
 					OrgID:             run.OwnerID,
 					IntegrationID:     integrationRecord.ID,
 					Provider:          provider,

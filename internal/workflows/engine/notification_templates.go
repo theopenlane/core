@@ -19,6 +19,9 @@ import (
 	"github.com/theopenlane/core/internal/workflows"
 )
 
+// teamsDestinationParts is the expected number of parts when splitting a Teams destination
+const teamsDestinationParts = 2
+
 // renderedNotificationTemplate captures a rendered notification template snapshot
 type renderedNotificationTemplate struct {
 	// Template holds the source template record
@@ -440,8 +443,8 @@ func resolveTeamsDestination(preference *generated.NotificationPreference, confi
 // splitTeamsDestination splits a Teams destination into team and channel parts
 func splitTeamsDestination(destination string) (string, string) {
 	for _, sep := range []string{":", "/"} {
-		parts := strings.SplitN(destination, sep, 2)
-		if len(parts) == 2 {
+		parts := strings.SplitN(destination, sep, teamsDestinationParts)
+		if len(parts) == teamsDestinationParts {
 			return parts[0], parts[1]
 		}
 	}
@@ -476,4 +479,3 @@ func operationNameForChannel(channel enums.Channel) (types.OperationName, error)
 		return "", ErrNotificationChannelUnsupported
 	}
 }
-

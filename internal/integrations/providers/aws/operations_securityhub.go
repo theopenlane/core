@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math"
 	"strings"
 
 	awssdk "github.com/aws/aws-sdk-go-v2/aws"
@@ -22,17 +23,17 @@ const (
 
 type securityHubFindingsConfig struct {
 	// PageSize overrides the page size per request
-	PageSize        int               `json:"page_size,omitempty" jsonschema:"description=Optional page size override (max 100)."`
+	PageSize int `json:"page_size,omitempty" jsonschema:"description=Optional page size override (max 100)."`
 	// MaxFindings limits the total number of findings returned
-	MaxFindings     int               `json:"max_findings,omitempty" jsonschema:"description=Optional cap on total findings returned."`
+	MaxFindings int `json:"max_findings,omitempty" jsonschema:"description=Optional cap on total findings returned."`
 	// Severity filters findings by severity label
-	Severity        types.LowerString `json:"severity,omitempty" jsonschema:"description=Optional severity label filter (low, medium, high, critical)."`
+	Severity types.LowerString `json:"severity,omitempty" jsonschema:"description=Optional severity label filter (low, medium, high, critical)."`
 	// RecordState filters findings by record state
-	RecordState     types.UpperString `json:"record_state,omitempty" jsonschema:"description=Optional record state filter (ACTIVE, ARCHIVED)."`
+	RecordState types.UpperString `json:"record_state,omitempty" jsonschema:"description=Optional record state filter (ACTIVE, ARCHIVED)."`
 	// WorkflowStatus filters findings by workflow status
-	WorkflowStatus  types.UpperString `json:"workflow_status,omitempty" jsonschema:"description=Optional workflow status filter (NEW, NOTIFIED, RESOLVED, SUPPRESSED)."`
+	WorkflowStatus types.UpperString `json:"workflow_status,omitempty" jsonschema:"description=Optional workflow status filter (NEW, NOTIFIED, RESOLVED, SUPPRESSED)."`
 	// IncludePayloads controls whether raw payloads are returned
-	IncludePayloads bool              `json:"include_payloads,omitempty" jsonschema:"description=Return raw finding payloads in the response (defaults to false)."`
+	IncludePayloads bool `json:"include_payloads,omitempty" jsonschema:"description=Return raw finding payloads in the response (defaults to false)."`
 }
 
 var securityHubFindingsSchema = operations.SchemaFrom[securityHubFindingsConfig]()
@@ -84,7 +85,7 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 
 	for {
 		resp, err := client.GetFindings(ctx, &securityhub.GetFindingsInput{
-			MaxResults: awssdk.Int32(int32(pageSize)),
+			MaxResults: awssdk.Int32(int32(min(pageSize, math.MaxInt32))), //nolint:gosec // bounds checked via min
 			NextToken:  nextToken,
 		})
 		if err != nil {

@@ -30,9 +30,9 @@ func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types
 		// Success indicates whether the API call succeeded
 		Success bool `json:"success"`
 		// Result holds token metadata returned by the API
-		Result  struct {
+		Result struct {
 			// IssuedOn is the token issued timestamp
-			IssuedOn  string `json:"issued_on"`
+			IssuedOn string `json:"issued_on"`
 			// ExpiresOn is the token expiration timestamp
 			ExpiresOn string `json:"expires_on"`
 		} `json:"result"`

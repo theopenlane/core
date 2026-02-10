@@ -59,9 +59,9 @@ func runVercelProjects(ctx context.Context, input types.OperationInput) (types.O
 		// Projects lists projects returned by the API
 		Projects []struct {
 			// ID is the project identifier
-			ID        string `json:"id"`
+			ID string `json:"id"`
 			// Name is the project name
-			Name      string `json:"name"`
+			Name string `json:"name"`
 			// Framework is the detected framework name
 			Framework string `json:"framework"`
 		} `json:"projects"`

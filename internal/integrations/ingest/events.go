@@ -16,8 +16,8 @@ const (
 	TopicIntegrationIngestRequested = "integration.ingest.requested"
 )
 
-// IngestRequestedPayload captures webhook alert envelopes for ingestion.
-type IngestRequestedPayload struct {
+// RequestedPayload captures webhook alert envelopes for ingestion.
+type RequestedPayload struct {
 	// IntegrationID identifies the integration that owns the payload.
 	IntegrationID string `json:"integration_id"`
 	// Schema identifies the ingest mapping schema (vulnerability, asset, etc).
@@ -27,8 +27,8 @@ type IngestRequestedPayload struct {
 }
 
 // IntegrationIngestRequestedTopic is emitted when webhook payloads should be ingested.
-var IntegrationIngestRequestedTopic = soiree.NewTypedTopic[IngestRequestedPayload](TopicIntegrationIngestRequested,
-	soiree.WithObservability(soiree.ObservabilitySpec[IngestRequestedPayload]{
+var IntegrationIngestRequestedTopic = soiree.NewTypedTopic[RequestedPayload](TopicIntegrationIngestRequested,
+	soiree.WithObservability(soiree.ObservabilitySpec[RequestedPayload]{
 		Operation: "handle_integration_ingest_requested",
 		Origin:    "listeners",
 	}),
@@ -45,7 +45,7 @@ func RegisterIngestListeners(bus *soiree.EventBus, db *ent.Client) error {
 
 	binding := soiree.BindListener(
 		IntegrationIngestRequestedTopic,
-		func(ctx *soiree.EventContext, payload IngestRequestedPayload) error {
+		func(ctx *soiree.EventContext, payload RequestedPayload) error {
 			return handleIngestRequested(ctx, db, payload)
 		},
 	)
@@ -54,7 +54,7 @@ func RegisterIngestListeners(bus *soiree.EventBus, db *ent.Client) error {
 	return err
 }
 
-func handleIngestRequested(ctx *soiree.EventContext, db *ent.Client, payload IngestRequestedPayload) error {
+func handleIngestRequested(ctx *soiree.EventContext, db *ent.Client, payload RequestedPayload) error {
 	if len(payload.Envelopes) == 0 {
 		return nil
 	}
@@ -94,7 +94,7 @@ func handleIngestRequested(ctx *soiree.EventContext, db *ent.Client, payload Ing
 			return err
 		}
 
-		_, err = IngestVulnerabilityAlerts(allowCtx, VulnerabilityIngestRequest{
+		_, err = VulnerabilityAlerts(allowCtx, VulnerabilityIngestRequest{
 			OrgID:             integrationRecord.OwnerID,
 			IntegrationID:     integrationRecord.ID,
 			Provider:          provider,
