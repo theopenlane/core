@@ -106,7 +106,7 @@ func (h *Handler) persistIntegrationVulnerabilities(ctx context.Context, orgID s
 				SetExternalID(vuln.externalID).
 				AddIntegrationIDs(integrationRecord.ID)
 			applyVulnerabilityCreate(create, vuln, provider)
-			if _, err := create.Save(ctx); err != nil {
+			if err := create.Exec(ctx); err != nil {
 				return summary, err
 			}
 
