@@ -75,8 +75,10 @@ func CheckRegistrationModeWithResponse(ctx echo.Context) error {
 
 // OpenAPIContext holds the OpenAPI operation and schema registry for automatic registration
 type OpenAPIContext struct {
+	// Operation is the OpenAPI operation metadata for the handler.
 	Operation *openapi3.Operation
-	Registry  SchemaRegistry
+	// Registry provides schema registration and lookup for OpenAPI models.
+	Registry SchemaRegistry
 }
 
 // Handler contains configuration options for handlers
@@ -103,6 +105,8 @@ type Handler struct {
 	OauthProvider OauthProviderConfig
 	// IntegrationOauthProvider contains the configuration settings for integration Oauth2 providers
 	IntegrationOauthProvider IntegrationOauthProviderConfig
+	// IntegrationGitHubApp contains the configuration settings for GitHub App integrations
+	IntegrationGitHubApp IntegrationGitHubAppConfig
 	// AuthMiddleware contains the middleware to be used for authenticated endpoints
 	AuthMiddleware []echo.MiddlewareFunc
 	// AdditionalMiddleware contains the additional middleware to be used for all endpoints

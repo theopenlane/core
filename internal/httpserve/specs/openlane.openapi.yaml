@@ -472,6 +472,68 @@ components:
                     additionalProperties: {}
                     type: object
             type: object
+        GitHubAppInstallCallbackResponse:
+            properties:
+                error:
+                    description: The error message if the request was unsuccessful
+                    type: string
+                error_code:
+                    description: The error code if the request was unsuccessful
+                    type: string
+                message:
+                    description: Success or error message
+                    type: string
+                success:
+                    description: Whether or not the request was successful or not
+                    type: boolean
+                unverified:
+                    type: boolean
+            type: object
+        GitHubAppInstallRequest: {}
+        GitHubAppInstallResponse:
+            properties:
+                error:
+                    description: The error message if the request was unsuccessful
+                    type: string
+                error_code:
+                    description: The error code if the request was unsuccessful
+                    type: string
+                installUrl:
+                    description: URL to initiate the GitHub App installation
+                    example: https://github.com/apps/openlane/installations/new?state=eyJvcmdJRCI6IjAxSE...
+                    type: string
+                message:
+                    description: Optional message
+                    type: string
+                state:
+                    description: State parameter used to validate the installation callback
+                    example: eyJvcmdJRCI6IjAxSE...
+                    type: string
+                success:
+                    description: Whether or not the request was successful or not
+                    type: boolean
+                unverified:
+                    type: boolean
+            type: object
+        GitHubAppWebhookResponse:
+            properties:
+                error:
+                    description: The error message if the request was unsuccessful
+                    type: string
+                error_code:
+                    description: The error code if the request was unsuccessful
+                    type: string
+                persisted:
+                    additionalProperties:
+                        description: Summary of persisted alerts
+                    description: Summary of persisted alerts
+                    type: object
+                success:
+                    description: Whether or not the request was successful or not
+                    type: boolean
+                unverified:
+                    type: boolean
+            type: object
         Group:
             description: |
                 SCIM Group resource as defined in RFC 7643 Section 4.2.
@@ -2537,6 +2599,32 @@ paths:
             summary: Favicon
             tags:
                 - static
+    /github/app/webhook:
+        post:
+            description: Handle GitHub App security alert webhooks
+            operationId: GitHubAppWebhook
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                success:
+                                    value:
+                                        persisted:
+                                            created: 0
+                                            skipped: 0
+                                            updated: 0
+                                        success: true
+                            schema:
+                                $ref: '#/components/schemas/GitHubAppWebhookResponse'
+                    description: Success
+                default:
+                    description: ""
+            security: []
+            summary: GitHubAppWebhook
+            tags:
+                - webhooks
+                - integrations
     /history/query:
         post:
             description: Handles all GraphQL queries for historical data
@@ -4065,6 +4153,95 @@ paths:
             summary: RefreshIntegrationToken
             tags:
                 - integrations
+    /v1/integrations/github/app/callback:
+        get:
+            description: Handle GitHub App installation callback
+            operationId: GitHubAppInstallCallback
+            parameters:
+                - description: GitHub App installation ID
+                  example: "12345678"
+                  in: query
+                  name: installation_id
+                  schema:
+                    type: string
+                - description: GitHub setup action
+                  example: install
+                  in: query
+                  name: setup_action
+                  schema:
+                    type: string
+                - description: State parameter used to validate the installation callback
+                  example: eyJvcmdJRCI6IjAxSE...
+                  in: query
+                  name: state
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                success:
+                                    value:
+                                        message: GitHub App integration connected
+                                        success: true
+                            schema:
+                                $ref: '#/components/schemas/GitHubAppInstallCallbackResponse'
+                    description: Success
+                "400":
+                    description: Bad Request
+                "401":
+                    description: Unauthorized
+                "500":
+                    description: Internal Server Error
+                default:
+                    description: ""
+            security: []
+            summary: GitHubAppInstallCallback
+            tags:
+                - integrations
+    /v1/integrations/github/app/install:
+        post:
+            description: Start GitHub App installation flow
+            operationId: GitHubAppInstall
+            requestBody:
+                content:
+                    application/json:
+                        examples:
+                            success:
+                                value: {}
+                        schema:
+                            $ref: '#/components/schemas/GitHubAppInstallRequest'
+                description: Request body
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                success:
+                                    value:
+                                        installUrl: https://github.com/apps/openlane/installations/new?state=eyJvcmdJRCI6IjAxSE...
+                                        state: eyJvcmdJRCI6IjAxSE...
+                                        success: true
+                            schema:
+                                $ref: '#/components/schemas/GitHubAppInstallResponse'
+                    description: Success
+                "400":
+                    description: Bad Request
+                "401":
+                    description: Unauthorized
+                "500":
+                    description: Internal Server Error
+                default:
+                    description: ""
+            security:
+                - bearer: []
+                - oauth2: []
+                - basic: []
+                - apiKey: []
+            summary: GitHubAppInstall
+            tags:
+                - integrations
     /v1/integrations/oauth/callback:
         get:
             description: Handle OAuth callback for integration
@@ -4906,7 +5083,7 @@ tags:
       name: webauthn
     - description: Webfinger
       name: webfinger
-    - description: ResendWebhook
+    - description: GitHubAppWebhook
       name: webhooks
     - description: JWKS
       name: well-known

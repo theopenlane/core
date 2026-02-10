@@ -2,6 +2,7 @@ package types //nolint:revive
 
 import (
 	"context"
+	"encoding/json"
 )
 
 // OperationName identifies a provider operation (health check, findings harvest, etc).
@@ -73,6 +74,18 @@ type OperationResult struct {
 	Summary string
 	// Details contains structured result data
 	Details map[string]any
+}
+
+// AlertEnvelope wraps an alert payload emitted by integration webhooks.
+type AlertEnvelope struct {
+	// AlertType identifies the alert category (dependabot, code_scanning, etc).
+	AlertType string `json:"alertType"`
+	// Resource identifies the alert resource (repo, project, etc).
+	Resource string `json:"resource,omitempty"`
+	// Action indicates the webhook action (created, resolved, etc).
+	Action string `json:"action,omitempty"`
+	// Payload is the raw alert payload as received from the provider.
+	Payload json.RawMessage `json:"payload,omitempty"`
 }
 
 // OperationFunc executes a provider operation using stored credentials and optional clients

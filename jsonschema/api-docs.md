@@ -26,6 +26,7 @@ Config contains the configuration for the core server
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
 |[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
 |[**integrationoauthprovider**](#integrationoauthprovider)|`object`|IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.<br/>||
+|[**integrationgithubapp**](#integrationgithubapp)|`object`|IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration.<br/>||
 |[**workflows**](#workflows)|`object`|||
 |[**campaignwebhook**](#campaignwebhook)|`object`|CampaignWebhookConfig contains webhook configuration for campaign-related email providers.<br/>||
 |[**cloudflare**](#cloudflare)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
@@ -136,6 +137,7 @@ Config contains the configuration for the core server
     "keywatcher": {},
     "slack": {},
     "integrationoauthprovider": {},
+    "integrationgithubapp": {},
     "workflows": {
         "cel": {}
     },
@@ -1683,6 +1685,24 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled toggles initialization of the integration provider registry.<br/>||
 |**successredirecturl**|`string`|SuccessRedirectURL is the URL to redirect to after successful OAuth integration.<br/>||
+
+**Additional Properties:** not allowed  
+<a name="integrationgithubapp"></a>
+## integrationgithubapp: object
+
+IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration.
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled toggles the GitHub App integration handlers.<br/>||
+|**appid**|`string`|AppID is the GitHub App ID used for JWT signing.<br/>||
+|**appslug**|`string`|AppSlug is the GitHub App slug used for the install URL.<br/>||
+|**privatekey**|`string`|PrivateKey is the PEM-encoded GitHub App private key.<br/>||
+|**webhooksecret**|`string`|WebhookSecret is the shared secret used to validate GitHub webhooks.<br/>||
+|**successredirecturl**|`string`|SuccessRedirectURL is the URL to redirect to after successful installation.<br/>||
 
 **Additional Properties:** not allowed  
 <a name="workflows"></a>

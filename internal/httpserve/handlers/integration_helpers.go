@@ -6,9 +6,13 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/theopenlane/core/common/integrations/types"
 )
+
+// statePayloadParts is the number of parts in an encoded OAuth state payload.
+const statePayloadParts = 3
 
 var (
 	errIntegrationBrokerNotConfigured     = errors.New("integration broker not configured")
@@ -16,6 +20,8 @@ var (
 	errIntegrationRegistryNotConfigured   = errors.New("integration registry not configured")
 	errIntegrationOperationsNotConfigured = errors.New("integration operations manager not configured")
 	errKeymakerNotConfigured              = errors.New("integration keymaker service not configured")
+	// errDBClientNotConfigured indicates the database client is missing.
+	errDBClientNotConfigured = errors.New("database client not configured")
 )
 
 // IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.
@@ -54,6 +60,37 @@ var (
 // buildStatePayload encodes the OAuth state payload for cookies and callbacks.
 func buildStatePayload(orgID, provider string, randomBytes []byte) string {
 	return orgID + ":" + provider + ":" + base64.URLEncoding.EncodeToString(randomBytes)
+}
+
+// parseStatePayload decodes the OAuth state payload and extracts the org and provider values.
+func parseStatePayload(state string) (string, string, error) {
+	state = strings.TrimSpace(state)
+	if state == "" {
+		return "", "", ErrInvalidStateFormat
+	}
+
+	decoded, err := base64.URLEncoding.DecodeString(state)
+	if err != nil {
+		return "", "", ErrInvalidStateFormat
+	}
+
+	parts := strings.SplitN(string(decoded), ":", statePayloadParts)
+	if len(parts) != statePayloadParts {
+		return "", "", ErrInvalidStateFormat
+	}
+
+	orgID := strings.TrimSpace(parts[0])
+	provider := strings.TrimSpace(parts[1])
+	randomPart := strings.TrimSpace(parts[2])
+	if orgID == "" || provider == "" || randomPart == "" {
+		return "", "", ErrInvalidStateFormat
+	}
+
+	if _, err := base64.URLEncoding.DecodeString(randomPart); err != nil {
+		return "", "", ErrInvalidStateFormat
+	}
+
+	return orgID, provider, nil
 }
 
 // OAuth error helpers reused across handlers to preserve consistent messaging.
