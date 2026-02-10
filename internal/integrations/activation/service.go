@@ -19,15 +19,20 @@ type CredentialWriter interface {
 	SaveCredential(ctx context.Context, orgID string, payload types.CredentialPayload) (types.CredentialPayload, error)
 }
 
+// OperationRunner executes provider operations for health checks
+type OperationRunner interface {
+	Run(ctx context.Context, req types.OperationRequest) (types.OperationResult, error)
+}
+
 // Service coordinates activation flows for OAuth and non-OAuth providers
 type Service struct {
 	keymaker   *keymaker.Service
 	store      CredentialWriter
-	operations *keystore.OperationManager
+	operations OperationRunner
 }
 
 // NewService constructs an activation service from the supplied dependencies
-func NewService(keymakerSvc *keymaker.Service, store CredentialWriter, operations *keystore.OperationManager) (*Service, error) {
+func NewService(keymakerSvc *keymaker.Service, store CredentialWriter, operations OperationRunner) (*Service, error) {
 	if store == nil {
 		return nil, ErrStoreRequired
 	}

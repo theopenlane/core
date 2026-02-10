@@ -296,7 +296,7 @@ func validateNotificationActionParams(params json.RawMessage) error {
 	}
 
 	if strings.TrimSpace(input.TemplateID) != "" && strings.TrimSpace(input.TemplateKey) != "" {
-		return fmt.Errorf("template_id and template_key cannot both be set")
+		return ErrNotificationTemplateBothIDAndKey
 	}
 
 	return nil
@@ -305,7 +305,7 @@ func validateNotificationActionParams(params json.RawMessage) error {
 // validateIntegrationActionParams validates params for INTEGRATION actions.
 func validateIntegrationActionParams(params json.RawMessage) error {
 	if len(params) == 0 {
-		return fmt.Errorf("params required")
+		return ErrIntegrationParamsRequired
 	}
 
 	var input workflows.IntegrationActionParams
@@ -314,11 +314,11 @@ func validateIntegrationActionParams(params json.RawMessage) error {
 	}
 
 	if strings.TrimSpace(input.Operation) == "" {
-		return fmt.Errorf("operation required")
+		return ErrIntegrationOperationRequired
 	}
 
 	if strings.TrimSpace(input.Integration) == "" && strings.TrimSpace(input.Provider) == "" {
-		return fmt.Errorf("provider or integration required")
+		return ErrIntegrationConfigRequired
 	}
 
 	return nil
@@ -458,7 +458,7 @@ func validateWorkflowDefinitionTemplateRefs(ctx context.Context, client *generat
 
 	ownerID = strings.TrimSpace(ownerID)
 	if ownerID == "" {
-		return fmt.Errorf("owner_id required for notification template validation")
+		return ErrOwnerIDRequired
 	}
 
 	ids := make(map[string]struct{})
@@ -487,7 +487,7 @@ func validateWorkflowDefinitionTemplateRefs(ctx context.Context, client *generat
 			return err
 		}
 		if !exists {
-			return fmt.Errorf("notification template not found: %s", id)
+			return fmt.Errorf("%w: %s", ErrNotificationTemplateNotFound, id)
 		}
 	}
 
@@ -506,7 +506,7 @@ func validateWorkflowDefinitionTemplateRefs(ctx context.Context, client *generat
 			return err
 		}
 		if !exists {
-			return fmt.Errorf("notification template key not found: %s", key)
+			return fmt.Errorf("%w: %s", ErrNotificationTemplateKeyNotFound, key)
 		}
 	}
 

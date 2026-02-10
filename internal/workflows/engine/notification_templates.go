@@ -206,52 +206,68 @@ func (e *WorkflowEngine) dispatchNotificationIntegrations(ctx context.Context, o
 			continue
 		}
 
-		operationName, err := operationNameForChannel(channel)
-		if err != nil {
+		if err := e.dispatchChannelNotifications(ctx, ownerID, channel, rendered, userIDs); err != nil {
 			return err
-		}
-
-		integrationRecord, provider, err := e.resolveNotificationIntegration(ctx, ownerID, rendered.Template, channel)
-		if err != nil {
-			return err
-		}
-
-		for _, userID := range userIDs {
-			preference, err := e.loadNotificationPreference(ctx, ownerID, userID, channel)
-			if err != nil {
-				return err
-			}
-			if preference == nil {
-				continue
-			}
-
-			config, err := buildNotificationOperationConfig(channel, preference, rendered)
-			if err != nil {
-				return err
-			}
-
-			if integrationRecord != nil {
-				merged, err := operations.ResolveOperationConfig(&integrationRecord.Config, string(operationName), config)
-				if err != nil {
-					return err
-				}
-				if merged != nil {
-					config = merged
-				}
-			}
-
-			if _, err := e.integrationOperations.Run(ctx, types.OperationRequest{
-				OrgID:    ownerID,
-				Provider: provider,
-				Name:     operationName,
-				Config:   config,
-			}); err != nil {
-				return err
-			}
 		}
 	}
 
 	return nil
+}
+
+// dispatchChannelNotifications sends notifications to all users for a specific channel
+func (e *WorkflowEngine) dispatchChannelNotifications(ctx context.Context, ownerID string, channel enums.Channel, rendered *renderedNotificationTemplate, userIDs []string) error {
+	operationName, err := operationNameForChannel(channel)
+	if err != nil {
+		return err
+	}
+
+	integrationRecord, provider, err := e.resolveNotificationIntegration(ctx, ownerID, rendered.Template, channel)
+	if err != nil {
+		return err
+	}
+
+	for _, userID := range userIDs {
+		if err := e.dispatchUserNotification(ctx, ownerID, userID, channel, operationName, provider, integrationRecord, rendered); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// dispatchUserNotification sends a notification to a single user via integration
+func (e *WorkflowEngine) dispatchUserNotification(ctx context.Context, ownerID, userID string, channel enums.Channel, operationName types.OperationName, provider types.ProviderType, integrationRecord *generated.Integration, rendered *renderedNotificationTemplate) error {
+	preference, err := e.loadNotificationPreference(ctx, ownerID, userID, channel)
+	if err != nil {
+		return err
+	}
+	if preference == nil {
+		return nil
+	}
+
+	config, err := buildNotificationOperationConfig(channel, preference, rendered)
+	if err != nil {
+		return err
+	}
+
+	if integrationRecord != nil {
+		merged, err := operations.ResolveOperationConfig(&integrationRecord.Config, string(operationName), config)
+		if err != nil {
+			return err
+		}
+		if merged != nil {
+			config = merged
+		}
+	}
+
+	_, err = e.integrationOperations.Run(ctx, types.OperationRequest{
+		OrgID:    ownerID,
+		Provider: provider,
+		Name:     operationName,
+		Config:   config,
+	})
+
+	return err
 }
 
 // resolveNotificationIntegration resolves the integration record and provider for a channel

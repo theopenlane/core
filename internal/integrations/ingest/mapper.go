@@ -53,11 +53,22 @@ var normalizedMappingSchemas = func() map[string]struct{} {
 	return out
 }()
 
+// Evaluator defines the interface for mapping expression evaluation
+type Evaluator interface {
+	// EvaluateFilter evaluates a CEL filter expression and returns a boolean
+	EvaluateFilter(ctx context.Context, expression string, vars map[string]any) (bool, error)
+	// EvaluateMap evaluates a CEL expression and returns a JSON object map
+	EvaluateMap(ctx context.Context, expression string, vars map[string]any) (map[string]any, error)
+}
+
 // MappingEvaluator runs CEL expressions against integration payloads
 // It is intentionally small to keep evaluation consistent across integrations
 type MappingEvaluator struct {
 	evaluator *celx.Evaluator
 }
+
+// compile-time interface check
+var _ Evaluator = (*MappingEvaluator)(nil)
 
 // MappingVars holds CEL variables for integration mappings
 type MappingVars struct {

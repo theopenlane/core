@@ -221,14 +221,11 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 
 // clearGitHubAppCookies removes cookies used during GitHub App installation.
 func (h *Handler) clearGitHubAppCookies(ctx echo.Context, cfg sessions.CookieConfig) {
-	writer := ctx.Response().Writer
-	for _, name := range []string{
+	clearCookies(ctx.Response().Writer, cfg, []string{
 		githubAppStateCookieName,
 		githubAppOrgIDCookieName,
 		githubAppUserIDCookieName,
-	} {
-		sessions.RemoveCookie(writer, name, cfg)
-	}
+	})
 }
 
 // validateGitHubAppConfig ensures required GitHub App settings are present.

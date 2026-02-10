@@ -181,35 +181,17 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 	}, nil
 }
 
+// newSecurityHubClient wraps securityhub.NewFromConfig for use with generic helpers
+func newSecurityHubClient(cfg awssdk.Config) *securityhub.Client {
+	return securityhub.NewFromConfig(cfg)
+}
+
 // resolveSecurityHubClient returns a pooled client when supplied or builds one on demand.
 func resolveSecurityHubClient(ctx context.Context, input types.OperationInput) (*securityhub.Client, auth.AWSMetadata, error) {
-	if client, ok := input.Client.(*securityhub.Client); ok && client != nil {
-		meta, err := awsMetadataFromPayload(input.Credential, awsDefaultSession)
-		if err != nil {
-			return nil, auth.AWSMetadata{}, err
-		}
-		return client, meta, nil
-	}
-
-	return buildSecurityHubClient(ctx, input.Credential)
+	return resolveAWSClient(ctx, input, newSecurityHubClient)
 }
 
 // buildSecurityHubClient builds a Security Hub client from stored credentials.
 func buildSecurityHubClient(ctx context.Context, payload types.CredentialPayload) (*securityhub.Client, auth.AWSMetadata, error) {
-	meta, err := awsMetadataFromPayload(payload, awsDefaultSession)
-	if err != nil {
-		return nil, auth.AWSMetadata{}, err
-	}
-
-	cfg, err := auth.BuildAWSConfig(ctx, meta.Region, auth.AWSCredentialsFromPayload(payload), auth.AWSAssumeRole{
-		RoleARN:         meta.RoleARN,
-		ExternalID:      meta.ExternalID,
-		SessionName:     meta.SessionName,
-		SessionDuration: meta.SessionDuration,
-	})
-	if err != nil {
-		return nil, meta, err
-	}
-
-	return securityhub.NewFromConfig(cfg), meta, nil
+	return buildAWSClient(ctx, payload, newSecurityHubClient)
 }

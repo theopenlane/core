@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/iam/auth"
@@ -54,14 +55,11 @@ func (h *Handler) setOAuthCookies(ctx echo.Context, cfg sessions.CookieConfig, v
 }
 
 func (h *Handler) clearOAuthCookies(ctx echo.Context, cfg sessions.CookieConfig) {
-	writer := ctx.Response().Writer
-	for _, name := range []string{
+	clearCookies(ctx.Response().Writer, cfg, []string{
 		oauthStateCookieName,
 		oauthOrgIDCookieName,
 		oauthUserIDCookieName,
-	} {
-		sessions.RemoveCookie(writer, name, cfg)
-	}
+	})
 }
 
 // StartOAuthFlow initiates the OAuth flow for a third-party integration.
@@ -164,14 +162,13 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 	reqCtx := ctx.Request().Context()
 
 	stateCookie, err := sessions.GetCookie(ctx.Request(), oauthStateCookieName)
-	if err != nil || stateCookie.Value == "" || stateCookie.Value != in.State {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("oauth state cookie mismatch")
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Str("payload_state", in.State).Msg("oauth state cookie not found")
 		return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
 	}
 
-	if in.State != stateCookie.Value {
-		logx.FromContext(reqCtx).Error().Str("payload state", in.State).Str("cookie state", stateCookie.Value).Msg("State cookies do not match")
-
+	if stateCookie.Value == "" || stateCookie.Value != in.State {
+		logx.FromContext(reqCtx).Error().Str("payload_state", in.State).Str("cookie_state", stateCookie.Value).Msg("oauth state cookie mismatch")
 		return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
 	}
 
@@ -269,13 +266,7 @@ func mergeScopes(spec config.ProviderSpec, requested []string) []string {
 		return nil
 	}
 
-	out := make([]string, 0, len(values))
-
-	for scope := range values {
-		out = append(out, scope)
-	}
-
-	return out
+	return lo.Keys(values)
 }
 
 func buildIntegrationRedirectURL(baseURL string, provider types.ProviderType) string {

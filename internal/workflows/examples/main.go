@@ -716,153 +716,57 @@ func approveWorkflowAssignment(ctx context.Context, apiClient *openlane.Client, 
 	return nil
 }
 
-const createNotificationTemplateDocument = `mutation CreateNotificationTemplate($input: CreateNotificationTemplateInput!) {
-  createNotificationTemplate(input: $input) {
-    notificationTemplate {
-      id
-      key
-      channel
-      integrationID
-    }
-  }
-}`
-
-const createNotificationPreferenceDocument = `mutation CreateNotificationPreference($input: CreateNotificationPreferenceInput!) {
-  createNotificationPreference(input: $input) {
-    notificationPreference {
-      id
-      channel
-      destination
-      enabled
-      status
-      templateID
-    }
-  }
-}`
-
-const getNotificationPreferencesDocument = `query GetNotificationPreferences($first: Int, $where: NotificationPreferenceWhereInput) {
-  notificationPreferences(first: $first, where: $where) {
-    edges {
-      node {
-        id
-        channel
-        destination
-        enabled
-        status
-        templateID
-      }
-    }
-  }
-}`
-
-type notificationTemplateRef struct {
-	ID            string        `json:"id"`
-	Key           string        `json:"key"`
-	Channel       enums.Channel `json:"channel"`
-	IntegrationID *string       `json:"integrationID,omitempty"`
-}
-
-type createNotificationTemplateResponse struct {
-	CreateNotificationTemplate struct {
-		NotificationTemplate notificationTemplateRef `json:"notificationTemplate"`
-	} `json:"createNotificationTemplate"`
-}
-
-type notificationPreferenceRef struct {
-	ID          string                          `json:"id"`
-	Channel     enums.Channel                   `json:"channel"`
-	Destination *string                         `json:"destination,omitempty"`
-	Enabled     bool                            `json:"enabled"`
-	Status      enums.NotificationChannelStatus `json:"status"`
-	TemplateID  *string                         `json:"templateID,omitempty"`
-}
-
-type createNotificationPreferenceResponse struct {
-	CreateNotificationPreference struct {
-		NotificationPreference notificationPreferenceRef `json:"notificationPreference"`
-	} `json:"createNotificationPreference"`
-}
-
-type getNotificationPreferencesResponse struct {
-	NotificationPreferences struct {
-		Edges []struct {
-			Node notificationPreferenceRef `json:"node"`
-		} `json:"edges"`
-	} `json:"notificationPreferences"`
-}
-
-func createNotificationTemplate(ctx context.Context, apiClient *openlane.Client, input graphclient.CreateNotificationTemplateInput) (*notificationTemplateRef, error) {
-	graphClient, err := requireGraphClient(apiClient)
+func createNotificationTemplate(ctx context.Context, apiClient *openlane.Client, input graphclient.CreateNotificationTemplateInput) (*graphclient.CreateNotificationTemplate_CreateNotificationTemplate_NotificationTemplate, error) {
+	resp, err := apiClient.CreateNotificationTemplate(ctx, input)
 	if err != nil {
 		return nil, err
 	}
 
-	var resp createNotificationTemplateResponse
-	vars := map[string]any{"input": input}
-
-	if err := graphClient.Client.Post(ctx, "CreateNotificationTemplate", createNotificationTemplateDocument, &resp, vars); err != nil {
-		return nil, err
-	}
-
-	if resp.CreateNotificationTemplate.NotificationTemplate.ID == "" {
+	template := &resp.CreateNotificationTemplate.NotificationTemplate
+	if template.ID == "" {
 		return nil, fmt.Errorf("create notification template returned empty result")
 	}
 
-	return &resp.CreateNotificationTemplate.NotificationTemplate, nil
+	return template, nil
 }
 
-func findNotificationPreference(ctx context.Context, apiClient *openlane.Client, ownerID, userID string, channel enums.Channel) (*notificationPreferenceRef, error) {
-	graphClient, err := requireGraphClient(apiClient)
-	if err != nil {
-		return nil, err
-	}
-
+func findNotificationPreference(ctx context.Context, apiClient *openlane.Client, ownerID, userID string, channel enums.Channel) (*graphclient.GetNotificationPreferences_NotificationPreferences_Edges_Node, error) {
 	where := &graphclient.NotificationPreferenceWhereInput{
 		OwnerID: &ownerID,
 		UserID:  &userID,
 		Channel: &channel,
 	}
 
-	var resp getNotificationPreferencesResponse
-	vars := map[string]any{
-		"first": int64(1),
-		"where": where,
-	}
-
-	if err := graphClient.Client.Post(ctx, "GetNotificationPreferences", getNotificationPreferencesDocument, &resp, vars); err != nil {
+	first := int64(1)
+	resp, err := apiClient.GetNotificationPreferences(ctx, &first, nil, nil, nil, nil, where)
+	if err != nil {
 		return nil, err
 	}
 
 	for _, edge := range resp.NotificationPreferences.Edges {
-		if edge.Node.ID != "" {
-			return &edge.Node, nil
+		if edge != nil && edge.Node != nil && edge.Node.ID != "" {
+			return edge.Node, nil
 		}
 	}
 
 	return nil, nil
 }
 
-func createNotificationPreference(ctx context.Context, apiClient *openlane.Client, input graphclient.CreateNotificationPreferenceInput) (*notificationPreferenceRef, error) {
-	graphClient, err := requireGraphClient(apiClient)
+func createNotificationPreference(ctx context.Context, apiClient *openlane.Client, input graphclient.CreateNotificationPreferenceInput) (*graphclient.CreateNotificationPreference_CreateNotificationPreference_NotificationPreference, error) {
+	resp, err := apiClient.CreateNotificationPreference(ctx, input)
 	if err != nil {
 		return nil, err
 	}
 
-	var resp createNotificationPreferenceResponse
-	vars := map[string]any{"input": input}
-
-	if err := graphClient.Client.Post(ctx, "CreateNotificationPreference", createNotificationPreferenceDocument, &resp, vars); err != nil {
-		return nil, err
-	}
-
-	if resp.CreateNotificationPreference.NotificationPreference.ID == "" {
+	pref := &resp.CreateNotificationPreference.NotificationPreference
+	if pref.ID == "" {
 		return nil, fmt.Errorf("create notification preference returned empty result")
 	}
 
-	return &resp.CreateNotificationPreference.NotificationPreference, nil
+	return pref, nil
 }
 
-func ensureNotificationPreference(ctx context.Context, apiClient *openlane.Client, ownerID, userID string, channel enums.Channel, destination, templateID string) (*notificationPreferenceRef, error) {
+func ensureNotificationPreference(ctx context.Context, apiClient *openlane.Client, ownerID, userID string, channel enums.Channel, destination, templateID string) (*graphclient.GetNotificationPreferences_NotificationPreferences_Edges_Node, error) {
 	existing, err := findNotificationPreference(ctx, apiClient, ownerID, userID, channel)
 	if err != nil {
 		return nil, err
@@ -888,7 +792,18 @@ func ensureNotificationPreference(ctx context.Context, apiClient *openlane.Clien
 		input.NotificationTemplateID = &templateID
 	}
 
-	return createNotificationPreference(ctx, apiClient, input)
+	created, err := createNotificationPreference(ctx, apiClient, input)
+	if err != nil {
+		return nil, err
+	}
+
+	return &graphclient.GetNotificationPreferences_NotificationPreferences_Edges_Node{
+		ID:          created.ID,
+		Channel:     created.Channel,
+		Destination: created.Destination,
+		Enabled:     created.Enabled,
+		Status:      created.Status,
+	}, nil
 }
 
 func resolveSlackIntegrationID(ctx context.Context, apiClient *openlane.Client, ownerID, providedID string) (string, error) {

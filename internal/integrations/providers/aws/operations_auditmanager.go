@@ -69,35 +69,17 @@ func runAWSAuditAssessments(ctx context.Context, input types.OperationInput) (ty
 	}, nil
 }
 
+// newAuditManagerClient wraps auditmanager.NewFromConfig for use with generic helpers
+func newAuditManagerClient(cfg awssdk.Config) *auditmanager.Client {
+	return auditmanager.NewFromConfig(cfg)
+}
+
 // resolveAuditManagerClient returns a pooled client when available or builds one on demand.
 func resolveAuditManagerClient(ctx context.Context, input types.OperationInput) (*auditmanager.Client, auth.AWSMetadata, error) {
-	if client, ok := input.Client.(*auditmanager.Client); ok && client != nil {
-		meta, err := awsMetadataFromPayload(input.Credential, awsDefaultSession)
-		if err != nil {
-			return nil, auth.AWSMetadata{}, err
-		}
-		return client, meta, nil
-	}
-
-	return buildAuditManagerClient(ctx, input.Credential)
+	return resolveAWSClient(ctx, input, newAuditManagerClient)
 }
 
 // buildAuditManagerClient constructs an Audit Manager client from the stored credential payload.
 func buildAuditManagerClient(ctx context.Context, payload types.CredentialPayload) (*auditmanager.Client, auth.AWSMetadata, error) {
-	meta, err := awsMetadataFromPayload(payload, awsDefaultSession)
-	if err != nil {
-		return nil, auth.AWSMetadata{}, err
-	}
-
-	cfg, err := auth.BuildAWSConfig(ctx, meta.Region, auth.AWSCredentialsFromPayload(payload), auth.AWSAssumeRole{
-		RoleARN:         meta.RoleARN,
-		ExternalID:      meta.ExternalID,
-		SessionName:     meta.SessionName,
-		SessionDuration: meta.SessionDuration,
-	})
-	if err != nil {
-		return nil, meta, err
-	}
-
-	return auditmanager.NewFromConfig(cfg), meta, nil
+	return buildAWSClient(ctx, payload, newAuditManagerClient)
 }

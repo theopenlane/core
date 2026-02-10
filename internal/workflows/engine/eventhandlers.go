@@ -642,11 +642,7 @@ func groupAssignmentsByAction(actions []models.WorkflowAction, allAssignments []
 }
 
 func collectAssignmentIDs(assignments []*generated.WorkflowAssignment) []string {
-	ids := make([]string, 0, len(assignments))
-	for _, assignment := range assignments {
-		ids = append(ids, assignment.ID)
-	}
-	return ids
+	return lo.Map(assignments, func(a *generated.WorkflowAssignment, _ int) string { return a.ID })
 }
 
 func (l *WorkflowListeners) recordApprovalEvent(

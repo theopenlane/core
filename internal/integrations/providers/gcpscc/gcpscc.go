@@ -8,6 +8,7 @@ import (
 	"time"
 
 	cloudscc "cloud.google.com/go/securitycenter/apiv2"
+	"github.com/samber/lo"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -579,15 +580,5 @@ func normalizeScopes(scopes []string) []string {
 		return nil
 	}
 
-	seen := make(map[string]struct{}, len(out))
-	uniq := out[:0]
-	for _, scope := range out {
-		if _, ok := seen[scope]; ok {
-			continue
-		}
-		seen[scope] = struct{}{}
-		uniq = append(uniq, scope)
-	}
-
-	return uniq
+	return lo.Uniq(out)
 }

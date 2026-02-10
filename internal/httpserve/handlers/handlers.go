@@ -137,6 +137,8 @@ type Handler struct {
 	IntegrationClients *keystore.ClientPoolManager
 	// IntegrationOperations standardizes executing provider operations
 	IntegrationOperations *keystore.OperationManager
+	// IntegrationIngestEmitter publishes webhook ingest events (dedicated pool).
+	IntegrationIngestEmitter soiree.Emitter
 	// EventEmitter publishes asynchronous integration events
 	EventEmitter soiree.Emitter
 	// IntegrationActivation orchestrates integration activation flows

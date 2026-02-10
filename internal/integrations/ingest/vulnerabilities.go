@@ -38,6 +38,21 @@ type VulnerabilityIngestRequest struct {
 	DB                *generated.Client
 }
 
+// Validate checks that required fields are present
+func (r *VulnerabilityIngestRequest) Validate() error {
+	if r.OrgID == "" {
+		return ErrIngestOrgIDRequired
+	}
+	if r.IntegrationID == "" {
+		return ErrIngestIntegrationRequired
+	}
+	if r.DB == nil {
+		return ErrDBClientRequired
+	}
+
+	return nil
+}
+
 // VulnerabilityIngestSummary reports mapping and persistence stats
 type VulnerabilityIngestSummary struct {
 	// Total counts total alerts processed
@@ -281,11 +296,12 @@ func upsertVulnerability(ctx context.Context, db *generated.Client, orgID string
 		update := db.Vulnerability.UpdateOneID(existingID)
 		input.Mutate(update.Mutation())
 		if integrationID != "" {
-			addIntegration := true
-			if exists, err := db.Vulnerability.Query().Where(vulnerability.IDEQ(existingID)).QueryIntegrations().Where(integration.IDEQ(integrationID)).Exist(ctx); err == nil {
-				addIntegration = !exists
+			exists, err := db.Vulnerability.Query().Where(vulnerability.IDEQ(existingID)).QueryIntegrations().Where(integration.IDEQ(integrationID)).Exist(ctx)
+			if err != nil {
+				return false, err
 			}
-			if addIntegration {
+
+			if !exists {
 				update.AddIntegrationIDs(integrationID)
 			}
 		}

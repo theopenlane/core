@@ -26,7 +26,6 @@ import (
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
-
 var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "start the core api server",
@@ -249,13 +248,16 @@ func serve(ctx context.Context) error {
 		serveropts.WithReadyChecks(dbClient.Config, fgaClient, redisClient, dbClient.Job),
 	)
 
-	// add auth options
-	so.AddServerOptions(serveropts.WithAuth())
-	so.AddServerOptions(serveropts.WithIntegrationStore(dbClient))
-	so.AddServerOptions(serveropts.WithIntegrationBroker())
-	so.AddServerOptions(serveropts.WithIntegrationClients())
-	so.AddServerOptions(serveropts.WithIntegrationOperations())
-	so.AddServerOptions(serveropts.WithIntegrationActivation())
+	// add auth and integration options
+	so.AddServerOptions(
+		serveropts.WithAuth(),
+		serveropts.WithIntegrationStore(dbClient),
+		serveropts.WithIntegrationBroker(),
+		serveropts.WithIntegrationClients(),
+		serveropts.WithIntegrationOperations(),
+		serveropts.WithIntegrationIngestEvents(dbClient),
+		serveropts.WithIntegrationActivation(),
+	)
 
 	// add session manager
 	so.AddServerOptions(
@@ -273,8 +275,10 @@ func serve(ctx context.Context) error {
 	}
 
 	// Setup Graph API Handlers
-	so.AddServerOptions(serveropts.WithGraphRoute(srv, dbClient))
-	so.AddServerOptions(serveropts.WithHistoryGraphRoute(srv, historyClient))
+	so.AddServerOptions(
+		serveropts.WithGraphRoute(srv, dbClient),
+		serveropts.WithHistoryGraphRoute(srv, historyClient),
+	)
 
 	if err := srv.StartEchoServer(ctx); err != nil {
 		log.Error().Err(err).Msg("failed to run server")

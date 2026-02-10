@@ -15,7 +15,7 @@ import (
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/providers"
@@ -64,7 +64,7 @@ func AppBuilder() providers.Builder {
 					SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
 				},
 			}
-			provider.operations = helpers.SanitizeOperationDescriptors(TypeGitHubApp, githubAppOperations(baseURL))
+			provider.operations = operations.SanitizeOperationDescriptors(TypeGitHubApp, githubAppOperations(baseURL))
 
 			return provider, nil
 		},
@@ -89,23 +89,17 @@ type appProvider struct {
 
 // Type returns the provider identifier.
 func (p *appProvider) Type() types.ProviderType {
-	if p == nil {
-		return types.ProviderUnknown
-	}
 	return p.provider
 }
 
 // Capabilities returns the supported capabilities.
 func (p *appProvider) Capabilities() types.ProviderCapabilities {
-	if p == nil {
-		return types.ProviderCapabilities{}
-	}
 	return p.caps
 }
 
 // Operations returns the provider operation descriptors.
 func (p *appProvider) Operations() []types.OperationDescriptor {
-	if p == nil || len(p.operations) == 0 {
+	if len(p.operations) == 0 {
 		return nil
 	}
 
@@ -121,10 +115,6 @@ func (p *appProvider) BeginAuth(context.Context, types.AuthContext) (types.AuthS
 
 // Mint exchanges GitHub App credentials for an installation access token.
 func (p *appProvider) Mint(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	if p == nil {
-		return types.CredentialPayload{}, ErrProviderNotInitialized
-	}
-
 	appID, installationID, privateKey, err := githubAppCredentialsFromPayload(subject.Credential)
 	if err != nil {
 		return types.CredentialPayload{}, err

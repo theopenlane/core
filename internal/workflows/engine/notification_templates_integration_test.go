@@ -40,11 +40,13 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotificationWithTemplateIntegration
 	})
 	s.Require().NoError(err)
 
+	seedCtx := s.SeedContext(userID, orgID)
+
 	integrationRecord, err := s.client.Integration.Create().
 		SetOwnerID(orgID).
 		SetName("Slack").
 		SetKind("slack").
-		Save(userCtx)
+		Save(seedCtx)
 	s.Require().NoError(err)
 
 	template, err := s.client.NotificationTemplate.Create().
@@ -55,7 +57,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotificationWithTemplateIntegration
 		SetTopicPattern("workflow.notification").
 		SetIntegrationID(integrationRecord.ID).
 		SetBodyTemplate("Hello {{review_url}}").
-		Save(userCtx)
+		Save(seedCtx)
 	s.Require().NoError(err)
 
 	_, err = s.client.NotificationPreference.Create().
@@ -63,7 +65,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotificationWithTemplateIntegration
 		SetUserID(userID).
 		SetChannel(enums.ChannelSlack).
 		SetDestination("C12345").
-		Save(userCtx)
+		Save(seedCtx)
 	s.Require().NoError(err)
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
