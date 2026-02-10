@@ -53457,29 +53457,29 @@ input ActionPlanWhereInput {
   """
   tagsHas: String
   """
-  Filter for tag_suggestionsHas to contain a specific value
+  Filter for tagSuggestionsHas to contain a specific value
   """
-  tag_suggestionsHas: String
+  tagSuggestionsHas: String
   """
-  Filter for dismissed_tag_suggestionsHas to contain a specific value
+  Filter for dismissedTagSuggestionsHas to contain a specific value
   """
-  dismissed_tag_suggestionsHas: String
+  dismissedTagSuggestionsHas: String
   """
-  Filter for control_suggestionsHas to contain a specific value
+  Filter for controlSuggestionsHas to contain a specific value
   """
-  control_suggestionsHas: String
+  controlSuggestionsHas: String
   """
-  Filter for dismissed_control_suggestionsHas to contain a specific value
+  Filter for dismissedControlSuggestionsHas to contain a specific value
   """
-  dismissed_control_suggestionsHas: String
+  dismissedControlSuggestionsHas: String
   """
-  Filter for improvement_suggestionsHas to contain a specific value
+  Filter for improvementSuggestionsHas to contain a specific value
   """
-  improvement_suggestionsHas: String
+  improvementSuggestionsHas: String
   """
-  Filter for dismissed_improvement_suggestionsHas to contain a specific value
+  Filter for dismissedImprovementSuggestionsHas to contain a specific value
   """
-  dismissed_improvement_suggestionsHas: String
+  dismissedImprovementSuggestionsHas: String
 }
 type Assessment implements Node {
   id: ID!
@@ -61069,13 +61069,13 @@ input ControlWhereInput {
   """
   aliasesHas: String
   """
-  Filter for mapped_categoriesHas to contain a specific value
+  Filter for mappedCategoriesHas to contain a specific value
   """
-  mapped_categoriesHas: String
+  mappedCategoriesHas: String
   """
-  Filter for control_questionsHas to contain a specific value
+  Filter for controlQuestionsHas to contain a specific value
   """
-  control_questionsHas: String
+  controlQuestionsHas: String
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -74446,13 +74446,13 @@ input EntityWhereInput {
   """
   domainsHas: String
   """
-  Filter for linked_asset_idsHas to contain a specific value
+  Filter for linkedAssetIdsHas to contain a specific value
   """
-  linked_asset_idsHas: String
+  linkedAssetIdsHas: String
   """
-  Filter for provided_servicesHas to contain a specific value
+  Filter for providedServicesHas to contain a specific value
   """
-  provided_servicesHas: String
+  providedServicesHas: String
   """
   Filter for linksHas to contain a specific value
   """
@@ -79192,9 +79192,9 @@ input FindingWhereInput {
   """
   referencesHas: String
   """
-  Filter for steps_to_reproduceHas to contain a specific value
+  Filter for stepsToReproduceHas to contain a specific value
   """
-  steps_to_reproduceHas: String
+  stepsToReproduceHas: String
   """
   Filter for targetsHas to contain a specific value
   """
@@ -85487,29 +85487,29 @@ input InternalPolicyWhereInput {
   """
   tagsHas: String
   """
-  Filter for tag_suggestionsHas to contain a specific value
+  Filter for tagSuggestionsHas to contain a specific value
   """
-  tag_suggestionsHas: String
+  tagSuggestionsHas: String
   """
-  Filter for dismissed_tag_suggestionsHas to contain a specific value
+  Filter for dismissedTagSuggestionsHas to contain a specific value
   """
-  dismissed_tag_suggestionsHas: String
+  dismissedTagSuggestionsHas: String
   """
-  Filter for control_suggestionsHas to contain a specific value
+  Filter for controlSuggestionsHas to contain a specific value
   """
-  control_suggestionsHas: String
+  controlSuggestionsHas: String
   """
-  Filter for dismissed_control_suggestionsHas to contain a specific value
+  Filter for dismissedControlSuggestionsHas to contain a specific value
   """
-  dismissed_control_suggestionsHas: String
+  dismissedControlSuggestionsHas: String
   """
-  Filter for improvement_suggestionsHas to contain a specific value
+  Filter for improvementSuggestionsHas to contain a specific value
   """
-  improvement_suggestionsHas: String
+  improvementSuggestionsHas: String
   """
-  Filter for dismissed_improvement_suggestionsHas to contain a specific value
+  Filter for dismissedImprovementSuggestionsHas to contain a specific value
   """
-  dismissed_improvement_suggestionsHas: String
+  dismissedImprovementSuggestionsHas: String
 }
 type Invite implements Node {
   id: ID!
@@ -89895,9 +89895,9 @@ input NotificationPreferenceWhereInput {
   hasNotificationTemplate: Boolean
   hasNotificationTemplateWith: [NotificationTemplateWhereInput!]
   """
-  Filter for topic_patternsHas to contain a specific value
+  Filter for topicPatternsHas to contain a specific value
   """
-  topic_patternsHas: String
+  topicPatternsHas: String
 }
 type NotificationTemplate implements Node {
   id: ID!
@@ -94775,9 +94775,9 @@ input OrganizationSettingWhereInput {
   """
   domainsHas: String
   """
-  Filter for allowed_email_domainsHas to contain a specific value
+  Filter for allowedEmailDomainsHas to contain a specific value
   """
-  allowed_email_domainsHas: String
+  allowedEmailDomainsHas: String
 }
 """
 OrganizationWhereInput is used for filtering Organization objects.
@@ -98928,29 +98928,29 @@ input ProcedureWhereInput {
   """
   tagsHas: String
   """
-  Filter for tag_suggestionsHas to contain a specific value
+  Filter for tagSuggestionsHas to contain a specific value
   """
-  tag_suggestionsHas: String
+  tagSuggestionsHas: String
   """
-  Filter for dismissed_tag_suggestionsHas to contain a specific value
+  Filter for dismissedTagSuggestionsHas to contain a specific value
   """
-  dismissed_tag_suggestionsHas: String
+  dismissedTagSuggestionsHas: String
   """
-  Filter for control_suggestionsHas to contain a specific value
+  Filter for controlSuggestionsHas to contain a specific value
   """
-  control_suggestionsHas: String
+  controlSuggestionsHas: String
   """
-  Filter for dismissed_control_suggestionsHas to contain a specific value
+  Filter for dismissedControlSuggestionsHas to contain a specific value
   """
-  dismissed_control_suggestionsHas: String
+  dismissedControlSuggestionsHas: String
   """
-  Filter for improvement_suggestionsHas to contain a specific value
+  Filter for improvementSuggestionsHas to contain a specific value
   """
-  improvement_suggestionsHas: String
+  improvementSuggestionsHas: String
   """
-  Filter for dismissed_improvement_suggestionsHas to contain a specific value
+  Filter for dismissedImprovementSuggestionsHas to contain a specific value
   """
-  dismissed_improvement_suggestionsHas: String
+  dismissedImprovementSuggestionsHas: String
 }
 type Program implements Node {
   id: ID!
@@ -108049,9 +108049,9 @@ input ScanWhereInput {
   """
   tagsHas: String
   """
-  Filter for vulnerability_idsHas to contain a specific value
+  Filter for vulnerabilityIdsHas to contain a specific value
   """
-  vulnerability_idsHas: String
+  vulnerabilityIdsHas: String
 }
 type ScheduledJob implements Node {
   id: ID!
@@ -110564,13 +110564,13 @@ input SubcontrolWhereInput {
   """
   aliasesHas: String
   """
-  Filter for mapped_categoriesHas to contain a specific value
+  Filter for mappedCategoriesHas to contain a specific value
   """
-  mapped_categoriesHas: String
+  mappedCategoriesHas: String
   """
-  Filter for control_questionsHas to contain a specific value
+  Filter for controlQuestionsHas to contain a specific value
   """
-  control_questionsHas: String
+  controlQuestionsHas: String
 }
 type Subprocessor implements Node {
   id: ID!
@@ -112919,9 +112919,9 @@ input TaskWhereInput {
   """
   tagsHas: String
   """
-  Filter for external_reference_urlHas to contain a specific value
+  Filter for externalReferenceUrlHas to contain a specific value
   """
-  external_reference_urlHas: String
+  externalReferenceUrlHas: String
 }
 type Template implements Node {
   id: ID!
@@ -129347,9 +129347,9 @@ input WorkflowDefinitionWhereInput {
   """
   tagsHas: String
   """
-  Filter for tracked_fieldsHas to contain a specific value
+  Filter for trackedFieldsHas to contain a specific value
   """
-  tracked_fieldsHas: String
+  trackedFieldsHas: String
 }
 """
 WorkflowDefinitionWorkflowKind is enum for the field workflow_kind

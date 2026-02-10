@@ -18,7 +18,7 @@ require (
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.22.4
+	github.com/theopenlane/entx v0.22.5-0.20260210064508-9d95ce01a263
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/utils v0.6.2
 	github.com/zitadel/oidc/v3 v3.45.3

@@ -932,18 +932,18 @@ type ActionPlanWhereInput struct {
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
-	// Filter for tag_suggestionsHas to contain a specific value
-	TagSuggestionsHas *string `json:"tag_suggestionsHas,omitempty"`
-	// Filter for dismissed_tag_suggestionsHas to contain a specific value
-	DismissedTagSuggestionsHas *string `json:"dismissed_tag_suggestionsHas,omitempty"`
-	// Filter for control_suggestionsHas to contain a specific value
-	ControlSuggestionsHas *string `json:"control_suggestionsHas,omitempty"`
-	// Filter for dismissed_control_suggestionsHas to contain a specific value
-	DismissedControlSuggestionsHas *string `json:"dismissed_control_suggestionsHas,omitempty"`
-	// Filter for improvement_suggestionsHas to contain a specific value
-	ImprovementSuggestionsHas *string `json:"improvement_suggestionsHas,omitempty"`
-	// Filter for dismissed_improvement_suggestionsHas to contain a specific value
-	DismissedImprovementSuggestionsHas *string `json:"dismissed_improvement_suggestionsHas,omitempty"`
+	// Filter for tagSuggestionsHas to contain a specific value
+	TagSuggestionsHas *string `json:"tagSuggestionsHas,omitempty"`
+	// Filter for dismissedTagSuggestionsHas to contain a specific value
+	DismissedTagSuggestionsHas *string `json:"dismissedTagSuggestionsHas,omitempty"`
+	// Filter for controlSuggestionsHas to contain a specific value
+	ControlSuggestionsHas *string `json:"controlSuggestionsHas,omitempty"`
+	// Filter for dismissedControlSuggestionsHas to contain a specific value
+	DismissedControlSuggestionsHas *string `json:"dismissedControlSuggestionsHas,omitempty"`
+	// Filter for improvementSuggestionsHas to contain a specific value
+	ImprovementSuggestionsHas *string `json:"improvementSuggestionsHas,omitempty"`
+	// Filter for dismissedImprovementSuggestionsHas to contain a specific value
+	DismissedImprovementSuggestionsHas *string `json:"dismissedImprovementSuggestionsHas,omitempty"`
 }
 
 // AddProgramMembershipInput is used for create ProgramMembership object under an existing program
@@ -5327,10 +5327,10 @@ type ControlWhereInput struct {
 	TagsHas *string `json:"tagsHas,omitempty"`
 	// Filter for aliasesHas to contain a specific value
 	AliasesHas *string `json:"aliasesHas,omitempty"`
-	// Filter for mapped_categoriesHas to contain a specific value
-	MappedCategoriesHas *string `json:"mapped_categoriesHas,omitempty"`
-	// Filter for control_questionsHas to contain a specific value
-	ControlQuestionsHas *string `json:"control_questionsHas,omitempty"`
+	// Filter for mappedCategoriesHas to contain a specific value
+	MappedCategoriesHas *string `json:"mappedCategoriesHas,omitempty"`
+	// Filter for controlQuestionsHas to contain a specific value
+	ControlQuestionsHas *string `json:"controlQuestionsHas,omitempty"`
 }
 
 // CreateAPITokenInput is used for create APIToken object.
@@ -13956,10 +13956,10 @@ type EntityWhereInput struct {
 	TagsHas *string `json:"tagsHas,omitempty"`
 	// Filter for domainsHas to contain a specific value
 	DomainsHas *string `json:"domainsHas,omitempty"`
-	// Filter for linked_asset_idsHas to contain a specific value
-	LinkedAssetIdsHas *string `json:"linked_asset_idsHas,omitempty"`
-	// Filter for provided_servicesHas to contain a specific value
-	ProvidedServicesHas *string `json:"provided_servicesHas,omitempty"`
+	// Filter for linkedAssetIdsHas to contain a specific value
+	LinkedAssetIdsHas *string `json:"linkedAssetIdsHas,omitempty"`
+	// Filter for providedServicesHas to contain a specific value
+	ProvidedServicesHas *string `json:"providedServicesHas,omitempty"`
 	// Filter for linksHas to contain a specific value
 	LinksHas *string `json:"linksHas,omitempty"`
 }
@@ -16564,8 +16564,8 @@ type FindingWhereInput struct {
 	CategoriesHas *string `json:"categoriesHas,omitempty"`
 	// Filter for referencesHas to contain a specific value
 	ReferencesHas *string `json:"referencesHas,omitempty"`
-	// Filter for steps_to_reproduceHas to contain a specific value
-	StepsToReproduceHas *string `json:"steps_to_reproduceHas,omitempty"`
+	// Filter for stepsToReproduceHas to contain a specific value
+	StepsToReproduceHas *string `json:"stepsToReproduceHas,omitempty"`
 	// Filter for targetsHas to contain a specific value
 	TargetsHas *string `json:"targetsHas,omitempty"`
 }
@@ -19477,18 +19477,18 @@ type InternalPolicyWhereInput struct {
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
-	// Filter for tag_suggestionsHas to contain a specific value
-	TagSuggestionsHas *string `json:"tag_suggestionsHas,omitempty"`
-	// Filter for dismissed_tag_suggestionsHas to contain a specific value
-	DismissedTagSuggestionsHas *string `json:"dismissed_tag_suggestionsHas,omitempty"`
-	// Filter for control_suggestionsHas to contain a specific value
-	ControlSuggestionsHas *string `json:"control_suggestionsHas,omitempty"`
-	// Filter for dismissed_control_suggestionsHas to contain a specific value
-	DismissedControlSuggestionsHas *string `json:"dismissed_control_suggestionsHas,omitempty"`
-	// Filter for improvement_suggestionsHas to contain a specific value
-	ImprovementSuggestionsHas *string `json:"improvement_suggestionsHas,omitempty"`
-	// Filter for dismissed_improvement_suggestionsHas to contain a specific value
-	DismissedImprovementSuggestionsHas *string `json:"dismissed_improvement_suggestionsHas,omitempty"`
+	// Filter for tagSuggestionsHas to contain a specific value
+	TagSuggestionsHas *string `json:"tagSuggestionsHas,omitempty"`
+	// Filter for dismissedTagSuggestionsHas to contain a specific value
+	DismissedTagSuggestionsHas *string `json:"dismissedTagSuggestionsHas,omitempty"`
+	// Filter for controlSuggestionsHas to contain a specific value
+	ControlSuggestionsHas *string `json:"controlSuggestionsHas,omitempty"`
+	// Filter for dismissedControlSuggestionsHas to contain a specific value
+	DismissedControlSuggestionsHas *string `json:"dismissedControlSuggestionsHas,omitempty"`
+	// Filter for improvementSuggestionsHas to contain a specific value
+	ImprovementSuggestionsHas *string `json:"improvementSuggestionsHas,omitempty"`
+	// Filter for dismissedImprovementSuggestionsHas to contain a specific value
+	DismissedImprovementSuggestionsHas *string `json:"dismissedImprovementSuggestionsHas,omitempty"`
 }
 
 type Invite struct {
@@ -22563,8 +22563,8 @@ type NotificationPreferenceWhereInput struct {
 	// notification_template edge predicates
 	HasNotificationTemplate     *bool                             `json:"hasNotificationTemplate,omitempty"`
 	HasNotificationTemplateWith []*NotificationTemplateWhereInput `json:"hasNotificationTemplateWith,omitempty"`
-	// Filter for topic_patternsHas to contain a specific value
-	TopicPatternsHas *string `json:"topic_patternsHas,omitempty"`
+	// Filter for topicPatternsHas to contain a specific value
+	TopicPatternsHas *string `json:"topicPatternsHas,omitempty"`
 }
 
 type NotificationTemplate struct {
@@ -24136,8 +24136,8 @@ type OrganizationSettingWhereInput struct {
 	TagsHas *string `json:"tagsHas,omitempty"`
 	// Filter for domainsHas to contain a specific value
 	DomainsHas *string `json:"domainsHas,omitempty"`
-	// Filter for allowed_email_domainsHas to contain a specific value
-	AllowedEmailDomainsHas *string `json:"allowed_email_domainsHas,omitempty"`
+	// Filter for allowedEmailDomainsHas to contain a specific value
+	AllowedEmailDomainsHas *string `json:"allowedEmailDomainsHas,omitempty"`
 }
 
 // Return response for transferOrganizationOwnership mutation
@@ -26532,18 +26532,18 @@ type ProcedureWhereInput struct {
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
-	// Filter for tag_suggestionsHas to contain a specific value
-	TagSuggestionsHas *string `json:"tag_suggestionsHas,omitempty"`
-	// Filter for dismissed_tag_suggestionsHas to contain a specific value
-	DismissedTagSuggestionsHas *string `json:"dismissed_tag_suggestionsHas,omitempty"`
-	// Filter for control_suggestionsHas to contain a specific value
-	ControlSuggestionsHas *string `json:"control_suggestionsHas,omitempty"`
-	// Filter for dismissed_control_suggestionsHas to contain a specific value
-	DismissedControlSuggestionsHas *string `json:"dismissed_control_suggestionsHas,omitempty"`
-	// Filter for improvement_suggestionsHas to contain a specific value
-	ImprovementSuggestionsHas *string `json:"improvement_suggestionsHas,omitempty"`
-	// Filter for dismissed_improvement_suggestionsHas to contain a specific value
-	DismissedImprovementSuggestionsHas *string `json:"dismissed_improvement_suggestionsHas,omitempty"`
+	// Filter for tagSuggestionsHas to contain a specific value
+	TagSuggestionsHas *string `json:"tagSuggestionsHas,omitempty"`
+	// Filter for dismissedTagSuggestionsHas to contain a specific value
+	DismissedTagSuggestionsHas *string `json:"dismissedTagSuggestionsHas,omitempty"`
+	// Filter for controlSuggestionsHas to contain a specific value
+	ControlSuggestionsHas *string `json:"controlSuggestionsHas,omitempty"`
+	// Filter for dismissedControlSuggestionsHas to contain a specific value
+	DismissedControlSuggestionsHas *string `json:"dismissedControlSuggestionsHas,omitempty"`
+	// Filter for improvementSuggestionsHas to contain a specific value
+	ImprovementSuggestionsHas *string `json:"improvementSuggestionsHas,omitempty"`
+	// Filter for dismissedImprovementSuggestionsHas to contain a specific value
+	DismissedImprovementSuggestionsHas *string `json:"dismissedImprovementSuggestionsHas,omitempty"`
 }
 
 type Program struct {
@@ -29663,8 +29663,8 @@ type ScanWhereInput struct {
 	HasPerformedByGroupWith []*GroupWhereInput `json:"hasPerformedByGroupWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
-	// Filter for vulnerability_idsHas to contain a specific value
-	VulnerabilityIdsHas *string `json:"vulnerability_idsHas,omitempty"`
+	// Filter for vulnerabilityIdsHas to contain a specific value
+	VulnerabilityIdsHas *string `json:"vulnerabilityIdsHas,omitempty"`
 }
 
 type ScheduledJob struct {
@@ -31304,10 +31304,10 @@ type SubcontrolWhereInput struct {
 	TagsHas *string `json:"tagsHas,omitempty"`
 	// Filter for aliasesHas to contain a specific value
 	AliasesHas *string `json:"aliasesHas,omitempty"`
-	// Filter for mapped_categoriesHas to contain a specific value
-	MappedCategoriesHas *string `json:"mapped_categoriesHas,omitempty"`
-	// Filter for control_questionsHas to contain a specific value
-	ControlQuestionsHas *string `json:"control_questionsHas,omitempty"`
+	// Filter for mappedCategoriesHas to contain a specific value
+	MappedCategoriesHas *string `json:"mappedCategoriesHas,omitempty"`
+	// Filter for controlQuestionsHas to contain a specific value
+	ControlQuestionsHas *string `json:"controlQuestionsHas,omitempty"`
 }
 
 type SubmitTrustCenterNDAResponseInput struct {
@@ -32799,8 +32799,8 @@ type TaskWhereInput struct {
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
-	// Filter for external_reference_urlHas to contain a specific value
-	ExternalReferenceURLHas *string `json:"external_reference_urlHas,omitempty"`
+	// Filter for externalReferenceUrlHas to contain a specific value
+	ExternalReferenceURLHas *string `json:"externalReferenceUrlHas,omitempty"`
 }
 
 type Template struct {
@@ -43926,8 +43926,8 @@ type WorkflowDefinitionWhereInput struct {
 	HasEmailTemplatesWith []*EmailTemplateWhereInput `json:"hasEmailTemplatesWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
-	// Filter for tracked_fieldsHas to contain a specific value
-	TrackedFieldsHas *string `json:"tracked_fieldsHas,omitempty"`
+	// Filter for trackedFieldsHas to contain a specific value
+	TrackedFieldsHas *string `json:"trackedFieldsHas,omitempty"`
 }
 
 type WorkflowEvent struct {
