@@ -145,4 +145,6 @@ var (
 	ErrMissingObjectRef = errors.New("workflow object ref is required")
 	// ErrReviewNoTargets indicates a review action resolved no targets and should be skipped
 	ErrReviewNoTargets = errors.New("review action has no resolved targets")
+	// ErrTemplateRenderDepthExceeded is returned when template rendering exceeds the maximum depth
+	ErrTemplateRenderDepthExceeded = errors.New("template render depth exceeded")
 )

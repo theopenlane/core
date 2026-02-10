@@ -3,16 +3,12 @@ package engine
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"strings"
 )
 
 // maxTemplateRenderDepth limits recursion depth for template rendering to prevent stack overflow
 const maxTemplateRenderDepth = 64
-
-// ErrTemplateRenderDepthExceeded is returned when template rendering exceeds the maximum recursion depth
-var ErrTemplateRenderDepthExceeded = errors.New("template render depth exceeded")
 
 // renderTemplateValue renders template expressions within a structured value
 func renderTemplateValue(ctx context.Context, evaluator *CELEvaluator, input any, vars map[string]any) (any, error) {
@@ -115,13 +111,16 @@ func singleTemplateExpression(input string) (string, bool) {
 	if !strings.HasPrefix(trimmed, "{{") || !strings.HasSuffix(trimmed, "}}") {
 		return "", false
 	}
+
 	if strings.Count(trimmed, "{{") != 1 || strings.Count(trimmed, "}}") != 1 {
 		return "", false
 	}
+
 	expr := strings.TrimSpace(trimmed[2 : len(trimmed)-2])
 	if expr == "" {
 		return "", false
 	}
+
 	return expr, true
 }
 
@@ -161,6 +160,7 @@ func isTemplateIdentifier(expr string) bool {
 			return false
 		}
 	}
+
 	return expr != ""
 }
 
