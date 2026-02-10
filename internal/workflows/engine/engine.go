@@ -28,6 +28,16 @@ type WorkflowEngine struct {
 	client *generated.Client
 	// emitter is the event emitter for workflow events
 	emitter soiree.Emitter
+	// integrationEmitter is the event bus dedicated to integration operations
+	integrationEmitter *soiree.EventBus
+	// integrationRegistry provides provider operation descriptors (optional)
+	integrationRegistry IntegrationRegistry
+	// integrationStore ensures integration records exist
+	integrationStore IntegrationStore
+	// integrationOperations executes integration operations
+	integrationOperations IntegrationOperations
+	// integrationListenersRegistered tracks whether integration listeners are registered
+	integrationListenersRegistered bool
 	// observer is the observability observer for metrics and tracing
 	observer *observability.Observer
 	// config is the workflow configuration

@@ -14,12 +14,12 @@ import (
 const statePayloadParts = 3
 
 var (
-	errIntegrationBrokerNotConfigured     = errors.New("integration broker not configured")
-	errIntegrationStoreNotConfigured      = errors.New("integration store not configured")
-	errIntegrationRegistryNotConfigured   = errors.New("integration registry not configured")
-	errIntegrationOperationsNotConfigured = errors.New("integration operations manager not configured")
-	errIntegrationEmitterNotConfigured    = errors.New("integration event emitter not configured")
-	errActivationNotConfigured            = errors.New("integration activation service not configured")
+	errIntegrationBrokerNotConfigured         = errors.New("integration broker not configured")
+	errIntegrationStoreNotConfigured          = errors.New("integration store not configured")
+	errIntegrationRegistryNotConfigured       = errors.New("integration registry not configured")
+	errIntegrationOperationsNotConfigured     = errors.New("integration operations manager not configured")
+	errIntegrationWorkflowEngineNotConfigured = errors.New("integration workflow engine not configured")
+	errActivationNotConfigured                = errors.New("integration activation service not configured")
 )
 
 // IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.
@@ -32,25 +32,25 @@ type IntegrationOauthProviderConfig struct {
 
 var (
 	// ErrInvalidState is returned when OAuth state validation fails
-	ErrInvalidState = fmt.Errorf("invalid OAuth state parameter")
+	ErrInvalidState = errors.New("invalid OAuth state parameter")
 	// ErrMissingCode is returned when OAuth authorization code is missing
-	ErrMissingCode = fmt.Errorf("missing OAuth authorization code")
+	ErrMissingCode = errors.New("missing OAuth authorization code")
 	// ErrExchangeAuthCode is returned when OAuth code exchange fails
-	ErrExchangeAuthCode = fmt.Errorf("failed to exchange authorization code")
+	ErrExchangeAuthCode = errors.New("failed to exchange authorization code")
 	// ErrValidateToken is returned when OAuth token validation fails
-	ErrValidateToken = fmt.Errorf("failed to validate OAuth token")
+	ErrValidateToken = errors.New("failed to validate OAuth token")
 	// ErrInvalidStateFormat is returned when OAuth state format is invalid
-	ErrInvalidStateFormat = fmt.Errorf("invalid state format")
+	ErrInvalidStateFormat = errors.New("invalid state format")
 	// ErrProviderRequired is returned when provider parameter is missing
-	ErrProviderRequired = fmt.Errorf("provider parameter is required")
+	ErrProviderRequired = errors.New("provider parameter is required")
 	// ErrIntegrationIDRequired is returned when integration ID is missing
-	ErrIntegrationIDRequired = fmt.Errorf("integration ID is required")
+	ErrIntegrationIDRequired = errors.New("integration ID is required")
 	// ErrIntegrationNotFound is returned when integration is not found
-	ErrIntegrationNotFound = fmt.Errorf("integration not found")
+	ErrIntegrationNotFound = errors.New("integration not found")
 	// ErrDeleteSecrets is returned when deleting integration secrets fails
-	ErrDeleteSecrets = fmt.Errorf("failed to delete integration secrets")
+	ErrDeleteSecrets = errors.New("failed to delete integration secrets")
 	// ErrUnsupportedAuthType indicates the provider does not support the requested flow
-	ErrUnsupportedAuthType = fmt.Errorf("provider does not support this authentication flow")
+	ErrUnsupportedAuthType = errors.New("provider does not support this authentication flow")
 )
 
 // buildStatePayload encodes the OAuth state payload for cookies and callbacks.

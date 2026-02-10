@@ -15,6 +15,7 @@
       "https://graph.microsoft.com/User.Read",
       "https://graph.microsoft.com/Team.ReadBasic.All",
       "https://graph.microsoft.com/Channel.ReadBasic.All",
+      "https://graph.microsoft.com/ChannelMessage.Send",
       "offline_access"
     ],
     "redirectUri": "https://api.theopenlane.io/v1/integrations/callback"

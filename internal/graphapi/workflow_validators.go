@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/resolvers"
@@ -271,12 +272,53 @@ func validateActionParams(actionType enums.WorkflowActionType, params json.RawMe
 	case enums.WorkflowActionTypeFieldUpdate:
 		err = validateFieldUpdateActionParams(params)
 	case enums.WorkflowActionTypeNotification:
-		// Notification action params are optional; validation happens in executor
-		return nil
+		err = validateNotificationActionParams(params)
+	case enums.WorkflowActionTypeIntegration:
+		err = validateIntegrationActionParams(params)
 	}
 
 	if err != nil {
 		return fmt.Errorf("%w: action %d (%s): %w", ErrActionInvalidParams, index, actionKey, err)
+	}
+
+	return nil
+}
+
+// validateNotificationActionParams validates params for NOTIFICATION actions.
+func validateNotificationActionParams(params json.RawMessage) error {
+	if len(params) == 0 {
+		return nil
+	}
+
+	var input workflows.NotificationActionParams
+	if err := json.Unmarshal(params, &input); err != nil {
+		return err
+	}
+
+	if strings.TrimSpace(input.TemplateID) != "" && strings.TrimSpace(input.TemplateKey) != "" {
+		return fmt.Errorf("template_id and template_key cannot both be set")
+	}
+
+	return nil
+}
+
+// validateIntegrationActionParams validates params for INTEGRATION actions.
+func validateIntegrationActionParams(params json.RawMessage) error {
+	if len(params) == 0 {
+		return fmt.Errorf("params required")
+	}
+
+	var input workflows.IntegrationActionParams
+	if err := json.Unmarshal(params, &input); err != nil {
+		return err
+	}
+
+	if strings.TrimSpace(input.Operation) == "" {
+		return fmt.Errorf("operation required")
+	}
+
+	if strings.TrimSpace(input.Integration) == "" && strings.TrimSpace(input.Provider) == "" {
+		return fmt.Errorf("provider or integration required")
 	}
 
 	return nil
@@ -398,6 +440,115 @@ func validateWorkflowDefinitionConflicts(ctx context.Context, client *generated.
 	}
 
 	return checkDomainConflicts(definitions, domainKeys)
+}
+
+// validateWorkflowDefinitionTemplateRefs ensures referenced notification templates exist and are active.
+func validateWorkflowDefinitionTemplateRefs(ctx context.Context, client *generated.Client, doc *models.WorkflowDefinitionDocument, ownerID string) error {
+	if doc == nil || client == nil {
+		return nil
+	}
+
+	refs, err := extractNotificationTemplateRefs(doc)
+	if err != nil {
+		return err
+	}
+	if len(refs) == 0 {
+		return nil
+	}
+
+	ownerID = strings.TrimSpace(ownerID)
+	if ownerID == "" {
+		return fmt.Errorf("owner_id required for notification template validation")
+	}
+
+	ids := make(map[string]struct{})
+	keys := make(map[string]struct{})
+	for _, ref := range refs {
+		if ref.ID != "" {
+			ids[ref.ID] = struct{}{}
+		}
+		if ref.Key != "" {
+			keys[ref.Key] = struct{}{}
+		}
+	}
+
+	for id := range ids {
+		exists, err := client.NotificationTemplate.Query().
+			Where(
+				notificationtemplate.IDEQ(id),
+				notificationtemplate.ActiveEQ(true),
+				notificationtemplate.Or(
+					notificationtemplate.OwnerIDEQ(ownerID),
+					notificationtemplate.SystemOwnedEQ(true),
+				),
+			).
+			Exist(ctx)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return fmt.Errorf("notification template not found: %s", id)
+		}
+	}
+
+	for key := range keys {
+		exists, err := client.NotificationTemplate.Query().
+			Where(
+				notificationtemplate.KeyEQ(key),
+				notificationtemplate.ActiveEQ(true),
+				notificationtemplate.Or(
+					notificationtemplate.OwnerIDEQ(ownerID),
+					notificationtemplate.SystemOwnedEQ(true),
+				),
+			).
+			Exist(ctx)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return fmt.Errorf("notification template key not found: %s", key)
+		}
+	}
+
+	return nil
+}
+
+type notificationTemplateRef struct {
+	ID  string
+	Key string
+}
+
+func extractNotificationTemplateRefs(doc *models.WorkflowDefinitionDocument) ([]notificationTemplateRef, error) {
+	if doc == nil {
+		return nil, nil
+	}
+
+	refs := make([]notificationTemplateRef, 0)
+
+	for _, action := range doc.Actions {
+		actionType := enums.ToWorkflowActionType(action.Type)
+		if actionType == nil || *actionType != enums.WorkflowActionTypeNotification {
+			continue
+		}
+
+		if len(action.Params) == 0 {
+			continue
+		}
+
+		var params workflows.NotificationActionParams
+		if err := json.Unmarshal(action.Params, &params); err != nil {
+			return nil, err
+		}
+
+		if id := strings.TrimSpace(params.TemplateID); id != "" {
+			refs = append(refs, notificationTemplateRef{ID: id})
+		}
+		if key := strings.TrimSpace(params.TemplateKey); key != "" {
+			refs = append(refs, notificationTemplateRef{Key: key})
+		}
+	}
+
+	return refs, nil
 }
 
 // extractDomainKeys extracts all domain keys from a workflow definition document
@@ -664,11 +815,7 @@ func validateWebhookActionParams(raw json.RawMessage, celCfg *workflows.Config) 
 		return ErrWebhookPayloadUnsupported
 	}
 
-	var params struct {
-		URL         string `json:"url"`
-		Method      string `json:"method"`
-		PayloadExpr string `json:"payload_expr"`
-	}
+	var params workflows.WebhookActionParams
 
 	if err := json.Unmarshal(raw, &params); err != nil {
 		return err

@@ -152,8 +152,6 @@ func registerDefaultMutationListeners(e *Eventer) {
 		e.AddMutationListener(entityType, handler)
 	})
 
-	RegisterIntegrationOperationListeners(e)
-
 	if e.workflowListenersEnabled {
 		RegisterWorkflowListeners(e)
 	}

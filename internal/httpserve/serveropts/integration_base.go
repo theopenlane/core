@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
+	"github.com/theopenlane/core/internal/workflows/engine"
 )
 
 // WithIntegrationStore wires the integration persistence layer into the handlers
@@ -84,6 +85,16 @@ func WithIntegrationOperations() ServerOption {
 		}
 
 		s.Config.Handler.IntegrationOperations = manager
+
+		if wf := s.Config.Handler.WorkflowEngine; wf != nil {
+			if err := wf.SetIntegrationDeps(engine.IntegrationDeps{
+				Registry:   s.Config.Handler.IntegrationRegistry,
+				Store:      s.Config.Handler.IntegrationStore,
+				Operations: manager,
+			}); err != nil {
+				log.Panic().Err(err).Msg("failed to configure integration dependencies on workflow engine")
+			}
+		}
 	})
 }
 

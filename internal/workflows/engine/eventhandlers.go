@@ -322,6 +322,9 @@ func (l *WorkflowListeners) HandleActionStarted(ctx *soiree.EventContext, payloa
 
 	// Execute action
 	execErr := l.engine.ProcessAction(scopeCtx, instance, action)
+	if errors.Is(execErr, ErrIntegrationActionQueued) {
+		return nil
+	}
 	if errors.Is(execErr, ErrApprovalNoTargets) || errors.Is(execErr, ErrReviewNoTargets) {
 		if err := l.removeParallelApprovalKey(scopeCtx, instance, action.Key); err != nil {
 			scope.RecordError(err, nil)

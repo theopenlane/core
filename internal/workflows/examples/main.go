@@ -44,15 +44,17 @@ type DemoConfig struct {
 type ScenarioRunner func(ctx context.Context, config openlane.Config, apiClient *openlane.Client, demo DemoConfig) (*WorkflowDemoSeed, []string, error)
 
 var (
-	flagScenario       = flag.String("scenario", "", "Workflow scenario (dual-approval|queue-approval|webhook|slack-webhook|field-update|evidence-review|examples)")
-	flagSlackWebhook   = flag.String("slack-webhook-url", "", "Slack webhook URL (required for slack-webhook and evidence-review scenarios)")
-	flagOpenlaneAPIURL = flag.String("openlane-api-url", "", "Override Openlane API base URL")
-	flagExamplesDir    = flag.String("examples-dir", "internal/workflows/examples", "Workflow definition JSON directory (used by examples scenario)")
-	flagEmail          = flag.String("email", "", "Demo user email (env: WORKFLOW_DEMO_EMAIL)")
-	flagPassword       = flag.String("password", "", "Demo user password (env: WORKFLOW_DEMO_PASSWORD)")
-	flagOrgID          = flag.String("org-id", "", "Existing organization ID (env: WORKFLOW_ORG_ID)")
-	flagUseDefaultOrg  = flag.Bool("use-default-org", false, "Use the user's default org instead of creating a new one (env: WORKFLOW_USE_DEFAULT_ORG)")
-	flagAPIToken       = flag.String("api-token", "", "API token for authentication, bypasses login (env: OPENLANE_API_TOKEN)")
+	flagScenario           = flag.String("scenario", "", "Workflow scenario (dual-approval|queue-approval|webhook|webhook-template|slack-webhook|slack-template|field-update|evidence-review|examples)")
+	flagSlackWebhook       = flag.String("slack-webhook-url", "", "Slack webhook URL (required for slack-webhook and evidence-review scenarios)")
+	flagSlackChannel       = flag.String("slack-channel", "", "Slack channel ID or name (required for slack-template scenario)")
+	flagSlackIntegrationID = flag.String("slack-integration-id", "", "Slack integration ID (optional; auto-resolved when possible)")
+	flagOpenlaneAPIURL     = flag.String("openlane-api-url", "", "Override Openlane API base URL")
+	flagExamplesDir        = flag.String("examples-dir", "internal/workflows/examples", "Workflow definition JSON directory (used by examples scenario)")
+	flagEmail              = flag.String("email", "", "Demo user email (env: WORKFLOW_DEMO_EMAIL)")
+	flagPassword           = flag.String("password", "", "Demo user password (env: WORKFLOW_DEMO_PASSWORD)")
+	flagOrgID              = flag.String("org-id", "", "Existing organization ID (env: WORKFLOW_ORG_ID)")
+	flagUseDefaultOrg      = flag.Bool("use-default-org", false, "Use the user's default org instead of creating a new one (env: WORKFLOW_USE_DEFAULT_ORG)")
+	flagAPIToken           = flag.String("api-token", "", "API token for authentication, bypasses login (env: OPENLANE_API_TOKEN)")
 )
 
 // main runs the workflow demo scenarios
@@ -61,9 +63,10 @@ func main() {
 
 	fmt.Println("=== Workflow Demo Seed Script ===")
 	fmt.Println("This demonstrates the complete workflow automation lifecycle")
-	fmt.Println("\nFlags: --scenario (dual-approval|queue-approval|webhook|slack-webhook|field-update|evidence-review|examples), --slack-webhook-url, --examples-dir")
+	fmt.Println("\nFlags: --scenario (dual-approval|queue-approval|webhook|webhook-template|slack-webhook|slack-template|field-update|evidence-review|examples)")
+	fmt.Println("       --slack-webhook-url, --slack-channel, --slack-integration-id, --examples-dir")
 	fmt.Println("       --email, --password, --org-id, --use-default-org")
-	fmt.Println("Env fallback: WORKFLOW_SCENARIO, SLACK_WEBHOOK_URL/SLACK_WEBHOOK, OPENLANE_API_URL")
+	fmt.Println("Env fallback: WORKFLOW_SCENARIO, SLACK_WEBHOOK_URL/SLACK_WEBHOOK, SLACK_CHANNEL, SLACK_INTEGRATION_ID, OPENLANE_API_URL")
 	fmt.Println("              WORKFLOW_DEMO_EMAIL, WORKFLOW_DEMO_PASSWORD, WORKFLOW_ORG_ID, WORKFLOW_USE_DEFAULT_ORG")
 	flag.Parse()
 
@@ -145,6 +148,8 @@ func main() {
 
 	scenario := firstNonEmpty(*flagScenario, os.Getenv("WORKFLOW_SCENARIO"), "dual-approval")
 	slackWebhookURL := firstNonEmpty(*flagSlackWebhook, os.Getenv("SLACK_WEBHOOK_URL"), os.Getenv("SLACK_WEBHOOK"))
+	slackChannel := firstNonEmpty(*flagSlackChannel, os.Getenv("SLACK_CHANNEL"), os.Getenv("SLACK_CHANNEL_ID"))
+	slackIntegrationID := firstNonEmpty(*flagSlackIntegrationID, os.Getenv("SLACK_INTEGRATION_ID"))
 	demo := DemoConfig{
 		OrgID:         firstNonEmpty(*flagOrgID, os.Getenv("WORKFLOW_ORG_ID")),
 		UseDefaultOrg: *flagUseDefaultOrg || envBool("WORKFLOW_USE_DEFAULT_ORG"),
@@ -160,11 +165,17 @@ func main() {
 		"webhook": func(c context.Context, cfg openlane.Config, cl *openlane.Client, d DemoConfig) (*WorkflowDemoSeed, []string, error) {
 			return runWebhookDemo(c, cfg, cl, d)
 		},
+		"webhook-template": func(c context.Context, cfg openlane.Config, cl *openlane.Client, d DemoConfig) (*WorkflowDemoSeed, []string, error) {
+			return runWebhookTemplateDemo(c, cfg, cl, d, slackChannel, slackIntegrationID)
+		},
 		"field-update": func(c context.Context, cfg openlane.Config, cl *openlane.Client, d DemoConfig) (*WorkflowDemoSeed, []string, error) {
 			return runFieldUpdateDemo(c, cfg, cl, d)
 		},
 		"slack-webhook": func(c context.Context, cfg openlane.Config, cl *openlane.Client, d DemoConfig) (*WorkflowDemoSeed, []string, error) {
 			return runSlackWebhookDemo(c, cfg, cl, d, slackWebhookURL)
+		},
+		"slack-template": func(c context.Context, cfg openlane.Config, cl *openlane.Client, d DemoConfig) (*WorkflowDemoSeed, []string, error) {
+			return runSlackTemplateDemo(c, cfg, cl, d, slackChannel, slackIntegrationID)
 		},
 		"evidence-review": func(c context.Context, cfg openlane.Config, cl *openlane.Client, d DemoConfig) (*WorkflowDemoSeed, []string, error) {
 			return runEvidenceReviewDemo(c, cfg, cl, d, slackWebhookURL)
@@ -176,7 +187,7 @@ func main() {
 
 	run, ok := demos[scenario]
 	if !ok {
-		log.Fatalf("Unknown WORKFLOW_SCENARIO %q. Valid options: dual-approval, queue-approval, webhook, slack-webhook, field-update, evidence-review, examples.", scenario)
+		log.Fatalf("Unknown WORKFLOW_SCENARIO %q. Valid options: dual-approval, queue-approval, webhook, webhook-template, slack-webhook, slack-template, field-update, evidence-review, examples.", scenario)
 	}
 
 	fmt.Printf("\nRunning scenario: %s\n", scenario)
@@ -675,11 +686,20 @@ type approveWorkflowAssignmentResponse struct {
 	} `json:"approveWorkflowAssignment"`
 }
 
-// approveWorkflowAssignment issues the approval mutation for an assignment
-func approveWorkflowAssignment(ctx context.Context, apiClient *openlane.Client, assignmentID string) error {
+func requireGraphClient(apiClient *openlane.Client) (*graphclient.Client, error) {
 	graphClient, ok := apiClient.GraphClient.(*graphclient.Client)
 	if !ok || graphClient == nil {
-		return fmt.Errorf("graph client does not support raw workflow assignment mutations")
+		return nil, fmt.Errorf("graph client does not support raw workflow mutations")
+	}
+
+	return graphClient, nil
+}
+
+// approveWorkflowAssignment issues the approval mutation for an assignment
+func approveWorkflowAssignment(ctx context.Context, apiClient *openlane.Client, assignmentID string) error {
+	graphClient, err := requireGraphClient(apiClient)
+	if err != nil {
+		return err
 	}
 
 	var resp approveWorkflowAssignmentResponse
@@ -694,6 +714,211 @@ func approveWorkflowAssignment(ctx context.Context, apiClient *openlane.Client, 
 	}
 
 	return nil
+}
+
+const createNotificationTemplateDocument = `mutation CreateNotificationTemplate($input: CreateNotificationTemplateInput!) {
+  createNotificationTemplate(input: $input) {
+    notificationTemplate {
+      id
+      key
+      channel
+      integrationID
+    }
+  }
+}`
+
+const createNotificationPreferenceDocument = `mutation CreateNotificationPreference($input: CreateNotificationPreferenceInput!) {
+  createNotificationPreference(input: $input) {
+    notificationPreference {
+      id
+      channel
+      destination
+      enabled
+      status
+      templateID
+    }
+  }
+}`
+
+const getNotificationPreferencesDocument = `query GetNotificationPreferences($first: Int, $where: NotificationPreferenceWhereInput) {
+  notificationPreferences(first: $first, where: $where) {
+    edges {
+      node {
+        id
+        channel
+        destination
+        enabled
+        status
+        templateID
+      }
+    }
+  }
+}`
+
+type notificationTemplateRef struct {
+	ID            string        `json:"id"`
+	Key           string        `json:"key"`
+	Channel       enums.Channel `json:"channel"`
+	IntegrationID *string       `json:"integrationID,omitempty"`
+}
+
+type createNotificationTemplateResponse struct {
+	CreateNotificationTemplate struct {
+		NotificationTemplate notificationTemplateRef `json:"notificationTemplate"`
+	} `json:"createNotificationTemplate"`
+}
+
+type notificationPreferenceRef struct {
+	ID          string                          `json:"id"`
+	Channel     enums.Channel                   `json:"channel"`
+	Destination *string                         `json:"destination,omitempty"`
+	Enabled     bool                            `json:"enabled"`
+	Status      enums.NotificationChannelStatus `json:"status"`
+	TemplateID  *string                         `json:"templateID,omitempty"`
+}
+
+type createNotificationPreferenceResponse struct {
+	CreateNotificationPreference struct {
+		NotificationPreference notificationPreferenceRef `json:"notificationPreference"`
+	} `json:"createNotificationPreference"`
+}
+
+type getNotificationPreferencesResponse struct {
+	NotificationPreferences struct {
+		Edges []struct {
+			Node notificationPreferenceRef `json:"node"`
+		} `json:"edges"`
+	} `json:"notificationPreferences"`
+}
+
+func createNotificationTemplate(ctx context.Context, apiClient *openlane.Client, input graphclient.CreateNotificationTemplateInput) (*notificationTemplateRef, error) {
+	graphClient, err := requireGraphClient(apiClient)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp createNotificationTemplateResponse
+	vars := map[string]any{"input": input}
+
+	if err := graphClient.Client.Post(ctx, "CreateNotificationTemplate", createNotificationTemplateDocument, &resp, vars); err != nil {
+		return nil, err
+	}
+
+	if resp.CreateNotificationTemplate.NotificationTemplate.ID == "" {
+		return nil, fmt.Errorf("create notification template returned empty result")
+	}
+
+	return &resp.CreateNotificationTemplate.NotificationTemplate, nil
+}
+
+func findNotificationPreference(ctx context.Context, apiClient *openlane.Client, ownerID, userID string, channel enums.Channel) (*notificationPreferenceRef, error) {
+	graphClient, err := requireGraphClient(apiClient)
+	if err != nil {
+		return nil, err
+	}
+
+	where := &graphclient.NotificationPreferenceWhereInput{
+		OwnerID: &ownerID,
+		UserID:  &userID,
+		Channel: &channel,
+	}
+
+	var resp getNotificationPreferencesResponse
+	vars := map[string]any{
+		"first": int64(1),
+		"where": where,
+	}
+
+	if err := graphClient.Client.Post(ctx, "GetNotificationPreferences", getNotificationPreferencesDocument, &resp, vars); err != nil {
+		return nil, err
+	}
+
+	for _, edge := range resp.NotificationPreferences.Edges {
+		if edge.Node.ID != "" {
+			return &edge.Node, nil
+		}
+	}
+
+	return nil, nil
+}
+
+func createNotificationPreference(ctx context.Context, apiClient *openlane.Client, input graphclient.CreateNotificationPreferenceInput) (*notificationPreferenceRef, error) {
+	graphClient, err := requireGraphClient(apiClient)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp createNotificationPreferenceResponse
+	vars := map[string]any{"input": input}
+
+	if err := graphClient.Client.Post(ctx, "CreateNotificationPreference", createNotificationPreferenceDocument, &resp, vars); err != nil {
+		return nil, err
+	}
+
+	if resp.CreateNotificationPreference.NotificationPreference.ID == "" {
+		return nil, fmt.Errorf("create notification preference returned empty result")
+	}
+
+	return &resp.CreateNotificationPreference.NotificationPreference, nil
+}
+
+func ensureNotificationPreference(ctx context.Context, apiClient *openlane.Client, ownerID, userID string, channel enums.Channel, destination, templateID string) (*notificationPreferenceRef, error) {
+	existing, err := findNotificationPreference(ctx, apiClient, ownerID, userID, channel)
+	if err != nil {
+		return nil, err
+	}
+	if existing != nil {
+		if destination != "" && safeString(existing.Destination) != "" && safeString(existing.Destination) != destination {
+			fmt.Printf("   Existing %s preference uses destination %s (requested %s)\n", channel, safeString(existing.Destination), destination)
+		}
+		return existing, nil
+	}
+
+	input := graphclient.CreateNotificationPreferenceInput{
+		Channel: channel,
+		OwnerID: &ownerID,
+		UserID:  userID,
+		Enabled: ptr(true),
+		Status:  ptr(enums.NotificationChannelStatusEnabled),
+	}
+	if destination != "" {
+		input.Destination = &destination
+	}
+	if templateID != "" {
+		input.NotificationTemplateID = &templateID
+	}
+
+	return createNotificationPreference(ctx, apiClient, input)
+}
+
+func resolveSlackIntegrationID(ctx context.Context, apiClient *openlane.Client, ownerID, providedID string) (string, error) {
+	if strings.TrimSpace(providedID) != "" {
+		return strings.TrimSpace(providedID), nil
+	}
+
+	first := int64(10)
+	kind := "slack"
+	where := &graphclient.IntegrationWhereInput{
+		OwnerID:       &ownerID,
+		KindEqualFold: &kind,
+	}
+
+	resp, err := apiClient.GetIntegrations(ctx, &first, nil, nil, nil, where, nil)
+	if err != nil {
+		return "", fmt.Errorf("failed to query integrations: %w", err)
+	}
+
+	for _, edge := range resp.Integrations.Edges {
+		if edge == nil || edge.Node == nil {
+			continue
+		}
+		node := edge.Node
+		if node.Kind != nil && strings.EqualFold(*node.Kind, kind) {
+			return node.ID, nil
+		}
+	}
+
+	return "", fmt.Errorf("no Slack integration found for organization %s", ownerID)
 }
 
 // runWebhookDemo demonstrates a webhook + notification workflow without approvals.
@@ -826,6 +1051,168 @@ func runWebhookDemo(ctx context.Context, config openlane.Config, apiClient *open
 		"Created control object",
 		"Triggered workflow by updating control description",
 		"Confirmed webhook workflow completed (no approvals)",
+	}
+
+	return seed, steps, nil
+}
+
+// runWebhookTemplateDemo demonstrates template-driven notifications as a webhook alternative.
+func runWebhookTemplateDemo(ctx context.Context, config openlane.Config, apiClient *openlane.Client, demo DemoConfig, slackChannel, slackIntegrationID string) (*WorkflowDemoSeed, []string, error) {
+	seed, userResp, client, err := bootstrapDemo(ctx, config, apiClient, demo)
+	if err != nil {
+		return nil, nil, err
+	}
+	currentUserID := userResp.Self.ID
+
+	channel := enums.ChannelInApp
+	var integrationID string
+	if slackChannel != "" {
+		resolved, err := resolveSlackIntegrationID(ctx, client, seed.OrganizationID, slackIntegrationID)
+		if err != nil {
+			return nil, nil, err
+		}
+		integrationID = resolved
+		channel = enums.ChannelSlack
+	}
+
+	fmt.Println("\n3. Creating template-driven notification workflow...")
+
+	templateSuffix := ulids.New().String()
+	templateKey := fmt.Sprintf("workflow.demo.webhook-template.%s", templateSuffix)
+	topicPattern := fmt.Sprintf("workflow.notification.%s", templateSuffix)
+	titleTemplate := "Control description updated"
+	bodyTemplate := "Control {{object.ref_code}} description changed. View: {{data.control_url}}"
+	templateInput := graphclient.CreateNotificationTemplateInput{
+		Key:           templateKey,
+		Name:          "Control Description Updated (Template)",
+		Description:   ptr("Template-driven notification for control description updates"),
+		Channel:       channel,
+		Format:        ptr(enums.NotificationTemplateFormatText),
+		TopicPattern:  topicPattern,
+		TitleTemplate: &titleTemplate,
+		BodyTemplate:  &bodyTemplate,
+		OwnerID:       &seed.OrganizationID,
+		Active:        ptr(true),
+	}
+	if integrationID != "" {
+		templateInput.IntegrationID = &integrationID
+	}
+
+	template, err := createNotificationTemplate(ctx, client, templateInput)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to create notification template: %w", err)
+	}
+	fmt.Printf("   Created notification template: %s (%s)\n", template.Key, template.ID)
+
+	if channel == enums.ChannelSlack {
+		if _, err := ensureNotificationPreference(ctx, client, seed.OrganizationID, currentUserID, channel, slackChannel, template.ID); err != nil {
+			return nil, nil, fmt.Errorf("failed to ensure Slack notification preference: %w", err)
+		}
+	}
+
+	notificationParams := workflows.NotificationActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{
+				{
+					Type: enums.WorkflowTargetTypeUser,
+					ID:   currentUserID,
+				},
+			},
+		},
+		Channels:    []enums.Channel{channel},
+		TemplateKey: template.Key,
+		Data: map[string]any{
+			"control_url": "https://console.theopenlane.io/controls/{{object.id}}",
+		},
+	}
+	notificationBytes, err := marshalParams("notification params (template)", notificationParams)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	defDoc := models.WorkflowDefinitionDocument{
+		Triggers: []models.WorkflowTrigger{
+			{
+				Operation:  "UPDATE",
+				ObjectType: enums.WorkflowObjectTypeControl,
+				Fields:     []string{"description"},
+			},
+		},
+		Conditions: []models.WorkflowCondition{
+			{Expression: "'description' in changed_fields"},
+		},
+		Actions: []models.WorkflowAction{
+			{
+				Type:   enums.WorkflowActionTypeNotification.String(),
+				Key:    "notify_ops",
+				Params: notificationBytes,
+			},
+		},
+	}
+
+	defResp, err := client.CreateWorkflowDefinition(ctx, graphclient.CreateWorkflowDefinitionInput{
+		Name:           "Template Notification (Control Description Update)",
+		Description:    ptr("Sends a template-based notification when control description changes"),
+		SchemaType:     string(enums.WorkflowObjectTypeControl),
+		WorkflowKind:   enums.WorkflowKindNotification,
+		Active:         ptr(true),
+		Draft:          ptr(false),
+		OwnerID:        &seed.OrganizationID,
+		DefinitionJSON: &defDoc,
+	})
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to create template notification workflow definition: %w", err)
+	}
+	seed.WorkflowDef = &defResp.CreateWorkflowDefinition.WorkflowDefinition
+	syncOrgFromDefinition(seed)
+
+	fmt.Printf("   Created workflow: %s\n", seed.WorkflowDef.Name)
+	fmt.Printf("   - Trigger: description update\n")
+	fmt.Printf("   - Action: template notification (%s)\n", channel)
+
+	fmt.Println("\n4. Creating control to trigger workflow...")
+	control, err := createControl(ctx, client, seed.OrganizationID,
+		"Template Notification Demo Control",
+		"Initial description",
+		"Automation",
+	)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to create control: %w", err)
+	}
+	seed.Control = control
+	fmt.Printf("   Created control: %s (%s)\n", *seed.Control.Title, seed.Control.RefCode)
+
+	fmt.Println("\n5. Updating control description to trigger workflow...")
+	newDescription := "Updated by template demo"
+	updatedControl, err := client.UpdateControl(ctx, seed.Control.ID, graphclient.UpdateControlInput{
+		Description: &newDescription,
+	})
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to update control description: %w", err)
+	}
+	fmt.Printf("   Updated control description to: %s\n", *updatedControl.UpdateControl.Control.Description)
+	logControlSnapshot(ctx, client, seed.Control.ID)
+
+	instance, err := waitForWorkflowInstance(ctx, client, seed, 5, time.Second)
+	if err != nil {
+		return nil, nil, err
+	}
+	seed.InstanceID = instance.ID
+	fmt.Printf("   Workflow instance started: %s (state: %s)\n", instance.ID, instance.State.String())
+
+	fmt.Println("\n6. Verifying template workflow completion (no approvals expected)...")
+	finalState, err := waitForInstanceState(ctx, client, seed.InstanceID, enums.WorkflowInstanceStateCompleted, 10, time.Second)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Printf("   Workflow instance state: %s\n", finalState.String())
+
+	steps := []string{
+		"Initialized organization context",
+		"Created template-based notification workflow (description update trigger)",
+		"Created control object",
+		"Triggered workflow by updating control description",
+		"Confirmed template workflow completed (no approvals)",
 	}
 
 	return seed, steps, nil
@@ -1001,6 +1388,163 @@ func runSlackWebhookDemo(ctx context.Context, config openlane.Config, apiClient 
 		"Created control object",
 		"Approved control to trigger webhook",
 		"Confirmed webhook workflow completed (no approvals)",
+	}
+
+	return seed, steps, nil
+}
+
+// runSlackTemplateDemo demonstrates posting to Slack via notification templates + integrations.
+func runSlackTemplateDemo(ctx context.Context, config openlane.Config, apiClient *openlane.Client, demo DemoConfig, slackChannel, slackIntegrationID string) (*WorkflowDemoSeed, []string, error) {
+	if slackChannel == "" {
+		return nil, nil, fmt.Errorf("slack channel required: pass --slack-channel or set SLACK_CHANNEL/SLACK_CHANNEL_ID")
+	}
+
+	seed, userResp, client, err := bootstrapDemo(ctx, config, apiClient, demo)
+	if err != nil {
+		return nil, nil, err
+	}
+	currentUserID := userResp.Self.ID
+
+	integrationID, err := resolveSlackIntegrationID(ctx, client, seed.OrganizationID, slackIntegrationID)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	fmt.Println("\n3. Creating Slack template workflow...")
+
+	templateSuffix := ulids.New().String()
+	templateKey := fmt.Sprintf("workflow.demo.slack-template.%s", templateSuffix)
+	topicPattern := fmt.Sprintf("workflow.notification.%s", templateSuffix)
+	titleTemplate := "✅ Control Approved: {{object.ref_code}}"
+	bodyTemplate := "Control {{object.title}} is approved. View: {{data.control_url}}"
+	templateInput := graphclient.CreateNotificationTemplateInput{
+		Key:           templateKey,
+		Name:          "Slack Control Approved (Template)",
+		Description:   ptr("Template-driven Slack notification for control approvals"),
+		Channel:       enums.ChannelSlack,
+		Format:        ptr(enums.NotificationTemplateFormatText),
+		TopicPattern:  topicPattern,
+		TitleTemplate: &titleTemplate,
+		BodyTemplate:  &bodyTemplate,
+		OwnerID:       &seed.OrganizationID,
+		IntegrationID: &integrationID,
+		Active:        ptr(true),
+	}
+
+	template, err := createNotificationTemplate(ctx, client, templateInput)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to create Slack notification template: %w", err)
+	}
+	fmt.Printf("   Created Slack notification template: %s (%s)\n", template.Key, template.ID)
+
+	if _, err := ensureNotificationPreference(ctx, client, seed.OrganizationID, currentUserID, enums.ChannelSlack, slackChannel, template.ID); err != nil {
+		return nil, nil, fmt.Errorf("failed to ensure Slack notification preference: %w", err)
+	}
+
+	notificationParams := workflows.NotificationActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{
+				{
+					Type: enums.WorkflowTargetTypeUser,
+					ID:   currentUserID,
+				},
+			},
+		},
+		Channels:    []enums.Channel{enums.ChannelSlack},
+		TemplateKey: template.Key,
+		Data: map[string]any{
+			"control_url": "https://console.theopenlane.io/controls/{{object.id}}",
+		},
+	}
+	notificationBytes, err := marshalParams("notification params (Slack template)", notificationParams)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	defDoc := models.WorkflowDefinitionDocument{
+		Triggers: []models.WorkflowTrigger{
+			{
+				Operation:  "UPDATE",
+				ObjectType: enums.WorkflowObjectTypeControl,
+				Fields:     []string{"status"},
+			},
+		},
+		Conditions: []models.WorkflowCondition{
+			{Expression: "'status' in changed_fields && object.status == \"APPROVED\""},
+		},
+		Actions: []models.WorkflowAction{
+			{
+				Type:   enums.WorkflowActionTypeNotification.String(),
+				Key:    "notify_slack",
+				Params: notificationBytes,
+			},
+		},
+	}
+
+	defResp, err := client.CreateWorkflowDefinition(ctx, graphclient.CreateWorkflowDefinitionInput{
+		Name:           "Slack Template Alert on Control Approval",
+		Description:    ptr("Uses a notification template to post to Slack when a control is approved"),
+		SchemaType:     string(enums.WorkflowObjectTypeControl),
+		WorkflowKind:   enums.WorkflowKindNotification,
+		Active:         ptr(true),
+		Draft:          ptr(false),
+		OwnerID:        &seed.OrganizationID,
+		DefinitionJSON: &defDoc,
+	})
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to create Slack template workflow definition: %w", err)
+	}
+	seed.WorkflowDef = &defResp.CreateWorkflowDefinition.WorkflowDefinition
+	syncOrgFromDefinition(seed)
+
+	fmt.Printf("   Created workflow: %s\n", seed.WorkflowDef.Name)
+	fmt.Printf("   - Trigger: status -> APPROVED\n")
+	fmt.Printf("   - Action: Slack template notification\n")
+
+	fmt.Println("\n4. Creating control to trigger workflow...")
+	control, err := createControlWithRefCode(ctx, client, seed.OrganizationID,
+		"Template Slack Notification Control",
+		"Demonstrates Slack template notifications",
+		"Change Management",
+		"CC6.10",
+	)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to create control: %w", err)
+	}
+	seed.Control = control
+	fmt.Printf("   Created control: %s (%s)\n", *seed.Control.Title, seed.Control.RefCode)
+
+	fmt.Println("\n5. Updating control status to APPROVED to trigger workflow...")
+	approved := enums.ControlStatusApproved
+	updatedControl, err := client.UpdateControl(ctx, seed.Control.ID, graphclient.UpdateControlInput{
+		Status: &approved,
+	})
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to approve control: %w", err)
+	}
+	fmt.Printf("   Updated control status to: %s\n", *updatedControl.UpdateControl.Control.Status)
+	logControlSnapshot(ctx, client, seed.Control.ID)
+
+	instance, err := waitForWorkflowInstance(ctx, client, seed, 10, 2*time.Second)
+	if err != nil {
+		return nil, nil, err
+	}
+	seed.InstanceID = instance.ID
+	fmt.Printf("   Workflow instance started: %s (state: %s)\n", instance.ID, instance.State.String())
+
+	fmt.Println("\n6. Waiting for completion (template notification, no approvals)...")
+	finalState, err := waitForInstanceState(ctx, client, seed.InstanceID, enums.WorkflowInstanceStateCompleted, 10, time.Second)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Printf("   Workflow instance state: %s\n", finalState.String())
+
+	steps := []string{
+		"Initialized organization context",
+		"Created Slack template workflow (status APPROVED trigger)",
+		"Created control object",
+		"Approved control to trigger Slack template notification",
+		"Confirmed Slack template workflow completed (no approvals)",
 	}
 
 	return seed, steps, nil

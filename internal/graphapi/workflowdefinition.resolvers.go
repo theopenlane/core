@@ -38,6 +38,10 @@ func (r *mutationResolver) CreateWorkflowDefinition(ctx context.Context, input g
 		ownerID = orgID
 	}
 
+	if err := validateWorkflowDefinitionTemplateRefs(ctx, withTransactionalMutation(ctx), input.DefinitionJSON, ownerID); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowdefinition"})
+	}
+
 	active := true
 	if input.Active != nil {
 		active = *input.Active
@@ -162,6 +166,10 @@ func (r *mutationResolver) UpdateWorkflowDefinition(ctx context.Context, id stri
 	}
 
 	if err := validateWorkflowDefinitionInput(res.SchemaType, doc, &r.workflowsConfig); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowdefinition"})
+	}
+
+	if err := validateWorkflowDefinitionTemplateRefs(ctx, withTransactionalMutation(ctx), doc, res.OwnerID); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowdefinition"})
 	}
 

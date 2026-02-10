@@ -15,6 +15,7 @@ const (
 	slackOperationHealth      types.OperationName = "health.default"
 	slackOperationTeam        types.OperationName = "team.inspect"
 	slackOperationMessagePost types.OperationName = "message.post"
+	slackOperationMessageSend types.OperationName = "message.send"
 )
 
 type slackMessageOperationConfig struct {
@@ -72,6 +73,14 @@ func slackOperations() []types.OperationDescriptor {
 		},
 		{
 			Name:         slackOperationMessagePost,
+			Kind:         types.OperationKindNotify,
+			Description:  "Send a Slack message via chat.postMessage.",
+			Client:       ClientSlackAPI,
+			Run:          runSlackMessagePostOperation,
+			ConfigSchema: slackMessageConfigSchema,
+		},
+		{
+			Name:         slackOperationMessageSend,
 			Kind:         types.OperationKindNotify,
 			Description:  "Send a Slack message via chat.postMessage.",
 			Client:       ClientSlackAPI,

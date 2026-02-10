@@ -55,6 +55,8 @@ func (e *WorkflowEngine) Execute(ctx context.Context, action models.WorkflowActi
 		return e.executeNotification(ctx, action, instance, obj)
 	case enums.WorkflowActionTypeFieldUpdate:
 		return e.executeFieldUpdate(ctx, action, obj)
+	case enums.WorkflowActionTypeIntegration:
+		return e.executeIntegrationAction(ctx, action, instance, obj)
 	case enums.WorkflowActionTypeWebhook:
 		return e.executeWebhook(ctx, action, instance, obj)
 	default:
@@ -302,42 +304,103 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		channels = []enums.Channel{enums.ChannelInApp}
 	}
 
-	title := lo.CoalesceOrEmpty(params.Title, fmt.Sprintf("Workflow notification (%s)", action.Key))
-	body := lo.CoalesceOrEmpty(params.Body, fmt.Sprintf("Workflow instance %s emitted a notification action (%s).", instance.ID, action.Key))
-
-	replacements, baseData := wfworkflows.BuildWorkflowActionContext(instance, obj, action.Key)
-
-	title = replaceTokens(title, replacements)
-	body = replaceTokens(body, replacements)
-
-	data := applyStringTemplates(params.Data, replacements)
-	for k, v := range baseData {
-		data[k] = v
-	}
-
 	ownerID, err := wfworkflows.ResolveOwnerID(ctx, instance.OwnerID)
 	if err != nil {
 		return err
 	}
 
-	return e.dispatchWorkflowNotifications(ctx, wfworkflows.AllowContext(ctx), obj, params, title, body, data, channels, ownerID, action.Type, action.Key)
+	var rendered *renderedNotificationTemplate
+	if params.TemplateID != "" || params.TemplateKey != "" {
+		rendered, err = e.renderNotificationTemplate(ctx, instance, obj, action.Key, params, ownerID)
+		if err != nil {
+			return err
+		}
+	}
+
+	title := ""
+	body := ""
+	data := map[string]any{}
+	vars := map[string]any{}
+	if rendered != nil {
+		title = rendered.Title
+		body = rendered.Body
+		data = rendered.Data
+		vars = rendered.Vars
+	}
+
+	if rendered == nil {
+		var err error
+		vars, data, err = e.buildNotificationTemplateVars(ctx, instance, obj, action.Key, params.Data)
+		if err != nil {
+			return err
+		}
+
+		defaultTitle := lo.CoalesceOrEmpty(params.Title, fmt.Sprintf("Workflow notification (%s)", action.Key))
+		defaultBody := lo.CoalesceOrEmpty(params.Body, fmt.Sprintf("Workflow instance %s emitted a notification action (%s).", instance.ID, action.Key))
+
+		title, err = renderTemplateText(ctx, e.celEvaluator, defaultTitle, vars)
+		if err != nil {
+			return err
+		}
+		body, err = renderTemplateText(ctx, e.celEvaluator, defaultBody, vars)
+		if err != nil {
+			return err
+		}
+	} else {
+		defaultTitle := lo.CoalesceOrEmpty(params.Title, fmt.Sprintf("Workflow notification (%s)", action.Key))
+		defaultBody := lo.CoalesceOrEmpty(params.Body, fmt.Sprintf("Workflow instance %s emitted a notification action (%s).", instance.ID, action.Key))
+		if title == "" {
+			renderedTitle, err := renderTemplateText(ctx, e.celEvaluator, defaultTitle, vars)
+			if err != nil {
+				return err
+			}
+			title = renderedTitle
+		}
+		if body == "" {
+			renderedBody, err := renderTemplateText(ctx, e.celEvaluator, defaultBody, vars)
+			if err != nil {
+				return err
+			}
+			body = renderedBody
+		}
+	}
+
+	templateID := ""
+	if rendered != nil && rendered.Template != nil {
+		templateID = rendered.Template.ID
+	}
+
+	userIDs, err := e.dispatchWorkflowNotifications(ctx, wfworkflows.AllowContext(ctx), obj, params, title, body, data, channels, ownerID, action.Type, action.Key, templateID)
+	if err != nil {
+		return err
+	}
+
+	if rendered != nil {
+		if err := e.dispatchNotificationIntegrations(ctx, ownerID, channels, rendered, userIDs); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // dispatchWorkflowNotifications sends notification payloads to configured channels
-func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, allowCtx context.Context, obj *wfworkflows.Object, params wfworkflows.NotificationActionParams, title, body string, data map[string]any, channels []enums.Channel, ownerID string, actionType string, actionKey string) error {
+func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, allowCtx context.Context, obj *wfworkflows.Object, params wfworkflows.NotificationActionParams, title, body string, data map[string]any, channels []enums.Channel, ownerID string, actionType string, actionKey string, templateID string) ([]string, error) {
 	seenUsers := make(map[string]struct{})
+	resolvedUserIDs := make([]string, 0)
 
 	for _, targetConfig := range params.Targets {
-		userIDs, err := e.resolveTargetUsers(ctx, targetConfig, obj, actionType, actionKey)
+		targetUserIDs, err := e.resolveTargetUsers(ctx, targetConfig, obj, actionType, actionKey)
 		if err != nil {
-			return fmt.Errorf("%w %s: %w", ErrFailedToResolveNotificationTarget, targetConfig.Type.String(), err)
+			return nil, fmt.Errorf("%w %s: %w", ErrFailedToResolveNotificationTarget, targetConfig.Type.String(), err)
 		}
 
-		for _, userID := range userIDs {
+		for _, userID := range targetUserIDs {
 			if _, ok := seenUsers[userID]; ok {
 				continue
 			}
 			seenUsers[userID] = struct{}{}
+			resolvedUserIDs = append(resolvedUserIDs, userID)
 
 			notificationData := make(map[string]any, len(data)+1)
 			maps.Copy(notificationData, data)
@@ -353,17 +416,21 @@ func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, allo
 				SetChannels(channels).
 				SetUserID(userID)
 
+			if templateID != "" {
+				builder.SetTemplateID(templateID)
+			}
+
 			if params.Topic != "" {
 				builder.SetTopic(enums.NotificationTopic(params.Topic))
 			}
 
 			if err := builder.Exec(allowCtx); err != nil {
-				return fmt.Errorf("%w: %w", ErrNotificationCreationFailed, err)
+				return nil, fmt.Errorf("%w: %w", ErrNotificationCreationFailed, err)
 			}
 		}
 	}
 
-	return nil
+	return resolvedUserIDs, nil
 }
 
 // executeWebhook sends a webhook to an external system.

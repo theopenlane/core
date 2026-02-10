@@ -4,15 +4,17 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+
+	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/providers/schematest"
 )
 
 // TestSlackMessageConfigSchema verifies the Slack message schema has expected fields
 func TestSlackMessageConfigSchema(t *testing.T) {
 	schema := slackMessageConfigSchema
 	require.NotNil(t, schema)
-	require.Equal(t, "object", schema["type"])
 
-	props := schemaProperties(t, schema)
+	props := schematest.Properties(t, schema)
 	for _, key := range []string{
 		"channel",
 		"text",
@@ -25,36 +27,19 @@ func TestSlackMessageConfigSchema(t *testing.T) {
 		require.Contains(t, props, key)
 	}
 
-	required := schemaRequired(t, schema)
+	required := schematest.Required(t, schema)
 	require.Contains(t, required, "channel")
 }
 
-// schemaProperties extracts schema properties and fails the test if missing
-func schemaProperties(t *testing.T, schema map[string]any) map[string]any {
-	t.Helper()
-
-	props, ok := schema["properties"].(map[string]any)
-	require.True(t, ok, "expected properties to be a map")
-	return props
-}
-
-// schemaRequired extracts required fields from a schema and returns them as strings
-func schemaRequired(t *testing.T, schema map[string]any) []string {
-	t.Helper()
-
-	raw, ok := schema["required"]
-	if !ok {
-		return nil
+// TestSlackOperationsIncludeMessageSend verifies message.send operation registration
+func TestSlackOperationsIncludeMessageSend(t *testing.T) {
+	ops := slackOperations()
+	seen := map[types.OperationName]types.OperationDescriptor{}
+	for _, op := range ops {
+		seen[op.Name] = op
 	}
 
-	values, ok := raw.([]any)
-	require.True(t, ok, "expected required to be a slice")
-
-	out := make([]string, 0, len(values))
-	for _, value := range values {
-		if name, ok := value.(string); ok {
-			out = append(out, name)
-		}
-	}
-	return out
+	desc, ok := seen[slackOperationMessageSend]
+	require.True(t, ok, "expected message.send operation")
+	require.Equal(t, slackMessageConfigSchema, desc.ConfigSchema)
 }

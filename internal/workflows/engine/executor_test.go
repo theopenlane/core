@@ -276,11 +276,16 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 	s.Run("executes webhook with valid URL", func() {
 		var receivedPayload map[string]any
 		serverCalled := make(chan struct{}, 1)
+		customHeaderKey := "X-Custom-Header"
+		customHeaderValue := "custom-value"
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			body, _ := io.ReadAll(r.Body)
 			_ = json.Unmarshal(body, &receivedPayload)
 			if r.Header.Get("X-Workflow-Signature") == "" {
 				s.T().Errorf("expected signature header to be set")
+			}
+			if r.Header.Get(customHeaderKey) != customHeaderValue {
+				s.T().Errorf("expected custom header %s to be set", customHeaderKey)
 			}
 			serverCalled <- struct{}{}
 			w.WriteHeader(http.StatusOK)
@@ -290,6 +295,9 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		params := workflows.WebhookActionParams{
 			URL:    server.URL,
 			Secret: "test-secret",
+			Headers: map[string]string{
+				customHeaderKey: customHeaderValue,
+			},
 		}
 
 		paramsBytes, err := json.Marshal(params)

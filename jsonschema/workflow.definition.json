@@ -175,7 +175,15 @@
             "description": "Notification delivery channel"
           },
           "type": "array",
-          "description": "Notification delivery channels (IN_APP, SLACK, EMAIL)"
+          "description": "Notification delivery channels (IN_APP, SLACK, TEAMS, EMAIL)"
+        },
+        "template_id": {
+          "type": "string",
+          "description": "Notification template ID to render for external channels"
+        },
+        "template_key": {
+          "type": "string",
+          "description": "Notification template key to render for external channels"
         },
         "topic": {
           "type": "string",

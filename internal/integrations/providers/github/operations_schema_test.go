@@ -4,15 +4,16 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+
+	"github.com/theopenlane/core/internal/integrations/providers/schematest"
 )
 
 // TestGitHubRepoConfigSchema verifies the repository config schema has expected fields
 func TestGitHubRepoConfigSchema(t *testing.T) {
 	schema := githubRepoConfigSchema
 	require.NotNil(t, schema)
-	require.Equal(t, "object", schema["type"])
 
-	props := schemaProperties(t, schema)
+	props := schematest.Properties(t, schema)
 	require.Contains(t, props, "visibility")
 	require.Contains(t, props, "per_page")
 }
@@ -21,9 +22,8 @@ func TestGitHubRepoConfigSchema(t *testing.T) {
 func TestGitHubVulnerabilityConfigSchema(t *testing.T) {
 	schema := githubVulnerabilityConfigSchema
 	require.NotNil(t, schema)
-	require.Equal(t, "object", schema["type"])
 
-	props := schemaProperties(t, schema)
+	props := schematest.Properties(t, schema)
 	for _, key := range []string{
 		"alert_types",
 		"repositories",
@@ -38,13 +38,4 @@ func TestGitHubVulnerabilityConfigSchema(t *testing.T) {
 	} {
 		require.Contains(t, props, key)
 	}
-}
-
-// schemaProperties extracts schema properties and fails the test if missing
-func schemaProperties(t *testing.T, schema map[string]any) map[string]any {
-	t.Helper()
-
-	props, ok := schema["properties"].(map[string]any)
-	require.True(t, ok, "expected properties to be a map")
-	return props
 }
