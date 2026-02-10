@@ -10,14 +10,20 @@ import (
 type ExportType string
 
 var (
+	// ExportTypeAsset indicates the asset.
+	ExportTypeAsset ExportType = "ASSET"
 	// ExportTypeControl indicates the control.
 	ExportTypeControl ExportType = "CONTROL"
 	// ExportTypeDirectoryMembership indicates the directorymembership.
 	ExportTypeDirectoryMembership ExportType = "DIRECTORY_MEMBERSHIP"
+	// ExportTypeEntity indicates the entity.
+	ExportTypeEntity ExportType = "ENTITY"
 	// ExportTypeEvidence indicates the evidence.
 	ExportTypeEvidence ExportType = "EVIDENCE"
 	// ExportTypeFinding indicates the finding.
 	ExportTypeFinding ExportType = "FINDING"
+	// ExportTypeIdentityHolder indicates the identityholder.
+	ExportTypeIdentityHolder ExportType = "IDENTITY_HOLDER"
 	// ExportTypeInternalPolicy indicates the internalpolicy.
 	ExportTypeInternalPolicy ExportType = "INTERNAL_POLICY"
 	// ExportTypeProcedure indicates the procedure.
@@ -45,10 +51,13 @@ var (
 // Values returns a slice of strings representing all valid ExportType values.
 func (ExportType) Values() []string {
 	return []string{
+		string(ExportTypeAsset),
 		string(ExportTypeControl),
 		string(ExportTypeDirectoryMembership),
+		string(ExportTypeEntity),
 		string(ExportTypeEvidence),
 		string(ExportTypeFinding),
+		string(ExportTypeIdentityHolder),
 		string(ExportTypeInternalPolicy),
 		string(ExportTypeProcedure),
 		string(ExportTypeRemediation),
@@ -70,14 +79,20 @@ func (r ExportType) String() string {
 // ToExportType converts a string to its corresponding ExportType enum value.
 func ToExportType(r string) *ExportType {
 	switch strings.ToUpper(r) {
+	case ExportTypeAsset.String():
+		return &ExportTypeAsset
 	case ExportTypeControl.String():
 		return &ExportTypeControl
 	case ExportTypeDirectoryMembership.String():
 		return &ExportTypeDirectoryMembership
+	case ExportTypeEntity.String():
+		return &ExportTypeEntity
 	case ExportTypeEvidence.String():
 		return &ExportTypeEvidence
 	case ExportTypeFinding.String():
 		return &ExportTypeFinding
+	case ExportTypeIdentityHolder.String():
+		return &ExportTypeIdentityHolder
 	case ExportTypeInternalPolicy.String():
 		return &ExportTypeInternalPolicy
 	case ExportTypeProcedure.String():

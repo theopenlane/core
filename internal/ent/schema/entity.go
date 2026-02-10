@@ -364,6 +364,7 @@ func (e Entity) Policy() ent.Policy {
 func (e Entity) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entx.Exportable{},
 	}
 }
 
