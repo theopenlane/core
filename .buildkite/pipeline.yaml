@@ -197,6 +197,11 @@ steps:
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
+      - label: ":docs: update docs for release"
+          trigger: openlane-docs
+          depends_on: "image_tag_automation"
+          if: build.tag != null
+          soft_fail: true
   - group: ":golangci-lint: Linter"
     key: "linter"
     steps:
