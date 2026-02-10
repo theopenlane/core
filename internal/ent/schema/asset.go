@@ -221,6 +221,7 @@ func (a Asset) Policy() ent.Policy {
 func (a Asset) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entx.Exportable{},
 	}
 }
 
