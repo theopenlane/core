@@ -3632,7 +3632,7 @@ var (
 			},
 			{
 				Name:    "integration_owner_id_kind",
-				Unique:  true,
+				Unique:  false,
 				Columns: []*schema.Column{IntegrationsColumns[25], IntegrationsColumns[15]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
