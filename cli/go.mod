@@ -1,6 +1,6 @@
 module github.com/theopenlane/core/cli
 
-go 1.25.6
+go 1.25.7
 
 require (
 	github.com/99designs/gqlgen v0.17.86
@@ -21,7 +21,7 @@ require (
 	github.com/theopenlane/core/common v1.0.7
 	github.com/theopenlane/go-client v0.8.2
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.23.8
+	github.com/theopenlane/iam v0.24.0
 	github.com/theopenlane/utils v0.6.2
 	golang.org/x/oauth2 v0.35.0
 	golang.org/x/term v0.39.0
@@ -62,7 +62,7 @@ require (
 	github.com/knadh/koanf/maps v0.1.2 // indirect
 	github.com/lestrrat-go/blackmagic v1.0.4 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
-	github.com/lestrrat-go/httprc/v3 v3.0.3 // indirect
+	github.com/lestrrat-go/httprc/v3 v3.0.4 // indirect
 	github.com/lestrrat-go/jwx/v3 v3.0.13 // indirect
 	github.com/lestrrat-go/option/v2 v2.0.0 // indirect
 	github.com/mailru/easyjson v0.9.1 // indirect
@@ -100,7 +100,7 @@ require (
 	golang.org/x/crypto v0.47.0 // indirect
 	golang.org/x/image v0.35.0 // indirect
 	golang.org/x/net v0.49.0 // indirect
-	golang.org/x/sys v0.40.0 // indirect
+	golang.org/x/sys v0.41.0 // indirect
 	golang.org/x/text v0.33.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
