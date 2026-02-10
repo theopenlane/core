@@ -116,7 +116,7 @@ func (h *Handler) persistIntegrationVulnerabilities(ctx context.Context, orgID s
 
 		update := existing.Update().AddIntegrationIDs(integrationRecord.ID)
 		applyVulnerabilityUpdate(update, vuln, provider)
-		if _, err := update.Save(ctx); err != nil {
+		if err := update.Exec(ctx); err != nil {
 			return summary, err
 		}
 
