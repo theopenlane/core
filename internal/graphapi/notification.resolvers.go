@@ -7,8 +7,11 @@ package graphapi
 
 import (
 	"context"
+	"time"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
@@ -39,5 +42,56 @@ func (r *mutationResolver) UpdateNotification(ctx context.Context, id string, in
 
 	return &model.NotificationUpdatePayload{
 		Notification: res,
+	}, nil
+}
+
+// MarkNotificationsAsRead is the resolver for the markNotificationsAsRead field.
+func (r *mutationResolver) MarkNotificationsAsRead(ctx context.Context, ids []string) (*model.ActionNotificationsReadPayload, error) {
+	if len(ids) == 0 {
+		return &model.ActionNotificationsReadPayload{
+			ReadIDs: []*string{},
+		}, nil
+	}
+
+	// Get all notifications by IDs
+	notifications, err := withTransactionalMutation(ctx).Notification.Query().
+		Where(notification.IDIn(ids...)).
+		All(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "notification"})
+	}
+
+	if len(notifications) == 0 {
+		return &model.ActionNotificationsReadPayload{
+			ReadIDs: []*string{},
+		}, nil
+	}
+
+	// Verify all notifications belong to the user's organization
+	for _, notif := range notifications {
+		if err := common.SetOrganizationInAuthContext(ctx, &notif.OwnerID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("notification_id", notif.ID).Msg("failed to set organization in auth context")
+			return nil, rout.ErrPermissionDenied
+		}
+	}
+
+	// Bulk update all notifications to set readAt to now
+	readIDs := make([]*string, 0, len(notifications))
+	for _, notif := range notifications {
+		// Only update if not already read
+		if notif.ReadAt == nil {
+			_, err := notif.Update().
+				SetReadAt(models.DateTime(time.Now())).
+				Save(ctx)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("notification_id", notif.ID).Msg("failed to mark notification as read")
+				return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "notification"})
+			}
+		}
+		readIDs = append(readIDs, &notif.ID)
+	}
+
+	return &model.ActionNotificationsReadPayload{
+		ReadIDs: readIDs,
 	}, nil
 }
