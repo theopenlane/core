@@ -8,6 +8,8 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -472,41 +474,48 @@ func validateWorkflowDefinitionTemplateRefs(ctx context.Context, client *generat
 		}
 	}
 
-	for id := range ids {
-		exists, err := client.NotificationTemplate.Query().
+	if len(ids) > 0 {
+		idList := lo.Keys(ids)
+
+		foundIDs, err := client.NotificationTemplate.Query().
 			Where(
-				notificationtemplate.IDEQ(id),
+				notificationtemplate.IDIn(idList...),
 				notificationtemplate.ActiveEQ(true),
 				notificationtemplate.Or(
 					notificationtemplate.OwnerIDEQ(ownerID),
 					notificationtemplate.SystemOwnedEQ(true),
 				),
 			).
-			Exist(ctx)
+			IDs(ctx)
 		if err != nil {
 			return err
 		}
-		if !exists {
-			return fmt.Errorf("%w: %s", ErrNotificationTemplateNotFound, id)
+
+		if missing := lo.Without(idList, foundIDs...); len(missing) > 0 {
+			return fmt.Errorf("%w: %s", ErrNotificationTemplateNotFound, missing[0])
 		}
 	}
 
-	for key := range keys {
-		exists, err := client.NotificationTemplate.Query().
+	if len(keys) > 0 {
+		keyList := lo.Keys(keys)
+
+		foundKeys, err := client.NotificationTemplate.Query().
 			Where(
-				notificationtemplate.KeyEQ(key),
+				notificationtemplate.KeyIn(keyList...),
 				notificationtemplate.ActiveEQ(true),
 				notificationtemplate.Or(
 					notificationtemplate.OwnerIDEQ(ownerID),
 					notificationtemplate.SystemOwnedEQ(true),
 				),
 			).
-			Exist(ctx)
+			Select(notificationtemplate.FieldKey).
+			Strings(ctx)
 		if err != nil {
 			return err
 		}
-		if !exists {
-			return fmt.Errorf("%w: %s", ErrNotificationTemplateKeyNotFound, key)
+
+		if missing := lo.Without(keyList, foundKeys...); len(missing) > 0 {
+			return fmt.Errorf("%w: %s", ErrNotificationTemplateKeyNotFound, missing[0])
 		}
 	}
 

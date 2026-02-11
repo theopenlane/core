@@ -11,4 +11,6 @@ var (
 	ErrOperationTemplateOverridesNotAllowed = errors.New("operations: operation template overrides not allowed")
 	// ErrOperationTemplateOverrideNotAllowed indicates a provided override key is not permitted
 	ErrOperationTemplateOverrideNotAllowed = errors.New("operations: operation template override not allowed")
+	// ErrUnsupportedTokenType indicates the token type is not supported
+	ErrUnsupportedTokenType = errors.New("operations: unsupported token type")
 )

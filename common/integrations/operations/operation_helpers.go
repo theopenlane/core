@@ -65,6 +65,8 @@ func HealthCheckRunner[T any](tokenType TokenType, endpoint string, failureMsg s
 			client, token, err = auth.ClientAndOAuthToken(input)
 		case TokenTypeAPI:
 			client, token, err = auth.ClientAndAPIToken(input)
+		default:
+			return types.OperationResult{}, ErrUnsupportedTokenType
 		}
 
 		if err != nil {

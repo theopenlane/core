@@ -306,7 +306,7 @@ func upsertVulnerability(ctx context.Context, db *generated.Client, orgID string
 			}
 		}
 
-		if _, err := update.Save(ctx); err != nil {
+		if err := update.Exec(ctx); err != nil {
 			return false, err
 		}
 
@@ -318,7 +318,7 @@ func upsertVulnerability(ctx context.Context, db *generated.Client, orgID string
 		create.AddIntegrationIDs(integrationID)
 	}
 
-	if _, err := create.Save(ctx); err != nil {
+	if err := create.Exec(ctx); err != nil {
 		return false, err
 	}
 

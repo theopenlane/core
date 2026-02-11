@@ -63,7 +63,7 @@ func HTTPGetJSON(ctx context.Context, client *http.Client, url string, bearer st
 
 	options := []httpsling.Option{
 		httpsling.Get(url),
-		httpsling.Header(httpsling.HeaderAccept, "application/json"),
+		httpsling.Header(httpsling.HeaderAccept, httpsling.ContentTypeJSON),
 	}
 
 	if bearer != "" {
@@ -101,7 +101,7 @@ func HTTPPostJSON(ctx context.Context, client *http.Client, url string, bearer s
 
 	options := []httpsling.Option{
 		httpsling.Post(url),
-		httpsling.Header(httpsling.HeaderAccept, "application/json"),
+		httpsling.Header(httpsling.HeaderAccept, httpsling.ContentTypeJSON),
 	}
 
 	if body != nil {
