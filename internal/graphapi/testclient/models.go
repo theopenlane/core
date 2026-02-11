@@ -1077,7 +1077,9 @@ type AssessmentResponse struct {
 	// when the assessment response is due
 	DueDate *time.Time `json:"dueDate,omitempty"`
 	// the document containing the user's response data
-	DocumentDataID *string         `json:"documentDataID,omitempty"`
+	DocumentDataID *string `json:"documentDataID,omitempty"`
+	// is this a draft response? can the user resume from where they left?
+	IsDraft        bool            `json:"isDraft"`
 	Owner          *Organization   `json:"owner,omitempty"`
 	Assessment     *Assessment     `json:"assessment"`
 	Campaign       *Campaign       `json:"campaign,omitempty"`
@@ -1412,6 +1414,9 @@ type AssessmentResponseWhereInput struct {
 	DueDateLte    *time.Time   `json:"dueDateLTE,omitempty"`
 	DueDateIsNil  *bool        `json:"dueDateIsNil,omitempty"`
 	DueDateNotNil *bool        `json:"dueDateNotNil,omitempty"`
+	// is_draft field predicates
+	IsDraft    *bool `json:"isDraft,omitempty"`
+	IsDraftNeq *bool `json:"isDraftNEQ,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -5488,13 +5493,15 @@ type CreateAssessmentResponseInput struct {
 	// additional metadata about email delivery events
 	EmailMetadata map[string]any `json:"emailMetadata,omitempty"`
 	// when the assessment response is due
-	DueDate          *time.Time `json:"dueDate,omitempty"`
-	OwnerID          *string    `json:"ownerID,omitempty"`
-	AssessmentID     string     `json:"assessmentID"`
-	CampaignID       *string    `json:"campaignID,omitempty"`
-	IdentityHolderID *string    `json:"identityHolderID,omitempty"`
-	EntityID         *string    `json:"entityID,omitempty"`
-	DocumentID       *string    `json:"documentID,omitempty"`
+	DueDate *time.Time `json:"dueDate,omitempty"`
+	// is this a draft response? can the user resume from where they left?
+	IsDraft          *bool   `json:"isDraft,omitempty"`
+	OwnerID          *string `json:"ownerID,omitempty"`
+	AssessmentID     string  `json:"assessmentID"`
+	CampaignID       *string `json:"campaignID,omitempty"`
+	IdentityHolderID *string `json:"identityHolderID,omitempty"`
+	EntityID         *string `json:"entityID,omitempty"`
+	DocumentID       *string `json:"documentID,omitempty"`
 }
 
 // CreateAssetInput is used for create Asset object.

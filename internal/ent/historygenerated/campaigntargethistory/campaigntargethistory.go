@@ -140,7 +140,7 @@ const DefaultStatus enums.AssessmentResponseStatus = "NOT_STARTED"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.AssessmentResponseStatus) error {
 	switch s.String() {
-	case "NOT_STARTED", "SENT", "COMPLETED", "OVERDUE":
+	case "NOT_STARTED", "SENT", "COMPLETED", "OVERDUE", "DRAFT":
 		return nil
 	default:
 		return fmt.Errorf("campaigntargethistory: invalid enum value for status field: %q", s)

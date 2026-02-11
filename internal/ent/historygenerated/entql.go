@@ -220,6 +220,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessmentresponsehistory.FieldCompletedAt:      {Type: field.TypeTime, Column: assessmentresponsehistory.FieldCompletedAt},
 			assessmentresponsehistory.FieldDueDate:          {Type: field.TypeTime, Column: assessmentresponsehistory.FieldDueDate},
 			assessmentresponsehistory.FieldDocumentDataID:   {Type: field.TypeString, Column: assessmentresponsehistory.FieldDocumentDataID},
+			assessmentresponsehistory.FieldIsDraft:          {Type: field.TypeBool, Column: assessmentresponsehistory.FieldIsDraft},
 		},
 	}
 	graph.Nodes[3] = &sqlgraph.Node{
@@ -3628,6 +3629,11 @@ func (f *AssessmentResponseHistoryFilter) WhereDueDate(p entql.TimeP) {
 // WhereDocumentDataID applies the entql string predicate on the document_data_id field.
 func (f *AssessmentResponseHistoryFilter) WhereDocumentDataID(p entql.StringP) {
 	f.Where(p.Field(assessmentresponsehistory.FieldDocumentDataID))
+}
+
+// WhereIsDraft applies the entql bool predicate on the is_draft field.
+func (f *AssessmentResponseHistoryFilter) WhereIsDraft(p entql.BoolP) {
+	f.Where(p.Field(assessmentresponsehistory.FieldIsDraft))
 }
 
 // addPredicate implements the predicateAdder interface.

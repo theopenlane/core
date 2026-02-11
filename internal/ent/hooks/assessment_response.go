@@ -102,10 +102,15 @@ func findExistingAssessmentResponse(ctx context.Context, client *generated.Clien
 // It validates the response can be resent, increments send attempts, updates due date if provided,
 // and sends a new email invitation.
 func handleExistingAssessmentResponse(ctx context.Context, m *generated.AssessmentResponseMutation, existingResponse *generated.AssessmentResponse, isTest bool) (*generated.AssessmentResponse, error) {
-	if existingResponse.Status != enums.AssessmentResponseStatusSent &&
+	if existingResponse.Status != enums.AssessmentResponseStatusDraft &&
+		existingResponse.Status != enums.AssessmentResponseStatusSent &&
 		existingResponse.Status != enums.AssessmentResponseStatusOverdue &&
 		!isTest {
 		return nil, ErrAssessmentInProgress
+	}
+
+	if ok, _ := m.IsDraft(); ok {
+		m.SetStatus(enums.AssessmentResponseStatusDraft)
 	}
 
 	newAttempts := existingResponse.SendAttempts + 1
@@ -143,6 +148,11 @@ func handleExistingAssessmentResponse(ctx context.Context, m *generated.Assessme
 // and sends the initial email invitation. It handles race conditions by detecting unique constraint
 // violations and re-querying to update the existing record.
 func createNewAssessmentResponse(ctx context.Context, m *generated.AssessmentResponseMutation, next ent.Mutator, email string) (generated.Value, error) {
+
+	if ok, _ := m.IsDraft(); ok {
+		m.SetStatus(enums.AssessmentResponseStatusDraft)
+	}
+
 	m.ClearDocumentDataID()
 
 	count, err := m.Client().Contact.Query().Select(contact.FieldEmail).

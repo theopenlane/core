@@ -1114,6 +1114,7 @@ type CreateAssessmentResponseInput struct {
 	LastEmailEventAt *time.Time
 	EmailMetadata    map[string]interface{}
 	DueDate          *time.Time
+	IsDraft          *bool
 	OwnerID          *string
 	AssessmentID     string
 	CampaignID       *string
@@ -1148,6 +1149,9 @@ func (i *CreateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
 	}
 	if v := i.DueDate; v != nil {
 		m.SetDueDate(*v)
+	}
+	if v := i.IsDraft; v != nil {
+		m.SetIsDraft(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)

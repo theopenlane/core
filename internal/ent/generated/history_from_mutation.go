@@ -974,6 +974,10 @@ func (m *AssessmentResponseMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetDocumentDataID(documentDataID)
 	}
 
+	if isDraft, exists := m.IsDraft(); exists {
+		create = create.SetIsDraft(isDraft)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -1167,6 +1171,12 @@ func (m *AssessmentResponseMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetDocumentDataID(assessmentresponse.DocumentDataID)
 		}
 
+		if isDraft, exists := m.IsDraft(); exists {
+			create = create.SetIsDraft(isDraft)
+		} else {
+			create = create.SetIsDraft(assessmentresponse.IsDraft)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -1229,6 +1239,7 @@ func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context
 			SetCompletedAt(assessmentresponse.CompletedAt).
 			SetDueDate(assessmentresponse.DueDate).
 			SetDocumentDataID(assessmentresponse.DocumentDataID).
+			SetIsDraft(assessmentresponse.IsDraft).
 			Save(ctx)
 		if err != nil {
 			return err

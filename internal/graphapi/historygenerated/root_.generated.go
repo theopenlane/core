@@ -156,6 +156,7 @@ type ComplexityRoot struct {
 		HistoryTime      func(childComplexity int) int
 		ID               func(childComplexity int) int
 		IdentityHolderID func(childComplexity int) int
+		IsDraft          func(childComplexity int) int
 		IsTest           func(childComplexity int) int
 		LastEmailEventAt func(childComplexity int) int
 		Operation        func(childComplexity int) int
@@ -3732,6 +3733,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssessmentResponseHistory.IdentityHolderID(childComplexity), true
+
+	case "AssessmentResponseHistory.isDraft":
+		if e.complexity.AssessmentResponseHistory.IsDraft == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponseHistory.IsDraft(childComplexity), true
 
 	case "AssessmentResponseHistory.isTest":
 		if e.complexity.AssessmentResponseHistory.IsTest == nil {
@@ -21506,6 +21514,10 @@ type AssessmentResponseHistory implements Node {
   the document containing the user's response data
   """
   documentDataID: String
+  """
+  is this a draft response? can the user resume from where they left?
+  """
+  isDraft: Boolean!
 }
 """
 AssessmentResponseHistoryAssessmentResponseStatus is enum for the field status
@@ -21515,6 +21527,7 @@ enum AssessmentResponseHistoryAssessmentResponseStatus @goModel(model: "github.c
   SENT
   COMPLETED
   OVERDUE
+  DRAFT
 }
 """
 A connection to a list of items.
@@ -21960,6 +21973,11 @@ input AssessmentResponseHistoryWhereInput {
   dueDateLTE: Time
   dueDateIsNil: Boolean
   dueDateNotNil: Boolean
+  """
+  is_draft field predicates
+  """
+  isDraft: Boolean
+  isDraftNEQ: Boolean
 }
 type AssetHistory implements Node {
   id: ID!
@@ -23794,6 +23812,7 @@ enum CampaignTargetHistoryAssessmentResponseStatus @goModel(model: "github.com/t
   SENT
   COMPLETED
   OVERDUE
+  DRAFT
 }
 """
 A connection to a list of items.

@@ -104,6 +104,8 @@ func (ec *executionContext) fieldContext_AssessmentResponseCreatePayload_assessm
 				return ec.fieldContext_AssessmentResponse_dueDate(ctx, field)
 			case "documentDataID":
 				return ec.fieldContext_AssessmentResponse_documentDataID(ctx, field)
+			case "isDraft":
+				return ec.fieldContext_AssessmentResponse_isDraft(ctx, field)
 			case "owner":
 				return ec.fieldContext_AssessmentResponse_owner(ctx, field)
 			case "assessment":

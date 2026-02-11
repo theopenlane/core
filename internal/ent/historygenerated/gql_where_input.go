@@ -2914,6 +2914,10 @@ type AssessmentResponseHistoryWhereInput struct {
 	DueDateLTE    *time.Time  `json:"dueDateLTE,omitempty"`
 	DueDateIsNil  bool        `json:"dueDateIsNil,omitempty"`
 	DueDateNotNil bool        `json:"dueDateNotNil,omitempty"`
+
+	// "is_draft" field predicates.
+	IsDraft    *bool `json:"isDraft,omitempty"`
+	IsDraftNEQ *bool `json:"isDraftNEQ,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -3835,6 +3839,12 @@ func (i *AssessmentResponseHistoryWhereInput) P() (predicate.AssessmentResponseH
 	}
 	if i.DueDateNotNil {
 		predicates = append(predicates, assessmentresponsehistory.DueDateNotNil())
+	}
+	if i.IsDraft != nil {
+		predicates = append(predicates, assessmentresponsehistory.IsDraftEQ(*i.IsDraft))
+	}
+	if i.IsDraftNEQ != nil {
+		predicates = append(predicates, assessmentresponsehistory.IsDraftNEQ(*i.IsDraftNEQ))
 	}
 
 	switch len(predicates) {

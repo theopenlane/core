@@ -270,6 +270,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessmentresponse.FieldCompletedAt:      {Type: field.TypeTime, Column: assessmentresponse.FieldCompletedAt},
 			assessmentresponse.FieldDueDate:          {Type: field.TypeTime, Column: assessmentresponse.FieldDueDate},
 			assessmentresponse.FieldDocumentDataID:   {Type: field.TypeString, Column: assessmentresponse.FieldDocumentDataID},
+			assessmentresponse.FieldIsDraft:          {Type: field.TypeBool, Column: assessmentresponse.FieldIsDraft},
 		},
 	}
 	graph.Nodes[4] = &sqlgraph.Node{
@@ -17185,6 +17186,11 @@ func (f *AssessmentResponseFilter) WhereDueDate(p entql.TimeP) {
 // WhereDocumentDataID applies the entql string predicate on the document_data_id field.
 func (f *AssessmentResponseFilter) WhereDocumentDataID(p entql.StringP) {
 	f.Where(p.Field(assessmentresponse.FieldDocumentDataID))
+}
+
+// WhereIsDraft applies the entql bool predicate on the is_draft field.
+func (f *AssessmentResponseFilter) WhereIsDraft(p entql.BoolP) {
+	f.Where(p.Field(assessmentresponse.FieldIsDraft))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

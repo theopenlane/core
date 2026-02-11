@@ -412,6 +412,20 @@ func (_c *AssessmentResponseHistoryCreate) SetNillableDocumentDataID(v *string) 
 	return _c
 }
 
+// SetIsDraft sets the "is_draft" field.
+func (_c *AssessmentResponseHistoryCreate) SetIsDraft(v bool) *AssessmentResponseHistoryCreate {
+	_c.mutation.SetIsDraft(v)
+	return _c
+}
+
+// SetNillableIsDraft sets the "is_draft" field if the given value is not nil.
+func (_c *AssessmentResponseHistoryCreate) SetNillableIsDraft(v *bool) *AssessmentResponseHistoryCreate {
+	if v != nil {
+		_c.SetIsDraft(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *AssessmentResponseHistoryCreate) SetID(v string) *AssessmentResponseHistoryCreate {
 	_c.mutation.SetID(v)
@@ -515,6 +529,10 @@ func (_c *AssessmentResponseHistoryCreate) defaults() error {
 		v := assessmentresponsehistory.DefaultStartedAt
 		_c.mutation.SetStartedAt(v)
 	}
+	if _, ok := _c.mutation.IsDraft(); !ok {
+		v := assessmentresponsehistory.DefaultIsDraft
+		_c.mutation.SetIsDraft(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if assessmentresponsehistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized assessmentresponsehistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -563,6 +581,9 @@ func (_c *AssessmentResponseHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.StartedAt(); !ok {
 		return &ValidationError{Name: "started_at", err: errors.New(`historygenerated: missing required field "AssessmentResponseHistory.started_at"`)}
+	}
+	if _, ok := _c.mutation.IsDraft(); !ok {
+		return &ValidationError{Name: "is_draft", err: errors.New(`historygenerated: missing required field "AssessmentResponseHistory.is_draft"`)}
 	}
 	return nil
 }
@@ -719,6 +740,10 @@ func (_c *AssessmentResponseHistoryCreate) createSpec() (*AssessmentResponseHist
 	if value, ok := _c.mutation.DocumentDataID(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldDocumentDataID, field.TypeString, value)
 		_node.DocumentDataID = value
+	}
+	if value, ok := _c.mutation.IsDraft(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldIsDraft, field.TypeBool, value)
+		_node.IsDraft = value
 	}
 	return _node, _spec
 }
