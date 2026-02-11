@@ -54046,6 +54046,7 @@ enum AssessmentResponseOrderField {
   started_at
   completed_at
   due_date
+  is_draft
 }
 """
 AssessmentResponseWhereInput is used for filtering AssessmentResponse objects.
@@ -61432,10 +61433,6 @@ input CreateAssessmentResponseInput {
   when the assessment response is due
   """
   dueDate: Time
-  """
-  is this a draft response? can the user resume from where they left?
-  """
-  isDraft: Boolean
   ownerID: ID
   assessmentID: ID!
   campaignID: ID

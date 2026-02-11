@@ -21600,6 +21600,7 @@ enum AssessmentResponseHistoryOrderField {
   started_at
   completed_at
   due_date
+  is_draft
 }
 """
 AssessmentResponseHistoryWhereInput is used for filtering AssessmentResponseHistory objects.

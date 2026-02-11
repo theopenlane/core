@@ -2032,6 +2032,20 @@ var (
 			}
 		},
 	}
+	// AssessmentResponseOrderFieldIsDraft orders AssessmentResponse by is_draft.
+	AssessmentResponseOrderFieldIsDraft = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.IsDraft, nil
+		},
+		column: assessmentresponse.FieldIsDraft,
+		toTerm: assessmentresponse.ByIsDraft,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsDraft,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -2068,6 +2082,8 @@ func (f AssessmentResponseOrderField) String() string {
 		str = "completed_at"
 	case AssessmentResponseOrderFieldDueDate.column:
 		str = "due_date"
+	case AssessmentResponseOrderFieldIsDraft.column:
+		str = "is_draft"
 	}
 	return str
 }
@@ -2114,6 +2130,8 @@ func (f *AssessmentResponseOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentResponseOrderFieldCompletedAt
 	case "due_date":
 		*f = *AssessmentResponseOrderFieldDueDate
+	case "is_draft":
+		*f = *AssessmentResponseOrderFieldIsDraft
 	default:
 		return fmt.Errorf("%s is not a valid AssessmentResponseOrderField", str)
 	}

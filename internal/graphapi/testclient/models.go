@@ -5493,15 +5493,13 @@ type CreateAssessmentResponseInput struct {
 	// additional metadata about email delivery events
 	EmailMetadata map[string]any `json:"emailMetadata,omitempty"`
 	// when the assessment response is due
-	DueDate *time.Time `json:"dueDate,omitempty"`
-	// is this a draft response? can the user resume from where they left?
-	IsDraft          *bool   `json:"isDraft,omitempty"`
-	OwnerID          *string `json:"ownerID,omitempty"`
-	AssessmentID     string  `json:"assessmentID"`
-	CampaignID       *string `json:"campaignID,omitempty"`
-	IdentityHolderID *string `json:"identityHolderID,omitempty"`
-	EntityID         *string `json:"entityID,omitempty"`
-	DocumentID       *string `json:"documentID,omitempty"`
+	DueDate          *time.Time `json:"dueDate,omitempty"`
+	OwnerID          *string    `json:"ownerID,omitempty"`
+	AssessmentID     string     `json:"assessmentID"`
+	CampaignID       *string    `json:"campaignID,omitempty"`
+	IdentityHolderID *string    `json:"identityHolderID,omitempty"`
+	EntityID         *string    `json:"entityID,omitempty"`
+	DocumentID       *string    `json:"documentID,omitempty"`
 }
 
 // CreateAssetInput is used for create Asset object.
@@ -45471,6 +45469,7 @@ const (
 	AssessmentResponseOrderFieldStartedAt        AssessmentResponseOrderField = "started_at"
 	AssessmentResponseOrderFieldCompletedAt      AssessmentResponseOrderField = "completed_at"
 	AssessmentResponseOrderFieldDueDate          AssessmentResponseOrderField = "due_date"
+	AssessmentResponseOrderFieldIsDraft          AssessmentResponseOrderField = "is_draft"
 )
 
 var AllAssessmentResponseOrderField = []AssessmentResponseOrderField{
@@ -45489,11 +45488,12 @@ var AllAssessmentResponseOrderField = []AssessmentResponseOrderField{
 	AssessmentResponseOrderFieldStartedAt,
 	AssessmentResponseOrderFieldCompletedAt,
 	AssessmentResponseOrderFieldDueDate,
+	AssessmentResponseOrderFieldIsDraft,
 }
 
 func (e AssessmentResponseOrderField) IsValid() bool {
 	switch e {
-	case AssessmentResponseOrderFieldCreatedAt, AssessmentResponseOrderFieldUpdatedAt, AssessmentResponseOrderFieldEmail, AssessmentResponseOrderFieldSendAttempts, AssessmentResponseOrderFieldEmailDeliveredAt, AssessmentResponseOrderFieldEmailOpenedAt, AssessmentResponseOrderFieldEmailClickedAt, AssessmentResponseOrderFieldEmailOpenCount, AssessmentResponseOrderFieldEmailClickCount, AssessmentResponseOrderFieldLastEmailEventAt, AssessmentResponseOrderFieldStatus, AssessmentResponseOrderFieldAssignedAt, AssessmentResponseOrderFieldStartedAt, AssessmentResponseOrderFieldCompletedAt, AssessmentResponseOrderFieldDueDate:
+	case AssessmentResponseOrderFieldCreatedAt, AssessmentResponseOrderFieldUpdatedAt, AssessmentResponseOrderFieldEmail, AssessmentResponseOrderFieldSendAttempts, AssessmentResponseOrderFieldEmailDeliveredAt, AssessmentResponseOrderFieldEmailOpenedAt, AssessmentResponseOrderFieldEmailClickedAt, AssessmentResponseOrderFieldEmailOpenCount, AssessmentResponseOrderFieldEmailClickCount, AssessmentResponseOrderFieldLastEmailEventAt, AssessmentResponseOrderFieldStatus, AssessmentResponseOrderFieldAssignedAt, AssessmentResponseOrderFieldStartedAt, AssessmentResponseOrderFieldCompletedAt, AssessmentResponseOrderFieldDueDate, AssessmentResponseOrderFieldIsDraft:
 		return true
 	}
 	return false
