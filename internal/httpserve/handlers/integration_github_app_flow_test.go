@@ -12,7 +12,9 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/internal/integrations/activation"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
+	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/echox/middleware/echocontext"
 )
@@ -54,6 +56,18 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 	suite.h.IntegrationOperations = ops
 	defer func() {
 		suite.h.IntegrationOperations = originalOps
+	}()
+
+	originalActivation := suite.h.IntegrationActivation
+	store := keystore.NewStore(suite.db)
+	sessions := keymaker.NewMemorySessionStore()
+	svc, err := keymaker.NewService(suite.h.IntegrationRegistry, store, sessions, keymaker.ServiceOptions{})
+	require.NoError(t, err)
+	activationSvc, err := activation.NewService(svc, store, &mockOperationRunner{})
+	require.NoError(t, err)
+	suite.h.IntegrationActivation = activationSvc
+	defer func() {
+		suite.h.IntegrationActivation = originalActivation
 	}()
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)

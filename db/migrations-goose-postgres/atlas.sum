@@ -1,4 +1,4 @@
-h1:ZryuHlrjEhUp+VzawdZk7GpbojbxXKZwvSbNunE4M/4=
+h1:vEdADPt1ruQq6m3gT40KXoPlfGr8ci0KDSM68ak0uO0=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -44,3 +44,5 @@ h1:ZryuHlrjEhUp+VzawdZk7GpbojbxXKZwvSbNunE4M/4=
 20260203212426_custom_domain_trust_center_history.sql h1:uEHIYw0r7+6Jl8Xa10EN9/iWezdIxRNow8Nl3a/IMNg=
 20260205173032_integrationsaddon.sql h1:zP0YBHPKde7zqv9koOpi9HzdbLZ9MSRGHV+l/H+10LU=
 20260205173037_integrationsaddon_history.sql h1:TjaMu2RwjDCXU8AcmHmTjviGMO+0ccQek7dqSQ9rRQY=
+20260210212007_integrations.sql h1:OafdIpky7nYf13478Lo0DNPWg54ED8731l1gs21GjHA=
+20260210212011_integrations_history.sql h1:45XM9OHLt8GzCJ5VXlPRH7xP4m7wnkKlxXQahm3yHqw=

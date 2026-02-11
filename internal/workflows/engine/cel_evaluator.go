@@ -87,3 +87,17 @@ func (e *CELEvaluator) EvaluateJSONMap(ctx context.Context, expression string, v
 
 	return out, nil
 }
+
+// EvaluateValue evaluates a CEL expression and returns the JSON-compatible value.
+func (e *CELEvaluator) EvaluateValue(ctx context.Context, expression string, vars map[string]any) (any, error) {
+	out, _, evalErr := e.evaluator.Evaluate(ctx, expression, vars)
+	if evalErr != nil {
+		if errors.Is(evalErr, context.DeadlineExceeded) || errors.Is(evalErr, context.Canceled) {
+			return nil, ErrEvaluationTimeout
+		}
+
+		return nil, evalErr
+	}
+
+	return celx.ToJSON(out)
+}

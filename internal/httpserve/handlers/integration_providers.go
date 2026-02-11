@@ -61,20 +61,16 @@ func cloneProviderSchema(input map[string]any) map[string]any {
 	return maps.Clone(input)
 }
 
+// buildIntegrationProviderMetadata constructs provider metadata for API responses
 func buildIntegrationProviderMetadata(providerType types.ProviderType, spec config.ProviderSpec, meta types.ProviderConfig, registry ProviderRegistry) openapi.IntegrationProviderMetadata {
-	authType := meta.Auth
-	if authType == "" {
-		authType = spec.AuthType
-	}
-
 	entry := openapi.IntegrationProviderMetadata{
 		Name:                   defaultProviderName(providerType, spec.Name),
-		DisplayName:            coalesceString(meta.DisplayName, spec.DisplayName),
-		Category:               coalesceString(meta.Category, spec.Category),
-		AuthType:               keystore.AuthType(authType),
+		DisplayName:            meta.DisplayName,
+		Category:               meta.Category,
+		AuthType:               keystore.AuthType(meta.Auth),
 		Active:                 spec.Active,
-		LogoURL:                coalesceString(meta.LogoURL, spec.LogoURL),
-		DocsURL:                coalesceString(meta.DocsURL, spec.DocsURL),
+		LogoURL:                meta.LogoURL,
+		DocsURL:                meta.DocsURL,
 		Persistence:            spec.Persistence,
 		GoogleWorkloadIdentity: spec.GoogleWorkloadIdentity,
 		GitHubApp:              spec.GitHubApp,
@@ -116,12 +112,4 @@ func buildIntegrationProviderMetadata(providerType types.ProviderType, spec conf
 	}
 
 	return entry
-}
-
-func coalesceString(primary, fallback string) string {
-	if strings.TrimSpace(primary) != "" {
-		return primary
-	}
-
-	return fallback
 }

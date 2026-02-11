@@ -28,6 +28,16 @@ type WorkflowEngine struct {
 	client *generated.Client
 	// emitter is the event emitter for workflow events
 	emitter soiree.Emitter
+	// integrationEmitter is the event bus dedicated to integration operations
+	integrationEmitter *soiree.EventBus
+	// integrationRegistry provides provider operation descriptors (optional)
+	integrationRegistry IntegrationRegistry
+	// integrationStore ensures integration records exist
+	integrationStore IntegrationStore
+	// integrationOperations executes integration operations
+	integrationOperations IntegrationOperations
+	// integrationListenersRegistered tracks whether integration listeners are registered
+	integrationListenersRegistered bool
 	// observer is the observability observer for metrics and tracing
 	observer *observability.Observer
 	// config is the workflow configuration
@@ -251,9 +261,17 @@ func (e *WorkflowEngine) guardTriggerPerDomain(ctx context.Context, def *generat
 		return nil
 	}
 
-	// Check for active instances linked to any proposal in this domain
+	// Compute cooldown cutoff once if needed
+	var cooldownCutoff time.Time
+	checkCooldown := def.CooldownSeconds > 0
+	if checkCooldown {
+		cooldownCutoff = time.Now().Add(-time.Duration(def.CooldownSeconds) * time.Second)
+	}
+
+	// Check for active instances and cooldown in a single pass
 	for _, proposalID := range proposals {
-		exists, err := e.client.WorkflowInstance.Query().
+		// Check for running/paused instances
+		activeExists, err := e.client.WorkflowInstance.Query().
 			Where(
 				workflowinstance.WorkflowProposalIDEQ(proposalID),
 				workflowinstance.StateIn(enums.WorkflowInstanceStateRunning, enums.WorkflowInstanceStatePaused),
@@ -263,26 +281,23 @@ func (e *WorkflowEngine) guardTriggerPerDomain(ctx context.Context, def *generat
 		if err != nil {
 			return fmt.Errorf("failed to check for active instances: %w", err)
 		}
-		if exists {
+		if activeExists {
 			return workflows.ErrWorkflowAlreadyActive
 		}
-	}
 
-	// Check cooldown if configured
-	if def.CooldownSeconds > 0 {
-		cutoff := time.Now().Add(-time.Duration(def.CooldownSeconds) * time.Second)
-		for _, proposalID := range proposals {
-			exists, err := e.client.WorkflowInstance.Query().
+		// Check cooldown if configured
+		if checkCooldown {
+			recentExists, err := e.client.WorkflowInstance.Query().
 				Where(
 					workflowinstance.WorkflowProposalIDEQ(proposalID),
-					workflowinstance.CreatedAtGTE(cutoff),
+					workflowinstance.CreatedAtGTE(cooldownCutoff),
 					workflowinstance.OwnerIDEQ(orgID),
 				).
 				Exist(ctx)
 			if err != nil {
 				return fmt.Errorf("failed to check cooldown: %w", err)
 			}
-			if exists {
+			if recentExists {
 				return workflows.ErrWorkflowAlreadyActive
 			}
 		}

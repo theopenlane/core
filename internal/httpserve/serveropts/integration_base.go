@@ -4,9 +4,11 @@ import (
 	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/integrations/activation"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
+	"github.com/theopenlane/core/internal/workflows/engine"
 )
 
 // WithIntegrationStore wires the integration persistence layer into the handlers
@@ -83,11 +85,21 @@ func WithIntegrationOperations() ServerOption {
 		}
 
 		s.Config.Handler.IntegrationOperations = manager
+
+		if wf := s.Config.Handler.WorkflowEngine; wf != nil {
+			if err := wf.SetIntegrationDeps(engine.IntegrationDeps{
+				Registry:   s.Config.Handler.IntegrationRegistry,
+				Store:      s.Config.Handler.IntegrationStore,
+				Operations: manager,
+			}); err != nil {
+				log.Panic().Err(err).Msg("failed to configure integration dependencies on workflow engine")
+			}
+		}
 	})
 }
 
-// WithKeymaker wires the keymaker service used by OAuth flows
-func WithKeymaker() ServerOption {
+// WithIntegrationActivation wires the activation service used by integration flows.
+func WithIntegrationActivation() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		store := s.Config.Handler.IntegrationStore
 		reg, ok := s.Config.Handler.IntegrationRegistry.(*registry.Registry)
@@ -101,6 +113,11 @@ func WithKeymaker() ServerOption {
 			log.Panic().Err(err).Msg("failed to initialize keymaker service")
 		}
 
-		s.Config.Handler.KeymakerService = svc
+		activationSvc, err := activation.NewService(svc, store, s.Config.Handler.IntegrationOperations)
+		if err != nil {
+			log.Panic().Err(err).Msg("failed to initialize integration activation service")
+		}
+
+		s.Config.Handler.IntegrationActivation = activationSvc
 	})
 }

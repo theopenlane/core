@@ -11,5 +11,5 @@ const TypeMicrosoftTeams = types.ProviderType("microsoft_teams")
 
 // Builder returns the Microsoft Teams provider builder
 func Builder() providers.Builder {
-	return oauth.Builder(TypeMicrosoftTeams, oauth.WithOperations(teamsOperations()))
+	return oauth.Builder(TypeMicrosoftTeams, oauth.WithOperations(teamsOperations()), oauth.WithClientDescriptors(teamsClientDescriptors()))
 }

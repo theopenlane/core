@@ -2,23 +2,15 @@ package registry
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"maps"
 
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/providers/catalog"
-)
-
-var (
-	errRegistryNil     = errors.New("integrations/registry: registry is nil")
-	errProviderType    = errors.New("integrations/registry: provider type required")
-	errBuilderMismatch = errors.New("integrations/registry: builder missing or type mismatch")
 )
 
 // Registry exposes loaded provider configs and runtime providers to callers
@@ -58,19 +50,23 @@ func NewRegistry(ctx context.Context) (*Registry, error) {
 
 		provider, err := builder.Build(ctx, spec)
 		if err != nil {
-			return nil, fmt.Errorf("integrations/registry: build provider %s: %w", providerType, err)
+			return nil, ErrProviderBuildFailed
+		}
+
+		if provider == nil {
+			return nil, ErrProviderNil
 		}
 
 		instance.providers[providerType] = provider
 
 		if clientProvider, ok := provider.(types.ClientProvider); ok {
-			if descriptors := helpers.SanitizeClientDescriptors(providerType, clientProvider.ClientDescriptors()); len(descriptors) > 0 {
+			if descriptors := operations.SanitizeClientDescriptors(providerType, clientProvider.ClientDescriptors()); len(descriptors) > 0 {
 				instance.clients[providerType] = descriptors
 			}
 		}
 
 		if operationProvider, ok := provider.(types.OperationProvider); ok {
-			if ops := helpers.SanitizeOperationDescriptors(providerType, operationProvider.Operations()); len(ops) > 0 {
+			if ops := operations.SanitizeOperationDescriptors(providerType, operationProvider.Operations()); len(ops) > 0 {
 				instance.operations[providerType] = ops
 			}
 		}
@@ -113,13 +109,9 @@ func (r *Registry) ProviderMetadata(provider types.ProviderType) (types.Provider
 
 // ProviderMetadataCatalog returns a copy of all provider metadata entries.
 func (r *Registry) ProviderMetadataCatalog() map[types.ProviderType]types.ProviderConfig {
-	out := make(map[types.ProviderType]types.ProviderConfig, len(r.configs))
-
-	for key, spec := range r.configs {
-		out[key] = spec.ToProviderConfig()
-	}
-
-	return out
+	return lo.MapEntries(r.configs, func(key types.ProviderType, spec config.ProviderSpec) (types.ProviderType, types.ProviderConfig) {
+		return key, spec.ToProviderConfig()
+	})
 }
 
 // ClientDescriptors returns the registered client descriptors for a provider.
@@ -137,16 +129,11 @@ func (r *Registry) ClientDescriptors(provider types.ProviderType) []types.Client
 
 // ClientDescriptorCatalog returns a copy of all provider client descriptors.
 func (r *Registry) ClientDescriptorCatalog() map[types.ProviderType][]types.ClientDescriptor {
-	out := make(map[types.ProviderType][]types.ClientDescriptor, len(r.clients))
-	for provider, descriptors := range r.clients {
+	return lo.MapEntries(r.clients, func(provider types.ProviderType, descriptors []types.ClientDescriptor) (types.ProviderType, []types.ClientDescriptor) {
 		copied := make([]types.ClientDescriptor, len(descriptors))
-
 		copy(copied, descriptors)
-
-		out[provider] = copied
-	}
-
-	return out
+		return provider, copied
+	})
 }
 
 // OperationDescriptors returns the registered operation descriptors for a provider.
@@ -164,41 +151,40 @@ func (r *Registry) OperationDescriptors(provider types.ProviderType) []types.Ope
 
 // OperationDescriptorCatalog returns a copy of all provider operation descriptors.
 func (r *Registry) OperationDescriptorCatalog() map[types.ProviderType][]types.OperationDescriptor {
-	out := make(map[types.ProviderType][]types.OperationDescriptor, len(r.operations))
-
-	for provider, descriptors := range r.operations {
+	return lo.MapEntries(r.operations, func(provider types.ProviderType, descriptors []types.OperationDescriptor) (types.ProviderType, []types.OperationDescriptor) {
 		copied := make([]types.OperationDescriptor, len(descriptors))
 		copy(copied, descriptors)
-		out[provider] = copied
-	}
-
-	return out
+		return provider, copied
+	})
 }
 
 // UpsertProvider adds or replaces a provider/spec after initialization (primarily for tests).
 func (r *Registry) UpsertProvider(ctx context.Context, spec config.ProviderSpec, builder providers.Builder) error {
 	if r == nil {
-		return errRegistryNil
+		return ErrRegistryNil
 	}
 
 	providerType := spec.ProviderType()
 	if providerType == types.ProviderUnknown {
-		return errProviderType
+		return ErrProviderTypeRequired
 	}
 	if builder == nil || builder.Type() != providerType {
-		return fmt.Errorf("%w for %s", errBuilderMismatch, providerType)
+		return ErrBuilderMismatch
 	}
 
 	provider, err := builder.Build(ctx, spec)
 	if err != nil {
-		return fmt.Errorf("integrations/registry: build provider %s: %w", providerType, err)
+		return ErrProviderBuildFailed
+	}
+	if provider == nil {
+		return ErrProviderNil
 	}
 
 	r.configs[providerType] = spec
 	r.providers[providerType] = provider
 
 	if clientProvider, ok := provider.(types.ClientProvider); ok {
-		if descriptors := helpers.SanitizeClientDescriptors(providerType, clientProvider.ClientDescriptors()); len(descriptors) > 0 {
+		if descriptors := operations.SanitizeClientDescriptors(providerType, clientProvider.ClientDescriptors()); len(descriptors) > 0 {
 			r.clients[providerType] = descriptors
 		} else {
 			delete(r.clients, providerType)
@@ -208,7 +194,7 @@ func (r *Registry) UpsertProvider(ctx context.Context, spec config.ProviderSpec,
 	}
 
 	if operationProvider, ok := provider.(types.OperationProvider); ok {
-		if ops := helpers.SanitizeOperationDescriptors(providerType, operationProvider.Operations()); len(ops) > 0 {
+		if ops := operations.SanitizeOperationDescriptors(providerType, operationProvider.Operations()); len(ops) > 0 {
 			r.operations[providerType] = ops
 		} else {
 			delete(r.operations, providerType)

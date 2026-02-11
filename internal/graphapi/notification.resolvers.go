@@ -12,9 +12,11 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -53,9 +55,28 @@ func (r *mutationResolver) MarkNotificationsAsRead(ctx context.Context, ids []st
 		}, nil
 	}
 
+	// get organization ID from auth context
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("no authenticated user in context")
+
+		return nil, rout.ErrPermissionDenied
+	}
+
+	// notifications can only be marked as read by users in the same organization, so we need to check for both organization ID and subject ID and
+	// disallow marking as read if either is missing or if the authentication type is API token (since API tokens are not associated with a user)
+	if au.OrganizationID == "" || au.SubjectID == "" || au.AuthenticationType == auth.APITokenAuthentication {
+		logx.FromContext(ctx).Error().Str("organization_id", au.OrganizationID).Str("subject_id", au.SubjectID).Msg("authenticated user missing organization or subject ID")
+
+		return nil, rout.ErrPermissionDenied
+	}
+
 	// Get all notifications by IDs
 	notifications, err := withTransactionalMutation(ctx).Notification.Query().
-		Where(notification.IDIn(ids...)).
+		Where(notification.IDIn(ids...), notification.Or(
+			notification.OwnerID(au.OrganizationID),
+			notification.UserID(au.SubjectID),
+		)).
 		All(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "notification"})
@@ -80,11 +101,14 @@ func (r *mutationResolver) MarkNotificationsAsRead(ctx context.Context, ids []st
 	for _, notif := range notifications {
 		// Only update if not already read
 		if notif.ReadAt == nil {
-			_, err := notif.Update().
+			// we need to set allowCtx because updates are not generally allowed on notifations, but we want to allow the readAt to be set and
+			// we already verified that the user has access to this based on the user and organization ID checks above
+			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+			if err := notif.Update().
 				SetReadAt(models.DateTime(time.Now())).
-				Save(ctx)
-			if err != nil {
+				Exec(allowCtx); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Str("notification_id", notif.ID).Msg("failed to mark notification as read")
+
 				return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "notification"})
 			}
 		}

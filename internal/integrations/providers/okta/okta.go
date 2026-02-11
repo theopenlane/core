@@ -14,6 +14,7 @@ func Builder() providers.Builder {
 	return apikey.Builder(
 		TypeOkta,
 		apikey.WithTokenField("apiToken"),
+		apikey.WithClientDescriptors(oktaClientDescriptors()),
 		apikey.WithOperations(oktaOperations()),
 	)
 }

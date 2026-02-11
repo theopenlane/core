@@ -42,6 +42,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	"github.com/theopenlane/core/internal/integrations/activation"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/keymaker"
@@ -384,6 +385,7 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 			RedirectURL: "http://localhost",
 		},
 		DefaultTrustCenterDomain: "trust.openlane.com",
+		EventEmitter:             soiree.New(),
 	}
 
 	return h
@@ -421,18 +423,21 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 	require.NoError(suite.T(), err)
 	assert.NoError(suite.T(), reg.UpsertProvider(ctx, spec, builder))
 
-	sessions := keymaker.NewMemorySessionStore()
-	svc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
-	assert.NoError(suite.T(), err)
-
 	suite.h.IntegrationRegistry = reg
 	suite.h.IntegrationBroker = keystore.NewBroker(store, reg)
-	suite.h.KeymakerService = svc
 
 	opDescriptors := keystore.FlattenOperationDescriptors(reg.OperationDescriptorCatalog())
 	manager, err := keystore.NewOperationManager(suite.h.IntegrationBroker, opDescriptors)
 	assert.NoError(suite.T(), err)
 	suite.h.IntegrationOperations = manager
+
+	sessions := keymaker.NewMemorySessionStore()
+	svc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
+	assert.NoError(suite.T(), err)
+
+	activationSvc, err := activation.NewService(svc, store, suite.h.IntegrationOperations)
+	assert.NoError(suite.T(), err)
+	suite.h.IntegrationActivation = activationSvc
 }
 
 type testOAuthProvider struct {

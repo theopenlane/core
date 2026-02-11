@@ -37,6 +37,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	payload := models.IntegrationConfigRequest{
 		ProjectID:           "sample-project",
 		ServiceAccountEmail: "svc@example.iam.gserviceaccount.com",
+		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
 	body, err := json.Marshal(models.IntegrationConfigPayload{
@@ -135,6 +136,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderMissingProvider()
 	payload := models.IntegrationConfigRequest{
 		ProjectID:           "sample-project",
 		ServiceAccountEmail: "svc@example.iam.gserviceaccount.com",
+		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
 	body, err := json.Marshal(models.IntegrationConfigPayload{
@@ -171,6 +173,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnknownProvider()
 	payload := models.IntegrationConfigRequest{
 		ProjectID:           "sample-project",
 		ServiceAccountEmail: "svc@example.iam.gserviceaccount.com",
+		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
 	body, err := json.Marshal(models.IntegrationConfigPayload{
@@ -235,6 +238,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnauthorized() {
 	payload := models.IntegrationConfigRequest{
 		ProjectID:           "sample-project",
 		ServiceAccountEmail: "svc@example.iam.gserviceaccount.com",
+		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
 	body, err := json.Marshal(models.IntegrationConfigPayload{
@@ -270,6 +274,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	initialPayload := models.IntegrationConfigRequest{
 		ProjectID:           "initial-project",
 		ServiceAccountEmail: "initial@example.iam.gserviceaccount.com",
+		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
 	body, err := json.Marshal(models.IntegrationConfigPayload{
@@ -289,6 +294,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	updatedPayload := models.IntegrationConfigRequest{
 		ProjectID:           "updated-project",
 		ServiceAccountEmail: "updated@example.iam.gserviceaccount.com",
+		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
 	body, err = json.Marshal(models.IntegrationConfigPayload{
