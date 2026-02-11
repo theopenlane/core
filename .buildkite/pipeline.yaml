@@ -806,7 +806,7 @@ steps:
         depends_on: "apollo-publish-schema"
         if: build.tag != null
         soft_fail: true
-      - label: ":docs: update docs for release"
+      - label: ":docusaurus: update docs for release"
         trigger: openlane-docs
         depends_on: "image_tag_automation"
         if: build.tag != null
