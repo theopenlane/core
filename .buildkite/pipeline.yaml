@@ -807,7 +807,7 @@ steps:
         if: build.tag != null
         soft_fail: true
       - label: ":docs: update docs for release"
-          trigger: openlane-docs
-          depends_on: "image_tag_automation"
-          if: build.tag != null
-          soft_fail: true
+        trigger: openlane-docs
+        depends_on: "image_tag_automation"
+        if: build.tag != null
+        soft_fail: true
