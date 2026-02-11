@@ -183,7 +183,11 @@ func (AssessmentResponse) Fields() []ent.Field {
 
 		field.Bool("is_draft").
 			Default(false).
-			Comment("is this a draft response? can the user resume from where they left?"),
+			Comment("is this a draft response? can the user resume from where they left?").
+			Annotations(
+				entgql.OrderField("is_draft"),
+				entgql.Skip(entgql.SkipMutationUpdateInput, entgql.SkipMutationCreateInput),
+			),
 	}
 }
 

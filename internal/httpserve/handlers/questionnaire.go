@@ -52,6 +52,7 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 			assessmentresponse.AssessmentIDEQ(assessmentID),
 			assessmentresponse.EmailEQ(email),
 		).
+		WithDocument().
 		Only(allowCtx)
 	if err != nil && !generated.IsNotFound(err) {
 		logx.FromContext(reqCtx).Err(err).Msg("could not fetch assessment response")
@@ -97,6 +98,10 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 	if assessment.Edges.Template != nil {
 		response.Jsonconfig = assessment.Edges.Template.Jsonconfig
 		response.UISchema = assessment.Edges.Template.Uischema
+	}
+
+	if assessmentResponse != nil && assessmentResponse.Edges.Document != nil {
+		response.SavedData = assessmentResponse.Edges.Document.Data
 	}
 
 	return h.Success(ctx, response, openapi)
@@ -195,35 +200,62 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		return h.BadRequest(ctx, ErrAssessmentResponseAlreadyCompleted, openapi)
 	}
 
-	documentDataQuery := h.DBClient.DocumentData.Create().
-		SetOwnerID(assessment.OwnerID)
+	var documentDataID string
 
-	if assessment.TemplateID != "" {
-		documentDataQuery = documentDataQuery.SetTemplateID(assessment.TemplateID)
+	if assessmentResponse.DocumentDataID != "" {
+		_, err = h.DBClient.DocumentData.UpdateOneID(assessmentResponse.DocumentDataID).
+			SetData(req.Data).
+			Save(allowCtx)
+		if err != nil {
+			logx.FromContext(reqCtx).Err(err).Msg("could not update document data")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		}
+
+		documentDataID = assessmentResponse.DocumentDataID
+	} else {
+		documentDataQuery := h.DBClient.DocumentData.Create().
+			SetOwnerID(assessment.OwnerID)
+
+		if assessment.TemplateID != "" {
+			documentDataQuery = documentDataQuery.SetTemplateID(assessment.TemplateID)
+		}
+
+		documentData, err := documentDataQuery.SetData(req.Data).Save(allowCtx)
+		if err != nil {
+			logx.FromContext(reqCtx).Err(err).Msg("could not create document data")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		}
+
+		documentDataID = documentData.ID
 	}
 
-	documentData, err := documentDataQuery.SetData(req.Data).Save(allowCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Err(err).Msg("could not create document data")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+	responseUpdate := h.DBClient.AssessmentResponse.UpdateOneID(assessmentResponse.ID).
+		SetDocumentDataID(documentDataID)
+
+	if req.IsDraft {
+		responseUpdate = responseUpdate.
+			SetStatus(enums.AssessmentResponseStatusDraft).
+			SetIsDraft(true)
+	} else {
+		responseUpdate = responseUpdate.
+			SetStatus(enums.AssessmentResponseStatusCompleted).
+			SetCompletedAt(time.Now()).
+			SetIsDraft(false)
 	}
 
-	completedAt := time.Now()
-
-	freshResponse, err := h.DBClient.AssessmentResponse.UpdateOneID(assessmentResponse.ID).
-		SetDocumentDataID(documentData.ID).
-		SetStatus(enums.AssessmentResponseStatusCompleted).
-		SetCompletedAt(completedAt).
-		Save(allowCtx)
+	freshResponse, err := responseUpdate.Save(allowCtx)
 	if err != nil {
-		logx.FromContext(reqCtx).Err(err).Msg("could not update assessment")
+		logx.FromContext(reqCtx).Err(err).Msg("could not update assessment response")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	response := models.SubmitQuestionnaireResponse{
-		DocumentDataID: documentData.ID,
+		DocumentDataID: documentDataID,
 		Status:         freshResponse.Status.String(),
-		CompletedAt:    completedAt.Format(time.RFC3339),
+	}
+
+	if !freshResponse.CompletedAt.IsZero() {
+		response.CompletedAt = freshResponse.CompletedAt.Format(time.RFC3339)
 	}
 
 	return h.Success(ctx, response, openapi)

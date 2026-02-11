@@ -400,6 +400,145 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 		assert.Check(t, is.Equal(firstResponse.SendAttempts+1, updatedResponse.SendAttempts))
 	})
 
+	t.Run("draft response should have draft status", func(t *testing.T) {
+		email := gofakeit.Email()
+		isDraft := true
+		req := testclient.CreateAssessmentResponseInput{
+			Email:        email,
+			AssessmentID: assessment.ID,
+			OwnerID:      &testUser1.OrganizationID,
+			IsDraft:      &isDraft,
+		}
+
+		resp, err := suite.client.api.CreateAssessmentResponse(testUser1.UserCtx, req)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		response := resp.CreateAssessmentResponse.AssessmentResponse
+		assert.Check(t, is.Equal(enums.AssessmentResponseStatusDraft, response.Status))
+		responseIDsOrg1 = append(responseIDsOrg1, response.ID)
+	})
+
+	t.Run("draft on existing draft should succeed", func(t *testing.T) {
+		email := gofakeit.Email()
+		isDraft := true
+		req := testclient.CreateAssessmentResponseInput{
+			Email:        email,
+			AssessmentID: assessment.ID,
+			OwnerID:      &testUser1.OrganizationID,
+			IsDraft:      &isDraft,
+		}
+
+		resp, err := suite.client.api.CreateAssessmentResponse(testUser1.UserCtx, req)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		firstResponse := resp.CreateAssessmentResponse.AssessmentResponse
+		assert.Check(t, is.Equal(enums.AssessmentResponseStatusDraft, firstResponse.Status))
+		responseIDsOrg1 = append(responseIDsOrg1, firstResponse.ID)
+
+		secondResp, err := suite.client.api.CreateAssessmentResponse(testUser1.UserCtx, req)
+		assert.NilError(t, err)
+		assert.Assert(t, secondResp != nil)
+
+		updatedResponse := secondResp.CreateAssessmentResponse.AssessmentResponse
+		assert.Check(t, is.Equal(firstResponse.ID, updatedResponse.ID))
+		assert.Check(t, is.Equal(enums.AssessmentResponseStatusDraft, updatedResponse.Status))
+	})
+
+	t.Run("draft on sent response should fail", func(t *testing.T) {
+		email := gofakeit.Email()
+		req := testclient.CreateAssessmentResponseInput{
+			Email:        email,
+			AssessmentID: assessment.ID,
+			OwnerID:      &testUser1.OrganizationID,
+		}
+
+		resp, err := suite.client.api.CreateAssessmentResponse(testUser1.UserCtx, req)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		response := resp.CreateAssessmentResponse.AssessmentResponse
+		responseIDsOrg1 = append(responseIDsOrg1, response.ID)
+
+		isDraft := true
+		draftReq := testclient.CreateAssessmentResponseInput{
+			Email:        email,
+			AssessmentID: assessment.ID,
+			OwnerID:      &testUser1.OrganizationID,
+			IsDraft:      &isDraft,
+		}
+
+		_, err = suite.client.api.CreateAssessmentResponse(testUser1.UserCtx, draftReq)
+		assert.ErrorContains(t, err, "assessment is already in progress or completed")
+	})
+
+	t.Run("draft on completed response should fail", func(t *testing.T) {
+		email := gofakeit.Email()
+		req := testclient.CreateAssessmentResponseInput{
+			Email:        email,
+			AssessmentID: assessment.ID,
+			OwnerID:      &testUser1.OrganizationID,
+		}
+
+		resp, err := suite.client.api.CreateAssessmentResponse(testUser1.UserCtx, req)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		response := resp.CreateAssessmentResponse.AssessmentResponse
+		responseIDsOrg1 = append(responseIDsOrg1, response.ID)
+
+		updateCtx := setContext(testUser1.UserCtx, suite.client.db)
+		_, err = suite.client.db.AssessmentResponse.UpdateOneID(response.ID).
+			SetStatus(enums.AssessmentResponseStatusCompleted).
+			Save(updateCtx)
+		assert.NilError(t, err)
+
+		isDraft := true
+		draftReq := testclient.CreateAssessmentResponseInput{
+			Email:        email,
+			AssessmentID: assessment.ID,
+			OwnerID:      &testUser1.OrganizationID,
+			IsDraft:      &isDraft,
+		}
+
+		_, err = suite.client.api.CreateAssessmentResponse(testUser1.UserCtx, draftReq)
+		assert.ErrorContains(t, err, "assessment is already in progress or completed")
+	})
+
+	t.Run("non-draft on existing draft should send and bump attempts", func(t *testing.T) {
+		email := gofakeit.Email()
+		isDraft := true
+		draftReq := testclient.CreateAssessmentResponseInput{
+			Email:        email,
+			AssessmentID: assessment.ID,
+			OwnerID:      &testUser1.OrganizationID,
+			IsDraft:      &isDraft,
+		}
+
+		resp, err := suite.client.api.CreateAssessmentResponse(testUser1.UserCtx, draftReq)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		draftResponse := resp.CreateAssessmentResponse.AssessmentResponse
+		assert.Check(t, is.Equal(enums.AssessmentResponseStatusDraft, draftResponse.Status))
+		responseIDsOrg1 = append(responseIDsOrg1, draftResponse.ID)
+
+		sendReq := testclient.CreateAssessmentResponseInput{
+			Email:        email,
+			AssessmentID: assessment.ID,
+			OwnerID:      &testUser1.OrganizationID,
+		}
+
+		sendResp, err := suite.client.api.CreateAssessmentResponse(testUser1.UserCtx, sendReq)
+		assert.NilError(t, err)
+		assert.Assert(t, sendResp != nil)
+
+		sentResponse := sendResp.CreateAssessmentResponse.AssessmentResponse
+		assert.Check(t, is.Equal(draftResponse.ID, sentResponse.ID))
+		assert.Check(t, is.Equal(int64(2), sentResponse.SendAttempts))
+	})
+
 	t.Run("completed response should not be updated", func(t *testing.T) {
 		email := gofakeit.Email()
 		req := testclient.CreateAssessmentResponseInput{
