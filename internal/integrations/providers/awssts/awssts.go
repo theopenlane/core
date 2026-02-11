@@ -2,11 +2,11 @@ package awssts
 
 import (
 	"context"
-	"fmt"
 	"maps"
 
+	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/providers"
@@ -17,12 +17,20 @@ type ProviderOption func(*providerConfig)
 
 type providerConfig struct {
 	operations []types.OperationDescriptor
+	clients    []types.ClientDescriptor
 }
 
 // WithOperations registers provider-published operations.
 func WithOperations(descriptors []types.OperationDescriptor) ProviderOption {
 	return func(cfg *providerConfig) {
 		cfg.operations = descriptors
+	}
+}
+
+// WithClientDescriptors registers client descriptors for pooling.
+func WithClientDescriptors(descriptors []types.ClientDescriptor) ProviderOption {
+	return func(cfg *providerConfig) {
+		cfg.clients = descriptors
 	}
 }
 
@@ -39,17 +47,21 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 		ProviderType: provider,
 		BuildFunc: func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
 			if spec.AuthType != "" && spec.AuthType != types.AuthKindAWSFederation {
-				return nil, fmt.Errorf("%w (provider %s expects %s, found %s)", ErrAuthTypeMismatch, provider, types.AuthKindAWSFederation, spec.AuthType)
+				return nil, ErrAuthTypeMismatch
 			}
 
+			clients := operations.SanitizeClientDescriptors(provider, cfg.clients)
 			return &Provider{
-				provider:   provider,
-				operations: helpers.SanitizeOperationDescriptors(provider, cfg.operations),
-				caps: types.ProviderCapabilities{
-					SupportsRefreshTokens: false,
-					SupportsClientPooling: false,
-					SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
-				},
+				BaseProvider: providers.NewBaseProvider(
+					provider,
+					types.ProviderCapabilities{
+						SupportsRefreshTokens: false,
+						SupportsClientPooling: len(clients) > 0,
+						SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
+					},
+					operations.SanitizeOperationDescriptors(provider, cfg.operations),
+					clients,
+				),
 			}, nil
 		},
 	}
@@ -57,85 +69,72 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 
 // Provider persists AWS STS metadata and exposes it via CredentialSet.
 type Provider struct {
-	provider   types.ProviderType
-	operations []types.OperationDescriptor
-	caps       types.ProviderCapabilities
-}
-
-// Type returns the provider identifier.
-func (p *Provider) Type() types.ProviderType {
-	if p == nil {
-		return types.ProviderUnknown
-	}
-	return p.provider
-}
-
-// Capabilities returns optional capability flags.
-func (p *Provider) Capabilities() types.ProviderCapabilities {
-	if p == nil {
-		return types.ProviderCapabilities{}
-	}
-	return p.caps
-}
-
-// Operations returns provider-published operations.
-func (p *Provider) Operations() []types.OperationDescriptor {
-	if p == nil || len(p.operations) == 0 {
-		return nil
-	}
-
-	out := make([]types.OperationDescriptor, len(p.operations))
-	copy(out, p.operations)
-	return out
+	// BaseProvider holds shared provider metadata
+	providers.BaseProvider
 }
 
 // BeginAuth is not supported for AWS STS metadata flows.
 func (p *Provider) BeginAuth(context.Context, types.AuthContext) (types.AuthSession, error) {
-	return nil, fmt.Errorf("%w (provider %s)", ErrBeginAuthNotSupported, p.provider)
+	return nil, ErrBeginAuthNotSupported
 }
 
 // Mint validates the stored AWS metadata and persists structured credential fields.
 func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	if p == nil {
-		return types.CredentialPayload{}, ErrProviderNotInitialized
-	}
-
-	meta := cloneProviderData(subject.Credential.Data.ProviderData)
+	meta := subject.Credential.Data.ProviderData
 	if len(meta) == 0 {
 		return types.CredentialPayload{}, ErrProviderMetadataRequired
 	}
 
-	roleArn := helpers.StringValue(meta, "roleArn")
-	if roleArn == "" {
-		return types.CredentialPayload{}, ErrRoleARNRequired
+	var decoded awsSTSMetadata
+	if err := auth.DecodeProviderData(meta, &decoded); err != nil {
+		return types.CredentialPayload{}, err
 	}
 
-	region := helpers.StringValue(meta, "region")
-	if region == "" {
+	if decoded.RoleARN == "" {
+		return types.CredentialPayload{}, ErrRoleARNRequired
+	}
+	if decoded.Region == "" {
 		return types.CredentialPayload{}, ErrRegionRequired
 	}
 
 	sanitized := maps.Clone(meta)
+	sanitized["roleArn"] = decoded.RoleARN
+	sanitized["region"] = decoded.Region
 
-	accessKey := helpers.StringValue(meta, "accessKeyId")
-	secretKey := helpers.StringValue(meta, "secretAccessKey")
-	sessionToken := helpers.StringValue(meta, "sessionToken")
-
-	if accessKey != "" {
-		sanitized["accessKeyId"] = accessKey
-	}
-	if secretKey != "" {
-		sanitized["secretAccessKey"] = secretKey
-	}
-	if sessionToken != "" {
-		sanitized["sessionToken"] = sessionToken
+	creds := auth.AWSCredentials{
+		AccessKeyID:     decoded.AccessKeyID,
+		SecretAccessKey: decoded.SecretAccessKey,
+		SessionToken:    decoded.SessionToken,
 	}
 
-	builder := types.NewCredentialBuilder(p.provider).With(
+	if decoded.ExternalID != "" {
+		sanitized["externalId"] = decoded.ExternalID
+	}
+	if decoded.SessionName != "" {
+		sanitized["sessionName"] = decoded.SessionName
+	}
+	if decoded.SessionDuration != "" {
+		sanitized["sessionDuration"] = decoded.SessionDuration
+	}
+	if decoded.AccountID != "" {
+		sanitized["accountId"] = decoded.AccountID
+	}
+	if creds.AccessKeyID != "" {
+		sanitized["accessKeyId"] = creds.AccessKeyID
+	}
+	if creds.SecretAccessKey != "" {
+		sanitized["secretAccessKey"] = creds.SecretAccessKey
+	}
+	if creds.SessionToken != "" {
+		sanitized["sessionToken"] = creds.SessionToken
+	}
+
+	builder := types.NewCredentialBuilder(p.Type()).With(
 		types.WithCredentialKind(types.CredentialKindMetadata),
 		types.WithCredentialSet(models.CredentialSet{
-			AccessKeyID:     accessKey,
-			SecretAccessKey: secretKey,
+			AccessKeyID:     creds.AccessKeyID,
+			SecretAccessKey: creds.SecretAccessKey,
+			SessionToken:    creds.SessionToken,
 			ProviderData:    sanitized,
 		}),
 	)
@@ -143,10 +142,23 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 	return builder.Build()
 }
 
-func cloneProviderData(data map[string]any) map[string]any {
-	if len(data) == 0 {
-		return nil
-	}
-
-	return maps.Clone(data)
+type awsSTSMetadata struct {
+	// RoleARN is the role ARN to assume
+	RoleARN string `json:"roleArn"`
+	// Region is the AWS region for API calls
+	Region string `json:"region"`
+	// ExternalID is the optional external ID for role assumption
+	ExternalID string `json:"externalId"`
+	// SessionName is the optional session name for STS
+	SessionName string `json:"sessionName"`
+	// SessionDuration is the optional session duration string
+	SessionDuration string `json:"sessionDuration"`
+	// AccountID is the AWS account identifier
+	AccountID string `json:"accountId"`
+	// AccessKeyID is the AWS access key ID
+	AccessKeyID string `json:"accessKeyId"`
+	// SecretAccessKey is the AWS secret access key
+	SecretAccessKey string `json:"secretAccessKey"`
+	// SessionToken is the AWS session token
+	SessionToken string `json:"sessionToken"`
 }

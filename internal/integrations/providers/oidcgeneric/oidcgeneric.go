@@ -16,16 +16,18 @@ const TypeOIDCGeneric = types.ProviderType("oidc_generic")
 func Builder() providers.Builder {
 	return providers.BuilderFunc{
 		ProviderType: TypeOIDCGeneric,
-		BuildFunc: func(ctx context.Context, spec config.ProviderSpec) (providers.Provider, error) {
+		BuildFunc: func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
 			ops := oidcOperations(userInfoURL(spec))
-			return oauth.New(ctx, spec, oauth.WithOperations(ops))
+			return oauth.New(spec, oauth.WithOperations(ops), oauth.WithClientDescriptors(oidcClientDescriptors()))
 		},
 	}
 }
 
+// userInfoURL returns the configured userinfo endpoint when present
 func userInfoURL(spec config.ProviderSpec) string {
 	if spec.UserInfo != nil {
 		return spec.UserInfo.URL
 	}
+
 	return ""
 }

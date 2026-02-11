@@ -322,6 +322,9 @@ func (l *WorkflowListeners) HandleActionStarted(ctx *soiree.EventContext, payloa
 
 	// Execute action
 	execErr := l.engine.ProcessAction(scopeCtx, instance, action)
+	if errors.Is(execErr, ErrIntegrationActionQueued) {
+		return nil
+	}
 	if errors.Is(execErr, ErrApprovalNoTargets) || errors.Is(execErr, ErrReviewNoTargets) {
 		if err := l.removeParallelApprovalKey(scopeCtx, instance, action.Key); err != nil {
 			scope.RecordError(err, nil)
@@ -639,11 +642,7 @@ func groupAssignmentsByAction(actions []models.WorkflowAction, allAssignments []
 }
 
 func collectAssignmentIDs(assignments []*generated.WorkflowAssignment) []string {
-	ids := make([]string, 0, len(assignments))
-	for _, assignment := range assignments {
-		ids = append(ids, assignment.ID)
-	}
-	return ids
+	return lo.Map(assignments, func(a *generated.WorkflowAssignment, _ int) string { return a.ID })
 }
 
 func (l *WorkflowListeners) recordApprovalEvent(

@@ -177,6 +177,12 @@
           "type": "array",
           "description": "Notification delivery channels (IN_APP, SLACK, EMAIL)"
         },
+        "template_id": {
+          "type": "string"
+        },
+        "template_key": {
+          "type": "string"
+        },
         "topic": {
           "type": "string",
           "description": "Optional notification topic for categorization"

@@ -23,6 +23,8 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/integrations/ingest"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 )
 
@@ -84,7 +86,6 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
 	}
 
-	orgID := integrationRecord.OwnerID
 	webhookSecret := strings.TrimSpace(h.IntegrationGitHubApp.WebhookSecret)
 	if webhookSecret == "" {
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
@@ -124,29 +125,39 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
 	}
 
-	result := types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Processed GitHub %s webhook", eventType),
-		Details: map[string]any{
-			"alerts": []types.AlertEnvelope{
-				{
-					AlertType: alertType,
-					Resource:  repo,
-					Action:    envelope.Action,
-					Payload:   envelope.Alert,
-				},
-			},
+	alerts := []types.AlertEnvelope{
+		{
+			AlertType: alertType,
+			Resource:  repo,
+			Action:    envelope.Action,
+			Payload:   envelope.Alert,
 		},
 	}
 
-	persistSummary, err := h.persistIntegrationVulnerabilities(allowCtx, orgID, github.TypeGitHubApp, result)
-	if err != nil {
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+	if h.IntegrationIngestEmitter != nil {
+		errCh := h.IntegrationIngestEmitter.Emit(ingest.TopicIntegrationIngestRequested, ingest.RequestedPayload{
+			IntegrationID: integrationRecord.ID,
+			Schema:        integrationgenerated.IntegrationMappingSchemaVulnerability,
+			Envelopes:     alerts,
+		})
+
+		if errCh != nil {
+			go func() {
+				for err := range errCh {
+					if err != nil {
+						logx.FromContext(req.Context()).Warn().Err(err).Msg("failed to emit integration ingest event")
+					}
+				}
+			}()
+		}
 	}
 
 	return h.Success(ctx, apimodels.GitHubAppWebhookResponse{
-		Reply:     rout.Reply{Success: true},
-		Persisted: persistSummary,
+		Reply: rout.Reply{Success: true},
+		Persisted: map[string]any{
+			"queued": len(alerts),
+			"total":  len(alerts),
+		},
 	}, openapi)
 }
 
@@ -191,6 +202,7 @@ func githubInstallationID(installation *githubWebhookInstallation) string {
 	if installation == nil || installation.ID == 0 {
 		return ""
 	}
+
 	return fmt.Sprintf("%d", installation.ID)
 }
 
@@ -251,9 +263,6 @@ func validateGitHubWebhookSignature(secret string, signatureHeader string, paylo
 
 // findGitHubAppIntegrationByInstallationID locates the integration record for an installation ID.
 func (h *Handler) findGitHubAppIntegrationByInstallationID(ctx context.Context, installationID string) (*ent.Integration, error) {
-	if h.DBClient == nil {
-		return nil, errDBClientNotConfigured
-	}
 	installationID = strings.TrimSpace(installationID)
 	if installationID == "" {
 		return nil, nil

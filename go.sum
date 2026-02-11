@@ -87,6 +87,8 @@ github.com/aws/aws-sdk-go-v2/internal/ini v1.8.4 h1:WKuaxf++XKWlHWu9ECbMlha8WOEG
 github.com/aws/aws-sdk-go-v2/internal/ini v1.8.4/go.mod h1:ZWy7j6v1vWGmPReu0iSGvRiise4YI5SkR3OHKTZ6Wuc=
 github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.17 h1:JqcdRG//czea7Ppjb+g/n4o8i/R50aTBHkA7vu0lK+k=
 github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.17/go.mod h1:CO+WeGmIdj/MlPel2KwID9Gt7CNq4M65HUfBW97liM0=
+github.com/aws/aws-sdk-go-v2/service/auditmanager v1.46.8 h1:1ult8qkMOiThfgX6dgbe4jw+zX4OxgHAmqaU53gFybM=
+github.com/aws/aws-sdk-go-v2/service/auditmanager v1.46.8/go.mod h1:104sWpG3xXs+vP/+LVjn5eDxtb7DpjEzimCpRDs/mzc=
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.4 h1:0ryTNEdJbzUCEWkVXEXoqlXV72J5keC1GvILMOuD00E=
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.4/go.mod h1:HQ4qwNZh32C3CBeO6iJLQlgtMzqeG17ziAA/3KDJFow=
 github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.9.8 h1:Z5EiPIzXKewUQK0QTMkutjiaPVeVYXX7KIqhXu/0fXs=
@@ -97,6 +99,8 @@ github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.17 h1:bGeHBsGZx0Dvu
 github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.17/go.mod h1:dcW24lbU0CzHusTE8LLHhRLI42ejmINN8Lcr22bwh/g=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.96.0 h1:oeu8VPlOre74lBA/PMhxa5vewaMIMmILM+RraSyB8KA=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.96.0/go.mod h1:5jggDlZ2CLQhwJBiZJb4vfk4f0GxWdEDruWKEJ1xOdo=
+github.com/aws/aws-sdk-go-v2/service/securityhub v1.67.3 h1:FEs3IkfJWp+Sz3ZY6sAxmebBF0lr1wBcTWkuFW1OFJg=
+github.com/aws/aws-sdk-go-v2/service/securityhub v1.67.3/go.mod h1:3wnS16Wip5w0uh9kVFBhuMFmdkrMBr8Fc96kAY5h13o=
 github.com/aws/aws-sdk-go-v2/service/signin v1.0.5 h1:VrhDvQib/i0lxvr3zqlUwLwJP4fpmpyD9wYG1vfSu+Y=
 github.com/aws/aws-sdk-go-v2/service/signin v1.0.5/go.mod h1:k029+U8SY30/3/ras4G/Fnv/b88N4mAfliNn08Dem4M=
 github.com/aws/aws-sdk-go-v2/service/sso v1.30.9 h1:v6EiMvhEYBoHABfbGB4alOYmCIrcgyPPiBE1wZAEbqk=
@@ -663,8 +667,8 @@ github.com/theopenlane/emailtemplates v0.3.3 h1:vBnG3inSbOGGy3SyYJBaL6up92qQpXoy
 github.com/theopenlane/emailtemplates v0.3.3/go.mod h1:nLNXcp1fj53qUA5akgJpl/3ovERORr4sSZoa6lA5Vso=
 github.com/theopenlane/entx v0.22.5 h1:wVRnC8xAVrofucPgj8fgsbv2wkq0HbNS2HIxtPkyekE=
 github.com/theopenlane/entx v0.22.5/go.mod h1:YEXLGD7rn5zeoL4091PrnR83fEaJDWprd47ULKxE7nE=
-github.com/theopenlane/go-client v0.8.2 h1:3JFri3+i5LnSmeBC4cGDUcyAfKpb7M4OclI+/2WeddA=
-github.com/theopenlane/go-client v0.8.2/go.mod h1:0exe+xvCRq2uqOXp7uNcuD3YwQxvEhbz12ESMqBMCHE=
+github.com/theopenlane/go-client v0.8.4 h1:ERrbOL3X0aFpfbECN3kvQQtMryu59dkrYZP/xaSP9Gc=
+github.com/theopenlane/go-client v0.8.4/go.mod h1:xaYPGzs/jUgiIUozbMoqmJ0X/2Tc1wlQlj+BOQs8NLE=
 github.com/theopenlane/gqlgen-plugins v0.14.1 h1:AFNGoMpDu+OsWAdYd7TzyBq1jOR2AdCugYBahJ9KQZA=
 github.com/theopenlane/gqlgen-plugins v0.14.1/go.mod h1:7IT7XcIG3YbNdqJAzPiCYHBJ9n7bulIUOEV1Ypy6n9k=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=

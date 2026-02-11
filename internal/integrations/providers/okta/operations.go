@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -16,24 +17,23 @@ const (
 )
 const maxSampleSize = 5
 
+// oktaOperations returns the Okta operations supported by this provider.
 func oktaOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		{
-			Name:        oktaHealthOp,
-			Kind:        types.OperationKindHealth,
-			Description: "Call Okta org endpoint to verify API token.",
-			Run:         runOktaHealth,
-		},
+		operations.HealthOperation(oktaHealthOp, "Call Okta org endpoint to verify API token.", ClientOktaAPI, runOktaHealth),
 		{
 			Name:        oktaPoliciesOp,
 			Kind:        types.OperationKindCollectFindings,
 			Description: "Collect sign-on policy metadata for posture analysis.",
+			Client:      ClientOktaAPI,
 			Run:         runOktaPolicies,
 		},
 	}
 }
 
+// runOktaHealth verifies the Okta API token by fetching the org information
 func runOktaHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+	client := auth.AuthenticatedClientFromAny(input.Client)
 	baseURL, apiToken, err := oktaCredentials(input)
 	if err != nil {
 		return types.OperationResult{}, err
@@ -41,12 +41,8 @@ func runOktaHealth(ctx context.Context, input types.OperationInput) (types.Opera
 
 	endpoint := strings.TrimRight(baseURL, "/") + "/api/v1/org"
 	var resp map[string]any
-	if err := oktaGET(ctx, endpoint, apiToken, &resp); err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Okta org lookup failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+	if err := oktaGET(ctx, client, endpoint, apiToken, &resp); err != nil {
+		return operations.OperationFailure("Okta org lookup failed", err), err
 	}
 
 	summary := fmt.Sprintf("Okta org %s reachable", baseURL)
@@ -57,7 +53,9 @@ func runOktaHealth(ctx context.Context, input types.OperationInput) (types.Opera
 	}, nil
 }
 
+// runOktaPolicies collects a sample of Okta sign-on policies for reporting
 func runOktaPolicies(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+	client := auth.AuthenticatedClientFromAny(input.Client)
 	baseURL, apiToken, err := oktaCredentials(input)
 	if err != nil {
 		return types.OperationResult{}, err
@@ -65,12 +63,8 @@ func runOktaPolicies(ctx context.Context, input types.OperationInput) (types.Ope
 
 	endpoint := strings.TrimRight(baseURL, "/") + "/api/v1/policies?type=SIGN_ON"
 	var resp []map[string]any
-	if err := oktaGET(ctx, endpoint, apiToken, &resp); err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Okta policies fetch failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+	if err := oktaGET(ctx, client, endpoint, apiToken, &resp); err != nil {
+		return operations.OperationFailure("Okta policies fetch failed", err), err
 	}
 
 	samples := resp
@@ -88,29 +82,27 @@ func runOktaPolicies(ctx context.Context, input types.OperationInput) (types.Ope
 	}, nil
 }
 
+// oktaCredentials extracts the Okta base URL and API token from the credential payload
 func oktaCredentials(input types.OperationInput) (string, string, error) {
 	data := input.Credential.Data
-	baseURL := ""
-	if data.ProviderData != nil {
-		if value, ok := data.ProviderData["orgUrl"].(string); ok {
-			baseURL = strings.TrimSpace(value)
-		}
-	}
-	apiToken := strings.TrimSpace(data.APIToken)
+	baseURL, _ := data.ProviderData["orgUrl"].(string)
+	apiToken := data.APIToken
 	if baseURL == "" || apiToken == "" {
 		return "", "", ErrCredentialsMissing
 	}
+
 	return baseURL, apiToken, nil
 }
 
-func oktaGET(ctx context.Context, endpoint, apiToken string, out any) error {
+// oktaGET performs a GET request to the Okta API and decodes the JSON response
+func oktaGET(ctx context.Context, client *auth.AuthenticatedClient, endpoint, apiToken string, out any) error {
 	headers := map[string]string{
 		"Authorization": "SSWS " + apiToken,
 	}
 
-	if err := helpers.HTTPGetJSON(ctx, nil, endpoint, "", headers, out); err != nil {
-		if errors.Is(err, helpers.ErrHTTPRequestFailed) {
-			return fmt.Errorf("%w (endpoint %s): %s", ErrAPIRequest, endpoint, err.Error())
+	if err := auth.GetJSONWithClient(ctx, client, endpoint, "", headers, out); err != nil {
+		if errors.Is(err, auth.ErrHTTPRequestFailed) {
+			return ErrAPIRequest
 		}
 		return err
 	}

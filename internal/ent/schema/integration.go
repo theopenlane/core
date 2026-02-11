@@ -149,7 +149,6 @@ func (i Integration) Edges() []ent.Edge {
 func (Integration) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields(ownerFieldName, "kind").
-			Unique().
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }

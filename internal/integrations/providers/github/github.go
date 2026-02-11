@@ -11,5 +11,5 @@ const TypeGitHub = types.ProviderType("github")
 
 // Builder returns the GitHub provider builder
 func Builder() providers.Builder {
-	return oauth.Builder(TypeGitHub, oauth.WithOperations(githubOperations()))
+	return oauth.Builder(TypeGitHub, oauth.WithOperations(githubOperations()), oauth.WithClientDescriptors(githubClientDescriptors(TypeGitHub)))
 }

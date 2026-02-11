@@ -34,6 +34,10 @@ type NotificationActionParams struct {
 	TargetedActionParams
 	// Channels selects notification delivery channels
 	Channels []enums.Channel `json:"channels"`
+	// TemplateID references a notification template by ID
+	TemplateID string `json:"template_id,omitempty"`
+	// TemplateKey references a notification template by key
+	TemplateKey string `json:"template_key,omitempty"`
 	// Topic sets an optional notification topic
 	Topic string `json:"topic"`
 	// Title is the notification title

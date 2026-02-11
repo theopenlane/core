@@ -12,12 +12,8 @@ import (
 func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Builder {
 	return providers.BuilderFunc{
 		ProviderType: provider,
-		BuildFunc: func(ctx context.Context, spec config.ProviderSpec) (providers.Provider, error) {
-			if spec.OAuth == nil {
-				return nil, nil
-			}
-
-			return New(ctx, spec, opts...)
+		BuildFunc: func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
+			return New(spec, opts...)
 		},
 	}
 }

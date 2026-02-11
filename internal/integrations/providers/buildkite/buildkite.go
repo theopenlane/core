@@ -14,6 +14,7 @@ func Builder() providers.Builder {
 	return apikey.Builder(
 		TypeBuildkite,
 		apikey.WithTokenField("apiToken"),
+		apikey.WithClientDescriptors(buildkiteClientDescriptors()),
 		apikey.WithOperations(buildkiteOperations()),
 	)
 }

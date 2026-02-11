@@ -2,7 +2,6 @@ package oauth
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"github.com/samber/lo"
@@ -10,8 +9,9 @@ import (
 
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 
+	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/providers"
@@ -23,21 +23,27 @@ const (
 
 // Provider implements the types.Provider interface using Zitadel's relying party helpers
 type Provider struct {
-	providerType types.ProviderType
+	// BaseProvider holds shared provider metadata
+	providers.BaseProvider
 	spec         config.ProviderSpec
 	oauthConfig  *oauth2.Config
 	relyingParty rp.RelyingParty
 	authParams   map[string]string
 	tokenParams  map[string]string
-	capabilities types.ProviderCapabilities
-	operations   []types.OperationDescriptor
 }
 
 // ProviderOption customizes OAuth provider construction.
 type ProviderOption func(*Provider)
 
+// WithClientDescriptors registers client descriptors for pooling.
+func WithClientDescriptors(descriptors []types.ClientDescriptor) ProviderOption {
+	return func(p *Provider) {
+		p.Clients = operations.SanitizeClientDescriptors(p.Type(), descriptors)
+	}
+}
+
 // New constructs a Provider from the supplied spec
-func New(_ context.Context, spec config.ProviderSpec, options ...ProviderOption) (*Provider, error) {
+func New(spec config.ProviderSpec, options ...ProviderOption) (*Provider, error) {
 	if spec.OAuth == nil {
 		return nil, providers.ErrSpecOAuthRequired
 	}
@@ -60,21 +66,22 @@ func New(_ context.Context, spec config.ProviderSpec, options ...ProviderOption)
 
 	rparty, err := rp.NewRelyingPartyOAuth(cfg, rpOpts...)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", providers.ErrRelyingPartyInit, err)
+		return nil, providers.ErrRelyingPartyInit
+	}
+
+	caps := types.ProviderCapabilities{
+		SupportsRefreshTokens: true,
+		SupportsClientPooling: true,
+		SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
 	}
 
 	provider := &Provider{
-		providerType: spec.ProviderType(),
+		BaseProvider: providers.NewBaseProvider(spec.ProviderType(), caps, nil, nil),
 		spec:         spec,
 		oauthConfig:  cfg,
 		relyingParty: rparty,
 		authParams:   lo.Assign(map[string]string{}, spec.OAuth.AuthParams),
 		tokenParams:  lo.Assign(map[string]string{}, spec.OAuth.TokenParams),
-		capabilities: types.ProviderCapabilities{
-			SupportsRefreshTokens: true,
-			SupportsClientPooling: true,
-			SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
-		},
 	}
 
 	for _, opt := range options {
@@ -86,28 +93,6 @@ func New(_ context.Context, spec config.ProviderSpec, options ...ProviderOption)
 	return provider, nil
 }
 
-// Type returns the provider identifier
-func (p *Provider) Type() types.ProviderType {
-	return p.providerType
-}
-
-// Capabilities describes supported behaviours
-func (p *Provider) Capabilities() types.ProviderCapabilities {
-	return p.capabilities
-}
-
-// Operations returns the provider-published operations if configured.
-func (p *Provider) Operations() []types.OperationDescriptor {
-	if len(p.operations) == 0 {
-		return nil
-	}
-
-	ops := make([]types.OperationDescriptor, len(p.operations))
-	copy(ops, p.operations)
-
-	return ops
-}
-
 // BeginAuth starts an OAuth authorization flow
 func (p *Provider) BeginAuth(_ context.Context, input types.AuthContext) (types.AuthSession, error) {
 	scopes := p.spec.OAuth.Scopes
@@ -117,10 +102,10 @@ func (p *Provider) BeginAuth(_ context.Context, input types.AuthContext) (types.
 
 	state := input.State
 
-	if strings.TrimSpace(state) == "" {
-		generated, err := helpers.RandomState(stateLength)
+	if state == "" {
+		generated, err := auth.RandomState(stateLength)
 		if err != nil {
-			return nil, fmt.Errorf("%w: %w", providers.ErrStateGeneration, err)
+			return nil, providers.ErrStateGeneration
 		}
 
 		state = generated
@@ -163,10 +148,10 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 	tokenSource := p.oauthConfig.TokenSource(ctx, tokenOpt.MustGet())
 	freshToken, err := tokenSource.Token()
 	if err != nil {
-		return types.CredentialPayload{}, fmt.Errorf("%w: %w", providers.ErrTokenRefresh, err)
+		return types.CredentialPayload{}, providers.ErrTokenRefresh
 	}
 
-	builder := types.NewCredentialBuilder(p.providerType).
+	builder := types.NewCredentialBuilder(p.Type()).
 		With(
 			types.WithCredentialSet(models.CredentialSet{}),
 			types.WithOAuthToken(freshToken),
@@ -187,6 +172,6 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 // WithOperations configures provider-managed operations.
 func WithOperations(descriptors []types.OperationDescriptor) ProviderOption {
 	return func(p *Provider) {
-		p.operations = helpers.SanitizeOperationDescriptors(p.providerType, descriptors)
+		p.Ops = operations.SanitizeOperationDescriptors(p.Type(), descriptors)
 	}
 }

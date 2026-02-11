@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -29,7 +29,7 @@ func githubAppOperations(baseURL string) []types.OperationDescriptor {
 			Kind:        types.OperationKindHealth,
 			Description: "Validate GitHub App installation token by calling the installation repositories endpoint.",
 			Run: func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-				token, err := helpers.OAuthTokenFromPayload(input.Credential, string(input.Provider))
+				token, err := auth.OAuthTokenFromPayload(input.Credential)
 				if err != nil {
 					return types.OperationResult{}, err
 				}
@@ -72,9 +72,5 @@ func fetchGitHubAppResource(ctx context.Context, baseURL, token, path string, pa
 		"Accept": "application/vnd.github+json",
 	}
 
-	if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, headers, out); err != nil {
-		return err
-	}
-
-	return nil
+	return auth.HTTPGetJSON(ctx, nil, endpoint, token, headers, out)
 }

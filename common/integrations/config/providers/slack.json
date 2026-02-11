@@ -13,7 +13,8 @@
     "tokenUrl": "https://slack.com/api/oauth.v2.access",
     "scopes": [
       "identity.basic",
-      "identity.email"
+      "identity.email",
+      "chat:write"
     ],
     "redirectUri": "https://api.theopenlane.io/v1/integrations/callback"
   },

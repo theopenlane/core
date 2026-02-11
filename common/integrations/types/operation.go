@@ -18,6 +18,13 @@ const (
 	OperationKindCollectFindings OperationKind = "collect_findings"
 	// OperationKindScanSettings represents a settings scan operation
 	OperationKindScanSettings OperationKind = "scan_settings"
+	// OperationKindNotify represents a notification operation
+	OperationKindNotify OperationKind = "notify"
+)
+
+const (
+	// OperationVulnerabilitiesCollect identifies the vulnerabilities collection operation.
+	OperationVulnerabilitiesCollect OperationName = "vulnerabilities.collect"
 )
 
 // OperationStatus communicates the result of an operation run
@@ -101,9 +108,9 @@ type OperationRequest struct {
 	Name OperationName
 	// Config contains operation-specific configuration
 	Config map[string]any
-	// Force bypasses cached operation results
+	// Force bypasses cached credentials and forces a credential refresh
 	Force bool
-	// ClientForce forces creation of a new client instance
+	// ClientForce forces creation of a new client instance bypassing the client pool cache
 	ClientForce bool
 }
 
