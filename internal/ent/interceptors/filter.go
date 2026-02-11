@@ -2,7 +2,6 @@ package interceptors
 
 import (
 	"context"
-	"encoding/json"
 	"strings"
 
 	"entgo.io/ent"
@@ -17,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -355,13 +355,8 @@ func getObjectIDsFromEntValues(m ent.Value) ([]string, error) {
 		ID string `json:"id"`
 	}
 
-	tmp, err := json.Marshal(m)
-	if err != nil {
-		return nil, err
-	}
-
 	var results []objectIDer
-	if err := json.Unmarshal(tmp, &results); err != nil {
+	if err := jsonx.RoundTrip(m, &results); err != nil {
 		return nil, err
 	}
 
@@ -380,13 +375,8 @@ func getObjectIDFromEntValue(m ent.Value) (string, error) {
 		ID string `json:"id"`
 	}
 
-	tmp, err := json.Marshal(m)
-	if err != nil {
-		return "", err
-	}
-
 	var res objectIDer
-	if err := json.Unmarshal(tmp, &res); err != nil {
+	if err := jsonx.RoundTrip(m, &res); err != nil {
 		return "", err
 	}
 

@@ -3,6 +3,8 @@ package handlers
 import (
 	"encoding/json"
 	"reflect"
+
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // normalizeExampleValue converts strongly-typed example objects into a generic form
@@ -32,14 +34,9 @@ func normalizeExampleValue(value any) any {
 		return value
 	}
 
-	data, err := json.Marshal(value)
-	if err != nil {
-		return value
-	}
-
 	var generic any
 
-	if err := json.Unmarshal(data, &generic); err != nil {
+	if err := jsonx.RoundTrip(value, &generic); err != nil {
 		return value
 	}
 

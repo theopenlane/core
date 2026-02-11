@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // Avoid reflect-based nil checks on hot paths; treat marshaled "null" as a typed-nil sentinel
@@ -25,7 +27,7 @@ func StringField(node any, field string) (string, error) {
 	}
 
 	var m map[string]any
-	if err := json.Unmarshal(data, &m); err != nil {
+	if err := jsonx.RoundTrip(data, &m); err != nil {
 		return "", fmt.Errorf("%w: %w", ErrStringFieldUnmarshal, err)
 	}
 
@@ -65,7 +67,7 @@ func StringSliceField(node any, field string) ([]string, error) {
 	}
 
 	var m map[string]any
-	if err := json.Unmarshal(data, &m); err != nil {
+	if err := jsonx.RoundTrip(data, &m); err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrStringFieldUnmarshal, err)
 	}
 

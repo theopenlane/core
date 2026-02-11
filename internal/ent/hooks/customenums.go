@@ -42,13 +42,9 @@ type tableInfo struct {
 
 // tableHasColumn checks if a table has a column with the given name
 func tableHasColumn(table *schema.Table, columnName string) bool {
-	for _, col := range table.Columns {
-		if col.Name == columnName {
-			return true
-		}
-	}
-
-	return false
+	return lo.ContainsBy(table.Columns, func(col *schema.Column) bool {
+		return col.Name == columnName
+	})
 }
 
 // tableHasSoftDelete checks if a table has soft delete by looking for deleted_at column
@@ -58,32 +54,30 @@ func tableHasSoftDelete(table *schema.Table) bool {
 
 // findTablesWithColumn returns all tables that have a column with the given name
 func findTablesWithColumn(columnName string) []tableInfo {
-	var tables []tableInfo
-
-	for _, table := range migrate.Tables {
-		if tableHasColumn(table, columnName) {
-			tables = append(tables, tableInfo{
-				name:          table.Name,
-				hasSoftDelete: tableHasSoftDelete(table),
-			})
+	return lo.FilterMap(migrate.Tables, func(table *schema.Table, _ int) (tableInfo, bool) {
+		if !tableHasColumn(table, columnName) {
+			return tableInfo{}, false
 		}
-	}
-
-	return tables
+		return tableInfo{
+			name:          table.Name,
+			hasSoftDelete: tableHasSoftDelete(table),
+		}, true
+	})
 }
 
 // findTableWithColumn returns the first table that has a column with the given name
 func findTableWithColumn(columnName string) *tableInfo {
-	for _, table := range migrate.Tables {
-		if tableHasColumn(table, columnName) {
-			return &tableInfo{
-				name:          table.Name,
-				hasSoftDelete: tableHasSoftDelete(table),
-			}
-		}
+	table, ok := lo.Find(migrate.Tables, func(table *schema.Table) bool {
+		return tableHasColumn(table, columnName)
+	})
+	if !ok {
+		return nil
 	}
 
-	return nil
+	return &tableInfo{
+		name:          table.Name,
+		hasSoftDelete: tableHasSoftDelete(table),
+	}
 }
 
 // IsValidEnumField returns true if any table has a column matching the object type and field pattern

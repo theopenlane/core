@@ -2,7 +2,6 @@ package keystore
 
 import (
 	"context"
-	"encoding/json"
 	"strings"
 	"time"
 
@@ -19,6 +18,7 @@ import (
 	integration "github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
@@ -393,13 +393,8 @@ func claimsToMap(claims *oidc.IDTokenClaims) (map[string]any, error) {
 		return nil, nil
 	}
 
-	bytes, err := json.Marshal(claims)
+	out, err := jsonx.ToMap(claims)
 	if err != nil {
-		return nil, err
-	}
-
-	var out map[string]any
-	if err := json.Unmarshal(bytes, &out); err != nil {
 		return nil, err
 	}
 
@@ -412,13 +407,8 @@ func claimsFromSet(raw map[string]any) *oidc.IDTokenClaims {
 		return nil
 	}
 
-	bytes, err := json.Marshal(raw)
-	if err != nil {
-		return nil
-	}
-
 	var claims oidc.IDTokenClaims
-	if err := json.Unmarshal(bytes, &claims); err != nil {
+	if err := jsonx.RoundTrip(raw, &claims); err != nil {
 		return nil
 	}
 

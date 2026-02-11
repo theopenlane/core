@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
@@ -564,11 +565,7 @@ func extractAlertEnvelopes(details map[string]any) ([]types.AlertEnvelope, error
 // decodeAlertEnvelope coerces an envelope from a dynamic payload
 func decodeAlertEnvelope(value any) (types.AlertEnvelope, error) {
 	var envelope types.AlertEnvelope
-	encoded, err := json.Marshal(value)
-	if err != nil {
-		return envelope, err
-	}
-	if err := json.Unmarshal(encoded, &envelope); err != nil {
+	if err := jsonx.RoundTrip(value, &envelope); err != nil {
 		return envelope, err
 	}
 

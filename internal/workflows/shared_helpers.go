@@ -2,7 +2,6 @@ package workflows
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -15,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -286,16 +286,11 @@ func GetObjectUpdatedBy(obj *Object) string {
 		return ""
 	}
 
-	data, err := json.Marshal(obj.Node)
-	if err != nil {
-		return ""
-	}
-
 	var fields struct {
 		UpdatedBy string `json:"updated_by"`
 	}
 
-	if err := json.Unmarshal(data, &fields); err != nil {
+	if err := jsonx.RoundTrip(obj.Node, &fields); err != nil {
 		return ""
 	}
 

@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // diffContextLines is the number of context lines to show around changes in unified diffs
@@ -393,13 +394,8 @@ func workflowProposalCurrentValues(entity any, fields []string) (map[string]any,
 		return values, nil
 	}
 
-	data, err := json.Marshal(entity)
+	objectMap, err := jsonx.ToMap(entity)
 	if err != nil {
-		return nil, err
-	}
-
-	var objectMap map[string]any
-	if err := json.Unmarshal(data, &objectMap); err != nil {
 		return nil, err
 	}
 
