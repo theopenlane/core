@@ -8,9 +8,13 @@ import (
 func RoundTrip(input any, output any) error {
 	switch typed := input.(type) {
 	case []byte:
-		return json.Unmarshal(typed, output)
+		if err := json.Unmarshal(typed, output); err == nil {
+			return nil
+		}
 	case json.RawMessage:
-		return json.Unmarshal(typed, output)
+		if err := json.Unmarshal(typed, output); err == nil {
+			return nil
+		}
 	}
 
 	bytes, err := json.Marshal(input)
