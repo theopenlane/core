@@ -417,9 +417,10 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireReturnsDraftData() {
 	require.NoError(t, err)
 
 	testEmail := "draftfetch@example.com"
+	anonUserID := fmt.Sprintf("anon_questionnaire_%s", assessment.ID)
 
 	anonUser := &auth.AnonymousQuestionnaireUser{
-		SubjectID:      fmt.Sprintf("anon_questionnaire_%s", ulids.New().String()),
+		SubjectID:      anonUserID,
 		SubjectEmail:   testEmail,
 		OrganizationID: testUser1.OrganizationID,
 		AssessmentID:   assessment.ID,
@@ -428,8 +429,8 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireReturnsDraftData() {
 	questionnaireCtx := contextx.With(ctx, auth.QuestionnaireContextKey{})
 	questionnaireCtx = auth.WithAnonymousQuestionnaireUser(questionnaireCtx, anonUser)
 	questionnaireCtx = auth.WithAuthenticatedUser(questionnaireCtx, &auth.AuthenticatedUser{
-		SubjectID:      testUser1.ID,
-		OrganizationID: testUser1.OrganizationID,
+		SubjectID:      anonUser.SubjectID,
+		OrganizationID: anonUser.OrganizationID,
 	})
 
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
@@ -440,7 +441,6 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireReturnsDraftData() {
 		Save(questionnaireCtx)
 	require.NoError(t, err)
 
-	anonUserID := fmt.Sprintf("anon_questionnaire_%s", ulids.New().String())
 	claims := &tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject: anonUserID,
@@ -1068,9 +1068,10 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireDraft() {
 	require.NoError(t, err)
 
 	testEmail := "draft@example.com"
+	anonUserID := fmt.Sprintf("anon_questionnaire_%s", assessment.ID)
 
 	anonUser := &auth.AnonymousQuestionnaireUser{
-		SubjectID:      fmt.Sprintf("anon_questionnaire_%s", ulids.New().String()),
+		SubjectID:      anonUserID,
 		SubjectEmail:   testEmail,
 		OrganizationID: testUser1.OrganizationID,
 		AssessmentID:   assessment.ID,
@@ -1079,8 +1080,8 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireDraft() {
 	questionnaireCtx := contextx.With(ctx, auth.QuestionnaireContextKey{})
 	questionnaireCtx = auth.WithAnonymousQuestionnaireUser(questionnaireCtx, anonUser)
 	questionnaireCtx = auth.WithAuthenticatedUser(questionnaireCtx, &auth.AuthenticatedUser{
-		SubjectID:      testUser1.ID,
-		OrganizationID: testUser1.OrganizationID,
+		SubjectID:      anonUser.SubjectID,
+		OrganizationID: anonUser.OrganizationID,
 	})
 
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
@@ -1091,7 +1092,6 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireDraft() {
 		Save(questionnaireCtx)
 	require.NoError(t, err)
 
-	anonUserID := fmt.Sprintf("anon_questionnaire_%s", ulids.New().String())
 	claims := &tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject: anonUserID,
