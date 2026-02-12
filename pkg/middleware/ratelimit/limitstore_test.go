@@ -1,6 +1,7 @@
 package ratelimit
 
 import (
+	"context"
 	"testing"
 	"time"
 
@@ -37,7 +38,7 @@ func TestRateLimiter(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		store := NewMapLimitStore(1*time.Hour, 1*time.Hour)
+		store := NewMapLimitStore(context.Background(), 1*time.Hour, 1*time.Hour)
 		r := New(store, tt.requestsLimit, tt.windowSize)
 
 		for i := 0; i < tt.incNumber; i++ {
@@ -82,7 +83,7 @@ func TestCalcDuration(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		store := NewMapLimitStore(1*time.Hour, 1*time.Hour)
+		store := NewMapLimitStore(context.Background(), 1*time.Hour, 1*time.Hour)
 		r := New(store, tt.requestsLimit, tt.windowSize)
 		dur := r.calcLimitDuration(tt.prevValue, tt.currValue, tt.timeFromCurrWindow)
 		assert.InDelta(t, tt.want, dur, 3)
@@ -137,7 +138,7 @@ func TestCalcRate(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		store := NewMapLimitStore(1*time.Hour, 1*time.Hour)
+		store := NewMapLimitStore(context.Background(), 1*time.Hour, 1*time.Hour)
 		r := New(store, tt.requestsLimit, tt.windowSize)
 		rate := r.calcRate(tt.timeFromCurrWindow, tt.prevValue, tt.currentValue)
 		assert.Equal(t, tt.want, rate)
