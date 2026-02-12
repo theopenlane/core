@@ -203,9 +203,9 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 	var documentDataID string
 
 	if assessmentResponse.DocumentDataID != "" {
-		_, err = h.DBClient.DocumentData.UpdateOneID(assessmentResponse.DocumentDataID).
+		err = h.DBClient.DocumentData.UpdateOneID(assessmentResponse.DocumentDataID).
 			SetData(req.Data).
-			Save(allowCtx)
+			Exec(allowCtx)
 		if err != nil {
 			logx.FromContext(reqCtx).Err(err).Msg("could not update document data")
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
