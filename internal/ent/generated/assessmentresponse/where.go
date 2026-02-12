@@ -193,6 +193,11 @@ func DocumentDataID(v string) predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(sql.FieldEQ(FieldDocumentDataID, v))
 }
 
+// IsDraft applies equality check predicate on the "is_draft" field. It's identical to IsDraftEQ.
+func IsDraft(v bool) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldEQ(FieldIsDraft, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(sql.FieldEQ(FieldCreatedAt, v))
@@ -1641,6 +1646,16 @@ func DocumentDataIDEqualFold(v string) predicate.AssessmentResponse {
 // DocumentDataIDContainsFold applies the ContainsFold predicate on the "document_data_id" field.
 func DocumentDataIDContainsFold(v string) predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(sql.FieldContainsFold(FieldDocumentDataID, v))
+}
+
+// IsDraftEQ applies the EQ predicate on the "is_draft" field.
+func IsDraftEQ(v bool) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldEQ(FieldIsDraft, v))
+}
+
+// IsDraftNEQ applies the NEQ predicate on the "is_draft" field.
+func IsDraftNEQ(v bool) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldNEQ(FieldIsDraft, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

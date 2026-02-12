@@ -1,4 +1,4 @@
-h1:Ug5W/uiGOkfZC9AeT/ZXBIq79hvajhgI+uM+FlFO1AY=
+h1:d/lAeUzSkMbt/cbuxprOXsD7XNt8e7svguR4Qa0qa1k=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -46,3 +46,5 @@ h1:Ug5W/uiGOkfZC9AeT/ZXBIq79hvajhgI+uM+FlFO1AY=
 20260205173026_integrationsaddon_history.sql h1:EhSrCpnHmAvkyQ8w2LpjyQBLJNmq8PkVbVNjrKwM7G4=
 20260210211958_integrations.sql h1:+JayMaSEfghABofrZeN4c0ETn1N2Nhncr4TyldGZluc=
 20260210212002_integrations_history.sql h1:ydEk2yNwjflE69rGwhMeyZi6Y3R+5b+qxy0pBdTGYw8=
+20260211231029_is_draft_assessment_response.sql h1:+VjFSTrmvGrKomE3Oz0FP18SURbN4RCcEwUV9zlkSHE=
+20260211231037_is_draft_assessment_response_history.sql h1:1qNJII0MsVZafjT2ytiYwPrlOG5J13MO3zjdJ3Enc60=

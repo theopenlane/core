@@ -203,6 +203,11 @@ func DocumentDataID(v string) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldDocumentDataID, v))
 }
 
+// IsDraft applies equality check predicate on the "is_draft" field. It's identical to IsDraftEQ.
+func IsDraft(v bool) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldIsDraft, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1786,6 +1791,16 @@ func DocumentDataIDEqualFold(v string) predicate.AssessmentResponseHistory {
 // DocumentDataIDContainsFold applies the ContainsFold predicate on the "document_data_id" field.
 func DocumentDataIDContainsFold(v string) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldContainsFold(FieldDocumentDataID, v))
+}
+
+// IsDraftEQ applies the EQ predicate on the "is_draft" field.
+func IsDraftEQ(v bool) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldIsDraft, v))
+}
+
+// IsDraftNEQ applies the NEQ predicate on the "is_draft" field.
+func IsDraftNEQ(v bool) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNEQ(FieldIsDraft, v))
 }
 
 // And groups predicates with the AND operator between them.

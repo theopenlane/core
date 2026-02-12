@@ -98,14 +98,29 @@ func findExistingAssessmentResponse(ctx context.Context, client *generated.Clien
 	return existingResponse, nil
 }
 
-// handleExistingAssessmentResponse processes a resend request for an existing assessment response.
-// It validates the response can be resent, increments send attempts, updates due date if provided,
-// and sends a new email invitation.
+// handleExistingAssessmentResponse processes a resend or draft-update request for an existing
+// assessment response. For drafts it updates due date only. For non-drafts it increments send
+// attempts, resets overdue status, and sends a new email invitation.
 func handleExistingAssessmentResponse(ctx context.Context, m *generated.AssessmentResponseMutation, existingResponse *generated.AssessmentResponse, isTest bool) (*generated.AssessmentResponse, error) {
-	if existingResponse.Status != enums.AssessmentResponseStatusSent &&
+	isDraft, _ := m.IsDraft()
+
+	if existingResponse.Status != enums.AssessmentResponseStatusDraft &&
+		existingResponse.Status != enums.AssessmentResponseStatusSent &&
 		existingResponse.Status != enums.AssessmentResponseStatusOverdue &&
 		!isTest {
 		return nil, ErrAssessmentInProgress
+	}
+
+	update := m.Client().AssessmentResponse.UpdateOneID(existingResponse.ID)
+
+	if dueDate, ok := m.DueDate(); ok {
+		update = update.SetDueDate(dueDate)
+	}
+
+	if isDraft {
+		update = update.SetStatus(enums.AssessmentResponseStatusDraft)
+
+		return update.Save(ctx)
 	}
 
 	newAttempts := existingResponse.SendAttempts + 1
@@ -116,12 +131,7 @@ func handleExistingAssessmentResponse(ctx context.Context, m *generated.Assessme
 			ErrMaxAttemptsAssessments)
 	}
 
-	update := m.Client().AssessmentResponse.UpdateOneID(existingResponse.ID).
-		SetSendAttempts(newAttempts)
-
-	if dueDate, ok := m.DueDate(); ok {
-		update = update.SetDueDate(dueDate)
-	}
+	update = update.SetSendAttempts(newAttempts)
 
 	if existingResponse.Status == enums.AssessmentResponseStatusOverdue {
 		update = update.SetStatus(enums.AssessmentResponseStatusSent)
@@ -143,6 +153,12 @@ func handleExistingAssessmentResponse(ctx context.Context, m *generated.Assessme
 // and sends the initial email invitation. It handles race conditions by detecting unique constraint
 // violations and re-querying to update the existing record.
 func createNewAssessmentResponse(ctx context.Context, m *generated.AssessmentResponseMutation, next ent.Mutator, email string) (generated.Value, error) {
+	isDraft, _ := m.IsDraft()
+
+	if isDraft {
+		m.SetStatus(enums.AssessmentResponseStatusDraft)
+	}
+
 	m.ClearDocumentDataID()
 
 	count, err := m.Client().Contact.Query().Select(contact.FieldEmail).
@@ -166,6 +182,10 @@ func createNewAssessmentResponse(ctx context.Context, m *generated.AssessmentRes
 		}
 
 		return nil, err
+	}
+
+	if isDraft {
+		return value, nil
 	}
 
 	var responseID string
@@ -299,7 +319,8 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 	return err
 }
 
-// HookUpdateAssessmentResponse checks if the assessment response is past due and updates the status accordingly
+// HookUpdateAssessmentResponse validates status transitions and checks if the assessment response
+// is past due. Completed is a terminal state. Draft can only be set if already in draft.
 func HookUpdateAssessmentResponse() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.AssessmentResponseFunc(func(ctx context.Context, m *generated.AssessmentResponseMutation) (generated.Value, error) {
@@ -313,18 +334,28 @@ func HookUpdateAssessmentResponse() ent.Hook {
 				return nil, err
 			}
 
-			if !assessmentResp.DueDate.IsZero() && time.Now().After(assessmentResp.DueDate) {
-				newStatus, statusBeingSet := m.Status()
+			newStatus, statusExists := m.Status()
 
-				shouldSetOverdue := (statusBeingSet && newStatus == enums.AssessmentResponseStatusCompleted) ||
-					(!statusBeingSet && assessmentResp.Status != enums.AssessmentResponseStatusOverdue)
+			if statusExists {
+				switch assessmentResp.Status {
+				case enums.AssessmentResponseStatusCompleted,
+					enums.AssessmentResponseStatusOverdue:
+					return nil, ErrAssessmentInProgress
+				}
+			}
 
-				if shouldSetOverdue {
+			isPastDue := !assessmentResp.DueDate.IsZero() && time.Now().After(assessmentResp.DueDate)
+
+			if assessmentResp.Status != enums.AssessmentResponseStatusDraft && isPastDue {
+				switch {
+				case statusExists && newStatus == enums.AssessmentResponseStatusCompleted:
+					m.SetStatus(enums.AssessmentResponseStatusOverdue)
+				case !statusExists && assessmentResp.Status != enums.AssessmentResponseStatusOverdue:
 					m.SetStatus(enums.AssessmentResponseStatusOverdue)
 				}
 			}
 
-			newStatus, statusBeingSet := m.Status()
+			newStatus, statusExists = m.Status()
 			value, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err
@@ -335,7 +366,7 @@ func HookUpdateAssessmentResponse() ent.Hook {
 				return value, nil
 			}
 
-			if updatedResp.CampaignID != "" && !updatedResp.IsTest && statusBeingSet {
+			if updatedResp.CampaignID != "" && !updatedResp.IsTest && statusExists {
 				if err := updateCampaignTargetFromAssessmentResponse(ctx, m.Client(), updatedResp); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to update campaign target status from assessment response")
 				}

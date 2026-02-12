@@ -1919,7 +1919,9 @@ type GetQuestionnaireResponse struct {
 	// Jsonconfig is the jsonconfig value.
 	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
 	// UISchema is the uischema value.
-	UISchema   map[string]any `json:"uischema,omitempty"`
+	UISchema map[string]any `json:"uischema,omitempty"`
+	// SavedData is the previously saved draft data, if any.
+	SavedData map[string]any `json:"saved_data,omitempty"`
 }
 
 // ExampleResponse returns an example GetQuestionnaireResponse for OpenAPI documentation
@@ -1950,9 +1952,11 @@ var ExampleGetQuestionnaireResponse = GetQuestionnaireResponse{
 // SubmitQuestionnaireRequest is the request to submit questionnaire response data
 type SubmitQuestionnaireRequest struct {
 	// AssessmentID is the assessment_id value.
-	AssessmentID string         `json:"assessment_id,omitempty"`
+	AssessmentID string `json:"assessment_id,omitempty"`
 	// Data is the data value.
-	Data         map[string]any `json:"data" binding:"required"`
+	Data map[string]any `json:"data" binding:"required"`
+	// IsDraft when true saves partial progress without completing the questionnaire.
+	IsDraft bool `json:"is_draft,omitempty"`
 }
 
 // ExampleSubmitQuestionnaireRequest is an example questionnaire submission request for OpenAPI documentation
@@ -1971,9 +1975,9 @@ type SubmitQuestionnaireResponse struct {
 	// DocumentDataID is the document_data_id value.
 	DocumentDataID string `json:"document_data_id"`
 	// Status is the status value.
-	Status         string `json:"status"`
+	Status string `json:"status"`
 	// CompletedAt is the completed_at value.
-	CompletedAt    string `json:"completed_at"`
+	CompletedAt string `json:"completed_at,omitempty"`
 }
 
 // ExampleResponse returns an example SubmitQuestionnaireResponse for OpenAPI documentation

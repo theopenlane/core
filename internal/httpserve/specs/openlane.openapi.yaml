@@ -468,6 +468,9 @@ components:
                 jsonconfig:
                     additionalProperties: {}
                     type: object
+                saved_data:
+                    additionalProperties: {}
+                    type: object
                 uischema:
                     additionalProperties: {}
                     type: object
@@ -2855,7 +2858,6 @@ paths:
                             examples:
                                 success:
                                     value:
-                                        completed_at: ""
                                         document_data_id: ""
                                         status: ""
                             schema:

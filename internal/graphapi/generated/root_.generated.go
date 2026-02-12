@@ -327,6 +327,7 @@ type ComplexityRoot struct {
 		ID               func(childComplexity int) int
 		IdentityHolder   func(childComplexity int) int
 		IdentityHolderID func(childComplexity int) int
+		IsDraft          func(childComplexity int) int
 		IsTest           func(childComplexity int) int
 		LastEmailEventAt func(childComplexity int) int
 		Owner            func(childComplexity int) int
@@ -8347,6 +8348,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssessmentResponse.IdentityHolderID(childComplexity), true
+
+	case "AssessmentResponse.isDraft":
+		if e.complexity.AssessmentResponse.IsDraft == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.IsDraft(childComplexity), true
 
 	case "AssessmentResponse.isTest":
 		if e.complexity.AssessmentResponse.IsTest == nil {
@@ -53955,6 +53963,10 @@ type AssessmentResponse implements Node {
   the document containing the user's response data
   """
   documentDataID: ID
+  """
+  is this a draft response? can the user resume from where they left?
+  """
+  isDraft: Boolean!
   owner: Organization
   assessment: Assessment!
   campaign: Campaign
@@ -53970,6 +53982,7 @@ enum AssessmentResponseAssessmentResponseStatus @goModel(model: "github.com/theo
   SENT
   COMPLETED
   OVERDUE
+  DRAFT
 }
 """
 A connection to a list of items.
@@ -54033,6 +54046,7 @@ enum AssessmentResponseOrderField {
   started_at
   completed_at
   due_date
+  is_draft
 }
 """
 AssessmentResponseWhereInput is used for filtering AssessmentResponse objects.
@@ -54370,6 +54384,11 @@ input AssessmentResponseWhereInput {
   dueDateLTE: Time
   dueDateIsNil: Boolean
   dueDateNotNil: Boolean
+  """
+  is_draft field predicates
+  """
+  isDraft: Boolean
+  isDraftNEQ: Boolean
   """
   owner edge predicates
   """
@@ -56673,6 +56692,7 @@ enum CampaignTargetAssessmentResponseStatus @goModel(model: "github.com/theopenl
   SENT
   COMPLETED
   OVERDUE
+  DRAFT
 }
 """
 A connection to a list of items.
@@ -76199,10 +76219,13 @@ enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/common/enum
 ExportExportType is enum for the field export_type
 """
 enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.ExportType") {
+  ASSET
   CONTROL
   DIRECTORY_MEMBERSHIP
+  ENTITY
   EVIDENCE
   FINDING
+  IDENTITY_HOLDER
   INTERNAL_POLICY
   PROCEDURE
   REMEDIATION
