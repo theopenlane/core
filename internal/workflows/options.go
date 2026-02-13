@@ -4,7 +4,25 @@ import (
 	"time"
 
 	"github.com/mcuadros/go-defaults"
+	"github.com/samber/lo"
 )
+
+// GalaTopicMode controls migration behavior for one mutation topic.
+type GalaTopicMode string
+
+const (
+	// GalaTopicModeSoireeOnly keeps topic processing on legacy Soiree only.
+	GalaTopicModeSoireeOnly GalaTopicMode = "soiree_only"
+	// GalaTopicModeDualEmit emits to both legacy Soiree and Gala.
+	GalaTopicModeDualEmit GalaTopicMode = "dual_emit"
+	// GalaTopicModeV2Only prefers Gala emission only (with runtime-level fallback behavior).
+	GalaTopicModeV2Only GalaTopicMode = "v2_only"
+)
+
+// IsValid reports whether a topic mode is supported.
+func (m GalaTopicMode) IsValid() bool {
+	return m == GalaTopicModeSoireeOnly || m == GalaTopicModeDualEmit || m == GalaTopicModeV2Only
+}
 
 // Config contains the configuration for the workflows engine
 type Config struct {
@@ -12,6 +30,10 @@ type Config struct {
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// CEL contains configuration for CEL evaluation and validation
 	CEL CELConfig `json:"cel" koanf:"cel"`
+	// MutationOutbox enables optional River-backed mutation dispatch for Soiree listeners
+	MutationOutbox MutationOutboxConfig `json:"mutationoutbox" koanf:"mutationoutbox"`
+	// Gala enables optional River-backed durable gala runtime and dual-emit behavior
+	Gala GalaConfig `json:"gala" koanf:"gala"`
 }
 
 // CELConfig contains CEL evaluation and validation settings for workflows
@@ -44,14 +66,46 @@ type CELConfig struct {
 	TrackState bool `json:"trackstate" koanf:"trackstate" default:"false"`
 }
 
+// MutationOutboxConfig controls optional River-backed delivery for mutation listeners.
+type MutationOutboxConfig struct {
+	// Enabled toggles River-backed mutation dispatch
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// WorkerCount configures the default queue worker concurrency when enabled
+	WorkerCount int `json:"workercount" koanf:"workercount" default:"10"`
+	// MaxRetries sets River job max attempts for mutation dispatch jobs
+	MaxRetries int `json:"maxretries" koanf:"maxretries" default:"5"`
+	// FailOnEnqueueError enables strict-mode logging when outbox enqueue fails
+	FailOnEnqueueError bool `json:"failonenqueueerror" koanf:"failonenqueueerror" default:"false"`
+	// Topics optionally scopes outbox dispatch to specific mutation topics; empty means all topics
+	Topics []string `json:"topics" koanf:"topics"`
+}
+
+// GalaConfig controls optional gala runtime wiring and mutation dual-emit behavior.
+type GalaConfig struct {
+	// Enabled toggles gala worker and runtime initialization
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// DualEmit toggles mutation dual-emit into gala alongside legacy Soiree inline emission
+	DualEmit bool `json:"dualemit" koanf:"dualemit" default:"false"`
+	// WorkerCount configures default queue worker concurrency when gala workers are enabled
+	WorkerCount int `json:"workercount" koanf:"workercount" default:"10"`
+	// MaxRetries sets River job max attempts for gala dispatch jobs
+	MaxRetries int `json:"maxretries" koanf:"maxretries" default:"5"`
+	// FailOnEnqueueError enables strict-mode logging when gala enqueue fails during dual emit
+	FailOnEnqueueError bool `json:"failonenqueueerror" koanf:"failonenqueueerror" default:"false"`
+	// Topics optionally scopes gala dual emit to specific mutation topics; empty means all topics
+	Topics []string `json:"topics" koanf:"topics"`
+	// TopicModes overrides global gala migration behavior by topic (soiree_only, dual_emit, v2_only)
+	TopicModes map[string]GalaTopicMode `json:"topicmodes" koanf:"topicmodes"`
+	// QueueName optionally overrides queue selection for durable gala dispatch jobs
+	QueueName string `json:"queuename" koanf:"queuename" default:"default"`
+}
+
 // NewDefaultConfig creates a new workflows config with default values applied.
 func NewDefaultConfig(opts ...ConfigOpts) *Config {
 	c := &Config{}
 	defaults.SetDefaults(c)
 
-	for _, opt := range opts {
-		opt(c)
-	}
+	lo.ForEach(opts, func(opt ConfigOpts, _ int) { opt(c) })
 
 	return c
 }
@@ -162,6 +216,8 @@ func WithConfig(cfg Config) ConfigOpts {
 	return func(c *Config) {
 		c.Enabled = cfg.Enabled
 		c.CEL = cfg.CEL
+		c.MutationOutbox = cfg.MutationOutbox
+		c.Gala = cfg.Gala
 	}
 }
 

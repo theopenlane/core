@@ -11,11 +11,14 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
@@ -86,10 +89,21 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				props.Set("ID", eventID.ID)
 				addMutationFields(props, mutation)
 
+				changedFields, clearedFields := mutationChangedAndClearedFields(mutation)
+				changedEdges, addedIDs, removedIDs := workflowgenerated.ExtractChangedEdges(mutation)
+				proposedChanges := mutationProposedChanges(mutation, changedFields, clearedFields)
+
 				payload := &events.MutationPayload{
-					Mutation:  mutation,
-					Operation: op,
-					EntityID:  eventID.ID,
+					Mutation:        mutation,
+					MutationType:    mutation.Type(),
+					Operation:       op,
+					EntityID:        eventID.ID,
+					ChangedFields:   changedFields,
+					ClearedFields:   clearedFields,
+					ChangedEdges:    changedEdges,
+					AddedIDs:        addedIDs,
+					RemovedIDs:      removedIDs,
+					ProposedChanges: proposedChanges,
 				}
 
 				var emitterClient any
@@ -111,7 +125,41 @@ func EmitEventHook(e *Eventer) ent.Hook {
 					event.SetClient(emitterClient)
 				}
 
-				if e.Emitter != nil {
+				legacyEnabled := e.shouldUseLegacyEmit(topic.Name())
+				galaDispatched := false
+
+				if e.shouldUseGalaDispatch(topic.Name()) {
+					runtime := e.galaRuntime()
+					if runtime != nil {
+						galaErr := enqueueGalaMutationOutbox(ctx, runtime, topic.Name(), payload, event.Properties())
+						if galaErr != nil {
+							if e.galaFailOnEnqueueError {
+								logger.Error().Err(galaErr).Str("topic", topic.Name()).Msg("gala mutation dispatch failed; continuing legacy emit")
+							}
+						} else {
+							galaDispatched = true
+						}
+					} else if e.galaFailOnEnqueueError {
+						logger.Error().Str("topic", topic.Name()).Msg("gala mutation dispatch unavailable; continuing legacy emit")
+					}
+				}
+
+				// v2_only prefers gala dispatch but fails open to legacy emit when gala dispatch is unavailable.
+				if !legacyEnabled && !galaDispatched {
+					legacyEnabled = true
+				}
+
+				legacyDispatched := false
+				if legacyEnabled && e.Emitter != nil && e.shouldUseMutationOutbox(topic.Name()) {
+					outboxErr := enqueueMutationOutbox(ctx, topic.Name(), payload, event.Properties(), emitterClient)
+					if outboxErr == nil {
+						legacyDispatched = true
+					} else if e.mutationOutboxFailOnEnqueueError {
+						logger.Error().Err(outboxErr).Str("topic", topic.Name()).Msg("mutation outbox dispatch failed; falling back to inline emit")
+					}
+				}
+
+				if legacyEnabled && !legacyDispatched && e.Emitter != nil {
 					// fire-and-forget; listeners drain the returned channel
 					e.Emitter.Emit(topic.Name(), event)
 				}
@@ -198,7 +246,7 @@ func getOperation(ctx context.Context, mutation ent.Mutation) string {
 // emitEventOn determines whether to emit events for a given mutation
 func (e *Eventer) emitEventOn() func(context.Context, entgen.Mutation) bool {
 	return func(ctx context.Context, m entgen.Mutation) bool { //nolint:revive
-		if e == nil || m == nil {
+		if m == nil {
 			return false
 		}
 
@@ -237,21 +285,21 @@ func RegisterListeners(e *Eventer) error {
 	}
 
 	total := 0
-	for _, entries := range e.listeners {
-		total += len(entries)
-	}
-
-	total += len(e.bindings)
+	listenerGroups := lo.Values(e.listeners)
+	total = lo.Reduce(listenerGroups, func(acc int, entries []soiree.ListenerBinding, _ int) int {
+		return acc + len(entries)
+	}, len(e.bindings))
 
 	if total == 0 {
 		return nil
 	}
 
-	bindings := make([]soiree.ListenerBinding, 0, total)
-	for _, entries := range e.listeners {
-		bindings = append(bindings, entries...)
+	bindings := lo.Flatten(listenerGroups)
+	if cap(bindings) < total {
+		resized := make([]soiree.ListenerBinding, len(bindings), total)
+		copy(resized, bindings)
+		bindings = resized
 	}
-
 	bindings = append(bindings, e.bindings...)
 
 	if _, err := e.Emitter.RegisterListeners(bindings...); err != nil {
@@ -268,9 +316,94 @@ func addMutationFields(props soiree.Properties, mutation ent.Mutation) {
 		return
 	}
 
-	for _, field := range mutation.Fields() {
+	lo.ForEach(mutation.Fields(), func(field string, _ int) {
 		if value, ok := mutation.Field(field); ok {
 			props.Set(field, value)
 		}
+	})
+}
+
+// mutationChangedAndClearedFields derives updated/cleared field names from an ent mutation.
+func mutationChangedAndClearedFields(mutation ent.Mutation) ([]string, []string) {
+	if mutation == nil {
+		return nil, nil
 	}
+
+	clearedFields := uniqueStrings(mutation.ClearedFields())
+	changedFields := append(append([]string(nil), mutation.Fields()...), clearedFields...)
+
+	return uniqueStrings(changedFields), clearedFields
+}
+
+// mutationProposedChanges materializes field values (including explicit clears as nil).
+func mutationProposedChanges(mutation ent.Mutation, changedFields, clearedFields []string) map[string]any {
+	if mutation == nil || len(changedFields) == 0 {
+		return nil
+	}
+
+	clearedSet := make(map[string]struct{}, len(clearedFields))
+	lo.ForEach(clearedFields, func(field string, _ int) {
+		if field == "" {
+			return
+		}
+
+		clearedSet[field] = struct{}{}
+	})
+
+	proposed := make(map[string]any, len(changedFields))
+	lo.ForEach(changedFields, func(field string, _ int) {
+		if field == "" {
+			return
+		}
+
+		if val, ok := mutation.Field(field); ok {
+			proposed[field] = val
+			return
+		}
+
+		if _, ok := clearedSet[field]; ok {
+			proposed[field] = nil
+		}
+	})
+
+	if len(proposed) == 0 {
+		return nil
+	}
+
+	return proposed
+}
+
+// uniqueStrings returns distinct non-empty values while preserving first-seen order.
+func uniqueStrings(values []string) []string {
+	if len(values) == 0 {
+		return nil
+	}
+
+	out := lo.Uniq(lo.Filter(values, func(value string, _ int) bool { return value != "" }))
+	if len(out) == 0 {
+		return nil
+	}
+
+	return out
+}
+
+// enqueueMutationOutbox enqueues the mutation envelope for asynchronous dispatch.
+func enqueueMutationOutbox(
+	ctx context.Context,
+	topic string,
+	payload *events.MutationPayload,
+	props soiree.Properties,
+	emitterClient any,
+) error {
+	client, ok := emitterClient.(*entgen.Client)
+	if !ok || client.Job == nil {
+		return fmt.Errorf("%w: emitter client unavailable", ErrMutationOutboxEmitterClientUnavailable)
+	}
+
+	args := eventqueue.NewMutationDispatchArgs(ctx, topic, payload, props)
+	if err := enqueueJob(ctx, client.Job, args, nil); err != nil {
+		return fmt.Errorf("%w: %w", ErrMutationOutboxEnqueueFailed, err)
+	}
+
+	return nil
 }

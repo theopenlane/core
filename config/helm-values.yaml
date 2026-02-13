@@ -581,6 +581,21 @@ coreConfiguration:
       macrocalltracking: false  # @schema type:boolean; default:false
       evaloptimize: true  # @schema type:boolean; default:true
       trackstate: false  # @schema type:boolean; default:false
+    mutationoutbox:
+      enabled: false  # @schema type:boolean; default:false
+      workercount: 10  # @schema type:integer; default:10
+      maxretries: 5  # @schema type:integer; default:5
+      failonenqueueerror: false  # @schema type:boolean; default:false
+      topics: []  # @schema type:array; items:type:string
+    gala:
+      enabled: false  # @schema type:boolean; default:false
+      dualemit: false  # @schema type:boolean; default:false
+      workercount: 10  # @schema type:integer; default:10
+      maxretries: 5  # @schema type:integer; default:5
+      failonenqueueerror: false  # @schema type:boolean; default:false
+      queuename: default  # @schema type:string; default:default
+      topics: []  # @schema type:array; items:type:string
+      topicmodes: {}  # @schema type:object; additionalProperties:type:string
   # -- CampaignWebhook contains webhook configuration for campaign-related email providers
   campaignwebhook:
     # -- Enabled toggles the campaign webhook handler

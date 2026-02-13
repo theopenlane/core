@@ -2,8 +2,11 @@ package cmd
 
 import (
 	"context"
+	"errors"
+	"sync"
 	"time"
 
+	"github.com/riverqueue/river"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/theopenlane/beacon/otelx"
@@ -13,6 +16,8 @@ import (
 
 	"github.com/theopenlane/utils/cache"
 
+	"github.com/theopenlane/core/common/jobspec"
+	"github.com/theopenlane/core/internal/ent/eventqueue"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -23,6 +28,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
@@ -35,12 +41,14 @@ var serveCmd = &cobra.Command{
 	},
 }
 
+// init registers the serve command and its flags on the root command.
 func init() {
 	rootCmd.AddCommand(serveCmd)
 
 	serveCmd.PersistentFlags().String("config", "./config/.config.yaml", "config file location")
 }
 
+// serve initializes dependencies and starts the core API server.
 func serve(ctx context.Context) error {
 	// setup db connection for server
 	var (
@@ -174,11 +182,94 @@ func serve(ctx context.Context) error {
 	// Setup DB connection
 	log.Info().Interface("db", so.Config.Settings.DB.DatabaseName).Msg("connecting to database")
 
+	mutationOutboxCfg := so.Config.Settings.Workflows.MutationOutbox
+	galaCfg := so.Config.Settings.Workflows.Gala
+	mutationOutboxWorkerCount := max(mutationOutboxCfg.WorkerCount, 1)
+	galaWorkerCount := max(galaCfg.WorkerCount, 1)
+	mutationOutboxWorkersEnabled := mutationOutboxCfg.Enabled
+	galaRuntimeEnabled := galaCfg.Enabled || galaCfg.DualEmit
+	galaWorkersEnabled := galaCfg.Enabled
+
+	var galaRuntime *gala.Runtime
+
+	eventer := hooks.NewEventer(
+		hooks.WithWorkflowListenersEnabled(so.Config.Settings.Workflows.Enabled),
+		hooks.WithMutationOutboxEnabled(mutationOutboxCfg.Enabled),
+		hooks.WithMutationOutboxFailOnEnqueueError(mutationOutboxCfg.FailOnEnqueueError),
+		hooks.WithMutationOutboxTopics(mutationOutboxCfg.Topics),
+		hooks.WithGalaRuntimeProvider(func() *gala.Runtime { return galaRuntime }),
+		hooks.WithGalaDualEmitEnabled(galaCfg.DualEmit),
+		hooks.WithGalaFailOnEnqueueError(galaCfg.FailOnEnqueueError),
+		hooks.WithGalaTopics(galaCfg.Topics),
+		hooks.WithGalaTopicModes(galaCfg.TopicModes),
+	)
+
 	jobOpts := []riverqueue.Option{
 		riverqueue.WithConnectionURI(so.Config.Settings.JobQueue.ConnectionURI),
 	}
 
-	eventer := hooks.NewEventer(hooks.WithWorkflowListenersEnabled(so.Config.Settings.Workflows.Enabled))
+	if mutationOutboxWorkersEnabled || galaWorkersEnabled {
+		workers := river.NewWorkers()
+
+		if mutationOutboxWorkersEnabled {
+			if err := river.AddWorkerSafely(workers, eventqueue.NewMutationDispatchWorker(func() *soiree.EventBus {
+				return eventer.Emitter
+			})); err != nil {
+				return err
+			}
+		}
+
+		if galaWorkersEnabled {
+			if err := river.AddWorkerSafely(workers, gala.NewRiverDispatchWorker(func() *gala.Runtime {
+				return galaRuntime
+			})); err != nil {
+				return err
+			}
+		}
+
+		defaultQueueWorkers := 1
+		if mutationOutboxWorkersEnabled {
+			defaultQueueWorkers = max(defaultQueueWorkers, mutationOutboxWorkerCount)
+		}
+
+		queueName := galaCfg.QueueName
+		if queueName == "" {
+			queueName = jobspec.QueueDefault
+		}
+
+		queueConfig := map[string]river.QueueConfig{
+			jobspec.QueueDefault:      {MaxWorkers: defaultQueueWorkers},
+			jobspec.QueueCompliance:   {MaxWorkers: 1},
+			jobspec.QueueTrustcenter:  {MaxWorkers: 1},
+			jobspec.QueueNotification: {MaxWorkers: 1},
+		}
+
+		if galaWorkersEnabled {
+			if queueName == jobspec.QueueDefault {
+				queueConfig[jobspec.QueueDefault] = river.QueueConfig{MaxWorkers: max(defaultQueueWorkers, galaWorkerCount)}
+			} else {
+				queueConfig[queueName] = river.QueueConfig{MaxWorkers: galaWorkerCount}
+			}
+		}
+
+		jobOpts = append(jobOpts,
+			riverqueue.WithWorkers(workers),
+			riverqueue.WithQueues(queueConfig),
+		)
+
+		maxRetries := 0
+		if mutationOutboxWorkersEnabled {
+			maxRetries = max(maxRetries, mutationOutboxCfg.MaxRetries)
+		}
+
+		if galaWorkersEnabled {
+			maxRetries = max(maxRetries, galaCfg.MaxRetries)
+		}
+
+		if maxRetries > 0 {
+			jobOpts = append(jobOpts, riverqueue.WithMaxRetries(maxRetries))
+		}
+	}
 
 	clientOpts := []entdb.Option{
 		entdb.WithEventer(eventer, &so.Config.Settings.Workflows),
@@ -189,6 +280,98 @@ func serve(ctx context.Context) error {
 	dbClient, err := entdb.New(ctx, so.Config.Settings.DB, jobOpts, clientOpts, entOpts...)
 	if err != nil {
 		return err
+	}
+
+	if galaRuntimeEnabled {
+		jobClient, ok := dbClient.Job.(*riverqueue.Client)
+		if !ok {
+			log.Warn().Bool("dual_emit", galaCfg.DualEmit).Bool("worker_enabled", galaCfg.Enabled).Msg("gala enabled but job client is not riverqueue client")
+		} else {
+			queueName := galaCfg.QueueName
+			if queueName == "" {
+				queueName = jobspec.QueueDefault
+			}
+
+			dispatcher, err := gala.NewRiverDispatcher(gala.RiverDispatcherOptions{
+				JobClient: jobClient,
+				QueueByClass: map[gala.QueueClass]string{
+					gala.QueueClassWorkflow:    queueName,
+					gala.QueueClassIntegration: queueName,
+					gala.QueueClassGeneral:     queueName,
+				},
+				DefaultQueue: queueName,
+			})
+			if err != nil {
+				return err
+			}
+
+			gRuntime, err := gala.NewRuntime(gala.RuntimeOptions{
+				DurableDispatcher: dispatcher,
+			})
+			if err != nil {
+				return err
+			}
+
+			gala.ProvideValue(gRuntime.Injector(), dbClient)
+
+			if galaWorkersEnabled {
+				if _, err := hooks.RegisterGalaEntitlementListeners(gRuntime.Registry()); err != nil {
+					return err
+				}
+
+				if so.Config.Settings.Workflows.Enabled {
+					if _, err := hooks.RegisterGalaWorkflowListeners(gRuntime.Registry()); err != nil {
+						return err
+					}
+				}
+			}
+
+			galaRuntime = gRuntime
+		}
+	}
+
+	var (
+		stopEventWorker     func()
+		stopEventWorkerOnce sync.Once
+	)
+
+	stopEventWorkers := func() {
+		if stopEventWorker == nil {
+			return
+		}
+
+		stopEventWorkerOnce.Do(stopEventWorker)
+	}
+	defer stopEventWorkers()
+
+	if mutationOutboxWorkersEnabled || galaWorkersEnabled {
+		jobClient, ok := dbClient.Job.(*riverqueue.Client)
+		if !ok {
+			log.Warn().Bool("mutation_outbox", mutationOutboxWorkersEnabled).Bool("gala_worker", galaWorkersEnabled).Msg("event workers enabled but job client is not riverqueue client")
+		} else {
+			workerClient := jobClient.GetRiverClient()
+			if err := workerClient.Start(ctx); err != nil {
+				return err
+			}
+
+			stopEventWorker = func() {
+				stopCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+				defer cancel()
+
+				if stopErr := workerClient.Stop(stopCtx); stopErr != nil &&
+					!errors.Is(stopErr, context.Canceled) &&
+					!errors.Is(stopErr, context.DeadlineExceeded) {
+					log.Error().Err(stopErr).Msg("error stopping event worker client")
+				}
+			}
+
+			log.Info().
+				Bool("mutation_outbox_enabled", mutationOutboxWorkersEnabled).
+				Bool("gala_worker_enabled", galaWorkersEnabled).
+				Int("mutation_outbox_worker_count", mutationOutboxWorkerCount).
+				Int("gala_worker_count", galaWorkerCount).
+				Msg("event worker client started")
+		}
 	}
 
 	if so.Config.Settings.Workflows.Enabled {
@@ -210,6 +393,8 @@ func serve(ctx context.Context) error {
 		log.Ctx(ctx).Info().Msg("waiting for in-flight uploads to complete")
 		pkgobjects.WaitForUploads()
 		log.Ctx(ctx).Info().Msg("all uploads completed")
+
+		stopEventWorkers()
 
 		if err := entdb.GracefulClose(context.Background(), dbClient, time.Second); err != nil {
 			log.Ctx(ctx).Error().Err(err).Msg("error closing database")

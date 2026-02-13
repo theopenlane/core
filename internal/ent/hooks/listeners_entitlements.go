@@ -95,7 +95,7 @@ func handleOrganizationCreated(ctx *soiree.EventContext, payload *events.Mutatio
 
 // handleOrganizationSettingsUpdateOne updates Stripe customer details when billing fields change
 func handleOrganizationSettingsUpdateOne(ctx *soiree.EventContext, payload *events.MutationPayload) error {
-	if !mutationTouches(payload.Mutation, "billing_email", "billing_phone", "billing_address") {
+	if !payloadTouchesFields(payload, "billing_email", "billing_phone", "billing_address") {
 		return nil
 	}
 
@@ -148,6 +148,7 @@ var errMissingOrgCustomerPrereqs = errors.New("entitlement invocation missing pr
 // entitlementInvocation bundles the data required for entitlement listeners to perform their work
 type entitlementInvocation struct {
 	event    *soiree.EventContext
+	ctx      context.Context
 	payload  *events.MutationPayload
 	client   *entgen.Client
 	orgID    string
@@ -157,7 +158,19 @@ type entitlementInvocation struct {
 
 // Context returns the listener context associated with the invocation
 func (inv *entitlementInvocation) Context() context.Context {
-	return inv.event.Context()
+	if inv == nil {
+		return context.Background()
+	}
+
+	if inv.event != nil {
+		return inv.event.Context()
+	}
+
+	if inv.ctx != nil {
+		return inv.ctx
+	}
+
+	return context.Background()
 }
 
 // Logger returns a contextual logger for the invocation
@@ -205,7 +218,7 @@ func newEntitlementInvocation(event *soiree.EventContext, payload *events.Mutati
 
 	orgID := entityID
 
-	if payload != nil && payload.Mutation != nil && payload.Mutation.Type() == entgen.TypeOrganizationSetting {
+	if events.MutationType(payload) == entgen.TypeOrganizationSetting {
 		// OrganizationSetting mutations carry the setting ID, but the reconciler needs the owning organization
 		setting, err := client.OrganizationSetting.Get(allowCtx, entityID)
 		if err != nil {
@@ -218,6 +231,7 @@ func newEntitlementInvocation(event *soiree.EventContext, payload *events.Mutati
 
 	return &entitlementInvocation{
 		event:    event,
+		ctx:      event.Context(),
 		payload:  payload,
 		client:   client,
 		orgID:    orgID,
@@ -241,17 +255,8 @@ func mutationEntityID(ctx *soiree.EventContext, payload *events.MutationPayload)
 	}
 
 	if raw, ok := ctx.Property("ID"); ok && raw != nil {
-		if str, ok := raw.(fmt.Stringer); ok {
-			value := str.String()
-			if value == "" {
-				return "", false
-			}
-
-			return value, true
-		}
-
-		value := fmt.Sprint(raw)
-		if value == "" || value == "<nil>" {
+		value, ok := events.ValueAsString(raw)
+		if !ok {
 			return "", false
 		}
 
@@ -275,15 +280,33 @@ func mutationClient(ctx *soiree.EventContext, payload *events.MutationPayload) *
 	return client
 }
 
-// mutationTouches reports whether the mutation updates ("touches" don't get weird) any of the requested fields
-func mutationTouches(m ent.Mutation, fields ...string) bool {
-	if m == nil {
+// payloadTouchesFields reports whether the mutation payload updates any of the requested fields.
+func payloadTouchesFields(payload *events.MutationPayload, fields ...string) bool {
+	if payload == nil || len(fields) == 0 {
 		return false
 	}
 
-	return lo.SomeBy(fields, func(field string) bool {
-		_, ok := m.Field(field)
+	changedFields := lo.Filter(append(append([]string(nil), payload.ChangedFields...), payload.ClearedFields...), func(field string, _ int) bool {
+		return field != ""
+	})
+	changed := lo.SliceToMap(changedFields, func(field string) (string, struct{}) {
+		return field, struct{}{}
+	})
+	if lo.SomeBy(fields, func(field string) bool {
+		_, ok := changed[field]
 		return ok
+	}) {
+		return true
+	}
+
+	if payload.Mutation == nil {
+		return false
+	}
+
+	// Backwards-compatible fallback for in-memory listeners when metadata was not populated.
+	return lo.SomeBy(fields, func(field string) bool {
+		_, ok := payload.Mutation.Field(field)
+		return ok || payload.Mutation.FieldCleared(field)
 	})
 }
 

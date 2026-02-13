@@ -19,8 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/core/pkg/events/soiree"
@@ -47,6 +45,10 @@ func NewWorkflowListeners(client *generated.Client, engine *WorkflowEngine, emit
 
 // HandleWorkflowMutation triggers matching workflows for workflow-eligible mutations.
 func (l *WorkflowListeners) HandleWorkflowMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
+	if payload == nil {
+		return nil
+	}
+
 	if workflows.IsWorkflowBypass(ctx.Context()) && !workflows.AllowWorkflowEventEmission(ctx.Context()) {
 		return nil
 	}
@@ -58,17 +60,31 @@ func (l *WorkflowListeners) HandleWorkflowMutation(ctx *soiree.EventContext, pay
 		return nil
 	}
 
-	mut, ok := payload.Mutation.(utils.GenericMutation)
-	if !ok {
+	schemaType := mutationSchemaType(ctx, payload)
+	if schemaType == "" {
 		return nil
 	}
 
 	eventType := workflowEventTypeFromEntOperation(payload.Operation)
-	changedFields := workflows.CollectChangedFields(mut)
-	if eventType == "CREATE" {
-		changedFields = workflows.CollectAllChangedFields(mut)
+
+	changedFields := lo.Uniq(append([]string(nil), payload.ChangedFields...))
+	if eventType != "CREATE" {
+		if objectType := enums.ToWorkflowObjectType(schemaType); objectType != nil {
+			eligible := workflows.EligibleWorkflowFields(*objectType)
+			if len(eligible) > 0 {
+				changedFields = lo.Filter(changedFields, func(field string, _ int) bool {
+					_, ok := eligible[field]
+
+					return ok
+				})
+			}
+		}
 	}
-	changedEdges, addedIDs, removedIDs := workflowgenerated.ExtractChangedEdges(payload.Mutation)
+
+	changedEdges := lo.Uniq(append([]string(nil), payload.ChangedEdges...))
+	addedIDs := events.CloneStringSliceMap(payload.AddedIDs)
+	removedIDs := events.CloneStringSliceMap(payload.RemovedIDs)
+	proposedChanges := events.CloneAnyMap(payload.ProposedChanges)
 
 	if len(changedFields) == 0 && len(changedEdges) == 0 && eventType != "CREATE" {
 		return nil
@@ -81,9 +97,17 @@ func (l *WorkflowListeners) HandleWorkflowMutation(ctx *soiree.EventContext, pay
 
 	// Convert events.MutationPayload to workflows.MutationPayload
 	wfPayload := &workflows.MutationPayload{
-		Mutation:  payload.Mutation,
-		Operation: payload.Operation,
-		Client:    payload.Client,
+		Mutation:        payload.Mutation,
+		MutationType:    payload.MutationType,
+		Operation:       payload.Operation,
+		EntityID:        payload.EntityID,
+		ChangedFields:   changedFields,
+		ClearedFields:   append([]string(nil), payload.ClearedFields...),
+		ChangedEdges:    changedEdges,
+		AddedIDs:        addedIDs,
+		RemovedIDs:      removedIDs,
+		ProposedChanges: proposedChanges,
+		Client:          payload.Client,
 	}
 	entityID, ok := workflows.MutationEntityID(ctx, wfPayload)
 	if !ok {
@@ -91,14 +115,12 @@ func (l *WorkflowListeners) HandleWorkflowMutation(ctx *soiree.EventContext, pay
 	}
 
 	allowCtx := workflows.AllowContext(ctx.Context())
-	obj, err := loadWorkflowObject(allowCtx, client, payload.Mutation.Type(), entityID)
+	obj, err := loadWorkflowObject(allowCtx, client, schemaType, entityID)
 	if err != nil {
 		return nil
 	}
 
-	proposedChanges := workflows.BuildProposedChanges(mut, changedFields)
-
-	definitions, err := l.engine.FindMatchingDefinitions(allowCtx, payload.Mutation.Type(), eventType, changedFields, changedEdges, addedIDs, removedIDs, proposedChanges, obj)
+	definitions, err := l.engine.FindMatchingDefinitions(allowCtx, schemaType, eventType, changedFields, changedEdges, addedIDs, removedIDs, proposedChanges, obj)
 	if err != nil || len(definitions) == 0 {
 		return nil
 	}
@@ -126,8 +148,7 @@ func (l *WorkflowListeners) HandleWorkflowMutation(ctx *soiree.EventContext, pay
 
 // HandleWorkflowAssignmentMutation reacts to assignment status changes and emits completion events.
 func (l *WorkflowListeners) HandleWorkflowAssignmentMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
-	mut, ok := payload.Mutation.(*generated.WorkflowAssignmentMutation)
-	if !ok {
+	if payload == nil {
 		return nil
 	}
 
@@ -135,24 +156,86 @@ func (l *WorkflowListeners) HandleWorkflowAssignmentMutation(ctx *soiree.EventCo
 		return nil
 	}
 
-	newStatus, ok := mut.Status()
-	if !ok || newStatus == enums.WorkflowAssignmentStatusPending {
-		return nil
+	assignmentID := strings.TrimSpace(payload.EntityID)
+	if assignmentID == "" {
+		if id, ok := ctx.PropertyString("ID"); ok {
+			assignmentID = strings.TrimSpace(id)
+		}
 	}
-
-	oldStatus, err := mut.OldStatus(ctx.Context())
-	if err != nil || oldStatus == newStatus {
-		return err
-	}
-
-	assignmentID, _ := mut.ID()
 	if assignmentID == "" {
 		return nil
 	}
 
-	log.Info().Str("assignment_id", assignmentID).Str("old_status", oldStatus.String()).Str("new_status", newStatus.String()).Msg("workflow assignment status changed")
+	var (
+		newStatus enums.WorkflowAssignmentStatus
+		ok        bool
+	)
+
+	if mut, typed := payload.Mutation.(*generated.WorkflowAssignmentMutation); typed && mut != nil {
+		newStatus, ok = mut.Status()
+		if !ok || newStatus == enums.WorkflowAssignmentStatusPending {
+			return nil
+		}
+
+		oldStatus, err := mut.OldStatus(ctx.Context())
+		if err != nil || oldStatus == newStatus {
+			return err
+		}
+
+		log.Info().Str("assignment_id", assignmentID).Str("old_status", oldStatus.String()).Str("new_status", newStatus.String()).Msg("workflow assignment status changed")
+	} else {
+		if !lo.Contains(payload.ChangedFields, workflowassignment.FieldStatus) {
+			return nil
+		}
+
+		rawStatus, found := payload.ProposedChanges[workflowassignment.FieldStatus]
+		if !found {
+			if status, ok := ctx.PropertyString(workflowassignment.FieldStatus); ok {
+				rawStatus = status
+				found = true
+			}
+		}
+		if !found {
+			return nil
+		}
+
+		next := parseWorkflowAssignmentStatus(rawStatus)
+		if next == nil || *next == enums.WorkflowAssignmentStatusPending {
+			return nil
+		}
+
+		newStatus = *next
+	}
 
 	return l.engine.CompleteAssignment(ctx.Context(), assignmentID, newStatus, nil, nil)
+}
+
+// mutationSchemaType resolves schema type from payload metadata, event properties, or topic fallback.
+func mutationSchemaType(ctx *soiree.EventContext, payload *events.MutationPayload) string {
+	if schemaType := events.MutationType(payload); schemaType != "" {
+		return schemaType
+	}
+
+	if schemaType, ok := ctx.PropertyString("mutation_type"); ok {
+		if value := strings.TrimSpace(schemaType); value != "" {
+			return value
+		}
+	}
+
+	if ctx != nil {
+		if event := ctx.Event(); event != nil {
+			if topic := strings.TrimSpace(event.Topic()); topic != "" {
+				return topic
+			}
+		}
+	}
+
+	return ""
+}
+
+// parseWorkflowAssignmentStatus parses status values from mutation payloads/properties.
+func parseWorkflowAssignmentStatus(value any) *enums.WorkflowAssignmentStatus {
+	return events.ParseEnumPtr(value, enums.ToWorkflowAssignmentStatus)
 }
 
 // loadWorkflowObject loads a workflow object from the generated registry.
@@ -258,9 +341,9 @@ func (l *WorkflowListeners) HandleWorkflowTriggered(ctx *soiree.EventContext, pa
 			}
 		}
 
-		for _, start := range gatedToStart {
+		lo.ForEach(gatedToStart, func(start gatedStart, _ int) {
 			l.emitActionStarted(scope, instance, start.action.Key, start.index, start.actionType, start.obj)
-		}
+		})
 
 		return nil
 	}
@@ -585,18 +668,21 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 	return nil
 }
 
+// isChangeRequestAssignment reports whether an assignment is the change-request leg.
 func isChangeRequestAssignment(assignment *generated.WorkflowAssignment) bool {
 	return strings.HasPrefix(assignment.AssignmentKey, "change_request_") || assignment.Role == "REQUESTER"
 }
 
+// resolveExpectedActionIndices resolves action indexes from configured parallel action keys.
 func resolveExpectedActionIndices(actions []models.WorkflowAction, parallelKeys []string, actionIndex int) (map[int]struct{}, bool) {
 	expectedKeys := workflows.NormalizeStrings(parallelKeys)
-	expectedIndices := make(map[int]struct{})
-	for _, key := range expectedKeys {
-		if idx := actionIndexForKey(actions, key); idx >= 0 {
-			expectedIndices[idx] = struct{}{}
-		}
-	}
+	indexes := lo.FilterMap(expectedKeys, func(key string, _ int) (int, bool) {
+		idx := actionIndexForKey(actions, key)
+		return idx, idx >= 0
+	})
+	expectedIndices := lo.SliceToMap(indexes, func(idx int) (int, struct{}) {
+		return idx, struct{}{}
+	})
 
 	useExpected := len(expectedIndices) > 0
 	if useExpected {
@@ -608,6 +694,7 @@ func resolveExpectedActionIndices(actions []models.WorkflowAction, parallelKeys 
 	return expectedIndices, useExpected
 }
 
+// groupAssignmentsByAction buckets assignments by action index for approval evaluation.
 func groupAssignmentsByAction(actions []models.WorkflowAction, allAssignments []*generated.WorkflowAssignment, expectedIndices map[int]struct{}, useExpected bool, actionIndex int) (map[int][]*generated.WorkflowAssignment, int) {
 	assignmentsByAction := make(map[int][]*generated.WorkflowAssignment)
 	maxActionIndex := -1
@@ -641,10 +728,12 @@ func groupAssignmentsByAction(actions []models.WorkflowAction, allAssignments []
 	return assignmentsByAction, maxActionIndex
 }
 
+// collectAssignmentIDs returns assignment IDs for event metadata payloads.
 func collectAssignmentIDs(assignments []*generated.WorkflowAssignment) []string {
 	return lo.Map(assignments, func(a *generated.WorkflowAssignment, _ int) string { return a.ID })
 }
 
+// recordApprovalEvent emits normalized approval/review completion event details.
 func (l *WorkflowListeners) recordApprovalEvent(
 	scope *observability.Scope,
 	instance *generated.WorkflowInstance,
@@ -670,6 +759,7 @@ func (l *WorkflowListeners) recordApprovalEvent(
 	l.recordEvent(scope, instance, enums.WorkflowEventTypeActionCompleted, action.Key, details)
 }
 
+// evaluateApprovalGroups evaluates grouped assignments and reports resolution/failure status.
 func evaluateApprovalGroups(actions []models.WorkflowAction, assignmentsByAction map[int][]*generated.WorkflowAssignment, expectedIndices map[int]struct{}, useExpected bool) (bool, bool) {
 	allResolved := true
 
@@ -731,9 +821,7 @@ func (l *WorkflowListeners) closePendingApprovalsForChangeRequest(scope *observa
 
 	indices := make([]int, 0, len(expectedIndices))
 	if useExpected {
-		for idx := range expectedIndices {
-			indices = append(indices, idx)
-		}
+		indices = lo.Keys(expectedIndices)
 	} else {
 		indices = append(indices, actionIndex)
 	}

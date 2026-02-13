@@ -16,8 +16,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	notegen "github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
@@ -29,48 +35,14 @@ func handleTrustCenterDocMutation(ctx *soiree.EventContext, payload *events.Muta
 		return nil
 	}
 
-	mut, ok := payload.Mutation.(*entgen.TrustCenterDocMutation)
-	if !ok {
+	if !shouldInvalidateCacheForTrustCenterDoc(payload) {
 		return nil
 	}
 
-	shouldClearCache := false
-
-	switch payload.Operation {
-	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
-		shouldClearCache = true
-	case ent.OpCreate.String():
-		if visibility, ok := mut.Visibility(); ok {
-			if visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible ||
-				visibility == enums.TrustCenterDocumentVisibilityProtected {
-				shouldClearCache = true
-			}
-		}
-	case ent.OpUpdate.String(), ent.OpUpdateOne.String():
-		if _, ok := mut.Visibility(); ok {
-			// any visibility change should clear cache to ensure consistency
-			shouldClearCache = true
-		}
-	}
-
-	if !shouldClearCache {
-		return nil
-	}
-
-	var trustCenterID string
-	if tcID, exists := mut.TrustCenterID(); exists {
-		trustCenterID = tcID
-	}
+	trustCenterID := mutationStringFieldValue(ctx, payload, trustcenterdoc.FieldTrustCenterID)
 
 	if trustCenterID == "" {
-		docID := payload.EntityID
-		if docID == "" {
-			if id, ok := mut.ID(); ok {
-				docID = id
-			}
-		}
-
-		if docID != "" {
+		if docID, ok := mutationEntityID(ctx, payload); ok && docID != "" {
 			doc, err := payload.Client.TrustCenterDoc.Query().Where(trustcenterdoc.ID(docID)).Select(trustcenterdoc.FieldTrustCenterID).Only(ctx.Context())
 			if err == nil && doc != nil {
 				trustCenterID = doc.TrustCenterID
@@ -91,20 +63,30 @@ func handleNoteMutation(ctx *soiree.EventContext, payload *events.MutationPayloa
 		return nil
 	}
 
-	mut, ok := payload.Mutation.(*entgen.NoteMutation)
-	if !ok {
-		return nil
-	}
-
-	tcIDs := mut.TrustCenterIDs()
-	if len(tcIDs) == 0 {
-		return nil
-	}
-
-	for _, tcID := range tcIDs {
-		if err := enqueueCacheRefresh(ctx.Context(), payload.Client, tcID); err != nil {
-			logx.FromContext(ctx.Context()).Warn().Err(err).Str("trust_center_id", tcID).Msg("failed to trigger cache invalidation for note")
+	trustCenterID := mutationStringFieldValue(ctx, payload, notegen.FieldTrustCenterID)
+	if trustCenterID == "" {
+		noteID, ok := mutationEntityID(ctx, payload)
+		if !ok || noteID == "" {
+			return nil
 		}
+
+		note, err := payload.Client.Note.Query().
+			Where(notegen.ID(noteID)).
+			Select(notegen.FieldTrustCenterID).
+			Only(ctx.Context())
+		if err != nil || note == nil || note.TrustCenterID == "" {
+			return nil
+		}
+
+		trustCenterID = note.TrustCenterID
+	}
+
+	if trustCenterID == "" {
+		return nil
+	}
+
+	if err := enqueueCacheRefresh(ctx.Context(), payload.Client, trustCenterID); err != nil {
+		logx.FromContext(ctx.Context()).Warn().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to trigger cache invalidation for note")
 	}
 
 	return nil
@@ -116,25 +98,10 @@ func handleTrustCenterEntityMutation(ctx *soiree.EventContext, payload *events.M
 		return nil
 	}
 
-	mut, ok := payload.Mutation.(*entgen.TrustCenterEntityMutation)
-	if !ok {
-		return nil
-	}
-
-	var trustCenterID string
-	if tcID, exists := mut.TrustCenterID(); exists {
-		trustCenterID = tcID
-	}
+	trustCenterID := mutationStringFieldValue(ctx, payload, trustcenterentity.FieldTrustCenterID)
 
 	if trustCenterID == "" {
-		entityID := payload.EntityID
-		if entityID == "" {
-			if id, ok := mut.ID(); ok {
-				entityID = id
-			}
-		}
-
-		if entityID != "" {
+		if entityID, ok := mutationEntityID(ctx, payload); ok && entityID != "" {
 			entity, err := payload.Client.TrustCenterEntity.Get(ctx.Context(), entityID)
 			if err == nil && entity != nil {
 				trustCenterID = entity.TrustCenterID
@@ -155,25 +122,10 @@ func handleTrustCenterSubprocessorMutation(ctx *soiree.EventContext, payload *ev
 		return nil
 	}
 
-	mut, ok := payload.Mutation.(*entgen.TrustCenterSubprocessorMutation)
-	if !ok {
-		return nil
-	}
-
-	var trustCenterID string
-	if tcID, exists := mut.TrustCenterID(); exists {
-		trustCenterID = tcID
-	}
+	trustCenterID := mutationStringFieldValue(ctx, payload, trustcentersubprocessor.FieldTrustCenterID)
 
 	if trustCenterID == "" {
-		entityID := payload.EntityID
-		if entityID == "" {
-			if id, ok := mut.ID(); ok {
-				entityID = id
-			}
-		}
-
-		if entityID != "" {
+		if entityID, ok := mutationEntityID(ctx, payload); ok && entityID != "" {
 			entity, err := payload.Client.TrustCenterSubprocessor.Get(ctx.Context(), entityID)
 			if err == nil && entity != nil {
 				trustCenterID = entity.TrustCenterID
@@ -194,25 +146,10 @@ func handleTrustCenterComplianceMutation(ctx *soiree.EventContext, payload *even
 		return nil
 	}
 
-	mut, ok := payload.Mutation.(*entgen.TrustCenterComplianceMutation)
-	if !ok {
-		return nil
-	}
-
-	var trustCenterID string
-	if tcID, exists := mut.TrustCenterID(); exists {
-		trustCenterID = tcID
-	}
+	trustCenterID := mutationStringFieldValue(ctx, payload, trustcentercompliance.FieldTrustCenterID)
 
 	if trustCenterID == "" {
-		entityID := payload.EntityID
-		if entityID == "" {
-			if id, ok := mut.ID(); ok {
-				entityID = id
-			}
-		}
-
-		if entityID != "" {
+		if entityID, ok := mutationEntityID(ctx, payload); ok && entityID != "" {
 			entity, err := payload.Client.TrustCenterCompliance.Get(ctx.Context(), entityID)
 			if err == nil && entity != nil {
 				trustCenterID = entity.TrustCenterID
@@ -233,23 +170,12 @@ func handleSubprocessorMutation(ctx *soiree.EventContext, payload *events.Mutati
 		return nil
 	}
 
-	mut, ok := payload.Mutation.(*entgen.SubprocessorMutation)
-	if !ok {
+	if !shouldInvalidateCacheForSubprocessor(payload) {
 		return nil
 	}
 
-	if !shouldInvalidateCacheForSubprocessor(mut, payload.Operation) {
-		return nil
-	}
-
-	subprocessorID := payload.EntityID
-	if subprocessorID == "" {
-		if id, ok := mut.ID(); ok {
-			subprocessorID = id
-		}
-	}
-
-	if subprocessorID == "" {
+	subprocessorID, ok := mutationEntityID(ctx, payload)
+	if !ok || subprocessorID == "" {
 		return nil
 	}
 
@@ -270,11 +196,11 @@ func handleSubprocessorMutation(ctx *soiree.EventContext, payload *events.Mutati
 		return tcs.TrustCenterID, tcs.TrustCenterID != ""
 	}))
 
-	for _, tcID := range trustCenterIDs {
+	lo.ForEach(trustCenterIDs, func(tcID string, _ int) {
 		if err := enqueueCacheRefresh(ctx.Context(), payload.Client, tcID); err != nil {
 			logx.FromContext(ctx.Context()).Warn().Err(err).Str("trust_center_id", tcID).Msg("failed to trigger cache invalidation for subprocessor")
 		}
-	}
+	})
 
 	return nil
 }
@@ -285,23 +211,12 @@ func handleStandardMutation(ctx *soiree.EventContext, payload *events.MutationPa
 		return nil
 	}
 
-	mut, ok := payload.Mutation.(*entgen.StandardMutation)
-	if !ok {
+	if !shouldInvalidateCacheForStandard(payload) {
 		return nil
 	}
 
-	if !shouldInvalidateCacheForStandard(mut, payload.Operation) {
-		return nil
-	}
-
-	standardID := payload.EntityID
-	if standardID == "" {
-		if id, ok := mut.ID(); ok {
-			standardID = id
-		}
-	}
-
-	if standardID == "" {
+	standardID, ok := mutationEntityID(ctx, payload)
+	if !ok || standardID == "" {
 		return nil
 	}
 
@@ -322,11 +237,11 @@ func handleStandardMutation(ctx *soiree.EventContext, payload *events.MutationPa
 		return tcd.TrustCenterID, tcd.TrustCenterID != ""
 	}))
 
-	for _, tcID := range trustCenterIDs {
+	lo.ForEach(trustCenterIDs, func(tcID string, _ int) {
 		if err := enqueueCacheRefresh(ctx.Context(), payload.Client, tcID); err != nil {
 			logx.FromContext(ctx.Context()).Warn().Err(err).Str("trust_center_id", tcID).Msg("failed to trigger cache invalidation for standard")
 		}
-	}
+	})
 
 	return nil
 }
@@ -337,21 +252,9 @@ func handleTrustCenterSettingMutation(ctx *soiree.EventContext, payload *events.
 		return nil
 	}
 
-	mut, ok := payload.Mutation.(*entgen.TrustCenterSettingMutation)
-	if !ok {
-		return nil
-	}
-
-	trustCenterID, exists := mut.TrustCenterID()
-	if trustCenterID == "" || !exists {
-		settingID := payload.EntityID
-		if settingID == "" {
-			if id, ok := mut.ID(); ok {
-				settingID = id
-			}
-		}
-
-		if settingID != "" {
+	trustCenterID := mutationStringFieldValue(ctx, payload, trustcentersetting.FieldTrustCenterID)
+	if trustCenterID == "" {
+		if settingID, ok := mutationEntityID(ctx, payload); ok && settingID != "" {
 			setting, err := payload.Client.TrustCenterSetting.Get(ctx.Context(), settingID)
 			if err == nil && setting != nil {
 				trustCenterID = setting.TrustCenterID
@@ -368,7 +271,7 @@ func handleTrustCenterSettingMutation(ctx *soiree.EventContext, payload *events.
 
 // handleTrustCenterMutation processes TrustCenter mutations and refreshes cache
 func handleTrustCenterMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
-	if payload == nil {
+	if payload == nil || payload.Client == nil {
 		return nil
 	}
 
@@ -377,19 +280,8 @@ func handleTrustCenterMutation(ctx *soiree.EventContext, payload *events.Mutatio
 		return nil
 	}
 
-	mut, ok := payload.Mutation.(*entgen.TrustCenterMutation)
-	if !ok {
-		return nil
-	}
-
-	trustCenterID := payload.EntityID
-	if trustCenterID == "" {
-		if id, ok := mut.ID(); ok {
-			trustCenterID = id
-		}
-	}
-
-	if trustCenterID == "" {
+	trustCenterID, ok := mutationEntityID(ctx, payload)
+	if !ok || trustCenterID == "" {
 		return nil
 	}
 
@@ -397,43 +289,86 @@ func handleTrustCenterMutation(ctx *soiree.EventContext, payload *events.Mutatio
 }
 
 // shouldInvalidateCacheForSubprocessor determines if subprocessor changes warrant cache invalidation
-func shouldInvalidateCacheForSubprocessor(mut *entgen.SubprocessorMutation, operation string) bool {
-	switch operation {
+func shouldInvalidateCacheForSubprocessor(payload *events.MutationPayload) bool {
+	if payload == nil {
+		return false
+	}
+
+	switch payload.Operation {
 	case ent.OpCreate.String():
-		_, hasName := mut.Name()
-		_, hasLogoFileID := mut.LogoFileID()
-		_, hasLogoRemoteURL := mut.LogoRemoteURL()
-		return hasName || hasLogoFileID || hasLogoRemoteURL
+		return payloadTouchesFields(payload, subprocessor.FieldName, subprocessor.FieldLogoFileID, subprocessor.FieldLogoRemoteURL)
 	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
 		return true
 	case ent.OpUpdate.String(), ent.OpUpdateOne.String():
-		_, hasName := mut.Name()
-		_, hasLogoFileID := mut.LogoFileID()
-		_, hasLogoRemoteURL := mut.LogoRemoteURL()
-		logoFileCleared := mut.LogoFileIDCleared()
-		logoRemoteURLCleared := mut.LogoRemoteURLCleared()
-		return hasName || hasLogoFileID || hasLogoRemoteURL || logoFileCleared || logoRemoteURLCleared
+		return payloadTouchesFields(payload, subprocessor.FieldName, subprocessor.FieldLogoFileID, subprocessor.FieldLogoRemoteURL)
 	}
 
 	return false
 }
 
 // shouldInvalidateCacheForStandard determines if standard changes warrant cache invalidation
-func shouldInvalidateCacheForStandard(mut *entgen.StandardMutation, operation string) bool {
-	switch operation {
+func shouldInvalidateCacheForStandard(payload *events.MutationPayload) bool {
+	if payload == nil {
+		return false
+	}
+
+	switch payload.Operation {
 	case ent.OpCreate.String():
-		_, hasName := mut.Name()
-		_, hasLogoFileID := mut.LogoFileID()
-		return hasName || hasLogoFileID
+		return payloadTouchesFields(payload, standard.FieldName, standard.FieldLogoFileID)
 	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
 		return true
 	case ent.OpUpdate.String(), ent.OpUpdateOne.String():
-		_, hasName := mut.Name()
-		_, hasLogoFileID := mut.LogoFileID()
-		logoFileCleared := mut.LogoFileIDCleared()
-		return hasName || hasLogoFileID || logoFileCleared
+		return payloadTouchesFields(payload, standard.FieldName, standard.FieldLogoFileID)
 	}
 	return false
+}
+
+// shouldInvalidateCacheForTrustCenterDoc determines if doc changes require cache invalidation.
+func shouldInvalidateCacheForTrustCenterDoc(payload *events.MutationPayload) bool {
+	if payload == nil {
+		return false
+	}
+
+	switch payload.Operation {
+	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
+		return true
+	case ent.OpCreate.String():
+		visibility := events.ValueString(payload.ProposedChanges[trustcenterdoc.FieldVisibility])
+		return visibility == string(enums.TrustCenterDocumentVisibilityPubliclyVisible) ||
+			visibility == string(enums.TrustCenterDocumentVisibilityProtected)
+	case ent.OpUpdate.String(), ent.OpUpdateOne.String():
+		// any visibility change should clear cache to ensure consistency
+		return payloadTouchesFields(payload, trustcenterdoc.FieldVisibility)
+	}
+
+	return false
+}
+
+// mutationStringFieldValue resolves a mutation field value from durable metadata, then event properties.
+func mutationStringFieldValue(ctx *soiree.EventContext, payload *events.MutationPayload, field string) string {
+	if field == "" {
+		return ""
+	}
+
+	if payload != nil && payload.ProposedChanges != nil {
+		if raw, ok := payload.ProposedChanges[field]; ok {
+			return events.ValueString(raw)
+		}
+	}
+
+	if ctx == nil {
+		return ""
+	}
+
+	if value, ok := ctx.PropertyString(field); ok {
+		return value
+	}
+
+	if raw, ok := ctx.Property(field); ok {
+		return events.ValueString(raw)
+	}
+
+	return ""
 }
 
 const (
