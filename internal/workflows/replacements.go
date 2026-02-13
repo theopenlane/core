@@ -1,8 +1,9 @@
 package workflows
 
 import (
-	"encoding/json"
 	"fmt"
+
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // BuildObjectReplacements builds string replacements from object fields for template substitution
@@ -22,13 +23,8 @@ func BuildObjectReplacements(obj *Object) map[string]string {
 		node = obj.CELValue()
 	}
 
-	data, err := json.Marshal(node)
+	payload, err := jsonx.ToMap(node)
 	if err != nil {
-		return replacements
-	}
-
-	var payload map[string]any
-	if err := json.Unmarshal(data, &payload); err != nil {
 		return replacements
 	}
 

@@ -14,6 +14,8 @@ type CredentialSet struct {
 	AccessKeyID string `json:"accessKeyID"`
 	// SecretAccessKey for cloud providers
 	SecretAccessKey string `json:"secretAccessKey"`
+	// SessionToken for temporary cloud credentials
+	SessionToken string `json:"sessionToken"`
 	// ProjectID for GCS
 	ProjectID string `json:"projectID"`
 	// AccountID for Cloudflare R2
@@ -44,6 +46,9 @@ func (c CredentialSet) String() string {
 
 	if c.SecretAccessKey != "" {
 		masked["secretAccessKey"] = "***"
+	}
+	if c.SessionToken != "" {
+		masked["sessionToken"] = "***"
 	}
 
 	if c.ProjectID != "" {

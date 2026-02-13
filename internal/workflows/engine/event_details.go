@@ -129,12 +129,12 @@ func actionIndexOutOfBoundsDetails(payload soiree.WorkflowActionStartedPayload) 
 	}
 }
 
-// assignmentCreatedDetailsForApproval builds assignment created details for approval actions
-func assignmentCreatedDetailsForApproval(action models.WorkflowAction, actionIndex int, obj *workflows.Object, assignmentIDs, targetUserIDs []string, required bool, requiredCount int, label string) assignmentCreatedDetails {
+// assignmentCreatedDetailsForAction builds assignment created details for approval or review actions
+func assignmentCreatedDetailsForAction(action models.WorkflowAction, actionType enums.WorkflowActionType, actionIndex int, obj *workflows.Object, assignmentIDs, targetUserIDs []string, required bool, requiredCount int, label string) assignmentCreatedDetails {
 	details := assignmentCreatedDetails{
 		ActionKey:     action.Key,
 		ActionIndex:   actionIndex,
-		ActionType:    enums.WorkflowActionTypeApproval,
+		ActionType:    actionType,
 		AssignmentIDs: assignmentIDs,
 		TargetUserIDs: targetUserIDs,
 		Required:      required,
@@ -189,26 +189,6 @@ func approvalFailureMessage(counts AssignmentStatusCounts, requiredCount int) st
 	}
 
 	return approvalFailedMessage
-}
-
-// assignmentCreatedDetailsForReview builds assignment created details for review actions
-func assignmentCreatedDetailsForReview(action models.WorkflowAction, actionIndex int, obj *workflows.Object, assignmentIDs, targetUserIDs []string, required bool, requiredCount int, label string) assignmentCreatedDetails {
-	details := assignmentCreatedDetails{
-		ActionKey:     action.Key,
-		ActionIndex:   actionIndex,
-		ActionType:    enums.WorkflowActionTypeReview,
-		AssignmentIDs: assignmentIDs,
-		TargetUserIDs: targetUserIDs,
-		Required:      required,
-		RequiredCount: requiredCount,
-		Label:         label,
-	}
-	if obj != nil {
-		details.ObjectID = obj.ID
-		details.ObjectType = obj.Type
-	}
-
-	return details
 }
 
 // reviewCompletedDetails builds action completion details for review actions

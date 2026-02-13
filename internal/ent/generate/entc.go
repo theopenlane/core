@@ -220,6 +220,8 @@ func getEntGqlExtension() *entgql.Extension {
 
 	schemaHooks = append(schemaHooks, dExt.SchemaHooks()...)
 
+	schemaHooks = append(schemaHooks, genhooks.WithStringSliceWhereOps())
+
 	gqlExt, err := entgql.NewExtension(
 		entgql.WithSchemaGenerator(),
 		entgql.WithSchemaPath(graphSchemaDir+"ent.graphql"),

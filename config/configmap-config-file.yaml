@@ -1126,6 +1126,22 @@ data:
       successredirecturl: ""
       {{- end }}
     {{- end }}
+    {{- if .Values.openlane.coreConfiguration.integrationgithubapp }}
+    integrationgithubapp:
+      {{- if .Values.openlane.coreConfiguration.integrationgithubapp.enabled }}
+      enabled: {{ .Values.openlane.coreConfiguration.integrationgithubapp.enabled }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrationgithubapp.appslug }}
+      appslug: {{ .Values.openlane.coreConfiguration.integrationgithubapp.appslug | quote }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrationgithubapp.successredirecturl }}
+      successredirecturl: {{ .Values.openlane.coreConfiguration.integrationgithubapp.successredirecturl | quote }}
+      {{- else if .Values.domain }}
+      successredirecturl: "https://console.{{ .Values.domain }}/organization-settings/integrations"
+      {{- else }}
+      successredirecturl: ""
+      {{- end }}
+    {{- end }}
     {{- if .Values.openlane.coreConfiguration.workflows }}
     workflows:
       {{- if .Values.openlane.coreConfiguration.workflows.enabled }}

@@ -52,6 +52,12 @@ type APITokenUpdatePayload struct {
 	APIToken *generated.APIToken `json:"apiToken"`
 }
 
+// Return response for markNotificationsAsRead mutation
+type ActionNotificationsReadPayload struct {
+	// Updated notification IDs
+	ReadIDs []*string `json:"readIDs"`
+}
+
 // Return response for createBulkActionPlan mutation
 type ActionPlanBulkCreatePayload struct {
 	// Created actionPlans
@@ -1420,6 +1426,20 @@ type HushUpdatePayload struct {
 type IdentityHolderBulkCreatePayload struct {
 	// Created identityHolders
 	IdentityHolders []*generated.IdentityHolder `json:"identityHolders,omitempty"`
+}
+
+// Return response for deleteBulkIdentityHolder mutation
+type IdentityHolderBulkDeletePayload struct {
+	// Deleted identityHolder IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkIdentityHolder mutation
+type IdentityHolderBulkUpdatePayload struct {
+	// Updated identityHolders
+	IdentityHolders []*generated.IdentityHolder `json:"identityHolders,omitempty"`
+	// IDs of the updated identityHolders
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createIdentityHolder mutation

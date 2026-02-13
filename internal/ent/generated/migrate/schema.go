@@ -253,11 +253,12 @@ var (
 		{Name: "email_click_count", Type: field.TypeInt, Nullable: true, Default: 0},
 		{Name: "last_email_event_at", Type: field.TypeTime, Nullable: true},
 		{Name: "email_metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE"}, Default: "SENT"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE", "DRAFT"}, Default: "SENT"},
 		{Name: "assigned_at", Type: field.TypeTime},
 		{Name: "started_at", Type: field.TypeTime},
 		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "due_date", Type: field.TypeTime, Nullable: true},
+		{Name: "is_draft", Type: field.TypeBool, Default: false},
 		{Name: "assessment_id", Type: field.TypeString},
 		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
 		{Name: "campaign_id", Type: field.TypeString, Nullable: true},
@@ -273,37 +274,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "assessment_responses_assessments_assessment_responses",
-				Columns:    []*schema.Column{AssessmentResponsesColumns[22]},
+				Columns:    []*schema.Column{AssessmentResponsesColumns[23]},
 				RefColumns: []*schema.Column{AssessmentsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "assessment_responses_document_data_document",
-				Columns:    []*schema.Column{AssessmentResponsesColumns[23]},
+				Columns:    []*schema.Column{AssessmentResponsesColumns[24]},
 				RefColumns: []*schema.Column{DocumentDataColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assessment_responses_campaigns_assessment_responses",
-				Columns:    []*schema.Column{AssessmentResponsesColumns[24]},
+				Columns:    []*schema.Column{AssessmentResponsesColumns[25]},
 				RefColumns: []*schema.Column{CampaignsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assessment_responses_entities_assessment_responses",
-				Columns:    []*schema.Column{AssessmentResponsesColumns[25]},
+				Columns:    []*schema.Column{AssessmentResponsesColumns[26]},
 				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assessment_responses_identity_holders_assessment_responses",
-				Columns:    []*schema.Column{AssessmentResponsesColumns[26]},
+				Columns:    []*schema.Column{AssessmentResponsesColumns[27]},
 				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assessment_responses_organizations_assessment_responses",
-				Columns:    []*schema.Column{AssessmentResponsesColumns[27]},
+				Columns:    []*schema.Column{AssessmentResponsesColumns[28]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -312,7 +313,7 @@ var (
 			{
 				Name:    "assessmentresponse_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[27]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[28]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -320,7 +321,7 @@ var (
 			{
 				Name:    "assessmentresponse_assessment_id_email_is_test",
 				Unique:  true,
-				Columns: []*schema.Column{AssessmentResponsesColumns[22], AssessmentResponsesColumns[8], AssessmentResponsesColumns[7]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[23], AssessmentResponsesColumns[8], AssessmentResponsesColumns[7]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND campaign_id IS NULL",
 				},
@@ -328,7 +329,7 @@ var (
 			{
 				Name:    "assessmentresponse_campaign_id_assessment_id_email_is_test",
 				Unique:  true,
-				Columns: []*schema.Column{AssessmentResponsesColumns[24], AssessmentResponsesColumns[22], AssessmentResponsesColumns[8], AssessmentResponsesColumns[7]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[25], AssessmentResponsesColumns[23], AssessmentResponsesColumns[8], AssessmentResponsesColumns[7]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND campaign_id IS NOT NULL",
 				},
@@ -336,17 +337,17 @@ var (
 			{
 				Name:    "assessmentresponse_campaign_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[24]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[25]},
 			},
 			{
 				Name:    "assessmentresponse_identity_holder_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[26]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[27]},
 			},
 			{
 				Name:    "assessmentresponse_entity_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[25]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[26]},
 			},
 			{
 				Name:    "assessmentresponse_status",
@@ -692,7 +693,7 @@ var (
 		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "email", Type: field.TypeString},
 		{Name: "full_name", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE"}, Default: "NOT_STARTED"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE", "DRAFT"}, Default: "NOT_STARTED"},
 		{Name: "sent_at", Type: field.TypeTime, Nullable: true},
 		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
@@ -2416,7 +2417,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
-		{Name: "export_type", Type: field.TypeEnum, Enums: []string{"CONTROL", "DIRECTORY_MEMBERSHIP", "EVIDENCE", "FINDING", "INTERNAL_POLICY", "PROCEDURE", "REMEDIATION", "REVIEW", "RISK", "SUBPROCESSOR", "SUBSCRIBER", "TASK", "TRUST_CENTER_SUBPROCESSOR", "VULNERABILITY"}},
+		{Name: "export_type", Type: field.TypeEnum, Enums: []string{"ASSET", "CONTROL", "DIRECTORY_MEMBERSHIP", "ENTITY", "EVIDENCE", "FINDING", "IDENTITY_HOLDER", "INTERNAL_POLICY", "PROCEDURE", "REMEDIATION", "REVIEW", "RISK", "SUBPROCESSOR", "SUBSCRIBER", "TASK", "TRUST_CENTER_SUBPROCESSOR", "VULNERABILITY"}},
 		{Name: "format", Type: field.TypeEnum, Enums: []string{"CSV"}, Default: "CSV"},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "FAILED", "READY", "NODATA"}, Default: "PENDING"},
 		{Name: "fields", Type: field.TypeJSON, Nullable: true},
@@ -3632,7 +3633,7 @@ var (
 			},
 			{
 				Name:    "integration_owner_id_kind",
-				Unique:  true,
+				Unique:  false,
 				Columns: []*schema.Column{IntegrationsColumns[25], IntegrationsColumns[15]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",

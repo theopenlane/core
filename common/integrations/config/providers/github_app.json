@@ -1,0 +1,12 @@
+{
+  "name": "github_app",
+  "displayName": "GitHub App",
+  "category": "code",
+  "authType": "github_app",
+  "active": true,
+  "logoUrl": "",
+  "docsUrl": "https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps",
+  "githubApp": {
+    "baseUrl": "https://api.github.com"
+  }
+}

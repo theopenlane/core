@@ -2,6 +2,7 @@ package types //nolint:revive
 
 import (
 	"context"
+	"encoding/json"
 )
 
 // OperationName identifies a provider operation (health check, findings harvest, etc).
@@ -17,6 +18,13 @@ const (
 	OperationKindCollectFindings OperationKind = "collect_findings"
 	// OperationKindScanSettings represents a settings scan operation
 	OperationKindScanSettings OperationKind = "scan_settings"
+	// OperationKindNotify represents a notification operation
+	OperationKindNotify OperationKind = "notify"
+)
+
+const (
+	// OperationVulnerabilitiesCollect identifies the vulnerabilities collection operation.
+	OperationVulnerabilitiesCollect OperationName = "vulnerabilities.collect"
 )
 
 // OperationStatus communicates the result of an operation run
@@ -75,6 +83,18 @@ type OperationResult struct {
 	Details map[string]any
 }
 
+// AlertEnvelope wraps an alert payload emitted by integration webhooks.
+type AlertEnvelope struct {
+	// AlertType identifies the alert category (dependabot, code_scanning, etc).
+	AlertType string `json:"alertType"`
+	// Resource identifies the alert resource (repo, project, etc).
+	Resource string `json:"resource,omitempty"`
+	// Action indicates the webhook action (created, resolved, etc).
+	Action string `json:"action,omitempty"`
+	// Payload is the raw alert payload as received from the provider.
+	Payload json.RawMessage `json:"payload,omitempty"`
+}
+
 // OperationFunc executes a provider operation using stored credentials and optional clients
 type OperationFunc func(ctx context.Context, input OperationInput) (OperationResult, error)
 
@@ -88,9 +108,9 @@ type OperationRequest struct {
 	Name OperationName
 	// Config contains operation-specific configuration
 	Config map[string]any
-	// Force bypasses cached operation results
+	// Force bypasses cached credentials and forces a credential refresh
 	Force bool
-	// ClientForce forces creation of a new client instance
+	// ClientForce forces creation of a new client instance bypassing the client pool cache
 	ClientForce bool
 }
 

@@ -8,17 +8,23 @@ import (
 
 	"github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/activation"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/keymaker"
+	"github.com/theopenlane/core/internal/keystore"
 )
 
 func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[types.ProviderType]config.ProviderSpec) func() {
 	t.Helper()
 
-	original := suite.h.IntegrationRegistry
+	originalRegistry := suite.h.IntegrationRegistry
+	originalActivation := suite.h.IntegrationActivation
 
-	reg, err := registry.NewRegistry(context.Background())
+	ctx := context.Background()
+	reg, err := registry.NewRegistry(ctx)
 	require.NoError(t, err)
+
 	for provider, spec := range specs {
 		pt := provider
 		builder := providers.BuilderFunc{
@@ -27,14 +33,36 @@ func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[t
 				return &testProvider{providerType: pt}, nil
 			},
 		}
-		require.NoError(t, reg.UpsertProvider(context.Background(), spec, builder))
+		require.NoError(t, reg.UpsertProvider(ctx, spec, builder))
 	}
 
 	suite.h.IntegrationRegistry = reg
 
+	store := keystore.NewStore(suite.db)
+	sessions := keymaker.NewMemorySessionStore()
+	svc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
+	require.NoError(t, err)
+
+	mockOps := &mockOperationRunner{}
+	activationSvc, err := activation.NewService(svc, store, mockOps)
+	require.NoError(t, err)
+	suite.h.IntegrationActivation = activationSvc
+
 	return func() {
-		suite.h.IntegrationRegistry = original
+		suite.h.IntegrationRegistry = originalRegistry
+		suite.h.IntegrationActivation = originalActivation
 	}
+}
+
+// mockOperationRunner implements activation.OperationRunner for tests
+type mockOperationRunner struct{}
+
+func (m *mockOperationRunner) Run(_ context.Context, _ types.OperationRequest) (types.OperationResult, error) {
+	return types.OperationResult{
+		Status:  types.OperationStatusOK,
+		Summary: "mock health check passed",
+		Details: map[string]any{"mock": true},
+	}, nil
 }
 
 type testProvider struct {

@@ -136,12 +136,13 @@ var (
 		{Name: "email_click_count", Type: field.TypeInt, Nullable: true, Default: 0},
 		{Name: "last_email_event_at", Type: field.TypeTime, Nullable: true},
 		{Name: "email_metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE"}, Default: "SENT"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE", "DRAFT"}, Default: "SENT"},
 		{Name: "assigned_at", Type: field.TypeTime},
 		{Name: "started_at", Type: field.TypeTime},
 		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "due_date", Type: field.TypeTime, Nullable: true},
 		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
+		{Name: "is_draft", Type: field.TypeBool, Default: false},
 	}
 	// AssessmentResponseHistoryTable holds the schema information for the "assessment_response_history" table.
 	AssessmentResponseHistoryTable = &schema.Table{
@@ -301,7 +302,7 @@ var (
 		{Name: "group_id", Type: field.TypeString, Nullable: true},
 		{Name: "email", Type: field.TypeString},
 		{Name: "full_name", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE"}, Default: "NOT_STARTED"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE", "DRAFT"}, Default: "NOT_STARTED"},
 		{Name: "sent_at", Type: field.TypeTime, Nullable: true},
 		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},

@@ -2,7 +2,6 @@ package keystore
 
 import (
 	"context"
-	"encoding/json"
 	"strings"
 	"time"
 
@@ -11,6 +10,7 @@ import (
 
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
+	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -18,6 +18,7 @@ import (
 	integration "github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
@@ -57,6 +58,8 @@ func (s *Store) SaveCredential(ctx context.Context, orgID string, payload types.
 		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to ensure integration record")
 		return types.CredentialPayload{}, err
 	}
+
+	s.updateIntegrationProviderState(systemCtx, integrationRecord, payload.Provider, payload.Data.ProviderData)
 
 	secretName := string(payload.Provider)
 	envelope := payloadToCredentialSet(payload, s.now)
@@ -145,7 +148,16 @@ func (s *Store) LoadCredential(ctx context.Context, orgID string, provider types
 
 		envelope := secret.CredentialSet
 
-		return credentialSetToPayload(provider, envelope)
+		s.updateIntegrationProviderState(ctx, integrationRecord, provider, envelope.ProviderData)
+
+		payload, err := credentialSetToPayload(provider, envelope)
+		if err != nil {
+			return types.CredentialPayload{}, err
+		}
+		providerState := integrationRecord.ProviderState
+		payload.ProviderState = &providerState
+
+		return payload, nil
 	}
 
 	return types.CredentialPayload{}, ErrCredentialNotFound
@@ -238,6 +250,69 @@ func (s *Store) ensureIntegration(ctx context.Context, orgID string, provider ty
 	return record, nil
 }
 
+func (s *Store) updateIntegrationProviderState(ctx context.Context, record *ent.Integration, provider types.ProviderType, data map[string]any) {
+	if len(data) == 0 {
+		return
+	}
+
+	var (
+		updated bool
+		next    = record.ProviderState
+	)
+
+	switch provider {
+	case types.ProviderType("github"), types.ProviderType("github_app"):
+		appID, _ := data["appId"].(string)
+		installationID, _ := data["installationId"].(string)
+		if appID == "" && installationID == "" {
+			return
+		}
+
+		current := next.GitHub
+		currentAppID := ""
+		currentInstallationID := ""
+		if current != nil {
+			currentAppID = current.AppID
+			currentInstallationID = current.InstallationID
+		}
+
+		nextAppID := currentAppID
+		if appID != "" {
+			nextAppID = appID
+		}
+		nextInstallationID := currentInstallationID
+		if installationID != "" {
+			nextInstallationID = installationID
+		}
+
+		if nextAppID == currentAppID && nextInstallationID == currentInstallationID {
+			return
+		}
+
+		nextGitHub := state.GitHubState{}
+		if current != nil {
+			nextGitHub = *current
+		}
+		nextGitHub.AppID = nextAppID
+		nextGitHub.InstallationID = nextInstallationID
+		next.GitHub = &nextGitHub
+		updated = true
+	default:
+		return
+	}
+
+	if !updated {
+		return
+	}
+
+	if err := s.db.Integration.UpdateOneID(record.ID).SetProviderState(next).Exec(ctx); err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Str("provider", string(provider)).Msg("failed to update integration provider state")
+		return
+	}
+
+	record.ProviderState = next
+}
+
 // payloadToCredentialSet converts a CredentialPayload into a storable CredentialSet
 func payloadToCredentialSet(payload types.CredentialPayload, now func() time.Time) models.CredentialSet {
 	cloned := payload.Data
@@ -318,13 +393,8 @@ func claimsToMap(claims *oidc.IDTokenClaims) (map[string]any, error) {
 		return nil, nil
 	}
 
-	bytes, err := json.Marshal(claims)
+	out, err := jsonx.ToMap(claims)
 	if err != nil {
-		return nil, err
-	}
-
-	var out map[string]any
-	if err := json.Unmarshal(bytes, &out); err != nil {
 		return nil, err
 	}
 
@@ -337,13 +407,8 @@ func claimsFromSet(raw map[string]any) *oidc.IDTokenClaims {
 		return nil
 	}
 
-	bytes, err := json.Marshal(raw)
-	if err != nil {
-		return nil
-	}
-
 	var claims oidc.IDTokenClaims
-	if err := json.Unmarshal(bytes, &claims); err != nil {
+	if err := jsonx.RoundTrip(raw, &claims); err != nil {
 		return nil
 	}
 

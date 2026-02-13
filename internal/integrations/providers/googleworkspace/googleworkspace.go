@@ -11,5 +11,5 @@ const TypeGoogleWorkspace = types.ProviderType("google_workspace")
 
 // Builder returns the Google Workspace provider builder
 func Builder() providers.Builder {
-	return oauth.Builder(TypeGoogleWorkspace, oauth.WithOperations(googleWorkspaceOperations()))
+	return oauth.Builder(TypeGoogleWorkspace, oauth.WithOperations(googleWorkspaceOperations()), oauth.WithClientDescriptors(googleWorkspaceClientDescriptors()))
 }

@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/actionplanhistory"
@@ -552,6 +554,27 @@ type ActionPlanHistoryWhereInput struct {
 	SourceNotNil       bool     `json:"sourceNotNil,omitempty"`
 	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
 	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "tag_suggestions" JSON-string-array predicates.
+	TagSuggestionsHas *string `json:"tagSuggestionsHas,omitempty"`
+
+	// "dismissed_tag_suggestions" JSON-string-array predicates.
+	DismissedTagSuggestionsHas *string `json:"dismissedTagSuggestionsHas,omitempty"`
+
+	// "control_suggestions" JSON-string-array predicates.
+	ControlSuggestionsHas *string `json:"controlSuggestionsHas,omitempty"`
+
+	// "dismissed_control_suggestions" JSON-string-array predicates.
+	DismissedControlSuggestionsHas *string `json:"dismissedControlSuggestionsHas,omitempty"`
+
+	// "improvement_suggestions" JSON-string-array predicates.
+	ImprovementSuggestionsHas *string `json:"improvementSuggestionsHas,omitempty"`
+
+	// "dismissed_improvement_suggestions" JSON-string-array predicates.
+	DismissedImprovementSuggestionsHas *string `json:"dismissedImprovementSuggestionsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -1787,6 +1810,55 @@ func (i *ActionPlanHistoryWhereInput) P() (predicate.ActionPlanHistory, error) {
 		predicates = append(predicates, actionplanhistory.SourceContainsFold(*i.SourceContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(actionplanhistory.FieldTags, v))
+		})
+	}
+
+	if i.TagSuggestionsHas != nil {
+		v := *i.TagSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(actionplanhistory.FieldTagSuggestions, v))
+		})
+	}
+
+	if i.DismissedTagSuggestionsHas != nil {
+		v := *i.DismissedTagSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(actionplanhistory.FieldDismissedTagSuggestions, v))
+		})
+	}
+
+	if i.ControlSuggestionsHas != nil {
+		v := *i.ControlSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(actionplanhistory.FieldControlSuggestions, v))
+		})
+	}
+
+	if i.DismissedControlSuggestionsHas != nil {
+		v := *i.DismissedControlSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(actionplanhistory.FieldDismissedControlSuggestions, v))
+		})
+	}
+
+	if i.ImprovementSuggestionsHas != nil {
+		v := *i.ImprovementSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(actionplanhistory.FieldImprovementSuggestions, v))
+		})
+	}
+
+	if i.DismissedImprovementSuggestionsHas != nil {
+		v := *i.DismissedImprovementSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(actionplanhistory.FieldDismissedImprovementSuggestions, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyActionPlanHistoryWhereInput
@@ -1973,6 +2045,9 @@ type AssessmentHistoryWhereInput struct {
 	ResponseDueDurationLTE    *int64  `json:"responseDueDurationLTE,omitempty"`
 	ResponseDueDurationIsNil  bool    `json:"responseDueDurationIsNil,omitempty"`
 	ResponseDueDurationNotNil bool    `json:"responseDueDurationNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -2479,6 +2554,13 @@ func (i *AssessmentHistoryWhereInput) P() (predicate.AssessmentHistory, error) {
 		predicates = append(predicates, assessmenthistory.ResponseDueDurationNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(assessmenthistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyAssessmentHistoryWhereInput
@@ -2832,6 +2914,10 @@ type AssessmentResponseHistoryWhereInput struct {
 	DueDateLTE    *time.Time  `json:"dueDateLTE,omitempty"`
 	DueDateIsNil  bool        `json:"dueDateIsNil,omitempty"`
 	DueDateNotNil bool        `json:"dueDateNotNil,omitempty"`
+
+	// "is_draft" field predicates.
+	IsDraft    *bool `json:"isDraft,omitempty"`
+	IsDraftNEQ *bool `json:"isDraftNEQ,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -3754,6 +3840,12 @@ func (i *AssessmentResponseHistoryWhereInput) P() (predicate.AssessmentResponseH
 	if i.DueDateNotNil {
 		predicates = append(predicates, assessmentresponsehistory.DueDateNotNil())
 	}
+	if i.IsDraft != nil {
+		predicates = append(predicates, assessmentresponsehistory.IsDraftEQ(*i.IsDraft))
+	}
+	if i.IsDraftNEQ != nil {
+		predicates = append(predicates, assessmentresponsehistory.IsDraftNEQ(*i.IsDraftNEQ))
+	}
 
 	switch len(predicates) {
 	case 0:
@@ -4447,6 +4539,12 @@ type AssetHistoryWhereInput struct {
 	PurchaseDateLTE    *models.DateTime  `json:"purchaseDateLTE,omitempty"`
 	PurchaseDateIsNil  bool              `json:"purchaseDateIsNil,omitempty"`
 	PurchaseDateNotNil bool              `json:"purchaseDateNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "categories" JSON-string-array predicates.
+	CategoriesHas *string `json:"categoriesHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -6279,6 +6377,20 @@ func (i *AssetHistoryWhereInput) P() (predicate.AssetHistory, error) {
 		predicates = append(predicates, assethistory.PurchaseDateNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(assethistory.FieldTags, v))
+		})
+	}
+
+	if i.CategoriesHas != nil {
+		v := *i.CategoriesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(assethistory.FieldCategories, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyAssetHistoryWhereInput
@@ -6781,6 +6893,9 @@ type CampaignHistoryWhereInput struct {
 	EmailTemplateIDNotNil       bool     `json:"emailTemplateIDNotNil,omitempty"`
 	EmailTemplateIDEqualFold    *string  `json:"emailTemplateIDEqualFold,omitempty"`
 	EmailTemplateIDContainsFold *string  `json:"emailTemplateIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -8085,6 +8200,13 @@ func (i *CampaignHistoryWhereInput) P() (predicate.CampaignHistory, error) {
 		predicates = append(predicates, campaignhistory.EmailTemplateIDContainsFold(*i.EmailTemplateIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(campaignhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyCampaignHistoryWhereInput
@@ -9321,6 +9443,9 @@ type ContactHistoryWhereInput struct {
 	StatusNEQ   *enums.UserStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.UserStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.UserStatus `json:"statusNotIn,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -9983,6 +10108,13 @@ func (i *ContactHistoryWhereInput) P() (predicate.ContactHistory, error) {
 		predicates = append(predicates, contacthistory.StatusNotIn(i.StatusNotIn...))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(contacthistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyContactHistoryWhereInput
@@ -10534,6 +10666,18 @@ type ControlHistoryWhereInput struct {
 	StandardIDNotNil       bool     `json:"standardIDNotNil,omitempty"`
 	StandardIDEqualFold    *string  `json:"standardIDEqualFold,omitempty"`
 	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "aliases" JSON-string-array predicates.
+	AliasesHas *string `json:"aliasesHas,omitempty"`
+
+	// "mapped_categories" JSON-string-array predicates.
+	MappedCategoriesHas *string `json:"mappedCategoriesHas,omitempty"`
+
+	// "control_questions" JSON-string-array predicates.
+	ControlQuestionsHas *string `json:"controlQuestionsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -11997,6 +12141,34 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 		predicates = append(predicates, controlhistory.StandardIDContainsFold(*i.StandardIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(controlhistory.FieldTags, v))
+		})
+	}
+
+	if i.AliasesHas != nil {
+		v := *i.AliasesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(controlhistory.FieldAliases, v))
+		})
+	}
+
+	if i.MappedCategoriesHas != nil {
+		v := *i.MappedCategoriesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(controlhistory.FieldMappedCategories, v))
+		})
+	}
+
+	if i.ControlQuestionsHas != nil {
+		v := *i.ControlQuestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(controlhistory.FieldControlQuestions, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyControlHistoryWhereInput
@@ -12228,6 +12400,9 @@ type ControlImplementationHistoryWhereInput struct {
 	DetailsNotNil       bool     `json:"detailsNotNil,omitempty"`
 	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
 	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -12845,6 +13020,13 @@ func (i *ControlImplementationHistoryWhereInput) P() (predicate.ControlImplement
 		predicates = append(predicates, controlimplementationhistory.DetailsContainsFold(*i.DetailsContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(controlimplementationhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyControlImplementationHistoryWhereInput
@@ -13152,6 +13334,9 @@ type ControlObjectiveHistoryWhereInput struct {
 	SubcategoryNotNil       bool     `json:"subcategoryNotNil,omitempty"`
 	SubcategoryEqualFold    *string  `json:"subcategoryEqualFold,omitempty"`
 	SubcategoryContainsFold *string  `json:"subcategoryContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -13973,6 +14158,13 @@ func (i *ControlObjectiveHistoryWhereInput) P() (predicate.ControlObjectiveHisto
 		predicates = append(predicates, controlobjectivehistory.SubcategoryContainsFold(*i.SubcategoryContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(controlobjectivehistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyControlObjectiveHistoryWhereInput
@@ -14213,6 +14405,9 @@ type CustomDomainHistoryWhereInput struct {
 	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
 	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
 	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -14863,6 +15058,13 @@ func (i *CustomDomainHistoryWhereInput) P() (predicate.CustomDomainHistory, erro
 		predicates = append(predicates, customdomainhistory.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(customdomainhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyCustomDomainHistoryWhereInput
@@ -15124,6 +15326,9 @@ type DNSVerificationHistoryWhereInput struct {
 	AcmeChallengeStatusReasonNotNil       bool     `json:"acmeChallengeStatusReasonNotNil,omitempty"`
 	AcmeChallengeStatusReasonEqualFold    *string  `json:"acmeChallengeStatusReasonEqualFold,omitempty"`
 	AcmeChallengeStatusReasonContainsFold *string  `json:"acmeChallengeStatusReasonContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -15825,6 +16030,13 @@ func (i *DNSVerificationHistoryWhereInput) P() (predicate.DNSVerificationHistory
 		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonContainsFold(*i.AcmeChallengeStatusReasonContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(dnsverificationhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyDNSVerificationHistoryWhereInput
@@ -16316,6 +16528,9 @@ type DirectoryAccountHistoryWhereInput struct {
 	SourceVersionNotNil       bool     `json:"sourceVersionNotNil,omitempty"`
 	SourceVersionEqualFold    *string  `json:"sourceVersionEqualFold,omitempty"`
 	SourceVersionContainsFold *string  `json:"sourceVersionContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -17617,6 +17832,13 @@ func (i *DirectoryAccountHistoryWhereInput) P() (predicate.DirectoryAccountHisto
 		predicates = append(predicates, directoryaccounthistory.SourceVersionContainsFold(*i.SourceVersionContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(directoryaccounthistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyDirectoryAccountHistoryWhereInput
@@ -17987,6 +18209,9 @@ type DirectoryGroupHistoryWhereInput struct {
 	SourceVersionNotNil       bool     `json:"sourceVersionNotNil,omitempty"`
 	SourceVersionEqualFold    *string  `json:"sourceVersionEqualFold,omitempty"`
 	SourceVersionContainsFold *string  `json:"sourceVersionContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -18965,6 +19190,13 @@ func (i *DirectoryGroupHistoryWhereInput) P() (predicate.DirectoryGroupHistory, 
 	}
 	if i.SourceVersionContainsFold != nil {
 		predicates = append(predicates, directorygrouphistory.SourceVersionContainsFold(*i.SourceVersionContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(directorygrouphistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -21078,6 +21310,9 @@ type DocumentDataHistoryWhereInput struct {
 	TemplateIDNotNil       bool     `json:"templateIDNotNil,omitempty"`
 	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -21683,6 +21918,13 @@ func (i *DocumentDataHistoryWhereInput) P() (predicate.DocumentDataHistory, erro
 		predicates = append(predicates, documentdatahistory.TemplateIDContainsFold(*i.TemplateIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(documentdatahistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyDocumentDataHistoryWhereInput
@@ -22001,6 +22243,9 @@ type EmailBrandingHistoryWhereInput struct {
 	IsDefaultNEQ    *bool `json:"isDefaultNEQ,omitempty"`
 	IsDefaultIsNil  bool  `json:"isDefaultIsNil,omitempty"`
 	IsDefaultNotNil bool  `json:"isDefaultNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -22853,6 +23098,13 @@ func (i *EmailBrandingHistoryWhereInput) P() (predicate.EmailBrandingHistory, er
 	}
 	if i.IsDefaultNotNil {
 		predicates = append(predicates, emailbrandinghistory.IsDefaultNotNil())
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(emailbrandinghistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -25065,6 +25317,21 @@ type EntityHistoryWhereInput struct {
 	ContractRenewalAtLTE    *models.DateTime  `json:"contractRenewalAtLTE,omitempty"`
 	ContractRenewalAtIsNil  bool              `json:"contractRenewalAtIsNil,omitempty"`
 	ContractRenewalAtNotNil bool              `json:"contractRenewalAtNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "domains" JSON-string-array predicates.
+	DomainsHas *string `json:"domainsHas,omitempty"`
+
+	// "linked_asset_ids" JSON-string-array predicates.
+	LinkedAssetIdsHas *string `json:"linkedAssetIdsHas,omitempty"`
+
+	// "provided_services" JSON-string-array predicates.
+	ProvidedServicesHas *string `json:"providedServicesHas,omitempty"`
+
+	// "links" JSON-string-array predicates.
+	LinksHas *string `json:"linksHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -27077,6 +27344,41 @@ func (i *EntityHistoryWhereInput) P() (predicate.EntityHistory, error) {
 		predicates = append(predicates, entityhistory.ContractRenewalAtNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(entityhistory.FieldTags, v))
+		})
+	}
+
+	if i.DomainsHas != nil {
+		v := *i.DomainsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(entityhistory.FieldDomains, v))
+		})
+	}
+
+	if i.LinkedAssetIdsHas != nil {
+		v := *i.LinkedAssetIdsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(entityhistory.FieldLinkedAssetIds, v))
+		})
+	}
+
+	if i.ProvidedServicesHas != nil {
+		v := *i.ProvidedServicesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(entityhistory.FieldProvidedServices, v))
+		})
+	}
+
+	if i.LinksHas != nil {
+		v := *i.LinksHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(entityhistory.FieldLinks, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyEntityHistoryWhereInput
@@ -27268,6 +27570,9 @@ type EntityTypeHistoryWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -27789,6 +28094,13 @@ func (i *EntityTypeHistoryWhereInput) P() (predicate.EntityTypeHistory, error) {
 		predicates = append(predicates, entitytypehistory.NameContainsFold(*i.NameContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(entitytypehistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyEntityTypeHistoryWhereInput
@@ -28133,6 +28445,9 @@ type EvidenceHistoryWhereInput struct {
 	StatusNotIn  []enums.EvidenceStatus `json:"statusNotIn,omitempty"`
 	StatusIsNil  bool                   `json:"statusIsNil,omitempty"`
 	StatusNotNil bool                   `json:"statusNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -29047,6 +29362,13 @@ func (i *EvidenceHistoryWhereInput) P() (predicate.EvidenceHistory, error) {
 		predicates = append(predicates, evidencehistory.StatusNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(evidencehistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyEvidenceHistoryWhereInput
@@ -29525,6 +29847,9 @@ type FileHistoryWhereInput struct {
 	LastAccessedAtLTE    *time.Time  `json:"lastAccessedAtLTE,omitempty"`
 	LastAccessedAtIsNil  bool        `json:"lastAccessedAtIsNil,omitempty"`
 	LastAccessedAtNotNil bool        `json:"lastAccessedAtNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -30797,6 +31122,13 @@ func (i *FileHistoryWhereInput) P() (predicate.FileHistory, error) {
 	}
 	if i.LastAccessedAtNotNil {
 		predicates = append(predicates, filehistory.LastAccessedAtNotNil())
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(filehistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -32387,6 +32719,21 @@ type FindingHistoryWhereInput struct {
 	ExternalURINotNil       bool     `json:"externalURINotNil,omitempty"`
 	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
 	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "categories" JSON-string-array predicates.
+	CategoriesHas *string `json:"categoriesHas,omitempty"`
+
+	// "references" JSON-string-array predicates.
+	ReferencesHas *string `json:"referencesHas,omitempty"`
+
+	// "steps_to_reproduce" JSON-string-array predicates.
+	StepsToReproduceHas *string `json:"stepsToReproduceHas,omitempty"`
+
+	// "targets" JSON-string-array predicates.
+	TargetsHas *string `json:"targetsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -34153,6 +34500,41 @@ func (i *FindingHistoryWhereInput) P() (predicate.FindingHistory, error) {
 		predicates = append(predicates, findinghistory.ExternalURIContainsFold(*i.ExternalURIContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(findinghistory.FieldTags, v))
+		})
+	}
+
+	if i.CategoriesHas != nil {
+		v := *i.CategoriesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(findinghistory.FieldCategories, v))
+		})
+	}
+
+	if i.ReferencesHas != nil {
+		v := *i.ReferencesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(findinghistory.FieldReferences, v))
+		})
+	}
+
+	if i.StepsToReproduceHas != nil {
+		v := *i.StepsToReproduceHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(findinghistory.FieldStepsToReproduce, v))
+		})
+	}
+
+	if i.TargetsHas != nil {
+		v := *i.TargetsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(findinghistory.FieldTargets, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyFindingHistoryWhereInput
@@ -34397,6 +34779,9 @@ type GroupHistoryWhereInput struct {
 	ScimGroupMailingNotNil       bool     `json:"scimGroupMailingNotNil,omitempty"`
 	ScimGroupMailingEqualFold    *string  `json:"scimGroupMailingEqualFold,omitempty"`
 	ScimGroupMailingContainsFold *string  `json:"scimGroupMailingContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -35051,6 +35436,13 @@ func (i *GroupHistoryWhereInput) P() (predicate.GroupHistory, error) {
 	}
 	if i.ScimGroupMailingContainsFold != nil {
 		predicates = append(predicates, grouphistory.ScimGroupMailingContainsFold(*i.ScimGroupMailingContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(grouphistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -37663,6 +38055,9 @@ type IdentityHolderHistoryWhereInput struct {
 	ExternalReferenceIDNotNil       bool     `json:"externalReferenceIDNotNil,omitempty"`
 	ExternalReferenceIDEqualFold    *string  `json:"externalReferenceIDEqualFold,omitempty"`
 	ExternalReferenceIDContainsFold *string  `json:"externalReferenceIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -39039,6 +39434,13 @@ func (i *IdentityHolderHistoryWhereInput) P() (predicate.IdentityHolderHistory, 
 		predicates = append(predicates, identityholderhistory.ExternalReferenceIDContainsFold(*i.ExternalReferenceIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(identityholderhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyIdentityHolderHistoryWhereInput
@@ -39332,6 +39734,9 @@ type IntegrationHistoryWhereInput struct {
 	IntegrationTypeNotNil       bool     `json:"integrationTypeNotNil,omitempty"`
 	IntegrationTypeEqualFold    *string  `json:"integrationTypeEqualFold,omitempty"`
 	IntegrationTypeContainsFold *string  `json:"integrationTypeContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -40123,6 +40528,13 @@ func (i *IntegrationHistoryWhereInput) P() (predicate.IntegrationHistory, error)
 		predicates = append(predicates, integrationhistory.IntegrationTypeContainsFold(*i.IntegrationTypeContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(integrationhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyIntegrationHistoryWhereInput
@@ -40573,6 +40985,27 @@ type InternalPolicyHistoryWhereInput struct {
 	WorkflowEligibleMarkerNEQ    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
 	WorkflowEligibleMarkerIsNil  bool  `json:"workflowEligibleMarkerIsNil,omitempty"`
 	WorkflowEligibleMarkerNotNil bool  `json:"workflowEligibleMarkerNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "tag_suggestions" JSON-string-array predicates.
+	TagSuggestionsHas *string `json:"tagSuggestionsHas,omitempty"`
+
+	// "dismissed_tag_suggestions" JSON-string-array predicates.
+	DismissedTagSuggestionsHas *string `json:"dismissedTagSuggestionsHas,omitempty"`
+
+	// "control_suggestions" JSON-string-array predicates.
+	ControlSuggestionsHas *string `json:"controlSuggestionsHas,omitempty"`
+
+	// "dismissed_control_suggestions" JSON-string-array predicates.
+	DismissedControlSuggestionsHas *string `json:"dismissedControlSuggestionsHas,omitempty"`
+
+	// "improvement_suggestions" JSON-string-array predicates.
+	ImprovementSuggestionsHas *string `json:"improvementSuggestionsHas,omitempty"`
+
+	// "dismissed_improvement_suggestions" JSON-string-array predicates.
+	DismissedImprovementSuggestionsHas *string `json:"dismissedImprovementSuggestionsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -41763,6 +42196,55 @@ func (i *InternalPolicyHistoryWhereInput) P() (predicate.InternalPolicyHistory, 
 		predicates = append(predicates, internalpolicyhistory.WorkflowEligibleMarkerNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(internalpolicyhistory.FieldTags, v))
+		})
+	}
+
+	if i.TagSuggestionsHas != nil {
+		v := *i.TagSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(internalpolicyhistory.FieldTagSuggestions, v))
+		})
+	}
+
+	if i.DismissedTagSuggestionsHas != nil {
+		v := *i.DismissedTagSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(internalpolicyhistory.FieldDismissedTagSuggestions, v))
+		})
+	}
+
+	if i.ControlSuggestionsHas != nil {
+		v := *i.ControlSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(internalpolicyhistory.FieldControlSuggestions, v))
+		})
+	}
+
+	if i.DismissedControlSuggestionsHas != nil {
+		v := *i.DismissedControlSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(internalpolicyhistory.FieldDismissedControlSuggestions, v))
+		})
+	}
+
+	if i.ImprovementSuggestionsHas != nil {
+		v := *i.ImprovementSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(internalpolicyhistory.FieldImprovementSuggestions, v))
+		})
+	}
+
+	if i.DismissedImprovementSuggestionsHas != nil {
+		v := *i.DismissedImprovementSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(internalpolicyhistory.FieldDismissedImprovementSuggestions, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyInternalPolicyHistoryWhereInput
@@ -41992,6 +42474,9 @@ type JobTemplateHistoryWhereInput struct {
 	PlatformNEQ   *enums.JobPlatformType  `json:"platformNEQ,omitempty"`
 	PlatformIn    []enums.JobPlatformType `json:"platformIn,omitempty"`
 	PlatformNotIn []enums.JobPlatformType `json:"platformNotIn,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -42609,6 +43094,13 @@ func (i *JobTemplateHistoryWhereInput) P() (predicate.JobTemplateHistory, error)
 		predicates = append(predicates, jobtemplatehistory.PlatformNotIn(i.PlatformNotIn...))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(jobtemplatehistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyJobTemplateHistoryWhereInput
@@ -42758,6 +43250,9 @@ type MappableDomainHistoryWhereInput struct {
 	ZoneIDHasSuffix    *string  `json:"zoneIDHasSuffix,omitempty"`
 	ZoneIDEqualFold    *string  `json:"zoneIDEqualFold,omitempty"`
 	ZoneIDContainsFold *string  `json:"zoneIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -43171,6 +43666,13 @@ func (i *MappableDomainHistoryWhereInput) P() (predicate.MappableDomainHistory, 
 		predicates = append(predicates, mappabledomainhistory.ZoneIDContainsFold(*i.ZoneIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(mappabledomainhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyMappableDomainHistoryWhereInput
@@ -43390,6 +43892,9 @@ type MappedControlHistoryWhereInput struct {
 	SourceNotIn  []enums.MappingSource `json:"sourceNotIn,omitempty"`
 	SourceIsNil  bool                  `json:"sourceIsNil,omitempty"`
 	SourceNotNil bool                  `json:"sourceNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -43977,6 +44482,13 @@ func (i *MappedControlHistoryWhereInput) P() (predicate.MappedControlHistory, er
 		predicates = append(predicates, mappedcontrolhistory.SourceNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(mappedcontrolhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyMappedControlHistoryWhereInput
@@ -44217,6 +44729,9 @@ type NarrativeHistoryWhereInput struct {
 	DetailsNotNil       bool     `json:"detailsNotNil,omitempty"`
 	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
 	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -44865,6 +45380,13 @@ func (i *NarrativeHistoryWhereInput) P() (predicate.NarrativeHistory, error) {
 	}
 	if i.DetailsContainsFold != nil {
 		predicates = append(predicates, narrativehistory.DetailsContainsFold(*i.DetailsContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(narrativehistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -46089,6 +46611,9 @@ type NotificationPreferenceHistoryWhereInput struct {
 	LastErrorNotNil       bool     `json:"lastErrorNotNil,omitempty"`
 	LastErrorEqualFold    *string  `json:"lastErrorEqualFold,omitempty"`
 	LastErrorContainsFold *string  `json:"lastErrorContainsFold,omitempty"`
+
+	// "topic_patterns" JSON-string-array predicates.
+	TopicPatternsHas *string `json:"topicPatternsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -46977,6 +47502,13 @@ func (i *NotificationPreferenceHistoryWhereInput) P() (predicate.NotificationPre
 	}
 	if i.LastErrorContainsFold != nil {
 		predicates = append(predicates, notificationpreferencehistory.LastErrorContainsFold(*i.LastErrorContainsFold))
+	}
+
+	if i.TopicPatternsHas != nil {
+		v := *i.TopicPatternsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(notificationpreferencehistory.FieldTopicPatterns, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -49162,6 +49694,9 @@ type OrgSubscriptionHistoryWhereInput struct {
 	DaysUntilDueNotNil       bool     `json:"daysUntilDueNotNil,omitempty"`
 	DaysUntilDueEqualFold    *string  `json:"daysUntilDueEqualFold,omitempty"`
 	DaysUntilDueContainsFold *string  `json:"daysUntilDueContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -49743,6 +50278,13 @@ func (i *OrgSubscriptionHistoryWhereInput) P() (predicate.OrgSubscriptionHistory
 		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueContainsFold(*i.DaysUntilDueContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(orgsubscriptionhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyOrgSubscriptionHistoryWhereInput
@@ -49946,6 +50488,9 @@ type OrganizationHistoryWhereInput struct {
 	AvatarUpdatedAtLTE    *time.Time  `json:"avatarUpdatedAtLTE,omitempty"`
 	AvatarUpdatedAtIsNil  bool        `json:"avatarUpdatedAtIsNil,omitempty"`
 	AvatarUpdatedAtNotNil bool        `json:"avatarUpdatedAtNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -50497,6 +51042,13 @@ func (i *OrganizationHistoryWhereInput) P() (predicate.OrganizationHistory, erro
 		predicates = append(predicates, organizationhistory.AvatarUpdatedAtNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(organizationhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyOrganizationHistoryWhereInput
@@ -50894,6 +51446,15 @@ type OrganizationSettingHistoryWhereInput struct {
 	ComplianceWebhookTokenNotNil       bool     `json:"complianceWebhookTokenNotNil,omitempty"`
 	ComplianceWebhookTokenEqualFold    *string  `json:"complianceWebhookTokenEqualFold,omitempty"`
 	ComplianceWebhookTokenContainsFold *string  `json:"complianceWebhookTokenContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "domains" JSON-string-array predicates.
+	DomainsHas *string `json:"domainsHas,omitempty"`
+
+	// "allowed_email_domains" JSON-string-array predicates.
+	AllowedEmailDomainsHas *string `json:"allowedEmailDomainsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -51937,6 +52498,27 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 		predicates = append(predicates, organizationsettinghistory.ComplianceWebhookTokenContainsFold(*i.ComplianceWebhookTokenContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(organizationsettinghistory.FieldTags, v))
+		})
+	}
+
+	if i.DomainsHas != nil {
+		v := *i.DomainsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(organizationsettinghistory.FieldDomains, v))
+		})
+	}
+
+	if i.AllowedEmailDomainsHas != nil {
+		v := *i.AllowedEmailDomainsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(organizationsettinghistory.FieldAllowedEmailDomains, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyOrganizationSettingHistoryWhereInput
@@ -52763,6 +53345,9 @@ type PlatformHistoryWhereInput struct {
 	ExternalReferenceIDNotNil       bool     `json:"externalReferenceIDNotNil,omitempty"`
 	ExternalReferenceIDEqualFold    *string  `json:"externalReferenceIDEqualFold,omitempty"`
 	ExternalReferenceIDContainsFold *string  `json:"externalReferenceIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -54949,6 +55534,13 @@ func (i *PlatformHistoryWhereInput) P() (predicate.PlatformHistory, error) {
 		predicates = append(predicates, platformhistory.ExternalReferenceIDContainsFold(*i.ExternalReferenceIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(platformhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyPlatformHistoryWhereInput
@@ -55399,6 +55991,27 @@ type ProcedureHistoryWhereInput struct {
 	WorkflowEligibleMarkerNEQ    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
 	WorkflowEligibleMarkerIsNil  bool  `json:"workflowEligibleMarkerIsNil,omitempty"`
 	WorkflowEligibleMarkerNotNil bool  `json:"workflowEligibleMarkerNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "tag_suggestions" JSON-string-array predicates.
+	TagSuggestionsHas *string `json:"tagSuggestionsHas,omitempty"`
+
+	// "dismissed_tag_suggestions" JSON-string-array predicates.
+	DismissedTagSuggestionsHas *string `json:"dismissedTagSuggestionsHas,omitempty"`
+
+	// "control_suggestions" JSON-string-array predicates.
+	ControlSuggestionsHas *string `json:"controlSuggestionsHas,omitempty"`
+
+	// "dismissed_control_suggestions" JSON-string-array predicates.
+	DismissedControlSuggestionsHas *string `json:"dismissedControlSuggestionsHas,omitempty"`
+
+	// "improvement_suggestions" JSON-string-array predicates.
+	ImprovementSuggestionsHas *string `json:"improvementSuggestionsHas,omitempty"`
+
+	// "dismissed_improvement_suggestions" JSON-string-array predicates.
+	DismissedImprovementSuggestionsHas *string `json:"dismissedImprovementSuggestionsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -56589,6 +57202,55 @@ func (i *ProcedureHistoryWhereInput) P() (predicate.ProcedureHistory, error) {
 		predicates = append(predicates, procedurehistory.WorkflowEligibleMarkerNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(procedurehistory.FieldTags, v))
+		})
+	}
+
+	if i.TagSuggestionsHas != nil {
+		v := *i.TagSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(procedurehistory.FieldTagSuggestions, v))
+		})
+	}
+
+	if i.DismissedTagSuggestionsHas != nil {
+		v := *i.DismissedTagSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(procedurehistory.FieldDismissedTagSuggestions, v))
+		})
+	}
+
+	if i.ControlSuggestionsHas != nil {
+		v := *i.ControlSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(procedurehistory.FieldControlSuggestions, v))
+		})
+	}
+
+	if i.DismissedControlSuggestionsHas != nil {
+		v := *i.DismissedControlSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(procedurehistory.FieldDismissedControlSuggestions, v))
+		})
+	}
+
+	if i.ImprovementSuggestionsHas != nil {
+		v := *i.ImprovementSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(procedurehistory.FieldImprovementSuggestions, v))
+		})
+	}
+
+	if i.DismissedImprovementSuggestionsHas != nil {
+		v := *i.DismissedImprovementSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(procedurehistory.FieldDismissedImprovementSuggestions, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyProcedureHistoryWhereInput
@@ -56933,6 +57595,9 @@ type ProgramHistoryWhereInput struct {
 	ProgramOwnerIDNotNil       bool     `json:"programOwnerIDNotNil,omitempty"`
 	ProgramOwnerIDEqualFold    *string  `json:"programOwnerIDEqualFold,omitempty"`
 	ProgramOwnerIDContainsFold *string  `json:"programOwnerIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -57839,6 +58504,13 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	}
 	if i.ProgramOwnerIDContainsFold != nil {
 		predicates = append(predicates, programhistory.ProgramOwnerIDContainsFold(*i.ProgramOwnerIDContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(programhistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -58971,6 +59643,9 @@ type RemediationHistoryWhereInput struct {
 	ExternalURINotNil       bool     `json:"externalURINotNil,omitempty"`
 	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
 	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -60437,6 +61112,13 @@ func (i *RemediationHistoryWhereInput) P() (predicate.RemediationHistory, error)
 		predicates = append(predicates, remediationhistory.ExternalURIContainsFold(*i.ExternalURIContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(remediationhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyRemediationHistoryWhereInput
@@ -60925,6 +61607,9 @@ type ReviewHistoryWhereInput struct {
 	ExternalURINotNil       bool     `json:"externalURINotNil,omitempty"`
 	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
 	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -62223,6 +62908,13 @@ func (i *ReviewHistoryWhereInput) P() (predicate.ReviewHistory, error) {
 		predicates = append(predicates, reviewhistory.ExternalURIContainsFold(*i.ExternalURIContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(reviewhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyReviewHistoryWhereInput
@@ -62646,6 +63338,9 @@ type RiskHistoryWhereInput struct {
 	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -63773,6 +64468,13 @@ func (i *RiskHistoryWhereInput) P() (predicate.RiskHistory, error) {
 		predicates = append(predicates, riskhistory.DelegateIDContainsFold(*i.DelegateIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(riskhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyRiskHistoryWhereInput
@@ -64198,6 +64900,12 @@ type ScanHistoryWhereInput struct {
 	StatusNEQ   *enums.ScanStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.ScanStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.ScanStatus `json:"statusNotIn,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "vulnerability_ids" JSON-string-array predicates.
+	VulnerabilityIdsHas *string `json:"vulnerabilityIdsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -65331,6 +66039,20 @@ func (i *ScanHistoryWhereInput) P() (predicate.ScanHistory, error) {
 		predicates = append(predicates, scanhistory.StatusNotIn(i.StatusNotIn...))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(scanhistory.FieldTags, v))
+		})
+	}
+
+	if i.VulnerabilityIdsHas != nil {
+		v := *i.VulnerabilityIdsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(scanhistory.FieldVulnerabilityIds, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyScanHistoryWhereInput
@@ -66408,6 +67130,12 @@ type StandardHistoryWhereInput struct {
 	LogoFileIDNotNil       bool     `json:"logoFileIDNotNil,omitempty"`
 	LogoFileIDEqualFold    *string  `json:"logoFileIDEqualFold,omitempty"`
 	LogoFileIDContainsFold *string  `json:"logoFileIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "domains" JSON-string-array predicates.
+	DomainsHas *string `json:"domainsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -67421,6 +68149,20 @@ func (i *StandardHistoryWhereInput) P() (predicate.StandardHistory, error) {
 		predicates = append(predicates, standardhistory.LogoFileIDContainsFold(*i.LogoFileIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(standardhistory.FieldTags, v))
+		})
+	}
+
+	if i.DomainsHas != nil {
+		v := *i.DomainsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(standardhistory.FieldDomains, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyStandardHistoryWhereInput
@@ -67902,6 +68644,18 @@ type SubcontrolHistoryWhereInput struct {
 	ControlIDHasSuffix    *string  `json:"controlIDHasSuffix,omitempty"`
 	ControlIDEqualFold    *string  `json:"controlIDEqualFold,omitempty"`
 	ControlIDContainsFold *string  `json:"controlIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "aliases" JSON-string-array predicates.
+	AliasesHas *string `json:"aliasesHas,omitempty"`
+
+	// "mapped_categories" JSON-string-array predicates.
+	MappedCategoriesHas *string `json:"mappedCategoriesHas,omitempty"`
+
+	// "control_questions" JSON-string-array predicates.
+	ControlQuestionsHas *string `json:"controlQuestionsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -69179,6 +69933,34 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 		predicates = append(predicates, subcontrolhistory.ControlIDContainsFold(*i.ControlIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(subcontrolhistory.FieldTags, v))
+		})
+	}
+
+	if i.AliasesHas != nil {
+		v := *i.AliasesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(subcontrolhistory.FieldAliases, v))
+		})
+	}
+
+	if i.MappedCategoriesHas != nil {
+		v := *i.MappedCategoriesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(subcontrolhistory.FieldMappedCategories, v))
+		})
+	}
+
+	if i.ControlQuestionsHas != nil {
+		v := *i.ControlQuestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(subcontrolhistory.FieldControlQuestions, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptySubcontrolHistoryWhereInput
@@ -69421,6 +70203,9 @@ type SubprocessorHistoryWhereInput struct {
 	LogoFileIDNotNil       bool     `json:"logoFileIDNotNil,omitempty"`
 	LogoFileIDEqualFold    *string  `json:"logoFileIDEqualFold,omitempty"`
 	LogoFileIDContainsFold *string  `json:"logoFileIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -70077,6 +70862,13 @@ func (i *SubprocessorHistoryWhereInput) P() (predicate.SubprocessorHistory, erro
 		predicates = append(predicates, subprocessorhistory.LogoFileIDContainsFold(*i.LogoFileIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(subprocessorhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptySubprocessorHistoryWhereInput
@@ -70464,6 +71256,12 @@ type TaskHistoryWhereInput struct {
 	ParentTaskIDNotNil       bool     `json:"parentTaskIDNotNil,omitempty"`
 	ParentTaskIDEqualFold    *string  `json:"parentTaskIDEqualFold,omitempty"`
 	ParentTaskIDContainsFold *string  `json:"parentTaskIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "external_reference_url" JSON-string-array predicates.
+	ExternalReferenceURLHas *string `json:"externalReferenceURLHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -71495,6 +72293,20 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 		predicates = append(predicates, taskhistory.ParentTaskIDContainsFold(*i.ParentTaskIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(taskhistory.FieldTags, v))
+		})
+	}
+
+	if i.ExternalReferenceURLHas != nil {
+		v := *i.ExternalReferenceURLHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(taskhistory.FieldExternalReferenceURL, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyTaskHistoryWhereInput
@@ -71802,6 +72614,9 @@ type TemplateHistoryWhereInput struct {
 	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
 	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
 	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -72623,6 +73438,13 @@ func (i *TemplateHistoryWhereInput) P() (predicate.TemplateHistory, error) {
 		predicates = append(predicates, templatehistory.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(templatehistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyTemplateHistoryWhereInput
@@ -72774,6 +73596,9 @@ type TrustCenterComplianceHistoryWhereInput struct {
 	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
 	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
 	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -73193,6 +74018,13 @@ func (i *TrustCenterComplianceHistoryWhereInput) P() (predicate.TrustCenterCompl
 		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(trustcentercompliancehistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyTrustCenterComplianceHistoryWhereInput
@@ -73451,6 +74283,9 @@ type TrustCenterDocHistoryWhereInput struct {
 	StandardIDNotNil       bool     `json:"standardIDNotNil,omitempty"`
 	StandardIDEqualFold    *string  `json:"standardIDEqualFold,omitempty"`
 	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -74141,6 +74976,13 @@ func (i *TrustCenterDocHistoryWhereInput) P() (predicate.TrustCenterDocHistory, 
 	}
 	if i.StandardIDContainsFold != nil {
 		predicates = append(predicates, trustcenterdochistory.StandardIDContainsFold(*i.StandardIDContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(trustcenterdochistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -75100,6 +75942,9 @@ type TrustCenterHistoryWhereInput struct {
 	SubprocessorURLNotNil       bool     `json:"subprocessorURLNotNil,omitempty"`
 	SubprocessorURLEqualFold    *string  `json:"subprocessorURLEqualFold,omitempty"`
 	SubprocessorURLContainsFold *string  `json:"subprocessorURLContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -75813,6 +76658,13 @@ func (i *TrustCenterHistoryWhereInput) P() (predicate.TrustCenterHistory, error)
 		predicates = append(predicates, trustcenterhistory.SubprocessorURLContainsFold(*i.SubprocessorURLContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(trustcenterhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyTrustCenterHistoryWhereInput
@@ -76119,6 +76971,9 @@ type TrustCenterNDARequestHistoryWhereInput struct {
 	FileIDNotNil       bool     `json:"fileIDNotNil,omitempty"`
 	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
 	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -76935,6 +77790,13 @@ func (i *TrustCenterNDARequestHistoryWhereInput) P() (predicate.TrustCenterNDARe
 	}
 	if i.FileIDContainsFold != nil {
 		predicates = append(predicates, trustcenterndarequesthistory.FileIDContainsFold(*i.FileIDContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(trustcenterndarequesthistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -78842,6 +79704,9 @@ type TrustCenterSubprocessorHistoryWhereInput struct {
 	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
 	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
 	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "countries" JSON-string-array predicates.
+	CountriesHas *string `json:"countriesHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -79349,6 +80214,13 @@ func (i *TrustCenterSubprocessorHistoryWhereInput) P() (predicate.TrustCenterSub
 	}
 	if i.TrustCenterIDContainsFold != nil {
 		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
+	}
+
+	if i.CountriesHas != nil {
+		v := *i.CountriesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(trustcentersubprocessorhistory.FieldCountries, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -80671,6 +81543,9 @@ type UserHistoryWhereInput struct {
 	ScimLocaleNotNil       bool     `json:"scimLocaleNotNil,omitempty"`
 	ScimLocaleEqualFold    *string  `json:"scimLocaleEqualFold,omitempty"`
 	ScimLocaleContainsFold *string  `json:"scimLocaleContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -81693,6 +82568,13 @@ func (i *UserHistoryWhereInput) P() (predicate.UserHistory, error) {
 		predicates = append(predicates, userhistory.ScimLocaleContainsFold(*i.ScimLocaleContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(userhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyUserHistoryWhereInput
@@ -81914,6 +82796,9 @@ type UserSettingHistoryWhereInput struct {
 	IsTfaEnabledNEQ    *bool `json:"isTfaEnabledNEQ,omitempty"`
 	IsTfaEnabledIsNil  bool  `json:"isTfaEnabledIsNil,omitempty"`
 	IsTfaEnabledNotNil bool  `json:"isTfaEnabledNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -82493,6 +83378,13 @@ func (i *UserSettingHistoryWhereInput) P() (predicate.UserSettingHistory, error)
 	}
 	if i.IsTfaEnabledNotNil {
 		predicates = append(predicates, usersettinghistory.IsTfaEnabledNotNil())
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(usersettinghistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -83087,6 +83979,15 @@ type VulnerabilityHistoryWhereInput struct {
 	ExternalURINotNil       bool     `json:"externalURINotNil,omitempty"`
 	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
 	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "references" JSON-string-array predicates.
+	ReferencesHas *string `json:"referencesHas,omitempty"`
+
+	// "impacts" JSON-string-array predicates.
+	ImpactsHas *string `json:"impactsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -84637,6 +85538,27 @@ func (i *VulnerabilityHistoryWhereInput) P() (predicate.VulnerabilityHistory, er
 		predicates = append(predicates, vulnerabilityhistory.ExternalURIContainsFold(*i.ExternalURIContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(vulnerabilityhistory.FieldTags, v))
+		})
+	}
+
+	if i.ReferencesHas != nil {
+		v := *i.ReferencesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(vulnerabilityhistory.FieldReferences, v))
+		})
+	}
+
+	if i.ImpactsHas != nil {
+		v := *i.ImpactsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(vulnerabilityhistory.FieldImpacts, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyVulnerabilityHistoryWhereInput
@@ -84935,6 +85857,9 @@ type WorkflowAssignmentHistoryWhereInput struct {
 	DueAtLTE    *time.Time  `json:"dueAtLTE,omitempty"`
 	DueAtIsNil  bool        `json:"dueAtIsNil,omitempty"`
 	DueAtNotNil bool        `json:"dueAtNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -85729,6 +86654,13 @@ func (i *WorkflowAssignmentHistoryWhereInput) P() (predicate.WorkflowAssignmentH
 		predicates = append(predicates, workflowassignmenthistory.DueAtNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(workflowassignmenthistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyWorkflowAssignmentHistoryWhereInput
@@ -85952,6 +86884,9 @@ type WorkflowAssignmentTargetHistoryWhereInput struct {
 	ResolverKeyNotNil       bool     `json:"resolverKeyNotNil,omitempty"`
 	ResolverKeyEqualFold    *string  `json:"resolverKeyEqualFold,omitempty"`
 	ResolverKeyContainsFold *string  `json:"resolverKeyContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -86557,6 +87492,13 @@ func (i *WorkflowAssignmentTargetHistoryWhereInput) P() (predicate.WorkflowAssig
 		predicates = append(predicates, workflowassignmenttargethistory.ResolverKeyContainsFold(*i.ResolverKeyContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(workflowassignmenttargethistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyWorkflowAssignmentTargetHistoryWhereInput
@@ -86845,6 +87787,12 @@ type WorkflowDefinitionHistoryWhereInput struct {
 	// "active" field predicates.
 	Active    *bool `json:"active,omitempty"`
 	ActiveNEQ *bool `json:"activeNEQ,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "tracked_fields" JSON-string-array predicates.
+	TrackedFieldsHas *string `json:"trackedFieldsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -87597,6 +88545,20 @@ func (i *WorkflowDefinitionHistoryWhereInput) P() (predicate.WorkflowDefinitionH
 		predicates = append(predicates, workflowdefinitionhistory.ActiveNEQ(*i.ActiveNEQ))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(workflowdefinitionhistory.FieldTags, v))
+		})
+	}
+
+	if i.TrackedFieldsHas != nil {
+		v := *i.TrackedFieldsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(workflowdefinitionhistory.FieldTrackedFields, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyWorkflowDefinitionHistoryWhereInput
@@ -87769,6 +88731,9 @@ type WorkflowEventHistoryWhereInput struct {
 	EventTypeNEQ   *enums.WorkflowEventType  `json:"eventTypeNEQ,omitempty"`
 	EventTypeIn    []enums.WorkflowEventType `json:"eventTypeIn,omitempty"`
 	EventTypeNotIn []enums.WorkflowEventType `json:"eventTypeNotIn,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -88239,6 +89204,13 @@ func (i *WorkflowEventHistoryWhereInput) P() (predicate.WorkflowEventHistory, er
 		predicates = append(predicates, workfloweventhistory.EventTypeNotIn(i.EventTypeNotIn...))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(workfloweventhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyWorkflowEventHistoryWhereInput
@@ -88620,6 +89592,9 @@ type WorkflowInstanceHistoryWhereInput struct {
 	PlatformIDNotNil       bool     `json:"platformIDNotNil,omitempty"`
 	PlatformIDEqualFold    *string  `json:"platformIDEqualFold,omitempty"`
 	PlatformIDContainsFold *string  `json:"platformIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -89637,6 +90612,13 @@ func (i *WorkflowInstanceHistoryWhereInput) P() (predicate.WorkflowInstanceHisto
 	}
 	if i.PlatformIDContainsFold != nil {
 		predicates = append(predicates, workflowinstancehistory.PlatformIDContainsFold(*i.PlatformIDContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(workflowinstancehistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {

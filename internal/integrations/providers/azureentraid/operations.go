@@ -4,7 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -13,36 +14,30 @@ const (
 	azureEntraTenantOp types.OperationName = "directory.inspect"
 )
 
+// azureOperations returns the Azure Entra ID operations supported by this provider.
 func azureOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		{
-			Name:        azureEntraHealthOp,
-			Kind:        types.OperationKindHealth,
-			Description: "Call Microsoft Graph /organization to verify tenant access.",
-			Run:         runAzureEntraHealth,
-		},
+		operations.HealthOperation(azureEntraHealthOp, "Call Microsoft Graph /organization to verify tenant access.", ClientAzureEntraAPI, runAzureEntraHealth),
 		{
 			Name:        azureEntraTenantOp,
 			Kind:        types.OperationKindScanSettings,
 			Description: "Collect basic tenant metadata via Microsoft Graph.",
+			Client:      ClientAzureEntraAPI,
 			Run:         runAzureEntraTenantInspect,
 		},
 	}
 }
 
+// runAzureEntraHealth performs a basic tenant reachability check
 func runAzureEntraHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	token, err := helpers.OAuthTokenFromPayload(input.Credential, string(TypeAzureEntraID))
+	client, token, err := auth.ClientAndOAuthToken(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	org, err := fetchOrganization(ctx, token)
+	org, err := fetchOrganization(ctx, token, client)
 	if err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Graph organization lookup failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+		return operations.OperationFailure("Graph organization lookup failed", err), err
 	}
 
 	summary := fmt.Sprintf("Tenant %s reachable", org.DisplayName)
@@ -57,19 +52,16 @@ func runAzureEntraHealth(ctx context.Context, input types.OperationInput) (types
 	}, nil
 }
 
+// runAzureEntraTenantInspect collects tenant metadata from Microsoft Graph
 func runAzureEntraTenantInspect(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	token, err := helpers.OAuthTokenFromPayload(input.Credential, string(TypeAzureEntraID))
+	client, token, err := auth.ClientAndOAuthToken(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	org, err := fetchOrganization(ctx, token)
+	org, err := fetchOrganization(ctx, token, client)
 	if err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Graph organization lookup failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+		return operations.OperationFailure("Graph organization lookup failed", err), err
 	}
 
 	details := map[string]any{
@@ -86,20 +78,26 @@ func runAzureEntraTenantInspect(ctx context.Context, input types.OperationInput)
 }
 
 type graphOrganization struct {
-	ID              string        `json:"id"`
-	DisplayName     string        `json:"displayName"`
-	TenantID        string        `json:"tenantId"`
+	// ID is the organization identifier
+	ID string `json:"id"`
+	// DisplayName is the organization display name
+	DisplayName string `json:"displayName"`
+	// TenantID is the Azure AD tenant identifier
+	TenantID string `json:"tenantId"`
+	// VerifiedDomains lists verified domains for the tenant
 	VerifiedDomains []interface{} `json:"verifiedDomains"`
 }
 
 type graphOrganizationResponse struct {
+	// Value holds organization entries returned by Graph
 	Value []graphOrganization `json:"value"`
 }
 
-func fetchOrganization(ctx context.Context, token string) (graphOrganization, error) {
+// fetchOrganization retrieves the first organization entry from Microsoft Graph.
+func fetchOrganization(ctx context.Context, token string, client *auth.AuthenticatedClient) (graphOrganization, error) {
 	endpoint := "https://graph.microsoft.com/v1.0/organization?$select=id,displayName,tenantId,verifiedDomains&$top=1"
 	var resp graphOrganizationResponse
-	if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, nil, &resp); err != nil {
+	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
 		return graphOrganization{}, err
 	}
 

@@ -4,18 +4,15 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
+// oidcOperations returns OIDC operation descriptors
 func oidcOperations(userInfoURL string) []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		{
-			Name:        types.OperationName("health.default"),
-			Kind:        types.OperationKindHealth,
-			Description: "Call the configured userinfo endpoint (when available) to validate the OIDC token.",
-			Run:         runOIDCHealth(userInfoURL),
-		},
+		operations.HealthOperation(types.OperationName("health.default"), "Call the configured userinfo endpoint (when available) to validate the OIDC token.", ClientOIDCAPI, runOIDCHealth(userInfoURL)),
 		{
 			Name:        types.OperationName("claims.inspect"),
 			Kind:        types.OperationKindScanSettings,
@@ -25,9 +22,10 @@ func oidcOperations(userInfoURL string) []types.OperationDescriptor {
 	}
 }
 
+// runOIDCHealth builds a health check function for OIDC tokens
 func runOIDCHealth(userInfoURL string) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-		token, err := helpers.OAuthTokenFromPayload(input.Credential, string(TypeOIDCGeneric))
+		client, token, err := auth.ClientAndOAuthToken(input)
 		if err != nil {
 			return types.OperationResult{}, err
 		}
@@ -40,12 +38,8 @@ func runOIDCHealth(userInfoURL string) types.OperationFunc {
 		}
 
 		var resp map[string]any
-		if err := helpers.HTTPGetJSON(ctx, nil, userInfoURL, token, nil, &resp); err != nil {
-			return types.OperationResult{
-				Status:  types.OperationStatusFailed,
-				Summary: "OIDC userinfo call failed",
-				Details: map[string]any{"error": err.Error()},
-			}, err
+		if err := auth.GetJSONWithClient(ctx, client, userInfoURL, token, nil, &resp); err != nil {
+			return operations.OperationFailure("OIDC userinfo call failed", err), err
 		}
 
 		summary := "OIDC userinfo call succeeded"
@@ -61,6 +55,7 @@ func runOIDCHealth(userInfoURL string) types.OperationFunc {
 	}
 }
 
+// runOIDCClaims returns stored OIDC claims for inspection
 func runOIDCClaims(_ context.Context, input types.OperationInput) (types.OperationResult, error) {
 	claims := input.Credential.Claims
 	if claims == nil {

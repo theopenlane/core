@@ -265,6 +265,10 @@ func init() {
 	assessmentresponsehistoryDescStartedAt := assessmentresponsehistoryFields[27].Descriptor()
 	// assessmentresponsehistory.DefaultStartedAt holds the default value on creation for the started_at field.
 	assessmentresponsehistory.DefaultStartedAt = assessmentresponsehistoryDescStartedAt.Default.(time.Time)
+	// assessmentresponsehistoryDescIsDraft is the schema descriptor for is_draft field.
+	assessmentresponsehistoryDescIsDraft := assessmentresponsehistoryFields[31].Descriptor()
+	// assessmentresponsehistory.DefaultIsDraft holds the default value on creation for the is_draft field.
+	assessmentresponsehistory.DefaultIsDraft = assessmentresponsehistoryDescIsDraft.Default.(bool)
 	// assessmentresponsehistoryDescID is the schema descriptor for id field.
 	assessmentresponsehistoryDescID := assessmentresponsehistoryFields[9].Descriptor()
 	// assessmentresponsehistory.DefaultID holds the default value on creation for the id field.

@@ -146,6 +146,10 @@ type ComplexityRoot struct {
 		APIToken func(childComplexity int) int
 	}
 
+	ActionNotificationsReadPayload struct {
+		ReadIDs func(childComplexity int) int
+	}
+
 	ActionPlan struct {
 		ActionPlanKind                  func(childComplexity int) int
 		ActionPlanKindID                func(childComplexity int) int
@@ -323,6 +327,7 @@ type ComplexityRoot struct {
 		ID               func(childComplexity int) int
 		IdentityHolder   func(childComplexity int) int
 		IdentityHolderID func(childComplexity int) int
+		IsDraft          func(childComplexity int) int
 		IsTest           func(childComplexity int) int
 		LastEmailEventAt func(childComplexity int) int
 		Owner            func(childComplexity int) int
@@ -2580,6 +2585,15 @@ type ComplexityRoot struct {
 		IdentityHolders func(childComplexity int) int
 	}
 
+	IdentityHolderBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
+	IdentityHolderBulkUpdatePayload struct {
+		IdentityHolders func(childComplexity int) int
+		UpdatedIDs      func(childComplexity int) int
+	}
+
 	IdentityHolderConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -3407,6 +3421,7 @@ type ComplexityRoot struct {
 		DeleteBulkGroupMembership            func(childComplexity int, ids []string) int
 		DeleteBulkGroupSetting               func(childComplexity int, ids []string) int
 		DeleteBulkHush                       func(childComplexity int, ids []string) int
+		DeleteBulkIdentityHolder             func(childComplexity int, ids []string) int
 		DeleteBulkInternalPolicy             func(childComplexity int, ids []string) int
 		DeleteBulkInvite                     func(childComplexity int, ids []string) int
 		DeleteBulkJobTemplate                func(childComplexity int, ids []string) int
@@ -3512,6 +3527,7 @@ type ComplexityRoot struct {
 		DenyNDARequests                      func(childComplexity int, ids []string) int
 		ForceCompleteWorkflowInstance        func(childComplexity int, id string, applyProposal *bool) int
 		LaunchCampaign                       func(childComplexity int, input model.LaunchCampaignInput) int
+		MarkNotificationsAsRead              func(childComplexity int, ids []string) int
 		PublishTrustCenterSetting            func(childComplexity int) int
 		ReassignWorkflowAssignment           func(childComplexity int, id string, targetUserID string) int
 		RejectWorkflowAssignment             func(childComplexity int, id string, reason *string) int
@@ -3550,6 +3566,7 @@ type ComplexityRoot struct {
 		UpdateBulkCSVGroupMembership         func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVGroupSetting            func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVHush                    func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVIdentityHolder          func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVInternalPolicy          func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVInvite                  func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVJobTemplate             func(childComplexity int, input graphql.Upload) int
@@ -3591,6 +3608,7 @@ type ComplexityRoot struct {
 		UpdateBulkGroupMembership            func(childComplexity int, ids []string, input generated.UpdateGroupMembershipInput) int
 		UpdateBulkGroupSetting               func(childComplexity int, ids []string, input generated.UpdateGroupSettingInput) int
 		UpdateBulkHush                       func(childComplexity int, ids []string, input generated.UpdateHushInput) int
+		UpdateBulkIdentityHolder             func(childComplexity int, ids []string, input generated.UpdateIdentityHolderInput) int
 		UpdateBulkInternalPolicy             func(childComplexity int, ids []string, input generated.UpdateInternalPolicyInput) int
 		UpdateBulkInvite                     func(childComplexity int, ids []string, input generated.UpdateInviteInput) int
 		UpdateBulkJobTemplate                func(childComplexity int, ids []string, input generated.UpdateJobTemplateInput) int
@@ -7297,6 +7315,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.APITokenUpdatePayload.APIToken(childComplexity), true
 
+	case "ActionNotificationsReadPayload.readIDs":
+		if e.complexity.ActionNotificationsReadPayload.ReadIDs == nil {
+			break
+		}
+
+		return e.complexity.ActionNotificationsReadPayload.ReadIDs(childComplexity), true
+
 	case "ActionPlan.actionPlanKind":
 		if e.complexity.ActionPlan.ActionPlanKind == nil {
 			break
@@ -8323,6 +8348,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssessmentResponse.IdentityHolderID(childComplexity), true
+
+	case "AssessmentResponse.isDraft":
+		if e.complexity.AssessmentResponse.IsDraft == nil {
+			break
+		}
+
+		return e.complexity.AssessmentResponse.IsDraft(childComplexity), true
 
 	case "AssessmentResponse.isTest":
 		if e.complexity.AssessmentResponse.IsTest == nil {
@@ -19729,6 +19761,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.IdentityHolderBulkCreatePayload.IdentityHolders(childComplexity), true
 
+	case "IdentityHolderBulkDeletePayload.deletedIDs":
+		if e.complexity.IdentityHolderBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "IdentityHolderBulkUpdatePayload.identityHolders":
+		if e.complexity.IdentityHolderBulkUpdatePayload.IdentityHolders == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderBulkUpdatePayload.IdentityHolders(childComplexity), true
+
+	case "IdentityHolderBulkUpdatePayload.updatedIDs":
+		if e.complexity.IdentityHolderBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.IdentityHolderBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "IdentityHolderConnection.edges":
 		if e.complexity.IdentityHolderConnection.Edges == nil {
 			break
@@ -25373,6 +25426,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteBulkHush(childComplexity, args["ids"].([]string)), true
 
+	case "Mutation.deleteBulkIdentityHolder":
+		if e.complexity.Mutation.DeleteBulkIdentityHolder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkIdentityHolder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkIdentityHolder(childComplexity, args["ids"].([]string)), true
+
 	case "Mutation.deleteBulkInternalPolicy":
 		if e.complexity.Mutation.DeleteBulkInternalPolicy == nil {
 			break
@@ -26633,6 +26698,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.LaunchCampaign(childComplexity, args["input"].(model.LaunchCampaignInput)), true
 
+	case "Mutation.markNotificationsAsRead":
+		if e.complexity.Mutation.MarkNotificationsAsRead == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_markNotificationsAsRead_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.MarkNotificationsAsRead(childComplexity, args["ids"].([]string)), true
+
 	case "Mutation.publishTrustCenterSetting":
 		if e.complexity.Mutation.PublishTrustCenterSetting == nil {
 			break
@@ -27083,6 +27160,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateBulkCSVHush(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.updateBulkCSVIdentityHolder":
+		if e.complexity.Mutation.UpdateBulkCSVIdentityHolder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVIdentityHolder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVIdentityHolder(childComplexity, args["input"].(graphql.Upload)), true
 
 	case "Mutation.updateBulkCSVInternalPolicy":
 		if e.complexity.Mutation.UpdateBulkCSVInternalPolicy == nil {
@@ -27575,6 +27664,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateBulkHush(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateHushInput)), true
+
+	case "Mutation.updateBulkIdentityHolder":
+		if e.complexity.Mutation.UpdateBulkIdentityHolder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkIdentityHolder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkIdentityHolder(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateIdentityHolderInput)), true
 
 	case "Mutation.updateBulkInternalPolicy":
 		if e.complexity.Mutation.UpdateBulkInternalPolicy == nil {
@@ -52172,6 +52273,14 @@ input APITokenWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for scopesHas to contain a specific value
+  """
+  scopesHas: String
 }
 type ActionPlan implements Node {
   id: ID!
@@ -53420,6 +53529,34 @@ input ActionPlanWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for tagSuggestionsHas to contain a specific value
+  """
+  tagSuggestionsHas: String
+  """
+  Filter for dismissedTagSuggestionsHas to contain a specific value
+  """
+  dismissedTagSuggestionsHas: String
+  """
+  Filter for controlSuggestionsHas to contain a specific value
+  """
+  controlSuggestionsHas: String
+  """
+  Filter for dismissedControlSuggestionsHas to contain a specific value
+  """
+  dismissedControlSuggestionsHas: String
+  """
+  Filter for improvementSuggestionsHas to contain a specific value
+  """
+  improvementSuggestionsHas: String
+  """
+  Filter for dismissedImprovementSuggestionsHas to contain a specific value
+  """
+  dismissedImprovementSuggestionsHas: String
 }
 type Assessment implements Node {
   id: ID!
@@ -53826,6 +53963,10 @@ type AssessmentResponse implements Node {
   the document containing the user's response data
   """
   documentDataID: ID
+  """
+  is this a draft response? can the user resume from where they left?
+  """
+  isDraft: Boolean!
   owner: Organization
   assessment: Assessment!
   campaign: Campaign
@@ -53841,6 +53982,7 @@ enum AssessmentResponseAssessmentResponseStatus @goModel(model: "github.com/theo
   SENT
   COMPLETED
   OVERDUE
+  DRAFT
 }
 """
 A connection to a list of items.
@@ -53904,6 +54046,7 @@ enum AssessmentResponseOrderField {
   started_at
   completed_at
   due_date
+  is_draft
 }
 """
 AssessmentResponseWhereInput is used for filtering AssessmentResponse objects.
@@ -54242,6 +54385,11 @@ input AssessmentResponseWhereInput {
   dueDateIsNil: Boolean
   dueDateNotNil: Boolean
   """
+  is_draft field predicates
+  """
+  isDraft: Boolean
+  isDraftNEQ: Boolean
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -54472,6 +54620,10 @@ input AssessmentWhereInput {
   """
   hasCampaigns: Boolean
   hasCampaignsWith: [CampaignWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Asset implements Node {
   id: ID!
@@ -55877,6 +56029,14 @@ input AssetWhereInput {
   """
   hasConnectedFrom: Boolean
   hasConnectedFromWith: [AssetWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for categoriesHas to contain a specific value
+  """
+  categoriesHas: String
 }
 type Campaign implements Node {
   id: ID!
@@ -56532,6 +56692,7 @@ enum CampaignTargetAssessmentResponseStatus @goModel(model: "github.com/theopenl
   SENT
   COMPLETED
   OVERDUE
+  DRAFT
 }
 """
 A connection to a list of items.
@@ -57450,6 +57611,10 @@ input CampaignWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Contact implements Node {
   id: ID!
@@ -57925,6 +58090,10 @@ input ContactWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Control implements Node {
   id: ID!
@@ -59384,6 +59553,10 @@ input ControlImplementationWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type ControlObjective implements Node {
   id: ID!
@@ -60248,6 +60421,10 @@ input ControlObjectiveWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 Ordering options for Control connections
@@ -60972,6 +61149,22 @@ input ControlWhereInput {
   """
   hasControlMappings: Boolean
   hasControlMappingsWith: [FindingControlWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for aliasesHas to contain a specific value
+  """
+  aliasesHas: String
+  """
+  Filter for mappedCategoriesHas to contain a specific value
+  """
+  mappedCategoriesHas: String
+  """
+  Filter for controlQuestionsHas to contain a specific value
+  """
+  controlQuestionsHas: String
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -66657,6 +66850,10 @@ input CustomDomainWhereInput {
   """
   hasDNSVerification: Boolean
   hasDNSVerificationWith: [DNSVerificationWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type CustomTypeEnum implements Node {
   id: ID!
@@ -67796,6 +67993,10 @@ input DNSVerificationWhereInput {
   """
   hasCustomDomains: Boolean
   hasCustomDomainsWith: [CustomDomainWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type DirectoryAccount implements Node {
   id: ID!
@@ -68620,6 +68821,10 @@ input DirectoryAccountWhereInput {
   """
   hasMemberships: Boolean
   hasMembershipsWith: [DirectoryMembershipWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type DirectoryGroup implements Node {
   id: ID!
@@ -69282,6 +69487,10 @@ input DirectoryGroupWhereInput {
   """
   hasMembers: Boolean
   hasMembersWith: [DirectoryMembershipWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type DirectoryMembership implements Node {
   id: ID!
@@ -70930,6 +71139,10 @@ input DocumentDataWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type EmailBranding implements Node {
   id: ID!
@@ -71544,6 +71757,10 @@ input EmailBrandingWhereInput {
   """
   hasEmailTemplates: Boolean
   hasEmailTemplatesWith: [EmailTemplateWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type EmailTemplate implements Node {
   id: ID!
@@ -73374,6 +73591,10 @@ input EntityTypeWhereInput {
   """
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 EntityWhereInput is used for filtering Entity objects.
@@ -74305,6 +74526,26 @@ input EntityWhereInput {
   """
   hasEntityType: Boolean
   hasEntityTypeWith: [EntityTypeWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for domainsHas to contain a specific value
+  """
+  domainsHas: String
+  """
+  Filter for linkedAssetIdsHas to contain a specific value
+  """
+  linkedAssetIdsHas: String
+  """
+  Filter for providedServicesHas to contain a specific value
+  """
+  providedServicesHas: String
+  """
+  Filter for linksHas to contain a specific value
+  """
+  linksHas: String
 }
 type Event implements Node {
   id: ID!
@@ -74938,6 +75179,10 @@ input EventWhereInput {
   """
   hasOrgSubscriptions: Boolean
   hasOrgSubscriptionsWith: [OrgSubscriptionWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Evidence implements Node {
   id: ID!
@@ -75818,6 +76063,10 @@ input EvidenceWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Export implements Node {
   id: ID!
@@ -75970,10 +76219,13 @@ enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/common/enum
 ExportExportType is enum for the field export_type
 """
 enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.ExportType") {
+  ASSET
   CONTROL
   DIRECTORY_MEMBERSHIP
+  ENTITY
   EVIDENCE
   FINDING
+  IDENTITY_HOLDER
   INTERNAL_POLICY
   PROCEDURE
   REMEDIATION
@@ -76199,6 +76451,10 @@ input ExportWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  Filter for fieldsHas to contain a specific value
+  """
+  fieldsHas: String
 }
 type File implements Node {
   id: ID!
@@ -77081,6 +77337,10 @@ input FileWhereInput {
   """
   hasOriginalTrustCenterDoc: Boolean
   hasOriginalTrustCenterDocWith: [TrustCenterDocWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Finding implements Node {
   id: ID!
@@ -79011,6 +79271,26 @@ input FindingWhereInput {
   """
   hasControlMappings: Boolean
   hasControlMappingsWith: [FindingControlWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for categoriesHas to contain a specific value
+  """
+  categoriesHas: String
+  """
+  Filter for referencesHas to contain a specific value
+  """
+  referencesHas: String
+  """
+  Filter for stepsToReproduceHas to contain a specific value
+  """
+  stepsToReproduceHas: String
+  """
+  Filter for targetsHas to contain a specific value
+  """
+  targetsHas: String
 }
 type Group implements Node {
   id: ID!
@@ -81429,6 +81709,10 @@ input GroupWhereInput {
   """
   hasMembers: Boolean
   hasMembersWith: [GroupMembershipWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Hush implements Node {
   id: ID!
@@ -83107,6 +83391,10 @@ input IdentityHolderWhereInput {
   """
   hasUser: Boolean
   hasUserWith: [UserWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Integration implements Node {
   id: ID!
@@ -84086,6 +84374,10 @@ input IntegrationWhereInput {
   """
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type InternalPolicy implements Node {
   id: ID!
@@ -85282,6 +85574,34 @@ input InternalPolicyWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for tagSuggestionsHas to contain a specific value
+  """
+  tagSuggestionsHas: String
+  """
+  Filter for dismissedTagSuggestionsHas to contain a specific value
+  """
+  dismissedTagSuggestionsHas: String
+  """
+  Filter for controlSuggestionsHas to contain a specific value
+  """
+  controlSuggestionsHas: String
+  """
+  Filter for dismissedControlSuggestionsHas to contain a specific value
+  """
+  dismissedControlSuggestionsHas: String
+  """
+  Filter for improvementSuggestionsHas to contain a specific value
+  """
+  improvementSuggestionsHas: String
+  """
+  Filter for dismissedImprovementSuggestionsHas to contain a specific value
+  """
+  dismissedImprovementSuggestionsHas: String
 }
 type Invite implements Node {
   id: ID!
@@ -86326,6 +86646,10 @@ input JobRunnerRegistrationTokenWhereInput {
   """
   hasJobRunner: Boolean
   hasJobRunnerWith: [JobRunnerWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type JobRunnerToken implements Node {
   id: ID!
@@ -86641,6 +86965,10 @@ input JobRunnerTokenWhereInput {
   """
   hasJobRunners: Boolean
   hasJobRunnersWith: [JobRunnerWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 JobRunnerWhereInput is used for filtering JobRunner objects.
@@ -86902,6 +87230,10 @@ input JobRunnerWhereInput {
   """
   hasJobRunnerTokens: Boolean
   hasJobRunnerTokensWith: [JobRunnerTokenWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type JobTemplate implements Node {
   id: ID!
@@ -87260,6 +87592,10 @@ input JobTemplateWhereInput {
   """
   hasScheduledJobs: Boolean
   hasScheduledJobsWith: [ScheduledJobWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 The builtin Map type
@@ -87486,6 +87822,10 @@ input MappableDomainWhereInput {
   """
   hasCustomDomains: Boolean
   hasCustomDomainsWith: [CustomDomainWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type MappedControl implements Node {
   id: ID!
@@ -88013,6 +88353,10 @@ input MappedControlWhereInput {
   """
   hasToSubcontrols: Boolean
   hasToSubcontrolsWith: [SubcontrolWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Narrative implements Node {
   id: ID!
@@ -88578,6 +88922,10 @@ input NarrativeWhereInput {
   """
   hasProcedures: Boolean
   hasProceduresWith: [ProcedureWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 An object with an ID.
@@ -89638,6 +89986,10 @@ input NotificationPreferenceWhereInput {
   """
   hasNotificationTemplate: Boolean
   hasNotificationTemplateWith: [NotificationTemplateWhereInput!]
+  """
+  Filter for topicPatternsHas to contain a specific value
+  """
+  topicPatternsHas: String
 }
 type NotificationTemplate implements Node {
   id: ID!
@@ -90314,6 +90666,10 @@ input OnboardingWhereInput {
   """
   hasOrganization: Boolean
   hasOrganizationWith: [OrganizationWhereInput!]
+  """
+  Filter for domainsHas to contain a specific value
+  """
+  domainsHas: String
 }
 """
 Possible directions in which to order a list of items when provided an ` + "`" + `orderBy` + "`" + ` argument.
@@ -90843,6 +91199,10 @@ input OrgSubscriptionWhereInput {
   """
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Organization implements Node {
   id: ID!
@@ -94498,6 +94858,18 @@ input OrganizationSettingWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for domainsHas to contain a specific value
+  """
+  domainsHas: String
+  """
+  Filter for allowedEmailDomainsHas to contain a specific value
+  """
+  allowedEmailDomainsHas: String
 }
 """
 OrganizationWhereInput is used for filtering Organization objects.
@@ -95167,6 +95539,10 @@ input OrganizationWhereInput {
   """
   hasMembers: Boolean
   hasMembersWith: [OrgMembershipWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 Information about pagination in a connection.
@@ -95549,6 +95925,14 @@ input PersonalAccessTokenWhereInput {
   """
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for scopesHas to contain a specific value
+  """
+  scopesHas: String
 }
 type Platform implements Node {
   id: ID!
@@ -97503,6 +97887,10 @@ input PlatformWhereInput {
   """
   hasPlatformOwner: Boolean
   hasPlatformOwnerWith: [UserWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Procedure implements Node {
   id: ID!
@@ -98627,6 +99015,34 @@ input ProcedureWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for tagSuggestionsHas to contain a specific value
+  """
+  tagSuggestionsHas: String
+  """
+  Filter for dismissedTagSuggestionsHas to contain a specific value
+  """
+  dismissedTagSuggestionsHas: String
+  """
+  Filter for controlSuggestionsHas to contain a specific value
+  """
+  controlSuggestionsHas: String
+  """
+  Filter for dismissedControlSuggestionsHas to contain a specific value
+  """
+  dismissedControlSuggestionsHas: String
+  """
+  Filter for improvementSuggestionsHas to contain a specific value
+  """
+  improvementSuggestionsHas: String
+  """
+  Filter for dismissedImprovementSuggestionsHas to contain a specific value
+  """
+  dismissedImprovementSuggestionsHas: String
 }
 type Program implements Node {
   id: ID!
@@ -99889,6 +100305,10 @@ input ProgramWhereInput {
   """
   hasMembers: Boolean
   hasMembersWith: [ProgramMembershipWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Query {
   """
@@ -104084,6 +104504,10 @@ input RemediationWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Review implements Node {
   id: ID!
@@ -105369,6 +105793,10 @@ input ReviewWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Risk implements Node {
   id: ID!
@@ -106591,6 +107019,10 @@ input RiskWhereInput {
   """
   hasDiscussions: Boolean
   hasDiscussionsWith: [DiscussionWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Scan implements Node {
   id: ID!
@@ -107704,6 +108136,14 @@ input ScanWhereInput {
   """
   hasPerformedByGroup: Boolean
   hasPerformedByGroupWith: [GroupWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for vulnerabilityIdsHas to contain a specific value
+  """
+  vulnerabilityIdsHas: String
 }
 type ScheduledJob implements Node {
   id: ID!
@@ -108984,6 +109424,14 @@ input StandardWhereInput {
   """
   hasLogoFile: Boolean
   hasLogoFileWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for domainsHas to contain a specific value
+  """
+  domainsHas: String
 }
 type Subcontrol implements Node {
   id: ID!
@@ -110199,6 +110647,22 @@ input SubcontrolWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for aliasesHas to contain a specific value
+  """
+  aliasesHas: String
+  """
+  Filter for mappedCategoriesHas to contain a specific value
+  """
+  mappedCategoriesHas: String
+  """
+  Filter for controlQuestionsHas to contain a specific value
+  """
+  controlQuestionsHas: String
 }
 type Subprocessor implements Node {
   id: ID!
@@ -110592,6 +111056,10 @@ input SubprocessorWhereInput {
   """
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Subscriber implements Node {
   id: ID!
@@ -110898,6 +111366,10 @@ input SubscriberWhereInput {
   """
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type TFASetting implements Node {
   id: ID!
@@ -111381,6 +111853,10 @@ input TagDefinitionWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  Filter for aliasesHas to contain a specific value
+  """
+  aliasesHas: String
 }
 type Task implements Node {
   id: ID!
@@ -112530,6 +113006,14 @@ input TaskWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for externalReferenceUrlHas to contain a specific value
+  """
+  externalReferenceUrlHas: String
 }
 type Template implements Node {
   id: ID!
@@ -113157,6 +113641,10 @@ input TemplateWhereInput {
   """
   hasIdentityHolders: Boolean
   hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 The builtin Time type
@@ -113764,6 +114252,10 @@ input TrustCenterComplianceWhereInput {
   """
   hasStandard: Boolean
   hasStandardWith: [StandardWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 A connection to a list of items.
@@ -114241,6 +114733,10 @@ input TrustCenterDocWhereInput {
   """
   hasOriginalFile: Boolean
   hasOriginalFileWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 An edge in a connection.
@@ -115122,6 +115618,10 @@ input TrustCenterNDARequestWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 Ordering options for TrustCenter connections
@@ -116168,6 +116668,10 @@ input TrustCenterSubprocessorWhereInput {
   """
   hasSubprocessor: Boolean
   hasSubprocessorWith: [SubprocessorWhereInput!]
+  """
+  Filter for countriesHas to contain a specific value
+  """
+  countriesHas: String
 }
 """
 TrustCenterTrustCenterPreviewStatus is enum for the field preview_status
@@ -116927,6 +117431,10 @@ input TrustCenterWhereInput {
   """
   hasTrustCenterNdaRequests: Boolean
   hasTrustCenterNdaRequestsWith: [TrustCenterNDARequestWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -125443,6 +125951,10 @@ input UserSettingWhereInput {
   """
   hasDefaultOrg: Boolean
   hasDefaultOrgWith: [OrganizationWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 UserWhereInput is used for filtering User objects.
@@ -125900,6 +126412,10 @@ input UserWhereInput {
   """
   hasProgramMemberships: Boolean
   hasProgramMembershipsWith: [ProgramMembershipWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Vulnerability implements Node {
   id: ID!
@@ -127375,6 +127891,18 @@ input VulnerabilityWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for referencesHas to contain a specific value
+  """
+  referencesHas: String
+  """
+  Filter for impactsHas to contain a specific value
+  """
+  impactsHas: String
 }
 type Webauthn implements Node {
   id: ID!
@@ -127538,6 +128066,10 @@ input WebauthnWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [UserWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type WorkflowAssignment implements Node {
   id: ID!
@@ -128028,6 +128560,10 @@ input WorkflowAssignmentTargetWhereInput {
   """
   hasGroup: Boolean
   hasGroupWith: [GroupWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 WorkflowAssignmentTargetWorkflowTargetType is enum for the field target_type
@@ -128338,6 +128874,10 @@ input WorkflowAssignmentWhereInput {
   """
   hasGroup: Boolean
   hasGroupWith: [GroupWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 WorkflowAssignmentWorkflowAssignmentStatus is enum for the field status
@@ -128894,6 +129434,14 @@ input WorkflowDefinitionWhereInput {
   """
   hasEmailTemplates: Boolean
   hasEmailTemplatesWith: [EmailTemplateWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for trackedFieldsHas to contain a specific value
+  """
+  trackedFieldsHas: String
 }
 """
 WorkflowDefinitionWorkflowKind is enum for the field workflow_kind
@@ -129136,6 +129684,10 @@ input WorkflowEventWhereInput {
   """
   hasWorkflowInstance: Boolean
   hasWorkflowInstanceWith: [WorkflowInstanceWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 WorkflowEventWorkflowEventType is enum for the field event_type
@@ -129908,6 +130460,10 @@ input WorkflowInstanceWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 WorkflowInstanceWorkflowInstanceState is enum for the field state
@@ -132669,6 +133225,37 @@ extend type Mutation{
         """
         id: ID!
     ): IdentityHolderDeletePayload!
+    """
+    Delete multiple identityHolders
+    """
+    deleteBulkIdentityHolder(
+        """
+        IDs of the identityHolders to delete
+        """
+        ids: [ID!]!
+    ): IdentityHolderBulkDeletePayload!
+    """
+    Update multiple existing identityHolders
+    """
+    updateBulkIdentityHolder(
+        """
+        IDs of the identityHolders to update
+        """
+        ids: [ID!]!
+        """
+        values to update the identityHolders with
+        """
+        input: UpdateIdentityHolderInput!
+    ): IdentityHolderBulkUpdatePayload!
+    """
+    Update multiple existing identityHolders via file upload
+    """
+    updateBulkCSVIdentityHolder(
+        """
+        csv file containing values of the identityHolder, must include ID column
+        """
+        input: Upload!
+    ): IdentityHolderBulkUpdatePayload!
 }
 
 """
@@ -132709,6 +133296,30 @@ type IdentityHolderBulkCreatePayload {
     Created identityHolders
     """
     identityHolders: [IdentityHolder!]
+}
+
+"""
+Return response for deleteBulkIdentityHolder mutation
+"""
+type IdentityHolderBulkDeletePayload {
+    """
+    Deleted identityHolder IDs
+    """
+    deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkIdentityHolder mutation
+"""
+type IdentityHolderBulkUpdatePayload {
+    """
+    Updated identityHolders
+    """
+    identityHolders: [IdentityHolder!]
+    """
+    IDs of the updated identityHolders
+    """
+    updatedIDs: [ID!]
 }`, BuiltIn: false},
 	{Name: "../schema/integration.graphql", Input: `extend type Query {
     """
@@ -134305,6 +134916,16 @@ type NoteDeletePayload {
         """
         input: UpdateNotificationInput!
     ): NotificationUpdatePayload!
+
+    """
+    Update multiple existing notifications
+    """
+    markNotificationsAsRead(
+        """
+        IDs of the notifications to update
+        """
+        ids: [ID!]!
+    ): ActionNotificationsReadPayload!
 }
 
 """
@@ -134315,6 +134936,16 @@ type NotificationUpdatePayload {
     Updated notification
     """
     notification: Notification!
+}
+
+"""
+Return response for markNotificationsAsRead mutation
+"""
+type ActionNotificationsReadPayload {
+    """
+    Updated notification IDs
+    """
+    readIDs: [ID]!
 }`, BuiltIn: false},
 	{Name: "../schema/notificationpreference.graphql", Input: `extend type Query {
     """

@@ -18,6 +18,8 @@ var (
 	AssessmentResponseStatusCompleted AssessmentResponseStatus = "COMPLETED"
 	// AssessmentResponseStatusOverdue indicates the overdue.
 	AssessmentResponseStatusOverdue AssessmentResponseStatus = "OVERDUE"
+	// AssessmentResponseStatusDraft indicates the draft.
+	AssessmentResponseStatusDraft AssessmentResponseStatus = "DRAFT"
 	// AssessmentResponseStatusInvalid is used when an unknown or unsupported value is provided.
 	AssessmentResponseStatusInvalid AssessmentResponseStatus = "ASSESSMENTRESPONSESTATUS_INVALID"
 )
@@ -29,6 +31,7 @@ func (AssessmentResponseStatus) Values() []string {
 		string(AssessmentResponseStatusSent),
 		string(AssessmentResponseStatusCompleted),
 		string(AssessmentResponseStatusOverdue),
+		string(AssessmentResponseStatusDraft),
 	}
 }
 
@@ -48,6 +51,8 @@ func ToAssessmentResponseStatus(r string) *AssessmentResponseStatus {
 		return &AssessmentResponseStatusCompleted
 	case AssessmentResponseStatusOverdue.String():
 		return &AssessmentResponseStatusOverdue
+	case AssessmentResponseStatusDraft.String():
+		return &AssessmentResponseStatusDraft
 	default:
 		return &AssessmentResponseStatusInvalid
 	}

@@ -3,7 +3,8 @@ package cloudflare
 import (
 	"context"
 
-	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -11,30 +12,33 @@ const (
 	cloudflareHealthOp types.OperationName = "health.default"
 )
 
+// cloudflareOperations returns Cloudflare operation descriptors
 func cloudflareOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		{
-			Name:        cloudflareHealthOp,
-			Kind:        types.OperationKindHealth,
-			Description: "Verify Cloudflare API token via /user/tokens/verify.",
-			Run:         runCloudflareHealth,
-		},
+		operations.HealthOperation(cloudflareHealthOp, "Verify Cloudflare API token via /user/tokens/verify.", ClientCloudflareAPI, runCloudflareHealth),
 	}
 }
 
+// runCloudflareHealth validates Cloudflare credentials via token verification
 func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	token, err := helpers.APITokenFromPayload(input.Credential, string(TypeCloudflare))
+	client, token, err := auth.ClientAndAPIToken(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
 	var resp struct {
+		// Success indicates whether the API call succeeded
 		Success bool `json:"success"`
-		Result  struct {
-			IssuedOn  string `json:"issued_on"`
+		// Result holds token metadata returned by the API
+		Result struct {
+			// IssuedOn is the token issued timestamp
+			IssuedOn string `json:"issued_on"`
+			// ExpiresOn is the token expiration timestamp
 			ExpiresOn string `json:"expires_on"`
 		} `json:"result"`
+		// Errors lists any API errors returned by the verification call
 		Errors []struct {
+			// Message is the error message returned by the API
 			Message string `json:"message"`
 		} `json:"errors"`
 	}
@@ -42,12 +46,9 @@ func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
-	if err := helpers.HTTPGetJSON(ctx, nil, "https://api.cloudflare.com/client/v4/user/tokens/verify", token, headers, &resp); err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Cloudflare token verification failed",
-			Details: map[string]any{"error": err.Error()},
-		}, err
+	endpoint := "https://api.cloudflare.com/client/v4/user/tokens/verify"
+	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, headers, &resp); err != nil {
+		return operations.OperationFailure("Cloudflare token verification failed", err), err
 	}
 
 	if !resp.Success {

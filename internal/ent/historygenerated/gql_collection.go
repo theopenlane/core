@@ -714,6 +714,11 @@ func (_q *AssessmentResponseHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, assessmentresponsehistory.FieldDocumentDataID)
 				fieldSeen[assessmentresponsehistory.FieldDocumentDataID] = struct{}{}
 			}
+		case "isDraft":
+			if _, ok := fieldSeen[assessmentresponsehistory.FieldIsDraft]; !ok {
+				selectedFields = append(selectedFields, assessmentresponsehistory.FieldIsDraft)
+				fieldSeen[assessmentresponsehistory.FieldIsDraft] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

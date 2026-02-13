@@ -165,6 +165,13 @@ entconfig:
             provider: none
         maximumsentences: 10
         type: lexrank
+integrationgithubapp:
+    appid: ""
+    appslug: ""
+    enabled: false
+    privatekey: ""
+    successredirecturl: ""
+    webhooksecret: ""
 integrationoauthprovider:
     enabled: false
     successredirecturl: ""

@@ -31,6 +31,12 @@ func NewCELEnv(cfg *Config, scope CELExpressionScope) (*cel.Env, error) {
 		cel.Variable("removed_ids", cel.MapType(cel.StringType, cel.ListType(cel.StringType))),
 		cel.Variable("event_type", cel.StringType),
 		cel.Variable("proposed_changes", cel.DynType),
+		cel.Variable("instance_id", cel.StringType),
+		cel.Variable("definition_id", cel.StringType),
+		cel.Variable("object_id", cel.StringType),
+		cel.Variable("object_type", cel.StringType),
+		cel.Variable("action_key", cel.StringType),
+		cel.Variable("data", cel.DynType),
 	}
 
 	if scope == CELScopeAction {
