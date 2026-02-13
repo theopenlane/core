@@ -773,10 +773,9 @@ func adminSearchEntities(ctx context.Context, query string, after *entgql.Cursor
 					s.Where(sql.ExprP("(domains)::text LIKE $25", likeQuery)) // search by Domains
 				},
 				entity.EntityTypeIDContainsFold(query), // search by EntityTypeID
-				entity.StatusContainsFold(query),       // search by Status
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(linked_asset_ids)::text LIKE $28", likeQuery)) // search by LinkedAssetIds
+					s.Where(sql.ExprP("(linked_asset_ids)::text LIKE $27", likeQuery)) // search by LinkedAssetIds
 				},
 				entity.SpendCurrencyContainsFold(query), // search by SpendCurrency
 				entity.BillingModelContainsFold(query),  // search by BillingModel
@@ -784,17 +783,17 @@ func adminSearchEntities(ctx context.Context, query string, after *entgql.Cursor
 				entity.StatusPageURLContainsFold(query), // search by StatusPageURL
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(provided_services)::text LIKE $33", likeQuery)) // search by ProvidedServices
+					s.Where(sql.ExprP("(provided_services)::text LIKE $32", likeQuery)) // search by ProvidedServices
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(links)::text LIKE $34", likeQuery)) // search by Links
+					s.Where(sql.ExprP("(links)::text LIKE $33", likeQuery)) // search by Links
 				},
 				entity.RiskRatingContainsFold(query), // search by RiskRating
 				entity.TierContainsFold(query),       // search by Tier
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(vendor_metadata)::text LIKE $37", likeQuery)) // search by VendorMetadata
+					s.Where(sql.ExprP("(vendor_metadata)::text LIKE $36", likeQuery)) // search by VendorMetadata
 				},
 			),
 		)

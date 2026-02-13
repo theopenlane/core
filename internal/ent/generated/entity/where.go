@@ -224,11 +224,6 @@ func EntityTypeID(v string) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldEntityTypeID, v))
 }
 
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldEQ(FieldStatus, v))
-}
-
 // ApprovedForUse applies equality check predicate on the "approved_for_use" field. It's identical to ApprovedForUseEQ.
 func ApprovedForUse(v bool) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldApprovedForUse, v))
@@ -2520,58 +2515,33 @@ func EntityTypeIDContainsFold(v string) predicate.Entity {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldEQ(FieldStatus, v))
+func StatusEQ(v enums.EntityStatus) predicate.Entity {
+	vc := v
+	return predicate.Entity(sql.FieldEQ(FieldStatus, vc))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldNEQ(FieldStatus, v))
+func StatusNEQ(v enums.EntityStatus) predicate.Entity {
+	vc := v
+	return predicate.Entity(sql.FieldNEQ(FieldStatus, vc))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...string) predicate.Entity {
-	return predicate.Entity(sql.FieldIn(FieldStatus, vs...))
+func StatusIn(vs ...enums.EntityStatus) predicate.Entity {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Entity(sql.FieldIn(FieldStatus, v...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...string) predicate.Entity {
-	return predicate.Entity(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldGT(FieldStatus, v))
-}
-
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldGTE(FieldStatus, v))
-}
-
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldLT(FieldStatus, v))
-}
-
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldLTE(FieldStatus, v))
-}
-
-// StatusContains applies the Contains predicate on the "status" field.
-func StatusContains(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldContains(FieldStatus, v))
-}
-
-// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
-func StatusHasPrefix(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldHasPrefix(FieldStatus, v))
-}
-
-// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
-func StatusHasSuffix(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldHasSuffix(FieldStatus, v))
+func StatusNotIn(vs ...enums.EntityStatus) predicate.Entity {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Entity(sql.FieldNotIn(FieldStatus, v...))
 }
 
 // StatusIsNil applies the IsNil predicate on the "status" field.
@@ -2582,16 +2552,6 @@ func StatusIsNil() predicate.Entity {
 // StatusNotNil applies the NotNil predicate on the "status" field.
 func StatusNotNil() predicate.Entity {
 	return predicate.Entity(sql.FieldNotNull(FieldStatus))
-}
-
-// StatusEqualFold applies the EqualFold predicate on the "status" field.
-func StatusEqualFold(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldEqualFold(FieldStatus, v))
-}
-
-// StatusContainsFold applies the ContainsFold predicate on the "status" field.
-func StatusContainsFold(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldContainsFold(FieldStatus, v))
 }
 
 // ApprovedForUseEQ applies the EQ predicate on the "approved_for_use" field.

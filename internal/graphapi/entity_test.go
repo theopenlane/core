@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
@@ -157,7 +158,7 @@ func TestMutationCreateEntity(t *testing.T) {
 				DisplayName: lo.ToPtr("fraser fir"),
 				Description: lo.ToPtr("the pine trees of appalachia"),
 				Domains:     []string{"https://appalachiatrees.com"},
-				Status:      lo.ToPtr("Onboarding"),
+				Status:      &enums.EntityStatusUnderReview,
 				Note: &testclient.CreateNoteInput{
 					Text:    "matt is the best",
 					OwnerID: &testUser1.OrganizationID,
@@ -261,7 +262,7 @@ func TestMutationCreateEntity(t *testing.T) {
 				assert.Check(t, is.DeepEqual(tc.request.Status, resp.CreateEntity.Entity.Status))
 			} else {
 				// default status is active
-				assert.Check(t, is.Equal("active", *resp.CreateEntity.Entity.Status))
+				assert.Check(t, is.Equal(enums.EntityStatusActive, *resp.CreateEntity.Entity.Status))
 			}
 
 			if tc.request.Note != nil {
@@ -326,7 +327,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 		{
 			name: "update status and domain",
 			request: testclient.UpdateEntityInput{
-				Status:        lo.ToPtr("Onboarding"),
+				Status:        &enums.EntityStatusSuspended,
 				AppendDomains: []string{"example.com"},
 			},
 			client: suite.client.api,

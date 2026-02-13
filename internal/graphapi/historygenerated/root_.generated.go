@@ -30569,7 +30569,7 @@ type EntityHistory implements Node {
   """
   status of the entity
   """
-  status: String
+  status: EntityHistoryEntityStatus
   """
   whether the entity is approved for use
   """
@@ -30700,6 +30700,20 @@ type EntityHistoryEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+EntityHistoryEntityStatus is enum for the field status
+"""
+enum EntityHistoryEntityStatus @goModel(model: "github.com/theopenlane/core/common/enums.EntityStatus") {
+  DRAFT
+  UNDER_REVIEW
+  APPROVED
+  RESTRICTED
+  REJECTED
+  ACTIVE
+  SUSPENDED
+  OFFBOARDING
+  TERMINATED
 }
 """
 EntityHistoryFrequency is enum for the field review_frequency
@@ -31304,21 +31318,12 @@ input EntityHistoryWhereInput {
   """
   status field predicates
   """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
+  status: EntityHistoryEntityStatus
+  statusNEQ: EntityHistoryEntityStatus
+  statusIn: [EntityHistoryEntityStatus!]
+  statusNotIn: [EntityHistoryEntityStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   approved_for_use field predicates
   """

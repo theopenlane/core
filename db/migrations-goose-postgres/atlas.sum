@@ -1,4 +1,4 @@
-h1:366e2MenvtgflQdySB7O5wR0R8ohldHdFCttJJta57c=
+h1:JkUVX1iap0pZcdWr+19y7HxPzIBQ0shQBpN8pw2EY1U=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -48,3 +48,5 @@ h1:366e2MenvtgflQdySB7O5wR0R8ohldHdFCttJJta57c=
 20260210212011_integrations_history.sql h1:45XM9OHLt8GzCJ5VXlPRH7xP4m7wnkKlxXQahm3yHqw=
 20260211231049_is_draft_assessment_response.sql h1:Hh7OusVc4PN3nw7rRZ0Vo2kivREAbvTqsFpj6w28MPQ=
 20260211231056_is_draft_assessment_response_history.sql h1:NTSmxwkVKFAiKwY05VBhPtDlJ8VJ7rw3CgRSTwwzAfs=
+20260213153904_entitystatus.sql h1:teSh3km2LpCeB3lmXqTyWq3tcRGvz3B0L+CDnMeaP3k=
+20260213153912_entitystatus_history.sql h1:wf54GVEUL5spOHKKRL230gvhIesKp8vtU5e47xBTak0=
