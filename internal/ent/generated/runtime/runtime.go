@@ -2377,10 +2377,6 @@ func init() {
 	entityDescDomains := entityFields[3].Descriptor()
 	// entity.DomainsValidator is a validator for the "domains" field. It is called by the builders before save.
 	entity.DomainsValidator = entityDescDomains.Validators[0].(func([]string) error)
-	// entityDescStatus is the schema descriptor for status field.
-	entityDescStatus := entityFields[5].Descriptor()
-	// entity.DefaultStatus holds the default value on creation for the status field.
-	entity.DefaultStatus = entityDescStatus.Default.(string)
 	// entityDescApprovedForUse is the schema descriptor for approved_for_use field.
 	entityDescApprovedForUse := entityFields[6].Descriptor()
 	// entity.DefaultApprovedForUse holds the default value on creation for the approved_for_use field.

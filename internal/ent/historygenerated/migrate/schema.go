@@ -900,7 +900,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "entity_type_id", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeString, Nullable: true, Default: "active"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"DRAFT", "UNDER_REVIEW", "APPROVED", "RESTRICTED", "REJECTED", "ACTIVE", "SUSPENDED", "OFFBOARDING", "TERMINATED"}, Default: "ACTIVE"},
 		{Name: "approved_for_use", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "linked_asset_ids", Type: field.TypeJSON, Nullable: true},
 		{Name: "has_soc2", Type: field.TypeBool, Nullable: true, Default: false},

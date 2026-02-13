@@ -910,7 +910,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entityhistory.FieldDescription:                           {Type: field.TypeString, Column: entityhistory.FieldDescription},
 			entityhistory.FieldDomains:                               {Type: field.TypeJSON, Column: entityhistory.FieldDomains},
 			entityhistory.FieldEntityTypeID:                          {Type: field.TypeString, Column: entityhistory.FieldEntityTypeID},
-			entityhistory.FieldStatus:                                {Type: field.TypeString, Column: entityhistory.FieldStatus},
+			entityhistory.FieldStatus:                                {Type: field.TypeEnum, Column: entityhistory.FieldStatus},
 			entityhistory.FieldApprovedForUse:                        {Type: field.TypeBool, Column: entityhistory.FieldApprovedForUse},
 			entityhistory.FieldLinkedAssetIds:                        {Type: field.TypeJSON, Column: entityhistory.FieldLinkedAssetIds},
 			entityhistory.FieldHasSoc2:                               {Type: field.TypeBool, Column: entityhistory.FieldHasSoc2},

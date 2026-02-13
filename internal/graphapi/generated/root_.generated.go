@@ -62704,7 +62704,7 @@ input CreateEntityInput {
   """
   status of the entity
   """
-  status: String
+  status: EntityEntityStatus
   """
   whether the entity is approved for use
   """
@@ -72519,7 +72519,7 @@ type Entity implements Node {
   """
   status of the entity
   """
-  status: String
+  status: EntityEntityStatus
   """
   whether the entity is approved for use
   """
@@ -73250,6 +73250,20 @@ type EntityEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+EntityEntityStatus is enum for the field status
+"""
+enum EntityEntityStatus @goModel(model: "github.com/theopenlane/core/common/enums.EntityStatus") {
+  DRAFT
+  UNDER_REVIEW
+  APPROVED
+  RESTRICTED
+  REJECTED
+  ACTIVE
+  SUSPENDED
+  OFFBOARDING
+  TERMINATED
 }
 """
 EntityFrequency is enum for the field review_frequency
@@ -74098,21 +74112,12 @@ input EntityWhereInput {
   """
   status field predicates
   """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
+  status: EntityEntityStatus
+  statusNEQ: EntityEntityStatus
+  statusIn: [EntityEntityStatus!]
+  statusNotIn: [EntityEntityStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   approved_for_use field predicates
   """
@@ -119434,7 +119439,7 @@ input UpdateEntityInput {
   """
   status of the entity
   """
-  status: String
+  status: EntityEntityStatus
   clearStatus: Boolean
   """
   whether the entity is approved for use

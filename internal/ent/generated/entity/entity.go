@@ -544,8 +544,6 @@ var (
 	DisplayNameValidator func(string) error
 	// DomainsValidator is a validator for the "domains" field. It is called by the builders before save.
 	DomainsValidator func([]string) error
-	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus string
 	// DefaultApprovedForUse holds the default value on creation for the "approved_for_use" field.
 	DefaultApprovedForUse bool
 	// DefaultLinkedAssetIds holds the default value on creation for the "linked_asset_ids" field.
@@ -573,6 +571,18 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultStatus enums.EntityStatus = "ACTIVE"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.EntityStatus) error {
+	switch s.String() {
+	case "DRAFT", "UNDER_REVIEW", "APPROVED", "RESTRICTED", "REJECTED", "ACTIVE", "SUSPENDED", "OFFBOARDING", "TERMINATED":
+		return nil
+	default:
+		return fmt.Errorf("entity: invalid enum value for status field: %q", s)
+	}
+}
 
 const DefaultReviewFrequency enums.Frequency = "YEARLY"
 
@@ -1411,6 +1421,13 @@ func newEntityTypeStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, EntityTypeTable, EntityTypeColumn),
 	)
 }
+
+var (
+	// enums.EntityStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.EntityStatus)(nil)
+	// enums.EntityStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.EntityStatus)(nil)
+)
 
 var (
 	// enums.Frequency must implement graphql.Marshaler.

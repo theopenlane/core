@@ -619,13 +619,13 @@ func (_u *EntityUpdate) ClearEntityTypeID() *EntityUpdate {
 }
 
 // SetStatus sets the "status" field.
-func (_u *EntityUpdate) SetStatus(v string) *EntityUpdate {
+func (_u *EntityUpdate) SetStatus(v enums.EntityStatus) *EntityUpdate {
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *EntityUpdate) SetNillableStatus(v *string) *EntityUpdate {
+func (_u *EntityUpdate) SetNillableStatus(v *enums.EntityStatus) *EntityUpdate {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
@@ -2003,6 +2003,11 @@ func (_u *EntityUpdate) check() error {
 			return &ValidationError{Name: "domains", err: fmt.Errorf(`generated: validator failed for field "Entity.domains": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Status(); ok {
+		if err := entity.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Entity.status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.StatusPageURL(); ok {
 		if err := entity.StatusPageURLValidator(v); err != nil {
 			return &ValidationError{Name: "status_page_url", err: fmt.Errorf(`generated: validator failed for field "Entity.status_page_url": %w`, err)}
@@ -2173,10 +2178,10 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		_spec.ClearField(entity.FieldDomains, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(entity.FieldStatus, field.TypeString, value)
+		_spec.SetField(entity.FieldStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.StatusCleared() {
-		_spec.ClearField(entity.FieldStatus, field.TypeString)
+		_spec.ClearField(entity.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ApprovedForUse(); ok {
 		_spec.SetField(entity.FieldApprovedForUse, field.TypeBool, value)
@@ -4167,13 +4172,13 @@ func (_u *EntityUpdateOne) ClearEntityTypeID() *EntityUpdateOne {
 }
 
 // SetStatus sets the "status" field.
-func (_u *EntityUpdateOne) SetStatus(v string) *EntityUpdateOne {
+func (_u *EntityUpdateOne) SetStatus(v enums.EntityStatus) *EntityUpdateOne {
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *EntityUpdateOne) SetNillableStatus(v *string) *EntityUpdateOne {
+func (_u *EntityUpdateOne) SetNillableStatus(v *enums.EntityStatus) *EntityUpdateOne {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
@@ -5564,6 +5569,11 @@ func (_u *EntityUpdateOne) check() error {
 			return &ValidationError{Name: "domains", err: fmt.Errorf(`generated: validator failed for field "Entity.domains": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Status(); ok {
+		if err := entity.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Entity.status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.StatusPageURL(); ok {
 		if err := entity.StatusPageURLValidator(v); err != nil {
 			return &ValidationError{Name: "status_page_url", err: fmt.Errorf(`generated: validator failed for field "Entity.status_page_url": %w`, err)}
@@ -5751,10 +5761,10 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 		_spec.ClearField(entity.FieldDomains, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(entity.FieldStatus, field.TypeString, value)
+		_spec.SetField(entity.FieldStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.StatusCleared() {
-		_spec.ClearField(entity.FieldStatus, field.TypeString)
+		_spec.ClearField(entity.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ApprovedForUse(); ok {
 		_spec.SetField(entity.FieldApprovedForUse, field.TypeBool, value)

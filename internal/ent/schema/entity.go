@@ -86,9 +86,10 @@ func (Entity) Fields() []ent.Field {
 		field.String("entity_type_id").
 			Comment("The type of the entity").
 			Optional(),
-		field.String("status").
+		field.Enum("status").
 			Comment("status of the entity").
-			Default("active").
+			GoType(enums.EntityStatus("")).
+			Default(enums.EntityStatusActive.String()).
 			Annotations(
 				entgql.OrderField("status"),
 			).

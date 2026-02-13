@@ -6648,7 +6648,7 @@ type CreateEntityInput struct {
 	DisplayName                           *string
 	Description                           *string
 	Domains                               []string
-	Status                                *string
+	Status                                *enums.EntityStatus
 	ApprovedForUse                        *bool
 	LinkedAssetIds                        []string
 	HasSoc2                               *bool
@@ -6964,7 +6964,7 @@ type UpdateEntityInput struct {
 	Domains                                    []string
 	AppendDomains                              []string
 	ClearStatus                                bool
-	Status                                     *string
+	Status                                     *enums.EntityStatus
 	ClearApprovedForUse                        bool
 	ApprovedForUse                             *bool
 	ClearLinkedAssetIds                        bool
