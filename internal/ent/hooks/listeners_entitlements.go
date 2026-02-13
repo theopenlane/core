@@ -281,13 +281,10 @@ func mutationTouches(m ent.Mutation, fields ...string) bool {
 		return false
 	}
 
-	for _, field := range fields {
-		if _, ok := m.Field(field); ok {
-			return true
-		}
-	}
-
-	return false
+	return lo.SomeBy(fields, func(field string) bool {
+		_, ok := m.Field(field)
+		return ok
+	})
 }
 
 // fetchOrganizationCustomerByOrgSettingID loads the organization and customer data linked to an organization setting

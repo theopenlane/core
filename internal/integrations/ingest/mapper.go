@@ -2,7 +2,6 @@ package ingest
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -355,11 +354,12 @@ func filterMappingOutput(schema integrationgenerated.IntegrationMappingSchema, i
 func validateMappingOutput(schema integrationgenerated.IntegrationMappingSchema, input map[string]any) error {
 	requiredKeys := schema.RequiredKeys
 	if len(requiredKeys) == 0 {
-		for _, field := range schema.Fields {
+		requiredKeys = lo.FilterMap(schema.Fields, func(field integrationgenerated.IntegrationMappingField, _ int) (string, bool) {
 			if field.Required {
-				requiredKeys = append(requiredKeys, field.InputKey)
+				return field.InputKey, true
 			}
-		}
+			return "", false
+		})
 	}
 
 	for _, key := range requiredKeys {
@@ -373,28 +373,4 @@ func validateMappingOutput(schema integrationgenerated.IntegrationMappingSchema,
 	}
 
 	return nil
-}
-
-// toMap converts an arbitrary value into a JSON object map
-func toMap(value any) (map[string]any, error) {
-	bytes, err := json.Marshal(value)
-	if err != nil {
-		return nil, err
-	}
-
-	var out any
-	if err := json.Unmarshal(bytes, &out); err != nil {
-		return nil, err
-	}
-
-	if out == nil {
-		return map[string]any{}, nil
-	}
-
-	mapped, ok := out.(map[string]any)
-	if !ok {
-		return nil, ErrMappingOutputEmpty
-	}
-
-	return mapped, nil
 }
