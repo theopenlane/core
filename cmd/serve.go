@@ -2,11 +2,9 @@ package cmd
 
 import (
 	"context"
-	"errors"
 	"sync"
 	"time"
 
-	"github.com/riverqueue/river"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/theopenlane/beacon/otelx"
@@ -16,8 +14,6 @@ import (
 
 	"github.com/theopenlane/utils/cache"
 
-	"github.com/theopenlane/core/common/jobspec"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -80,9 +76,11 @@ func serve(ctx context.Context) error {
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))
 
 	hooks.SetSlackConfig(hooks.SlackConfig{
-		WebhookURL:               so.Config.Settings.Slack.WebhookURL,
-		NewSubscriberMessageFile: so.Config.Settings.Slack.NewSubscriberMessageFile,
-		NewUserMessageFile:       so.Config.Settings.Slack.NewUserMessageFile,
+		WebhookURL:                   so.Config.Settings.Slack.WebhookURL,
+		NewSubscriberMessageFile:     so.Config.Settings.Slack.NewSubscriberMessageFile,
+		NewUserMessageFile:           so.Config.Settings.Slack.NewUserMessageFile,
+		GalaNewSubscriberMessageFile: so.Config.Settings.Slack.GalaNewSubscriberMessageFile,
+		GalaNewUserMessageFile:       so.Config.Settings.Slack.GalaNewUserMessageFile,
 	})
 
 	// Create keys for development when no external keys are supplied
@@ -182,21 +180,22 @@ func serve(ctx context.Context) error {
 	// Setup DB connection
 	log.Info().Interface("db", so.Config.Settings.DB.DatabaseName).Msg("connecting to database")
 
-	mutationOutboxCfg := so.Config.Settings.Workflows.MutationOutbox
 	galaCfg := so.Config.Settings.Workflows.Gala
-	mutationOutboxWorkerCount := max(mutationOutboxCfg.WorkerCount, 1)
 	galaWorkerCount := max(galaCfg.WorkerCount, 1)
-	mutationOutboxWorkersEnabled := mutationOutboxCfg.Enabled
 	galaRuntimeEnabled := galaCfg.Enabled || galaCfg.DualEmit
 	galaWorkersEnabled := galaCfg.Enabled
+	galaQueueName := galaCfg.QueueName
+	if galaQueueName == "" {
+		galaQueueName = gala.DefaultQueueName
+	}
 
 	var galaRuntime *gala.Runtime
+	var galaRiverRuntime *gala.RiverRuntime
 
 	eventer := hooks.NewEventer(
 		hooks.WithWorkflowListenersEnabled(so.Config.Settings.Workflows.Enabled),
-		hooks.WithMutationOutboxEnabled(mutationOutboxCfg.Enabled),
-		hooks.WithMutationOutboxFailOnEnqueueError(mutationOutboxCfg.FailOnEnqueueError),
-		hooks.WithMutationOutboxTopics(mutationOutboxCfg.Topics),
+	)
+	galaEmitter := hooks.NewGalaEmitter(
 		hooks.WithGalaRuntimeProvider(func() *gala.Runtime { return galaRuntime }),
 		hooks.WithGalaDualEmitEnabled(galaCfg.DualEmit),
 		hooks.WithGalaFailOnEnqueueError(galaCfg.FailOnEnqueueError),
@@ -208,71 +207,9 @@ func serve(ctx context.Context) error {
 		riverqueue.WithConnectionURI(so.Config.Settings.JobQueue.ConnectionURI),
 	}
 
-	if mutationOutboxWorkersEnabled || galaWorkersEnabled {
-		workers := river.NewWorkers()
-
-		if mutationOutboxWorkersEnabled {
-			if err := river.AddWorkerSafely(workers, eventqueue.NewMutationDispatchWorker(func() *soiree.EventBus {
-				return eventer.Emitter
-			})); err != nil {
-				return err
-			}
-		}
-
-		if galaWorkersEnabled {
-			if err := river.AddWorkerSafely(workers, gala.NewRiverDispatchWorker(func() *gala.Runtime {
-				return galaRuntime
-			})); err != nil {
-				return err
-			}
-		}
-
-		defaultQueueWorkers := 1
-		if mutationOutboxWorkersEnabled {
-			defaultQueueWorkers = max(defaultQueueWorkers, mutationOutboxWorkerCount)
-		}
-
-		queueName := galaCfg.QueueName
-		if queueName == "" {
-			queueName = jobspec.QueueDefault
-		}
-
-		queueConfig := map[string]river.QueueConfig{
-			jobspec.QueueDefault:      {MaxWorkers: defaultQueueWorkers},
-			jobspec.QueueCompliance:   {MaxWorkers: 1},
-			jobspec.QueueTrustcenter:  {MaxWorkers: 1},
-			jobspec.QueueNotification: {MaxWorkers: 1},
-		}
-
-		if galaWorkersEnabled {
-			if queueName == jobspec.QueueDefault {
-				queueConfig[jobspec.QueueDefault] = river.QueueConfig{MaxWorkers: max(defaultQueueWorkers, galaWorkerCount)}
-			} else {
-				queueConfig[queueName] = river.QueueConfig{MaxWorkers: galaWorkerCount}
-			}
-		}
-
-		jobOpts = append(jobOpts,
-			riverqueue.WithWorkers(workers),
-			riverqueue.WithQueues(queueConfig),
-		)
-
-		maxRetries := 0
-		if mutationOutboxWorkersEnabled {
-			maxRetries = max(maxRetries, mutationOutboxCfg.MaxRetries)
-		}
-
-		if galaWorkersEnabled {
-			maxRetries = max(maxRetries, galaCfg.MaxRetries)
-		}
-
-		if maxRetries > 0 {
-			jobOpts = append(jobOpts, riverqueue.WithMaxRetries(maxRetries))
-		}
-	}
-
 	clientOpts := []entdb.Option{
 		entdb.WithEventer(eventer, &so.Config.Settings.Workflows),
+		entdb.WithGalaEmitter(galaEmitter),
 		entdb.WithModules(),
 		entdb.WithMetricsHook(),
 	}
@@ -283,39 +220,33 @@ func serve(ctx context.Context) error {
 	}
 
 	if galaRuntimeEnabled {
-		jobClient, ok := dbClient.Job.(*riverqueue.Client)
-		if !ok {
-			log.Warn().Bool("dual_emit", galaCfg.DualEmit).Bool("worker_enabled", galaCfg.Enabled).Msg("gala enabled but job client is not riverqueue client")
-		} else {
-			queueName := galaCfg.QueueName
-			if queueName == "" {
-				queueName = jobspec.QueueDefault
-			}
+		galaRiverRuntime, err = gala.NewRiverRuntime(ctx, gala.RiverRuntimeOptions{
+			ConnectionURI:  so.Config.Settings.JobQueue.ConnectionURI,
+			QueueName:      galaQueueName,
+			WorkerCount:    galaWorkerCount,
+			MaxRetries:     galaCfg.MaxRetries,
+			WorkersEnabled: galaWorkersEnabled,
+			ConfigureRuntime: func(gRuntime *gala.Runtime) error {
+				gala.ProvideValue(gRuntime.Injector(), dbClient)
+				if dbClient.EntitlementManager != nil {
+					gala.ProvideValue(gRuntime.Injector(), dbClient.EntitlementManager)
+				}
+				if dbClient.TokenManager != nil {
+					gala.ProvideValue(gRuntime.Injector(), dbClient.TokenManager)
+				}
+				if wfEngine, ok := dbClient.WorkflowEngine.(*engine.WorkflowEngine); ok && wfEngine != nil {
+					gala.ProvideValue(gRuntime.Injector(), wfEngine)
+				}
 
-			dispatcher, err := gala.NewRiverDispatcher(gala.RiverDispatcherOptions{
-				JobClient: jobClient,
-				QueueByClass: map[gala.QueueClass]string{
-					gala.QueueClassWorkflow:    queueName,
-					gala.QueueClassIntegration: queueName,
-					gala.QueueClassGeneral:     queueName,
-				},
-				DefaultQueue: queueName,
-			})
-			if err != nil {
-				return err
-			}
+				if !galaWorkersEnabled {
+					return nil
+				}
 
-			gRuntime, err := gala.NewRuntime(gala.RuntimeOptions{
-				DurableDispatcher: dispatcher,
-			})
-			if err != nil {
-				return err
-			}
-
-			gala.ProvideValue(gRuntime.Injector(), dbClient)
-
-			if galaWorkersEnabled {
 				if _, err := hooks.RegisterGalaEntitlementListeners(gRuntime.Registry()); err != nil {
+					return err
+				}
+
+				if _, err := hooks.RegisterGalaSlackListeners(gRuntime.Registry()); err != nil {
 					return err
 				}
 
@@ -324,10 +255,21 @@ func serve(ctx context.Context) error {
 						return err
 					}
 				}
-			}
 
-			galaRuntime = gRuntime
+				return nil
+			},
+		})
+		if err != nil {
+			return err
 		}
+
+		defer func() {
+			if closeErr := galaRiverRuntime.Close(); closeErr != nil {
+				log.Ctx(ctx).Error().Err(closeErr).Msg("error closing gala runtime")
+			}
+		}()
+
+		galaRuntime = galaRiverRuntime.Runtime()
 	}
 
 	var (
@@ -344,13 +286,11 @@ func serve(ctx context.Context) error {
 	}
 	defer stopEventWorkers()
 
-	if mutationOutboxWorkersEnabled || galaWorkersEnabled {
-		jobClient, ok := dbClient.Job.(*riverqueue.Client)
-		if !ok {
-			log.Warn().Bool("mutation_outbox", mutationOutboxWorkersEnabled).Bool("gala_worker", galaWorkersEnabled).Msg("event workers enabled but job client is not riverqueue client")
+	if galaWorkersEnabled {
+		if galaRiverRuntime == nil {
+			log.Warn().Bool("gala_worker", galaWorkersEnabled).Msg("gala workers enabled but gala runtime is unavailable")
 		} else {
-			workerClient := jobClient.GetRiverClient()
-			if err := workerClient.Start(ctx); err != nil {
+			if err := galaRiverRuntime.StartWorkers(ctx); err != nil {
 				return err
 			}
 
@@ -358,19 +298,16 @@ func serve(ctx context.Context) error {
 				stopCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 				defer cancel()
 
-				if stopErr := workerClient.Stop(stopCtx); stopErr != nil &&
-					!errors.Is(stopErr, context.Canceled) &&
-					!errors.Is(stopErr, context.DeadlineExceeded) {
-					log.Error().Err(stopErr).Msg("error stopping event worker client")
+				if stopErr := galaRiverRuntime.StopWorkers(stopCtx); stopErr != nil {
+					log.Error().Err(stopErr).Msg("error stopping gala worker client")
 				}
 			}
 
 			log.Info().
-				Bool("mutation_outbox_enabled", mutationOutboxWorkersEnabled).
 				Bool("gala_worker_enabled", galaWorkersEnabled).
-				Int("mutation_outbox_worker_count", mutationOutboxWorkerCount).
 				Int("gala_worker_count", galaWorkerCount).
-				Msg("event worker client started")
+				Str("gala_queue", galaQueueName).
+				Msg("gala worker client started")
 		}
 	}
 

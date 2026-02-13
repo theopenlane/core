@@ -9,16 +9,12 @@ import (
 	"entgo.io/ent"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/ent/eventqueue"
-	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
@@ -79,32 +75,11 @@ func EmitEventHook(e *Eventer) ent.Hook {
 					return
 				}
 
-				// Create a child logger for concurrency safety
-				logger := log.Logger.With().Logger()
-				logger.UpdateContext(func(c zerolog.Context) zerolog.Context {
-					return c.Str("mutation_id", eventID.ID)
-				})
-
 				props := soiree.NewProperties()
 				props.Set("ID", eventID.ID)
 				addMutationFields(props, mutation)
 
-				changedFields, clearedFields := mutationChangedAndClearedFields(mutation)
-				changedEdges, addedIDs, removedIDs := workflowgenerated.ExtractChangedEdges(mutation)
-				proposedChanges := mutationProposedChanges(mutation, changedFields, clearedFields)
-
-				payload := &events.MutationPayload{
-					Mutation:        mutation,
-					MutationType:    mutation.Type(),
-					Operation:       op,
-					EntityID:        eventID.ID,
-					ChangedFields:   changedFields,
-					ClearedFields:   clearedFields,
-					ChangedEdges:    changedEdges,
-					AddedIDs:        addedIDs,
-					RemovedIDs:      removedIDs,
-					ProposedChanges: proposedChanges,
-				}
+				payload := newMutationPayloadForDispatch(mutation, op, eventID.ID)
 
 				var emitterClient any
 				if e.Emitter != nil {
@@ -125,41 +100,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 					event.SetClient(emitterClient)
 				}
 
-				legacyEnabled := e.shouldUseLegacyEmit(topic.Name())
-				galaDispatched := false
-
-				if e.shouldUseGalaDispatch(topic.Name()) {
-					runtime := e.galaRuntime()
-					if runtime != nil {
-						galaErr := enqueueGalaMutationOutbox(ctx, runtime, topic.Name(), payload, event.Properties())
-						if galaErr != nil {
-							if e.galaFailOnEnqueueError {
-								logger.Error().Err(galaErr).Str("topic", topic.Name()).Msg("gala mutation dispatch failed; continuing legacy emit")
-							}
-						} else {
-							galaDispatched = true
-						}
-					} else if e.galaFailOnEnqueueError {
-						logger.Error().Str("topic", topic.Name()).Msg("gala mutation dispatch unavailable; continuing legacy emit")
-					}
-				}
-
-				// v2_only prefers gala dispatch but fails open to legacy emit when gala dispatch is unavailable.
-				if !legacyEnabled && !galaDispatched {
-					legacyEnabled = true
-				}
-
-				legacyDispatched := false
-				if legacyEnabled && e.Emitter != nil && e.shouldUseMutationOutbox(topic.Name()) {
-					outboxErr := enqueueMutationOutbox(ctx, topic.Name(), payload, event.Properties(), emitterClient)
-					if outboxErr == nil {
-						legacyDispatched = true
-					} else if e.mutationOutboxFailOnEnqueueError {
-						logger.Error().Err(outboxErr).Str("topic", topic.Name()).Msg("mutation outbox dispatch failed; falling back to inline emit")
-					}
-				}
-
-				if legacyEnabled && !legacyDispatched && e.Emitter != nil {
+				if e.Emitter != nil {
 					// fire-and-forget; listeners drain the returned channel
 					e.Emitter.Emit(topic.Name(), event)
 				}
@@ -385,25 +326,4 @@ func uniqueStrings(values []string) []string {
 	}
 
 	return out
-}
-
-// enqueueMutationOutbox enqueues the mutation envelope for asynchronous dispatch.
-func enqueueMutationOutbox(
-	ctx context.Context,
-	topic string,
-	payload *events.MutationPayload,
-	props soiree.Properties,
-	emitterClient any,
-) error {
-	client, ok := emitterClient.(*entgen.Client)
-	if !ok || client.Job == nil {
-		return fmt.Errorf("%w: emitter client unavailable", ErrMutationOutboxEmitterClientUnavailable)
-	}
-
-	args := eventqueue.NewMutationDispatchArgs(ctx, topic, payload, props)
-	if err := enqueueJob(ctx, client.Job, args, nil); err != nil {
-		return fmt.Errorf("%w: %w", ErrMutationOutboxEnqueueFailed, err)
-	}
-
-	return nil
 }

@@ -389,6 +389,8 @@ shortlinks:
     enabled: false
     endpointurl: https://admin.s.theopenlane.io/api/links
 slack:
+    galanewsubscribermessagefile: ""
+    galanewusermessagefile: ""
     newsubscribermessagefile: ""
     newusermessagefile: ""
     webhookurl: ""
@@ -443,22 +445,12 @@ workflows:
         timeout: 100000000
         trackstate: false
     enabled: false
-    mutationoutbox:
-        enabled: false
-        workercount: 10
-        maxretries: 5
-        failonenqueueerror: false
-        # optional allowlist of mutation topics to enqueue (empty = all)
-        topics: []
     gala:
-        enabled: false
         dualemit: false
-        workercount: 10
-        maxretries: 5
+        enabled: false
         failonenqueueerror: false
-        queuename: default
-        # optional allowlist of mutation topics to dual emit (empty = all)
-        topics: []
-        # optional explicit migration mode overrides by topic:
-        # valid values are soiree_only, dual_emit, v2_only
-        topicmodes: {}
+        maxretries: 5
+        queuename: events
+        topicmodes: null
+        topics: null
+        workercount: 10

@@ -5,10 +5,11 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/events"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -72,23 +73,29 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 	}).Register(runtime.Registry())
 	require.NoError(t, err)
 
-	props := soiree.NewProperties()
-	props.Set(soiree.PropertyEventID, "evt_123")
-	props.Set("mutation_field", "name")
-	props.Set("count", 7)
-
 	payload := &events.MutationPayload{
 		MutationType:  "organization",
 		Operation:     "UPDATE",
 		EntityID:      "org_123",
 		ChangedFields: []string{"name"},
+		ProposedChanges: map[string]any{
+			"mutation_field": "name",
+			"count":          7,
+		},
 	}
 
-	emitCtx := context.Background()
-	emitCtx = gala.WithFlag(emitCtx, gala.ContextFlagWorkflowBypass)
+	emitCtx := workflows.WithContext(context.Background())
+	emitCtx = workflows.WithAllowWorkflowEventEmission(emitCtx)
 	emitCtx = contextx.With(emitCtx, galaAdapterTestActor{ID: "actor_123"})
+	emitCtx = auth.WithAuthenticatedUser(emitCtx, &auth.AuthenticatedUser{
+		SubjectID:          "subject_123",
+		OrganizationID:     "org_123",
+		OrganizationRole:   auth.OwnerRole,
+		AuthenticationType: auth.JWTAuthentication,
+	})
 
-	envelope, err := NewMutationGalaEnvelope(emitCtx, runtime, topic, payload, props)
+	metadata := NewMutationGalaMetadata("evt_123", payload)
+	envelope, err := NewMutationGalaEnvelope(emitCtx, runtime, topic, payload, metadata)
 	require.NoError(t, err)
 
 	require.Equal(t, gala.EventID("evt_123"), envelope.ID)
@@ -97,9 +104,19 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 	require.Equal(t, "name", envelope.Headers.Properties["mutation_field"])
 	require.Equal(t, "7", envelope.Headers.Properties["count"])
 	require.Equal(t, true, envelope.ContextSnapshot.Flags[gala.ContextFlagWorkflowBypass])
+	require.Equal(t, true, envelope.ContextSnapshot.Flags[gala.ContextFlagWorkflowAllowEventEmission])
 	require.Contains(t, envelope.ContextSnapshot.Values, gala.ContextKey("adapter_actor"))
+	require.Contains(t, envelope.ContextSnapshot.Values, gala.ContextKey("auth_user"))
 
-	decodedAny, err := runtime.Registry().DecodePayload(context.Background(), topic.Name, envelope.Payload)
+	restoredContext, err := runtime.ContextManager().Restore(context.Background(), envelope.ContextSnapshot)
+	require.NoError(t, err)
+
+	restoredUser, err := auth.GetAuthenticatedUserFromContext(restoredContext)
+	require.NoError(t, err)
+	require.Equal(t, "subject_123", restoredUser.SubjectID)
+	require.Equal(t, "org_123", restoredUser.OrganizationID)
+
+	decodedAny, err := runtime.Registry().DecodePayload(topic.Name, envelope.Payload)
 	require.NoError(t, err)
 
 	decoded, ok := decodedAny.(MutationGalaPayload)
@@ -108,17 +125,31 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 	require.Equal(t, payload.Operation, decoded.Operation)
 }
 
-// TestNewGalaHeadersFromMutationProperties verifies property normalization for gala headers.
-func TestNewGalaHeadersFromMutationProperties(t *testing.T) {
+// TestProjectGalaFlagsFromWorkflowContext verifies known workflow context markers
+// are projected to Gala flags during envelope context capture.
+func TestProjectGalaFlagsFromWorkflowContext(t *testing.T) {
 	t.Parallel()
 
-	props := soiree.NewProperties()
-	props.Set(soiree.PropertyEventID, "evt_456")
-	props.Set("active", true)
-	props.Set("count", 5)
-	props.Set("", "ignored")
+	projected := projectGalaFlagsFromWorkflowContext(
+		workflows.WithAllowWorkflowEventEmission(workflows.WithContext(context.Background())),
+	)
 
-	headers := NewGalaHeadersFromMutationProperties(props)
+	require.True(t, gala.HasFlag(projected, gala.ContextFlagWorkflowBypass))
+	require.True(t, gala.HasFlag(projected, gala.ContextFlagWorkflowAllowEventEmission))
+}
+
+// TestNewGalaHeadersFromMutationMetadata verifies property normalization for gala headers.
+func TestNewGalaHeadersFromMutationMetadata(t *testing.T) {
+	t.Parallel()
+
+	headers := NewGalaHeadersFromMutationMetadata(MutationGalaMetadata{
+		EventID: "evt_456",
+		Properties: map[string]string{
+			"active": "true",
+			"count":  "5",
+			"":       "ignored",
+		},
+	})
 
 	require.Equal(t, "evt_456", headers.IdempotencyKey)
 	require.Equal(t, "true", headers.Properties["active"])

@@ -21,32 +21,7 @@ import (
 
 // RegisterGalaWorkflowListeners registers workflow-facing Gala mutation listeners.
 func RegisterGalaWorkflowListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	topicNames := append(append([]string(nil), enums.WorkflowObjectTypes...), generated.TypeWorkflowAssignment)
-	topicNames = lo.Uniq(topicNames)
-
-	registrations := lo.Map(topicNames, func(topicName string, _ int) gala.Registration[eventqueue.MutationGalaPayload] {
-		return gala.Registration[eventqueue.MutationGalaPayload]{
-			Topic: gala.Topic[eventqueue.MutationGalaPayload]{
-				Name: gala.TopicName(topicName),
-			},
-			Codec: gala.JSONCodec[eventqueue.MutationGalaPayload]{},
-			Policy: gala.TopicPolicy{
-				EmitMode:   gala.EmitModeDurable,
-				QueueClass: gala.QueueClassWorkflow,
-			},
-		}
-	})
-
-	for _, registration := range registrations {
-		err := registration.Register(registry)
-		if err == nil || errors.Is(err, gala.ErrTopicAlreadyRegistered) {
-			continue
-		}
-
-		return nil, err
-	}
-
-	definitions := lo.Map(enums.WorkflowObjectTypes, func(topicName string, _ int) gala.Definition[eventqueue.MutationGalaPayload] {
+	definitions := lo.Map(lo.Uniq(enums.WorkflowObjectTypes), func(topicName string, _ int) gala.Definition[eventqueue.MutationGalaPayload] {
 		return gala.Definition[eventqueue.MutationGalaPayload]{
 			Topic: gala.Topic[eventqueue.MutationGalaPayload]{
 				Name: gala.TopicName(topicName),
@@ -64,28 +39,18 @@ func RegisterGalaWorkflowListeners(registry *gala.Registry) ([]gala.ListenerID, 
 		Handle: handleWorkflowAssignmentMutationGala,
 	})
 
-	ids := make([]gala.ListenerID, 0, len(definitions))
-	for _, definition := range definitions {
-		id, err := definition.Register(registry)
-		if err != nil {
-			return nil, err
-		}
-
-		ids = append(ids, id)
-	}
-
-	return ids, nil
+	return gala.RegisterDurableListeners(registry, gala.QueueClassWorkflow, definitions...)
 }
 
 // handleWorkflowMutationGala evaluates and triggers matching workflows for workflow-eligible mutations.
 func handleWorkflowMutationGala(handlerContext gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client, wfEngine, ok := galaWorkflowDeps(handlerContext)
-	if !ok {
+	ctx := handlerContext.Context
+	if shouldSkipWorkflowMutationForBypass(ctx) {
 		return nil
 	}
 
-	ctx := handlerContext.Context
-	if workflows.IsWorkflowBypass(ctx) && !workflows.AllowWorkflowEventEmission(ctx) {
+	client, wfEngine, ok := galaWorkflowDeps(handlerContext)
+	if !ok {
 		return nil
 	}
 
@@ -175,6 +140,14 @@ func handleWorkflowMutationGala(handlerContext gala.HandlerContext, payload even
 	return nil
 }
 
+// shouldSkipWorkflowMutationForBypass reports whether bypass semantics should short-circuit workflow mutation handling.
+func shouldSkipWorkflowMutationForBypass(ctx context.Context) bool {
+	workflowBypass := workflows.IsWorkflowBypass(ctx) || gala.HasFlag(ctx, gala.ContextFlagWorkflowBypass)
+	allowWorkflowEvents := workflows.AllowWorkflowEventEmission(ctx) || gala.HasFlag(ctx, gala.ContextFlagWorkflowAllowEventEmission)
+
+	return workflowBypass && !allowWorkflowEvents
+}
+
 // handleWorkflowAssignmentMutationGala completes workflow assignments when status transitions.
 func handleWorkflowAssignmentMutationGala(handlerContext gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
 	_, wfEngine, ok := galaWorkflowDeps(handlerContext)
@@ -222,8 +195,8 @@ func galaWorkflowDeps(handlerContext gala.HandlerContext) (*generated.Client, *e
 		return nil, nil, false
 	}
 
-	wfEngine, ok := client.WorkflowEngine.(*engine.WorkflowEngine)
-	if !ok || wfEngine == nil {
+	wfEngine, err := gala.ResolveFromContext[*engine.WorkflowEngine](handlerContext)
+	if err != nil || wfEngine == nil {
 		return nil, nil, false
 	}
 

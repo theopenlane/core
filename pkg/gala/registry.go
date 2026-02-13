@@ -1,49 +1,47 @@
 package gala
 
 import (
-	"context"
-	"fmt"
 	"sync"
 )
 
-// Registration ties a typed topic to its codec and policy.
+// Registration ties a typed topic to its codec and policy
 type Registration[T any] struct {
-	// Topic defines the typed topic contract.
+	// Topic defines the typed topic contract
 	Topic Topic[T]
-	// Codec serializes and deserializes payloads for the topic.
+	// Codec serializes and deserializes payloads for the topic
 	Codec Codec[T]
-	// Policy defines dispatch behavior for the topic.
+	// Policy defines dispatch behavior for the topic
 	Policy TopicPolicy
 }
 
-// Register registers this topic with the registry.
+// Register registers this topic with the registry
 func (r Registration[T]) Register(registry *Registry) error {
 	return RegisterTopic(registry, r)
 }
 
-// Registry stores topic codecs, policies, and listeners.
+// Registry stores topic codecs, policies, and listeners
 type Registry struct {
 	mu        sync.RWMutex
 	topics    map[TopicName]topicRegistration
 	listeners map[TopicName][]registeredListener
 }
 
-// topicRegistration stores non-generic topic metadata and codec wrappers.
+// topicRegistration stores non-generic topic metadata and codec wrappers
 type topicRegistration struct {
 	policy        TopicPolicy
 	schemaVersion int
-	encode        func(context.Context, any) ([]byte, error)
-	decode        func(context.Context, []byte) (any, error)
+	encode        func(any) ([]byte, error)
+	decode        func([]byte) (any, error)
 }
 
-// registeredListener stores non-generic listener wrappers.
+// registeredListener stores non-generic listener wrappers
 type registeredListener struct {
 	id     ListenerID
 	name   string
 	handle func(HandlerContext, any) error
 }
 
-// NewRegistry creates an empty topic/listener registry.
+// NewRegistry creates an empty topic/listener registry
 func NewRegistry() *Registry {
 	return &Registry{
 		topics:    map[TopicName]topicRegistration{},
@@ -51,7 +49,7 @@ func NewRegistry() *Registry {
 	}
 }
 
-// RegisterTopic registers one typed topic in the registry.
+// RegisterTopic registers one typed topic in the registry
 func RegisterTopic[T any](registry *Registry, registration Registration[T]) error {
 	if registry == nil {
 		return ErrRuntimeRequired
@@ -67,7 +65,7 @@ func RegisterTopic[T any](registry *Registry, registration Registration[T]) erro
 	defer registry.mu.Unlock()
 
 	if _, exists := registry.topics[topic]; exists {
-		return fmt.Errorf("%w: %s", ErrTopicAlreadyRegistered, topic)
+		return ErrTopicAlreadyRegistered
 	}
 
 	registry.topics[topic] = topicRegistration{
@@ -80,7 +78,7 @@ func RegisterTopic[T any](registry *Registry, registration Registration[T]) erro
 	return nil
 }
 
-// AttachListener registers one typed listener in the registry.
+// AttachListener registers one typed listener in the registry
 func AttachListener[T any](registry *Registry, definition Definition[T]) (ListenerID, error) {
 	if registry == nil {
 		return "", ErrRuntimeRequired
@@ -96,7 +94,7 @@ func AttachListener[T any](registry *Registry, definition Definition[T]) (Listen
 	defer registry.mu.Unlock()
 
 	if _, exists := registry.topics[topic]; !exists {
-		return "", fmt.Errorf("%w: %s", ErrListenerTopicNotRegistered, topic)
+		return "", ErrListenerTopicNotRegistered
 	}
 
 	listenerID := ListenerID(NewEventID())
@@ -106,7 +104,7 @@ func AttachListener[T any](registry *Registry, definition Definition[T]) (Listen
 		handle: func(handlerCtx HandlerContext, payload any) error {
 			typedPayload, ok := payload.(T)
 			if !ok {
-				return fmt.Errorf("%w: listener=%s topic=%s", ErrPayloadTypeMismatch, definition.Name, topic)
+				return ErrPayloadTypeMismatch
 			}
 
 			return definition.Handle(handlerCtx, typedPayload)
@@ -118,7 +116,7 @@ func AttachListener[T any](registry *Registry, definition Definition[T]) (Listen
 	return listenerID, nil
 }
 
-// TopicPolicy returns policy metadata for a topic.
+// TopicPolicy returns policy metadata for a topic
 func (r *Registry) TopicPolicy(topic TopicName) (TopicPolicy, bool) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
@@ -131,14 +129,14 @@ func (r *Registry) TopicPolicy(topic TopicName) (TopicPolicy, bool) {
 	return registration.policy, true
 }
 
-// EncodePayload encodes a payload for a registered topic and returns schema version.
-func (r *Registry) EncodePayload(ctx context.Context, topic TopicName, payload any) ([]byte, int, error) {
+// EncodePayload encodes a payload for a registered topic and returns schema version
+func (r *Registry) EncodePayload(topic TopicName, payload any) ([]byte, int, error) {
 	registration, err := r.topicRegistration(topic)
 	if err != nil {
 		return nil, 0, err
 	}
 
-	encoded, err := registration.encode(ctx, payload)
+	encoded, err := registration.encode(payload)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -146,17 +144,17 @@ func (r *Registry) EncodePayload(ctx context.Context, topic TopicName, payload a
 	return encoded, registration.schemaVersion, nil
 }
 
-// DecodePayload decodes payload bytes for a registered topic.
-func (r *Registry) DecodePayload(ctx context.Context, topic TopicName, payload []byte) (any, error) {
+// DecodePayload decodes payload bytes for a registered topic
+func (r *Registry) DecodePayload(topic TopicName, payload []byte) (any, error) {
 	registration, err := r.topicRegistration(topic)
 	if err != nil {
 		return nil, err
 	}
 
-	return registration.decode(ctx, payload)
+	return registration.decode(payload)
 }
 
-// Listeners returns a snapshot of listeners for one topic.
+// Listeners returns a snapshot of listeners for one topic
 func (r *Registry) Listeners(topic TopicName) []registeredListener {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
@@ -172,7 +170,7 @@ func (r *Registry) Listeners(topic TopicName) []registeredListener {
 	return copied
 }
 
-// topicRegistration resolves one topic registration by name.
+// topicRegistration resolves one topic registration by name
 func (r *Registry) topicRegistration(topic TopicName) (topicRegistration, error) {
 	if topic == "" {
 		return topicRegistration{}, ErrTopicNameRequired
@@ -183,13 +181,13 @@ func (r *Registry) topicRegistration(topic TopicName) (topicRegistration, error)
 
 	registration, exists := r.topics[topic]
 	if !exists {
-		return topicRegistration{}, fmt.Errorf("%w: %s", ErrTopicNotRegistered, topic)
+		return topicRegistration{}, ErrTopicNotRegistered
 	}
 
 	return registration, nil
 }
 
-// validateTopicRegistration validates topic registration requirements.
+// validateTopicRegistration validates topic registration requirements
 func validateTopicRegistration[T any](registration Registration[T]) error {
 	if registration.Topic.Name == "" {
 		return ErrTopicNameRequired
@@ -202,7 +200,7 @@ func validateTopicRegistration[T any](registration Registration[T]) error {
 	return nil
 }
 
-// validateListenerDefinition validates listener definition requirements.
+// validateListenerDefinition validates listener definition requirements
 func validateListenerDefinition[T any](definition Definition[T]) error {
 	if definition.Topic.Name == "" {
 		return ErrTopicNameRequired
@@ -219,29 +217,29 @@ func validateListenerDefinition[T any](definition Definition[T]) error {
 	return nil
 }
 
-// wrapTopicEncoder creates a non-generic encoder wrapper for one topic.
-func wrapTopicEncoder[T any](registration Registration[T]) func(context.Context, any) ([]byte, error) {
-	return func(ctx context.Context, payload any) ([]byte, error) {
+// wrapTopicEncoder creates a non-generic encoder wrapper for one topic
+func wrapTopicEncoder[T any](registration Registration[T]) func(any) ([]byte, error) {
+	return func(payload any) ([]byte, error) {
 		typedPayload, ok := payload.(T)
 		if !ok {
-			return nil, fmt.Errorf("%w: topic=%s", ErrPayloadTypeMismatch, registration.Topic.Name)
+			return nil, ErrPayloadTypeMismatch
 		}
 
-		encoded, err := registration.Codec.Encode(ctx, typedPayload)
+		encoded, err := registration.Codec.Encode(typedPayload)
 		if err != nil {
-			return nil, err
+			return nil, ErrPayloadEncodeFailed
 		}
 
 		return encoded, nil
 	}
 }
 
-// wrapTopicDecoder creates a non-generic decoder wrapper for one topic.
-func wrapTopicDecoder[T any](registration Registration[T]) func(context.Context, []byte) (any, error) {
-	return func(ctx context.Context, payload []byte) (any, error) {
-		decoded, err := registration.Codec.Decode(ctx, payload)
+// wrapTopicDecoder creates a non-generic decoder wrapper for one topic
+func wrapTopicDecoder[T any](registration Registration[T]) func([]byte) (any, error) {
+	return func(payload []byte) (any, error) {
+		decoded, err := registration.Codec.Decode(payload)
 		if err != nil {
-			return nil, err
+			return nil, ErrPayloadDecodeFailed
 		}
 
 		return decoded, nil

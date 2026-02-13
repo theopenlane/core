@@ -109,6 +109,8 @@ type ContextFlag string
 const (
 	// ContextFlagWorkflowBypass marks workflow bypass behavior.
 	ContextFlagWorkflowBypass ContextFlag = "workflow_bypass"
+	// ContextFlagWorkflowAllowEventEmission allows workflow listener execution while bypass is set.
+	ContextFlagWorkflowAllowEventEmission ContextFlag = "workflow_allow_event_emission"
 )
 
 // ContextSnapshot captures context data that can be restored after durable hops.

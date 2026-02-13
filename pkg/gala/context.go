@@ -3,7 +3,6 @@ package gala
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"slices"
 	"sync"
 
@@ -11,32 +10,43 @@ import (
 	"github.com/theopenlane/utils/contextx"
 )
 
-// ContextCodec captures and restores one typed context value.
+// ContextCodec captures and restores one typed context value
 type ContextCodec interface {
-	// Key returns the stable snapshot key.
+	// Key returns the stable snapshot key
 	Key() ContextKey
-	// Capture extracts and encodes context data.
+	// Capture extracts and encodes context data
 	Capture(context.Context) (json.RawMessage, bool, error)
-	// Restore decodes and re-attaches context data.
+	// Restore decodes and re-attaches context data
 	Restore(context.Context, json.RawMessage) (context.Context, error)
 }
 
-// TypedContextCodec captures/restores context values stored via contextx.With.
+// TypedContextCodec captures/restores context values stored via contextx.With
 type TypedContextCodec[T any] struct {
 	key ContextKey
 }
 
-// NewTypedContextCodec creates a typed context codec for a specific snapshot key.
+// ContextManager manages context codecs and snapshot round-trips
+type ContextManager struct {
+	mu     sync.RWMutex
+	codecs map[ContextKey]ContextCodec
+}
+
+// contextFlagSet stores boolean flags in context
+type contextFlagSet struct {
+	Flags map[ContextFlag]bool
+}
+
+// NewTypedContextCodec creates a typed context codec for a specific snapshot key
 func NewTypedContextCodec[T any](key ContextKey) TypedContextCodec[T] {
 	return TypedContextCodec[T]{key: key}
 }
 
-// Key returns the codec snapshot key.
+// Key returns the codec snapshot key
 func (c TypedContextCodec[T]) Key() ContextKey {
 	return c.key
 }
 
-// Capture extracts a typed context value and JSON encodes it.
+// Capture extracts a typed context value and JSON encodes it
 func (c TypedContextCodec[T]) Capture(ctx context.Context) (json.RawMessage, bool, error) {
 	value, ok := contextx.From[T](ctx)
 	if !ok {
@@ -45,30 +55,24 @@ func (c TypedContextCodec[T]) Capture(ctx context.Context) (json.RawMessage, boo
 
 	encoded, err := json.Marshal(value)
 	if err != nil {
-		return nil, false, err
+		return nil, false, ErrContextSnapshotCaptureFailed
 	}
 
 	return append(json.RawMessage(nil), encoded...), true, nil
 }
 
-// Restore JSON decodes a typed context value and re-attaches it.
+// Restore JSON decodes a typed context value and re-attaches it
 func (c TypedContextCodec[T]) Restore(ctx context.Context, raw json.RawMessage) (context.Context, error) {
 	var value T
 
 	if err := json.Unmarshal(raw, &value); err != nil {
-		return ctx, err
+		return ctx, ErrContextSnapshotRestoreFailed
 	}
 
 	return contextx.With(ctx, value), nil
 }
 
-// ContextManager manages context codecs and snapshot round-trips.
-type ContextManager struct {
-	mu     sync.RWMutex
-	codecs map[ContextKey]ContextCodec
-}
-
-// NewContextManager creates a context manager and registers any initial codecs.
+// NewContextManager creates a context manager and registers any initial codecs
 func NewContextManager(codecs ...ContextCodec) (*ContextManager, error) {
 	manager := &ContextManager{codecs: map[ContextKey]ContextCodec{}}
 
@@ -81,7 +85,7 @@ func NewContextManager(codecs ...ContextCodec) (*ContextManager, error) {
 	return manager, nil
 }
 
-// Register registers a context codec by key.
+// Register registers a context codec by key
 func (m *ContextManager) Register(codec ContextCodec) error {
 	if codec == nil {
 		return ErrContextCodecRequired
@@ -96,7 +100,7 @@ func (m *ContextManager) Register(codec ContextCodec) error {
 	defer m.mu.Unlock()
 
 	if _, exists := m.codecs[key]; exists {
-		return fmt.Errorf("%w: %s", ErrContextCodecAlreadyRegistered, key)
+		return ErrContextCodecAlreadyRegistered
 	}
 
 	m.codecs[key] = codec
@@ -104,7 +108,7 @@ func (m *ContextManager) Register(codec ContextCodec) error {
 	return nil
 }
 
-// Capture captures all registered context codec values and current context flags.
+// Capture captures all registered context codec values and current context flags
 func (m *ContextManager) Capture(ctx context.Context) (ContextSnapshot, error) {
 	codecs := m.codecsSnapshot()
 	codecKeys := lo.Keys(codecs)
@@ -118,7 +122,7 @@ func (m *ContextManager) Capture(ctx context.Context) (ContextSnapshot, error) {
 		codec := codecs[key]
 		raw, present, err := codec.Capture(ctx)
 		if err != nil {
-			return ContextSnapshot{}, fmt.Errorf("%w: key=%s: %w", ErrContextSnapshotCaptureFailed, key, err)
+			return ContextSnapshot{}, ErrContextSnapshotCaptureFailed
 		}
 
 		if !present {
@@ -140,7 +144,7 @@ func (m *ContextManager) Capture(ctx context.Context) (ContextSnapshot, error) {
 	return snapshot, nil
 }
 
-// Restore restores snapshot values into a new context.
+// Restore restores snapshot values into a new context
 func (m *ContextManager) Restore(ctx context.Context, snapshot ContextSnapshot) (context.Context, error) {
 	restored := ctx
 	codecs := m.codecsSnapshot()
@@ -157,7 +161,7 @@ func (m *ContextManager) Restore(ctx context.Context, snapshot ContextSnapshot) 
 		raw := snapshot.Values[key]
 		next, err := codec.Restore(restored, raw)
 		if err != nil {
-			return restored, fmt.Errorf("%w: key=%s: %w", ErrContextSnapshotRestoreFailed, key, err)
+			return restored, ErrContextSnapshotRestoreFailed
 		}
 
 		restored = next
@@ -177,12 +181,7 @@ func (m *ContextManager) Restore(ctx context.Context, snapshot ContextSnapshot) 
 	return restored, nil
 }
 
-// contextFlagSet stores boolean flags in context.
-type contextFlagSet struct {
-	Flags map[ContextFlag]bool
-}
-
-// WithFlag sets a typed context flag.
+// WithFlag sets a typed context flag
 func WithFlag(ctx context.Context, flag ContextFlag) context.Context {
 	flags := flagsFromContext(ctx)
 	flags[flag] = true
@@ -190,14 +189,14 @@ func WithFlag(ctx context.Context, flag ContextFlag) context.Context {
 	return contextx.With(ctx, contextFlagSet{Flags: flags})
 }
 
-// HasFlag reports whether a typed context flag is set.
+// HasFlag reports whether a typed context flag is set
 func HasFlag(ctx context.Context, flag ContextFlag) bool {
 	flags := flagsFromContext(ctx)
 
 	return flags[flag]
 }
 
-// flagsFromContext extracts the current context flags and clones the map.
+// flagsFromContext extracts the current context flags and clones the map
 func flagsFromContext(ctx context.Context) map[ContextFlag]bool {
 	existing, exists := contextx.From[contextFlagSet](ctx)
 	if !exists {
@@ -207,7 +206,7 @@ func flagsFromContext(ctx context.Context) map[ContextFlag]bool {
 	return cloneFlags(existing.Flags)
 }
 
-// cloneFlags clones a flag map.
+// cloneFlags clones a flag map
 func cloneFlags(flags map[ContextFlag]bool) map[ContextFlag]bool {
 	if len(flags) == 0 {
 		return map[ContextFlag]bool{}
@@ -216,7 +215,7 @@ func cloneFlags(flags map[ContextFlag]bool) map[ContextFlag]bool {
 	return lo.Assign(map[ContextFlag]bool{}, flags)
 }
 
-// codecsSnapshot clones the registered codec map for lock-free processing.
+// codecsSnapshot clones the registered codec map for lock-free processing
 func (m *ContextManager) codecsSnapshot() map[ContextKey]ContextCodec {
 	m.mu.RLock()
 	defer m.mu.RUnlock()

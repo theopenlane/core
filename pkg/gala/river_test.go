@@ -266,7 +266,7 @@ func TestRiverDispatchWorkerWorkDispatchesEnvelope(t *testing.T) {
 		t.Fatalf("failed to register listener: %v", err)
 	}
 
-	encodedPayload, schemaVersion, err := runtime.Registry().EncodePayload(context.Background(), topic.Name, runtimeTestPayload{Message: "from-worker"})
+	encodedPayload, schemaVersion, err := runtime.Registry().EncodePayload(topic.Name, runtimeTestPayload{Message: "from-worker"})
 	if err != nil {
 		t.Fatalf("failed to encode payload: %v", err)
 	}
@@ -305,5 +305,36 @@ func TestRiverDispatchWorkerRequiresRuntimeProvider(t *testing.T) {
 	err := worker.Work(context.Background(), job)
 	if !errors.Is(err, ErrRiverRuntimeProviderRequired) {
 		t.Fatalf("expected ErrRiverRuntimeProviderRequired, got %v", err)
+	}
+}
+
+// TestAddRiverDispatchWorkerRequiresWorkers verifies worker registration fails when workers are nil.
+func TestAddRiverDispatchWorkerRequiresWorkers(t *testing.T) {
+	err := AddRiverDispatchWorker(nil, func() *Runtime { return nil })
+	if !errors.Is(err, ErrRiverWorkersRequired) {
+		t.Fatalf("expected ErrRiverWorkersRequired, got %v", err)
+	}
+}
+
+// TestAddRiverDispatchWorkerRequiresRuntimeProvider verifies worker registration validates runtime provider.
+func TestAddRiverDispatchWorkerRequiresRuntimeProvider(t *testing.T) {
+	err := AddRiverDispatchWorker(river.NewWorkers(), nil)
+	if !errors.Is(err, ErrRiverRuntimeProviderRequired) {
+		t.Fatalf("expected ErrRiverRuntimeProviderRequired, got %v", err)
+	}
+}
+
+// TestAddRiverDispatchWorkerRegistersWorker verifies helper-based worker registration succeeds.
+func TestAddRiverDispatchWorkerRegistersWorker(t *testing.T) {
+	runtime, err := NewRuntime(RuntimeOptions{})
+	if err != nil {
+		t.Fatalf("failed to build runtime: %v", err)
+	}
+
+	err = AddRiverDispatchWorker(river.NewWorkers(), func() *Runtime {
+		return runtime
+	})
+	if err != nil {
+		t.Fatalf("unexpected worker registration error: %v", err)
 	}
 }

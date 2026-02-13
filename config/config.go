@@ -208,6 +208,10 @@ type Slack struct {
 	NewSubscriberMessageFile string `json:"newsubscribermessagefile" koanf:"newsubscribermessagefile"`
 	// NewUserMessageFile is the path to the template used for new user notifications
 	NewUserMessageFile string `json:"newusermessagefile" koanf:"newusermessagefile"`
+	// GalaNewSubscriberMessageFile is the optional template path for Gala subscriber notifications
+	GalaNewSubscriberMessageFile string `json:"galanewsubscribermessagefile" koanf:"galanewsubscribermessagefile"`
+	// GalaNewUserMessageFile is the optional template path for Gala user notifications
+	GalaNewUserMessageFile string `json:"galanewusermessagefile" koanf:"galanewusermessagefile"`
 }
 
 var (

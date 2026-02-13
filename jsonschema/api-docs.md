@@ -139,7 +139,10 @@ Config contains the configuration for the core server
     "integrationoauthprovider": {},
     "integrationgithubapp": {},
     "workflows": {
-        "cel": {}
+        "cel": {},
+        "gala": {
+            "topicmodes": {}
+        }
     },
     "campaignwebhook": {},
     "cloudflare": {},
@@ -1671,6 +1674,8 @@ Slack contains settings for Slack notifications
 |**webhookurl**|`string`|WebhookURL is the Slack webhook to post messages to<br/>||
 |**newsubscribermessagefile**|`string`|NewSubscriberMessageFile is the path to the template used for new subscriber notifications<br/>||
 |**newusermessagefile**|`string`|NewUserMessageFile is the path to the template used for new user notifications<br/>||
+|**galanewsubscribermessagefile**|`string`|GalaNewSubscriberMessageFile is the optional template path for Gala subscriber notifications<br/>||
+|**galanewusermessagefile**|`string`|GalaNewUserMessageFile is the optional template path for Gala user notifications<br/>||
 
 **Additional Properties:** not allowed  
 <a name="integrationoauthprovider"></a>
@@ -1714,13 +1719,17 @@ IntegrationGitHubAppConfig contains configuration required to install and operat
 |----|----|-----------|--------|
 |**enabled**|`boolean`|||
 |[**cel**](#workflowscel)|`object`|||
+|[**gala**](#workflowsgala)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
 
 ```json
 {
-    "cel": {}
+    "cel": {},
+    "gala": {
+        "topicmodes": {}
+    }
 }
 ```
 
@@ -1746,6 +1755,46 @@ IntegrationGitHubAppConfig contains configuration required to install and operat
 |**trackstate**|`boolean`|||
 
 **Additional Properties:** not allowed  
+<a name="workflowsgala"></a>
+### workflows\.gala: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|**dualemit**|`boolean`|||
+|**workercount**|`integer`|||
+|**maxretries**|`integer`|||
+|**failonenqueueerror**|`boolean`|||
+|[**topics**](#workflowsgalatopics)|`string[]`|||
+|[**topicmodes**](#workflowsgalatopicmodes)|`object`|||
+|**queuename**|`string`|||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "topicmodes": {}
+}
+```
+
+<a name="workflowsgalatopics"></a>
+#### workflows\.gala\.topics: array
+
+**Items**
+
+**Item Type:** `string`  
+<a name="workflowsgalatopicmodes"></a>
+#### workflows\.gala\.topicmodes: object
+
+**Additional Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**Additional Properties**|`string`|||
+
 <a name="campaignwebhook"></a>
 ## campaignwebhook: object
 

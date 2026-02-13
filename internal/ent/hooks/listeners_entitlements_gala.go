@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"errors"
 	"strings"
 
 	"entgo.io/ent"
@@ -16,73 +15,24 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-var (
-	galaMutationOrganizationTopic = gala.Topic[eventqueue.MutationGalaPayload]{
-		Name: gala.TopicName(entgen.TypeOrganization),
-	}
-	galaMutationOrganizationSettingTopic = gala.Topic[eventqueue.MutationGalaPayload]{
-		Name: gala.TopicName(entgen.TypeOrganizationSetting),
-	}
-)
-
 // RegisterGalaEntitlementListeners registers initial gala-native entitlement listeners.
 func RegisterGalaEntitlementListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	topicRegistrations := []gala.Registration[eventqueue.MutationGalaPayload]{
-		{
-			Topic: galaMutationOrganizationTopic,
-			Codec: gala.JSONCodec[eventqueue.MutationGalaPayload]{},
-			Policy: gala.TopicPolicy{
-				EmitMode:   gala.EmitModeDurable,
-				QueueClass: gala.QueueClassWorkflow,
+	return gala.RegisterDurableListeners(registry, gala.QueueClassWorkflow,
+		gala.Definition[eventqueue.MutationGalaPayload]{
+			Topic: gala.Topic[eventqueue.MutationGalaPayload]{
+				Name: gala.TopicName(entgen.TypeOrganization),
 			},
-		},
-		{
-			Topic: galaMutationOrganizationSettingTopic,
-			Codec: gala.JSONCodec[eventqueue.MutationGalaPayload]{},
-			Policy: gala.TopicPolicy{
-				EmitMode:   gala.EmitModeDurable,
-				QueueClass: gala.QueueClassWorkflow,
-			},
-		},
-	}
-
-	for _, topicRegistration := range topicRegistrations {
-		err := topicRegistration.Register(registry)
-		if err == nil {
-			continue
-		}
-
-		if errors.Is(err, gala.ErrTopicAlreadyRegistered) {
-			continue
-		}
-
-		return nil, err
-	}
-
-	definitions := []gala.Definition[eventqueue.MutationGalaPayload]{
-		{
-			Topic:  galaMutationOrganizationTopic,
 			Name:   "entitlements.organization",
 			Handle: handleOrganizationMutationGala,
 		},
-		{
-			Topic:  galaMutationOrganizationSettingTopic,
+		gala.Definition[eventqueue.MutationGalaPayload]{
+			Topic: gala.Topic[eventqueue.MutationGalaPayload]{
+				Name: gala.TopicName(entgen.TypeOrganizationSetting),
+			},
 			Name:   "entitlements.organization_setting",
 			Handle: handleOrganizationSettingMutationGala,
 		},
-	}
-
-	ids := make([]gala.ListenerID, 0, len(definitions))
-	for _, definition := range definitions {
-		id, err := definition.Register(registry)
-		if err != nil {
-			return nil, err
-		}
-
-		ids = append(ids, id)
-	}
-
-	return ids, nil
+	)
 }
 
 // handleOrganizationMutationGala routes organization mutations to the correct entitlement handler.

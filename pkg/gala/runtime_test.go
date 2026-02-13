@@ -6,6 +6,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 )
 
@@ -115,6 +116,80 @@ func TestRuntimeEmitDispatchesWithDependencyInjectionAndContextRehydration(t *te
 
 	if observed != "fmt:hello:actor-1" {
 		t.Fatalf("unexpected listener output: %s", observed)
+	}
+}
+
+// TestRuntimeEmitDispatchesWithAuthenticatedUserContext verifies default runtime codecs
+// rehydrate auth context values for listener execution.
+func TestRuntimeEmitDispatchesWithAuthenticatedUserContext(t *testing.T) {
+	runtime, err := NewRuntime(RuntimeOptions{})
+	if err != nil {
+		t.Fatalf("failed to build runtime: %v", err)
+	}
+
+	topic := Topic[runtimeTestPayload]{
+		Name: TopicName("runtime.test.auth"),
+	}
+
+	if err := (Registration[runtimeTestPayload]{
+		Topic: topic,
+		Codec: JSONCodec[runtimeTestPayload]{},
+	}).Register(runtime.Registry()); err != nil {
+		t.Fatalf("failed to register topic: %v", err)
+	}
+
+	var observed auth.AuthenticatedUser
+	if _, err := (Definition[runtimeTestPayload]{
+		Topic: topic,
+		Name:  "runtime.test.auth.listener",
+		Handle: func(handlerContext HandlerContext, _ runtimeTestPayload) error {
+			au, err := auth.GetAuthenticatedUserFromContext(handlerContext.Context)
+			if err != nil {
+				return err
+			}
+
+			observed = *au
+			return nil
+		},
+	}).Register(runtime.Registry()); err != nil {
+		t.Fatalf("failed to register listener: %v", err)
+	}
+
+	emitContext := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
+		SubjectID:          "subject_123",
+		SubjectName:        "Codex User",
+		SubjectEmail:       "codex@example.com",
+		OrganizationID:     "org_123",
+		OrganizationName:   "Acme Corp",
+		OrganizationIDs:    []string{"org_123", "org_234"},
+		AuthenticationType: auth.JWTAuthentication,
+		OrganizationRole:   auth.OwnerRole,
+		IsSystemAdmin:      true,
+	})
+
+	receipt := EmitTyped(emitContext, runtime, topic, runtimeTestPayload{Message: "auth"})
+	if receipt.Err != nil {
+		t.Fatalf("unexpected emit error: %v", receipt.Err)
+	}
+
+	if !receipt.Accepted {
+		t.Fatalf("expected accepted receipt")
+	}
+
+	if observed.SubjectID != "subject_123" {
+		t.Fatalf("unexpected subject id %q", observed.SubjectID)
+	}
+
+	if observed.OrganizationID != "org_123" {
+		t.Fatalf("unexpected organization id %q", observed.OrganizationID)
+	}
+
+	if observed.OrganizationRole != auth.OwnerRole {
+		t.Fatalf("unexpected organization role %q", observed.OrganizationRole)
+	}
+
+	if !observed.IsSystemAdmin {
+		t.Fatalf("expected system admin flag to be true")
 	}
 }
 
@@ -304,7 +379,7 @@ func TestRuntimeEmitEnvelopeUsesPrebuiltEventID(t *testing.T) {
 		t.Fatalf("failed to register topic: %v", err)
 	}
 
-	encodedPayload, _, err := runtime.Registry().EncodePayload(context.Background(), topic.Name, runtimeTestPayload{Message: "prebuilt"})
+	encodedPayload, _, err := runtime.Registry().EncodePayload(topic.Name, runtimeTestPayload{Message: "prebuilt"})
 	if err != nil {
 		t.Fatalf("failed to encode payload: %v", err)
 	}

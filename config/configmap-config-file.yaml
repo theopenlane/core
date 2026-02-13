@@ -1112,6 +1112,12 @@ data:
       {{- if .Values.openlane.coreConfiguration.slack.newusermessagefile }}
       newusermessagefile: {{ .Values.openlane.coreConfiguration.slack.newusermessagefile | quote }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.slack.galanewsubscribermessagefile }}
+      galanewsubscribermessagefile: {{ .Values.openlane.coreConfiguration.slack.galanewsubscribermessagefile | quote }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.slack.galanewusermessagefile }}
+      galanewusermessagefile: {{ .Values.openlane.coreConfiguration.slack.galanewusermessagefile | quote }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.integrationoauthprovider }}
     integrationoauthprovider:
@@ -1189,27 +1195,6 @@ data:
         trackstate: {{ .Values.openlane.coreConfiguration.workflows.cel.trackstate }}
         {{- end }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.workflows.mutationoutbox }}
-      mutationoutbox:
-        {{- if .Values.openlane.coreConfiguration.workflows.mutationoutbox.enabled }}
-        enabled: {{ .Values.openlane.coreConfiguration.workflows.mutationoutbox.enabled }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.mutationoutbox.workercount }}
-        workercount: {{ .Values.openlane.coreConfiguration.workflows.mutationoutbox.workercount }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.mutationoutbox.maxretries }}
-        maxretries: {{ .Values.openlane.coreConfiguration.workflows.mutationoutbox.maxretries }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.mutationoutbox.failonenqueueerror }}
-        failonenqueueerror: {{ .Values.openlane.coreConfiguration.workflows.mutationoutbox.failonenqueueerror }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.mutationoutbox.topics }}
-        topics:
-          {{- range .Values.openlane.coreConfiguration.workflows.mutationoutbox.topics }}
-          - {{ . | quote }}
-          {{- end }}
-        {{- end }}
-      {{- end }}
       {{- if .Values.openlane.coreConfiguration.workflows.gala }}
       gala:
         {{- if .Values.openlane.coreConfiguration.workflows.gala.enabled }}
@@ -1227,20 +1212,18 @@ data:
         {{- if .Values.openlane.coreConfiguration.workflows.gala.failonenqueueerror }}
         failonenqueueerror: {{ .Values.openlane.coreConfiguration.workflows.gala.failonenqueueerror }}
         {{- end }}
+        {{- $sliceValue := (.Values.openlane.coreConfiguration.workflows.gala.topics | default (list)) }}
+        {{- if gt (len $sliceValue) 0 }}
+        topics:
+        {{- toYaml $sliceValue | nindent 10 }}
+        {{- end }}
+        {{- $mapValue := (.Values.openlane.coreConfiguration.workflows.gala.topicmodes | default (dict)) }}
+        {{- if gt (len $mapValue) 0 }}
+        topicmodes:
+        {{- toYaml $mapValue | nindent 10 }}
+        {{- end }}
         {{- if .Values.openlane.coreConfiguration.workflows.gala.queuename }}
         queuename: {{ .Values.openlane.coreConfiguration.workflows.gala.queuename | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.gala.topics }}
-        topics:
-          {{- range .Values.openlane.coreConfiguration.workflows.gala.topics }}
-          - {{ . | quote }}
-          {{- end }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.gala.topicmodes }}
-        topicmodes:
-          {{- range $topic, $mode := .Values.openlane.coreConfiguration.workflows.gala.topicmodes }}
-          {{ $topic | quote }}: {{ $mode | quote }}
-          {{- end }}
         {{- end }}
       {{- end }}
     {{- end }}

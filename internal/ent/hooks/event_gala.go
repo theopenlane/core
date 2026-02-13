@@ -7,17 +7,16 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/events"
-	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-// enqueueGalaMutationOutbox builds and dispatches a durable gala envelope for a mutation event.
-func enqueueGalaMutationOutbox(
+// enqueueGalaMutation builds and dispatches a durable gala envelope for a mutation event.
+func enqueueGalaMutation(
 	ctx context.Context,
 	runtime *gala.Runtime,
 	topic string,
 	payload *events.MutationPayload,
-	props soiree.Properties,
+	metadata eventqueue.MutationGalaMetadata,
 ) error {
 	if runtime == nil {
 		return ErrGalaRuntimeUnavailable
@@ -28,16 +27,16 @@ func enqueueGalaMutationOutbox(
 	}
 
 	if err := ensureGalaMutationTopicRegistered(runtime.Registry(), mutationTopic); err != nil {
-		return fmt.Errorf("%w: %w", ErrGalaMutationOutboxEnqueueFailed, err)
+		return fmt.Errorf("%w: %w", ErrGalaMutationEnqueueFailed, err)
 	}
 
-	envelope, err := eventqueue.NewMutationGalaEnvelope(context.WithoutCancel(ctx), runtime, mutationTopic, payload, props)
+	envelope, err := eventqueue.NewMutationGalaEnvelope(context.WithoutCancel(ctx), runtime, mutationTopic, payload, metadata)
 	if err != nil {
-		return fmt.Errorf("%w: %w", ErrGalaMutationOutboxEnqueueFailed, err)
+		return fmt.Errorf("%w: %w", ErrGalaMutationEnqueueFailed, err)
 	}
 
 	if err := runtime.EmitEnvelope(context.WithoutCancel(ctx), envelope); err != nil {
-		return fmt.Errorf("%w: %w", ErrGalaMutationOutboxEnqueueFailed, err)
+		return fmt.Errorf("%w: %w", ErrGalaMutationEnqueueFailed, err)
 	}
 
 	return nil

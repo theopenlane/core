@@ -39,19 +39,13 @@ func TestConfigOptions(t *testing.T) {
 	assert.True(t, cfg.CEL.MacroCallTracking)
 	assert.False(t, cfg.CEL.EvalOptimize)
 	assert.True(t, cfg.CEL.TrackState)
+	assert.Equal(t, "events", cfg.Gala.QueueName)
 
 	override := Config{
 		Enabled: false,
 		CEL: CELConfig{
 			Timeout:   time.Second,
 			CostLimit: 12,
-		},
-		MutationOutbox: MutationOutboxConfig{
-			Enabled:            true,
-			WorkerCount:        7,
-			MaxRetries:         9,
-			FailOnEnqueueError: true,
-			Topics:             []string{"Organization", "WorkflowAssignment"},
 		},
 		Gala: GalaConfig{
 			Enabled:            true,
@@ -64,18 +58,13 @@ func TestConfigOptions(t *testing.T) {
 				"Organization":        GalaTopicModeDualEmit,
 				"OrganizationSetting": GalaTopicModeV2Only,
 			},
-			QueueName: "default",
+			QueueName: "events",
 		},
 	}
 	cfg = NewDefaultConfig(WithConfig(override))
 	assert.Equal(t, override.Enabled, cfg.Enabled)
 	assert.Equal(t, override.CEL.Timeout, cfg.CEL.Timeout)
 	assert.Equal(t, override.CEL.CostLimit, cfg.CEL.CostLimit)
-	assert.Equal(t, override.MutationOutbox.Enabled, cfg.MutationOutbox.Enabled)
-	assert.Equal(t, override.MutationOutbox.WorkerCount, cfg.MutationOutbox.WorkerCount)
-	assert.Equal(t, override.MutationOutbox.MaxRetries, cfg.MutationOutbox.MaxRetries)
-	assert.Equal(t, override.MutationOutbox.FailOnEnqueueError, cfg.MutationOutbox.FailOnEnqueueError)
-	assert.Equal(t, override.MutationOutbox.Topics, cfg.MutationOutbox.Topics)
 	assert.Equal(t, override.Gala.Enabled, cfg.Gala.Enabled)
 	assert.Equal(t, override.Gala.DualEmit, cfg.Gala.DualEmit)
 	assert.Equal(t, override.Gala.WorkerCount, cfg.Gala.WorkerCount)

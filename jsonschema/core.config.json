@@ -278,6 +278,14 @@
         "newusermessagefile": {
           "type": "string",
           "description": "NewUserMessageFile is the path to the template used for new user notifications"
+        },
+        "galanewsubscribermessagefile": {
+          "type": "string",
+          "description": "GalaNewSubscriberMessageFile is the optional template path for Gala subscriber notifications"
+        },
+        "galanewusermessagefile": {
+          "type": "string",
+          "description": "GalaNewUserMessageFile is the optional template path for Gala user notifications"
         }
       },
       "additionalProperties": false,
@@ -890,6 +898,12 @@
     "map[string]tokens.APITokenKeyConfig": {
       "additionalProperties": {
         "$ref": "#/$defs/tokens.APITokenKeyConfig"
+      },
+      "type": "object"
+    },
+    "map[string]workflows.GalaTopicMode": {
+      "additionalProperties": {
+        "type": "string"
       },
       "type": "object"
     },
@@ -1811,6 +1825,39 @@
         },
         "cel": {
           "$ref": "#/$defs/workflows.CELConfig"
+        },
+        "gala": {
+          "$ref": "#/$defs/workflows.GalaConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "workflows.GalaConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "dualemit": {
+          "type": "boolean"
+        },
+        "workercount": {
+          "type": "integer"
+        },
+        "maxretries": {
+          "type": "integer"
+        },
+        "failonenqueueerror": {
+          "type": "boolean"
+        },
+        "topics": {
+          "$ref": "#/$defs/[]string"
+        },
+        "topicmodes": {
+          "$ref": "#/$defs/map[string]workflows.GalaTopicMode"
+        },
+        "queuename": {
+          "type": "string"
         }
       },
       "additionalProperties": false,

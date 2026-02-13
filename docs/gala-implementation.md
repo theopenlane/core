@@ -471,11 +471,22 @@ Keep external mutation emits available for cross-domain listeners, but workflow 
 - Per-topic migration mode config is wired (`soiree_only`, `dual_emit`, `v2_only`) and applied by the mutation hook dispatch path.
 - Initial workflow-facing Gala listeners are registered for workflow object mutation topics and workflow assignment mutation handling.
 - Hook tests cover topic-mode behavior (`v2_only`, `dual_emit`, v2 fail-open fallback).
+- Topic ownership matrix now contains explicit entries for currently migrated mutation topics (`Organization`, `OrganizationSetting`, workflow object topics, `WorkflowAssignment`) and their current/target mode intent.
+- Initial workflow listener parity coverage now compares legacy Soiree and Gala outcomes for workflow mutation trigger and assignment completion paths.
+- Targeted validation suites were run with `-tags test` for `pkg/gala`, `internal/ent/hooks`, `internal/ent/eventqueue`, and `cmd/...`.
 
 ### Not completed yet
-- Per-topic migration matrix and `v2_only` cutover implementation.
+- `v2_only` cutover implementation for selected low-risk migrated topics.
 - Workflow command-topic migration and replay/recovery hardening.
-- Broader parity suite covering all high-risk listener behavior changes.
+- Broader parity suite covering all high-risk listener behavior changes beyond initial workflow trigger/assignment parity coverage.
+- Full topic-by-topic migration of non-workflow/non-entitlements listeners.
+
+## Immediate Next Steps (Ordered)
+1. Keep the explicit topic ownership matrix updated as topics move from `dual_emit` to `v2_only`, and gate every mode change behind a clear rollback path.
+2. Expand parity tests for migrated workflow listeners beyond the initial trigger + assignment-completion coverage to include additional edge cases and failure paths.
+3. Implement retry/terminal metrics and observability for Gala durable dispatch and worker handling (`EVT2-204`), including queue-level failure counters and durable dispatch error cardinality controls.
+4. Introduce the first controlled `v2_only` rollout for a low-risk migrated topic, backed by feature-flagged config and clear rollback path to `dual_emit`.
+5. Start workflow command-topic design (`EVT2-401`/`EVT2-402`) so workflow engine internals can move off mutation-shape dependence over time.
 
 ## TODO Tracker
 
@@ -553,7 +564,8 @@ Keep external mutation emits available for cross-domain listeners, but workflow 
 - [x] EVT2-601 Add per-topic mode config (`soiree_only`, `dual_emit`, `v2_only`).
 - [x] EVT2-602 Wire mutation emit path for dual emit with canonical event ID.
 - [ ] EVT2-603 Migrate first target topics (workflow-related) to `v2_only`.
-- [x] EVT2-604 Migrate selected legacy listeners topic-by-topic.
+- [x] EVT2-604a Migrate initial listener tranche to Gala (workflow mutation + assignment, entitlements org + org setting).
+- [ ] EVT2-604 Migrate selected legacy listeners topic-by-topic.
 - [ ] EVT2-605 Remove legacy emission for migrated topics.
 
 ### Phase 6 Acceptance
@@ -572,7 +584,19 @@ Keep external mutation emits available for cross-domain listeners, but workflow 
 
 | Topic | Current Owner | Target Owner | Mode | Notes |
 | --- | --- | --- | --- | --- |
-| `<mutation.workflow_object.*>` | soiree | gala | dual_emit | first migration tranche |
+| `Organization` | soiree | gala | dual_emit | entitlement listener migrated; candidate low-risk `v2_only` rollout after metrics |
+| `OrganizationSetting` | soiree | gala | dual_emit | entitlement listener migrated; candidate low-risk `v2_only` rollout after metrics |
+| `ActionPlan` | soiree | gala | dual_emit | workflow object mutation topic migrated |
+| `Campaign` | soiree | gala | dual_emit | workflow object mutation topic migrated |
+| `CampaignTarget` | soiree | gala | dual_emit | workflow object mutation topic migrated |
+| `Control` | soiree | gala | dual_emit | workflow object mutation topic migrated |
+| `Evidence` | soiree | gala | dual_emit | workflow object mutation topic migrated |
+| `IdentityHolder` | soiree | gala | dual_emit | workflow object mutation topic migrated |
+| `InternalPolicy` | soiree | gala | dual_emit | workflow object mutation topic migrated |
+| `Platform` | soiree | gala | dual_emit | workflow object mutation topic migrated |
+| `Procedure` | soiree | gala | dual_emit | workflow object mutation topic migrated |
+| `Subcontrol` | soiree | gala | dual_emit | workflow object mutation topic migrated |
+| `WorkflowAssignment` | soiree | gala | dual_emit | workflow assignment mutation handler migrated |
 | `<workflow.command.*>` | n/a | gala | v2_only | new contracts |
 | `<integration.command.execute>` | mixed | gala | v2_only | long-running |
 

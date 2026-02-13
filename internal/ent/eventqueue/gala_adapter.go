@@ -8,7 +8,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/ent/events"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -34,6 +34,19 @@ type MutationGalaPayload struct {
 	ProposedChanges map[string]any `json:"proposed_changes,omitempty"`
 }
 
+const (
+	// mutationGalaPropertyEntityID is the standard mutation metadata key used for entity identifiers.
+	mutationGalaPropertyEntityID = "ID"
+)
+
+// MutationGalaMetadata captures envelope metadata for Gala mutation dispatch.
+type MutationGalaMetadata struct {
+	// EventID is the stable idempotency/event identifier for this mutation dispatch.
+	EventID string
+	// Properties stores string-safe metadata for listener header fallbacks.
+	Properties map[string]string
+}
+
 // NewMutationGalaPayload converts a mutation payload into a JSON-safe gala payload.
 func NewMutationGalaPayload(payload *events.MutationPayload) MutationGalaPayload {
 	if payload == nil {
@@ -53,10 +66,30 @@ func NewMutationGalaPayload(payload *events.MutationPayload) MutationGalaPayload
 	}
 }
 
-// NewGalaHeadersFromMutationProperties builds gala headers from soiree properties.
-func NewGalaHeadersFromMutationProperties(props soiree.Properties) gala.Headers {
-	properties := normalizeSoireeProperties(props)
-	eventID := strings.TrimSpace(properties[soiree.PropertyEventID])
+// NewMutationGalaMetadata builds metadata for Gala mutation envelopes from mutation payload data.
+func NewMutationGalaMetadata(eventID string, payload *events.MutationPayload) MutationGalaMetadata {
+	properties := mutationMetadataProperties(payload)
+	entityID := ""
+	if payload != nil {
+		entityID = strings.TrimSpace(payload.EntityID)
+	}
+	if entityID != "" {
+		if properties == nil {
+			properties = map[string]string{}
+		}
+		properties[mutationGalaPropertyEntityID] = entityID
+	}
+
+	return MutationGalaMetadata{
+		EventID:    strings.TrimSpace(eventID),
+		Properties: properties,
+	}
+}
+
+// NewGalaHeadersFromMutationMetadata builds Gala headers from mutation metadata.
+func NewGalaHeadersFromMutationMetadata(metadata MutationGalaMetadata) gala.Headers {
+	properties := normalizeMutationMetadataProperties(metadata.Properties)
+	eventID := strings.TrimSpace(metadata.EventID)
 
 	return gala.Headers{
 		IdempotencyKey: eventID,
@@ -70,21 +103,21 @@ func NewMutationGalaEnvelope(
 	runtime *gala.Runtime,
 	topic gala.Topic[MutationGalaPayload],
 	payload *events.MutationPayload,
-	props soiree.Properties,
+	metadata MutationGalaMetadata,
 ) (gala.Envelope, error) {
 	if runtime == nil {
 		return gala.Envelope{}, gala.ErrRuntimeRequired
 	}
 
-	headers := NewGalaHeadersFromMutationProperties(props)
+	headers := NewGalaHeadersFromMutationMetadata(metadata)
 	galaPayload := NewMutationGalaPayload(payload)
 
-	encodedPayload, schemaVersion, err := runtime.Registry().EncodePayload(ctx, topic.Name, galaPayload)
+	encodedPayload, schemaVersion, err := runtime.Registry().EncodePayload(topic.Name, galaPayload)
 	if err != nil {
 		return gala.Envelope{}, err
 	}
 
-	snapshot, err := runtime.ContextManager().Capture(ctx)
+	snapshot, err := runtime.ContextManager().Capture(projectGalaFlagsFromWorkflowContext(ctx))
 	if err != nil {
 		return gala.Envelope{}, err
 	}
@@ -92,6 +125,7 @@ func NewMutationGalaEnvelope(
 	eventID := gala.EventID(headers.IdempotencyKey)
 	if eventID == "" {
 		eventID = gala.NewEventID()
+		headers.IdempotencyKey = string(eventID)
 	}
 
 	return gala.Envelope{
@@ -105,13 +139,30 @@ func NewMutationGalaEnvelope(
 	}, nil
 }
 
-// normalizeSoireeProperties converts soiree properties to string values for gala headers.
-func normalizeSoireeProperties(props soiree.Properties) map[string]string {
-	if len(props) == 0 {
+// projectGalaFlagsFromWorkflowContext maps known workflow context markers into Gala context flags.
+func projectGalaFlagsFromWorkflowContext(ctx context.Context) context.Context {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	if workflows.IsWorkflowBypass(ctx) {
+		ctx = gala.WithFlag(ctx, gala.ContextFlagWorkflowBypass)
+	}
+
+	if workflows.AllowWorkflowEventEmission(ctx) {
+		ctx = gala.WithFlag(ctx, gala.ContextFlagWorkflowAllowEventEmission)
+	}
+
+	return ctx
+}
+
+// mutationMetadataProperties builds listener fallback properties from payload proposed changes.
+func mutationMetadataProperties(payload *events.MutationPayload) map[string]string {
+	if payload == nil {
 		return nil
 	}
 
-	normalized := lo.MapEntries(props, func(key string, value any) (string, string) {
+	normalized := lo.MapEntries(payload.ProposedChanges, func(key string, value any) (string, string) {
 		stringValue, ok := events.ValueAsString(value)
 		if !ok || strings.TrimSpace(key) == "" {
 			return "", ""
@@ -120,6 +171,48 @@ func normalizeSoireeProperties(props soiree.Properties) map[string]string {
 		return key, stringValue
 	})
 
+	normalized = lo.PickBy(normalized, func(key string, _ string) bool {
+		return strings.TrimSpace(key) != ""
+	})
+
+	if len(normalized) == 0 {
+		if payload.Mutation == nil {
+			return nil
+		}
+
+		normalized = map[string]string{}
+		for _, field := range payload.Mutation.Fields() {
+			rawValue, ok := payload.Mutation.Field(field)
+			if !ok || strings.TrimSpace(field) == "" {
+				continue
+			}
+
+			stringValue, valueOK := events.ValueAsString(rawValue)
+			if !valueOK {
+				continue
+			}
+
+			normalized[field] = stringValue
+		}
+	}
+
+	return normalizeMutationMetadataProperties(normalized)
+}
+
+// normalizeMutationMetadataProperties normalizes mutation metadata keys and values for Gala headers.
+func normalizeMutationMetadataProperties(properties map[string]string) map[string]string {
+	if len(properties) == 0 {
+		return nil
+	}
+
+	normalized := lo.MapEntries(properties, func(key, value string) (string, string) {
+		key = strings.TrimSpace(key)
+		if key == "" {
+			return "", ""
+		}
+
+		return key, value
+	})
 	normalized = lo.PickBy(normalized, func(key string, _ string) bool {
 		return strings.TrimSpace(key) != ""
 	})
