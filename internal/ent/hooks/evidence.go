@@ -88,14 +88,7 @@ func HookEvidenceFiles() ent.Hook {
 func checkEvidenceFiles[T utils.GenericMutation](ctx context.Context, m T) (context.Context, error) {
 	key := "evidenceFiles"
 
-	// Create adapter for the existing mutation interface
-	adapter := objects.NewGenericMutationAdapter(m,
-		func(mut T) (string, bool) { return mut.ID() },
-		func(mut T) string { return mut.Type() },
-	)
-
-	// Use the generic helper to process files
-	return objects.ProcessFilesForMutation(ctx, adapter, key)
+	return objects.ProcessFilesForMutation(ctx, m, key)
 }
 
 // checkEvidenceHasFiles checks if evidence has any attached files

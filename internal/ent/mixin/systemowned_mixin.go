@@ -128,7 +128,6 @@ func (d SystemOwnedMixin) Policy() ent.Policy {
 type SystemOwnedMutation interface {
 	utils.GenericMutation
 
-	Field(name string) (ent.Value, bool)
 	FieldCleared(name string) bool
 	SystemOwned() (bool, bool)
 	SetSystemOwned(bool)

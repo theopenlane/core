@@ -171,7 +171,7 @@ func HookDocumentDataFile() ent.Hook {
 				return nil, errOnlyOneDocumentData
 			}
 
-			// first checks the authenicated user context,
+			// first checks the authenticated user context,
 			// second checks specifically for the SystemAdminContextKey key in the context
 			if !auth.IsSystemAdminFromContext(ctx) {
 				if user, ok := auth.SystemAdminFromContext(ctx); ok && !user.IsSystemAdmin {
@@ -196,12 +196,7 @@ func HookDocumentDataFile() ent.Hook {
 				return nil, generated.ErrPermissionDenied
 			}
 
-			adapter := objects.NewGenericMutationAdapter(m,
-				func(mut *generated.DocumentDataMutation) (string, bool) { return mut.ID() },
-				func(mut *generated.DocumentDataMutation) string { return mut.Type() },
-			)
-
-			ctx, err = objects.ProcessFilesForMutation(ctx, adapter, "documentDataFile")
+			ctx, err = objects.ProcessFilesForMutation(ctx, m, "documentDataFile")
 			if err != nil {
 				return nil, err
 			}

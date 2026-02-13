@@ -22,12 +22,10 @@ import (
 
 // MutationMember is an interface that can be implemented by a member mutation to get IDs
 type MutationMember interface {
+	utils.GenericMutation
+
 	UserIDs() []string
 	UserID() (string, bool)
-	ID() (string, bool)
-	IDs(ctx context.Context) ([]string, error)
-	Op() ent.Op
-	Client() *generated.Client
 }
 
 // HookMembershipSelf is a hook that runs on membership mutations
@@ -117,8 +115,7 @@ func createMembershipCheck(m MutationMember, actorID string) error {
 
 // updateMembershipCheck is a helper function to check if a user is trying to update themselves in a membership
 func updateMembershipCheck(ctx context.Context, m MutationMember, table string, actorID string) error {
-	mut := m.(utils.GenericMutation)
-	memberIDs := getMutationIDs(ctx, mut)
+	memberIDs := getMutationIDs(ctx, m)
 	if len(memberIDs) == 0 {
 		return nil
 	}

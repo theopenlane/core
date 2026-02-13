@@ -84,10 +84,5 @@ func checkTemplateFiles(ctx context.Context, m *generated.TemplateMutation) (con
 		return ctx, nil
 	}
 
-	adapter := objects.NewGenericMutationAdapter(m,
-		func(mut *generated.TemplateMutation) (string, bool) { return mut.ID() },
-		func(mut *generated.TemplateMutation) string { return mut.Type() },
-	)
-
-	return objects.ProcessFilesForMutation(ctx, adapter, key)
+	return objects.ProcessFilesForMutation(ctx, m, key)
 }

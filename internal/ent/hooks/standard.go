@@ -414,10 +414,5 @@ func checkStandardLogoFile(ctx context.Context, m *generated.StandardMutation) (
 
 	m.SetLogoFileID(logoFiles[0].ID)
 
-	adapter := pkgobjects.NewGenericMutationAdapter(m,
-		func(mut *generated.StandardMutation) (string, bool) { return mut.ID() },
-		func(mut *generated.StandardMutation) string { return mut.Type() },
-	)
-
-	return pkgobjects.ProcessFilesForMutation(ctx, adapter, logoKey)
+	return pkgobjects.ProcessFilesForMutation(ctx, m, logoKey)
 }
