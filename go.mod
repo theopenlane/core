@@ -20,7 +20,7 @@ require (
 	entgo.io/ent v0.14.6-0.20260214061101-d056659140fa
 	github.com/99designs/gqlgen v0.17.86
 	github.com/AfterShip/email-verifier v1.4.1
-	github.com/Yamashou/gqlgenc v0.33.0
+	github.com/Yamashou/gqlgenc v0.33.1
 	github.com/alicebob/miniredis/v2 v2.36.1
 	github.com/alitto/pond/v2 v2.6.0
 	github.com/aws/aws-sdk-go-v2 v1.41.1
@@ -64,11 +64,11 @@ require (
 	github.com/labstack/gommon v0.4.2
 	github.com/lestrrat-go/httprc/v3 v3.0.4
 	github.com/lestrrat-go/jwx/v3 v3.0.13
-	github.com/lib/pq v1.11.1
+	github.com/lib/pq v1.11.2
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
 	github.com/microcosm-cc/bluemonday v1.0.27
-	github.com/nyaruka/phonenumbers v1.6.8
+	github.com/nyaruka/phonenumbers v1.6.9
 	github.com/oklog/ulid/v2 v2.1.1
 	github.com/openfga/go-sdk v0.7.4
 	github.com/pkg/errors v0.9.1
@@ -87,10 +87,10 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v84 v84.1.0
 	github.com/theopenlane/beacon v0.3.0
-	github.com/theopenlane/core/common v1.0.7
+	github.com/theopenlane/core/common v1.0.8
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/emailtemplates v0.3.3
+	github.com/theopenlane/emailtemplates v0.3.5
 	github.com/theopenlane/entx v0.22.5
 	github.com/theopenlane/go-client v0.8.4
 	github.com/theopenlane/gqlgen-plugins v0.14.1
@@ -103,7 +103,7 @@ require (
 	github.com/urfave/cli/v3 v3.6.2
 	github.com/vektah/gqlparser/v2 v2.5.31
 	github.com/xeipuuv/gojsonschema v1.2.0
-	github.com/zitadel/oidc/v3 v3.45.3
+	github.com/zitadel/oidc/v3 v3.45.4
 	gocloud.dev v0.44.0
 	golang.org/x/crypto v0.48.0
 	golang.org/x/mod v0.33.0
@@ -227,7 +227,7 @@ require (
 	github.com/tklauser/numcpus v0.11.0 // indirect
 	github.com/ugorji/go/codec v1.3.0 // indirect
 	github.com/urfave/cli/v2 v2.27.7 // indirect
-	github.com/vektra/mockery/v3 v3.6.3 // indirect
+	github.com/vektra/mockery/v3 v3.6.4 // indirect
 	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
