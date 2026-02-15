@@ -11,8 +11,8 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
@@ -86,7 +86,11 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				props.Set("ID", eventID.ID)
 				addMutationFields(props, mutation)
 
-				payload := newMutationPayloadForDispatch(mutation, op, eventID.ID)
+				payload := &events.MutationPayload{
+					Mutation:  mutation,
+					Operation: op,
+					EntityID:  eventID.ID,
+				}
 
 				var emitterClient any
 				if e.Emitter != nil {
@@ -194,7 +198,7 @@ func getOperation(ctx context.Context, mutation ent.Mutation) string {
 // emitEventOn determines whether to emit events for a given mutation
 func (e *Eventer) emitEventOn() func(context.Context, entgen.Mutation) bool {
 	return func(ctx context.Context, m entgen.Mutation) bool { //nolint:revive
-		if m == nil {
+		if e == nil || m == nil {
 			return false
 		}
 
@@ -233,21 +237,21 @@ func RegisterListeners(e *Eventer) error {
 	}
 
 	total := 0
-	listenerGroups := lo.Values(e.listeners)
-	total = lo.Reduce(listenerGroups, func(acc int, entries []soiree.ListenerBinding, _ int) int {
-		return acc + len(entries)
-	}, len(e.bindings))
+	for _, entries := range e.listeners {
+		total += len(entries)
+	}
+
+	total += len(e.bindings)
 
 	if total == 0 {
 		return nil
 	}
 
-	bindings := lo.Flatten(listenerGroups)
-	if cap(bindings) < total {
-		resized := make([]soiree.ListenerBinding, len(bindings), total)
-		copy(resized, bindings)
-		bindings = resized
+	bindings := make([]soiree.ListenerBinding, 0, total)
+	for _, entries := range e.listeners {
+		bindings = append(bindings, entries...)
 	}
+
 	bindings = append(bindings, e.bindings...)
 
 	if _, err := e.Emitter.RegisterListeners(bindings...); err != nil {
@@ -264,73 +268,9 @@ func addMutationFields(props soiree.Properties, mutation ent.Mutation) {
 		return
 	}
 
-	lo.ForEach(mutation.Fields(), func(field string, _ int) {
+	for _, field := range mutation.Fields() {
 		if value, ok := mutation.Field(field); ok {
 			props.Set(field, value)
 		}
-	})
-}
-
-// mutationChangedAndClearedFields derives updated/cleared field names from an ent mutation.
-func mutationChangedAndClearedFields(mutation ent.Mutation) ([]string, []string) {
-	if mutation == nil {
-		return nil, nil
 	}
-
-	clearedFields := uniqueStrings(mutation.ClearedFields())
-	changedFields := append(append([]string(nil), mutation.Fields()...), clearedFields...)
-
-	return uniqueStrings(changedFields), clearedFields
-}
-
-// mutationProposedChanges materializes field values (including explicit clears as nil).
-func mutationProposedChanges(mutation ent.Mutation, changedFields, clearedFields []string) map[string]any {
-	if mutation == nil || len(changedFields) == 0 {
-		return nil
-	}
-
-	clearedSet := make(map[string]struct{}, len(clearedFields))
-	lo.ForEach(clearedFields, func(field string, _ int) {
-		if field == "" {
-			return
-		}
-
-		clearedSet[field] = struct{}{}
-	})
-
-	proposed := make(map[string]any, len(changedFields))
-	lo.ForEach(changedFields, func(field string, _ int) {
-		if field == "" {
-			return
-		}
-
-		if val, ok := mutation.Field(field); ok {
-			proposed[field] = val
-			return
-		}
-
-		if _, ok := clearedSet[field]; ok {
-			proposed[field] = nil
-		}
-	})
-
-	if len(proposed) == 0 {
-		return nil
-	}
-
-	return proposed
-}
-
-// uniqueStrings returns distinct non-empty values while preserving first-seen order.
-func uniqueStrings(values []string) []string {
-	if len(values) == 0 {
-		return nil
-	}
-
-	out := lo.Uniq(lo.Filter(values, func(value string, _ int) bool { return value != "" }))
-	if len(out) == 0 {
-		return nil
-	}
-
-	return out
 }

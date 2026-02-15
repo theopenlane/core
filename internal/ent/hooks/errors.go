@@ -3,8 +3,6 @@ package hooks
 import (
 	"errors"
 	"strings"
-
-	"github.com/samber/lo"
 )
 
 var (
@@ -206,9 +204,15 @@ func IsUniqueConstraintError(err error) bool {
 		return false
 	}
 
-	return lo.SomeBy([]string{
+	for _, s := range []string{
 		"Error 1062",                 // MySQL
 		"violates unique constraint", // Postgres
 		"UNIQUE constraint failed",   // SQLite
-	}, func(marker string) bool { return strings.Contains(err.Error(), marker) })
+	} {
+		if strings.Contains(err.Error(), s) {
+			return true
+		}
+	}
+
+	return false
 }

@@ -183,9 +183,7 @@ func serve(ctx context.Context) error {
 		riverqueue.WithConnectionURI(so.Config.Settings.JobQueue.ConnectionURI),
 	}
 
-	eventer := hooks.NewEventer(
-		hooks.WithWorkflowListenersEnabled(so.Config.Settings.Workflows.Enabled),
-	)
+	eventer := hooks.NewEventer(hooks.WithWorkflowListenersEnabled(so.Config.Settings.Workflows.Enabled))
 
 	clientOpts := []entdb.Option{
 		entdb.WithEventer(eventer, &so.Config.Settings.Workflows),

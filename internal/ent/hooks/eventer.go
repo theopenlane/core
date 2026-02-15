@@ -4,8 +4,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/notifications"
@@ -37,7 +35,9 @@ func NewEventer(opts ...EventerOpts) *Eventer {
 		workflowListenersEnabled: true,
 	}
 
-	lo.ForEach(opts, func(opt EventerOpts, _ int) { opt(e) })
+	for _, opt := range opts {
+		opt(e)
+	}
 
 	return e
 }
@@ -77,7 +77,7 @@ func mutationTopic(entity string) soiree.TypedTopic[*events.MutationPayload] {
 // AddMutationListener registers a handler for the supplied entity; registration automatically
 // opts the entity into event emission
 func (e *Eventer) AddMutationListener(entity string, handler MutationHandler) {
-	if handler == nil || entity == "" {
+	if e == nil || handler == nil || entity == "" {
 		return
 	}
 
@@ -97,6 +97,10 @@ func (e *Eventer) AddMutationListener(entity string, handler MutationHandler) {
 
 // AddListenerBinding registers a non-mutation listener binding for later registration.
 func (e *Eventer) AddListenerBinding(binding soiree.ListenerBinding) {
+	if e == nil {
+		return
+	}
+
 	e.bindings = append(e.bindings, binding)
 }
 
@@ -125,6 +129,10 @@ func NewEventerPool(client any) *Eventer {
 
 // registerDefaultMutationListeners wires the listeners we ship by default
 func registerDefaultMutationListeners(e *Eventer) {
+	if e == nil {
+		return
+	}
+
 	e.AddMutationListener(entgen.TypeOrganization, handleOrganizationMutation)
 	e.AddMutationListener(entgen.TypeOrganizationSetting, handleOrganizationSettingMutation)
 

@@ -80,7 +80,9 @@ require (
 	github.com/redis/go-redis/v9 v9.17.3
 	github.com/riverqueue/river v0.30.2
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.30.2
+	github.com/riverqueue/river/rivertype v0.30.2
 	github.com/rs/zerolog v1.34.0
+	github.com/samber/do/v2 v2.0.0
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.2
 	github.com/stoewer/go-strcase v1.3.1
@@ -126,9 +128,7 @@ require (
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
 	github.com/fumiama/imgsz v0.0.4 // indirect
 	github.com/gqlgo/gqlgenc v0.33.1 // indirect
-	github.com/riverqueue/river/rivertype v0.30.2 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
-	github.com/samber/do/v2 v2.0.0 // indirect
 	github.com/samber/go-type-to-string v1.8.0 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect

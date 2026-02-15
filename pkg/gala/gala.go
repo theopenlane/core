@@ -260,8 +260,6 @@ func (g *Gala) DispatchEnvelope(ctx context.Context, envelope Envelope) error {
 
 			return err
 		}
-
-		logx.FromContext(restoredContext).Debug().Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("operation", operation).Str("listener", listener.name).Msg("gala listener completed")
 	}
 
 	logx.FromContext(restoredContext).Debug().Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("operation", operation).Int("listener_count", len(listeners)).Msg("gala event processed")

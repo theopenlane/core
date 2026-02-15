@@ -51,15 +51,15 @@ func BuildProposedChanges(m utils.GenericMutation, changedFields []string) map[s
 	})
 
 	proposed := make(map[string]any, len(changedFields))
-	lo.ForEach(changedFields, func(field string, _ int) {
+	for _, field := range changedFields {
 		if val, ok := m.Field(field); ok {
 			proposed[field] = val
-			return
+			continue
 		}
 		if _, ok := clearedSet[field]; ok {
 			proposed[field] = nil
 		}
-	})
+	}
 
 	return proposed
 }

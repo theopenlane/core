@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/mcuadros/go-defaults"
-	"github.com/samber/lo"
 )
 
 // Config contains the configuration for the workflows engine
@@ -66,7 +65,9 @@ func NewDefaultConfig(opts ...ConfigOpts) *Config {
 	c := &Config{}
 	defaults.SetDefaults(c)
 
-	lo.ForEach(opts, func(opt ConfigOpts, _ int) { opt(c) })
+	for _, opt := range opts {
+		opt(c)
+	}
 
 	return c
 }

@@ -1672,7 +1672,7 @@ func TestContextCodecRestoreInvalidJSON(t *testing.T) {
 }
 
 func TestAuthContextSnapshotToAuthenticatedUser(t *testing.T) {
-	snapshot := AuthContextSnapshot{
+	snapshot := AuthSnapshot{
 		SubjectID:          "sub_123",
 		SubjectName:        "Test User",
 		SubjectEmail:       "test@example.com",

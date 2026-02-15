@@ -74,7 +74,7 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 	t.Parallel()
 
 	contextManager, err := gala.NewContextManager(
-		gala.NewAuthContextCodec(),
+		gala.NewContextCodec(),
 		gala.NewTypedContextCodec[galaAdapterTestActor]("adapter_actor"),
 	)
 	require.NoError(t, err)

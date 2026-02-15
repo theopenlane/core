@@ -158,8 +158,8 @@ func (r *Registry) registeredListeners(topic TopicName) []registeredListener {
 	return copied
 }
 
-// InterestedIn reports whether any listener is registered for topic+operation.
-// Empty operation means topic-level interest only.
+// InterestedIn reports whether any listener is registered for topic+operation
+// Empty operation means topic-level interest only
 func (r *Registry) InterestedIn(topic TopicName, operation string) bool {
 	if topic == "" {
 		return false
@@ -187,8 +187,8 @@ func (r *Registry) InterestedIn(topic TopicName, operation string) bool {
 	return false
 }
 
-// listenerInterestedInOperation reports whether a listener matches an operation filter.
-// Callers must pass a trimmed operation string.
+// listenerInterestedInOperation reports whether a listener matches an operation filter
+// Callers must pass a trimmed operation string
 func listenerInterestedInOperation(listener registeredListener, operation string) bool {
 	if len(listener.ops) == 0 {
 		return true
@@ -273,7 +273,7 @@ func normalizeOperations(operations []string) map[string]struct{} {
 	return normalized
 }
 
-// wrapTopicEncoder creates a non-generic encoder wrapper for one topic
+// wrapTopicEncoder coverts a type-specific codec into a common shape for registry storage (any -> T)
 func wrapTopicEncoder[T any](registration Registration[T]) func(any) ([]byte, error) {
 	return func(payload any) ([]byte, error) {
 		typedPayload, ok := payload.(T)
@@ -290,7 +290,7 @@ func wrapTopicEncoder[T any](registration Registration[T]) func(any) ([]byte, er
 	}
 }
 
-// wrapTopicDecoder creates a non-generic decoder wrapper for one topic
+// wrapTopicDecoder wides the return type on the way out from the encoder (T -> any) for registry storage
 func wrapTopicDecoder[T any](registration Registration[T]) func([]byte) (any, error) {
 	return func(payload []byte) (any, error) {
 		decoded, err := registration.Codec.Decode(payload)

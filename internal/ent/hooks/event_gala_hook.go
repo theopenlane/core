@@ -6,6 +6,7 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
@@ -143,4 +144,68 @@ func newMutationPayloadForDispatch(mutation ent.Mutation, operation, entityID st
 		RemovedIDs:      removedIDs,
 		ProposedChanges: proposedChanges,
 	}
+}
+
+// mutationChangedAndClearedFields derives updated/cleared field names from an ent mutation.
+func mutationChangedAndClearedFields(mutation ent.Mutation) ([]string, []string) {
+	if mutation == nil {
+		return nil, nil
+	}
+
+	clearedFields := uniqueStrings(mutation.ClearedFields())
+	changedFields := append(append([]string(nil), mutation.Fields()...), clearedFields...)
+
+	return uniqueStrings(changedFields), clearedFields
+}
+
+// mutationProposedChanges materializes field values (including explicit clears as nil).
+func mutationProposedChanges(mutation ent.Mutation, changedFields, clearedFields []string) map[string]any {
+	if mutation == nil || len(changedFields) == 0 {
+		return nil
+	}
+
+	clearedSet := make(map[string]struct{}, len(clearedFields))
+	lo.ForEach(clearedFields, func(field string, _ int) {
+		if field == "" {
+			return
+		}
+
+		clearedSet[field] = struct{}{}
+	})
+
+	proposed := make(map[string]any, len(changedFields))
+	lo.ForEach(changedFields, func(field string, _ int) {
+		if field == "" {
+			return
+		}
+
+		if val, ok := mutation.Field(field); ok {
+			proposed[field] = val
+			return
+		}
+
+		if _, ok := clearedSet[field]; ok {
+			proposed[field] = nil
+		}
+	})
+
+	if len(proposed) == 0 {
+		return nil
+	}
+
+	return proposed
+}
+
+// uniqueStrings returns distinct non-empty values while preserving first-seen order.
+func uniqueStrings(values []string) []string {
+	if len(values) == 0 {
+		return nil
+	}
+
+	out := lo.Uniq(lo.Filter(values, func(value string, _ int) bool { return value != "" }))
+	if len(out) == 0 {
+		return nil
+	}
+
+	return out
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// Provider resolves the gala instance used by River workers.
+// Provider resolves the gala instance used by River workers
 type Provider func() *Gala
 
 // RiverDispatchWorker processes durable gala dispatch jobs from River
@@ -51,7 +51,7 @@ type Dispatcher interface {
 	Dispatch(context.Context, Envelope) error
 }
 
-// NewRiverDispatcher creates a River-backed durable dispatcher.
+// NewRiverDispatcher creates a River-backed durable dispatcher
 func NewRiverDispatcher(jobClient RiverInsertClient, defaultQueue string) (*RiverDispatcher, error) {
 	if jobClient == nil {
 		return nil, ErrRiverJobClientRequired

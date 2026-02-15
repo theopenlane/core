@@ -10,41 +10,41 @@ import (
 )
 
 const (
-	// durableContextCodecKey is the context snapshot key for durable context values.
+	// durableContextCodecKey is the context snapshot key for durable context values
 	durableContextCodecKey ContextKey = "durable"
 )
 
-// DurableContextSnapshot captures context values that should persist across durable event processing.
+// DurableContextSnapshot captures context values that should persist across durable event processing
 type DurableContextSnapshot struct {
-	// Auth contains authenticated user context when present.
+	// Auth contains authenticated user context when present
 	Auth *AuthSnapshot `json:"auth,omitempty"`
-	// LogFields contains logger context fields for correlation and tracing.
+	// LogFields contains logger context fields for correlation and tracing
 	LogFields map[string]any `json:"log_fields,omitempty"`
 }
 
-// AuthSnapshot is a JSON-safe snapshot of authenticated user context values.
+// AuthSnapshot is a JSON-safe snapshot of authenticated user context values
 type AuthSnapshot struct {
-	// SubjectID is the authenticated principal identifier.
+	// SubjectID is the authenticated principal identifier
 	SubjectID string `json:"subject_id,omitempty"`
-	// SubjectName is the authenticated principal display name.
+	// SubjectName is the authenticated principal display name
 	SubjectName string `json:"subject_name,omitempty"`
-	// SubjectEmail is the authenticated principal email.
+	// SubjectEmail is the authenticated principal email
 	SubjectEmail string `json:"subject_email,omitempty"`
-	// OrganizationID is the active organization scope.
+	// OrganizationID is the active organization scope
 	OrganizationID string `json:"organization_id,omitempty"`
-	// OrganizationName is the active organization display name.
+	// OrganizationName is the active organization display name
 	OrganizationName string `json:"organization_name,omitempty"`
-	// OrganizationIDs contains organizations available in caller scope.
+	// OrganizationIDs contains organizations available in caller scope
 	OrganizationIDs []string `json:"organization_ids,omitempty"`
-	// AuthenticationType identifies the authentication method used by the caller.
+	// AuthenticationType identifies the authentication method used by the caller
 	AuthenticationType string `json:"authentication_type,omitempty"`
-	// OrganizationRole captures the caller role within the active organization.
+	// OrganizationRole captures the caller role within the active organization
 	OrganizationRole string `json:"organization_role,omitempty"`
-	// IsSystemAdmin reports whether the caller has system-admin privileges.
+	// IsSystemAdmin reports whether the caller has system-admin privileges
 	IsSystemAdmin bool `json:"is_system_admin,omitempty"`
 }
 
-// ToAuthenticatedUser converts a snapshot into an auth.AuthenticatedUser payload.
+// ToAuthenticatedUser converts a snapshot into an auth.AuthenticatedUser payload
 func (s AuthSnapshot) ToAuthenticatedUser() *auth.AuthenticatedUser {
 	return &auth.AuthenticatedUser{
 		SubjectID:          s.SubjectID,
@@ -59,7 +59,7 @@ func (s AuthSnapshot) ToAuthenticatedUser() *auth.AuthenticatedUser {
 	}
 }
 
-// authSnapshotFromUser converts an auth.AuthenticatedUser into a JSON-safe snapshot.
+// authSnapshotFromUser converts an auth.AuthenticatedUser into a JSON-safe snapshot
 func authSnapshotFromUser(user *auth.AuthenticatedUser) *AuthSnapshot {
 	if user == nil {
 		return nil
@@ -78,30 +78,20 @@ func authSnapshotFromUser(user *auth.AuthenticatedUser) *AuthSnapshot {
 	}
 }
 
-// DurableContextCodec captures and restores durable context values including auth and logger fields.
+// DurableContextCodec captures and restores durable context values including auth and logger fields
 type DurableContextCodec struct{}
 
-// NewContextCodec creates a context codec for durable context capture.
+// NewContextCodec creates a context codec for durable context capture
 func NewContextCodec() DurableContextCodec {
 	return DurableContextCodec{}
 }
 
-// NewAuthContextCodec is an alias for NewContextCodec for backwards compatibility.
-// Deprecated: Use NewContextCodec instead.
-func NewAuthContextCodec() DurableContextCodec {
-	return NewContextCodec()
-}
-
-// AuthContextSnapshot is an alias for AuthSnapshot for backwards compatibility.
-// Deprecated: Use AuthSnapshot instead.
-type AuthContextSnapshot = AuthSnapshot
-
-// Key returns the stable snapshot key used by the context codec.
+// Key returns the stable snapshot key used by the context codec
 func (DurableContextCodec) Key() ContextKey {
 	return durableContextCodecKey
 }
 
-// Capture extracts durable context values and encodes them as JSON.
+// Capture extracts durable context values and encodes them as JSON
 func (DurableContextCodec) Capture(ctx context.Context) (json.RawMessage, bool, error) {
 	snapshot := DurableContextSnapshot{}
 	hasData := false
@@ -130,7 +120,7 @@ func (DurableContextCodec) Capture(ctx context.Context) (json.RawMessage, bool, 
 	return append(json.RawMessage(nil), encoded...), true, nil
 }
 
-// Restore decodes durable context values and restores them on the supplied context.
+// Restore decodes durable context values and restores them on the supplied context
 func (DurableContextCodec) Restore(ctx context.Context, raw json.RawMessage) (context.Context, error) {
 	var snapshot DurableContextSnapshot
 	if err := jsonx.RoundTrip(raw, &snapshot); err != nil {

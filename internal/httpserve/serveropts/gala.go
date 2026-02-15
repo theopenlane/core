@@ -35,7 +35,10 @@ func WithGala(ctx context.Context, so *ServerOptions, dbClient *ent.Client) (*ga
 		return nil, err
 	}
 
-	dbClient.Use(hooks.EmitGalaEventHook(func() *gala.Gala { return galaApp }, galaCfg.FailOnEnqueueError))
+	// slightly weird signature but same registration of a new ent hook
+	dbClient.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
+		return galaApp
+	}, galaCfg.FailOnEnqueueError))
 
 	provideGalaDependencies(galaApp.Injector(), dbClient)
 
