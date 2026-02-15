@@ -111,7 +111,7 @@ func LoggingMiddleware(config Config) echo.MiddlewareFunc {
 			}
 
 			if config.AttachRequestMetadata {
-				logger, ctx = attachRequestMetadataWithDurableFields(c, logger, ctx)
+				logger, ctx = attachRequestMetadataWithDurableFields(ctx, c, logger)
 			}
 
 			// The request context is retrieved and set to the logger's context
@@ -237,7 +237,7 @@ func logEvent(c echo.Context, logger *Logger, config Config, start time.Time, er
 }
 
 // attachRequestMetadataWithDurableFields attaches stable request metadata to the logger and stores fields durably on context.
-func attachRequestMetadataWithDurableFields(c echo.Context, logger *Logger, ctx context.Context) (*Logger, context.Context) {
+func attachRequestMetadataWithDurableFields(ctx context.Context, c echo.Context, logger *Logger) (*Logger, context.Context) {
 	req := c.Request()
 	remoteIP := c.RealIP()
 

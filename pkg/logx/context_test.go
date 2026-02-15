@@ -54,7 +54,7 @@ func TestFieldsFromContextEmpty(t *testing.T) {
 }
 
 func TestFieldsFromContextNil(t *testing.T) {
-	fields := logx.FieldsFromContext(nil)
+	fields := logx.FieldsFromContext(context.TODO())
 	assert.Nil(t, fields)
 }
 
