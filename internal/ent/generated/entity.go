@@ -92,7 +92,7 @@ type Entity struct {
 	// The type of the entity
 	EntityTypeID string `json:"entity_type_id,omitempty"`
 	// status of the entity
-	Status string `json:"status,omitempty"`
+	Status enums.EntityStatus `json:"status,omitempty"`
 	// whether the entity is approved for use
 	ApprovedForUse bool `json:"approved_for_use,omitempty"`
 	// asset identifiers linked to the entity
@@ -800,7 +800,7 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				_m.Status = value.String
+				_m.Status = enums.EntityStatus(value.String)
 			}
 		case entity.FieldApprovedForUse:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -1306,7 +1306,7 @@ func (_m *Entity) String() string {
 	builder.WriteString(_m.EntityTypeID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(_m.Status)
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("approved_for_use=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ApprovedForUse))

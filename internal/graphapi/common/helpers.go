@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/objects/store"
 	"github.com/theopenlane/core/internal/objects/upload"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
@@ -993,13 +994,13 @@ func GetOrgOwnerFromInput[T any](input *T) (*string, error) {
 		return nil, nil
 	}
 
+	var ownerInput inputWithOwnerID
 	inputBytes, err := json.Marshal(input)
 	if err != nil {
 		return nil, err
 	}
 
-	var ownerInput inputWithOwnerID
-	if err := json.Unmarshal(inputBytes, &ownerInput); err != nil {
+	if err := jsonx.RoundTrip(inputBytes, &ownerInput); err != nil {
 		return nil, err
 	}
 
@@ -1010,14 +1011,14 @@ func GetOrgOwnerFromInput[T any](input *T) (*string, error) {
 	var wrappedOwner struct {
 		Input inputWithOwnerID `json:"Input"`
 	}
-	if err := json.Unmarshal(inputBytes, &wrappedOwner); err == nil && wrappedOwner.Input.OwnerID != nil {
+	if err := jsonx.RoundTrip(inputBytes, &wrappedOwner); err == nil && wrappedOwner.Input.OwnerID != nil {
 		return wrappedOwner.Input.OwnerID, nil
 	}
 
 	var wrappedOwnerLower struct {
 		Input inputWithOwnerID `json:"input"`
 	}
-	if err := json.Unmarshal(inputBytes, &wrappedOwnerLower); err == nil && wrappedOwnerLower.Input.OwnerID != nil {
+	if err := jsonx.RoundTrip(inputBytes, &wrappedOwnerLower); err == nil && wrappedOwnerLower.Input.OwnerID != nil {
 		return wrappedOwnerLower.Input.OwnerID, nil
 	}
 
@@ -1041,7 +1042,7 @@ func templateKindFromVariables(variables map[string]any, inputKey string) *enums
 	}
 
 	var input inputWithTemplateKind
-	if err := json.Unmarshal(inputBytes, &input); err != nil {
+	if err := jsonx.RoundTrip(inputBytes, &input); err != nil {
 		return nil
 	}
 
@@ -1310,14 +1311,8 @@ func isEmptySlice(x any) bool {
 
 // ConvertToObject converts an object to a specific type
 func ConvertToObject[J any](obj any) (*J, error) {
-	jsonBytes, err := json.Marshal(obj)
-	if err != nil {
-		return nil, err
-	}
-
 	var result J
-	err = json.Unmarshal(jsonBytes, &result)
-	if err != nil {
+	if err := jsonx.RoundTrip(obj, &result); err != nil {
 		return nil, err
 	}
 
@@ -1350,7 +1345,7 @@ func getOwnerIDFromVariables(variables map[string]any, inputKey string) (*string
 			}
 
 			var owner inputWithOwnerID
-			if err := json.Unmarshal(inputBytes, &owner); err != nil {
+			if err := jsonx.RoundTrip(inputBytes, &owner); err != nil {
 				return nil, err
 			}
 

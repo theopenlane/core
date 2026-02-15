@@ -960,10 +960,6 @@ func init() {
 	entityhistoryDescSystemOwned := entityhistoryFields[19].Descriptor()
 	// entityhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	entityhistory.DefaultSystemOwned = entityhistoryDescSystemOwned.Default.(bool)
-	// entityhistoryDescStatus is the schema descriptor for status field.
-	entityhistoryDescStatus := entityhistoryFields[37].Descriptor()
-	// entityhistory.DefaultStatus holds the default value on creation for the status field.
-	entityhistory.DefaultStatus = entityhistoryDescStatus.Default.(string)
 	// entityhistoryDescApprovedForUse is the schema descriptor for approved_for_use field.
 	entityhistoryDescApprovedForUse := entityhistoryFields[38].Descriptor()
 	// entityhistory.DefaultApprovedForUse holds the default value on creation for the approved_for_use field.

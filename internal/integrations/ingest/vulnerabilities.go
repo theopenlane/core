@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // VulnerabilityIngestRequest defines the inputs required for vulnerability ingestion
@@ -109,11 +110,11 @@ func newVulnerabilityIngestContext(req VulnerabilityIngestRequest) (vulnerabilit
 		return vulnerabilityIngestContext{}, ErrMappingSchemaNotFound
 	}
 
-	integrationConfigMap, err := toMap(req.IntegrationConfig)
+	integrationConfigMap, err := jsonx.ToMap(req.IntegrationConfig)
 	if err != nil {
 		return vulnerabilityIngestContext{}, err
 	}
-	providerStateMap, err := toMap(req.ProviderState)
+	providerStateMap, err := jsonx.ToMap(req.ProviderState)
 	if err != nil {
 		return vulnerabilityIngestContext{}, err
 	}
@@ -257,12 +258,7 @@ func decodeAlertPayload(payload json.RawMessage) (map[string]any, error) {
 // decodeVulnerabilityInput converts mapped fields into a create input
 func decodeVulnerabilityInput(data map[string]any) (generated.CreateVulnerabilityInput, error) {
 	var input generated.CreateVulnerabilityInput
-	bytes, err := json.Marshal(data)
-	if err != nil {
-		return input, err
-	}
-
-	if err := json.Unmarshal(bytes, &input); err != nil {
+	if err := jsonx.RoundTrip(data, &input); err != nil {
 		return input, err
 	}
 

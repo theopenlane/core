@@ -485,13 +485,13 @@ func (_c *EntityCreate) SetNillableEntityTypeID(v *string) *EntityCreate {
 }
 
 // SetStatus sets the "status" field.
-func (_c *EntityCreate) SetStatus(v string) *EntityCreate {
+func (_c *EntityCreate) SetStatus(v enums.EntityStatus) *EntityCreate {
 	_c.mutation.SetStatus(v)
 	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *EntityCreate) SetNillableStatus(v *string) *EntityCreate {
+func (_c *EntityCreate) SetNillableStatus(v *enums.EntityStatus) *EntityCreate {
 	if v != nil {
 		_c.SetStatus(*v)
 	}
@@ -1309,6 +1309,11 @@ func (_c *EntityCreate) check() error {
 			return &ValidationError{Name: "domains", err: fmt.Errorf(`generated: validator failed for field "Entity.domains": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.Status(); ok {
+		if err := entity.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Entity.status": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.StatusPageURL(); ok {
 		if err := entity.StatusPageURLValidator(v); err != nil {
 			return &ValidationError{Name: "status_page_url", err: fmt.Errorf(`generated: validator failed for field "Entity.status_page_url": %w`, err)}
@@ -1449,7 +1454,7 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 		_node.Domains = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(entity.FieldStatus, field.TypeString, value)
+		_spec.SetField(entity.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := _c.mutation.ApprovedForUse(); ok {

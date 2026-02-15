@@ -68,9 +68,8 @@ func parseVariablesMap(variables map[string]any, keys ...string) (map[string][]F
 
 		uploads := extractUploads(value)
 		if len(uploads) > 0 {
-			var files []File
-			for _, upload := range uploads {
-				files = append(files, File{
+			files := lo.Map(uploads, func(upload graphql.Upload, _ int) File {
+				return File{
 					RawFile:      upload.File,
 					OriginalName: upload.Filename,
 					FieldName:    key,
@@ -79,8 +78,8 @@ func parseVariablesMap(variables map[string]any, keys ...string) (map[string][]F
 						ContentType: upload.ContentType,
 						Key:         key,
 					},
-				})
-			}
+				}
+			})
 			result[key] = files
 		}
 	}
@@ -96,13 +95,10 @@ func extractUploads(v any) []graphql.Upload {
 	case graphql.Upload:
 		return []graphql.Upload{val}
 	case []any:
-		var uploads []graphql.Upload
-		for _, item := range val {
-			if upload, ok := item.(graphql.Upload); ok {
-				uploads = append(uploads, upload)
-			}
-		}
-		return uploads
+		return lo.FilterMap(val, func(item any, _ int) (graphql.Upload, bool) {
+			upload, ok := item.(graphql.Upload)
+			return upload, ok
+		})
 	case map[string]any:
 		var uploads []graphql.Upload
 		for _, value := range val {
