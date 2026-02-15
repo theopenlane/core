@@ -137,6 +137,7 @@ func TestMutationCreateEntity(t *testing.T) {
 	entityTypesToDelete := []string{}
 
 	entityType := (&EntityTypeBuilder{client: suite.client, Name: "superheros"}).MustNew(testUser1.UserCtx, t)
+	entityTypeAnotherOrg := (&EntityTypeBuilder{client: suite.client, Name: "villains"}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name           string
@@ -155,7 +156,7 @@ func TestMutationCreateEntity(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "happy path, all input",
+			name: "happy path, all input with entity type",
 			request: testclient.CreateEntityInput{
 				Name:        lo.ToPtr("mitb"),
 				DisplayName: lo.ToPtr("fraser fir"),
@@ -164,12 +165,22 @@ func TestMutationCreateEntity(t *testing.T) {
 				Status:      &enums.EntityStatusUnderReview,
 				Note: &testclient.CreateNoteInput{
 					Text:    "matt is the best",
-					OwnerID: &testUser1.OrganizationID,
+					OwnerID: &adminUser.OrganizationID,
 				},
 			},
 			entityTypeName: &entityType.Name,
 			client:         suite.client.api,
+			ctx:            adminUser.UserCtx,
+		},
+		{
+			name: "not allowed to use another org's entity type",
+			request: testclient.CreateEntityInput{
+				Name: lo.ToPtr("peter pan"),
+			},
+			entityTypeName: &entityTypeAnotherOrg.Name,
+			client:         suite.client.api,
 			ctx:            testUser1.UserCtx,
+			expectedErr:    "invalid or unparsable field: entity_type_name",
 		},
 		{
 			name: "happy path, using api token",
