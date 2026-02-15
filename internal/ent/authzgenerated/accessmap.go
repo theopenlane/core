@@ -1007,9 +1007,9 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "entity_type": {
-	ObjectType:      "entity_type",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	ObjectType:      "organization",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "entity_type": {"owner": {
 	ObjectType:      "owner",
