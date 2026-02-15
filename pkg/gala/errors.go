@@ -3,10 +3,10 @@ package gala
 import "errors"
 
 var (
-	// ErrRuntimeRequired is returned when a nil runtime is used.
-	ErrRuntimeRequired = errors.New("gala: runtime is required")
-	// ErrInjectorRequired is returned when dependency resolution is attempted without an injector.
-	ErrInjectorRequired = errors.New("gala: injector is required")
+	// ErrGalaRequired is returned when a nil gala runtime is used.
+	ErrGalaRequired = errors.New("gala: gala is required")
+	// ErrRegistryRequired is returned when a nil topic registry is used.
+	ErrRegistryRequired = errors.New("gala: registry is required")
 	// ErrTopicNameRequired is returned when a topic name is empty.
 	ErrTopicNameRequired = errors.New("gala: topic name is required")
 	// ErrTopicAlreadyRegistered is returned when a topic is registered more than once.
@@ -27,20 +27,12 @@ var (
 	ErrPayloadEncodeFailed = errors.New("gala: payload encode failed")
 	// ErrPayloadDecodeFailed is returned when payload deserialization fails.
 	ErrPayloadDecodeFailed = errors.New("gala: payload decode failed")
-	// ErrEnvelopeTopicRequired is returned when an envelope has no topic.
-	ErrEnvelopeTopicRequired = errors.New("gala: envelope topic is required")
 	// ErrEnvelopePayloadRequired is returned when an envelope has an empty payload.
 	ErrEnvelopePayloadRequired = errors.New("gala: envelope payload is required")
-	// ErrListenerExecutionFailed is returned when listener processing fails.
-	ErrListenerExecutionFailed = errors.New("gala: listener execution failed")
-	// ErrUnsupportedEmitMode is returned when a topic policy specifies an unknown emit mode.
-	ErrUnsupportedEmitMode = errors.New("gala: unsupported emit mode")
-	// ErrDurableDispatcherRequired is returned when durable emit mode is used without a durable dispatcher.
-	ErrDurableDispatcherRequired = errors.New("gala: durable dispatcher is required")
-	// ErrDurableDispatchFailed is returned when durable dispatch fails.
-	ErrDurableDispatchFailed = errors.New("gala: durable dispatch failed")
-	// ErrDualDispatchFailed is returned when dual dispatch fails on either durable or inline paths.
-	ErrDualDispatchFailed = errors.New("gala: dual dispatch failed")
+	// ErrDispatcherRequired is returned when emit is attempted without a dispatcher.
+	ErrDispatcherRequired = errors.New("gala: dispatcher is required")
+	// ErrDispatchFailed is returned when dispatch fails.
+	ErrDispatchFailed = errors.New("gala: dispatch failed")
 	// ErrContextCodecRequired is returned when context codec registration receives nil.
 	ErrContextCodecRequired = errors.New("gala: context codec is required")
 	// ErrContextCodecKeyRequired is returned when a context codec key is empty.
@@ -53,10 +45,8 @@ var (
 	ErrContextSnapshotRestoreFailed = errors.New("gala: context snapshot restore failed")
 	// ErrRiverJobClientRequired is returned when a river dispatcher is built without a job client.
 	ErrRiverJobClientRequired = errors.New("gala: river job client is required")
-	// ErrRiverRuntimeProviderRequired is returned when a river worker is built without a runtime provider.
-	ErrRiverRuntimeProviderRequired = errors.New("gala: river runtime provider is required")
-	// ErrRiverWorkersRequired is returned when river worker registration receives a nil worker registry.
-	ErrRiverWorkersRequired = errors.New("gala: river workers registry is required")
+	// ErrRiverGalaProviderRequired is returned when a river worker is built without a gala provider.
+	ErrRiverGalaProviderRequired = errors.New("gala: river gala provider is required")
 	// ErrRiverDispatchJobEnvelopeRequired is returned when a river dispatch job has no envelope payload.
 	ErrRiverDispatchJobEnvelopeRequired = errors.New("gala: river dispatch job envelope is required")
 	// ErrRiverEnvelopeEncodeFailed is returned when encoding a river envelope payload fails.
@@ -75,10 +65,34 @@ var (
 	ErrRiverWorkerStopFailed = errors.New("gala: river worker stop failed")
 	// ErrRiverClientCloseFailed is returned when closing the gala river queue client fails.
 	ErrRiverClientCloseFailed = errors.New("gala: river client close failed")
-	// ErrRuntimeConfigureFailed is returned when runtime configuration callbacks fail.
-	ErrRuntimeConfigureFailed = errors.New("gala: runtime configure failed")
 	// ErrAuthContextEncodeFailed is returned when auth context snapshot encoding fails.
 	ErrAuthContextEncodeFailed = errors.New("gala: auth context encode failed")
 	// ErrAuthContextDecodeFailed is returned when auth context snapshot decoding fails.
 	ErrAuthContextDecodeFailed = errors.New("gala: auth context decode failed")
+	// ErrListenerPanicked is returned when a listener panics during execution.
+	ErrListenerPanicked = errors.New("gala: listener panicked")
 )
+
+// ListenerError captures a listener execution failure with context.
+type ListenerError struct {
+	// ListenerName is the name of the listener that failed.
+	ListenerName string
+	// Cause is the underlying error from the listener.
+	Cause error
+	// Panicked indicates whether the listener panicked.
+	Panicked bool
+}
+
+// Error returns a static error message for listener execution failures.
+func (e ListenerError) Error() string {
+	if e.Panicked {
+		return "gala: listener panicked"
+	}
+
+	return "gala: listener execution failed"
+}
+
+// Unwrap returns the underlying cause for use with errors.Is and errors.As.
+func (e ListenerError) Unwrap() error {
+	return e.Cause
+}

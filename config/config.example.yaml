@@ -389,8 +389,6 @@ shortlinks:
     enabled: false
     endpointurl: https://admin.s.theopenlane.io/api/links
 slack:
-    galanewsubscribermessagefile: ""
-    galanewusermessagefile: ""
     newsubscribermessagefile: ""
     newusermessagefile: ""
     webhookurl: ""
@@ -446,11 +444,8 @@ workflows:
         trackstate: false
     enabled: false
     gala:
-        dualemit: false
         enabled: false
         failonenqueueerror: false
         maxretries: 5
         queuename: events
-        topicmodes: null
-        topics: null
         workercount: 10

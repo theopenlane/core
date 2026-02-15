@@ -12,19 +12,15 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/entx"
 )
 
 // EmitGalaEventHook returns a hook that emits Gala mutation envelopes after mutations.
-func EmitGalaEventHook(galaEmitter *GalaEmitter) ent.Hook {
-	if galaEmitter == nil {
-		return func(next ent.Mutator) ent.Mutator { return next }
-	}
-
+func EmitGalaEventHook(galaProvider func() *gala.Gala, failOnEnqueueError bool) ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, mutation ent.Mutation) (ent.Value, error) {
-			// Soft delete emits are handled by the mirrored update mutation path.
 			if entx.CheckIsSoftDeleteType(ctx, mutation.Type()) {
 				return next.Mutate(ctx, mutation)
 			}
@@ -43,6 +39,11 @@ func EmitGalaEventHook(galaEmitter *GalaEmitter) ent.Hook {
 			op := getOperation(ctx, mutation)
 
 			if op != SoftDeleteOne && reflect.TypeOf(retVal).Kind() == reflect.Int {
+				return retVal, err
+			}
+
+			topicName := mutation.Type()
+			if topicName == "" {
 				return retVal, err
 			}
 
@@ -66,26 +67,15 @@ func EmitGalaEventHook(galaEmitter *GalaEmitter) ent.Hook {
 
 				if eventID == nil || eventID.ID == "" {
 					logx.FromContext(ctx).Error().Msg("event ID is nil or empty, skipping gala emission")
+
 					return
 				}
 
 				payload := newMutationPayloadForDispatch(mutation, op, eventID.ID)
-				topicName := mutation.Type()
-				if !galaEmitter.shouldDispatch(topicName) {
-					return
-				}
-
-				runtime := galaEmitter.runtime()
-				if runtime == nil {
-					if galaEmitter.failOnEnqueueError {
-						logx.FromContext(ctx).Error().Str("topic", topicName).Msg("gala mutation dispatch unavailable")
-					}
-
-					return
-				}
-
+				galaRuntime := galaProvider()
 				metadata := eventqueue.NewMutationGalaMetadata(eventID.ID, payload)
-				if galaErr := enqueueGalaMutation(ctx, runtime, topicName, payload, metadata); galaErr != nil && galaEmitter.failOnEnqueueError {
+
+				if galaErr := enqueueGalaMutation(ctx, galaRuntime, topicName, payload, metadata); galaErr != nil && failOnEnqueueError {
 					logx.FromContext(ctx).Error().Err(galaErr).Str("topic", topicName).Msg("gala mutation dispatch failed")
 				}
 			}
@@ -108,23 +98,30 @@ func EmitGalaEventHook(galaEmitter *GalaEmitter) ent.Hook {
 			return retVal, err
 		})
 	},
-		galaEmitter.emitGalaEventOn(),
+		emitGalaEventOn(galaProvider),
 	)
 }
 
-// emitGalaEventOn reports whether the mutation topic is configured for Gala dispatch.
-func (g *GalaEmitter) emitGalaEventOn() func(context.Context, entgen.Mutation) bool {
-	return func(_ context.Context, m entgen.Mutation) bool { //nolint:revive
+// emitGalaEventOn reports whether the mutation topic is eligible for Gala dispatch
+func emitGalaEventOn(galaProvider func() *gala.Gala) func(context.Context, entgen.Mutation) bool {
+	return func(ctx context.Context, m entgen.Mutation) bool {
 		if m == nil {
 			return false
 		}
 
 		entity := m.Type()
-		if entity == "" {
+		if entity == "" || galaProvider == nil {
 			return false
 		}
 
-		return g.shouldDispatch(entity)
+		g := galaProvider()
+		if g == nil {
+			return false
+		}
+
+		operation := getOperation(ctx, m)
+
+		return g.Registry().InterestedIn(gala.TopicName(entity), operation)
 	}
 }
 

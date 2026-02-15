@@ -16,49 +16,43 @@ import (
 
 // RegisterGalaSlackListeners registers Gala mutation listeners that emit Slack notifications.
 func RegisterGalaSlackListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterDurableListeners(registry, gala.QueueClassGeneral,
+	return gala.RegisterListeners(registry,
 		gala.Definition[eventqueue.MutationGalaPayload]{
 			Topic: gala.Topic[eventqueue.MutationGalaPayload]{
 				Name: gala.TopicName(entgen.TypeSubscriber),
 			},
-			Name:   "slack.subscriber",
-			Handle: handleSubscriberMutationGala,
+			Name:       "slack.subscriber",
+			Operations: []string{ent.OpCreate.String()},
+			Handle:     handleSubscriberMutationGala,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
 			Topic: gala.Topic[eventqueue.MutationGalaPayload]{
 				Name: gala.TopicName(entgen.TypeUser),
 			},
-			Name:   "slack.user",
-			Handle: handleUserMutationGala,
+			Name:       "slack.user",
+			Operations: []string{ent.OpCreate.String()},
+			Handle:     handleUserMutationGala,
 		},
 	)
 }
 
 // handleSubscriberMutationGala sends a Slack notification for subscriber create mutations.
 func handleSubscriberMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	if payload.Operation != ent.OpCreate.String() {
-		return nil
-	}
-
 	return sendSlackNotificationWithEmail(
 		ctx.Context,
 		mutationEmailFromGala(payload, ctx.Envelope.Headers.Properties, subscriber.FieldEmail),
-		galaSubscriberTemplateOverride(),
-		slacktemplates.GalaSubscriberTemplateName,
+		subscriberTemplateOverride(),
+		slacktemplates.SubscriberTemplateName,
 	)
 }
 
 // handleUserMutationGala sends a Slack notification for user create mutations.
 func handleUserMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	if payload.Operation != ent.OpCreate.String() {
-		return nil
-	}
-
 	return sendSlackNotificationWithEmail(
 		ctx.Context,
 		mutationEmailFromGala(payload, ctx.Envelope.Headers.Properties, user.FieldEmail),
-		galaUserTemplateOverride(),
-		slacktemplates.GalaUserTemplateName,
+		userTemplateOverride(),
+		slacktemplates.UserTemplateName,
 	)
 }
 

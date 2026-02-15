@@ -7,10 +7,6 @@ import (
 	"os"
 	"strings"
 
-	"entgo.io/ent"
-
-	"github.com/theopenlane/core/internal/ent/events"
-	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/slacktemplates"
 	"github.com/theopenlane/utils/slack"
@@ -20,14 +16,10 @@ import (
 type SlackConfig struct {
 	// WebhookURL is the endpoint to send messages to
 	WebhookURL string
-	// NewSubscriberMessageFile is an optional path to a bespoke Slack template for new subscriber notifications (cat memes)
+	// NewSubscriberMessageFile is an optional path to a bespoke Slack template for new subscriber notifications
 	NewSubscriberMessageFile string
-	// NewUserMessageFile is an optional path to a bespoke Slack template for new user notifications (welcome messages)
+	// NewUserMessageFile is an optional path to a bespoke Slack template for new user notifications
 	NewUserMessageFile string
-	// GalaNewSubscriberMessageFile is an optional path to a Gala-specific subscriber template
-	GalaNewSubscriberMessageFile string
-	// GalaNewUserMessageFile is an optional path to a Gala-specific user template
-	GalaNewUserMessageFile string
 }
 
 var slackCfg SlackConfig
@@ -35,44 +27,6 @@ var slackCfg SlackConfig
 // SetSlackConfig replaces the active Slack notification configuration
 func SetSlackConfig(cfg SlackConfig) {
 	slackCfg = cfg
-}
-
-// handleSubscriberMutation processes subscriber mutations and publishes Slack notifications when a record is created
-func handleSubscriberMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
-	if payload.Operation != ent.OpCreate.String() {
-		return nil
-	}
-
-	return sendSlackNotification(
-		ctx,
-		slackCfg.NewSubscriberMessageFile,
-		slacktemplates.SubscriberTemplateName,
-	)
-}
-
-// handleUserMutation processes user mutations and publishes Slack notifications when a record is created
-func handleUserMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
-	if payload.Operation != ent.OpCreate.String() {
-		return nil
-	}
-
-	return sendSlackNotification(
-		ctx,
-		slackCfg.NewUserMessageFile,
-		slacktemplates.UserTemplateName,
-	)
-}
-
-// sendSlackNotification renders the desired Slack template and posts the resulting message to the configured webhook
-func sendSlackNotification(ctx *soiree.EventContext, overrideFile, embeddedTemplate string) error {
-	email := ""
-	logCtx := context.Background()
-	if ctx != nil {
-		email, _ = ctx.PropertyString("email")
-		logCtx = ctx.Context()
-	}
-
-	return sendSlackNotificationWithEmail(logCtx, email, overrideFile, embeddedTemplate)
 }
 
 // sendSlackNotificationWithEmail renders and posts a Slack message using explicit email and context values.
@@ -136,22 +90,12 @@ func loadSlackTemplate(ctx context.Context, fileOverride, embeddedTemplate strin
 	return t, nil
 }
 
-// galaSubscriberTemplateOverride returns the Gala-specific subscriber template override if configured.
-func galaSubscriberTemplateOverride() string {
-	override := strings.TrimSpace(slackCfg.GalaNewSubscriberMessageFile)
-	if override != "" {
-		return override
-	}
-
+// subscriberTemplateOverride returns the subscriber template override if configured.
+func subscriberTemplateOverride() string {
 	return strings.TrimSpace(slackCfg.NewSubscriberMessageFile)
 }
 
-// galaUserTemplateOverride returns the Gala-specific user template override if configured.
-func galaUserTemplateOverride() string {
-	override := strings.TrimSpace(slackCfg.GalaNewUserMessageFile)
-	if override != "" {
-		return override
-	}
-
+// userTemplateOverride returns the user template override if configured.
+func userTemplateOverride() string {
 	return strings.TrimSpace(slackCfg.NewUserMessageFile)
 }

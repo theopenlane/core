@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -99,7 +100,7 @@ func (AuthContextCodec) Capture(ctx context.Context) (json.RawMessage, bool, err
 // Restore decodes authenticated user context and restores it on the supplied context.
 func (AuthContextCodec) Restore(ctx context.Context, raw json.RawMessage) (context.Context, error) {
 	var snapshot AuthContextSnapshot
-	if err := json.Unmarshal(raw, &snapshot); err != nil {
+	if err := jsonx.RoundTrip(raw, &snapshot); err != nil {
 		return ctx, ErrAuthContextDecodeFailed
 	}
 

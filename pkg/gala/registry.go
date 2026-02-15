@@ -1,43 +1,44 @@
 package gala
 
 import (
+	"strings"
 	"sync"
 )
 
-// Registration ties a typed topic to its codec and policy
+// Registration ties a typed topic to its codec
 type Registration[T any] struct {
 	// Topic defines the typed topic contract
 	Topic Topic[T]
 	// Codec serializes and deserializes payloads for the topic
 	Codec Codec[T]
-	// Policy defines dispatch behavior for the topic
-	Policy TopicPolicy
-}
-
-// Register registers this topic with the registry
-func (r Registration[T]) Register(registry *Registry) error {
-	return RegisterTopic(registry, r)
 }
 
 // Registry stores topic codecs, policies, and listeners
 type Registry struct {
-	mu        sync.RWMutex
-	topics    map[TopicName]topicRegistration
+	mu sync.RWMutex
+	// topics stores topic metadata and codec wrappers by topic name
+	topics map[TopicName]topicRegistration
+	// listeners stores registered listeners by topic name
 	listeners map[TopicName][]registeredListener
 }
 
 // topicRegistration stores non-generic topic metadata and codec wrappers
 type topicRegistration struct {
-	policy        TopicPolicy
-	schemaVersion int
-	encode        func(any) ([]byte, error)
-	decode        func([]byte) (any, error)
+	// encode is a wrapper around the topic codec's Encode method for non-generic payloads
+	encode func(any) ([]byte, error)
+	// decode is a wrapper around the topic codec's Decode method for non-generic payloads
+	decode func([]byte) (any, error)
 }
 
 // registeredListener stores non-generic listener wrappers
 type registeredListener struct {
-	id     ListenerID
-	name   string
+	// id is the unique identifier for this listener
+	id ListenerID
+	// name is the human-friendly name for this listener #mitb
+	name string
+	// ops is the set of operations this listener is interested in, empty means topic-level interest
+	ops map[string]struct{}
+	// handle is a wrapper around the listener definition's Handle method for non-generic payloads
 	handle func(HandlerContext, any) error
 }
 
@@ -52,7 +53,7 @@ func NewRegistry() *Registry {
 // RegisterTopic registers one typed topic in the registry
 func RegisterTopic[T any](registry *Registry, registration Registration[T]) error {
 	if registry == nil {
-		return ErrRuntimeRequired
+		return ErrRegistryRequired
 	}
 
 	if err := validateTopicRegistration(registration); err != nil {
@@ -69,10 +70,8 @@ func RegisterTopic[T any](registry *Registry, registration Registration[T]) erro
 	}
 
 	registry.topics[topic] = topicRegistration{
-		policy:        registration.Policy,
-		schemaVersion: registration.Topic.EffectiveSchemaVersion(),
-		encode:        wrapTopicEncoder(registration),
-		decode:        wrapTopicDecoder(registration),
+		encode: wrapTopicEncoder(registration),
+		decode: wrapTopicDecoder(registration),
 	}
 
 	return nil
@@ -81,7 +80,7 @@ func RegisterTopic[T any](registry *Registry, registration Registration[T]) erro
 // AttachListener registers one typed listener in the registry
 func AttachListener[T any](registry *Registry, definition Definition[T]) (ListenerID, error) {
 	if registry == nil {
-		return "", ErrRuntimeRequired
+		return "", ErrRegistryRequired
 	}
 
 	if err := validateListenerDefinition(definition); err != nil {
@@ -98,9 +97,11 @@ func AttachListener[T any](registry *Registry, definition Definition[T]) (Listen
 	}
 
 	listenerID := ListenerID(NewEventID())
+
 	listener := registeredListener{
 		id:   listenerID,
 		name: definition.Name,
+		ops:  normalizeOperations(definition.Operations),
 		handle: func(handlerCtx HandlerContext, payload any) error {
 			typedPayload, ok := payload.(T)
 			if !ok {
@@ -116,32 +117,19 @@ func AttachListener[T any](registry *Registry, definition Definition[T]) (Listen
 	return listenerID, nil
 }
 
-// TopicPolicy returns policy metadata for a topic
-func (r *Registry) TopicPolicy(topic TopicName) (TopicPolicy, bool) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
-	registration, exists := r.topics[topic]
-	if !exists {
-		return TopicPolicy{}, false
-	}
-
-	return registration.policy, true
-}
-
-// EncodePayload encodes a payload for a registered topic and returns schema version
-func (r *Registry) EncodePayload(topic TopicName, payload any) ([]byte, int, error) {
+// EncodePayload encodes a payload for a registered topic
+func (r *Registry) EncodePayload(topic TopicName, payload any) ([]byte, error) {
 	registration, err := r.topicRegistration(topic)
 	if err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 
 	encoded, err := registration.encode(payload)
 	if err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 
-	return encoded, registration.schemaVersion, nil
+	return encoded, nil
 }
 
 // DecodePayload decodes payload bytes for a registered topic
@@ -154,8 +142,8 @@ func (r *Registry) DecodePayload(topic TopicName, payload []byte) (any, error) {
 	return registration.decode(payload)
 }
 
-// Listeners returns a snapshot of listeners for one topic
-func (r *Registry) Listeners(topic TopicName) []registeredListener {
+// registeredListeners returns a snapshot of listeners for one topic.
+func (r *Registry) registeredListeners(topic TopicName) []registeredListener {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
@@ -168,6 +156,51 @@ func (r *Registry) Listeners(topic TopicName) []registeredListener {
 	copy(copied, listeners)
 
 	return copied
+}
+
+// InterestedIn reports whether any listener is registered for topic+operation.
+// Empty operation means topic-level interest only.
+func (r *Registry) InterestedIn(topic TopicName, operation string) bool {
+	if topic == "" {
+		return false
+	}
+
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	listeners := r.listeners[topic]
+	if len(listeners) == 0 {
+		return false
+	}
+
+	operation = strings.TrimSpace(operation)
+	if operation == "" {
+		return true
+	}
+
+	for _, listener := range listeners {
+		if listenerInterestedInOperation(listener, operation) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// listenerInterestedInOperation reports whether a listener matches an operation filter.
+// Callers must pass a trimmed operation string.
+func listenerInterestedInOperation(listener registeredListener, operation string) bool {
+	if len(listener.ops) == 0 {
+		return true
+	}
+
+	if operation == "" {
+		return false
+	}
+
+	_, ok := listener.ops[operation]
+
+	return ok
 }
 
 // topicRegistration resolves one topic registration by name
@@ -215,6 +248,29 @@ func validateListenerDefinition[T any](definition Definition[T]) error {
 	}
 
 	return nil
+}
+
+// normalizeOperations normalizes operation filters for one listener registration
+func normalizeOperations(operations []string) map[string]struct{} {
+	if len(operations) == 0 {
+		return nil
+	}
+
+	normalized := map[string]struct{}{}
+	for _, operation := range operations {
+		operation = strings.TrimSpace(operation)
+		if operation == "" {
+			continue
+		}
+
+		normalized[operation] = struct{}{}
+	}
+
+	if len(normalized) == 0 {
+		return nil
+	}
+
+	return normalized
 }
 
 // wrapTopicEncoder creates a non-generic encoder wrapper for one topic

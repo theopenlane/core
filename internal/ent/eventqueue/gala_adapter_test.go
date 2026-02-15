@@ -18,6 +18,19 @@ type galaAdapterTestActor struct {
 	ID string `json:"id"`
 }
 
+type galaAdapterRuntime struct {
+	registry       *gala.Registry
+	contextManager *gala.ContextManager
+}
+
+func (r galaAdapterRuntime) Registry() *gala.Registry {
+	return r.registry
+}
+
+func (r galaAdapterRuntime) ContextManager() *gala.ContextManager {
+	return r.contextManager
+}
+
 // TestNewMutationGalaPayload verifies mutation payload conversion into JSON-safe gala payload fields.
 func TestNewMutationGalaPayload(t *testing.T) {
 	t.Parallel()
@@ -60,17 +73,22 @@ func TestNewMutationGalaPayload(t *testing.T) {
 func TestNewMutationGalaEnvelope(t *testing.T) {
 	t.Parallel()
 
-	contextManager, err := gala.NewContextManager(gala.NewTypedContextCodec[galaAdapterTestActor](gala.ContextKey("adapter_actor")))
+	contextManager, err := gala.NewContextManager(
+		gala.NewAuthContextCodec(),
+		gala.NewTypedContextCodec[galaAdapterTestActor]("adapter_actor"),
+	)
 	require.NoError(t, err)
 
-	runtime, err := gala.NewRuntime(gala.RuntimeOptions{ContextManager: contextManager})
-	require.NoError(t, err)
+	runtime := galaAdapterRuntime{
+		registry:       gala.NewRegistry(),
+		contextManager: contextManager,
+	}
 
 	topic := gala.Topic[MutationGalaPayload]{Name: gala.TopicName("mutation.organization")}
-	err = (gala.Registration[MutationGalaPayload]{
+	err = gala.RegisterTopic(runtime.Registry(), gala.Registration[MutationGalaPayload]{
 		Topic: topic,
 		Codec: gala.JSONCodec[MutationGalaPayload]{},
-	}).Register(runtime.Registry())
+	})
 	require.NoError(t, err)
 
 	payload := &events.MutationPayload{

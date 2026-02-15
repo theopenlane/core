@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"sync"
 	"time"
 
 	"github.com/rs/zerolog/log"
@@ -24,9 +23,11 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/gala"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
+
+// galaShutdownTimeout is the maximum time to wait for gala workers to stop gracefully.
+const galaShutdownTimeout = 10 * time.Second
 
 var serveCmd = &cobra.Command{
 	Use:   "serve",
@@ -76,11 +77,9 @@ func serve(ctx context.Context) error {
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))
 
 	hooks.SetSlackConfig(hooks.SlackConfig{
-		WebhookURL:                   so.Config.Settings.Slack.WebhookURL,
-		NewSubscriberMessageFile:     so.Config.Settings.Slack.NewSubscriberMessageFile,
-		NewUserMessageFile:           so.Config.Settings.Slack.NewUserMessageFile,
-		GalaNewSubscriberMessageFile: so.Config.Settings.Slack.GalaNewSubscriberMessageFile,
-		GalaNewUserMessageFile:       so.Config.Settings.Slack.GalaNewUserMessageFile,
+		WebhookURL:               so.Config.Settings.Slack.WebhookURL,
+		NewSubscriberMessageFile: so.Config.Settings.Slack.NewSubscriberMessageFile,
+		NewUserMessageFile:       so.Config.Settings.Slack.NewUserMessageFile,
 	})
 
 	// Create keys for development when no external keys are supplied
@@ -180,27 +179,8 @@ func serve(ctx context.Context) error {
 	// Setup DB connection
 	log.Info().Interface("db", so.Config.Settings.DB.DatabaseName).Msg("connecting to database")
 
-	galaCfg := so.Config.Settings.Workflows.Gala
-	galaWorkerCount := max(galaCfg.WorkerCount, 1)
-	galaRuntimeEnabled := galaCfg.Enabled || galaCfg.DualEmit
-	galaWorkersEnabled := galaCfg.Enabled
-	galaQueueName := galaCfg.QueueName
-	if galaQueueName == "" {
-		galaQueueName = gala.DefaultQueueName
-	}
-
-	var galaRuntime *gala.Runtime
-	var galaRiverRuntime *gala.RiverRuntime
-
 	eventer := hooks.NewEventer(
 		hooks.WithWorkflowListenersEnabled(so.Config.Settings.Workflows.Enabled),
-	)
-	galaEmitter := hooks.NewGalaEmitter(
-		hooks.WithGalaRuntimeProvider(func() *gala.Runtime { return galaRuntime }),
-		hooks.WithGalaDualEmitEnabled(galaCfg.DualEmit),
-		hooks.WithGalaFailOnEnqueueError(galaCfg.FailOnEnqueueError),
-		hooks.WithGalaTopics(galaCfg.Topics),
-		hooks.WithGalaTopicModes(galaCfg.TopicModes),
 	)
 
 	jobOpts := []riverqueue.Option{
@@ -209,7 +189,6 @@ func serve(ctx context.Context) error {
 
 	clientOpts := []entdb.Option{
 		entdb.WithEventer(eventer, &so.Config.Settings.Workflows),
-		entdb.WithGalaEmitter(galaEmitter),
 		entdb.WithModules(),
 		entdb.WithMetricsHook(),
 	}
@@ -219,96 +198,9 @@ func serve(ctx context.Context) error {
 		return err
 	}
 
-	if galaRuntimeEnabled {
-		galaRiverRuntime, err = gala.NewRiverRuntime(ctx, gala.RiverRuntimeOptions{
-			ConnectionURI:  so.Config.Settings.JobQueue.ConnectionURI,
-			QueueName:      galaQueueName,
-			WorkerCount:    galaWorkerCount,
-			MaxRetries:     galaCfg.MaxRetries,
-			WorkersEnabled: galaWorkersEnabled,
-			ConfigureRuntime: func(gRuntime *gala.Runtime) error {
-				gala.ProvideValue(gRuntime.Injector(), dbClient)
-				if dbClient.EntitlementManager != nil {
-					gala.ProvideValue(gRuntime.Injector(), dbClient.EntitlementManager)
-				}
-				if dbClient.TokenManager != nil {
-					gala.ProvideValue(gRuntime.Injector(), dbClient.TokenManager)
-				}
-				if wfEngine, ok := dbClient.WorkflowEngine.(*engine.WorkflowEngine); ok && wfEngine != nil {
-					gala.ProvideValue(gRuntime.Injector(), wfEngine)
-				}
-
-				if !galaWorkersEnabled {
-					return nil
-				}
-
-				if _, err := hooks.RegisterGalaEntitlementListeners(gRuntime.Registry()); err != nil {
-					return err
-				}
-
-				if _, err := hooks.RegisterGalaSlackListeners(gRuntime.Registry()); err != nil {
-					return err
-				}
-
-				if so.Config.Settings.Workflows.Enabled {
-					if _, err := hooks.RegisterGalaWorkflowListeners(gRuntime.Registry()); err != nil {
-						return err
-					}
-				}
-
-				return nil
-			},
-		})
-		if err != nil {
-			return err
-		}
-
-		defer func() {
-			if closeErr := galaRiverRuntime.Close(); closeErr != nil {
-				log.Ctx(ctx).Error().Err(closeErr).Msg("error closing gala runtime")
-			}
-		}()
-
-		galaRuntime = galaRiverRuntime.Runtime()
-	}
-
-	var (
-		stopEventWorker     func()
-		stopEventWorkerOnce sync.Once
-	)
-
-	stopEventWorkers := func() {
-		if stopEventWorker == nil {
-			return
-		}
-
-		stopEventWorkerOnce.Do(stopEventWorker)
-	}
-	defer stopEventWorkers()
-
-	if galaWorkersEnabled {
-		if galaRiverRuntime == nil {
-			log.Warn().Bool("gala_worker", galaWorkersEnabled).Msg("gala workers enabled but gala runtime is unavailable")
-		} else {
-			if err := galaRiverRuntime.StartWorkers(ctx); err != nil {
-				return err
-			}
-
-			stopEventWorker = func() {
-				stopCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-				defer cancel()
-
-				if stopErr := galaRiverRuntime.StopWorkers(stopCtx); stopErr != nil {
-					log.Error().Err(stopErr).Msg("error stopping gala worker client")
-				}
-			}
-
-			log.Info().
-				Bool("gala_worker_enabled", galaWorkersEnabled).
-				Int("gala_worker_count", galaWorkerCount).
-				Str("gala_queue", galaQueueName).
-				Msg("gala worker client started")
-		}
+	galaApp, err := serveropts.WithGala(ctx, so, dbClient)
+	if err != nil {
+		return err
 	}
 
 	if so.Config.Settings.Workflows.Enabled {
@@ -331,7 +223,17 @@ func serve(ctx context.Context) error {
 		pkgobjects.WaitForUploads()
 		log.Ctx(ctx).Info().Msg("all uploads completed")
 
-		stopEventWorkers()
+		if galaApp != nil {
+			stopCtx, cancel := context.WithTimeout(context.Background(), galaShutdownTimeout)
+			if stopErr := galaApp.StopWorkers(stopCtx); stopErr != nil {
+				log.Error().Err(stopErr).Msg("error stopping gala worker client")
+			}
+			cancel()
+
+			if closeErr := galaApp.Close(); closeErr != nil {
+				log.Ctx(ctx).Error().Err(closeErr).Msg("error closing gala runtime")
+			}
+		}
 
 		if err := entdb.GracefulClose(context.Background(), dbClient, time.Second); err != nil {
 			log.Ctx(ctx).Error().Err(err).Msg("error closing database")

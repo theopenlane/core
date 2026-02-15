@@ -1112,12 +1112,6 @@ data:
       {{- if .Values.openlane.coreConfiguration.slack.newusermessagefile }}
       newusermessagefile: {{ .Values.openlane.coreConfiguration.slack.newusermessagefile | quote }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.slack.galanewsubscribermessagefile }}
-      galanewsubscribermessagefile: {{ .Values.openlane.coreConfiguration.slack.galanewsubscribermessagefile | quote }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.slack.galanewusermessagefile }}
-      galanewusermessagefile: {{ .Values.openlane.coreConfiguration.slack.galanewusermessagefile | quote }}
-      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.integrationoauthprovider }}
     integrationoauthprovider:
@@ -1200,9 +1194,6 @@ data:
         {{- if .Values.openlane.coreConfiguration.workflows.gala.enabled }}
         enabled: {{ .Values.openlane.coreConfiguration.workflows.gala.enabled }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.gala.dualemit }}
-        dualemit: {{ .Values.openlane.coreConfiguration.workflows.gala.dualemit }}
-        {{- end }}
         {{- if .Values.openlane.coreConfiguration.workflows.gala.workercount }}
         workercount: {{ .Values.openlane.coreConfiguration.workflows.gala.workercount }}
         {{- end }}
@@ -1211,16 +1202,6 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.workflows.gala.failonenqueueerror }}
         failonenqueueerror: {{ .Values.openlane.coreConfiguration.workflows.gala.failonenqueueerror }}
-        {{- end }}
-        {{- $sliceValue := (.Values.openlane.coreConfiguration.workflows.gala.topics | default (list)) }}
-        {{- if gt (len $sliceValue) 0 }}
-        topics:
-        {{- toYaml $sliceValue | nindent 10 }}
-        {{- end }}
-        {{- $mapValue := (.Values.openlane.coreConfiguration.workflows.gala.topicmodes | default (dict)) }}
-        {{- if gt (len $mapValue) 0 }}
-        topicmodes:
-        {{- toYaml $mapValue | nindent 10 }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.workflows.gala.queuename }}
         queuename: {{ .Values.openlane.coreConfiguration.workflows.gala.queuename | quote }}

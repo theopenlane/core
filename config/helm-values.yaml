@@ -550,10 +550,6 @@ coreConfiguration:
     newsubscribermessagefile: ""  # @schema type:string
     # -- NewUserMessageFile is the path to the template used for new user notifications
     newusermessagefile: ""  # @schema type:string
-    # -- GalaNewSubscriberMessageFile is the optional template path for Gala subscriber notifications
-    galanewsubscribermessagefile: ""  # @schema type:string
-    # -- GalaNewUserMessageFile is the optional template path for Gala user notifications
-    galanewusermessagefile: ""  # @schema type:string
   # -- IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)
   integrationoauthprovider:
     # -- Enabled toggles initialization of the integration provider registry.
@@ -587,12 +583,9 @@ coreConfiguration:
       trackstate: false  # @schema type:boolean; default:false
     gala:
       enabled: false  # @schema type:boolean; default:false
-      dualemit: false  # @schema type:boolean; default:false
       workercount: 10  # @schema type:integer; default:10
       maxretries: 5  # @schema type:integer; default:5
       failonenqueueerror: false  # @schema type:boolean; default:false
-      topics: []
-      topicmodes: {}
       queuename: "events"  # @schema type:string; default:events
   # -- CampaignWebhook contains webhook configuration for campaign-related email providers
   campaignwebhook:

@@ -78,17 +78,6 @@ func WithEventer(eventer *hooks.Eventer, workflowConfig *workflows.Config) Optio
 	}
 }
 
-// WithGalaEmitter adds the independent Gala mutation emit hook to the ent client.
-func WithGalaEmitter(galaEmitter *hooks.GalaEmitter) Option {
-	return func(c *ent.Client) {
-		if galaEmitter == nil {
-			return
-		}
-
-		c.Use(hooks.EmitGalaEventHook(galaEmitter))
-	}
-}
-
 // WithMetricsHook adds the metrics hook to the ent client
 func WithMetricsHook() Option {
 	return func(c *ent.Client) {

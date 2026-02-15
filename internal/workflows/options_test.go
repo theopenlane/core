@@ -49,16 +49,10 @@ func TestConfigOptions(t *testing.T) {
 		},
 		Gala: GalaConfig{
 			Enabled:            true,
-			DualEmit:           true,
 			WorkerCount:        11,
 			MaxRetries:         13,
 			FailOnEnqueueError: true,
-			Topics:             []string{"Organization", "OrganizationSetting"},
-			TopicModes: map[string]GalaTopicMode{
-				"Organization":        GalaTopicModeDualEmit,
-				"OrganizationSetting": GalaTopicModeV2Only,
-			},
-			QueueName: "events",
+			QueueName:          "events",
 		},
 	}
 	cfg = NewDefaultConfig(WithConfig(override))
@@ -66,12 +60,9 @@ func TestConfigOptions(t *testing.T) {
 	assert.Equal(t, override.CEL.Timeout, cfg.CEL.Timeout)
 	assert.Equal(t, override.CEL.CostLimit, cfg.CEL.CostLimit)
 	assert.Equal(t, override.Gala.Enabled, cfg.Gala.Enabled)
-	assert.Equal(t, override.Gala.DualEmit, cfg.Gala.DualEmit)
 	assert.Equal(t, override.Gala.WorkerCount, cfg.Gala.WorkerCount)
 	assert.Equal(t, override.Gala.MaxRetries, cfg.Gala.MaxRetries)
 	assert.Equal(t, override.Gala.FailOnEnqueueError, cfg.Gala.FailOnEnqueueError)
-	assert.Equal(t, override.Gala.Topics, cfg.Gala.Topics)
-	assert.Equal(t, override.Gala.TopicModes, cfg.Gala.TopicModes)
 	assert.Equal(t, override.Gala.QueueName, cfg.Gala.QueueName)
 }
 

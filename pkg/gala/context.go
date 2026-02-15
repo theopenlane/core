@@ -3,12 +3,30 @@ package gala
 import (
 	"context"
 	"encoding/json"
+	"maps"
 	"slices"
 	"sync"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/utils/contextx"
 )
+
+// ContextKey identifies a restorable context value key
+// using string alias for better readability and to avoid collisions with other context keys
+// this has to be a string to be used as a JSON key for durability rather than a strict type + contextx
+type ContextKey = string
+
+// ContextFlag identifies a boolean context flag
+type ContextFlag string
+
+// ContextSnapshot captures context data that can be restored after durable hops
+type ContextSnapshot struct {
+	// Values contains codec-managed context values
+	Values map[ContextKey]json.RawMessage `json:"values,omitempty"`
+	// Flags contains boolean context flags
+	Flags map[ContextFlag]bool `json:"flags,omitempty"`
+}
 
 // ContextCodec captures and restores one typed context value
 type ContextCodec interface {
@@ -34,6 +52,19 @@ type ContextManager struct {
 // contextFlagSet stores boolean flags in context
 type contextFlagSet struct {
 	Flags map[ContextFlag]bool
+}
+
+// NewContextManager creates a context manager and registers any initial codecs
+func NewContextManager(codecs ...ContextCodec) (*ContextManager, error) {
+	manager := &ContextManager{codecs: map[ContextKey]ContextCodec{}}
+
+	for _, codec := range codecs {
+		if err := manager.Register(codec); err != nil {
+			return nil, err
+		}
+	}
+
+	return manager, nil
 }
 
 // NewTypedContextCodec creates a typed context codec for a specific snapshot key
@@ -65,24 +96,11 @@ func (c TypedContextCodec[T]) Capture(ctx context.Context) (json.RawMessage, boo
 func (c TypedContextCodec[T]) Restore(ctx context.Context, raw json.RawMessage) (context.Context, error) {
 	var value T
 
-	if err := json.Unmarshal(raw, &value); err != nil {
+	if err := jsonx.RoundTrip(raw, &value); err != nil {
 		return ctx, ErrContextSnapshotRestoreFailed
 	}
 
 	return contextx.With(ctx, value), nil
-}
-
-// NewContextManager creates a context manager and registers any initial codecs
-func NewContextManager(codecs ...ContextCodec) (*ContextManager, error) {
-	manager := &ContextManager{codecs: map[ContextKey]ContextCodec{}}
-
-	for _, codec := range codecs {
-		if err := manager.Register(codec); err != nil {
-			return nil, err
-		}
-	}
-
-	return manager, nil
 }
 
 // Register registers a context codec by key
@@ -111,34 +129,28 @@ func (m *ContextManager) Register(codec ContextCodec) error {
 // Capture captures all registered context codec values and current context flags
 func (m *ContextManager) Capture(ctx context.Context) (ContextSnapshot, error) {
 	codecs := m.codecsSnapshot()
-	codecKeys := lo.Keys(codecs)
-	slices.Sort(codecKeys)
+	values := map[ContextKey]json.RawMessage{}
 
-	snapshot := ContextSnapshot{
-		Values: map[ContextKey]json.RawMessage{},
-	}
-
-	for _, key := range codecKeys {
+	for _, key := range slices.Sorted(maps.Keys(codecs)) {
 		codec := codecs[key]
 		raw, present, err := codec.Capture(ctx)
 		if err != nil {
-			return ContextSnapshot{}, ErrContextSnapshotCaptureFailed
+			return ContextSnapshot{Values: values}, ErrContextSnapshotCaptureFailed
 		}
 
-		if !present {
-			continue
+		if present {
+			values[key] = append(json.RawMessage(nil), raw...)
 		}
-
-		snapshot.Values[key] = append(json.RawMessage(nil), raw...)
 	}
 
-	flags := flagsFromContext(ctx)
-	if len(flags) > 0 {
+	var snapshot ContextSnapshot
+
+	if len(values) > 0 {
+		snapshot.Values = values
+	}
+
+	if flags := flagsFromContext(ctx); len(flags) > 0 {
 		snapshot.Flags = flags
-	}
-
-	if len(snapshot.Values) == 0 {
-		snapshot.Values = nil
 	}
 
 	return snapshot, nil
@@ -149,10 +161,7 @@ func (m *ContextManager) Restore(ctx context.Context, snapshot ContextSnapshot) 
 	restored := ctx
 	codecs := m.codecsSnapshot()
 
-	valueKeys := lo.Keys(snapshot.Values)
-	slices.Sort(valueKeys)
-
-	for _, key := range valueKeys {
+	for _, key := range slices.Sorted(maps.Keys(snapshot.Values)) {
 		codec, exists := codecs[key]
 		if !exists {
 			continue
@@ -167,10 +176,7 @@ func (m *ContextManager) Restore(ctx context.Context, snapshot ContextSnapshot) 
 		restored = next
 	}
 
-	flagKeys := lo.Keys(snapshot.Flags)
-	slices.Sort(flagKeys)
-
-	for _, flag := range flagKeys {
+	for _, flag := range slices.Sorted(maps.Keys(snapshot.Flags)) {
 		if !snapshot.Flags[flag] {
 			continue
 		}
@@ -198,21 +204,9 @@ func HasFlag(ctx context.Context, flag ContextFlag) bool {
 
 // flagsFromContext extracts the current context flags and clones the map
 func flagsFromContext(ctx context.Context) map[ContextFlag]bool {
-	existing, exists := contextx.From[contextFlagSet](ctx)
-	if !exists {
-		return map[ContextFlag]bool{}
-	}
+	existing := contextx.FromOr(ctx, contextFlagSet{})
 
-	return cloneFlags(existing.Flags)
-}
-
-// cloneFlags clones a flag map
-func cloneFlags(flags map[ContextFlag]bool) map[ContextFlag]bool {
-	if len(flags) == 0 {
-		return map[ContextFlag]bool{}
-	}
-
-	return lo.Assign(map[ContextFlag]bool{}, flags)
+	return lo.Assign(map[ContextFlag]bool{}, existing.Flags)
 }
 
 // codecsSnapshot clones the registered codec map for lock-free processing
@@ -222,3 +216,10 @@ func (m *ContextManager) codecsSnapshot() map[ContextKey]ContextCodec {
 
 	return lo.Assign(map[ContextKey]ContextCodec{}, m.codecs)
 }
+
+const (
+	// ContextFlagWorkflowBypass marks workflow bypass behavior
+	ContextFlagWorkflowBypass ContextFlag = "workflow_bypass"
+	// ContextFlagWorkflowAllowEventEmission allows workflow listener execution while bypass is set
+	ContextFlagWorkflowAllowEventEmission ContextFlag = "workflow_allow_event_emission"
+)

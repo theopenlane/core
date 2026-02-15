@@ -1,6 +1,10 @@
 package gala
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/theopenlane/core/pkg/jsonx"
+)
 
 // Codec encodes and decodes a topic payload type
 type Codec[T any] interface {
@@ -31,7 +35,7 @@ func (JSONCodec[T]) Decode(payload []byte) (T, error) {
 		return decoded, ErrEnvelopePayloadRequired
 	}
 
-	if err := json.Unmarshal(payload, &decoded); err != nil {
+	if err := jsonx.RoundTrip(payload, &decoded); err != nil {
 		return decoded, ErrPayloadDecodeFailed
 	}
 

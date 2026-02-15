@@ -5,10 +5,19 @@ import (
 	"errors"
 
 	"github.com/samber/do/v2"
+	"github.com/theopenlane/utils/ulids"
 )
 
 // ListenerID identifies a registered listener
 type ListenerID string
+
+// EventID is a stable identifier used for idempotency and traceability
+type EventID string
+
+// NewEventID creates a new event identifier
+func NewEventID() EventID {
+	return EventID(ulids.New().String())
+}
 
 // HandlerContext provides event context and dependency resolution scope for listeners
 type HandlerContext struct {
@@ -23,63 +32,42 @@ type HandlerContext struct {
 // Handler processes a typed event payload
 type Handler[T any] func(HandlerContext, T) error
 
+// TopicName is the stable string identifier for a topic
+type TopicName string
+
+// Topic defines a strongly typed topic contract
+type Topic[T any] struct {
+	// Name is the stable topic identifier
+	Name TopicName
+}
+
 // Definition defines one listener binding
 type Definition[T any] struct {
 	// Topic is the topic handled by this listener
 	Topic Topic[T]
 	// Name is the stable listener name
 	Name string
+	// Operations optionally scopes listener interest to specific mutation operations
+	// Empty means the listener accepts all operations for the topic
+	Operations []string
 	// Handle is the callback invoked for this listener
 	Handle Handler[T]
 }
 
-// Register registers the listener definition against a registry
-func (d Definition[T]) Register(registry *Registry) (ListenerID, error) {
-	return AttachListener(registry, d)
-}
+// RegisterListeners registers listeners and ensures their topic contracts are configured
+func RegisterListeners[T any](registry *Registry, definitions ...Definition[T]) ([]ListenerID, error) {
+	ids := make([]ListenerID, 0, len(definitions))
 
-// ListenerRegistration captures topic and listener registration in one operation
-type ListenerRegistration[T any] struct {
-	// Topic is the topic handled by this listener
-	Topic Topic[T]
-	// Codec serializes and deserializes payloads for the topic. Defaults to JSONCodec[T] when nil
-	Codec Codec[T]
-	// Policy defines dispatch behavior for the topic
-	Policy TopicPolicy
-	// Name is the stable listener name
-	Name string
-	// Handle is the callback invoked for this listener
-	Handle Handler[T]
-}
+	for _, definition := range definitions {
+		err := RegisterTopic(registry, Registration[T]{
+			Topic: definition.Topic,
+			Codec: JSONCodec[T]{},
+		})
+		if err != nil && !errors.Is(err, ErrTopicAlreadyRegistered) {
+			return nil, err
+		}
 
-// RegisterListener registers a topic (idempotent) and listener in a single call
-func RegisterListener[T any](registry *Registry, registration ListenerRegistration[T]) (ListenerID, error) {
-	codec := registration.Codec
-	if codec == nil {
-		codec = JSONCodec[T]{}
-	}
-
-	err := RegisterTopic(registry, Registration[T]{
-		Topic:  registration.Topic,
-		Codec:  codec,
-		Policy: registration.Policy,
-	})
-	if err != nil && !errors.Is(err, ErrTopicAlreadyRegistered) {
-		return "", err
-	}
-
-	return AttachListener(registry, Definition[T]{
-		Topic:  registration.Topic,
-		Name:   registration.Name,
-		Handle: registration.Handle,
-	})
-}
-
-// RegisterListeners registers multiple listeners and their topics in order
-func RegisterListeners[T any](registry *Registry, registrations ...ListenerRegistration[T]) ([]ListenerID, error) {
-	ids := make([]ListenerID, 0, len(registrations))
-	for _, registration := range registrations {
-		id, err := RegisterListener(registry, registration)
+		id, err := AttachListener(registry, definition)
 		if err != nil {
 			return nil, err
 		}
@@ -88,22 +76,4 @@ func RegisterListeners[T any](registry *Registry, registrations ...ListenerRegis
 	}
 
 	return ids, nil
-}
-
-// RegisterDurableListeners registers listeners as durable topics with one shared queue class
-func RegisterDurableListeners[T any](registry *Registry, queueClass QueueClass, definitions ...Definition[T]) ([]ListenerID, error) {
-	registrations := make([]ListenerRegistration[T], 0, len(definitions))
-	for _, definition := range definitions {
-		registrations = append(registrations, ListenerRegistration[T]{
-			Topic:  definition.Topic,
-			Name:   definition.Name,
-			Handle: definition.Handle,
-			Policy: TopicPolicy{
-				EmitMode:   EmitModeDurable,
-				QueueClass: queueClass,
-			},
-		})
-	}
-
-	return RegisterListeners(registry, registrations...)
 }
