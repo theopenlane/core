@@ -136,12 +136,15 @@ func TestMutationCreateEntity(t *testing.T) {
 	entitiesToDelete := []string{}
 	entityTypesToDelete := []string{}
 
+	entityType := (&EntityTypeBuilder{client: suite.client, Name: "superheros"}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
-		name        string
-		request     testclient.CreateEntityInput
-		client      *testclient.TestClient
-		ctx         context.Context
-		expectedErr string
+		name           string
+		entityTypeName *string
+		request        testclient.CreateEntityInput
+		client         *testclient.TestClient
+		ctx            context.Context
+		expectedErr    string
 	}{
 		{
 			name: "happy path, minimal input",
@@ -164,8 +167,9 @@ func TestMutationCreateEntity(t *testing.T) {
 					OwnerID: &testUser1.OrganizationID,
 				},
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			entityTypeName: &entityType.Name,
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
 		},
 		{
 			name: "happy path, using api token",
@@ -224,7 +228,7 @@ func TestMutationCreateEntity(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.CreateEntity(tc.ctx, tc.request)
+			resp, err := tc.client.CreateEntity(tc.ctx, tc.request, tc.entityTypeName)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 
@@ -268,6 +272,13 @@ func TestMutationCreateEntity(t *testing.T) {
 			if tc.request.Note != nil {
 				assert.Check(t, is.Len(resp.CreateEntity.Entity.Notes.Edges, 1))
 				assert.Check(t, is.Equal(tc.request.Note.Text, resp.CreateEntity.Entity.Notes.Edges[0].Node.Text))
+			}
+
+			if tc.entityTypeName != nil {
+				assert.Check(t, resp.CreateEntity.Entity.EntityType != nil)
+				assert.Check(t, is.Equal(*tc.entityTypeName, resp.CreateEntity.Entity.EntityType.Name))
+			} else {
+				assert.Check(t, resp.CreateEntity.Entity.EntityType == nil)
 			}
 
 			entitiesToDelete = append(entitiesToDelete, resp.CreateEntity.Entity.ID)

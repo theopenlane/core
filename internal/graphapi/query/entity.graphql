@@ -62,8 +62,8 @@ mutation CreateBulkEntity($input: [CreateEntityInput!]) {
   }
 }
 
-mutation CreateEntity($input: CreateEntityInput!) {
-  createEntity(input: $input) {
+mutation CreateEntity($input: CreateEntityInput!, $entityTypeName: String) {
+  createEntity(input: $input, entityTypeName: $entityTypeName) {
     entity {
       createdAt
       createdBy
