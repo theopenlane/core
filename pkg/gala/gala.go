@@ -122,7 +122,7 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 // initialize sets Gala core dependencies and default runtime services
 // future expansion / features may necessitate passing in additional dependencies or a more complex runtime config object but avoiding pre-optimization
 func (g *Gala) initialize(dispatcher Dispatcher) error {
-	contextManager, err := NewContextManager(NewAuthContextCodec())
+	contextManager, err := NewContextManager(NewContextCodec())
 	if err != nil {
 		return err
 	}
@@ -223,8 +223,6 @@ func (g *Gala) EmitEnvelope(ctx context.Context, envelope Envelope) error {
 
 // DispatchEnvelope dispatches one envelope to all listeners on the topic
 func (g *Gala) DispatchEnvelope(ctx context.Context, envelope Envelope) error {
-	logx.FromContext(ctx).Debug().Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Msg("gala processing event")
-
 	registration, err := g.registry.topicRegistration(envelope.Topic)
 	if err != nil {
 		return err
@@ -240,13 +238,16 @@ func (g *Gala) DispatchEnvelope(ctx context.Context, envelope Envelope) error {
 		return err
 	}
 
+	operation := payloadOperation(decodedPayload)
+
+	logx.FromContext(restoredContext).Debug().Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("operation", operation).Msg("gala processing event")
+
 	handlerContext := HandlerContext{
 		Context:  restoredContext,
 		Envelope: envelope,
 		Injector: g.injector,
 	}
 
-	operation := payloadOperation(decodedPayload)
 	listeners := g.registry.registeredListeners(envelope.Topic)
 
 	for _, listener := range listeners {
@@ -255,15 +256,15 @@ func (g *Gala) DispatchEnvelope(ctx context.Context, envelope Envelope) error {
 		}
 
 		if err := g.executeListener(handlerContext, listener, decodedPayload); err != nil {
-			logx.FromContext(ctx).Warn().Err(err).Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("listener", listener.name).Msg("gala listener failed")
+			logx.FromContext(restoredContext).Warn().Err(err).Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("operation", operation).Str("listener", listener.name).Msg("gala listener failed")
 
 			return err
 		}
 
-		logx.FromContext(ctx).Debug().Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("listener", listener.name).Msg("gala listener completed")
+		logx.FromContext(restoredContext).Debug().Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("operation", operation).Str("listener", listener.name).Msg("gala listener completed")
 	}
 
-	logx.FromContext(ctx).Debug().Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Int("listener_count", len(listeners)).Msg("gala event processed")
+	logx.FromContext(restoredContext).Debug().Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("operation", operation).Int("listener_count", len(listeners)).Msg("gala event processed")
 
 	return nil
 }

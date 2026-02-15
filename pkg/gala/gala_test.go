@@ -1595,16 +1595,16 @@ func TestRegistryEncodePayloadTypeMismatch(t *testing.T) {
 	}
 }
 
-func TestAuthContextCodecKey(t *testing.T) {
-	codec := NewAuthContextCodec()
+func TestContextCodecKey(t *testing.T) {
+	codec := NewContextCodec()
 
-	if key := codec.Key(); key != "auth_user" {
-		t.Fatalf("expected key 'auth_user', got %q", key)
+	if key := codec.Key(); key != "durable" {
+		t.Fatalf("expected key 'durable', got %q", key)
 	}
 }
 
-func TestAuthContextCodecCaptureWithoutAuthContext(t *testing.T) {
-	codec := NewAuthContextCodec()
+func TestContextCodecCaptureWithoutAuthContext(t *testing.T) {
+	codec := NewContextCodec()
 
 	raw, present, err := codec.Capture(context.Background())
 	if err != nil {
@@ -1612,7 +1612,7 @@ func TestAuthContextCodecCaptureWithoutAuthContext(t *testing.T) {
 	}
 
 	if present {
-		t.Fatalf("expected not present for unauthenticated context")
+		t.Fatalf("expected not present for empty context")
 	}
 
 	if raw != nil {
@@ -1620,8 +1620,8 @@ func TestAuthContextCodecCaptureWithoutAuthContext(t *testing.T) {
 	}
 }
 
-func TestAuthContextCodecCaptureAndRestore(t *testing.T) {
-	codec := NewAuthContextCodec()
+func TestContextCodecCaptureAndRestore(t *testing.T) {
+	codec := NewContextCodec()
 
 	ctx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
 		SubjectID:       "subject_test",
@@ -1662,12 +1662,12 @@ func TestAuthContextCodecCaptureAndRestore(t *testing.T) {
 	}
 }
 
-func TestAuthContextCodecRestoreInvalidJSON(t *testing.T) {
-	codec := NewAuthContextCodec()
+func TestContextCodecRestoreInvalidJSON(t *testing.T) {
+	codec := NewContextCodec()
 
 	_, err := codec.Restore(context.Background(), []byte("{invalid"))
-	if !errors.Is(err, ErrAuthContextDecodeFailed) {
-		t.Fatalf("expected ErrAuthContextDecodeFailed, got %v", err)
+	if !errors.Is(err, ErrContextSnapshotRestoreFailed) {
+		t.Fatalf("expected ErrContextSnapshotRestoreFailed, got %v", err)
 	}
 }
 

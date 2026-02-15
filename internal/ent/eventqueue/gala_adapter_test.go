@@ -124,7 +124,7 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 	require.Equal(t, true, envelope.ContextSnapshot.Flags[gala.ContextFlagWorkflowBypass])
 	require.Equal(t, true, envelope.ContextSnapshot.Flags[gala.ContextFlagWorkflowAllowEventEmission])
 	require.Contains(t, envelope.ContextSnapshot.Values, gala.ContextKey("adapter_actor"))
-	require.Contains(t, envelope.ContextSnapshot.Values, gala.ContextKey("auth_user"))
+	require.Contains(t, envelope.ContextSnapshot.Values, gala.ContextKey("durable"))
 
 	restoredContext, err := runtime.ContextManager().Restore(context.Background(), envelope.ContextSnapshot)
 	require.NoError(t, err)

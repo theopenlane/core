@@ -1,11 +1,13 @@
 package logx
 
 import (
+	"context"
 	"os"
 	"strconv"
 	"time"
 
 	"github.com/rs/zerolog"
+	"github.com/theopenlane/utils/contextx"
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
@@ -99,18 +101,22 @@ func LoggingMiddleware(config Config) echo.MiddlewareFunc {
 
 			logger = enrichLogger(c, logger, config)
 
+			// Start with the request context and enrich it with durable fields
+			ctx := req.Context()
+
 			id := getRequestID(c, config)
 			if id != "" {
 				logger = newLoggerFromExisting(logger.log.With().Str(config.RequestIDKey, id).Logger(), logger.out, logger.setters)
+				ctx = storeDurableField(ctx, config.RequestIDKey, id)
 			}
 
 			if config.AttachRequestMetadata {
-				logger = attachRequestMetadata(c, logger)
+				logger, ctx = attachRequestMetadataWithDurableFields(c, logger, ctx)
 			}
 
 			// The request context is retrieved and set to the logger's context
 			// the context is then set to the request, and a new context is created with the logger
-			c.SetRequest(req.WithContext(logger.WithContext(req.Context())))
+			c.SetRequest(req.WithContext(logger.WithContext(ctx)))
 			c = NewContext(c, logger)
 
 			if config.BeforeNext != nil {
@@ -230,8 +236,8 @@ func logEvent(c echo.Context, logger *Logger, config Config, start time.Time, er
 	}
 }
 
-// attachRequestMetadata attaches stable request metadata to the logger context
-func attachRequestMetadata(c echo.Context, logger *Logger) *Logger {
+// attachRequestMetadataWithDurableFields attaches stable request metadata to the logger and stores fields durably on context.
+func attachRequestMetadataWithDurableFields(c echo.Context, logger *Logger, ctx context.Context) (*Logger, context.Context) {
 	req := c.Request()
 	remoteIP := c.RealIP()
 
@@ -240,17 +246,36 @@ func attachRequestMetadata(c echo.Context, logger *Logger) *Logger {
 		Str("user_agent", req.UserAgent()).
 		Str("request_protocol", req.Proto)
 
+	ctx = storeDurableField(ctx, "remote_ip", remoteIP)
+	ctx = storeDurableField(ctx, "user_agent", req.UserAgent())
+	ctx = storeDurableField(ctx, "request_protocol", req.Proto)
+
 	if trueClientIP := req.Header.Get("True-Client-IP"); trueClientIP != "" {
 		zctx = zctx.Str("true_client_ip", trueClientIP)
+		ctx = storeDurableField(ctx, "true_client_ip", trueClientIP)
 	}
 
 	if forwardedFor := req.Header.Get("X-Forwarded-For"); forwardedFor != "" {
 		zctx = zctx.Str("x_forwarded_for", forwardedFor)
+		ctx = storeDurableField(ctx, "x_forwarded_for", forwardedFor)
 	}
 
 	if realIP := req.Header.Get("X-Real-IP"); realIP != "" {
 		zctx = zctx.Str("x_real_ip", realIP)
+		ctx = storeDurableField(ctx, "x_real_ip", realIP)
 	}
 
-	return newLoggerFromExisting(zctx.Logger(), logger.out, logger.setters)
+	return newLoggerFromExisting(zctx.Logger(), logger.out, logger.setters), ctx
+}
+
+// storeDurableField stores a field in the durable log fields on the context.
+func storeDurableField(ctx context.Context, key string, value any) context.Context {
+	fields := FieldsFromContext(ctx)
+	if fields == nil {
+		fields = LogFields{}
+	}
+
+	fields[key] = value
+
+	return contextx.With(ctx, fields)
 }

@@ -5,16 +5,25 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
 
 const (
-	// authContextCodecKey is the default context snapshot key for authenticated user context.
-	authContextCodecKey ContextKey = "auth_user"
+	// durableContextCodecKey is the context snapshot key for durable context values.
+	durableContextCodecKey ContextKey = "durable"
 )
 
-// AuthContextSnapshot is a JSON-safe snapshot of authenticated user context values.
-type AuthContextSnapshot struct {
+// DurableContextSnapshot captures context values that should persist across durable event processing.
+type DurableContextSnapshot struct {
+	// Auth contains authenticated user context when present.
+	Auth *AuthSnapshot `json:"auth,omitempty"`
+	// LogFields contains logger context fields for correlation and tracing.
+	LogFields map[string]any `json:"log_fields,omitempty"`
+}
+
+// AuthSnapshot is a JSON-safe snapshot of authenticated user context values.
+type AuthSnapshot struct {
 	// SubjectID is the authenticated principal identifier.
 	SubjectID string `json:"subject_id,omitempty"`
 	// SubjectName is the authenticated principal display name.
@@ -36,7 +45,7 @@ type AuthContextSnapshot struct {
 }
 
 // ToAuthenticatedUser converts a snapshot into an auth.AuthenticatedUser payload.
-func (s AuthContextSnapshot) ToAuthenticatedUser() *auth.AuthenticatedUser {
+func (s AuthSnapshot) ToAuthenticatedUser() *auth.AuthenticatedUser {
 	return &auth.AuthenticatedUser{
 		SubjectID:          s.SubjectID,
 		SubjectName:        s.SubjectName,
@@ -50,13 +59,13 @@ func (s AuthContextSnapshot) ToAuthenticatedUser() *auth.AuthenticatedUser {
 	}
 }
 
-// authContextSnapshotFromUser converts an auth.AuthenticatedUser into a JSON-safe snapshot.
-func authContextSnapshotFromUser(user *auth.AuthenticatedUser) AuthContextSnapshot {
+// authSnapshotFromUser converts an auth.AuthenticatedUser into a JSON-safe snapshot.
+func authSnapshotFromUser(user *auth.AuthenticatedUser) *AuthSnapshot {
 	if user == nil {
-		return AuthContextSnapshot{}
+		return nil
 	}
 
-	return AuthContextSnapshot{
+	return &AuthSnapshot{
 		SubjectID:          user.SubjectID,
 		SubjectName:        user.SubjectName,
 		SubjectEmail:       user.SubjectEmail,
@@ -69,40 +78,74 @@ func authContextSnapshotFromUser(user *auth.AuthenticatedUser) AuthContextSnapsh
 	}
 }
 
-// AuthContextCodec captures and restores auth.AuthenticatedUser context values.
-type AuthContextCodec struct{}
+// DurableContextCodec captures and restores durable context values including auth and logger fields.
+type DurableContextCodec struct{}
 
-// NewAuthContextCodec creates a context codec for authenticated user context.
-func NewAuthContextCodec() AuthContextCodec {
-	return AuthContextCodec{}
+// NewContextCodec creates a context codec for durable context capture.
+func NewContextCodec() DurableContextCodec {
+	return DurableContextCodec{}
 }
 
-// Key returns the stable snapshot key used by the auth context codec.
-func (AuthContextCodec) Key() ContextKey {
-	return authContextCodecKey
+// NewAuthContextCodec is an alias for NewContextCodec for backwards compatibility.
+// Deprecated: Use NewContextCodec instead.
+func NewAuthContextCodec() DurableContextCodec {
+	return NewContextCodec()
 }
 
-// Capture extracts authenticated user context and encodes it as JSON.
-func (AuthContextCodec) Capture(ctx context.Context) (json.RawMessage, bool, error) {
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil || au == nil {
+// AuthContextSnapshot is an alias for AuthSnapshot for backwards compatibility.
+// Deprecated: Use AuthSnapshot instead.
+type AuthContextSnapshot = AuthSnapshot
+
+// Key returns the stable snapshot key used by the context codec.
+func (DurableContextCodec) Key() ContextKey {
+	return durableContextCodecKey
+}
+
+// Capture extracts durable context values and encodes them as JSON.
+func (DurableContextCodec) Capture(ctx context.Context) (json.RawMessage, bool, error) {
+	snapshot := DurableContextSnapshot{}
+	hasData := false
+
+	// Capture auth context
+	if au, err := auth.GetAuthenticatedUserFromContext(ctx); err == nil && au != nil {
+		snapshot.Auth = authSnapshotFromUser(au)
+		hasData = true
+	}
+
+	// Capture logger fields if available
+	if fields := logx.FieldsFromContext(ctx); len(fields) > 0 {
+		snapshot.LogFields = fields
+		hasData = true
+	}
+
+	if !hasData {
 		return nil, false, nil
 	}
 
-	encoded, err := json.Marshal(authContextSnapshotFromUser(au))
+	encoded, err := json.Marshal(snapshot)
 	if err != nil {
-		return nil, false, ErrAuthContextEncodeFailed
+		return nil, false, ErrContextSnapshotCaptureFailed
 	}
 
 	return append(json.RawMessage(nil), encoded...), true, nil
 }
 
-// Restore decodes authenticated user context and restores it on the supplied context.
-func (AuthContextCodec) Restore(ctx context.Context, raw json.RawMessage) (context.Context, error) {
-	var snapshot AuthContextSnapshot
+// Restore decodes durable context values and restores them on the supplied context.
+func (DurableContextCodec) Restore(ctx context.Context, raw json.RawMessage) (context.Context, error) {
+	var snapshot DurableContextSnapshot
 	if err := jsonx.RoundTrip(raw, &snapshot); err != nil {
-		return ctx, ErrAuthContextDecodeFailed
+		return ctx, ErrContextSnapshotRestoreFailed
 	}
 
-	return auth.WithAuthenticatedUser(ctx, snapshot.ToAuthenticatedUser()), nil
+	// Restore auth context
+	if snapshot.Auth != nil {
+		ctx = auth.WithAuthenticatedUser(ctx, snapshot.Auth.ToAuthenticatedUser())
+	}
+
+	// Restore logger with captured fields
+	if len(snapshot.LogFields) > 0 {
+		ctx = logx.WithFields(ctx, snapshot.LogFields)
+	}
+
+	return ctx, nil
 }
