@@ -40793,6 +40793,11 @@ type Mutation {
 		values of the entity
 		"""
 		input: CreateEntityInput!
+
+		"""
+		entity type name allows the name of the entity type to be passed in over an id
+		"""
+		entityTypeName: String
 	): EntityCreatePayload!
 	"""
 	Create multiple new entities

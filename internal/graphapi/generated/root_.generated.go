@@ -3325,7 +3325,7 @@ type ComplexityRoot struct {
 		CreateDocumentData                   func(childComplexity int, input generated.CreateDocumentDataInput) int
 		CreateEmailBranding                  func(childComplexity int, input generated.CreateEmailBrandingInput) int
 		CreateEmailTemplate                  func(childComplexity int, input generated.CreateEmailTemplateInput) int
-		CreateEntity                         func(childComplexity int, input generated.CreateEntityInput) int
+		CreateEntity                         func(childComplexity int, input generated.CreateEntityInput, entityTypeName *string) int
 		CreateEntityType                     func(childComplexity int, input generated.CreateEntityTypeInput) int
 		CreateEvent                          func(childComplexity int, input generated.CreateEventInput) int
 		CreateEvidence                       func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) int
@@ -24284,7 +24284,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateEntity(childComplexity, args["input"].(generated.CreateEntityInput)), true
+		return e.complexity.Mutation.CreateEntity(childComplexity, args["input"].(generated.CreateEntityInput), args["entityTypeName"].(*string)), true
 
 	case "Mutation.createEntityType":
 		if e.complexity.Mutation.CreateEntityType == nil {
@@ -131246,6 +131246,10 @@ extend type Mutation{
         values of the entity
         """
         input: CreateEntityInput!
+        """
+        entity type name allows the name of the entity type to be passed in over an id
+        """
+        entityTypeName: String
     ): EntityCreatePayload!
     """
     Create multiple new entities

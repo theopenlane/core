@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
@@ -19,12 +20,28 @@ import (
 )
 
 // CreateEntity is the resolver for the createEntity field.
-func (r *mutationResolver) CreateEntity(ctx context.Context, input generated.CreateEntityInput) (*model.EntityCreatePayload, error) {
+func (r *mutationResolver) CreateEntity(ctx context.Context, input generated.CreateEntityInput, entityTypeName *string) (*model.EntityCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	if entityTypeName != nil {
+		// get the entity id from the entity type name
+		etID, err := withTransactionalMutation(ctx).EntityType.Query().Where(entitytype.NameEqualFold(*entityTypeName)).OnlyID(ctx)
+		if err != nil || etID == "" {
+			logx.FromContext(ctx).Error().Err(err).Str("entity_type_name", *entityTypeName).Msg("failed to get entity type by name")
+
+			return nil, rout.InvalidField("entity_type_name")
+		}
+
+		logx.FromContext(ctx).Debug().Str("entity_type_name", *entityTypeName).Str("entity_type_id", etID).Msg("resolved entity type name to id")
+
+		input.EntityTypeID = &etID
+	} else {
+		logx.FromContext(ctx).Warn().Msg("no entity type name provided, skipping resolution")
 	}
 
 	res, err := withTransactionalMutation(ctx).Entity.Create().SetInput(input).Save(ctx)
