@@ -59,7 +59,6 @@ func handleExportMutation(ctx *soiree.EventContext, payload *events.MutationPayl
 	return nil
 }
 
-// fetchExportFields collects export fields from payload/properties with DB fallback.
 func fetchExportFields(ctx *soiree.EventContext, props soiree.Properties, payload *events.MutationPayload) (*exportFields, error) {
 	fields := &exportFields{}
 
@@ -75,7 +74,6 @@ func fetchExportFields(ctx *soiree.EventContext, props soiree.Properties, payloa
 	return fields, nil
 }
 
-// extractExportFromPayload populates export fields from mutation metadata and typed mutation values.
 func extractExportFromPayload(payload *events.MutationPayload, fields *exportFields) {
 	if payload == nil {
 		return
@@ -83,30 +81,6 @@ func extractExportFromPayload(payload *events.MutationPayload, fields *exportFie
 
 	if payload.EntityID != "" {
 		fields.entityID = payload.EntityID
-	}
-
-	if ownerID, exists := mutationProposedString(payload, export.FieldOwnerID); exists {
-		fields.ownerID = ownerID
-	}
-
-	if requestorID, exists := mutationProposedString(payload, export.FieldRequestorID); exists {
-		fields.requestorID = requestorID
-	}
-
-	if exportTypeRaw, exists := mutationProposedValue(payload, export.FieldExportType); exists {
-		if exportType, ok := parseExportType(exportTypeRaw); ok {
-			fields.exportType = exportType
-		}
-	}
-
-	if statusRaw, exists := mutationProposedValue(payload, export.FieldStatus); exists {
-		if status, ok := parseExportStatus(statusRaw); ok {
-			fields.status = status
-		}
-	}
-
-	if errorMessage, exists := mutationProposedString(payload, export.FieldErrorMessage); exists {
-		fields.errorMessage = errorMessage
 	}
 
 	exportMut, ok := payload.Mutation.(*generated.ExportMutation)
@@ -135,7 +109,6 @@ func extractExportFromPayload(payload *events.MutationPayload, fields *exportFie
 	}
 }
 
-// extractExportFromProps populates export fields from event properties when metadata is missing.
 func extractExportFromProps(props soiree.Properties, fields *exportFields) {
 	if fields.ownerID == "" {
 		if ownerID, ok := props.GetKey(export.FieldOwnerID).(string); ok {
@@ -150,14 +123,20 @@ func extractExportFromProps(props soiree.Properties, fields *exportFields) {
 	}
 
 	if fields.exportType == "" {
-		if exportType, ok := parseExportType(props.GetKey(export.FieldExportType)); ok {
-			fields.exportType = exportType
+		switch v := props.GetKey(export.FieldExportType).(type) {
+		case string:
+			fields.exportType = enums.ExportType(v)
+		case enums.ExportType:
+			fields.exportType = v
 		}
 	}
 
 	if fields.status == "" {
-		if status, ok := parseExportStatus(props.GetKey(export.FieldStatus)); ok {
-			fields.status = status
+		switch v := props.GetKey(export.FieldStatus).(type) {
+		case string:
+			fields.status = enums.ExportStatus(v)
+		case enums.ExportStatus:
+			fields.status = v
 		}
 	}
 
@@ -174,22 +153,10 @@ func extractExportFromProps(props soiree.Properties, fields *exportFields) {
 	}
 }
 
-// parseExportType parses an export type value from metadata/property variants.
-func parseExportType(raw any) (enums.ExportType, bool) {
-	return events.ParseEnum(raw, enums.ToExportType, enums.ExportTypeInvalid)
-}
-
-// parseExportStatus parses an export status value from metadata/property variants.
-func parseExportStatus(raw any) (enums.ExportStatus, bool) {
-	return events.ParseEnum(raw, enums.ToExportStatus, enums.ExportStatusInvalid)
-}
-
-// needsExportDBQuery reports whether export fields are incomplete and require DB lookup.
 func needsExportDBQuery(fields *exportFields) bool {
 	return fields.entityID == "" || fields.ownerID == "" || fields.requestorID == "" || fields.exportType == ""
 }
 
-// queryExportFromDB fetches missing export fields from the database.
 func queryExportFromDB(ctx *soiree.EventContext, fields *exportFields) error {
 	if fields.entityID == "" {
 		return ErrEntityIDNotFound
@@ -230,7 +197,6 @@ func queryExportFromDB(ctx *soiree.EventContext, fields *exportFields) error {
 	return nil
 }
 
-// addExportNotification creates a notification for the export requestor when eligible.
 func addExportNotification(ctx *soiree.EventContext, input *exportFields) error {
 	client, ok := soiree.ClientAs[*generated.Client](ctx)
 	if !ok {

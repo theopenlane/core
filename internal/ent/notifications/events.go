@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/events"
@@ -134,14 +133,6 @@ func extractTaskFromPayload(payload *events.MutationPayload, fields *taskFields)
 		fields.entityID = payload.EntityID
 	}
 
-	if title, exists := mutationProposedString(payload, task.FieldTitle); exists {
-		fields.title = title
-	}
-
-	if ownerID, exists := mutationProposedString(payload, task.FieldOwnerID); exists {
-		fields.ownerID = ownerID
-	}
-
 	taskMut, ok := payload.Mutation.(*generated.TaskMutation)
 	if !ok {
 		return
@@ -226,7 +217,6 @@ func handleInternalPolicyMutation(ctx *soiree.EventContext, payload *events.Muta
 	return nil
 }
 
-// handleDocumentNeedsApproval creates approval notifications when a document status changes to NEEDS_APPROVAL.
 func handleDocumentNeedsApproval(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	props := ctx.Properties()
 	if props == nil {
@@ -236,7 +226,7 @@ func handleDocumentNeedsApproval(ctx *soiree.EventContext, payload *events.Mutat
 	// Check if status field changed - only trigger notification if this field was updated
 	statusVal := props.GetKey("status")
 	if statusVal != nil {
-		status, ok := parseDocumentStatus(statusVal)
+		status, ok := statusVal.(enums.DocumentStatus)
 		if ok {
 
 			// Check if status is NEEDS_APPROVAL
@@ -267,11 +257,6 @@ func handleDocumentNeedsApproval(ctx *soiree.EventContext, payload *events.Mutat
 		}
 	}
 	return nil
-}
-
-// parseDocumentStatus normalizes a status value from properties into the document enum type.
-func parseDocumentStatus(raw any) (enums.DocumentStatus, bool) {
-	return events.ParseEnum(raw, enums.ToDocumentStatus)
 }
 
 // handleRiskMutation processes risk mutations and creates notifications for mentions
@@ -321,23 +306,6 @@ func extractDocumentFromPayload(payload *events.MutationPayload, fields *documen
 	if payload.EntityID != "" {
 		fields.entityID = payload.EntityID
 	}
-
-	type proposedFieldBinding struct {
-		field  string
-		target *string
-	}
-
-	bindings := []proposedFieldBinding{
-		{field: internalpolicy.FieldName, target: &fields.name},
-		{field: internalpolicy.FieldOwnerID, target: &fields.ownerID},
-		{field: internalpolicy.FieldApproverID, target: &fields.approverID},
-	}
-
-	lo.ForEach(bindings, func(item proposedFieldBinding, _ int) {
-		if value, exists := mutationProposedString(payload, item.field); exists {
-			*item.target = value
-		}
-	})
 
 	mut, ok := payload.Mutation.(approverMutation)
 	if !ok {
@@ -397,22 +365,13 @@ func queryDocumentFromDB(ctx *soiree.EventContext, fields *documentFields, paylo
 		return ErrEntityIDNotFound
 	}
 
-	switch events.MutationType(payload) {
-	case generated.TypeInternalPolicy:
+	switch t := payload.Mutation.(type) {
+	case *generated.InternalPolicyMutation:
 		return getInternalPolicyFromDB(ctx, fields)
-	case generated.TypeProcedure:
+	case *generated.ProcedureMutation:
 		return getProcedureFromDB(ctx, fields)
-	}
-
-	if payload != nil {
-		switch t := payload.Mutation.(type) {
-		case *generated.InternalPolicyMutation:
-			return getInternalPolicyFromDB(ctx, fields)
-		case *generated.ProcedureMutation:
-			return getProcedureFromDB(ctx, fields)
-		default:
-			logx.FromContext(ctx.Context()).Warn().Msgf("unsupported mutation type %T for document query", t)
-		}
+	default:
+		logx.FromContext(ctx.Context()).Warn().Msgf("unsupported mutation type %T for document query", t)
 	}
 
 	return nil
@@ -474,7 +433,6 @@ func getProcedureFromDB(ctx *soiree.EventContext, fields *documentFields) error 
 	return nil
 }
 
-// addTaskAssigneeNotification creates and persists task assignment notifications for a specific user.
 func addTaskAssigneeNotification(ctx *soiree.EventContext, input taskNotificationInput) error {
 	client, ok := soiree.ClientAs[*generated.Client](ctx)
 	if !ok {
@@ -502,7 +460,6 @@ func addTaskAssigneeNotification(ctx *soiree.EventContext, input taskNotificatio
 	return newNotificationCreation(ctx, []string{input.assigneeID}, notifInput)
 }
 
-// addDocumentNotification creates and persists document approval notifications for approver group members.
 func addDocumentNotification(ctx *soiree.EventContext, input documentNotificationInput, payload *events.MutationPayload) error {
 	client, ok := soiree.ClientAs[*generated.Client](ctx)
 	if !ok {
@@ -525,17 +482,18 @@ func addDocumentNotification(ctx *soiree.EventContext, input documentNotificatio
 	}
 
 	// collect user IDs
-	userIDs := lo.Map(groupMemberships, func(gm *generated.GroupMembership, _ int) string { return gm.UserID })
+	userIDs := make([]string, len(groupMemberships))
+	for i, gm := range groupMemberships {
+		userIDs[i] = gm.UserID
+	}
 
 	consoleURL := client.EntConfig.Notifications.ConsoleURL
 
-	mutationType := events.MutationType(payload)
-
 	objectName := ""
-	switch mutationType {
-	case generated.TypeInternalPolicy:
+	switch payload.Mutation.(type) {
+	case *generated.InternalPolicyMutation:
 		objectName = "Internal Policy"
-	case generated.TypeProcedure:
+	case *generated.ProcedureMutation:
 		objectName = "Procedure"
 	default:
 		logx.FromContext(ctx.Context()).Warn().Msg("unsupported mutation type for document notification")
@@ -544,7 +502,7 @@ func addDocumentNotification(ctx *soiree.EventContext, input documentNotificatio
 
 	// create the data map with the URL
 	dataMap := map[string]any{
-		"url": getURLPathForObject(consoleURL, input.docID, mutationType),
+		"url": getURLPathForObject(consoleURL, input.docID, payload.Mutation.Type()),
 	}
 
 	topic := enums.NotificationTopicApproval
@@ -555,13 +513,12 @@ func addDocumentNotification(ctx *soiree.EventContext, input documentNotificatio
 		Data:             dataMap,
 		OwnerID:          &input.ownerID,
 		Topic:            &topic,
-		ObjectType:       mutationType,
+		ObjectType:       payload.Mutation.Type(),
 	}
 
 	return newNotificationCreation(ctx, userIDs, notifInput)
 }
 
-// newNotificationCreation creates one notification row per user recipient.
 func newNotificationCreation(ctx *soiree.EventContext, userIDs []string, input *generated.CreateNotificationInput) error {
 	client, ok := soiree.ClientAs[*generated.Client](ctx)
 	if !ok {

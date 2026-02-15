@@ -5,17 +5,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/events"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/events/soiree"
 )
-
-type statusStringer string
-
-func (s statusStringer) String() string { return string(s) }
 
 func TestNeedsTaskDBQuery(t *testing.T) {
 	tests := []struct {
@@ -153,23 +146,6 @@ func TestExtractTaskFromPayload(t *testing.T) {
 	}
 }
 
-func TestExtractTaskFromPayloadMetadata(t *testing.T) {
-	fields := &taskFields{}
-	payload := &events.MutationPayload{
-		EntityID: "task-456",
-		ProposedChanges: map[string]any{
-			task.FieldTitle:   "Metadata Task",
-			task.FieldOwnerID: "owner-123",
-		},
-	}
-
-	extractTaskFromPayload(payload, fields)
-
-	assert.Equal(t, "task-456", fields.entityID)
-	assert.Equal(t, "Metadata Task", fields.title)
-	assert.Equal(t, "owner-123", fields.ownerID)
-}
-
 func TestExtractPolicyFromPayload(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -200,78 +176,6 @@ func TestExtractPolicyFromPayload(t *testing.T) {
 			assert.Equal(t, tt.expected.name, fields.name)
 			assert.Equal(t, tt.expected.ownerID, fields.ownerID)
 			assert.Equal(t, tt.expected.approverID, fields.approverID)
-		})
-	}
-}
-
-func TestExtractPolicyFromPayloadMetadata(t *testing.T) {
-	fields := &documentFields{}
-	payload := &events.MutationPayload{
-		EntityID: "policy-456",
-		ProposedChanges: map[string]any{
-			internalpolicy.FieldName:       "Metadata Policy",
-			internalpolicy.FieldOwnerID:    "owner-789",
-			internalpolicy.FieldApproverID: "group-123",
-		},
-	}
-
-	extractDocumentFromPayload(payload, fields)
-
-	assert.Equal(t, "policy-456", fields.entityID)
-	assert.Equal(t, "Metadata Policy", fields.name)
-	assert.Equal(t, "owner-789", fields.ownerID)
-	assert.Equal(t, "group-123", fields.approverID)
-}
-
-func TestParseDocumentStatus(t *testing.T) {
-	tests := []struct {
-		name     string
-		input    any
-		expected enums.DocumentStatus
-		ok       bool
-	}{
-		{
-			name:     "enum value",
-			input:    enums.DocumentStatus("NEEDS_APPROVAL"),
-			expected: enums.DocumentNeedsApproval,
-			ok:       true,
-		},
-		{
-			name:     "string value",
-			input:    "DRAFT",
-			expected: enums.DocumentDraft,
-			ok:       true,
-		},
-		{
-			name:     "lowercase normalized by enums helper",
-			input:    "approved",
-			expected: enums.DocumentApproved,
-			ok:       true,
-		},
-		{
-			name:     "fmt stringer value",
-			input:    statusStringer("ARCHIVED"),
-			ok:       true,
-			expected: enums.DocumentArchived,
-		},
-		{
-			name:  "invalid value",
-			input: "NOT_A_STATUS",
-			ok:    false,
-		},
-		{
-			name:  "nil value",
-			input: nil,
-			ok:    false,
-		},
-	}
-
-	for _, tc := range tests {
-		tc := tc
-		t.Run(tc.name, func(t *testing.T) {
-			status, ok := parseDocumentStatus(tc.input)
-			assert.Equal(t, tc.ok, ok)
-			assert.Equal(t, tc.expected, status)
 		})
 	}
 }

@@ -4,18 +4,13 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/events"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/slateparser"
@@ -168,7 +163,7 @@ func fetchNoteFields(ctx *soiree.EventContext, props soiree.Properties, payload 
 	extractNoteFromProps(props, fields)
 
 	// Query database if we need the old text for comparison (on update operations)
-	if isUpdateOperation(payload.Operation) {
+	if payload.Operation == "UpdateOne" || payload.Operation == "Update" {
 		if fields.oldText == "" && fields.oldTextJSON == "" {
 			if err := queryNoteOldText(ctx, fields); err != nil {
 				logx.FromContext(ctx.Context()).Warn().Err(err).Msg("failed to get old note text, treating as create")
@@ -176,9 +171,8 @@ func fetchNoteFields(ctx *soiree.EventContext, props soiree.Properties, payload 
 		}
 	}
 
-	// If required identifiers are missing or we cannot infer parent refs from mutation data,
-	// query once with relationships so mention context is complete for outbox-delivered events.
-	if fields.entityID == "" || fields.ownerID == "" || !noteHasParentReference(fields) {
+	// If we don't have the entity ID yet, we need it to query parent relationships
+	if fields.entityID == "" || fields.ownerID == "" {
 		if err := queryNoteFromDB(ctx, fields); err != nil {
 			return nil, err
 		}
@@ -195,18 +189,6 @@ func extractNoteFromPayload(payload *events.MutationPayload, fields *noteFields)
 
 	if payload.EntityID != "" {
 		fields.entityID = payload.EntityID
-	}
-
-	if text, exists := mutationProposedString(payload, note.FieldText); exists {
-		fields.text = text
-	}
-
-	if textJSON, exists := mutationProposedAnySlice(payload, note.FieldTextJSON); exists {
-		fields.textJSON = jsonSliceToString(textJSON)
-	}
-
-	if ownerID, exists := mutationProposedString(payload, note.FieldOwnerID); exists {
-		fields.ownerID = ownerID
 	}
 
 	noteMut, ok := payload.Mutation.(*generated.NoteMutation)
@@ -250,20 +232,6 @@ func extractNoteFromPayload(payload *events.MutationPayload, fields *noteFields)
 	if evidenceID, exists := noteMut.EvidenceID(); exists {
 		fields.evidenceID = evidenceID
 	}
-}
-
-// noteHasParentReference reports whether the note payload includes any parent object ID.
-func noteHasParentReference(fields *noteFields) bool {
-	if fields == nil {
-		return false
-	}
-
-	return fields.taskID != "" ||
-		fields.controlID != "" ||
-		fields.procedureID != "" ||
-		fields.riskID != "" ||
-		fields.policyID != "" ||
-		fields.evidenceID != ""
 }
 
 // extractNoteFromProps extracts note fields from properties
@@ -476,7 +444,12 @@ func addMentionNotification(ctx *soiree.EventContext, input mentionNotificationI
 	}
 
 	// Filter out the ownerID to avoid sending self-mention notifications
-	filteredMentionedUserIDs := lo.Filter(input.mentionedUserIDs, func(id string, _ int) bool { return id != input.ownerID })
+	filteredMentionedUserIDs := make([]string, 0, len(input.mentionedUserIDs))
+	for _, id := range input.mentionedUserIDs {
+		if id != input.ownerID {
+			filteredMentionedUserIDs = append(filteredMentionedUserIDs, id)
+		}
+	}
 
 	if len(filteredMentionedUserIDs) == 0 {
 		return nil
@@ -533,7 +506,6 @@ func handleObjectMentions(ctx *soiree.EventContext, payload *events.MutationPayl
 	allowCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
 
 	var details objectMentionDetails
-	mutationType := events.MutationType(payload)
 
 	// Use type switch for cleaner, more type-safe handling
 	switch mut := payload.Mutation.(type) {
@@ -565,54 +537,7 @@ func handleObjectMentions(ctx *soiree.EventContext, payload *events.MutationPayl
 			return &oldDocumentDetails{name: policy.Name, ownerID: policy.OwnerID, details: policy.Details, detailsJSON: policy.DetailsJSON}, nil
 		})
 	default:
-		switch mutationType {
-		case generated.TypeTask:
-			details = extractTaskMentionDetailsFromMetadata(allowCtx, client, payload)
-		case generated.TypeRisk:
-			details = extractDocumentMentionDetailsFromMetadata(payload, generated.TypeRisk, risk.FieldName, risk.FieldDetails, risk.FieldDetailsJSON, risk.FieldOwnerID, func() (*oldDocumentDetails, error) {
-				riskEntity, err := client.Risk.Get(allowCtx, payload.EntityID)
-				if err != nil {
-					return nil, err
-				}
-
-				return &oldDocumentDetails{
-					name:        riskEntity.Name,
-					ownerID:     riskEntity.OwnerID,
-					details:     riskEntity.Details,
-					detailsJSON: riskEntity.DetailsJSON,
-				}, nil
-			})
-		case generated.TypeProcedure:
-			details = extractDocumentMentionDetailsFromMetadata(payload, generated.TypeProcedure, procedure.FieldName, procedure.FieldDetails, procedure.FieldDetailsJSON, procedure.FieldOwnerID, func() (*oldDocumentDetails, error) {
-				procedureEntity, err := client.Procedure.Get(allowCtx, payload.EntityID)
-				if err != nil {
-					return nil, err
-				}
-
-				return &oldDocumentDetails{
-					name:        procedureEntity.Name,
-					ownerID:     procedureEntity.OwnerID,
-					details:     procedureEntity.Details,
-					detailsJSON: procedureEntity.DetailsJSON,
-				}, nil
-			})
-		case generated.TypeInternalPolicy:
-			details = extractDocumentMentionDetailsFromMetadata(payload, generated.TypeInternalPolicy, internalpolicy.FieldName, internalpolicy.FieldDetails, internalpolicy.FieldDetailsJSON, internalpolicy.FieldOwnerID, func() (*oldDocumentDetails, error) {
-				policy, err := client.InternalPolicy.Get(allowCtx, payload.EntityID)
-				if err != nil {
-					return nil, err
-				}
-
-				return &oldDocumentDetails{
-					name:        policy.Name,
-					ownerID:     policy.OwnerID,
-					details:     policy.Details,
-					detailsJSON: policy.DetailsJSON,
-				}, nil
-			})
-		default:
-			return nil
-		}
+		return nil
 	}
 
 	if !details.valid {
@@ -706,7 +631,7 @@ func extractTaskMentionDetails(allowCtx context.Context, client *generated.Clien
 	}
 
 	// Get old details if this is an update
-	if isUpdateOperation(payload.Operation) {
+	if payload.Operation == "UpdateOne" || payload.Operation == "Update" {
 		if details.objectID != "" {
 			task, err := client.Task.Get(allowCtx, details.objectID)
 			if err == nil {
@@ -756,7 +681,7 @@ func extractDocumentMentionDetails[T documentMutation](
 	}
 
 	// Get old details if this is an update
-	if isUpdateOperation(payload.Operation) {
+	if payload.Operation == "UpdateOne" || payload.Operation == "Update" {
 		if details.objectID != "" {
 			oldDoc, err := queryFunc()
 			if err == nil {
@@ -770,112 +695,6 @@ func extractDocumentMentionDetails[T documentMutation](
 				}
 			}
 		}
-	}
-
-	return details
-}
-
-// extractTaskMentionDetailsFromMetadata extracts task mention context from durable mutation metadata.
-func extractTaskMentionDetailsFromMetadata(allowCtx context.Context, client *generated.Client, payload *events.MutationPayload) objectMentionDetails {
-	details := objectMentionDetails{
-		objectID:   payload.EntityID,
-		objectType: generated.TypeTask,
-		valid:      true,
-	}
-
-	if detailsJSON, exists := mutationProposedAnySlice(payload, task.FieldDetailsJSON); exists {
-		details.newDetailsJSON = jsonSliceToString(detailsJSON)
-	}
-
-	if plainDetails, exists := mutationProposedString(payload, task.FieldDetails); exists {
-		details.newDetails = plainDetails
-	}
-
-	if title, exists := mutationProposedString(payload, task.FieldTitle); exists {
-		details.objectName = title
-	}
-
-	if owner, exists := mutationProposedString(payload, task.FieldOwnerID); exists {
-		details.ownerID = owner
-	}
-
-	if details.objectID == "" {
-		return details
-	}
-
-	taskEntity, err := client.Task.Get(allowCtx, details.objectID)
-	if err != nil {
-		return details
-	}
-
-	if isUpdateOperation(payload.Operation) {
-		details.oldDetailsJSON = jsonSliceToString(taskEntity.DetailsJSON)
-		details.oldDetails = taskEntity.Details
-	}
-
-	if details.objectName == "" {
-		details.objectName = taskEntity.Title
-	}
-
-	if details.ownerID == "" {
-		details.ownerID = taskEntity.OwnerID
-	}
-
-	return details
-}
-
-// extractDocumentMentionDetailsFromMetadata extracts document mention context from durable metadata.
-func extractDocumentMentionDetailsFromMetadata(
-	payload *events.MutationPayload,
-	mutationType string,
-	nameField string,
-	detailsField string,
-	detailsJSONField string,
-	ownerField string,
-	queryFunc func() (*oldDocumentDetails, error),
-) objectMentionDetails {
-	details := objectMentionDetails{
-		objectID:   payload.EntityID,
-		objectType: mutationType,
-		valid:      true,
-	}
-
-	if detailsJSON, exists := mutationProposedAnySlice(payload, detailsJSONField); exists {
-		details.newDetailsJSON = jsonSliceToString(detailsJSON)
-	}
-
-	if plainDetails, exists := mutationProposedString(payload, detailsField); exists {
-		details.newDetails = plainDetails
-	}
-
-	if name, exists := mutationProposedString(payload, nameField); exists {
-		details.objectName = name
-	}
-
-	if owner, exists := mutationProposedString(payload, ownerField); exists {
-		details.ownerID = owner
-	}
-
-	if details.objectID == "" {
-		return details
-	}
-
-	oldDoc, err := queryFunc()
-	if err != nil {
-		return details
-	}
-
-	if isUpdateOperation(payload.Operation) {
-		details.oldDetailsJSON = jsonSliceToString(oldDoc.detailsJSON)
-		details.oldDetails = oldDoc.details
-	}
-
-	if details.objectName == "" {
-		details.objectName = oldDoc.name
-	}
-
-	if details.ownerID == "" {
-		details.ownerID = oldDoc.ownerID
 	}
 
 	return details

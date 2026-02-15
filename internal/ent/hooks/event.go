@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 
@@ -74,6 +75,12 @@ func EmitEventHook(e *Eventer) ent.Hook {
 					logx.FromContext(ctx).Error().Err(err).Msg("Event ID is nil or empty, cannot emit event")
 					return
 				}
+
+				// Create a child logger for concurrency safety
+				logger := log.Logger.With().Logger()
+				logger.UpdateContext(func(c zerolog.Context) zerolog.Context {
+					return c.Str("mutation_id", eventID.ID)
+				})
 
 				props := soiree.NewProperties()
 				props.Set("ID", eventID.ID)
