@@ -443,3 +443,9 @@ workflows:
         timeout: 100000000
         trackstate: false
     enabled: false
+    gala:
+        enabled: false
+        failonenqueueerror: false
+        maxretries: 5
+        queuename: events
+        workercount: 10

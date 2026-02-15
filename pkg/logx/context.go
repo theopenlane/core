@@ -5,7 +5,11 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/utils/contextx"
 )
+
+// LogFields holds structured log fields that can be captured and restored.
+type LogFields map[string]any
 
 // WithContext returns a new context with the provided logger
 func (l Logger) WithContext(ctx context.Context) context.Context {
@@ -45,4 +49,54 @@ func SeedContext(ctx context.Context) context.Context {
 	}
 
 	return FromContext(ctx).WithContext(ctx)
+}
+
+// WithField adds a single field to both the logger and the durable field store on the context.
+func WithField(ctx context.Context, key string, value any) context.Context {
+	fields := FieldsFromContext(ctx)
+	if fields == nil {
+		fields = LogFields{}
+	}
+
+	fields[key] = value
+
+	logger := FromContext(ctx).With().Interface(key, value).Logger()
+
+	ctx = contextx.With(ctx, fields)
+
+	return logger.WithContext(ctx)
+}
+
+// WithFields adds multiple fields to both the logger and the durable field store on the context.
+func WithFields(ctx context.Context, fields map[string]any) context.Context {
+	if len(fields) == 0 {
+		return ctx
+	}
+
+	existing := FieldsFromContext(ctx)
+	if existing == nil {
+		existing = LogFields{}
+	}
+
+	logCtx := FromContext(ctx).With()
+
+	for k, v := range fields {
+		existing[k] = v
+		logCtx = logCtx.Interface(k, v)
+	}
+
+	ctx = contextx.With(ctx, existing)
+
+	return logCtx.Logger().WithContext(ctx)
+}
+
+// FieldsFromContext returns the durable log fields stored on the context.
+func FieldsFromContext(ctx context.Context) LogFields {
+	if ctx == nil {
+		return nil
+	}
+
+	fields, _ := contextx.From[LogFields](ctx)
+
+	return fields
 }

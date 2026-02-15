@@ -89,6 +89,10 @@ var (
 	ErrSSONotEnforceable = errors.New("you cannot enforce sso without testing the connection works correctly")
 	// ErrUnableToDetermineEventID is returned when we cannot determine the event ID for an event
 	ErrUnableToDetermineEventID = errors.New("unable to determine event ID")
+	// ErrGalaRuntimeUnavailable is returned when gala dual emit is enabled but runtime is unavailable
+	ErrGalaRuntimeUnavailable = errors.New("gala runtime unavailable")
+	// ErrGalaMutationEnqueueFailed is returned when gala mutation enqueue fails.
+	ErrGalaMutationEnqueueFailed = errors.New("gala mutation enqueue failed")
 	// ErrNotSingularTrustCenter is returned when an org is trying to create multiple trust centers
 	ErrNotSingularTrustCenter = errors.New("you can only create/manage one trust center at a time")
 	// ErrStatusApprovedNotAllowed is returned when a user attempts to set status to APPROVED without being in the approver or delegate group

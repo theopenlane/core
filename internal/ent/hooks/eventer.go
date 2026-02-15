@@ -135,8 +135,6 @@ func registerDefaultMutationListeners(e *Eventer) {
 
 	e.AddMutationListener(entgen.TypeOrganization, handleOrganizationMutation)
 	e.AddMutationListener(entgen.TypeOrganizationSetting, handleOrganizationSettingMutation)
-	e.AddMutationListener(entgen.TypeSubscriber, handleSubscriberMutation)
-	e.AddMutationListener(entgen.TypeUser, handleUserMutation)
 
 	e.AddMutationListener(entgen.TypeTrustCenterDoc, handleTrustCenterDocMutation)
 	e.AddMutationListener(entgen.TypeTrustCenterSetting, handleTrustCenterSettingMutation)
