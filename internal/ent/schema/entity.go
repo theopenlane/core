@@ -330,6 +330,9 @@ func (e Entity) Edges() []ent.Edge {
 			fromSchema: e,
 			edgeSchema: EntityType{},
 			field:      "entity_type_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }
