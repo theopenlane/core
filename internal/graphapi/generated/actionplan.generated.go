@@ -168,7 +168,7 @@ type MutationResolver interface {
 	UpdateEmailTemplate(ctx context.Context, id string, input generated.UpdateEmailTemplateInput) (*model.EmailTemplateUpdatePayload, error)
 	DeleteEmailTemplate(ctx context.Context, id string) (*model.EmailTemplateDeletePayload, error)
 	DeleteBulkEmailTemplate(ctx context.Context, ids []string) (*model.EmailTemplateBulkDeletePayload, error)
-	CreateEntity(ctx context.Context, input generated.CreateEntityInput) (*model.EntityCreatePayload, error)
+	CreateEntity(ctx context.Context, input generated.CreateEntityInput, entityTypeName *string) (*model.EntityCreatePayload, error)
 	CreateBulkEntity(ctx context.Context, input []*generated.CreateEntityInput) (*model.EntityBulkCreatePayload, error)
 	CreateBulkCSVEntity(ctx context.Context, input graphql.Upload) (*model.EntityBulkCreatePayload, error)
 	UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput) (*model.EntityUpdatePayload, error)
@@ -2390,6 +2390,11 @@ func (ec *executionContext) field_Mutation_createEntity_args(ctx context.Context
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "entityTypeName", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["entityTypeName"] = arg1
 	return args, nil
 }
 
@@ -15219,7 +15224,7 @@ func (ec *executionContext) _Mutation_createEntity(ctx context.Context, field gr
 		ec.fieldContext_Mutation_createEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateEntity(ctx, fc.Args["input"].(generated.CreateEntityInput))
+			return ec.resolvers.Mutation().CreateEntity(ctx, fc.Args["input"].(generated.CreateEntityInput), fc.Args["entityTypeName"].(*string))
 		},
 		nil,
 		ec.marshalNEntityCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityCreatePayload,
