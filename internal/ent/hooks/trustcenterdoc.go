@@ -348,26 +348,12 @@ func updateTrustCenterDocVisibility(ctx context.Context, m *generated.TrustCente
 func checkTrustCenterDocFile(ctx context.Context, m *generated.TrustCenterDocMutation) (context.Context, error) {
 	key := "trustCenterDocFile"
 
-	// Create adapter for the existing mutation interface
-	adapter := objects.NewGenericMutationAdapter(m,
-		func(mut *generated.TrustCenterDocMutation) (string, bool) { return mut.ID() },
-		func(mut *generated.TrustCenterDocMutation) string { return mut.Type() },
-	)
-
-	// Use the generic helper to process files
-	return objects.ProcessFilesForMutation(ctx, adapter, key, "trust_center_doc")
+	return objects.ProcessFilesForMutation(ctx, m, key, "trust_center_doc")
 }
 
 // checkWatermarkedTrustCenterDocFile checks if the watermarked doc file is provided and sets the parent information
 func checkWatermarkedTrustCenterDocFile(ctx context.Context, m *generated.TrustCenterDocMutation) (context.Context, error) {
 	key := "watermarkedTrustCenterDocFile"
 
-	// Create adapter for the existing mutation interface
-	adapter := objects.NewGenericMutationAdapter(m,
-		func(mut *generated.TrustCenterDocMutation) (string, bool) { return mut.ID() },
-		func(mut *generated.TrustCenterDocMutation) string { return mut.Type() },
-	)
-
-	// Use the generic helper to process files
-	return objects.ProcessFilesForMutation(ctx, adapter, key, "trust_center_doc")
+	return objects.ProcessFilesForMutation(ctx, m, key, "trust_center_doc")
 }

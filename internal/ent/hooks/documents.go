@@ -99,13 +99,9 @@ func HookImportDocument() ent.Hook {
 			default:
 				// Derive the expected file key for this mutation and attach parent metadata to uploaded files
 				key := mutationToFileKey(mut)
-				adapter := objects.NewGenericMutationAdapter(mut,
-					func(mm importSchemaMutation) (string, bool) { return mm.ID() },
-					func(mm importSchemaMutation) string { return mm.Type() },
-				)
 
 				var err error
-				ctx, err = objects.ProcessFilesForMutation(ctx, adapter, key)
+				ctx, err = objects.ProcessFilesForMutation(ctx, mut, key)
 				if err != nil {
 					return nil, err
 				}

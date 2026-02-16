@@ -102,10 +102,5 @@ func checkNoteFiles(ctx context.Context, m *generated.NoteMutation) (context.Con
 
 	m.AddFileIDs(fileIDs...)
 
-	adapter := pkgobjects.NewGenericMutationAdapter(m,
-		func(mut *generated.NoteMutation) (string, bool) { return mut.ID() },
-		func(mut *generated.NoteMutation) string { return mut.Type() },
-	)
-
-	return pkgobjects.ProcessFilesForMutation(ctx, adapter, key)
+	return pkgobjects.ProcessFilesForMutation(ctx, m, key)
 }

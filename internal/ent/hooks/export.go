@@ -157,10 +157,5 @@ func checkExportFiles(ctx context.Context, m *generated.ExportMutation) (context
 		return ctx, nil
 	}
 
-	adapter := pkgobjects.NewGenericMutationAdapter(m,
-		func(mut *generated.ExportMutation) (string, bool) { return mut.ID() },
-		func(mut *generated.ExportMutation) string { return mut.Type() },
-	)
-
-	return pkgobjects.ProcessFilesForMutation(ctx, adapter, key)
+	return pkgobjects.ProcessFilesForMutation(ctx, m, key)
 }
