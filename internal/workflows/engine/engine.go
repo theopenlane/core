@@ -393,6 +393,11 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 		}
 	}
 
+	// CompleteAssignment emits workflow-assignment-completed explicitly below
+	// Mark this mutation to skip hook-based mutation emission so we don't re-enter completion logic
+	allowCtx = workflows.WithSkipEventEmission(allowCtx)
+	workflows.MarkSkipEventEmission(allowCtx)
+
 	if err = update.Exec(allowCtx); err != nil {
 		return scope.Fail(fmt.Errorf("%w: %w", ErrAssignmentUpdateFailed, err), nil)
 	}

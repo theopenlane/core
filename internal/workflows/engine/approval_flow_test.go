@@ -1627,6 +1627,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 		Save(seedCtx)
 	s.Require().NoError(err)
 
+	// Submitting the proposal resumes the paused instance asynchronously and creates assignments
+	s.WaitForEvents()
+
 	// Get the assignment that was created
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
