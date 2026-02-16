@@ -24,6 +24,7 @@ import (
 	{{- end }}
 	"entgo.io/ent/dialect/sql"
  	"entgo.io/ent/dialect/sql/sqljson"
+	"github.com/theopenlane/core/internal/ent/schemautil"
 )
 {{ template "import" $ }}
 
@@ -214,11 +215,30 @@ import (
 		{{- end }}
 		{{ range $e := filterEdges $n.Edges (skipMode "where_input") }}
 			{{- $func := print "Has" $e.StructField }}
+			{{- /* Check if edge type is a trust center child (name would usually start with "TrustCenter") with trust_center_id field.
+			       This excludes other entities that may have an optional trust_center_id. */}}
+			{{- $isTrustCenterScoped := false }}
+			{{- if eq (printf "%.11s" $e.Type.Name) "TrustCenter" }}
+				{{- range $f := $e.Type.Fields }}
+					{{- if eq $f.Name "trust_center_id" }}
+						{{- $isTrustCenterScoped = true }}
+					{{- end }}
+				{{- end }}
+			{{- end }}
 			if i.{{ $func }} != nil {
+				{{- if $isTrustCenterScoped }}
+				p := {{ $n.Package }}.{{ $func }}With(
+					predicate.{{ $e.Type.Name }}(schemautil.TrustCenterScopePredicate()),
+				)
+				if !*i.{{ $func }} {
+					p = {{ $n.Package }}.Not(p)
+				}
+				{{- else }}
 				p := {{ $n.Package }}.{{ $func }}()
 				if !*i.{{ $func }} {
 					p = {{ $n.Package }}.Not(p)
 				}
+				{{- end }}
 				predicates = append(predicates, p)
 			}
 			{{- $func = print $func "With" }}
@@ -233,6 +253,9 @@ import (
 				with := make([]predicate.{{ $e.Type.Name }}, 0, len(i.{{ $func }}))
 				{{- if $hasSoftDelete }}
 				with = append(with, {{ $e.Type.Package }}.DeletedAtIsNil())
+				{{- end }}
+				{{- if $isTrustCenterScoped }}
+				with = append(with, predicate.{{ $e.Type.Name }}(schemautil.TrustCenterScopePredicate()))
 				{{- end }}
 				for _, w := range i.{{ $func }} {
 					p, err := w.P()
