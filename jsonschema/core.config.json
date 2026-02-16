@@ -1811,6 +1811,30 @@
         },
         "cel": {
           "$ref": "#/$defs/workflows.CELConfig"
+        },
+        "gala": {
+          "$ref": "#/$defs/workflows.GalaConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "workflows.GalaConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "workercount": {
+          "type": "integer"
+        },
+        "maxretries": {
+          "type": "integer"
+        },
+        "failonenqueueerror": {
+          "type": "boolean"
+        },
+        "queuename": {
+          "type": "string"
         }
       },
       "additionalProperties": false,

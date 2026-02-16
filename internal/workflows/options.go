@@ -12,6 +12,8 @@ type Config struct {
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// CEL contains configuration for CEL evaluation and validation
 	CEL CELConfig `json:"cel" koanf:"cel"`
+	// Gala enables optional River-backed durable gala runtime and dual-emit behavior
+	Gala GalaConfig `json:"gala" koanf:"gala"`
 }
 
 // CELConfig contains CEL evaluation and validation settings for workflows
@@ -42,6 +44,20 @@ type CELConfig struct {
 	EvalOptimize bool `json:"evaloptimize" koanf:"evaloptimize" default:"true"`
 	// TrackState enables evaluation state tracking for debugging
 	TrackState bool `json:"trackstate" koanf:"trackstate" default:"false"`
+}
+
+// GalaConfig controls optional gala runtime wiring.
+type GalaConfig struct {
+	// Enabled toggles gala worker and runtime initialization
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// WorkerCount configures default queue worker concurrency when gala workers are enabled
+	WorkerCount int `json:"workercount" koanf:"workercount" default:"10"`
+	// MaxRetries sets River job max attempts for gala dispatch jobs
+	MaxRetries int `json:"maxretries" koanf:"maxretries" default:"5"`
+	// FailOnEnqueueError enables strict-mode logging when gala enqueue fails
+	FailOnEnqueueError bool `json:"failonenqueueerror" koanf:"failonenqueueerror" default:"false"`
+	// QueueName optionally overrides queue selection for durable gala dispatch jobs
+	QueueName string `json:"queuename" koanf:"queuename" default:"events"`
 }
 
 // NewDefaultConfig creates a new workflows config with default values applied.
@@ -162,6 +178,7 @@ func WithConfig(cfg Config) ConfigOpts {
 	return func(c *Config) {
 		c.Enabled = cfg.Enabled
 		c.CEL = cfg.CEL
+		c.Gala = cfg.Gala
 	}
 }
 
