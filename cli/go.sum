@@ -200,10 +200,10 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-github.com/theopenlane/core v1.9.4 h1:vaZz8VRQg94U24zuyBLQv7tXbQg5i/clb1gndS2WGj0=
-github.com/theopenlane/core v1.9.4/go.mod h1:OWSdMdq8ceRWKpoeAjvnO6bAr6SLZDVZ4pH9gk9pDNQ=
-github.com/theopenlane/core/common v1.0.8 h1:44HADJaErn49UU/yljyOiBmL3qkxCUje+I8wCbEpA50=
-github.com/theopenlane/core/common v1.0.8/go.mod h1:Lz54GwJpEKvtT8mcrjv80xPP4XBDRocpFUbkS9Vckzs=
+github.com/theopenlane/core v1.9.6 h1:VJ5eTxC4TzP5wIFCnYCpui6YZzLLuAbm5fQAtIsCdRs=
+github.com/theopenlane/core v1.9.6/go.mod h1:2EVx5lnO3Eu97TGIw4PF1QruPasKxy0BgrcZOMW7VVk=
+github.com/theopenlane/core/common v1.0.9 h1:2DUqCGyhUdUCnC4sWA2ucS7LjqW5VVd1pKCC1/tMOHE=
+github.com/theopenlane/core/common v1.0.9/go.mod h1:U8Tr/WuwM6Qxfpk3Ei4ywngJL2F84QK/eGaQoc/KS9w=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
 github.com/theopenlane/go-client v0.8.4 h1:ERrbOL3X0aFpfbECN3kvQQtMryu59dkrYZP/xaSP9Gc=
@@ -235,6 +235,7 @@ github.com/yuin/gopher-lua v1.1.1/go.mod h1:GBR0iDaNXjAgGg9zfCvksxSRnQx76gclCIb7
 github.com/zalando/go-keyring v0.2.6 h1:r7Yc3+H+Ux0+M72zacZoItR3UDxeWfKTcabvkI8ua9s=
 github.com/zalando/go-keyring v0.2.6/go.mod h1:2TCrxYrbUNYfNS/Kgy/LSrkSQzZ5UPVH85RwfczwvcI=
 github.com/zitadel/oidc/v3 v3.45.4 h1:GKyWaPRVQ8sCu9XgJ3NgNGtG52FzwVJpzXjIUG2+YrI=
+github.com/zitadel/oidc/v3 v3.45.4/go.mod h1:XALmFXS9/kSom9B6uWin1yJ2WTI/E4Ti5aXJdewAVEs=
 github.com/zitadel/schema v1.3.2 h1:gfJvt7dOMfTmxzhscZ9KkapKo3Nei3B6cAxjav+lyjI=
 github.com/zitadel/schema v1.3.2/go.mod h1:IZmdfF9Wu62Zu6tJJTH3UsArevs3Y4smfJIj3L8fzxw=
 go.uber.org/mock v0.6.0 h1:hyF9dfmbgIX5EfOdasqLsWD6xqpNZlXblLB/Dbnwv3Y=
