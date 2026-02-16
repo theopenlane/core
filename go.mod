@@ -20,9 +20,9 @@ require (
 	entgo.io/ent v0.14.6-0.20260214061101-d056659140fa
 	github.com/99designs/gqlgen v0.17.86
 	github.com/AfterShip/email-verifier v1.4.1
-	github.com/Yamashou/gqlgenc v0.33.0
+	github.com/Yamashou/gqlgenc v0.33.1
 	github.com/alicebob/miniredis/v2 v2.36.1
-	github.com/alitto/pond/v2 v2.6.0
+	github.com/alitto/pond/v2 v2.6.1
 	github.com/aws/aws-sdk-go-v2 v1.41.1
 	github.com/aws/aws-sdk-go-v2/config v1.32.7
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.7
