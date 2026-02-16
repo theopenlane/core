@@ -2,7 +2,7 @@ package graphapi
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"sync"
 	"time"
 
@@ -20,8 +20,10 @@ const (
 )
 
 var (
-	workflowTestSetupMu sync.Mutex
-	workflowTestSetups  = map[*generated.Client]*WorkflowTestSetup{}
+	workflowTestSetupMu            sync.Mutex
+	workflowTestSetups             = map[*generated.Client]*WorkflowTestSetup{}
+	ErrTimedOutWaitingForCondition = errors.New("timed out waiting for condition")
+	ErrClientRequired              = errors.New("client is required")
 )
 
 // pollUntil executes query repeatedly until condition returns true or timeout expires.
@@ -58,7 +60,7 @@ func pollUntil[T any](ctx context.Context, timeout time.Duration, query func() (
 		return result, nil
 	}
 
-	return result, fmt.Errorf("timed out after %s waiting for condition", timeout)
+	return result, ErrTimedOutWaitingForCondition
 }
 
 // WorkflowTestSetup contains the workflow engine and eventer for tests
@@ -72,7 +74,7 @@ type WorkflowTestSetup struct {
 // are processed through the actual event-driven flow used in production.
 func SetupWorkflowEngine(client *generated.Client) (*WorkflowTestSetup, error) {
 	if client == nil {
-		return nil, fmt.Errorf("client is required")
+		return nil, ErrClientRequired
 	}
 
 	workflowTestSetupMu.Lock()
