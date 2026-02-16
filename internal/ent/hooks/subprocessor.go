@@ -43,10 +43,5 @@ func checkSubprocessorLogoFile(ctx context.Context, m *generated.SubprocessorMut
 
 	m.SetLogoFileID(logoFiles[0].ID)
 
-	adapter := pkgobjects.NewGenericMutationAdapter(m,
-		func(mut *generated.SubprocessorMutation) (string, bool) { return mut.ID() },
-		func(mut *generated.SubprocessorMutation) string { return mut.Type() },
-	)
-
-	return pkgobjects.ProcessFilesForMutation(ctx, adapter, logoKey)
+	return pkgobjects.ProcessFilesForMutation(ctx, m, logoKey)
 }
