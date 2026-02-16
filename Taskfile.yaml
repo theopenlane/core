@@ -236,7 +236,7 @@ tasks:
     desc: runs golangci-lint, the most annoying opinionated linter ever, for CI
     ## do not use --fix in CI
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --print-resources-usage
+      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --verbose
 
   go:lint:ci:graphapi:
     silent: true
@@ -248,7 +248,7 @@ tasks:
     silent: true
     desc: runs golangci-lint only on the httpserve handlers package for CI
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --print-resources-usage ./internal/httpserve/handlers/...
+      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --verbose ./internal/httpserve/handlers/...
 
   go:lint:ci:no-api:
     silent: true

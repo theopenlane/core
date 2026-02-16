@@ -26,6 +26,9 @@ import (
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
+// galaShutdownTimeout is the maximum time to wait for gala workers to stop gracefully.
+const galaShutdownTimeout = 10 * time.Second
+
 var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "start the core api server",
@@ -35,12 +38,14 @@ var serveCmd = &cobra.Command{
 	},
 }
 
+// init registers the serve command and its flags on the root command.
 func init() {
 	rootCmd.AddCommand(serveCmd)
 
 	serveCmd.PersistentFlags().String("config", "./config/.config.yaml", "config file location")
 }
 
+// serve initializes dependencies and starts the core API server.
 func serve(ctx context.Context) error {
 	// setup db connection for server
 	var (
@@ -191,6 +196,11 @@ func serve(ctx context.Context) error {
 		return err
 	}
 
+	galaApp, err := serveropts.WithGala(ctx, so, dbClient)
+	if err != nil {
+		return err
+	}
+
 	if so.Config.Settings.Workflows.Enabled {
 		if wfEngine, ok := dbClient.WorkflowEngine.(*engine.WorkflowEngine); ok {
 			so.AddServerOptions(serveropts.WithWorkflows(wfEngine))
@@ -210,6 +220,18 @@ func serve(ctx context.Context) error {
 		log.Ctx(ctx).Info().Msg("waiting for in-flight uploads to complete")
 		pkgobjects.WaitForUploads()
 		log.Ctx(ctx).Info().Msg("all uploads completed")
+
+		if galaApp != nil {
+			stopCtx, cancel := context.WithTimeout(context.Background(), galaShutdownTimeout)
+			if stopErr := galaApp.StopWorkers(stopCtx); stopErr != nil {
+				log.Error().Err(stopErr).Msg("error stopping gala worker client")
+			}
+			cancel()
+
+			if closeErr := galaApp.Close(); closeErr != nil {
+				log.Ctx(ctx).Error().Err(closeErr).Msg("error closing gala runtime")
+			}
+		}
 
 		if err := entdb.GracefulClose(context.Background(), dbClient, time.Second); err != nil {
 			log.Ctx(ctx).Error().Err(err).Msg("error closing database")
