@@ -6,6 +6,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // TrustCenterScopePredicate returns a predicate that scopes trust center joins
@@ -26,7 +27,8 @@ func TrustCenterScopePredicate() func(*sql.Selector) {
 		}
 
 		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
-		if err != nil || len(orgIDs) == 0 {
+		if err != nil {
+			logx.FromContext(ctx).Err(err).Msg("could not fetch org ids when scoping trustcenter")
 			return
 		}
 
