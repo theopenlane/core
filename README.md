@@ -28,7 +28,7 @@ the heart of the [Openlane](https://www.theopenlane.io) cloud service. [Sign up 
 
 ### High-level Roadmap
 
-- Trust Center and vanity domains
+- Trust Center and vanity domains - Now available!
 - Automated Evidence collection
 - Continuous GRC features
 - Vulnerability Management
@@ -42,7 +42,7 @@ For more information or to learn about how to use the system, visit our [docs pa
 > [!TIP]
 >   This repo takes heavy use of `go:build` flags to help with compile times, which can result in tooling like VSCode showing errors of unknown functions. It is suggested to add the following build flags to your settings:
 >
-> `-tags=cli,test,codegen`
+> `-tags=cli,test,codegen,examples`
 
 ## Layout
 
