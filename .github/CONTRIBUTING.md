@@ -33,7 +33,7 @@ changes!
    utility we also use for seeding data
 1. [gqlgen](https://gqlgen.com/) - Code generation + GraphQL server building
    from from `ent` schema definitions
-1. [gqlgenc](https://github.com/Yamashou/gqlgenc) - Client building utilities
+1. [gqlgenc](https://github.com/gqlgo/gqlgenc) - Client building utilities
    with GraphQL
 1. [openfga](https://openfga.dev/) - Flexible authorization/permission engine
    inspired by Google Zanzibar
