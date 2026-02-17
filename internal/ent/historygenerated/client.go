@@ -80,6 +80,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterfaqhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersettinghistory"
@@ -226,6 +227,8 @@ type Client struct {
 	TrustCenterDocHistory *TrustCenterDocHistoryClient
 	// TrustCenterEntityHistory is the client for interacting with the TrustCenterEntityHistory builders.
 	TrustCenterEntityHistory *TrustCenterEntityHistoryClient
+	// TrustCenterFAQHistory is the client for interacting with the TrustCenterFAQHistory builders.
+	TrustCenterFAQHistory *TrustCenterFAQHistoryClient
 	// TrustCenterHistory is the client for interacting with the TrustCenterHistory builders.
 	TrustCenterHistory *TrustCenterHistoryClient
 	// TrustCenterNDARequestHistory is the client for interacting with the TrustCenterNDARequestHistory builders.
@@ -331,6 +334,7 @@ func (c *Client) init() {
 	c.TrustCenterComplianceHistory = NewTrustCenterComplianceHistoryClient(c.config)
 	c.TrustCenterDocHistory = NewTrustCenterDocHistoryClient(c.config)
 	c.TrustCenterEntityHistory = NewTrustCenterEntityHistoryClient(c.config)
+	c.TrustCenterFAQHistory = NewTrustCenterFAQHistoryClient(c.config)
 	c.TrustCenterHistory = NewTrustCenterHistoryClient(c.config)
 	c.TrustCenterNDARequestHistory = NewTrustCenterNDARequestHistoryClient(c.config)
 	c.TrustCenterSettingHistory = NewTrustCenterSettingHistoryClient(c.config)
@@ -521,6 +525,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		TrustCenterComplianceHistory:      NewTrustCenterComplianceHistoryClient(cfg),
 		TrustCenterDocHistory:             NewTrustCenterDocHistoryClient(cfg),
 		TrustCenterEntityHistory:          NewTrustCenterEntityHistoryClient(cfg),
+		TrustCenterFAQHistory:             NewTrustCenterFAQHistoryClient(cfg),
 		TrustCenterHistory:                NewTrustCenterHistoryClient(cfg),
 		TrustCenterNDARequestHistory:      NewTrustCenterNDARequestHistoryClient(cfg),
 		TrustCenterSettingHistory:         NewTrustCenterSettingHistoryClient(cfg),
@@ -614,6 +619,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		TrustCenterComplianceHistory:      NewTrustCenterComplianceHistoryClient(cfg),
 		TrustCenterDocHistory:             NewTrustCenterDocHistoryClient(cfg),
 		TrustCenterEntityHistory:          NewTrustCenterEntityHistoryClient(cfg),
+		TrustCenterFAQHistory:             NewTrustCenterFAQHistoryClient(cfg),
 		TrustCenterHistory:                NewTrustCenterHistoryClient(cfg),
 		TrustCenterNDARequestHistory:      NewTrustCenterNDARequestHistoryClient(cfg),
 		TrustCenterSettingHistory:         NewTrustCenterSettingHistoryClient(cfg),
@@ -676,7 +682,7 @@ func (c *Client) Use(hooks ...Hook) {
 		c.RiskHistory, c.ScanHistory, c.ScheduledJobHistory, c.StandardHistory,
 		c.SubcontrolHistory, c.SubprocessorHistory, c.TaskHistory, c.TemplateHistory,
 		c.TrustCenterComplianceHistory, c.TrustCenterDocHistory,
-		c.TrustCenterEntityHistory, c.TrustCenterHistory,
+		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
 		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
 		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfigHistory,
 		c.UserHistory, c.UserSettingHistory, c.VulnerabilityHistory,
@@ -711,7 +717,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.RiskHistory, c.ScanHistory, c.ScheduledJobHistory, c.StandardHistory,
 		c.SubcontrolHistory, c.SubprocessorHistory, c.TaskHistory, c.TemplateHistory,
 		c.TrustCenterComplianceHistory, c.TrustCenterDocHistory,
-		c.TrustCenterEntityHistory, c.TrustCenterHistory,
+		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
 		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
 		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfigHistory,
 		c.UserHistory, c.UserSettingHistory, c.VulnerabilityHistory,
@@ -898,6 +904,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.TrustCenterDocHistory.mutate(ctx, m)
 	case *TrustCenterEntityHistoryMutation:
 		return c.TrustCenterEntityHistory.mutate(ctx, m)
+	case *TrustCenterFAQHistoryMutation:
+		return c.TrustCenterFAQHistory.mutate(ctx, m)
 	case *TrustCenterHistoryMutation:
 		return c.TrustCenterHistory.mutate(ctx, m)
 	case *TrustCenterNDARequestHistoryMutation:
@@ -9029,6 +9037,141 @@ func (c *TrustCenterEntityHistoryClient) mutate(ctx context.Context, m *TrustCen
 	}
 }
 
+// TrustCenterFAQHistoryClient is a client for the TrustCenterFAQHistory schema.
+type TrustCenterFAQHistoryClient struct {
+	config
+}
+
+// NewTrustCenterFAQHistoryClient returns a client for the TrustCenterFAQHistory from the given config.
+func NewTrustCenterFAQHistoryClient(c config) *TrustCenterFAQHistoryClient {
+	return &TrustCenterFAQHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trustcenterfaqhistory.Hooks(f(g(h())))`.
+func (c *TrustCenterFAQHistoryClient) Use(hooks ...Hook) {
+	c.hooks.TrustCenterFAQHistory = append(c.hooks.TrustCenterFAQHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `trustcenterfaqhistory.Intercept(f(g(h())))`.
+func (c *TrustCenterFAQHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TrustCenterFAQHistory = append(c.inters.TrustCenterFAQHistory, interceptors...)
+}
+
+// Create returns a builder for creating a TrustCenterFAQHistory entity.
+func (c *TrustCenterFAQHistoryClient) Create() *TrustCenterFAQHistoryCreate {
+	mutation := newTrustCenterFAQHistoryMutation(c.config, OpCreate)
+	return &TrustCenterFAQHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrustCenterFAQHistory entities.
+func (c *TrustCenterFAQHistoryClient) CreateBulk(builders ...*TrustCenterFAQHistoryCreate) *TrustCenterFAQHistoryCreateBulk {
+	return &TrustCenterFAQHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TrustCenterFAQHistoryClient) MapCreateBulk(slice any, setFunc func(*TrustCenterFAQHistoryCreate, int)) *TrustCenterFAQHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TrustCenterFAQHistoryCreateBulk{err: fmt.Errorf("calling to TrustCenterFAQHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TrustCenterFAQHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TrustCenterFAQHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrustCenterFAQHistory.
+func (c *TrustCenterFAQHistoryClient) Update() *TrustCenterFAQHistoryUpdate {
+	mutation := newTrustCenterFAQHistoryMutation(c.config, OpUpdate)
+	return &TrustCenterFAQHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrustCenterFAQHistoryClient) UpdateOne(_m *TrustCenterFAQHistory) *TrustCenterFAQHistoryUpdateOne {
+	mutation := newTrustCenterFAQHistoryMutation(c.config, OpUpdateOne, withTrustCenterFAQHistory(_m))
+	return &TrustCenterFAQHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrustCenterFAQHistoryClient) UpdateOneID(id string) *TrustCenterFAQHistoryUpdateOne {
+	mutation := newTrustCenterFAQHistoryMutation(c.config, OpUpdateOne, withTrustCenterFAQHistoryID(id))
+	return &TrustCenterFAQHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrustCenterFAQHistory.
+func (c *TrustCenterFAQHistoryClient) Delete() *TrustCenterFAQHistoryDelete {
+	mutation := newTrustCenterFAQHistoryMutation(c.config, OpDelete)
+	return &TrustCenterFAQHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TrustCenterFAQHistoryClient) DeleteOne(_m *TrustCenterFAQHistory) *TrustCenterFAQHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TrustCenterFAQHistoryClient) DeleteOneID(id string) *TrustCenterFAQHistoryDeleteOne {
+	builder := c.Delete().Where(trustcenterfaqhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrustCenterFAQHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for TrustCenterFAQHistory.
+func (c *TrustCenterFAQHistoryClient) Query() *TrustCenterFAQHistoryQuery {
+	return &TrustCenterFAQHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTrustCenterFAQHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TrustCenterFAQHistory entity by its id.
+func (c *TrustCenterFAQHistoryClient) Get(ctx context.Context, id string) (*TrustCenterFAQHistory, error) {
+	return c.Query().Where(trustcenterfaqhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrustCenterFAQHistoryClient) GetX(ctx context.Context, id string) *TrustCenterFAQHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TrustCenterFAQHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.TrustCenterFAQHistory
+	return append(hooks[:len(hooks):len(hooks)], trustcenterfaqhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TrustCenterFAQHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.TrustCenterFAQHistory
+	return append(inters[:len(inters):len(inters)], trustcenterfaqhistory.Interceptors[:]...)
+}
+
+func (c *TrustCenterFAQHistoryClient) mutate(ctx context.Context, m *TrustCenterFAQHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TrustCenterFAQHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TrustCenterFAQHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TrustCenterFAQHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TrustCenterFAQHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown TrustCenterFAQHistory mutation op: %q", m.Op())
+	}
+}
+
 // TrustCenterHistoryClient is a client for the TrustCenterHistory schema.
 type TrustCenterHistoryClient struct {
 	config
@@ -10939,9 +11082,10 @@ type (
 		ReviewHistory, RiskHistory, ScanHistory, ScheduledJobHistory, StandardHistory,
 		SubcontrolHistory, SubprocessorHistory, TaskHistory, TemplateHistory,
 		TrustCenterComplianceHistory, TrustCenterDocHistory, TrustCenterEntityHistory,
-		TrustCenterHistory, TrustCenterNDARequestHistory, TrustCenterSettingHistory,
-		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfigHistory, UserHistory,
-		UserSettingHistory, VulnerabilityHistory, WorkflowAssignmentHistory,
+		TrustCenterFAQHistory, TrustCenterHistory, TrustCenterNDARequestHistory,
+		TrustCenterSettingHistory, TrustCenterSubprocessorHistory,
+		TrustCenterWatermarkConfigHistory, UserHistory, UserSettingHistory,
+		VulnerabilityHistory, WorkflowAssignmentHistory,
 		WorkflowAssignmentTargetHistory, WorkflowDefinitionHistory,
 		WorkflowEventHistory, WorkflowInstanceHistory,
 		WorkflowObjectRefHistory []ent.Hook
@@ -10964,9 +11108,10 @@ type (
 		ReviewHistory, RiskHistory, ScanHistory, ScheduledJobHistory, StandardHistory,
 		SubcontrolHistory, SubprocessorHistory, TaskHistory, TemplateHistory,
 		TrustCenterComplianceHistory, TrustCenterDocHistory, TrustCenterEntityHistory,
-		TrustCenterHistory, TrustCenterNDARequestHistory, TrustCenterSettingHistory,
-		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfigHistory, UserHistory,
-		UserSettingHistory, VulnerabilityHistory, WorkflowAssignmentHistory,
+		TrustCenterFAQHistory, TrustCenterHistory, TrustCenterNDARequestHistory,
+		TrustCenterSettingHistory, TrustCenterSubprocessorHistory,
+		TrustCenterWatermarkConfigHistory, UserHistory, UserSettingHistory,
+		VulnerabilityHistory, WorkflowAssignmentHistory,
 		WorkflowAssignmentTargetHistory, WorkflowDefinitionHistory,
 		WorkflowEventHistory, WorkflowInstanceHistory,
 		WorkflowObjectRefHistory []ent.Interceptor

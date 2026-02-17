@@ -487,6 +487,8 @@ var ForeignKeys = []string{
 	"trust_center_doc_editors",
 	"trust_center_entity_blocked_groups",
 	"trust_center_entity_editors",
+	"trust_center_faq_blocked_groups",
+	"trust_center_faq_editors",
 	"trust_center_nda_request_blocked_groups",
 	"trust_center_nda_request_editors",
 	"trust_center_setting_blocked_groups",

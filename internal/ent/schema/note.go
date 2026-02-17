@@ -79,7 +79,7 @@ func (n Note) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Note](
 				n,
-				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}, TrustCenter{}, Risk{}, Evidence{}, Discussion{}),
+				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}, TrustCenter{}, Risk{}, Evidence{}, Discussion{}, TrustCenterFAQ{}),
 				withOrganizationOwner(false),
 				withOwnerRelation(fgax.OwnerRelation),
 				withAllowAnonymousTrustCenterAccess(true),
@@ -141,6 +141,11 @@ func (n Note) Edges() []ent.Edge {
 				// you should only need to be able to view a discussion to add a comment to it
 				accessmap.EdgeViewCheck(Discussion{}.Name()),
 			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: n,
+			edgeSchema: TrustCenterFAQ{},
+			ref:        "notes",
 		}),
 		defaultEdgeToWithPagination(n, File{}),
 	}

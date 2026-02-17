@@ -96,6 +96,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
@@ -2518,6 +2519,33 @@ func (f TraverseTrustCenterEntity) Traverse(ctx context.Context, q generated.Que
 	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterEntityQuery", q)
 }
 
+// The TrustCenterFAQFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TrustCenterFAQFunc func(context.Context, *generated.TrustCenterFAQQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TrustCenterFAQFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.TrustCenterFAQQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterFAQQuery", q)
+}
+
+// The TraverseTrustCenterFAQ type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTrustCenterFAQ func(context.Context, *generated.TrustCenterFAQQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTrustCenterFAQ) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTrustCenterFAQ) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterFAQQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterFAQQuery", q)
+}
+
 // The TrustCenterNDARequestFunc type is an adapter to allow the use of ordinary function as a Querier.
 type TrustCenterNDARequestFunc func(context.Context, *generated.TrustCenterNDARequestQuery) (generated.Value, error)
 
@@ -3100,6 +3128,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.TrustCenterDocQuery, predicate.TrustCenterDoc, trustcenterdoc.OrderOption]{typ: generated.TypeTrustCenterDoc, tq: q}, nil
 	case *generated.TrustCenterEntityQuery:
 		return &query[*generated.TrustCenterEntityQuery, predicate.TrustCenterEntity, trustcenterentity.OrderOption]{typ: generated.TypeTrustCenterEntity, tq: q}, nil
+	case *generated.TrustCenterFAQQuery:
+		return &query[*generated.TrustCenterFAQQuery, predicate.TrustCenterFAQ, trustcenterfaq.OrderOption]{typ: generated.TypeTrustCenterFAQ, tq: q}, nil
 	case *generated.TrustCenterNDARequestQuery:
 		return &query[*generated.TrustCenterNDARequestQuery, predicate.TrustCenterNDARequest, trustcenterndarequest.OrderOption]{typ: generated.TypeTrustCenterNDARequest, tq: q}, nil
 	case *generated.TrustCenterSettingQuery:

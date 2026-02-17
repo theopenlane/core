@@ -1322,6 +1322,11 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		Rules: []CSVReferenceRule{
 		},
 	},
+	"TrustCenterFAQ": {
+		SchemaName: "TrustCenterFAQ",
+		Rules: []CSVReferenceRule{
+		},
+	},
 	"TrustCenterNDARequest": {
 		SchemaName: "TrustCenterNDARequest",
 		Rules: []CSVReferenceRule{
@@ -2839,6 +2844,24 @@ type TrustCenterEntityCSVUpdateInput struct {
 
 // CSVInputWrapper marks TrustCenterEntityCSVUpdateInput for CSV header preprocessing.
 func (TrustCenterEntityCSVUpdateInput) CSVInputWrapper() {}
+
+// TrustCenterFAQCSVInput wraps CreateTrustCenterFAQInput with CSV reference columns.
+type TrustCenterFAQCSVInput struct {
+	Input generated.CreateTrustCenterFAQInput
+}
+
+// CSVInputWrapper marks TrustCenterFAQCSVInput for CSV header preprocessing.
+func (TrustCenterFAQCSVInput) CSVInputWrapper() {}
+
+// TrustCenterFAQCSVUpdateInput wraps UpdateTrustCenterFAQInput with CSV reference columns for bulk updates.
+type TrustCenterFAQCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateTrustCenterFAQInput
+}
+
+// CSVInputWrapper marks TrustCenterFAQCSVUpdateInput for CSV header preprocessing.
+func (TrustCenterFAQCSVUpdateInput) CSVInputWrapper() {}
 
 // TrustCenterNDARequestCSVInput wraps CreateTrustCenterNDARequestInput with CSV reference columns.
 type TrustCenterNDARequestCSVInput struct {

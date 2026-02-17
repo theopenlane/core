@@ -106,6 +106,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
@@ -321,6 +322,8 @@ type Client struct {
 	TrustCenterDoc *TrustCenterDocClient
 	// TrustCenterEntity is the client for interacting with the TrustCenterEntity builders.
 	TrustCenterEntity *TrustCenterEntityClient
+	// TrustCenterFAQ is the client for interacting with the TrustCenterFAQ builders.
+	TrustCenterFAQ *TrustCenterFAQClient
 	// TrustCenterNDARequest is the client for interacting with the TrustCenterNDARequest builders.
 	TrustCenterNDARequest *TrustCenterNDARequestClient
 	// TrustCenterSetting is the client for interacting with the TrustCenterSetting builders.
@@ -458,6 +461,7 @@ func (c *Client) init() {
 	c.TrustCenterCompliance = NewTrustCenterComplianceClient(c.config)
 	c.TrustCenterDoc = NewTrustCenterDocClient(c.config)
 	c.TrustCenterEntity = NewTrustCenterEntityClient(c.config)
+	c.TrustCenterFAQ = NewTrustCenterFAQClient(c.config)
 	c.TrustCenterNDARequest = NewTrustCenterNDARequestClient(c.config)
 	c.TrustCenterSetting = NewTrustCenterSettingClient(c.config)
 	c.TrustCenterSubprocessor = NewTrustCenterSubprocessorClient(c.config)
@@ -772,6 +776,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		TrustCenterCompliance:      NewTrustCenterComplianceClient(cfg),
 		TrustCenterDoc:             NewTrustCenterDocClient(cfg),
 		TrustCenterEntity:          NewTrustCenterEntityClient(cfg),
+		TrustCenterFAQ:             NewTrustCenterFAQClient(cfg),
 		TrustCenterNDARequest:      NewTrustCenterNDARequestClient(cfg),
 		TrustCenterSetting:         NewTrustCenterSettingClient(cfg),
 		TrustCenterSubprocessor:    NewTrustCenterSubprocessorClient(cfg),
@@ -893,6 +898,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		TrustCenterCompliance:      NewTrustCenterComplianceClient(cfg),
 		TrustCenterDoc:             NewTrustCenterDocClient(cfg),
 		TrustCenterEntity:          NewTrustCenterEntityClient(cfg),
+		TrustCenterFAQ:             NewTrustCenterFAQClient(cfg),
 		TrustCenterNDARequest:      NewTrustCenterNDARequestClient(cfg),
 		TrustCenterSetting:         NewTrustCenterSettingClient(cfg),
 		TrustCenterSubprocessor:    NewTrustCenterSubprocessorClient(cfg),
@@ -956,11 +962,12 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Remediation, c.Review, c.Risk, c.Scan, c.ScheduledJob, c.ScheduledJobRun,
 		c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber, c.TFASetting,
 		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
-		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterNDARequest,
-		c.TrustCenterSetting, c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig,
-		c.User, c.UserSetting, c.Vulnerability, c.Webauthn, c.WorkflowAssignment,
-		c.WorkflowAssignmentTarget, c.WorkflowDefinition, c.WorkflowEvent,
-		c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
+		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterFAQ,
+		c.TrustCenterNDARequest, c.TrustCenterSetting, c.TrustCenterSubprocessor,
+		c.TrustCenterWatermarkConfig, c.User, c.UserSetting, c.Vulnerability,
+		c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
+		c.WorkflowDefinition, c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef,
+		c.WorkflowProposal,
 	} {
 		n.Use(hooks...)
 	}
@@ -989,11 +996,12 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Remediation, c.Review, c.Risk, c.Scan, c.ScheduledJob, c.ScheduledJobRun,
 		c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber, c.TFASetting,
 		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
-		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterNDARequest,
-		c.TrustCenterSetting, c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig,
-		c.User, c.UserSetting, c.Vulnerability, c.Webauthn, c.WorkflowAssignment,
-		c.WorkflowAssignmentTarget, c.WorkflowDefinition, c.WorkflowEvent,
-		c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
+		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterFAQ,
+		c.TrustCenterNDARequest, c.TrustCenterSetting, c.TrustCenterSubprocessor,
+		c.TrustCenterWatermarkConfig, c.User, c.UserSetting, c.Vulnerability,
+		c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
+		c.WorkflowDefinition, c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef,
+		c.WorkflowProposal,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1248,6 +1256,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.TrustCenterDoc.mutate(ctx, m)
 	case *TrustCenterEntityMutation:
 		return c.TrustCenterEntity.mutate(ctx, m)
+	case *TrustCenterFAQMutation:
+		return c.TrustCenterFAQ.mutate(ctx, m)
 	case *TrustCenterNDARequestMutation:
 		return c.TrustCenterNDARequest.mutate(ctx, m)
 	case *TrustCenterSettingMutation:
@@ -17603,6 +17613,25 @@ func (c *NoteClient) QueryDiscussion(_m *Note) *DiscussionQuery {
 	return query
 }
 
+// QueryTrustCenterFaq queries the trust_center_faq edge of a Note.
+func (c *NoteClient) QueryTrustCenterFaq(_m *Note) *TrustCenterFAQQuery {
+	query := (&TrustCenterFAQClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(trustcenterfaq.Table, trustcenterfaq.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.TrustCenterFaqTable, note.TrustCenterFaqColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterFAQ
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryFiles queries the files edge of a Note.
 func (c *NoteClient) QueryFiles(_m *Note) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()
@@ -29618,6 +29647,25 @@ func (c *TrustCenterClient) QueryTrustCenterNdaRequests(_m *TrustCenter) *TrustC
 	return query
 }
 
+// QueryTrustCenterFaqs queries the trust_center_faqs edge of a TrustCenter.
+func (c *TrustCenterClient) QueryTrustCenterFaqs(_m *TrustCenter) *TrustCenterFAQQuery {
+	query := (&TrustCenterFAQClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(trustcenterfaq.Table, trustcenterfaq.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TrustCenterFaqsTable, trustcenter.TrustCenterFaqsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterFAQ
+		step.Edge.Schema = schemaConfig.TrustCenterFAQ
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TrustCenterClient) Hooks() []Hook {
 	hooks := c.hooks.TrustCenter
@@ -30351,6 +30399,217 @@ func (c *TrustCenterEntityClient) mutate(ctx context.Context, m *TrustCenterEnti
 		return (&TrustCenterEntityDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown TrustCenterEntity mutation op: %q", m.Op())
+	}
+}
+
+// TrustCenterFAQClient is a client for the TrustCenterFAQ schema.
+type TrustCenterFAQClient struct {
+	config
+}
+
+// NewTrustCenterFAQClient returns a client for the TrustCenterFAQ from the given config.
+func NewTrustCenterFAQClient(c config) *TrustCenterFAQClient {
+	return &TrustCenterFAQClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trustcenterfaq.Hooks(f(g(h())))`.
+func (c *TrustCenterFAQClient) Use(hooks ...Hook) {
+	c.hooks.TrustCenterFAQ = append(c.hooks.TrustCenterFAQ, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `trustcenterfaq.Intercept(f(g(h())))`.
+func (c *TrustCenterFAQClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TrustCenterFAQ = append(c.inters.TrustCenterFAQ, interceptors...)
+}
+
+// Create returns a builder for creating a TrustCenterFAQ entity.
+func (c *TrustCenterFAQClient) Create() *TrustCenterFAQCreate {
+	mutation := newTrustCenterFAQMutation(c.config, OpCreate)
+	return &TrustCenterFAQCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrustCenterFAQ entities.
+func (c *TrustCenterFAQClient) CreateBulk(builders ...*TrustCenterFAQCreate) *TrustCenterFAQCreateBulk {
+	return &TrustCenterFAQCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TrustCenterFAQClient) MapCreateBulk(slice any, setFunc func(*TrustCenterFAQCreate, int)) *TrustCenterFAQCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TrustCenterFAQCreateBulk{err: fmt.Errorf("calling to TrustCenterFAQClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TrustCenterFAQCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TrustCenterFAQCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrustCenterFAQ.
+func (c *TrustCenterFAQClient) Update() *TrustCenterFAQUpdate {
+	mutation := newTrustCenterFAQMutation(c.config, OpUpdate)
+	return &TrustCenterFAQUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrustCenterFAQClient) UpdateOne(_m *TrustCenterFAQ) *TrustCenterFAQUpdateOne {
+	mutation := newTrustCenterFAQMutation(c.config, OpUpdateOne, withTrustCenterFAQ(_m))
+	return &TrustCenterFAQUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrustCenterFAQClient) UpdateOneID(id string) *TrustCenterFAQUpdateOne {
+	mutation := newTrustCenterFAQMutation(c.config, OpUpdateOne, withTrustCenterFAQID(id))
+	return &TrustCenterFAQUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrustCenterFAQ.
+func (c *TrustCenterFAQClient) Delete() *TrustCenterFAQDelete {
+	mutation := newTrustCenterFAQMutation(c.config, OpDelete)
+	return &TrustCenterFAQDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TrustCenterFAQClient) DeleteOne(_m *TrustCenterFAQ) *TrustCenterFAQDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TrustCenterFAQClient) DeleteOneID(id string) *TrustCenterFAQDeleteOne {
+	builder := c.Delete().Where(trustcenterfaq.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrustCenterFAQDeleteOne{builder}
+}
+
+// Query returns a query builder for TrustCenterFAQ.
+func (c *TrustCenterFAQClient) Query() *TrustCenterFAQQuery {
+	return &TrustCenterFAQQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTrustCenterFAQ},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TrustCenterFAQ entity by its id.
+func (c *TrustCenterFAQClient) Get(ctx context.Context, id string) (*TrustCenterFAQ, error) {
+	return c.Query().Where(trustcenterfaq.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrustCenterFAQClient) GetX(ctx context.Context, id string) *TrustCenterFAQ {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryBlockedGroups queries the blocked_groups edge of a TrustCenterFAQ.
+func (c *TrustCenterFAQClient) QueryBlockedGroups(_m *TrustCenterFAQ) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterfaq.Table, trustcenterfaq.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterfaq.BlockedGroupsTable, trustcenterfaq.BlockedGroupsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a TrustCenterFAQ.
+func (c *TrustCenterFAQClient) QueryEditors(_m *TrustCenterFAQ) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterfaq.Table, trustcenterfaq.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterfaq.EditorsTable, trustcenterfaq.EditorsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTrustCenter queries the trust_center edge of a TrustCenterFAQ.
+func (c *TrustCenterFAQClient) QueryTrustCenter(_m *TrustCenterFAQ) *TrustCenterQuery {
+	query := (&TrustCenterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterfaq.Table, trustcenterfaq.FieldID, id),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcenterfaq.TrustCenterTable, trustcenterfaq.TrustCenterColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterFAQ
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNotes queries the notes edge of a TrustCenterFAQ.
+func (c *TrustCenterFAQClient) QueryNotes(_m *TrustCenterFAQ) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterfaq.Table, trustcenterfaq.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterfaq.NotesTable, trustcenterfaq.NotesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *TrustCenterFAQClient) Hooks() []Hook {
+	hooks := c.hooks.TrustCenterFAQ
+	return append(hooks[:len(hooks):len(hooks)], trustcenterfaq.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TrustCenterFAQClient) Interceptors() []Interceptor {
+	inters := c.inters.TrustCenterFAQ
+	return append(inters[:len(inters):len(inters)], trustcenterfaq.Interceptors[:]...)
+}
+
+func (c *TrustCenterFAQClient) mutate(ctx context.Context, m *TrustCenterFAQMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TrustCenterFAQCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TrustCenterFAQUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TrustCenterFAQUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TrustCenterFAQDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TrustCenterFAQ mutation op: %q", m.Op())
 	}
 }
 
@@ -34811,11 +35070,11 @@ type (
 		Procedure, Program, ProgramMembership, Remediation, Review, Risk, Scan,
 		ScheduledJob, ScheduledJobRun, Standard, Subcontrol, Subprocessor, Subscriber,
 		TFASetting, TagDefinition, Task, Template, TrustCenter, TrustCenterCompliance,
-		TrustCenterDoc, TrustCenterEntity, TrustCenterNDARequest, TrustCenterSetting,
-		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
-		Vulnerability, Webauthn, WorkflowAssignment, WorkflowAssignmentTarget,
-		WorkflowDefinition, WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
-		WorkflowProposal []ent.Hook
+		TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest,
+		TrustCenterSetting, TrustCenterSubprocessor, TrustCenterWatermarkConfig, User,
+		UserSetting, Vulnerability, Webauthn, WorkflowAssignment,
+		WorkflowAssignmentTarget, WorkflowDefinition, WorkflowEvent, WorkflowInstance,
+		WorkflowObjectRef, WorkflowProposal []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
@@ -34834,11 +35093,11 @@ type (
 		Procedure, Program, ProgramMembership, Remediation, Review, Risk, Scan,
 		ScheduledJob, ScheduledJobRun, Standard, Subcontrol, Subprocessor, Subscriber,
 		TFASetting, TagDefinition, Task, Template, TrustCenter, TrustCenterCompliance,
-		TrustCenterDoc, TrustCenterEntity, TrustCenterNDARequest, TrustCenterSetting,
-		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
-		Vulnerability, Webauthn, WorkflowAssignment, WorkflowAssignmentTarget,
-		WorkflowDefinition, WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
-		WorkflowProposal []ent.Interceptor
+		TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest,
+		TrustCenterSetting, TrustCenterSubprocessor, TrustCenterWatermarkConfig, User,
+		UserSetting, Vulnerability, Webauthn, WorkflowAssignment,
+		WorkflowAssignmentTarget, WorkflowDefinition, WorkflowEvent, WorkflowInstance,
+		WorkflowObjectRef, WorkflowProposal []ent.Interceptor
 	}
 )
 

@@ -207,6 +207,12 @@ func (t TrustCenter) Edges() []ent.Edge {
 			edgeSchema:    TrustCenterNDARequest{},
 			cascadeDelete: "TrustCenter",
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    t,
+			name:          "faqs",
+			edgeSchema:    TrustCenterFAQ{},
+			cascadeDelete: "TrustCenter",
+		}),
 	}
 }
 

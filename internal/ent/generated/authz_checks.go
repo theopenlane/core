@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
@@ -6685,6 +6686,194 @@ func (m *TrustCenterEntityMutation) CheckAccessForEdit(ctx context.Context) erro
 }
 
 func (m *TrustCenterEntityMutation) CheckAccessForDelete(ctx context.Context) error {
+	gCtx := graphql.GetFieldContext(ctx)
+	if gCtx == nil {
+		// Skip to the next privacy rule (equivalent to return nil)
+		// if this is not a graphql request
+		return privacy.Skipf("not a graphql request, no context to check")
+	}
+
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
+		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
+
+		return privacy.Allowf("nil request, bypassing auth check")
+	}
+
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to get authenticated user from context")
+		return privacy.Skipf("unable to get authenticated user from context")
+	}
+
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: auth.GetAuthzSubjectType(ctx),
+		SubjectID:   au.SubjectID,
+		Context:     newOrganizationContextKey(au.SubjectEmail),
+	}
+
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
+
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
+	}
+
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
+}
+
+func (q *TrustCenterFAQQuery) CheckAccess(ctx context.Context) error {
+	gCtx := graphql.GetFieldContext(ctx)
+
+	if gCtx == nil {
+		// Skip to the next privacy rule (equivalent to return nil)
+		// if this is not a graphql request
+		return privacy.Skipf("not a graphql request, no context to check")
+	}
+
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to get authenticated user from context")
+		return privacy.Skipf("unable to get authenticated user from context")
+	}
+
+	var objectID string
+
+	// check id from graphql arg context
+	// when all objects are requested, the interceptor will check object access
+	// check the where input first
+	whereArg := gCtx.Args["where"]
+	if whereArg != nil {
+		where, ok := whereArg.(*TrustCenterFAQWhereInput)
+		if ok && where != nil && where.TrustCenterID != nil {
+			objectID = *where.TrustCenterID
+		}
+	}
+
+	// if that doesn't work, check for the id in the request args
+	if objectID == "" {
+		objectID, _ = gCtx.Args["trustcenterid"].(string)
+	}
+
+	// if we still don't have an object id, run the query and grab the object ID
+	// from the result
+	// this happens on join tables where we have the join ID (for updates and deletes)
+	// and not the actual object id
+	if objectID == "" {
+		// allow this query to run
+		reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+		ob, err := q.Clone().Only(reqCtx)
+		if err != nil {
+			return privacy.Allowf("nil request, bypassing auth check")
+		}
+
+		objectID = ob.TrustCenterID
+	}
+
+	// request is for a list objects, will get filtered in interceptors
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
+	}
+
+	// check if the user has access to the object requested
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanView,
+		ObjectType:  "trust_center",
+		SubjectType: auth.GetAuthzSubjectType(ctx),
+		SubjectID:   au.SubjectID,
+		ObjectID:    objectID,
+		Context:     newOrganizationContextKey(au.SubjectEmail),
+	}
+
+	access, err := q.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
+	}
+
+	// Skip to the next privacy rule (equivalent to return nil)
+	return privacy.Skip
+}
+
+func (m *TrustCenterFAQMutation) CheckAccessForEdit(ctx context.Context) error {
+	var objectID string
+
+	gCtx := graphql.GetFieldContext(ctx)
+	if gCtx == nil {
+		// Skip to the next privacy rule (equivalent to return nil)
+		// if this is not a graphql request
+		return privacy.Skipf("not a graphql request, no context to check")
+	}
+
+	// get the input from the context
+	gInput := gCtx.Args["input"]
+
+	// check if the input is a CreateTrustCenterFAQInput
+	input, ok := gInput.(CreateTrustCenterFAQInput)
+	if ok {
+		objectID = *input.TrustCenterID
+
+	}
+
+	// check the id from the args
+	if objectID == "" {
+		objectID, _ = gCtx.Args["trustcenterid"].(string)
+	}
+	// if this is still empty, we need to query the object to get the object id
+	// this happens on join tables where we have the join ID (for updates and deletes)
+	if objectID == "" {
+		id, ok := gCtx.Args["id"].(string)
+		if ok {
+			// allow this query to run
+			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
+			ob, err := m.Client().TrustCenterFAQ.Query().Where(trustcenterfaq.ID(id)).Only(reqCtx)
+			if err != nil {
+				return privacy.Skipf("nil request, skipping auth check")
+			}
+			objectID = ob.TrustCenterID
+		}
+	}
+
+	// request is for a list objects, will get filtered in interceptors
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
+	}
+
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to get authenticated user from context")
+		return privacy.Skipf("unable to get authenticated user from context")
+	}
+
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: auth.GetAuthzSubjectType(ctx),
+		SubjectID:   au.SubjectID,
+		Context:     newOrganizationContextKey(au.SubjectEmail),
+	}
+
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
+
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
+	}
+
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
+}
+
+func (m *TrustCenterFAQMutation) CheckAccessForDelete(ctx context.Context) error {
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
 		// Skip to the next privacy rule (equivalent to return nil)

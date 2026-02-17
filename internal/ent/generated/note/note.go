@@ -65,6 +65,8 @@ const (
 	EdgeTrustCenter = "trust_center"
 	// EdgeDiscussion holds the string denoting the discussion edge name in mutations.
 	EdgeDiscussion = "discussion"
+	// EdgeTrustCenterFaq holds the string denoting the trust_center_faq edge name in mutations.
+	EdgeTrustCenterFaq = "trust_center_faq"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
 	// Table holds the table name of the note in the database.
@@ -139,6 +141,13 @@ const (
 	DiscussionInverseTable = "discussions"
 	// DiscussionColumn is the table column denoting the discussion relation/edge.
 	DiscussionColumn = "discussion_id"
+	// TrustCenterFaqTable is the table that holds the trust_center_faq relation/edge.
+	TrustCenterFaqTable = "notes"
+	// TrustCenterFaqInverseTable is the table name for the TrustCenterFAQ entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenterfaq" package.
+	TrustCenterFaqInverseTable = "trust_center_fa_qs"
+	// TrustCenterFaqColumn is the table column denoting the trust_center_faq relation/edge.
+	TrustCenterFaqColumn = "trust_center_faq_notes"
 	// FilesTable is the table that holds the files relation/edge.
 	FilesTable = "files"
 	// FilesInverseTable is the table name for the File entity.
@@ -183,6 +192,7 @@ var ForeignKeys = []string{
 	"risk_comments",
 	"subcontrol_comments",
 	"task_comments",
+	"trust_center_faq_notes",
 	"vulnerability_comments",
 }
 
@@ -376,6 +386,13 @@ func ByDiscussionField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByTrustCenterFaqField orders the results by trust_center_faq field.
+func ByTrustCenterFaqField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterFaqStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByFilesCount orders the results by files count.
 func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -457,6 +474,13 @@ func newDiscussionStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DiscussionInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, DiscussionTable, DiscussionColumn),
+	)
+}
+func newTrustCenterFaqStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterFaqInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterFaqTable, TrustCenterFaqColumn),
 	)
 }
 func newFilesStep() *sqlgraph.Step {

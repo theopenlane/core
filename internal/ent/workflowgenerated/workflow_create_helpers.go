@@ -131,6 +131,7 @@ var creatableSchemaTypes = map[string]createObjectEntry{
 	NormalizeSchemaType("TrustCenterEntity"): makeCreateEntry[generated.CreateTrustCenterEntityInput](func(client *generated.Client) *generated.TrustCenterEntityCreate {
 		return client.TrustCenterEntity.Create()
 	}),
+	NormalizeSchemaType("TrustCenterFAQ"): makeCreateEntry[generated.CreateTrustCenterFAQInput](func(client *generated.Client) *generated.TrustCenterFAQCreate { return client.TrustCenterFAQ.Create() }),
 	NormalizeSchemaType("TrustCenterNDARequest"): makeCreateEntry[generated.CreateTrustCenterNDARequestInput](func(client *generated.Client) *generated.TrustCenterNDARequestCreate {
 		return client.TrustCenterNDARequest.Create()
 	}),

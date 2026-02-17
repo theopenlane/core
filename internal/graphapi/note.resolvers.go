@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
@@ -192,6 +193,30 @@ func (r *mutationResolver) UpdateInternalPolicyComment(ctx context.Context, id s
 	}, nil
 }
 
+// UpdateTrustCenterFAQComment is the resolver for the updateTrustCenterFAQComment field.
+func (r *mutationResolver) UpdateTrustCenterFAQComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TrustCenterFAQUpdatePayload, error) {
+	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterfaq"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	if err = req.Exec(ctx); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterfaq"})
+	}
+
+	objectRes, err := withTransactionalMutation(ctx).TrustCenterFAQ.Query().Where(trustcenterfaq.HasNotesWith(note.ID(id))).WithNotes().Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterfaq"})
+	}
+
+	return &model.TrustCenterFAQUpdatePayload{
+		TrustCenterFAQ: objectRes,
+	}, nil
+}
+
 // UpdateTrustCenterPost is the resolver for the updateTrustCenterPost field.
 func (r *mutationResolver) UpdateTrustCenterPost(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TrustCenterUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
@@ -270,6 +295,29 @@ func (r *queryResolver) Note(ctx context.Context, id string) (*generated.Note, e
 	}
 
 	return res, nil
+}
+
+// CreateNote is the resolver for the createNote field.
+func (r *createTrustCenterFAQInputResolver) CreateNote(ctx context.Context, obj *generated.CreateTrustCenterFAQInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	noteRes, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "note"})
+	}
+
+	obj.NoteIDs = append(obj.NoteIDs, noteRes.ID)
+
+	return nil
 }
 
 // AddDiscussion is the resolver for the addDiscussion field.
@@ -862,6 +910,44 @@ func (r *updateTaskInputResolver) AddComment(ctx context.Context, obj *generated
 
 // DeleteComment is the resolver for the deleteComment field.
 func (r *updateTaskInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateTaskInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "comment"})
+	}
+
+	return nil
+}
+
+// AddComment is the resolver for the addComment field.
+func (r *updateTrustCenterFAQInputResolver) AddComment(ctx context.Context, obj *generated.UpdateTrustCenterFAQInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.TrustCenterFaqID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.TrustCenterFaqID == nil {
+		return common.NewNotFoundError("trustcenterfaq")
+	}
+
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
+	}
+
+	return nil
+}
+
+// DeleteComment is the resolver for the deleteComment field.
+func (r *updateTrustCenterFAQInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateTrustCenterFAQInput, data *string) error {
 	if data == nil {
 		return nil
 	}

@@ -2015,6 +2015,7 @@ type ComplexityRoot struct {
 		TrustCenterComplianceHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterComplianceHistoryOrder, where *historygenerated.TrustCenterComplianceHistoryWhereInput) int
 		TrustCenterDocHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterDocHistoryOrder, where *historygenerated.TrustCenterDocHistoryWhereInput) int
 		TrustCenterEntityHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterEntityHistoryOrder, where *historygenerated.TrustCenterEntityHistoryWhereInput) int
+		TrustCenterFaqHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterFAQHistoryOrder, where *historygenerated.TrustCenterFAQHistoryWhereInput) int
 		TrustCenterHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterHistoryOrder, where *historygenerated.TrustCenterHistoryWhereInput) int
 		TrustCenterNdaRequestHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterNDARequestHistoryOrder, where *historygenerated.TrustCenterNDARequestHistoryWhereInput) int
 		TrustCenterSettingHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterSettingHistoryOrder, where *historygenerated.TrustCenterSettingHistoryWhereInput) int
@@ -2545,6 +2546,32 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterEntityHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	TrustCenterFAQHistory struct {
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		DisplayOrder  func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		ReferenceLink func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		TrustCenterID func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+	}
+
+	TrustCenterFAQHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	TrustCenterFAQHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
 	}
@@ -14201,6 +14228,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.TrustCenterEntityHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterEntityHistoryOrder), args["where"].(*historygenerated.TrustCenterEntityHistoryWhereInput)), true
 
+	case "Query.trustCenterFaqHistories":
+		if e.complexity.Query.TrustCenterFaqHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterFaqHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterFaqHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterFAQHistoryOrder), args["where"].(*historygenerated.TrustCenterFAQHistoryWhereInput)), true
+
 	case "Query.trustCenterHistories":
 		if e.complexity.Query.TrustCenterHistories == nil {
 			break
@@ -17176,6 +17215,125 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterEntityHistoryEdge.Node(childComplexity), true
 
+	case "TrustCenterFAQHistory.createdAt":
+		if e.complexity.TrustCenterFAQHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistory.CreatedAt(childComplexity), true
+
+	case "TrustCenterFAQHistory.createdBy":
+		if e.complexity.TrustCenterFAQHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistory.CreatedBy(childComplexity), true
+
+	case "TrustCenterFAQHistory.displayOrder":
+		if e.complexity.TrustCenterFAQHistory.DisplayOrder == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistory.DisplayOrder(childComplexity), true
+
+	case "TrustCenterFAQHistory.historyTime":
+		if e.complexity.TrustCenterFAQHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistory.HistoryTime(childComplexity), true
+
+	case "TrustCenterFAQHistory.id":
+		if e.complexity.TrustCenterFAQHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistory.ID(childComplexity), true
+
+	case "TrustCenterFAQHistory.operation":
+		if e.complexity.TrustCenterFAQHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistory.Operation(childComplexity), true
+
+	case "TrustCenterFAQHistory.ref":
+		if e.complexity.TrustCenterFAQHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistory.Ref(childComplexity), true
+
+	case "TrustCenterFAQHistory.referenceLink":
+		if e.complexity.TrustCenterFAQHistory.ReferenceLink == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistory.ReferenceLink(childComplexity), true
+
+	case "TrustCenterFAQHistory.tags":
+		if e.complexity.TrustCenterFAQHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistory.Tags(childComplexity), true
+
+	case "TrustCenterFAQHistory.trustCenterID":
+		if e.complexity.TrustCenterFAQHistory.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistory.TrustCenterID(childComplexity), true
+
+	case "TrustCenterFAQHistory.updatedAt":
+		if e.complexity.TrustCenterFAQHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistory.UpdatedAt(childComplexity), true
+
+	case "TrustCenterFAQHistory.updatedBy":
+		if e.complexity.TrustCenterFAQHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistory.UpdatedBy(childComplexity), true
+
+	case "TrustCenterFAQHistoryConnection.edges":
+		if e.complexity.TrustCenterFAQHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistoryConnection.Edges(childComplexity), true
+
+	case "TrustCenterFAQHistoryConnection.pageInfo":
+		if e.complexity.TrustCenterFAQHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistoryConnection.PageInfo(childComplexity), true
+
+	case "TrustCenterFAQHistoryConnection.totalCount":
+		if e.complexity.TrustCenterFAQHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistoryConnection.TotalCount(childComplexity), true
+
+	case "TrustCenterFAQHistoryEdge.cursor":
+		if e.complexity.TrustCenterFAQHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistoryEdge.Cursor(childComplexity), true
+
+	case "TrustCenterFAQHistoryEdge.node":
+		if e.complexity.TrustCenterFAQHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistoryEdge.Node(childComplexity), true
+
 	case "TrustCenterHistory.createdAt":
 		if e.complexity.TrustCenterHistory.CreatedAt == nil {
 			break
@@ -20118,6 +20276,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTrustCenterDocHistoryWhereInput,
 		ec.unmarshalInputTrustCenterEntityHistoryOrder,
 		ec.unmarshalInputTrustCenterEntityHistoryWhereInput,
+		ec.unmarshalInputTrustCenterFAQHistoryOrder,
+		ec.unmarshalInputTrustCenterFAQHistoryWhereInput,
 		ec.unmarshalInputTrustCenterHistoryOrder,
 		ec.unmarshalInputTrustCenterHistoryWhereInput,
 		ec.unmarshalInputTrustCenterNDARequestHistoryOrder,
@@ -46414,6 +46574,37 @@ type Query {
     """
     where: TrustCenterEntityHistoryWhereInput
   ): TrustCenterEntityHistoryConnection!
+  trustCenterFaqHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterFAQHistories returned from the connection.
+    """
+    orderBy: TrustCenterFAQHistoryOrder
+
+    """
+    Filtering options for TrustCenterFAQHistories returned from the connection.
+    """
+    where: TrustCenterFAQHistoryWhereInput
+  ): TrustCenterFAQHistoryConnection!
   trustCenterHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -53509,6 +53700,260 @@ input TrustCenterEntityHistoryWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+}
+type TrustCenterFAQHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: TrustCenterFAQHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  optional reference link for the FAQ
+  """
+  referenceLink: String
+  """
+  display order of the FAQ
+  """
+  displayOrder: Int
+  """
+  ID of the trust center
+  """
+  trustCenterID: String
+}
+"""
+A connection to a list of items.
+"""
+type TrustCenterFAQHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [TrustCenterFAQHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TrustCenterFAQHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: TrustCenterFAQHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+TrustCenterFAQHistoryOpType is enum for the field operation
+"""
+enum TrustCenterFAQHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for TrustCenterFAQHistory connections
+"""
+input TrustCenterFAQHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TrustCenterFAQHistories.
+  """
+  field: TrustCenterFAQHistoryOrderField!
+}
+"""
+Properties by which TrustCenterFAQHistory connections can be ordered.
+"""
+enum TrustCenterFAQHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+TrustCenterFAQHistoryWhereInput is used for filtering TrustCenterFAQHistory objects.
+Input was generated by ent.
+"""
+input TrustCenterFAQHistoryWhereInput {
+  not: TrustCenterFAQHistoryWhereInput
+  and: [TrustCenterFAQHistoryWhereInput!]
+  or: [TrustCenterFAQHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: TrustCenterFAQHistoryOpType
+  operationNEQ: TrustCenterFAQHistoryOpType
+  operationIn: [TrustCenterFAQHistoryOpType!]
+  operationNotIn: [TrustCenterFAQHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  reference_link field predicates
+  """
+  referenceLink: String
+  referenceLinkNEQ: String
+  referenceLinkIn: [String!]
+  referenceLinkNotIn: [String!]
+  referenceLinkGT: String
+  referenceLinkGTE: String
+  referenceLinkLT: String
+  referenceLinkLTE: String
+  referenceLinkContains: String
+  referenceLinkHasPrefix: String
+  referenceLinkHasSuffix: String
+  referenceLinkIsNil: Boolean
+  referenceLinkNotNil: Boolean
+  referenceLinkEqualFold: String
+  referenceLinkContainsFold: String
+  """
+  display_order field predicates
+  """
+  displayOrder: Int
+  displayOrderNEQ: Int
+  displayOrderIn: [Int!]
+  displayOrderNotIn: [Int!]
+  displayOrderGT: Int
+  displayOrderGTE: Int
+  displayOrderLT: Int
+  displayOrderLTE: Int
+  displayOrderIsNil: Boolean
+  displayOrderNotNil: Boolean
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
 }
 type TrustCenterHistory implements Node {
   id: ID!

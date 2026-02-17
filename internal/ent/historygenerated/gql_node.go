@@ -71,6 +71,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterfaqhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersettinghistory"
@@ -391,6 +392,11 @@ var trustcenterentityhistoryImplementors = []string{"TrustCenterEntityHistory", 
 
 // IsNode implements the Node interface check for GQLGen.
 func (*TrustCenterEntityHistory) IsNode() {}
+
+var trustcenterfaqhistoryImplementors = []string{"TrustCenterFAQHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*TrustCenterFAQHistory) IsNode() {}
 
 var trustcenterhistoryImplementors = []string{"TrustCenterHistory", "Node"}
 
@@ -1056,6 +1062,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(trustcenterentityhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterentityhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case trustcenterfaqhistory.Table:
+		query := c.TrustCenterFAQHistory.Query().
+			Where(trustcenterfaqhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterfaqhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2207,6 +2222,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.TrustCenterEntityHistory.Query().
 			Where(trustcenterentityhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, trustcenterentityhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case trustcenterfaqhistory.Table:
+		query := c.TrustCenterFAQHistory.Query().
+			Where(trustcenterfaqhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, trustcenterfaqhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

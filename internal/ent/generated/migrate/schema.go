@@ -2844,6 +2844,8 @@ var (
 		{Name: "trust_center_doc_editors", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_entity_blocked_groups", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_entity_editors", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_faq_blocked_groups", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_faq_editors", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_nda_request_blocked_groups", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_nda_request_editors", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_setting_blocked_groups", Type: field.TypeString, Nullable: true},
@@ -3170,74 +3172,86 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_nda_requests_blocked_groups",
+				Symbol:     "groups_trust_center_fa_qs_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[70]},
+				RefColumns: []*schema.Column{TrustCenterFaQsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_trust_center_fa_qs_editors",
+				Columns:    []*schema.Column{GroupsColumns[71]},
+				RefColumns: []*schema.Column{TrustCenterFaQsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_trust_center_nda_requests_blocked_groups",
+				Columns:    []*schema.Column{GroupsColumns[72]},
 				RefColumns: []*schema.Column{TrustCenterNdaRequestsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_nda_requests_editors",
-				Columns:    []*schema.Column{GroupsColumns[71]},
+				Columns:    []*schema.Column{GroupsColumns[73]},
 				RefColumns: []*schema.Column{TrustCenterNdaRequestsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_settings_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[72]},
+				Columns:    []*schema.Column{GroupsColumns[74]},
 				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_settings_editors",
-				Columns:    []*schema.Column{GroupsColumns[73]},
+				Columns:    []*schema.Column{GroupsColumns[75]},
 				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_subprocessors_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[74]},
+				Columns:    []*schema.Column{GroupsColumns[76]},
 				RefColumns: []*schema.Column{TrustCenterSubprocessorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_subprocessors_editors",
-				Columns:    []*schema.Column{GroupsColumns[75]},
+				Columns:    []*schema.Column{GroupsColumns[77]},
 				RefColumns: []*schema.Column{TrustCenterSubprocessorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_watermark_configs_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[76]},
+				Columns:    []*schema.Column{GroupsColumns[78]},
 				RefColumns: []*schema.Column{TrustCenterWatermarkConfigsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_watermark_configs_editors",
-				Columns:    []*schema.Column{GroupsColumns[77]},
+				Columns:    []*schema.Column{GroupsColumns[79]},
 				RefColumns: []*schema.Column{TrustCenterWatermarkConfigsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_vulnerabilities_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[78]},
-				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "groups_vulnerabilities_editors",
-				Columns:    []*schema.Column{GroupsColumns[79]},
-				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "groups_vulnerabilities_viewers",
 				Columns:    []*schema.Column{GroupsColumns[80]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_workflow_definitions_groups",
+				Symbol:     "groups_vulnerabilities_editors",
 				Columns:    []*schema.Column{GroupsColumns[81]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_vulnerabilities_viewers",
+				Columns:    []*schema.Column{GroupsColumns[82]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_workflow_definitions_groups",
+				Columns:    []*schema.Column{GroupsColumns[83]},
 				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4367,6 +4381,7 @@ var (
 		{Name: "subcontrol_comments", Type: field.TypeString, Nullable: true},
 		{Name: "task_comments", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_faq_notes", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_comments", Type: field.TypeString, Nullable: true},
 	}
 	// NotesTable holds the schema information for the "notes" table.
@@ -4466,8 +4481,14 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "notes_vulnerabilities_comments",
+				Symbol:     "notes_trust_center_fa_qs_notes",
 				Columns:    []*schema.Column{NotesColumns[28]},
+				RefColumns: []*schema.Column{TrustCenterFaQsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notes_vulnerabilities_comments",
+				Columns:    []*schema.Column{NotesColumns[29]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -7176,6 +7197,34 @@ var (
 				Symbol:     "trust_center_entities_entity_types_entity_type",
 				Columns:    []*schema.Column{TrustCenterEntitiesColumns[12]},
 				RefColumns: []*schema.Column{EntityTypesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// TrustCenterFaQsColumns holds the columns for the "trust_center_fa_qs" table.
+	TrustCenterFaQsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "reference_link", Type: field.TypeString, Nullable: true},
+		{Name: "display_order", Type: field.TypeInt, Nullable: true, Default: 0},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+	}
+	// TrustCenterFaQsTable holds the schema information for the "trust_center_fa_qs" table.
+	TrustCenterFaQsTable = &schema.Table{
+		Name:       "trust_center_fa_qs",
+		Columns:    TrustCenterFaQsColumns,
+		PrimaryKey: []*schema.Column{TrustCenterFaQsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "trust_center_fa_qs_trust_centers_trust_center_faqs",
+				Columns:    []*schema.Column{TrustCenterFaQsColumns[10]},
+				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -12464,6 +12513,7 @@ var (
 		TrustCenterCompliancesTable,
 		TrustCenterDocsTable,
 		TrustCenterEntitiesTable,
+		TrustCenterFaQsTable,
 		TrustCenterNdaRequestsTable,
 		TrustCenterSettingsTable,
 		TrustCenterSubprocessorsTable,
@@ -12855,18 +12905,20 @@ func init() {
 	GroupsTable.ForeignKeys[48].RefTable = TrustCenterDocsTable
 	GroupsTable.ForeignKeys[49].RefTable = TrustCenterEntitiesTable
 	GroupsTable.ForeignKeys[50].RefTable = TrustCenterEntitiesTable
-	GroupsTable.ForeignKeys[51].RefTable = TrustCenterNdaRequestsTable
-	GroupsTable.ForeignKeys[52].RefTable = TrustCenterNdaRequestsTable
-	GroupsTable.ForeignKeys[53].RefTable = TrustCenterSettingsTable
-	GroupsTable.ForeignKeys[54].RefTable = TrustCenterSettingsTable
-	GroupsTable.ForeignKeys[55].RefTable = TrustCenterSubprocessorsTable
-	GroupsTable.ForeignKeys[56].RefTable = TrustCenterSubprocessorsTable
-	GroupsTable.ForeignKeys[57].RefTable = TrustCenterWatermarkConfigsTable
-	GroupsTable.ForeignKeys[58].RefTable = TrustCenterWatermarkConfigsTable
-	GroupsTable.ForeignKeys[59].RefTable = VulnerabilitiesTable
-	GroupsTable.ForeignKeys[60].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[51].RefTable = TrustCenterFaQsTable
+	GroupsTable.ForeignKeys[52].RefTable = TrustCenterFaQsTable
+	GroupsTable.ForeignKeys[53].RefTable = TrustCenterNdaRequestsTable
+	GroupsTable.ForeignKeys[54].RefTable = TrustCenterNdaRequestsTable
+	GroupsTable.ForeignKeys[55].RefTable = TrustCenterSettingsTable
+	GroupsTable.ForeignKeys[56].RefTable = TrustCenterSettingsTable
+	GroupsTable.ForeignKeys[57].RefTable = TrustCenterSubprocessorsTable
+	GroupsTable.ForeignKeys[58].RefTable = TrustCenterSubprocessorsTable
+	GroupsTable.ForeignKeys[59].RefTable = TrustCenterWatermarkConfigsTable
+	GroupsTable.ForeignKeys[60].RefTable = TrustCenterWatermarkConfigsTable
 	GroupsTable.ForeignKeys[61].RefTable = VulnerabilitiesTable
-	GroupsTable.ForeignKeys[62].RefTable = WorkflowDefinitionsTable
+	GroupsTable.ForeignKeys[62].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[63].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[64].RefTable = WorkflowDefinitionsTable
 	GroupMembershipsTable.ForeignKeys[0].RefTable = GroupsTable
 	GroupMembershipsTable.ForeignKeys[1].RefTable = UsersTable
 	GroupMembershipsTable.ForeignKeys[2].RefTable = OrgMembershipsTable
@@ -12930,7 +12982,8 @@ func init() {
 	NotesTable.ForeignKeys[12].RefTable = SubcontrolsTable
 	NotesTable.ForeignKeys[13].RefTable = TasksTable
 	NotesTable.ForeignKeys[14].RefTable = TrustCentersTable
-	NotesTable.ForeignKeys[15].RefTable = VulnerabilitiesTable
+	NotesTable.ForeignKeys[15].RefTable = TrustCenterFaQsTable
+	NotesTable.ForeignKeys[16].RefTable = VulnerabilitiesTable
 	NotificationsTable.ForeignKeys[0].RefTable = NotificationTemplatesTable
 	NotificationsTable.ForeignKeys[1].RefTable = OrganizationsTable
 	NotificationsTable.ForeignKeys[2].RefTable = UsersTable
@@ -13103,6 +13156,7 @@ func init() {
 	TrustCenterEntitiesTable.ForeignKeys[1].RefTable = TrustCentersTable
 	TrustCenterEntitiesTable.ForeignKeys[2].RefTable = FilesTable
 	TrustCenterEntitiesTable.ForeignKeys[3].RefTable = EntityTypesTable
+	TrustCenterFaQsTable.ForeignKeys[0].RefTable = TrustCentersTable
 	TrustCenterNdaRequestsTable.ForeignKeys[0].RefTable = TrustCentersTable
 	TrustCenterNdaRequestsTable.ForeignKeys[1].RefTable = DocumentDataTable
 	TrustCenterNdaRequestsTable.ForeignKeys[2].RefTable = FilesTable

@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 )
 
 // Note is the model entity for the Note schema.
@@ -73,6 +74,7 @@ type Note struct {
 	risk_comments            *string
 	subcontrol_comments      *string
 	task_comments            *string
+	trust_center_faq_notes   *string
 	vulnerability_comments   *string
 	selectValues             sql.SelectValues
 }
@@ -99,13 +101,15 @@ type NoteEdges struct {
 	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
 	// Discussion holds the value of the discussion edge.
 	Discussion *Discussion `json:"discussion,omitempty"`
+	// TrustCenterFaq holds the value of the trust_center_faq edge.
+	TrustCenterFaq *TrustCenterFAQ `json:"trust_center_faq,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [11]bool
+	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
-	totalCount [11]map[string]int
+	totalCount [12]map[string]int
 
 	namedFiles map[string][]*File
 }
@@ -220,10 +224,21 @@ func (e NoteEdges) DiscussionOrErr() (*Discussion, error) {
 	return nil, &NotLoadedError{edge: "discussion"}
 }
 
+// TrustCenterFaqOrErr returns the TrustCenterFaq value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NoteEdges) TrustCenterFaqOrErr() (*TrustCenterFAQ, error) {
+	if e.TrustCenterFaq != nil {
+		return e.TrustCenterFaq, nil
+	} else if e.loadedTypes[10] {
+		return nil, &NotFoundError{label: trustcenterfaq.Label}
+	}
+	return nil, &NotLoadedError{edge: "trust_center_faq"}
+}
+
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e NoteEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -266,7 +281,9 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case note.ForeignKeys[11]: // task_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[12]: // vulnerability_comments
+		case note.ForeignKeys[12]: // trust_center_faq_notes
+			values[i] = new(sql.NullString)
+		case note.ForeignKeys[13]: // vulnerability_comments
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -468,6 +485,13 @@ func (_m *Note) assignValues(columns []string, values []any) error {
 			}
 		case note.ForeignKeys[12]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_faq_notes", values[i])
+			} else if value.Valid {
+				_m.trust_center_faq_notes = new(string)
+				*_m.trust_center_faq_notes = value.String
+			}
+		case note.ForeignKeys[13]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_comments", values[i])
 			} else if value.Valid {
 				_m.vulnerability_comments = new(string)
@@ -534,6 +558,11 @@ func (_m *Note) QueryTrustCenter() *TrustCenterQuery {
 // QueryDiscussion queries the "discussion" edge of the Note entity.
 func (_m *Note) QueryDiscussion() *DiscussionQuery {
 	return NewNoteClient(_m.config).QueryDiscussion(_m)
+}
+
+// QueryTrustCenterFaq queries the "trust_center_faq" edge of the Note entity.
+func (_m *Note) QueryTrustCenterFaq() *TrustCenterFAQQuery {
+	return NewNoteClient(_m.config).QueryTrustCenterFaq(_m)
 }
 
 // QueryFiles queries the "files" edge of the Note entity.

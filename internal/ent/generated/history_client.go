@@ -193,6 +193,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*TrustCenterEntityMutation]() {
 		c.TrustCenterEntity.Use(hook)
 	}
+	for _, hook := range history.Hooks[*TrustCenterFAQMutation]() {
+		c.TrustCenterFAQ.Use(hook)
+	}
 	for _, hook := range history.Hooks[*TrustCenterNDARequestMutation]() {
 		c.TrustCenterNDARequest.Use(hook)
 	}

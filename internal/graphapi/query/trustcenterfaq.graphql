@@ -1,0 +1,185 @@
+
+mutation CreateBulkCSVTrustCenterFAQ($input: Upload!) {
+  createBulkCSVTrustCenterFAQ(input: $input) {
+    trustCenterFAQs {
+      createdAt
+      createdBy
+      displayOrder
+      id
+      referenceLink
+      tags
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkTrustCenterFAQ($input: [CreateTrustCenterFAQInput!]) {
+  createBulkTrustCenterFAQ(input: $input) {
+    trustCenterFAQs {
+      createdAt
+      createdBy
+      displayOrder
+      id
+      referenceLink
+      tags
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateTrustCenterFAQ($input: CreateTrustCenterFAQInput!) {
+  createTrustCenterFAQ(input: $input) {
+    trustCenterFAQ {
+      createdAt
+      createdBy
+      displayOrder
+      id
+      referenceLink
+      tags
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteTrustCenterFAQ($deleteTrustCenterFAQId: ID!) {
+  deleteTrustCenterFAQ(id: $deleteTrustCenterFAQId) {
+    deletedID
+  }
+}
+
+mutation UpdateBulkTrustCenterFAQ($ids: [ID!]!, $input: UpdateTrustCenterFAQInput!) {
+  updateBulkTrustCenterFAQ(ids: $ids, input: $input) {
+    trustCenterFAQs {
+      createdAt
+      createdBy
+      displayOrder
+      id
+      referenceLink
+      tags
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+    updatedIDs
+  }
+}
+
+mutation UpdateBulkCSVTrustCenterFAQ($input: Upload!) {
+  updateBulkCSVTrustCenterFAQ(input: $input) {
+    trustCenterFAQs {
+      createdAt
+      createdBy
+      displayOrder
+      id
+      referenceLink
+      tags
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+    updatedIDs
+  }
+}
+
+mutation DeleteBulkTrustCenterFAQ($ids: [ID!]!) {
+  deleteBulkTrustCenterFAQ(ids: $ids) {
+    deletedIDs
+  }
+}
+
+query GetAllTrustCenterFAQS($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TrustCenterFAQOrder!]){
+  trustCenterFaQs(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        displayOrder
+        id
+        referenceLink
+        tags
+        trustCenterID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetTrustCenterFAQByID($trustCenterFAQId: ID!) {
+  trustCenterFAQ(id: $trustCenterFAQId) {
+    createdAt
+    createdBy
+    displayOrder
+    id
+    referenceLink
+    tags
+    trustCenterID
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetTrustCenterFAQS($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TrustCenterFAQOrder!], $where: TrustCenterFAQWhereInput) {
+  trustCenterFaQs(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+    ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        displayOrder
+        id
+        referenceLink
+        tags
+        trustCenterID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateTrustCenterFAQ($updateTrustCenterFAQId: ID!, $input: UpdateTrustCenterFAQInput!) {
+  updateTrustCenterFAQ(id: $updateTrustCenterFAQId, input: $input) {
+    trustCenterFAQ {
+      createdAt
+      createdBy
+      displayOrder
+      id
+      referenceLink
+      tags
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}
