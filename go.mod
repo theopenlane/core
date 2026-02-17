@@ -23,8 +23,8 @@ require (
 	github.com/alicebob/miniredis/v2 v2.36.1
 	github.com/alitto/pond/v2 v2.6.2
 	github.com/aws/aws-sdk-go-v2 v1.41.1
-	github.com/aws/aws-sdk-go-v2/config v1.32.7
-	github.com/aws/aws-sdk-go-v2/credentials v1.19.7
+	github.com/aws/aws-sdk-go-v2/config v1.32.8
+	github.com/aws/aws-sdk-go-v2/credentials v1.19.8
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.21.1
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.96.0
 	github.com/brianvoe/gofakeit/v7 v7.14.0
@@ -97,7 +97,7 @@ require (
 	github.com/theopenlane/go-client v0.8.4
 	github.com/theopenlane/gqlgen-plugins v0.14.3
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.24.0
+	github.com/theopenlane/iam v0.24.1
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.8.8
 	github.com/theopenlane/utils v0.6.2
@@ -128,7 +128,6 @@ require (
 	github.com/di-wu/parser v0.3.0 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
 	github.com/fumiama/imgsz v0.0.4 // indirect
-	github.com/google/go-github/v80 v80.0.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/samber/go-type-to-string v1.8.0 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
@@ -168,7 +167,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.17 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.17 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.30.9 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.13 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.14 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.41.6
 	github.com/aws/smithy-go v1.24.0 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
