@@ -863,7 +863,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			},
 			expectedStandard:   &publicStandard.ShortName,
 			expectedControls:   controls[:1],
-			expectedNumProgram: 0, // api token has no program access
+			expectedNumProgram: 1, // api token has scopes for program access
 			client:             suite.client.apiWithToken,
 			ctx:                context.Background(),
 		},

@@ -149,10 +149,10 @@ func TestQueryNarratives(t *testing.T) {
 			expectedResults: 0,
 		},
 		{
-			name:            "happy path, no access to the program or group",
+			name:            "happy path, scope access to all narratives in org",
 			client:          suite.client.apiWithToken,
 			ctx:             context.Background(),
-			expectedResults: 0,
+			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using pat",

@@ -33,9 +33,20 @@ func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string)
 		return privacy.Allow
 	}
 
+	// Check API token scope first if applicable
+	genericMut, ok := m.(utils.GenericMutation)
+	if ok {
+		op := genericMut.Op()
+		if err := CheckAPITokenScope(ctx, genericMut.Type(), relation, &op); err != nil {
+			if !errors.Is(err, privacy.Skip) {
+				return err
+			}
+		}
+	}
+
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err == nil {
-		if relation == fgax.CanView {
+		if relation == fgax.CanView && !auth.IsAPITokenAuthentication(ctx) {
 			// if the relation is view, we can skip the check
 			return privacy.Allow
 		}
