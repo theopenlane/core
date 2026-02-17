@@ -2,6 +2,7 @@ package serveropts
 
 import (
 	"os"
+	"sync"
 	"time"
 
 	"github.com/fsnotify/fsnotify"
@@ -13,7 +14,12 @@ import (
 // TokenManager when keys are added or removed.
 func WithKeyDirWatcher(dir string) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
+		var mu sync.Mutex
+
 		reload := func() {
+			mu.Lock()
+			defer mu.Unlock()
+
 			WithKeyDir(dir).apply(s)
 
 			tm, err := tokens.New(s.Config.Settings.Auth.Token)
