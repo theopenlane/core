@@ -129,17 +129,20 @@ func (r *mutationResolver) bulkDeleteActionPlan(ctx context.Context, ids []strin
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each actionplan individually to ensure proper cleanup
-			if err := r.db.ActionPlan.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("actionplan_id", id).Msg("failed to delete actionplan in bulk operation")
+			if err := r.db.ActionPlan.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("actionplan_id", id).Msg("failed to delete actionplan in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.ActionPlanEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("actionplan_id", id).Msg("failed to cleanup actionplan edges in bulk operation")
+			if err := generated.ActionPlanEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("actionplan_id", id).Msg("failed to cleanup actionplan edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -198,17 +201,20 @@ func (r *mutationResolver) bulkDeleteAPIToken(ctx context.Context, ids []string)
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each apitoken individually to ensure proper cleanup
-			if err := r.db.APIToken.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("apitoken_id", id).Msg("failed to delete apitoken in bulk operation")
+			if err := r.db.APIToken.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("apitoken_id", id).Msg("failed to delete apitoken in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.APITokenEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("apitoken_id", id).Msg("failed to cleanup apitoken edges in bulk operation")
+			if err := generated.APITokenEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("apitoken_id", id).Msg("failed to cleanup apitoken edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -330,17 +336,20 @@ func (r *mutationResolver) bulkDeleteAssessment(ctx context.Context, ids []strin
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each assessment individually to ensure proper cleanup
-			if err := r.db.Assessment.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("assessment_id", id).Msg("failed to delete assessment in bulk operation")
+			if err := r.db.Assessment.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("assessment_id", id).Msg("failed to delete assessment in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.AssessmentEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("assessment_id", id).Msg("failed to cleanup assessment edges in bulk operation")
+			if err := generated.AssessmentEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("assessment_id", id).Msg("failed to cleanup assessment edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -399,17 +408,20 @@ func (r *mutationResolver) bulkDeleteAsset(ctx context.Context, ids []string) (*
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each asset individually to ensure proper cleanup
-			if err := r.db.Asset.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("asset_id", id).Msg("failed to delete asset in bulk operation")
+			if err := r.db.Asset.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("asset_id", id).Msg("failed to delete asset in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.AssetEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("asset_id", id).Msg("failed to cleanup asset edges in bulk operation")
+			if err := generated.AssetEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("asset_id", id).Msg("failed to cleanup asset edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -670,17 +682,20 @@ func (r *mutationResolver) bulkDeleteContact(ctx context.Context, ids []string) 
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each contact individually to ensure proper cleanup
-			if err := r.db.Contact.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("contact_id", id).Msg("failed to delete contact in bulk operation")
+			if err := r.db.Contact.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("contact_id", id).Msg("failed to delete contact in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.ContactEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("contact_id", id).Msg("failed to cleanup contact edges in bulk operation")
+			if err := generated.ContactEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("contact_id", id).Msg("failed to cleanup contact edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -821,17 +836,20 @@ func (r *mutationResolver) bulkDeleteControl(ctx context.Context, ids []string) 
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each control individually to ensure proper cleanup
-			if err := r.db.Control.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("control_id", id).Msg("failed to delete control in bulk operation")
+			if err := r.db.Control.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("control_id", id).Msg("failed to delete control in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.ControlEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("control_id", id).Msg("failed to cleanup control edges in bulk operation")
+			if err := generated.ControlEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("control_id", id).Msg("failed to cleanup control edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -890,17 +908,20 @@ func (r *mutationResolver) bulkDeleteControlImplementation(ctx context.Context, 
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each controlimplementation individually to ensure proper cleanup
-			if err := r.db.ControlImplementation.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("controlimplementation_id", id).Msg("failed to delete controlimplementation in bulk operation")
+			if err := r.db.ControlImplementation.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("controlimplementation_id", id).Msg("failed to delete controlimplementation in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.ControlImplementationEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("controlimplementation_id", id).Msg("failed to cleanup controlimplementation edges in bulk operation")
+			if err := generated.ControlImplementationEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("controlimplementation_id", id).Msg("failed to cleanup controlimplementation edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1041,17 +1062,20 @@ func (r *mutationResolver) bulkDeleteControlObjective(ctx context.Context, ids [
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each controlobjective individually to ensure proper cleanup
-			if err := r.db.ControlObjective.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("controlobjective_id", id).Msg("failed to delete controlobjective in bulk operation")
+			if err := r.db.ControlObjective.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("controlobjective_id", id).Msg("failed to delete controlobjective in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.ControlObjectiveEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("controlobjective_id", id).Msg("failed to cleanup controlobjective edges in bulk operation")
+			if err := generated.ControlObjectiveEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("controlobjective_id", id).Msg("failed to cleanup controlobjective edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1192,17 +1216,20 @@ func (r *mutationResolver) bulkDeleteCustomDomain(ctx context.Context, ids []str
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each customdomain individually to ensure proper cleanup
-			if err := r.db.CustomDomain.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("customdomain_id", id).Msg("failed to delete customdomain in bulk operation")
+			if err := r.db.CustomDomain.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("customdomain_id", id).Msg("failed to delete customdomain in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.CustomDomainEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("customdomain_id", id).Msg("failed to cleanup customdomain edges in bulk operation")
+			if err := generated.CustomDomainEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("customdomain_id", id).Msg("failed to cleanup customdomain edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1457,17 +1484,20 @@ func (r *mutationResolver) bulkDeleteDNSVerification(ctx context.Context, ids []
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each dnsverification individually to ensure proper cleanup
-			if err := r.db.DNSVerification.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("dnsverification_id", id).Msg("failed to delete dnsverification in bulk operation")
+			if err := r.db.DNSVerification.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("dnsverification_id", id).Msg("failed to delete dnsverification in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.DNSVerificationEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("dnsverification_id", id).Msg("failed to cleanup dnsverification edges in bulk operation")
+			if err := generated.DNSVerificationEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("dnsverification_id", id).Msg("failed to cleanup dnsverification edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1608,17 +1638,20 @@ func (r *mutationResolver) bulkDeleteDocumentData(ctx context.Context, ids []str
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each documentdata individually to ensure proper cleanup
-			if err := r.db.DocumentData.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("documentdata_id", id).Msg("failed to delete documentdata in bulk operation")
+			if err := r.db.DocumentData.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("documentdata_id", id).Msg("failed to delete documentdata in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.DocumentDataEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("documentdata_id", id).Msg("failed to cleanup documentdata edges in bulk operation")
+			if err := generated.DocumentDataEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("documentdata_id", id).Msg("failed to cleanup documentdata edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1841,17 +1874,20 @@ func (r *mutationResolver) bulkDeleteEmailBranding(ctx context.Context, ids []st
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each emailbranding individually to ensure proper cleanup
-			if err := r.db.EmailBranding.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("emailbranding_id", id).Msg("failed to delete emailbranding in bulk operation")
+			if err := r.db.EmailBranding.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("emailbranding_id", id).Msg("failed to delete emailbranding in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.EmailBrandingEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("emailbranding_id", id).Msg("failed to cleanup emailbranding edges in bulk operation")
+			if err := generated.EmailBrandingEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("emailbranding_id", id).Msg("failed to cleanup emailbranding edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1992,17 +2028,20 @@ func (r *mutationResolver) bulkDeleteEmailTemplate(ctx context.Context, ids []st
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each emailtemplate individually to ensure proper cleanup
-			if err := r.db.EmailTemplate.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("emailtemplate_id", id).Msg("failed to delete emailtemplate in bulk operation")
+			if err := r.db.EmailTemplate.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("emailtemplate_id", id).Msg("failed to delete emailtemplate in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.EmailTemplateEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("emailtemplate_id", id).Msg("failed to cleanup emailtemplate edges in bulk operation")
+			if err := generated.EmailTemplateEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("emailtemplate_id", id).Msg("failed to cleanup emailtemplate edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2061,17 +2100,20 @@ func (r *mutationResolver) bulkDeleteEntity(ctx context.Context, ids []string) (
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each entity individually to ensure proper cleanup
-			if err := r.db.Entity.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("entity_id", id).Msg("failed to delete entity in bulk operation")
+			if err := r.db.Entity.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("entity_id", id).Msg("failed to delete entity in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.EntityEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("entity_id", id).Msg("failed to cleanup entity edges in bulk operation")
+			if err := generated.EntityEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("entity_id", id).Msg("failed to cleanup entity edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2212,17 +2254,20 @@ func (r *mutationResolver) bulkDeleteEntityType(ctx context.Context, ids []strin
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each entitytype individually to ensure proper cleanup
-			if err := r.db.EntityType.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("entitytype_id", id).Msg("failed to delete entitytype in bulk operation")
+			if err := r.db.EntityType.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("entitytype_id", id).Msg("failed to delete entitytype in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.EntityTypeEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("entitytype_id", id).Msg("failed to cleanup entitytype edges in bulk operation")
+			if err := generated.EntityTypeEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("entitytype_id", id).Msg("failed to cleanup entitytype edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2363,17 +2408,20 @@ func (r *mutationResolver) bulkDeleteEvent(ctx context.Context, ids []string) (*
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each event individually to ensure proper cleanup
-			if err := r.db.Event.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("event_id", id).Msg("failed to delete event in bulk operation")
+			if err := r.db.Event.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("event_id", id).Msg("failed to delete event in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.EventEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("event_id", id).Msg("failed to cleanup event edges in bulk operation")
+			if err := generated.EventEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("event_id", id).Msg("failed to cleanup event edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2596,17 +2644,20 @@ func (r *mutationResolver) bulkDeleteEvidence(ctx context.Context, ids []string)
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each evidence individually to ensure proper cleanup
-			if err := r.db.Evidence.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("evidence_id", id).Msg("failed to delete evidence in bulk operation")
+			if err := r.db.Evidence.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("evidence_id", id).Msg("failed to delete evidence in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.EvidenceEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("evidence_id", id).Msg("failed to cleanup evidence edges in bulk operation")
+			if err := generated.EvidenceEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("evidence_id", id).Msg("failed to cleanup evidence edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2646,17 +2697,20 @@ func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each export individually to ensure proper cleanup
-			if err := r.db.Export.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("export_id", id).Msg("failed to delete export in bulk operation")
+			if err := r.db.Export.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("export_id", id).Msg("failed to delete export in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.ExportEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("export_id", id).Msg("failed to cleanup export edges in bulk operation")
+			if err := generated.ExportEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("export_id", id).Msg("failed to cleanup export edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2753,17 +2807,20 @@ func (r *mutationResolver) bulkDeleteGroup(ctx context.Context, ids []string) (*
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each group individually to ensure proper cleanup
-			if err := r.db.Group.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("group_id", id).Msg("failed to delete group in bulk operation")
+			if err := r.db.Group.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("group_id", id).Msg("failed to delete group in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.GroupEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("group_id", id).Msg("failed to cleanup group edges in bulk operation")
+			if err := generated.GroupEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("group_id", id).Msg("failed to cleanup group edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2904,17 +2961,20 @@ func (r *mutationResolver) bulkDeleteGroupMembership(ctx context.Context, ids []
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each groupmembership individually to ensure proper cleanup
-			if err := r.db.GroupMembership.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("groupmembership_id", id).Msg("failed to delete groupmembership in bulk operation")
+			if err := r.db.GroupMembership.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("groupmembership_id", id).Msg("failed to delete groupmembership in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.GroupMembershipEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("groupmembership_id", id).Msg("failed to cleanup groupmembership edges in bulk operation")
+			if err := generated.GroupMembershipEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("groupmembership_id", id).Msg("failed to cleanup groupmembership edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -3055,17 +3115,20 @@ func (r *mutationResolver) bulkDeleteGroupSetting(ctx context.Context, ids []str
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each groupsetting individually to ensure proper cleanup
-			if err := r.db.GroupSetting.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("groupsetting_id", id).Msg("failed to delete groupsetting in bulk operation")
+			if err := r.db.GroupSetting.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("groupsetting_id", id).Msg("failed to delete groupsetting in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.GroupSettingEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("groupsetting_id", id).Msg("failed to cleanup groupsetting edges in bulk operation")
+			if err := generated.GroupSettingEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("groupsetting_id", id).Msg("failed to cleanup groupsetting edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -3288,17 +3351,20 @@ func (r *mutationResolver) bulkDeleteHush(ctx context.Context, ids []string) (*m
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each hush individually to ensure proper cleanup
-			if err := r.db.Hush.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("hush_id", id).Msg("failed to delete hush in bulk operation")
+			if err := r.db.Hush.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("hush_id", id).Msg("failed to delete hush in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.HushEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("hush_id", id).Msg("failed to cleanup hush edges in bulk operation")
+			if err := generated.HushEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("hush_id", id).Msg("failed to cleanup hush edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -3357,17 +3423,20 @@ func (r *mutationResolver) bulkDeleteIdentityHolder(ctx context.Context, ids []s
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each identityholder individually to ensure proper cleanup
-			if err := r.db.IdentityHolder.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("identityholder_id", id).Msg("failed to delete identityholder in bulk operation")
+			if err := r.db.IdentityHolder.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("identityholder_id", id).Msg("failed to delete identityholder in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.IdentityHolderEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("identityholder_id", id).Msg("failed to cleanup identityholder edges in bulk operation")
+			if err := generated.IdentityHolderEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("identityholder_id", id).Msg("failed to cleanup identityholder edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -3590,17 +3659,20 @@ func (r *mutationResolver) bulkDeleteInternalPolicy(ctx context.Context, ids []s
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each internalpolicy individually to ensure proper cleanup
-			if err := r.db.InternalPolicy.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("internalpolicy_id", id).Msg("failed to delete internalpolicy in bulk operation")
+			if err := r.db.InternalPolicy.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("internalpolicy_id", id).Msg("failed to delete internalpolicy in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.InternalPolicyEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("internalpolicy_id", id).Msg("failed to cleanup internalpolicy edges in bulk operation")
+			if err := generated.InternalPolicyEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("internalpolicy_id", id).Msg("failed to cleanup internalpolicy edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -3659,17 +3731,20 @@ func (r *mutationResolver) bulkDeleteInvite(ctx context.Context, ids []string) (
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each invite individually to ensure proper cleanup
-			if err := r.db.Invite.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("invite_id", id).Msg("failed to delete invite in bulk operation")
+			if err := r.db.Invite.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("invite_id", id).Msg("failed to delete invite in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.InviteEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("invite_id", id).Msg("failed to cleanup invite edges in bulk operation")
+			if err := generated.InviteEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("invite_id", id).Msg("failed to cleanup invite edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -3810,17 +3885,20 @@ func (r *mutationResolver) bulkDeleteJobTemplate(ctx context.Context, ids []stri
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each jobtemplate individually to ensure proper cleanup
-			if err := r.db.JobTemplate.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("jobtemplate_id", id).Msg("failed to delete jobtemplate in bulk operation")
+			if err := r.db.JobTemplate.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("jobtemplate_id", id).Msg("failed to delete jobtemplate in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.JobTemplateEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("jobtemplate_id", id).Msg("failed to cleanup jobtemplate edges in bulk operation")
+			if err := generated.JobTemplateEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("jobtemplate_id", id).Msg("failed to cleanup jobtemplate edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -3961,17 +4039,20 @@ func (r *mutationResolver) bulkDeleteMappableDomain(ctx context.Context, ids []s
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each mappabledomain individually to ensure proper cleanup
-			if err := r.db.MappableDomain.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("mappabledomain_id", id).Msg("failed to delete mappabledomain in bulk operation")
+			if err := r.db.MappableDomain.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("mappabledomain_id", id).Msg("failed to delete mappabledomain in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.MappableDomainEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("mappabledomain_id", id).Msg("failed to cleanup mappabledomain edges in bulk operation")
+			if err := generated.MappableDomainEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("mappabledomain_id", id).Msg("failed to cleanup mappabledomain edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -4112,17 +4193,20 @@ func (r *mutationResolver) bulkDeleteMappedControl(ctx context.Context, ids []st
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each mappedcontrol individually to ensure proper cleanup
-			if err := r.db.MappedControl.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("mappedcontrol_id", id).Msg("failed to delete mappedcontrol in bulk operation")
+			if err := r.db.MappedControl.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("mappedcontrol_id", id).Msg("failed to delete mappedcontrol in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.MappedControlEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("mappedcontrol_id", id).Msg("failed to cleanup mappedcontrol edges in bulk operation")
+			if err := generated.MappedControlEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("mappedcontrol_id", id).Msg("failed to cleanup mappedcontrol edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -4263,17 +4347,20 @@ func (r *mutationResolver) bulkDeleteNarrative(ctx context.Context, ids []string
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each narrative individually to ensure proper cleanup
-			if err := r.db.Narrative.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("narrative_id", id).Msg("failed to delete narrative in bulk operation")
+			if err := r.db.Narrative.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("narrative_id", id).Msg("failed to delete narrative in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.NarrativeEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("narrative_id", id).Msg("failed to cleanup narrative edges in bulk operation")
+			if err := generated.NarrativeEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("narrative_id", id).Msg("failed to cleanup narrative edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -4496,17 +4583,20 @@ func (r *mutationResolver) bulkDeleteNotificationPreference(ctx context.Context,
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each notificationpreference individually to ensure proper cleanup
-			if err := r.db.NotificationPreference.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("notificationpreference_id", id).Msg("failed to delete notificationpreference in bulk operation")
+			if err := r.db.NotificationPreference.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("notificationpreference_id", id).Msg("failed to delete notificationpreference in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.NotificationPreferenceEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("notificationpreference_id", id).Msg("failed to cleanup notificationpreference edges in bulk operation")
+			if err := generated.NotificationPreferenceEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("notificationpreference_id", id).Msg("failed to cleanup notificationpreference edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -4647,17 +4737,20 @@ func (r *mutationResolver) bulkDeleteNotificationTemplate(ctx context.Context, i
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each notificationtemplate individually to ensure proper cleanup
-			if err := r.db.NotificationTemplate.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("notificationtemplate_id", id).Msg("failed to delete notificationtemplate in bulk operation")
+			if err := r.db.NotificationTemplate.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("notificationtemplate_id", id).Msg("failed to delete notificationtemplate in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.NotificationTemplateEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("notificationtemplate_id", id).Msg("failed to cleanup notificationtemplate edges in bulk operation")
+			if err := generated.NotificationTemplateEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("notificationtemplate_id", id).Msg("failed to cleanup notificationtemplate edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -4716,17 +4809,20 @@ func (r *mutationResolver) bulkDeleteOrganizationSetting(ctx context.Context, id
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each organizationsetting individually to ensure proper cleanup
-			if err := r.db.OrganizationSetting.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("organizationsetting_id", id).Msg("failed to delete organizationsetting in bulk operation")
+			if err := r.db.OrganizationSetting.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("organizationsetting_id", id).Msg("failed to delete organizationsetting in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.OrganizationSettingEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("organizationsetting_id", id).Msg("failed to cleanup organizationsetting edges in bulk operation")
+			if err := generated.OrganizationSettingEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("organizationsetting_id", id).Msg("failed to cleanup organizationsetting edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -4867,17 +4963,20 @@ func (r *mutationResolver) bulkDeleteOrgMembership(ctx context.Context, ids []st
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each orgmembership individually to ensure proper cleanup
-			if err := r.db.OrgMembership.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("orgmembership_id", id).Msg("failed to delete orgmembership in bulk operation")
+			if err := r.db.OrgMembership.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("orgmembership_id", id).Msg("failed to delete orgmembership in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.OrgMembershipEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("orgmembership_id", id).Msg("failed to cleanup orgmembership edges in bulk operation")
+			if err := generated.OrgMembershipEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("orgmembership_id", id).Msg("failed to cleanup orgmembership edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -5119,17 +5218,20 @@ func (r *mutationResolver) bulkDeleteProcedure(ctx context.Context, ids []string
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each procedure individually to ensure proper cleanup
-			if err := r.db.Procedure.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("procedure_id", id).Msg("failed to delete procedure in bulk operation")
+			if err := r.db.Procedure.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("procedure_id", id).Msg("failed to delete procedure in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.ProcedureEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("procedure_id", id).Msg("failed to cleanup procedure edges in bulk operation")
+			if err := generated.ProcedureEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("procedure_id", id).Msg("failed to cleanup procedure edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -5188,17 +5290,20 @@ func (r *mutationResolver) bulkDeleteProgram(ctx context.Context, ids []string) 
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each program individually to ensure proper cleanup
-			if err := r.db.Program.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("program_id", id).Msg("failed to delete program in bulk operation")
+			if err := r.db.Program.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("program_id", id).Msg("failed to delete program in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.ProgramEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("program_id", id).Msg("failed to cleanup program edges in bulk operation")
+			if err := generated.ProgramEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("program_id", id).Msg("failed to cleanup program edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -5339,17 +5444,20 @@ func (r *mutationResolver) bulkDeleteProgramMembership(ctx context.Context, ids 
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each programmembership individually to ensure proper cleanup
-			if err := r.db.ProgramMembership.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("programmembership_id", id).Msg("failed to delete programmembership in bulk operation")
+			if err := r.db.ProgramMembership.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("programmembership_id", id).Msg("failed to delete programmembership in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.ProgramMembershipEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("programmembership_id", id).Msg("failed to cleanup programmembership edges in bulk operation")
+			if err := generated.ProgramMembershipEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("programmembership_id", id).Msg("failed to cleanup programmembership edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -5610,17 +5718,20 @@ func (r *mutationResolver) bulkDeleteRisk(ctx context.Context, ids []string) (*m
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each risk individually to ensure proper cleanup
-			if err := r.db.Risk.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("risk_id", id).Msg("failed to delete risk in bulk operation")
+			if err := r.db.Risk.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("risk_id", id).Msg("failed to delete risk in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.RiskEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("risk_id", id).Msg("failed to cleanup risk edges in bulk operation")
+			if err := generated.RiskEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("risk_id", id).Msg("failed to cleanup risk edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -5761,17 +5872,20 @@ func (r *mutationResolver) bulkDeleteScan(ctx context.Context, ids []string) (*m
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each scan individually to ensure proper cleanup
-			if err := r.db.Scan.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("scan_id", id).Msg("failed to delete scan in bulk operation")
+			if err := r.db.Scan.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("scan_id", id).Msg("failed to delete scan in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.ScanEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("scan_id", id).Msg("failed to cleanup scan edges in bulk operation")
+			if err := generated.ScanEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("scan_id", id).Msg("failed to cleanup scan edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -5830,17 +5944,20 @@ func (r *mutationResolver) bulkDeleteScheduledJob(ctx context.Context, ids []str
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each scheduledjob individually to ensure proper cleanup
-			if err := r.db.ScheduledJob.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("scheduledjob_id", id).Msg("failed to delete scheduledjob in bulk operation")
+			if err := r.db.ScheduledJob.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("scheduledjob_id", id).Msg("failed to delete scheduledjob in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.ScheduledJobEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("scheduledjob_id", id).Msg("failed to cleanup scheduledjob edges in bulk operation")
+			if err := generated.ScheduledJobEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("scheduledjob_id", id).Msg("failed to cleanup scheduledjob edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -5981,17 +6098,20 @@ func (r *mutationResolver) bulkDeleteSubcontrol(ctx context.Context, ids []strin
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each subcontrol individually to ensure proper cleanup
-			if err := r.db.Subcontrol.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("subcontrol_id", id).Msg("failed to delete subcontrol in bulk operation")
+			if err := r.db.Subcontrol.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("subcontrol_id", id).Msg("failed to delete subcontrol in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.SubcontrolEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("subcontrol_id", id).Msg("failed to cleanup subcontrol edges in bulk operation")
+			if err := generated.SubcontrolEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("subcontrol_id", id).Msg("failed to cleanup subcontrol edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -6214,17 +6334,20 @@ func (r *mutationResolver) bulkDeleteSubprocessor(ctx context.Context, ids []str
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each subprocessor individually to ensure proper cleanup
-			if err := r.db.Subprocessor.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("subprocessor_id", id).Msg("failed to delete subprocessor in bulk operation")
+			if err := r.db.Subprocessor.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("subprocessor_id", id).Msg("failed to delete subprocessor in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.SubprocessorEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("subprocessor_id", id).Msg("failed to cleanup subprocessor edges in bulk operation")
+			if err := generated.SubprocessorEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("subprocessor_id", id).Msg("failed to cleanup subprocessor edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -6403,17 +6526,20 @@ func (r *mutationResolver) bulkDeleteTask(ctx context.Context, ids []string) (*m
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each task individually to ensure proper cleanup
-			if err := r.db.Task.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("task_id", id).Msg("failed to delete task in bulk operation")
+			if err := r.db.Task.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("task_id", id).Msg("failed to delete task in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.TaskEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("task_id", id).Msg("failed to cleanup task edges in bulk operation")
+			if err := generated.TaskEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("task_id", id).Msg("failed to cleanup task edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -6472,17 +6598,20 @@ func (r *mutationResolver) bulkDeleteTemplate(ctx context.Context, ids []string)
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each template individually to ensure proper cleanup
-			if err := r.db.Template.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("template_id", id).Msg("failed to delete template in bulk operation")
+			if err := r.db.Template.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("template_id", id).Msg("failed to delete template in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.TemplateEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("template_id", id).Msg("failed to cleanup template edges in bulk operation")
+			if err := generated.TemplateEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("template_id", id).Msg("failed to cleanup template edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -6623,17 +6752,20 @@ func (r *mutationResolver) bulkDeleteTrustCenterCompliance(ctx context.Context, 
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each trustcentercompliance individually to ensure proper cleanup
-			if err := r.db.TrustCenterCompliance.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("trustcentercompliance_id", id).Msg("failed to delete trustcentercompliance in bulk operation")
+			if err := r.db.TrustCenterCompliance.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("trustcentercompliance_id", id).Msg("failed to delete trustcentercompliance in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.TrustCenterComplianceEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("trustcentercompliance_id", id).Msg("failed to cleanup trustcentercompliance edges in bulk operation")
+			if err := generated.TrustCenterComplianceEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("trustcentercompliance_id", id).Msg("failed to cleanup trustcentercompliance edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -6856,17 +6988,20 @@ func (r *mutationResolver) bulkDeleteTrustCenterDoc(ctx context.Context, ids []s
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each trustcenterdoc individually to ensure proper cleanup
-			if err := r.db.TrustCenterDoc.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to delete trustcenterdoc in bulk operation")
+			if err := r.db.TrustCenterDoc.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to delete trustcenterdoc in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.TrustCenterDocEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to cleanup trustcenterdoc edges in bulk operation")
+			if err := generated.TrustCenterDocEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to cleanup trustcenterdoc edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -6944,17 +7079,20 @@ func (r *mutationResolver) bulkDeleteTrustCenterNDARequest(ctx context.Context, 
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each trustcenterndarequest individually to ensure proper cleanup
-			if err := r.db.TrustCenterNDARequest.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("trustcenterndarequest_id", id).Msg("failed to delete trustcenterndarequest in bulk operation")
+			if err := r.db.TrustCenterNDARequest.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("trustcenterndarequest_id", id).Msg("failed to delete trustcenterndarequest in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.TrustCenterNDARequestEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("trustcenterndarequest_id", id).Msg("failed to cleanup trustcenterndarequest edges in bulk operation")
+			if err := generated.TrustCenterNDARequestEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("trustcenterndarequest_id", id).Msg("failed to cleanup trustcenterndarequest edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -7095,17 +7233,20 @@ func (r *mutationResolver) bulkDeleteTrustCenterSubprocessor(ctx context.Context
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each trustcentersubprocessor individually to ensure proper cleanup
-			if err := r.db.TrustCenterSubprocessor.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("trustcentersubprocessor_id", id).Msg("failed to delete trustcentersubprocessor in bulk operation")
+			if err := r.db.TrustCenterSubprocessor.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("trustcentersubprocessor_id", id).Msg("failed to delete trustcentersubprocessor in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.TrustCenterSubprocessorEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("trustcentersubprocessor_id", id).Msg("failed to cleanup trustcentersubprocessor edges in bulk operation")
+			if err := generated.TrustCenterSubprocessorEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("trustcentersubprocessor_id", id).Msg("failed to cleanup trustcentersubprocessor edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -7164,17 +7305,20 @@ func (r *mutationResolver) bulkDeleteUserSetting(ctx context.Context, ids []stri
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each usersetting individually to ensure proper cleanup
-			if err := r.db.UserSetting.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("usersetting_id", id).Msg("failed to delete usersetting in bulk operation")
+			if err := r.db.UserSetting.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("usersetting_id", id).Msg("failed to delete usersetting in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.UserSettingEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("usersetting_id", id).Msg("failed to cleanup usersetting edges in bulk operation")
+			if err := generated.UserSettingEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("usersetting_id", id).Msg("failed to cleanup usersetting edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
