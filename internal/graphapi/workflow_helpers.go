@@ -2,6 +2,8 @@ package graphapi
 
 import (
 	"context"
+	"errors"
+	"sync"
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
@@ -17,8 +19,15 @@ const (
 	defaultPollTimeout  = 5 * time.Second
 )
 
+var (
+	workflowTestSetupMu            sync.Mutex
+	workflowTestSetups             = map[*generated.Client]*WorkflowTestSetup{}
+	ErrTimedOutWaitingForCondition = errors.New("timed out waiting for condition")
+	ErrClientRequired              = errors.New("client is required")
+)
+
 // pollUntil executes query repeatedly until condition returns true or timeout expires.
-// Returns the final query result regardless of whether condition was satisfied.
+// Returns the latest query result and a timeout error when the condition is not satisfied in time.
 func pollUntil[T any](ctx context.Context, timeout time.Duration, query func() (T, error), condition func(T) bool) (T, error) {
 	deadline := time.Now().Add(timeout)
 
@@ -41,7 +50,17 @@ func pollUntil[T any](ctx context.Context, timeout time.Duration, query func() (
 		}
 	}
 
-	return query()
+	result, err := query()
+	if err != nil {
+		var zero T
+		return zero, err
+	}
+
+	if condition(result) {
+		return result, nil
+	}
+
+	return result, ErrTimedOutWaitingForCondition
 }
 
 // WorkflowTestSetup contains the workflow engine and eventer for tests
@@ -54,6 +73,19 @@ type WorkflowTestSetup struct {
 // This wires up event listeners so that assignment completions and other workflow events
 // are processed through the actual event-driven flow used in production.
 func SetupWorkflowEngine(client *generated.Client) (*WorkflowTestSetup, error) {
+	if client == nil {
+		return nil, ErrClientRequired
+	}
+
+	workflowTestSetupMu.Lock()
+	defer workflowTestSetupMu.Unlock()
+
+	if existing, ok := workflowTestSetups[client]; ok && existing != nil {
+		client.WorkflowEngine = existing.Engine
+
+		return existing, nil
+	}
+
 	eventer := hooks.NewEventerPool(client)
 	hooks.RegisterGlobalHooks(client, eventer)
 
@@ -68,10 +100,14 @@ func SetupWorkflowEngine(client *generated.Client) (*WorkflowTestSetup, error) {
 
 	client.WorkflowEngine = wfEngine
 
-	return &WorkflowTestSetup{
+	setup := &WorkflowTestSetup{
 		Engine:  wfEngine,
 		Eventer: eventer,
-	}, nil
+	}
+
+	workflowTestSetups[client] = setup
+
+	return setup, nil
 }
 
 // workflowsEnabled reports whether workflows are enabled for this resolver

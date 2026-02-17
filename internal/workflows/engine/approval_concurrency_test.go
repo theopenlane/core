@@ -91,6 +91,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce
 	s.Require().NoError(err)
 	s.Require().NotNil(instance)
 
+	// wait until handlers have drained before asserting
+	s.WaitForEvents()
+
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)

@@ -141,7 +141,7 @@ steps:
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
-      - label: ":arrows_counterclockwise: finalize config PRs"
+      - label: ":arrows_counterclockwise: close draft config PRs"
         key: "post_merge_automation"
         depends_on: "helm_automation"
         if: build.branch == "main"
@@ -177,7 +177,7 @@ steps:
                 - "HELM_CHART_REPO"
       - label: ":rocket: update image tag for release"
         key: "image_tag_automation"
-        depends_on: 
+        depends_on:
           - "docker-build-and-tag"
           - "go_tests"
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
@@ -472,7 +472,7 @@ steps:
           - artifacts#v1.9.4:
               download: "junit-graph.xml"
               step: "go_test_graph"
-              
+
           - docker#v5.13.0:
               image: "sonarsource/sonar-scanner-cli:11.5"
               propagate-environment: true

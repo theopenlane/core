@@ -121,8 +121,11 @@ if [[ "$changes_made" == "false" ]]; then
   exit 0
 fi
 
+# Normalize escaped newlines for markdown/notification output.
+formatted_change_summary=$(printf '%b' "$change_summary")
+
 echo "📝 Release changes detected, creating PR"
-echo -e "Summary:$change_summary"
+echo "Summary:${formatted_change_summary}"
 
 # Source helm documentation utilities from core repo
 source "${BUILDKITE_BUILD_CHECKOUT_PATH}/.buildkite/helm-docs-utils.sh"
@@ -137,7 +140,7 @@ setup_git_user
 template_dir=$(get_template_dir)
 commit_message=$(load_template "${template_dir}/github/release-commit.md" \
     "RELEASE_TAG=${BUILDKITE_TAG}" \
-    "CHANGE_SUMMARY=${change_summary}" \
+    "CHANGE_SUMMARY=${formatted_change_summary}" \
     "BUILD_NUMBER=${BUILDKITE_BUILD_NUMBER}" \
     "SOURCE_COMMIT_SHORT=${BUILDKITE_COMMIT:0:8}")
 
@@ -150,7 +153,7 @@ echo "🚀 Pushing release branch..."
 if safe_push_branch "$release_branch"; then
   pr_body=$(load_template "${template_dir}/github/release-pr.md" \
       "RELEASE_TAG=${BUILDKITE_TAG}" \
-      "CHANGE_SUMMARY=${change_summary}" \
+      "CHANGE_SUMMARY=${formatted_change_summary}" \
       "BUILD_NUMBER=${BUILDKITE_BUILD_NUMBER}" \
       "SOURCE_COMMIT_SHORT=${BUILDKITE_COMMIT:0:8}" \
       "SOURCE_COMMIT_FULL=${BUILDKITE_COMMIT}" \
@@ -166,7 +169,7 @@ if safe_push_branch "$release_branch"; then
     echo "✅ Release pull request created successfully: $pr_url"
 
     # Send Slack notification for release deployment
-    send_release_notification "$pr_url" "${BUILDKITE_TAG}" "$change_summary"
+    send_release_notification "$pr_url" "${BUILDKITE_TAG}" "$formatted_change_summary"
   else
     echo "❌ Failed to create release pull request"
     exit 1
