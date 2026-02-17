@@ -5,15 +5,20 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/gorilla/websocket"
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
-	"github.com/theopenlane/httpsling"
-	"github.com/theopenlane/iam/auth"
 )
+
+// websocketConnectionTrackerKey will be used to track when the webhook connection was opened
+type websocketConnectionTrackerKey struct{}
 
 // CreateWebsocketClient creates a websocket transport with the appropriate settings
 func (r *Resolver) CreateWebsocketClient() transport.Websocket {
@@ -22,6 +27,14 @@ func (r *Resolver) CreateWebsocketClient() transport.Websocket {
 		InitTimeout:           defaultInitTimeout,
 		InitFunc:              r.webSocketInit,
 		Upgrader:              r.upgraderFunc(),
+		CloseFunc: func(ctx context.Context, _ int) {
+			t, ok := ctx.Value(websocketConnectionTrackerKey{}).(time.Time)
+			if !ok {
+				return
+			}
+
+			metrics.RecordSubscriptionClosed(time.Since(t).Seconds())
+		},
 	}
 }
 
@@ -51,8 +64,8 @@ func (r *Resolver) webSocketInit(
 	logx.FromContext(ctx).Debug().Str("user_id", au.SubjectID).Msg("websocket connection authenticated")
 
 	ctx = auth.WithAuthenticatedUser(ctx, au)
+	ctx = context.WithValue(ctx, websocketConnectionTrackerKey{}, time.Now())
 
-	// increment websocket connections metric
 	metrics.RecordSubscriptionOpened()
 
 	return ctx, nil, nil
