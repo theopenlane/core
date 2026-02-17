@@ -312,7 +312,7 @@ require (
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/opencontainers/runc v1.3.3 // indirect
 	github.com/openfga/api/proto v0.0.0-20260122164422-25e22cb1875b // indirect
-	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20251027165255-0f8f255e5f6c // indirect
+	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20251027165255-0f8f255e5f6c
 	github.com/openfga/openfga v1.11.5 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect

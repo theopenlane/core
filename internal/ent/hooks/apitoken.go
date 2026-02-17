@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	fgamodel "github.com/theopenlane/core/fga/model"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/logx"
@@ -54,7 +56,7 @@ func HookCreateAPIToken() ent.Hook {
 			}
 
 			// create the relationship tuples in fga for the token
-			tuples, err := createScopeTuples(token.Scopes, orgID, token.ID)
+			tuples, err := createScopeTuples(ctx, token.Scopes, orgID, token.ID)
 			if err != nil {
 				return retVal, err
 			}
@@ -88,6 +90,24 @@ func HookCreateAPIToken() ent.Hook {
 func HookUpdateAPIToken() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.APITokenFunc(func(ctx context.Context, m *generated.APITokenMutation) (generated.Value, error) {
+			var oldScopes []string
+			var scopesModified bool
+
+			// Only query old scopes if scopes are being modified and this is an UpdateOne operation
+			_, scopesModified = m.Scopes()
+			if !scopesModified {
+				// check appended
+				_, scopesModified = m.AppendedScopes()
+			}
+
+			if scopesModified && m.Op().Is(ent.OpUpdateOne) {
+				var err error
+				oldScopes, err = m.OldScopes(ctx)
+				if err != nil {
+					return nil, err
+				}
+			}
+
 			retVal, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err
@@ -101,23 +121,31 @@ func HookUpdateAPIToken() ent.Hook {
 
 			at.Token = redacted
 
-			// create the relationship tuples in fga for the token
-			newScopes, err := getNewScopes(ctx, m)
-			if err != nil {
-				return at, err
-			}
+			// Only update scope tuples if scopes were modified
+			if scopesModified {
+				scopeSet, err := fgamodel.DefaultServiceScopeSet()
+				if err != nil {
+					return nil, fmt.Errorf("failed to load available token scopes from model: %w", err)
+				}
 
-			tuples, err := createScopeTuples(newScopes, at.OwnerID, at.ID)
-			if err != nil {
-				return retVal, err
-			}
+				addedScopes, removedScopes := diffScopes(oldScopes, at.Scopes)
 
-			// create the relationship tuples if we have any
-			if len(tuples) > 0 {
-				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
-
+				addTuples, err := scopeTuples(ctx, addedScopes, at.OwnerID, at.ID, scopeSet)
+				if err != nil {
 					return nil, err
+				}
+
+				removeTuples, err := scopeTuples(ctx, removedScopes, at.OwnerID, at.ID, scopeSet)
+				if err != nil {
+					return nil, err
+				}
+
+				if len(addTuples) > 0 || len(removeTuples) > 0 {
+					if _, err := m.Authz.WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
+						logx.FromContext(ctx).Error().Err(err).Msg("failed to update api token scope tuples")
+
+						return nil, err
+					}
 				}
 			}
 
@@ -126,27 +154,36 @@ func HookUpdateAPIToken() ent.Hook {
 	}, ent.OpUpdate|ent.OpUpdateOne)
 }
 
-// createScopeTuples creates the relationship tuples for the token
-func createScopeTuples(scopes []string, orgID, tokenID string) (tuples []fgax.TupleKey, err error) {
-	// create the relationship tuples in fga for the token
-	// TODO (sfunk): this shouldn't be a static list
-	for _, scope := range scopes {
-		var relation string
+// / createScopeTuples creates the relationship tuples for the token
+func createScopeTuples(ctx context.Context, scopes []string, orgID, tokenID string) ([]fgax.TupleKey, error) {
+	scopeSet, err := fgamodel.DefaultServiceScopeSet()
+	if err != nil {
+		return nil, fmt.Errorf("failed to load available token scopes from model: %w", err)
+	}
 
-		switch scope {
-		case "read":
-			relation = "can_view"
-		case "write":
-			relation = "can_edit"
-		case "delete":
-			relation = "can_delete"
-		case "group_manager":
-			relation = "group_manager"
+	return scopeTuples(ctx, scopes, orgID, tokenID, scopeSet)
+}
+
+// scopeTuples creates relationship tuples for the given scopes
+func scopeTuples(ctx context.Context, scopes []string, orgID, tokenID string, scopeSet map[string]struct{}) ([]fgax.TupleKey, error) {
+	var tuples []fgax.TupleKey
+
+	for _, scope := range scopes {
+		relation := fgamodel.NormalizeScope(scope)
+
+		if relation == "" {
+			logx.FromContext(ctx).Warn().Str("scope", scope).Msg("ignoring empty scope on api token")
+
+			continue
+		}
+
+		if _, ok := scopeSet[relation]; !ok {
+			return nil, fmt.Errorf("%w: %q (%s)", ErrInvalidScope, scope, relation)
 		}
 
 		req := fgax.TupleRequest{
 			SubjectID:   tokenID,
-			SubjectType: "service",
+			SubjectType: auth.ServiceSubjectType,
 			ObjectID:    orgID,
 			ObjectType:  generated.TypeOrganization,
 			Relation:    relation,
@@ -155,30 +192,14 @@ func createScopeTuples(scopes []string, orgID, tokenID string) (tuples []fgax.Tu
 		tuples = append(tuples, fgax.GetTupleKey(req))
 	}
 
-	return
+	return tuples, nil
 }
 
-// getNewScopes returns the new scopes that were added to the token during an update
-// NOTE: there is an AppendedScopes on the mutation, but this is not populated
-// so calculating the new scopes for now
-func getNewScopes(ctx context.Context, m *generated.APITokenMutation) ([]string, error) {
-	scopes, ok := m.Scopes()
-	if !ok {
-		return nil, nil
-	}
+// diffScopes returns the added and removed scopes between two scope slices
+func diffScopes(oldScopes, newScopes []string) (added []string, removed []string) {
+	// lo for the win
+	added, _ = lo.Difference(newScopes, oldScopes)
+	removed, _ = lo.Difference(oldScopes, newScopes)
 
-	oldScopes, err := m.OldScopes(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	var newScopes []string
-
-	for _, scope := range scopes {
-		if !lo.Contains(oldScopes, scope) {
-			newScopes = append(newScopes, scope)
-		}
-	}
-
-	return newScopes, nil
+	return
 }

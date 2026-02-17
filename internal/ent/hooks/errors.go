@@ -195,6 +195,8 @@ var (
 	ErrFailedToTriggerWorkflow = errors.New("failed to trigger workflow")
 	// ErrMissingIDForTrustCenterNDARequest is returned when a mutation for trust center nda request is missing the ID field, which is required to determine the trust center and send the appropriate email
 	ErrMissingIDForTrustCenterNDARequest = errors.New("missing ID for trust center NDA request mutation")
+	// ErrInvalidScope is returned when a scope is not assignable to service subjects
+	ErrInvalidScope = errors.New("scope is not assignable to service subjects")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

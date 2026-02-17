@@ -10,37 +10,21 @@ import (
 	"entgo.io/ent/schema/mixin"
 	"github.com/theopenlane/iam/fgax"
 
+	fgamodel "github.com/theopenlane/core/fga/model"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/entx/accessmap"
 )
 
-// createObjectTypes is a list of object types that access can be granted specifically for creation
-// outside of the normal organization edit permissions
-// TODO (sfunk): see if we can pull the annotations from the other schemas to make this dynamic
-var createObjectTypes = []string{
-	"control",
-	"control_implementation",
-	"control_objective",
-	"evidence",
-	"asset",
-	"finding",
-	"vulnerability",
-	"group",
-	"internal_policy",
-	"mapped_control",
-	"narrative",
-	"procedure",
-	"program",
-	"risk",
-	"scheduled_job",
-	"standard",
-	"template",
-	"subprocessor",
-	"trust_center_doc",
-	"trust_center_subprocessor",
-	"action_plan",
-}
+// createObjectTypes is derived from the model scopes for service subjects.
+var createObjectTypes = func() []string {
+	opts, err := fgamodel.CreateOptions()
+	if err != nil {
+		return nil
+	}
+
+	return opts
+}()
 
 // GroupBasedCreateAccessMixin is a mixin for group permissions for creation of an entity
 // that should be added to both the to schema (Group) and the from schema (Organization)

@@ -2,6 +2,7 @@ package rule
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/stoewer/go-strcase"
@@ -20,6 +21,14 @@ func CheckGroupBasedObjectCreationAccess() privacy.MutationRuleFunc {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m generated.Mutation) error {
 		if m.Op() != generated.OpCreate {
 			return privacy.Skipf("mutation is not a create operation, skipping")
+		}
+
+		// Check API token scope first if applicable
+		op := m.Op()
+		if err := CheckAPITokenScope(ctx, m.Type(), "", &op); err != nil {
+			if !errors.Is(err, privacy.Skip) {
+				return err
+			}
 		}
 
 		au, err := auth.GetAuthenticatedUserFromContext(ctx)
