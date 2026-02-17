@@ -149,7 +149,7 @@ func main() {
 	// only run if there were changes to the internal/ent/generated or internal/ent/schema directories
 	hasChangesForHistory, err := genhelpers.HasSchemaChanges(historyInputChecksumFile, historySchemaInputPaths...)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to check for schema changes, running history generation anyway")
+		log.Warn().Err(err).Msg("failed to check for schema changes, running history generation anyway")
 
 		hasChangesForHistory = true
 	}
@@ -166,14 +166,14 @@ func main() {
 	if hasChanges {
 		err := genhelpers.SetSchemaChecksum(schemaInputChecksumFile, mainSchemaInputPaths...)
 		if err != nil {
-			log.Error().Err(err).Msg("error setting schema checksum")
+			log.Warn().Err(err).Msg("error setting schema checksum")
 		}
 	}
 
 	if hasChangesForHistory {
 		err := genhelpers.SetSchemaChecksum(historyInputChecksumFile, historySchemaInputPaths...)
 		if err != nil {
-			log.Error().Err(err).Msg("error setting history schema checksum")
+			log.Warn().Err(err).Msg("error setting history schema checksum")
 		}
 	}
 }
