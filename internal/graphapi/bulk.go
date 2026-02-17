@@ -58,7 +58,7 @@ func (r *mutationResolver) bulkUpdateActionPlan(ctx context.Context, ids []strin
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendDetailsJSON(input.AppendDetailsJSON).AppendTagSuggestions(input.AppendTagSuggestions).AppendDismissedTagSuggestions(input.AppendDismissedTagSuggestions).AppendControlSuggestions(input.AppendControlSuggestions).AppendDismissedControlSuggestions(input.AppendDismissedControlSuggestions).AppendImprovementSuggestions(input.AppendImprovementSuggestions).AppendDismissedImprovementSuggestions(input.AppendDismissedImprovementSuggestions).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("actionplan_id", id).Msg("failed to update actionplan in bulk operation")
 			continue
@@ -99,7 +99,7 @@ func (r *mutationResolver) bulkUpdateCSVActionPlan(ctx context.Context, inputs [
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDetailsJSON(input.Input.AppendDetailsJSON).AppendTagSuggestions(input.Input.AppendTagSuggestions).AppendDismissedTagSuggestions(input.Input.AppendDismissedTagSuggestions).AppendControlSuggestions(input.Input.AppendControlSuggestions).AppendDismissedControlSuggestions(input.Input.AppendDismissedControlSuggestions).AppendImprovementSuggestions(input.Input.AppendImprovementSuggestions).AppendDismissedImprovementSuggestions(input.Input.AppendDismissedImprovementSuggestions).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("actionplan_id", input.ID).Msg("failed to update actionplan in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "actionplan"})
@@ -259,7 +259,7 @@ func (r *mutationResolver) bulkUpdateAPIToken(ctx context.Context, ids []string,
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendScopes(input.AppendScopes).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("apitoken_id", id).Msg("failed to update apitoken in bulk operation")
 			continue
@@ -300,7 +300,7 @@ func (r *mutationResolver) bulkUpdateCSVAPIToken(ctx context.Context, inputs []*
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendScopes(input.Input.AppendScopes).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("apitoken_id", input.ID).Msg("failed to update apitoken in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "apitoken"})
@@ -460,7 +460,7 @@ func (r *mutationResolver) bulkUpdateAsset(ctx context.Context, ids []string, in
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendCategories(input.AppendCategories).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("asset_id", id).Msg("failed to update asset in bulk operation")
 			continue
@@ -501,7 +501,7 @@ func (r *mutationResolver) bulkUpdateCSVAsset(ctx context.Context, inputs []*csv
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendCategories(input.Input.AppendCategories).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("asset_id", input.ID).Msg("failed to update asset in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "asset"})
@@ -599,7 +599,7 @@ func (r *mutationResolver) bulkUpdateContact(ctx context.Context, ids []string, 
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("contact_id", id).Msg("failed to update contact in bulk operation")
 			continue
@@ -640,7 +640,7 @@ func (r *mutationResolver) bulkUpdateCSVContact(ctx context.Context, inputs []*c
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("contact_id", input.ID).Msg("failed to update contact in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "contact"})
@@ -750,7 +750,7 @@ func (r *mutationResolver) bulkUpdateControl(ctx context.Context, ids []string, 
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendDescriptionJSON(input.AppendDescriptionJSON).AppendAliases(input.AppendAliases).AppendMappedCategories(input.AppendMappedCategories).AppendAssessmentObjectives(input.AppendAssessmentObjectives).AppendAssessmentMethods(input.AppendAssessmentMethods).AppendControlQuestions(input.AppendControlQuestions).AppendImplementationGuidance(input.AppendImplementationGuidance).AppendExampleEvidence(input.AppendExampleEvidence).AppendReferences(input.AppendReferences).AppendTestingProcedures(input.AppendTestingProcedures).AppendEvidenceRequests(input.AppendEvidenceRequests).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("control_id", id).Msg("failed to update control in bulk operation")
 			continue
@@ -791,7 +791,7 @@ func (r *mutationResolver) bulkUpdateCSVControl(ctx context.Context, inputs []*c
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDescriptionJSON(input.Input.AppendDescriptionJSON).AppendAliases(input.Input.AppendAliases).AppendMappedCategories(input.Input.AppendMappedCategories).AppendAssessmentObjectives(input.Input.AppendAssessmentObjectives).AppendAssessmentMethods(input.Input.AppendAssessmentMethods).AppendControlQuestions(input.Input.AppendControlQuestions).AppendImplementationGuidance(input.Input.AppendImplementationGuidance).AppendExampleEvidence(input.Input.AppendExampleEvidence).AppendReferences(input.Input.AppendReferences).AppendTestingProcedures(input.Input.AppendTestingProcedures).AppendEvidenceRequests(input.Input.AppendEvidenceRequests).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("control_id", input.ID).Msg("failed to update control in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "control"})
@@ -951,7 +951,7 @@ func (r *mutationResolver) bulkUpdateControlImplementation(ctx context.Context, 
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendDetailsJSON(input.AppendDetailsJSON).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("controlimplementation_id", id).Msg("failed to update controlimplementation in bulk operation")
 			continue
@@ -992,7 +992,7 @@ func (r *mutationResolver) bulkUpdateCSVControlImplementation(ctx context.Contex
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDetailsJSON(input.Input.AppendDetailsJSON).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("controlimplementation_id", input.ID).Msg("failed to update controlimplementation in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "controlimplementation"})
@@ -1102,7 +1102,7 @@ func (r *mutationResolver) bulkUpdateControlObjective(ctx context.Context, ids [
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendDesiredOutcomeJSON(input.AppendDesiredOutcomeJSON).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("controlobjective_id", id).Msg("failed to update controlobjective in bulk operation")
 			continue
@@ -1143,7 +1143,7 @@ func (r *mutationResolver) bulkUpdateCSVControlObjective(ctx context.Context, in
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDesiredOutcomeJSON(input.Input.AppendDesiredOutcomeJSON).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("controlobjective_id", input.ID).Msg("failed to update controlobjective in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "controlobjective"})
@@ -1253,7 +1253,7 @@ func (r *mutationResolver) bulkUpdateCustomDomain(ctx context.Context, ids []str
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("customdomain_id", id).Msg("failed to update customdomain in bulk operation")
 			continue
@@ -1294,7 +1294,7 @@ func (r *mutationResolver) bulkUpdateCSVCustomDomain(ctx context.Context, inputs
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("customdomain_id", input.ID).Msg("failed to update customdomain in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "customdomain"})
@@ -1518,7 +1518,7 @@ func (r *mutationResolver) bulkUpdateDNSVerification(ctx context.Context, ids []
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("dnsverification_id", id).Msg("failed to update dnsverification in bulk operation")
 			continue
@@ -1559,7 +1559,7 @@ func (r *mutationResolver) bulkUpdateCSVDNSVerification(ctx context.Context, inp
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("dnsverification_id", input.ID).Msg("failed to update dnsverification in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "dnsverification"})
@@ -1669,7 +1669,7 @@ func (r *mutationResolver) bulkUpdateDocumentData(ctx context.Context, ids []str
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("documentdata_id", id).Msg("failed to update documentdata in bulk operation")
 			continue
@@ -1710,7 +1710,7 @@ func (r *mutationResolver) bulkUpdateCSVDocumentData(ctx context.Context, inputs
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("documentdata_id", input.ID).Msg("failed to update documentdata in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "documentdata"})
@@ -1770,7 +1770,7 @@ func (r *mutationResolver) bulkUpdateEmailBranding(ctx context.Context, ids []st
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("emailbranding_id", id).Msg("failed to update emailbranding in bulk operation")
 			continue
@@ -1811,7 +1811,7 @@ func (r *mutationResolver) bulkUpdateCSVEmailBranding(ctx context.Context, input
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("emailbranding_id", input.ID).Msg("failed to update emailbranding in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "emailbranding"})
@@ -2122,7 +2122,7 @@ func (r *mutationResolver) bulkUpdateEntity(ctx context.Context, ids []string, i
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendDomains(input.AppendDomains).AppendLinkedAssetIds(input.AppendLinkedAssetIds).AppendProvidedServices(input.AppendProvidedServices).AppendLinks(input.AppendLinks).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("entity_id", id).Msg("failed to update entity in bulk operation")
 			continue
@@ -2163,7 +2163,7 @@ func (r *mutationResolver) bulkUpdateCSVEntity(ctx context.Context, inputs []*cs
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDomains(input.Input.AppendDomains).AppendLinkedAssetIds(input.Input.AppendLinkedAssetIds).AppendProvidedServices(input.Input.AppendProvidedServices).AppendLinks(input.Input.AppendLinks).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("entity_id", input.ID).Msg("failed to update entity in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "entity"})
@@ -2273,7 +2273,7 @@ func (r *mutationResolver) bulkUpdateEntityType(ctx context.Context, ids []strin
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("entitytype_id", id).Msg("failed to update entitytype in bulk operation")
 			continue
@@ -2314,7 +2314,7 @@ func (r *mutationResolver) bulkUpdateCSVEntityType(ctx context.Context, inputs [
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("entitytype_id", input.ID).Msg("failed to update entitytype in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "entitytype"})
@@ -2424,7 +2424,7 @@ func (r *mutationResolver) bulkUpdateEvent(ctx context.Context, ids []string, in
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("event_id", id).Msg("failed to update event in bulk operation")
 			continue
@@ -2465,7 +2465,7 @@ func (r *mutationResolver) bulkUpdateCSVEvent(ctx context.Context, inputs []*csv
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("event_id", input.ID).Msg("failed to update event in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "event"})
@@ -2525,7 +2525,7 @@ func (r *mutationResolver) bulkUpdateEvidence(ctx context.Context, ids []string,
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("evidence_id", id).Msg("failed to update evidence in bulk operation")
 			continue
@@ -2566,7 +2566,7 @@ func (r *mutationResolver) bulkUpdateCSVEvidence(ctx context.Context, inputs []*
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("evidence_id", input.ID).Msg("failed to update evidence in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "evidence"})
@@ -2814,7 +2814,7 @@ func (r *mutationResolver) bulkUpdateGroup(ctx context.Context, ids []string, in
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("group_id", id).Msg("failed to update group in bulk operation")
 			continue
@@ -2855,7 +2855,7 @@ func (r *mutationResolver) bulkUpdateCSVGroup(ctx context.Context, inputs []*csv
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("group_id", input.ID).Msg("failed to update group in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "group"})
@@ -3418,7 +3418,7 @@ func (r *mutationResolver) bulkUpdateIdentityHolder(ctx context.Context, ids []s
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("identityholder_id", id).Msg("failed to update identityholder in bulk operation")
 			continue
@@ -3459,7 +3459,7 @@ func (r *mutationResolver) bulkUpdateCSVIdentityHolder(ctx context.Context, inpu
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("identityholder_id", input.ID).Msg("failed to update identityholder in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "identityholder"})
@@ -3519,7 +3519,7 @@ func (r *mutationResolver) bulkUpdateInternalPolicy(ctx context.Context, ids []s
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendDetailsJSON(input.AppendDetailsJSON).AppendTagSuggestions(input.AppendTagSuggestions).AppendDismissedTagSuggestions(input.AppendDismissedTagSuggestions).AppendControlSuggestions(input.AppendControlSuggestions).AppendDismissedControlSuggestions(input.AppendDismissedControlSuggestions).AppendImprovementSuggestions(input.AppendImprovementSuggestions).AppendDismissedImprovementSuggestions(input.AppendDismissedImprovementSuggestions).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("internalpolicy_id", id).Msg("failed to update internalpolicy in bulk operation")
 			continue
@@ -3560,7 +3560,7 @@ func (r *mutationResolver) bulkUpdateCSVInternalPolicy(ctx context.Context, inpu
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDetailsJSON(input.Input.AppendDetailsJSON).AppendTagSuggestions(input.Input.AppendTagSuggestions).AppendDismissedTagSuggestions(input.Input.AppendDismissedTagSuggestions).AppendControlSuggestions(input.Input.AppendControlSuggestions).AppendDismissedControlSuggestions(input.Input.AppendDismissedControlSuggestions).AppendImprovementSuggestions(input.Input.AppendImprovementSuggestions).AppendDismissedImprovementSuggestions(input.Input.AppendDismissedImprovementSuggestions).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("internalpolicy_id", input.ID).Msg("failed to update internalpolicy in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "internalpolicy"})
@@ -3871,7 +3871,7 @@ func (r *mutationResolver) bulkUpdateJobTemplate(ctx context.Context, ids []stri
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendConfiguration(input.AppendConfiguration).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("jobtemplate_id", id).Msg("failed to update jobtemplate in bulk operation")
 			continue
@@ -3912,7 +3912,7 @@ func (r *mutationResolver) bulkUpdateCSVJobTemplate(ctx context.Context, inputs 
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendConfiguration(input.Input.AppendConfiguration).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("jobtemplate_id", input.ID).Msg("failed to update jobtemplate in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "jobtemplate"})
@@ -4022,7 +4022,7 @@ func (r *mutationResolver) bulkUpdateMappableDomain(ctx context.Context, ids []s
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("mappabledomain_id", id).Msg("failed to update mappabledomain in bulk operation")
 			continue
@@ -4063,7 +4063,7 @@ func (r *mutationResolver) bulkUpdateCSVMappableDomain(ctx context.Context, inpu
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("mappabledomain_id", input.ID).Msg("failed to update mappabledomain in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "mappabledomain"})
@@ -4173,7 +4173,7 @@ func (r *mutationResolver) bulkUpdateMappedControl(ctx context.Context, ids []st
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("mappedcontrol_id", id).Msg("failed to update mappedcontrol in bulk operation")
 			continue
@@ -4214,7 +4214,7 @@ func (r *mutationResolver) bulkUpdateCSVMappedControl(ctx context.Context, input
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("mappedcontrol_id", input.ID).Msg("failed to update mappedcontrol in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "mappedcontrol"})
@@ -4324,7 +4324,7 @@ func (r *mutationResolver) bulkUpdateNarrative(ctx context.Context, ids []string
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("narrative_id", id).Msg("failed to update narrative in bulk operation")
 			continue
@@ -4365,7 +4365,7 @@ func (r *mutationResolver) bulkUpdateCSVNarrative(ctx context.Context, inputs []
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("narrative_id", input.ID).Msg("failed to update narrative in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "narrative"})
@@ -4425,7 +4425,7 @@ func (r *mutationResolver) bulkUpdateNotificationPreference(ctx context.Context,
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTopicPatterns(input.AppendTopicPatterns).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("notificationpreference_id", id).Msg("failed to update notificationpreference in bulk operation")
 			continue
@@ -4466,7 +4466,7 @@ func (r *mutationResolver) bulkUpdateCSVNotificationPreference(ctx context.Conte
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTopicPatterns(input.Input.AppendTopicPatterns).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("notificationpreference_id", input.ID).Msg("failed to update notificationpreference in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "notificationpreference"})
@@ -4777,7 +4777,7 @@ func (r *mutationResolver) bulkUpdateOrganizationSetting(ctx context.Context, id
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendDomains(input.AppendDomains).AppendAllowedEmailDomains(input.AppendAllowedEmailDomains).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("organizationsetting_id", id).Msg("failed to update organizationsetting in bulk operation")
 			continue
@@ -4818,7 +4818,7 @@ func (r *mutationResolver) bulkUpdateCSVOrganizationSetting(ctx context.Context,
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDomains(input.Input.AppendDomains).AppendAllowedEmailDomains(input.Input.AppendAllowedEmailDomains).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("organizationsetting_id", input.ID).Msg("failed to update organizationsetting in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organizationsetting"})
@@ -5048,7 +5048,7 @@ func (r *mutationResolver) bulkUpdateProcedure(ctx context.Context, ids []string
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendDetailsJSON(input.AppendDetailsJSON).AppendTagSuggestions(input.AppendTagSuggestions).AppendDismissedTagSuggestions(input.AppendDismissedTagSuggestions).AppendControlSuggestions(input.AppendControlSuggestions).AppendDismissedControlSuggestions(input.AppendDismissedControlSuggestions).AppendImprovementSuggestions(input.AppendImprovementSuggestions).AppendDismissedImprovementSuggestions(input.AppendDismissedImprovementSuggestions).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("procedure_id", id).Msg("failed to update procedure in bulk operation")
 			continue
@@ -5089,7 +5089,7 @@ func (r *mutationResolver) bulkUpdateCSVProcedure(ctx context.Context, inputs []
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDetailsJSON(input.Input.AppendDetailsJSON).AppendTagSuggestions(input.Input.AppendTagSuggestions).AppendDismissedTagSuggestions(input.Input.AppendDismissedTagSuggestions).AppendControlSuggestions(input.Input.AppendControlSuggestions).AppendDismissedControlSuggestions(input.Input.AppendDismissedControlSuggestions).AppendImprovementSuggestions(input.Input.AppendImprovementSuggestions).AppendDismissedImprovementSuggestions(input.Input.AppendDismissedImprovementSuggestions).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("procedure_id", input.ID).Msg("failed to update procedure in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "procedure"})
@@ -5249,7 +5249,7 @@ func (r *mutationResolver) bulkUpdateProgram(ctx context.Context, ids []string, 
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("program_id", id).Msg("failed to update program in bulk operation")
 			continue
@@ -5290,7 +5290,7 @@ func (r *mutationResolver) bulkUpdateCSVProgram(ctx context.Context, inputs []*c
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("program_id", input.ID).Msg("failed to update program in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "program"})
@@ -5539,7 +5539,7 @@ func (r *mutationResolver) bulkUpdateRisk(ctx context.Context, ids []string, inp
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendMitigationJSON(input.AppendMitigationJSON).AppendDetailsJSON(input.AppendDetailsJSON).AppendBusinessCostsJSON(input.AppendBusinessCostsJSON).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("risk_id", id).Msg("failed to update risk in bulk operation")
 			continue
@@ -5580,7 +5580,7 @@ func (r *mutationResolver) bulkUpdateCSVRisk(ctx context.Context, inputs []*csvg
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendMitigationJSON(input.Input.AppendMitigationJSON).AppendDetailsJSON(input.Input.AppendDetailsJSON).AppendBusinessCostsJSON(input.Input.AppendBusinessCostsJSON).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("risk_id", input.ID).Msg("failed to update risk in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "risk"})
@@ -5690,7 +5690,7 @@ func (r *mutationResolver) bulkUpdateScan(ctx context.Context, ids []string, inp
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendVulnerabilityIds(input.AppendVulnerabilityIds).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("scan_id", id).Msg("failed to update scan in bulk operation")
 			continue
@@ -5731,7 +5731,7 @@ func (r *mutationResolver) bulkUpdateCSVScan(ctx context.Context, inputs []*csvg
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendVulnerabilityIds(input.Input.AppendVulnerabilityIds).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("scan_id", input.ID).Msg("failed to update scan in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "scan"})
@@ -5891,7 +5891,7 @@ func (r *mutationResolver) bulkUpdateScheduledJob(ctx context.Context, ids []str
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendConfiguration(input.AppendConfiguration).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("scheduledjob_id", id).Msg("failed to update scheduledjob in bulk operation")
 			continue
@@ -5932,7 +5932,7 @@ func (r *mutationResolver) bulkUpdateCSVScheduledJob(ctx context.Context, inputs
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendConfiguration(input.Input.AppendConfiguration).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("scheduledjob_id", input.ID).Msg("failed to update scheduledjob in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "scheduledjob"})
@@ -6042,7 +6042,7 @@ func (r *mutationResolver) bulkUpdateSubcontrol(ctx context.Context, ids []strin
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendDescriptionJSON(input.AppendDescriptionJSON).AppendAliases(input.AppendAliases).AppendMappedCategories(input.AppendMappedCategories).AppendAssessmentObjectives(input.AppendAssessmentObjectives).AppendAssessmentMethods(input.AppendAssessmentMethods).AppendControlQuestions(input.AppendControlQuestions).AppendImplementationGuidance(input.AppendImplementationGuidance).AppendExampleEvidence(input.AppendExampleEvidence).AppendReferences(input.AppendReferences).AppendTestingProcedures(input.AppendTestingProcedures).AppendEvidenceRequests(input.AppendEvidenceRequests).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("subcontrol_id", id).Msg("failed to update subcontrol in bulk operation")
 			continue
@@ -6083,7 +6083,7 @@ func (r *mutationResolver) bulkUpdateCSVSubcontrol(ctx context.Context, inputs [
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDescriptionJSON(input.Input.AppendDescriptionJSON).AppendAliases(input.Input.AppendAliases).AppendMappedCategories(input.Input.AppendMappedCategories).AppendAssessmentObjectives(input.Input.AppendAssessmentObjectives).AppendAssessmentMethods(input.Input.AppendAssessmentMethods).AppendControlQuestions(input.Input.AppendControlQuestions).AppendImplementationGuidance(input.Input.AppendImplementationGuidance).AppendExampleEvidence(input.Input.AppendExampleEvidence).AppendReferences(input.Input.AppendReferences).AppendTestingProcedures(input.Input.AppendTestingProcedures).AppendEvidenceRequests(input.Input.AppendEvidenceRequests).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("subcontrol_id", input.ID).Msg("failed to update subcontrol in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subcontrol"})
@@ -6143,7 +6143,7 @@ func (r *mutationResolver) bulkUpdateSubprocessor(ctx context.Context, ids []str
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("subprocessor_id", id).Msg("failed to update subprocessor in bulk operation")
 			continue
@@ -6184,7 +6184,7 @@ func (r *mutationResolver) bulkUpdateCSVSubprocessor(ctx context.Context, inputs
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("subprocessor_id", input.ID).Msg("failed to update subprocessor in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subprocessor"})
@@ -6332,7 +6332,7 @@ func (r *mutationResolver) bulkUpdateTask(ctx context.Context, ids []string, inp
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendDetailsJSON(input.AppendDetailsJSON).AppendExternalReferenceURL(input.AppendExternalReferenceURL).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("task_id", id).Msg("failed to update task in bulk operation")
 			continue
@@ -6373,7 +6373,7 @@ func (r *mutationResolver) bulkUpdateCSVTask(ctx context.Context, inputs []*csvg
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDetailsJSON(input.Input.AppendDetailsJSON).AppendExternalReferenceURL(input.Input.AppendExternalReferenceURL).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("task_id", input.ID).Msg("failed to update task in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "task"})
@@ -6533,7 +6533,7 @@ func (r *mutationResolver) bulkUpdateTemplate(ctx context.Context, ids []string,
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("template_id", id).Msg("failed to update template in bulk operation")
 			continue
@@ -6574,7 +6574,7 @@ func (r *mutationResolver) bulkUpdateCSVTemplate(ctx context.Context, inputs []*
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("template_id", input.ID).Msg("failed to update template in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "template"})
@@ -6684,7 +6684,7 @@ func (r *mutationResolver) bulkUpdateTrustCenterCompliance(ctx context.Context, 
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("trustcentercompliance_id", id).Msg("failed to update trustcentercompliance in bulk operation")
 			continue
@@ -6725,7 +6725,7 @@ func (r *mutationResolver) bulkUpdateCSVTrustCenterCompliance(ctx context.Contex
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("trustcentercompliance_id", input.ID).Msg("failed to update trustcentercompliance in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentercompliance"})
@@ -6785,7 +6785,7 @@ func (r *mutationResolver) bulkUpdateTrustCenterDoc(ctx context.Context, ids []s
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to update trustcenterdoc in bulk operation")
 			continue
@@ -6826,7 +6826,7 @@ func (r *mutationResolver) bulkUpdateCSVTrustCenterDoc(ctx context.Context, inpu
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("trustcenterdoc_id", input.ID).Msg("failed to update trustcenterdoc in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterdoc"})
@@ -7024,7 +7024,7 @@ func (r *mutationResolver) bulkUpdateTrustCenterSubprocessor(ctx context.Context
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendCountries(input.AppendCountries).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("trustcentersubprocessor_id", id).Msg("failed to update trustcentersubprocessor in bulk operation")
 			continue
@@ -7065,7 +7065,7 @@ func (r *mutationResolver) bulkUpdateCSVTrustCenterSubprocessor(ctx context.Cont
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendCountries(input.Input.AppendCountries).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("trustcentersubprocessor_id", input.ID).Msg("failed to update trustcentersubprocessor in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersubprocessor"})
@@ -7225,7 +7225,7 @@ func (r *mutationResolver) bulkUpdateUserSetting(ctx context.Context, ids []stri
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("usersetting_id", id).Msg("failed to update usersetting in bulk operation")
 			continue
@@ -7266,7 +7266,7 @@ func (r *mutationResolver) bulkUpdateCSVUserSetting(ctx context.Context, inputs 
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("usersetting_id", input.ID).Msg("failed to update usersetting in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "usersetting"})
