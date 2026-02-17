@@ -17,7 +17,6 @@ import (
 	"github.com/mcuadros/go-defaults"
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/beacon/otelx"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/fgax"
@@ -67,8 +66,6 @@ type Config struct {
 	JobQueue riverqueue.Config `json:"jobqueue" koanf:"jobqueue"`
 	// Redis contains the redis configuration for the key-value store
 	Redis cache.Config `json:"redis" koanf:"redis"`
-	// Tracer contains the tracing config for opentelemetry
-	Tracer otelx.Config `json:"tracer" koanf:"tracer"`
 	// Email contains email sending configuration for the server
 	Email emailtemplates.Config `json:"email" koanf:"email"`
 	// Sessions config for user sessions and cookies
@@ -162,10 +159,6 @@ type KeyWatcher struct {
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// KeyDir is the path to the directory containing PEM keys for JWT signing
 	KeyDir string `json:"keydir" koanf:"keydir" default:"./keys"`
-	// ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)
-	ExternalSecretsIntegration bool `json:"externalsecretsintegration" koanf:"externalsecretsintegration" default:"false"`
-	// SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key
-	SecretManagerSecret string `json:"secretmanager" koanf:"secretmanager" default:"" sensitive:"true"`
 }
 
 // Auth settings including oauth2 providers and token configuration

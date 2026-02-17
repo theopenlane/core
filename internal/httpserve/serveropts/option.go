@@ -589,15 +589,6 @@ func WithKeyDirOption() ServerOption {
 	})
 }
 
-// WithSecretManagerKeysOption allows the secret manager secret name to be set via server config.
-func WithSecretManagerKeysOption() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.Keywatcher.SecretManagerSecret != "" && s.Config.Settings.Keywatcher.ExternalSecretsIntegration {
-			WithSecretManagerKeys(s.Config.Settings.Server.SecretManagerSecret).apply(s)
-		}
-	})
-}
-
 // WithCSRF sets up the CSRF middleware for the server
 func WithCSRF() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
