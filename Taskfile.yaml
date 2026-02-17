@@ -65,11 +65,21 @@ tasks:
     aliases: [generate]
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
+    deps:
+      - task: generate:core
+      - task: generate:catalog:smart
+    cmds:
+      - task: generate:openapi:smart
+      - task: tidy
+
+  generate:core:
+    desc: Run ent and graphql code generation (serial dependency chain)
+    internal: true
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - task: generate:ent:smart
       - task: generate:graphql:smart
-      - task: generate:others:smart
-      - task: tidy
 
   generate:ent:smart:
     aliases: ['generate:ent']
@@ -108,24 +118,35 @@ tasks:
     cmds:
       - go generate internal/graphapi/generate/generate.go
 
-  generate:others:smart:
-    internal: true
+  generate:catalog:smart:
+    desc: Generate catalog code from YAML definitions
+    aliases: ['generate:catalog']
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
       - pkg/catalog/**/*.go
+      - pkg/catalog/**/*.yaml
       - common/models/catalog.go
-      - .mockery.yml
+    generates:
+      - pkg/catalog/gencatalog/*.go
+      - pkg/catalog/**/*.json
+      - common/models/orgmodule_gen.go
+    method: checksum
+    cmds:
+      - go generate pkg/catalog/generate.go
+
+  generate:openapi:smart:
+    desc: Generate OpenAPI specification with checksum tracking
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
+    sources:
       - internal/httpserve/**/*.go
       - common/openapi/*.go
     generates:
-      - pkg/catalog/**/*.yaml
-      - pkg/catalog/**/*.json
       - internal/httpserve/specs/openlane.openapi.json
       - internal/httpserve/specs/openlane.openapi.yaml
     method: checksum
     cmds:
-      - go generate pkg/catalog/generate.go
       - go generate internal/httpserve/specs/generate/generate.go
 
   generate:removechecksums:
