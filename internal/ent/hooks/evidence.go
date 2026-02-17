@@ -34,6 +34,10 @@ func HookEvidenceFiles() ent.Hook {
 					return nil, ErrFutureTimeNotAllowed
 				}
 
+				if err := validateTimeNotInPast(m.RenewalDate()); err != nil {
+					return nil, err
+				}
+
 				hasURL := checkEvidenceHasURL(ctx, m)
 				hasFiles := checkEvidenceHasFiles(ctx, m)
 

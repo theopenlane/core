@@ -15,8 +15,7 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-func validateExpirationTime(m mutationWithExpirationTime) error {
-	t, ok := m.ExpiresAt()
+func validateTimeNotInPast(t time.Time, ok bool) error {
 	if !ok {
 		return nil
 	}
@@ -26,10 +25,6 @@ func validateExpirationTime(m mutationWithExpirationTime) error {
 	}
 
 	return nil
-}
-
-type mutationWithExpirationTime interface {
-	ExpiresAt() (time.Time, bool)
 }
 
 // HookCreateAPIToken runs on api token mutations and sets the owner id
@@ -44,7 +39,7 @@ func HookCreateAPIToken() ent.Hook {
 			// set organization on the token
 			m.SetOwnerID(orgID)
 
-			if err := validateExpirationTime(m); err != nil {
+			if err := validateTimeNotInPast(m.ExpiresAt()); err != nil {
 				return nil, err
 			}
 
