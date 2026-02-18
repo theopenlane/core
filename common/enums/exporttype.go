@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // ExportType is a custom type representing the various states of ExportType.
 type ExportType string
@@ -48,89 +44,39 @@ var (
 	ExportTypeInvalid ExportType = "EXPORTTYPE_INVALID"
 )
 
-// Values returns a slice of strings representing all valid ExportType values.
-func (ExportType) Values() []string {
-	return []string{
-		string(ExportTypeAsset),
-		string(ExportTypeControl),
-		string(ExportTypeDirectoryMembership),
-		string(ExportTypeEntity),
-		string(ExportTypeEvidence),
-		string(ExportTypeFinding),
-		string(ExportTypeIdentityHolder),
-		string(ExportTypeInternalPolicy),
-		string(ExportTypeProcedure),
-		string(ExportTypeRemediation),
-		string(ExportTypeReview),
-		string(ExportTypeRisk),
-		string(ExportTypeSubprocessor),
-		string(ExportTypeSubscriber),
-		string(ExportTypeTask),
-		string(ExportTypeTrustCenterSubprocessor),
-		string(ExportTypeVulnerability),
-	}
+var exportTypeValues = []ExportType{
+	ExportTypeAsset,
+	ExportTypeControl,
+	ExportTypeDirectoryMembership,
+	ExportTypeEntity,
+	ExportTypeEvidence,
+	ExportTypeFinding,
+	ExportTypeIdentityHolder,
+	ExportTypeInternalPolicy,
+	ExportTypeProcedure,
+	ExportTypeRemediation,
+	ExportTypeReview,
+	ExportTypeRisk,
+	ExportTypeSubprocessor,
+	ExportTypeSubscriber,
+	ExportTypeTask,
+	ExportTypeTrustCenterSubprocessor,
+	ExportTypeVulnerability,
 }
 
+// Values returns a slice of strings representing all valid ExportType values.
+func (ExportType) Values() []string { return stringValues(exportTypeValues) }
+
 // String returns the string representation of the ExportType value.
-func (r ExportType) String() string {
-	return string(r)
-}
+func (r ExportType) String() string { return string(r) }
 
 // ToExportType converts a string to its corresponding ExportType enum value.
 func ToExportType(r string) *ExportType {
-	switch strings.ToUpper(r) {
-	case ExportTypeAsset.String():
-		return &ExportTypeAsset
-	case ExportTypeControl.String():
-		return &ExportTypeControl
-	case ExportTypeDirectoryMembership.String():
-		return &ExportTypeDirectoryMembership
-	case ExportTypeEntity.String():
-		return &ExportTypeEntity
-	case ExportTypeEvidence.String():
-		return &ExportTypeEvidence
-	case ExportTypeFinding.String():
-		return &ExportTypeFinding
-	case ExportTypeIdentityHolder.String():
-		return &ExportTypeIdentityHolder
-	case ExportTypeInternalPolicy.String():
-		return &ExportTypeInternalPolicy
-	case ExportTypeProcedure.String():
-		return &ExportTypeProcedure
-	case ExportTypeRemediation.String():
-		return &ExportTypeRemediation
-	case ExportTypeReview.String():
-		return &ExportTypeReview
-	case ExportTypeRisk.String():
-		return &ExportTypeRisk
-	case ExportTypeSubprocessor.String():
-		return &ExportTypeSubprocessor
-	case ExportTypeSubscriber.String():
-		return &ExportTypeSubscriber
-	case ExportTypeTask.String():
-		return &ExportTypeTask
-	case ExportTypeTrustCenterSubprocessor.String():
-		return &ExportTypeTrustCenterSubprocessor
-	case ExportTypeVulnerability.String():
-		return &ExportTypeVulnerability
-	default:
-		return &ExportTypeInvalid
-	}
+	return parse(r, exportTypeValues, &ExportTypeInvalid)
 }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r ExportType) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r ExportType) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *ExportType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for ExportType, got: %T", v) //nolint:err113
-	}
-
-	*r = ExportType(str)
-
-	return nil
-}
+func (r *ExportType) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

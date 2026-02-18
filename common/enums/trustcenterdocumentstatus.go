@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // TrustCenterDocumentVisibility is a custom type for document status
 type TrustCenterDocumentVisibility string
@@ -21,52 +17,28 @@ var (
 	TrustCenterDocumentVisibilityInvalid TrustCenterDocumentVisibility = "DOCUMENT_STATUS_INVALID"
 )
 
+var trustCenterDocumentVisibilityValues = []TrustCenterDocumentVisibility{
+	TrustCenterDocumentVisibilityPubliclyVisible,
+	TrustCenterDocumentVisibilityProtected,
+	TrustCenterDocumentVisibilityNotVisible,
+}
+
 // Values returns a slice of strings that represents all the possible values of the TrustCenterDocumentVisibility enum.
 // Possible default values are "PUBLISHED", "DRAFT", "NEEDS_APPROVAL", and "APPROVED"
-func (TrustCenterDocumentVisibility) Values() (kinds []string) {
-	for _, s := range []TrustCenterDocumentVisibility{
-		TrustCenterDocumentVisibilityPubliclyVisible,
-		TrustCenterDocumentVisibilityProtected,
-		TrustCenterDocumentVisibilityNotVisible,
-	} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
+func (TrustCenterDocumentVisibility) Values() []string {
+	return stringValues(trustCenterDocumentVisibilityValues)
 }
 
 // String returns the document status as a string
-func (r TrustCenterDocumentVisibility) String() string {
-	return string(r)
-}
+func (r TrustCenterDocumentVisibility) String() string { return string(r) }
 
 // ToTrustCenterDocumentVisibility returns the document status enum based on string input
 func ToTrustCenterDocumentVisibility(r string) *TrustCenterDocumentVisibility {
-	switch r := strings.ToUpper(r); r {
-	case TrustCenterDocumentVisibilityPubliclyVisible.String():
-		return &TrustCenterDocumentVisibilityPubliclyVisible
-	case TrustCenterDocumentVisibilityProtected.String():
-		return &TrustCenterDocumentVisibilityProtected
-	case TrustCenterDocumentVisibilityNotVisible.String():
-		return &TrustCenterDocumentVisibilityNotVisible
-	default:
-		return nil
-	}
+	return parse(r, trustCenterDocumentVisibilityValues, nil)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r TrustCenterDocumentVisibility) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r TrustCenterDocumentVisibility) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *TrustCenterDocumentVisibility) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for TrustCenterDocumentVisibility, got: %T", v) //nolint:err113
-	}
-
-	*r = TrustCenterDocumentVisibility(str)
-
-	return nil
-}
+func (r *TrustCenterDocumentVisibility) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

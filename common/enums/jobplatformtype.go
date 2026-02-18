@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // JobPlatformType is a custom type representing the various states of JobPlatformType.
 type JobPlatformType string
@@ -18,44 +14,21 @@ var (
 	JobPlatformTypeInvalid JobPlatformType = "JOBPLATFORMTYPE_INVALID"
 )
 
+var jobPlatformTypeValues = []JobPlatformType{JobPlatformTypeGo, JobPlatformTypeTs}
+
 // Values returns a slice of strings representing all valid JobPlatformType values.
-func (JobPlatformType) Values() []string {
-	return []string{
-		string(JobPlatformTypeGo),
-		string(JobPlatformTypeTs),
-	}
-}
+func (JobPlatformType) Values() []string { return stringValues(jobPlatformTypeValues) }
 
 // String returns the string representation of the JobPlatformType value.
-func (r JobPlatformType) String() string {
-	return string(r)
-}
+func (r JobPlatformType) String() string { return string(r) }
 
 // ToJobPlatformType converts a string to its corresponding JobPlatformType enum value.
 func ToJobPlatformType(r string) *JobPlatformType {
-	switch strings.ToUpper(r) {
-	case JobPlatformTypeGo.String():
-		return &JobPlatformTypeGo
-	case JobPlatformTypeTs.String():
-		return &JobPlatformTypeTs
-	default:
-		return &JobPlatformTypeInvalid
-	}
+	return parse(r, jobPlatformTypeValues, &JobPlatformTypeInvalid)
 }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r JobPlatformType) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r JobPlatformType) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *JobPlatformType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for JobPlatformType, got: %T", v) //nolint:err113
-	}
-
-	*r = JobPlatformType(str)
-
-	return nil
-}
+func (r *JobPlatformType) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

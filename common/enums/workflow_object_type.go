@@ -2,10 +2,7 @@
 // This file is auto-generated to ensure WorkflowObjectType enum matches entities with workflow support.
 package enums
 
-import (
-	"fmt"
-	"io"
-)
+import "io"
 
 // WorkflowObjectType enumerates supported object types for workflows.
 // These types are automatically generated based on entities that have the WorkflowApprovalMixin.
@@ -24,66 +21,36 @@ var (
 	WorkflowObjectTypeSubcontrol     WorkflowObjectType = "Subcontrol"
 )
 
-var WorkflowObjectTypes = []string{
-	string(WorkflowObjectTypeActionPlan),
-	string(WorkflowObjectTypeCampaign),
-	string(WorkflowObjectTypeCampaignTarget),
-	string(WorkflowObjectTypeControl),
-	string(WorkflowObjectTypeEvidence),
-	string(WorkflowObjectTypeIdentityHolder),
-	string(WorkflowObjectTypeInternalPolicy),
-	string(WorkflowObjectTypePlatform),
-	string(WorkflowObjectTypeProcedure),
-	string(WorkflowObjectTypeSubcontrol),
+var workflowObjectTypeValues = []WorkflowObjectType{
+	WorkflowObjectTypeActionPlan, WorkflowObjectTypeCampaign, WorkflowObjectTypeCampaignTarget,
+	WorkflowObjectTypeControl, WorkflowObjectTypeEvidence, WorkflowObjectTypeIdentityHolder,
+	WorkflowObjectTypeInternalPolicy, WorkflowObjectTypePlatform, WorkflowObjectTypeProcedure,
+	WorkflowObjectTypeSubcontrol,
 }
 
+// WorkflowObjectTypes lists all valid workflow object types as strings.
+var WorkflowObjectTypes = stringValues(workflowObjectTypeValues)
+
 // Values returns all workflow object type values.
-func (WorkflowObjectType) Values() (vals []string) {
-	return WorkflowObjectTypes
-}
+func (WorkflowObjectType) Values() []string { return WorkflowObjectTypes }
 
 // String returns the string representation of the workflow object type.
 func (r WorkflowObjectType) String() string { return string(r) }
 
 // ToWorkflowObjectType converts a string to a WorkflowObjectType pointer.
+// Note: WorkflowObjectType values are PascalCase (entity names), so this comparison is case-sensitive.
 func ToWorkflowObjectType(v string) *WorkflowObjectType {
-	switch v {
-	case WorkflowObjectTypeActionPlan.String():
-		return &WorkflowObjectTypeActionPlan
-	case WorkflowObjectTypeCampaign.String():
-		return &WorkflowObjectTypeCampaign
-	case WorkflowObjectTypeCampaignTarget.String():
-		return &WorkflowObjectTypeCampaignTarget
-	case WorkflowObjectTypeControl.String():
-		return &WorkflowObjectTypeControl
-	case WorkflowObjectTypeEvidence.String():
-		return &WorkflowObjectTypeEvidence
-	case WorkflowObjectTypeIdentityHolder.String():
-		return &WorkflowObjectTypeIdentityHolder
-	case WorkflowObjectTypeInternalPolicy.String():
-		return &WorkflowObjectTypeInternalPolicy
-	case WorkflowObjectTypePlatform.String():
-		return &WorkflowObjectTypePlatform
-	case WorkflowObjectTypeProcedure.String():
-		return &WorkflowObjectTypeProcedure
-	case WorkflowObjectTypeSubcontrol.String():
-		return &WorkflowObjectTypeSubcontrol
-	default:
-		return nil
+	for i := range workflowObjectTypeValues {
+		if string(workflowObjectTypeValues[i]) == v {
+			return &workflowObjectTypeValues[i]
+		}
 	}
+
+	return nil
 }
 
 // MarshalGQL marshals the workflow object type to GraphQL.
-func (r WorkflowObjectType) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte("\"" + r.String() + "\""))
-}
+func (r WorkflowObjectType) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL unmarshals the workflow object type from GraphQL.
-func (r *WorkflowObjectType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowObjectType, v)
-	}
-	*r = WorkflowObjectType(str)
-	return nil
-}
+func (r *WorkflowObjectType) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

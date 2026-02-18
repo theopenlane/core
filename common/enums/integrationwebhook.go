@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // IntegrationWebhookStatus represents the status of an integration webhook.
 type IntegrationWebhookStatus string
@@ -20,53 +16,29 @@ var (
 	IntegrationWebhookStatusPending IntegrationWebhookStatus = "PENDING"
 )
 
-// IntegrationWebhookStatuses is a list of all valid IntegrationWebhookStatus values.
-var IntegrationWebhookStatuses = []string{
-	string(IntegrationWebhookStatusActive),
-	string(IntegrationWebhookStatusInactive),
-	string(IntegrationWebhookStatusFailed),
-	string(IntegrationWebhookStatusPending),
+var integrationWebhookStatusValues = []IntegrationWebhookStatus{
+	IntegrationWebhookStatusActive,
+	IntegrationWebhookStatusInactive,
+	IntegrationWebhookStatusFailed,
+	IntegrationWebhookStatusPending,
 }
+
+// IntegrationWebhookStatuses is a list of all valid IntegrationWebhookStatus values.
+var IntegrationWebhookStatuses = stringValues(integrationWebhookStatusValues)
 
 // Values returns a slice of strings that represents all the possible values of the IntegrationWebhookStatus enum.
-func (IntegrationWebhookStatus) Values() (kinds []string) {
-	return IntegrationWebhookStatuses
-}
+func (IntegrationWebhookStatus) Values() []string { return IntegrationWebhookStatuses }
 
 // String returns the IntegrationWebhookStatus as a string.
-func (r IntegrationWebhookStatus) String() string {
-	return string(r)
-}
+func (r IntegrationWebhookStatus) String() string { return string(r) }
 
 // ToIntegrationWebhookStatus returns the IntegrationWebhookStatus based on string input.
 func ToIntegrationWebhookStatus(r string) *IntegrationWebhookStatus {
-	switch strings.ToUpper(r) {
-	case IntegrationWebhookStatusActive.String():
-		return &IntegrationWebhookStatusActive
-	case IntegrationWebhookStatusInactive.String():
-		return &IntegrationWebhookStatusInactive
-	case IntegrationWebhookStatusFailed.String():
-		return &IntegrationWebhookStatusFailed
-	case IntegrationWebhookStatusPending.String():
-		return &IntegrationWebhookStatusPending
-	default:
-		return nil
-	}
+	return parse(r, integrationWebhookStatusValues, nil)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen.
-func (r IntegrationWebhookStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r IntegrationWebhookStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen.
-func (r *IntegrationWebhookStatus) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for IntegrationWebhookStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = IntegrationWebhookStatus(str)
-
-	return nil
-}
+func (r *IntegrationWebhookStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }
