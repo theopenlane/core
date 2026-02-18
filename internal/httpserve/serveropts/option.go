@@ -481,7 +481,6 @@ func WithSecureMW() ServerOption {
 	})
 }
 
-
 // WithCacheHeaders sets up the cache control headers for the server
 func WithCacheHeaders() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {

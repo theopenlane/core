@@ -127,8 +127,8 @@ func newRiverBackedGala(t *testing.T, workerCount int, optimized bool) *TestGala
 
 	if optimized {
 		opts = append(opts,
-			WithTestFetchCooldown(time.Millisecond),        // 1ms = River's minimum
-			WithTestFetchPollInterval(time.Millisecond),    // 1ms fallback polling
+			WithTestFetchCooldown(time.Millisecond),     // 1ms = River's minimum
+			WithTestFetchPollInterval(time.Millisecond), // 1ms fallback polling
 		)
 	}
 
