@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // TrustCenterNDARequestStatus is a custom type for NDA request status
 type TrustCenterNDARequestStatus string
@@ -24,57 +20,29 @@ var (
 	TrustCenterNDARequestStatusInvalid TrustCenterNDARequestStatus = "INVALID"
 )
 
-// Values returns a slice of strings that represents all the possible values of the TrustCenterNDARequestStatus enum
-func (TrustCenterNDARequestStatus) Values() (kinds []string) {
-	for _, s := range []TrustCenterNDARequestStatus{
-		TrustCenterNDARequestStatusRequested,
-		TrustCenterNDARequestStatusNeedsApproval,
-		TrustCenterNDARequestStatusApproved,
-		TrustCenterNDARequestStatusSigned,
-		TrustCenterNDARequestStatusDeclined,
-	} {
-		kinds = append(kinds, string(s))
-	}
+var trustCenterNDARequestStatusValues = []TrustCenterNDARequestStatus{
+	TrustCenterNDARequestStatusRequested,
+	TrustCenterNDARequestStatusNeedsApproval,
+	TrustCenterNDARequestStatusApproved,
+	TrustCenterNDARequestStatusSigned,
+	TrustCenterNDARequestStatusDeclined,
+}
 
-	return
+// Values returns a slice of strings that represents all the possible values of the TrustCenterNDARequestStatus enum
+func (TrustCenterNDARequestStatus) Values() []string {
+	return stringValues(trustCenterNDARequestStatusValues)
 }
 
 // String returns the NDA request status as a string
-func (r TrustCenterNDARequestStatus) String() string {
-	return string(r)
-}
+func (r TrustCenterNDARequestStatus) String() string { return string(r) }
 
 // ToTrustCenterNDARequestStatus returns the NDA request status enum based on string input
 func ToTrustCenterNDARequestStatus(r string) *TrustCenterNDARequestStatus {
-	switch r := strings.ToUpper(r); r {
-	case TrustCenterNDARequestStatusRequested.String():
-		return &TrustCenterNDARequestStatusRequested
-	case TrustCenterNDARequestStatusNeedsApproval.String():
-		return &TrustCenterNDARequestStatusNeedsApproval
-	case TrustCenterNDARequestStatusApproved.String():
-		return &TrustCenterNDARequestStatusApproved
-	case TrustCenterNDARequestStatusSigned.String():
-		return &TrustCenterNDARequestStatusSigned
-	case TrustCenterNDARequestStatusDeclined.String():
-		return &TrustCenterNDARequestStatusDeclined
-	default:
-		return nil
-	}
+	return parse(r, trustCenterNDARequestStatusValues, nil)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r TrustCenterNDARequestStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r TrustCenterNDARequestStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *TrustCenterNDARequestStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for TrustCenterNDARequestStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = TrustCenterNDARequestStatus(str)
-
-	return nil
-}
+func (r *TrustCenterNDARequestStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

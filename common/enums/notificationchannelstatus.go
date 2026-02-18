@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // NotificationChannelStatus represents the configuration status for a notification channel.
 type NotificationChannelStatus string
@@ -24,53 +20,26 @@ var (
 	NotificationChannelStatusInvalid NotificationChannelStatus = "INVALID"
 )
 
+var notificationChannelStatusValues = []NotificationChannelStatus{
+	NotificationChannelStatusEnabled, NotificationChannelStatusDisabled, NotificationChannelStatusPending,
+	NotificationChannelStatusVerified, NotificationChannelStatusError,
+}
+
 // Values returns a slice of strings that represents all the possible values of the NotificationChannelStatus enum.
 func (NotificationChannelStatus) Values() []string {
-	return []string{
-		NotificationChannelStatusEnabled.String(),
-		NotificationChannelStatusDisabled.String(),
-		NotificationChannelStatusPending.String(),
-		NotificationChannelStatusVerified.String(),
-		NotificationChannelStatusError.String(),
-	}
+	return stringValues(notificationChannelStatusValues)
 }
 
 // String returns the status as a string.
-func (r NotificationChannelStatus) String() string {
-	return string(r)
-}
+func (r NotificationChannelStatus) String() string { return string(r) }
 
 // ToNotificationChannelStatus returns the status enum based on string input.
 func ToNotificationChannelStatus(r string) *NotificationChannelStatus {
-	switch strings.ToUpper(r) {
-	case NotificationChannelStatusEnabled.String():
-		return &NotificationChannelStatusEnabled
-	case NotificationChannelStatusDisabled.String():
-		return &NotificationChannelStatusDisabled
-	case NotificationChannelStatusPending.String():
-		return &NotificationChannelStatusPending
-	case NotificationChannelStatusVerified.String():
-		return &NotificationChannelStatusVerified
-	case NotificationChannelStatusError.String():
-		return &NotificationChannelStatusError
-	default:
-		return &NotificationChannelStatusInvalid
-	}
+	return parse(r, notificationChannelStatusValues, &NotificationChannelStatusInvalid)
 }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r NotificationChannelStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r NotificationChannelStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *NotificationChannelStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for NotificationChannelStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = NotificationChannelStatus(str)
-
-	return nil
-}
+func (r *NotificationChannelStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

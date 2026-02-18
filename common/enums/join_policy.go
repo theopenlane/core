@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 type JoinPolicy string
 
@@ -21,50 +17,22 @@ var (
 	JoinPolicyInvalid JoinPolicy = "INVALID"
 )
 
+var joinPolicyValues = []JoinPolicy{JoinPolicyOpen, JoinPolicyInviteOnly, JoinPolicyApplicationOnly, JoinPolicyInviteOrApplication}
+
 // Values returns a slice of strings that represents all the possible values of the JoinPolicy enum.
 // Possible default values are "OPEN", "INVITE_ONLY", "APPLICATION_ONLY", and "INVITE_OR_APPLICATION".
-func (JoinPolicy) Values() (kinds []string) {
-	for _, s := range []JoinPolicy{JoinPolicyOpen, JoinPolicyInviteOnly, JoinPolicyApplicationOnly, JoinPolicyInviteOrApplication} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
-}
+func (JoinPolicy) Values() []string { return stringValues(joinPolicyValues) }
 
 // String returns the JoinPolicy as a string
-func (r JoinPolicy) String() string {
-	return string(r)
-}
+func (r JoinPolicy) String() string { return string(r) }
 
 // ToGroupJoinPolicy returns the user status enum based on string input
 func ToGroupJoinPolicy(r string) *JoinPolicy {
-	switch r := strings.ToUpper(r); r {
-	case JoinPolicyOpen.String():
-		return &JoinPolicyOpen
-	case JoinPolicyInviteOnly.String():
-		return &JoinPolicyInviteOnly
-	case JoinPolicyApplicationOnly.String():
-		return &JoinPolicyApplicationOnly
-	case JoinPolicyInviteOrApplication.String():
-		return &JoinPolicyInviteOrApplication
-	default:
-		return &JoinPolicyInvalid
-	}
+	return parse(r, joinPolicyValues, &JoinPolicyInvalid)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r JoinPolicy) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r JoinPolicy) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *JoinPolicy) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for JoinPolicy, got: %T", v) //nolint:err113
-	}
-
-	*r = JoinPolicy(str)
-
-	return nil
-}
+func (r *JoinPolicy) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

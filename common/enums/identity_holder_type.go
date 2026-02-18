@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // IdentityHolderType is a custom type representing the identity holder classification
 type IdentityHolderType string
@@ -18,46 +14,22 @@ var (
 	IdentityHolderTypeInvalid IdentityHolderType = "INVALID"
 )
 
+var identityHolderTypeValues = []IdentityHolderType{IdentityHolderTypeEmployee, IdentityHolderTypeContractor}
+
 // Values returns a slice of strings that represents all the possible values of the IdentityHolderType enum
 // Possible default values are "EMPLOYEE" and "CONTRACTOR"
-func (IdentityHolderType) Values() (kinds []string) {
-	for _, s := range []IdentityHolderType{IdentityHolderTypeEmployee, IdentityHolderTypeContractor} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
-}
+func (IdentityHolderType) Values() []string { return stringValues(identityHolderTypeValues) }
 
 // String returns the IdentityHolderType as a string
-func (r IdentityHolderType) String() string {
-	return string(r)
-}
+func (r IdentityHolderType) String() string { return string(r) }
 
 // ToIdentityHolderType returns the identity holder type enum based on string input
 func ToIdentityHolderType(r string) *IdentityHolderType {
-	switch r := strings.ToUpper(r); r {
-	case IdentityHolderTypeEmployee.String():
-		return &IdentityHolderTypeEmployee
-	case IdentityHolderTypeContractor.String():
-		return &IdentityHolderTypeContractor
-	default:
-		return &IdentityHolderTypeInvalid
-	}
+	return parse(r, identityHolderTypeValues, &IdentityHolderTypeInvalid)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r IdentityHolderType) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r IdentityHolderType) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *IdentityHolderType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for IdentityHolderType, got: %T", v) //nolint:err113
-	}
-
-	*r = IdentityHolderType(str)
-
-	return nil
-}
+func (r *IdentityHolderType) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

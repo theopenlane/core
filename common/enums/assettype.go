@@ -1,11 +1,8 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
+// AssetType is a custom type representing the various asset types.
 type AssetType string
 
 var (
@@ -16,41 +13,25 @@ var (
 	AssetTypeInvalid    AssetType = "INVALID"
 )
 
-func (AssetType) Values() []string {
-	return []string{
-		string(AssetTypeTechnology),
-		string(AssetTypeDomain),
-		string(AssetTypeDevice),
-		string(AssetTypeTelephone),
-	}
+var assetTypeValues = []AssetType{
+	AssetTypeTechnology,
+	AssetTypeDomain,
+	AssetTypeDevice,
+	AssetTypeTelephone,
 }
 
-func (a AssetType) String() string { return string(a) }
+// Values returns a slice of strings that represents all the possible values of the AssetType enum.
+// Possible default values are "TECHNOLOGY", "DOMAIN", "DEVICE", and "TELEPHONE".
+func (AssetType) Values() []string { return stringValues(assetTypeValues) }
 
-func ToAssetType(str string) *AssetType {
-	switch strings.ToUpper(str) {
-	case AssetTypeTechnology.String():
-		return &AssetTypeTechnology
-	case AssetTypeDomain.String():
-		return &AssetTypeDomain
-	case AssetTypeDevice.String():
-		return &AssetTypeDevice
-	case AssetTypeTelephone.String():
-		return &AssetTypeTelephone
-	default:
-		return &AssetTypeInvalid
-	}
-}
+// String returns the AssetType as a string
+func (r AssetType) String() string { return string(r) }
 
-func (a AssetType) MarshalGQL(w io.Writer) { _, _ = w.Write([]byte(`"` + a.String() + `"`)) }
+// ToAssetType returns the AssetType based on string input
+func ToAssetType(r string) *AssetType { return parse(r, assetTypeValues, &AssetTypeInvalid) }
 
-func (a *AssetType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for AssetType, got: %T", v) //nolint:err113
-	}
+// MarshalGQL implement the Marshaler interface for gqlgen
+func (r AssetType) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
-	*a = AssetType(str)
-
-	return nil
-}
+// UnmarshalGQL implement the Unmarshaler interface for gqlgen
+func (r *AssetType) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }
