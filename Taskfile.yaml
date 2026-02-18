@@ -587,7 +587,6 @@ tasks:
       - command -v gcloud &> /dev/null || curl https://sdk.cloud.google.com | bash
       - sudo npm install jsonschema2mk --global
       - sudo npm install format-graphql
-      - go mod download
       - pre-commit install && pre-commit install-hooks
       - pre-commit autoupdate
       - go mod tidy && go get -u ./... &> /dev/null
