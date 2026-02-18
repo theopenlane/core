@@ -340,8 +340,8 @@
             "INTEGRATION",
             "REASSIGN_APPROVAL",
             "SEND_EMAIL",
-            "REQUEST_REVIEW",
-            "CREATE_OBJECT"
+            "CREATE_OBJECT",
+            "REQUEST_REVIEW"
           ],
           "description": "Action type: REQUEST_APPROVAL, NOTIFY, WEBHOOK, UPDATE_FIELD, or INTEGRATION"
         },
