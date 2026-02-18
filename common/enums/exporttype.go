@@ -71,9 +71,7 @@ func (ExportType) Values() []string { return stringValues(exportTypeValues) }
 func (r ExportType) String() string { return string(r) }
 
 // ToExportType converts a string to its corresponding ExportType enum value.
-func ToExportType(r string) *ExportType {
-	return parse(r, exportTypeValues, &ExportTypeInvalid)
-}
+func ToExportType(r string) *ExportType { return parse(r, exportTypeValues, &ExportTypeInvalid) }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
 func (r ExportType) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
