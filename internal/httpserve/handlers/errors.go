@@ -153,6 +153,8 @@ var (
 	ErrResendWebhookDisabled = errors.New("resend webhook is not enabled")
 	// ErrResendWebhookMissingID is returned when resend webhook is missing svix-id header
 	ErrResendWebhookMissingID = errors.New("resend webhook is missing svix-id header")
+	// ErrMaxQuestionnaireResendAttempts is returned when the max resend attempts for a questionnaire email have been reached
+	ErrMaxQuestionnaireResendAttempts = errors.New("max attempts to resend questionnaire email reached")
 )
 
 var (
