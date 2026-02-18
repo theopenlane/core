@@ -16,7 +16,7 @@ import (
 	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/resend/resend-go/v2"
+	"github.com/resend/resend-go/v3"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/common/enums"
