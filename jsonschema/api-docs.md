@@ -16,7 +16,6 @@ Config contains the configuration for the core server
 |[**db**](#db)|`object`||yes|
 |[**jobqueue**](#jobqueue)|`object`|||
 |[**redis**](#redis)|`object`|||
-|[**tracer**](#tracer)|`object`|||
 |[**email**](#email)|`object`|||
 |[**sessions**](#sessions)|`object`|||
 |[**totp**](#totp)|`object`|||
@@ -43,9 +42,6 @@ Config contains the configuration for the core server
             "prefixes": {}
         },
         "secure": {},
-        "redirects": {
-            "redirects": {}
-        },
         "cachecontrol": {
             "nocacheheaders": {}
         },
@@ -101,10 +97,6 @@ Config contains the configuration for the core server
         "metrics": {}
     },
     "redis": {},
-    "tracer": {
-        "stdout": {},
-        "otlp": {}
-    },
     "email": {
         "urls": {}
     },
@@ -169,7 +161,6 @@ Server settings for the echo server
 |[**tls**](#servertls)|`object`|TLS settings for the server for secure connections<br/>|no|
 |[**cors**](#servercors)|`object`|Config holds the cors configuration settings<br/>|no|
 |[**secure**](#serversecure)|`object`|Config contains the types used in the mw middleware<br/>|no|
-|[**redirects**](#serverredirects)|`object`|Config contains the types used in executing redirects via the redirect middleware<br/>|no|
 |[**cachecontrol**](#servercachecontrol)|`object`|Config is the config values for the cache-control middleware<br/>|no|
 |[**mime**](#servermime)|`object`|Config defines the config for Mime middleware<br/>|no|
 |[**graphpool**](#servergraphpool)|`object`|PoolConfig contains the settings for the goroutine pool<br/>|no|
@@ -193,9 +184,6 @@ Server settings for the echo server
         "prefixes": {}
     },
     "secure": {},
-    "redirects": {
-        "redirects": {}
-    },
     "cachecontrol": {
         "nocacheheaders": {}
     },
@@ -287,38 +275,6 @@ Config contains the types used in the mw middleware
 |**cspreportonly**|`boolean`|CSPReportOnly is a boolean to enable the Content-Security-Policy-Report-Only header - default is false<br/>||
 
 **Additional Properties:** not allowed  
-<a name="serverredirects"></a>
-### server\.redirects: object
-
-Config contains the types used in executing redirects via the redirect middleware
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates if the redirect middleware should be enabled<br/>||
-|[**redirects**](#serverredirectsredirects)|`object`|||
-|**code**|`integer`|Code is the HTTP status code to use for the redirect<br/>||
-
-**Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "redirects": {}
-}
-```
-
-<a name="serverredirectsredirects"></a>
-#### server\.redirects\.redirects: object
-
-**Additional Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**Additional Properties**|`string`|||
-
 <a name="servercachecontrol"></a>
 ### server\.cachecontrol: object
 
@@ -1160,61 +1116,6 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**maxactiveconns**|`integer`|||
 
 **Additional Properties:** not allowed  
-<a name="tracer"></a>
-## tracer: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|||
-|**provider**|`string`|||
-|**environment**|`string`|||
-|[**stdout**](#tracerstdout)|`object`|||
-|[**otlp**](#tracerotlp)|`object`|||
-
-**Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "stdout": {},
-    "otlp": {}
-}
-```
-
-<a name="tracerstdout"></a>
-### tracer\.stdout: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**pretty**|`boolean`|||
-|**disabletimestamp**|`boolean`|||
-
-**Additional Properties:** not allowed  
-<a name="tracerotlp"></a>
-### tracer\.otlp: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**endpoint**|`string`|||
-|**insecure**|`boolean`|||
-|**certificate**|`string`|||
-|[**headers**](#tracerotlpheaders)|`string[]`|||
-|**compression**|`string`|||
-|**timeout**|`integer`|||
-
-**Additional Properties:** not allowed  
-<a name="tracerotlpheaders"></a>
-#### tracer\.otlp\.headers: array
-
-**Items**
-
-**Item Type:** `string`  
 <a name="email"></a>
 ## email: object
 
@@ -1655,8 +1556,6 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled indicates whether the key watcher is enabled<br/>||
 |**keydir**|`string`|KeyDir is the path to the directory containing PEM keys for JWT signing<br/>||
-|**externalsecretsintegration**|`boolean`|ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)<br/>||
-|**secretmanager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>||
 
 **Additional Properties:** not allowed  
 <a name="slack"></a>

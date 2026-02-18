@@ -357,7 +357,6 @@ tasks:
     cmds:
       - go run gotest.tools/gotestsum@latest --junitfile junit-graph.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/internal/graphapi/" --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage-graph.out -tags test
 
-
   go:testsum:ci:handlers:
     desc: runs tests only graph tests using gotestsum for CI
     silent: true
@@ -467,21 +466,6 @@ tasks:
       - task: go:fmt
       - task: go:lint
       - task: go:test
-
-  hush:keyset:
-    desc: Generates a new Tink keyset for field encryption
-    cmds:
-      - go run -tags generate ./internal/ent/hush/cmd/hush generate
-
-  hush:quiet:
-    desc: Generates a new Tink keyset (output only)
-    cmds:
-      - go run -tags generate ./internal/ent/hush/cmd/hush generate --quiet
-
-  hush:export:
-    desc: Generates a new Tink keyset in export format
-    cmds:
-      - go run -tags generate ./internal/ent/hush/cmd/hush generate --export
 
   # dev tasks
   run-dev:

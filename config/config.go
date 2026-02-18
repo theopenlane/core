@@ -35,7 +35,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/csrf"
 	"github.com/theopenlane/core/pkg/middleware/mime"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
-	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/shortlinks"
@@ -124,8 +123,6 @@ type Server struct {
 	CORS cors.Config `json:"cors" koanf:"cors"`
 	// Secure contains settings for the secure middleware
 	Secure secure.Config `json:"secure" koanf:"secure"`
-	// Redirect contains settings for the redirect middleware
-	Redirects redirect.Config `json:"redirects" koanf:"redirects"`
 	// CacheControl contains settings for the cache control middleware
 	CacheControl cachecontrol.Config `json:"cachecontrol" koanf:"cachecontrol"`
 	// Mime contains settings for the mime middleware
