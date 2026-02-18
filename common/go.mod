@@ -3,7 +3,7 @@ module github.com/theopenlane/core/common
 go 1.25.7
 
 require (
-	entgo.io/ent v0.14.6-0.20260214061101-d056659140fa
+	entgo.io/ent v0.14.6-0.20260218064135-ab0540611e15
 	github.com/aws/aws-sdk-go-v2 v1.41.1
 	github.com/aws/aws-sdk-go-v2/config v1.32.8
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.8
