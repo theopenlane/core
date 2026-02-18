@@ -12,6 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 	"github.com/rs/zerolog/log"
@@ -39,8 +40,7 @@ type Provider struct {
 	client              *s3.Client
 	options             *storage.ProviderOptions
 	presignClient       *s3.PresignClient
-	downloader          *manager.Downloader
-	uploader            *manager.Uploader
+	downloader          *transfermanager.Client
 	objExistsWaiter     *s3.ObjectExistsWaiter
 	objNotExistsWaiter  *s3.ObjectNotExistsWaiter
 	acl                 types.ObjectCannedACL
@@ -180,8 +180,7 @@ func createS3Provider(cfg providerConfig) mo.Result[*Provider] {
 	provider := &Provider{
 		client:             client,
 		options:            cfg.options.Clone(),
-		downloader:         manager.NewDownloader(client),
-		uploader:           manager.NewUploader(client),
+		downloader:         transfermanager.New(client),
 		presignClient:      s3.NewPresignClient(client),
 		objExistsWaiter:    s3.NewObjectExistsWaiter(client),
 		objNotExistsWaiter: s3.NewObjectNotExistsWaiter(client),
@@ -277,7 +276,7 @@ func (p *Provider) Download(ctx context.Context, file *storagetypes.File, opts *
 		bucket = opts.Bucket
 	}
 
-	_, err = p.downloader.Download(ctx, w, &s3.GetObjectInput{
+	_, err = p.downloader.DownloadObject(ctx, &transfermanager.DownloadObjectInput{
 		Bucket: aws.String(bucket),
 		Key:    aws.String(file.Key),
 	})

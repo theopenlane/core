@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 	"github.com/rs/zerolog/log"
@@ -36,8 +37,7 @@ type Provider struct {
 	client              *s3.Client
 	options             *storage.ProviderOptions
 	presignClient       *s3.PresignClient
-	downloader          *manager.Downloader
-	uploader            *manager.Uploader
+	downloader          *transfermanager.Client
 	objExistsWaiter     *s3.ObjectExistsWaiter
 	objNotExistsWaiter  *s3.ObjectNotExistsWaiter
 	proxyPresignEnabled bool
@@ -110,8 +110,7 @@ func NewR2Provider(options *storage.ProviderOptions, opts ...Option) (*Provider,
 	return &Provider{
 		client:              client,
 		options:             config.options.Clone(),
-		downloader:          manager.NewDownloader(client),
-		uploader:            manager.NewUploader(client),
+		downloader:          transfermanager.New(client),
 		presignClient:       s3.NewPresignClient(client),
 		objExistsWaiter:     s3.NewObjectExistsWaiter(client),
 		objNotExistsWaiter:  s3.NewObjectNotExistsWaiter(client),
@@ -194,7 +193,7 @@ func (p *Provider) Download(ctx context.Context, file *storagetypes.File, _ *sto
 	buf := make([]byte, int(*head.ContentLength))
 	w := manager.NewWriteAtBuffer(buf)
 
-	_, err = p.downloader.Download(ctx, w, &s3.GetObjectInput{
+	_, err = p.downloader.DownloadObject(ctx, &transfermanager.DownloadObjectInput{
 		Bucket: aws.String(p.options.Bucket),
 		Key:    aws.String(file.Key),
 	})
