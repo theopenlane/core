@@ -277,8 +277,9 @@ func (p *Provider) Download(ctx context.Context, file *storagetypes.File, opts *
 	}
 
 	_, err = p.downloader.DownloadObject(ctx, &transfermanager.DownloadObjectInput{
-		Bucket: aws.String(bucket),
-		Key:    aws.String(file.Key),
+		Bucket:   aws.String(bucket),
+		Key:      aws.String(file.Key),
+		WriterAt: w,
 	})
 	if err != nil {
 		return nil, err
